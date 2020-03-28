@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import TreeItem from '@material-ui/lab/TreeItem';
 import { ScrollTo } from './ScrollTo';
 
@@ -40,6 +39,7 @@ export class SidebarIndexTableOfContents extends Component {
 
   /** */
   buildTreeItems(nodes, visibleNodeIds, containerRef, nodeIdToScrollTo) {
+    const { classes } = this.props;
     if (!nodes) {
       return null;
     }
@@ -48,6 +48,13 @@ export class SidebarIndexTableOfContents extends Component {
         <TreeItem
           key={node.id}
           nodeId={node.id}
+          classes={{
+            content: classes.content,
+            group: classes.group,
+            iconContainer: classes.iconContainer,
+            label: visibleNodeIds.indexOf(node.id) !== -1 ? classes.visibleNode : null,
+            root: classes.treeItemRoot,
+          }}
           label={(
             <ScrollTo
               containerRef={containerRef}
@@ -55,10 +62,9 @@ export class SidebarIndexTableOfContents extends Component {
               offsetTop={96} // offset for the height of the form above
               scrollTo={nodeIdToScrollTo === node.id}
             >
-              <>
-                {visibleNodeIds.indexOf(node.id) !== -1 && <VisibilityIcon fontSize="small" color="secondary" />}
+              <div>
                 {node.label}
-              </>
+              </div>
             </ScrollTo>
           )}
           onClick={() => this.selectTreeItem(node)}
@@ -89,8 +95,8 @@ export class SidebarIndexTableOfContents extends Component {
       <>
         <TreeView
           className={classes.root}
-          defaultCollapseIcon={<ExpandMoreIcon />}
-          defaultExpandIcon={<ChevronRightIcon />}
+          defaultCollapseIcon={<ExpandMoreIcon color="action" />}
+          defaultExpandIcon={<ChevronRightIcon color="action" />}
           defaultEndIcon={<></>}
           expanded={expandedNodeIds}
         >
