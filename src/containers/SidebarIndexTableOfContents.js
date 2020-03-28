@@ -37,8 +37,28 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
  * Styles for withStyles HOC
  */
 const styles = theme => ({
+  content: {
+    alignItems: 'flex-start',
+    padding: '8px 8px 8px 0',
+    width: 'auto',
+  },
+  group: {
+    borderLeft: `1px solid ${theme.palette.grey[400]}`,
+    marginLeft: 12,
+  },
+  iconContainer: {
+    marginRight: 2,
+  },
   root: {
     flexGrow: 1,
+  },
+  treeItemRoot: {
+    '&:focus > $content, &$selected > $content': {
+      borderLeft: `1px solid ${theme.palette.secondary.main}`,
+    },
+  },
+  visibleNode: {
+    fontWeight: 500,
   },
 });
 
