@@ -4,6 +4,7 @@ import TreeView from '@material-ui/lab/TreeView';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import TreeItem from '@material-ui/lab/TreeItem';
+import clsx from 'clsx';
 import { ScrollTo } from './ScrollTo';
 
 /** */
@@ -68,9 +69,9 @@ export class SidebarIndexTableOfContents extends Component {
           classes={{
             content: classes.content,
             group: classes.group,
-            iconContainer: classes.iconContainer,
-            label: visibleNodeIds.indexOf(node.id) !== -1 ? classes.visibleNode : null,
+            label: classes.label,
             root: classes.treeItemRoot,
+            selected: classes.selected,
           }}
           label={(
             <ScrollTo
@@ -79,7 +80,11 @@ export class SidebarIndexTableOfContents extends Component {
               offsetTop={96} // offset for the height of the form above
               scrollTo={nodeIdToScrollTo === node.id}
             >
-              <div>
+              <div
+                className={clsx({
+                  [classes.visibleNode]: visibleNodeIds.indexOf(node.id) !== -1,
+                })}
+              >
                 {node.label}
               </div>
             </ScrollTo>
