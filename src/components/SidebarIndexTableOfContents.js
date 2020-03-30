@@ -19,7 +19,9 @@ export class SidebarIndexTableOfContents extends Component {
     if (!node.data.getCanvasIds() || node.data.getCanvasIds().length === 0) {
       return;
     }
-    const target = node.data.getCanvasIds()[0];
+    const target = node.data.__jsonld.startCanvas
+      || node.data.__jsonld.start
+      || node.data.getCanvasIds()[0];
     const canvasId = target.indexOf('#') === -1 ? target : target.substr(0, target.indexOf('#'));
     setCanvas(windowId, canvasId);
   }
