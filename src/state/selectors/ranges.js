@@ -44,6 +44,7 @@ function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
     if (nodeContainsVisibleCanvas || subTreeVisibleNodeIds.length > 0) {
       result.push({
         containsVisibleCanvas: nodeContainsVisibleCanvas,
+        descendantsContainVisibleCanvas: subTreeVisibleNodeIds.length > 0,
         id: node.id,
         leaf: node.nodes.length === 0,
         parentIds: getAllParentIds(node),
@@ -81,7 +82,7 @@ const getVisibleBranchNodeIds = createSelector(
     getVisibleLeafAndBranchNodeIds,
   ],
   visibleLeafAndBranchNodeIds => visibleLeafAndBranchNodeIds.reduce(
-    (acc, item) => (item.leaf ? acc : [...acc, item.id]),
+    (acc, item) => (item.leaf || !item.descendantsContainVisibleCanvas ? acc : [...acc, item.id]),
     [],
   ),
 );
