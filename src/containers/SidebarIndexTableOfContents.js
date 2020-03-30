@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withPlugins } from '../extend/withPlugins';
 import { SidebarIndexTableOfContents } from '../components/SidebarIndexTableOfContents';
 import {
@@ -39,26 +40,34 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
 const styles = theme => ({
   content: {
     alignItems: 'flex-start',
-    padding: '8px 8px 8px 0',
+    borderLeft: '1px solid transparent',
+    padding: '8px 16px 8px 0',
     width: 'auto',
   },
   group: {
-    borderLeft: `1px solid ${theme.palette.grey[400]}`,
-    marginLeft: 12,
+    borderLeft: `1px solid ${theme.palette.grey[300]}`,
   },
-  iconContainer: {
-    marginRight: 2,
-  },
+  label: {
+    paddingLeft: 0,
+  }, // needed for pseudo $label class
   root: {
     flexGrow: 1,
   },
+  selected: {}, // needed for pseudo $selected class
   treeItemRoot: {
-    '&:focus > $content, &$selected > $content': {
-      borderLeft: `1px solid ${theme.palette.secondary.main}`,
+    '&:focus > $content': {
+      backgroundColor: theme.palette.action.selected,
+    },
+    '&:hover > $content': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&:hover >$content $label, &:focus > $content $label, &$selected > $content $label, &$selected > $content $label:hover, &$selected:focus > $content $label': {
+      backgroundColor: 'transparent',
     },
   },
   visibleNode: {
-    fontWeight: 500,
+    backgroundColor: fade(theme.palette.highlights.primary, 0.35),
+    display: 'inline',
   },
 });
 
