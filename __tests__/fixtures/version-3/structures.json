@@ -25,7 +25,31 @@
       "type": "Canvas"
     },
     {
-      "id": "http://foo.test/1/canvas/c4",
+      "id": "http://foo.test/1/canvas/c5",
+      "type": "Canvas"
+    },
+    {
+      "id": "http://foo.test/1/canvas/c6",
+      "type": "Canvas"
+    },
+    {
+      "id": "http://foo.test/1/canvas/c7",
+      "type": "Canvas"
+    },
+    {
+      "id": "http://foo.test/1/canvas/c8",
+      "type": "Canvas"
+    },
+    {
+      "id": "http://foo.test/1/canvas/c9",
+      "type": "Canvas"
+    },
+    {
+      "id": "http://foo.test/1/canvas/c10",
+      "type": "Canvas"
+    },
+    {
+      "id": "http://foo.test/1/canvas/c11",
       "type": "Canvas"
     }
   ],
@@ -66,7 +90,57 @@
         },
         {
           "id": "http://foo.test/1/range/0-0-1",
-          "type": "Range"
+          "type": "Range",
+          "items": [
+            {
+              "id": "http://foo.test/1/canvas/c6",
+              "type": "Canvas"
+            },
+            {
+              "id": "http://foo.test/1/canvas/c7",
+              "type": "Canvas"
+            }
+          ],
+          "start": {
+            "id": "http://foo.test/1/canvas/c7",
+            "type": "Canvas"
+          }
+        },
+        {
+          "id": "http://foo.test/1/range/0-0-2",
+          "type": "Range",
+          "items": [
+            {
+              "id": "http://foo.test/1/canvas/c8",
+              "type": "Canvas"
+            },
+            {
+              "id": "http://foo.test/1/canvas/c9",
+              "type": "Canvas"
+            }
+          ],
+          "start": {
+            "type": "SpecificResource",
+            "source": "http://foo.test/1/canvas/c9"
+          }
+        },
+        {
+          "id": "http://foo.test/1/range/0-0-3",
+          "type": "Range",
+          "label": { "none": "missing start canvas" },
+          "items": [
+            {
+              "id": "http://foo.test/1/canvas/c10",
+              "type": "Canvas"
+            },
+            {
+              "id": "http://foo.test/1/canvas/c11",
+              "type": "Canvas"
+            }
+          ],
+          "start": {
+            "type": "SpecificResource"
+          }
         }
       ]
     }

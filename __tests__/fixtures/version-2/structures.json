@@ -55,17 +55,22 @@
         {
           "@id": "http://foo.test/1/canvas/c10", 
           "@type": "sc:Canvas", 
-          "label": "Canvas: 9" 
+          "label": "Canvas: 10" 
         },
         {
           "@id": "http://foo.test/1/canvas/c11", 
           "@type": "sc:Canvas", 
-          "label": "Canvas: 9" 
+          "label": "Canvas: 11" 
         },
         {
           "@id": "http://foo.test/1/canvas/c12", 
           "@type": "sc:Canvas", 
-          "label": "Canvas: 9" 
+          "label": "Canvas: 12" 
+        },
+        {
+          "@id": "http://foo.test/1/canvas/c13", 
+          "@type": "sc:Canvas", 
+          "label": "Canvas: 13" 
         }
       ]
     }
@@ -78,7 +83,9 @@
       "ranges": [
         "http://foo.test/1/range/0-0",
         "http://foo.test/1/range/0-1",
-        "http://foo.test/1/range/0-2"
+        "http://foo.test/1/range/0-2",
+        "http://foo.test/1/range/0-3",
+        "http://foo.test/1/range/0-4"
       ],
       "canvases": []
     },
@@ -249,6 +256,32 @@
       "canvases": [
         "http://foo.test/1/canvas/c9"
       ]
+    },
+    {
+      "@id": "http://foo.test/1/range/0-3",
+      "@type": "sc:Range",
+      "ranges": [],
+      "canvases": [
+        "http://foo.test/1/canvas/c10",
+        "http://foo.test/1/canvas/c11"
+     ],
+     "startCanvas": "http://foo.test/1/canvas/c11"
+    },
+    {
+      "@id": "http://foo.test/1/range/0-4",
+      "@type": "sc:Range",
+      "ranges": [
+        "http://foo.test/1/range/0-4-0"
+      ],
+      "canvases": [
+        "http://foo.test/1/canvas/c13"
+     ]
+    },
+    {
+      "@id": "http://foo.test/1/range/0-4-0",
+      "@type": "sc:Range",
+      "ranges": [],
+      "canvases": []
     }
   ]
 }
