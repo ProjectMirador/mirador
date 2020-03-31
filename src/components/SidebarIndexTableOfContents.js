@@ -15,8 +15,11 @@ export class SidebarIndexTableOfContents extends Component {
     if (node.nodes.length > 0) {
       toggleNode(node.id);
     }
-    // Do not select if there are no canvases listed
-    if (!node.data.getCanvasIds() || node.data.getCanvasIds().length === 0) {
+
+    // Do not select if there are no canvases listed or it has children
+    if (!node.data.getCanvasIds()
+        || node.data.getCanvasIds().length === 0
+        || node.nodes.length > 0) {
       return;
     }
     const target = node.data.getCanvasIds()[0];
