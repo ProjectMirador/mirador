@@ -156,6 +156,12 @@ describe('getExpandedNodeIds', () => {
     ]));
     expect(expandedNodeIds.length).toBe(5);
   });
+
+  it('does not contain ids of nodes whos descendants do not contain currently visible canvases', () => {
+    const canvas13State = setIn(state, ['windows', 'w1', 'canvasId'], 'http://foo.test/1/canvas/c13');
+    const expandedNodeIds = getExpandedNodeIds(canvas13State, { companionWindowId: 'cw123', windowId: 'w1' });
+    expect(expandedNodeIds.length).toBe(0);
+  });
 });
 
 describe('getNodeIdToScrollTo', () => {
@@ -179,7 +185,8 @@ describe('getNodeIdToScrollTo', () => {
   });
 
   it('returns no node id if current canvas is not contained in any range', () => {
-    const rangeFreeCanvasState = setIn(expandedNodesState, ['windows', 'w1', 'canvasId'], 'http://foo.test/1/canvas/c12');
+    const singleViewState = setIn(expandedNodesState, ['windows', 'w1', 'view'], 'single');
+    const rangeFreeCanvasState = setIn(singleViewState, ['windows', 'w1', 'canvasId'], 'http://foo.test/1/canvas/c12');
     expect(getNodeIdToScrollTo(rangeFreeCanvasState, { companionWindowId: 'cw123', windowId: 'w1' })).toBe(null);
   });
 });
