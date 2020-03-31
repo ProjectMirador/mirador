@@ -179,24 +179,24 @@ describe('SidebarIndexTableOfContents', () => {
     expect(toggleNode).toHaveBeenCalledTimes(5);
   });
 
-  it('calls setCanvas only on click for ranges with canvases', () => {
+  it('calls setCanvas only on click for ranges with canvases that do not have children', () => {
     const wrapper = createWrapper({ setCanvas, toggleNode });
     const treeView = wrapper.children(TreeView).at(0);
     const node0 = treeView.childAt(0);
     expect(node0.prop('nodeId')).toBe('0-0');
     node0.simulate('click');
-    expect(setCanvas).toHaveBeenCalledTimes(1);
+    expect(setCanvas).toHaveBeenCalledTimes(0);
     node0.childAt(0).simulate('click');
-    expect(setCanvas).toHaveBeenCalledTimes(2);
+    expect(setCanvas).toHaveBeenCalledTimes(1);
     node0.childAt(1).simulate('click');
-    expect(setCanvas).toHaveBeenCalledTimes(3);
+    expect(setCanvas).toHaveBeenCalledTimes(2);
     node0.childAt(2).simulate('click');
-    expect(setCanvas).toHaveBeenCalledTimes(4);
+    expect(setCanvas).toHaveBeenCalledTimes(3);
 
     const node1 = treeView.childAt(1);
     expect(node1.prop('nodeId')).toBe('0-1');
     node1.simulate(...createKeydownProps('ArrowRight'));
-    expect(setCanvas).toHaveBeenCalledTimes(4);
+    expect(setCanvas).toHaveBeenCalledTimes(3);
   });
 
   it('sets the canvas to a start canvas if present', () => {
