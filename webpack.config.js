@@ -53,7 +53,13 @@ const baseConfig = [
 module.exports = (env, options) => {
   const isProduction = options.mode === 'production';
   return baseConfig.map((config) => {
-    config.devtool = !isProduction ? 'eval-source-map' : false; // eslint-disable-line no-param-reassign
+    if (isProduction) {
+      config.plugins.push(new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1,
+      }));
+    } else {
+      config.devtool = 'eval-source-map'; // eslint-disable-line no-param-reassign
+    }
     return config;
   });
 };
