@@ -2,23 +2,23 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getTheme } from '../state/selectors';
+import { getTheme, getMiradorState } from '../state/selectors';
 import { App } from '../components/App';
-
 
 /**
  * mapStateToProps - to hook up connect
  * @memberof App
  * @private
  */
-const mapStateToProps = state => (
-  {
+function mapStateToProps(globalState) {
+  const state = getMiradorState(globalState);
+  return {
     isFullscreenEnabled: state.workspace.isFullscreenEnabled,
     language: state.config.language,
     theme: getTheme(state),
     translations: state.config.translations,
-  }
-);
+  };
+}
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
