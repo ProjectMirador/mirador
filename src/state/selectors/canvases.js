@@ -188,38 +188,28 @@ const authServiceProfiles = {
  *
  */
 export function selectNextAuthService({ auth }, resource, filter = authServiceProfiles) {
-  const externalService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/external');
+  const orderedAuthServiceProfiles = [
+    'http://iiif.io/api/auth/1/external',
+    'http://iiif.io/api/auth/1/kiosk',
+    'http://iiif.io/api/auth/1/clickthrough',
+    'http://iiif.io/api/auth/1/login',
+  ];
 
-  if (externalService) {
-    if (!auth[externalService.id]) {
-      return filter.external && externalService;
-    }
+  const mapFilterToProfiles = {
+    'http://iiif.io/api/auth/1/clickthrough': 'clickthrough',
+    'http://iiif.io/api/auth/1/external': 'external',
+    'http://iiif.io/api/auth/1/kiosk': 'kiosk',
+    'http://iiif.io/api/auth/1/login': 'login',
+  };
 
-    if (auth[externalService.id].isFetching || auth[externalService.id].ok) return null;
-  }
+  for (const profile of orderedAuthServiceProfiles) {
+    const services = getServices(resource, profile);
+    for (const service of services) {
+      if (!auth[service.id]) {
+        return filter[mapFilterToProfiles[profile]] && service;
+      }
 
-  const kioskService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/kiosk');
-  if (kioskService) {
-    if (!auth[kioskService.id]) {
-      return filter.kiosk && kioskService;
-    }
-
-    if (auth[kioskService.id].isFetching || auth[kioskService.id].ok) return null;
-  }
-
-  const clickthroughService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/clickthrough');
-  if (clickthroughService) {
-    if (!auth[clickthroughService.id]) {
-      return filter.clickthrough && clickthroughService;
-    }
-
-    if (auth[clickthroughService.id].isFetching || auth[clickthroughService.id].ok) return null;
-  }
-
-  const loginService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/login');
-  if (loginService) {
-    if (!auth[loginService.id]) {
-      return filter.login && loginService;
+      if (auth[service.id].isFetching || auth[service.id].ok) return null;
     }
   }
 
@@ -228,17 +218,18 @@ export function selectNextAuthService({ auth }, resource, filter = authServicePr
 
 /** */
 export function selectActiveAuthService(state, resource) {
-  const loginService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/login');
-  if (selectAuthStatus(state, loginService)) return loginService;
+  const orderedAuthServiceProfiles = [
+    'http://iiif.io/api/auth/1/login',
+    'http://iiif.io/api/auth/1/clickthrough',
+    'http://iiif.io/api/auth/1/kiosk',
+    'http://iiif.io/api/auth/1/external',
+  ];
 
-  const clickthroughService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/clickthrough');
-  if (selectAuthStatus(state, clickthroughService)) return clickthroughService;
-
-  const kioskService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/kiosk');
-  if (selectAuthStatus(state, kioskService)) return kioskService;
-
-  const externalService = Utils.getService({ ...resource, options: {} }, 'http://iiif.io/api/auth/1/external');
-  if (selectAuthStatus(state, externalService)) return externalService;
+  for (const profile of orderedAuthServiceProfiles) {
+    const services = getServices(resource, profile);
+    const service = services.find(s => selectAuthStatus(state, s));
+    if (service) return service;
+  }
 
   return null;
 }
@@ -265,4 +256,11 @@ export function selectAuthStatus({ auth }, service) {
   if (auth[service.id].isFetching) return 'fetching';
   if (auth[service.id].ok) return 'ok';
   return 'failed';
+}
+
+/** Get all the services that match a profile */
+function getServices(resource, profile) {
+  const services = Utils.getServices({ ...resource, options: {} });
+
+  return services.filter(service => service.getProfile() === profile);
 }
