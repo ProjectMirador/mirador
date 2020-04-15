@@ -184,12 +184,13 @@ export class OpenSeadragonViewer extends Component {
     const { canvasWorld } = this.props;
     const context = this.osdCanvasOverlay.context2d;
     const zoom = this.viewer.viewport.getZoom(true);
+    const width = canvasWorld.worldBounds()[2];
     annotations.forEach((annotation) => {
       annotation.resources.forEach((resource) => {
         if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
         const offset = canvasWorld.offsetByCanvas(resource.targetId);
         const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
-          color, offset, resource, zoom,
+          color, offset, resource, width, zoom,
         });
         canvasAnnotationDisplay.toContext(context);
       });
