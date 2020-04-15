@@ -22,11 +22,12 @@ export function requestInfoResponse(infoId) {
  * @param  {Object} manifestJson
  * @memberof ActionCreators
  */
-export function receiveInfoResponse(infoId, infoJson, ok) {
+export function receiveInfoResponse(infoId, infoJson, ok, tokenServiceId) {
   return {
     infoId,
     infoJson,
     ok,
+    tokenServiceId,
     type: ActionTypes.RECEIVE_INFO_RESPONSE,
   };
 }
@@ -38,15 +39,16 @@ export function receiveInfoResponse(infoId, infoJson, ok) {
  * @param  {String} error
  * @memberof ActionCreators
  */
-export function receiveInfoResponseFailure(infoId, error) {
+export function receiveInfoResponseFailure(infoId, error, tokenServiceId) {
   return {
     error,
     infoId,
+    tokenServiceId,
     type: ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE,
   };
 }
 /** @private */
-function getAccessToken({ accessTokens }, iiifService) {
+function getAccessTokenService({ accessTokens }, iiifService) {
   if (!iiifService) return undefined;
 
   const services = Utils.getServices(iiifService).filter(s => s.getProfile().match(/http:\/\/iiif.io\/api\/auth\/1\//));
@@ -55,7 +57,7 @@ function getAccessToken({ accessTokens }, iiifService) {
     const authService = services[i];
     const accessTokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token');
     const token = accessTokens[accessTokenService.id];
-    if (token && token.json) return token.json.accessToken;
+    if (token && token.json) return token;
   }
 
   return undefined;
@@ -79,21 +81,22 @@ export function fetchInfoResponse({ imageId, imageResource }) {
       && !state.infoResponses[infoId].isFetching
       && state.infoResponses[infoId].json;
 
-    const token = getAccessToken(
+    const tokenService = getAccessTokenService(
       getState(),
       infoResponse || (imageResource && imageResource.getServices()[0]),
     );
 
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
+    if (tokenService) {
+      headers.Authorization = `Bearer ${tokenService.json.accessToken}`;
     }
 
     dispatch(requestInfoResponse(infoId));
 
+    const tokenServiceId = tokenService && tokenService.id;
     return fetch(`${infoId.replace(/\/$/, '')}/info.json`, { headers })
       .then(response => response.json().then(json => ({ json, ok: response.ok })))
-      .then(({ json, ok }) => dispatch(receiveInfoResponse(infoId, json, ok)))
-      .catch(error => dispatch(receiveInfoResponseFailure(infoId, error)));
+      .then(({ json, ok }) => dispatch(receiveInfoResponse(infoId, json, ok, tokenServiceId)))
+      .catch(error => dispatch(receiveInfoResponseFailure(infoId, error, tokenServiceId)));
   });
 }
 

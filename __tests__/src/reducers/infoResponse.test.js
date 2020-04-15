@@ -28,6 +28,7 @@ describe('info response reducer', () => {
           content: 'lots of canvases and metadata and such',
           id: 'abc123',
         },
+        tokenServiceId: 'efg456',
         type: ActionTypes.RECEIVE_INFO_RESPONSE,
       },
     )).toMatchObject({
@@ -35,6 +36,7 @@ describe('info response reducer', () => {
         id: 'abc123',
         isFetching: false,
         json: {},
+        tokenServiceId: 'efg456',
       },
     });
   });
@@ -49,6 +51,7 @@ describe('info response reducer', () => {
       {
         error: "This institution didn't enable CORS.",
         infoId: 'abc123',
+        tokenServiceId: 'efg456',
         type: ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE,
       },
     )).toEqual({
@@ -56,6 +59,7 @@ describe('info response reducer', () => {
         error: "This institution didn't enable CORS.",
         id: 'abc123',
         isFetching: false,
+        tokenServiceId: 'efg456',
       },
     });
   });
@@ -87,5 +91,28 @@ describe('info response reducer', () => {
       state: { infoResponses: { new: 'stuff' } },
       type: ActionTypes.IMPORT_MIRADOR_STATE,
     })).toEqual({});
+  });
+  it('should handle RESET_AUTHENTICATION_STATE', () => {
+    expect(infoResponsesReducer(
+      {
+        abc123: {
+          stuff: 'foo',
+          tokenServiceId: 'abc123',
+        },
+        def456: {
+          stuff: 'foo',
+          tokenServiceId: 'def456',
+        },
+      },
+      {
+        tokenServiceId: 'abc123',
+        type: ActionTypes.RESET_AUTHENTICATION_STATE,
+      },
+    )).toEqual({
+      def456: {
+        stuff: 'foo',
+        tokenServiceId: 'def456',
+      },
+    });
   });
 });
