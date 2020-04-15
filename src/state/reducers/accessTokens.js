@@ -1,5 +1,5 @@
 import normalizeUrl from 'normalize-url';
-
+import { removeIn } from 'immutable';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ActionTypes from '../actions/action-types';
 
@@ -59,6 +59,8 @@ export function accessTokensReducer(state = {}, action) {
           isFetching: false,
         },
       };
+    case ActionTypes.RESET_AUTHENTICATION_STATE:
+      return removeIn(state, [action.tokenServiceId]);
     default:
       return state;
   }

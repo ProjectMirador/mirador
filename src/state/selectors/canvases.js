@@ -266,6 +266,19 @@ export const selectCanvasAuthService = createSelector(
   },
 );
 
+export const selectLogoutAuthService = createSelector(
+  [
+    selectInfoResponse,
+    state => state,
+  ],
+  (infoResponse, state) => {
+    if (!infoResponse) return undefined;
+    const authService = selectActiveAuthService(state, infoResponse.json);
+    if (!authService) return undefined;
+    return authService.getService('http://iiif.io/api/auth/1/logout');
+  },
+);
+
 /** */
 export function selectAuthStatus({ auth }, service) {
   if (!service) return null;

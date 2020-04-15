@@ -103,4 +103,20 @@ describe('auth response reducer', () => {
       },
     });
   });
+  describe('should handle RESET_AUTHENTICATION_STATE', () => {
+    it('does nothing if id is not present', () => {
+      expect(authReducer({}, {
+        id: 'foo',
+        type: ActionTypes.RESET_AUTHENTICATION_STATE,
+      })).toEqual({});
+    });
+    it('removes id', () => {
+      expect(authReducer({
+        foo: 'otherStuff',
+      }, {
+        id: 'foo',
+        type: ActionTypes.RESET_AUTHENTICATION_STATE,
+      })).toEqual({});
+    });
+  });
 });
