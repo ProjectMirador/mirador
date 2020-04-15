@@ -91,7 +91,7 @@ export class WindowAuthenticationControl extends Component {
       <Paper square elevation={4} color="secondary" classes={{ root: classes.paper }}>
         <Button fullWidth className={classes.topBar} onClick={hasCollapsedContent ? this.handleClickOpen : this.handleConfirm} component="div" color="inherit">
           <LockIcon className={classes.icon} />
-          <Typography className={classes.label} component="h3" variant="body1" color="inherit" inline>
+          <Typography className={classes.label} component="h3" variant="body1" color="inherit">
             <SanitizedHtml htmlString={(isInFailureState ? failureHeader : label) || t('authenticationRequired')} ruleSet="iiif" />
           </Typography>
           <span className={classes.fauxButton}>
