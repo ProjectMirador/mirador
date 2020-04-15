@@ -355,7 +355,7 @@ describe('OpenSeadragonViewer', () => {
       wrapper.instance().annotationsToContext(annotations);
       const context = wrapper.instance().osdCanvasOverlay.context2d;
       expect(context.strokeStyle).toEqual('yellow');
-      expect(context.lineWidth).toEqual(20);
+      expect(context.lineWidth).toEqual(4);
       expect(strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
     });
   });

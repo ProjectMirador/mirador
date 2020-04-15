@@ -5,12 +5,13 @@
 export default class CanvasAnnotationDisplay {
   /** */
   constructor({
-    resource, color, zoom, offset,
+    resource, color, zoom, offset, width,
   }) {
     this.resource = resource;
     this.color = color;
     this.zoom = zoom;
     this.offset = offset;
+    this.width = width || 1000;
   }
 
   /** */
@@ -60,7 +61,7 @@ export default class CanvasAnnotationDisplay {
 
   /** */
   lineWidth() {
-    return Math.ceil(1 / (this.zoom * 100));
+    return Math.ceil(10 / (this.zoom * this.width));
   }
 
   /** */
