@@ -200,6 +200,10 @@ describe('selectNextAuthService', () => {
         '@id': 'login',
         profile: 'http://iiif.io/api/auth/1/login',
       },
+      {
+        '@id': 'login2',
+        profile: 'http://iiif.io/api/auth/1/login',
+      },
     ],
   };
 
@@ -220,11 +224,13 @@ describe('selectNextAuthService', () => {
     expect(selectNextAuthService({ auth }, resource).id).toEqual('clickthrough');
   });
 
-  it('returns login last', () => {
+  it('returns logins last', () => {
     auth.external = { isFetching: false, ok: false };
     auth.kiosk = { isFetching: false, ok: false };
     auth.clickthrough = { isFetching: false, ok: false };
     expect(selectNextAuthService({ auth }, resource).id).toEqual('login');
+    auth.login = { isFetching: false, ok: false };
+    expect(selectNextAuthService({ auth }, resource).id).toEqual('login2');
   });
 
   it('returns null if there are no services', () => {
