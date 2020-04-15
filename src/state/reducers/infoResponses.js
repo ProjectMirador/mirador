@@ -22,6 +22,7 @@ export const infoResponsesReducer = (state = {}, action) => {
           id: action.infoId,
           isFetching: false,
           json: action.infoJson,
+          tokenServiceId: action.tokenServiceId,
         },
       };
     case ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE:
@@ -31,6 +32,7 @@ export const infoResponsesReducer = (state = {}, action) => {
           error: action.error,
           id: action.infoId,
           isFetching: false,
+          tokenServiceId: action.tokenServiceId,
         },
       };
     case ActionTypes.REMOVE_INFO_RESPONSE:
@@ -42,6 +44,13 @@ export const infoResponsesReducer = (state = {}, action) => {
       }, {});
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};
+    case ActionTypes.RESET_AUTHENTICATION_STATE:
+      return Object.keys(state).reduce((object, key) => {
+        if (state[key].tokenServiceId !== action.tokenServiceId) {
+          object[key] = state[key]; // eslint-disable-line no-param-reassign
+        }
+        return object;
+      }, {});
     default: return state;
   }
 };
