@@ -127,3 +127,20 @@ export function resolveAccessTokenRequest({ messageId, ...json }) {
     }
   });
 }
+
+/**
+ * Resets authentication state for a token service
+ */
+export function resetAuthenticationState({ authServiceId }) {
+  return ((dispatch, getState) => {
+    const { accessTokens } = getState();
+
+    const currentService = Object.values(accessTokens)
+      .find(service => service.authId === authServiceId);
+    dispatch({
+      id: authServiceId,
+      tokenServiceId: currentService && currentService.id,
+      type: ActionTypes.RESET_AUTHENTICATION_STATE,
+    });
+  });
+}

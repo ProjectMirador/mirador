@@ -1,4 +1,6 @@
 import normalizeUrl from 'normalize-url';
+import { removeIn } from 'immutable';
+
 import ActionTypes from '../actions/action-types';
 import { selectNextAuthService } from '../selectors/canvases';
 
@@ -51,6 +53,8 @@ export const authReducer = (state = {}, action) => {
           ok: action.ok,
         },
       };
+    case ActionTypes.RESET_AUTHENTICATION_STATE:
+      return removeIn(state, [action.id]);
     default: return state;
   }
 };

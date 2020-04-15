@@ -13,6 +13,7 @@ import {
   selectNextAuthService,
   selectInfoResponse,
   getVisibleCanvasNonTiledResources,
+  selectLogoutAuthService,
 } from '../../../src/state/selectors/canvases';
 
 describe('getVisibleCanvases', () => {
@@ -311,6 +312,50 @@ describe('selectCanvasAuthService', () => {
     expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 0, manifestId: 'a' }).id).toEqual('login');
     expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 0, manifestId: 'b' }).id).toEqual('external');
     expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 1, manifestId: 'b' })).toBeUndefined();
+  });
+});
+
+describe('selectLogoutAuthService', () => {
+  it('returns a logout auth service if one exists', () => {
+    const logout = {
+      '@id': 'http://foo/logout',
+      profile: 'http://iiif.io/api/auth/1/logout',
+    };
+    const resource = {
+      service: [
+        {
+          '@id': 'login',
+          profile: 'http://iiif.io/api/auth/1/login',
+          service: [
+            logout,
+          ],
+        },
+      ],
+    };
+    const state = {
+      auth: {
+        login: {
+          ok: true,
+        },
+      },
+      infoResponses: {
+        'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
+          json: resource,
+        },
+      },
+      manifests: {
+        a: {
+          json: manifestFixture001,
+        },
+      },
+    };
+    expect(
+      selectLogoutAuthService(
+        state,
+        { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' },
+      ).id,
+    )
+      .toBe(logout['@id']);
   });
 });
 

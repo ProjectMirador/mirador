@@ -5,9 +5,10 @@ import Collapse from '@material-ui/core/Collapse';
 import DialogActions from '@material-ui/core/DialogActions';
 import SanitizedHtml from '../../../src/containers/SanitizedHtml';
 import { WindowAuthenticationControl } from '../../../src/components/WindowAuthenticationControl';
+import AuthenticationLogout from '../../../src/containers/AuthenticationLogout';
 
 /**
- * Helper function to create a shallow wrapper around ErrorDialog
+ * Helper function to create a shallow wrapper around WindowAuthenticationControl
  */
 function createWrapper(props) {
   return shallow(
@@ -27,9 +28,9 @@ function createWrapper(props) {
 describe('WindowAuthenticationControl', () => {
   let wrapper;
 
-  it('renders nothing if it is not degraded', () => {
+  it('renders AuthenticationLogout if it is not degraded', () => {
     wrapper = createWrapper({ degraded: false });
-    expect(wrapper.matchesElement(<></>)).toBe(true);
+    expect(wrapper.find(AuthenticationLogout).length).toBe(1);
   });
 
   describe('with a non-interactive login', () => {

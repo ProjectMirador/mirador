@@ -135,4 +135,20 @@ describe('access tokens response reducer', () => {
       },
     });
   });
+  describe('should handle RESET_AUTHENTICATION_STATE', () => {
+    it('does nothing if tokenServiceId is not present', () => {
+      expect(accessTokensReducer({}, {
+        tokenServiceId: 'foo',
+        type: ActionTypes.RESET_AUTHENTICATION_STATE,
+      })).toEqual({});
+    });
+    it('removes tokenServiceId', () => {
+      expect(accessTokensReducer({
+        foo: 'otherStuff',
+      }, {
+        tokenServiceId: 'foo',
+        type: ActionTypes.RESET_AUTHENTICATION_STATE,
+      })).toEqual({});
+    });
+  });
 });
