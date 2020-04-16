@@ -15,7 +15,10 @@ import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnota
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
-  annotationCount: getAnnotationResourcesByMotivation(state, { motivations: ['oa:commenting', 'sc:painting', 'commenting'], windowId }).length,
+  annotationCount: getAnnotationResourcesByMotivation(
+    state,
+    { motivations: state.config.annotations.filteredMotivations, windowId },
+  ).length,
   selectedCanvases: getVisibleCanvases(state, { windowId }),
 });
 

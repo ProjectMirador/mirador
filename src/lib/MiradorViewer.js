@@ -42,7 +42,9 @@ class MiradorViewer {
    * Process config into actions
    */
   processConfig() {
-    const mergedConfig = deepmerge(settings, this.config);
+    /** merge type for arrays */
+    const overwriteMerge = (destinationArray, sourceArray, options) => sourceArray;
+    const mergedConfig = deepmerge(settings, this.config, { arrayMerge: overwriteMerge });
     const action = actions.setConfig(mergedConfig);
     this.store.dispatch(action);
 
