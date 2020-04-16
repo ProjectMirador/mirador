@@ -357,4 +357,37 @@ describe('selectInfoResponse', () => {
 
     expect(selectInfoResponse(state, { canvasId: 'some-canvas-without-resources', manifestId: 'a' })).toBe(undefined);
   });
+
+  it('returns nothing if there are no canvas services', () => {
+    const state = {
+      auth: {},
+      manifests: {
+        a: {
+          json: {
+            '@context': 'http://iiif.io/api/presentation/2/context.json',
+            '@id':
+             'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+            '@type': 'sc:Manifest',
+            sequences: [
+              {
+                canvases: [
+                  {
+                    '@id': 'some-canvas-without-services',
+                    images: [
+                      {
+                        resource: {
+                        },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    expect(selectInfoResponse(state, { canvasId: 'some-canvas-without-services', manifestId: 'a' })).toBe(undefined);
+  });
 });
