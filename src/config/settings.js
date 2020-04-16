@@ -211,6 +211,9 @@ export default {
     'zh-TW': '中文(繁體)',
     it: "Italiano",
   },
+  annotations: {
+    filteredMotivations: ['oa:commenting', 'sc:painting', 'commenting'],
+  },
   displayAllAnnotations: false, // Configure if annotations to be displayed on the canvas by default when fetched
   resourceHeaders: {}, // Headers to send with IIIF Presentation API resource requests
   translations: { // Translations can be added to inject new languages or override existing labels
