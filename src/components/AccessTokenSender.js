@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import IframeComm from 'react-iframe-comm';
+import IComCom from 'icomcom-react';
 
 /**
  * Opens a new window for click
@@ -29,7 +29,7 @@ export class AccessTokenSender extends Component {
     external, no-op
     */
     return (
-      <IframeComm
+      <IComCom
         attributes={{ src: `${url}?origin=${window.origin}&messageId=${url}` }}
         handleReceiveMessage={this.onReceiveAccessTokenMessage}
       />
