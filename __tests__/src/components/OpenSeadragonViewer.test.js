@@ -118,7 +118,7 @@ describe('OpenSeadragonViewer', () => {
     });
   });
 
-  describe('addAllTileSources', () => {
+  describe('addAllImageSources', () => {
     it('calls addTileSource for every tileSources and then zoomsToWorld', () => {
       wrapper.instance().viewer = {
         close: () => {},
@@ -126,8 +126,18 @@ describe('OpenSeadragonViewer', () => {
       wrapper.setProps({ tileSources: [1, 2, 3, 4] });
       const mockAddTileSource = jest.fn();
       wrapper.instance().addTileSource = mockAddTileSource;
-      wrapper.instance().addAllTileSources();
+      wrapper.instance().addAllImageSources();
       expect(mockAddTileSource).toHaveBeenCalledTimes(4);
+    });
+    it('calls addNonTileSource for every nonTiledImage and then zoomsToWorld', () => {
+      wrapper.instance().viewer = {
+        close: () => {},
+      };
+      wrapper.setProps({ nonTiledImages: [1, 2, 3, 4] });
+      const mockAddNonTiledImage = jest.fn();
+      wrapper.instance().addNonTiledImage = mockAddNonTiledImage;
+      wrapper.instance().addAllImageSources();
+      expect(mockAddNonTiledImage).toHaveBeenCalledTimes(4);
     });
   });
 

@@ -1,5 +1,7 @@
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
+import minimumRequired from '../../fixtures/version-2/minimumRequired.json';
+
 import {
   getVisibleCanvases,
   getNextCanvasGrouping,
@@ -9,6 +11,7 @@ import {
   selectCanvasAuthService,
   selectNextAuthService,
   selectInfoResponse,
+  getVisibleCanvasNonTiledResources,
 } from '../../../src/state/selectors/canvases';
 
 describe('getVisibleCanvases', () => {
@@ -389,5 +392,27 @@ describe('selectInfoResponse', () => {
     };
 
     expect(selectInfoResponse(state, { canvasId: 'some-canvas-without-services', manifestId: 'a' })).toBe(undefined);
+  });
+});
+
+describe('getVisibleCanvasNonTiledResources', () => {
+  it('returns canvases resources without services', () => {
+    const state = {
+      manifests: {
+        'http://iiif.io/api/presentation/2.0/example/fixtures/1/manifest.json': {
+          id: 'http://iiif.io/api/presentation/2.0/example/fixtures/1/manifest.json',
+          json: minimumRequired,
+        },
+      },
+      windows: {
+        a: {
+          canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/1/c1.json',
+          manifestId: 'http://iiif.io/api/presentation/2.0/example/fixtures/1/manifest.json',
+        },
+      },
+    };
+    expect(getVisibleCanvasNonTiledResources(
+      state, { windowId: 'a' },
+    )[0].id).toBe('http://iiif.io/api/presentation/2.0/example/fixtures/resources/page1-full.png');
   });
 });

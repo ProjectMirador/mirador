@@ -84,7 +84,7 @@ export class OpenSeadragonViewer extends Component {
       this.viewer.viewport.panTo(viewer, true);
       this.viewer.viewport.zoomTo(viewer.zoom, viewer, true);
     }
-    this.addAllTileSources();
+    this.addAllImageSources();
   }
 
   /**
@@ -125,7 +125,7 @@ export class OpenSeadragonViewer extends Component {
 
     if (!this.tileSourcesMatch(prevProps.tileSources)) {
       this.viewer.close();
-      this.addAllTileSources();
+      this.addAllImageSources();
     } else if (viewer && !this.osdUpdating) {
       const { viewport } = this.viewer;
 
@@ -197,14 +197,33 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /** */
-  addAllTileSources() {
-    const { tileSources } = this.props;
+  addAllImageSources() {
+    const { nonTiledImages, tileSources } = this.props;
     Promise.all(
       tileSources.map((tileSource, i) => this.addTileSource(tileSource, i)),
+      nonTiledImages.map((image, i) => this.addNonTiledImage(image, i)),
     ).then(() => {
-      if (tileSources[0]) {
+      if (tileSources[0] || nonTiledImages[0]) {
         this.zoomToWorld();
       }
+    });
+  }
+
+  /** */
+  addNonTiledImage(image, i = 0) {
+    const { canvasWorld } = this.props;
+    return new Promise((resolve, reject) => {
+      if (!this.viewer) {
+        return;
+      }
+      this.viewer.addSimpleImage({
+        error: event => reject(event),
+        fitBounds: new OpenSeadragon.Rect(
+          ...canvasWorld.canvasToWorldCoordinates(i),
+        ),
+        success: event => resolve(event),
+        url: image.id,
+      });
     });
   }
 
@@ -321,6 +340,7 @@ OpenSeadragonViewer.defaultProps = {
   children: null,
   highlightedAnnotations: [],
   label: null,
+  nonTiledImages: [],
   osdConfig: {},
   palette: {},
   searchAnnotations: [],
@@ -336,6 +356,7 @@ OpenSeadragonViewer.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
+  nonTiledImages: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),

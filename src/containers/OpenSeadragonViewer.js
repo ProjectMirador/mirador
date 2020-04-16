@@ -7,6 +7,7 @@ import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
 import CanvasWorld from '../lib/CanvasWorld';
 import {
+  getVisibleCanvasNonTiledResources,
   getCurrentCanvas,
   getSelectedAnnotationsOnCanvases,
   getHighlightedAnnotationsOnCanvases,
@@ -34,6 +35,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
     canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
     windowId,
   }),
+  nonTiledImages: getVisibleCanvasNonTiledResources(state, { windowId }),
   osdConfig: state.config.osdConfig,
   palette: getTheme(state).palette,
   searchAnnotations: getSearchAnnotationsForWindow(
