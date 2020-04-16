@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import flatten from 'lodash/flatten';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import { getManifestoInstance } from './manifests';
 import { getWindow, getWindowViewType } from './windows';
@@ -169,6 +170,16 @@ export const getCanvasDescription = createSelector(
 
 /** */
 export const selectInfoResponses = state => state.infoResponses;
+
+export const getVisibleCanvasNonTiledResources = createSelector(
+  [
+    getVisibleCanvases,
+  ],
+  canvases => canvases && flatten(canvases
+    .map(canvas => canvas.getImages()
+      .map(image => image.getResource())))
+    .filter(resource => resource.getServices().length < 1),
+);
 
 export const selectInfoResponse = createSelector(
   [
