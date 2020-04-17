@@ -1,6 +1,7 @@
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import minimumRequired from '../../fixtures/version-2/minimumRequired.json';
+import minimumRequired3 from '../../fixtures/version-3/minimumRequired.json';
 
 import {
   getVisibleCanvases,
@@ -414,5 +415,24 @@ describe('getVisibleCanvasNonTiledResources', () => {
     expect(getVisibleCanvasNonTiledResources(
       state, { windowId: 'a' },
     )[0].id).toBe('http://iiif.io/api/presentation/2.0/example/fixtures/resources/page1-full.png');
+  });
+  it('works for v3 Presentation API', () => {
+    const state = {
+      manifests: {
+        'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/manifest.json': {
+          id: 'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/manifest.json',
+          json: minimumRequired3,
+        },
+      },
+      windows: {
+        a: {
+          canvasId: 'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/canvas/p1',
+          manifestId: 'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/manifest.json',
+        },
+      },
+    };
+    expect(getVisibleCanvasNonTiledResources(
+      state, { windowId: 'a' },
+    )[0].id).toBe('http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png');
   });
 });
