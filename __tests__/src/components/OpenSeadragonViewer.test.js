@@ -35,6 +35,9 @@ describe('OpenSeadragonViewer', () => {
           height: 201,
           width: 150,
         }]}
+        nonTiledImages={[{
+          id: 'http://foo',
+        }]}
         windowId="base"
         config={{}}
         updateViewport={updateViewport}
@@ -115,6 +118,22 @@ describe('OpenSeadragonViewer', () => {
     });
     it('when the @ids do match', () => {
       expect(wrapper.instance().tileSourcesMatch([{ '@id': 'http://foo' }])).toBe(true);
+    });
+  });
+
+  describe('nonTiledImagedMatch', () => {
+    it('when they do not match', () => {
+      expect(wrapper.instance().nonTiledImagedMatch([])).toBe(false);
+    });
+    it('with an empty array', () => {
+      wrapper.instance().viewer = {
+        close: () => {},
+      };
+      wrapper.setProps({ nonTiledImages: [] });
+      expect(wrapper.instance().nonTiledImagedMatch([])).toBe(true);
+    });
+    it('when the ids do match', () => {
+      expect(wrapper.instance().nonTiledImagedMatch([{ id: 'http://foo' }])).toBe(true);
     });
   });
 
