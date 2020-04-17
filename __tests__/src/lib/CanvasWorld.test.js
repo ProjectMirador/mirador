@@ -25,7 +25,7 @@ describe('CanvasWorld', () => {
         .toEqual([6305, 0, 2848, 4288]);
     });
     it('supports RTL orientations', () => {
-      expect(new CanvasWorld(canvasSubset, {}, 'right-to-left').canvasToWorldCoordinates(1))
+      expect(new CanvasWorld(canvasSubset, null, 'right-to-left').canvasToWorldCoordinates({ '@id': 'https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410' }))
         .toEqual([0, 0, 2848, 4288]);
     });
   });
