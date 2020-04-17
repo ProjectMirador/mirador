@@ -175,11 +175,25 @@ export const getVisibleCanvasNonTiledResources = createSelector(
   [
     getVisibleCanvases,
   ],
-  canvases => canvases && flatten(canvases
+  canvases => canvases
+    && iiifV2NonTiledResources(canvases).concat(iiifV3NonTiledResources(canvases)),
+);
+
+/** */
+function iiifV2NonTiledResources(canvases) {
+  return flatten(canvases
     .map(canvas => canvas.getImages()
       .map(image => image.getResource())))
-    .filter(resource => resource.getServices().length < 1),
-);
+    .filter(resource => resource.getServices().length < 1);
+}
+
+/** */
+function iiifV3NonTiledResources(canvases) {
+  return flatten(canvases
+    .map(canvas => flatten(canvas.getContent()
+      .map(image => image.getBody()))))
+    .filter(body => body.getServices().length < 1);
+}
 
 export const selectInfoResponse = createSelector(
   [
