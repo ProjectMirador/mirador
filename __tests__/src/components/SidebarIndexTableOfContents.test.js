@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import TreeItem from '@material-ui/lab/TreeItem';
 import TreeView from '@material-ui/lab/TreeView';
 import { SidebarIndexTableOfContents } from '../../../src/components/SidebarIndexTableOfContents';
@@ -12,7 +12,7 @@ import manifestVersion3 from '../../fixtures/version-3/structures.json';
  * @param {*} props
  */
 function createWrapper(props) {
-  const manifest = manifesto.create(props.manifest ? props.manifest : manifestVersion2);
+  const manifest = Utils.parseManifest(props.manifest ? props.manifest : manifestVersion2);
   return shallow(
     <SidebarIndexTableOfContents
       id="something"
