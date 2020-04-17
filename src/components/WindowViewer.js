@@ -39,11 +39,6 @@ export class WindowViewer extends Component {
         });
         manifestoCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
       });
-
-      currentCanvases.map(canvas => new ManifestoCanvas(canvas))
-        .map(manifestoCanvas => manifestoCanvas.annotationListUris.forEach((uri) => {
-          fetchAnnotation(manifestoCanvas.canvas.id, uri);
-        }));
     }
   }
 
