@@ -123,7 +123,9 @@ export class OpenSeadragonViewer extends Component {
       this.viewer.forceRedraw();
     }
 
-    if (!this.tileSourcesMatch(prevProps.tileSources)) {
+    if (!this.tileSourcesMatch(prevProps.tileSources)
+      || !this.nonTiledImagedMatch(prevProps.nonTiledImages)
+    ) {
       this.viewer.close();
       this.addAllImageSources();
     } else if (viewer && !this.osdUpdating) {
@@ -271,6 +273,25 @@ export class OpenSeadragonViewer extends Component {
         return false;
       }
       if (tileSource['@id'] === prevTileSources[index]['@id']) {
+        return true;
+      }
+      return false;
+    });
+  }
+
+  /**
+   * nonTiledImagedMatch - compares previous images to current to determin
+   * whether a refresh of the OSD viewer is needed
+   */
+  nonTiledImagedMatch(prevNonTiledImages) {
+    const { nonTiledImages } = this.props;
+    if (nonTiledImages.length === 0 && prevNonTiledImages.length === 0) return true;
+
+    return nonTiledImages.some((image, index) => {
+      if (!prevNonTiledImages[index]) {
+        return false;
+      }
+      if (image.id === prevNonTiledImages[index].id) {
         return true;
       }
       return false;
