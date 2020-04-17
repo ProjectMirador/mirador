@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import manifesto from 'manifesto.js';
+import { Utils } from 'manifesto.js';
 import Input from '@material-ui/core/Input';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
@@ -39,7 +39,7 @@ describe('CanvasLayers', () => {
 
   it('renders canvas layers in a list', () => {
     const wrapper = createWrapper({
-      canvas: manifesto.create(manifestFixtureHamilton).getSequences()[0].getCanvasByIndex(0),
+      canvas: Utils.parseManifest(manifestFixtureHamilton).getSequences()[0].getCanvasByIndex(0),
       layers: [
         { id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg' },
         { id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png' },
@@ -96,7 +96,7 @@ describe('CanvasLayers', () => {
     beforeEach(() => {
       updateLayers = jest.fn();
       const wrapper = createWrapper({
-        canvas: manifesto.create(manifestFixtureHamilton).getSequences()[0].getCanvasByIndex(0),
+        canvas: Utils.parseManifest(manifestFixtureHamilton).getSequences()[0].getCanvasByIndex(0),
         layers: [
           { id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg' },
           { id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png' },
