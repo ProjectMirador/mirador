@@ -139,6 +139,6 @@ export const getDefaultSidebarVariant = createSelector(
     getManifestTreeStructure,
   ],
   tree => (
-    tree && tree.nodes && tree.nodes.length > 0 ? 'tableOfContents' : 'thumbnail'
+    tree && tree.nodes && tree.nodes.length > 0 ? 'tableOfContents' : 'item'
   ),
 );

@@ -1,12 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
-import { SidebarIndexCompact } from '../../../src/components/SidebarIndexCompact';
+import { SidebarIndexItem } from '../../../src/components/SidebarIndexItem';
 
 /** */
 function createWrapper(props) {
   return shallow(
-    <SidebarIndexCompact
+    <SidebarIndexItem
       canvas={{ label: 'yolo' }}
       classes={{}}
       {...props}
@@ -14,7 +14,7 @@ function createWrapper(props) {
   );
 }
 
-describe('SidebarIndexCompact', () => {
+describe('SidebarIndexItem', () => {
   it('creates Typography with a canvas label', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(Typography).length).toBe(1);
