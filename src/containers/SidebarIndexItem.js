@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
-import { SidebarIndexCompact } from '../components/SidebarIndexCompact';
+import { SidebarIndexItem } from '../components/SidebarIndexItem';
 
 /**
  * Styles for withStyles HOC
@@ -18,7 +18,7 @@ const enhance = compose(
   withStyles(styles),
   withTranslation(),
   connect(null, null),
-  withPlugins('SidebarIndexCompact'),
+  withPlugins('SidebarIndexItem'),
 );
 
-export default enhance(SidebarIndexCompact);
+export default enhance(SidebarIndexItem);

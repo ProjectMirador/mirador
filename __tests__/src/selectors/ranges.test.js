@@ -194,7 +194,7 @@ describe('getNodeIdToScrollTo', () => {
 describe('getDefaultSidebarVariant', () => {
   it('returns thumbnail when no ranges exist', () => {
     const noRangeState = setIn(state, ['manifests', 'mID', 'json'], noRangesJson);
-    expect(getDefaultSidebarVariant(noRangeState, { windowId: 'w1' })).toBe('thumbnail');
+    expect(getDefaultSidebarVariant(noRangeState, { windowId: 'w1' })).toBe('item');
   });
   it('returns tableOfContents when ranges exist', () => {
     expect(getDefaultSidebarVariant(state, { windowId: 'w1' })).toBe('tableOfContents');

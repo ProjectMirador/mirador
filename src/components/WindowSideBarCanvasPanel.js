@@ -97,9 +97,9 @@ export class WindowSideBarCanvasPanel extends Component {
                 classes={{ select: classes.select }}
                 className={classes.selectEmpty}
               >
-                <MenuItem value="compact"><Typography variant="body2">{ t('compactList') }</Typography></MenuItem>
-                <MenuItem value="thumbnail"><Typography variant="body2">{ t('thumbnailList') }</Typography></MenuItem>
                 <MenuItem value="tableOfContents"><Typography variant="body2">{ t('tableOfContentsList') }</Typography></MenuItem>
+                <MenuItem value="item"><Typography variant="body2">{ t('itemList') }</Typography></MenuItem>
+                <MenuItem value="thumbnail"><Typography variant="body2">{ t('thumbnailList') }</Typography></MenuItem>
               </Select>
             </FormControl>
           )}
@@ -117,6 +117,6 @@ WindowSideBarCanvasPanel.propTypes = {
   t: PropTypes.func.isRequired,
   toggleDraggingEnabled: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
-  variant: PropTypes.oneOf(['compact', 'thumbnail', 'tableOfContents']).isRequired,
+  variant: PropTypes.oneOf(['item', 'thumbnail', 'tableOfContents']).isRequired,
   windowId: PropTypes.string.isRequired,
 };

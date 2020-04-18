@@ -25,7 +25,7 @@ function createWrapper(props) {
       config={{ canvasNavigation: { height: 100 } }}
       updateVariant={() => {}}
       selectedCanvases={[canvases[1]]}
-      variant="compact"
+      variant="item"
       {...props}
     />,
   );
@@ -42,8 +42,8 @@ describe('WindowSideBarCanvasPanel', () => {
     it('updates the variant', () => {
       const updateVariant = jest.fn();
       const wrapper = createWrapper({ updateVariant });
-      wrapper.instance().handleVariantChange({ target: { value: 'compact' } });
-      expect(updateVariant).toHaveBeenCalledWith('compact');
+      wrapper.instance().handleVariantChange({ target: { value: 'item' } });
+      expect(updateVariant).toHaveBeenCalledWith('item');
     });
   });
 });

@@ -4,7 +4,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { ScrollTo } from './ScrollTo';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
-import SidebarIndexCompact from '../containers/SidebarIndexCompact';
+import SidebarIndexItem from '../containers/SidebarIndexItem';
 import SidebarIndexThumbnail from '../containers/SidebarIndexThumbnail';
 
 /** */
@@ -55,7 +55,7 @@ export class SidebarIndexList extends Component {
                   component="li"
                   selected={!!selectedCanvases.find(c => c.id === canvas.id)}
                 >
-                  {variant === 'compact' && <SidebarIndexCompact canvas={canvas} />}
+                  {variant === 'item' && <SidebarIndexItem canvas={canvas} />}
                   {variant === 'thumbnail' && <SidebarIndexThumbnail canvas={canvas} otherCanvas={canvases[canvasIndex]} />}
                 </ListItem>
               </ScrollTo>
@@ -73,11 +73,11 @@ SidebarIndexList.propTypes = {
   containerRef: PropTypes.oneOf([PropTypes.func, PropTypes.object]).isRequired,
   selectedCanvases: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string })),
   setCanvas: PropTypes.func.isRequired,
-  variant: PropTypes.oneOf(['compact', 'thumbnail']),
+  variant: PropTypes.oneOf(['item', 'thumbnail']),
   windowId: PropTypes.string.isRequired,
 };
 
 SidebarIndexList.defaultProps = {
   selectedCanvases: [],
-  variant: 'thumbnail',
+  variant: 'item',
 };

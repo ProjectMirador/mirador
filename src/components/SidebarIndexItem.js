@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
 
 /** */
-export class SidebarIndexCompact extends Component {
+export class SidebarIndexItem extends Component {
   /** */
   render() {
     const {
@@ -24,7 +24,7 @@ export class SidebarIndexCompact extends Component {
   }
 }
 
-SidebarIndexCompact.propTypes = {
+SidebarIndexItem.propTypes = {
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
