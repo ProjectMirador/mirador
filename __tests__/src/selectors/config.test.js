@@ -4,6 +4,7 @@ import {
   getTheme,
   getThemeIds,
   getContainerId,
+  getThemeDirection,
 } from '../../../src/state/selectors';
 
 describe('getLanguagesFromConfigWithCurrent', () => {
@@ -93,5 +94,16 @@ describe('getContainerId', () => {
   it('returns the container id', () => {
     const state = { config: { id: 'mirador' } };
     expect(getContainerId(state)).toEqual('mirador');
+  });
+});
+
+describe('getThemeDirection', () => {
+  it('returns the configured theme direction', () => {
+    const state = { config: { theme: { direction: 'rtl' } } };
+    expect(getThemeDirection(state)).toBe('rtl');
+  });
+  it('returns ltr as default', () => {
+    const state = { config: { theme: { } } };
+    expect(getThemeDirection(state)).toBe('ltr');
   });
 });
