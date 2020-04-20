@@ -15,22 +15,22 @@ describe('Mirador Invalid API Response Handler Test', () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/');
   });
   it('breaks Mirador', async () => {
-    fetchManifest('http://localhost:5000/invalid');
-    await expect(page).toMatchElement('li', { text: 'http://localhost:5000/invalid', timeout: 2000 });
+    fetchManifest('http://localhost:4488/invalid');
+    await expect(page).toMatchElement('li', { text: 'http://localhost:4488/invalid', timeout: 2000 });
   }, 10000);
 
   it('renders an error message when a manifest cannot be loaded (and allows it to be dismissed)', async () => {
-    fetchManifest('http://localhost:5000/api/broken');
+    fetchManifest('http://localhost:4488/__tests__/fixtures/version-2/broken');
 
     await expect(page).toMatchElement(
       'p', { text: 'The resource cannot be added:', timeout: 2000 },
     );
     await expect(page).toMatchElement(
-      'p', { text: 'http://localhost:5000/api/broken' },
+      'p', { text: 'http://localhost:4488/__tests__/fixtures/version-2/broken' },
     );
     await expect(page).toClick('button', { text: 'Dismiss' });
 
-    await page.waitFor(() => !document.querySelector('li[data-manifestid="http://localhost:5000/api/broken"]'));
+    await page.waitFor(() => !document.querySelector('li[data-manifestid="http://localhost:4488/__tests__/fixtures/version-2/broken"]'));
 
     await expect(page).not.toMatchElement(
       'p',
