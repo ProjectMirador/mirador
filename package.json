@@ -12,7 +12,7 @@
     "clean": "rm -rf ./dist",
     "lint": "node_modules/.bin/eslint ./ && npm run lint:translations",
     "lint:translations": "node ./scripts/i18n-lint.js",
-    "server": "node_modules/.bin/http-server",
+    "server": "node_modules/.bin/http-server --cors",
     "test": "npm run build && npm run lint && npm run size && jest -c jest.json",
     "test:watch": "jest -c jest.json --watch",
     "build": "webpack --mode=production",
@@ -22,8 +22,7 @@
     "build:watch": "webpack --watch --mode=development",
     "prepublishOnly": "npm run clean && npm run build:es && npm run build:cjs && npm run build",
     "size": "bundlewatch --config bundlewatch.config.json",
-    "start": "npm run build:dev && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\"",
-    "server:json": "node ./scripts/json-server/server.js >> ./scripts/json-server/json-server.log"
+    "start": "npm run build:dev && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\""
   },
   "license": "Apache-2.0",
   "contributors": [
@@ -109,7 +108,6 @@
     "jest-fetch-mock": "^2.1.2",
     "jest-puppeteer": "^4.1.1",
     "jsdom": "15.1.1",
-    "json-server": "^0.15.0",
     "puppeteer": "^1.18.1",
     "react": "^16.8.6",
     "react-dev-utils": "^9.0.1",

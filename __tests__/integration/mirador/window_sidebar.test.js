@@ -6,11 +6,11 @@ describe('Window Sidebars', () => {
 
     await expect(page).toClick('#addBtn');
     await expect(page).toClick('.mirador-add-resource-button');
-    await expect(page).toFill('#manifestURL', 'http://localhost:5000/api/001');
+    await expect(page).toFill('#manifestURL', 'http://localhost:4488/__tests__/fixtures/version-2/001.json');
     await expect(page).toClick('#fetchBtn');
 
-    await expect(page).toMatchElement('[data-manifestid="http://localhost:5000/api/001"] button');
-    await expect(page).toClick('[data-manifestid="http://localhost:5000/api/001"] button');
+    await expect(page).toMatchElement('[data-manifestid="http://localhost:4488/__tests__/fixtures/version-2/001.json"] button');
+    await expect(page).toClick('[data-manifestid="http://localhost:4488/__tests__/fixtures/version-2/001.json"] button');
   });
 
   it('renders and updates canvas level metadata', async () => {
@@ -24,7 +24,7 @@ describe('Window Sidebars', () => {
     ));
 
     const windowId = Object.values(windows)
-      .find(window => window.manifestId === 'http://localhost:5000/api/001')
+      .find(window => window.manifestId === 'http://localhost:4488/__tests__/fixtures/version-2/001.json')
       .id;
 
     await expect(page).toMatchElement(`#${windowId} button[aria-label="Toggle sidebar"]`);
@@ -39,7 +39,7 @@ describe('Window Sidebars', () => {
     ));
 
     const windowId = Object.values(windows)
-      .find(window => window.manifestId === 'http://localhost:5000/api/001')
+      .find(window => window.manifestId === 'http://localhost:4488/__tests__/fixtures/version-2/001.json')
       .id;
 
     await expect(page).toMatchElement(`#${windowId} button[aria-label="Toggle sidebar"]`);
