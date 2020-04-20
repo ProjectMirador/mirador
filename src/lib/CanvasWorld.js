@@ -73,10 +73,11 @@ export default class CanvasWorld {
   /** @private */
   getLayerMetadata(contentResource) {
     if (!this.layers) return undefined;
-
     const manifestoCanvas = this.canvases.find(c => (
       c.imageResources.find(r => r.id === contentResource.id)
     ));
+
+    if (!manifestoCanvas) return undefined;
 
     const resourceIndex = manifestoCanvas.imageResources
       .findIndex(r => r.id === contentResource.id);
