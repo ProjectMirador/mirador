@@ -76,17 +76,17 @@ export class WindowViewer extends Component {
    */
   infoResponseIsInStore() {
     const responses = this.currentInfoResponses();
-    if (responses.length === this.imageIds().length) {
+    if (responses.length === this.imageServiceIds().length) {
       return true;
     }
     return false;
   }
 
   /** */
-  imageIds() {
+  imageServiceIds() {
     const { currentCanvases } = this.props;
 
-    return flatten(currentCanvases.map(canvas => new ManifestoCanvas(canvas).imageIds));
+    return flatten(currentCanvases.map(canvas => new ManifestoCanvas(canvas).imageServiceIds));
   }
 
   /**
@@ -96,7 +96,7 @@ export class WindowViewer extends Component {
   currentInfoResponses() {
     const { infoResponses } = this.props;
 
-    return this.imageIds().map(imageId => (
+    return this.imageServiceIds().map(imageId => (
       infoResponses[imageId]
     )).filter(infoResponse => (infoResponse !== undefined
       && infoResponse.isFetching === false
@@ -110,7 +110,7 @@ export class WindowViewer extends Component {
     const responses = this.currentInfoResponses()
       .map(infoResponse => infoResponse.json);
     // Only return actual tileSources when all current canvases have completed.
-    if (responses.length === this.imageIds().length) {
+    if (responses.length === this.imageServiceIds().length) {
       return responses;
     }
     return [];

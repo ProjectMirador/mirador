@@ -206,8 +206,8 @@ export class OpenSeadragonViewer extends Component {
   addAllImageSources() {
     const { nonTiledImages, tileSources } = this.props;
     Promise.all(
-      tileSources.map((tileSource, i) => this.addTileSource(tileSource, i)),
-      nonTiledImages.map((image, i) => this.addNonTiledImage(image, i)),
+      tileSources.map(tileSource => this.addTileSource(tileSource)),
+      nonTiledImages.map(image => this.addNonTiledImage(image)),
     ).then(() => {
       if (tileSources[0] || nonTiledImages[0]) {
         this.zoomToWorld();
@@ -216,7 +216,7 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /** */
-  addNonTiledImage(image, i = 0) {
+  addNonTiledImage(contentResource) {
     const { canvasWorld } = this.props;
     return new Promise((resolve, reject) => {
       if (!this.viewer) {
@@ -225,29 +225,36 @@ export class OpenSeadragonViewer extends Component {
       this.viewer.addSimpleImage({
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
-          ...canvasWorld.canvasToWorldCoordinates(i),
+          ...canvasWorld.canvasToWorldCoordinates(contentResource),
         ),
+        index: canvasWorld.layerIndexOfImageResource(contentResource),
+        opacity: canvasWorld.layerOpacityOfImageResource(contentResource),
         success: event => resolve(event),
-        url: image.id,
+        url: contentResource.id,
       });
     });
   }
 
   /**
    */
-  addTileSource(tileSource, i = 0) {
+  addTileSource(tileSource) {
     const { canvasWorld } = this.props;
     return new Promise((resolve, reject) => {
       if (!this.viewer) {
         return;
       }
+
+      const contentResource = canvasWorld.contentResource(tileSource);
+
+      if (!contentResource) return;
+
       this.viewer.addTiledImage({
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
-          ...canvasWorld.canvasToWorldCoordinates(tileSource),
+          ...canvasWorld.canvasToWorldCoordinates(contentResource),
         ),
-        index: canvasWorld.layerIndexOfImageResource(tileSource),
-        opacity: canvasWorld.layerOpacityOfImageResource(tileSource),
+        index: canvasWorld.layerIndexOfImageResource(contentResource),
+        opacity: canvasWorld.layerOpacityOfImageResource(contentResource),
         success: event => resolve(event),
         tileSource,
       });

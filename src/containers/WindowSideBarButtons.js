@@ -30,9 +30,8 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
 
 /** */
 function hasLayers(canvases) {
-  return canvases && canvases.some(c => new ManifestoCanvas(c).imageIds.length > 1);
+  return canvases && canvases.some(c => new ManifestoCanvas(c).imageResources.length > 1);
 }
-
 
 /**
  * mapStateToProps - used to hook up connect to state

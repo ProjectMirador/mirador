@@ -8,7 +8,7 @@ const canvasSubset = [canvases[1], canvases[2]];
 describe('CanvasWorld', () => {
   describe('constructor', () => {
     it('sets canvases', () => {
-      expect(new CanvasWorld([1]).canvases).toEqual([1]);
+      expect(new CanvasWorld([1]).canvases.map(c => c.canvas)).toEqual([1]);
     });
   });
   describe('worldBounds', () => {
@@ -19,13 +19,13 @@ describe('CanvasWorld', () => {
   });
   describe('canvasToWorldCoordinates', () => {
     it('converts canvas coordinates to world offset by location', () => {
-      expect(new CanvasWorld([canvases[1]]).canvasToWorldCoordinates({ '@id': 'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005' }))
+      expect(new CanvasWorld([canvases[1]]).canvasToWorldCoordinates({ id: 'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/full/full/0/default.jpg' }))
         .toEqual([0, 0, 6501, 4421]);
-      expect(new CanvasWorld(canvasSubset).canvasToWorldCoordinates({ '@id': 'https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410' }))
+      expect(new CanvasWorld(canvasSubset).canvasToWorldCoordinates({ id: 'https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410/full/full/0/default.jpg' }))
         .toEqual([6305, 0, 2848, 4288]);
     });
     it('supports RTL orientations', () => {
-      expect(new CanvasWorld(canvasSubset, null, 'right-to-left').canvasToWorldCoordinates({ '@id': 'https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410' }))
+      expect(new CanvasWorld(canvasSubset, null, 'right-to-left').canvasToWorldCoordinates({ id: 'https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410/full/full/0/default.jpg' }))
         .toEqual([0, 0, 2848, 4288]);
     });
   });
@@ -48,7 +48,7 @@ describe('CanvasWorld', () => {
   });
 
   describe('layerOpacityOfImageResource', () => {
-    const tileSource1 = { '@id': 'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005' };
+    const tileSource1 = { id: 'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/full/full/0/default.jpg' };
     it('returns 0 if the layer is currently hidden', () => {
       const layers = {
         'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1': {
@@ -98,7 +98,7 @@ describe('CanvasWorld', () => {
   });
 
   describe('layerIndexOfImageResource', () => {
-    const tileSource0 = { '@id': 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44' };
+    const tileSource0 = { id: 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/full/0/default.jpg' };
     it('returns undefined by default', () => {
       expect(
         new CanvasWorld(canvases).layerIndexOfImageResource(tileSource0),

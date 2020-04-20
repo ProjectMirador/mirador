@@ -13,6 +13,21 @@ export default class ManifestoCanvas {
     this.canvas = canvas;
   }
 
+  /** */
+  get id() {
+    return this.canvas.id;
+  }
+
+  /** */
+  getWidth() {
+    return this.canvas.getWidth();
+  }
+
+  /** */
+  getHeight() {
+    return this.canvas.getHeight();
+  }
+
   /**
    * Implements Manifesto's canonicalImageUri algorithm to support
    * IIIF Presentation v3
@@ -98,22 +113,18 @@ export default class ManifestoCanvas {
         default:
           return resource;
       }
-    })).filter(r => r && r.getServices()[0] && r.getServices()[0].id);
-  }
-
-  /**
-   */
-  get imageId() {
-    if (!(this.imageResource)) {
-      return undefined;
-    }
-
-    return this.imageResource.getServices()[0].id;
+    }));
   }
 
   /** */
-  get imageIds() {
-    return this.imageResources.map(r => r.getServices()[0].id);
+  get iiifImageResources() {
+    return this.imageResources
+      .filter(r => r && r.getServices()[0] && r.getServices()[0].id);
+  }
+
+  /** */
+  get imageServiceIds() {
+    return this.iiifImageResources.map(r => r.getServices()[0].id);
   }
 
   /** */

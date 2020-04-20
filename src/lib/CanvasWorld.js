@@ -10,7 +10,7 @@ export default class CanvasWorld {
    * world from.
    */
   constructor(canvases, layers, viewingDirection = 'left-to-right') {
-    this.canvases = canvases;
+    this.canvases = canvases.map(c => new ManifestoCanvas(c));
     this.layers = layers;
     this.viewingDirection = viewingDirection;
   }
@@ -24,14 +24,15 @@ export default class CanvasWorld {
    * canvasToWorldCoordinates - calculates the canvas coordinates respective to
    * the world.
    */
-  canvasToWorldCoordinates(tileSource) {
+  canvasToWorldCoordinates(contentResource) {
     const wholeBounds = this.worldBounds();
-    const i = this.indexOfImageResource(tileSource['@id']);
-    const canvas = this.canvases[i];
-    const aspectRatio = canvas.getWidth() / canvas.getHeight();
+    const manifestoCanvasIndex = this.canvases.findIndex(c => (
+      c.imageResources.find(r => r.id === contentResource.id)
+    ));
+    const { aspectRatio } = this.canvases[manifestoCanvasIndex];
     const scaledWidth = Math.floor(wholeBounds[3] * aspectRatio);
     let x = 0;
-    if (i === this.secondCanvasIndex) {
+    if (manifestoCanvasIndex === this.secondCanvasIndex) {
       x = wholeBounds[2] - scaledWidth;
     }
     return [
@@ -55,33 +56,33 @@ export default class CanvasWorld {
     return this.canvases.map(canvas => canvas.id).indexOf(canvasTarget);
   }
 
-  /** @private */
-  indexOfImageResource(imageId) {
-    return this.canvases.findIndex(c => new ManifestoCanvas(c).imageIds.some(id => (
-      normalizeUrl(id, { stripAuthentication: false })
-        === normalizeUrl(imageId, { stripAuthentication: false })
-    )));
-  }
-
-  /** @private */
-  getLayerMetadata(tileSource) {
-    if (!this.layers) return undefined;
-
+  /** Get the IIIF content resource for an image */
+  contentResource(tileSource) {
     const imageId = tileSource['@id'];
-    const canvases = this.canvases.map(c => new ManifestoCanvas(c));
-    const manifestoCanvas = canvases.find(c => c.imageIds.some(id => (
+    const manifestoCanvas = this.canvases.find(c => c.imageServiceIds.some(id => (
       normalizeUrl(id, { stripAuthentication: false })
         === normalizeUrl(imageId, { stripAuthentication: false }))));
     if (!manifestoCanvas) return undefined;
 
-    const resourceIndex = manifestoCanvas.imageResources
-      .findIndex(r => (
+    return manifestoCanvas.imageResources
+      .find(r => (
         normalizeUrl(r.getServices()[0].id, { stripAuthentication: false })
         === normalizeUrl(imageId, { stripAuthentication: false })));
-    const resource = manifestoCanvas.imageResources[resourceIndex];
+  }
+
+  /** @private */
+  getLayerMetadata(contentResource) {
+    if (!this.layers) return undefined;
+
+    const manifestoCanvas = this.canvases.find(c => (
+      c.imageResources.find(r => r.id === contentResource.id)
+    ));
+
+    const resourceIndex = manifestoCanvas.imageResources
+      .findIndex(r => r.id === contentResource.id);
 
     const layer = this.layers[manifestoCanvas.canvas.id];
-    const imageResourceLayer = layer && layer[resource.id];
+    const imageResourceLayer = layer && layer[contentResource.id];
 
     return {
       index: resourceIndex,
@@ -93,8 +94,8 @@ export default class CanvasWorld {
   }
 
   /** */
-  layerOpacityOfImageResource(tileSource) {
-    const layer = this.getLayerMetadata(tileSource);
+  layerOpacityOfImageResource(contentResource) {
+    const layer = this.getLayerMetadata(contentResource);
     if (!layer) return 1;
     if (!layer.visibility) return 0;
 
@@ -102,8 +103,8 @@ export default class CanvasWorld {
   }
 
   /** */
-  layerIndexOfImageResource(tileSource) {
-    const layer = this.getLayerMetadata(tileSource);
+  layerIndexOfImageResource(contentResource) {
+    const layer = this.getLayerMetadata(contentResource);
     if (!layer) return undefined;
 
     return layer.total - layer.index - 1;
