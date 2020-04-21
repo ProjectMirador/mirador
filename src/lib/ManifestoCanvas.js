@@ -1,5 +1,6 @@
 import flatten from 'lodash/flatten';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import flattenDeep from 'lodash/flattenDeep';
+import { Canvas, Utils } from 'manifesto.js';
 /**
  * ManifestoCanvas - adds additional, testable logic around Manifesto's Canvas
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
@@ -12,16 +13,32 @@ export default class ManifestoCanvas {
     this.canvas = canvas;
   }
 
+  /** */
+  get id() {
+    return this.canvas.id;
+  }
+
+  /** */
+  getWidth() {
+    return this.canvas.getWidth();
+  }
+
+  /** */
+  getHeight() {
+    return this.canvas.getHeight();
+  }
+
   /**
    * Implements Manifesto's canonicalImageUri algorithm to support
    * IIIF Presentation v3
    */
-  canonicalImageUri(w, format = 'jpg') {
-    const service = this.imageResource.getServices()[0];
+  canonicalImageUri(w, format = 'jpg', resourceId = undefined) {
+    const resource = this.getImageResourceOrDefault(resourceId);
+    const service = resource && resource.getServices()[0];
     if (!(service)) return undefined;
     const region = 'full';
     let size = w;
-    const imageWidth = this.imageResource.getWidth();
+    const imageWidth = resource.getWidth();
     if ((!w) || w === imageWidth) size = 'full';
     const quality = Utils.getImageQuality(service.getProfile());
     const id = service.id.replace(/\/+$/, '');
@@ -79,57 +96,55 @@ export default class ManifestoCanvas {
    * Will negotiate a v2 or v3 type of resource
    */
   get imageResource() {
-    return (this.presentation2ImageResource || this.presentation3ImageResource);
+    return this.imageResources[0];
   }
 
   /** */
-  get presentation2ImageResource() {
-    if (!(
-      this.canvas.getImages()[0]
-      && this.canvas.getImages()[0].getResource()
-      && this.canvas.getImages()[0].getResource().getServices()[0]
-      && this.canvas.getImages()[0].getResource().getServices()[0].id
-    )) {
-      return undefined;
-    }
+  get imageResources() {
+    const resources = flattenDeep([
+      this.canvas.getImages().map(i => i.getResource()),
+      this.canvas.getContent().map(i => i.getBody()),
+    ]);
 
-    return this.canvas.getImages()[0].getResource();
+    return flatten(resources.map((resource) => {
+      switch (resource.getProperty('type')) {
+        case 'oa:Choice':
+          return new Canvas({ images: flatten([resource.getProperty('default'), resource.getProperty('item')]).map(r => ({ resource: r })) }, this.canvas.options).getImages().map(i => i.getResource());
+        default:
+          return resource;
+      }
+    }));
   }
 
   /** */
-  get presentation3ImageResource() {
-    if (!(
-      this.canvas.getContent()[0]
-      && this.canvas.getContent()[0]
-      && this.canvas.getContent()[0].getBody()[0]
-      && this.canvas.getContent()[0].getBody()[0].getServices()[0]
-      && this.canvas.getContent()[0].getBody()[0].getServices()[0].id
-    )) {
-      return undefined;
-    }
-
-    return this.canvas.getContent()[0].getBody()[0];
+  get iiifImageResources() {
+    return this.imageResources
+      .filter(r => r && r.getServices()[0] && r.getServices()[0].id);
   }
 
-  /**
-   */
-  get imageId() {
-    if (!(this.imageResource)) {
-      return undefined;
-    }
-
-    return this.imageResource.getServices()[0].id;
+  /** */
+  get imageServiceIds() {
+    return this.iiifImageResources.map(r => r.getServices()[0].id);
   }
 
-  /**
-   */
-  get imageInformationUri() {
-    if (!(this.imageId)) {
-      return undefined;
-    }
+  /** */
+  getImageResourceOrDefault(resourceId) {
+    const resources = this.imageResources;
+
+    if (resourceId) return resources.find(r => r.id === resourceId);
+    return resources[0];
+  }
+
+  /** @private */
+  imageInformationUri(resourceId) {
+    const image = this.getImageResourceOrDefault(resourceId);
+
+    const imageId = image && image.getServices()[0].id;
+
+    if (!imageId) return undefined;
 
     return `${
-      this.imageId.replace(/\/$/, '')
+      imageId.replace(/\/$/, '')
     }/info.json`;
   }
 
@@ -183,11 +198,11 @@ export default class ManifestoCanvas {
    * Creates a canonical image request for a thumb
    * @param {Number} height
    */
-  thumbnail(maxWidth = undefined, maxHeight = undefined) {
+  thumbnail(maxWidth = undefined, maxHeight = undefined, resourceId = undefined) {
     let width;
     let height;
 
-    if (!this.imageInformationUri) {
+    if (!this.imageInformationUri(resourceId)) {
       return undefined;
     }
 
@@ -205,7 +220,7 @@ export default class ManifestoCanvas {
     // note that, although the IIIF server may support sizeByConfinedWh (e.g. !w,h)
     // this is a IIIF level 2 feature, so we're instead providing w, or h,-style requests
     // which are only level 1.
-    return this.canonicalImageUri().replace(/\/full\/.*\/0\//, `/full/${width || ''},${height || ''}/0/`);
+    return this.canonicalImageUri(undefined, undefined, resourceId).replace(/\/full\/.*\/0\//, `/full/${width || ''},${height || ''}/0/`);
   }
 
   /** @private */

@@ -8,6 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/InfoSharp';
 import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import AttributionIcon from '@material-ui/icons/CopyrightSharp';
+import LayersIcon from '@material-ui/icons/LayersSharp';
 import SearchIcon from '@material-ui/icons/SearchSharp';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
 import { keys, chars } from '../lib/KeyHelper';
@@ -132,6 +133,8 @@ export class WindowSideBarButtons extends Component {
     const {
       classes,
       hasAnnotations,
+      hasAnyLayers,
+      hasCurrentLayers,
       hasSearchResults,
       hasSearchService,
       panels,
@@ -204,6 +207,16 @@ export class WindowSideBarButtons extends Component {
             )}
           />
         )}
+        { panels.layers && hasAnyLayers && (
+          <TabButton
+            value="layers"
+            icon={(
+              <Badge classes={{ badge: classes.badge }} invisible={!hasCurrentLayers} variant="dot">
+                <LayersIcon />
+              </Badge>
+            )}
+          />
+        )}
       </Tabs>
     );
   }
@@ -213,6 +226,8 @@ WindowSideBarButtons.propTypes = {
   addCompanionWindow: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.string),
   hasAnnotations: PropTypes.bool,
+  hasAnyLayers: PropTypes.bool,
+  hasCurrentLayers: PropTypes.bool,
   hasSearchResults: PropTypes.bool,
   hasSearchService: PropTypes.bool,
   panels: PropTypes.arrayOf(PropTypes.bool),
@@ -223,6 +238,8 @@ WindowSideBarButtons.propTypes = {
 WindowSideBarButtons.defaultProps = {
   classes: {},
   hasAnnotations: false,
+  hasAnyLayers: false,
+  hasCurrentLayers: false,
   hasSearchResults: false,
   hasSearchService: false,
   panels: [],

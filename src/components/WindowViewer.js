@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import flatten from 'lodash/flatten';
 import OSDViewer from '../containers/OpenSeadragonViewer';
 import WindowCanvasNavigationControls from '../containers/WindowCanvasNavigationControls';
 import ManifestoCanvas from '../lib/ManifestoCanvas';
@@ -33,10 +34,9 @@ export class WindowViewer extends Component {
     if (!this.infoResponseIsInStore()) {
       currentCanvases.forEach((canvas) => {
         const manifestoCanvas = new ManifestoCanvas(canvas);
-        const { imageResource } = manifestoCanvas;
-        if (imageResource) {
+        manifestoCanvas.imageResources.forEach((imageResource) => {
           fetchInfoResponse({ imageResource });
-        }
+        });
         manifestoCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
       });
     }
@@ -56,12 +56,16 @@ export class WindowViewer extends Component {
     ) {
       currentCanvases.forEach((canvas) => {
         const manifestoCanvas = new ManifestoCanvas(canvas);
-        const { imageResource } = manifestoCanvas;
-        if (imageResource) {
+        manifestoCanvas.imageResources.forEach((imageResource) => {
           fetchInfoResponse({ imageResource });
-        }
+        });
         manifestoCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
       });
+
+      currentCanvases.map(canvas => new ManifestoCanvas(canvas))
+        .map(manifestoCanvas => manifestoCanvas.annotationListUris.forEach((uri) => {
+          fetchAnnotation(manifestoCanvas.canvas.id, uri);
+        }));
     }
   }
 
@@ -71,13 +75,18 @@ export class WindowViewer extends Component {
    * @return [Boolean]
    */
   infoResponseIsInStore() {
-    const { currentCanvases } = this.props;
-
     const responses = this.currentInfoResponses();
-    if (responses.length === currentCanvases.length) {
+    if (responses.length === this.imageServiceIds().length) {
       return true;
     }
     return false;
+  }
+
+  /** */
+  imageServiceIds() {
+    const { currentCanvases } = this.props;
+
+    return flatten(currentCanvases.map(canvas => new ManifestoCanvas(canvas).imageServiceIds));
   }
 
   /**
@@ -85,10 +94,10 @@ export class WindowViewer extends Component {
    * canvases to be displayed.
    */
   currentInfoResponses() {
-    const { currentCanvases, infoResponses } = this.props;
+    const { infoResponses } = this.props;
 
-    return currentCanvases.map(canvas => (
-      infoResponses[new ManifestoCanvas(canvas).imageId]
+    return this.imageServiceIds().map(imageId => (
+      infoResponses[imageId]
     )).filter(infoResponse => (infoResponse !== undefined
       && infoResponse.isFetching === false
       && infoResponse.error === undefined));
@@ -98,12 +107,10 @@ export class WindowViewer extends Component {
    * Return an image information response from the store for the correct image
    */
   tileInfoFetchedFromStore() {
-    const { currentCanvases } = this.props;
-
     const responses = this.currentInfoResponses()
       .map(infoResponse => infoResponse.json);
     // Only return actual tileSources when all current canvases have completed.
-    if (responses.length === currentCanvases.length) {
+    if (responses.length === this.imageServiceIds().length) {
       return responses;
     }
     return [];

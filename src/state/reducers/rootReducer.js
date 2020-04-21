@@ -13,6 +13,7 @@ import {
   workspaceReducer,
   annotationsReducer,
   searchesReducer,
+  layersReducer,
 } from '.';
 
 /**
@@ -30,6 +31,7 @@ export default function createRootReducer(pluginReducers) {
     elasticLayout: elasticLayoutReducer,
     errors: errorsReducer,
     infoResponses: infoResponsesReducer,
+    layers: layersReducer,
     manifests: manifestsReducer,
     searches: searchesReducer,
     viewers: viewersReducer,

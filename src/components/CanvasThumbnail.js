@@ -109,6 +109,8 @@ export class CanvasThumbnail extends Component {
   /**
    */
   render() {
+    const { ImageProps } = this.props;
+
     return (
       <>
         <IntersectionObserver onChange={this.handleIntersection}>
@@ -117,6 +119,7 @@ export class CanvasThumbnail extends Component {
             role="presentation"
             src={this.imageSrc()}
             style={this.imageStyles()}
+            {...ImageProps}
           />
         </IntersectionObserver>
       </>
@@ -129,6 +132,7 @@ CanvasThumbnail.defaultImgPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANS
 
 CanvasThumbnail.propTypes = {
   aspectRatio: PropTypes.number,
+  ImageProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types,
   imageUrl: PropTypes.string,
   isValid: PropTypes.bool,
   maxHeight: PropTypes.number,
@@ -138,6 +142,7 @@ CanvasThumbnail.propTypes = {
 
 CanvasThumbnail.defaultProps = {
   aspectRatio: null,
+  ImageProps: undefined,
   imageUrl: null,
   isValid: true,
   maxHeight: null,

@@ -1,0 +1,422 @@
+{
+    "@context": "http://iiif.io/api/presentation/2/context.json",
+    "@id": "https://prtd.app/hamilton/manifest.json",
+    "@type": "sc:Manifest",
+    "label": "Letter from Alexander Hamilton Papers (September 6, 1780)",
+    "description": "<p>When the Library of Congress recently digitized the <a href=\"https://www.loc.gov/collections/alexander-hamilton-papers/about-this-collection/?loclr=blogloc\">Alexander Hamilton Papers</a>, <a href=\"https://www.loc.gov/resource/mss24612.001_0373_0521/?sp=81&loclr=blogloc\">this letter, unedited, with its 14 obliterated lines</a> from Alexander Hamilton to Elizabeth Schuyler (dated September 6, 1780, two months before they married), became visible to all for the first time. However, the lines were still unreadable. To find out what lay beneath the scratchings-out, Fenella France, chief of the <a href=\"https://www.loc.gov/preservation/scientists?loclr=blogloc\">Preservation Research and Testing Division</a>, and preservation staff Meghan Wilson and Chris Bolser used <a href=\"https://www.loc.gov/preservation/scientists/instrumentation/hyperspec_imaging.html?loclr=blogloc\">hyperspectral imaging</a>. A noninvasive analysis that employs light at different wavelengths to capture information not visible to the eye, hyperspectral imaging can determine the composition of inks and pigments, track changes in documents over time and reveal faded, erased or covered writing.</p><p>[Adapted from <a href=\"https://blogs.loc.gov/loc/author/wmal/\">Wendi Maloney</a>'s Library of Congress blog <a href=\"https://blogs.loc.gov/loc/2018/01/technology-at-the-library-long-hidden-text-is-uncovered-in-alexander-hamilton-letter/\">Technology at the Library: Long-Hidden Text Is Uncovered in Alexander Hamilton Letter</a> (January 11, 2018).</p>",
+    "attribution": "<p><a href=\"https://www.loc.gov/preservation/scientists?loclr=blogloc\">Preservation Research and Testing Division</a>, Library of Congress.</p>",
+    "thumbnail": {
+        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/,80/0/default.jpg",
+        "service": {
+            "@context": "http://iiif.io/api/image/2/context.json",
+            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC",
+            "profile": "http://iiif.io/api/image/2/level2.json"
+        }
+    },
+    "logo": "https://loc.gov/static/images/LOClogo1_c.svg",
+    "related": [
+    	{
+    		"@id": "https://www.loc.gov/resource/mss24612.001_0373_0521/?sp=81&loclr=blogloc",
+    		"label": "- Digitized Letter (Image 81, 1780) in the Alexander Hamilton Papers: General Correspondence, 1734-1804"
+    	},
+    	{
+    		"@id": "https://www.loc.gov/item/mss246120005/",
+    		"label": "- Catalogue record"
+    	},
+    	{
+    		"@id": "https://www.loc.gov/collections/alexander-hamilton-papers/about-this-collection/?loclr=blogloc",
+    		"label": "- Digitized Collection of the Alexander Hamilton Papers"
+        },
+        {
+            "@id": "https://blogs.loc.gov/loc/2018/01/technology-at-the-library-long-hidden-text-is-uncovered-in-alexander-hamilton-letter/",
+            "label": "- Technology at the Library: Long-Hidden Text Is Uncovered in Alexander Hamilton Letter (Wendi Maloney, Library of Congress blog)"
+        }
+    ],
+    "metadata": [
+        {
+            "label": "Transcription", 
+            "value": "<p>Do you know my sensations when I see the <br/>sweet characters from your hand? Yes you do, <br/>by comparing [them] with your [own] <br/>for my Betsey [loves] me and is [acquainted] <br/>with all the joys of fondness. [Would] you <br/>[exchange] them my dear for any other worthy <br/>blessings? Is there any thing you would put <br/>in competition[,] with one glowing [kiss] of <br/>animated tenderness? Anticipate my <br/>[unreadable], anticipate the delights we [unreadable] <br/>in the unrestrained intercourses of wedded love, <br/>and bet your heart joins mine in [fervent] <br/>[wishes] to heaven that [all obstacles] and [interruptions] <br/>May [be] speedily [removed].</p>"
+        },
+        {
+            "label": "Multispectral Imaging (MSI)",
+            "value": "<p>A non-invasive technique that captures information at specific wavelengths along the electromagnetic spectrum, inclusing those beyond the visible range. Multispectral data was captured at a resolution of 595 pixels per inch (ppi) with a Megavision 50 megapixel E7 camera, Kodak CCD camera back, 120mm Copal-0 hyperspectral lens, light emitting diode (LED) illumination spanning 365-940 nanometers (nm), and integrated Photoshoot capture software.</p>"
+        }
+    ],
+    "structures": [
+        {
+            "canvases": [
+                "https://prtd.app/hamilton/canvas/p1.json"
+            ],
+            "@id": "https://prtd.app/hamilton/range-1.json",
+            "@type": "sc:Range",
+            "label": "Hamilton Letter"
+        }
+    ],
+    "sequences": [
+        {
+            "@id": "https://prtd.app/hamilton/sequence/normal.json",
+            "@type": "sc:Sequence",
+            "label": "Current Page Order",
+            "canvases": [
+                {
+                    "otherContent": [
+                        {
+                            "@id": "https://prtd.app/hamilton/annotations.json", 
+                            "@type": "sc:AnnotationList"
+                        }
+                    ], 
+                    "@id": "https://prtd.app/hamilton/canvas/p1.json",
+                    "@type": "sc:Canvas",
+                    "label": "Hamilton Letter (September 6, 1780)",
+                    "width": 3912,
+                    "height": 4648,
+                    "thumbnail": {
+                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/,80/0/default.jpg",
+                        "service": {
+                            "@context": "http://iiif.io/api/image/2/context.json",
+                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC",
+                            "profile": "http://iiif.io/api/image/2/level2.json"
+                        }
+                    },
+                    "images": [
+                        {
+                            "@type": "oa:Annotation",
+                            "motivation": "sc:painting",
+                            "@id": "https://prtd.app/hamilton/canvas/p1/anno-01.json",
+                            "resource": {
+                                "default": {
+                                    "label": "Full-spectrum Color Image",
+                                    "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg",
+                                    "@type": "dctypes:Image",
+                                    "format": "image/jpeg",
+                                    "width": 3912,
+                                    "height": 4648,
+                                    "service": {
+                                        "@context": "http://iiif.io/api/image/2/context.json",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC",
+                                        "profile": "http://iiif.io/api/image/2/level2.json"
+                                    }
+                                },
+                                "item": [
+                                    {
+                                        "label": "Transcription - Blue",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/png",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "opacity": 0.35,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "365nm, Ultraviolet",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_001_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_001_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "400nm, Ultraviolet/Violet",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_002_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_002_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "420nm, Violet",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_003_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_003_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "450nm, Deep Blue",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_004_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_004_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "470nm, Blue",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_005_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_005_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "505nm, Cyan",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_006_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_006_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "530nm, Green",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_007_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_007_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "560nm, Lime",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_008_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_008_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "590nm, Amber",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_009_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_009_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "615nm, Red-Orange",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_010_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_010_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "630nm, Red",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_011_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_011_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "655nm, Deep Red",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_012_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_012_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "700nm, Infrared",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_013_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_013_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "730nm, Infrared",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_014_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_014_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "780nm, Infrared",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_015_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_015_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "870nm, Infrared",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_016_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_016_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    },
+                                    {
+                                        "label": "940nm, Infrared",
+                                        "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_017_F/full/862,1024/0/default.jpg",
+                                        "@type": "dctypes:Image",
+                                        "format": "image/jpeg",
+                                        "width": 3912,
+                                        "height": 4648,
+                                        "service": {
+                                            "@context": "http://iiif.io/api/image/2/context.json",
+                                            "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_017_F",
+                                            "profile": "http://iiif.io/api/image/2/level2.json"
+                                        }
+                                    }
+                                ],
+                                "@type": "oa:Choice"
+                            },
+                            "on": "https://prtd.app/hamilton/canvas/p1.json"
+                        }, 
+                        {
+                            "@type": "oa:Annotation",
+                            "motivation": "sc:painting",
+                            "@id": "https://prtd.app/hamilton/canvas/p1/anno-02.json",
+                            "resource": {
+                                "label": "PC17 - uncertain title",
+                                "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg",
+                                "@type": "dctypes:Image",
+                                "format": "image/jpeg",
+                                "width": 739,
+                                "height": 521,
+                                "service": {
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17",
+                                    "profile": "http://iiif.io/api/image/2/level2.json"
+                                }
+                            },
+                            "on": "https://prtd.app/hamilton/canvas/p1.json#xywh=552,1584,3360,2368"
+                        },
+                        {
+                            "@type": "oa:Annotation",
+                            "motivation": "sc:painting",
+                            "@id": "https://prtd.app/hamilton/canvas/p1/anno-03.json",
+                            "resource": {
+                                "label": "PC17-2 - uncertain title",
+                                "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17-2/full/739,521/0/default.jpg",
+                                "@type": "dctypes:Image",
+                                "format": "image/jpeg",
+                                "width": 739,
+                                "height": 521,
+                                "service": {
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17-2",
+                                    "profile": "http://iiif.io/api/image/2/level2.json"
+                                }
+                            },
+                            "on": "https://prtd.app/hamilton/canvas/p1.json#xywh=552,1584,3360,2368"
+                        },
+                        {
+                            "@type": "oa:Annotation",
+                            "motivation": "sc:painting",
+                            "@id": "https://prtd.app/hamilton/canvas/p1/anno-04.json",
+                            "resource": {
+                                "label": "Principal component analysis pseudocolor using bands 1, 3, and 5",
+                                "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PCA_RGB-1-3-5/full/739,521/0/default.jpg",
+                                "@type": "dctypes:Image",
+                                "format": "image/jpeg",
+                                "width": 739,
+                                "height": 521,
+                                "service": {
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PCA_RGB-1-3-5",
+                                    "profile": "http://iiif.io/api/image/2/level2.json"
+                                }
+                            },
+                            "on": "https://prtd.app/hamilton/canvas/p1.json#xywh=552,1584,3360,2368"
+                        },
+                        {
+                            "@type": "oa:Annotation",
+                            "motivation": "sc:painting",
+                            "@id": "https://prtd.app/hamilton/canvas/p1/anno-05.json",
+                            "resource": {
+                                "label": "Principal component analysis pseudocolor using bands 1, 3, and 5 with a gradient adjustment",
+                                "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PCA_RGB-1-3-5_gradi/full/739,521/0/default.jpg",
+                                "@type": "dctypes:Image",
+                                "format": "image/jpeg",
+                                "width": 739,
+                                "height": 521,
+                                "service": {
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "@id": "https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PCA_RGB-1-3-5_gradi",
+                                    "profile": "http://iiif.io/api/image/2/level2.json"
+                                }
+                            },
+                            "on": "https://prtd.app/hamilton/canvas/p1.json#xywh=552,1584,3360,2368"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

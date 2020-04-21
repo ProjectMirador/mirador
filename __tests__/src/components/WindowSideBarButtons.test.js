@@ -78,6 +78,7 @@ describe('WindowSideBarButtons (shallow)', () => {
     it('by default is off', () => {
       expect(wrapper.find('WithStyles(Tab)[value="search"]').length).toEqual(0);
     });
+
     it('can be configured to be on', () => {
       wrapper = createWrapper({ hasSearchService: true, panels: { search: true }, windowId });
       expect(wrapper.find('WithStyles(ForwardRef(Tab))[value="search"]').length).toEqual(1);
@@ -105,6 +106,43 @@ describe('WindowSideBarButtons (shallow)', () => {
         windowId,
       });
       tab = wrapper.find(Tab).find('[value="search"]');
+
+      expect(tab.find(Badge).props().invisible).toBe(true);
+    });
+  });
+
+  describe('layers', () => {
+    it('by default is off', () => {
+      expect(wrapper.find('WithStyles(Tab)[value="layers"]').length).toEqual(0);
+    });
+
+    it('can be configured to be on', () => {
+      wrapper = createWrapper({ hasAnyLayers: true, panels: { layers: true }, windowId });
+      expect(wrapper.find('WithStyles(ForwardRef(Tab))[value="layers"]').length).toEqual(1);
+    });
+
+    it('has a badge indicating if there are currently any layers', () => {
+      let tab;
+      wrapper = createWrapper({
+        hasAnyLayers: true,
+        hasCurrentLayers: true,
+        panels: {
+          layers: true,
+        },
+        windowId,
+      });
+      tab = wrapper.find(Tab).find('[value="layers"]');
+      expect(tab.find(Badge).props().invisible).toBe(false);
+
+      wrapper = createWrapper({
+        hasAnyLayers: true,
+        hasCurrentLayers: false,
+        panels: {
+          layers: true,
+        },
+        windowId,
+      });
+      tab = wrapper.find(Tab).find('[value="layers"]');
 
       expect(tab.find(Badge).props().invisible).toBe(true);
     });

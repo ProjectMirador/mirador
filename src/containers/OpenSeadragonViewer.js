@@ -13,6 +13,7 @@ import {
   getHighlightedAnnotationsOnCanvases,
   getCanvasLabel,
   getManifestViewingDirection,
+  getLayersForVisibleCanvases,
   getVisibleCanvases,
   getViewer,
   getSearchAnnotationsForWindow,
@@ -28,6 +29,7 @@ import {
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   canvasWorld: new CanvasWorld(
     getVisibleCanvases(state, { windowId }),
+    getLayersForVisibleCanvases(state, { windowId }),
     getManifestViewingDirection(state, { windowId }),
   ),
   highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),

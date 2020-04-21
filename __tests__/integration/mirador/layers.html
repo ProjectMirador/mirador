@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Mirador</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+  </head>
+  <body>
+    <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script type="text/javascript">
+     var miradorInstance = Mirador.viewer({
+       id: 'mirador',
+       windows: [{
+         manifestId: 'https://prtd.app/hamilton/manifest.json',
+       }],
+       window: {
+         defaultSideBarPanel: 'layers',
+         sideBarOpenByDefault: true,
+         panels: { // Configure which panels are visible in WindowSideBarButtons
+           layers: true,
+           search: true,
+         }
+       },
+       manifests: {
+         "https://demos.biblissima.fr/iiif/metadata/BVMM/chateauroux/manifest.json": {},
+         "https://prtd.app/aom/manifest.json": {},
+         "https://prtd.app/fv/manifest.json": {},
+         "https://manifests.britishart.yale.edu/Osbornfa1": {},
+       }
+     });
+    </script>
+  </body>
+</html>
