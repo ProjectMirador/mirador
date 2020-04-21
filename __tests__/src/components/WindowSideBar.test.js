@@ -26,4 +26,14 @@ describe('WindowSideBar', () => {
     expect(wrapper.find(Drawer).length).toBe(1);
     expect(wrapper.find(Drawer).prop('open')).toBe(true);
   });
+  it('when ltr', () => {
+    const wrapper = createWrapper();
+    expect(wrapper.find(Drawer).prop('anchor')).toBe('left');
+  });
+  it('when rtl', () => {
+    const wrapper = createWrapper({
+      direction: 'rtl',
+    });
+    expect(wrapper.find(Drawer).prop('anchor')).toBe('right');
+  });
 });

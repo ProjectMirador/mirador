@@ -27,6 +27,23 @@ describe('CompanionArea', () => {
     expect(wrapper.find(Slide).prop('direction')).toBe('left');
   });
 
+  it('when rtl, the left slide should be from the right', () => {
+    const wrapper = createWrapper({
+      direction: 'rtl',
+    });
+    expect(wrapper.find(CompanionWindowFactory).length).toBe(2);
+    expect(wrapper.find(Slide).prop('direction')).toBe('right');
+  });
+
+  it('when rtl, the right slide should be from the left', () => {
+    const wrapper = createWrapper({
+      direction: 'rtl',
+      position: 'left',
+    });
+    expect(wrapper.find(CompanionWindowFactory).length).toBe(2);
+    expect(wrapper.find(Slide).prop('direction')).toBe('left');
+  });
+
   it('should add the appropriate classes when the companion area fills the full width', () => {
     const wrapper = createWrapper({ position: 'bottom' });
     expect(wrapper.find('div.horizontal').length).toBe(2);

@@ -14,7 +14,7 @@ export class WindowSideBar extends Component {
    */
   render() {
     const {
-      classes, t, windowId, sideBarOpen,
+      classes, direction, t, windowId, sideBarOpen,
     } = this.props;
 
     return (
@@ -23,13 +23,13 @@ export class WindowSideBar extends Component {
           variant="persistent"
           className={classNames(classes.drawer)}
           classes={{ paper: classNames(classes.paper) }}
-          anchor="left"
+          anchor={direction === 'rtl' ? 'right' : 'left'}
           PaperProps={{
             'aria-label': t('sidebarPanelsNavigation'),
             component: 'nav',
-            style: { position: 'relative' },
+            style: { height: '100%', position: 'relative' },
           }}
-          SlideProps={{ mountOnEnter: true, unmountOnExit: true }}
+          SlideProps={{ direction: direction === 'rtl' ? 'left' : 'right', mountOnEnter: true, unmountOnExit: true }}
           open={sideBarOpen}
         >
           <WindowSideBarButtons windowId={windowId} />
@@ -41,6 +41,7 @@ export class WindowSideBar extends Component {
 
 WindowSideBar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  direction: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,
   t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
