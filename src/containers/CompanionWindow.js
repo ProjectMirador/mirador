@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core';
 import { withSize } from 'react-sizeme';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getCompanionWindow } from '../state/selectors';
+import { getCompanionWindow, getThemeDirection } from '../state/selectors';
 import { CompanionWindow } from '../components/CompanionWindow';
 
 /**
@@ -20,6 +20,7 @@ const mapStateToProps = (state, { id, windowId }) => {
   return {
     ...companionWindow,
     defaultSidebarPanelWidth,
+    direction: getThemeDirection(state),
     isDisplayed: (companionWindow
                   && companionWindow.content
                   && companionWindow.content.length > 0),

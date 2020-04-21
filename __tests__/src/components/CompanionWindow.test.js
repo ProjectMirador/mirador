@@ -9,6 +9,7 @@ function createWrapper(props) {
   return shallow(
     <CompanionWindow
       id="abc123"
+      direction="ltr"
       windowId="x"
       classes={{ horizontal: 'horizontal', small: 'small', vertical: 'vertical' }}
       companionWindow={{}}

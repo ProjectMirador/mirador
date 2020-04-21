@@ -15,8 +15,27 @@ import ns from '../config/css-ns';
  */
 export class CompanionWindow extends Component {
   /** */
+  openInNewStyle() {
+    const { direction } = this.props;
+    if (direction === 'rtl') return { transform: 'scale(-1, 1)' };
+    return {};
+  }
+
+
+  /** */
   resizeHandles() {
-    const { position } = this.props;
+    const { direction, position } = this.props;
+    const positions = {
+      ltr: {
+        default: 'left',
+        opposite: 'right',
+      },
+      rtl: {
+        default: 'right',
+        opposite: 'left',
+      },
+    };
+
 
     const base = {
       bottom: false,
@@ -30,11 +49,11 @@ export class CompanionWindow extends Component {
     };
 
     if (position === 'right' || position === 'far-right') {
-      return { ...base, left: true };
+      return { ...base, [positions[direction].default]: true };
     }
 
     if (position === 'left') {
-      return { ...base, right: true };
+      return { ...base, [positions[direction].opposite]: true };
     }
 
     if (position === 'bottom' || position === 'far-bottom') {
@@ -100,7 +119,7 @@ export class CompanionWindow extends Component {
                       aria-label={t('openInCompanionWindow')}
                       onClick={() => { updateCompanionWindow(windowId, id, { position: 'right' }); }}
                     >
-                      <OpenInNewIcon />
+                      <OpenInNewIcon style={this.openInNewStyle()} />
                     </MiradorMenuButton>
                   )
                 : (
@@ -156,6 +175,7 @@ CompanionWindow.propTypes = {
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   defaultSidebarPanelWidth: PropTypes.number,
+  direction: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   isDisplayed: PropTypes.bool,
   onCloseClick: PropTypes.func,

@@ -10,6 +10,7 @@ function createWrapper(props) {
   return shallow(
     <CompanionArea
       classes={{ horizontal: 'horizontal' }}
+      direction="ltr"
       windowId="abc123"
       position="right"
       companionAreaOpen
