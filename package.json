@@ -46,6 +46,8 @@
     "immutable": "^4.0.0-rc.12",
     "intersection-observer": "^0.7.0",
     "isomorphic-unfetch": "^3.0.0",
+    "jss": "^10.1.1",
+    "jss-rtl": "^0.3.0",
     "lodash": "^4.17.11",
     "manifesto.js": "^4.0.1",
     "normalize-url": "^4.2.0",
