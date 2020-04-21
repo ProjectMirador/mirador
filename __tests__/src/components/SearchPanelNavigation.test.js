@@ -10,6 +10,7 @@ function createWrapper(props) {
   return shallow(
     <SearchPanelNavigation
       companionWindowId="cw"
+      direction="ltr"
       windowId="window"
       {...props}
     />,
