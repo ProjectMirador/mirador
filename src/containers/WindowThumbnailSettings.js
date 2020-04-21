@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getThumbnailNavigationPosition } from '../state/selectors';
+import { getThumbnailNavigationPosition, getThemeDirection } from '../state/selectors';
 import { WindowThumbnailSettings } from '../components/WindowThumbnailSettings';
 
 /**
@@ -21,6 +21,7 @@ const mapDispatchToProps = { setWindowThumbnailPosition: actions.setWindowThumbn
  */
 const mapStateToProps = (state, { windowId }) => (
   {
+    direction: getThemeDirection(state),
     thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId }),
   }
 );

@@ -10,6 +10,7 @@ function createWrapper(props) {
   return shallow(
     <WindowThumbnailSettings
       classes={{}}
+      direction="ltr"
       windowId="xyz"
       setWindowThumbnailPosition={() => {}}
       thumbnailNavigationPosition="off"
@@ -46,5 +47,10 @@ describe('WindowThumbnailSettings', () => {
     expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'off');
     wrapper.find(MenuItem).at(2).simulate('click');
     expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'far-right');
+  });
+
+  it('when rtl flips an icon', () => {
+    const wrapper = createWrapper({ direction: 'rtl' });
+    expect(wrapper.find(FormControlLabel).at(2).props().control.props.style).toEqual({ transform: 'rotate(180deg)' });
   });
 });

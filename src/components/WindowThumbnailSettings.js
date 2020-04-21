@@ -34,7 +34,7 @@ export class WindowThumbnailSettings extends Component {
    */
   render() {
     const {
-      classes, handleClose, t, thumbnailNavigationPosition,
+      classes, handleClose, t, thumbnailNavigationPosition, direction,
     } = this.props;
 
     return (
@@ -67,9 +67,12 @@ export class WindowThumbnailSettings extends Component {
           <FormControlLabel
             value="far-right"
             classes={{ label: thumbnailNavigationPosition === 'far-right' ? classes.selectedLabel : classes.label }}
-            control={
-              <ThumbnailNavigationRightIcon color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined} />
-            }
+            control={(
+              <ThumbnailNavigationRightIcon
+                color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined}
+                style={direction === 'rtl' ? { transform: 'rotate(180deg)' } : {}}
+              />
+            )}
             label={t('right')}
             labelPlacement="bottom"
           />
@@ -81,6 +84,7 @@ export class WindowThumbnailSettings extends Component {
 
 WindowThumbnailSettings.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  direction: PropTypes.string.isRequired,
   handleClose: PropTypes.func,
   setWindowThumbnailPosition: PropTypes.func.isRequired,
   t: PropTypes.func,
