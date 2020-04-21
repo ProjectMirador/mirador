@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
 import AccessTokenSender from '../../../src/containers/AccessTokenSender';
 import AuthenticationSender from '../../../src/containers/AuthenticationSender';
@@ -27,7 +27,8 @@ function createWrapper(props) {
 describe('App', () => {
   it('should render all needed elements ', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find(MuiThemeProvider).length).toBe(1);
+    expect(wrapper.find(ThemeProvider).length).toBe(1);
+    expect(wrapper.find(StylesProvider).length).toBe(1);
     expect(wrapper.find(Fullscreen).length).toBe(1);
     expect(wrapper.find('Suspense').length).toBe(1);
     expect(wrapper.find(AuthenticationSender).length).toBe(1);
@@ -36,7 +37,7 @@ describe('App', () => {
 
   it('sets up a theme based on the config passed in merged w/ MaterialUI', () => {
     const wrapper = createWrapper();
-    const { theme } = wrapper.find(MuiThemeProvider).props();
+    const { theme } = wrapper.find(ThemeProvider).props();
     expect(theme.palette.type).toEqual('light');
     expect(theme.typography.useNextVariants).toBe(true);
     expect(Object.keys(theme).length).toBeGreaterThan(10);
