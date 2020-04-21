@@ -26,14 +26,20 @@ describe('OpenSeadragonViewer', () => {
     wrapper = shallow(
       <OpenSeadragonViewer
         classes={{}}
-        tileSources={[{
-          '@id': 'http://foo',
-          height: 200,
-          width: 100,
+        infoResponses={[{
+          id: 'a',
+          json: {
+            '@id': 'http://foo',
+            height: 200,
+            width: 100,
+          },
         }, {
-          '@id': 'http://bar',
-          height: 201,
-          width: 150,
+          id: 'b',
+          json: {
+            '@id': 'http://bar',
+            height: 201,
+            width: 150,
+          },
         }]}
         nonTiledImages={[{
           id: 'http://foo',
@@ -105,19 +111,22 @@ describe('OpenSeadragonViewer', () => {
     });
   });
 
-  describe('tileSourcesMatch', () => {
+  describe('infoResponsesMatch', () => {
     it('when they do not match', () => {
-      expect(wrapper.instance().tileSourcesMatch([])).toBe(false);
+      expect(wrapper.instance().infoResponsesMatch([])).toBe(false);
     });
     it('with an empty array', () => {
       wrapper.instance().viewer = {
         close: () => {},
       };
-      wrapper.setProps({ tileSources: [] });
-      expect(wrapper.instance().tileSourcesMatch([])).toBe(true);
+      wrapper.setProps({ infoResponses: [] });
+      expect(wrapper.instance().infoResponsesMatch([])).toBe(true);
     });
     it('when the @ids do match', () => {
-      expect(wrapper.instance().tileSourcesMatch([{ '@id': 'http://foo' }])).toBe(true);
+      expect(wrapper.instance().infoResponsesMatch([{ id: 'a', json: { '@id': 'http://foo' } }])).toBe(true);
+    });
+    it('when the @ids do not match', () => {
+      expect(wrapper.instance().infoResponsesMatch([{ id: 'a', json: { '@id': 'http://foo-degraded' } }])).toBe(false);
     });
   });
 
@@ -142,7 +151,7 @@ describe('OpenSeadragonViewer', () => {
       wrapper.instance().viewer = {
         close: () => {},
       };
-      wrapper.setProps({ tileSources: [1, 2, 3, 4] });
+      wrapper.setProps({ infoResponses: [1, 2, 3, 4] });
       const mockAddTileSource = jest.fn();
       wrapper.instance().addTileSource = mockAddTileSource;
       wrapper.instance().addAllImageSources();

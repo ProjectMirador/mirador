@@ -57,8 +57,8 @@ export default class CanvasWorld {
   }
 
   /** Get the IIIF content resource for an image */
-  contentResource(tileSource) {
-    const imageId = tileSource['@id'];
+  contentResource(infoResponse) {
+    const imageId = infoResponse.id;
     const manifestoCanvas = this.canvases.find(c => c.imageServiceIds.some(id => (
       normalizeUrl(id, { stripAuthentication: false })
         === normalizeUrl(imageId, { stripAuthentication: false }))));

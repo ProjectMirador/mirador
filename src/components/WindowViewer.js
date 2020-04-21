@@ -106,9 +106,8 @@ export class WindowViewer extends Component {
   /**
    * Return an image information response from the store for the correct image
    */
-  tileInfoFetchedFromStore() {
-    const responses = this.currentInfoResponses()
-      .map(infoResponse => infoResponse.json);
+  infoResponsesFetchedFromStore() {
+    const responses = this.currentInfoResponses();
     // Only return actual tileSources when all current canvases have completed.
     if (responses.length === this.imageServiceIds().length) {
       return responses;
@@ -130,7 +129,7 @@ export class WindowViewer extends Component {
 
     return (
       <OSDViewer
-        tileSources={this.tileInfoFetchedFromStore()}
+        infoResponses={this.infoResponsesFetchedFromStore()}
         windowId={windowId}
       >
         <WindowCanvasNavigationControls key="canvas_nav" windowId={windowId} />

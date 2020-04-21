@@ -124,7 +124,7 @@ export class OpenSeadragonViewer extends Component {
       this.viewer.forceRedraw();
     }
 
-    if (!this.tileSourcesMatch(prevProps.tileSources)
+    if (!this.infoResponsesMatch(prevProps.infoResponses)
       || !this.nonTiledImagedMatch(prevProps.nonTiledImages)
     ) {
       this.viewer.close();
@@ -204,12 +204,12 @@ export class OpenSeadragonViewer extends Component {
 
   /** */
   addAllImageSources() {
-    const { nonTiledImages, tileSources } = this.props;
+    const { nonTiledImages, infoResponses } = this.props;
     Promise.all(
-      tileSources.map(tileSource => this.addTileSource(tileSource)),
+      infoResponses.map(infoResponse => this.addTileSource(infoResponse)),
       nonTiledImages.map(image => this.addNonTiledImage(image)),
     ).then(() => {
-      if (tileSources[0] || nonTiledImages[0]) {
+      if (infoResponses[0] || nonTiledImages[0]) {
         this.zoomToWorld();
       }
     });
@@ -237,14 +237,15 @@ export class OpenSeadragonViewer extends Component {
 
   /**
    */
-  addTileSource(tileSource) {
+  addTileSource(infoResponse) {
     const { canvasWorld } = this.props;
     return new Promise((resolve, reject) => {
       if (!this.viewer) {
         return;
       }
 
-      const contentResource = canvasWorld.contentResource(tileSource);
+      const tileSource = infoResponse.json;
+      const contentResource = canvasWorld.contentResource(infoResponse);
 
       if (!contentResource) return;
 
@@ -288,22 +289,28 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /**
-   * tileSourcesMatch - compares previous tileSources to current to determine
+   * infoResponsesMatch - compares previous tileSources to current to determine
    * whether a refresh of the OSD viewer is needed.
    * @param  {Array} prevTileSources
    * @return {Boolean}
    */
-  tileSourcesMatch(prevTileSources) {
-    const { tileSources } = this.props;
-    if (tileSources.length === 0 && prevTileSources.length === 0) return true;
+  infoResponsesMatch(prevInfoResponses) {
+    const { infoResponses } = this.props;
+    if (infoResponses.length === 0 && prevInfoResponses.length === 0) return true;
 
-    return tileSources.some((tileSource, index) => {
-      if (!prevTileSources[index]) {
+    return infoResponses.some((infoResponse, index) => {
+      if (!prevInfoResponses[index]) {
         return false;
       }
-      if (tileSource['@id'] === prevTileSources[index]['@id']) {
+
+      if (!infoResponse.json) {
+        return false;
+      }
+
+      if (infoResponse.json['@id'] === (prevInfoResponses[index].json || {})['@id']) {
         return true;
       }
+
       return false;
     });
   }
@@ -390,6 +397,7 @@ export class OpenSeadragonViewer extends Component {
 OpenSeadragonViewer.defaultProps = {
   children: null,
   highlightedAnnotations: [],
+  infoResponses: [],
   label: null,
   nonTiledImages: [],
   osdConfig: {},
@@ -397,7 +405,6 @@ OpenSeadragonViewer.defaultProps = {
   searchAnnotations: [],
   selectedAnnotations: [],
   selectedContentSearchAnnotations: [],
-  tileSources: [],
   viewer: null,
 };
 
@@ -406,6 +413,7 @@ OpenSeadragonViewer.propTypes = {
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
+  infoResponses: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
   nonTiledImages: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
@@ -414,7 +422,6 @@ OpenSeadragonViewer.propTypes = {
   selectedAnnotations: PropTypes.arrayOf(PropTypes.object),
   selectedContentSearchAnnotations: PropTypes.arrayOf(PropTypes.object),
   t: PropTypes.func.isRequired,
-  tileSources: PropTypes.arrayOf(PropTypes.object),
   updateViewport: PropTypes.func.isRequired,
   viewer: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windowId: PropTypes.string.isRequired,
