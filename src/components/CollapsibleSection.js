@@ -35,7 +35,15 @@ export class CollapsibleSection extends Component {
 
     return (
       <>
-        <div>
+        <div className={classes.container}>
+          <Typography
+            className={classes.heading}
+            id={id}
+            onClick={this.toggleSection}
+            variant="overline"
+          >
+            {label}
+          </Typography>
           <MiradorMenuButton
             aria-label={
               t(
@@ -48,14 +56,6 @@ export class CollapsibleSection extends Component {
           >
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </MiradorMenuButton>
-          <Typography
-            className={classes.heading}
-            id={id}
-            onClick={this.toggleSection}
-            variant="overline"
-          >
-            {label}
-          </Typography>
         </div>
         {open && children}
       </>

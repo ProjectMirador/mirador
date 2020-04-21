@@ -5,8 +5,11 @@ import { CollapsibleSection } from '../components/CollapsibleSection';
 
 const styles = {
   button: {
-    float: 'right',
     padding: 0,
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   heading: {
     cursor: 'pointer',
