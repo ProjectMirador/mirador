@@ -22,7 +22,7 @@
     "build:watch": "webpack --watch --mode=development",
     "prepublishOnly": "npm run clean && npm run build:es && npm run build:cjs && npm run build",
     "size": "bundlewatch --config bundlewatch.config.json",
-    "start": "npm run build:dev && concurrently \"npm run build:watch\" \"npm run server -- -p 4444\""
+    "start": "npm run build:dev && concurrently -k \"npm:build:watch\" \"npm:server -- -p 4444\""
   },
   "license": "Apache-2.0",
   "contributors": [
