@@ -36,6 +36,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   paper: {
+    borderInlineEnd: `1px solid ${theme.palette.divider}`,
     overflowX: 'hidden',
     width: 48,
   },

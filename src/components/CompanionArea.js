@@ -18,6 +18,19 @@ export class CompanionArea extends Component {
     return (position === 'bottom' || position === 'far-bottom') ? classes.horizontal : null;
   }
 
+  /** */
+  collapseIcon() {
+    const { companionAreaOpen, direction } = this.props;
+    if (companionAreaOpen) {
+      if (direction === 'ltr') {
+        return <ArrowLeftIcon />;
+      }
+      return <ArrowRightIcon />;
+    }
+    if (direction === 'rtl') return <ArrowLeftIcon />;
+    return <ArrowRightIcon />;
+  }
+
   /** @private */
   slideDirection() {
     const { direction, position } = this.props;
@@ -56,7 +69,7 @@ export class CompanionArea extends Component {
                 onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
                 TooltipProps={{ placement: 'right' }}
               >
-                {companionAreaOpen ? <ArrowLeftIcon /> : <ArrowRightIcon />}
+                {this.collapseIcon()}
               </MiradorMenuButton>
             </div>
           )
