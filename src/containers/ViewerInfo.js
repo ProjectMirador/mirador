@@ -32,6 +32,7 @@ const styles = {
     overflow: 'hidden',
     paddingBottom: 3,
     textOverflow: 'ellipsis',
+    unicodeBidi: 'plaintext',
     whiteSpace: 'nowrap',
     width: '100%',
   },
