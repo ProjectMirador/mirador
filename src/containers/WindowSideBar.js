@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { WindowSideBar } from '../components/WindowSideBar';
-import { getWindow } from '../state/selectors';
+import { getThemeDirection, getWindow } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -13,6 +13,7 @@ import { getWindow } from '../state/selectors';
  */
 const mapStateToProps = (state, { windowId }) => (
   {
+    direction: getThemeDirection(state),
     sideBarOpen: (getWindow(state, { windowId }) || {}).sideBarOpen,
     sideBarPanel: (getWindow(state, { windowId }) || {}).sideBarPanel,
   }
@@ -28,7 +29,6 @@ const styles = theme => ({
   drawer: {
     flexShrink: 0,
     height: '100%',
-    left: 0,
     order: -1000,
     zIndex: theme.zIndex.appBar - 1,
   },

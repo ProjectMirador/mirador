@@ -20,17 +20,19 @@ export class CompanionArea extends Component {
 
   /** @private */
   slideDirection() {
-    const { position } = this.props;
+    const { direction, position } = this.props;
+    const defaultPosition = direction === 'rtl' ? 'left' : 'right';
+    const oppositePosition = direction === 'rtl' ? 'right' : 'left';
 
     switch (position) {
       case 'right':
       case 'far-right':
-        return 'left';
+        return oppositePosition;
       case 'bottom':
       case 'far-bottom':
         return 'up';
       default:
-        return 'right';
+        return defaultPosition;
     }
   }
 
@@ -77,6 +79,7 @@ CompanionArea.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   companionAreaOpen: PropTypes.bool.isRequired,
   companionWindowIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  direction: PropTypes.string.isRequired,
   position: PropTypes.string.isRequired,
   setCompanionAreaOpen: PropTypes.func,
   sideBarOpen: PropTypes.bool,
