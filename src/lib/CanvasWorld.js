@@ -57,17 +57,16 @@ export default class CanvasWorld {
   }
 
   /** Get the IIIF content resource for an image */
-  contentResource(infoResponse) {
-    const imageId = infoResponse.id;
+  contentResource(infoResponseId) {
     const manifestoCanvas = this.canvases.find(c => c.imageServiceIds.some(id => (
       normalizeUrl(id, { stripAuthentication: false })
-        === normalizeUrl(imageId, { stripAuthentication: false }))));
+        === normalizeUrl(infoResponseId, { stripAuthentication: false }))));
     if (!manifestoCanvas) return undefined;
 
     return manifestoCanvas.imageResources
       .find(r => (
         normalizeUrl(r.getServices()[0].id, { stripAuthentication: false })
-        === normalizeUrl(imageId, { stripAuthentication: false })));
+        === normalizeUrl(infoResponseId, { stripAuthentication: false })));
   }
 
   /** @private */
