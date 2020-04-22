@@ -225,7 +225,7 @@ export class OpenSeadragonViewer extends Component {
       this.viewer.addSimpleImage({
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
-          ...canvasWorld.canvasToWorldCoordinates(contentResource),
+          ...canvasWorld.contentResourceToWorldCoordinates(contentResource),
         ),
         index: canvasWorld.layerIndexOfImageResource(contentResource),
         opacity: canvasWorld.layerOpacityOfImageResource(contentResource),
@@ -252,7 +252,7 @@ export class OpenSeadragonViewer extends Component {
       this.viewer.addTiledImage({
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
-          ...canvasWorld.canvasToWorldCoordinates(contentResource),
+          ...canvasWorld.contentResourceToWorldCoordinates(contentResource),
         ),
         index: canvasWorld.layerIndexOfImageResource(contentResource),
         opacity: canvasWorld.layerOpacityOfImageResource(contentResource),

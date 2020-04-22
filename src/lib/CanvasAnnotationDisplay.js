@@ -36,6 +36,8 @@ export default class CanvasAnnotationDisplay {
        *  TODO: Support multi canvas offset
        *  One example: https://developer.mozilla.org/en-US/docs/Web/API/Path2D/addPath
        */
+      context.save();
+      context.translate(this.offset.x, this.offset.y);
       const p = new Path2D(element.attributes.d.nodeValue);
       /**
        * Note: we could do something to return the svg styling attributes as
@@ -47,6 +49,7 @@ export default class CanvasAnnotationDisplay {
       context.strokeStyle = this.color; // eslint-disable-line no-param-reassign
       context.lineWidth = this.lineWidth(); // eslint-disable-line no-param-reassign
       context.stroke(p);
+      context.restore();
     });
   }
 
@@ -54,6 +57,7 @@ export default class CanvasAnnotationDisplay {
   fragmentContext(context) {
     const fragment = this.resource.fragmentSelector;
     fragment[0] += this.offset.x;
+    fragment[1] += this.offset.y;
     context.strokeStyle = this.color; // eslint-disable-line no-param-reassign
     context.lineWidth = this.lineWidth(); // eslint-disable-line no-param-reassign
     context.strokeRect(...fragment);

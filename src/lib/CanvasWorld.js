@@ -21,14 +21,32 @@ export default class CanvasWorld {
   }
 
   /**
-   * canvasToWorldCoordinates - calculates the canvas coordinates respective to
-   * the world.
+   * contentResourceToWorldCoordinates - calculates the contentResource coordinates
+   * respective to the world.
    */
-  canvasToWorldCoordinates(contentResource) {
+  contentResourceToWorldCoordinates(contentResource) {
     const wholeBounds = this.worldBounds();
     const manifestoCanvasIndex = this.canvases.findIndex(c => (
       c.imageResources.find(r => r.id === contentResource.id)
     ));
+    const { aspectRatio } = this.canvases[manifestoCanvasIndex];
+    const scaledWidth = Math.floor(wholeBounds[3] * aspectRatio);
+    let x = 0;
+    if (manifestoCanvasIndex === this.secondCanvasIndex) {
+      x = wholeBounds[2] - scaledWidth;
+    }
+    return [
+      x,
+      0,
+      scaledWidth,
+      wholeBounds[3],
+    ];
+  }
+
+  /** */
+  canvasToWorldCoordinates(canvasId) {
+    const wholeBounds = this.worldBounds();
+    const manifestoCanvasIndex = this.canvases.findIndex(c => (c.id === canvasId));
     const { aspectRatio } = this.canvases[manifestoCanvasIndex];
     const scaledWidth = Math.floor(wholeBounds[3] * aspectRatio);
     let x = 0;
@@ -51,10 +69,6 @@ export default class CanvasWorld {
     return this.viewingDirection === 'right-to-left' ? 0 : 1;
   }
 
-  /** */
-  indexOfTarget(canvasTarget) {
-    return this.canvases.map(canvas => canvas.id).indexOf(canvasTarget);
-  }
 
   /** Get the IIIF content resource for an image */
   contentResource(infoResponse) {
@@ -116,12 +130,11 @@ export default class CanvasWorld {
    * assumes a horrizontal only layout.
    */
   offsetByCanvas(canvasTarget) {
-    const offset = { x: 0, y: 0 };
-    let i;
-    for (i = 0; i < this.indexOfTarget(canvasTarget); i += 1) {
-      offset.x += this.canvases[i].getWidth();
-    }
-    return offset;
+    const coordinates = this.canvasToWorldCoordinates(canvasTarget);
+    return {
+      x: coordinates[0],
+      y: coordinates[1],
+    };
   }
 
   /**
