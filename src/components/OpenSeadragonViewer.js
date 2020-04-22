@@ -129,7 +129,7 @@ export class OpenSeadragonViewer extends Component {
     ) {
       this.viewer.close();
       this.addAllImageSources();
-    } else if (canvasWorld.layers !== prevProps.canvasWorld.layers) {
+    } else if (!isEqual(canvasWorld.layers, prevProps.canvasWorld.layers)) {
       this.refreshTileProperties();
     } else if (viewer && !this.osdUpdating) {
       const { viewport } = this.viewer;
@@ -211,6 +211,7 @@ export class OpenSeadragonViewer extends Component {
     ).then(() => {
       if (infoResponses[0] || nonTiledImages[0]) {
         this.zoomToWorld();
+        this.refreshTileProperties();
       }
     });
   }
