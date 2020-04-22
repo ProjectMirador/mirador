@@ -245,7 +245,7 @@ export class OpenSeadragonViewer extends Component {
       }
 
       const tileSource = infoResponse.json;
-      const contentResource = canvasWorld.contentResource(infoResponse);
+      const contentResource = canvasWorld.contentResource(infoResponse.id);
 
       if (!contentResource) return;
 
@@ -273,9 +273,10 @@ export class OpenSeadragonViewer extends Component {
     }
 
     items.forEach((item, i) => {
-      const newIndex = canvasWorld.layerIndexOfImageResource(item.source);
+      const contentResource = canvasWorld.contentResource(item.source['@id'] || item.source.id);
+      const newIndex = canvasWorld.layerIndexOfImageResource(contentResource);
       if (i !== newIndex) world.setItemIndex(item, newIndex);
-      item.setOpacity(canvasWorld.layerOpacityOfImageResource(item.source));
+      item.setOpacity(canvasWorld.layerOpacityOfImageResource(contentResource));
     });
   }
 
