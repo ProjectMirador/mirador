@@ -55,13 +55,19 @@ describe('CanvasAnnotationDisplay', () => {
   describe('svgContext', () => {
     it('draws the paths with selected arguments', () => {
       const context = {
+        restore: jest.fn(),
+        save: jest.fn(),
         stroke: jest.fn(),
+        translate: jest.fn(),
       };
       const subject = createSubject({
         resource: new AnnotationResource(dualStrategyAnno),
       });
       subject.svgContext(context);
       expect(context.stroke).toHaveBeenCalledWith({});
+      expect(context.save).toHaveBeenCalledWith();
+      expect(context.restore).toHaveBeenCalledWith();
+      expect(context.translate).toHaveBeenCalledWith(-100, 0);
       expect(context.strokeStyle).toEqual('blue');
       expect(context.lineWidth).toEqual(20);
     });
