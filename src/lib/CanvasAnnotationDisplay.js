@@ -46,12 +46,26 @@ export default class CanvasAnnotationDisplay {
        *  context.strokeStyle = element.attributes.stroke.nodeValue;
        *  context.lineWidth = element.attributes['stroke-width'].nodeValue;
        */
-      context.strokeStyle = this.color; // eslint-disable-line no-param-reassign
-      context.lineWidth = this.lineWidth(); // eslint-disable-line no-param-reassign
+      this.setupLineDash(context, element.attributes);
+      context.strokeStyle = this.strokeColor( // eslint-disable-line no-param-reassign
+        element.attributes,
+      );
+      context.lineWidth = this.lineWidth( // eslint-disable-line no-param-reassign
+        element.attributes,
+      );
       context.stroke(p);
       context.restore();
     });
   }
+
+  /* eslint-disable  require-jsdoc, class-methods-use-this */
+  setupLineDash(context, elementAttributes) {
+    // stroke-dasharray
+    if (elementAttributes['stroke-dasharray']) {
+      context.setLineDash(elementAttributes['stroke-dasharray'].nodeValue.split(','));
+    }
+  }
+  /* eslint-enable  require-jsdoc, class-methods-use-this */
 
   /** */
   fragmentContext(context) {
@@ -64,8 +78,20 @@ export default class CanvasAnnotationDisplay {
   }
 
   /** */
-  lineWidth() {
-    return Math.ceil(10 / (this.zoom * this.width));
+  strokeColor(elementAttributes) {
+    if (elementAttributes && elementAttributes.stroke) {
+      return elementAttributes.stroke.nodeValue;
+    }
+    return this.color;
+  }
+
+  /** */
+  lineWidth(elementAttributes) {
+    let calculatedWidth = Math.ceil(10 / (this.zoom * this.width));
+    if (elementAttributes && elementAttributes['stroke-width']) {
+      calculatedWidth *= elementAttributes['stroke-width'].nodeValue;
+    }
+    return calculatedWidth;
   }
 
   /** */
