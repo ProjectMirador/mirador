@@ -57,6 +57,7 @@ describe('CanvasAnnotationDisplay', () => {
       const context = {
         restore: jest.fn(),
         save: jest.fn(),
+        setLineDash: jest.fn(),
         stroke: jest.fn(),
         translate: jest.fn(),
       };
@@ -68,8 +69,8 @@ describe('CanvasAnnotationDisplay', () => {
       expect(context.save).toHaveBeenCalledWith();
       expect(context.restore).toHaveBeenCalledWith();
       expect(context.translate).toHaveBeenCalledWith(-100, 0);
-      expect(context.strokeStyle).toEqual('blue');
-      expect(context.lineWidth).toEqual(20);
+      expect(context.strokeStyle).toEqual('#00bfff');
+      expect(context.lineWidth).toEqual(617.4334);
     });
   });
   describe('fragmentContext', () => {
