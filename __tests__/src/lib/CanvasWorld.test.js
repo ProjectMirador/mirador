@@ -1,5 +1,6 @@
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import fixture from '../../fixtures/version-2/019.json';
+import fragmentFixture from '../../fixtures/version-2/hamilton.json';
 import CanvasWorld from '../../../src/lib/CanvasWorld';
 
 const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
@@ -27,6 +28,13 @@ describe('CanvasWorld', () => {
     it('supports RTL orientations', () => {
       expect(new CanvasWorld(canvasSubset, null, 'right-to-left').contentResourceToWorldCoordinates({ id: 'https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410/full/full/0/default.jpg' }))
         .toEqual([0, 0, 2848, 4288]);
+    });
+    it('when placed by a fragment contains the offset', () => {
+      const subject = new CanvasWorld(
+        [Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0]],
+      );
+      expect(subject.contentResourceToWorldCoordinates({ id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg' }))
+        .toEqual([552, 1584, 3360, 2368]);
     });
   });
   describe('canvasToWorldCoordinates', () => {

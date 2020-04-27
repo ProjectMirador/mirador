@@ -7,6 +7,7 @@ import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 import serviceFixture from '../../fixtures/version-2/canvasService.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
 import otherContentStringsFixture from '../../fixtures/version-2/BibliographicResource_3000126341277.json';
+import fragmentFixture from '../../fixtures/version-2/hamilton.json';
 
 describe('ManifestoCanvas', () => {
   let instance;
@@ -152,6 +153,26 @@ describe('ManifestoCanvas', () => {
 
     it('returns undefined if there is no service', () => {
       expect(instance.service).toBeUndefined();
+    });
+  });
+  describe('resourceAnnotation', () => {
+    it('returns the containing Annotation for a given contentResource id', () => {
+      instance = new ManifestoCanvas(
+        Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0],
+      );
+      expect(
+        instance.resourceAnnotation('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg').id,
+      ).toEqual('https://prtd.app/hamilton/canvas/p1/anno-02.json');
+    });
+  });
+  describe('onFragment', () => {
+    it('when a fragment selector exists for a given contentResources id, returns that fragment', () => {
+      instance = new ManifestoCanvas(
+        Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0],
+      );
+      expect(
+        instance.onFragment('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg'),
+      ).toEqual([552, 1584, 3360, 2368]);
     });
   });
 });

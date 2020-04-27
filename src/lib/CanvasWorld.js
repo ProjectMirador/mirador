@@ -29,11 +29,20 @@ export default class CanvasWorld {
     const manifestoCanvasIndex = this.canvases.findIndex(c => (
       c.imageResources.find(r => r.id === contentResource.id)
     ));
-    const { aspectRatio } = this.canvases[manifestoCanvasIndex];
-    const scaledWidth = Math.floor(wholeBounds[3] * aspectRatio);
+    const canvas = this.canvases[manifestoCanvasIndex];
+    const scaledWidth = Math.floor(wholeBounds[3] * canvas.aspectRatio);
     let x = 0;
     if (manifestoCanvasIndex === this.secondCanvasIndex) {
       x = wholeBounds[2] - scaledWidth;
+    }
+    const fragmentOffset = canvas.onFragment(contentResource.id);
+    if (fragmentOffset) {
+      return [
+        x + fragmentOffset[0],
+        0 + fragmentOffset[1],
+        fragmentOffset[2],
+        fragmentOffset[3],
+      ];
     }
     return [
       x,
@@ -76,7 +85,6 @@ export default class CanvasWorld {
       normalizeUrl(id, { stripAuthentication: false })
         === normalizeUrl(infoResponseId, { stripAuthentication: false }))));
     if (!manifestoCanvas) return undefined;
-
     return manifestoCanvas.imageResources
       .find(r => (
         normalizeUrl(r.getServices()[0].id, { stripAuthentication: false })
