@@ -117,6 +117,36 @@ export default class ManifestoCanvas {
   }
 
   /** */
+  get resourceAnnotations() {
+    return flattenDeep([
+      this.canvas.getImages(),
+      this.canvas.getContent(),
+    ]);
+  }
+
+  /**
+   * Returns a given resource Annotation, based on a contained resource or body
+   * id
+   */
+  resourceAnnotation(id) {
+    return this.resourceAnnotations.find(
+      anno => anno.getResource().id === id || anno.getBody().id === id,
+    );
+  }
+
+  /**
+   * Returns the fragment placement values if a resourceAnnotation is placed on
+   * a canvas somewhere besides the full extent
+   */
+  onFragment(id) {
+    const resourceAnnotation = this.resourceAnnotation(id);
+    if (!resourceAnnotation) return undefined;
+    const fragmentMatch = resourceAnnotation.getProperty('on').match(/xywh=(.*)$/);
+    if (!fragmentMatch) return undefined;
+    return fragmentMatch[1].split(',').map(str => parseInt(str, 10));
+  }
+
+  /** */
   get iiifImageResources() {
     return this.imageResources
       .filter(r => r && r.getServices()[0] && r.getServices()[0].id);
