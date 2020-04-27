@@ -169,7 +169,7 @@ export default class ManifestoCanvas {
   imageInformationUri(resourceId) {
     const image = this.getImageResourceOrDefault(resourceId);
 
-    const imageId = image && image.getServices()[0].id;
+    const imageId = image && image.getServices()[0] && image.getServices()[0].id;
 
     if (!imageId) return undefined;
 
