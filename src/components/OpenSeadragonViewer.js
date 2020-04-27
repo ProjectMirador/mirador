@@ -275,6 +275,7 @@ export class OpenSeadragonViewer extends Component {
 
     items.forEach((item, i) => {
       const contentResource = canvasWorld.contentResource(item.source['@id'] || item.source.id);
+      if (!contentResource) return;
       const newIndex = canvasWorld.layerIndexOfImageResource(contentResource);
       if (i !== newIndex) world.setItemIndex(item, newIndex);
       item.setOpacity(canvasWorld.layerOpacityOfImageResource(contentResource));
