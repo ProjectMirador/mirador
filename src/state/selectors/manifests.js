@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import createCachedSelector from 're-reselect';
 import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
-import ManifestoCanvas from '../../lib/ManifestoCanvas';
+import MiradorCanvas from '../../lib/MiradorCanvas';
 
 /** */
 function createManifestoInstance(json, locale) {
@@ -231,9 +231,9 @@ export function getManifestThumbnail(state, props) {
 
     if (canvases.length === 0) return null;
 
-    const manifestoCanvas = new ManifestoCanvas(canvases[0]);
+    const miradorCanvas = new MiradorCanvas(canvases[0]);
 
-    return manifestoCanvas.thumbnail(null, 80);
+    return miradorCanvas.thumbnail(null, 80);
   }
 
   return getTopLevelManifestThumbnail()

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { ScrollTo } from './ScrollTo';
-import ManifestoCanvas from '../lib/ManifestoCanvas';
+import MiradorCanvas from '../lib/MiradorCanvas';
 import SidebarIndexItem from '../containers/SidebarIndexItem';
 import SidebarIndexThumbnail from '../containers/SidebarIndexThumbnail';
 
@@ -15,7 +15,7 @@ export class SidebarIndexList extends Component {
 
     return canvases.map((canvas, index) => ({
       id: canvas.id,
-      label: new ManifestoCanvas(canvas).getLabel(),
+      label: new MiradorCanvas(canvas).getLabel(),
     }));
   }
 

@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import flatten from 'lodash/flatten';
 import CanvasGroupings from '../../lib/CanvasGroupings';
-import ManifestoCanvas from '../../lib/ManifestoCanvas';
+import MiradorCanvas from '../../lib/MiradorCanvas';
 import { getManifestoInstance } from './manifests';
 import { getWindow, getWindowViewType } from './windows';
 
@@ -177,7 +177,7 @@ export const getVisibleCanvasNonTiledResources = createSelector(
     getVisibleCanvases,
   ],
   canvases => flatten(canvases
-    .map(canvas => new ManifestoCanvas(canvas).imageResources))
+    .map(canvas => new MiradorCanvas(canvas).imageResources))
     .filter(resource => resource.getServices().length < 1),
 );
 
@@ -188,8 +188,8 @@ export const selectInfoResponse = createSelector(
   ],
   (canvas, infoResponses) => {
     if (!canvas) return undefined;
-    const manifestoCanvas = new ManifestoCanvas(canvas);
-    const image = manifestoCanvas.iiifImageResources[0];
+    const miradorCanvas = new MiradorCanvas(canvas);
+    const image = miradorCanvas.iiifImageResources[0];
     const iiifServiceId = image && image.getServices()[0].id;
 
     return iiifServiceId && infoResponses[iiifServiceId]

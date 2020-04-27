@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import ManifestoCanvas from '../lib/ManifestoCanvas';
+import MiradorCanvas from '../lib/MiradorCanvas';
 import {
   getCanvases,
   getVisibleCanvases,
@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
 
 /** */
 function hasLayers(canvases) {
-  return canvases && canvases.some(c => new ManifestoCanvas(c).imageResources.length > 1);
+  return canvases && canvases.some(c => new MiradorCanvas(c).imageResources.length > 1);
 }
 
 /**

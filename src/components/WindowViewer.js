@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import flatten from 'lodash/flatten';
 import OSDViewer from '../containers/OpenSeadragonViewer';
 import WindowCanvasNavigationControls from '../containers/WindowCanvasNavigationControls';
-import ManifestoCanvas from '../lib/ManifestoCanvas';
+import MiradorCanvas from '../lib/MiradorCanvas';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -33,11 +33,11 @@ export class WindowViewer extends Component {
 
     if (!this.infoResponseIsInStore()) {
       currentCanvases.forEach((canvas) => {
-        const manifestoCanvas = new ManifestoCanvas(canvas);
-        manifestoCanvas.imageResources.forEach((imageResource) => {
+        const miradorCanvas = new MiradorCanvas(canvas);
+        miradorCanvas.imageResources.forEach((imageResource) => {
           fetchInfoResponse({ imageResource });
         });
-        manifestoCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
+        miradorCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
       });
     }
   }
@@ -55,16 +55,16 @@ export class WindowViewer extends Component {
       || (prevProps.currentCanvasId !== currentCanvasId && !this.infoResponseIsInStore())
     ) {
       currentCanvases.forEach((canvas) => {
-        const manifestoCanvas = new ManifestoCanvas(canvas);
-        manifestoCanvas.imageResources.forEach((imageResource) => {
+        const miradorCanvas = new MiradorCanvas(canvas);
+        miradorCanvas.imageResources.forEach((imageResource) => {
           fetchInfoResponse({ imageResource });
         });
-        manifestoCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
+        miradorCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
       });
 
-      currentCanvases.map(canvas => new ManifestoCanvas(canvas))
-        .map(manifestoCanvas => manifestoCanvas.annotationListUris.forEach((uri) => {
-          fetchAnnotation(manifestoCanvas.canvas.id, uri);
+      currentCanvases.map(canvas => new MiradorCanvas(canvas))
+        .map(miradorCanvas => miradorCanvas.annotationListUris.forEach((uri) => {
+          fetchAnnotation(miradorCanvas.canvas.id, uri);
         }));
     }
   }
@@ -86,7 +86,7 @@ export class WindowViewer extends Component {
   imageServiceIds() {
     const { currentCanvases } = this.props;
 
-    return flatten(currentCanvases.map(canvas => new ManifestoCanvas(canvas).imageServiceIds));
+    return flatten(currentCanvases.map(canvas => new MiradorCanvas(canvas).imageServiceIds));
   }
 
   /**
