@@ -201,15 +201,12 @@ describe('OpenSeadragonViewer', () => {
 
       wrapper.instance().refreshTileProperties();
 
-      expect(setOpacity).toHaveBeenCalledTimes(2);
+      expect(setOpacity).toHaveBeenCalledTimes(1);
       expect(setOpacity.mock.calls[0]).toEqual([0.5]);
-      expect(setOpacity.mock.calls[1]).toEqual([0.5]);
 
-      expect(setItemIndex).toHaveBeenCalledTimes(2);
-      expect(setItemIndex.mock.calls[0][0].source.id).toEqual(0);
-      expect(setItemIndex.mock.calls[0][1]).toEqual(1);
-      expect(setItemIndex.mock.calls[1][0].source.id).toEqual(1);
-      expect(setItemIndex.mock.calls[1][1]).toEqual(0);
+      expect(setItemIndex).toHaveBeenCalledTimes(1);
+      expect(setItemIndex.mock.calls[0][0].source.id).toEqual(1);
+      expect(setItemIndex.mock.calls[0][1]).toEqual(0);
     });
   });
 
