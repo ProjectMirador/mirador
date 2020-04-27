@@ -2,12 +2,12 @@ import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
 import { Canvas, Utils } from 'manifesto.js';
 /**
- * ManifestoCanvas - adds additional, testable logic around Manifesto's Canvas
+ * MiradorCanvas - adds additional, testable logic around Manifesto's Canvas
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
  */
-export default class ManifestoCanvas {
+export default class MiradorCanvas {
   /**
-   * @param {ManifestoCanvas} canvas
+   * @param {MiradorCanvas} canvas
    */
   constructor(canvas) {
     this.canvas = canvas;

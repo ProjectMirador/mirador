@@ -15,7 +15,7 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOffSharp';
 import OpacityIcon from '@material-ui/icons/OpacitySharp';
 import Typography from '@material-ui/core/Typography';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import ManifestoCanvas from '../lib/ManifestoCanvas';
+import MiradorCanvas from '../lib/MiradorCanvas';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { CanvasThumbnail } from './CanvasThumbnail';
 
@@ -123,7 +123,7 @@ export class CanvasLayers extends Component {
       t,
     } = this.props;
 
-    const manifestoCanvas = new ManifestoCanvas(canvas);
+    const miradorCanvas = new MiradorCanvas(canvas);
     const { width, height } = { height: undefined, width: 50 };
 
     const layer = {
@@ -137,11 +137,11 @@ export class CanvasLayers extends Component {
         <div style={{ alignItems: 'flex-start', display: 'flex' }}>
           <div style={{ minWidth: 50 }}>
             <CanvasThumbnail
-              isValid={manifestoCanvas.hasValidDimensions}
-              imageUrl={manifestoCanvas.thumbnail(width, height, resource.id)}
+              isValid={miradorCanvas.hasValidDimensions}
+              imageUrl={miradorCanvas.thumbnail(width, height, resource.id)}
               maxHeight={height}
               maxWidth={width}
-              aspectRatio={manifestoCanvas.aspectRatio}
+              aspectRatio={miradorCanvas.aspectRatio}
               ImageProps={{ className: classes.image }}
             />
           </div>

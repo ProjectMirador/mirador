@@ -4,7 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
-import ManifestoCanvas from '../lib/ManifestoCanvas';
+import MiradorCanvas from '../lib/MiradorCanvas';
 import { CanvasThumbnail } from './CanvasThumbnail';
 
 /**
@@ -71,7 +71,7 @@ export class GalleryViewThumbnail extends Component {
       annotationsCount, annotationSelected, canvas, classes, config, selected,
     } = this.props;
 
-    const manifestoCanvas = new ManifestoCanvas(canvas);
+    const miradorCanvas = new MiradorCanvas(canvas);
 
     return (
       <div
@@ -89,17 +89,17 @@ export class GalleryViewThumbnail extends Component {
         tabIndex={0}
       >
         <CanvasThumbnail
-          imageUrl={manifestoCanvas.thumbnail(config.width, config.height)}
-          isValid={manifestoCanvas.hasValidDimensions}
+          imageUrl={miradorCanvas.thumbnail(config.width, config.height)}
+          isValid={miradorCanvas.hasValidDimensions}
           maxHeight={config.height}
-          aspectRatio={manifestoCanvas.aspectRatio}
+          aspectRatio={miradorCanvas.aspectRatio}
           style={{
             margin: '0 auto',
-            maxWidth: `${Math.ceil(config.height * manifestoCanvas.aspectRatio)}px`,
+            maxWidth: `${Math.ceil(config.height * miradorCanvas.aspectRatio)}px`,
           }}
         />
         <Typography variant="caption" className={classes.galleryViewCaption}>
-          {manifestoCanvas.getLabel()}
+          {miradorCanvas.getLabel()}
         </Typography>
         { annotationsCount > 0 && (
           <Chip

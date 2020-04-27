@@ -1,5 +1,5 @@
 import normalizeUrl from 'normalize-url';
-import ManifestoCanvas from './ManifestoCanvas';
+import MiradorCanvas from './MiradorCanvas';
 
 /**
  * CanvasWorld
@@ -10,7 +10,7 @@ export default class CanvasWorld {
    * world from.
    */
   constructor(canvases, layers, viewingDirection = 'left-to-right') {
-    this.canvases = canvases.map(c => new ManifestoCanvas(c));
+    this.canvases = canvases.map(c => new MiradorCanvas(c));
     this.layers = layers;
     this.viewingDirection = viewingDirection;
   }
@@ -26,13 +26,13 @@ export default class CanvasWorld {
    */
   contentResourceToWorldCoordinates(contentResource) {
     const wholeBounds = this.worldBounds();
-    const manifestoCanvasIndex = this.canvases.findIndex(c => (
+    const miradorCanvasIndex = this.canvases.findIndex(c => (
       c.imageResources.find(r => r.id === contentResource.id)
     ));
-    const canvas = this.canvases[manifestoCanvasIndex];
+    const canvas = this.canvases[miradorCanvasIndex];
     const scaledWidth = Math.floor(wholeBounds[3] * canvas.aspectRatio);
     let x = 0;
-    if (manifestoCanvasIndex === this.secondCanvasIndex) {
+    if (miradorCanvasIndex === this.secondCanvasIndex) {
       x = wholeBounds[2] - scaledWidth;
     }
     const fragmentOffset = canvas.onFragment(contentResource.id);
@@ -55,11 +55,11 @@ export default class CanvasWorld {
   /** */
   canvasToWorldCoordinates(canvasId) {
     const wholeBounds = this.worldBounds();
-    const manifestoCanvasIndex = this.canvases.findIndex(c => (c.id === canvasId));
-    const { aspectRatio } = this.canvases[manifestoCanvasIndex];
+    const miradorCanvasIndex = this.canvases.findIndex(c => (c.id === canvasId));
+    const { aspectRatio } = this.canvases[miradorCanvasIndex];
     const scaledWidth = Math.floor(wholeBounds[3] * aspectRatio);
     let x = 0;
-    if (manifestoCanvasIndex === this.secondCanvasIndex) {
+    if (miradorCanvasIndex === this.secondCanvasIndex) {
       x = wholeBounds[2] - scaledWidth;
     }
     return [
@@ -81,11 +81,11 @@ export default class CanvasWorld {
 
   /** Get the IIIF content resource for an image */
   contentResource(infoResponseId) {
-    const manifestoCanvas = this.canvases.find(c => c.imageServiceIds.some(id => (
+    const miradorCanvas = this.canvases.find(c => c.imageServiceIds.some(id => (
       normalizeUrl(id, { stripAuthentication: false })
         === normalizeUrl(infoResponseId, { stripAuthentication: false }))));
-    if (!manifestoCanvas) return undefined;
-    return manifestoCanvas.imageResources
+    if (!miradorCanvas) return undefined;
+    return miradorCanvas.imageResources
       .find(r => (
         normalizeUrl(r.getServices()[0].id, { stripAuthentication: false })
         === normalizeUrl(infoResponseId, { stripAuthentication: false })));
@@ -94,22 +94,22 @@ export default class CanvasWorld {
   /** @private */
   getLayerMetadata(contentResource) {
     if (!this.layers) return undefined;
-    const manifestoCanvas = this.canvases.find(c => (
+    const miradorCanvas = this.canvases.find(c => (
       c.imageResources.find(r => r.id === contentResource.id)
     ));
 
-    if (!manifestoCanvas) return undefined;
+    if (!miradorCanvas) return undefined;
 
-    const resourceIndex = manifestoCanvas.imageResources
+    const resourceIndex = miradorCanvas.imageResources
       .findIndex(r => r.id === contentResource.id);
 
-    const layer = this.layers[manifestoCanvas.canvas.id];
+    const layer = this.layers[miradorCanvas.canvas.id];
     const imageResourceLayer = layer && layer[contentResource.id];
 
     return {
       index: resourceIndex,
       opacity: 1,
-      total: manifestoCanvas.imageResources.length,
+      total: miradorCanvas.imageResources.length,
       visibility: true,
       ...imageResourceLayer,
     };

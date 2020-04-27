@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
-import ManifestoCanvas from '../lib/ManifestoCanvas';
+import MiradorCanvas from '../lib/MiradorCanvas';
 import { CanvasThumbnail } from './CanvasThumbnail';
 
 /** */
@@ -14,18 +14,18 @@ export class SidebarIndexThumbnail extends Component {
     } = this.props;
 
     const { width, height } = config.canvasNavigation;
-    const manifestoCanvas = new ManifestoCanvas(otherCanvas);
+    const miradorCanvas = new MiradorCanvas(otherCanvas);
 
     return (
       <>
         <div style={{ minWidth: 50 }}>
           <CanvasThumbnail
             className={classNames(classes.clickable)}
-            isValid={manifestoCanvas.hasValidDimensions}
-            imageUrl={manifestoCanvas.thumbnail(width, height)}
+            isValid={miradorCanvas.hasValidDimensions}
+            imageUrl={miradorCanvas.thumbnail(width, height)}
             maxHeight={config.canvasNavigation.height}
             maxWidth={config.canvasNavigation.width}
-            aspectRatio={manifestoCanvas.aspectRatio}
+            aspectRatio={miradorCanvas.aspectRatio}
           />
         </div>
         <Typography

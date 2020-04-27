@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import ManifestoCanvas from '../../lib/ManifestoCanvas';
+import MiradorCanvas from '../../lib/MiradorCanvas';
 import { getCanvas, getVisibleCanvases } from './canvases';
 
 /**
@@ -11,8 +11,8 @@ export const getCanvasLayers = createSelector(
   ],
   (canvas) => {
     if (!canvas) return [];
-    const manifestoCanvas = new ManifestoCanvas(canvas);
-    return manifestoCanvas.imageResources;
+    const miradorCanvas = new MiradorCanvas(canvas);
+    return miradorCanvas.imageResources;
   },
 );
 

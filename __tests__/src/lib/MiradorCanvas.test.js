@@ -1,5 +1,5 @@
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
-import ManifestoCanvas from '../../../src/lib/ManifestoCanvas';
+import MiradorCanvas from '../../../src/lib/MiradorCanvas';
 import fixture from '../../fixtures/version-2/019.json';
 import v3fixture from '../../fixtures/version-3/001.json';
 import imagev1Fixture from '../../fixtures/version-2/Osbornfa1.json';
@@ -9,14 +9,14 @@ import otherContentFixture from '../../fixtures/version-2/299843.json';
 import otherContentStringsFixture from '../../fixtures/version-2/BibliographicResource_3000126341277.json';
 import fragmentFixture from '../../fixtures/version-2/hamilton.json';
 
-describe('ManifestoCanvas', () => {
+describe('MiradorCanvas', () => {
   let instance;
   let v3Instance;
   beforeAll(() => {
-    instance = new ManifestoCanvas(
+    instance = new MiradorCanvas(
       Utils.parseManifest(fixture).getSequences()[0].getCanvases()[0],
     );
-    v3Instance = new ManifestoCanvas(
+    v3Instance = new MiradorCanvas(
       Utils.parseManifest(v3fixture).getSequences()[0].getCanvases()[0],
     );
   });
@@ -29,7 +29,7 @@ describe('ManifestoCanvas', () => {
     describe('when annotationLists are present', () => {
       describe('with items as objects', () => {
         it('returns an array of uris', () => {
-          const otherContentInstance = new ManifestoCanvas(
+          const otherContentInstance = new MiradorCanvas(
             Utils.parseManifest(otherContentFixture).getSequences()[0].getCanvases()[0],
           );
           expect(otherContentInstance.annotationListUris.length).toEqual(1);
@@ -40,7 +40,7 @@ describe('ManifestoCanvas', () => {
       });
       describe('with items as strings', () => {
         it('returns an array of uris', () => {
-          const otherContentInstance = new ManifestoCanvas(
+          const otherContentInstance = new MiradorCanvas(
             Utils.parseManifest(otherContentStringsFixture).getSequences()[0].getCanvases()[0],
           );
           expect(otherContentInstance.annotationListUris.length).toEqual(1);
@@ -66,7 +66,7 @@ describe('ManifestoCanvas', () => {
   describe('processAnnotations', () => {
     describe('v2', () => {
       it('fetches annotations for each annotationList', () => {
-        const otherContentInstance = new ManifestoCanvas(
+        const otherContentInstance = new MiradorCanvas(
           Utils.parseManifest(otherContentFixture).getSequences()[0].getCanvases()[0],
         );
         const fetchMock = jest.fn();
@@ -89,14 +89,14 @@ describe('ManifestoCanvas', () => {
       expect(instance.imageInformationUri()).toEqual('https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/info.json');
     });
     it('correctly returns an image information url for a v1 Image API', () => {
-      const imagev1Instance = new ManifestoCanvas(
+      const imagev1Instance = new MiradorCanvas(
         Utils.parseManifest(imagev1Fixture).getSequences()[0].getCanvases()[0],
       );
       expect(imagev1Instance.imageInformationUri()).toEqual('https://images.britishart.yale.edu/iiif/b38081da-8991-4464-a71e-d9891226a35f/info.json');
     });
 
     it('is undefined if a canvas is empty (e.g. has no images)', () => {
-      const emptyCanvasInstance = new ManifestoCanvas(
+      const emptyCanvasInstance = new MiradorCanvas(
         Utils.parseManifest(emptyCanvasFixture).getSequences()[0].getCanvases()[3],
       );
 
@@ -135,7 +135,7 @@ describe('ManifestoCanvas', () => {
     });
 
     it('returns undefined if there are no images to generate a thumbnail from', () => {
-      const emptyCanvasInstance = new ManifestoCanvas(
+      const emptyCanvasInstance = new MiradorCanvas(
         Utils.parseManifest(emptyCanvasFixture).getSequences()[0].getCanvases()[3],
       );
 
@@ -144,7 +144,7 @@ describe('ManifestoCanvas', () => {
   });
   describe('service', () => {
     it('correctly returns the service information for the given canvas', () => {
-      const serviceInstance = new ManifestoCanvas(
+      const serviceInstance = new MiradorCanvas(
         Utils.parseManifest(serviceFixture).getSequences()[0].getCanvases()[0],
       );
 
@@ -157,7 +157,7 @@ describe('ManifestoCanvas', () => {
   });
   describe('resourceAnnotation', () => {
     it('returns the containing Annotation for a given contentResource id', () => {
-      instance = new ManifestoCanvas(
+      instance = new MiradorCanvas(
         Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0],
       );
       expect(
@@ -167,7 +167,7 @@ describe('ManifestoCanvas', () => {
   });
   describe('onFragment', () => {
     it('when a fragment selector exists for a given contentResources id, returns that fragment', () => {
-      instance = new ManifestoCanvas(
+      instance = new MiradorCanvas(
         Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0],
       );
       expect(

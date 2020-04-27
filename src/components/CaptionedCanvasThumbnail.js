@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
-import ManifestoCanvas from '../lib/ManifestoCanvas';
+import MiradorCanvas from '../lib/MiradorCanvas';
 import { CanvasThumbnail } from './CanvasThumbnail';
 import ns from '../config/css-ns';
 
@@ -11,7 +11,7 @@ export class CaptionedCanvasThumbnail extends Component {
   /** */
   render() {
     const { canvas, classes, height } = this.props;
-    const manifestoCanvas = new ManifestoCanvas(canvas);
+    const miradorCanvas = new MiradorCanvas(canvas);
     return (
       <div
         key={canvas.id}
@@ -19,13 +19,13 @@ export class CaptionedCanvasThumbnail extends Component {
       >
         <CanvasThumbnail
           imageUrl={
-            manifestoCanvas.thumbnail(null, 200)
+            miradorCanvas.thumbnail(null, 200)
             // TODO: When we make these areas resizable, we should probably not hard code this
           }
-          isValid={manifestoCanvas.hasValidDimensions}
+          isValid={miradorCanvas.hasValidDimensions}
           maxHeight={height}
           style={{
-            maxWidth: `${Math.ceil(height * manifestoCanvas.aspectRatio)}px`,
+            maxWidth: `${Math.ceil(height * miradorCanvas.aspectRatio)}px`,
           }}
         />
         <div
@@ -40,7 +40,7 @@ export class CaptionedCanvasThumbnail extends Component {
               classes={{ root: classes.title }}
               variant="caption"
             >
-              {manifestoCanvas.getLabel()}
+              {miradorCanvas.getLabel()}
             </Typography>
           </div>
         </div>
