@@ -16,10 +16,11 @@ export default class CanvasAnnotationDisplay {
 
   /** */
   toContext(context) {
+    this.context = context;
     if (this.resource.svgSelector) {
-      this.svgContext(context);
+      this.svgContext();
     } else {
-      this.fragmentContext(context);
+      this.fragmentContext();
     }
   }
 
@@ -29,15 +30,15 @@ export default class CanvasAnnotationDisplay {
   }
 
   /** */
-  svgContext(context) {
+  svgContext() {
     [...this.svgPaths].forEach((element) => {
       /**
        *  Note: Path2D is not supported in IE11.
        *  TODO: Support multi canvas offset
        *  One example: https://developer.mozilla.org/en-US/docs/Web/API/Path2D/addPath
        */
-      context.save();
-      context.translate(this.offset.x, this.offset.y);
+      this.context.save();
+      this.context.translate(this.offset.x, this.offset.y);
       const p = new Path2D(element.attributes.d.nodeValue);
       /**
        * Note: we could do something to return the svg styling attributes as
@@ -46,35 +47,34 @@ export default class CanvasAnnotationDisplay {
        *  context.strokeStyle = element.attributes.stroke.nodeValue;
        *  context.lineWidth = element.attributes['stroke-width'].nodeValue;
        */
-      this.setupLineDash(context, element.attributes);
-      context.strokeStyle = this.strokeColor( // eslint-disable-line no-param-reassign
+      this.setupLineDash(element.attributes);
+      this.context.strokeStyle = this.strokeColor( // eslint-disable-line no-param-reassign
         element.attributes,
       );
-      context.lineWidth = this.lineWidth( // eslint-disable-line no-param-reassign
+      this.context.lineWidth = this.lineWidth( // eslint-disable-line no-param-reassign
         element.attributes,
       );
-      context.stroke(p);
-      context.restore();
+      this.context.stroke(p);
+      this.context.restore();
     });
   }
 
-  /* eslint-disable  require-jsdoc, class-methods-use-this */
-  setupLineDash(context, elementAttributes) {
+  /** */
+  setupLineDash(elementAttributes) {
     // stroke-dasharray
     if (elementAttributes['stroke-dasharray']) {
-      context.setLineDash(elementAttributes['stroke-dasharray'].nodeValue.split(','));
+      this.context.setLineDash(elementAttributes['stroke-dasharray'].nodeValue.split(','));
     }
   }
-  /* eslint-enable  require-jsdoc, class-methods-use-this */
 
   /** */
-  fragmentContext(context) {
+  fragmentContext() {
     const fragment = this.resource.fragmentSelector;
     fragment[0] += this.offset.x;
     fragment[1] += this.offset.y;
-    context.strokeStyle = this.color; // eslint-disable-line no-param-reassign
-    context.lineWidth = this.lineWidth(); // eslint-disable-line no-param-reassign
-    context.strokeRect(...fragment);
+    this.context.strokeStyle = this.color; // eslint-disable-line no-param-reassign
+    this.context.lineWidth = this.lineWidth(); // eslint-disable-line no-param-reassign
+    this.context.strokeRect(...fragment);
   }
 
   /** */

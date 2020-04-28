@@ -64,7 +64,8 @@ describe('CanvasAnnotationDisplay', () => {
       const subject = createSubject({
         resource: new AnnotationResource(dualStrategyAnno),
       });
-      subject.svgContext(context);
+      subject.context = context;
+      subject.svgContext();
       expect(context.stroke).toHaveBeenCalledWith({});
       expect(context.save).toHaveBeenCalledWith();
       expect(context.restore).toHaveBeenCalledWith();
@@ -81,7 +82,8 @@ describe('CanvasAnnotationDisplay', () => {
       const subject = createSubject({
         resource: new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }),
       });
-      subject.fragmentContext(context);
+      subject.context = context;
+      subject.fragmentContext();
       expect(context.strokeRect).toHaveBeenCalledWith(-90, 10, 100, 200);
       expect(context.strokeStyle).toEqual('blue');
       expect(context.lineWidth).toEqual(20);
