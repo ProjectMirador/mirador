@@ -5,12 +5,13 @@
 export default class CanvasAnnotationDisplay {
   /** */
   constructor({
-    resource, color, zoomRatio, offset,
+    resource, color, zoomRatio, offset, selected,
   }) {
     this.resource = resource;
     this.color = color;
     this.zoomRatio = zoomRatio;
     this.offset = offset;
+    this.selected = selected;
   }
 
   /** */
@@ -62,6 +63,10 @@ export default class CanvasAnnotationDisplay {
 
       // Resize the stroke based off of the zoomRatio (currentZoom / maxZoom)
       this.context.lineWidth /= this.zoomRatio;
+      // Reset the color if it is selected
+      if (this.selected) {
+        this.context.strokeStyle = this.color;
+      }
       this.context.stroke(p);
 
       // Wait to set the fill, so we can adjust the globalAlpha value if we need to
