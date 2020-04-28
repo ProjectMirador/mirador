@@ -10,7 +10,7 @@ function createSubject(args) {
       x: -100,
       y: 0,
     },
-    zoom: 0.0005,
+    zoomRatio: 0.5,
     ...args,
   });
 }
@@ -72,7 +72,7 @@ describe('CanvasAnnotationDisplay', () => {
       expect(context.restore).toHaveBeenCalledWith();
       expect(context.translate).toHaveBeenCalledWith(-100, 0);
       expect(context.strokeStyle).toEqual('#00bfff');
-      expect(context.lineWidth).toEqual(617.4334);
+      expect(context.lineWidth).toEqual(61.74334);
       expect(context.fill).toHaveBeenCalled();
     });
   });
@@ -88,7 +88,7 @@ describe('CanvasAnnotationDisplay', () => {
       subject.fragmentContext();
       expect(context.strokeRect).toHaveBeenCalledWith(-90, 10, 100, 200);
       expect(context.strokeStyle).toEqual('blue');
-      expect(context.lineWidth).toEqual(20);
+      expect(context.lineWidth).toEqual(2);
     });
   });
 });
