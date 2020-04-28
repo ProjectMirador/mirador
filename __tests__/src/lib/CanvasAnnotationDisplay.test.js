@@ -75,6 +75,23 @@ describe('CanvasAnnotationDisplay', () => {
       expect(context.lineWidth).toEqual(61.74334);
       expect(context.fill).toHaveBeenCalled();
     });
+    it('resets the color if selected rather than using the SVG color', () => {
+      const context = {
+        fill: jest.fn(),
+        restore: jest.fn(),
+        save: jest.fn(),
+        setLineDash: jest.fn(),
+        stroke: jest.fn(),
+        translate: jest.fn(),
+      };
+      const subject = createSubject({
+        resource: new AnnotationResource(dualStrategyAnno),
+        selected: true,
+      });
+      subject.context = context;
+      subject.svgContext();
+      expect(subject.context.strokeStyle).toBe('blue');
+    });
   });
   describe('fragmentContext', () => {
     it('draws the fragment with selected arguments', () => {
