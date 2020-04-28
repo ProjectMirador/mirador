@@ -55,6 +55,7 @@ describe('CanvasAnnotationDisplay', () => {
   describe('svgContext', () => {
     it('draws the paths with selected arguments', () => {
       const context = {
+        fill: jest.fn(),
         restore: jest.fn(),
         save: jest.fn(),
         setLineDash: jest.fn(),
@@ -72,6 +73,7 @@ describe('CanvasAnnotationDisplay', () => {
       expect(context.translate).toHaveBeenCalledWith(-100, 0);
       expect(context.strokeStyle).toEqual('#00bfff');
       expect(context.lineWidth).toEqual(617.4334);
+      expect(context.fill).toHaveBeenCalled();
     });
   });
   describe('fragmentContext', () => {

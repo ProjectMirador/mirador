@@ -40,31 +40,40 @@ export default class CanvasAnnotationDisplay {
       this.context.save();
       this.context.translate(this.offset.x, this.offset.y);
       const p = new Path2D(element.attributes.d.nodeValue);
-      /**
-       * Note: we could do something to return the svg styling attributes as
-       * some have encoded information in these values. However, how should we
-       * handle highlighting and other complications?
-       *  context.strokeStyle = element.attributes.stroke.nodeValue;
-       *  context.lineWidth = element.attributes['stroke-width'].nodeValue;
-       */
-      this.setupLineDash(element.attributes);
-      this.context.strokeStyle = this.strokeColor( // eslint-disable-line no-param-reassign
-        element.attributes,
-      );
+
+      // Setup styling from SVG -> Canvas
+      this.context.strokeStyle = this.color;
+      if (element.attributes['stroke-dasharray']) {
+        this.context.setLineDash(element.attributes['stroke-dasharray'].nodeValue.split(','));
+      }
+      const svgToCanvasMap = {
+        fill: 'fillStyle',
+        stroke: 'strokeStyle',
+        'stroke-dashoffset': 'lineDashOffset',
+        'stroke-linecap': 'lineCap',
+        'stroke-linejoin': 'lineJoin',
+        'stroke-miterlimit': 'miterlimit',
+      };
+      Object.keys(svgToCanvasMap).forEach((key) => {
+        if (element.attributes[key]) {
+          this.context[svgToCanvasMap[key]] = element.attributes[key].nodeValue;
+        }
+      });
+
       this.context.lineWidth = this.lineWidth( // eslint-disable-line no-param-reassign
         element.attributes,
       );
       this.context.stroke(p);
+
+      // Wait to set the fill, so we can adjust the globalAlpha value if we need to
+      if (element.attributes.fill && element.attributes.fill.nodeValue !== 'none') {
+        if (element.attributes['fill-opacity']) {
+          this.context.globalAlpha = element.attributes['fill-opacity'].nodeValue;
+        }
+        this.context.fill(p);
+      }
       this.context.restore();
     });
-  }
-
-  /** */
-  setupLineDash(elementAttributes) {
-    // stroke-dasharray
-    if (elementAttributes['stroke-dasharray']) {
-      this.context.setLineDash(elementAttributes['stroke-dasharray'].nodeValue.split(','));
-    }
   }
 
   /** */
@@ -78,15 +87,8 @@ export default class CanvasAnnotationDisplay {
   }
 
   /** */
-  strokeColor(elementAttributes) {
-    if (elementAttributes && elementAttributes.stroke) {
-      return elementAttributes.stroke.nodeValue;
-    }
-    return this.color;
-  }
-
-  /** */
   lineWidth(elementAttributes) {
+    console.log(this.zoom, this.width);
     let calculatedWidth = Math.ceil(10 / (this.zoom * this.width));
     if (elementAttributes && elementAttributes['stroke-width']) {
       calculatedWidth *= elementAttributes['stroke-width'].nodeValue;
