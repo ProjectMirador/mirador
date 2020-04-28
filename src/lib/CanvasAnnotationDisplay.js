@@ -5,13 +5,12 @@
 export default class CanvasAnnotationDisplay {
   /** */
   constructor({
-    resource, color, zoom, offset, width,
+    resource, color, zoomRatio, offset,
   }) {
     this.resource = resource;
     this.color = color;
-    this.zoom = zoom;
+    this.zoomRatio = zoomRatio;
     this.offset = offset;
-    this.width = width || 1000;
   }
 
   /** */
@@ -53,6 +52,7 @@ export default class CanvasAnnotationDisplay {
         'stroke-linecap': 'lineCap',
         'stroke-linejoin': 'lineJoin',
         'stroke-miterlimit': 'miterlimit',
+        'stroke-width': 'lineWidth',
       };
       Object.keys(svgToCanvasMap).forEach((key) => {
         if (element.attributes[key]) {
@@ -60,9 +60,8 @@ export default class CanvasAnnotationDisplay {
         }
       });
 
-      this.context.lineWidth = this.lineWidth( // eslint-disable-line no-param-reassign
-        element.attributes,
-      );
+      // Resize the stroke based off of the zoomRatio (currentZoom / maxZoom)
+      this.context.lineWidth /= this.zoomRatio;
       this.context.stroke(p);
 
       // Wait to set the fill, so we can adjust the globalAlpha value if we need to
@@ -81,19 +80,9 @@ export default class CanvasAnnotationDisplay {
     const fragment = this.resource.fragmentSelector;
     fragment[0] += this.offset.x;
     fragment[1] += this.offset.y;
-    this.context.strokeStyle = this.color; // eslint-disable-line no-param-reassign
-    this.context.lineWidth = this.lineWidth(); // eslint-disable-line no-param-reassign
+    this.context.strokeStyle = this.color;
+    this.context.lineWidth = 1 / this.zoomRatio;
     this.context.strokeRect(...fragment);
-  }
-
-  /** */
-  lineWidth(elementAttributes) {
-    console.log(this.zoom, this.width);
-    let calculatedWidth = Math.ceil(10 / (this.zoom * this.width));
-    if (elementAttributes && elementAttributes['stroke-width']) {
-      calculatedWidth *= elementAttributes['stroke-width'].nodeValue;
-    }
-    return calculatedWidth;
   }
 
   /** */

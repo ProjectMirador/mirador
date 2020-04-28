@@ -412,7 +412,8 @@ describe('OpenSeadragonViewer', () => {
       };
       wrapper.instance().viewer = {
         viewport: {
-          getZoom: () => (0.0005),
+          getMaxZoom: () => (1),
+          getZoom: () => (0.05),
         },
       };
 
@@ -424,7 +425,7 @@ describe('OpenSeadragonViewer', () => {
       wrapper.instance().annotationsToContext(annotations);
       const context = wrapper.instance().osdCanvasOverlay.context2d;
       expect(context.strokeStyle).toEqual('yellow');
-      expect(context.lineWidth).toEqual(4);
+      expect(context.lineWidth).toEqual(20);
       expect(strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
     });
   });
