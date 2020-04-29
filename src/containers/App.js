@@ -13,6 +13,7 @@ import { App } from '../components/App';
  */
 const mapStateToProps = state => (
   {
+    classPrefix: state.config.classPrefix,
     isFullscreenEnabled: state.workspace.isFullscreenEnabled,
     language: state.config.language,
     theme: getTheme(state),

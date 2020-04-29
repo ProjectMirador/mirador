@@ -1,7 +1,7 @@
 import React, { Component, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import {
-  ThemeProvider, StylesProvider, createMuiTheme, jssPreset,
+  ThemeProvider, StylesProvider, createMuiTheme, jssPreset, createGenerateClassName,
 } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
 import { create } from 'jss';
@@ -52,8 +52,12 @@ export class App extends Component {
    */
   render() {
     const {
-      isFullscreenEnabled, setWorkspaceFullscreen, theme, translations,
+      classPrefix, isFullscreenEnabled, setWorkspaceFullscreen, theme, translations,
     } = this.props;
+
+    const generateClassName = createGenerateClassName({
+      productionPrefix: classPrefix,
+    });
 
     Object.keys(translations).forEach((lng) => {
       this.i18n.addResourceBundle(lng, 'translation', translations[lng], true, true);
@@ -69,7 +73,10 @@ export class App extends Component {
             <ThemeProvider
               theme={createMuiTheme(theme)}
             >
-              <StylesProvider jss={create({ plugins: [...jssPreset().plugins, rtl()] })}>
+              <StylesProvider
+                jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
+                generateClassName={generateClassName}
+              >
                 <AuthenticationSender />
                 <AccessTokenSender />
                 <Suspense
@@ -87,6 +94,7 @@ export class App extends Component {
 }
 
 App.propTypes = {
+  classPrefix: PropTypes.string,
   isFullscreenEnabled: PropTypes.bool,
   language: PropTypes.string.isRequired,
   setWorkspaceFullscreen: PropTypes.func.isRequired,
@@ -96,5 +104,6 @@ App.propTypes = {
 };
 
 App.defaultProps = {
+  classPrefix: '',
   isFullscreenEnabled: false,
 };

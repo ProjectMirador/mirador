@@ -1,10 +1,10 @@
-import { createCssNs } from 'css-ns';
-
+import settings from './settings'
+import flatten from 'lodash/flatten';
 /**
  * export ns - sets up css namespacing for everything to be `mirador-`
  */
-const ns = className => createCssNs({
-  namespace: 'mirador',
-})(className);
+const ns = classNames => flatten([classNames]).map(
+  className => [settings.classPrefix, className].join('-')
+).join(' ');
 
 export default ns;
