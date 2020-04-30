@@ -84,7 +84,7 @@ export class OpenSeadragonViewer extends Component {
       this.viewer.viewport.panTo(viewer, true);
       this.viewer.viewport.zoomTo(viewer.zoom, viewer, true);
     }
-    this.addAllImageSources();
+    this.addAllImageSources(!(viewer));
   }
 
   /**
@@ -128,7 +128,8 @@ export class OpenSeadragonViewer extends Component {
       || !this.nonTiledImagedMatch(prevProps.nonTiledImages)
     ) {
       this.viewer.close();
-      this.addAllImageSources();
+      const canvasesChanged = !(isEqual(canvasWorld.canvasIds, prevProps.canvasWorld.canvasIds));
+      this.addAllImageSources((canvasesChanged || !viewer));
     } else if (!isEqual(canvasWorld.layers, prevProps.canvasWorld.layers)) {
       this.refreshTileProperties();
     } else if (viewer && !this.osdUpdating) {
@@ -203,14 +204,14 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /** */
-  addAllImageSources() {
+  addAllImageSources(zoomAfterAdd = true) {
     const { nonTiledImages, infoResponses } = this.props;
     Promise.all(
       infoResponses.map(infoResponse => this.addTileSource(infoResponse)),
       nonTiledImages.map(image => this.addNonTiledImage(image)),
     ).then(() => {
       if (infoResponses[0] || nonTiledImages[0]) {
-        this.zoomToWorld();
+        if (zoomAfterAdd) this.zoomToWorld();
         this.refreshTileProperties();
       }
     });
