@@ -60,6 +60,16 @@ describe('WorkspaceMosaic', () => {
       wrapper.setProps({ windows: {} });
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith(null);
     });
+    it('when the new and old layouts are the same', () => {
+      const updateWorkspaceMosaicLayout = jest.fn();
+      wrapper = createWrapper({
+        layout: { first: 1, second: 2 },
+        updateWorkspaceMosaicLayout,
+        windows,
+      });
+      wrapper.setProps({ layout: { first: 1, second: 2 }, windows });
+      expect(updateWorkspaceMosaicLayout).toHaveBeenCalledTimes(1);
+    });
   });
   describe('bookkeepPath', () => {
     it('as windows are rendered keeps a reference to their path in binary tree', () => {

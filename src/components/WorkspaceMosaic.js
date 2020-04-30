@@ -6,6 +6,7 @@ import {
 import 'react-mosaic-component/react-mosaic-component.css';
 import difference from 'lodash/difference';
 import toPairs from 'lodash/toPairs';
+import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';
 import Window from '../containers/Window';
@@ -44,6 +45,13 @@ export class WorkspaceMosaic extends React.Component {
     const { windows, layout, updateWorkspaceMosaicLayout } = this.props;
     const prevWindows = Object.keys(prevProps.windows);
     const currentWindows = Object.keys(windows);
+    // Handles when Windows are added (not via Add Resource UI) Could be a workspace import
+    if (!currentWindows.every(e => prevWindows.includes(e))) {
+      const newLayout = this.determineWorkspaceLayout();
+      if (!isEqual(newLayout, layout)) updateWorkspaceMosaicLayout(newLayout);
+      return;
+    }
+    // console.log(prevWindows, currentWindows);
     // Handles when Windows are removed from the state
     if (!prevWindows.every(e => currentWindows.includes(e))) {
       // There are no more remaining Windows, just return an empty layout
@@ -56,12 +64,6 @@ export class WorkspaceMosaic extends React.Component {
       const newLayout = new MosaicLayout(layout);
       newLayout.removeWindows(removedWindows, this.windowPaths);
       updateWorkspaceMosaicLayout(newLayout.layout);
-    }
-    // Handles when Windows are added (not via Add Resource UI)
-    // TODO: If a window is added, add it in a better way #2380
-    if (!currentWindows.every(e => prevWindows.includes(e))) {
-      const newLayout = this.determineWorkspaceLayout();
-      if (newLayout !== layout) updateWorkspaceMosaicLayout(newLayout);
     }
   }
 
