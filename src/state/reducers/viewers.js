@@ -1,3 +1,4 @@
+import { setIn } from 'immutable';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -19,6 +20,10 @@ export const viewersReducer = (state = {}, action) => {
         }
         return object;
       }, {});
+    case ActionTypes.SET_WINDOW_VIEW_TYPE:
+      return setIn(state, [action.windowId], null);
+    case ActionTypes.SET_CANVAS:
+      return setIn(state, [action.windowId], null);
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.viewers;
     default:
