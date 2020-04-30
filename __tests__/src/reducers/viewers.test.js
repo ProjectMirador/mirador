@@ -42,6 +42,42 @@ describe('viewers reducer', () => {
       },
     });
   });
+  it('should handle SET_WINDOW_VIEW_TYPE', () => {
+    expect(viewersReducer({
+      abc123: {
+        foo: 'bar',
+      },
+      def456: {
+        foo: 'bar',
+      },
+    }, {
+      type: ActionTypes.SET_WINDOW_VIEW_TYPE,
+      windowId: 'abc123',
+    })).toEqual({
+      abc123: null,
+      def456: {
+        foo: 'bar',
+      },
+    });
+  });
+  it('should handle SET_CANVAS', () => {
+    expect(viewersReducer({
+      abc123: {
+        foo: 'bar',
+      },
+      def456: {
+        foo: 'bar',
+      },
+    }, {
+      type: ActionTypes.SET_CANVAS,
+      windowId: 'abc123',
+    })).toEqual({
+      abc123: null,
+      def456: {
+        foo: 'bar',
+      },
+    });
+  });
   it('should handle IMPORT_MIRADOR_STATE', () => {
     expect(viewersReducer({}, {
       state: { viewers: { new: 'stuff' } },
