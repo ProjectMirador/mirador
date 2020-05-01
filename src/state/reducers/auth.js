@@ -10,7 +10,7 @@ export const authReducer = (state = {}, action) => {
 
   switch (action.type) {
     case ActionTypes.RECEIVE_INFO_RESPONSE:
-      if (action.ok && normalizeUrl(action.infoId, { stripAuthentication: false }) === normalizeUrl(action.infoJson['@id'], { stripAuthentication: false })) return state;
+      if (action.ok && normalizeUrl(action.infoId, { stripAuthentication: false }) === normalizeUrl(action.infoJson.id || action.infoJson['@id'], { stripAuthentication: false })) return state;
 
       service = selectNextAuthService(
         { auth: state }, action.infoJson, { external: true, kiosk: true },
