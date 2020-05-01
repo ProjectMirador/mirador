@@ -18,7 +18,7 @@ export const infoResponsesReducer = (state = {}, action) => {
       return {
         ...state,
         [action.infoId]: {
-          degraded: !action.ok || !(normalizeUrl(action.infoId, { stripAuthentication: false }) === normalizeUrl(action.infoJson['@id'], { stripAuthentication: false })),
+          degraded: !action.ok || !(normalizeUrl(action.infoId, { stripAuthentication: false }) === normalizeUrl(action.infoJson.id || action.infoJson['@id'], { stripAuthentication: false })),
           id: action.infoId,
           isFetching: false,
           json: action.infoJson,
