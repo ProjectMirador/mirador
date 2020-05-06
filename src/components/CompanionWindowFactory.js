@@ -7,6 +7,7 @@ import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
 import AttributionPanel from '../containers/AttributionPanel';
 import SearchPanel from '../containers/SearchPanel';
 import LayersPanel from '../containers/LayersPanel';
+import CustomPanel from '../containers/CustomPanel';
 
 /**
  * Render a companion window using the appropriate component for the content
@@ -31,6 +32,8 @@ export class CompanionWindowFactory extends Component {
         return <SearchPanel id={id} windowId={windowId} />;
       case 'layers':
         return <LayersPanel id={id} windowId={windowId} />;
+      case 'custom':
+        return <CustomPanel id={id} windowId={windowId} />;
       default:
         return (<></>);
     }
