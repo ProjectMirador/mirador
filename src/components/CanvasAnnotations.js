@@ -58,6 +58,7 @@ export class CanvasAnnotations extends Component {
   render() {
     const {
       annotations, classes, index, label, selectedAnnotationIds, t, totalSize,
+      listContainerComponent,
     } = this.props;
     if (annotations.length === 0) return <></>;
 
@@ -71,9 +72,10 @@ export class CanvasAnnotations extends Component {
             annotations.map(annotation => (
               <ListItem
                 button
-                component="li"
+                component={listContainerComponent}
                 className={classes.annotationListItem}
                 key={annotation.id}
+                annotationid={annotation.id}
                 selected={selectedAnnotationIds.includes(annotation.id)}
                 onClick={e => this.handleClick(e, annotation)}
                 onFocus={() => this.handleAnnotationHighlight(annotation)}
@@ -106,6 +108,7 @@ CanvasAnnotations.propTypes = {
   highlightAnnotation: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
+  listContainerComponent: PropTypes.elementType,
   selectAnnotation: PropTypes.func.isRequired,
   selectedAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func.isRequired,
@@ -115,5 +118,6 @@ CanvasAnnotations.propTypes = {
 CanvasAnnotations.defaultProps = {
   annotations: [],
   classes: {},
+  listContainerComponent: 'li',
   selectedAnnotationIds: [],
 };
