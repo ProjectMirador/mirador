@@ -2,10 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import uuid from 'uuid/v4';
-import PluginProvider from '../extend/PluginProvider';
-import App from '../containers/App';
+import { App } from '../components/App';
 import createStore from '../state/createStore';
-import createRootReducer from '../state/reducers/rootReducer';
 import * as actions from '../state/actions';
 import { getCompanionWindowIdsForPosition, getManifestSearchService } from '../state/selectors';
 
@@ -28,9 +26,7 @@ class MiradorViewer {
 
     ReactDOM.render(
       <Provider store={this.store}>
-        <PluginProvider plugins={this.plugins} createRootReducer={createRootReducer}>
-          <App />
-        </PluginProvider>
+        <App plugins={this.plugins} />
       </Provider>,
       document.getElementById(config.id),
     );
