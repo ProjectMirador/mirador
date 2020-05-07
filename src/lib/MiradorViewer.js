@@ -15,10 +15,12 @@ import { getCompanionWindowIdsForPosition, getManifestSearchService } from '../s
 class MiradorViewer {
   /**
    */
-  constructor(config, plugins) {
-    this.store = createStore();
+  constructor(config, viewerConfig = {}) {
     this.config = config;
+    this.plugins = viewerConfig.plugins || [];
+    this.store = viewerConfig.store || createStore();
     this.processConfig();
+
     const viewer = {
       actions,
       store: this.store,
@@ -26,7 +28,7 @@ class MiradorViewer {
 
     ReactDOM.render(
       <Provider store={this.store}>
-        <PluginProvider plugins={plugins} createRootReducer={createRootReducer}>
+        <PluginProvider plugins={this.plugins} createRootReducer={createRootReducer}>
           <App />
         </PluginProvider>
       </Provider>,
