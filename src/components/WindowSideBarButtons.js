@@ -5,12 +5,6 @@ import Badge from '@material-ui/core/Badge';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/InfoSharp';
-import AnnotationIcon from '@material-ui/icons/CommentSharp';
-import AttributionIcon from '@material-ui/icons/CopyrightSharp';
-import LayersIcon from '@material-ui/icons/LayersSharp';
-import SearchIcon from '@material-ui/icons/SearchSharp';
-import CanvasIndexIcon from './icons/CanvasIndexIcon';
 import { keys, chars } from '../lib/KeyHelper';
 /**
  *
@@ -131,12 +125,9 @@ export class WindowSideBarButtons extends Component {
    */
   render() {
     const {
+      badge,
       classes,
-      hasAnnotations,
-      hasAnyLayers,
-      hasCurrentLayers,
-      hasSearchResults,
-      hasSearchService,
+      hidden,
       panels,
       sideBarPanel,
       t,
@@ -157,6 +148,14 @@ export class WindowSideBarButtons extends Component {
       </Tooltip>
     );
 
+    const sortedPanelKeys = Object.keys(panels)
+      .filter(k => panels[k] && panels[k].enabled && !hidden[k])
+      .sort((k1, k2) => (
+        panels[k1].order - panels[k2].order
+      ));
+
+    if (sortedPanelKeys.length === 0) return null;
+
     return (
       <Tabs
         classes={{ flexContainer: classes.tabsFlexContainer, indicator: classes.tabsIndicator }}
@@ -169,54 +168,22 @@ export class WindowSideBarButtons extends Component {
         aria-label={t('sidebarPanelsNavigation')}
         ref={ref => this.setTabsRef(ref)}
       >
-        { panels.info && (
-          <TabButton
-            value="info"
-            icon={(<InfoIcon />)}
-          />
-        )}
-        { panels.attribution && (
-          <TabButton
-            value="attribution"
-            icon={(<AttributionIcon />)}
-          />
-        )}
-        { panels.canvas && (
-          <TabButton
-            value="canvas"
-            icon={(<CanvasIndexIcon />)}
-          />
-        )}
-        {panels.annotations && (
-          <TabButton
-            value="annotations"
-            icon={(
-              <Badge classes={{ badge: classes.badge }} invisible={!hasAnnotations} variant="dot">
-                <AnnotationIcon />
-              </Badge>
-            )}
-          />
-        )}
-        {panels.search && hasSearchService && (
-          <TabButton
-            value="search"
-            icon={(
-              <Badge classes={{ badge: classes.badge }} invisible={!hasSearchResults} variant="dot">
-                <SearchIcon />
-              </Badge>
-            )}
-          />
-        )}
-        { panels.layers && hasAnyLayers && (
-          <TabButton
-            value="layers"
-            icon={(
-              <Badge classes={{ badge: classes.badge }} invisible={!hasCurrentLayers} variant="dot">
-                <LayersIcon />
-              </Badge>
-            )}
-          />
-        )}
+        {
+          sortedPanelKeys.map((key) => {
+            const Icon = panels[key].icon;
+            return (
+              <TabButton
+                key={key}
+                value={key}
+                icon={(
+                  <Badge classes={{ badge: classes.badge }} invisible={!badge[key]} variant="dot">
+                    <Icon />
+                  </Badge>
+                )}
+              />
+            );
+          })
+        }
       </Tabs>
     );
   }
@@ -224,25 +191,19 @@ export class WindowSideBarButtons extends Component {
 
 WindowSideBarButtons.propTypes = {
   addCompanionWindow: PropTypes.func.isRequired,
+  badge: PropTypes.arrayOf(PropTypes.boolean),
   classes: PropTypes.objectOf(PropTypes.string),
-  hasAnnotations: PropTypes.bool,
-  hasAnyLayers: PropTypes.bool,
-  hasCurrentLayers: PropTypes.bool,
-  hasSearchResults: PropTypes.bool,
-  hasSearchService: PropTypes.bool,
-  panels: PropTypes.arrayOf(PropTypes.bool),
+  hidden: PropTypes.arrayOf(PropTypes.boolean),
+  panels: PropTypes.objectOf(PropTypes.object),
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
 };
 
 WindowSideBarButtons.defaultProps = {
+  badge: {},
   classes: {},
-  hasAnnotations: false,
-  hasAnyLayers: false,
-  hasCurrentLayers: false,
-  hasSearchResults: false,
-  hasSearchService: false,
-  panels: [],
+  hidden: {},
+  panels: {},
   sideBarPanel: 'closed',
   t: key => key,
 };

@@ -1,4 +1,10 @@
 import uuid from 'uuid/v4';
+import InfoIcon from '@material-ui/icons/InfoSharp';
+import AnnotationIcon from '@material-ui/icons/CommentSharp';
+import AttributionIcon from '@material-ui/icons/CopyrightSharp';
+import LayersIcon from '@material-ui/icons/LayersSharp';
+import SearchIcon from '@material-ui/icons/SearchSharp';
+import CanvasIndexIcon from '../components/icons/CanvasIndexIcon';
 
 export default {
   canvasNavigation: { // Set the hight and width of canvas thumbnails in the  CanvasNavigation companion window
@@ -235,11 +241,36 @@ export default {
     showLocalePicker: false, // Configure locale picker for multi-lingual metadata
     sideBarOpenByDefault: false, // Configure if the sidebar (and its content panel) is open by default
     panels: { // Configure which panels are visible in WindowSideBarButtons
-      info: true,
-      attribution: true,
-      canvas: true,
-      annotations: true,
-      search: true,
+      info: {
+        order: 1,
+        enabled: true,
+        icon: InfoIcon
+      },
+      attribution: {
+        order: 2,
+        enabled: true,
+        icon: AttributionIcon
+      },
+      canvas: {
+        order: 3,
+        enabled: true,
+        icon: CanvasIndexIcon
+      },
+      annotations: {
+        order: 4,
+        enabled: true,
+        icon: AnnotationIcon
+      },
+      search: {
+        order: 5,
+        enabled: true,
+        icon: SearchIcon
+      },
+      layers: {
+        order: 6,
+        enabled: false,
+        icon: LayersIcon
+      }
     }
   },
   windows: [ // Array of windows to be open when mirador initializes (each object should at least provide a manifestId key with the value of the IIIF presentation manifest to load)

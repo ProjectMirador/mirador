@@ -39,17 +39,21 @@ function hasLayers(canvases) {
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
-  hasAnnotations: getAnnotationResourcesByMotivation(
-    state,
-    { motivations: state.config.annotations.filteredMotivations, windowId },
-  ).length > 0,
-  hasAnyLayers: hasLayers(getCanvases(state, { windowId })),
-  hasCurrentLayers: hasLayers(getVisibleCanvases(state, { windowId })),
-  hasSearchResults: getWindow(state, { windowId }).suggestedSearches || getSearchQuery(state, {
-    companionWindowId: (getCompanionWindowsForPosition(state, { position: 'left', windowId })[0] || {}).id,
-    windowId,
-  }),
-  hasSearchService: getManifestSearchService(state, { windowId }) !== null,
+  badge: {
+    annotations: getAnnotationResourcesByMotivation(
+      state,
+      { motivations: state.config.annotations.filteredMotivations, windowId },
+    ).length > 0,
+    layers: hasLayers(getVisibleCanvases(state, { windowId })),
+    search: getWindow(state, { windowId }).suggestedSearches || getSearchQuery(state, {
+      companionWindowId: (getCompanionWindowsForPosition(state, { position: 'left', windowId })[0] || {}).id,
+      windowId,
+    }),
+  },
+  hidden: {
+    layers: !hasLayers(getCanvases(state, { windowId })),
+    search: getManifestSearchService(state, { windowId }) === null,
+  },
   panels: state.config.window.panels,
   sideBarPanel: ((getCompanionWindowsForPosition(state, { position: 'left', windowId }))[0] || {}).content,
 });
