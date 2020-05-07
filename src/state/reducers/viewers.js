@@ -25,7 +25,7 @@ export const viewersReducer = (state = {}, action) => {
     case ActionTypes.SET_CANVAS:
       return setIn(state, [action.windowId], null);
     case ActionTypes.IMPORT_MIRADOR_STATE:
-      return action.state.viewers;
+      return action.state.viewers || {};
     default:
       return state;
   }

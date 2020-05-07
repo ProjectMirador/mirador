@@ -12,7 +12,7 @@ export const configReducer = (state = {}, action) => {
     case ActionTypes.SET_CONFIG:
       return action.config;
     case ActionTypes.IMPORT_MIRADOR_STATE:
-      return action.state.config;
+      return action.state.config || {};
     default:
       return state;
   }

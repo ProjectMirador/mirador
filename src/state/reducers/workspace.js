@@ -93,7 +93,7 @@ export const workspaceReducer = (
     case ActionTypes.SET_CONFIG:
       return { ...state, ...action.config.workspace };
     case ActionTypes.IMPORT_MIRADOR_STATE:
-      return action.state.workspace;
+      return action.state.workspace || {};
     case ActionTypes.TOGGLE_DRAGGING:
       return { ...state, draggingEnabled: !state.draggingEnabled };
     default:
