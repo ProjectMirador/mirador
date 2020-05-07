@@ -1,3 +1,5 @@
+
+import React, { lazy } from 'react';
 import uuid from 'uuid/v4';
 import InfoIcon from '@material-ui/icons/InfoSharp';
 import AnnotationIcon from '@material-ui/icons/CommentSharp';
@@ -5,12 +7,12 @@ import AttributionIcon from '@material-ui/icons/CopyrightSharp';
 import LayersIcon from '@material-ui/icons/LayersSharp';
 import SearchIcon from '@material-ui/icons/SearchSharp';
 import CanvasIndexIcon from '../components/icons/CanvasIndexIcon';
-import WindowSideBarAnnotationsPanel from '../containers/WindowSideBarAnnotationsPanel';
-import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
-import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
-import AttributionPanel from '../containers/AttributionPanel';
-import SearchPanel from '../containers/SearchPanel';
-import LayersPanel from '../containers/LayersPanel';
+const WindowSideBarAnnotationsPanel = lazy(() => import('../containers/WindowSideBarAnnotationsPanel'));
+const WindowSideBarInfoPanel = lazy(() => import('../containers/WindowSideBarInfoPanel'));
+const WindowSideBarCanvasPanel = lazy(() => import('../containers/WindowSideBarCanvasPanel'));
+const AttributionPanel = lazy(() => import('../containers/AttributionPanel'));
+const SearchPanel = lazy(() => import('../containers/SearchPanel'));
+const LayersPanel = lazy(() => import('../containers/LayersPanel'));
 
 export default {
   canvasNavigation: { // Set the hight and width of canvas thumbnails in the  CanvasNavigation companion window

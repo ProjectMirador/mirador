@@ -34,6 +34,7 @@ const baseConfig = [
       ],
     },
     output: {
+      chunkFilename: 'mirador-[chunkhash].js',
       filename: 'mirador.min.js',
       library: 'Mirador',
       libraryExport: 'default',

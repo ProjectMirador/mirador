@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import ThumbnailNavigation from '../containers/ThumbnailNavigation';
 
@@ -18,7 +18,7 @@ export class CompanionWindowFactory extends Component {
 
     const Panel = panels[content].panel;
 
-    return (<Panel id={id} windowId={windowId} />);
+    return (<Suspense><Panel id={id} windowId={windowId} /></Suspense>);
   }
 }
 
