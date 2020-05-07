@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import deepmerge from 'deepmerge';
 import uuid from 'uuid/v4';
 import PluginProvider from '../extend/PluginProvider';
 import App from '../containers/App';
 import createStore from '../state/createStore';
 import createRootReducer from '../state/reducers/rootReducer';
 import * as actions from '../state/actions';
-import settings from '../config/settings';
 import { getCompanionWindowIdsForPosition, getManifestSearchService } from '../state/selectors';
 
 /**
@@ -43,12 +41,11 @@ class MiradorViewer {
    */
   processConfig() {
     /** merge type for arrays */
-    const overwriteMerge = (destinationArray, sourceArray, options) => sourceArray;
-    const mergedConfig = deepmerge(settings, this.config, { arrayMerge: overwriteMerge });
-    const action = actions.setConfig(mergedConfig);
+    const action = actions.importConfig(this.config);
     this.store.dispatch(action);
+    const { config: storedConfig } = this.store.getState();
 
-    mergedConfig.windows.forEach((miradorWindow, layoutOrder) => {
+    storedConfig.windows.forEach((miradorWindow, layoutOrder) => {
       const windowId = `window-${uuid()}`;
       const manifestId = miradorWindow.manifestId || miradorWindow.loadedManifest;
       const manifestAction = this.store.dispatch(actions.fetchManifest(manifestId));
@@ -57,7 +54,7 @@ class MiradorViewer {
         id: windowId,
         layoutOrder,
         manifestId,
-        thumbnailNavigationPosition: mergedConfig.thumbnailNavigation.defaultPosition,
+        thumbnailNavigationPosition: storedConfig.thumbnailNavigation.defaultPosition,
         // ... overridden by values from the window configuration ...
         ...miradorWindow,
       }));
@@ -81,9 +78,9 @@ class MiradorViewer {
       });
     });
 
-    Object.keys(mergedConfig.manifests || {}).forEach((manifestId) => {
+    Object.keys(storedConfig.manifests || {}).forEach((manifestId) => {
       this.store.dispatch(
-        actions.requestManifest(manifestId, mergedConfig.manifests[manifestId]),
+        actions.requestManifest(manifestId, storedConfig.manifests[manifestId]),
       );
     });
   }
