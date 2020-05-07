@@ -1,3 +1,5 @@
+import uuid from 'uuid/v4';
+
 export default {
   canvasNavigation: { // Set the hight and width of canvas thumbnails in the  CanvasNavigation companion window
     height: 50,
@@ -258,6 +260,8 @@ export default {
     width: 100, // width of one canvas (doubled for book view) in ThumbnailNavigation area when position is "far-right"
   },
   workspace: {
+    draggingEnabled: true,
+    id: uuid(),
     exposeModeOn: false, // unused?
     height: 5000, // height of the elastic mode's virtual canvas
     showZoomControls: false, // Configure if zoom controls should be displayed by default
