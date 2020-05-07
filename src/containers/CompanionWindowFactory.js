@@ -15,6 +15,7 @@ const mapStateToProps = (state, { id }) => {
   return {
     content: companionWindow.content,
     id,
+    panels: state.config.window.panels,
   };
 };
 

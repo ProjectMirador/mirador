@@ -5,6 +5,12 @@ import AttributionIcon from '@material-ui/icons/CopyrightSharp';
 import LayersIcon from '@material-ui/icons/LayersSharp';
 import SearchIcon from '@material-ui/icons/SearchSharp';
 import CanvasIndexIcon from '../components/icons/CanvasIndexIcon';
+import WindowSideBarAnnotationsPanel from '../containers/WindowSideBarAnnotationsPanel';
+import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
+import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
+import AttributionPanel from '../containers/AttributionPanel';
+import SearchPanel from '../containers/SearchPanel';
+import LayersPanel from '../containers/LayersPanel';
 
 export default {
   canvasNavigation: { // Set the hight and width of canvas thumbnails in the  CanvasNavigation companion window
@@ -244,32 +250,38 @@ export default {
       info: {
         order: 1,
         enabled: true,
-        icon: InfoIcon
+        icon: InfoIcon,
+        panel: WindowSideBarInfoPanel,
       },
       attribution: {
         order: 2,
         enabled: true,
-        icon: AttributionIcon
+        icon: AttributionIcon,
+        panel: AttributionPanel,
       },
       canvas: {
         order: 3,
         enabled: true,
-        icon: CanvasIndexIcon
+        icon: CanvasIndexIcon,
+        panel: WindowSideBarCanvasPanel,
       },
       annotations: {
         order: 4,
         enabled: true,
-        icon: AnnotationIcon
+        icon: AnnotationIcon,
+        panel: WindowSideBarAnnotationsPanel,
       },
       search: {
         order: 5,
         enabled: true,
-        icon: SearchIcon
+        icon: SearchIcon,
+        panel: SearchPanel,
       },
       layers: {
         order: 6,
         enabled: false,
-        icon: LayersIcon
+        icon: LayersIcon,
+        panel: LayersPanel,
       }
     }
   },
