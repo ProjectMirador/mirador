@@ -82,7 +82,7 @@ export function addWindow({ companionWindows, ...options }) {
       rangeId: null,
       rotation: null,
       selectedAnnotations: {},
-      sideBarOpen: config.window.defaultSideBarPanel && config.window.sideBarOpenByDefault,
+      sideBarOpen: config.window.sideBarOpenByDefault,
       sideBarPanel: config.window.defaultSideBarPanel,
       thumbnailNavigationId: cwThumbs,
     };
