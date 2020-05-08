@@ -42,14 +42,37 @@ export function addWindow({ companionWindows, ...options }) {
     const { config, windows } = getState();
     const numWindows = Object.keys(windows).length;
 
-    const cwDefault = `cw-${uuid()}`;
     const cwThumbs = `cw-${uuid()}`;
-    const additionalCompanionWindowIds = (companionWindows || []).map(e => `cw-${uuid()}`);
+
+    const defaultCompanionWindows = [
+      {
+        content: 'thumbnailNavigation',
+        default: true,
+        id: cwThumbs,
+        position: options.thumbnailNavigationPosition
+          || config.thumbnailNavigation.defaultPosition,
+      },
+      ...(
+        (companionWindows || []).map((cw, i) => ({ ...cw, id: `cw-${uuid()}` }))
+      ),
+    ];
+
+    if (config.window.defaultSideBarPanel) {
+      defaultCompanionWindows.unshift(
+        {
+          content: config.window.defaultSideBarPanel,
+          default: true,
+          id: `cw-${uuid()}`,
+          position: 'left',
+        },
+      );
+    }
+
     const defaultOptions = {
       canvasId: undefined,
       collectionIndex: 0,
       companionAreaOpen: true,
-      companionWindowIds: [cwDefault, cwThumbs, ...additionalCompanionWindowIds],
+      companionWindowIds: defaultCompanionWindows.map(cw => cw.id),
       displayAllAnnotations: config.displayAllAnnotations || false,
       draggingEnabled: true,
       id: `window-${uuid()}`,
@@ -59,7 +82,7 @@ export function addWindow({ companionWindows, ...options }) {
       rangeId: null,
       rotation: null,
       selectedAnnotations: {},
-      sideBarOpen: config.window.sideBarOpenByDefault,
+      sideBarOpen: config.window.defaultSideBarPanel && config.window.sideBarOpenByDefault,
       sideBarPanel: config.window.defaultSideBarPanel,
       thumbnailNavigationId: cwThumbs,
     };
@@ -72,24 +95,7 @@ export function addWindow({ companionWindows, ...options }) {
     };
 
     dispatch({
-      companionWindows: [
-        {
-          content: config.window.defaultSideBarPanel,
-          default: true,
-          id: cwDefault,
-          position: 'left',
-        },
-        {
-          content: 'thumbnailNavigation',
-          default: true,
-          id: cwThumbs,
-          position: options.thumbnailNavigationPosition
-            || config.thumbnailNavigation.defaultPosition,
-        },
-        ...(
-          (companionWindows || []).map((cw, i) => ({ ...cw, id: additionalCompanionWindowIds[i] }))
-        ),
-      ],
+      companionWindows: defaultCompanionWindows,
       elasticLayout,
       type: ActionTypes.ADD_WINDOW,
       window: { ...defaultOptions, ...options },
