@@ -150,7 +150,9 @@ describe('window actions', () => {
         companionWindows: {},
         config: {
           thumbnailNavigation: {},
-          window: {},
+          window: {
+            defaultSideBarPanel: 'info',
+          },
         },
         windows: {},
       };
@@ -166,6 +168,35 @@ describe('window actions', () => {
       expect(action.window.companionWindowIds.length).toEqual(3);
       expect(action.window.companionWindowIds[2]).toEqual(action.companionWindows[2].id);
       expect(action.companionWindows[2]).toMatchObject({ content: 'attribution', position: 'right' });
+    });
+    it('creates a new window without a default sidebar', () => {
+      const options = {
+        canvasIndex: 1,
+        companionWindows: [],
+        id: 'helloworld',
+      };
+
+      const mockState = {
+        companionWindows: {},
+        config: {
+          thumbnailNavigation: {},
+          window: {
+            defaultSideBarPanel: null,
+          },
+        },
+        windows: {},
+      };
+
+      const mockDispatch = jest.fn(() => ({}));
+      const mockGetState = jest.fn(() => mockState);
+      const thunk = actions.addWindow(options);
+
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+
+      expect(action.window.companionWindowIds.length).toEqual(1);
+      expect(action.companionWindows[0]).toMatchObject({ content: 'thumbnailNavigation' });
     });
   });
 
