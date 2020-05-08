@@ -34,7 +34,7 @@ export class WindowViewer extends Component {
     if (!this.infoResponseIsInStore()) {
       currentCanvases.forEach((canvas) => {
         const miradorCanvas = new MiradorCanvas(canvas);
-        miradorCanvas.imageResources.forEach((imageResource) => {
+        miradorCanvas.iiifImageResources.forEach((imageResource) => {
           fetchInfoResponse({ imageResource });
         });
         miradorCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
@@ -56,7 +56,7 @@ export class WindowViewer extends Component {
     ) {
       currentCanvases.forEach((canvas) => {
         const miradorCanvas = new MiradorCanvas(canvas);
-        miradorCanvas.imageResources.forEach((imageResource) => {
+        miradorCanvas.iiifImageResources.forEach((imageResource) => {
           fetchInfoResponse({ imageResource });
         });
         miradorCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
