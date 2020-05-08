@@ -27,7 +27,7 @@ export class Branding extends Component {
             target="_blank"
             rel="noopener"
           >
-            <MiradorIcon fontSize="large" />
+            <MiradorIcon titleAccess="About Project Mirador" fontSize="large" />
           </IconButton>
         </Typography>
       </div>
