@@ -11,6 +11,8 @@ import {
   getSequenceTreeStructure,
   getWindow,
   getManifestoInstance,
+  getSequence,
+  getSequences,
 } from '../state/selectors';
 
 /**
@@ -27,8 +29,9 @@ const mapStateToProps = (state, { id, windowId }) => {
     collection: collectionId && getManifestoInstance(state, { manifestId: collectionId }),
     config,
     showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
-    variant: companionWindow.variant
-      || getDefaultSidebarVariant(state, { windowId }),
+    variant: companionWindow.variant || getDefaultSidebarVariant(state, { windowId }),
+    sequenceId: getSequence(state, { windowId }).id,
+    sequences: getSequences(state, { windowId }),
   };
 };
 
@@ -43,6 +46,9 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
     actions.addOrUpdateCompanionWindow(windowId, { content: 'collection', position: 'right' }),
   ),
   toggleDraggingEnabled: () => dispatch(actions.toggleDraggingEnabled()),
+  updateSequence: sequenceId => dispatch(
+    actions.updateWindow(windowId, { sequenceId }),
+  ),
   updateVariant: variant => dispatch(
     actions.updateCompanionWindow(windowId, id, { variant }),
   ),
@@ -55,6 +61,10 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
 const styles = theme => ({
   collectionNavigationButton: {
     textTransform: 'none',
+  },
+  break: {
+    flexBasis: '100%',
+    height: 0,
   },
   label: {
     paddingLeft: theme.spacing(1),

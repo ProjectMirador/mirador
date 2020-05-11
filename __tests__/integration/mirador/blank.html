@@ -13,7 +13,9 @@
     <script type="text/javascript">
      var miradorInstance = Mirador.viewer({
        id: 'mirador',
-       windows: [],
+       windows: [{
+         manifestId: 'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/manifest.json'
+       }],
        theme: {
          transitions: window.location.port === '4488' ?  { create: () => 'none' } : {},
        },
