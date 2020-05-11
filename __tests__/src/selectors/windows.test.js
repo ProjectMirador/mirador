@@ -9,9 +9,11 @@ import {
   getWindowDraggability,
   getCanvasIndex,
   getWindowManifests,
-  getWindows,
   getMaximizedWindowsIds,
 } from '../../../src/state/selectors/windows';
+import {
+  getWindows,
+} from '../../../src/state/selectors/getters';
 
 describe('getWindows', () => {
   it('should return windows from state', () => {

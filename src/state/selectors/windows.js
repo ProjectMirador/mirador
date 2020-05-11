@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
-import { getManifestTitle, getManifestViewingHint, getManifestoInstance } from './manifests';
+import { getManifestTitle, getManifestViewingHint, getSequence } from './manifests';
 import { getDefaultView } from './config';
 import { getWorkspaceType } from './workspace';
+import { getWindows, getWindow } from './getters';
 
 /**
  * Return the manifest titles for all open windows
@@ -28,11 +29,6 @@ export function getWindowManifests(state) {
 }
 
 /** */
-export function getWindows(state) {
-  return state.windows || {};
-}
-
-/** */
 export const getWindowIds = createSelector(
   [getWindows],
   windows => Object.keys(windows),
@@ -46,11 +42,6 @@ export const getMaximizedWindowsIds = createSelector(
     .map(window => window.id),
 );
 
-/** */
-export function getWindow(state, { windowId }) {
-  return getWindows(state)[windowId];
-}
-
 /** Return the canvas index for a certain window.
 * @param {object} state
 * @param {String} windowId
@@ -59,11 +50,11 @@ export function getWindow(state, { windowId }) {
 export const getCanvasIndex = createSelector(
   [
     getWindow,
-    getManifestoInstance,
+    getSequence,
   ],
-  (window, manifest) => (
-    (manifest && window && window.canvasId
-      && manifest.getSequences()[0].getCanvasById(window.canvasId))
+  (window, sequence) => (
+    (sequence && window && window.canvasId
+      && sequence.getCanvasById(window.canvasId))
     || {}).index || 0,
 );
 

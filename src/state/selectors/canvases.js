@@ -3,12 +3,13 @@ import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import flatten from 'lodash/flatten';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import MiradorCanvas from '../../lib/MiradorCanvas';
-import { getManifestoInstance } from './manifests';
-import { getWindow, getWindowViewType } from './windows';
+import { getSequence } from './manifests';
+import { getWindow } from './getters';
+import { getWindowViewType } from './windows';
 
 export const getCanvases = createSelector(
-  [getManifestoInstance],
-  manifest => manifest && manifest.getSequences()[0].getCanvases(),
+  [getSequence],
+  sequence => sequence && sequence.getCanvases(),
 );
 
 /**
@@ -21,29 +22,29 @@ export const getCanvases = createSelector(
 */
 export const getCanvas = createSelector(
   [
-    getManifestoInstance,
+    getSequence,
     (state, { canvasIndex }) => canvasIndex,
     (state, { canvasId }) => canvasId,
   ],
-  (manifest, canvasIndex, canvasId) => {
-    if (!manifest) return undefined;
+  (sequence, canvasIndex, canvasId) => {
+    if (!sequence) return undefined;
 
-    if (canvasId !== undefined) return manifest.getSequences()[0].getCanvasById(canvasId);
-    return manifest.getSequences()[0].getCanvasByIndex(canvasIndex);
+    if (canvasId !== undefined) return sequence.getCanvasById(canvasId);
+    return sequence.getCanvasByIndex(canvasIndex);
   },
 );
 
 export const getCurrentCanvas = createSelector(
   [
-    getManifestoInstance,
+    getSequence,
     getWindow,
   ],
-  (manifest, window) => {
-    if (!manifest || !window) return undefined;
+  (sequence, window) => {
+    if (!sequence || !window) return undefined;
 
-    if (!window.canvasId) return manifest.getSequences()[0].getCanvasByIndex(0);
+    if (!window.canvasId) return sequence.getCanvasByIndex(0);
 
-    return manifest.getSequences()[0].getCanvasById(window.canvasId);
+    return sequence.getCanvasById(window.canvasId);
   },
 );
 

@@ -2,14 +2,15 @@ import { createSelector } from 'reselect';
 import createCachedSelector from 're-reselect';
 import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { TreeNode } from 'manifesto.js/dist-esmodule/TreeNode';
 import MiradorCanvas from '../../lib/MiradorCanvas';
+import { getWindow } from './getters';
 
 /** */
 function createManifestoInstance(json, locale) {
   if (!json) return undefined;
   return Utils.parseManifest(json, locale ? { locale } : undefined);
 }
-
 
 /** Get the relevant manifest information */
 export function getManifest(state, { manifestId, windowId }) {
@@ -241,6 +242,51 @@ export function getManifestThumbnail(state, props) {
     || generateThumbnailFromFirstCanvas();
 }
 
+export const getSequences = createSelector(
+  [getManifestoInstance],
+  (manifest) => {
+    if (!manifest) return null;
+
+    const topRangesOrRoot = manifest.getTopRanges();
+    const v2TopRanges = topRangesOrRoot.filter(r => r.viewingHint === 'top');
+    let v3RangeSequences = [];
+
+    if (v2TopRanges.length === 0 && topRangesOrRoot.length === 1) {
+      v3RangeSequences = topRangesOrRoot[0].getRanges().filter(r => r.getBehavior() === 'sequence');
+    }
+
+    const sequences = [].concat(
+      // v2: multi-sequence manifests, or v3: items
+      manifest.getSequences(),
+      // v2: top ranges
+      v2TopRanges,
+      // v3: all top-level ranges with behavior=sequence
+      v3RangeSequences,
+    );
+
+    return sequences;
+  },
+);
+
+export const getSequence = createSelector(
+  [
+    getSequences,
+    getWindow,
+    (state, { sequenceId }) => sequenceId,
+  ],
+  (sequences, window, sequenceId) => {
+    if (!sequences) return null;
+
+    if (sequenceId || (window && window.sequenceId)) {
+      const currentSequence = sequences.find(s => s.id === (sequenceId || window.sequenceId));
+
+      if (currentSequence) return currentSequence;
+    }
+
+    return sequences[0];
+  },
+);
+
 /**
 * Return the logo of a manifest or null
 * @param {object} state
@@ -250,17 +296,13 @@ export function getManifestThumbnail(state, props) {
 * @return {String|null}
 */
 export const getManifestCanvases = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) {
+  [getSequence],
+  (sequence) => {
+    if (!sequence) {
       return [];
     }
 
-    if (!manifest.getSequences || !manifest.getSequences()[0]) {
-      return [];
-    }
-
-    return manifest.getSequences()[0].getCanvases();
+    return sequence.getCanvases();
   },
 );
 
@@ -408,22 +450,20 @@ export function getManifestStartCanvas(json, canvasIndexFromState) {
  * @return {Number}
  */
 export const getManifestViewingHint = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return null;
-    const viewingHint = (manifest.getSequences()[0] && manifest.getSequences()[0].getViewingHint())
-      || manifest.getViewingHint();
+  [getManifestoInstance, getSequence],
+  (manifest, sequence) => {
+    const viewingHint = (sequence && sequence.getViewingHint())
+      || (manifest && manifest.getViewingHint());
     if (viewingHint) return viewingHint;
     return null;
   },
 );
 
 export const getManifestViewingDirection = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return null;
-    const viewingDirection = manifest.getSequences()[0].getViewingDirection()
-      || manifest.getViewingDirection();
+  [getManifestoInstance, getSequence],
+  (manifest, sequence) => {
+    const viewingDirection = (sequence && sequence.getViewingDirection())
+      || (manifest && manifest.getViewingDirection());
     if (viewingDirection) return viewingDirection;
     return null;
   },
@@ -456,9 +496,9 @@ export const getManifestAutocompleteService = createSelector(
 
 /** */
 export const getManifestTreeStructure = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return null;
-    return manifest.getDefaultTree();
+  [getSequence],
+  (sequence) => {
+    if (!sequence || !sequence.isRange()) return new TreeNode('root');
+    return sequence.getTree(new TreeNode('root'));
   },
 );
