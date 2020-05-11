@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getTheme } from '../state/selectors';
-import { App } from '../components/App';
+import { AppProviders } from '../components/AppProviders';
 
 
 /**
@@ -32,7 +32,7 @@ const mapDispatchToProps = {
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('App'),
+  withPlugins('AppProviders'),
 );
 
-export default enhance(App);
+export default enhance(AppProviders);

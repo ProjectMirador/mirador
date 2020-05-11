@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4';
+import settings from '../../config/settings';
 import ActionTypes from '../actions/action-types';
 
 /** Check if the viewport dimensions are fully specified */
@@ -21,10 +21,7 @@ function contains(container, containee) {
  * workspaceReducer
  */
 export const workspaceReducer = (
-  state = { // we'll need to abstract this more, methinks.
-    draggingEnabled: true,
-    id: uuid(),
-  },
+  state = settings.workspace,
   action,
 ) => {
   let newWorkspaceDimensions;
@@ -91,9 +88,11 @@ export const workspaceReducer = (
     case ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE:
       return { ...state, exposeModeOn: !state.exposeModeOn };
     case ActionTypes.SET_CONFIG:
+    case ActionTypes.IMPORT_CONFIG:
+    case ActionTypes.UPDATE_CONFIG:
       return { ...state, ...action.config.workspace };
     case ActionTypes.IMPORT_MIRADOR_STATE:
-      return action.state.workspace;
+      return action.state.workspace || {};
     case ActionTypes.TOGGLE_DRAGGING:
       return { ...state, draggingEnabled: !state.draggingEnabled };
     default:

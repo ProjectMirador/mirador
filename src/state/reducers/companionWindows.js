@@ -24,7 +24,7 @@ export function companionWindowsReducer(state = {}, action) {
     case ActionTypes.REMOVE_COMPANION_WINDOW:
       return removeIn(state, [action.id]);
     case ActionTypes.IMPORT_MIRADOR_STATE:
-      return action.state.companionWindows;
+      return action.state.companionWindows || [];
     case ActionTypes.TOGGLE_TOC_NODE:
       return updateIn(state, [[action.id], 'tocNodes'], {}, orig => merge(orig, action.payload));
     default:

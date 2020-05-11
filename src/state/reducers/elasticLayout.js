@@ -25,7 +25,7 @@ export const elasticLayoutReducer = (state = {}, action) => {
         return object;
       }, {});
     case ActionTypes.IMPORT_MIRADOR_STATE:
-      return action.state.elasticLayout;
+      return action.state.elasticLayout || {};
     default:
       return state;
   }
