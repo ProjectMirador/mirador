@@ -69,6 +69,7 @@
     "links": "Liens",
     "listAllOpenWindows": "Lister les fenêtres",
     "login": "Se connecter",
+    "logout": "Se déconnecter",
     "manifestError": "Cette ressource ne peut pas être ajoutée :",
     "maximizeWindow": "Agrandir cette fenêtre",
     "menu": "Menu",
