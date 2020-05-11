@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ThumbnailNavigation from '../containers/ThumbnailNavigation';
-import WindowSideBarAnnotationsPanel from '../containers/WindowSideBarAnnotationsPanel';
-import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
-import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
-import AttributionPanel from '../containers/AttributionPanel';
-import SearchPanel from '../containers/SearchPanel';
-import LayersPanel from '../containers/LayersPanel';
-import CustomPanel from '../containers/CustomPanel';
+import CompanionWindowRegistry from '../lib/CompanionWindowRegistry';
 
 /**
  * Render a companion window using the appropriate component for the content
@@ -16,27 +9,11 @@ export class CompanionWindowFactory extends Component {
   /** */
   render() {
     const { content, windowId, id } = this.props;
+    const type = CompanionWindowRegistry[content];
 
-    switch (content) {
-      case 'info':
-        return (<WindowSideBarInfoPanel id={id} windowId={windowId} />);
-      case 'canvas':
-        return (<WindowSideBarCanvasPanel id={id} windowId={windowId} />);
-      case 'annotations':
-        return <WindowSideBarAnnotationsPanel id={id} windowId={windowId} />;
-      case 'thumbnailNavigation':
-        return <ThumbnailNavigation id={id} windowId={windowId} />;
-      case 'attribution':
-        return <AttributionPanel id={id} windowId={windowId} />;
-      case 'search':
-        return <SearchPanel id={id} windowId={windowId} />;
-      case 'layers':
-        return <LayersPanel id={id} windowId={windowId} />;
-      case 'custom':
-        return <CustomPanel id={id} windowId={windowId} />;
-      default:
-        return (<></>);
-    }
+    if (!type) return <></>;
+
+    return React.createElement(type, { id, windowId });
   }
 }
 

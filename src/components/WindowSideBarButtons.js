@@ -10,6 +10,7 @@ import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import AttributionIcon from '@material-ui/icons/CopyrightSharp';
 import LayersIcon from '@material-ui/icons/LayersSharp';
 import SearchIcon from '@material-ui/icons/SearchSharp';
+import { PluginHook } from './PluginHook';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
 import { keys, chars } from '../lib/KeyHelper';
 /**
@@ -63,6 +64,7 @@ export class WindowSideBarButtons extends Component {
   */
   handleChange(event, value) {
     const { addCompanionWindow } = this.props;
+
     const tab = event.target;
     this.selectTab(tab);
     addCompanionWindow(value);
@@ -138,6 +140,7 @@ export class WindowSideBarButtons extends Component {
       hasSearchResults,
       hasSearchService,
       panels,
+      PluginComponents,
       sideBarPanel,
       t,
     } = this.props;
@@ -217,6 +220,7 @@ export class WindowSideBarButtons extends Component {
             )}
           />
         )}
+        <PluginHook TabButton={TabButton} PluginComponents={PluginComponents} />
       </Tabs>
     );
   }
@@ -231,6 +235,7 @@ WindowSideBarButtons.propTypes = {
   hasSearchResults: PropTypes.bool,
   hasSearchService: PropTypes.bool,
   panels: PropTypes.arrayOf(PropTypes.bool),
+  PluginComponents: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
 };
@@ -243,6 +248,7 @@ WindowSideBarButtons.defaultProps = {
   hasSearchResults: false,
   hasSearchService: false,
   panels: [],
+  PluginComponents: null,
   sideBarPanel: 'closed',
   t: key => key,
 };

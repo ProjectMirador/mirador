@@ -1,6 +1,7 @@
 import update from 'lodash/update';
 import { connect } from 'react-redux';
 import { validatePlugin } from './pluginValidation';
+import CompanionWindowRegistry from '../lib/CompanionWindowRegistry';
 
 /**
  * Returns a mapping from targets to plugins and modes
@@ -40,6 +41,15 @@ export function connectPluginsToStore(plugins) {
 export function addPluginReducersToStore(store, createRootReducer, plugins) {
   const pluginReducers = getReducersFromPlugins(plugins);
   store.replaceReducer(createRootReducer(pluginReducers));
+}
+
+/** */
+export function addPluginsToCompanionWindowsRegistry(plugins) {
+  plugins.filter(p => p.companionWindowKey).forEach((plugin) => {
+    CompanionWindowRegistry[plugin.companionWindowKey] = plugin.component;
+  });
+
+  return CompanionWindowRegistry;
 }
 
 /** */
