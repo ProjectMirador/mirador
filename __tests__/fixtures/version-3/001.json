@@ -284,6 +284,23 @@
                 "value": "I love this!"
               },
               "target": "https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json#xywh=2000,500,2000,2000"
+            },
+            {
+              "body": {
+                "language": "en",
+                "type": "TextualBody",
+                "value": "this is a face"
+              },
+              "id": "https://example.org/iiif/book1/page/manifest/9c6934ee-1026-4a10-8a97-aaf513513020",
+              "motivation": "commenting",
+              "target": {
+                "id": "https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json",
+                "selector": {
+                  "type": "SvgSelector",
+                  "value": "<path xmlns=\"http://www.w3.org/2000/svg\" d=\"M3548.40946,1221.66399c0,-84.79382 68.73897,-153.53279 153.53279,-153.53279c84.79382,0 153.53279,68.73897 153.53279,153.53279c0,84.79382 -68.73897,153.53279 -153.53279,153.53279c-84.79382,0 -153.53279,-68.73897 -153.53279,-153.53279z\" fill=\"none\" fill-rule=\"nonzero\" stroke=\"#00bfff\" stroke-width=\"1\" stroke-linecap=\"butt\" stroke-linejoin=\"miter\" stroke-miterlimit=\"10\" stroke-dasharray=\"\" stroke-dashoffset=\"0\" font-family=\"none\" font-weight=\"none\" font-size=\"none\" text-anchor=\"none\" style=\"mix-blend-mode: normal\"/>"
+                }
+              },
+              "type": "Annotation"
             }
           ]
         },
