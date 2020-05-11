@@ -23,6 +23,8 @@ export default class AnnotationItem {
     switch (typeof target) {
       case 'string':
         return target.replace(/#?xywh=(.*)$/, '');
+      case 'object':
+        return target.id;
       default:
         return null;
     }
@@ -61,6 +63,24 @@ export default class AnnotationItem {
     switch (typeof target) {
       case 'string':
         return target;
+      case 'object':
+        return target.selector;
+      default:
+        return null;
+    }
+  }
+
+  /** */
+  get svgSelector() {
+    const { selector } = this;
+    switch (typeof selector) {
+      case 'string':
+        return null;
+      case 'object':
+        if (selector.type && selector.type === 'SvgSelector') {
+          return selector;
+        }
+        return null;
       default:
         return null;
     }
@@ -73,6 +93,8 @@ export default class AnnotationItem {
     switch (typeof selector) {
       case 'string':
         return selector.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+      case 'object':
+        return selector.value.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
       default:
         return null;
     }
