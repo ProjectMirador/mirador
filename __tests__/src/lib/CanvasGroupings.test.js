@@ -35,6 +35,16 @@ describe('CanvasGroupings', () => {
         expect(subject.groupings()[1]).toEqual([1, 2]);
       });
     });
+    describe('scroll', () => {
+      let subject;
+      beforeEach(() => {
+        subject = new CanvasGroupings([0, 1, 2, 3], 'scroll');
+      });
+      it('creates an array of all the canvases', () => {
+        expect(subject.groupings().length).toEqual(1);
+        expect(subject.groupings()[0]).toEqual([0, 1, 2, 3]);
+      });
+    });
   });
   describe('getCanvases', () => {
     describe('single', () => {
@@ -56,6 +66,12 @@ describe('CanvasGroupings', () => {
       it('selects by index', () => {
         const subject = new CanvasGroupings([0, 1, 2, 3]);
         expect(subject.getCanvases(2)).toEqual([2]);
+      });
+    });
+    describe('scroll', () => {
+      it('selects by index', () => {
+        const subject = new CanvasGroupings([0, 1, 2, 3], 'scroll');
+        expect(subject.getCanvases(0)).toEqual([0, 1, 2, 3]);
       });
     });
   });

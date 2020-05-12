@@ -88,6 +88,7 @@ export const getWindowViewType = createSelector(
   ],
   (window, manifestViewingHint, manifestBehaviors, defaultView) => {
     const lookup = {
+      continuous: 'continuous',
       individuals: 'single',
       paged: 'book',
     };
