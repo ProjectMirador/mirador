@@ -44,7 +44,7 @@
     "errorDialogConfirm": "حسناً",
     "errorDialogTitle": "لقد حدث خطأ",
     "exitFullScreen": "خروج من الشاشة الكاملة",
-    "expandSection": "توسيع الجزء",
+    "expandSection": "توسيع الجزء {{section}}",
     "expandSidePanel": "توسيع الشريط الجانبي",
     "fetchManifest": "أضف",
     "fullScreen": "شاشة كاملة",
