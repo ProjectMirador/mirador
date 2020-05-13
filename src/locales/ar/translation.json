@@ -113,7 +113,7 @@
     "settings": "اعدادات",
     "showingNumAnnotations": "تظهر {{عدد}} ملاحظات",
     "showZoomControls": "اظهر عناصر التحكم بالتكبير و التصغير",
-    "sidebarPanelsNavigation": "التنقل بين لوح الشريط الجانبي",
+    "sidebarPanelsNavigation": "تصفح لوح الشريط الجانبي",
     "single": "مفرد",
     "startHere": "إبدأ هنا",
     "suggestSearch": "ابحث في هذا المستند عن  \"{{ query }}\"",
