@@ -55,7 +55,7 @@
     "iiif_renderings": "تنسيقات بديلة",
     "iiif_seeAlso": "أنظر أيضا",
     "import" : "استورد ",
-    "importWorkspace": "استورد مساحة العمل",
+    "importWorkspace": "استيراد مساحة العمل",
     "importWorkspaceHint": "قم بلصق تركيبة Mirador 3 ليتم استيراده",
     "item": "العنصر: {{label}}",
     "language": "اللغة",
