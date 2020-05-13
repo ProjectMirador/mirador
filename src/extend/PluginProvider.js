@@ -7,6 +7,7 @@ import {
   addPluginReducersToStore,
   connectPluginsToStore,
   createTargetToPluginMapping,
+  addPluginsToCompanionWindowsRegistry,
 } from './pluginPreprocessing';
 
 /**  */
@@ -19,6 +20,7 @@ export default function PluginProvider(props) {
     const validPlugins = filterValidPlugins(plugins);
     const connectedPlugins = connectPluginsToStore(validPlugins);
     createRootReducer && addPluginReducersToStore(store, createRootReducer, validPlugins);
+    addPluginsToCompanionWindowsRegistry(connectedPlugins);
     setPluginMap(createTargetToPluginMapping(connectedPlugins));
   }, []);
 

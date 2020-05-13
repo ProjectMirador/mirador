@@ -3,6 +3,7 @@ import {
   connectPluginsToStore,
   addPluginReducersToStore,
   createTargetToPluginMapping,
+  addPluginsToCompanionWindowsRegistry,
 } from '../../../src/extend/pluginPreprocessing';
 
 
@@ -105,6 +106,26 @@ describe('connectPluginsToStore', () => {
     expect(result.length).toBe(2);
     expect(result[0].component.displayName).toBe('Connect(ComponentA)');
     expect(result[1].component.displayName).toBe('Connect(ComponentB)');
+  });
+});
+
+describe('addPluginsToCompanionWindowsRegistry', () => {
+  it('adds plugin references to the companion window registry', () => {
+    /** */
+    const ComponentA = props => null;
+
+    const plugins = [
+      {
+        companionWindowKey: 'xyz',
+        component: ComponentA,
+        mode: 'add',
+        target: 'CompanionWindowFactory',
+      },
+    ];
+
+    const result = addPluginsToCompanionWindowsRegistry(plugins);
+
+    expect(result.xyz).toBe(ComponentA);
   });
 });
 
