@@ -57,7 +57,7 @@
     "import" : "استورد ",
     "importWorkspace": "استيراد مساحة العمل",
     "importWorkspaceHint": "قم بلصق تركيبة Mirador 3 ليتم استيراده",
-    "item": "العنصر: {{الملصق}}",
+    "item": "العنصر: {{ملصق}}",
     "language": "اللغة",
     "layer_hide": "إخفاء الطبقة",
     "layer_move": "تحريك الطبقة",
