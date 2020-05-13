@@ -127,7 +127,7 @@
     "untitled": "[بدون عنوان]",
     "view": "شاهد",
     "welcome": "مرحباً بكم في Mirador",
-    "window": "النافذة:  {{ملصق}}",
+    "window": "النافذة:  {{label}}",
     "windowMenu": "عرض النوافذ و الصور المصغرة",
     "windowNavigation": "تصفح النافذة",
     "windowPluginButtons": "خيارات",
