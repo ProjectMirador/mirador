@@ -75,6 +75,18 @@ export class CompanionWindow extends Component {
 
     const isBottom = (position === 'bottom' || position === 'far-bottom');
 
+    const childrenWithAdditionalProps = React.Children.map(children, child => (
+      React.cloneElement(
+        child,
+        {
+          parentactions: {
+            closeCompanionWindow: onCloseClick,
+          },
+        },
+      )
+    ));
+
+
     return (
       <Paper
         className={[classes.root, position === 'bottom' ? classes.horizontal : classes.vertical, classes[`companionWindow-${position}`], ns(`companion-window-${position}`), paperClassName].join(' ')}
@@ -162,7 +174,7 @@ export class CompanionWindow extends Component {
             }
           </Toolbar>
           <Paper className={classes.content} elevation={0}>
-            {children}
+            {childrenWithAdditionalProps}
           </Paper>
         </Rnd>
       </Paper>
