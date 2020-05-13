@@ -111,7 +111,7 @@
     "searchTitle": "بحث",
     "selectWorkspaceMenu": "اختر نوع مساحة العمل",
     "settings": "اعدادات",
-    "showingNumAnnotations": "تظهر {{عدد}} ملاحظات",
+    "showingNumAnnotations": "تظهر {{number}} ملاحظات",
     "showZoomControls": "اظهر عناصر التحكم بالتكبير و التصغير",
     "sidebarPanelsNavigation": "تصفح لوح الشريط الجانبي",
     "single": "مفرد",
