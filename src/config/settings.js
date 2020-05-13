@@ -203,6 +203,7 @@ export default {
   },
   language: 'en', // The default language set in the application
   availableLanguages: { // All the languages available in the language switcher
+    ar: 'العربية',
     de: 'Deutsch',
     en: 'English',
     fr: 'Français',
