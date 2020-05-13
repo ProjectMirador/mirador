@@ -116,7 +116,7 @@
     "sidebarPanelsNavigation": "تصفح لوح الشريط الجانبي",
     "single": "مفرد",
     "startHere": "إبدأ هنا",
-    "suggestSearch": "ابحث في هذا المستند عن  \"{{ سؤال }}\"",
+    "suggestSearch": "ابحث في هذا المستند عن  \"{{ query }}\"",
     "tableOfContentsList": "جدول المحتويات",
     "theme": "موضوع",
     "thumbnailList": "قائمة الصور المصغرة",
