@@ -5,7 +5,7 @@
     "addManifestUrl": "موقع المصدر",
     "addManifestUrlHelp": "الرابط لمصدر IIIF ",
     "addResource": "اضف مصدر",
-    "annotationCanvasLabel_1/1": "العنصر: [{{label}}]",
+    "annotationCanvasLabel_1/1": "العنصر: [{{الملصق}}]",
     "annotationCanvasLabel_1/2": "يسار: [{{label}}]",
     "annotationCanvasLabel_2/2": "يمين: [{{label}}]",
     "annotations": "ملاحظات",
