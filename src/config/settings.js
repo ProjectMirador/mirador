@@ -215,6 +215,7 @@ export default {
     it: "Italiano",
   },
   annotations: {
+    htmlSanitizationRuleSet: 'iiif', // See src/lib/htmlRules.js for acceptable values
     filteredMotivations: ['oa:commenting', 'sc:painting', 'commenting'],
   },
   classPrefix: 'mirador',
