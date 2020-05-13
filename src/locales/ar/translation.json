@@ -84,7 +84,7 @@
     "moveCompanionWindowToBottom": "انتقل للأسفل",
     "moveCompanionWindowToRight": "انتقل لليمين",
     "nextCanvas": "العنصر التالي",
-    "numItems": "{{}} عناصر",
+    "numItems": "{{number}} عناصر",
     "off": "ايقاف",
     "openCompanionWindow_annotations": "ملاحظات",
     "openCompanionWindow_attribution": "حقوق",
