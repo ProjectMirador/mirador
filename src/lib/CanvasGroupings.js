@@ -29,7 +29,7 @@ export default class CanvasGroupings {
     if (this._groupings) { // eslint-disable-line no-underscore-dangle
       return this._groupings; // eslint-disable-line no-underscore-dangle
     }
-    if (this.viewType === 'continuous') {
+    if (this.viewType === 'scroll') {
       return [this.canvases];
     }
     if (this.viewType !== 'book') {

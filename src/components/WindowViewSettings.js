@@ -84,6 +84,15 @@ export class WindowViewSettings extends Component {
             labelPlacement="bottom"
           />
         </MenuItem>
+        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('scroll'); handleClose(); }}>
+          <FormControlLabel
+            value="scroll"
+            classes={{ label: windowViewType === 'scroll' ? classes.selectedLabel : classes.label }}
+            control={<BookViewIcon color={windowViewType === 'scroll' ? 'secondary' : undefined} />}
+            label={t('scroll')}
+            labelPlacement="bottom"
+          />
+        </MenuItem>
         <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('gallery'); handleClose(); }}>
           <FormControlLabel
             value="gallery"
