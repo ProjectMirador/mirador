@@ -418,6 +418,26 @@ export const getManifestViewingHint = createSelector(
   },
 );
 
+/**
+ * Returns the behaviors viewing hint for the manifest
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @return {Number}
+ */
+export const getManifestBehaviors = createSelector(
+  [getManifestoInstance],
+  (manifest) => {
+    if (!manifest) return [];
+    const behaviors = manifest.getProperty('behavior');
+
+    if (!behaviors) return [];
+    if (Array.isArray(behaviors)) return behaviors;
+    return [behaviors];
+  },
+);
+
 export const getManifestViewingDirection = createSelector(
   [getManifestoInstance],
   (manifest) => {
