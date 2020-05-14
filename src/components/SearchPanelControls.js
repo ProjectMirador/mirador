@@ -3,39 +3,17 @@ import PropTypes from 'prop-types';
 import deburr from 'lodash/deburr';
 import debounce from 'lodash/debounce';
 import Downshift from 'downshift';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import SearchIcon from '@material-ui/icons/SearchSharp';
+import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import SearchPanelNavigation from '../containers/SearchPanelNavigation';
-
-/** */
-function renderInput(inputProps) {
-  const {
-    InputProps,
-    classes,
-    ref,
-    ...other
-  } = inputProps;
-
-  return (
-    <TextField
-      InputProps={{
-        classes: {
-          input: classes.inputInput,
-          root: classes.inputRoot,
-        },
-        inputRef: ref,
-        ...InputProps,
-      }}
-      {...other}
-    />
-  );
-}
 
 /** */
 function renderSuggestion(suggestionProps) {
@@ -168,76 +146,34 @@ export class SearchPanelControls extends Component {
       <>
         <form onSubmit={this.submitSearch}>
           <FormControl className={classes.searchInput}>
-            <Downshift
-              id={id}
-              inputValue={search}
-              isOpen={selectOpen}
-              onOuterClick={() => this.setState({ selectOpen: false })}
-              onSelect={this.selectItem}
-            >
-              {({
-                getInputProps,
-                getItemProps,
-                getLabelProps,
-                getMenuProps,
-                highlightedIndex,
-                inputValue,
-                isOpen,
-                selectedItem,
-              }) => {
-                const { onBlur, onFocus, ...inputProps } = getInputProps({
-                  onChange: (e) => {
-                    this.handleChange(e.target.value);
-                  },
-                  onKeyDown: (e) => {
-                    e.nativeEvent.preventDownshiftDefault = true;
-                  },
-                });
+            <Autocomplete
+              options={['0', '1', '2', '3', '4']}
+              renderOption={option => (
+                <Typography>{option}</Typography>
+              )}
+              fullWidth
+              renderInput={(params) => {
                 return (
-                  <div>
-                    {renderInput({
-                      classes: {},
-                      fullWidth: true,
-                      InputLabelProps: getLabelProps(),
-                      InputProps: {
-                        endAdornment: (
-                          <InputAdornment position="end" className={classes.adornmentWrapper}>
-                            <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
-                              <SearchIcon />
-                            </MiradorMenuButton>
-                            {Boolean(searchIsFetching) && (
-                              <CircularProgress className={classes.searchProgress} size={50} />
-                            )}
-                          </InputAdornment>
-                        ),
-                        id,
-                        onBlur,
-                        onFocus,
-                      },
-                      inputProps,
-                      label: t('searchInputLabel'),
-                    })}
-                    <div {...getMenuProps()}>
-                      {isOpen ? (
-                        <Paper square className={classes.suggestions}>
-                          {
-                            this.getSuggestions(inputValue).map((suggestion, index) => (
-                              renderSuggestion({
-                                highlightedIndex,
-                                index,
-                                itemProps: getItemProps({ item: suggestion.match }),
-                                selectedItem,
-                                suggestion,
-                              })
-                            ))
-                          }
-                        </Paper>
-                      ) : null}
-                    </div>
-                  </div>
+                  <TextField
+                    {...params}
+                    fullWidth
+                    label={t('searchInputLabel')}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end" className={classes.adornmentWrapper}>
+                          <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
+                            <SearchIcon />
+                          </MiradorMenuButton>
+                          {Boolean(searchIsFetching) && (
+                            <CircularProgress className={classes.searchProgress} size={50} />
+                          )}
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
                 );
               }}
-            </Downshift>
+            />
           </FormControl>
         </form>
         <SearchPanelNavigation windowId={windowId} companionWindowId={companionWindowId} />
