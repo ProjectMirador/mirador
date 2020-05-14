@@ -124,7 +124,7 @@ export default class CanvasWorld {
       case 'right-to-left': return [-1, 0];
       case 'top-to-bottom': return [0, 1];
       case 'bottom-to-top': return [0, -1];
-      default: return [0, 1];
+      default: return [1, 0];
     }
   }
 
