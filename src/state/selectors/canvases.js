@@ -44,7 +44,11 @@ export const getCurrentCanvas = createSelector(
 
     if (!window.canvasId) return sequence.getCanvasByIndex(0);
 
-    return sequence.getCanvasById(window.canvasId);
+    const canvas = sequence.getCanvasById(window.canvasId);
+
+    if (!canvas) return sequence.getCanvasByIndex(0);
+
+    return canvas;
   },
 );
 
