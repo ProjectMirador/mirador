@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import VisibilityIcon from '@material-ui/icons/VisibilitySharp';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOffSharp';
+import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
  * AnnotationSettings is a component to handle various annotation
@@ -17,19 +18,14 @@ export class AnnotationSettings extends Component {
     } = this.props;
 
     return (
-      <FormControlLabel
-        control={(
-          <Switch
-            checked={displayAll}
-            disabled={displayAllDisabled}
-            onChange={toggleAnnotationDisplay}
-            value={displayAll ? 'all' : 'select'}
-            color="secondary"
-          />
-        )}
-        label={t('displayAllAnnotations')}
-        labelPlacement="start"
-      />
+      <MiradorMenuButton
+        aria-label={t(displayAll ? 'displayNoAnnotations' : 'displayAllAnnotations')}
+        onClick={toggleAnnotationDisplay}
+        disabled={displayAllDisabled}
+        size="small"
+      >
+        { displayAll ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+      </MiradorMenuButton>
     );
   }
 }

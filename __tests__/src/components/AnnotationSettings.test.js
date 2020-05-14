@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { AnnotationSettings } from '../../../src/components/AnnotationSettings';
 
 /** */
@@ -18,62 +18,18 @@ function createWrapper(props) {
 }
 
 describe('AnnotationSettings', () => {
-  let control;
   let wrapper;
   const toggleAnnotationDisplayMock = jest.fn();
 
-
-  it('renders a FormControlLabel and a Switch', () => {
+  it('renders a MiradorMenuButton', () => {
     wrapper = createWrapper();
-    control = shallow(
-      wrapper.find(FormControlLabel).props().control,
-    );
-    expect(wrapper.find(FormControlLabel).length).toBe(1);
-    expect(control.find('ForwardRef(Switch)').length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).length).toBe(1);
   });
 
-  describe('control', () => {
-    it('is not checked when the displayAll prop is false', () => {
-      wrapper = createWrapper();
-      control = shallow(
-        wrapper.find(FormControlLabel).props().control,
-      );
+  it('calls the toggleAnnotationDisplay prop function on click', () => {
+    wrapper = createWrapper({ toggleAnnotationDisplay: toggleAnnotationDisplayMock });
+    wrapper.find(MiradorMenuButton).simulate('click');
 
-      expect(control.find('ForwardRef(Switch)').props().checked).toBe(false);
-    });
-
-    it('is checked when the displayAll prop is true', () => {
-      wrapper = createWrapper({ displayAll: true });
-      control = shallow(
-        wrapper.find(FormControlLabel).props().control,
-      );
-
-      expect(control.find('ForwardRef(Switch)').props().checked).toBe(true);
-    });
-
-    it('is disabled based on the displayAllDisabled prop', () => {
-      wrapper = createWrapper();
-      control = shallow(
-        wrapper.find(FormControlLabel).props().control,
-      );
-      expect(control.find('ForwardRef(Switch)').props().disabled).toBe(false);
-
-      wrapper = createWrapper({ displayAllDisabled: true });
-      control = shallow(
-        wrapper.find(FormControlLabel).props().control,
-      );
-      expect(control.find('ForwardRef(Switch)').props().disabled).toBe(true);
-    });
-
-    it('calls the toggleAnnotationDisplay prop function on change', () => {
-      wrapper = createWrapper({ toggleAnnotationDisplay: toggleAnnotationDisplayMock });
-      control = shallow(
-        wrapper.find(FormControlLabel).props().control,
-      );
-
-      control.find('ForwardRef(Switch)').props().onChange(); // trigger the onChange prop
-
-      expect(toggleAnnotationDisplayMock).toHaveBeenCalledTimes(1);
-    });
+    expect(toggleAnnotationDisplayMock).toHaveBeenCalledTimes(1);
   });
 });

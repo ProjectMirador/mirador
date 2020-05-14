@@ -36,6 +36,7 @@
     "dark": "Dark theme",
     "dismiss": "Dismiss",
     "displayAllAnnotations": "Highlight all",
+    "displayNoAnnotations": "Highlight none",
     "downloadExport": "Export workspace",
     "downloadExportWorkspace": "Export workspace",
     "elastic": "Elastic",
