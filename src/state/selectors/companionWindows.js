@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import groupBy from 'lodash/groupBy';
-import { getWindow, getWindows } from './windows';
+import { getWindow, getWindows } from './getters';
 
 
 /** */
@@ -16,7 +16,7 @@ export function getCompanionWindows(state) {
 export const getThumbnailNavigationPosition = createSelector(
   [
     getWindow,
-    state => state.companionWindows,
+    getCompanionWindows,
   ],
   (window, companionWindows) => window
     && companionWindows[window.thumbnailNavigationId]

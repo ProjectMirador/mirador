@@ -9,6 +9,8 @@ import {
   getCompanionWindow,
   getDefaultSidebarVariant,
   getManifestCanvases,
+  getSequence,
+  getSequences,
   getVisibleCanvases,
 } from '../state/selectors';
 
@@ -22,6 +24,8 @@ const mapStateToProps = (state, { id, windowId }) => {
     canvases,
     config,
     selectedCanvases: getVisibleCanvases(state, { windowId }),
+    sequenceId: getSequence(state, { windowId }).id,
+    sequences: getSequences(state, { windowId }),
     variant: getCompanionWindow(state, { companionWindowId: id, windowId }).variant
       || getDefaultSidebarVariant(state, { windowId }),
   };
@@ -35,6 +39,9 @@ const mapStateToProps = (state, { id, windowId }) => {
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
   toggleDraggingEnabled: () => dispatch(actions.toggleDraggingEnabled()),
+  updateSequence: sequenceId => dispatch(
+    actions.updateWindow(windowId, { sequenceId }),
+  ),
   updateVariant: variant => dispatch(
     actions.updateCompanionWindow(windowId, id, { variant }),
   ),
@@ -45,6 +52,10 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
  * @param theme
  */
 const styles = theme => ({
+  break: {
+    flexBasis: '100%',
+    height: 0,
+  },
   label: {
     paddingLeft: theme.spacing(1),
   },
