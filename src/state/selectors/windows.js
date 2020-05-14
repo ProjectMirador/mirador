@@ -1,5 +1,10 @@
 import { createSelector } from 'reselect';
-import { getManifestTitle, getManifestViewingHint, getManifestoInstance } from './manifests';
+import {
+  getManifestTitle,
+  getManifestBehaviors,
+  getManifestViewingHint,
+  getManifestoInstance,
+} from './manifests';
 import { getDefaultView } from './config';
 import { getWorkspaceType } from './workspace';
 
@@ -78,14 +83,17 @@ export const getWindowViewType = createSelector(
   [
     getWindow,
     getManifestViewingHint,
+    getManifestBehaviors,
     getDefaultView,
   ],
-  (window, manifestViewingHint, defaultView) => {
+  (window, manifestViewingHint, manifestBehaviors, defaultView) => {
     const lookup = {
       individuals: 'single',
       paged: 'book',
     };
-    return (window && window.view) || lookup[manifestViewingHint] || defaultView;
+    return (window && window.view)
+      || lookup[manifestBehaviors.find(b => lookup[b]) || manifestViewingHint]
+      || defaultView;
   },
 );
 
