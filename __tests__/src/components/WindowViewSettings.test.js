@@ -7,11 +7,12 @@ import { WindowViewSettings } from '../../../src/components/WindowViewSettings';
 
 /** create wrapper */
 function createWrapper(props) {
-  return shallow(
+  return mount(
     <WindowViewSettings
       classes={{}}
       windowId="xyz"
       setWindowViewType={() => {}}
+      viewTypes={['single', 'book', 'scroll', 'gallery']}
       windowViewType="single"
       {...props}
     />,
@@ -64,6 +65,7 @@ describe('WindowViewSettings', () => {
         classes={{}}
         windowId="xyz"
         setWindowViewType={() => {}}
+        viewTypes={['single', 'book', 'scroll', 'gallery']}
         windowViewType="single"
       />,
     );

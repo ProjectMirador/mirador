@@ -11,6 +11,7 @@ import {
   getWindowManifests,
   getWindows,
   getMaximizedWindowsIds,
+  getAllowedWindowViewTypes,
 } from '../../../src/state/selectors/windows';
 
 describe('getWindows', () => {
@@ -104,6 +105,12 @@ describe('getWindowViewType', () => {
     config: {
       window: {
         defaultView: 'default',
+        views: [
+          { behaviors: ['individuals'], key: 'single' },
+          { behaviors: ['paged'], key: 'book' },
+          { behaviors: ['continuous'], key: 'scroll' },
+          { key: 'gallery' },
+        ],
       },
     },
     manifests: {
@@ -147,6 +154,36 @@ describe('getWindowViewType', () => {
   it('should return modified viewingHint for a book', () => {
     const received = getWindowViewType(state, { windowId: 'f' });
     expect(received).toEqual('book');
+  });
+});
+
+describe('getAllowedWindowViewTypes', () => {
+  const state = {
+    config: {
+      window: {
+        defaultView: 'single',
+        views: [
+          { behaviors: ['individuals'], key: 'single' },
+          { behaviors: ['paged'], key: 'book' },
+          { behaviors: ['continuous'], key: 'scroll' },
+          { key: 'gallery' },
+        ],
+      },
+    },
+    manifests: {
+      x: { json: { ...manifestFixture001 } },
+      y: { json: { ...manifestFixture015 } },
+    },
+  };
+
+  it('should return unrestricted view types', () => {
+    const received = getAllowedWindowViewTypes(state, { manifestId: 'x' });
+    expect(received).toEqual(['single', 'gallery']);
+  });
+
+  it('should return view types where behaviors match', () => {
+    const received = getAllowedWindowViewTypes(state, { manifestId: 'y' });
+    expect(received).toEqual(['single', 'book', 'gallery']);
   });
 });
 

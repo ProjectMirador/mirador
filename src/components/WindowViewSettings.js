@@ -4,6 +4,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import SingleIcon from '@material-ui/icons/CropOriginalSharp';
+import ScrollViewIcon from '@material-ui/icons/ViewColumn';
 import PropTypes from 'prop-types';
 import BookViewIcon from './icons/BookViewIcon';
 import GalleryViewIcon from './icons/GalleryViewIcon';
@@ -55,53 +56,41 @@ export class WindowViewSettings extends Component {
    */
   render() {
     const {
-      classes, handleClose, t, windowViewType,
+      classes, handleClose, t, windowViewType, viewTypes,
     } = this.props;
+
+    if (viewTypes.length === 0) return null;
+
+    const iconMap = {
+      book: BookViewIcon,
+      gallery: GalleryViewIcon,
+      scroll: ScrollViewIcon,
+      single: SingleIcon,
+    };
+
+    /** */
+    const ViewItem = ({ Icon, value }) => (
+      <MenuItem
+        className={classes.MenuItem}
+        ref={ref => this.handleSelectedRef(ref)}
+        onClick={() => { this.handleChange(value); handleClose(); }}
+      >
+        <FormControlLabel
+          value={value}
+          classes={{ label: windowViewType === value ? classes.selectedLabel : classes.label }}
+          control={Icon && <Icon color={windowViewType === value ? 'secondary' : undefined} />}
+          label={t(value)}
+          labelPlacement="bottom"
+        />
+      </MenuItem>
+    );
 
     return (
       <>
         <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('view')}</ListSubheader>
-
-        <MenuItem
-          className={classes.MenuItem}
-          ref={ref => this.handleSelectedRef(ref)}
-          onClick={() => { this.handleChange('single'); handleClose(); }}
-        >
-          <FormControlLabel
-            value="single"
-            classes={{ label: windowViewType === 'single' ? classes.selectedLabel : classes.label }}
-            control={<SingleIcon color={windowViewType === 'single' ? 'secondary' : undefined} />}
-            label={t('single')}
-            labelPlacement="bottom"
-          />
-        </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('book'); handleClose(); }}>
-          <FormControlLabel
-            value="book"
-            classes={{ label: windowViewType === 'book' ? classes.selectedLabel : classes.label }}
-            control={<BookViewIcon color={windowViewType === 'book' ? 'secondary' : undefined} />}
-            label={t('book')}
-            labelPlacement="bottom"
-          />
-        </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('scroll'); handleClose(); }}>
-          <FormControlLabel
-            value="scroll"
-            classes={{ label: windowViewType === 'scroll' ? classes.selectedLabel : classes.label }}
-            control={<BookViewIcon color={windowViewType === 'scroll' ? 'secondary' : undefined} />}
-            label={t('scroll')}
-            labelPlacement="bottom"
-          />
-        </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('gallery'); handleClose(); }}>
-          <FormControlLabel
-            value="gallery"
-            classes={{ label: windowViewType === 'gallery' ? classes.selectedLabel : classes.label }}
-            control={<GalleryViewIcon color={windowViewType === 'gallery' ? 'secondary' : undefined} />}
-            label={t('gallery')}
-            labelPlacement="bottom"
-          />
-        </MenuItem>
+        {viewTypes.map(value => (
+          <ViewItem Icon={iconMap[value]} key={value} value={value} />
+        ))}
       </>
     );
   }
@@ -112,10 +101,12 @@ WindowViewSettings.propTypes = {
   handleClose: PropTypes.func,
   setWindowViewType: PropTypes.func.isRequired,
   t: PropTypes.func,
+  viewTypes: PropTypes.arrayOf(PropTypes.string),
   windowId: PropTypes.string.isRequired,
   windowViewType: PropTypes.string.isRequired,
 };
 WindowViewSettings.defaultProps = {
   handleClose: () => {},
   t: key => key,
+  viewTypes: [],
 };

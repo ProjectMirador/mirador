@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getWindowViewType } from '../state/selectors';
+import { getAllowedWindowViewTypes, getWindowViewType } from '../state/selectors';
 import { WindowViewSettings } from '../components/WindowViewSettings';
 
 /**
@@ -21,6 +21,7 @@ const mapDispatchToProps = { setWindowViewType: actions.setWindowViewType };
  */
 const mapStateToProps = (state, { windowId }) => (
   {
+    viewTypes: getAllowedWindowViewTypes(state, { windowId }),
     windowViewType: getWindowViewType(state, { windowId }),
   }
 );
