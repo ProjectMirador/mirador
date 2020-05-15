@@ -41,6 +41,7 @@ const styles = theme => ({
   searchInput: {
     paddingBottom: theme.spacing(1),
     paddingRight: theme.spacing(1.5),
+    width: '100%',
   },
   searchProgress: {
     position: 'absolute',
