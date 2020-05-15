@@ -242,7 +242,13 @@ export default {
       canvas: true,
       annotations: true,
       search: true,
-    }
+    },
+    views: [
+      { key: 'single', behaviors: ['individuals'] },
+      { key: 'book', behaviors: ['paged'] },
+      { key: 'scroll', behaviors: ['continuous'] },
+      { key: 'gallery' },
+    ],
   },
   windows: [ // Array of windows to be open when mirador initializes (each object should at least provide a manifestId key with the value of the IIIF presentation manifest to load)
     /**

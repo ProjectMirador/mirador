@@ -13,6 +13,7 @@ export default class CanvasWorld {
     this.canvases = canvases.map(c => new MiradorCanvas(c));
     this.layers = layers;
     this.viewingDirection = viewingDirection;
+    this._canvasDimensions = null; // eslint-disable-line no-underscore-dangle
   }
 
   /** */
@@ -20,64 +21,112 @@ export default class CanvasWorld {
     return this.canvases.map(canvas => canvas.id);
   }
 
+  /** */
+  get canvasDimensions() {
+    if (this._canvasDimensions) { // eslint-disable-line no-underscore-dangle
+      return this._canvasDimensions; // eslint-disable-line no-underscore-dangle
+    }
+
+    const [dirX, dirY] = this.canvasDirection;
+    const scale = dirY === 0
+      ? Math.min(...this.canvases.map(c => c.getHeight()))
+      : Math.min(...this.canvases.map(c => c.getWidth()));
+    let incX = 0;
+    let incY = 0;
+
+    const canvasDims = this.canvases.reduce((acc, canvas) => {
+      let canvasHeight;
+      let canvasWidth;
+
+      if (dirY === 0) {
+        // constant height
+        canvasHeight = scale;
+        canvasWidth = Math.floor(scale * canvas.aspectRatio);
+      } else {
+        // constant width
+        canvasWidth = scale;
+        canvasHeight = Math.floor(scale * (1 / canvas.aspectRatio));
+      }
+      acc.push({
+        canvas,
+        height: canvasHeight,
+        width: canvasWidth,
+        x: incX,
+        y: incY,
+      });
+
+      incX += dirX * canvasWidth;
+      incY += dirY * canvasHeight;
+      return acc;
+    }, []);
+
+    const worldHeight = dirY === 0 ? scale : Math.abs(incY);
+    const worldWidth = dirX === 0 ? scale : Math.abs(incX);
+
+    this._canvasDimensions = canvasDims // eslint-disable-line no-underscore-dangle
+      .reduce((acc, dims) => {
+        acc.push({
+          ...dims,
+          x: dirX === -1 ? dims.x + worldWidth - dims.width : dims.x,
+          y: dirY === -1 ? dims.y + worldHeight - dims.height : dims.y,
+        });
+
+        return acc;
+      }, []);
+
+    return this._canvasDimensions; // eslint-disable-line no-underscore-dangle
+  }
+
   /**
    * contentResourceToWorldCoordinates - calculates the contentResource coordinates
    * respective to the world.
    */
   contentResourceToWorldCoordinates(contentResource) {
-    const wholeBounds = this.worldBounds();
     const miradorCanvasIndex = this.canvases.findIndex(c => (
       c.imageResources.find(r => r.id === contentResource.id)
     ));
     const canvas = this.canvases[miradorCanvasIndex];
-    const scaledWidth = Math.floor(wholeBounds[3] * canvas.aspectRatio);
-    let x = 0;
-    if (miradorCanvasIndex === this.secondCanvasIndex) {
-      x = wholeBounds[2] - scaledWidth;
-    }
+    const [x, y, w, h] = this.canvasToWorldCoordinates(canvas.id);
+
     const fragmentOffset = canvas.onFragment(contentResource.id);
     if (fragmentOffset) {
       return [
         x + fragmentOffset[0],
-        0 + fragmentOffset[1],
+        y + fragmentOffset[1],
         fragmentOffset[2],
         fragmentOffset[3],
       ];
     }
     return [
       x,
-      0,
-      scaledWidth,
-      wholeBounds[3],
+      y,
+      w,
+      h,
     ];
   }
 
   /** */
   canvasToWorldCoordinates(canvasId) {
-    const wholeBounds = this.worldBounds();
-    const miradorCanvasIndex = this.canvases.findIndex(c => (c.id === canvasId));
-    const { aspectRatio } = this.canvases[miradorCanvasIndex];
-    const scaledWidth = Math.floor(wholeBounds[3] * aspectRatio);
-    let x = 0;
-    if (miradorCanvasIndex === this.secondCanvasIndex) {
-      x = wholeBounds[2] - scaledWidth;
-    }
+    const canvasDimensions = this.canvasDimensions.find(c => c.canvas.id === canvasId);
+
     return [
-      x,
-      0,
-      scaledWidth,
-      wholeBounds[3],
+      canvasDimensions.x,
+      canvasDimensions.y,
+      canvasDimensions.width,
+      canvasDimensions.height,
     ];
   }
 
-  /**
-   * secondCanvasIndex - index of the second canvas used for determining which
-   * is first
-   */
-  get secondCanvasIndex() {
-    return this.viewingDirection === 'right-to-left' ? 0 : 1;
+  /** */
+  get canvasDirection() {
+    switch (this.viewingDirection) {
+      case 'left-to-right': return [1, 0];
+      case 'right-to-left': return [-1, 0];
+      case 'top-to-bottom': return [0, 1];
+      case 'bottom-to-top': return [0, -1];
+      default: return [1, 0];
+    }
   }
-
 
   /** Get the IIIF content resource for an image */
   contentResource(infoResponseId) {
@@ -149,26 +198,14 @@ export default class CanvasWorld {
    * lined up horizontally starting from left to right.
    */
   worldBounds() {
-    const heights = [];
-    const dimensions = [];
-    this.canvases.forEach((canvas) => {
-      heights.push(canvas.getHeight());
-      dimensions.push({
-        height: canvas.getHeight(),
-        width: canvas.getWidth(),
-      });
-    });
-    const minHeight = Math.min(...heights);
-    let scaledWidth = 0;
-    dimensions.forEach((dim) => {
-      const aspectRatio = dim.width / dim.height;
-      scaledWidth += Math.floor(minHeight * aspectRatio);
-    });
+    const worldWidth = Math.max(...this.canvasDimensions.map(c => c.x + c.width));
+    const worldHeight = Math.max(...this.canvasDimensions.map(c => c.y + c.height));
+
     return [
       0,
       0,
-      scaledWidth,
-      minHeight,
+      worldWidth,
+      worldHeight,
     ];
   }
 }

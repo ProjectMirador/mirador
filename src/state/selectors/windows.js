@@ -5,7 +5,7 @@ import {
   getManifestViewingHint,
   getManifestoInstance,
 } from './manifests';
-import { getDefaultView } from './config';
+import { getDefaultView, getViewConfigs } from './config';
 import { getWorkspaceType } from './workspace';
 
 /**
@@ -85,16 +85,39 @@ export const getWindowViewType = createSelector(
     getManifestViewingHint,
     getManifestBehaviors,
     getDefaultView,
+    getViewConfigs,
   ],
-  (window, manifestViewingHint, manifestBehaviors, defaultView) => {
-    const lookup = {
-      individuals: 'single',
-      paged: 'book',
-    };
-    return (window && window.view)
-      || lookup[manifestBehaviors.find(b => lookup[b]) || manifestViewingHint]
-      || defaultView;
+  (window, manifestViewingHint, manifestBehaviors, defaultView, viewConfig) => {
+    if (window && window.view) return window.view;
+
+    const config = viewConfig.find(view => (
+      view.behaviors
+      && view.behaviors.some(b => manifestViewingHint === b || manifestBehaviors.includes(b))
+    ));
+
+    return (config && config.key) || defaultView;
   },
+);
+
+/** */
+export const getAllowedWindowViewTypes = createSelector(
+  [
+    getManifestViewingHint,
+    getManifestBehaviors,
+    getDefaultView,
+    getViewConfigs,
+  ],
+  (manifestViewingHint, manifestBehaviors, defaultView, viewConfig) => (
+    viewConfig.reduce((allowedViews, view) => {
+      if (
+        view.key === defaultView
+        || !view.behaviors
+        || view.behaviors.some(b => (
+          manifestViewingHint === b || manifestBehaviors.includes(b)
+        ))) allowedViews.push(view.key);
+      return allowedViews;
+    }, [])
+  ),
 );
 
 export const getViewer = createSelector(

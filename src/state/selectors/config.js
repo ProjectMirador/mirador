@@ -52,6 +52,11 @@ export const getDefaultView = createSelector(
   ({ window }) => window && window.defaultView,
 );
 
+export const getViewConfigs = createSelector(
+  [getConfig],
+  ({ window }) => (window && window.views) || [],
+);
+
 export const getThemeDirection = createSelector(
   [getConfig],
   ({ theme }) => theme.direction || 'ltr',
