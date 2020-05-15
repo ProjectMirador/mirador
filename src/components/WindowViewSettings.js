@@ -59,8 +59,6 @@ export class WindowViewSettings extends Component {
       classes, handleClose, t, windowViewType, viewTypes,
     } = this.props;
 
-    if (viewTypes.length === 0) return null;
-
     const iconMap = {
       book: BookViewIcon,
       gallery: GalleryViewIcon,
@@ -68,29 +66,30 @@ export class WindowViewSettings extends Component {
       single: SingleIcon,
     };
 
-    /** */
-    const ViewItem = ({ Icon, value }) => (
+    /** Suspiciously similar to a component, yet if it is invoked through JSX
+        none of the click handlers work? */
+    const menuItem = ({ value, Icon }) => (
       <MenuItem
+        key={value}
         className={classes.MenuItem}
-        ref={ref => this.handleSelectedRef(ref)}
+        ref={windowViewType === value && (ref => this.handleSelectedRef(ref))}
         onClick={() => { this.handleChange(value); handleClose(); }}
       >
         <FormControlLabel
           value={value}
           classes={{ label: windowViewType === value ? classes.selectedLabel : classes.label }}
-          control={Icon && <Icon color={windowViewType === value ? 'secondary' : undefined} />}
+          control={<Icon color={windowViewType === value ? 'secondary' : undefined} />}
           label={t(value)}
           labelPlacement="bottom"
         />
       </MenuItem>
     );
 
+    if (viewTypes.length === 0) return null;
     return (
       <>
         <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('view')}</ListSubheader>
-        {viewTypes.map(value => (
-          <ViewItem Icon={iconMap[value]} key={value} value={value} />
-        ))}
+        { viewTypes.map(value => menuItem({ Icon: iconMap[value], value })) }
       </>
     );
   }
