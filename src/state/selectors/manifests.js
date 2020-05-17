@@ -338,9 +338,10 @@ export const getManifestMetadata = createSelector(
 /** */
 function getLocalesForStructure(item) {
   const languages = [];
+
   if (Array.isArray(item)) {
     languages.push(...item.filter(i => (typeof i === 'object' && i['@language'])).map(i => i['@language']));
-  } else if (typeof item === 'object') {
+  } else if (item && typeof item === 'object') {
     if (item['@language']) languages.push(item['@language']);
   }
   return languages;
