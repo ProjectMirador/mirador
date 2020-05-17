@@ -1,5 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { getCompanionWindow } from '../state/selectors';
 import { CompanionWindowFactory } from '../components/CompanionWindowFactory';
@@ -19,6 +20,7 @@ const mapStateToProps = (state, { id }) => {
 };
 
 const enhance = compose(
+  withTranslation(),
   connect(mapStateToProps),
   withPlugins('CompanionWindowFactory'),
 );
