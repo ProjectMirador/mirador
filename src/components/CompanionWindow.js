@@ -75,16 +75,17 @@ export class CompanionWindow extends Component {
 
     const isBottom = (position === 'bottom' || position === 'far-bottom');
 
-    const childrenWithAdditionalProps = React.Children.map(children, child => (
-      React.cloneElement(
+    const childrenWithAdditionalProps = React.Children.map(children, (child) => {
+      if (!child) return null;
+      return React.cloneElement(
         child,
         {
           parentactions: {
             closeCompanionWindow: onCloseClick,
           },
         },
-      )
-    ));
+      );
+    });
 
 
     return (
