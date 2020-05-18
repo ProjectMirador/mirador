@@ -93,9 +93,11 @@ export class SearchPanelControls extends Component {
   }
 
   /** */
-  selectItem(selectedItem) {
-    this.setState({ search: selectedItem });
-    this.submitSearch();
+  selectItem(_event, selectedItem, _reason) {
+    if (selectedItem && selectedItem.match) {
+      this.setState({ search: selectedItem.match });
+      this.submitSearch();
+    }
   }
 
   /** */
@@ -119,6 +121,7 @@ export class SearchPanelControls extends Component {
                 deburr(option.match.trim()).toLowerCase()
                   === deburr(value.match.trim()).toLowerCase()
               )}
+              onChange={this.selectItem}
               onInputChange={this.handleChange}
               fullWidth
               renderInput={params => (
