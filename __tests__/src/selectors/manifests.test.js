@@ -360,6 +360,8 @@ describe('getMetadataLocales', () => {
           label: 'Some label',
           value: { '@language': 'one-value', '@value': '1' },
         },
+        { label: 'Bad value', value: null },
+        { label: null, value: 'Bad label' },
       ],
     };
     const state = { manifests: { x: { json: manifest } } };
