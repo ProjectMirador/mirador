@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import union from 'lodash/union';
 import without from 'lodash/without';
-import { Utils } from 'manifesto.js';
+import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { getManifestTreeStructure } from './manifests';
 import { getVisibleCanvases } from './canvases';
 import { getCompanionWindow } from './companionWindows';
