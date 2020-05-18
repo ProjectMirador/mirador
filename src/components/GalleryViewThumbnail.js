@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
 import MiradorCanvas from '../lib/MiradorCanvas';
-import { CanvasThumbnail } from './CanvasThumbnail';
+import CanvasThumbnail from '../containers/CanvasThumbnail';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -89,31 +88,30 @@ export class GalleryViewThumbnail extends Component {
         tabIndex={0}
       >
         <CanvasThumbnail
-          imageUrl={miradorCanvas.thumbnail(config.width, config.height)}
-          isValid={miradorCanvas.hasValidDimensions}
+          resource={canvas}
+          classes={{ caption: classes.galleryViewCaption }}
+          labelled
+          maxWidth={config.width}
           maxHeight={config.height}
-          aspectRatio={miradorCanvas.aspectRatio}
           style={{
             margin: '0 auto',
             maxWidth: `${Math.ceil(config.height * miradorCanvas.aspectRatio)}px`,
           }}
-        />
-        <Typography variant="caption" className={classes.galleryViewCaption}>
-          {miradorCanvas.getLabel()}
-        </Typography>
-        { annotationsCount > 0 && (
-          <Chip
-            avatar={<Avatar className={classes.avatar} />}
-            label={annotationsCount}
-            className={
-              classNames(
-                classes.chip,
-                annotationSelected ? classes.selected : '',
-              )
-            }
-            size="small"
-          />
-        )}
+        >
+          { annotationsCount > 0 && (
+            <Chip
+              avatar={<Avatar className={classes.avatar} />}
+              label={annotationsCount}
+              className={
+                classNames(
+                  classes.chip,
+                  annotationSelected ? classes.selected : '',
+                )
+              }
+              size="small"
+            />
+          )}
+        </CanvasThumbnail>
       </div>
     );
   }

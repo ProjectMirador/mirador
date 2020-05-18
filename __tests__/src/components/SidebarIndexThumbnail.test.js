@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import fixture from '../../fixtures/version-2/019.json';
 import { SidebarIndexThumbnail } from '../../../src/components/SidebarIndexThumbnail';
-import { CanvasThumbnail } from '../../../src/components/CanvasThumbnail';
+import CanvasThumbnail from '../../../src/containers/CanvasThumbnail';
 
 /** */
 function createWrapper(props) {

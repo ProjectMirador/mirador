@@ -1,6 +1,6 @@
 import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
-import { Canvas, Utils } from 'manifesto.js';
+import { Canvas } from 'manifesto.js';
 /**
  * MiradorCanvas - adds additional, testable logic around Manifesto's Canvas
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
@@ -26,23 +26,6 @@ export default class MiradorCanvas {
   /** */
   getHeight() {
     return this.canvas.getHeight();
-  }
-
-  /**
-   * Implements Manifesto's canonicalImageUri algorithm to support
-   * IIIF Presentation v3
-   */
-  canonicalImageUri(w, format = 'jpg', resourceId = undefined) {
-    const resource = this.getImageResourceOrDefault(resourceId);
-    const service = resource && resource.getServices()[0];
-    if (!(service)) return undefined;
-    const region = 'full';
-    let size = w;
-    const imageWidth = resource.getWidth();
-    if ((!w) || w === imageWidth) size = 'full';
-    const quality = Utils.getImageQuality(service.getProfile());
-    const id = service.id.replace(/\/+$/, '');
-    return [id, region, size, 0, `${quality}.${format}`].join('/');
   }
 
   /**
@@ -157,57 +140,6 @@ export default class MiradorCanvas {
     return this.iiifImageResources.map(r => r.getServices()[0].id);
   }
 
-  /** */
-  getImageResourceOrDefault(resourceId) {
-    const resources = this.imageResources;
-
-    if (resourceId) return resources.find(r => r.id === resourceId);
-    return resources[0];
-  }
-
-  /** @private */
-  imageInformationUri(resourceId) {
-    const image = this.getImageResourceOrDefault(resourceId);
-
-    const imageId = image && image.getServices()[0] && image.getServices()[0].id;
-
-    if (!imageId) return undefined;
-
-    return `${
-      imageId.replace(/\/$/, '')
-    }/info.json`;
-  }
-
-  /**
-   * checks whether the canvas has a valid height
-   */
-  get hasValidHeight() {
-    return (
-      typeof this.canvas.getHeight() === 'number'
-      && this.canvas.getHeight() > 0
-    );
-  }
-
-  /**
-   * checks whether the canvas has a valid height
-   */
-  get hasValidWidth() {
-    return (
-      typeof this.canvas.getHeight() === 'number'
-      && this.canvas.getHeight() > 0
-    );
-  }
-
-  /**
-   * checks whether the canvas has valid dimensions
-   */
-  get hasValidDimensions() {
-    return (
-      this.hasValidHeight
-      && this.hasValidWidth
-    );
-  }
-
   /**
    * Get the canvas service
    */
@@ -222,46 +154,5 @@ export default class MiradorCanvas {
     return this.canvas.getLabel().length > 0
       ? this.canvas.getLabel().map(label => label.value)[0]
       : String(this.canvas.index + 1);
-  }
-
-  /**
-   * Creates a canonical image request for a thumb
-   * @param {Number} height
-   */
-  thumbnail(maxWidth = undefined, maxHeight = undefined, resourceId = undefined) {
-    let width;
-    let height;
-
-    if (!this.imageInformationUri(resourceId)) {
-      return undefined;
-    }
-
-    switch (this.thumbnailConstraints(maxWidth, maxHeight)) {
-      case 'sizeByH':
-        height = maxHeight;
-        break;
-      case 'sizeByW':
-        width = maxWidth;
-        break;
-      default:
-        height = '150';
-    }
-
-    // note that, although the IIIF server may support sizeByConfinedWh (e.g. !w,h)
-    // this is a IIIF level 2 feature, so we're instead providing w, or h,-style requests
-    // which are only level 1.
-    return this.canonicalImageUri(undefined, undefined, resourceId).replace(/\/full\/.*\/0\//, `/full/${width || ''},${height || ''}/0/`);
-  }
-
-  /** @private */
-  thumbnailConstraints(maxWidth, maxHeight) {
-    if (!maxHeight && !maxWidth) return undefined;
-    if (maxHeight && !maxWidth) return 'sizeByH';
-    if (!maxHeight && maxWidth) return 'sizeByW';
-
-    const { aspectRatio } = this;
-    const desiredAspectRatio = maxWidth / maxHeight;
-
-    return desiredAspectRatio < aspectRatio ? 'sizeByW' : 'sizeByH';
   }
 }

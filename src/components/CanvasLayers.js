@@ -15,9 +15,8 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOffSharp';
 import OpacityIcon from '@material-ui/icons/OpacitySharp';
 import Typography from '@material-ui/core/Typography';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import MiradorCanvas from '../lib/MiradorCanvas';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
-import { CanvasThumbnail } from './CanvasThumbnail';
+import CanvasThumbnail from '../containers/CanvasThumbnail';
 
 /** */
 const reorder = (list, startIndex, endIndex) => {
@@ -117,13 +116,11 @@ export class CanvasLayers extends Component {
   /** @private */
   renderLayer(resource, index) {
     const {
-      canvas,
       classes,
       layerMetadata,
       t,
     } = this.props;
 
-    const miradorCanvas = new MiradorCanvas(canvas);
     const { width, height } = { height: undefined, width: 50 };
 
     const layer = {
@@ -135,16 +132,12 @@ export class CanvasLayers extends Component {
     return (
       <div style={{ flex: 1 }}>
         <div style={{ alignItems: 'flex-start', display: 'flex' }}>
-          <div style={{ minWidth: 50 }}>
-            <CanvasThumbnail
-              isValid={miradorCanvas.hasValidDimensions}
-              imageUrl={miradorCanvas.thumbnail(width, height, resource.id)}
-              maxHeight={height}
-              maxWidth={width}
-              aspectRatio={miradorCanvas.aspectRatio}
-              ImageProps={{ className: classes.image }}
-            />
-          </div>
+          <CanvasThumbnail
+            maxHeight={height}
+            maxWidth={width}
+            resource={resource}
+            classes={{ image: classes.image, root: classes.thumbnail }}
+          />
           <Typography
             className={classes.label}
             component="div"

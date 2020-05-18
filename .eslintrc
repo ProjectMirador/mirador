@@ -22,6 +22,7 @@
         "FunctionExpression": true
       }
     }],
+    "no-underscore-dangle": "off",
     "react/prefer-stateless-function": "off",
     "sort-keys": ["error", "asc", {
       "caseSensitive": false,
