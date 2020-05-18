@@ -69,6 +69,17 @@ describe('CompanionWindow', () => {
       parentactions.closeCompanionWindow();
       expect(removeCompanionWindowEvent).toHaveBeenCalledTimes(1);
     });
+
+    it('checks that a child is valid before enhancing', () => {
+      const removeCompanionWindowEvent = jest.fn();
+      companionWindow = createWrapper({
+        children: [null, <div>HelloWorld</div>],
+        onCloseClick: removeCompanionWindowEvent,
+      });
+      const { parentactions } = companionWindow.children().find('div').props();
+      parentactions.closeCompanionWindow();
+      expect(removeCompanionWindowEvent).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('when the companion window is on the right', () => {
