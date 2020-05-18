@@ -95,8 +95,7 @@ export class SearchPanelControls extends Component {
   /** */
   selectItem(_event, selectedItem, _reason) {
     if (selectedItem && selectedItem.match) {
-      this.setState({ search: selectedItem.match });
-      this.submitSearch();
+      this.setState({ search: selectedItem.match }, this.submitSearch);
     }
   }
 
