@@ -24,9 +24,12 @@ export default class AnnotationPage {
 
   /** */
   get items() {
-    if (!this.json || !this.json.items) return [];
+    this._items = this._items || (() => { // eslint-disable-line no-underscore-dangle
+      if (!this.json || !this.json.items) return [];
 
-    return flatten([this.json.items]).map(resource => new AnnotationItem(resource));
+      return flatten([this.json.items]).map(resource => new AnnotationItem(resource));
+    })();
+    return this._items; // eslint-disable-line no-underscore-dangle
   }
 
   /**
