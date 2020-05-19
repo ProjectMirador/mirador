@@ -61,6 +61,7 @@ export class ThumbnailNavigation extends Component {
       }
       // Default case bottom
       default: {
+        if (bounds[3] === 0) return thumbnailNavigation.width + this.spacing;
         const calc = Math.ceil(
           (thumbnailNavigation.height - this.scrollbarSize - this.spacing - 4)
            * bounds[2] / bounds[3],

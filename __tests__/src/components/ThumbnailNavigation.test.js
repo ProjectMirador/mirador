@@ -85,7 +85,9 @@ describe('ThumbnailNavigation', () => {
     it('calculateScaledSize', () => {
       expect(wrapper.instance().calculateScaledSize(0)).toEqual(82);
       expect(rightWrapper.instance().calculateScaledSize(0)).toEqual(158);
-      const zeroWidthWrapper = createWrapper({ position: 'far-right' }, zeroWidthFixture);
+      let zeroWidthWrapper = createWrapper({ position: 'far-right' }, zeroWidthFixture);
+      expect(zeroWidthWrapper.instance().calculateScaledSize(0)).toEqual(108);
+      zeroWidthWrapper = createWrapper({ position: 'bottom' }, zeroWidthFixture);
       expect(zeroWidthWrapper.instance().calculateScaledSize(0)).toEqual(108);
     });
     it('calculatingWidth', () => {
