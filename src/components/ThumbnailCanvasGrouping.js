@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import CaptionedCanvasThumbnail from '../containers/CaptionedCanvasThumbnail';
+import IIIFThumbnail from '../containers/IIIFThumbnail';
 import ns from '../config/css-ns';
 
 
@@ -72,10 +72,12 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           )}
         >
           {currentGroupings.map((canvas, i) => (
-            <CaptionedCanvasThumbnail
+            <IIIFThumbnail
               key={canvas.id}
-              canvas={canvas}
-              height={(position === 'far-right') ? style.height - (1.5 * SPACING) : height - (1.5 * SPACING)}
+              resource={canvas}
+              labelled
+              maxHeight={(position === 'far-right') ? style.height - (1.5 * SPACING) : height - (1.5 * SPACING)}
+              variant="inside"
             />
           ))}
         </div>

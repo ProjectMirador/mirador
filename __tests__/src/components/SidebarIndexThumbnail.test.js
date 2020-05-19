@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import fixture from '../../fixtures/version-2/019.json';
 import { SidebarIndexThumbnail } from '../../../src/components/SidebarIndexThumbnail';
-import { CanvasThumbnail } from '../../../src/components/CanvasThumbnail';
+import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 
 /** */
 function createWrapper(props) {
@@ -25,8 +25,8 @@ describe('SidebarIndexThumbnail', () => {
     expect(wrapper.find(Typography).length).toBe(1);
     expect(wrapper.text()).toEqual(expect.stringContaining('yolo'));
   });
-  it('contains a CanvasThumbnail', () => {
+  it('contains a IIIFThumbnail', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find(CanvasThumbnail).length).toBe(1);
+    expect(wrapper.find(IIIFThumbnail).length).toBe(1);
   });
 });

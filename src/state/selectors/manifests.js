@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import createCachedSelector from 're-reselect';
 import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
-import MiradorCanvas from '../../lib/MiradorCanvas';
+import getThumbnail from '../../lib/ThumbnailFactory';
 
 /** */
 function createManifestoInstance(json, locale) {
@@ -209,36 +209,13 @@ export const getRights = createSelector(
 * @return {String|null}
 */
 export function getManifestThumbnail(state, props) {
-  /** */
-  function getTopLevelManifestThumbnail() {
-    const manifest = getManifestoInstance(state, props);
+  const manifest = getManifestoInstance(state, props);
 
-    return manifest
-      && manifest.getThumbnail()
-      && manifest.getThumbnail().id;
-  }
+  if (!manifest) return undefined;
 
-  /** */
-  function getFirstCanvasThumbnail() {
-    const canvases = getManifestCanvases(state, props);
+  const thumbnail = getThumbnail(manifest, { maxHeight: 80, maxWidth: 120 });
 
-    return canvases.length > 0 && canvases[0].getThumbnail() && canvases[0].getThumbnail().id;
-  }
-
-  /** */
-  function generateThumbnailFromFirstCanvas() {
-    const canvases = getManifestCanvases(state, props);
-
-    if (canvases.length === 0) return null;
-
-    const miradorCanvas = new MiradorCanvas(canvases[0]);
-
-    return miradorCanvas.thumbnail(null, 80);
-  }
-
-  return getTopLevelManifestThumbnail()
-    || getFirstCanvasThumbnail()
-    || generateThumbnailFromFirstCanvas();
+  return thumbnail && thumbnail.url;
 }
 
 /**
@@ -366,39 +343,6 @@ export const getMetadataLocales = createSelector(
   [getManifestoInstance],
   manifest => getLocales(manifest),
 );
-
-/**
- * Returns the starting canvas specified in the manifest
- * @param {object} manifest manifesto instance
- * @param {number} canvasIndexFromState
- * @return {Canvas}
- */
-export function getManifestStartCanvas(json, canvasIndexFromState) {
-  if (!json) return {};
-
-  const manifest = createManifestoInstance(json);
-
-  if (!manifest) return {};
-
-  if (canvasIndexFromState !== undefined) {
-    return manifest.getSequences()[0].getCanvasByIndex(canvasIndexFromState);
-  }
-
-  let canvasId;
-
-  // IIIF v2
-  canvasId = manifest.getSequences()[0].getProperty('startCanvas');
-
-  if (!canvasId) {
-    // IIIF v3
-    const start = manifest.getProperty('start')
-    || manifest.getSequences()[0].getProperty('start');
-
-    canvasId = start && (start.id || start.source);
-  }
-
-  return ((canvasId && manifest.getSequences()[0].getCanvasById(canvasId)) || {});
-}
 
 /**
  * Returns the viewing hint for the first sequence in the manifest or the manifest

@@ -2,10 +2,9 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryViewThumbnail } from '../../../src/components/GalleryViewThumbnail';
-import { CanvasThumbnail } from '../../../src/components/CanvasThumbnail';
+import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -31,19 +30,14 @@ describe('GalleryView', () => {
   });
   it('renders the thumbnail', () => {
     wrapper = createWrapper({ config: { height: 55 } });
-    expect(wrapper.find(CanvasThumbnail).length).toBe(1);
-    expect(wrapper.find(CanvasThumbnail).prop('maxHeight')).toBe(55);
-  });
-  it('renders the canvas labels for each canvas in canvas items', () => {
-    wrapper = createWrapper();
-    expect(wrapper.find(Typography).length).toBe(1);
+    expect(wrapper.find(IIIFThumbnail).length).toBe(1);
+    expect(wrapper.find(IIIFThumbnail).prop('maxHeight')).toBe(55);
   });
   it('sets the selected canvas on click', () => {
     const setCanvas = jest.fn();
     wrapper = createWrapper({ setCanvas });
     wrapper.find('div[role="button"]').first().simulate('click');
     expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
-    expect(wrapper.find(Typography).length).toBe(1);
   });
 
   it('sets the window mode if the selected canvas is clicked', () => {

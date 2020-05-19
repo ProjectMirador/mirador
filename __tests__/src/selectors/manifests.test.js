@@ -18,7 +18,6 @@ import {
   getManifestDescription,
   getManifestHomepage,
   getManifestProvider,
-  getManifestStartCanvas,
   getManifestTitle,
   getManifestThumbnail,
   getManifestMetadata,
@@ -105,10 +104,10 @@ describe('getManifestLogo()', () => {
 });
 
 describe('getManifestThumbnail()', () => {
-  it('should return manifest thumbnail id', () => {
+  it('should return manifest-level thumbnail', () => {
     const state = { manifests: { x: { json: manifestFixture001 } } };
     const received = getManifestThumbnail(state, { manifestId: 'x' });
-    expect(received).toEqual(manifestFixture001.thumbnail['@id']);
+    expect(received).toEqual('https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d/full/,120/0/default.jpg');
   });
 
   it('returns the first canvas thumbnail id', () => {
@@ -136,13 +135,13 @@ describe('getManifestThumbnail()', () => {
   it('returns a thumbnail sized image url from the first canvas', () => {
     const state = { manifests: { x: { json: manifestFixture019 } } };
     const received = getManifestThumbnail(state, { manifestId: 'x' });
-    expect(received).toEqual('https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/,80/0/default.jpg');
+    expect(received).toEqual('https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/!120,120/0/default.jpg');
   });
 
   it('should return null if manifest has no thumbnail', () => {
     const state = { manifests: { x: {} } };
     const received = getManifestThumbnail(state, { manifestId: 'x' });
-    expect(received).toBeNull();
+    expect(received).toBeUndefined();
   });
 });
 
@@ -414,75 +413,6 @@ describe('getRights', () => {
     const state = { manifests: { x: { json: manifest } } };
     const received = getRights(state, { manifestId: 'x' });
     expect(received).toEqual(['http://example.com']);
-  });
-});
-
-describe('getManifestStartCanvas', () => {
-  it('gets the startCanvas index for a IIIF v2 manifest', () => {
-    const manifest = {
-      '@context': 'http://iiif.io/api/presentation/2/context.json',
-      '@id':
-       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
-      '@type': 'sc:Manifest',
-      sequences: [{
-        canvases: [
-          {
-            '@id': 'http://example.com/1',
-          },
-          {
-            '@id': 'http://example.com/2',
-          },
-        ],
-        startCanvas: 'http://example.com/2',
-      }],
-    };
-    expect(getManifestStartCanvas(manifest).id).toEqual('http://example.com/2');
-  });
-
-  it('gets the start data for a IIIF v3 manifest', () => {
-    const manifest = {
-      '@context': 'http://iiif.io/api/presentation/2/context.json',
-      '@id':
-       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
-      '@type': 'sc:Manifest',
-      sequences: [{
-        canvases: [
-          {
-            '@id': 'http://example.com/1',
-          },
-          {
-            '@id': 'http://example.com/2',
-          },
-        ],
-      }],
-      start: { source: 'http://example.com/2' },
-    };
-    expect(getManifestStartCanvas(manifest).id).toEqual('http://example.com/2');
-  });
-
-  it('gets a canvas by index', () => {
-    const manifest = {
-      '@context': 'http://iiif.io/api/presentation/2/context.json',
-      '@id':
-       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
-      '@type': 'sc:Manifest',
-      sequences: [{
-        canvases: [
-          {
-            '@id': 'http://example.com/1',
-          },
-          {
-            '@id': 'http://example.com/2',
-          },
-        ],
-        startCanvas: 'http://example.com/2',
-      }],
-    };
-    expect(getManifestStartCanvas(manifest, 0).id).toEqual('http://example.com/1');
-  });
-
-  it('is undefined if no start canvas is specified', () => {
-    expect(getManifestStartCanvas(manifestFixture001).id).toEqual(undefined);
   });
 });
 

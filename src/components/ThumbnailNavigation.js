@@ -47,7 +47,7 @@ export class ThumbnailNavigation extends Component {
    * When on bottom, column width
    */
   calculateScaledSize(index) {
-    const { config, canvasGroupings, position } = this.props;
+    const { thumbnailNavigation, canvasGroupings, position } = this.props;
     const canvases = canvasGroupings.groupings()[index];
     const world = new CanvasWorld(canvases);
     const bounds = world.worldBounds();
@@ -56,13 +56,13 @@ export class ThumbnailNavigation extends Component {
         const calc = Math.floor(
           this.calculatingWidth(canvases.length) * bounds[3] / bounds[2],
         );
-        if (!Number.isInteger(calc)) return config.thumbnailNavigation.width + this.spacing;
+        if (!Number.isInteger(calc)) return thumbnailNavigation.width + this.spacing;
         return calc + this.spacing;
       }
       // Default case bottom
       default: {
         const calc = Math.ceil(
-          (config.thumbnailNavigation.height - this.scrollbarSize - this.spacing - 4)
+          (thumbnailNavigation.height - this.scrollbarSize - this.spacing - 4)
            * bounds[2] / bounds[3],
         );
         return calc;
@@ -72,27 +72,27 @@ export class ThumbnailNavigation extends Component {
 
   /** */
   calculatingWidth(canvasesLength) {
-    const { config } = this.props;
+    const { thumbnailNavigation } = this.props;
     if (canvasesLength === 1) {
-      return config.thumbnailNavigation.width;
+      return thumbnailNavigation.width;
     }
-    return config.thumbnailNavigation.width * 2;
+    return thumbnailNavigation.width * 2;
   }
 
   /** */
   rightWidth() {
-    const { view, config } = this.props;
+    const { view, thumbnailNavigation } = this.props;
     switch (view) {
       case 'book':
-        return (config.thumbnailNavigation.width * 2);
+        return (thumbnailNavigation.width * 2);
       default:
-        return config.thumbnailNavigation.width;
+        return thumbnailNavigation.width;
     }
   }
 
   /** */
   style() {
-    const { position, config } = this.props;
+    const { position, thumbnailNavigation } = this.props;
     switch (position) {
       case 'far-right':
         return {
@@ -103,7 +103,7 @@ export class ThumbnailNavigation extends Component {
       // Default case bottom
       default:
         return {
-          height: `${config.thumbnailNavigation.height}px`,
+          height: `${thumbnailNavigation.height}px`,
           width: '100%',
         };
     }
@@ -111,13 +111,13 @@ export class ThumbnailNavigation extends Component {
 
   /** */
   areaHeight(height) {
-    const { config, position } = this.props;
+    const { position, thumbnailNavigation } = this.props;
     switch (position) {
       case 'far-right':
         return height;
       // Default case bottom
       default:
-        return config.thumbnailNavigation.height;
+        return thumbnailNavigation.height;
     }
   }
 
@@ -174,8 +174,8 @@ export class ThumbnailNavigation extends Component {
       t,
       canvasGroupings,
       classes,
-      config,
       position,
+      thumbnailNavigation,
       viewingDirection,
       windowId,
     } = this.props;
@@ -183,6 +183,12 @@ export class ThumbnailNavigation extends Component {
       return <></>;
     }
     const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
+    const itemData = {
+      canvasGroupings,
+      height: thumbnailNavigation.height - this.spacing - this.scrollbarSize,
+      position,
+      windowId,
+    };
     return (
       <Paper
         className={classNames(
@@ -209,13 +215,7 @@ export class ThumbnailNavigation extends Component {
               itemSize={this.calculateScaledSize}
               width={width}
               layout={(position === 'far-bottom') ? 'horizontal' : 'vertical'}
-              itemData={{
-                canvasGroupings,
-                config,
-                height: config.thumbnailNavigation.height - this.spacing - this.scrollbarSize,
-                position,
-                windowId,
-              }}
+              itemData={itemData}
               ref={this.gridRef}
             >
               {ThumbnailCanvasGrouping}
@@ -231,13 +231,13 @@ ThumbnailNavigation.propTypes = {
   canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   canvasIndex: PropTypes.number.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  config: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   hasNextCanvas: PropTypes.bool,
   hasPreviousCanvas: PropTypes.bool,
   position: PropTypes.string.isRequired,
   setNextCanvas: PropTypes.func,
   setPreviousCanvas: PropTypes.func,
   t: PropTypes.func.isRequired,
+  thumbnailNavigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
   viewingDirection: PropTypes.string,
   windowId: PropTypes.string.isRequired,

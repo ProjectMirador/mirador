@@ -98,6 +98,9 @@ const styles = theme => ({
     marginRight: theme.spacing(2),
     maxWidth: 150,
   },
+  thumbnail: {
+    minWidth: 50,
+  },
 });
 
 const enhance = compose(
