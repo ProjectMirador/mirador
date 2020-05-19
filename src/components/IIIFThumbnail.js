@@ -24,43 +24,40 @@ export class IIIFThumbnail extends Component {
       maxHeight, maxWidth, style, image,
     } = this.props;
 
-    let height = 'auto';
-    let width = 'auto';
+    const styleProps = { height: 'auto', width: 'auto' };
 
     const { height: thumbHeight, width: thumbWidth } = image;
-
     if (thumbHeight && thumbWidth) {
       if ((maxHeight && (thumbHeight > maxHeight)) || (maxWidth && (thumbWidth > maxWidth))) {
         const aspectRatio = thumbWidth / thumbHeight;
 
         if (maxHeight && maxWidth) {
           if ((maxWidth / maxHeight) < aspectRatio) {
-            height = Math.round(maxWidth / aspectRatio);
-            width = maxWidth;
+            styleProps.height = Math.round(maxWidth / aspectRatio);
+            styleProps.width = maxWidth;
           } else {
-            height = maxHeight;
-            width = Math.round(maxHeight * aspectRatio);
+            styleProps.height = maxHeight;
+            styleProps.width = Math.round(maxHeight * aspectRatio);
           }
         } else if (maxHeight) {
-          height = maxHeight;
-          width = Math.round(maxHeight * aspectRatio);
+          styleProps.height = maxHeight;
+          styleProps.maxWidth = Math.round(maxHeight * aspectRatio);
         } else if (maxWidth) {
-          height = Math.round(maxWidth / aspectRatio);
-          width = maxWidth;
+          styleProps.width = maxWidth;
+          styleProps.maxHeight = Math.round(maxWidth / aspectRatio);
         }
       } else {
-        width = thumbWidth;
-        height = thumbHeight;
+        styleProps.width = thumbWidth;
+        styleProps.height = thumbHeight;
       }
     } else if (thumbHeight && !thumbWidth) {
-      height = maxHeight;
+      styleProps.height = maxHeight;
     } else if (!thumbHeight && thumbWidth) {
-      width = maxWidth;
+      styleProps.width = maxWidth;
     }
 
     return {
-      height,
-      width,
+      ...styleProps,
       ...style,
     };
   }

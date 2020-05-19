@@ -45,13 +45,13 @@ describe('IIIFThumbnail', () => {
   it('can be constrained by maxHeight', () => {
     wrapper = createWrapper({ image, maxHeight: 100 });
 
-    expect(wrapper.find('img').props().style).toMatchObject({ height: 100, width: 83 });
+    expect(wrapper.find('img').props().style).toMatchObject({ height: 100, width: 'auto' });
   });
 
   it('can be constrained by maxWidth', () => {
     wrapper = createWrapper({ image, maxWidth: 80 });
 
-    expect(wrapper.find('img').props().style).toMatchObject({ height: 96, width: 80 });
+    expect(wrapper.find('img').props().style).toMatchObject({ height: 'auto', width: 80 });
   });
 
   it('can be constrained by maxWidth and maxHeight', () => {
