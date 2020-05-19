@@ -27,8 +27,6 @@ const mapStateToProps = (state, {
 const styles = theme => ({
   caption: {
     lineHeight: '1.5em',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
     wordBreak: 'break-word',
   },
   insideCaption: {
@@ -49,6 +47,10 @@ const styles = theme => ({
     display: 'inline-block',
     height: 'inherit',
     position: 'relative',
+  },
+  label: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   outsideCaption: {
     boxOrient: 'vertical',
