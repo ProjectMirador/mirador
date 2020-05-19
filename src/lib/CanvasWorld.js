@@ -35,18 +35,21 @@ export default class CanvasWorld {
     let incY = 0;
 
     const canvasDims = this.canvases.reduce((acc, canvas) => {
-      let canvasHeight;
-      let canvasWidth;
+      let canvasHeight = 0;
+      let canvasWidth = 0;
 
-      if (dirY === 0) {
-        // constant height
-        canvasHeight = scale;
-        canvasWidth = Math.floor(scale * canvas.aspectRatio);
-      } else {
-        // constant width
-        canvasWidth = scale;
-        canvasHeight = Math.floor(scale * (1 / canvas.aspectRatio));
+      if (!isNaN(canvas.aspectRatio)) {
+        if (dirY === 0) {
+          // constant height
+          canvasHeight = scale;
+          canvasWidth = Math.floor(scale * canvas.aspectRatio);
+        } else {
+          // constant width
+          canvasWidth = scale;
+          canvasHeight = Math.floor(scale * (1 / canvas.aspectRatio));
+        }
       }
+
       acc.push({
         canvas,
         height: canvasHeight,
