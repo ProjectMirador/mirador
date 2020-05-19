@@ -75,11 +75,6 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             <IIIFThumbnail
               key={canvas.id}
               resource={canvas}
-              classes={{
-                caption: classes.thumbnailTitle,
-                label: classNames(ns('canvas-thumb-label'), classes.thumbnailCanvasLabel),
-                root: classes.thumbnailContainer,
-              }}
               labelled
               maxHeight={(position === 'far-right') ? style.height - (1.5 * SPACING) : height - (1.5 * SPACING)}
               variant="inside"

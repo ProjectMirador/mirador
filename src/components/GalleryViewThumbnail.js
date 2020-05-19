@@ -89,8 +89,8 @@ export class GalleryViewThumbnail extends Component {
       >
         <IIIFThumbnail
           resource={canvas}
-          classes={{ caption: classes.galleryViewCaption }}
           labelled
+          variant="outside"
           maxWidth={config.width}
           maxHeight={config.height}
           style={{

@@ -48,31 +48,11 @@ const styles = theme => ({
   },
   currentCanvas: {
   },
-  thumbnailCanvasLabel: {
-    background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-    bottom: '5px',
-    boxSizing: 'border-box',
-    left: '0px',
-    overflow: 'hidden',
-    padding: '4px',
-    position: 'absolute',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    width: '100%',
-  },
-  thumbnailContainer: {
-    display: 'inline-block',
-    height: 'inherit',
-    position: 'relative',
-  },
-  thumbnailTitle: {
-    color: '#ffffff',
-  },
 });
 
 const enhance = compose(
-  withStyles(styles),
   withTranslation(),
+  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ThumbnailCanvasGrouping'),
 );

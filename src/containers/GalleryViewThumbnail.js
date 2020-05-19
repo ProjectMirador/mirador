@@ -27,16 +27,6 @@ const styles = theme => ({
     top: 80,
     transform: 'translate(-50%, 0)',
   },
-  galleryViewCaption: {
-    boxOrient: 'vertical',
-    display: '-webkit-box',
-    height: '3em',
-    lineClamp: '2',
-    lineHeight: '1.5em',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    wordBreak: 'break-word',
-  },
   galleryViewItem: {
     '&$hasAnnotations': {
       border: `2px solid ${theme.palette.action.selected}`,

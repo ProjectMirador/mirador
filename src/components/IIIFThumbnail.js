@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import 'intersection-observer'; // polyfill needed for Safari
 import Typography from '@material-ui/core/Typography';
 import IntersectionObserver from '@researchgate/react-intersection-observer';
+import classNames from 'classnames';
 
 /**
  * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
@@ -85,12 +86,13 @@ export class IIIFThumbnail extends Component {
       image,
       label,
       labelled,
+      variant,
     } = this.props;
 
     const { loaded } = this.state;
 
     return (
-      <div className={classes.root}>
+      <div className={classNames(classes.root, { [classes[`${variant}Root`]]: variant })}>
         <IntersectionObserver onChange={this.handleIntersection}>
           <img
             alt=""
@@ -101,8 +103,8 @@ export class IIIFThumbnail extends Component {
           />
         </IntersectionObserver>
         { labelled && label && (
-          <div className={classes.label}>
-            <Typography variant="caption" classes={{ root: classes.caption }}>
+          <div className={classNames(classes.label, { [classes[`${variant}Label`]]: variant })}>
+            <Typography variant="caption" classes={{ root: classNames(classes.caption, { [classes[`${variant}Caption`]]: variant }) }}>
               {label}
             </Typography>
           </div>
@@ -129,6 +131,7 @@ IIIFThumbnail.propTypes = {
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  variant: PropTypes.oneOf(['inside', 'outside']),
 };
 
 IIIFThumbnail.defaultProps = {
@@ -139,4 +142,5 @@ IIIFThumbnail.defaultProps = {
   maxHeight: null,
   maxWidth: null,
   style: {},
+  variant: null,
 };
