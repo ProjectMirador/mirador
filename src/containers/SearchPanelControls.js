@@ -35,21 +35,18 @@ const mapDispatchToProps = {
 
 /** */
 const styles = theme => ({
-  adornmentWrapper: {
-    position: 'relative',
+  endAdornment: {
+    position: 'absolute',
+    right: 0,
   },
-  searchInput: {
+  form: {
     paddingBottom: theme.spacing(1),
     paddingRight: theme.spacing(1.5),
     width: '100%',
   },
   searchProgress: {
     position: 'absolute',
-    zIndex: 1,
-  },
-  suggestions: {
-    position: 'absolute',
-    zIndex: theme.zIndex.modal - 1,
+    right: 0,
   },
 });
 
