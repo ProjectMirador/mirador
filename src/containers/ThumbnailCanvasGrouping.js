@@ -23,7 +23,6 @@ const mapDispatchToProps = (dispatch, { data }) => ({
  */
 const mapStateToProps = (state, { data }) => ({
   currentCanvasId: (getCurrentCanvas(state, { windowId: data.windowId }) || {}).id,
-  window: getWindow(state, { windowId: data.windowId }),
 });
 
 /**
