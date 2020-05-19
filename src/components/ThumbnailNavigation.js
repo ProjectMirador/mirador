@@ -183,6 +183,12 @@ export class ThumbnailNavigation extends Component {
       return <></>;
     }
     const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
+    const itemData = {
+      canvasGroupings,
+      height: thumbnailNavigation.height - this.spacing - this.scrollbarSize,
+      position,
+      windowId,
+    };
     return (
       <Paper
         className={classNames(
@@ -209,12 +215,7 @@ export class ThumbnailNavigation extends Component {
               itemSize={this.calculateScaledSize}
               width={width}
               layout={(position === 'far-bottom') ? 'horizontal' : 'vertical'}
-              itemData={{
-                canvasGroupings,
-                height: thumbnailNavigation.height - this.spacing - this.scrollbarSize,
-                position,
-                windowId,
-              }}
+              itemData={itemData}
               ref={this.gridRef}
             >
               {ThumbnailCanvasGrouping}
