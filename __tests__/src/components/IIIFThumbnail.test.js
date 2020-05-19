@@ -33,6 +33,18 @@ describe('IIIFThumbnail', () => {
     )).toBe(true);
   });
 
+  it('renders a placeholder if there is no image', () => {
+    wrapper = createWrapper({});
+    expect(wrapper.matchesElement(
+      <div>
+        <IntersectionObserver onChange={wrapper.instance().handleIntersection}>
+          <img alt="" />
+        </IntersectionObserver>
+      </div>,
+    )).toBe(true);
+    expect(wrapper.find('img').props().src).toMatch(/data:image\/png;base64/);
+  });
+
   it('defaults using the placeholder image', () => {
     expect(wrapper.find('img').props().src).toMatch(/data:image\/png;base64/);
   });
