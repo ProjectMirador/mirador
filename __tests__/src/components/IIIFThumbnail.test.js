@@ -2,20 +2,20 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import IntersectionObserver from '@researchgate/react-intersection-observer';
 import Typography from '@material-ui/core/Typography';
-import { CanvasThumbnail } from '../../../src/components/CanvasThumbnail';
+import { IIIFThumbnail } from '../../../src/components/IIIFThumbnail';
 
 /**
- * Helper function to create a shallow wrapper around CanvasThumbnail
+ * Helper function to create a shallow wrapper around IIIFThumbnail
  */
 function createWrapper(props) {
   return shallow(
-    <CanvasThumbnail
+    <IIIFThumbnail
       {...props}
     />,
   );
 }
 
-describe('CanvasThumbnail', () => {
+describe('IIIFThumbnail', () => {
   let wrapper;
   const url = 'http://example.com/iiif/image';
   const image = { height: 120, url, width: 100 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { ThumbnailCanvasGrouping } from '../../../src/components/ThumbnailCanvasGrouping';
-import CanvasThumbnail from '../../../src/containers/CanvasThumbnail';
+import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';
 import manifestJson from '../../fixtures/version-2/019.json';
 
@@ -42,8 +42,8 @@ describe('ThumbnailCanvasGrouping', () => {
   it('sets a mirador-current-canvas-grouping class on current canvas', () => {
     expect(wrapper.find('.mirador-thumbnail-nav-canvas-1.mirador-current-canvas-grouping').length).toEqual(1);
   });
-  it('renders a CaptionedCanvasThumbnail', () => {
-    expect(wrapper.find(CanvasThumbnail).length).toEqual(1);
+  it('renders a CaptionedIIIFThumbnail', () => {
+    expect(wrapper.find(IIIFThumbnail).length).toEqual(1);
   });
   it('when clicked, updates the current canvas', () => {
     wrapper = createWrapper({ data, index: 0, setCanvas });

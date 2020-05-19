@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import manifestFixtureHamilton from '../../fixtures/version-2/hamilton.json';
 import { CanvasLayers } from '../../../src/components/CanvasLayers';
-import CanvasThumbnail from '../../../src/containers/CanvasThumbnail';
+import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 
 /** Utility function to wrap CanvasAnnotations */
 function createWrapper(props) {
@@ -58,7 +58,7 @@ describe('CanvasLayers', () => {
       inner.find(Draggable).at(0).prop('children')({}, {}),
     );
 
-    expect(layer.find(CanvasThumbnail).prop('resource').id).toEqual('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg');
+    expect(layer.find(IIIFThumbnail).prop('resource').id).toEqual('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg');
     expect(layer.find(Typography).text()).toEqual('1');
     expect(layer.find('[aria-label="layer_hide"]').length).toEqual(1);
     expect(layer.find('[aria-label="layer_moveToTop"]').length).toEqual(1);

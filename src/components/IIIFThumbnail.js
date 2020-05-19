@@ -7,7 +7,7 @@ import IntersectionObserver from '@researchgate/react-intersection-observer';
 /**
  * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
  */
-export class CanvasThumbnail extends Component {
+export class IIIFThumbnail extends Component {
   /**
    */
   constructor(props) {
@@ -98,7 +98,7 @@ export class CanvasThumbnail extends Component {
           <img
             alt=""
             role="presentation"
-            src={(loaded && image.url) || CanvasThumbnail.defaultImgPlaceholder}
+            src={(loaded && image.url) || IIIFThumbnail.defaultImgPlaceholder}
             style={this.imageStyles()}
             className={classes.image}
           />
@@ -117,9 +117,9 @@ export class CanvasThumbnail extends Component {
 }
 
 // Transparent "gray"
-CanvasThumbnail.defaultImgPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
+IIIFThumbnail.defaultImgPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
 
-CanvasThumbnail.propTypes = {
+IIIFThumbnail.propTypes = {
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string),
   image: PropTypes.shape({
@@ -134,7 +134,7 @@ CanvasThumbnail.propTypes = {
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
-CanvasThumbnail.defaultProps = {
+IIIFThumbnail.defaultProps = {
   children: null,
   classes: {},
   label: undefined,

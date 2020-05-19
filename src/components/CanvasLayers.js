@@ -16,7 +16,7 @@ import OpacityIcon from '@material-ui/icons/OpacitySharp';
 import Typography from '@material-ui/core/Typography';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
-import CanvasThumbnail from '../containers/CanvasThumbnail';
+import IIIFThumbnail from '../containers/IIIFThumbnail';
 
 /** */
 const reorder = (list, startIndex, endIndex) => {
@@ -132,7 +132,7 @@ export class CanvasLayers extends Component {
     return (
       <div style={{ flex: 1 }}>
         <div style={{ alignItems: 'flex-start', display: 'flex' }}>
-          <CanvasThumbnail
+          <IIIFThumbnail
             maxHeight={height}
             maxWidth={width}
             resource={resource}

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import CanvasThumbnail from '../containers/CanvasThumbnail';
+import IIIFThumbnail from '../containers/IIIFThumbnail';
 import ns from '../config/css-ns';
 
 
@@ -72,7 +72,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           )}
         >
           {currentGroupings.map((canvas, i) => (
-            <CanvasThumbnail
+            <IIIFThumbnail
               key={canvas.id}
               resource={canvas}
               classes={{

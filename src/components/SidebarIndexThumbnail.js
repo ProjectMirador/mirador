@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
-import CanvasThumbnail from '../containers/CanvasThumbnail';
+import IIIFThumbnail from '../containers/IIIFThumbnail';
 
 /** */
 export class SidebarIndexThumbnail extends Component {
@@ -15,7 +15,7 @@ export class SidebarIndexThumbnail extends Component {
     return (
       <>
         <div style={{ minWidth: 50 }}>
-          <CanvasThumbnail
+          <IIIFThumbnail
             resource={otherCanvas}
             className={classNames(classes.clickable)}
             maxHeight={config.canvasNavigation.height}

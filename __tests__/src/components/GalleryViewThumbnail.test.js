@@ -4,7 +4,7 @@ import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import Chip from '@material-ui/core/Chip';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryViewThumbnail } from '../../../src/components/GalleryViewThumbnail';
-import CanvasThumbnail from '../../../src/containers/CanvasThumbnail';
+import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -30,8 +30,8 @@ describe('GalleryView', () => {
   });
   it('renders the thumbnail', () => {
     wrapper = createWrapper({ config: { height: 55 } });
-    expect(wrapper.find(CanvasThumbnail).length).toBe(1);
-    expect(wrapper.find(CanvasThumbnail).prop('maxHeight')).toBe(55);
+    expect(wrapper.find(IIIFThumbnail).length).toBe(1);
+    expect(wrapper.find(IIIFThumbnail).prop('maxHeight')).toBe(55);
   });
   it('sets the selected canvas on click', () => {
     const setCanvas = jest.fn();

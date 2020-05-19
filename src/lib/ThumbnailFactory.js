@@ -159,7 +159,7 @@ class ThumbnailFactory {
   }
 
   /** */
-  getCanvasThumbnail(canvas) {
+  getIIIFThumbnail(canvas) {
     const thumb = this.getThumbnail(canvas, { requireIiif: true });
     if (thumb) return thumb;
 
@@ -183,7 +183,7 @@ class ThumbnailFactory {
       || (manifest.getSequences()[0] && manifest.getSequences()[0].getCanvases()[0])
     );
 
-    return (canvas && this.getCanvasThumbnail(canvas))
+    return (canvas && this.getIIIFThumbnail(canvas))
       || this.getThumbnail(manifest, { quirksMode: true, requireIiif: false });
   }
 
@@ -202,7 +202,7 @@ class ThumbnailFactory {
   get() {
     if (!this.resource) return undefined;
 
-    if (this.resource.isCanvas()) return this.getCanvasThumbnail(this.resource);
+    if (this.resource.isCanvas()) return this.getIIIFThumbnail(this.resource);
     if (this.resource.isManifest()) return this.getManifestThumbnail(this.resource);
     if (this.resource.isCollection()) return this.getCollectionThumbnail(this.resource);
     return this.getResourceThumbnail(this.resource, { requireIiif: true });

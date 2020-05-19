@@ -4,7 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import classNames from 'classnames';
 import MiradorCanvas from '../lib/MiradorCanvas';
-import CanvasThumbnail from '../containers/CanvasThumbnail';
+import IIIFThumbnail from '../containers/IIIFThumbnail';
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -87,7 +87,7 @@ export class GalleryViewThumbnail extends Component {
         role="button"
         tabIndex={0}
       >
-        <CanvasThumbnail
+        <IIIFThumbnail
           resource={canvas}
           classes={{ caption: classes.galleryViewCaption }}
           labelled
@@ -111,7 +111,7 @@ export class GalleryViewThumbnail extends Component {
               size="small"
             />
           )}
-        </CanvasThumbnail>
+        </IIIFThumbnail>
       </div>
     );
   }

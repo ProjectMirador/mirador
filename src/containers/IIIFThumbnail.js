@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
-import { CanvasThumbnail } from '../components/CanvasThumbnail';
+import { IIIFThumbnail } from '../components/IIIFThumbnail';
 import getThumbnail from '../lib/ThumbnailFactory';
 
 /** */
@@ -23,7 +23,7 @@ const mapStateToProps = (state, {
 const enhance = compose(
   connect(mapStateToProps),
   withTranslation(),
-  withPlugins('CanvasThumbnail'),
+  withPlugins('IIIFThumbnail'),
 );
 
-export default enhance(CanvasThumbnail);
+export default enhance(IIIFThumbnail);
