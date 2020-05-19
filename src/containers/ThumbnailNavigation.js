@@ -25,10 +25,10 @@ const mapStateToProps = (state, { windowId }) => {
       viewType,
     ),
     canvasIndex: getCanvasIndex(state, { windowId }),
-    config: state.config,
     hasNextCanvas: !!getNextCanvasGrouping(state, { windowId }),
     hasPreviousCanvas: !!getPreviousCanvasGrouping(state, { windowId }),
     position: state.companionWindows[state.windows[windowId].thumbnailNavigationId].position,
+    thumbnailNavigation: state.config.thumbnailNavigation,
     view: viewType,
     viewingDirection: getManifestViewingDirection(state, { windowId }),
   };

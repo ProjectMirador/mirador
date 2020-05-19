@@ -17,7 +17,7 @@ function createWrapper(props, fixture = manifestJson) {
       canvasIndex={1}
       classes={{}}
       windowId="foobar"
-      config={{ thumbnailNavigation: { height: 150, width: 100 } }}
+      thumbnailNavigation={{ height: 150, width: 100 }}
       position="far-bottom"
       t={k => k}
       {...props}
