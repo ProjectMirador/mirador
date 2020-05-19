@@ -27,6 +27,8 @@ export class IIIFThumbnail extends Component {
 
     const styleProps = { height: 'auto', width: 'auto' };
 
+    if (!image) return { ...style, height: maxHeight || 'auto', width: maxWidth || 'auto' };
+
     const { height: thumbHeight, width: thumbWidth } = image;
     if (thumbHeight && thumbWidth) {
       if ((maxHeight && (thumbHeight > maxHeight)) || (maxWidth && (thumbWidth > maxWidth))) {
@@ -97,7 +99,7 @@ export class IIIFThumbnail extends Component {
           <img
             alt=""
             role="presentation"
-            src={(loaded && image.url) || IIIFThumbnail.defaultImgPlaceholder}
+            src={(loaded && image && image.url) || IIIFThumbnail.defaultImgPlaceholder}
             style={this.imageStyles()}
             className={classes.image}
           />
@@ -125,7 +127,7 @@ IIIFThumbnail.propTypes = {
     height: PropTypes.number,
     url: PropTypes.string.isRequired,
     width: PropTypes.number,
-  }).isRequired,
+  }),
   label: PropTypes.string,
   labelled: PropTypes.bool,
   maxHeight: PropTypes.number,
@@ -137,6 +139,7 @@ IIIFThumbnail.propTypes = {
 IIIFThumbnail.defaultProps = {
   children: null,
   classes: {},
+  image: null,
   label: undefined,
   labelled: false,
   maxHeight: null,
