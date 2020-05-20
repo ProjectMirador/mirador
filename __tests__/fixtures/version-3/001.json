@@ -286,11 +286,18 @@
               "target": "https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json#xywh=2000,500,2000,2000"
             },
             {
-              "body": {
-                "language": "en",
-                "type": "TextualBody",
-                "value": "this is a face"
-              },
+              "body": [
+                {
+                  "language": "en",
+                  "type": "TextualBody",
+                  "value": "this is a face"
+                },
+                {
+                  "type": "TextualBody",
+                  "value": "Face",
+                  "purpose": "tagging"
+                }
+              ],
               "id": "https://example.org/iiif/book1/page/manifest/9c6934ee-1026-4a10-8a97-aaf513513020",
               "motivation": "commenting",
               "target": {
@@ -301,6 +308,30 @@
                 }
               },
               "type": "Annotation"
+            },
+            {
+              "id": "https://example.org/iiif/book1/page/manifest/a3",
+              "type": "Annotation",
+              "motivation": "tagging",
+              "body": [
+                {
+                  "type": "TextualBody",
+                  "value": "Tree"
+                },
+                {
+                  "type": "TextualBody",
+                  "value": "Drawing"
+                },
+                {
+                  "type": "TextualBody",
+                  "value": "Coniferous"
+                },
+                {
+                  "type": "TextualBody",
+                  "value": "Stanford Cardinal"
+                }
+              ],
+              "target": "https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json#xywh=1605,961,437,625"
             }
           ]
         },

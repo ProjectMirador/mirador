@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Chip from '@material-ui/core/Chip';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -89,6 +90,13 @@ export class CanvasAnnotations extends Component {
                     ruleSet={htmlSanitizationRuleSet}
                     htmlString={annotation.content}
                   />
+                  <div>
+                    {
+                      annotation.tags.map(tag => (
+                        <Chip size="small" variant="outlined" label={tag} id={tag} className={classes.chip} />
+                      ))
+                    }
+                  </div>
                 </ListItemText>
               </ListItem>
             ))

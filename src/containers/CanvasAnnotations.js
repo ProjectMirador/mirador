@@ -20,6 +20,7 @@ function getIdAndContentOfResources(resources) {
   return resources.map((resource, i) => ({
     content: resource.chars,
     id: resource.id,
+    tags: resource.tags,
     targetId: resource.targetId,
   }));
 }
@@ -59,6 +60,11 @@ const styles = theme => ({
     },
     borderBottom: `0.5px solid ${theme.palette.divider}`,
     cursor: 'pointer',
+  },
+  chip: {
+    backgroundColor: theme.palette.background.paper,
+    marginRight: theme.spacing(0.5),
+    marginTop: theme.spacing(1),
   },
   sectionHeading: {
     paddingLeft: theme.spacing(2),
