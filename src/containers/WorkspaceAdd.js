@@ -11,7 +11,7 @@ import { WorkspaceAdd } from '../components/WorkspaceAdd';
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => ({ manifests: state.manifests });
+const mapStateToProps = state => ({ catalog: state.catalog });
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

@@ -67,6 +67,8 @@ const ActionTypes = {
   SELECT_CONTENT_SEARCH_ANNOTATION: 'mirador/SELECT_CONTENT_SEARCH_ANNOTATION',
 
   UPDATE_LAYERS: 'mirador/UPDATE_LAYERS',
+  ADD_RESOURCE: 'mirador/ADD_RESOURCE',
+  REMOVE_RESOURCE: 'mirador/REMOVE_RESOURCE',
 };
 
 export default ActionTypes;

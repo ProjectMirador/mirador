@@ -11,7 +11,7 @@ import { ManifestForm } from '../components/ManifestForm';
  * @memberof ManifestForm
  * @private
  */
-const mapDispatchToProps = { fetchManifest: actions.fetchManifest };
+const mapDispatchToProps = { addResource: actions.addResource };
 /**
  *
  * @param theme

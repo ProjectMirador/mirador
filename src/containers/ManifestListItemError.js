@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
-import { fetchManifest, removeManifest } from '../state/actions/manifest';
+import { fetchManifest, removeResource } from '../state/actions';
 import { ManifestListItemError } from '../components/ManifestListItemError';
 
 /** */
 const mapDispatchToProps = {
-  onDismissClick: removeManifest,
+  onDismissClick: removeResource,
   onTryAgainClick: fetchManifest,
 };
 

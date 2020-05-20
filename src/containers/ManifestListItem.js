@@ -12,18 +12,21 @@ import * as actions from '../state/actions';
 import { ManifestListItem } from '../components/ManifestListItem';
 
 /** */
-const mapStateToProps = (state, { manifestId }) => ({
-  active: getWindowManifests(state).includes(manifestId),
-  error: getManifest(state, { manifestId }).error,
-  isFetching: getManifest(state, { manifestId }).isFetching,
-  manifestLogo: getManifestLogo(state, { manifestId }),
-  provider: getManifest(state, { manifestId }).provider
-    || getManifestProvider(state, { manifestId }),
-  ready: !!getManifest(state, { manifestId }).json,
-  size: getManifestCanvases(state, { manifestId }).length,
-  thumbnail: getManifestThumbnail(state, { manifestId }),
-  title: getManifestTitle(state, { manifestId }),
-});
+const mapStateToProps = (state, { manifestId, provider }) => {
+  const manifest = getManifest(state, { manifestId }) || {};
+  return {
+    active: getWindowManifests(state).includes(manifestId),
+    error: manifest.error,
+    isFetching: manifest.isFetching,
+    manifestLogo: getManifestLogo(state, { manifestId }),
+    provider: provider
+      || getManifestProvider(state, { manifestId }),
+    ready: !!manifest.json,
+    size: getManifestCanvases(state, { manifestId }).length,
+    thumbnail: getManifestThumbnail(state, { manifestId }),
+    title: getManifestTitle(state, { manifestId }),
+  };
+};
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
