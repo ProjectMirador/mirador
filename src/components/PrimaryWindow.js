@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import WindowSideBar from '../containers/WindowSideBar';
-import WindowViewer from '../containers/WindowViewer';
-import GalleryView from '../containers/GalleryView';
 import CompanionArea from '../containers/CompanionArea';
 import ns from '../config/css-ns';
+
+const GalleryView = lazy(() => import('../containers/GalleryView'));
+const WindowViewer = lazy(() => import('../containers/WindowViewer'));
 
 /**
  * WindowMiddleContent - component that renders the "middle" area of the
@@ -45,7 +46,9 @@ export class PrimaryWindow extends Component {
       <div className={classNames(ns('primary-window'), classes.primaryWindow)}>
         <WindowSideBar windowId={windowId} />
         <CompanionArea windowId={windowId} position="left" />
-        {this.renderViewer()}
+        <Suspense fallback={<div />}>
+          {this.renderViewer()}
+        </Suspense>
       </div>
     );
   }

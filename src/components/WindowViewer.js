@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import flatten from 'lodash/flatten';
-import OSDViewer from '../containers/OpenSeadragonViewer';
 import WindowCanvasNavigationControls from '../containers/WindowCanvasNavigationControls';
 import MiradorCanvas from '../lib/MiradorCanvas';
+
+const OSDViewer = lazy(() => import('../containers/OpenSeadragonViewer'));
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -128,12 +129,14 @@ export class WindowViewer extends Component {
     }
 
     return (
-      <OSDViewer
-        infoResponses={this.infoResponsesFetchedFromStore()}
-        windowId={windowId}
-      >
-        <WindowCanvasNavigationControls key="canvas_nav" windowId={windowId} />
-      </OSDViewer>
+      <Suspense fallback={<div />}>
+        <OSDViewer
+          infoResponses={this.infoResponsesFetchedFromStore()}
+          windowId={windowId}
+        >
+          <WindowCanvasNavigationControls key="canvas_nav" windowId={windowId} />
+        </OSDViewer>
+      </Suspense>
     );
   }
 }
