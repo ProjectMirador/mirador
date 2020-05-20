@@ -2,8 +2,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { PrimaryWindow } from '../../../src/components/PrimaryWindow';
 import WindowSideBar from '../../../src/containers/WindowSideBar';
-import WindowViewer from '../../../src/containers/WindowViewer';
-import GalleryView from '../../../src/containers/GalleryView';
 import CollectionDialog from '../../../src/containers/CollectionDialog';
 
 /** create wrapper */
@@ -26,17 +24,22 @@ describe('PrimaryWindow', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(WindowSideBar)).toHaveLength(1);
   });
-  it('should render nothing if manifest is still f etching', () => {
+  it('should render nothing if manifest is still fetching', () => {
     const wrapper = createWrapper({ isFetching: true });
-    expect(wrapper.find(WindowViewer)).toHaveLength(0);
+    const suspenseComponent = wrapper.find('Suspense');
+    expect(suspenseComponent).toEqual({});
   });
   it('should render <WindowViewer> if manifest is present', () => {
     const wrapper = createWrapper({ isFetching: false });
-    expect(wrapper.find(WindowViewer)).toHaveLength(1);
+    const suspenseComponent = wrapper.find('Suspense');
+    const lazyComponent = suspenseComponent.dive().find('lazy');
+    expect(lazyComponent.type().displayName).toBe('WindowViewer');
   });
   it('should render <GalleryView> if manifest is present and view is gallery', () => {
     const wrapper = createWrapper({ isFetching: false, view: 'gallery', windowId: 'window-2' });
-    expect(wrapper.find(GalleryView)).toHaveLength(1);
+    const suspenseComponent = wrapper.find('Suspense');
+    const lazyComponent = suspenseComponent.dive().find('lazy');
+    expect(lazyComponent.type().displayName).toBe('GalleryView');
   });
   it('should render <CollectionDialog> and <SelectCollection> if manifest is collection and isCollectionDialogVisible', () => {
     const wrapper = createWrapper({ isCollection: true, isCollectionDialogVisible: true });
