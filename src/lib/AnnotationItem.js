@@ -12,6 +12,11 @@ export default class AnnotationItem {
   }
 
   /** */
+  isOnlyTag() {
+    return (this.motivations.length === 1 && this.motivations[0] === 'tagging');
+  }
+
+  /** */
   get id() {
     this._id = this._id || this.resource.id || uuid(); // eslint-disable-line no-underscore-dangle
     return this._id; // eslint-disable-line no-underscore-dangle
@@ -48,13 +53,22 @@ export default class AnnotationItem {
   }
 
   /** */
+  get tags() {
+    if (this.isOnlyTag()) {
+      return this.body.map(r => r.value);
+    }
+    return this.body.filter(r => r.purpose === 'tagging').map(r => r.value);
+  }
+
+  /** */
   get target() {
     return flatten(compact(new Array(this.resource.target)));
   }
 
   /** */
   get chars() {
-    return this.body.map(r => r.value).join(' ');
+    if (this.isOnlyTag()) return null;
+    return this.body.filter(r => r.purpose !== 'tagging').map(r => r.value).join(' ');
   }
 
   /** */

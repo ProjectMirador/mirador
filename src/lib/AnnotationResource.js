@@ -10,6 +10,11 @@ export default class AnnotationResource {
   }
 
   /** */
+  isOnlyTag() {
+    return (this.motivations.length === 1 && this.motivations[0] === 'oa:tagging');
+  }
+
+  /** */
   get id() {
     this._id = this._id || this.resource['@id'] || uuid(); // eslint-disable-line no-underscore-dangle
     return this._id; // eslint-disable-line no-underscore-dangle
@@ -46,8 +51,16 @@ export default class AnnotationResource {
   }
 
   /** */
+  get tags() {
+    if (this.isOnlyTag()) {
+      return this.resources.map(r => r.value);
+    }
+    return this.resources.filter(r => r['@type'] === 'oa:Tag').map(r => r.value);
+  }
+
+  /** */
   get chars() {
-    return this.resources.map(r => r.chars).join(' ');
+    return this.resources.filter(r => r['@type'] !== 'oa:Tag').map(r => r.chars).join(' ');
   }
 
   /** */

@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
+import Chip from '@material-ui/core/Chip';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { CanvasAnnotations } from '../../../src/components/CanvasAnnotations';
@@ -30,11 +31,13 @@ describe('CanvasAnnotations', () => {
     {
       content: 'First Annotation',
       id: 'abc123',
+      tags: ['abc123', 'def456'],
       targetId: 'example.com/iiif/12345',
     },
     {
       content: 'Last Annotation',
       id: 'xyz321',
+      tags: [],
       targetId: 'example.com/iiif/54321',
     },
   ];
@@ -59,6 +62,12 @@ describe('CanvasAnnotations', () => {
 
     expect(wrapper.find(List).length).toEqual(1);
     expect(wrapper.find(ListItem).length).toEqual(2);
+  });
+
+  it('renders a Chip for every tag', () => {
+    wrapper = createWrapper({ annotations });
+
+    expect(wrapper.find(Chip).length).toEqual(2);
   });
 
   it('pass through the annotation to make plugins life easier', () => {
@@ -107,6 +116,7 @@ describe('CanvasAnnotations', () => {
             {
               content: 'Annotation',
               id: 'annoId',
+              tags: [],
               targetId: 'example.com/iiif/12345',
             },
           ],
@@ -130,6 +140,7 @@ describe('CanvasAnnotations', () => {
             {
               content: 'Annotation',
               id: 'annoId',
+              tags: [],
               targetId: 'example.com/iiif/12345',
             },
           ],
@@ -148,6 +159,7 @@ describe('CanvasAnnotations', () => {
             {
               content: 'Annotation',
               id: 'annoId',
+              tags: [],
               targetId: 'example.com/iiif/12345',
             },
           ],
@@ -166,6 +178,7 @@ describe('CanvasAnnotations', () => {
             {
               content: 'Annotation',
               id: 'annoId',
+              tags: [],
               targetId: 'example.com/iiif/12345',
             },
           ],

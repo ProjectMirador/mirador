@@ -12,6 +12,33 @@ describe('AnnotationResource', () => {
     });
   });
 
+  describe('isOnlyTag', () => {
+    it('when the only motivation is tagging', () => {
+      expect(new AnnotationResource({ motivation: 'oa:tagging' }).isOnlyTag())
+        .toBe(true);
+    });
+    it('when there are other motivations besides tagging', () => {
+      expect(new AnnotationResource({ motivation: ['oa:commenting', 'oa:tagging'] }).isOnlyTag())
+        .toBe(false);
+    });
+  });
+
+  describe('tags', () => {
+    it('when only motivation', () => {
+      expect(
+        new AnnotationResource({ resource: [{ '@type': 'oa:Tag', value: 'yo' }, { '@type': 'oa:Tag', value: 'lo' }] }).tags,
+      ).toEqual(['yo', 'lo']);
+    });
+    it('when multiple motivations', () => {
+      expect(
+        new AnnotationResource({
+          motivation: ['oa:commenting', 'oa:tagging'],
+          resource: [{ '@type': 'oa:commenting', value: 'yo' }, { '@type': 'oa:Tag', value: 'lo' }],
+        }).tags,
+      ).toEqual(['lo']);
+    });
+  });
+
   describe('targetId', () => {
     it('removes fragmentSelector coords from string targets', () => {
       expect(

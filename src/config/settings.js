@@ -216,7 +216,7 @@ export default {
   },
   annotations: {
     htmlSanitizationRuleSet: 'iiif', // See src/lib/htmlRules.js for acceptable values
-    filteredMotivations: ['oa:commenting', 'sc:painting', 'commenting'],
+    filteredMotivations: ['oa:commenting', 'oa:tagging', 'sc:painting', 'commenting', 'tagging'],
   },
   classPrefix: 'mirador',
   displayAllAnnotations: false, // Configure if annotations to be displayed on the canvas by default when fetched
