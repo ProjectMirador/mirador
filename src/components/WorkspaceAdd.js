@@ -43,21 +43,22 @@ export class WorkspaceAdd extends React.Component {
    */
   render() {
     const {
-      manifests, setWorkspaceAddVisibility, t, classes,
+      catalog, setWorkspaceAddVisibility, t, classes,
     } = this.props;
     const { addResourcesOpen } = this.state;
 
-    const manifestList = Object.keys(manifests).map(manifest => (
+    const manifestList = catalog.map(resource => (
       <ManifestListItem
-        key={manifest}
-        manifestId={manifest}
+        key={resource.manifestId}
+        manifestId={resource.manifestId}
+        provider={resource.provider}
         handleClose={() => setWorkspaceAddVisibility(false)}
       />
     ));
 
     return (
       <div className={classNames(ns('workspace-add'), classes.workspaceAdd)}>
-        {(Object.keys(manifests).length < 1) ? (
+        {catalog.length < 1 ? (
           <Grid
             alignItems="center"
             container
@@ -141,13 +142,14 @@ export class WorkspaceAdd extends React.Component {
 }
 
 WorkspaceAdd.propTypes = {
+  catalog: PropTypes.arrayOf(PropTypes.object),
   classes: PropTypes.objectOf(PropTypes.string),
-  manifests: PropTypes.instanceOf(Object).isRequired,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   t: PropTypes.func,
 };
 
 WorkspaceAdd.defaultProps = {
+  catalog: [],
   classes: {},
   t: key => key,
 };

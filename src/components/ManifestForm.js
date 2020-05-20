@@ -53,11 +53,11 @@ export class ManifestForm extends Component {
    * @private
    */
   formSubmit(event) {
-    const { fetchManifest, onSubmit } = this.props;
+    const { addResource, onSubmit } = this.props;
     const { formValue } = this.state;
     event.preventDefault();
     onSubmit();
-    fetchManifest(formValue);
+    addResource(formValue);
     this.setState({ formValue: '' });
   }
 
@@ -134,9 +134,9 @@ export class ManifestForm extends Component {
 }
 
 ManifestForm.propTypes = {
+  addResource: PropTypes.func.isRequired,
   addResourcesOpen: PropTypes.bool.isRequired,
   classes: PropTypes.objectOf(PropTypes.string),
-  fetchManifest: PropTypes.func.isRequired,
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
   t: PropTypes.func,

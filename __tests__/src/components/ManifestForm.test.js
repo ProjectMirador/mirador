@@ -6,7 +6,7 @@ import { ManifestForm } from '../../../src/components/ManifestForm';
 function createWrapper(props) {
   return mount(
     <ManifestForm
-      fetchManifest={() => {}}
+      addResource={() => {}}
       t={str => str}
       {...props}
     />,
@@ -37,15 +37,15 @@ describe('ManifestForm', () => {
   });
 
   it('triggers an action when the form is submitted', () => {
-    const fetchManifest = jest.fn();
+    const addResource = jest.fn();
     const onSubmit = jest.fn();
-    const wrapper = createWrapper({ addResourcesOpen: true, fetchManifest, onSubmit });
+    const wrapper = createWrapper({ addResource, addResourcesOpen: true, onSubmit });
     wrapper.setState({ formValue: 'asdf' });
 
     wrapper.setState({ formValue: 'http://example.com/iiif' });
 
     wrapper.find('form').simulate('submit', { preventDefault: () => {} });
-    expect(fetchManifest).toHaveBeenCalledWith('http://example.com/iiif');
+    expect(addResource).toHaveBeenCalledWith('http://example.com/iiif');
     expect(onSubmit).toHaveBeenCalled();
     expect(wrapper.state().formValue).toBe('');
   });

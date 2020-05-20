@@ -6,7 +6,6 @@ import Fab from '@material-ui/core/Fab';
 import Typography from '@material-ui/core/Typography';
 import { WorkspaceAdd } from '../../../src/components/WorkspaceAdd';
 import ManifestListItem from '../../../src/containers/ManifestListItem';
-import fixture from '../../fixtures/version-2/002.json';
 import ManifestForm from '../../../src/containers/ManifestForm';
 
 /** create wrapper */
@@ -14,10 +13,10 @@ function createWrapper(props) {
   return shallow(
     <WorkspaceAdd
       setWorkspaceAddVisibility={() => {}}
-      manifests={{
-        bar: fixture,
-        foo: fixture,
-      }}
+      catalog={[
+        { manifestId: 'bar' },
+        { manifestId: 'foo' },
+      ]}
       classes={{}}
       t={str => str}
       {...props}
@@ -32,7 +31,7 @@ describe('WorkspaceAdd', () => {
   });
 
   it('without manifests, renders an empty message', () => {
-    const wrapper = createWrapper({ manifests: {} });
+    const wrapper = createWrapper({ catalog: [] });
     expect(wrapper.find(ManifestListItem).length).toEqual(0);
     expect(wrapper.find(Typography).first().children().text()).toEqual('emptyResourceList');
   });

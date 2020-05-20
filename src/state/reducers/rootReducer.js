@@ -14,6 +14,7 @@ import {
   annotationsReducer,
   searchesReducer,
   layersReducer,
+  catalogReducer,
 } from '.';
 
 /**
@@ -26,6 +27,7 @@ export default function createRootReducer(pluginReducers) {
     accessTokens: accessTokensReducer,
     annotations: annotationsReducer,
     auth: authReducer,
+    catalog: catalogReducer,
     companionWindows: companionWindowsReducer,
     config: configReducer,
     elasticLayout: elasticLayoutReducer,
