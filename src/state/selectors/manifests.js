@@ -19,6 +19,12 @@ export function getManifest(state, { manifestId, windowId }) {
   ];
 }
 
+/** Convenience selector to get a manifest (or placeholder) */
+export const getManifestStatus = createSelector(
+  [getManifest],
+  manifest => manifest || { missing: true },
+);
+
 /** Instantiate a manifesto instance */
 export const getManifestoInstance = createCachedSelector(
   getManifest,
