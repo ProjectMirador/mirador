@@ -13,6 +13,7 @@ import {
   getManifestLocale,
   getDestructuredMetadata,
   getManifest,
+  getManifestStatus,
   getManifestLogo,
   getManifestCanvases,
   getManifestDescription,
@@ -54,7 +55,6 @@ describe('getManifest()', () => {
     expect(received).toEqual(expected);
   });
 
-
   it('should return the manifest of a certain window', () => {
     const received = getManifest(state, { windowId: 'a' });
     const expected = { id: 'x' };
@@ -74,6 +74,26 @@ describe('getManifest()', () => {
   it('should return undefined if manifest does not exist', () => {
     const received = getManifest(state, { windowId: 'b' });
     expect(received).toBeUndefined();
+  });
+});
+
+describe('getManifestStatus', () => {
+  const state = {
+    manifests: {
+      x: { id: 'x' },
+    },
+  };
+
+  it('returns the manifest of a certain id', () => {
+    const received = getManifestStatus(state, { manifestId: 'x' });
+    const expected = { id: 'x' };
+    expect(received).toEqual(expected);
+  });
+
+  it('returns a placeholder', () => {
+    const received = getManifestStatus(state, { manifestId: 'y' });
+    const expected = { missing: true };
+    expect(received).toEqual(expected);
   });
 });
 

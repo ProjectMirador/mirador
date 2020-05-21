@@ -3,12 +3,14 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
-import { getManifestTitle } from '../state/selectors';
+import { getManifestStatus, getManifestTitle } from '../state/selectors';
 import { WindowTopBarTitle } from '../components/WindowTopBarTitle';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => ({
+  error: getManifestStatus(state, { windowId }).error,
   hideWindowTitle: state.config.window.hideWindowTitle,
+  isFetching: getManifestStatus(state, { windowId }).isFetching,
   manifestTitle: getManifestTitle(state, { windowId }),
 });
 

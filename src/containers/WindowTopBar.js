@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getManifestTitle, getWindow } from '../state/selectors';
+import { getWindow } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';
 
 /** mapStateToProps */
@@ -15,7 +15,6 @@ const mapStateToProps = (state, { windowId }) => ({
   allowTopMenuButton: state.config.window.allowTopMenuButton,
   allowWindowSideBar: state.config.window.allowWindowSideBar,
   focused: state.workspace.focusedWindowId === windowId,
-  manifestTitle: getManifestTitle(state, { windowId }),
   maximized: (getWindow(state, { windowId }) || {}).maximized,
 });
 

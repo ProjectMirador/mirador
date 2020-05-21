@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import Skeleton from '@material-ui/lab/Skeleton';
+import ErrorIcon from '@material-ui/icons/ErrorOutlineSharp';
 
 /**
  * WindowTopBarTitle
@@ -12,16 +14,39 @@ export class WindowTopBarTitle extends Component {
    */
   render() {
     const {
-      classes, hideWindowTitle, manifestTitle,
+      classes, error, hideWindowTitle, isFetching, manifestTitle,
     } = this.props;
+
+    /** */
+    const TitleTypography = props => (
+      <Typography variant="h2" noWrap color="inherit" className={classes.title} {...props}>
+        {props.children}
+      </Typography>
+    );
+
     let title = null;
-    if (hideWindowTitle) {
+    if (isFetching) {
+      title = (
+        <TitleTypography>
+          <Skeleton variant="text" />
+        </TitleTypography>
+      );
+    } else if (error) {
+      title = (
+        <>
+          <ErrorIcon color="error" />
+          <TitleTypography color="textSecondary">
+            {error}
+          </TitleTypography>
+        </>
+      );
+    } else if (hideWindowTitle) {
       title = (<div className={classes.title} />);
     } else {
       title = (
-        <Typography variant="h2" noWrap color="inherit" className={classes.title}>
+        <TitleTypography>
           {manifestTitle}
-        </Typography>
+        </TitleTypography>
       );
     }
     return title;
@@ -30,11 +55,15 @@ export class WindowTopBarTitle extends Component {
 
 WindowTopBarTitle.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  error: PropTypes.string,
   hideWindowTitle: PropTypes.bool,
+  isFetching: PropTypes.bool,
   manifestTitle: PropTypes.string,
 };
 
 WindowTopBarTitle.defaultProps = {
+  error: null,
   hideWindowTitle: false,
+  isFetching: false,
   manifestTitle: '',
 };
