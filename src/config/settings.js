@@ -1,4 +1,4 @@
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 export default {
   canvasNavigation: { // Set the hight and width of canvas thumbnails in the  CanvasNavigation companion window

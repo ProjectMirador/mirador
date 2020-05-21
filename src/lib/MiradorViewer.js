@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 import { App } from '../components/App';
 import createStore from '../state/createStore';
 import * as actions from '../state/actions';

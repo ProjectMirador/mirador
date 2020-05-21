@@ -1,6 +1,6 @@
 import compact from 'lodash/compact';
 import flatten from 'lodash/flatten';
-import uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
 /**
  * A modeled WebAnnotation item
