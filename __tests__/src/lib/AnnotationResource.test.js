@@ -26,14 +26,14 @@ describe('AnnotationResource', () => {
   describe('tags', () => {
     it('when only motivation', () => {
       expect(
-        new AnnotationResource({ resource: [{ '@type': 'oa:Tag', value: 'yo' }, { '@type': 'oa:Tag', value: 'lo' }] }).tags,
+        new AnnotationResource({ resource: [{ '@type': 'oa:Tag', chars: 'yo' }, { '@type': 'oa:Tag', chars: 'lo' }] }).tags,
       ).toEqual(['yo', 'lo']);
     });
     it('when multiple motivations', () => {
       expect(
         new AnnotationResource({
           motivation: ['oa:commenting', 'oa:tagging'],
-          resource: [{ '@type': 'oa:commenting', value: 'yo' }, { '@type': 'oa:Tag', value: 'lo' }],
+          resource: [{ '@type': 'oa:commenting', chars: 'yo' }, { '@type': 'oa:Tag', chars: 'lo' }],
         }).tags,
       ).toEqual(['lo']);
     });

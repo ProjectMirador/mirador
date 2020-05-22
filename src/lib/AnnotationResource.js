@@ -53,9 +53,9 @@ export default class AnnotationResource {
   /** */
   get tags() {
     if (this.isOnlyTag()) {
-      return this.resources.map(r => r.value);
+      return this.resources.map(r => r.chars);
     }
-    return this.resources.filter(r => r['@type'] === 'oa:Tag').map(r => r.value);
+    return this.resources.filter(r => r['@type'] === 'oa:Tag').map(r => r.chars);
   }
 
   /** */
