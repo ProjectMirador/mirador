@@ -14,7 +14,58 @@ import {
   selectInfoResponse,
   getVisibleCanvasNonTiledResources,
   selectLogoutAuthService,
+  getVisibleCanvasIds,
 } from '../../../src/state/selectors/canvases';
+
+describe('getVisibleCanvasIds', () => {
+  const state = {
+    manifests: {
+      x: {
+        id: 'x',
+        json: manifestFixture019,
+      },
+    },
+    windows: {
+      a: {
+        canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
+        id: 'a',
+        manifestId: 'x',
+        view: 'book',
+      },
+    },
+  };
+
+  const noManifestationState = {
+    manifests: {
+      x: {
+        id: 'x',
+      },
+    },
+    windows: {
+      a: {
+        canvasIndex: 1,
+        id: 'a',
+        manifestId: 'x',
+      },
+    },
+  };
+
+  it('should return canvas groupings based on the canvas index stored window state', () => {
+    const selectedCanvases = getVisibleCanvasIds(state, { windowId: 'a' });
+
+    expect(selectedCanvases.length).toEqual(2);
+    expect(selectedCanvases).toEqual([
+      'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
+      'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
+    ]);
+  });
+
+  it('should return undefined when there is no manifestation to get a canvas from', () => {
+    const selectedCanvas = getVisibleCanvasIds(noManifestationState, { windowId: 'a' });
+
+    expect(selectedCanvas).toEqual([]);
+  });
+});
 
 describe('getVisibleCanvases', () => {
   const state = {
