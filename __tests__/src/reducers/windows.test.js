@@ -121,6 +121,7 @@ describe('windows reducer', () => {
       abc123: {
         canvasId: 'http://example.com/canvas/1',
         id: 'abc123',
+        visibleCanvases: ['http://example.com/canvas/1'],
       },
       def456: {
         canvasId: 'http://example.com/canvas/1',
@@ -128,14 +129,14 @@ describe('windows reducer', () => {
       },
     }, {
       canvasId: 'http://example.com/canvas/5',
-      selectedContentSearchAnnotation: 'xyz',
       type: ActionTypes.SET_CANVAS,
+      visibleCanvases: ['http://example.com/canvas/5'],
       windowId: 'abc123',
     })).toEqual({
       abc123: {
         canvasId: 'http://example.com/canvas/5',
         id: 'abc123',
-        selectedContentSearchAnnotation: 'xyz',
+        visibleCanvases: ['http://example.com/canvas/5'],
       },
       def456: {
         canvasId: 'http://example.com/canvas/1',

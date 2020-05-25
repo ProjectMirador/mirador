@@ -7,13 +7,14 @@ import { setCanvas } from '../../../src/state/actions';
 import {
   getManifests, getManifestoInstance,
   getManifestSearchService, getCompanionWindowIdsForPosition,
+  getWindow, getCanvasGrouping,
 } from '../../../src/state/selectors';
 import { fetchManifest } from '../../../src/state/sagas/iiif';
 import {
   fetchWindowManifest,
   setWindowDefaultSearchQuery,
   setWindowStartingCanvas,
-
+  updateVisibleCanvases,
 } from '../../../src/state/sagas/windows';
 import fixture from '../../fixtures/version-2/019.json';
 
@@ -150,6 +151,27 @@ describe('window-level sagas', () => {
         })
         .run()
         .then(({ allEffects }) => allEffects.length === 1);
+    });
+  });
+
+  describe('updateVisibleCanvases', () => {
+    it('recalculates the visible canvases', () => {
+      const windowId = 'x';
+      const action = {
+        windowId,
+      };
+
+      return expectSaga(updateVisibleCanvases, action)
+        .provide([
+          [select(getWindow, { windowId }), { canvasId: 'y' }],
+          [select(getCanvasGrouping, { canvasId: 'y', windowId }), [{ id: 'y' }, { id: 'z' }]],
+        ])
+        .put({
+          id: windowId,
+          payload: { visibleCanvases: ['y', 'z'] },
+          type: ActionTypes.UPDATE_WINDOW,
+        })
+        .run();
     });
   });
 });

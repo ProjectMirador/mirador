@@ -47,8 +47,8 @@ describe('getAnnotationResourcesByMotivation', () => {
       },
       windows: {
         abc123: {
-          canvasIndex: 0,
           manifestId: 'mid',
+          visibleCanvases: ['cid1'],
         },
       },
     };
@@ -111,12 +111,12 @@ it('getSelectedAnnotationIds returns an array of selected annotation IDs from st
     },
     windows: {
       wid: {
-        canvasIndex: 0,
         manifestId: 'mid',
         selectedAnnotations: {
           tid1: ['aid1', 'aid2'],
           tid2: ['aid3'],
         },
+        visibleCanvases: ['tid1'],
       },
     },
   };

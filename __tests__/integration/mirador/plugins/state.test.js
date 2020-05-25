@@ -43,9 +43,9 @@ describe('how plugins relate to state', () => {
     let canvasChangeCount;
 
     canvasChangeCount = await getCanvasChangeCount();
-    await expect(canvasChangeCount).toBe(0);
+    await expect(canvasChangeCount).toBe(1);
     await expect(page).toClick('.mirador-thumbnail-nav-canvas');
     canvasChangeCount = await getCanvasChangeCount();
-    await expect(canvasChangeCount).toBe(1);
+    await expect(canvasChangeCount).toBe(2);
   });
 });

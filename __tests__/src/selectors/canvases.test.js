@@ -27,10 +27,12 @@ describe('getVisibleCanvasIds', () => {
     },
     windows: {
       a: {
-        canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
         id: 'a',
         manifestId: 'x',
-        view: 'book',
+        visibleCanvases: [
+          'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
+          'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
+        ],
       },
     },
   };
@@ -43,7 +45,6 @@ describe('getVisibleCanvasIds', () => {
     },
     windows: {
       a: {
-        canvasIndex: 1,
         id: 'a',
         manifestId: 'x',
       },
@@ -77,10 +78,12 @@ describe('getVisibleCanvases', () => {
     },
     windows: {
       a: {
-        canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
         id: 'a',
         manifestId: 'x',
-        view: 'book',
+        visibleCanvases: [
+          'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
+          'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
+        ],
       },
     },
   };
@@ -93,9 +96,12 @@ describe('getVisibleCanvases', () => {
     },
     windows: {
       a: {
-        canvasIndex: 1,
         id: 'a',
         manifestId: 'x',
+        visibleCanvases: [
+          'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
+          'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
+        ],
       },
     },
   };
@@ -113,7 +119,7 @@ describe('getVisibleCanvases', () => {
   it('should return undefined when there is no manifestation to get a canvas from', () => {
     const selectedCanvas = getVisibleCanvases(noManifestationState, { windowId: 'a' });
 
-    expect(selectedCanvas).toBeUndefined();
+    expect(selectedCanvas).toEqual([]);
   });
 });
 
@@ -503,8 +509,10 @@ describe('getVisibleCanvasNonTiledResources', () => {
       },
       windows: {
         a: {
-          canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/1/c1.json',
           manifestId: 'http://iiif.io/api/presentation/2.0/example/fixtures/1/manifest.json',
+          visibleCanvases: [
+            'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/1/c1.json',
+          ],
         },
       },
     };
@@ -522,8 +530,10 @@ describe('getVisibleCanvasNonTiledResources', () => {
       },
       windows: {
         a: {
-          canvasId: 'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/canvas/p1',
           manifestId: 'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/manifest.json',
+          visibleCanvases: [
+            'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/canvas/p1',
+          ],
         },
       },
     };
