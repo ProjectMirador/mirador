@@ -123,7 +123,11 @@ describe('OpenSeadragonViewer', () => {
       expect(wrapper.instance().infoResponsesMatch([])).toBe(true);
     });
     it('when the @ids do match', () => {
-      expect(wrapper.instance().infoResponsesMatch([{ id: 'a', json: { '@id': 'http://foo' } }])).toBe(true);
+      const newInfos = [
+        { id: 'a', json: { '@id': 'http://foo' } },
+        { id: 'b', json: { '@id': 'http://bar' } },
+      ];
+      expect(wrapper.instance().infoResponsesMatch(newInfos)).toBe(true);
     });
     it('when the @ids do not match', () => {
       expect(wrapper.instance().infoResponsesMatch([{ id: 'a', json: { '@id': 'http://foo-degraded' } }])).toBe(false);

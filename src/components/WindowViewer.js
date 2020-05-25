@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import difference from 'lodash/difference';
 import flatten from 'lodash/flatten';
 import OSDViewer from '../containers/OpenSeadragonViewer';
 import WindowCanvasNavigationControls from '../containers/WindowCanvasNavigationControls';
@@ -48,12 +49,11 @@ export class WindowViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      currentCanvasId, currentCanvases, view, fetchInfoResponse, fetchAnnotation, receiveAnnotation,
+      currentCanvases, fetchInfoResponse, fetchAnnotation, receiveAnnotation,
     } = this.props;
 
-    if (prevProps.view !== view
-      || (prevProps.currentCanvasId !== currentCanvasId && !this.infoResponseIsInStore())
-    ) {
+    if (difference(currentCanvases, prevProps.currentCanvases).length > 0
+    && !this.infoResponseIsInStore()) {
       currentCanvases.forEach((canvas) => {
         const miradorCanvas = new MiradorCanvas(canvas);
         miradorCanvas.iiifImageResources.forEach((imageResource) => {
@@ -140,11 +140,9 @@ export class WindowViewer extends Component {
 
 WindowViewer.propTypes = {
   currentCanvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-  currentCanvasId: PropTypes.string.isRequired,
   fetchAnnotation: PropTypes.func.isRequired,
   fetchInfoResponse: PropTypes.func.isRequired,
   infoResponses: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   receiveAnnotation: PropTypes.func.isRequired,
-  view: PropTypes.string.isRequired,
   windowId: PropTypes.string.isRequired,
 };
