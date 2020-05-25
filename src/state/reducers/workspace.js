@@ -21,11 +21,12 @@ function contains(container, containee) {
  * workspaceReducer
  */
 export const workspaceReducer = (
-  state = settings.workspace,
+  state = { ...settings.workspace, windowIds: [] },
   action,
 ) => {
   let newWorkspaceDimensions;
   let viewportPosition;
+  let newWindowIds;
   switch (action.type) {
     case ActionTypes.UPDATE_WORKSPACE:
       return {
@@ -45,12 +46,17 @@ export const workspaceReducer = (
       return {
         ...state,
         focusedWindowId: action.window.id,
+        windowIds: [...(state.windows || []), action.window.id],
       };
     case ActionTypes.REMOVE_WINDOW:
-      if (Object.keys(action.windows).length > 2) return state;
+      newWindowIds = (state.windowIds || []).filter(v => v !== action.windowId);
+
       return {
         ...state,
-        focusedWindowId: Object.keys(action.windows).find(e => e !== action.windowId),
+        focusedWindowId: action.windowId === state.focusedWindowId
+          ? newWindowIds[newWindowIds.length - 1]
+          : state.focusedWindowId,
+        windowIds: newWindowIds,
       };
     case ActionTypes.SET_WORKSPACE_FULLSCREEN:
       return { ...state, isFullscreenEnabled: action.isFullscreenEnabled };

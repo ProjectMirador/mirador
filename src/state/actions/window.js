@@ -42,6 +42,7 @@ export function addWindow({ companionWindows, ...options }) {
     const { config, windows } = getState();
     const numWindows = Object.keys(windows).length;
 
+    const windowId = options.id || `window-${uuid()}`;
     const cwThumbs = `cw-${uuid()}`;
 
     const defaultCompanionWindows = [
@@ -51,6 +52,7 @@ export function addWindow({ companionWindows, ...options }) {
         id: cwThumbs,
         position: options.thumbnailNavigationPosition
           || config.thumbnailNavigation.defaultPosition,
+        windowId,
       },
       ...(
         (companionWindows || []).map((cw, i) => ({ ...cw, id: `cw-${uuid()}` }))
@@ -64,6 +66,7 @@ export function addWindow({ companionWindows, ...options }) {
           default: true,
           id: `cw-${uuid()}`,
           position: 'left',
+          windowId,
         },
       );
     }
@@ -75,7 +78,7 @@ export function addWindow({ companionWindows, ...options }) {
       companionWindowIds: defaultCompanionWindows.map(cw => cw.id),
       displayAllAnnotations: config.displayAllAnnotations || false,
       draggingEnabled: true,
-      id: `window-${uuid()}`,
+      id: windowId,
       layoutOrder: numWindows + 1,
       manifestId: null,
       maximized: false,
@@ -146,16 +149,9 @@ export function setCompanionAreaOpen(id, companionAreaOpen) {
  * @memberof ActionCreators
  */
 export function removeWindow(windowId) {
-  return (dispatch, getState) => {
-    const { windows } = getState();
-    const { companionWindowIds } = windows[windowId];
-
-    dispatch({
-      companionWindowIds,
-      type: ActionTypes.REMOVE_WINDOW,
-      windowId,
-      windows,
-    });
+  return {
+    type: ActionTypes.REMOVE_WINDOW,
+    windowId,
   };
 }
 
