@@ -48,6 +48,12 @@ export const getCurrentCanvas = createSelector(
 );
 
 /** */
+export const getVisibleCanvasIds = createSelector(
+  [getVisibleCanvases],
+  grouping => (grouping || []).map(canvas => canvas.id),
+);
+
+/** */
 export function getVisibleCanvases(state, args) {
   const canvas = getCurrentCanvas(state, { ...args });
   if (!canvas) return undefined;
