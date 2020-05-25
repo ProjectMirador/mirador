@@ -103,6 +103,15 @@ export function addWindow({ companionWindows, ...options }) {
   };
 }
 
+/** */
+export function updateWindow(id, payload) {
+  return {
+    id,
+    payload,
+    type: ActionTypes.UPDATE_WINDOW,
+  };
+}
+
 /**
  * maximizeWindow
  * @param  {String} windowId
@@ -119,15 +128,6 @@ export function maximizeWindow(windowId, layout) {
  */
 export function minimizeWindow(windowId) {
   return { type: ActionTypes.MINIMIZE_WINDOW, windowId };
-}
-
-/** */
-export function updateWindow(id, payload) {
-  return {
-    id,
-    payload,
-    type: ActionTypes.UPDATE_WINDOW,
-  };
 }
 
 /** */
