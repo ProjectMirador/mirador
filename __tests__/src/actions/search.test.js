@@ -134,58 +134,6 @@ describe('search actions', () => {
           },
         ]);
       });
-      it('dispatches the REQUEST_SEARCH and then RECEIVE_SEARCH', () => {
-        store.dispatch(actions.fetchSearch(
-          'windowId',
-          'companionWindowId',
-          'searchId',
-        ))
-          .then(() => {
-            const expectedActions = store.getActions();
-            expect(expectedActions).toEqual([
-              {
-                companionWindowId: 'companionWindowId',
-                searchId: 'searchId',
-                type: 'mirador/REQUEST_SEARCH',
-                windowId: 'windowId',
-              },
-              {
-                companionWindowId: 'companionWindowId',
-                searchId: 'searchId',
-                searchJson: { data: '12345' },
-                type: 'mirador/RECEIVE_SEARCH',
-                windowId: 'windowId',
-              },
-            ]);
-          });
-      });
-    });
-    describe('error response', () => {
-      it('dispatches the REQUEST_SEARCH and then RECEIVE_SEARCH', () => {
-        store.dispatch(actions.fetchSearch(
-          'windowId',
-          'companionWindowId',
-          'searchId',
-        ))
-          .then(() => {
-            const expectedActions = store.getActions();
-            expect(expectedActions).toEqual([
-              {
-                companionWindowId: 'companionWindowId',
-                searchId: 'searchId',
-                type: 'mirador/REQUEST_SEARCH',
-                windowId: 'windowId',
-              },
-              {
-                companionWindowId: 'companionWindowId',
-                error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'),
-                searchId: 'searchId',
-                type: 'mirador/RECEIVE_SEARCH_FAILURE',
-                windowId: 'windowId',
-              },
-            ]);
-          });
-      });
     });
   });
   describe('selectContentSearchAnnotation', () => {

@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch';
 import {
   getCanvasForAnnotation,
   getCanvas,
@@ -107,13 +106,7 @@ export function removeSearch(windowId, companionWindowId) {
  * @memberof ActionCreators
  */
 export function fetchSearch(windowId, companionWindowId, searchId, query) {
-  return ((dispatch) => {
-    dispatch(requestSearch(windowId, companionWindowId, searchId, query));
-    return fetch(searchId)
-      .then(response => response.json())
-      .then(json => dispatch(receiveSearch(windowId, companionWindowId, searchId, json)))
-      .catch(error => dispatch(receiveSearchFailure(windowId, companionWindowId, searchId, error)));
-  });
+  return requestSearch(windowId, companionWindowId, searchId, query);
 }
 
 /**

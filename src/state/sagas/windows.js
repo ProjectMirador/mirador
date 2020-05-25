@@ -4,12 +4,14 @@ import {
 import ActionTypes from '../actions/action-types';
 import MiradorManifest from '../../lib/MiradorManifest';
 import {
+  selectContentSearchAnnotations,
   setWorkspaceViewportPosition,
   updateWindow,
   setCanvas,
   fetchSearch,
 } from '../actions';
 import {
+  getSearchForWindow, getSearchAnnotationsForCompanionWindow,
   getCanvasGrouping, getWindow, getManifests, getManifestoInstance,
   getCompanionWindowIdsForPosition, getManifestSearchService,
   getWorkspace,
@@ -68,6 +70,28 @@ export function* setWindowDefaultSearchQuery(action) {
   }
 }
 
+/** */
+function* selectAnnotationsOnCurrentCanvas({ canvasIds, windowId }) {
+  const searches = yield select(getSearchForWindow, { windowId });
+
+  if (!searches) return;
+
+  const state = yield select(s => s);
+  const annotationBySearch = Object.keys(searches).reduce((accumulator, companionWindowId) => {
+    const annotations = getSearchAnnotationsForCompanionWindow(
+      state, { companionWindowId, windowId },
+    );
+    const resourceAnnotations = annotations.resources;
+    const hitAnnotation = resourceAnnotations.find(r => canvasIds.includes(r.targetId));
+
+    if (hitAnnotation) accumulator[companionWindowId] = [hitAnnotation.id];
+
+    return accumulator;
+  }, {});
+
+  yield put(selectContentSearchAnnotations(windowId, annotationBySearch));
+}
+
 /** @private */
 export function* panToFocusedWindow({ pan, windowId }) {
   if (!pan) return;
@@ -98,6 +122,7 @@ export default function* windowsSaga() {
   yield all([
     takeEvery(ActionTypes.ADD_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchWindowManifest),
+    takeEvery(ActionTypes.SET_CANVAS, selectAnnotationsOnCurrentCanvas),
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
     takeEvery(ActionTypes.FOCUS_WINDOW, panToFocusedWindow),
   ]);
