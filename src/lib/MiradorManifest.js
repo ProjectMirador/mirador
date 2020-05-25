@@ -35,4 +35,12 @@ export default class MiradorManifest {
 
     return (canvasId && sequence.getCanvasById(canvasId)) || undefined;
   }
+
+  /** */
+  canvasAt(index) {
+    const sequence = this.manifest.getSequences()[0];
+    const canvases = sequence && sequence.getCanvases();
+
+    return canvases && canvases[index];
+  }
 }
