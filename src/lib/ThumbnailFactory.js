@@ -178,10 +178,7 @@ class ThumbnailFactory {
     if (thumb) return thumb;
 
     const miradorManifest = new MiradorManifest(manifest);
-    const canvas = (
-      miradorManifest.startCanvas
-      || (manifest.getSequences()[0] && manifest.getSequences()[0].getCanvases()[0])
-    );
+    const canvas = miradorManifest.startCanvas || miradorManifest.canvasAt(0);
 
     return (canvas && this.getIIIFThumbnail(canvas))
       || this.getThumbnail(manifest, { quirksMode: true, requireIiif: false });
