@@ -26,7 +26,7 @@ export const getManifestStatus = createSelector(
 );
 
 /** Instantiate a manifesto instance */
-export const getManifestoInstance = createCachedSelector(
+const getContextualManifestoInstance = createCachedSelector(
   getManifest,
   getLocale,
   (manifest, locale) => manifest
@@ -40,6 +40,16 @@ export const getManifestoInstance = createCachedSelector(
       && state.companionWindows[props.companionWindowId].locale)
       || (state.config && state.config.language),
   ].join(' - '), // Cache key consisting of manifestId, windowId, and locale
+);
+
+/** Instantiate a manifesto instance */
+export const getManifestoInstance = createSelector(
+  getContextualManifestoInstance,
+  (state, { json }) => json,
+  getLocale,
+  (manifesto, manifestJson, locale) => (
+    manifestJson && createManifestoInstance(manifestJson, locale)
+  ) || manifesto,
 );
 
 export const getManifestLocale = createSelector(
