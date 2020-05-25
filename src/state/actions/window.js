@@ -60,7 +60,7 @@ export function addWindow({ companionWindows, ...options }) {
     if (config.window.defaultSideBarPanel) {
       defaultCompanionWindows.unshift(
         {
-          content: config.window.defaultSideBarPanel,
+          content: options.defaultSearchQuery ? 'search' : config.window.defaultSideBarPanel,
           default: true,
           id: `cw-${uuid()}`,
           position: 'left',
@@ -82,7 +82,7 @@ export function addWindow({ companionWindows, ...options }) {
       rangeId: null,
       rotation: null,
       selectedAnnotations: {},
-      sideBarOpen: config.window.sideBarOpenByDefault,
+      sideBarOpen: config.window.sideBarOpenByDefault || !!options.defaultSearchQuery,
       sideBarPanel: config.window.defaultSideBarPanel,
       thumbnailNavigationId: cwThumbs,
     };
