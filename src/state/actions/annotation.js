@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch';
 import ActionTypes from './action-types';
 
 /**
@@ -57,13 +56,7 @@ export function receiveAnnotationFailure(targetId, annotationId, error) {
  * @memberof ActionCreators
  */
 export function fetchAnnotation(targetId, annotationId) {
-  return ((dispatch) => {
-    dispatch(requestAnnotation(targetId, annotationId));
-    return fetch(annotationId)
-      .then(response => response.json())
-      .then(json => dispatch(receiveAnnotation(targetId, annotationId, json)))
-      .catch(error => dispatch(receiveAnnotationFailure(targetId, annotationId, error)));
-  });
+  return requestAnnotation(targetId, annotationId);
 }
 
 /**

@@ -1,7 +1,9 @@
 import { call, select } from 'redux-saga/effects';
 import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import {
+  fetchAnnotation,
   fetchManifest,
+  fetchSearchResponse,
   fetchInfoResponse,
   refetchInfoResponses,
   fetchResourceManifest,
@@ -183,6 +185,73 @@ describe('IIIF sagas', () => {
         ])
         .next()
         .put({ serviceId, type: 'mirador/CLEAR_ACCESS_TOKEN_QUEUE' });
+    });
+  });
+
+  describe('fetchSearchResponse', () => {
+    it('fetches a IIIF search', () => {
+      fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
+      const action = {
+        companionWindowId: 'companionWindowId',
+        query: 'q',
+        searchId: 'searchId',
+        windowId: 'windowId',
+      };
+
+      return expectSaga(fetchSearchResponse, action)
+        .put({
+          companionWindowId: 'companionWindowId',
+          searchId: 'searchId',
+          searchJson: { data: '12345' },
+          type: 'mirador/RECEIVE_SEARCH',
+          windowId: 'windowId',
+        })
+        .run();
+    });
+
+    it('handles failures', () => {
+      fetch.mockResponseOnce('<h1>Not Json</h1>');
+      const action = {
+        companionWindowId: 'companionWindowId',
+        query: 'q',
+        searchId: 'searchId',
+        windowId: 'windowId',
+      };
+
+      return expectSaga(fetchSearchResponse, action)
+        .put.actionType('mirador/RECEIVE_SEARCH_FAILURE')
+        .run();
+    });
+  });
+
+  describe('fetchAnnotation', () => {
+    it('fetches a IIIF annotation page', () => {
+      fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
+      const action = {
+        annotationId: 'annotationId',
+        targetId: 'targetId',
+      };
+
+      return expectSaga(fetchAnnotation, action)
+        .put({
+          annotationId: 'annotationId',
+          annotationJson: { data: '12345' },
+          targetId: 'targetId',
+          type: 'mirador/RECEIVE_ANNOTATION',
+        })
+        .run();
+    });
+
+    it('handles failures', () => {
+      fetch.mockResponseOnce('<h1>Not Json</h1>');
+      const action = {
+        annotationId: 'annotationId',
+        targetId: 'targetId',
+      };
+
+      return expectSaga(fetchAnnotation, action)
+        .put.actionType('mirador/RECEIVE_ANNOTATION_FAILURE')
+        .run();
     });
   });
 

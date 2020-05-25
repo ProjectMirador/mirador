@@ -8,6 +8,8 @@ import ActionTypes from '../actions/action-types';
 import {
   receiveManifest, receiveManifestFailure, receiveInfoResponse,
   receiveInfoResponseFailure, receiveDegradedInfoResponse,
+  receiveSearch, receiveSearchFailure,
+  receiveAnnotation, receiveAnnotationFailure,
 } from '../actions';
 import {
   getManifests,
@@ -142,6 +144,32 @@ export function* fetchInfoResponse({ imageResource, infoId, tokenService: passed
   yield call(fetchIiifResourceWithAuth, `${infoId.replace(/\/$/, '')}/info.json`, iiifResource, {}, callbacks);
 }
 
+/** @private */
+export function* fetchSearchResponse({
+  windowId, companionWindowId, query, searchId,
+}) {
+  const callbacks = {
+    failure: ({ error, json, response }) => (
+      receiveSearchFailure(windowId, companionWindowId, searchId, error)
+    ),
+    success: ({ json, response }) => receiveSearch(windowId, companionWindowId, searchId, json),
+  };
+  const dispatch = yield call(fetchIiifResource, searchId, {}, callbacks);
+  yield put(dispatch);
+}
+
+/** @private */
+export function* fetchAnnotation({ targetId, annotationId }) {
+  const callbacks = {
+    failure: ({ error, json, response }) => (
+      receiveAnnotationFailure(targetId, annotationId, error)
+    ),
+    success: ({ json, response }) => receiveAnnotation(targetId, annotationId, json),
+  };
+  const dispatch = yield call(fetchIiifResource, annotationId, {}, callbacks);
+  yield put(dispatch);
+}
+
 /** */
 export function* fetchResourceManifest({ manifestId }) {
   if (!manifestId) return;
@@ -172,6 +200,8 @@ export default function* iiifSaga() {
   yield all([
     takeEvery(ActionTypes.REQUEST_MANIFEST, fetchManifest),
     takeEvery(ActionTypes.REQUEST_INFO_RESPONSE, fetchInfoResponse),
+    takeEvery(ActionTypes.REQUEST_SEARCH, fetchSearchResponse),
+    takeEvery(ActionTypes.REQUEST_ANNOTATION, fetchAnnotation),
     takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchInfoResponses),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),
   ]);
