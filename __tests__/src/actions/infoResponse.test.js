@@ -40,22 +40,34 @@ describe('infoResponse actions', () => {
     });
     describe('success response', () => {
       beforeEach(() => {
-        fetch.mockResponseOnce(JSON.stringify({ data: '12345' })); // eslint-disable-line no-undef
+        fetch.mockResponseOnce(JSON.stringify({ id: 'someUrl' })); // eslint-disable-line no-undef
       });
       it('dispatches the REQUEST_INFO_RESPONSE action', () => {
-        store.dispatch(actions.fetchInfoResponse({ imageId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000' }));
+        store.dispatch(actions.fetchInfoResponse({ imageId: 'someUrl' }));
         expect(store.getActions()).toEqual([
-          { infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', type: 'mirador/REQUEST_INFO_RESPONSE' },
+          { infoId: 'someUrl', type: 'mirador/REQUEST_INFO_RESPONSE' },
         ]);
       });
       it('dispatches the REQUEST_INFO_RESPONSE and then RECEIVE_INFO_RESPONSE', () => {
-        store.dispatch(actions.fetchInfoResponse({ imageId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000' }))
+        store.dispatch(actions.fetchInfoResponse({ imageId: 'someUrl' }))
           .then(() => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
-              { infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', type: 'mirador/REQUEST_INFO_RESPONSE' },
+              { infoId: 'someUrl', type: 'mirador/REQUEST_INFO_RESPONSE' },
               {
-                infoId: 'https://stacks.stanford.edu/image/iiif/sn904cj3429%2F12027000', infoJson: { data: '12345' }, ok: true, type: 'mirador/RECEIVE_INFO_RESPONSE',
+                infoId: 'someUrl', infoJson: { id: 'someUrl' }, ok: true, type: 'mirador/RECEIVE_INFO_RESPONSE',
+              },
+            ]);
+          });
+      });
+      it('dispatches the REQUEST_INFO_RESPONSE and then RECEIVE_DEGRADED_INFO_RESPONSE', () => {
+        store.dispatch(actions.fetchInfoResponse({ imageId: 'someRedirectedUrl' }))
+          .then(() => {
+            const expectedActions = store.getActions();
+            expect(expectedActions).toEqual([
+              { infoId: 'someRedirectedUrl', type: 'mirador/REQUEST_INFO_RESPONSE' },
+              {
+                infoId: 'someRedirectedUrl', infoJson: { id: 'someUrl' }, ok: true, type: 'mirador/RECEIVE_DEGRADED_INFO_RESPONSE',
               },
             ]);
           });
@@ -64,7 +76,7 @@ describe('infoResponse actions', () => {
         store = mockStore({
           accessTokens: { a_token_service: { json: { accessToken: 'TOKEN' } } },
           infoResponses: {
-            a: {
+            someUrl: {
               isFetching: false,
               json: {
                 service: {
@@ -79,13 +91,13 @@ describe('infoResponse actions', () => {
           },
         });
         // TODO: I've got no idea how to test if we used an acceess token
-        store.dispatch(actions.fetchInfoResponse({ imageId: 'a' }))
+        store.dispatch(actions.fetchInfoResponse({ imageId: 'someUrl' }))
           .then(() => {
             const expectedActions = store.getActions();
             expect(expectedActions).toEqual([
-              { infoId: 'a', type: 'mirador/REQUEST_INFO_RESPONSE' },
+              { infoId: 'someUrl', type: 'mirador/REQUEST_INFO_RESPONSE' },
               {
-                infoId: 'a', infoJson: { data: '12345' }, ok: true, type: 'mirador/RECEIVE_INFO_RESPONSE',
+                infoId: 'someUrl', infoJson: { id: 'someUrl' }, ok: true, type: 'mirador/RECEIVE_INFO_RESPONSE',
               },
             ]);
           });

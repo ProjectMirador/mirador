@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-unfetch';
+import normalizeUrl from 'normalize-url';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ActionTypes from './action-types';
 
@@ -29,6 +30,23 @@ export function receiveInfoResponse(infoId, infoJson, ok, tokenServiceId) {
     ok,
     tokenServiceId,
     type: ActionTypes.RECEIVE_INFO_RESPONSE,
+  };
+}
+
+/**
+ * receiveDegradedInfoResponse - action creator
+ *
+ * @param  {String} infoId
+ * @param  {Object} manifestJson
+ * @memberof ActionCreators
+ */
+export function receiveDegradedInfoResponse(infoId, infoJson, ok, tokenServiceId) {
+  return {
+    infoId,
+    infoJson,
+    ok,
+    tokenServiceId,
+    type: ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE,
   };
 }
 
@@ -95,7 +113,13 @@ export function fetchInfoResponse({ imageId, imageResource }) {
     const tokenServiceId = tokenService && tokenService.id;
     return fetch(`${infoId.replace(/\/$/, '')}/info.json`, { headers })
       .then(response => response.json().then(json => ({ json, ok: response.ok })))
-      .then(({ json, ok }) => dispatch(receiveInfoResponse(infoId, json, ok, tokenServiceId)))
+      .then(({ json, ok }) => {
+        if (ok && normalizeUrl(infoId, { stripAuthentication: false }) === normalizeUrl(json.id || json['@id'], { stripAuthentication: false })) {
+          dispatch(receiveInfoResponse(infoId, json, ok, tokenServiceId));
+        } else {
+          dispatch(receiveDegradedInfoResponse(infoId, json, ok, tokenServiceId));
+        }
+      })
       .catch(error => dispatch(receiveInfoResponseFailure(infoId, error, tokenServiceId)));
   });
 }

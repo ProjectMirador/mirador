@@ -2,16 +2,7 @@ import { accessTokensReducer } from '../../../src/state/reducers/accessTokens';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('access tokens response reducer', () => {
-  describe('should handle RECEIVE_INFO_RESPONSE', () => {
-    it('does nothing if the response is not degraded', () => {
-      expect(accessTokensReducer({}, {
-        infoId: 'http://example.com',
-        infoJson: {
-          '@id': 'http://example.com',
-        },
-        type: ActionTypes.RECEIVE_INFO_RESPONSE,
-      })).toEqual({});
-    });
+  describe('should handle RECEIVE_DEGRADED_INFO_RESPONSE', () => {
     it('does nothing for a kiosk service', () => {
       expect(accessTokensReducer({}, {
         infoId: 'http://example.com',
@@ -21,7 +12,7 @@ describe('access tokens response reducer', () => {
             profile: 'http://iiif.io/api/auth/1/kiosk',
           },
         },
-        type: ActionTypes.RECEIVE_INFO_RESPONSE,
+        type: ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE,
       })).toEqual({});
     });
     it('does nothing if a external request for that token service is in flight', () => {
@@ -44,7 +35,7 @@ describe('access tokens response reducer', () => {
               },
             },
           },
-          type: ActionTypes.RECEIVE_INFO_RESPONSE,
+          type: ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE,
         },
       )).toEqual({ token: { isFetching: true } });
     });
@@ -65,7 +56,7 @@ describe('access tokens response reducer', () => {
             },
           },
           ok: false,
-          type: ActionTypes.RECEIVE_INFO_RESPONSE,
+          type: ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE,
         },
       )).toEqual({
         token: {

@@ -2,16 +2,7 @@ import { authReducer } from '../../../src/state/reducers/auth';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('auth response reducer', () => {
-  describe('should handle RECEIVE_INFO_RESPONSE', () => {
-    it('does nothing if the response is not degraded', () => {
-      expect(authReducer({}, {
-        infoId: 'http://example.com',
-        infoJson: {
-          '@id': 'http://example.com',
-        },
-        type: ActionTypes.RECEIVE_INFO_RESPONSE,
-      })).toEqual({});
-    });
+  describe('should handle RECEIVE_DEGRADED_INFO_RESPONSE', () => {
     it('does nothing for a login service', () => {
       expect(authReducer({}, {
         infoId: 'http://example.com',
@@ -21,7 +12,7 @@ describe('auth response reducer', () => {
             profile: 'http://iiif.io/api/auth/1/login',
           },
         },
-        type: ActionTypes.RECEIVE_INFO_RESPONSE,
+        type: ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE,
       })).toEqual({});
     });
     it('does nothing if a kiosk/external request for that service is in flight', () => {
@@ -40,7 +31,7 @@ describe('auth response reducer', () => {
               profile: 'http://iiif.io/api/auth/1/kiosk',
             },
           },
-          type: ActionTypes.RECEIVE_INFO_RESPONSE,
+          type: ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE,
         },
       )).toEqual({ auth: { isFetching: true } });
     });
@@ -57,7 +48,7 @@ describe('auth response reducer', () => {
             },
           },
           ok: false,
-          type: ActionTypes.RECEIVE_INFO_RESPONSE,
+          type: ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE,
         },
       )).toEqual({
         auth: {
