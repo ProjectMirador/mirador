@@ -8,6 +8,7 @@ import * as actions from '../state/actions';
 import {
   filterValidPlugins,
   getReducersFromPlugins,
+  getSagasFromPlugins,
 } from '../extend/pluginPreprocessing';
 import { getCompanionWindowIdsForPosition, getManifestSearchService } from '../state/selectors';
 
@@ -21,7 +22,7 @@ class MiradorViewer {
     this.config = config;
     this.plugins = filterValidPlugins(viewerConfig.plugins || []);
     this.store = viewerConfig.store
-      || createStore(getReducersFromPlugins(this.plugins));
+      || createStore(getReducersFromPlugins(this.plugins), getSagasFromPlugins(this.plugins));
     this.processConfig();
 
     const viewer = {
