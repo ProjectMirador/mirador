@@ -6,7 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { Window } from '../components/Window';
 import {
-  getManifest, getManifestTitle, getThumbnailNavigationPosition, getWindow,
+  getManifest, getManifestStatus, getManifestTitle, getThumbnailNavigationPosition, getWindow,
   getWorkspaceType, getWindowDraggability, getWindowViewType,
 } from '../state/selectors';
 
@@ -17,6 +17,7 @@ import {
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
+  isFetching: getManifestStatus(state, { windowId }).isFetching,
   label: getManifestTitle(state, { windowId }),
   manifest: getManifest(state, { windowId }),
   manifestId: (getWindow(state, { windowId }) || {}).manifestId,

@@ -44,14 +44,13 @@ export class Window extends Component {
    */
   wrappedTopBar() {
     const {
-      manifest, windowId, workspaceType, windowDraggable,
+      windowId, workspaceType, windowDraggable,
     } = this.props;
 
     const topBar = (
       <div>
         <WindowTopBar
           windowId={windowId}
-          manifest={manifest}
           windowDraggable={windowDraggable}
         />
         <WindowAuthenticationControl key="auth" windowId={windowId} />
@@ -71,7 +70,7 @@ export class Window extends Component {
    */
   render() {
     const {
-      focusWindow, label, manifest, maximized, sideBarOpen, view, windowId, classes, t,
+      focusWindow, label, isFetching, maximized, sideBarOpen, view, windowId, classes, t,
     } = this.props;
 
     const { error, hasError } = this.state;
@@ -102,7 +101,7 @@ export class Window extends Component {
               <PrimaryWindow
                 view={view}
                 windowId={windowId}
-                manifest={manifest}
+                isFetching={isFetching}
                 sideBarOpen={sideBarOpen}
               />
             </div>
@@ -128,6 +127,7 @@ Window.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   fetchManifest: PropTypes.func.isRequired,
   focusWindow: PropTypes.func,
+  isFetching: PropTypes.bool,
   label: PropTypes.string,
   manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   manifestId: PropTypes.string,
@@ -143,6 +143,7 @@ Window.propTypes = {
 Window.defaultProps = {
   classes: {},
   focusWindow: () => {},
+  isFetching: false,
   label: null,
   manifest: null,
   manifestId: undefined,

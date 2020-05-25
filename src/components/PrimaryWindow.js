@@ -18,8 +18,8 @@ export class PrimaryWindow extends Component {
    * @return {(String|null)}
    */
   renderViewer() {
-    const { manifest, view, windowId } = this.props;
-    if (manifest && manifest.isFetching === false) {
+    const { isFetching, view, windowId } = this.props;
+    if (isFetching === false) {
       if (view === 'gallery') {
         return (
           <GalleryView
@@ -53,12 +53,12 @@ export class PrimaryWindow extends Component {
 
 PrimaryWindow.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  isFetching: PropTypes.bool,
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,
 };
 
 PrimaryWindow.defaultProps = {
-  manifest: null,
+  isFetching: false,
   view: undefined,
 };
