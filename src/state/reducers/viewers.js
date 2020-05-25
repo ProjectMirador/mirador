@@ -1,4 +1,4 @@
-import { setIn } from 'immutable';
+import { removeIn, setIn } from 'immutable';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -14,12 +14,7 @@ export const viewersReducer = (state = {}, action) => {
         },
       };
     case ActionTypes.REMOVE_WINDOW:
-      return Object.keys(state).reduce((object, key) => {
-        if (key !== action.windowId) {
-          object[key] = state[key]; // eslint-disable-line no-param-reassign
-        }
-        return object;
-      }, {});
+      return removeIn(state, [action.windowId]);
     case ActionTypes.SET_WINDOW_VIEW_TYPE:
       return setIn(state, [action.windowId], null);
     case ActionTypes.SET_CANVAS:

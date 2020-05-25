@@ -1,4 +1,6 @@
-import { remove, updateIn, merge } from 'immutable';
+import {
+  remove, removeIn, updateIn, merge,
+} from 'immutable';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ActionTypes from '../actions/action-types';
 import MiradorManifest from '../../lib/MiradorManifest';
@@ -61,12 +63,7 @@ export const windowsReducer = (state = {}, action) => {
       return updateIn(state, [action.id], orig => merge(orig, action.payload));
 
     case ActionTypes.REMOVE_WINDOW:
-      return Object.keys(state).reduce((object, key) => {
-        if (key !== action.windowId) {
-          object[key] = state[key]; // eslint-disable-line no-param-reassign
-        }
-        return object;
-      }, {});
+      return removeIn(state, [action.windowId]);
     case ActionTypes.TOGGLE_WINDOW_SIDE_BAR:
       return {
         ...state,
