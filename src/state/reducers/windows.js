@@ -116,28 +116,14 @@ export const windowsReducer = (state = {}, action) => {
         selectedContentSearchAnnotation: action.selectedContentSearchAnnotation,
       }));
     case ActionTypes.ADD_COMPANION_WINDOW:
-      if (action.payload.position === 'left') {
-        const { companionWindowIds } = state[action.windowId];
-        const { companionWindows } = action;
-        const newCompanionWindowIds = companionWindowIds
-          .filter(id => companionWindows[id].position !== action.payload.position);
-
-        return {
-          ...state,
-          [action.windowId]: {
-            ...state[action.windowId],
-            companionAreaOpen: true,
-            companionWindowIds: newCompanionWindowIds.concat([action.id]),
-            sideBarPanel: action.payload.content,
-          },
-        };
-      }
-
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
           companionWindowIds: state[action.windowId].companionWindowIds.concat([action.id]),
+          ...(action.payload.position === 'left'
+            ? { companionAreaOpen: true, sideBarPanel: action.payload.content }
+            : {}),
         },
       };
     case ActionTypes.UPDATE_COMPANION_WINDOW:

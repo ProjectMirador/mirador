@@ -9,17 +9,15 @@ const defaultProps = {
 
 /** */
 export function addCompanionWindow(windowId, payload, defaults = defaultProps) {
-  return (dispatch, getState) => {
-    const { companionWindows } = getState();
-    const id = `cw-${uuid()}`;
+  const id = `cw-${uuid()}`;
 
-    dispatch({
-      companionWindows,
-      id,
-      payload: { ...defaults, ...payload, id },
-      type: ActionTypes.ADD_COMPANION_WINDOW,
-      windowId,
-    });
+  return {
+    id,
+    payload: {
+      ...defaults, ...payload, id, windowId,
+    },
+    type: ActionTypes.ADD_COMPANION_WINDOW,
+    windowId,
   };
 }
 

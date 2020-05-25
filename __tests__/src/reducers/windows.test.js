@@ -277,16 +277,13 @@ describe('windows reducer', () => {
       },
     });
 
-    // on the left, replaces all ids of windows in that position and sets some additional properties
+    // on the left, sets some additional properties
     expect(windowsReducer({
       abc123: {
-        companionWindowIds: ['left123'],
+        companionWindowIds: [],
         id: 'abc123',
       },
     }, {
-      companionWindows: {
-        left123: { position: 'left' },
-      },
       id: 'xyz',
       payload: {
         content: 'content',
