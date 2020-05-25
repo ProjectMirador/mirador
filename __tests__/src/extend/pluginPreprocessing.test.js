@@ -27,16 +27,16 @@ describe('filterValidPlugins', () => {
         target: 'Window',
       },
       {
+        mode: 'wrap',
         name: 'invalid Plugin 1',
       },
       {
         name: 'invalid Plugin 2',
+        target: 'missing-mode',
       },
     ];
     const result = filterValidPlugins(plugins);
-    expect(result.length).toBe(2);
-    expect(result[0].name).toBe('valid plugin 1');
-    expect(result[1].name).toBe('valid plugin 2');
+    expect(result.map(r => r.name)).toEqual(['valid plugin 1', 'valid plugin 2']);
   });
 });
 

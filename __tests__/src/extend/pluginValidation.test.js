@@ -22,7 +22,7 @@ describe('validatePlugin', () => {
   });
 
   it('plugin must be a object', () => {
-    const plugin = [];
+    const plugin = 'some string';
     expect(validatePlugin(plugin)).toBe(false);
   });
 
@@ -36,17 +36,17 @@ describe('validatePlugin', () => {
   });
 
   it('target must be string', () => {
-    let plugin = createPlugin({ target: undefined });
+    let plugin = createPlugin({ mode: 'add', target: undefined });
     expect(validatePlugin(plugin)).toBe(false);
-    plugin = createPlugin({ target: 'test' });
+    plugin = createPlugin({ mode: 'add', target: 'test' });
     expect(validatePlugin(plugin)).toBe(true);
-    plugin = createPlugin({ target: [] });
+    plugin = createPlugin({ mode: 'add', target: [] });
     expect(validatePlugin(plugin)).toBe(false);
   });
 
-  it('mode must be "add" or "wrap"', () => {
-    let plugin = createPlugin({ mode: undefined });
-    expect(validatePlugin(plugin)).toBe(false);
+  it('mode must be missing, "add" or "wrap"', () => {
+    let plugin = createPlugin({ mode: undefined, target: undefined });
+    expect(validatePlugin(plugin)).toBe(true);
     plugin = createPlugin({ mode: 'somethink' });
     expect(validatePlugin(plugin)).toBe(false);
     plugin = createPlugin({ mode: 'add' });

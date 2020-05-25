@@ -27,14 +27,16 @@ const checkName = (plugin) => {
 
 /** */
 const checkTarget = (plugin) => {
-  const { target } = plugin;
+  const { mode, target } = plugin;
+  if (isUndefined(mode)) return isUndefined(target);
+
   return isString(target);
 };
 
 /** */
 const checkMode = (plugin) => {
   const { mode } = plugin;
-  return ['add', 'wrap'].some(s => s === mode);
+  return isUndefined(mode) || ['add', 'wrap'].some(s => s === mode);
 };
 
 /** */

@@ -1,7 +1,6 @@
 import React, { Component, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import PluginProvider from '../extend/PluginProvider';
-import createRootReducer from '../state/reducers/rootReducer';
 import AppProviders from '../containers/AppProviders';
 import AuthenticationSender from '../containers/AuthenticationSender';
 import AccessTokenSender from '../containers/AccessTokenSender';
@@ -21,7 +20,7 @@ export class App extends Component {
     const { plugins } = this.props;
 
     return (
-      <PluginProvider plugins={plugins} createRootReducer={createRootReducer}>
+      <PluginProvider plugins={plugins}>
         <AppProviders>
           <AuthenticationSender />
           <AccessTokenSender />

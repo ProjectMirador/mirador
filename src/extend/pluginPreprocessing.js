@@ -76,6 +76,6 @@ function connectPluginComponent(plugin) {
 }
 
 /**  */
-function getReducersFromPlugins(plugins) {
+export function getReducersFromPlugins(plugins) {
   return plugins && plugins.reduce((acc, plugin) => ({ ...acc, ...plugin.reducers }), {});
 }
