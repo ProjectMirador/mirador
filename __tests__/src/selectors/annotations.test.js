@@ -108,8 +108,8 @@ describe('getAnnotationResourcesByMotivation', () => {
       },
       windows: {
         abc123: {
-          canvasIndex: 0,
           manifestId: 'mid',
+          visibleCanvases: ['cid1'],
         },
       },
     };
@@ -149,6 +149,7 @@ it('getSelectedAnnotationIds returns an array of selected annotation IDs from st
           tid1: ['aid1', 'aid2'],
           tid2: ['aid3'],
         },
+        visibleCanvases: ['tid1'],
       },
     },
   };
@@ -186,7 +187,7 @@ describe('getHighlightedAnnotationsOnCanvases', () => {
         },
       },
       windows: {
-        abc123: { canvasIndex: 0, displayAllAnnotations: true, manifestId: 'mid' },
+        abc123: { displayAllAnnotations: true, manifestId: 'mid', visibleCanvases: ['cid1'] },
       },
     };
 
@@ -223,10 +224,10 @@ describe('getHighlightedAnnotationsOnCanvases', () => {
       },
       windows: {
         abc123: {
-          canvasIndex: 0,
           displayAllAnnotations: false,
           highlightedAnnotation: 'annoId1',
           manifestId: 'mid',
+          visibleCanvases: ['cid1'],
         },
       },
     };
@@ -263,7 +264,7 @@ describe('getHighlightedAnnotationsOnCanvases', () => {
         },
       },
       windows: {
-        abc123: { canvasIndex: 0, highlightedAnnotation: 'annoId2', manifestId: 'mid' },
+        abc123: { highlightedAnnotation: 'annoId2', manifestId: 'mid', visibleCanvases: ['cid1'] },
       },
     };
 

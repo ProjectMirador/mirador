@@ -4,11 +4,12 @@ import {
 import ActionTypes from '../actions/action-types';
 import MiradorManifest from '../../lib/MiradorManifest';
 import {
+  updateWindow,
   setCanvas,
   fetchSearch,
 } from '../actions';
 import {
-  getManifests, getManifestoInstance,
+  getCanvasGrouping, getWindow, getManifests, getManifestoInstance,
   getCompanionWindowIdsForPosition, getManifestSearchService,
 } from '../selectors';
 import { fetchManifest } from './iiif';
@@ -64,10 +65,18 @@ export function* setWindowDefaultSearchQuery(action) {
   }
 }
 
+/** @private */
+export function* updateVisibleCanvases({ windowId }) {
+  const { canvasId } = yield select(getWindow, { windowId });
+  const visibleCanvases = yield select(getCanvasGrouping, { canvasId, windowId });
+  yield put(updateWindow(windowId, { visibleCanvases: (visibleCanvases || []).map(c => c.id) }));
+}
+
 /** */
 export default function* windowsSaga() {
   yield all([
     takeEvery(ActionTypes.ADD_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchWindowManifest),
+    takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
   ]);
 }
