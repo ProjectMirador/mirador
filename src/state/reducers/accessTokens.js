@@ -1,4 +1,3 @@
-import normalizeUrl from 'normalize-url';
 import { removeIn } from 'immutable';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ActionTypes from '../actions/action-types';
@@ -9,9 +8,7 @@ export function accessTokensReducer(state = {}, action) {
   let tokenService;
 
   switch (action.type) {
-    case ActionTypes.RECEIVE_INFO_RESPONSE:
-      if (action.ok && normalizeUrl(action.infoId, { stripAuthentication: false }) === normalizeUrl(action.infoJson.id || action.infoJson['@id'], { stripAuthentication: false })) return state;
-
+    case ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE:
       authService = Utils.getService({ ...action.infoJson, options: {} }, 'http://iiif.io/api/auth/1/external');
       if (!authService) return state;
 
