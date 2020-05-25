@@ -189,14 +189,19 @@ export const getVisibleCanvasNonTiledResources = createSelector(
 
 export const selectInfoResponse = createSelector(
   [
+    (state, { infoId }) => infoId,
     getCanvas,
     selectInfoResponses,
   ],
-  (canvas, infoResponses) => {
-    if (!canvas) return undefined;
-    const miradorCanvas = new MiradorCanvas(canvas);
-    const image = miradorCanvas.iiifImageResources[0];
-    const iiifServiceId = image && image.getServices()[0].id;
+  (infoId, canvas, infoResponses) => {
+    let iiifServiceId = infoId;
+
+    if (!infoId) {
+      if (!canvas) return undefined;
+      const miradorCanvas = new MiradorCanvas(canvas);
+      const image = miradorCanvas.iiifImageResources[0];
+      iiifServiceId = image && image.getServices()[0].id;
+    }
 
     return iiifServiceId && infoResponses[iiifServiceId]
     && !infoResponses[iiifServiceId].isFetching
