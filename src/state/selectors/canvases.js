@@ -90,7 +90,7 @@ export const getCanvasGrouping = createSelector(
     getCanvasGroupings,
     (state, { canvasId }) => canvasId,
   ],
-  (groupings, canvasId, view) => (groupings
+  (groupings, canvasId) => (groupings
       && groupings.find(group => group.some(c => c.id === canvasId))) || [],
 );
 
