@@ -113,7 +113,7 @@ export const windowsReducer = (state = {}, action) => {
     case ActionTypes.SET_CANVAS:
       return updateIn(state, [action.windowId], orig => merge(orig, {
         canvasId: action.canvasId,
-        selectedContentSearchAnnotation: action.selectedContentSearchAnnotation,
+        visibleCanvases: action.visibleCanvases || [],
       }));
     case ActionTypes.ADD_COMPANION_WINDOW:
       return {
@@ -152,6 +152,14 @@ export const windowsReducer = (state = {}, action) => {
           ...state[action.windowId],
           canvasId: action.canvasId,
           selectedContentSearchAnnotation: action.annotationId,
+        },
+      };
+    case ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATIONS:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          selectedContentSearchAnnotation: Object.values(action.annotationsBySearch)[0],
         },
       };
     case ActionTypes.SELECT_ANNOTATION:

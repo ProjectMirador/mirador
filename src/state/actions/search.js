@@ -139,3 +139,8 @@ export function selectContentSearchAnnotation(windowId, companionWindowId, annot
     });
   };
 }
+
+/** */
+export function selectContentSearchAnnotations(windowId, annotationsBySearch) {
+  return { annotationsBySearch, type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATIONS, windowId };
+}

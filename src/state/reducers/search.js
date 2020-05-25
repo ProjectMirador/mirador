@@ -105,16 +105,14 @@ export const searchesReducer = (state = {}, action) => {
           },
         },
       };
-    case ActionTypes.SET_CANVAS:
-      if (Object.keys(action.searches).length === 0) return state;
-
+    case ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATIONS:
       return {
         ...state,
         [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
-          if (Object.keys(action.searches).includes(key)) {
+          if (Object.keys(action.annotationsBySearch).includes(key)) {
             object[key] = { // eslint-disable-line no-param-reassign
               ...state[action.windowId][key],
-              selectedContentSearchAnnotation: action.searches[key],
+              selectedContentSearchAnnotation: action.annotationsBySearch[key],
             };
           }
           return object;
