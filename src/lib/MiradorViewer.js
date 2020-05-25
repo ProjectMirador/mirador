@@ -5,6 +5,10 @@ import { v4 as uuid } from 'uuid';
 import { App } from '../components/App';
 import createStore from '../state/createStore';
 import * as actions from '../state/actions';
+import {
+  filterValidPlugins,
+  getReducersFromPlugins,
+} from '../extend/pluginPreprocessing';
 import { getCompanionWindowIdsForPosition, getManifestSearchService } from '../state/selectors';
 
 /**
@@ -15,8 +19,9 @@ class MiradorViewer {
    */
   constructor(config, viewerConfig = {}) {
     this.config = config;
-    this.plugins = viewerConfig.plugins || [];
-    this.store = viewerConfig.store || createStore();
+    this.plugins = filterValidPlugins(viewerConfig.plugins || []);
+    this.store = viewerConfig.store
+      || createStore(getReducersFromPlugins(this.plugins));
     this.processConfig();
 
     const viewer = {
