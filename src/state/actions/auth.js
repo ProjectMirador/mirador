@@ -1,6 +1,5 @@
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ActionTypes from './action-types';
-import { fetchInfoResponse } from './infoResponse';
 
 /**
  * addAuthenticationRequest - action creator
@@ -10,10 +9,11 @@ import { fetchInfoResponse } from './infoResponse';
  * @param  {String} id
  * @memberof ActionCreators
  */
-export function addAuthenticationRequest(windowId, infoId, id) {
+export function addAuthenticationRequest(windowId, infoId, id, profile = undefined) {
   return {
     id,
     infoId,
+    profile,
     type: ActionTypes.ADD_AUTHENTICATION_REQUEST,
     windowId,
   };
@@ -59,7 +59,7 @@ export function requestAccessToken(serviceId, authId, infoIds) {
  * @param  {Object} json
  * @memberof ActionCreators
  */
-export function receiveAccessToken(serviceId, json) {
+export function receiveAccessToken(serviceId, json, infoIds) {
   return {
     json,
     serviceId,
@@ -111,7 +111,7 @@ export function fetchAccessTokenRequest(id, infoIds, providedServices = undefine
  */
 export function resolveAccessTokenRequest({ messageId, ...json }) {
   return ((dispatch, getState) => {
-    const { authId, infoIds } = getState().accessTokens[messageId];
+    const { authId } = getState().accessTokens[messageId];
 
     dispatch({
       id: authId,
@@ -121,7 +121,6 @@ export function resolveAccessTokenRequest({ messageId, ...json }) {
 
     if (json.accessToken) {
       dispatch(receiveAccessToken(messageId, json));
-      infoIds.forEach(imageId => dispatch(fetchInfoResponse({ imageId })));
     } else {
       dispatch(receiveAccessTokenFailure(messageId, json));
     }

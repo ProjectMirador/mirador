@@ -139,7 +139,6 @@ describe('auth actions', () => {
       expect(store.getActions()).toEqual([
         { id: authId, ok: true, type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST },
         { json, serviceId: messageId, type: ActionTypes.RECEIVE_ACCESS_TOKEN },
-        { infoId, type: ActionTypes.REQUEST_INFO_RESPONSE },
       ]);
     });
 
