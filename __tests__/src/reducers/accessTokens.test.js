@@ -83,7 +83,7 @@ describe('access tokens response reducer', () => {
       },
     });
   });
-  it('should handle RECEIVE_INFO_RESPONSE', () => {
+  it('should handle RECEIVE_ACCESS_TOKEN', () => {
     expect(accessTokensReducer(
       {
         abc123: {
@@ -99,7 +99,6 @@ describe('access tokens response reducer', () => {
     )).toMatchObject({
       abc123: {
         id: 'abc123',
-        infoIds: [],
         isFetching: false,
         json: { data: true },
       },
