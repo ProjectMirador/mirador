@@ -30,14 +30,6 @@ export class Window extends Component {
     return { error, hasError: true };
   }
 
-  /** */
-  componentDidMount(prevProps) {
-    const { fetchManifest, manifest, manifestId } = this.props;
-    if (manifestId && (!manifest || !manifest.isFetching)) {
-      fetchManifest(manifestId);
-    }
-  }
-
   /**
    * wrappedTopBar - will conditionally wrap a WindowTopBar for needed
    * additional functionality based on workspace type
@@ -125,12 +117,9 @@ Window.contextType = MosaicWindowContext;
 
 Window.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
-  fetchManifest: PropTypes.func.isRequired,
   focusWindow: PropTypes.func,
   isFetching: PropTypes.bool,
   label: PropTypes.string,
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  manifestId: PropTypes.string,
   maximized: PropTypes.bool,
   sideBarOpen: PropTypes.bool,
   t: PropTypes.func.isRequired,
@@ -145,8 +134,6 @@ Window.defaultProps = {
   focusWindow: () => {},
   isFetching: false,
   label: null,
-  manifest: null,
-  manifestId: undefined,
   maximized: false,
   sideBarOpen: false,
   view: undefined,

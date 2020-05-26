@@ -1,23 +1,7 @@
 import {
   remove, removeIn, updateIn, merge,
 } from 'immutable';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ActionTypes from '../actions/action-types';
-import MiradorManifest from '../../lib/MiradorManifest';
-
-/** */
-function getStartingCanvas(json, { canvasIndex }) {
-  const manifest = Utils.parseManifest(json);
-  if (!manifest) return undefined;
-
-  if (canvasIndex !== undefined) {
-    return manifest.getSequences()[0].getCanvasByIndex(canvasIndex);
-  }
-
-  const miradorManifest = new MiradorManifest(manifest);
-
-  return miradorManifest.startCanvas;
-}
 
 /**
  * windowsReducer
@@ -27,21 +11,6 @@ export const windowsReducer = (state = {}, action) => {
     case ActionTypes.ADD_WINDOW:
       return { ...state, [action.window.id]: action.window };
 
-    case ActionTypes.RECEIVE_MANIFEST:
-      return Object.keys(state).reduce((object, key) => {
-        if (state[key].manifestId === action.manifestId) {
-          object[key] = { // eslint-disable-line no-param-reassign
-            ...state[key],
-            canvasId: state[key].canvasId
-              || (getStartingCanvas(action.manifestJson, state[key]) || {}).id,
-            canvasIndex: undefined,
-          };
-        } else {
-          object[key] = state[key]; // eslint-disable-line no-param-reassign
-        }
-
-        return object;
-      }, {});
     case ActionTypes.MAXIMIZE_WINDOW:
       return {
         ...state,

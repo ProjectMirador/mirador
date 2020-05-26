@@ -10,6 +10,10 @@ function createManifestoInstance(json, locale) {
   return Utils.parseManifest(json, locale ? { locale } : undefined);
 }
 
+/** */
+export function getManifests(state) {
+  return state.manifests || {};
+}
 
 /** Get the relevant manifest information */
 export function getManifest(state, { manifestId, windowId }) {

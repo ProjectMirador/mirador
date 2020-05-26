@@ -7,6 +7,10 @@ jest.mock('isomorphic-unfetch', () => jest.fn(() => Promise.resolve({ json: () =
 
 jest.mock('../../../src/state/selectors', () => ({
   getCompanionWindowIdsForPosition: () => ['cwid'],
+  getManifestoInstance: () => {},
+  getManifests: () => (
+    { 'https://iiif.harvardartmuseums.org/manifests/object/299843': { isFetching: true } }
+  ),
   getManifestSearchService: () => ({ id: 'http://example.com/search' }),
 }));
 
@@ -30,10 +34,10 @@ describe('MiradorViewer', () => {
   describe('processConfig', () => {
     it('transforms config values to actions to dispatch to store', () => {
       instance = new MiradorViewer({
+        catalog: [
+          { manifestId: 'http://media.nga.gov/public/manifests/nga_highlights.json', provider: 'National Gallery of Art' },
+        ],
         id: 'mirador',
-        manifests: {
-          'http://media.nga.gov/public/manifests/nga_highlights.json': { provider: 'National Gallery of Art' },
-        },
         windows: [
           {
             canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
@@ -47,7 +51,7 @@ describe('MiradorViewer', () => {
         ],
       });
 
-      const { windows, manifests } = instance.store.getState();
+      const { windows, catalog } = instance.store.getState();
       const windowIds = Object.keys(windows);
       expect(Object.keys(windowIds).length).toBe(2);
       expect(windows[windowIds[0]].canvasId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892');
@@ -59,34 +63,9 @@ describe('MiradorViewer', () => {
       expect(windows[windowIds[0]].view).toBe(undefined);
       expect(windows[windowIds[1]].view).toBe('book');
 
-      const manifestIds = Object.keys(manifests);
-      expect(Object.keys(manifestIds).length).toBe(2);
-      expect(manifests['http://media.nga.gov/public/manifests/nga_highlights.json'].provider).toBe('National Gallery of Art');
-    });
-
-    /** */
-    function flushPromises() {
-      return new Promise(resolve => setImmediate(resolve));
-    }
-
-    it('dispatches pre-configured searches', async () => {
-      instance = new MiradorViewer({
-        id: 'mirador',
-        windows: [
-          {
-            defaultSearchQuery: 'NSF',
-            manifestId: 'https://purl.stanford.edu/fg165hz3589/iiif/manifest',
-          },
-        ],
-      });
-
-      await flushPromises();
-
-      const { searches, windows } = instance.store.getState();
-      const windowIds = Object.keys(windows);
-      const searchWindowIds = Object.keys(searches);
-      expect(Object.keys(searchWindowIds).length).toBe(1);
-      expect(searches[windowIds[0]].cwid.query).toBe('NSF');
+      expect(catalog.length).toBe(1);
+      expect(catalog[0].manifestId).toBe('http://media.nga.gov/public/manifests/nga_highlights.json');
+      expect(catalog[0].provider).toBe('National Gallery of Art');
     });
   });
 });
