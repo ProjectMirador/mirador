@@ -13,7 +13,6 @@ function createWrapper(props, context) {
       manifestId="foo"
       classes={{}}
       t={k => k}
-      fetchManifest={() => {}}
       {...props}
     />,
     { context },
@@ -37,11 +36,6 @@ describe('Window', () => {
   it('renders <WindowAuthenticationControl>', () => {
     wrapper = createWrapper();
     expect(wrapper.find(WindowAuthenticationControl)).toHaveLength(1);
-  });
-  it('should dispatch fetchManifest when component mounts but manifest is not preset', () => {
-    const mockFetchManifest = jest.fn();
-    wrapper = createWrapper({ fetchManifest: mockFetchManifest });
-    expect(mockFetchManifest).toHaveBeenCalled();
   });
   describe('when workspaceType is mosaic', () => {
     xit('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {
