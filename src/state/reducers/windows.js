@@ -182,16 +182,6 @@ export const windowsReducer = (state = {}, action) => {
           suggestedSearches: undefined,
         },
       };
-    case ActionTypes.RECEIVE_SEARCH:
-      return {
-        ...state,
-        [action.windowId]: {
-          ...state[action.windowId],
-          canvasId: action.canvasId || state[action.windowId].canvasId,
-          selectedContentSearchAnnotation: (action.annotationId && [action.annotationId])
-            || state[action.windowId].selectedContentSearchAnnotation,
-        },
-      };
     default:
       return state;
   }

@@ -1,12 +1,5 @@
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-
 import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
-import manifestFixture015 from '../../fixtures/version-2/015.json';
-
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
 describe('search actions', () => {
   describe('requestSearch', () => {
@@ -28,11 +21,6 @@ describe('search actions', () => {
     });
   });
   describe('receiveSearch', () => {
-    let store = null;
-    beforeEach(() => {
-      store = mockStore({});
-    });
-
     it('recieves an search', () => {
       const windowId = 'foo';
       const companionWindowId = 'abc123';
@@ -48,26 +36,12 @@ describe('search actions', () => {
         type: ActionTypes.RECEIVE_SEARCH,
         windowId,
       };
-      store.dispatch(
+      expect(
         actions.receiveSearch(windowId, companionWindowId, searchId, json),
-      );
-      expect(store.getActions()).toEqual([expectedAction]);
+      ).toEqual([expectedAction]);
     });
 
     it('provides the first annotation id and its canvas', () => {
-      store = mockStore({
-        manifests: {
-          bar: {
-            json: manifestFixture015,
-          },
-        },
-        windows: {
-          foo: {
-            manifestId: 'bar',
-          },
-        },
-      });
-
       const windowId = 'foo';
       const companionWindowId = 'abc123';
       const searchId = 'search?page=1';
@@ -79,19 +53,15 @@ describe('search actions', () => {
           },
         ],
       };
-      const expectedAction = {
-        annotationId: 'abc123',
-        canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json',
+      expect(
+        actions.receiveSearch(windowId, companionWindowId, searchId, json),
+      ).toEqual({
         companionWindowId,
         searchId,
         searchJson: json,
         type: ActionTypes.RECEIVE_SEARCH,
         windowId,
-      };
-      store.dispatch(
-        actions.receiveSearch(windowId, companionWindowId, searchId, json),
-      );
-      expect(store.getActions()).toEqual([expectedAction]);
+      });
     });
   });
 
@@ -109,80 +79,37 @@ describe('search actions', () => {
   });
 
   describe('fetchSearch', () => {
-    let store = null;
-    beforeEach(() => {
-      store = mockStore({});
-    });
     describe('success response', () => {
-      beforeEach(() => {
-        fetch.mockResponseOnce(JSON.stringify({ data: '12345' })); // eslint-disable-line no-undef
-      });
       it('dispatches the REQUEST_SEARCH action', () => {
-        store.dispatch(actions.fetchSearch(
+        const actual = actions.fetchSearch(
           'windowId',
           'companionWindowId',
           'searchId',
           'search terms',
-        ));
-        expect(store.getActions()).toEqual([
-          {
-            companionWindowId: 'companionWindowId',
-            query: 'search terms',
-            searchId: 'searchId',
-            type: 'mirador/REQUEST_SEARCH',
-            windowId: 'windowId',
-          },
-        ]);
+        );
+        expect(actual).toEqual({
+          companionWindowId: 'companionWindowId',
+          query: 'search terms',
+          searchId: 'searchId',
+          type: 'mirador/REQUEST_SEARCH',
+          windowId: 'windowId',
+        });
       });
     });
   });
   describe('selectContentSearchAnnotation', () => {
-    it('dispatches the SELECT_CONTENT_SEARCH_ANNOTATION action with the right canvas index', () => {
-      const store = mockStore({
-        manifests: {
-          bar: {
-            json: manifestFixture015,
-          },
-        },
-        searches: {
-          foo: {
-            cwid: {
-              data: {
-                'search?page=1': {
-                  json: {
-                    resources: [
-                      {
-                        '@id': 'abc123',
-                        on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json#0,2,4,5',
-                      },
-                    ],
-                  },
-                },
-              },
-            },
-          },
-        },
-        windows: {
-          foo: {
-            manifestId: 'bar',
-          },
-        },
-      });
+    it('dispatches the SELECT_CONTENT_SEARCH_ANNOTATION action', () => {
       const windowId = 'foo';
       const companionWindowId = 'cwid';
       const annotationId = ['abc123'];
-      const expectedAction = {
+      expect(
+        actions.selectContentSearchAnnotation(windowId, companionWindowId, annotationId),
+      ).toEqual({
         annotationId,
-        canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json',
         companionWindowId,
         type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
         windowId,
-      };
-      store.dispatch(
-        actions.selectContentSearchAnnotation(windowId, companionWindowId, annotationId),
-      );
-      const actualActions = store.getActions();
-      expect(actualActions).toEqual([expectedAction]);
+      });
     });
   });
 });
