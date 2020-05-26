@@ -3,71 +3,23 @@ import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('window actions', () => {
   describe('focusWindow', () => {
-    it('should return correct action object with pan=true', () => {
+    it('should return correct action object', () => {
       const expectedAction = {
-        position: { x: 25, y: -13 },
+        pan: false,
         type: ActionTypes.FOCUS_WINDOW,
         windowId: 'window',
       };
 
-      const mockState = {
-        companionWindows: {},
-        elasticLayout: {
-          window: {
-            height: 50,
-            width: 50,
-            x: 50,
-            y: 12,
-          },
-        },
-        windows: {
-          window: {
-          },
-        },
-        workspace: {
-          viewportPosition: {
-            height: 100,
-            width: 100,
-          },
-        },
-      };
-
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
-      const thunk = actions.focusWindow('window', true);
-
-      thunk(mockDispatch, mockGetState);
-
-      const action = mockDispatch.mock.calls[0][0];
-      expect(action).toEqual(expectedAction);
+      expect(actions.focusWindow('window')).toEqual(expectedAction);
     });
-    it('should return correct action object with pan=false', () => {
+    it('should return the action object with panning', () => {
       const expectedAction = {
-        position: {},
+        pan: true,
         type: ActionTypes.FOCUS_WINDOW,
         windowId: 'window',
       };
 
-      const mockState = {
-        companionWindows: {},
-        elasticLayout: {
-          windows: {
-            window: { x: 50, y: 12 },
-          },
-        },
-        windows: {
-          window: {},
-        },
-      };
-
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
-      const thunk = actions.focusWindow('window');
-
-      thunk(mockDispatch, mockGetState);
-
-      const action = mockDispatch.mock.calls[0][0];
-      expect(action).toEqual(expectedAction);
+      expect(actions.focusWindow('window', true)).toEqual(expectedAction);
     });
   });
 
