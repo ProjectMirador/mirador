@@ -12,7 +12,7 @@ import {
  * @param  {String} canvasId
  * @memberof ActionCreators
  */
-export function setCanvas(windowId, canvasId, newGroup = undefined) {
+export function setCanvas(windowId, canvasId, newGroup = undefined, options = {}) {
   return ((dispatch, getState) => {
     const state = getState();
     let visibleCanvases = newGroup;
@@ -23,6 +23,7 @@ export function setCanvas(windowId, canvasId, newGroup = undefined) {
     }
 
     dispatch({
+      ...options,
       canvasId,
       type: ActionTypes.SET_CANVAS,
       visibleCanvases,
