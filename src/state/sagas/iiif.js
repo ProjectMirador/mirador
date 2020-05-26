@@ -7,6 +7,7 @@ import {
   receiveManifest, receiveManifestFailure,
 } from '../actions';
 import {
+  getManifests,
   getConfig,
 } from '../selectors';
 
@@ -34,8 +35,17 @@ export function* fetchManifest({ manifestId }) {
 }
 
 /** */
+export function* fetchResourceManifest({ manifestId }) {
+  if (!manifestId) return;
+
+  const manifests = yield select(getManifests) || {};
+  if (!manifests[manifestId]) yield* fetchManifest({ manifestId });
+}
+
+/** */
 export default function* iiifSaga() {
   yield all([
     takeEvery(ActionTypes.REQUEST_MANIFEST, fetchManifest),
+    takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),
   ]);
 }
