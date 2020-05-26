@@ -1,15 +1,11 @@
 import ActionTypes from './action-types';
-import { fetchManifest } from './manifest';
 
 /**
  * add a manifest to the resource catalog
  * @param {string} manifestId
  */
 export function addResource(manifestId) {
-  return ((dispatch, getState) => {
-    dispatch({ manifestId, type: ActionTypes.ADD_RESOURCE });
-    dispatch(fetchManifest(manifestId));
-  });
+  return { manifestId, type: ActionTypes.ADD_RESOURCE };
 }
 
 /** remove a manifest from the resource catalog */
