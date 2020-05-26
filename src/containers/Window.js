@@ -6,7 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { Window } from '../components/Window';
 import {
-  getManifest, getManifestStatus, getManifestTitle, getThumbnailNavigationPosition, getWindow,
+  getManifestStatus, getManifestTitle, getThumbnailNavigationPosition, getWindow,
   getWorkspaceType, getWindowDraggability, getWindowViewType,
 } from '../state/selectors';
 
@@ -19,8 +19,6 @@ import {
 const mapStateToProps = (state, { windowId }) => ({
   isFetching: getManifestStatus(state, { windowId }).isFetching,
   label: getManifestTitle(state, { windowId }),
-  manifest: getManifest(state, { windowId }),
-  manifestId: (getWindow(state, { windowId }) || {}).manifestId,
   maximized: (getWindow(state, { windowId }) || {}).maximized,
   sideBarOpen: (getWindow(state, { windowId }) || {}).sideBarOpen,
   thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId }),
@@ -36,7 +34,6 @@ const mapStateToProps = (state, { windowId }) => ({
  * @private
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
-  fetchManifest: (...args) => dispatch(actions.fetchManifest(...args)),
   focusWindow: () => dispatch(actions.focusWindow(windowId)),
 });
 

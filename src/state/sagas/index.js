@@ -2,6 +2,8 @@ import {
   all, call, spawn,
 } from 'redux-saga/effects';
 
+import iiifSaga from './iiif';
+
 /** */
 function* launchSaga(saga) {
   while (true) {
@@ -18,6 +20,7 @@ function* launchSaga(saga) {
 function getRootSaga(pluginSagas) {
   return function* rootSaga() {
     const sagas = [
+      iiifSaga,
       ...pluginSagas,
     ];
 
