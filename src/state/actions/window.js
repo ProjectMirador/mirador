@@ -8,26 +8,10 @@ import ActionTypes from './action-types';
  * @memberof ActionCreators
  */
 export function focusWindow(windowId, pan = false) {
-  return (dispatch, getState) => {
-    const { elasticLayout, workspace } = getState();
-
-    let position;
-
-    if (pan) {
-      const {
-        x, y, width, height,
-      } = elasticLayout[windowId];
-
-      const { viewportPosition: { width: viewWidth, height: viewHeight } } = workspace;
-      position = { x: (x + width / 2) - viewWidth / 2, y: (y + height / 2) - viewHeight / 2 };
-    } else {
-      position = {};
-    }
-    dispatch({
-      position,
-      type: ActionTypes.FOCUS_WINDOW,
-      windowId,
-    });
+  return {
+    pan,
+    type: ActionTypes.FOCUS_WINDOW,
+    windowId,
   };
 }
 

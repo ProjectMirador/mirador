@@ -7,6 +7,7 @@ import { setCanvas } from '../../../src/state/actions';
 import {
   getManifests, getManifestoInstance,
   getManifestSearchService, getCompanionWindowIdsForPosition,
+  getWorkspace, getElasticLayout,
   getWindow, getCanvasGrouping,
 } from '../../../src/state/selectors';
 import { fetchManifest } from '../../../src/state/sagas/iiif';
@@ -14,6 +15,7 @@ import {
   fetchWindowManifest,
   setWindowDefaultSearchQuery,
   setWindowStartingCanvas,
+  panToFocusedWindow,
   updateVisibleCanvases,
 } from '../../../src/state/sagas/windows';
 import fixture from '../../fixtures/version-2/019.json';
@@ -151,6 +153,46 @@ describe('window-level sagas', () => {
         })
         .run()
         .then(({ allEffects }) => allEffects.length === 1);
+    });
+  });
+
+  describe('panToFocusedWindow', () => {
+    it('does nothing if pan was disabled', () => {
+      const action = {
+        pan: false,
+        windowId: 'x',
+      };
+
+      return expectSaga(panToFocusedWindow, action)
+        .run().then(({ allEffects }) => allEffects.length === 0);
+    });
+
+    it('sets the viewport position to the newly focused window', () => {
+      const action = {
+        pan: true,
+        windowId: 'x',
+      };
+      return expectSaga(panToFocusedWindow, action)
+        .provide([
+          [select(getWorkspace), {
+            viewportPosition: { height: 100, width: 100 },
+          }],
+          [select(getElasticLayout), {
+            x: {
+              height: 50, width: 50, x: 50, y: 12,
+            },
+          }],
+        ])
+        .put({
+          payload: {
+            position: {
+              x: 25,
+              y: -13,
+            },
+          },
+          type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
+        })
+        .run();
     });
   });
 

@@ -4,6 +4,7 @@ import {
 import ActionTypes from '../actions/action-types';
 import MiradorManifest from '../../lib/MiradorManifest';
 import {
+  setWorkspaceViewportPosition,
   updateWindow,
   setCanvas,
   fetchSearch,
@@ -11,6 +12,8 @@ import {
 import {
   getCanvasGrouping, getWindow, getManifests, getManifestoInstance,
   getCompanionWindowIdsForPosition, getManifestSearchService,
+  getWorkspace,
+  getElasticLayout,
 } from '../selectors';
 import { fetchManifest } from './iiif';
 
@@ -66,6 +69,24 @@ export function* setWindowDefaultSearchQuery(action) {
 }
 
 /** @private */
+export function* panToFocusedWindow({ pan, windowId }) {
+  if (!pan) return;
+  const elasticLayout = yield select(getElasticLayout);
+  const {
+    x, y, width, height,
+  } = elasticLayout[windowId] || {};
+
+  const {
+    viewportPosition: { width: viewWidth, height: viewHeight },
+  } = yield select(getWorkspace);
+
+  yield put(setWorkspaceViewportPosition({
+    x: (x + width / 2) - viewWidth / 2,
+    y: (y + height / 2) - viewHeight / 2,
+  }));
+}
+
+/** @private */
 export function* updateVisibleCanvases({ windowId }) {
   const { canvasId } = yield select(getWindow, { windowId });
   const visibleCanvases = yield select(getCanvasGrouping, { canvasId, windowId });
@@ -78,5 +99,6 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.ADD_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
+    takeEvery(ActionTypes.FOCUS_WINDOW, panToFocusedWindow),
   ]);
 }
