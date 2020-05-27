@@ -4,6 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import WorkspaceElastic from '../components/WorkspaceElastic';
+import {
+  getElasticLayout,
+  getWorkspace,
+} from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -12,8 +16,8 @@ import WorkspaceElastic from '../components/WorkspaceElastic';
  */
 const mapStateToProps = state => (
   {
-    elasticLayout: state.elasticLayout,
-    workspace: state.workspace,
+    elasticLayout: getElasticLayout(),
+    workspace: getWorkspace(),
   }
 );
 

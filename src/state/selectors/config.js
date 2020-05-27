@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import deepmerge from 'deepmerge';
 
 /** */
-function getConfig(state) {
+export function getConfig(state) {
   return state.config || {};
 }
 
