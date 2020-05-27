@@ -1,8 +1,13 @@
 import { createSelector } from 'reselect';
 
 /** */
-function getWorkspace(state) {
+export function getWorkspace(state) {
   return state.workspace;
+}
+
+/** */
+export function getElasticLayout(state) {
+  return state.elasticLayout;
 }
 
 export const getFullScreenEnabled = createSelector(
