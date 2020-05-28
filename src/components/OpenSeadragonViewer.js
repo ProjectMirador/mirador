@@ -36,6 +36,14 @@ export class OpenSeadragonViewer extends Component {
     });
   }
 
+  /** */
+  static resourceClip(contentResource) {
+    const fragmentMatch = contentResource.id.match(/xywh=(.*)$/);
+    if (!fragmentMatch) return undefined;
+    const bounds = fragmentMatch[1].split(',').map(str => parseInt(str, 10));
+    return new OpenSeadragon.Rect(...bounds);
+  }
+
   /**
    * @param {Object} props
    */
@@ -223,7 +231,10 @@ export class OpenSeadragonViewer extends Component {
       if (!this.viewer) {
         return;
       }
+
+      const clip = OpenSeadragonViewer.resourceClip(contentResource);
       this.viewer.addSimpleImage({
+        ...(clip && { clip }),
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
           ...canvasWorld.contentResourceToWorldCoordinates(contentResource),
@@ -249,8 +260,10 @@ export class OpenSeadragonViewer extends Component {
       const contentResource = canvasWorld.contentResource(infoResponse.id);
 
       if (!contentResource) return;
+      const clip = OpenSeadragonViewer.resourceClip(contentResource);
 
       this.viewer.addTiledImage({
+        ...(clip && { clip }),
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
           ...canvasWorld.contentResourceToWorldCoordinates(contentResource),
