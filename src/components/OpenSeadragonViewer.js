@@ -4,6 +4,7 @@ import isEqual from 'lodash/isEqual';
 import OpenSeadragon from 'openseadragon';
 import classNames from 'classnames';
 import flatten from 'lodash/flatten';
+import debounce from 'lodash/debounce';
 import ns from '../config/css-ns';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
@@ -51,6 +52,7 @@ export class OpenSeadragonViewer extends Component {
     this.onUpdateViewport = this.onUpdateViewport.bind(this);
     this.onViewportChange = this.onViewportChange.bind(this);
     this.onCanvasClick = this.onCanvasClick.bind(this);
+    this.onCanvasMouseMove = debounce(this.onCanvasMouseMove.bind(this), 100);
     this.zoomToWorld = this.zoomToWorld.bind(this);
     this.osdUpdating = false;
   }
@@ -80,6 +82,7 @@ export class OpenSeadragonViewer extends Component {
       this.osdUpdating = false;
     });
     this.viewer.addHandler('canvas-click', this.onCanvasClick);
+    this.viewer.innerTracker.moveHandler = this.onCanvasMouseMove;
 
     this.updateCanvas = this.canvasUpdateCallback();
 
@@ -158,62 +161,29 @@ export class OpenSeadragonViewer extends Component {
   /** */
   onCanvasClick(event) {
     const {
-      canvasWorld,
       selectAnnotation,
-      highlightedAnnotations, searchAnnotations,
       windowId,
     } = this.props;
 
     const { position: webPosition, eventSource: { viewport } } = event;
     const point = viewport.pointFromPixel(webPosition);
-    console.log(point);
-
-    const canvasDimensions = canvasWorld.canvasDimensions.find(c => (
-      c.x <= point.x && point.x <= (c.x + c.width)
-        && c.y <= point.y && point.y <= (c.y + c.height)
-    ));
-
-    if (!canvasDimensions) return;
-    const { canvas } = canvasDimensions;
-
-    const lists = [...highlightedAnnotations, ...searchAnnotations];
-
-    const annos = flatten(lists.map(l => l.resources)).filter((resource) => {
-      if (canvas.id !== resource.targetId) return false;
-
-      if (resource.svgSelector) {
-        const context = this.osdCanvasOverlay.context2d;
-        const { svgPaths } = new CanvasAnnotationDisplay({ resource });
-        return svgPaths.some(path => context.isPointInPath(new Path2D(path), point.x, point.y));
-      }
-
-      if (resource.fragmentSelector) {
-        console.log(resource.fragmentSelector);
-        const [x, y, w, h] = resource.fragmentSelector;
-        return x <= point.x && point.x <= (x + w)
-          && y <= point.y && point.y <= (y + h);
-      }
-
-      return false;
-    });
-
+    const annos = this.annotationsAtPoint(point);
     annos.forEach(anno => selectAnnotation(windowId, anno.targetId, anno.id));
 
     if (annos.length > 0) event.preventDefaultAction = true;
+  }
 
-    // figure out what canvas we're on
-    // figure out what annotations are on that canvas
-    // figure out if any of the rect annotations match
-    // figure out if any of the svg annotations match
-    //
-    // const { position: webPosition, eventSource: { viewport } } = event;
-    // const viewportPoint = viewport.pointFromPixel(webPoint);
-    //
-    // // figure out what we clicked on
-    // const annotation = undefined;
-    // if (annotation) {
-    //   selectAnnotation(annotation);
-    // }
+  /** */
+  onCanvasMouseMove(event) {
+    const {
+      selectAnnotation,
+      windowId,
+    } = this.props;
+
+    const { position: webPosition } = event;
+    const point = this.viewer.viewport.pointFromPixel(webPosition);
+    const annos = this.annotationsAtPoint(point);
+    if (annos.length > 0) console.log(annos);
   }
 
   /**
@@ -236,6 +206,39 @@ export class OpenSeadragonViewer extends Component {
       y: Math.round(viewport.centerSpringY.target.value),
       zoom: viewport.zoomSpring.target.value,
     });
+  }
+
+  /** */
+  annotationsAtPoint(point) {
+    const {
+      canvasWorld,
+      highlightedAnnotations, searchAnnotations,
+    } = this.props;
+
+    const canvas = canvasWorld.canvasAtPoint(point);
+    if (!canvas) return [];
+
+    const lists = [...highlightedAnnotations, ...searchAnnotations];
+
+    const annos = flatten(lists.map(l => l.resources)).filter((resource) => {
+      if (canvas.id !== resource.targetId) return false;
+
+      if (resource.svgSelector) {
+        const context = this.osdCanvasOverlay.context2d;
+        const { svgPaths } = new CanvasAnnotationDisplay({ resource });
+        return svgPaths.some(path => context.isPointInPath(new Path2D(path), point.x, point.y));
+      }
+
+      if (resource.fragmentSelector) {
+        const [x, y, w, h] = resource.fragmentSelector;
+        return x <= point.x && point.x <= (x + w)
+          && y <= point.y && point.y <= (y + h);
+      }
+
+      return false;
+    });
+
+    return annos;
   }
 
   /** */
