@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import OpenSeadragon from 'openseadragon';
 import classNames from 'classnames';
+import flatten from 'lodash/flatten';
 import ns from '../config/css-ns';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
@@ -49,6 +50,7 @@ export class OpenSeadragonViewer extends Component {
     this.ref = React.createRef();
     this.onUpdateViewport = this.onUpdateViewport.bind(this);
     this.onViewportChange = this.onViewportChange.bind(this);
+    this.onCanvasClick = this.onCanvasClick.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
     this.osdUpdating = false;
   }
@@ -77,6 +79,7 @@ export class OpenSeadragonViewer extends Component {
     this.viewer.addHandler('animation-finish', () => {
       this.osdUpdating = false;
     });
+    this.viewer.addHandler('canvas-click', this.onCanvasClick);
 
     this.updateCanvas = this.canvasUpdateCallback();
 
@@ -150,6 +153,67 @@ export class OpenSeadragonViewer extends Component {
    */
   componentWillUnmount() {
     this.viewer.removeAllHandlers();
+  }
+
+  /** */
+  onCanvasClick(event) {
+    const {
+      canvasWorld,
+      selectAnnotation,
+      highlightedAnnotations, searchAnnotations,
+      windowId,
+    } = this.props;
+
+    const { position: webPosition, eventSource: { viewport } } = event;
+    const point = viewport.pointFromPixel(webPosition);
+    console.log(point);
+
+    const canvasDimensions = canvasWorld.canvasDimensions.find(c => (
+      c.x <= point.x && point.x <= (c.x + c.width)
+        && c.y <= point.y && point.y <= (c.y + c.height)
+    ));
+
+    if (!canvasDimensions) return;
+    const { canvas } = canvasDimensions;
+
+    const lists = [...highlightedAnnotations, ...searchAnnotations];
+
+    const annos = flatten(lists.map(l => l.resources)).filter((resource) => {
+      if (canvas.id !== resource.targetId) return false;
+
+      if (resource.svgSelector) {
+        const context = this.osdCanvasOverlay.context2d;
+        const { svgPaths } = new CanvasAnnotationDisplay({ resource });
+        return svgPaths.some(path => context.isPointInPath(new Path2D(path), point.x, point.y));
+      }
+
+      if (resource.fragmentSelector) {
+        console.log(resource.fragmentSelector);
+        const [x, y, w, h] = resource.fragmentSelector;
+        return x <= point.x && point.x <= (x + w)
+          && y <= point.y && point.y <= (y + h);
+      }
+
+      return false;
+    });
+
+    annos.forEach(anno => selectAnnotation(windowId, anno.targetId, anno.id));
+
+    if (annos.length > 0) event.preventDefaultAction = true;
+
+    // figure out what canvas we're on
+    // figure out what annotations are on that canvas
+    // figure out if any of the rect annotations match
+    // figure out if any of the svg annotations match
+    //
+    // const { position: webPosition, eventSource: { viewport } } = event;
+    // const viewportPoint = viewport.pointFromPixel(webPoint);
+    //
+    // // figure out what we clicked on
+    // const annotation = undefined;
+    // if (annotation) {
+    //   selectAnnotation(annotation);
+    // }
   }
 
   /**
@@ -407,6 +471,7 @@ OpenSeadragonViewer.defaultProps = {
   osdConfig: {},
   palette: {},
   searchAnnotations: [],
+  selectAnnotation: () => {},
   selectedAnnotations: [],
   selectedContentSearchAnnotations: [],
   viewer: null,
@@ -423,6 +488,7 @@ OpenSeadragonViewer.propTypes = {
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),
+  selectAnnotation: PropTypes.func,
   selectedAnnotations: PropTypes.arrayOf(PropTypes.object),
   selectedContentSearchAnnotations: PropTypes.arrayOf(PropTypes.object),
   t: PropTypes.func.isRequired,

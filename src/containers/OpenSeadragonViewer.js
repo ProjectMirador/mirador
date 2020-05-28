@@ -55,6 +55,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
  * @private
  */
 const mapDispatchToProps = {
+  selectAnnotation: actions.selectAnnotation,
   updateViewport: actions.updateViewport,
 };
 
