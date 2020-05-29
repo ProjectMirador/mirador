@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { v4 as uuid } from 'uuid';
-import { App } from '../components/App';
+import HotApp from '../components/App';
 import createStore from '../state/createStore';
 import * as actions from '../state/actions';
 import { getCompanionWindowIdsForPosition, getManifestSearchService } from '../state/selectors';
@@ -26,7 +26,7 @@ class MiradorViewer {
 
     ReactDOM.render(
       <Provider store={this.store}>
-        <App plugins={this.plugins} />
+        <HotApp plugins={this.plugins} />
       </Provider>,
       document.getElementById(config.id),
     );

@@ -20,7 +20,7 @@ Mirador local development requires [nodejs](https://nodejs.org/en/download/) to 
 $ npm start
 ```
 
-Then navigate to [http://127.0.0.1:4444/\_\_tests\_\_/integration/mirador/](http://127.0.0.1:4444/\_\_tests\_\_/integration/mirador/)
+Then navigate to [http://127.0.0.1:4444/](http://127.0.0.1:4444/)
 
 ### Instantiating Mirador
 

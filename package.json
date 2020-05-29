@@ -22,7 +22,7 @@
     "build:watch": "webpack --watch --mode=development",
     "prepublishOnly": "npm run clean && npm run build:es && npm run build:cjs && npm run build",
     "size": "bundlewatch --config bundlewatch.config.json",
-    "start": "npm run build:dev && concurrently -k \"npm:build:watch\" \"npm:server -- -p 4444\""
+    "start": "webpack-dev-server --open"
   },
   "license": "Apache-2.0",
   "contributors": [
@@ -56,6 +56,7 @@
     "react-beautiful-dnd": "^11.0.4",
     "react-copy-to-clipboard": "^5.0.1",
     "react-full-screen": "^0.2.4",
+    "react-hot-loader": "^4.12.21",
     "react-i18next": "^10.11.4",
     "react-image": "^2.1.3",
     "react-mosaic-component": "^4.0.1",
@@ -120,7 +121,8 @@
     "unfetch": "^4.1.0",
     "url-polyfill": "^1.1.7",
     "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5"
+    "webpack-cli": "^3.3.5",
+    "webpack-dev-server": "^3.11.0"
   },
   "peerDependencies": {
     "react": "^16.8.3",

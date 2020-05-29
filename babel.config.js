@@ -84,7 +84,9 @@ module.exports = function (api) {
         'lodash',
       ],
     },
-    ]];
+    ],
+    'react-hot-loader/babel',
+  ];
 
   return {
     plugins,
