@@ -253,8 +253,6 @@ export class OpenSeadragonViewer extends Component {
       windowId,
     } = this.props;
 
-    console.log(selectedAnnotations);
-
     const lists = [...selectedAnnotations, ...selectedContentSearchAnnotations];
 
     const selected = flatten(lists.map(l => l.resources)).some(r => r.id === id);

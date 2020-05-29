@@ -65,10 +65,10 @@ export default class CanvasAnnotationDisplay {
       // Resize the stroke based off of the zoomRatio (currentZoom / maxZoom)
       this.context.lineWidth /= this.zoomRatio;
       // Reset the color if it is selected
-      if (this.hover) {
-        this.context.strokeStyle = this.palette.hover;
-      } else if (this.selected) {
+      if (this.selected) {
         this.context.strokeStyle = this.palette.selected;
+      } else if (this.hover) {
+        this.context.strokeStyle = this.palette.hover;
       }
       this.context.stroke(p);
 
@@ -88,14 +88,15 @@ export default class CanvasAnnotationDisplay {
     const fragment = this.resource.fragmentSelector;
     fragment[0] += this.offset.x;
     fragment[1] += this.offset.y;
-    if (this.hover) {
-      this.context.strokeStyle = this.palette.hover;
-    } else if (this.selected) {
+    if (this.selected) {
       this.context.strokeStyle = this.palette.selected;
+    } else if (this.hover) {
+      this.context.strokeStyle = this.palette.hover;
     } else {
       this.context.strokeStyle = this.palette.default;
     }
     this.context.lineWidth = 1 / this.zoomRatio;
+    if (this.hover && this.selected) this.context.lineWidth = 2 / this.zoomRatio;
     this.context.strokeRect(...fragment);
   }
 
