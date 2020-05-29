@@ -85,8 +85,8 @@ module.exports = function (api) {
       ],
     },
     ],
-    'react-hot-loader/babel',
-  ];
+    isDevelopmentEnv && 'react-hot-loader/babel',
+  ].filter(Boolean);
 
   return {
     plugins,

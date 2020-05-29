@@ -3,7 +3,8 @@ const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const paths = require('./config/paths');
 
-const baseConfig = {
+/** */
+const baseConfig = mode => ({
   entry: ['react-hot-loader/patch', './src/polyfills.js', './src/index.js'],
   module: {
     rules: [
@@ -15,6 +16,7 @@ const baseConfig = {
           cacheCompression: true,
           cacheDirectory: true,
           compact: true,
+          envName: mode,
         },
         test: /\.(js|mjs|jsx)$/,
       },
@@ -45,14 +47,14 @@ const baseConfig = {
     }),
   ],
   resolve: { extensions: ['.js'] },
-};
+});
 
 module.exports = (env, options) => {
   const isProduction = options.mode === 'production';
 
   if (isProduction) {
     return {
-      ...baseConfig,
+      ...baseConfig(options.mode),
       devtool: 'source-map',
       mode: 'production',
       plugins: [
@@ -65,7 +67,7 @@ module.exports = (env, options) => {
   }
 
   return {
-    ...baseConfig,
+    ...baseConfig(options.mode),
     devServer: {
       contentBase: './__tests__/integration/mirador',
       hot: true,
