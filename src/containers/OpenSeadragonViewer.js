@@ -19,6 +19,7 @@ import {
   getSearchAnnotationsForWindow,
   getSelectedContentSearchAnnotations,
   getTheme,
+  getWindow,
 } from '../state/selectors';
 
 /**
@@ -33,6 +34,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
     getManifestViewingDirection(state, { windowId }),
   ),
   highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),
+  hoveredAnnotationIds: getWindow(state, { windowId }).hoveredAnnotationIds || [],
   label: getCanvasLabel(state, {
     canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
     windowId,
@@ -55,6 +57,8 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
  * @private
  */
 const mapDispatchToProps = {
+  deselectAnnotation: actions.deselectAnnotation,
+  hoverAnnotations: actions.hoverAnnotations,
   selectAnnotation: actions.selectAnnotation,
   updateViewport: actions.updateViewport,
 };

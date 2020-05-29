@@ -101,6 +101,22 @@ export function deselectAnnotation(windowId, targetId, annotationId) {
 }
 
 /**
+ * deselectAnnotation - action creator
+ *
+ * @param  {String} windowId
+ * @param  {String} targetId
+ * @param  {String} annotationId
+ * @memberof ActionCreators
+ */
+export function hoverAnnotations(windowId, annotations) {
+  return {
+    annotations,
+    type: ActionTypes.HOVER_ANNOTATIONS,
+    windowId,
+  };
+}
+
+/**
  * toggleAnnotationDisplay - action creator
  *
  * @param  {String} windowId

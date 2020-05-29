@@ -55,6 +55,7 @@ export default {
       highlights: {
         primary: '#ffff00',
         secondary: '#00BFFF',
+        hover: '#BF00FF',
       },
       section_divider: 'rgba(0, 0, 0, 0.25)',
     },

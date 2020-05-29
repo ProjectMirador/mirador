@@ -5,13 +5,14 @@
 export default class CanvasAnnotationDisplay {
   /** */
   constructor({
-    resource, color, zoomRatio, offset, selected,
+    resource, zoomRatio, offset, selected, hover, palette,
   }) {
     this.resource = resource;
-    this.color = color;
     this.zoomRatio = zoomRatio;
     this.offset = offset;
     this.selected = selected;
+    this.hover = hover;
+    this.palette = palette;
   }
 
   /** */
@@ -42,7 +43,7 @@ export default class CanvasAnnotationDisplay {
       const p = new Path2D(element.attributes.d.nodeValue);
 
       // Setup styling from SVG -> Canvas
-      this.context.strokeStyle = this.color;
+      this.context.strokeStyle = this.palette.default;
       if (element.attributes['stroke-dasharray']) {
         this.context.setLineDash(element.attributes['stroke-dasharray'].nodeValue.split(','));
       }
@@ -64,8 +65,10 @@ export default class CanvasAnnotationDisplay {
       // Resize the stroke based off of the zoomRatio (currentZoom / maxZoom)
       this.context.lineWidth /= this.zoomRatio;
       // Reset the color if it is selected
-      if (this.selected) {
-        this.context.strokeStyle = this.color;
+      if (this.hover) {
+        this.context.strokeStyle = this.palette.hover;
+      } else if (this.selected) {
+        this.context.strokeStyle = this.palette.selected;
       }
       this.context.stroke(p);
 
@@ -85,7 +88,13 @@ export default class CanvasAnnotationDisplay {
     const fragment = this.resource.fragmentSelector;
     fragment[0] += this.offset.x;
     fragment[1] += this.offset.y;
-    this.context.strokeStyle = this.color;
+    if (this.hover) {
+      this.context.strokeStyle = this.palette.hover;
+    } else if (this.selected) {
+      this.context.strokeStyle = this.palette.selected;
+    } else {
+      this.context.strokeStyle = this.palette.default;
+    }
     this.context.lineWidth = 1 / this.zoomRatio;
     this.context.strokeRect(...fragment);
   }
