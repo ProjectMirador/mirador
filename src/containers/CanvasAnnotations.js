@@ -33,6 +33,7 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
       state, { canvasId, motivations: state.config.annotations.filteredMotivations, windowId },
     ),
   ),
+  hoveredAnnotationIds: getWindow(state, { windowId }).hoveredAnnotationIds || [],
   htmlSanitizationRuleSet: state.config.annotations.htmlSanitizationRuleSet,
   label: getCanvasLabel(state, {
     canvasId,

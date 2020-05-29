@@ -59,7 +59,7 @@ export class CanvasAnnotations extends Component {
   render() {
     const {
       annotations, classes, index, label, selectedAnnotationIds, t, totalSize,
-      listContainerComponent, htmlSanitizationRuleSet,
+      listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
     } = this.props;
     if (annotations.length === 0) return <></>;
 
@@ -78,7 +78,8 @@ export class CanvasAnnotations extends Component {
                 key={annotation.id}
                 annotation={annotation}
                 annotationid={annotation.id}
-                selected={selectedAnnotationIds.includes(annotation.id)}
+                selected={selectedAnnotationIds.includes(annotation.id)
+                  || hoveredAnnotationIds.includes(annotation.id)}
                 onClick={e => this.handleClick(e, annotation)}
                 onFocus={() => this.handleAnnotationHighlight(annotation)}
                 onBlur={this.handleAnnotationUnHighlight}
@@ -118,6 +119,7 @@ CanvasAnnotations.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   deselectAnnotation: PropTypes.func.isRequired,
   highlightAnnotation: PropTypes.func.isRequired,
+  hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   htmlSanitizationRuleSet: PropTypes.string,
   index: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
@@ -131,6 +133,7 @@ CanvasAnnotations.propTypes = {
 CanvasAnnotations.defaultProps = {
   annotations: [],
   classes: {},
+  hoveredAnnotationIds: [],
   htmlSanitizationRuleSet: 'iiif',
   listContainerComponent: 'li',
   selectedAnnotationIds: [],
