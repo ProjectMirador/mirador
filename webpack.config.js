@@ -53,6 +53,8 @@ module.exports = (env, options) => {
   if (isProduction) {
     return {
       ...baseConfig,
+      devtool: 'source-map',
+      mode: 'production',
       plugins: [
         ...(baseConfig.plugins || []),
         new webpack.optimize.LimitChunkCountPlugin({
