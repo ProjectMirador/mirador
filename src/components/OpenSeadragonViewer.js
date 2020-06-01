@@ -186,7 +186,7 @@ export class OpenSeadragonViewer extends Component {
   /**
    * annotationsToContext - converts anontations to a canvas context
    */
-  annotationsToContext(annotations, color = 'yellow', selected = false) {
+  annotationsToContext(annotations, color = 'yellow', selected = false, isSearch = false) {
     const { canvasWorld } = this.props;
     const context = this.osdCanvasOverlay.context2d;
     const zoomRatio = this.viewer.viewport.getZoom(true) / this.viewer.viewport.getMaxZoom();
@@ -195,7 +195,7 @@ export class OpenSeadragonViewer extends Component {
         if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
         const offset = canvasWorld.offsetByCanvas(resource.targetId);
         const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
-          color, offset, resource, selected, zoomRatio,
+          color, isSearch, offset, resource, selected, zoomRatio,
         });
         canvasAnnotationDisplay.toContext(context);
       });
@@ -355,11 +355,11 @@ export class OpenSeadragonViewer extends Component {
       palette,
     } = this.props;
 
-    this.annotationsToContext(searchAnnotations, palette.highlights.secondary);
+    this.annotationsToContext(searchAnnotations, palette.highlights.secondary, false, true);
     this.annotationsToContext(
       selectedContentSearchAnnotations,
       palette.highlights.primary,
-      true,
+      true, true,
     );
 
     this.annotationsToContext(highlightedAnnotations, palette.highlights.secondary);
