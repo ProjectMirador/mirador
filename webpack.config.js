@@ -5,7 +5,7 @@ const paths = require('./config/paths');
 
 /** */
 const baseConfig = mode => ({
-  entry: ['react-hot-loader/patch', './src/polyfills.js', './src/index.js'],
+  entry: ['./src/polyfills.js', './src/index.js'],
   module: {
     rules: [
       {
@@ -74,6 +74,7 @@ module.exports = (env, options) => {
       port: 4444,
     },
     devtool: 'eval-source-map',
+    entry: ['react-hot-loader/patch', ...baseConfig(options.mode).entry],
     mode: 'development',
   };
 };
