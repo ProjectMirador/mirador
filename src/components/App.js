@@ -1,4 +1,5 @@
 import React, { Component, lazy, Suspense } from 'react';
+import { hot } from 'react-hot-loader/root';
 import PropTypes from 'prop-types';
 import PluginProvider from '../extend/PluginProvider';
 import createRootReducer from '../state/reducers/rootReducer';
@@ -43,3 +44,5 @@ App.propTypes = {
 App.defaultProps = {
   plugins: [],
 };
+
+export default hot(App);
