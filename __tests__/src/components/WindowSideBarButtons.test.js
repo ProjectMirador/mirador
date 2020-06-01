@@ -147,31 +147,4 @@ describe('WindowSideBarButtons (shallow)', () => {
       expect(tab.find(Badge).props().invisible).toBe(true);
     });
   });
-
-  describe('handleKeyUp', () => {
-    it('the first tab is focussed by default', () => {
-      assertTabFocused(wrapper, 0);
-    });
-
-    it('the focuses on the next tab when pressing the down arrow', () => {
-      wrapper.find('button[role="tab"]').at(0).simulate('keyUp', { key: 'ArrowDown' });
-      assertTabFocused(wrapper, 1);
-    });
-
-    it('the focuses on the previous tab when pressing the up arrow', () => {
-      wrapper.find('button[role="tab"]').at(1).simulate('keyUp', { key: 'ArrowUp' });
-      assertTabFocused(wrapper, 0);
-    });
-
-    it('the focuses on the first tab when pressing the down arrow from the last tab', () => {
-      wrapper.find('button[role="tab"]').last().simulate('keyUp', { key: 'ArrowDown' });
-      assertTabFocused(wrapper, 0);
-    });
-
-    it('the focuses on the last tab when pressing the up arrow from the first tab', () => {
-      const tabs = wrapper.find('button[role="tab"]');
-      wrapper.find('button[role="tab"]').first().simulate('keyUp', { key: 'ArrowUp' });
-      assertTabFocused(wrapper, tabs.length - 1); // Assuming 3 tabs
-    });
-  });
 });
