@@ -35,24 +35,25 @@ describe('workspace reducer', () => {
       window: { id: 'abc123' },
     })).toEqual({
       focusedWindowId: 'abc123',
+      windowIds: ['abc123'],
     });
   });
   it('should handle REMOVE_WINDOW (by doing nothing if multiple windows remain)', () => {
-    expect(workspaceReducer({ focusedWindowId: 'asdf' }, {
+    expect(workspaceReducer({ focusedWindowId: 'asdf', windowIds: ['abc123', 'asdf'] }, {
       type: ActionTypes.REMOVE_WINDOW,
       windowId: 'abc123',
-      windows: { abc123: {}, def123: {}, ghi123: {} },
     })).toEqual({
       focusedWindowId: 'asdf',
+      windowIds: ['asdf'],
     });
   });
   it('should handle REMOVE_WINDOW (by focusing the window if it is the last one remaining)', () => {
-    expect(workspaceReducer([], {
+    expect(workspaceReducer({ focusedWindowId: 'abc123', windowIds: ['abc123', 'def123'] }, {
       type: ActionTypes.REMOVE_WINDOW,
       windowId: 'abc123',
-      windows: { abc123: {}, def123: {} },
     })).toEqual({
       focusedWindowId: 'def123',
+      windowIds: ['def123'],
     });
   });
   it('should handle SET_WORKSPACE_FULLSCREEN', () => {

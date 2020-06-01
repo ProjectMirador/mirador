@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import MiradorCanvas from '../../lib/MiradorCanvas';
-import { getCanvas, getVisibleCanvases } from './canvases';
+import { getCanvas, getVisibleCanvasIds } from './canvases';
 
 /**
  * Get the image layers from a canvas
@@ -61,12 +61,12 @@ export const getSortedLayers = createSelector(
  */
 export const getLayersForVisibleCanvases = createSelector(
   [
-    getVisibleCanvases,
+    getVisibleCanvasIds,
     (state, { windowId }) => (canvasId => getLayers(state, { canvasId, windowId })),
   ],
-  (canvases, getLayersForCanvas) => (
-    canvases.reduce((acc, canvas) => {
-      acc[canvas.id] = getLayersForCanvas(canvas.id);
+  (canvasIds, getLayersForCanvas) => (
+    canvasIds.reduce((acc, canvasId) => {
+      acc[canvasId] = getLayersForCanvas(canvasId);
       return acc;
     }, {})
   ),

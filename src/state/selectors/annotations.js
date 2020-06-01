@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import AnnotationFactory from '../../lib/AnnotationFactory';
-import { getCanvas, getVisibleCanvases } from './canvases';
+import { getCanvas, getVisibleCanvasIds } from './canvases';
 
 const getAnnotationsOnCanvas = createSelector(
   [
@@ -31,13 +31,13 @@ const getPresentAnnotationsCanvas = createSelector(
 
 const getAnnotationsOnSelectedCanvases = createSelector(
   [
-    getVisibleCanvases,
+    getVisibleCanvasIds,
     state => state.annotations,
   ],
-  (canvases, annotations) => {
-    if (!annotations || !canvases) return [];
+  (canvasIds, annotations) => {
+    if (!annotations || canvasIds.length === 0) return [];
     return flatten(
-      canvases.map(c => c.id).map(
+      canvasIds.map(
         targetId => annotations[targetId] && Object.values(annotations[targetId]),
       ),
     );
@@ -103,12 +103,10 @@ export const getAnnotationResourcesByMotivation = createSelector(
 export const getSelectedAnnotationIds = createSelector(
   [
     (state, { windowId }) => state.windows[windowId].selectedAnnotations,
-    getVisibleCanvases,
+    getVisibleCanvasIds,
   ],
-  (selectedAnnotations, canvases) => (
-    (canvases && flatten(
-      canvases.map(c => c.id).map(targetId => selectedAnnotations && selectedAnnotations[targetId]),
-    )) || []
+  (selectedAnnotations, canvasIds) => (
+    (flatten(canvasIds.map(targetId => selectedAnnotations && selectedAnnotations[targetId])))
   ),
 );
 

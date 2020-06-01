@@ -83,10 +83,12 @@ describe('window actions', () => {
           {
             content: 'info',
             position: 'left',
+            windowId: 'helloworld',
           },
           {
             content: 'thumbnailNavigation',
             position: 'off',
+            windowId: 'helloworld',
           },
         ],
         elasticLayout: {
@@ -214,34 +216,10 @@ describe('window actions', () => {
   });
 
   describe('removeWindow', () => {
-    it('removes the window and returns windowId', () => {
-      const id = 'abc123';
-      const expectedAction = {
-        companionWindowIds: ['a', 'b', 'c'],
-        type: ActionTypes.REMOVE_WINDOW,
-        windowId: id,
-        windows: {
-          abc123: {
-            companionWindowIds: ['a', 'b', 'c'],
-          },
-        },
-      };
-
-      const mockState = {
-        companionWindows: {},
-        windows: {
-          abc123: { companionWindowIds: ['a', 'b', 'c'] },
-        },
-      };
-
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
-      const thunk = actions.removeWindow(id);
-
-      thunk(mockDispatch, mockGetState);
-
-      const action = mockDispatch.mock.calls[0][0];
-      expect(action).toEqual(expectedAction);
+    it('should return correct action object', () => {
+      const action = actions.removeWindow('window-123');
+      expect(action.type).toBe(ActionTypes.REMOVE_WINDOW);
+      expect(action.windowId).toBe('window-123');
     });
   });
 

@@ -1,4 +1,3 @@
-import normalizeUrl from 'normalize-url';
 import { removeIn } from 'immutable';
 
 import ActionTypes from '../actions/action-types';
@@ -11,9 +10,7 @@ export const authReducer = (state = {}, action) => {
   let service;
 
   switch (action.type) {
-    case ActionTypes.RECEIVE_INFO_RESPONSE:
-      if (action.ok && normalizeUrl(action.infoId, { stripAuthentication: false }) === normalizeUrl(action.infoJson.id || action.infoJson['@id'], { stripAuthentication: false })) return state;
-
+    case ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE:
       service = selectNextAuthService(
         { auth: state }, action.infoJson, { external: true, kiosk: true },
       );
@@ -42,6 +39,7 @@ export const authReducer = (state = {}, action) => {
             action.infoId,
           ),
           isFetching: true,
+          profile: action.profile,
         },
       };
     case ActionTypes.RESOLVE_AUTHENTICATION_REQUEST:

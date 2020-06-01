@@ -1,4 +1,4 @@
-import { updateIn, merge } from 'immutable';
+import { updateIn, merge, removeIn } from 'immutable';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -18,12 +18,7 @@ export const elasticLayoutReducer = (state = {}, action) => {
       return updateIn(state, [action.windowId], orig => merge(orig, action.payload));
 
     case ActionTypes.REMOVE_WINDOW:
-      return Object.keys(state).reduce((object, key) => {
-        if (key !== action.windowId) {
-          object[key] = state[key]; // eslint-disable-line no-param-reassign
-        }
-        return object;
-      }, {});
+      return removeIn(state, [action.windowId]);
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.elasticLayout || {};
     default:

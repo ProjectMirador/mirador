@@ -3,7 +3,7 @@ import union from 'lodash/union';
 import without from 'lodash/without';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { getManifestTreeStructure } from './manifests';
-import { getVisibleCanvases } from './canvases';
+import { getVisibleCanvasIds } from './canvases';
 import { getCompanionWindow } from './companionWindows';
 
 /** */
@@ -58,13 +58,10 @@ function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
 const getVisibleLeafAndBranchNodeIds = createSelector(
   [
     getManifestTreeStructure,
-    getVisibleCanvases,
+    getVisibleCanvasIds,
   ],
-  (tree, canvases) => {
-    if (!canvases) {
-      return [];
-    }
-    const canvasIds = canvases.map(canvas => canvas.id);
+  (tree, canvasIds) => {
+    if (canvasIds.length === 0) return [];
     return getVisibleNodeIdsInSubTree(tree.nodes, canvasIds);
   },
 );

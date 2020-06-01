@@ -7,7 +7,7 @@ import { SearchHit } from '../components/SearchHit';
 import * as actions from '../state/actions';
 import {
   getCanvasLabel,
-  getVisibleCanvases,
+  getVisibleCanvasIds,
   getResourceAnnotationForSearchHit,
   getResourceAnnotationLabel,
   getSelectedContentSearchAnnotationIds,
@@ -28,7 +28,7 @@ const mapStateToProps = (state, {
   const annotationLabel = getResourceAnnotationLabel(
     state, { annotationUri: realAnnoId, companionWindowId, windowId },
   );
-  const selectedCanvasIds = getVisibleCanvases(state, { windowId }).map(canvas => canvas.id);
+  const selectedCanvasIds = getVisibleCanvasIds(state, { windowId });
 
   const selectedAnnotation = getSelectedContentSearchAnnotationIds(state, {
     companionWindowId, windowId,

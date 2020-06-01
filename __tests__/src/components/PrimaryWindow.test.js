@@ -11,7 +11,6 @@ function createWrapper(props) {
     <PrimaryWindow
       classes={{}}
       windowId="window-1"
-      manifest={{}}
       {...props}
     />,
   );
@@ -26,14 +25,16 @@ describe('PrimaryWindow', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(WindowSideBar)).toHaveLength(1);
   });
+  it('should render nothing if manifest is still f etching', () => {
+    const wrapper = createWrapper({ isFetching: true });
+    expect(wrapper.find(WindowViewer)).toHaveLength(0);
+  });
   it('should render <WindowViewer> if manifest is present', () => {
-    const manifest = { id: 456, isFetching: false };
-    const wrapper = createWrapper({ manifest });
+    const wrapper = createWrapper({ isFetching: false });
     expect(wrapper.find(WindowViewer)).toHaveLength(1);
   });
   it('should render <GalleryView> if manifest is present and view is gallery', () => {
-    const manifest = { id: 456, isFetching: false };
-    const wrapper = createWrapper({ manifest, view: 'gallery', windowId: 'window-2' });
+    const wrapper = createWrapper({ isFetching: false, view: 'gallery', windowId: 'window-2' });
     expect(wrapper.find(GalleryView)).toHaveLength(1);
   });
 });

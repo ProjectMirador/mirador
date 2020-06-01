@@ -300,6 +300,7 @@ export class OpenSeadragonViewer extends Component {
   infoResponsesMatch(prevInfoResponses) {
     const { infoResponses } = this.props;
     if (infoResponses.length === 0 && prevInfoResponses.length === 0) return true;
+    if (infoResponses.length !== prevInfoResponses.length) return false;
 
     return infoResponses.some((infoResponse, index) => {
       if (!prevInfoResponses[index]) {
