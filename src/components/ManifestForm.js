@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -19,10 +18,10 @@ export class ManifestForm extends Component {
       formValue: '',
     };
 
+    this.inputRef = React.createRef();
     this.formSubmit = this.formSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.setInputRef = this.setInputRef.bind(this);
   }
 
   /**
@@ -32,19 +31,9 @@ export class ManifestForm extends Component {
    */
   componentDidUpdate() {
     const { addResourcesOpen } = this.props;
-    if (this.input && addResourcesOpen) {
-      ReactDOM.findDOMNode(this.input).querySelector('#manifestURL').focus();// eslint-disable-line react/no-find-dom-node
+    if (this.inputRef && this.inputRef.current && addResourcesOpen) {
+      this.inputRef.current.focus();
     }
-  }
-
-  /**
-   * Set the ref to the manifest input
-   * @param {*} input
-   */
-  setInputRef(input) {
-    if (this.input) return;
-
-    this.input = input;
   }
 
   /**
@@ -100,7 +89,7 @@ export class ManifestForm extends Component {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={8} md={9}>
             <TextField
-              ref={ref => this.setInputRef(ref)}
+              inputRef={this.inputRef}
               fullWidth
               value={formValue}
               id="manifestURL"
