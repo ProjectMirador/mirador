@@ -59,29 +59,19 @@ describe('WindowViewSettings', () => {
     expect(setWindowViewType).toHaveBeenCalledWith('xyz', 'gallery');
   });
 
-  it('sets the selected ref to a MenuItem in the component (when mounting)', () => {
+  it('sets autofocus on the selected MenuItem', () => {
     const wrapper = mount(
       <WindowViewSettings
         classes={{}}
         windowId="xyz"
         setWindowViewType={() => {}}
         viewTypes={['single', 'book', 'scroll', 'gallery']}
-        windowViewType="single"
+        windowViewType="book"
       />,
     );
 
     expect(
-      wrapper
-        .instance()
-        .selectedRef
-        .tagName,
-    ).toEqual('LI');
-
-    // The document's ActiveElement is an li
-    expect(
-      document
-        .activeElement[Object.keys(document.activeElement)[0]]
-        .elementType,
-    ).toEqual('li');
+      wrapper.find(MenuItem).at(1).prop('autoFocus'),
+    ).toEqual(true);
   });
 });
