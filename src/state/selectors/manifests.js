@@ -3,24 +3,12 @@ import createCachedSelector from 're-reselect';
 import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import getThumbnail from '../../lib/ThumbnailFactory';
+import { getManifest } from './getters';
 
 /** */
 function createManifestoInstance(json, locale) {
   if (!json) return undefined;
   return Utils.parseManifest(json, locale ? { locale } : undefined);
-}
-
-/** */
-export function getManifests(state) {
-  return state.manifests || {};
-}
-
-/** Get the relevant manifest information */
-export function getManifest(state, { manifestId, windowId }) {
-  return state.manifests && state.manifests[
-    manifestId
-    || (windowId && state.windows && state.windows[windowId] && state.windows[windowId].manifestId)
-  ];
 }
 
 /** Convenience selector to get a manifest (or placeholder) */
@@ -239,29 +227,6 @@ export function getManifestThumbnail(state, props) {
 }
 
 /**
-* Return the logo of a manifest or null
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
-*/
-export const getManifestCanvases = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) {
-      return [];
-    }
-
-    if (!manifest.getSequences || !manifest.getSequences()[0]) {
-      return [];
-    }
-
-    return manifest.getSequences()[0].getCanvases();
-  },
-);
-
-/**
 * Return manifest title
 * @param {object} state
 * @param {object} props
@@ -364,56 +329,6 @@ export const getMetadataLocales = createSelector(
   manifest => getLocales(manifest),
 );
 
-/**
- * Returns the viewing hint for the first sequence in the manifest or the manifest
- * @param {object} state
- * @param {object} props
- * @param {string} props.manifestId
- * @param {string} props.windowId
- * @return {Number}
- */
-export const getManifestViewingHint = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return null;
-    const viewingHint = (manifest.getSequences()[0] && manifest.getSequences()[0].getViewingHint())
-      || manifest.getViewingHint();
-    if (viewingHint) return viewingHint;
-    return null;
-  },
-);
-
-/**
- * Returns the behaviors viewing hint for the manifest
- * @param {object} state
- * @param {object} props
- * @param {string} props.manifestId
- * @param {string} props.windowId
- * @return {Number}
- */
-export const getManifestBehaviors = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return [];
-    const behaviors = manifest.getProperty('behavior');
-
-    if (!behaviors) return [];
-    if (Array.isArray(behaviors)) return behaviors;
-    return [behaviors];
-  },
-);
-
-export const getManifestViewingDirection = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return null;
-    const viewingDirection = manifest.getSequences()[0].getViewingDirection()
-      || manifest.getViewingDirection();
-    if (viewingDirection) return viewingDirection;
-    return null;
-  },
-);
-
 /** */
 export const getManifestSearchService = createSelector(
   [getManifestoInstance],
@@ -436,14 +351,5 @@ export const getManifestAutocompleteService = createSelector(
     );
 
     return autocompleteService && autocompleteService;
-  },
-);
-
-/** */
-export const getManifestTreeStructure = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return null;
-    return manifest.getDefaultTree();
   },
 );

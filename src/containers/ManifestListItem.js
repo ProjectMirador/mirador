@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getManifest,
-  getManifestTitle, getManifestThumbnail, getManifestCanvases,
+  getManifestTitle, getManifestThumbnail, getCanvases,
   getManifestLogo, getManifestProvider, getWindowManifests,
 } from '../state/selectors';
 import * as actions from '../state/actions';
@@ -22,7 +22,7 @@ const mapStateToProps = (state, { manifestId, provider }) => {
     provider: provider
       || getManifestProvider(state, { manifestId }),
     ready: !!manifest.json,
-    size: getManifestCanvases(state, { manifestId }).length,
+    size: getCanvases(state, { manifestId }).length,
     thumbnail: getManifestThumbnail(state, { manifestId }),
     title: getManifestTitle(state, { manifestId }),
   };

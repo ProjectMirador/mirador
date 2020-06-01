@@ -2,9 +2,9 @@ import { createSelector } from 'reselect';
 import union from 'lodash/union';
 import without from 'lodash/without';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
-import { getManifestTreeStructure } from './manifests';
 import { getVisibleCanvasIds } from './canvases';
 import { getCompanionWindow } from './companionWindows';
+import { getSequenceTreeStructure } from './sequences';
 
 /** */
 function rangeContainsCanvasId(range, canvasId) {
@@ -57,7 +57,7 @@ function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
 /** */
 const getVisibleLeafAndBranchNodeIds = createSelector(
   [
-    getManifestTreeStructure,
+    getSequenceTreeStructure,
     getVisibleCanvasIds,
   ],
   (tree, canvasIds) => {
@@ -133,7 +133,7 @@ export function getNodeIdToScrollTo(state, { ...args }) {
  */
 export const getDefaultSidebarVariant = createSelector(
   [
-    getManifestTreeStructure,
+    getSequenceTreeStructure,
   ],
   tree => (
     tree && tree.nodes && tree.nodes.length > 0 ? 'tableOfContents' : 'item'

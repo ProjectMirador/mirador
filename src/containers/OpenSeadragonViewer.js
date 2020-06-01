@@ -12,7 +12,7 @@ import {
   getSelectedAnnotationsOnCanvases,
   getHighlightedAnnotationsOnCanvases,
   getCanvasLabel,
-  getManifestViewingDirection,
+  getSequenceViewingDirection,
   getLayersForVisibleCanvases,
   getVisibleCanvases,
   getViewer,
@@ -30,7 +30,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   canvasWorld: new CanvasWorld(
     getVisibleCanvases(state, { windowId }),
     getLayersForVisibleCanvases(state, { windowId }),
-    getManifestViewingDirection(state, { windowId }),
+    getSequenceViewingDirection(state, { windowId }),
   ),
   highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),
   label: getCanvasLabel(state, {

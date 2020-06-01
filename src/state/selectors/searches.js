@@ -3,7 +3,7 @@ import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
 import flatten from 'lodash/flatten';
 import AnnotationList from '../../lib/AnnotationList';
 import { getCanvas, getCanvases } from './canvases';
-import { getWindow } from './windows';
+import { getWindow } from './getters';
 import { getManifestLocale } from './manifests';
 
 export const getSearchForWindow = createSelector(

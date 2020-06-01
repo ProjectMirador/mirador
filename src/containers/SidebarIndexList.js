@@ -6,7 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
   getCompanionWindow,
-  getManifestCanvases,
+  getCanvases,
   getVisibleCanvases,
 } from '../state/selectors';
 import { SidebarIndexList } from '../components/SidebarIndexList';
@@ -15,7 +15,7 @@ import { SidebarIndexList } from '../components/SidebarIndexList';
  * mapStateToProps - to hook up connect
  */
 const mapStateToProps = (state, { id, windowId }) => {
-  const canvases = getManifestCanvases(state, { windowId });
+  const canvases = getCanvases(state, { windowId });
   return {
     canvases,
     selectedCanvases: getVisibleCanvases(state, { windowId }),
