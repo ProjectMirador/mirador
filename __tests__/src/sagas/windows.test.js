@@ -83,7 +83,7 @@ describe('window-level sagas', () => {
         },
       };
 
-      return expectSaga(fetchWindowManifest, action)
+      return expectSaga(setWindowStartingCanvas, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
           [call(setCanvas, 'x', '1', null, { preserveViewport: false }), { type: 'setCanvasThunk' }],
@@ -101,7 +101,7 @@ describe('window-level sagas', () => {
         },
       };
 
-      return expectSaga(fetchWindowManifest, action)
+      return expectSaga(setWindowStartingCanvas, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
           [call(setCanvas, 'x', '1', null, { preserveViewport: true }), { type: 'setCanvasThunk' }],
