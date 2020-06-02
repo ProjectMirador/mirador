@@ -76,7 +76,6 @@ export class CanvasAnnotations extends Component {
                 component={listContainerComponent}
                 className={classes.annotationListItem}
                 key={annotation.id}
-                annotation={annotation}
                 annotationid={annotation.id}
                 selected={selectedAnnotationIds.includes(annotation.id)}
                 onClick={e => this.handleClick(e, annotation)}

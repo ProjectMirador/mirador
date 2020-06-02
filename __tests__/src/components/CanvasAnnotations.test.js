@@ -70,11 +70,6 @@ describe('CanvasAnnotations', () => {
     expect(wrapper.find(Chip).length).toEqual(2);
   });
 
-  it('pass through the annotation to make plugins life easier', () => {
-    wrapper = createWrapper({ annotations });
-    expect(wrapper.find(ListItem).first().dive().props().annotation.id).toEqual('abc123');
-  });
-
   it('renders nothing when there are no annotations', () => {
     wrapper = createWrapper();
     expect(wrapper.find(Typography).length).toBe(0);
