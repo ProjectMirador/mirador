@@ -43,6 +43,23 @@ export function* fetchWindowManifest(action) {
 
   yield call(setWindowStartingCanvas, action);
   yield call(setWindowDefaultSearchQuery, action);
+  if (!collectionPath) {
+    yield call(setCollectionPath, { manifestId, windowId: action.id || action.window.id });
+  }
+}
+
+/** */
+export function* setCollectionPath({ manifestId, windowId }) {
+  const manifestoInstance = yield select(getManifestoInstance, { manifestId });
+
+  if (manifestoInstance) {
+    const partOfs = manifestoInstance.getProperty('partOf');
+    const partOf = Array.isArray(partOfs) ? partOfs[0] : partOfs;
+
+    if (partOf && partOf.id) {
+      yield put(updateWindow(windowId, { collectionPath: [partOf.id] }));
+    }
+  }
 }
 
 /** */

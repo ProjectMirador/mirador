@@ -65,6 +65,7 @@ describe('window-level sagas', () => {
           [select(getManifests), { 'manifest.json': {} }],
           [call(setWindowStartingCanvas, action)],
           [call(setWindowDefaultSearchQuery, action)],
+          [call(setCollectionPath, { manifestId: 'manifest.json', windowId: 'x' })],
         ])
         .call(setWindowStartingCanvas, action)
         .call(setWindowDefaultSearchQuery, action)
