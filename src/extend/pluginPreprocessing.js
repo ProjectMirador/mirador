@@ -40,7 +40,9 @@ export function connectPluginsToStore(plugins) {
 /** */
 export function addPluginReducersToStore(store, createRootReducer, plugins) {
   const pluginReducers = getReducersFromPlugins(plugins);
-  store.replaceReducer(createRootReducer(pluginReducers));
+  if (pluginReducers && pluginReducers.length > 0) {
+    store.replaceReducer(createRootReducer(pluginReducers));
+  }
 }
 
 /** */
