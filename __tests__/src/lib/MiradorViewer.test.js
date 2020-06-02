@@ -58,10 +58,10 @@ describe('MiradorViewer', () => {
       expect(windows[windowIds[0]].view).toBe(undefined);
       expect(windows[windowIds[1]].view).toBe('book');
 
-      expect(catalog.length).toBe(1);
-      expect(catalog[0].manifestId).toBe('http://media.nga.gov/public/manifests/nga_highlights.json');
-      expect(catalog[0].provider).toBe('National Gallery of Art');
-
+      expect(catalog.length).toBe(2);
+      expect(catalog[0].manifestId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843');
+      expect(catalog[1].manifestId).toBe('http://media.nga.gov/public/manifests/nga_highlights.json');
+      expect(catalog[1].provider).toBe('National Gallery of Art');
       expect(config.foo).toBe('bar');
     });
     it('merges translation configs from multiple plugins', () => {
