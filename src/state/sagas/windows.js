@@ -45,6 +45,14 @@ export function* fetchWindowManifest(action) {
   yield call(setWindowDefaultSearchQuery, action);
 }
 
+/** */
+export function* fetchCollectionManifests(action) {
+  const { collectionPath } = action.payload;
+  if (!collectionPath) return;
+
+  yield call(fetchManifests, ...collectionPath);
+}
+
 /** @private */
 export function* setWindowStartingCanvas(action) {
   const { canvasId, canvasIndex, manifestId } = action.payload || action.window;
@@ -210,6 +218,7 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.SET_CANVAS, setCurrentAnnotationsOnCurrentCanvas),
     takeEvery(ActionTypes.SET_CANVAS, fetchInfoResponses),
+    takeEvery(ActionTypes.UPDATE_COMPANION_WINDOW, fetchCollectionManifests),
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
     takeEvery(ActionTypes.RECEIVE_SEARCH, setCanvasOfFirstSearchResult),
     takeEvery(ActionTypes.SELECT_ANNOTATION, setCanvasforSelectedAnnotation),
