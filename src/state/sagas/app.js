@@ -2,7 +2,7 @@ import {
   all, call, put, takeEvery,
 } from 'redux-saga/effects';
 import { v4 as uuid } from 'uuid';
-import { fetchManifest } from './iiif';
+import { fetchManifests } from './iiif';
 import { fetchWindowManifest } from './windows';
 import { addWindow } from '../actions';
 import ActionTypes from '../actions/action-types';
@@ -14,7 +14,7 @@ export function* importState(action) {
       .map(([_, window]) => call(fetchWindowManifest, { id: window.id, payload: window })),
     ...Object.entries(action.state.manifests || {})
       .filter(([_, manifest]) => !manifest.json)
-      .map(([_, manifest]) => call(fetchManifest, { manifestId: manifest.id })),
+      .map(([_, manifest]) => call(fetchManifests, manifest.id)),
   ]);
 }
 
@@ -42,9 +42,16 @@ export function* importConfig({ config: { thumbnailNavigation, windows } }) {
 }
 
 /** */
+export function* fetchCollectionManifests(action) {
+  const { collectionPath, manifestId } = action.payload;
+  yield call(fetchManifests, manifestId, ...collectionPath);
+}
+
+/** */
 export default function* appSaga() {
   yield all([
     takeEvery(ActionTypes.IMPORT_MIRADOR_STATE, importState),
     takeEvery(ActionTypes.IMPORT_CONFIG, importConfig),
+    takeEvery(ActionTypes.SHOW_COLLECTION_DIALOG, fetchCollectionManifests),
   ]);
 }

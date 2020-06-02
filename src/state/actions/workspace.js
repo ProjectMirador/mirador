@@ -92,3 +92,20 @@ export function toggleDraggingEnabled() {
     type: ActionTypes.TOGGLE_DRAGGING,
   };
 }
+
+/** */
+export function showCollectionDialog(manifestId, collectionPath = [], windowId = null) {
+  return {
+    collectionPath,
+    manifestId,
+    type: ActionTypes.SHOW_COLLECTION_DIALOG,
+    windowId,
+  };
+}
+
+/** */
+export function hideCollectionDialog() {
+  return {
+    type: ActionTypes.HIDE_COLLECTION_DIALOG,
+  };
+}

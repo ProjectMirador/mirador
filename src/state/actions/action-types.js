@@ -70,6 +70,8 @@ const ActionTypes = {
   UPDATE_LAYERS: 'mirador/UPDATE_LAYERS',
   ADD_RESOURCE: 'mirador/ADD_RESOURCE',
   REMOVE_RESOURCE: 'mirador/REMOVE_RESOURCE',
+  SHOW_COLLECTION_DIALOG: 'mirador/SHOW_COLLECTION_DIALOG',
+  HIDE_COLLECTION_DIALOG: 'mirador/HIDE_COLLECTION_DIALOG',
 };
 
 export default ActionTypes;

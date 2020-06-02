@@ -99,6 +99,16 @@ export const workspaceReducer = (
       return action.state.workspace || {};
     case ActionTypes.TOGGLE_DRAGGING:
       return { ...state, draggingEnabled: !state.draggingEnabled };
+    case ActionTypes.SHOW_COLLECTION_DIALOG:
+      return {
+        ...state,
+        collectionDialogOn: true,
+        collectionManifestId: action.manifestId,
+        collectionPath: action.collectionPath,
+        collectionUpdateWindowId: action.windowId,
+      };
+    case ActionTypes.HIDE_COLLECTION_DIALOG:
+      return { ...state, collectionDialogOn: false };
     default:
       return state;
   }
