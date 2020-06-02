@@ -211,6 +211,16 @@ export function* refetchInfoResponses({ serviceId }) {
 }
 
 /** */
+export function* fetchManifests(...manifestIds) {
+  const manifests = yield select(getManifests);
+
+  for (let i = 0; i < manifestIds.length; i += 1) {
+    const manifestId = manifestIds[i];
+    if (!manifests[manifestId]) yield call(fetchManifest, { manifestId });
+  }
+}
+
+/** */
 export default function* iiifSaga() {
   yield all([
     takeEvery(ActionTypes.REQUEST_MANIFEST, fetchManifest),
