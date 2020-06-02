@@ -11,10 +11,10 @@ describe('app-level sagas', () => {
       const action = {
         state: {
           manifests: [],
-          windows: [
-            { id: 'x', manifestId: 'url' },
-            { id: 'y', manifestId: 'url2' },
-          ],
+          windows: {
+            x: { id: 'x', manifestId: 'url' },
+            y: { id: 'y', manifestId: 'url2' },
+          },
         },
       };
 
@@ -29,7 +29,7 @@ describe('app-level sagas', () => {
       const action = {
         state: {
           manifests: { x: { id: 'x' } },
-          windows: [],
+          windows: {},
         },
       };
 
@@ -43,7 +43,7 @@ describe('app-level sagas', () => {
       const action = {
         state: {
           manifests: { x: { id: 'x', json: '{}' } },
-          windows: [],
+          windows: {},
         },
       };
 
