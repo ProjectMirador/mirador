@@ -1,5 +1,6 @@
 import update from 'lodash/update';
 import { connect } from 'react-redux';
+import isEmpty from 'lodash/isEmpty';
 import { validatePlugin } from './pluginValidation';
 import CompanionWindowRegistry from '../lib/CompanionWindowRegistry';
 
@@ -40,7 +41,7 @@ export function connectPluginsToStore(plugins) {
 /** */
 export function addPluginReducersToStore(store, createRootReducer, plugins) {
   const pluginReducers = getReducersFromPlugins(plugins);
-  if (pluginReducers && pluginReducers.length > 0) {
+  if (!isEmpty(pluginReducers)) {
     store.replaceReducer(createRootReducer(pluginReducers));
   }
 }
