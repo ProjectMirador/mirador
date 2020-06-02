@@ -42,9 +42,16 @@ export function accessTokensReducer(state = {}, action) {
         ...state,
         [action.serviceId]: {
           ...state[action.serviceId],
-          infoIds: [],
           isFetching: false,
           json: action.json,
+        },
+      };
+    case ActionTypes.CLEAR_ACCESS_TOKEN_QUEUE:
+      return {
+        ...state,
+        [action.serviceId]: {
+          ...state[action.serviceId],
+          infoIds: [],
         },
       };
     case ActionTypes.RECEIVE_ACCESS_TOKEN_FAILURE:

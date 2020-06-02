@@ -5,7 +5,11 @@ import { v4 as uuid } from 'uuid';
 import HotApp from '../components/App';
 import createStore from '../state/createStore';
 import * as actions from '../state/actions';
-import { getCompanionWindowIdsForPosition, getManifestSearchService } from '../state/selectors';
+import {
+  filterValidPlugins,
+  getReducersFromPlugins,
+  getSagasFromPlugins,
+} from '../extend/pluginPreprocessing';
 
 /**
  * Default Mirador instantiation
@@ -15,8 +19,9 @@ class MiradorViewer {
    */
   constructor(config, viewerConfig = {}) {
     this.config = config;
-    this.plugins = viewerConfig.plugins || [];
-    this.store = viewerConfig.store || createStore();
+    this.plugins = filterValidPlugins(viewerConfig.plugins || []);
+    this.store = viewerConfig.store
+      || createStore(getReducersFromPlugins(this.plugins), getSagasFromPlugins(this.plugins));
     this.processConfig();
 
     const viewer = {
@@ -46,8 +51,8 @@ class MiradorViewer {
     storedConfig.windows.forEach((miradorWindow, layoutOrder) => {
       const windowId = `window-${uuid()}`;
       const manifestId = miradorWindow.manifestId || miradorWindow.loadedManifest;
-      const manifestAction = this.store.dispatch(actions.fetchManifest(manifestId));
-      const windowAction = this.store.dispatch(actions.addWindow({
+
+      this.store.dispatch(actions.addWindow({
         // these are default values ...
         id: windowId,
         layoutOrder,
@@ -56,30 +61,6 @@ class MiradorViewer {
         // ... overridden by values from the window configuration ...
         ...miradorWindow,
       }));
-
-      Promise.all([manifestAction, windowAction]).then(() => {
-        if (miradorWindow.defaultSearchQuery) {
-          const state = this.store.getState();
-          const companionWindowId = getCompanionWindowIdsForPosition(state, { position: 'left', windowId })[0];
-          const searchService = getManifestSearchService(state, { windowId });
-          const searchId = searchService && `${searchService.id}?q=${miradorWindow.defaultSearchQuery}`;
-
-          companionWindowId && searchId && this.store.dispatch(
-            actions.fetchSearch(
-              windowId,
-              companionWindowId,
-              searchId,
-              miradorWindow.defaultSearchQuery,
-            ),
-          );
-        }
-      });
-    });
-
-    Object.keys(storedConfig.manifests || {}).forEach((manifestId) => {
-      this.store.dispatch(
-        actions.requestManifest(manifestId, storedConfig.manifests[manifestId]),
-      );
     });
   }
 }

@@ -76,6 +76,11 @@ function connectPluginComponent(plugin) {
 }
 
 /**  */
-function getReducersFromPlugins(plugins) {
+export function getReducersFromPlugins(plugins) {
   return plugins && plugins.reduce((acc, plugin) => ({ ...acc, ...plugin.reducers }), {});
+}
+
+/**  */
+export function getSagasFromPlugins(plugins) {
+  return plugins && plugins.filter(plugin => plugin.saga).map(plugin => plugin.saga);
 }

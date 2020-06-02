@@ -11,13 +11,6 @@ jest.mock('../../../src/state/selectors', () => ({
   getCanvasGrouping: (state, { canvasId }) => [{ id: canvasId }],
   getNextCanvasGrouping: () => [{ id: 'canvasIndex-2' }],
   getPreviousCanvasGrouping: () => [{ id: 'canvasIndex-0' }],
-  getSearchAnnotationsForCompanionWindow: () => ({
-    resources: [
-      { id: 'annoId', targetId: 'a' },
-    ],
-  }),
-  getSearchForWindow: () => ({ cwid: { } }),
-  getVisibleCanvases: () => [{ id: 'a' }],
 }));
 
 describe('canvas actions', () => {
@@ -31,11 +24,8 @@ describe('canvas actions', () => {
       const id = 'abc123';
       const expectedAction = {
         canvasId: 'a',
-        searches: {
-          cwid: ['annoId'],
-        },
-        selectedContentSearchAnnotation: ['annoId'],
         type: ActionTypes.SET_CANVAS,
+        visibleCanvases: ['a'],
         windowId: id,
       };
       store.dispatch(actions.setCanvas(id, 'a'));
@@ -52,8 +42,8 @@ describe('canvas actions', () => {
       const id = 'abc123';
       const expectedAction = {
         canvasId: 'canvasIndex-0',
-        searches: {},
         type: ActionTypes.SET_CANVAS,
+        visibleCanvases: ['canvasIndex-0'],
         windowId: id,
       };
       store.dispatch(actions.setPreviousCanvas(id));
@@ -70,8 +60,8 @@ describe('canvas actions', () => {
       const id = 'abc123';
       const expectedAction = {
         canvasId: 'canvasIndex-2',
-        searches: {},
         type: ActionTypes.SET_CANVAS,
+        visibleCanvases: ['canvasIndex-2'],
         windowId: id,
       };
       store.dispatch(actions.setNextCanvas(id));

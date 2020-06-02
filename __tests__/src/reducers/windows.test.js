@@ -1,6 +1,5 @@
 import { windowsReducer } from '../../../src/state/reducers/windows';
 import ActionTypes from '../../../src/state/actions/action-types';
-import manifestJson from '../../fixtures/version-2/019.json';
 
 describe('windows reducer', () => {
   it('should handle ADD_WINDOW', () => {
@@ -28,28 +27,6 @@ describe('windows reducer', () => {
       def456: {
         id: 'def456',
       },
-    });
-  });
-  it('should handle RECEIVE_MANIFEST', () => {
-    const state = {
-      window: {
-        canvasIndex: 1,
-        manifestId: 'a',
-      },
-      window2: {
-      },
-    };
-    expect(windowsReducer(state, {
-      manifestId: 'a',
-      manifestJson,
-      type: ActionTypes.RECEIVE_MANIFEST,
-    })).toEqual({
-      window: {
-        canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
-        canvasIndex: undefined,
-        manifestId: 'a',
-      },
-      window2: {},
     });
   });
   it('should handle MAXIMIZE_WINDOW', () => {
@@ -144,6 +121,7 @@ describe('windows reducer', () => {
       abc123: {
         canvasId: 'http://example.com/canvas/1',
         id: 'abc123',
+        visibleCanvases: ['http://example.com/canvas/1'],
       },
       def456: {
         canvasId: 'http://example.com/canvas/1',
@@ -151,14 +129,14 @@ describe('windows reducer', () => {
       },
     }, {
       canvasId: 'http://example.com/canvas/5',
-      selectedContentSearchAnnotation: 'xyz',
       type: ActionTypes.SET_CANVAS,
+      visibleCanvases: ['http://example.com/canvas/5'],
       windowId: 'abc123',
     })).toEqual({
       abc123: {
         canvasId: 'http://example.com/canvas/5',
         id: 'abc123',
-        selectedContentSearchAnnotation: 'xyz',
+        visibleCanvases: ['http://example.com/canvas/5'],
       },
       def456: {
         canvasId: 'http://example.com/canvas/1',
@@ -469,30 +447,5 @@ describe('windows reducer', () => {
       state: { windows: { new: 'stuff' } },
       type: ActionTypes.IMPORT_MIRADOR_STATE,
     })).toEqual({ new: 'stuff' });
-  });
-
-  describe('RECEIVE_SEARCH', () => {
-    it('set the canvas index and annotation id if provided', () => {
-      const beforeState = { abc123: {} };
-      const action = {
-        annotationId: 'aaa123', canvasId: 'info:canvas/5', type: ActionTypes.RECEIVE_SEARCH, windowId: 'abc123',
-      };
-      const expectedState = {
-        abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] },
-      };
-
-      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
-    });
-    it('passes through existing data otherwise', () => {
-      const beforeState = { abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] } };
-      const action = {
-        type: ActionTypes.RECEIVE_SEARCH, windowId: 'abc123',
-      };
-      const expectedState = {
-        abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] },
-      };
-
-      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
-    });
   });
 });

@@ -1,10 +1,8 @@
 import ActionTypes from './action-types';
 import {
-  getCanvasGrouping,
   getNextCanvasGrouping,
   getPreviousCanvasGrouping,
-  getSearchAnnotationsForCompanionWindow,
-  getSearchForWindow,
+  getCanvasGrouping,
 } from '../selectors';
 
 /**
@@ -14,40 +12,23 @@ import {
  * @param  {String} canvasId
  * @memberof ActionCreators
  */
-export function setCanvas(windowId, canvasId) {
+export function setCanvas(windowId, canvasId, newGroup = undefined, options = {}) {
   return ((dispatch, getState) => {
     const state = getState();
+    let visibleCanvases = newGroup;
 
-    const canvasIds = getCanvasGrouping(state, { canvasId, windowId }).map(c => c.id);
-    const searches = getSearchForWindow(state, { windowId }) || {};
-    const annotationBySearch = Object.keys(searches).reduce((accumulator, companionWindowId) => {
-      const annotations = getSearchAnnotationsForCompanionWindow(state, {
-        companionWindowId, windowId,
-      });
-      const resourceAnnotations = annotations.resources;
-      const hitAnnotation = resourceAnnotations.find(r => canvasIds.includes(r.targetId));
-
-      if (hitAnnotation) accumulator[companionWindowId] = [hitAnnotation.id];
-
-      return accumulator;
-    }, {});
-
-    const annotationIds = Object.values(annotationBySearch);
-
-    const action = {
-      canvasId: canvasIds && canvasIds[0],
-      searches: annotationBySearch,
-      type: ActionTypes.SET_CANVAS,
-      windowId,
-    };
-
-    if (annotationIds.length > 0) {
-      action.selectedContentSearchAnnotation = ( // eslint-disable-line prefer-destructuring
-        annotationIds[0]
-      );
+    if (!visibleCanvases) {
+      const group = getCanvasGrouping(state, { canvasId, windowId });
+      visibleCanvases = (group || []).map(c => c.id);
     }
 
-    dispatch(action);
+    dispatch({
+      ...options,
+      canvasId,
+      type: ActionTypes.SET_CANVAS,
+      visibleCanvases,
+      windowId,
+    });
   });
 }
 
@@ -56,7 +37,8 @@ export function setNextCanvas(windowId) {
   return ((dispatch, getState) => {
     const state = getState();
     const newGroup = getNextCanvasGrouping(state, { windowId });
-    newGroup && dispatch(setCanvas(windowId, newGroup[0] && newGroup[0].id));
+    const ids = (newGroup || []).map(c => c.id);
+    newGroup && dispatch(setCanvas(windowId, ids[0], ids));
   });
 }
 
@@ -66,7 +48,8 @@ export function setPreviousCanvas(windowId) {
     const state = getState();
 
     const newGroup = getPreviousCanvasGrouping(state, { windowId });
-    newGroup && dispatch(setCanvas(windowId, newGroup[0] && newGroup[0].id));
+    const ids = (newGroup || []).map(c => c.id);
+    newGroup && dispatch(setCanvas(windowId, ids[0], ids));
   });
 }
 

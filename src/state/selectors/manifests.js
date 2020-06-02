@@ -10,6 +10,10 @@ function createManifestoInstance(json, locale) {
   return Utils.parseManifest(json, locale ? { locale } : undefined);
 }
 
+/** */
+export function getManifests(state) {
+  return state.manifests || {};
+}
 
 /** Get the relevant manifest information */
 export function getManifest(state, { manifestId, windowId }) {
@@ -26,7 +30,7 @@ export const getManifestStatus = createSelector(
 );
 
 /** Instantiate a manifesto instance */
-export const getManifestoInstance = createCachedSelector(
+const getContextualManifestoInstance = createCachedSelector(
   getManifest,
   getLocale,
   (manifest, locale) => manifest
@@ -40,6 +44,16 @@ export const getManifestoInstance = createCachedSelector(
       && state.companionWindows[props.companionWindowId].locale)
       || (state.config && state.config.language),
   ].join(' - '), // Cache key consisting of manifestId, windowId, and locale
+);
+
+/** Instantiate a manifesto instance */
+export const getManifestoInstance = createSelector(
+  getContextualManifestoInstance,
+  (state, { json }) => json,
+  getLocale,
+  (manifesto, manifestJson, locale) => (
+    manifestJson && createManifestoInstance(manifestJson, locale)
+  ) || manifesto,
 );
 
 export const getManifestLocale = createSelector(

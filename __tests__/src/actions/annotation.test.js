@@ -1,11 +1,5 @@
-import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-
 import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
-
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
 describe('annotation actions', () => {
   describe('requestAnnotation', () => {
@@ -38,72 +32,19 @@ describe('annotation actions', () => {
     });
   });
   describe('fetchAnnotation', () => {
-    let store = null;
-    beforeEach(() => {
-      store = mockStore({});
-    });
     describe('success response', () => {
       beforeEach(() => {
         fetch.mockResponseOnce(JSON.stringify({ data: '12345' })); // eslint-disable-line no-undef
       });
       it('dispatches the REQUEST_ANNOTATION action', () => {
-        store.dispatch(actions.fetchAnnotation(
+        expect(actions.fetchAnnotation(
           'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
           'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-        ));
-        expect(store.getActions()).toEqual([
-          {
-            annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-            targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-            type: 'mirador/REQUEST_ANNOTATION',
-          },
-        ]);
-      });
-      it('dispatches the REQUEST_ANNOTATION and then RECEIVE_ANNOTATION', () => {
-        store.dispatch(actions.fetchAnnotation(
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-        ))
-          .then(() => {
-            const expectedActions = store.getActions();
-            expect(expectedActions).toEqual([
-              {
-                annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-                type: 'mirador/REQUEST_ANNOTATION',
-              },
-              {
-                annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-                annotationJson: { data: '12345' },
-                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-                type: 'mirador/RECEIVE_ANNOTATION',
-              },
-            ]);
-          });
-      });
-    });
-    describe('error response', () => {
-      it('dispatches the REQUEST_ANNOTATION and then RECEIVE_ANNOTATION', () => {
-        store.dispatch(actions.fetchAnnotation(
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-        ))
-          .then(() => {
-            const expectedActions = store.getActions();
-            expect(expectedActions).toEqual([
-              {
-                annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-                type: 'mirador/REQUEST_ANNOTATION',
-              },
-              {
-                annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-                error: new Error('invalid json response body at undefined reason: Unexpected end of JSON input'),
-                targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-                type: 'mirador/RECEIVE_ANNOTATION_FAILURE',
-              },
-            ]);
-          });
+        )).toEqual({
+          annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
+          targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
+          type: 'mirador/REQUEST_ANNOTATION',
+        });
       });
     });
   });

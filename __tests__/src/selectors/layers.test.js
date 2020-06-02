@@ -104,9 +104,12 @@ describe('getLayersForVisibleCanvases', () => {
     },
     windows: {
       x: {
-        canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
         manifestId: 'm019',
         view: 'book',
+        visibleCanvases: [
+          'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
+          'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
+        ],
       },
     },
   };

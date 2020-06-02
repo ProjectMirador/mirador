@@ -5,7 +5,15 @@ import {
   getThemeIds,
   getContainerId,
   getThemeDirection,
+  getConfig,
 } from '../../../src/state/selectors';
+
+describe('getConfig', () => {
+  it('returns the whole config', () => {
+    const state = { config: { x: {} } };
+    expect(getConfig(state)).toEqual(state.config);
+  });
+});
 
 describe('getLanguagesFromConfigWithCurrent', () => {
   it('returns an array of objects with locale, label, and current properties', () => {
