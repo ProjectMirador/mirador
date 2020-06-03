@@ -8,7 +8,7 @@ import { WindowSideBarCanvasPanel } from '../components/WindowSideBarCanvasPanel
 import {
   getCompanionWindow,
   getDefaultSidebarVariant,
-  getManifestCanvases,
+  getCanvases,
   getVisibleCanvases,
 } from '../state/selectors';
 
@@ -16,7 +16,7 @@ import {
  * mapStateToProps - to hook up connect
  */
 const mapStateToProps = (state, { id, windowId }) => {
-  const canvases = getManifestCanvases(state, { windowId });
+  const canvases = getCanvases(state, { windowId });
   const { config } = state;
   return {
     canvases,

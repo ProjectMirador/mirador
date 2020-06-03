@@ -187,22 +187,13 @@ describe('getCanvas', () => {
     });
     expect(received.id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
   });
-
-  it('returns the canvas by index', () => {
-    const state = { manifests: { a: { json: manifestFixture001 } } };
-    const received = getCanvas(state, {
-      canvasIndex: 0,
-      manifestId: 'a',
-    });
-    expect(received.id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
-  });
 });
 
 describe('getCanvasLabel', () => {
   it('should return label of the canvas', () => {
     const state = { manifests: { a: { json: manifestFixture001 } } };
     const received = getCanvasLabel(state, {
-      canvasIndex: 0,
+      canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
       manifestId: 'a',
     });
     expect(received).toBe('Whole Page');
@@ -211,7 +202,7 @@ describe('getCanvasLabel', () => {
   it('should return undefined if the canvas is undefined', () => {
     const state = { manifests: { } };
     expect(getCanvasLabel(state, {
-      canvasIndex: 0,
+      canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
       manifestId: 'b',
     })).toBeUndefined();
   });
@@ -235,7 +226,7 @@ describe('getCanvasLabel', () => {
 
     const state = { manifests: { a: { json: manifest } } };
     const received = getCanvasLabel(state, {
-      canvasIndex: 0,
+      canvasId: 'some-canvas-without-a-label',
       manifestId: 'a',
     });
     expect(received).toBe('1');
@@ -349,16 +340,16 @@ describe('selectCanvasAuthService', () => {
   };
 
   it('returns undefined if there is no current canvas', () => {
-    expect(selectCanvasAuthService({ manifests: {} }, { canvasIndex: 5, manifestId: 'a' })).toBeUndefined();
+    expect(selectCanvasAuthService({ manifests: {} }, { manifestId: 'a' })).toBeUndefined();
   });
 
   it('returns the next auth service to try', () => {
-    expect(selectCanvasAuthService(state, { canvasIndex: 0, manifestId: 'a' }).id).toEqual('external');
+    expect(selectCanvasAuthService(state, { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' }).id).toEqual('external');
   });
 
   it('returns the service if the next auth service is interactive', () => {
     const auth = { external: { isFetching: false, ok: false } };
-    expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 0, manifestId: 'a' }).id).toEqual('login');
+    expect(selectCanvasAuthService({ ...state, auth }, { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' }).id).toEqual('login');
   });
 
   it('returns the last attempted auth service if all of them have been tried', () => {
@@ -366,9 +357,9 @@ describe('selectCanvasAuthService', () => {
       external: { isFetching: false, ok: false },
       login: { isFetching: false, ok: false },
     };
-    expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 0, manifestId: 'a' }).id).toEqual('login');
-    expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 0, manifestId: 'b' }).id).toEqual('external');
-    expect(selectCanvasAuthService({ ...state, auth }, { canvasIndex: 1, manifestId: 'b' })).toBeUndefined();
+    expect(selectCanvasAuthService({ ...state, auth }, { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' }).id).toEqual('login');
+    expect(selectCanvasAuthService({ ...state, auth }, { canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json', manifestId: 'b' }).id).toEqual('external');
+    expect(selectCanvasAuthService({ ...state, auth }, { canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1', manifestId: 'b' })).toBeUndefined();
   });
 });
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { GalleryView } from '../components/GalleryView';
-import { getManifestCanvases, getManifestViewingDirection } from '../state/selectors';
+import { getCanvases, getSequenceViewingDirection } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -12,8 +12,8 @@ import { getManifestCanvases, getManifestViewingDirection } from '../state/selec
  */
 const mapStateToProps = (state, { windowId }) => (
   {
-    canvases: getManifestCanvases(state, { windowId }),
-    viewingDirection: getManifestViewingDirection(state, { windowId }),
+    canvases: getCanvases(state, { windowId }),
+    viewingDirection: getSequenceViewingDirection(state, { windowId }),
   }
 );
 

@@ -1,21 +1,17 @@
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
-import manifestFixture015 from '../../fixtures/version-2/015.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import manifestFixtureSn904cj3429 from '../../fixtures/version-2/sn904cj3429.json';
 import manifestFixturev3001 from '../../fixtures/version-3/001.json';
 import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
 import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
-import manifestFixture2017498721 from '../../fixtures/version-2/2017498721.json';
 import {
   getManifestoInstance,
   getManifestLocale,
   getDestructuredMetadata,
-  getManifest,
   getManifestStatus,
   getManifestLogo,
-  getManifestCanvases,
   getManifestDescription,
   getManifestHomepage,
   getManifestProvider,
@@ -25,57 +21,12 @@ import {
   getManifestRelatedContent,
   getManifestRenderings,
   getManifestUrl,
-  getManifestViewingDirection,
-  getManifestViewingHint,
-  getManifestBehaviors,
-  getManifestTreeStructure,
   getMetadataLocales,
   getRequiredStatement,
   getRights,
   getManifestSearchService,
   getManifestAutocompleteService,
 } from '../../../src/state/selectors/manifests';
-
-
-describe('getManifest()', () => {
-  const state = {
-    manifests: {
-      x: { id: 'x' },
-    },
-    windows: {
-      a: { id: 'a', manifestId: 'x' },
-      b: { id: 'b', manifestId: 'y' },
-      c: { id: 'c' },
-    },
-  };
-
-  it('should return the manifest of a certain id', () => {
-    const received = getManifest(state, { manifestId: 'x' });
-    const expected = { id: 'x' };
-    expect(received).toEqual(expected);
-  });
-
-  it('should return the manifest of a certain window', () => {
-    const received = getManifest(state, { windowId: 'a' });
-    const expected = { id: 'x' };
-    expect(received).toEqual(expected);
-  });
-
-  it('should return undefined if window doesnt exist', () => {
-    const received = getManifest(state, { windowId: 'unknown' });
-    expect(received).toBeUndefined();
-  });
-
-  it('should return undefined if window has no manifest id', () => {
-    const received = getManifest(state, { windowId: 'c' });
-    expect(received).toBeUndefined();
-  });
-
-  it('should return undefined if manifest does not exist', () => {
-    const received = getManifest(state, { windowId: 'b' });
-    expect(received).toBeUndefined();
-  });
-});
 
 describe('getManifestStatus', () => {
   const state = {
@@ -162,21 +113,6 @@ describe('getManifestThumbnail()', () => {
     const state = { manifests: { x: {} } };
     const received = getManifestThumbnail(state, { manifestId: 'x' });
     expect(received).toBeUndefined();
-  });
-});
-
-describe('getManifestCanvases', () => {
-  it('returns an empty array if the manifestation is not loaded', () => {
-    const state = { manifests: { x: {} } };
-    const received = getManifestCanvases(state, { manifestId: 'x' });
-    expect(received).toEqual([]);
-  });
-
-  it('returns canvases from the manifest', () => {
-    const state = { manifests: { x: { json: manifestFixture001 } } };
-    const received = getManifestCanvases(state, { manifestId: 'x' });
-    expect(received.length).toBe(1);
-    expect(received[0].id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
   });
 });
 
@@ -433,52 +369,6 @@ describe('getRights', () => {
     const state = { manifests: { x: { json: manifest } } };
     const received = getRights(state, { manifestId: 'x' });
     expect(received).toEqual(['http://example.com']);
-  });
-});
-
-describe('getManifestViewingHint', () => {
-  it('gets from the manifest', () => {
-    const state = { manifests: { x: { json: manifestFixture001 } } };
-    expect(getManifestViewingHint(state, { manifestId: 'x' })).toEqual('individuals');
-  });
-
-  it('gets from the manifest if this is no sequence', () => {
-    const state = { manifests: { x: { json: manifestFixture2017498721 } } };
-    expect(getManifestViewingHint(state, { manifestId: 'x' })).toEqual('paged');
-  });
-
-  it('gets from the sequence', () => {
-    const state = { manifests: { x: { json: manifestFixture015 } } };
-    expect(getManifestViewingHint(state, { manifestId: 'x' })).toEqual('paged');
-  });
-
-  it('is null if no viewingHint is specified', () => {
-    const state = { manifests: { x: { json: manifestFixture019 } } };
-    expect(getManifestViewingHint(state, { manifestId: 'x' })).toBeNull();
-  });
-});
-
-describe('getManifestBehaviors', () => {
-  it('gets from the manifest', () => {
-    const state = { manifests: { x: { json: manifestFixturev3001 } } };
-    expect(getManifestBehaviors(state, { manifestId: 'x' })).toEqual(['individuals']);
-  });
-});
-
-describe('getManifestViewingDirection', () => {
-  it('gets from the manifest', () => {
-    const state = { manifests: { x: { json: manifestFixture001 } } };
-    expect(getManifestViewingDirection(state, { manifestId: 'x' })).toEqual('left-to-right');
-  });
-
-  it('gets from the sequence', () => {
-    const state = { manifests: { x: { json: manifestFixture015 } } };
-    expect(getManifestViewingDirection(state, { manifestId: 'x' })).toEqual('left-to-right');
-  });
-
-  it('is null if no viewingDirection is specified', () => {
-    const state = { manifests: { x: { json: manifestFixture019 } } };
-    expect(getManifestViewingDirection(state, { manifestId: 'x' })).toBeNull();
   });
 });
 

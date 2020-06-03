@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import groupBy from 'lodash/groupBy';
-import { getWindow, getWindows } from './windows';
+import { getWindow, getWindows } from './getters';
 
 
 /** */

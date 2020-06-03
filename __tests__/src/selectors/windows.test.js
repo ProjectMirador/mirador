@@ -5,29 +5,10 @@ import manifestFixture019 from '../../fixtures/version-2/019.json';
 import {
   getWindowTitles,
   getWindowViewType,
-  getViewer,
   getWindowDraggability,
-  getCanvasIndex,
-  getWindowManifests,
-  getWindows,
   getMaximizedWindowsIds,
   getAllowedWindowViewTypes,
 } from '../../../src/state/selectors/windows';
-
-describe('getWindows', () => {
-  it('should return windows from state', () => {
-    const state = {
-      windows: {
-        a: { manifestId: 'amanifest' },
-        b: { manifestId: 'bmanifest' },
-      },
-    };
-
-    const received = getWindows(state);
-
-    expect(received).toEqual(state.windows);
-  });
-});
 
 describe('getMaximizedWindowsIds', () => {
   it('filters windows to only those maximized', () => {
@@ -64,39 +45,6 @@ describe('getWindowTitles', () => {
       a: 'Bodleian Library Human Freaks 2 (33)',
       b: 'Test 2 Manifest: Metadata Pairs',
     });
-  });
-});
-
-describe('getWindowManifests', () => {
-  it('should return manifest titles for the open windows', () => {
-    const state = {
-      windows: {
-        a: { manifestId: 'amanifest' },
-        b: { manifestId: 'bmanifest' },
-      },
-    };
-
-    const received = getWindowManifests(state);
-
-    expect(received).toEqual(['amanifest', 'bmanifest']);
-  });
-});
-
-describe('getCanvasIndex', () => {
-  it('returns the current canvasIndex for the window', () => {
-    const state = {
-      manifests: {
-        y: { json: { ...manifestFixture015 } },
-      },
-      windows: {
-        a: { canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json', manifestId: 'y' },
-      },
-    };
-
-    expect(getCanvasIndex(state, { windowId: 'a' })).toEqual(1);
-  });
-  it('defaults to the first canvas', () => {
-    expect(getCanvasIndex({}, {})).toEqual(0);
   });
 });
 
@@ -184,24 +132,6 @@ describe('getAllowedWindowViewTypes', () => {
   it('should return view types where behaviors match', () => {
     const received = getAllowedWindowViewTypes(state, { manifestId: 'y' });
     expect(received).toEqual(['single', 'book', 'gallery']);
-  });
-});
-
-describe('getViewer', () => {
-  const state = {
-    viewers: {
-      bar: {
-        id: 'bar',
-      },
-    },
-  };
-
-  it('should return companion windows for a given window id', () => {
-    const received = getViewer(state, { windowId: 'bar' });
-
-    expect(received).toEqual({
-      id: 'bar',
-    });
   });
 });
 

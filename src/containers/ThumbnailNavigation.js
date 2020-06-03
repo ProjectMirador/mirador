@@ -8,8 +8,8 @@ import * as actions from '../state/actions';
 import { ThumbnailNavigation } from '../components/ThumbnailNavigation';
 import {
   getNextCanvasGrouping, getPreviousCanvasGrouping,
-  getManifestCanvases, getCanvasIndex, getWindowViewType,
-  getManifestViewingDirection,
+  getCanvases, getCanvasIndex, getWindowViewType,
+  getSequenceViewingDirection,
 } from '../state/selectors';
 
 /**
@@ -21,7 +21,7 @@ const mapStateToProps = (state, { windowId }) => {
   const viewType = getWindowViewType(state, { windowId });
   return {
     canvasGroupings: new CanvasGroupings(
-      getManifestCanvases(state, { windowId }),
+      getCanvases(state, { windowId }),
       viewType,
     ),
     canvasIndex: getCanvasIndex(state, { windowId }),
@@ -30,7 +30,7 @@ const mapStateToProps = (state, { windowId }) => {
     position: state.companionWindows[state.windows[windowId].thumbnailNavigationId].position,
     thumbnailNavigation: state.config.thumbnailNavigation,
     view: viewType,
-    viewingDirection: getManifestViewingDirection(state, { windowId }),
+    viewingDirection: getSequenceViewingDirection(state, { windowId }),
   };
 };
 

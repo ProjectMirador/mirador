@@ -6,7 +6,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withPlugins } from '../extend/withPlugins';
 import { SidebarIndexTableOfContents } from '../components/SidebarIndexTableOfContents';
 import {
-  getManifestTreeStructure,
+  getSequenceTreeStructure,
   getVisibleNodeIds,
   getExpandedNodeIds,
   getNodeIdToScrollTo,
@@ -20,7 +20,7 @@ import * as actions from '../state/actions';
 const mapStateToProps = (state, { id, windowId }) => ({
   expandedNodeIds: getExpandedNodeIds(state, { companionWindowId: id, windowId }),
   nodeIdToScrollTo: getNodeIdToScrollTo(state, { companionWindowId: id, windowId }),
-  treeStructure: getManifestTreeStructure(state, { windowId }),
+  treeStructure: getSequenceTreeStructure(state, { windowId }),
   visibleNodeIds: getVisibleNodeIds(state, { companionWindowId: id, windowId }),
 });
 
