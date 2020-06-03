@@ -22,10 +22,10 @@ export default () => {
     it,
     ja,
     nl,
-    sr,
     'pt-BR': ptBr,
     'zh-CN': zhCn,
     'zh-TW': zhTw,
+    sr,
   };
 
   const instance = i18n.createInstance();
