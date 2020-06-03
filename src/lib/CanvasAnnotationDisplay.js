@@ -1,5 +1,5 @@
 /** Opacity of the search annotations */
-const SEARCH_ANNOTATION_ALPHA = 0.3;
+const FILL_OUTLINE_ALPHA = 0.3;
 
 /**
  * CanvasAnnotationDisplay - class used to display a SVG and fragment based
@@ -8,14 +8,14 @@ const SEARCH_ANNOTATION_ALPHA = 0.3;
 export default class CanvasAnnotationDisplay {
   /** */
   constructor({
-    resource, color, zoomRatio, offset, selected, isSearch,
+    resource, color, zoomRatio, offset, selected, fillOutline,
   }) {
     this.resource = resource;
     this.color = color;
     this.zoomRatio = zoomRatio;
     this.offset = offset;
     this.selected = selected;
-    this.isSearch = isSearch;
+    this.fillOutline = fillOutline;
   }
 
   /** */
@@ -79,10 +79,6 @@ export default class CanvasAnnotationDisplay {
           this.context.globalAlpha = element.attributes['fill-opacity'].nodeValue;
         }
         this.context.fill(p);
-      } else if (this.isSearch) {
-        this.context.fillStyle = this.color;
-        this.context.globalAlpha = SEARCH_ANNOTATION_ALPHA;
-        this.context.fill(p);
       }
       this.context.restore();
     });
@@ -93,9 +89,9 @@ export default class CanvasAnnotationDisplay {
     const fragment = this.resource.fragmentSelector;
     fragment[0] += this.offset.x;
     fragment[1] += this.offset.y;
-    if (this.isSearch) {
+    if (this.fillOutline) {
       this.context.fillStyle = this.color;
-      this.context.globalAlpha = SEARCH_ANNOTATION_ALPHA;
+      this.context.globalAlpha = FILL_OUTLINE_ALPHA;
       this.context.fillRect(...fragment);
       this.context.restore();
     } else {
