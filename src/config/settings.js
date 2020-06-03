@@ -213,7 +213,7 @@ export default {
     'zh-CN': '中文(简体)',
     'zh-TW': '中文(繁體)',
     it: "Italiano",
-    sr: 'Serbian',
+    sr: 'Српски',
   },
   annotations: {
     htmlSanitizationRuleSet: 'iiif', // See src/lib/htmlRules.js for acceptable values
