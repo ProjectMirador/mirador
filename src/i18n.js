@@ -23,9 +23,9 @@ export default () => {
     ja,
     nl,
     'pt-BR': ptBr,
+    sr,
     'zh-CN': zhCn,
     'zh-TW': zhTw,
-    sr,
   };
 
   const instance = i18n.createInstance();
