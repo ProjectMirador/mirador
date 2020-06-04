@@ -61,11 +61,6 @@ export class WindowViewer extends Component {
         });
         miradorCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
       });
-
-      currentCanvases.map(canvas => new MiradorCanvas(canvas))
-        .map(miradorCanvas => miradorCanvas.annotationListUris.forEach((uri) => {
-          fetchAnnotation(miradorCanvas.canvas.id, uri);
-        }));
     }
   }
 
