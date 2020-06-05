@@ -1,7 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { WindowSideBarCanvasPanel } from '../../../src/components/WindowSideBarCanvasPanel';
 import SidebarIndexList from '../../../src/containers/SidebarIndexList';

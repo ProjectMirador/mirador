@@ -2,8 +2,6 @@ import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import MiradorCanvas from '../../../src/lib/MiradorCanvas';
 import fixture from '../../fixtures/version-2/019.json';
 import v3fixture from '../../fixtures/version-3/001.json';
-import imagev1Fixture from '../../fixtures/version-2/Osbornfa1.json';
-import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 import serviceFixture from '../../fixtures/version-2/canvasService.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
 import otherContentStringsFixture from '../../fixtures/version-2/BibliographicResource_3000126341277.json';
