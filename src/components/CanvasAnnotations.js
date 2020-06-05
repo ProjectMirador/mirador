@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Chip from '@material-ui/core/Chip';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import SanitizedHtml from '../containers/SanitizedHtml';
@@ -68,10 +68,10 @@ export class CanvasAnnotations extends Component {
         <Typography className={classes.sectionHeading} variant="overline">
           {t('annotationCanvasLabel', { context: `${index + 1}/${totalSize}`, label })}
         </Typography>
-        <List>
+        <MenuList autoFocusItem variant="selectedMenu">
           {
             annotations.map(annotation => (
-              <ListItem
+              <MenuItem
                 button
                 component={listContainerComponent}
                 className={classes.annotationListItem}
@@ -97,10 +97,10 @@ export class CanvasAnnotations extends Component {
                     }
                   </div>
                 </ListItemText>
-              </ListItem>
+              </MenuItem>
             ))
           }
-        </List>
+        </MenuList>
       </>
     );
   }
