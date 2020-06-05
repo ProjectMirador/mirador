@@ -13,7 +13,7 @@ jest.setTimeout(10000);
 
 window.HTMLCanvasElement.prototype.getContext = () => {};
 jest.setMock('isomorphic-unfetch', fetch);
-global.fetch = require('jest-fetch-mock'); // eslint-disable-line import/no-extraneous-dependencies
+require('jest-fetch-mock').enableMocks(); // eslint-disable-line import/no-extraneous-dependencies
 
 global.window = window;
 global.navigator = {
