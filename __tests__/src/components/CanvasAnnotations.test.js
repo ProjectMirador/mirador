@@ -2,8 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
 import { CanvasAnnotations } from '../../../src/components/CanvasAnnotations';
 
 /** Utility function to wrap CanvasAnnotations */
@@ -60,8 +60,8 @@ describe('CanvasAnnotations', () => {
   it('renders a List w/ a ListItem for every annotation', () => {
     wrapper = createWrapper({ annotations });
 
-    expect(wrapper.find(List).length).toEqual(1);
-    expect(wrapper.find(ListItem).length).toEqual(2);
+    expect(wrapper.find(MenuList).length).toEqual(1);
+    expect(wrapper.find(MenuItem).length).toEqual(2);
   });
 
   it('renders a Chip for every tag', () => {
@@ -84,7 +84,7 @@ describe('CanvasAnnotations', () => {
         selectAnnotation,
       });
 
-      wrapper.find(ListItem).first().simulate('click');
+      wrapper.find(MenuItem).first().simulate('click');
       expect(selectAnnotation).toHaveBeenCalledWith('abc', 'example.com/iiif/12345', 'abc123');
     });
 
@@ -97,7 +97,7 @@ describe('CanvasAnnotations', () => {
         selectedAnnotationIds: ['abc123'],
       });
 
-      wrapper.find(ListItem).first().simulate('click');
+      wrapper.find(MenuItem).first().simulate('click');
       expect(deselectAnnotation).toHaveBeenCalledWith('abc', 'example.com/iiif/12345', 'abc123');
     });
 
@@ -118,10 +118,10 @@ describe('CanvasAnnotations', () => {
           highlightAnnotation,
         });
 
-        wrapper.find(ListItem).first().simulate('mouseEnter');
+        wrapper.find(MenuItem).first().simulate('mouseEnter');
         expect(highlightAnnotation).not.toHaveBeenCalled();
 
-        wrapper.find(ListItem).first().simulate('mouseLeave');
+        wrapper.find(MenuItem).first().simulate('mouseLeave');
         expect(highlightAnnotation).not.toHaveBeenCalled();
       });
     });
@@ -142,7 +142,7 @@ describe('CanvasAnnotations', () => {
           highlightAnnotation,
         });
 
-        wrapper.find(ListItem).first().simulate('mouseEnter');
+        wrapper.find(MenuItem).first().simulate('mouseEnter');
         expect(highlightAnnotation).toHaveBeenCalledWith('abc', 'annoId');
       });
 
@@ -161,7 +161,7 @@ describe('CanvasAnnotations', () => {
           highlightAnnotation,
         });
 
-        wrapper.find(ListItem).first().simulate('focus');
+        wrapper.find(MenuItem).first().simulate('focus');
         expect(highlightAnnotation).toHaveBeenCalledWith('abc', 'annoId');
       });
 
@@ -180,7 +180,7 @@ describe('CanvasAnnotations', () => {
           highlightAnnotation,
         });
 
-        wrapper.find(ListItem).first().simulate('mouseLeave');
+        wrapper.find(MenuItem).first().simulate('mouseLeave');
         expect(highlightAnnotation).toHaveBeenCalledWith('abc', null);
       });
     });

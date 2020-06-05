@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
 import { ScrollTo } from './ScrollTo';
 import MiradorCanvas from '../lib/MiradorCanvas';
 import SidebarIndexItem from '../containers/SidebarIndexItem';
@@ -34,35 +34,35 @@ export class SidebarIndexList extends Component {
     const canvasesIdAndLabel = this.getIdAndLabelOfCanvases(canvases);
 
     return (
-      <List>
+      <MenuList autoFocusItem variant="selectedMenu">
         {
           canvasesIdAndLabel.map((canvas, canvasIndex) => {
             const onClick = () => { setCanvas(windowId, canvas.id); }; // eslint-disable-line require-jsdoc, max-len
 
             return (
-              <ScrollTo
-                containerRef={containerRef}
-                key={`${canvas.id}-${variant}`}
-                offsetTop={96} // offset for the height of the form above
-                scrollTo={!!selectedCanvases.find(c => c.id === canvas.id)}
+              <MenuItem
+                key={canvas.id}
+                className={classes.listItem}
+                alignItems="flex-start"
+                onClick={onClick}
+                button
+                component="li"
+                selected={!!selectedCanvases.find(c => c.id === canvas.id)}
               >
-                <ListItem
-                  key={canvas.id}
-                  className={classes.listItem}
-                  alignItems="flex-start"
-                  onClick={onClick}
-                  button
-                  component="li"
-                  selected={!!selectedCanvases.find(c => c.id === canvas.id)}
+                <ScrollTo
+                  containerRef={containerRef}
+                  key={`${canvas.id}-${variant}`}
+                  offsetTop={96} // offset for the height of the form above
+                  scrollTo={!!selectedCanvases.find(c => c.id === canvas.id)}
                 >
                   {variant === 'item' && <SidebarIndexItem canvas={canvas} />}
                   {variant === 'thumbnail' && <SidebarIndexThumbnail canvas={canvas} otherCanvas={canvases[canvasIndex]} />}
-                </ListItem>
-              </ScrollTo>
+                </ScrollTo>
+              </MenuItem>
             );
           })
         }
-      </List>
+      </MenuList>
     );
   }
 }

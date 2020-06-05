@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { SidebarIndexList } from '../../../src/components/SidebarIndexList';
 import SidebarIndexItem from '../../../src/containers/SidebarIndexItem';
@@ -38,24 +38,24 @@ describe('SidebarIndexList', () => {
 
   it('renders all needed elements for the thumbnail view', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find(List).length).toBe(1);
-    expect(wrapper.find(ListItem).length).toBe(3);
-    expect(wrapper.find(ListItem).first().props().component).toEqual('li');
-    expect(wrapper.find(ListItem).at(1).props().selected).toBe(true);
-    expect(wrapper.find(List).find(SidebarIndexItem).length).toBe(3);
+    expect(wrapper.find(MenuList).length).toBe(1);
+    expect(wrapper.find(MenuItem).length).toBe(3);
+    expect(wrapper.find(MenuItem).first().props().component).toEqual('li');
+    expect(wrapper.find(MenuItem).at(1).props().selected).toBe(true);
+    expect(wrapper.find(MenuList).find(SidebarIndexItem).length).toBe(3);
   });
 
   it('renders all needed elements for the item view', () => {
     const wrapper = createWrapper({ variant: 'item' });
-    expect(wrapper.find(List).length).toBe(1);
-    expect(wrapper.find(ListItem).length).toBe(3);
-    expect(wrapper.find(ListItem).first().props().component).toEqual('li');
-    expect(wrapper.find(List).find(SidebarIndexItem).length).toBe(3);
+    expect(wrapper.find(MenuList).length).toBe(1);
+    expect(wrapper.find(MenuItem).length).toBe(3);
+    expect(wrapper.find(MenuItem).first().props().component).toEqual('li');
+    expect(wrapper.find(MenuList).find(SidebarIndexItem).length).toBe(3);
   });
 
   it('should call the onClick handler of a list item', () => {
     const wrapper = createWrapper({ setCanvas });
-    wrapper.find(ListItem).at(1).simulate('click');
+    wrapper.find(MenuItem).at(1).simulate('click');
     expect(setCanvas).toHaveBeenCalledTimes(1);
   });
 
