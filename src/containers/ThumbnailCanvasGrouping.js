@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getWindow, getCurrentCanvas } from '../state/selectors';
+import { getCurrentCanvas } from '../state/selectors';
 import { ThumbnailCanvasGrouping } from '../components/ThumbnailCanvasGrouping';
 
 /**

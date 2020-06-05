@@ -23,19 +23,6 @@ function createWrapper(props) {
   );
 }
 
-/**
- * Assert which tab is focussed
- */
-function assertTabFocused(wrapper, tabIndex) {
-  const tabs = wrapper.find('button[role="tab"]');
-
-  tabs.forEach((tab, index) => {
-    if (index === tabIndex) {
-      expect(tab.find('button').instance()).toEqual(document.activeElement);
-    }
-  });
-}
-
 describe('WindowSideBarButtons (shallow)', () => {
   const windowId = 'test123';
   let wrapper;

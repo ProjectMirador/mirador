@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import NavigationIcon from '@material-ui/icons/PlayCircleOutlineSharp';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
 
