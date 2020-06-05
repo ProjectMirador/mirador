@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
@@ -19,25 +18,6 @@ export class WindowViewSettings extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
-  }
-
-  /**
-   * Take action when the component mounts for the first time
-   */
-  componentDidMount() {
-    if (this.selectedRef) {
-      // MUI uses ReactDOM.findDOMNode and refs for handling focus
-      ReactDOM.findDOMNode(this.selectedRef).focus(); // eslint-disable-line react/no-find-dom-node
-    }
-  }
-
-  /**
-   * @private
-   */
-  handleSelectedRef(ref) {
-    if (this.selectedRef) return;
-
-    this.selectedRef = ref;
   }
 
   /**
@@ -72,7 +52,7 @@ export class WindowViewSettings extends Component {
       <MenuItem
         key={value}
         className={classes.MenuItem}
-        ref={windowViewType === value && (ref => this.handleSelectedRef(ref))}
+        autoFocus={windowViewType === value}
         onClick={() => { this.handleChange(value); handleClose(); }}
       >
         <FormControlLabel

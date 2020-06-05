@@ -25,12 +25,14 @@ export class CompanionWindowFactory extends Component {
    * case, only when we reuse an existing companionWindow instance for
    * the left-anchored companion area (anti-pattern?)
    */
-  UNSAFE_componentWillReceiveProps(nextProps) { // eslint-disable-line camelcase
+  componentDidUpdate(prevProps) {
     const { content } = this.props;
 
     // Typical usage (don't forget to compare props):
-    if (content !== nextProps.content) {
-      this.setState({ error: null, hasError: false });
+    if (content !== prevProps.content) {
+      this.setState({ // eslint-disable-line react/no-did-update-set-state
+        error: null, hasError: false,
+      });
     }
   }
 

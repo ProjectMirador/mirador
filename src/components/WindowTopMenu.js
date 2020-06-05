@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Menu from '@material-ui/core/Menu';
+import Menu from '@material-ui/core//Menu';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import PropTypes from 'prop-types';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
@@ -29,34 +29,31 @@ export class WindowTopMenu extends Component {
     const {
       containerId, handleClose, anchorEl, toggleDraggingEnabled, windowId,
     } = this.props;
-    // const {} = this.state;
 
     return (
-      <>
-        <Menu
-          id={`window-menu_${windowId}`}
-          container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
-          anchorEl={anchorEl}
-          anchorOrigin={{
-            horizontal: 'right',
-            vertical: 'bottom',
-          }}
-          transformOrigin={{
-            horizontal: 'right',
-            vertical: 'top',
-          }}
-          getContentAnchorEl={null}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-          onEntering={toggleDraggingEnabled}
-          onExit={toggleDraggingEnabled}
-          disableAutoFocusItem
-        >
-          <WindowViewSettings windowId={windowId} handleClose={handleClose} />
-          <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />
-          <PluginHookWithHeader {...this.props} />
-        </Menu>
-      </>
+      <Menu
+        id={`window-menu_${windowId}`}
+        container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          horizontal: 'right',
+          vertical: 'bottom',
+        }}
+        transformOrigin={{
+          horizontal: 'right',
+          vertical: 'top',
+        }}
+        getContentAnchorEl={null}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        onEntering={toggleDraggingEnabled}
+        onExit={toggleDraggingEnabled}
+        orientation="horizontal"
+      >
+        <WindowViewSettings windowId={windowId} handleClose={handleClose} />
+        <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />
+        <PluginHookWithHeader {...this.props} />
+      </Menu>
     );
   }
 }
