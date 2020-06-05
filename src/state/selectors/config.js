@@ -3,7 +3,7 @@ import deepmerge from 'deepmerge';
 
 /** */
 export function getConfig(state) {
-  return state.config || {};
+  return (state && state.config) || {};
 }
 
 /**
@@ -60,4 +60,9 @@ export const getViewConfigs = createSelector(
 export const getThemeDirection = createSelector(
   [getConfig],
   ({ theme }) => theme.direction || 'ltr',
+);
+
+export const getRequestsConfig = createSelector(
+  [getConfig],
+  ({ requests }) => requests || {},
 );

@@ -13,6 +13,7 @@ import {
   getManifests,
   selectInfoResponse,
   getAccessTokens,
+  getRequestsConfig,
 } from '../../../src/state/selectors';
 
 describe('IIIF sagas', () => {
@@ -46,6 +47,28 @@ describe('IIIF sagas', () => {
           [select(getConfig), {}],
         ])
         .put.actionType('mirador/RECEIVE_MANIFEST_FAILURE')
+        .run();
+    });
+
+    it('supports request configuration preprocessors', () => {
+      fetch.once(req => Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })));
+      const action = {
+        manifestId: 'manifestId',
+      };
+
+      return expectSaga(fetchManifest, action)
+        .provide([
+          [select(getRequestsConfig), {
+            preprocessors: [
+              (url, options) => ({ ...options, headers: { CustomHeader: 'config injected' } }),
+            ],
+          }],
+        ])
+        .put({
+          manifestId: 'manifestId',
+          manifestJson: { data: 'config injected' },
+          type: 'mirador/RECEIVE_MANIFEST',
+        })
         .run();
     });
   });

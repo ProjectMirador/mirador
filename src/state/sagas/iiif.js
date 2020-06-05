@@ -13,13 +13,13 @@ import {
 } from '../actions';
 import {
   getManifests,
-  getConfig,
+  getRequestsConfig,
   getAccessTokens,
   selectInfoResponse,
 } from '../selectors';
 
 /** */
-function fetchIiifResource(url, options, { success, degraded, failure }) {
+function fetchWrapper(url, options, { success, degraded, failure }) {
   return fetch(url, options)
     .then(response => response.json().then((json) => {
       if (response.status === 401) return (degraded || success)({ json, response });
@@ -27,6 +27,19 @@ function fetchIiifResource(url, options, { success, degraded, failure }) {
       return failure({ error: response.statusText, json, response });
     }).catch(error => failure({ error, response })))
     .catch(error => failure({ error }));
+}
+
+/** */
+function* fetchIiifResource(url, options, { success, degraded, failure }) {
+  const { preprocessors = [] } = yield select(getRequestsConfig);
+
+  try {
+    const reqOptions = preprocessors.reduce((acc, f) => f(url, acc) || acc, options);
+
+    const resp = yield call(fetchWrapper, url, reqOptions, { degraded, failure, success });
+
+    return resp;
+  } catch (error) { return failure({ error }); }
 }
 
 /** */
@@ -92,13 +105,11 @@ function* fetchIiifResourceWithAuth(url, iiifResource, options, { degraded, fail
 
 /** */
 export function* fetchManifest({ manifestId }) {
-  const { resourceHeaders } = yield select(getConfig);
-  const options = { headers: resourceHeaders };
   const callbacks = {
     failure: ({ error, json, response }) => receiveManifestFailure(manifestId, typeof error === 'object' ? String(error) : error),
     success: ({ json, response }) => receiveManifest(manifestId, json),
   };
-  const dispatch = yield call(fetchIiifResource, manifestId, options, callbacks);
+  const dispatch = yield call(fetchIiifResource, manifestId, {}, callbacks);
   yield put(dispatch);
 }
 

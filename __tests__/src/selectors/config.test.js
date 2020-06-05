@@ -6,6 +6,7 @@ import {
   getContainerId,
   getThemeDirection,
   getConfig,
+  getRequestsConfig,
 } from '../../../src/state/selectors';
 
 describe('getConfig', () => {
@@ -113,5 +114,12 @@ describe('getThemeDirection', () => {
   it('returns ltr as default', () => {
     const state = { config: { theme: { } } };
     expect(getThemeDirection(state)).toBe('ltr');
+  });
+});
+
+describe('getRequestsConfig', () => {
+  it('returns the requests configration', () => {
+    const state = { config: { requests: 'whatever' } };
+    expect(getRequestsConfig(state)).toEqual('whatever');
   });
 });
