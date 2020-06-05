@@ -221,7 +221,11 @@ export default {
   },
   classPrefix: 'mirador',
   displayAllAnnotations: false, // Configure if annotations to be displayed on the canvas by default when fetched
-  resourceHeaders: {}, // Headers to send with IIIF Presentation API resource requests
+  requests: {
+    preprocessors: [ // Functions that receive HTTP requests and manipulate them (e.g. to add headers)
+      // (url, options) => (url.match('info.json') && { ...options, myCustomThing: 'blah' })
+    ],
+  },
   translations: { // Translations can be added to inject new languages or override existing labels
   },
   window: {
