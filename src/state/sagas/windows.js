@@ -53,8 +53,10 @@ export function* setWindowStartingCanvas(action) {
       const startCanvas = miradorManifest.startCanvas
         || miradorManifest.canvasAt(canvasIndex || 0)
         || miradorManifest.canvasAt(0);
-      const thunk = yield call(setCanvas, windowId, startCanvas.id);
-      if (startCanvas) yield put(thunk);
+      if (startCanvas) {
+        const thunk = yield call(setCanvas, windowId, startCanvas.id);
+        yield put(thunk);
+      }
     }
   }
 }
