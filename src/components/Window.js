@@ -62,7 +62,9 @@ export class Window extends Component {
    */
   render() {
     const {
-      focusWindow, label, isFetching, maximized, sideBarOpen, view, windowId, classes, t,
+      focusWindow, label, isFetching, maximized, sideBarOpen,
+      view, windowId, classes, t,
+      manifestError,
     } = this.props;
 
     const { error, hasError } = this.state;
@@ -87,6 +89,7 @@ export class Window extends Component {
         aria-label={t('window', { label })}
       >
         {this.wrappedTopBar()}
+        { manifestError && <ErrorContent error={{ stack: manifestError }} windowId={windowId} /> }
         <div className={classes.middle}>
           <div className={classes.middleLeft}>
             <div className={classes.primaryWindow}>
@@ -120,6 +123,7 @@ Window.propTypes = {
   focusWindow: PropTypes.func,
   isFetching: PropTypes.bool,
   label: PropTypes.string,
+  manifestError: PropTypes.string,
   maximized: PropTypes.bool,
   sideBarOpen: PropTypes.bool,
   t: PropTypes.func.isRequired,
@@ -134,6 +138,7 @@ Window.defaultProps = {
   focusWindow: () => {},
   isFetching: false,
   label: null,
+  manifestError: null,
   maximized: false,
   sideBarOpen: false,
   view: undefined,
