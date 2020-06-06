@@ -18,12 +18,25 @@ export class ViewerNavigation extends Component {
     } = this.props;
 
     let htmlDir = 'ltr';
-    let nextIconStyle = { transform: 'rotate(180deg)' };
     let previousIconStyle = {};
-    if (viewingDirection === 'right-to-left') {
-      htmlDir = 'rtl';
-      nextIconStyle = {};
-      previousIconStyle = { transform: 'rotate(180deg)' };
+    let nextIconStyle = {};
+    switch (viewingDirection) {
+      case 'top-to-bottom':
+        previousIconStyle = { transform: 'rotate(270deg)' };
+        nextIconStyle = { transform: 'rotate(90deg)' };
+        break;
+      case 'bottom-to-top':
+        previousIconStyle = { transform: 'rotate(90deg)' };
+        nextIconStyle = { transform: 'rotate(270deg)' };
+        break;
+      case 'right-to-left':
+        htmlDir = 'rtl';
+        previousIconStyle = {};
+        nextIconStyle = { transform: 'rotate(180deg)' };
+        break;
+      default:
+        previousIconStyle = { transform: 'rotate(180deg)' };
+        nextIconStyle = {};
     }
 
     return (
@@ -37,7 +50,7 @@ export class ViewerNavigation extends Component {
           disabled={!hasPreviousCanvas}
           onClick={() => { hasPreviousCanvas && setPreviousCanvas(); }}
         >
-          <NavigationIcon style={nextIconStyle} />
+          <NavigationIcon style={previousIconStyle} />
         </MiradorMenuButton>
         <MiradorMenuButton
           aria-label={t('nextCanvas')}
@@ -45,7 +58,7 @@ export class ViewerNavigation extends Component {
           disabled={!hasNextCanvas}
           onClick={() => { hasNextCanvas && setNextCanvas(); }}
         >
-          <NavigationIcon style={previousIconStyle} />
+          <NavigationIcon style={nextIconStyle} />
         </MiradorMenuButton>
       </div>
     );
