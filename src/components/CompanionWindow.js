@@ -70,7 +70,8 @@ export class CompanionWindow extends Component {
   render() {
     const {
       ariaLabel, classes, paperClassName, id, onCloseClick, updateCompanionWindow, isDisplayed,
-      position, t, windowId, title, children, titleControls, size, defaultSidebarPanelWidth,
+      position, t, windowId, title, children, titleControls, size,
+      defaultSidebarPanelWidth, defaultSidebarPanelHeight,
     } = this.props;
 
     const isBottom = (position === 'bottom' || position === 'far-bottom');
@@ -103,7 +104,7 @@ export class CompanionWindow extends Component {
           className={[classes.rnd]}
           style={{ display: 'flex', position: 'relative' }}
           default={{
-            height: isBottom ? 201 : '100%',
+            height: isBottom ? defaultSidebarPanelHeight : '100%',
             width: isBottom ? 'auto' : defaultSidebarPanelWidth,
           }}
           disableDragging
@@ -187,6 +188,7 @@ CompanionWindow.propTypes = {
   ariaLabel: PropTypes.string,
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  defaultSidebarPanelHeight: PropTypes.number,
   defaultSidebarPanelWidth: PropTypes.number,
   direction: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
@@ -208,6 +210,7 @@ CompanionWindow.propTypes = {
 CompanionWindow.defaultProps = {
   ariaLabel: undefined,
   children: undefined,
+  defaultSidebarPanelHeight: 201,
   defaultSidebarPanelWidth: 235,
   isDisplayed: false,
   onCloseClick: () => {},
