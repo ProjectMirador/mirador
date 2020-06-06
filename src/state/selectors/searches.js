@@ -114,7 +114,7 @@ const searchResultsToAnnotation = (results) => {
       id: anno.id,
       resources: anno.resources,
     };
-  }).filter(a => a);
+  }).filter(Boolean);
 
   return {
     id: (annotations.find(a => a.id) || {}).id,

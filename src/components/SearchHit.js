@@ -44,10 +44,10 @@ export class SearchHit extends Component {
    */
   announceHit() {
     const {
-      annotationLabel, announcer, canvasLabel, hit, index, t, total,
+      annotation, annotationLabel, announcer, canvasLabel, hit, index, t, total,
     } = this.props;
     if (!hit) return;
-    const truncatedHit = new TruncatedHit(hit);
+    const truncatedHit = new TruncatedHit(hit, annotation);
 
     announcer([
       t('pagination', { current: index + 1, total }),
@@ -89,7 +89,7 @@ export class SearchHit extends Component {
 
     if (focused && !selected) return null;
 
-    const truncatedHit = focused ? hit : hit && new TruncatedHit(hit);
+    const truncatedHit = focused ? hit : hit && new TruncatedHit(hit, annotation);
     const truncated = hit && truncatedHit.before !== hit.before && truncatedHit.after !== hit.after;
     const canvasLabelHtmlId = `${companionWindowId}-${index}`;
 
