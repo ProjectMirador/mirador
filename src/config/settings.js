@@ -225,6 +225,14 @@ export default {
     preprocessors: [ // Functions that receive HTTP requests and manipulate them (e.g. to add headers)
       // (url, options) => (url.match('info.json') && { ...options, myCustomThing: 'blah' })
     ],
+    postprocessors: [ // Functions that receive HTTP responses and manipulates them before adding to store
+      // An example of manipulating the response for an annotation request
+      // (url, action) => {
+      //   if (action.annotationId) {
+      //     action.annotationJson = {};
+      //   }
+      // }
+    ]
   },
   translations: { // Translations can be added to inject new languages or override existing labels
   },

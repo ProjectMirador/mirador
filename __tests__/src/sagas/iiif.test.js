@@ -71,6 +71,30 @@ describe('IIIF sagas', () => {
         })
         .run();
     });
+
+    it('supports response postprocessors', () => {
+      fetch.once(req => Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })));
+      const action = {
+        manifestId: 'manifestId',
+      };
+
+      return expectSaga(fetchManifest, action)
+        .provide([
+          [select(getRequestsConfig), {
+            postprocessors: [
+              (url, responseAction) => {
+                responseAction.manifestJson = { foo: 'modified!' }; // eslint-disable-line no-param-reassign
+              },
+            ],
+          }],
+        ])
+        .put({
+          manifestId: 'manifestId',
+          manifestJson: { foo: 'modified!' },
+          type: 'mirador/RECEIVE_MANIFEST',
+        })
+        .run();
+    });
   });
 
   describe('fetchInfoResponse', () => {
