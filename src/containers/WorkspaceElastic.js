@@ -16,8 +16,8 @@ import {
  */
 const mapStateToProps = state => (
   {
-    elasticLayout: getElasticLayout(),
-    workspace: getWorkspace(),
+    elasticLayout: getElasticLayout(state),
+    workspace: getWorkspace(state),
   }
 );
 
