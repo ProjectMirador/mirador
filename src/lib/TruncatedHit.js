@@ -1,15 +1,23 @@
 /** */
 export default class TruncatedHit {
   /** */
-  constructor(hit, maxChars = 200, minimum = 20) {
+  constructor(hit, annotation = undefined, { maxChars = 200, minimum = 20 } = {}) {
     this.hit = hit;
-    this.maxChars = maxChars;
-    this.minimum = minimum;
+    this.annotation = annotation;
+    this.maxChars = maxChars || 200;
+    this.minimum = minimum || 20;
+  }
+
+  /** */
+  get match() {
+    return this.hit.match
+      || (this.annotation && this.annotation.resource.resource.chars)
+      || '-';
   }
 
   /** */
   get charsOnSide() {
-    const resultingChars = (this.maxChars - this.hit.match.length) / 2;
+    const resultingChars = (this.maxChars - this.match.length) / 2;
     const measured = [(this.hit.before || '').length, (this.hit.after || '').length].filter(length => length > 0);
     return Math.max(Math.min(resultingChars, ...measured), this.minimum);
   }
@@ -20,11 +28,6 @@ export default class TruncatedHit {
     return this.hit.before.substring(
       this.hit.before.length - this.charsOnSide, this.hit.before.length,
     );
-  }
-
-  /** */
-  get match() {
-    return this.hit.match;
   }
 
   /** */
