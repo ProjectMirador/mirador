@@ -48,7 +48,7 @@ export class AppProviders extends Component {
   /** */
   render() {
     const {
-      children, classPrefix, isFullscreenEnabled, setWorkspaceFullscreen, theme, translations,
+      children, classPrefix, dragDropManager, isFullscreenEnabled, setWorkspaceFullscreen, theme, translations,
     } = this.props;
 
     const generateClassName = createGenerateClassName({
@@ -73,7 +73,7 @@ export class AppProviders extends Component {
                 jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
                 generateClassName={generateClassName}
               >
-                <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+                <DndProvider backend={MultiBackend} options={HTML5toTouch} {...dragDropManager && { manager: dragDropManager }}>
                   {children}
                 </DndProvider>
               </StylesProvider>
@@ -88,6 +88,7 @@ export class AppProviders extends Component {
 AppProviders.propTypes = {
   children: PropTypes.node,
   classPrefix: PropTypes.string,
+  dragDropManager: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   isFullscreenEnabled: PropTypes.bool,
   language: PropTypes.string.isRequired,
   setWorkspaceFullscreen: PropTypes.func.isRequired,
@@ -98,5 +99,6 @@ AppProviders.propTypes = {
 AppProviders.defaultProps = {
   children: null,
   classPrefix: '',
+  dragDropManager: undefined,
   isFullscreenEnabled: false,
 };

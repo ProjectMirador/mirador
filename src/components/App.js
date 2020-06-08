@@ -18,11 +18,11 @@ export class App extends Component {
    * @return {String} - HTML markup for the component
    */
   render() {
-    const { plugins } = this.props;
+    const { dragDropManager, plugins } = this.props;
 
     return (
       <PluginProvider plugins={plugins}>
-        <AppProviders>
+        <AppProviders dragDropManager={dragDropManager}>
           <AuthenticationSender />
           <AccessTokenSender />
           <Suspense
@@ -37,10 +37,12 @@ export class App extends Component {
 }
 
 App.propTypes = {
+  dragDropManager: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   plugins: PropTypes.array, // eslint-disable-line react/forbid-prop-types
 };
 
 App.defaultProps = {
+  dragDropManager: undefined,
   plugins: [],
 };
 
