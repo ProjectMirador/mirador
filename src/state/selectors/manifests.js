@@ -17,6 +17,12 @@ export const getManifestStatus = createSelector(
   manifest => manifest || { missing: true },
 );
 
+/** Convenience selector to get a manifest loading error */
+export const getManifestError = createSelector(
+  [getManifest],
+  manifest => manifest && manifest.error,
+);
+
 /** Instantiate a manifesto instance */
 const getContextualManifestoInstance = createCachedSelector(
   getManifest,

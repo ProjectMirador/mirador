@@ -4,6 +4,7 @@ import { Window } from '../../../src/components/Window';
 import WindowTopBar from '../../../src/containers/WindowTopBar';
 import PrimaryWindow from '../../../src/containers/PrimaryWindow';
 import WindowAuthenticationControl from '../../../src/containers/WindowAuthenticationControl';
+import ErrorContent from '../../../src/containers/ErrorContent';
 
 /** create wrapper */
 function createWrapper(props, context) {
@@ -37,6 +38,12 @@ describe('Window', () => {
     wrapper = createWrapper();
     expect(wrapper.find(WindowAuthenticationControl)).toHaveLength(1);
   });
+  it('renders manifest error', () => {
+    wrapper = createWrapper({ manifestError: 'Invalid JSON' });
+    expect(wrapper.find(ErrorContent)).toHaveLength(1);
+    expect(wrapper.find(ErrorContent).prop('error')).toEqual({ stack: 'Invalid JSON' });
+  });
+
   describe('when workspaceType is mosaic', () => {
     xit('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {
       const connectDragSource = jest.fn(component => component);
