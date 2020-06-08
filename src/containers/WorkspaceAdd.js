@@ -18,7 +18,10 @@ const mapStateToProps = state => ({ catalog: state.catalog });
  * @memberof Workspace
  * @private
  */
-const mapDispatchToProps = { setWorkspaceAddVisibility: actions.setWorkspaceAddVisibility };
+const mapDispatchToProps = {
+  addResource: actions.addResource,
+  setWorkspaceAddVisibility: actions.setWorkspaceAddVisibility,
+};
 
 /**
  *

@@ -1,6 +1,7 @@
 import {
   all, call, put, select, takeEvery,
 } from 'redux-saga/effects';
+import { v4 as uuid } from 'uuid';
 import ActionTypes from '../actions/action-types';
 import MiradorManifest from '../../lib/MiradorManifest';
 import {
@@ -10,6 +11,7 @@ import {
   updateWindow,
   setCanvas,
   fetchSearch,
+  receiveManifest,
 } from '../actions';
 import {
   getSearchForWindow, getSearchAnnotationsForCompanionWindow,
@@ -23,6 +25,17 @@ import {
   getElasticLayout,
 } from '../selectors';
 import { fetchManifest } from './iiif';
+
+/** */
+export function* addProvidedManifest(action) {
+  const { manifest, window: { id } } = action;
+  if (!manifest) return;
+
+  const manifestId = uuid();
+
+  yield put(receiveManifest(manifestId, manifest));
+  yield put(updateWindow(id, { manifestId }));
+}
 
 /** */
 export function* fetchWindowManifest(action) {
@@ -170,6 +183,7 @@ export function* setCanvasforSelectedAnnotation({ annotationId, companionWindowI
 /** */
 export default function* windowsSaga() {
   yield all([
+    takeEvery(ActionTypes.ADD_WINDOW, addProvidedManifest),
     takeEvery(ActionTypes.ADD_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.SET_CANVAS, selectAnnotationsOnCurrentCanvas),

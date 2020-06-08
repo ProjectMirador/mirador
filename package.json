@@ -55,6 +55,10 @@
     "react-aria-live": "^2.0.5",
     "react-beautiful-dnd": "^11.0.4",
     "react-copy-to-clipboard": "^5.0.1",
+    "react-dnd": "^10.0.2",
+    "react-dnd-html5-backend": "^10.0.2",
+    "react-dnd-multi-backend": "^5.0.0",
+    "react-dnd-touch-backend": "^10.0.2",
     "react-full-screen": "^0.2.4",
     "react-hot-loader": "^4.12.21",
     "react-i18next": "^10.11.4",
@@ -72,7 +76,8 @@
     "redux-saga-test-plan": "^4.0.0-rc.3",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "uuid": "^8.1.0"
+    "uuid": "^8.1.0",
+    "whatwg-url": "^8.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.0",

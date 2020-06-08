@@ -26,10 +26,10 @@ export class ManifestListItem extends React.Component {
   /** */
   componentDidMount() {
     const {
-      fetchManifest, manifestId, ready, isFetching, error,
+      fetchManifest, manifestId, ready, isFetching, error, provider,
     } = this.props;
 
-    if (!ready && !error && !isFetching) fetchManifest(manifestId);
+    if (!ready && !error && !isFetching && provider !== 'file') fetchManifest(manifestId);
   }
 
   /** */

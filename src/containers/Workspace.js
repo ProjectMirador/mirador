@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { Workspace } from '../components/Workspace';
 import { getMaximizedWindowsIds, getWindowIds, getWorkspaceType } from '../state/selectors';
+import * as actions from '../state/actions';
 
 /**
  * mapStateToProps - to hook up connect
@@ -20,6 +21,15 @@ const mapStateToProps = state => (
     workspaceType: getWorkspaceType(state),
   }
 );
+
+/**
+ * mapDispatchToProps - used to hook up connect to action creators
+ * @memberof Workspace
+ * @private
+ */
+const mapDispatchToProps = {
+  addWindow: actions.addWindow,
+};
 
 /**
  * @param theme
@@ -50,7 +60,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withPlugins('Workspace'),
   // further HOC go here
 );

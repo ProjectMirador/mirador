@@ -223,6 +223,7 @@ export class OpenSeadragonViewer extends Component {
       if (!this.viewer) {
         return;
       }
+
       this.viewer.addSimpleImage({
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(

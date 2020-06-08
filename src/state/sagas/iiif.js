@@ -4,6 +4,7 @@ import {
 import fetch from 'isomorphic-unfetch';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import normalizeUrl from 'normalize-url';
+import { v4 as uuid } from 'uuid';
 import ActionTypes from '../actions/action-types';
 import {
   receiveManifest, receiveManifestFailure, receiveInfoResponse,
@@ -182,7 +183,12 @@ export function* fetchAnnotation({ targetId, annotationId }) {
 }
 
 /** */
-export function* fetchResourceManifest({ manifestId }) {
+export function* fetchResourceManifest({ manifestId, manifestJson }) {
+  if (manifestJson) {
+    yield put(receiveManifest(manifestId, manifestJson));
+    return;
+  }
+
   if (!manifestId) return;
 
   const manifests = yield select(getManifests) || {};

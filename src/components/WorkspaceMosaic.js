@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';
 import Window from '../containers/Window';
 import MosaicLayout from '../lib/MosaicLayout';
+import { DndContext } from 'react-dnd'
 
 /**
  * Represents a work area that contains any number of windows
@@ -150,13 +151,18 @@ export class WorkspaceMosaic extends React.Component {
   render() {
     const { layout, classes } = this.props;
     return (
-      <Mosaic
-        renderTile={this.tileRenderer}
-        initialValue={layout || this.determineWorkspaceLayout()}
-        onChange={this.mosaicChange}
-        className={classNames('mirador-mosaic', classes.root)}
-        zeroStateView={this.zeroStateView}
-      />
+      <DndContext.Consumer>
+				{(ctx) => (
+          <Mosaic
+            manager={ctx.dragDropManager}
+            renderTile={this.tileRenderer}
+            initialValue={layout || this.determineWorkspaceLayout()}
+            onChange={this.mosaicChange}
+            className={classNames('mirador-mosaic', classes.root)}
+            zeroStateView={this.zeroStateView}
+          />
+        )}
+      </DndContext.Consumer>
     );
   }
 }

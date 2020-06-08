@@ -21,7 +21,7 @@ export function focusWindow(windowId, pan = false) {
  * @param  {Object} options
  * @memberof ActionCreators
  */
-export function addWindow({ companionWindows, ...options }) {
+export function addWindow({ companionWindows, manifest, ...options }) {
   return (dispatch, getState) => {
     const { config, windows } = getState();
     const numWindows = Object.keys(windows).length;
@@ -84,6 +84,7 @@ export function addWindow({ companionWindows, ...options }) {
     dispatch({
       companionWindows: defaultCompanionWindows,
       elasticLayout,
+      manifest,
       type: ActionTypes.ADD_WINDOW,
       window: { ...defaultOptions, ...options },
     });
