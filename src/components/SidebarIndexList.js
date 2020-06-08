@@ -32,6 +32,15 @@ export class SidebarIndexList extends Component {
     } = this.props;
 
     const canvasesIdAndLabel = this.getIdAndLabelOfCanvases(canvases);
+    let Item;
+
+    switch (variant) {
+      case 'thumbnail':
+        Item = SidebarIndexThumbnail;
+        break;
+      default:
+        Item = SidebarIndexItem;
+    }
 
     return (
       <MenuList autoFocusItem variant="selectedMenu">
@@ -55,8 +64,7 @@ export class SidebarIndexList extends Component {
                   offsetTop={96} // offset for the height of the form above
                   scrollTo={!!selectedCanvases.find(c => c.id === canvas.id)}
                 >
-                  {variant === 'item' && <SidebarIndexItem canvas={canvas} />}
-                  {variant === 'thumbnail' && <SidebarIndexThumbnail canvas={canvas} otherCanvas={canvases[canvasIndex]} />}
+                  <Item canvas={canvas} otherCanvas={canvases[canvasIndex]} />
                 </ScrollTo>
               </MenuItem>
             );
