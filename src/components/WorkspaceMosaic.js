@@ -4,6 +4,7 @@ import {
   Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
 } from 'react-mosaic-component';
 import 'react-mosaic-component/react-mosaic-component.css';
+import { DndContext } from 'react-dnd';
 import difference from 'lodash/difference';
 import toPairs from 'lodash/toPairs';
 import isEqual from 'lodash/isEqual';
@@ -11,7 +12,6 @@ import classNames from 'classnames';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';
 import Window from '../containers/Window';
 import MosaicLayout from '../lib/MosaicLayout';
-import { DndContext } from 'react-dnd'
 
 /**
  * Represents a work area that contains any number of windows
@@ -152,16 +152,18 @@ export class WorkspaceMosaic extends React.Component {
     const { layout, classes } = this.props;
     return (
       <DndContext.Consumer>
-				{(ctx) => (
-          <Mosaic
-            manager={ctx.dragDropManager}
-            renderTile={this.tileRenderer}
-            initialValue={layout || this.determineWorkspaceLayout()}
-            onChange={this.mosaicChange}
-            className={classNames('mirador-mosaic', classes.root)}
-            zeroStateView={this.zeroStateView}
-          />
-        )}
+        {
+          ctx => (
+            <Mosaic
+              manager={ctx.dragDropManager}
+              renderTile={this.tileRenderer}
+              initialValue={layout || this.determineWorkspaceLayout()}
+              onChange={this.mosaicChange}
+              className={classNames('mirador-mosaic', classes.root)}
+              zeroStateView={this.zeroStateView}
+            />
+          )
+        }
       </DndContext.Consumer>
     );
   }

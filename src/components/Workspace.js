@@ -54,17 +54,17 @@ export class Workspace extends React.Component {
           new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.addEventListener('load', () => {
-              var image = new Image();
+              const image = new Image();
               image.src = reader.result;
               image.addEventListener('load', () => {
                 resolve({
+                  height: image.height,
                   name: file.name,
                   type: file.type,
                   url: reader.result,
                   width: image.width,
-                  height: image.height,
                 });
-              })
+              });
             });
             reader.readAsDataURL(file);
           })
@@ -74,34 +74,36 @@ export class Workspace extends React.Component {
           const manifest = {
             '@context': 'http://iiif.io/api/presentation/3/context.json',
             id,
-            label: images[0].name,
-            type: 'Manifest',
-            items: images.map(({ name, type, width, height, url }, index) => ({
+            items: images.map(({
+              name, type, width, height, url,
+            }, index) => ({
+              height,
               id: `${id}/canvas/${index}`,
-              label: name,
-              type: 'Canvas',
-              width: width,
-              height: height,
               items: [
                 {
                   id: `${id}/canvas/${index}/1`,
-                  type: 'AnnotationPage',
                   items: [{
-                    id: `${id}/canvas/${index}/1/image`,
-                    type: 'Annotation',
-                    motivation: 'painting',
                     body: {
+                      format: type,
                       id: url,
                       type: 'Image',
-                      format: type,
                     },
+                    height,
+                    id: `${id}/canvas/${index}/1/image`,
+                    motivation: 'painting',
                     target: `${id}/canvas/${index}/1`,
-                    width: width,
-                    height: height,
+                    type: 'Annotation',
+                    width,
                   }],
+                  type: 'AnnotationPage',
                 },
               ],
+              label: name,
+              type: 'Canvas',
+              width,
             })),
+            label: images[0].name,
+            type: 'Manifest',
           };
           addWindow({ manifest });
         });

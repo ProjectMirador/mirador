@@ -48,7 +48,8 @@ export class AppProviders extends Component {
   /** */
   render() {
     const {
-      children, classPrefix, dragDropManager, isFullscreenEnabled, setWorkspaceFullscreen, theme, translations,
+      children, classPrefix, dragDropManager, isFullscreenEnabled,
+      setWorkspaceFullscreen, theme, translations,
     } = this.props;
 
     const generateClassName = createGenerateClassName({
@@ -73,7 +74,11 @@ export class AppProviders extends Component {
                 jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
                 generateClassName={generateClassName}
               >
-                <DndProvider backend={MultiBackend} options={HTML5toTouch} {...dragDropManager && { manager: dragDropManager }}>
+                <DndProvider
+                  backend={MultiBackend}
+                  options={HTML5toTouch}
+                  {...(dragDropManager && { manager: dragDropManager })}
+                >
                   {children}
                 </DndProvider>
               </StylesProvider>
