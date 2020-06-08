@@ -138,6 +138,11 @@ describe('getNextCanvasGrouping', () => {
         manifestId: 'x',
         view: 'book',
       },
+      b: {
+        canvasId: 'does-not-exist',
+        id: 'a',
+        manifestId: 'x',
+      },
     },
   };
 
@@ -148,6 +153,10 @@ describe('getNextCanvasGrouping', () => {
       'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
       'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
     ]);
+  });
+
+  it('returns undefined if the canvas is not found', () => {
+    expect(getNextCanvasGrouping(state, { windowId: 'b' })).toBeUndefined();
   });
 });
 
@@ -166,6 +175,11 @@ describe('getPreviousCanvasGrouping', () => {
         manifestId: 'x',
         view: 'book',
       },
+      b: {
+        canvasId: 'does-not-exist',
+        id: 'a',
+        manifestId: 'x',
+      },
     },
   };
 
@@ -175,6 +189,10 @@ describe('getPreviousCanvasGrouping', () => {
     expect(selectedCanvases.map(canvas => canvas.id)).toEqual([
       'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
     ]);
+  });
+
+  it('returns undefined if the canvas is not found', () => {
+    expect(getPreviousCanvasGrouping(state, { windowId: 'b' })).toBeUndefined();
   });
 });
 

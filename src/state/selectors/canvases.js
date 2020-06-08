@@ -112,7 +112,7 @@ export const getNextCanvasGrouping = createSelector(
     getCurrentCanvas,
   ],
   (groupings, canvas, view) => {
-    if (!groupings) return undefined;
+    if (!groupings || !canvas) return undefined;
     const currentGroupIndex = groupings.findIndex(group => group.some(c => c.id === canvas.id));
 
     if (currentGroupIndex < 0 || currentGroupIndex + 1 >= groupings.length) return undefined;
@@ -137,7 +137,7 @@ export const getPreviousCanvasGrouping = createSelector(
     getCurrentCanvas,
   ],
   (groupings, canvas, view) => {
-    if (!groupings) return undefined;
+    if (!groupings || !canvas) return undefined;
 
     const currentGroupIndex = groupings.findIndex(group => group.some(c => c.id === canvas.id));
 
