@@ -31,14 +31,14 @@ function fetchWrapper(url, options, { success, degraded, failure }) {
 
 /** */
 function* fetchIiifResource(url, options, { success, degraded, failure }) {
-  const { preprocessors = [] } = yield select(getRequestsConfig);
+  const { preprocessors = [], postprocessors = [] } = yield select(getRequestsConfig);
 
   try {
     const reqOptions = preprocessors.reduce((acc, f) => f(url, acc) || acc, options);
 
-    const resp = yield call(fetchWrapper, url, reqOptions, { degraded, failure, success });
-
-    return resp;
+    let action = yield call(fetchWrapper, url, reqOptions, { degraded, failure, success });
+    action = postprocessors.reduce((acc, f) => f(url, acc) || acc, action);
+    return action;
   } catch (error) { return failure({ error }); }
 }
 
@@ -215,5 +215,6 @@ export default function* iiifSaga() {
     takeEvery(ActionTypes.REQUEST_ANNOTATION, fetchAnnotation),
     takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchInfoResponses),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),
+    // takeEvery(ActionTypes.RECEIVE_ANNOTATION, processReceiveAnno),
   ]);
 }
