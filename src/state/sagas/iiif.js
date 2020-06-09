@@ -215,6 +215,5 @@ export default function* iiifSaga() {
     takeEvery(ActionTypes.REQUEST_ANNOTATION, fetchAnnotation),
     takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchInfoResponses),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),
-    // takeEvery(ActionTypes.RECEIVE_ANNOTATION, processReceiveAnno),
   ]);
 }
