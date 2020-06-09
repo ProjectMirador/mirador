@@ -43,7 +43,9 @@ export function* setWindowStartingCanvas(action) {
   const windowId = action.id || action.window.id;
 
   if (canvasId) {
-    const thunk = yield call(setCanvas, windowId, canvasId);
+    const thunk = yield call(
+      setCanvas, windowId, canvasId, null, { preserveViewport: !!action.payload },
+    );
     yield put(thunk);
   } else {
     const manifestoInstance = yield select(getManifestoInstance, { manifestId });

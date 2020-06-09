@@ -98,7 +98,25 @@ describe('window-level sagas', () => {
       return expectSaga(fetchWindowManifest, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
-          [call(setCanvas, 'x', '1'), { type: 'setCanvasThunk' }],
+          [call(setCanvas, 'x', '1', null, { preserveViewport: false }), { type: 'setCanvasThunk' }],
+        ])
+        .put({ type: 'setCanvasThunk' })
+        .run();
+    });
+
+    it('calls setCanvas if the canvas id was provided via the payload and preserves viewport', () => {
+      const action = {
+        id: 'x',
+        payload: {
+          canvasId: '1',
+          manifestId: 'manifest.json',
+        },
+      };
+
+      return expectSaga(fetchWindowManifest, action)
+        .provide([
+          [select(getManifests), { 'manifest.json': {} }],
+          [call(setCanvas, 'x', '1', null, { preserveViewport: true }), { type: 'setCanvasThunk' }],
         ])
         .put({ type: 'setCanvasThunk' })
         .run();
