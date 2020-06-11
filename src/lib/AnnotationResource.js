@@ -16,7 +16,10 @@ export default class AnnotationResource {
 
   /** */
   get id() {
-    this._id = this._id || this.resource['@id'] || uuid(); // eslint-disable-line no-underscore-dangle
+    this._id = this._id
+      || this.resource['@id']
+      || (this.resources[0] && this.resources[0]['@id'])
+      || uuid();
     return this._id; // eslint-disable-line no-underscore-dangle
   }
 
