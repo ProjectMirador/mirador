@@ -103,6 +103,23 @@ export const getCompanionWindowsForPosition = createSelector(
   (companionWindows, { position }) => companionWindows[position] || EMPTY_ARRAY,
 );
 
+/**
+* Return the companion window string from state in a given windowId and content type
+* @param {object} state
+* @param {String} windowId
+* @param {String} position
+* @return {String}
+*/
+export const getCompanionWindowsForContent = createSelector(
+  [
+    getCompanionWindowsOfWindow,
+    (state, { content }) => ({ content }),
+  ],
+  (companionWindows, { content }) => (
+    [].concat(...Object.values(companionWindows)).filter(w => w.content === content)
+  ),
+);
+
 const EMPTY_ARRAY = [];
 
 /** */

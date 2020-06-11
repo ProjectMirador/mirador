@@ -10,7 +10,6 @@ import { CanvasAnnotations } from '../../../src/components/CanvasAnnotations';
 function createWrapper(props) {
   return shallow(
     <CanvasAnnotations
-      allAnnotationsAreHighlighted={false}
       classes={{}}
       deselectAnnotation={() => {}}
       hoverAnnotation={() => {}}
@@ -101,88 +100,61 @@ describe('CanvasAnnotations', () => {
       expect(deselectAnnotation).toHaveBeenCalledWith('abc', 'example.com/iiif/12345', 'abc123');
     });
 
-    describe('when allAnnotationsAreHighlighted is true', () => {
-      it('does not highlight annotations on mouse enter', () => {
-        const hoverAnnotation = jest.fn();
+    it('highlights annotations on mouse enter', () => {
+      const hoverAnnotation = jest.fn();
 
-        wrapper = createWrapper({
-          allAnnotationsAreHighlighted: true,
-          annotations: [
-            {
-              content: 'Annotation',
-              id: 'annoId',
-              tags: [],
-              targetId: 'example.com/iiif/12345',
-            },
-          ],
-          hoverAnnotation,
-        });
-
-        wrapper.find(MenuItem).first().simulate('mouseEnter');
-        expect(hoverAnnotation).not.toHaveBeenCalled();
-
-        wrapper.find(MenuItem).first().simulate('mouseLeave');
-        expect(hoverAnnotation).not.toHaveBeenCalled();
+      wrapper = createWrapper({
+        annotations: [
+          {
+            content: 'Annotation',
+            id: 'annoId',
+            tags: [],
+            targetId: 'example.com/iiif/12345',
+          },
+        ],
+        hoverAnnotation,
       });
+
+      wrapper.find(MenuItem).first().simulate('mouseEnter');
+      expect(hoverAnnotation).toHaveBeenCalledWith('abc', ['annoId']);
     });
 
-    describe('when allAnnotationsAreHighlighted is false', () => {
-      it('highlights annotations on mouse enter', () => {
-        const hoverAnnotation = jest.fn();
+    it('highlights annotations on focus', () => {
+      const hoverAnnotation = jest.fn();
 
-        wrapper = createWrapper({
-          annotations: [
-            {
-              content: 'Annotation',
-              id: 'annoId',
-              tags: [],
-              targetId: 'example.com/iiif/12345',
-            },
-          ],
-          hoverAnnotation,
-        });
-
-        wrapper.find(MenuItem).first().simulate('mouseEnter');
-        expect(hoverAnnotation).toHaveBeenCalledWith('abc', ['annoId']);
+      wrapper = createWrapper({
+        annotations: [
+          {
+            content: 'Annotation',
+            id: 'annoId',
+            tags: [],
+            targetId: 'example.com/iiif/12345',
+          },
+        ],
+        hoverAnnotation,
       });
 
-      it('highlights annotations on focus', () => {
-        const hoverAnnotation = jest.fn();
+      wrapper.find(MenuItem).first().simulate('focus');
+      expect(hoverAnnotation).toHaveBeenCalledWith('abc', ['annoId']);
+    });
 
-        wrapper = createWrapper({
-          annotations: [
-            {
-              content: 'Annotation',
-              id: 'annoId',
-              tags: [],
-              targetId: 'example.com/iiif/12345',
-            },
-          ],
-          hoverAnnotation,
-        });
+    it('sets the highlighted annotation to null on mouse leave', () => {
+      const hoverAnnotation = jest.fn();
 
-        wrapper.find(MenuItem).first().simulate('focus');
-        expect(hoverAnnotation).toHaveBeenCalledWith('abc', ['annoId']);
+      wrapper = createWrapper({
+        annotations: [
+          {
+            content: 'Annotation',
+            id: 'annoId',
+            tags: [],
+            targetId: 'example.com/iiif/12345',
+          },
+        ],
+        hoverAnnotation,
       });
 
-      it('sets the highlighted annotation to null on mouse leave', () => {
-        const hoverAnnotation = jest.fn();
-
-        wrapper = createWrapper({
-          annotations: [
-            {
-              content: 'Annotation',
-              id: 'annoId',
-              tags: [],
-              targetId: 'example.com/iiif/12345',
-            },
-          ],
-          hoverAnnotation,
-        });
-
-        wrapper.find(MenuItem).first().simulate('mouseLeave');
-        expect(hoverAnnotation).toHaveBeenCalledWith('abc', []);
-      });
+      wrapper.find(MenuItem).first().simulate('mouseLeave');
+      expect(hoverAnnotation).toHaveBeenCalledWith('abc', []);
     });
   });
 });

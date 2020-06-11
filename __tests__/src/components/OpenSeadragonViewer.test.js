@@ -345,7 +345,7 @@ describe('OpenSeadragonViewer', () => {
 
       wrapper.setProps(
         {
-          selectedAnnotations: [
+          annotations: [
             new AnnotationList(
               { '@id': 'foo', resources: [{ foo: 'bar' }] },
             ),
@@ -354,7 +354,7 @@ describe('OpenSeadragonViewer', () => {
       );
       wrapper.setProps(
         {
-          selectedAnnotations: [
+          annotations: [
             new AnnotationList(
               { '@id': 'foo', resources: [{ foo: 'bar' }] },
             ),
@@ -363,7 +363,7 @@ describe('OpenSeadragonViewer', () => {
       );
       wrapper.setProps(
         {
-          selectedAnnotations: [
+          annotations: [
             new AnnotationList(
               { '@id': 'bar', resources: [{ foo: 'bar' }] },
             ),
@@ -411,6 +411,8 @@ describe('OpenSeadragonViewer', () => {
       const strokeRect = jest.fn();
       wrapper.instance().osdCanvasOverlay = {
         context2d: {
+          restore: () => {},
+          save: () => {},
           strokeRect,
         },
       };
@@ -426,7 +428,12 @@ describe('OpenSeadragonViewer', () => {
           { '@id': 'foo', resources: [{ on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=10,10,100,200' }] },
         ),
       ];
-      wrapper.instance().annotationsToContext(annotations);
+
+      const palette = {
+        default: { strokeStyle: 'yellow' },
+      };
+
+      wrapper.instance().annotationsToContext(annotations, palette);
       const context = wrapper.instance().osdCanvasOverlay.context2d;
       expect(context.strokeStyle).toEqual('yellow');
       expect(context.lineWidth).toEqual(20);

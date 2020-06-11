@@ -5,10 +5,14 @@ import dualStrategyAnno from '../../fixtures/version-2/annotationMiradorDual.jso
 /** */
 function createSubject(args) {
   return new CanvasAnnotationDisplay({
-    color: 'blue',
     offset: {
       x: -100,
       y: 0,
+    },
+    palette: {
+      default: { globalAlpha: 0, strokeStyle: 'black' },
+      hovered: { globalAlpha: 1, strokeStyle: 'blue' },
+      selected: { globalAlpha: 1, strokeStyle: 'yellow' },
     },
     zoomRatio: 0.5,
     ...args,
@@ -90,12 +94,14 @@ describe('CanvasAnnotationDisplay', () => {
       });
       subject.context = context;
       subject.svgContext();
-      expect(subject.context.strokeStyle).toBe('blue');
+      expect(subject.context.strokeStyle).toBe('yellow');
     });
   });
   describe('fragmentContext', () => {
     it('draws the fragment with selected arguments', () => {
       const context = {
+        restore: jest.fn(),
+        save: jest.fn(),
         strokeRect: jest.fn(),
       };
       const subject = createSubject({

@@ -40,16 +40,14 @@ export class CanvasAnnotations extends Component {
 
   /** */
   handleAnnotationHover(annotation) {
-    const { allAnnotationsAreHighlighted, hoverAnnotation, windowId } = this.props;
-    if (allAnnotationsAreHighlighted) return;
+    const { hoverAnnotation, windowId } = this.props;
 
     hoverAnnotation(windowId, [annotation.id]);
   }
 
   /** */
   handleAnnotationBlur() {
-    const { allAnnotationsAreHighlighted, hoverAnnotation, windowId } = this.props;
-    if (allAnnotationsAreHighlighted) return;
+    const { hoverAnnotation, windowId } = this.props;
 
     hoverAnnotation(windowId, []);
   }

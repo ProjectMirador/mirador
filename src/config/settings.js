@@ -57,6 +57,17 @@ export default {
         secondary: '#00BFFF',
       },
       section_divider: 'rgba(0, 0, 0, 0.25)',
+      annotations: {
+        hidden: { globalAlpha: 0 },
+        default: { strokeStyle: '#00BFFF', globalAlpha: 1 },
+        hovered: { strokeStyle: '#BF00FF', globalAlpha: 1 },
+        selected: { strokeStyle: '#ffff00', globalAlpha: 1 },
+      },
+      search: {
+        default: { fillStyle: '#00BFFF', globalAlpha: 0.3 },
+        hovered: { fillStyle: '#00FFFF', globalAlpha: 0.3 },
+        selected: { fillStyle: '#ffff00', globalAlpha: 0.3 },
+      }
     },
     typography: {
       body1: {
@@ -246,6 +257,7 @@ export default {
     defaultSidebarPanelHeight: 201,  // Configure default sidebar height in pixels
     defaultSidebarPanelWidth: 235, // Configure default sidebar width in pixels
     defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
+    forceDrawAnnotations: false,
     hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
     highlightAllAnnotations: false, // Configure whether to display annotations on the canvas by default
     showLocalePicker: false, // Configure locale picker for multi-lingual metadata

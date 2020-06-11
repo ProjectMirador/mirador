@@ -1,6 +1,3 @@
-/** Opacity of the search annotations */
-const FILL_OUTLINE_ALPHA = 0.3;
-
 /**
  * CanvasAnnotationDisplay - class used to display a SVG and fragment based
  * annotations.
@@ -8,14 +5,14 @@ const FILL_OUTLINE_ALPHA = 0.3;
 export default class CanvasAnnotationDisplay {
   /** */
   constructor({
-    resource, color, zoomRatio, offset, selected, fillOutline,
+    resource, palette, zoomRatio, offset, selected, hovered,
   }) {
     this.resource = resource;
-    this.color = color;
+    this.palette = palette;
     this.zoomRatio = zoomRatio;
     this.offset = offset;
     this.selected = selected;
-    this.fillOutline = fillOutline;
+    this.hovered = hovered;
   }
 
   /** */
@@ -67,10 +64,21 @@ export default class CanvasAnnotationDisplay {
 
       // Resize the stroke based off of the zoomRatio (currentZoom / maxZoom)
       this.context.lineWidth /= this.zoomRatio;
-      // Reset the color if it is selected
-      if (this.selected) {
-        this.context.strokeStyle = this.color;
+
+      let currentPalette;
+      if (this.hovered) {
+        currentPalette = this.palette.hovered;
+      } else if (this.selected) {
+        currentPalette = this.palette.selected;
+      } else {
+        currentPalette = this.palette.default;
       }
+
+      // Reset the color if it is selected or hovered on
+      if (this.selected || this.hovered) {
+        this.context.strokeStyle = currentPalette.strokeStyle || currentPalette.fillStyle;
+      }
+
       this.context.stroke(p);
 
       // Wait to set the fill, so we can adjust the globalAlpha value if we need to
@@ -89,16 +97,29 @@ export default class CanvasAnnotationDisplay {
     const fragment = this.resource.fragmentSelector;
     fragment[0] += this.offset.x;
     fragment[1] += this.offset.y;
-    if (this.fillOutline) {
-      this.context.fillStyle = this.color;
-      this.context.globalAlpha = FILL_OUTLINE_ALPHA;
-      this.context.fillRect(...fragment);
-      this.context.restore();
+
+    let currentPalette;
+    if (this.selected) {
+      currentPalette = this.palette.selected;
+    } else if (this.hovered) {
+      currentPalette = this.palette.hovered;
     } else {
-      this.context.strokeStyle = this.color;
+      currentPalette = this.palette.default;
+    }
+
+    this.context.save();
+    Object.keys(currentPalette).forEach((key) => {
+      this.context[key] = currentPalette[key];
+    });
+
+    if (currentPalette.fillStyle) {
+      this.context.fillRect(...fragment);
+    } else {
       this.context.lineWidth = 1 / this.zoomRatio;
       this.context.strokeRect(...fragment);
     }
+
+    this.context.restore();
   }
 
   /** */

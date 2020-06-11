@@ -97,28 +97,35 @@ export class OpenSeadragonViewer extends Component {
     const {
       viewer,
       canvasWorld,
-      highlightedAnnotations, selectedAnnotations,
-      searchAnnotations, selectedContentSearchAnnotations,
+      drawAnnotations,
+      drawSearchAnnotations,
+      annotations, searchAnnotations,
+      hoveredAnnotationIds, selectedAnnotationId,
+      highlightAllAnnotations,
     } = this.props;
-    const highlightsUpdated = !OpenSeadragonViewer.annotationsMatch(
-      highlightedAnnotations, prevProps.highlightedAnnotations,
-    );
-    const selectionsUpdated = !OpenSeadragonViewer.annotationsMatch(
-      selectedAnnotations, prevProps.selectedAnnotations,
+
+    const annotationsUpdated = !OpenSeadragonViewer.annotationsMatch(
+      annotations, prevProps.annotations,
     );
     const searchAnnotationsUpdated = !OpenSeadragonViewer.annotationsMatch(
       searchAnnotations, prevProps.searchAnnotations,
     );
 
-    const selectedContentSearchAnnotationsUpdated = !OpenSeadragonViewer.annotationsMatch(
-      selectedContentSearchAnnotations, prevProps.selectedContentSearchAnnotations,
+    const hoveredAnnotationsUpdated = (
+      xor(hoveredAnnotationIds, prevProps.hoveredAnnotationIds).length > 0
     );
+    const selectedAnnotationsUpdated = selectedAnnotationId !== prevProps.selectedAnnotationId;
+
+    const redrawAnnotations = drawAnnotations !== prevProps.drawAnnotations
+      || drawSearchAnnotations !== prevProps.drawSearchAnnotations
+      || highlightAllAnnotations !== prevProps.highlightAllAnnotations;
 
     if (
       searchAnnotationsUpdated
-      || selectedContentSearchAnnotationsUpdated
-      || highlightsUpdated
-      || selectionsUpdated
+      || annotationsUpdated
+      || selectedAnnotationsUpdated
+      || hoveredAnnotationsUpdated
+      || redrawAnnotations
     ) {
       this.updateCanvas = this.canvasUpdateCallback();
       this.viewer.forceRedraw();
@@ -183,11 +190,69 @@ export class OpenSeadragonViewer extends Component {
     };
   }
 
+  /** */
+  isAnnotationAtPoint(resource, canvas, point) {
+    const {
+      canvasWorld,
+    } = this.props;
+
+    const [canvasX, canvasY] = canvasWorld.canvasToWorldCoordinates(canvas.id);
+    const relativeX = point.x - canvasX;
+    const relativeY = point.y - canvasY;
+
+    if (resource.svgSelector) {
+      const context = this.osdCanvasOverlay.context2d;
+      const { svgPaths } = new CanvasAnnotationDisplay({ resource });
+      return svgPaths.some(path => context.isPointInPath(new Path2D(path), relativeX, relativeY));
+    }
+
+    if (resource.fragmentSelector) {
+      const [x, y, w, h] = resource.fragmentSelector;
+      return x <= relativeX && relativeX <= (x + w)
+        && y <= relativeY && relativeY <= (y + h);
+    }
+    return false;
+  }
+
+  /** */
+  annotationsAtPoint(canvas, point) {
+    const {
+      annotations, searchAnnotations,
+    } = this.props;
+
+    const lists = [...annotations, ...searchAnnotations];
+    const annos = flatten(lists.map(l => l.resources)).filter((resource) => {
+      if (canvas.id !== resource.targetId) return false;
+
+      return this.isAnnotationAtPoint(resource, canvas, point);
+    });
+
+    return annos;
+  }
+
+  /** */
+  toggleAnnotation(targetId, id) {
+    const {
+      selectedAnnotationId,
+      selectAnnotation,
+      deselectAnnotation,
+      windowId,
+    } = this.props;
+
+    if (selectedAnnotationId === id) {
+      deselectAnnotation(windowId, targetId, id);
+    } else {
+      selectAnnotation(windowId, targetId, id);
+    }
+  }
+
   /**
    * annotationsToContext - converts anontations to a canvas context
    */
-  annotationsToContext(annotations, color = 'yellow', selected = false, isSearch = false) {
-    const { canvasWorld } = this.props;
+  annotationsToContext(annotations, palette) {
+    const {
+      highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId, canvasWorld,
+    } = this.props;
     const context = this.osdCanvasOverlay.context2d;
     const zoomRatio = this.viewer.viewport.getZoom(true) / this.viewer.viewport.getMaxZoom();
     annotations.forEach((annotation) => {
@@ -195,7 +260,18 @@ export class OpenSeadragonViewer extends Component {
         if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
         const offset = canvasWorld.offsetByCanvas(resource.targetId);
         const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
-          color, isSearch, offset, resource, selected, zoomRatio,
+          hovered: hoveredAnnotationIds.includes(resource.id),
+          offset,
+          palette: {
+            ...palette,
+            default: {
+              ...palette.default,
+              ...(!highlightAllAnnotations && palette.hidden),
+            },
+          },
+          resource,
+          selected: selectedAnnotationId === resource.id,
+          zoomRatio,
         });
         canvasAnnotationDisplay.toContext(context);
       });
@@ -349,22 +425,20 @@ export class OpenSeadragonViewer extends Component {
   /** */
   renderAnnotations() {
     const {
+      annotations,
+      drawAnnotations,
+      drawSearchAnnotations,
       searchAnnotations,
-      selectedContentSearchAnnotations,
-      highlightedAnnotations,
-      selectedAnnotations,
       palette,
     } = this.props;
 
-    this.annotationsToContext(searchAnnotations, palette.highlights.secondary, false, true);
-    this.annotationsToContext(
-      selectedContentSearchAnnotations,
-      palette.highlights.primary,
-      true, true,
-    );
+    if (drawSearchAnnotations) {
+      this.annotationsToContext(searchAnnotations, palette.search);
+    }
 
-    this.annotationsToContext(highlightedAnnotations, palette.highlights.secondary);
-    this.annotationsToContext(selectedAnnotations, palette.highlights.primary, true);
+    if (drawAnnotations) {
+      this.annotationsToContext(annotations, palette.annotations);
+    }
   }
 
   /**
@@ -400,32 +474,38 @@ export class OpenSeadragonViewer extends Component {
 }
 
 OpenSeadragonViewer.defaultProps = {
+  annotations: [],
   children: null,
-  highlightedAnnotations: [],
+  drawAnnotations: true,
+  drawSearchAnnotations: true,
+  highlightAllAnnotations: false,
+  hoveredAnnotationIds: [],
   infoResponses: [],
   label: null,
   nonTiledImages: [],
   osdConfig: {},
   palette: {},
   searchAnnotations: [],
-  selectedAnnotations: [],
-  selectedContentSearchAnnotations: [],
+  selectedAnnotationId: undefined,
   viewer: null,
 };
 
 OpenSeadragonViewer.propTypes = {
+  annotations: PropTypes.arrayOf(PropTypes.object),
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
+  drawAnnotations: PropTypes.bool,
+  drawSearchAnnotations: PropTypes.bool,
+  highlightAllAnnotations: PropTypes.bool,
+  hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   infoResponses: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
   nonTiledImages: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),
-  selectedAnnotations: PropTypes.arrayOf(PropTypes.object),
-  selectedContentSearchAnnotations: PropTypes.arrayOf(PropTypes.object),
+  selectedAnnotationId: PropTypes.string,
   t: PropTypes.func.isRequired,
   updateViewport: PropTypes.func.isRequired,
   viewer: PropTypes.object, // eslint-disable-line react/forbid-prop-types
