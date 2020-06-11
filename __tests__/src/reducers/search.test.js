@@ -157,32 +157,6 @@ describe('search reducer', () => {
     });
   });
 
-  it('handles SELECT_CONTENT_SEARCH_ANNOTATION', () => {
-    expect(searchesReducer(
-      {
-        foo: {
-          abc123: {
-            selectedContentSearchAnnotation: ['foo'],
-            whatever: true,
-          },
-        },
-      },
-      {
-        annotationId: ['bar'],
-        companionWindowId: 'abc123',
-        type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
-        windowId: 'foo',
-      },
-    )).toEqual({
-      foo: {
-        abc123: {
-          selectedContentSearchAnnotation: ['bar'],
-          whatever: true,
-        },
-      },
-    });
-  });
-
   it('should handle IMPORT_MIRADOR_STATE setting to clean state', () => {
     expect(searchesReducer(
       {

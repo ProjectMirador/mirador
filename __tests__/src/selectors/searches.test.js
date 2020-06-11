@@ -264,37 +264,17 @@ describe('getSearchAnnotationsForWindow', () => {
 });
 
 describe('getSelectedContentSearchAnnotationIds', () => {
-  it('returns the currently selected content search annotations for the window', () => {
-    const state = {
-      windows: {
-        foo: {
-          selectedContentSearchAnnotation: ['bar'],
-        },
-      },
-    };
-
-    expect(
-      getSelectedContentSearchAnnotationIds(state, { windowId: 'foo' }),
-    ).toEqual(['bar']);
-
-    expect(
-      getSelectedContentSearchAnnotationIds(state, { windowId: 'baz' }),
-    ).toEqual([]);
-  });
-
   it('returns the selected content search annotation for the search', () => {
     const state = {
       searches: {
         foo: {
           bar: {
-            selectedContentSearchAnnotation: ['baz'],
+            selectedContentSearchAnnotationIds: ['baz'],
           },
         },
       },
       windows: {
-        foo: {
-          selectedContentSearchAnnotation: ['unused'],
-        },
+        foo: {},
       },
     };
 
@@ -308,48 +288,6 @@ describe('getSelectedContentSearchAnnotationIds', () => {
   });
 });
 
-
-describe('getSelectedContentSearchAnnotations', () => {
-  it('returns the currently selected content search annotations for the window', () => {
-    const state = {
-      searches: {
-        foo: {
-          bar: {
-            data: {
-              'search?page=1': {
-                json: { '@id': 'yolo', resources: [{ '@id': 'annoId2' }] },
-              },
-            },
-          },
-          baz: {
-            data: {
-              'search?page=1': {
-                json: { '@id': 'nope', resources: [{ '@id': 'notthisone' }] },
-              },
-            },
-          },
-        },
-      },
-      windows: {
-        foo: {
-          selectedContentSearchAnnotation: ['annoId2'],
-        },
-      },
-    };
-
-    expect(
-      getSelectedContentSearchAnnotations(state, { windowId: 'foo' })[0].resources.length,
-    ).toEqual(1);
-
-    expect(
-      getSelectedContentSearchAnnotations(state, { windowId: 'foo' })[0].resources[0].id,
-    ).toEqual('annoId2');
-
-    expect(
-      getSelectedContentSearchAnnotations(state, { windowId: 'baz' }),
-    ).toEqual([]);
-  });
-});
 
 describe('getResourceAnnotationForSearchHit', () => {
   const companionWindowId = 'cwid';

@@ -4,7 +4,7 @@ import {
 import ActionTypes from '../actions/action-types';
 import MiradorManifest from '../../lib/MiradorManifest';
 import {
-  selectContentSearchAnnotations,
+  setContentSearchCurrentAnnotation,
   selectContentSearchAnnotation,
   setWorkspaceViewportPosition,
   updateWindow,
@@ -111,7 +111,15 @@ export function* selectAnnotationsOnCurrentCanvas({
     getAnnotationsBySearch, { canvasIds: visibleCanvases, companionWindowIds, windowId },
   );
 
-  yield put(selectContentSearchAnnotations(windowId, annotationBySearch));
+  yield all(
+    Object.keys(annotationBySearch)
+      .map(companionWindowId => (
+        put(setContentSearchCurrentAnnotation(
+          windowId,
+          companionWindowId,
+          annotationBySearch[companionWindowId],
+        )))),
+  );
 }
 
 /** @private */

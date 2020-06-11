@@ -116,45 +116,20 @@ export const windowsReducer = (state = {}, action) => {
             .companionWindowIds.filter(id => id !== action.id),
         },
       };
-    case ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION:
-      return {
-        ...state,
-        [action.windowId]: {
-          ...state[action.windowId],
-          canvasId: action.canvasId,
-          selectedContentSearchAnnotation: action.annotationId,
-        },
-      };
-    case ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATIONS:
-      return {
-        ...state,
-        [action.windowId]: {
-          ...state[action.windowId],
-          selectedContentSearchAnnotation: Object.values(action.annotationsBySearch)[0],
-        },
-      };
     case ActionTypes.SELECT_ANNOTATION:
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          selectedAnnotations: {
-            ...state[action.windowId].selectedAnnotations,
-            [action.targetId]: [
-              ...((state[action.windowId].selectedAnnotations || {})[action.targetId] || []),
-              action.annotationId,
-            ],
-          },
+          selectedAnnotationId: action.annotationId,
         },
       };
     case ActionTypes.DESELECT_ANNOTATION: {
-      const selectedAnnotations = updatedSelectedAnnotations(state, action);
-
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          selectedAnnotations,
+          selectedAnnotationId: undefined,
         },
       };
     }

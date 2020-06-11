@@ -226,7 +226,9 @@ describe('window-level sagas', () => {
           [select(getAnnotationsBySearch, { canvasIds: ['a', 'b'], companionWindowIds: ['cwid'], windowId: 'abc123' }),
             { cwid: ['annoId'] }],
         ])
-        .put({ annotationsBySearch: { cwid: ['annoId'] }, type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATIONS, windowId: 'abc123' })
+        .put({
+          annotationIds: ['annoId'], companionWindowId: 'cwid', type: ActionTypes.SET_CONTENT_SEARCH_CURRENT_ANNOTATIONS, windowId: 'abc123',
+        })
         .run();
     });
   });

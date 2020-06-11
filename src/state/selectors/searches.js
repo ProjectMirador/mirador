@@ -167,8 +167,7 @@ export const getSelectedContentSearchAnnotationIds = createSelector(
     getWindow,
     getSearchForCompanionWindow,
   ],
-  (window, search) => (search && search.selectedContentSearchAnnotation)
-    || (window && window.selectedContentSearchAnnotation)
+  (window, search) => (search && search.selectedContentSearchAnnotationIds)
     || [],
 );
 
