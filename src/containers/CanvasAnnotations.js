@@ -8,7 +8,6 @@ import {
   getAnnotationResourcesByMotivationForCanvas,
   getCanvasLabel,
   getSelectedAnnotationIds,
-  getWindow,
 } from '../state/selectors';
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
 
@@ -27,7 +26,6 @@ function getIdAndContentOfResources(resources) {
 
 /** For connect */
 const mapStateToProps = (state, { canvasId, windowId }) => ({
-  allAnnotationsAreHighlighted: getWindow(state, { windowId }).highlightAllAnnotations,
   annotations: getIdAndContentOfResources(
     getAnnotationResourcesByMotivationForCanvas(
       state, { canvasId, motivations: state.config.annotations.filteredMotivations, windowId },
@@ -48,13 +46,16 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
  */
 const mapDispatchToProps = {
   deselectAnnotation: actions.deselectAnnotation,
-  highlightAnnotation: actions.highlightAnnotation,
+  hoverAnnotation: actions.hoverAnnotation,
   selectAnnotation: actions.selectAnnotation,
 };
 
 /** For withStlyes */
 const styles = theme => ({
   annotationListItem: {
+    '&$hovered': {
+      backgroundColor: theme.palette.action.hover,
+    },
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
     },
@@ -66,6 +67,7 @@ const styles = theme => ({
     marginRight: theme.spacing(0.5),
     marginTop: theme.spacing(1),
   },
+  hovered: {},
   sectionHeading: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),

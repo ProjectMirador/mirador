@@ -402,40 +402,26 @@ describe('windows reducer', () => {
 
   describe('TOGGLE_ANNOTATION_DISPLAY', () => {
     it('handles TOGGLE_ANNOTATION_DISPLAY by toggling the given window\'s displayAllAnnotation value', () => {
-      const beforeState = { abc123: { displayAllAnnotations: false } };
+      const beforeState = { abc123: { highlightAllAnnotations: false } };
       const action = {
         type: ActionTypes.TOGGLE_ANNOTATION_DISPLAY, windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { displayAllAnnotations: true },
+        abc123: { highlightAllAnnotations: true },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
     });
   });
 
-  describe('HIGHLIGHT_ANNOTATION', () => {
+  describe('HOVER_ANNOTATION', () => {
     it('sets the highlightedAnnotation attribute on the given window', () => {
       const beforeState = { abc123: {} };
       const action = {
-        annotationId: 'aaa123', type: ActionTypes.HIGHLIGHT_ANNOTATION, windowId: 'abc123',
+        annotationIds: ['aaa123'], type: ActionTypes.HOVER_ANNOTATION, windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { highlightedAnnotation: 'aaa123' },
-      };
-
-      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
-    });
-  });
-
-  describe('SELECT_CONTENT_SEARCH_ANNOTATION', () => {
-    it('sets the highlightedAnnotation attribute on the given window', () => {
-      const beforeState = { abc123: {} };
-      const action = {
-        annotationId: ['aaa123'], canvasId: 'info:canvas/5', type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION, windowId: 'abc123',
-      };
-      const expectedState = {
-        abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] },
+        abc123: { hoveredAnnotationIds: ['aaa123'] },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);

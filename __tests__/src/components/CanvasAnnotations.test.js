@@ -13,7 +13,7 @@ function createWrapper(props) {
       allAnnotationsAreHighlighted={false}
       classes={{}}
       deselectAnnotation={() => {}}
-      highlightAnnotation={() => {}}
+      hoverAnnotation={() => {}}
       index={0}
       label="A Canvas Label"
       selectAnnotation={() => {}}
@@ -103,7 +103,7 @@ describe('CanvasAnnotations', () => {
 
     describe('when allAnnotationsAreHighlighted is true', () => {
       it('does not highlight annotations on mouse enter', () => {
-        const highlightAnnotation = jest.fn();
+        const hoverAnnotation = jest.fn();
 
         wrapper = createWrapper({
           allAnnotationsAreHighlighted: true,
@@ -115,20 +115,20 @@ describe('CanvasAnnotations', () => {
               targetId: 'example.com/iiif/12345',
             },
           ],
-          highlightAnnotation,
+          hoverAnnotation,
         });
 
         wrapper.find(MenuItem).first().simulate('mouseEnter');
-        expect(highlightAnnotation).not.toHaveBeenCalled();
+        expect(hoverAnnotation).not.toHaveBeenCalled();
 
         wrapper.find(MenuItem).first().simulate('mouseLeave');
-        expect(highlightAnnotation).not.toHaveBeenCalled();
+        expect(hoverAnnotation).not.toHaveBeenCalled();
       });
     });
 
     describe('when allAnnotationsAreHighlighted is false', () => {
       it('highlights annotations on mouse enter', () => {
-        const highlightAnnotation = jest.fn();
+        const hoverAnnotation = jest.fn();
 
         wrapper = createWrapper({
           annotations: [
@@ -139,15 +139,15 @@ describe('CanvasAnnotations', () => {
               targetId: 'example.com/iiif/12345',
             },
           ],
-          highlightAnnotation,
+          hoverAnnotation,
         });
 
         wrapper.find(MenuItem).first().simulate('mouseEnter');
-        expect(highlightAnnotation).toHaveBeenCalledWith('abc', 'annoId');
+        expect(hoverAnnotation).toHaveBeenCalledWith('abc', ['annoId']);
       });
 
       it('highlights annotations on focus', () => {
-        const highlightAnnotation = jest.fn();
+        const hoverAnnotation = jest.fn();
 
         wrapper = createWrapper({
           annotations: [
@@ -158,15 +158,15 @@ describe('CanvasAnnotations', () => {
               targetId: 'example.com/iiif/12345',
             },
           ],
-          highlightAnnotation,
+          hoverAnnotation,
         });
 
         wrapper.find(MenuItem).first().simulate('focus');
-        expect(highlightAnnotation).toHaveBeenCalledWith('abc', 'annoId');
+        expect(hoverAnnotation).toHaveBeenCalledWith('abc', ['annoId']);
       });
 
       it('sets the highlighted annotation to null on mouse leave', () => {
-        const highlightAnnotation = jest.fn();
+        const hoverAnnotation = jest.fn();
 
         wrapper = createWrapper({
           annotations: [
@@ -177,11 +177,11 @@ describe('CanvasAnnotations', () => {
               targetId: 'example.com/iiif/12345',
             },
           ],
-          highlightAnnotation,
+          hoverAnnotation,
         });
 
         wrapper.find(MenuItem).first().simulate('mouseLeave');
-        expect(highlightAnnotation).toHaveBeenCalledWith('abc', null);
+        expect(hoverAnnotation).toHaveBeenCalledWith('abc', []);
       });
     });
   });

@@ -99,6 +99,7 @@ describe('CanvasAnnotationDisplay', () => {
         strokeRect: jest.fn(),
       };
       const subject = createSubject({
+        hovered: true,
         resource: new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }),
       });
       subject.context = context;

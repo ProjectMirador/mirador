@@ -19,8 +19,8 @@ export class CanvasAnnotations extends Component {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
-    this.handleAnnotationHighlight = this.handleAnnotationHighlight.bind(this);
-    this.handleAnnotationUnHighlight = this.handleAnnotationUnHighlight.bind(this);
+    this.handleAnnotationHover = this.handleAnnotationHover.bind(this);
+    this.handleAnnotationBlur = this.handleAnnotationBlur.bind(this);
   }
 
   /**
@@ -39,19 +39,19 @@ export class CanvasAnnotations extends Component {
   }
 
   /** */
-  handleAnnotationHighlight(annotation) {
-    const { allAnnotationsAreHighlighted, highlightAnnotation, windowId } = this.props;
+  handleAnnotationHover(annotation) {
+    const { allAnnotationsAreHighlighted, hoverAnnotation, windowId } = this.props;
     if (allAnnotationsAreHighlighted) return;
 
-    highlightAnnotation(windowId, annotation.id);
+    hoverAnnotation(windowId, [annotation.id]);
   }
 
   /** */
-  handleAnnotationUnHighlight() {
-    const { allAnnotationsAreHighlighted, highlightAnnotation, windowId } = this.props;
+  handleAnnotationBlur() {
+    const { allAnnotationsAreHighlighted, hoverAnnotation, windowId } = this.props;
     if (allAnnotationsAreHighlighted) return;
 
-    highlightAnnotation(windowId, null);
+    hoverAnnotation(windowId, []);
   }
 
   /**
@@ -60,7 +60,7 @@ export class CanvasAnnotations extends Component {
   render() {
     const {
       annotations, classes, index, label, selectedAnnotationIds, t, totalSize,
-      listContainerComponent, htmlSanitizationRuleSet,
+      listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
     } = this.props;
     if (annotations.length === 0) return <></>;
 
@@ -75,15 +75,20 @@ export class CanvasAnnotations extends Component {
               <MenuItem
                 button
                 component={listContainerComponent}
-                className={classes.annotationListItem}
+                className={clsx(
+                  classes.annotationListItem,
+                  {
+                    [classes.hovered]: hoveredAnnotationIds.includes(annotation.id),
+                  },
+                )}
                 key={annotation.id}
                 annotationid={annotation.id}
                 selected={selectedAnnotationIds.includes(annotation.id)}
                 onClick={e => this.handleClick(e, annotation)}
-                onFocus={() => this.handleAnnotationHighlight(annotation)}
-                onBlur={this.handleAnnotationUnHighlight}
-                onMouseEnter={() => this.handleAnnotationHighlight(annotation)}
-                onMouseLeave={this.handleAnnotationUnHighlight}
+                onFocus={() => this.handleAnnotationHover(annotation)}
+                onBlur={this.handleAnnotationBlur}
+                onMouseEnter={() => this.handleAnnotationHover(annotation)}
+                onMouseLeave={this.handleAnnotationBlur}
               >
                 <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
                   <SanitizedHtml
@@ -108,7 +113,6 @@ export class CanvasAnnotations extends Component {
 }
 
 CanvasAnnotations.propTypes = {
-  allAnnotationsAreHighlighted: PropTypes.bool.isRequired,
   annotations: PropTypes.arrayOf(
     PropTypes.shape({
       content: PropTypes.string.isRequired,
@@ -117,7 +121,8 @@ CanvasAnnotations.propTypes = {
   ),
   classes: PropTypes.objectOf(PropTypes.string),
   deselectAnnotation: PropTypes.func.isRequired,
-  highlightAnnotation: PropTypes.func.isRequired,
+  hoverAnnotation: PropTypes.func.isRequired,
+  hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   htmlSanitizationRuleSet: PropTypes.string,
   index: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
@@ -131,6 +136,7 @@ CanvasAnnotations.propTypes = {
 CanvasAnnotations.defaultProps = {
   annotations: [],
   classes: {},
+  hoveredAnnotationIds: [],
   htmlSanitizationRuleSet: 'iiif',
   listContainerComponent: 'li',
   selectedAnnotationIds: [],
