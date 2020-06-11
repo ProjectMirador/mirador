@@ -60,6 +60,9 @@ const mapStateToProps = (state, { windowId }) => ({
  * @private
  */
 const mapDispatchToProps = {
+  deselectAnnotation: actions.deselectAnnotation,
+  hoverAnnotation: actions.hoverAnnotation,
+  selectAnnotation: actions.selectAnnotation,
   updateViewport: actions.updateViewport,
 };
 

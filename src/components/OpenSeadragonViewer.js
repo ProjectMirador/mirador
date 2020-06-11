@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
+import debounce from 'lodash/debounce';
+import flatten from 'lodash/flatten';
+import sortBy from 'lodash/sortBy';
+import xor from 'lodash/xor';
 import OpenSeadragon from 'openseadragon';
 import classNames from 'classnames';
 import ns from '../config/css-ns';
@@ -49,6 +53,9 @@ export class OpenSeadragonViewer extends Component {
     this.ref = React.createRef();
     this.onUpdateViewport = this.onUpdateViewport.bind(this);
     this.onViewportChange = this.onViewportChange.bind(this);
+    this.onCanvasClick = this.onCanvasClick.bind(this);
+    this.onCanvasMouseMove = debounce(this.onCanvasMouseMove.bind(this), 10);
+    this.onCanvasExit = this.onCanvasExit.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
     this.osdUpdating = false;
   }
@@ -77,6 +84,13 @@ export class OpenSeadragonViewer extends Component {
     this.viewer.addHandler('animation-finish', () => {
       this.osdUpdating = false;
     });
+
+    this.viewer.addHandler('canvas-click', this.onCanvasClick);
+    this.viewer.addHandler('canvas-exit', this.onCanvasExit);
+
+    if (this.viewer.innerTracker) {
+      this.viewer.innerTracker.moveHandler = this.onCanvasMouseMove;
+    }
 
     this.updateCanvas = this.canvasUpdateCallback();
 
@@ -114,6 +128,15 @@ export class OpenSeadragonViewer extends Component {
     const hoveredAnnotationsUpdated = (
       xor(hoveredAnnotationIds, prevProps.hoveredAnnotationIds).length > 0
     );
+
+    if (hoveredAnnotationsUpdated) {
+      if (hoveredAnnotationIds.length > 0) {
+        this.ref.current.style.cursor = 'pointer';
+      } else {
+        this.ref.current.style.cursor = '';
+      }
+    }
+
     const selectedAnnotationsUpdated = selectedAnnotationId !== prevProps.selectedAnnotationId;
 
     const redrawAnnotations = drawAnnotations !== prevProps.drawAnnotations
@@ -159,6 +182,112 @@ export class OpenSeadragonViewer extends Component {
     this.viewer.removeAllHandlers();
   }
 
+  /** */
+  onCanvasClick(event) {
+    const {
+      canvasWorld,
+    } = this.props;
+
+    const { position: webPosition, eventSource: { viewport } } = event;
+    const point = viewport.pointFromPixel(webPosition);
+
+    const canvas = canvasWorld.canvasAtPoint(point);
+    if (!canvas) return;
+    const [
+      _canvasX, _canvasY, canvasWidth, canvasHeight, // eslint-disable-line no-unused-vars
+    ] = canvasWorld.canvasToWorldCoordinates(canvas.id);
+
+    // get all the annotations that contain the click
+    const annos = this.annotationsAtPoint(canvas, point);
+
+    if (annos.length > 0) {
+      event.preventDefaultAction = true; // eslint-disable-line no-param-reassign
+    }
+
+    if (annos.length === 1) {
+      this.toggleAnnotation(annos[0].id);
+    } else if (annos.length > 0) {
+      /**
+       * Try to find the "right" annotation to select after a click.
+       *
+       * This is perhaps a naive method, but seems to deal with rectangles and SVG shapes:
+       *
+       * - figure out how many points around a circle are inside the annotation shape
+       * - if there's a shape with the fewest interior points, it's probably the one
+       *       with the closest boundary?
+       * - if there's a tie, make the circle bigger and try again.
+       */
+      const annosWithClickScore = (radius) => {
+        const degreesToRadians = Math.PI / 180;
+
+        return (anno) => {
+          let score = 0;
+          for (let degrees = 0; degrees < 360; degrees += 1) {
+            const x = Math.cos(degrees * degreesToRadians) * radius + point.x;
+            const y = Math.sin(degrees * degreesToRadians) * radius + point.y;
+
+            if (this.isAnnotationAtPoint(anno, canvas, { x, y })) score += 1;
+          }
+
+          return { anno, score };
+        };
+      };
+
+      let annosWithScore = [];
+      let radius = 1;
+      annosWithScore = sortBy(annos.map(annosWithClickScore(radius)), 'score');
+
+      while (radius < Math.max(canvasWidth, canvasHeight)
+        && annosWithScore[0].score === annosWithScore[1].score) {
+        radius *= 2;
+        annosWithScore = sortBy(annos.map(annosWithClickScore(radius)), 'score');
+      }
+
+      this.toggleAnnotation(annosWithScore[0].anno.id);
+    }
+  }
+
+  /** */
+  onCanvasMouseMove(event) {
+    const {
+      annotations,
+      canvasWorld,
+      hoverAnnotation,
+      hoveredAnnotationIds,
+      searchAnnotations,
+      windowId,
+    } = this.props;
+
+    if (annotations.length === 0 && searchAnnotations.length === 0) return;
+
+    const { position: webPosition } = event;
+    const point = this.viewer.viewport.pointFromPixel(webPosition);
+
+    const canvas = canvasWorld.canvasAtPoint(point);
+    if (!canvas) {
+      hoverAnnotation(windowId, []);
+      return;
+    }
+
+    const annos = this.annotationsAtPoint(canvas, point);
+
+    if (xor(hoveredAnnotationIds, annos.map(a => a.id)).length > 0) {
+      hoverAnnotation(windowId, annos.map(a => a.id));
+    }
+  }
+
+  /** If the cursor leaves the canvas, wipe out highlights */
+  onCanvasExit(event) {
+    const {
+      hoverAnnotation,
+      windowId,
+    } = this.props;
+
+    // a move event may be queued up by the debouncer
+    this.onCanvasMouseMove.cancel();
+    hoverAnnotation(windowId, []);
+  }
+
   /**
    * onUpdateViewport - fires during OpenSeadragon render method.
    */
@@ -190,7 +319,7 @@ export class OpenSeadragonViewer extends Component {
     };
   }
 
-  /** */
+  /** @private */
   isAnnotationAtPoint(resource, canvas, point) {
     const {
       canvasWorld,
@@ -203,7 +332,9 @@ export class OpenSeadragonViewer extends Component {
     if (resource.svgSelector) {
       const context = this.osdCanvasOverlay.context2d;
       const { svgPaths } = new CanvasAnnotationDisplay({ resource });
-      return svgPaths.some(path => context.isPointInPath(new Path2D(path), relativeX, relativeY));
+      return [...svgPaths].some(path => (
+        context.isPointInPath(new Path2D(path.attributes.d.nodeValue), relativeX, relativeY)
+      ));
     }
 
     if (resource.fragmentSelector) {
@@ -214,7 +345,7 @@ export class OpenSeadragonViewer extends Component {
     return false;
   }
 
-  /** */
+  /** @private */
   annotationsAtPoint(canvas, point) {
     const {
       annotations, searchAnnotations,
@@ -231,7 +362,7 @@ export class OpenSeadragonViewer extends Component {
   }
 
   /** */
-  toggleAnnotation(targetId, id) {
+  toggleAnnotation(id) {
     const {
       selectedAnnotationId,
       selectAnnotation,
@@ -476,9 +607,11 @@ export class OpenSeadragonViewer extends Component {
 OpenSeadragonViewer.defaultProps = {
   annotations: [],
   children: null,
+  deselectAnnotation: () => {},
   drawAnnotations: true,
   drawSearchAnnotations: true,
   highlightAllAnnotations: false,
+  hoverAnnotation: () => {},
   hoveredAnnotationIds: [],
   infoResponses: [],
   label: null,
@@ -486,6 +619,7 @@ OpenSeadragonViewer.defaultProps = {
   osdConfig: {},
   palette: {},
   searchAnnotations: [],
+  selectAnnotation: () => {},
   selectedAnnotationId: undefined,
   viewer: null,
 };
@@ -495,9 +629,11 @@ OpenSeadragonViewer.propTypes = {
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  deselectAnnotation: PropTypes.func,
   drawAnnotations: PropTypes.bool,
   drawSearchAnnotations: PropTypes.bool,
   highlightAllAnnotations: PropTypes.bool,
+  hoverAnnotation: PropTypes.func,
   hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   infoResponses: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
@@ -505,6 +641,7 @@ OpenSeadragonViewer.propTypes = {
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),
+  selectAnnotation: PropTypes.func,
   selectedAnnotationId: PropTypes.string,
   t: PropTypes.func.isRequired,
   updateViewport: PropTypes.func.isRequired,
