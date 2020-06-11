@@ -171,7 +171,7 @@ export const windowsReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          displayAllAnnotations: !state[action.windowId].displayAllAnnotations,
+          highlightAllAnnotations: !state[action.windowId].highlightAllAnnotations,
         },
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:

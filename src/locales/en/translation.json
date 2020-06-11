@@ -35,7 +35,7 @@
     "currentItem_2/2": "Right",
     "dark": "Dark theme",
     "dismiss": "Dismiss",
-    "displayAllAnnotations": "Highlight all",
+    "highlightAllAnnotations": "Highlight all",
     "displayNoAnnotations": "Highlight none",
     "downloadExport": "Export workspace",
     "downloadExportWorkspace": "Export workspace",

@@ -27,7 +27,7 @@ function getIdAndContentOfResources(resources) {
 
 /** For connect */
 const mapStateToProps = (state, { canvasId, windowId }) => ({
-  allAnnotationsAreHighlighted: getWindow(state, { windowId }).displayAllAnnotations,
+  allAnnotationsAreHighlighted: getWindow(state, { windowId }).highlightAllAnnotations,
   annotations: getIdAndContentOfResources(
     getAnnotationResourcesByMotivationForCanvas(
       state, { canvasId, motivations: state.config.annotations.filteredMotivations, windowId },

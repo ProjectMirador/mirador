@@ -220,7 +220,6 @@ export default {
     filteredMotivations: ['oa:commenting', 'oa:tagging', 'sc:painting', 'commenting', 'tagging'],
   },
   classPrefix: 'mirador',
-  displayAllAnnotations: false, // Configure if annotations to be displayed on the canvas by default when fetched
   requests: {
     preprocessors: [ // Functions that receive HTTP requests and manipulate them (e.g. to add headers)
       // (url, options) => (url.match('info.json') && { ...options, myCustomThing: 'blah' })
@@ -248,6 +247,7 @@ export default {
     defaultSidebarPanelWidth: 235, // Configure default sidebar width in pixels
     defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
     hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
+    highlightAllAnnotations: false, // Configure whether to display annotations on the canvas by default
     showLocalePicker: false, // Configure locale picker for multi-lingual metadata
     sideBarOpenByDefault: false, // Configure if the sidebar (and its content panel) is open by default
     panels: { // Configure which panels are visible in WindowSideBarButtons
