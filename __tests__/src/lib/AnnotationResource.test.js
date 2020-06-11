@@ -10,6 +10,9 @@ describe('AnnotationResource', () => {
       const expected = annoResource.id;
       expect(annoResource.id).toEqual(expected);
     });
+    it('handles the case where an id is only present in the resource', () => {
+      expect(new AnnotationResource({ resource: [{ '@id': 'bar' }] }).id).toEqual('bar');
+    });
   });
 
   describe('isOnlyTag', () => {
