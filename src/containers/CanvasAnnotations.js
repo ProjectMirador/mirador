@@ -7,7 +7,7 @@ import * as actions from '../state/actions';
 import {
   getAnnotationResourcesByMotivationForCanvas,
   getCanvasLabel,
-  getSelectedAnnotationIds,
+  getSelectedAnnotationId,
 } from '../state/selectors';
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
 
@@ -36,7 +36,7 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
     canvasId,
     windowId,
   }),
-  selectedAnnotationIds: getSelectedAnnotationIds(state, { windowId }),
+  selectedAnnotationId: getSelectedAnnotationId(state, { windowId }),
 });
 
 /**

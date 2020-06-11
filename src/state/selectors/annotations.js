@@ -100,25 +100,22 @@ export const getAnnotationResourcesByMotivation = createSelector(
  * @param {Array} targetIds
  * @return {Array}
  */
-export const getSelectedAnnotationIds = createSelector(
+export const getSelectedAnnotationId = createSelector(
   [
-    (state, { windowId }) => state.windows[windowId].selectedAnnotations,
-    getVisibleCanvasIds,
+    (state, { windowId }) => state.windows[windowId].selectedAnnotationId,
   ],
-  (selectedAnnotations, canvasIds) => (
-    (flatten(canvasIds.map(targetId => selectedAnnotations && selectedAnnotations[targetId])))
-  ),
+  selectedAnnotationId => selectedAnnotationId,
 );
 
 export const getSelectedAnnotationsOnCanvases = createSelector(
   [
     getPresentAnnotationsOnSelectedCanvases,
-    getSelectedAnnotationIds,
+    getSelectedAnnotationId,
   ],
-  (canvasAnnotations, selectedAnnotationIds) => canvasAnnotations.map(annotation => ({
+  (canvasAnnotations, selectedAnnotationId) => canvasAnnotations.map(annotation => ({
     id: (annotation['@id'] || annotation.id),
     resources: annotation.resources.filter(
-      r => selectedAnnotationIds && selectedAnnotationIds.includes(r.id),
+      r => selectedAnnotationId === r.id,
     ),
   })).filter(val => val.resources.length > 0),
 );

@@ -1,5 +1,5 @@
 import {
-  remove, removeIn, updateIn, merge,
+  removeIn, updateIn, merge,
 } from 'immutable';
 import ActionTypes from '../actions/action-types';
 
@@ -163,22 +163,3 @@ export const windowsReducer = (state = {}, action) => {
       return state;
   }
 };
-
-/**
- * Handle removing IDs from selectedAnnotations
- * where empty targetIds are removed from state as well
- */
-function updatedSelectedAnnotations(state, action) {
-  const filteredIds = state[action.windowId]
-    .selectedAnnotations[action.targetId]
-    .filter(id => id !== action.annotationId);
-
-  if (filteredIds.length > 0) {
-    return {
-      ...state[action.windowId].selectedAnnotations,
-      [action.targetId]: filteredIds,
-    };
-  }
-
-  return remove(state[action.windowId].selectedAnnotations, action.targetId);
-}

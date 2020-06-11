@@ -1,8 +1,7 @@
 import {
   getAnnotationResourcesByMotivation,
   getAnnotationResourcesByMotivationForCanvas,
-  getHighlightedAnnotationsOnCanvases,
-  getSelectedAnnotationIds,
+  getSelectedAnnotationId,
 } from '../../../src/state/selectors';
 
 describe('getAnnotationResourcesByMotivationForCanvas', () => {
@@ -120,7 +119,7 @@ describe('getAnnotationResourcesByMotivation', () => {
   });
 });
 
-it('getSelectedAnnotationIds returns an array of selected annotation IDs from state', () => {
+it('getSelectedAnnotationId returns the selected annotation ID from state', () => {
   const state = {
     manifests: {
       mid: {
@@ -145,17 +144,14 @@ it('getSelectedAnnotationIds returns an array of selected annotation IDs from st
       wid: {
         canvasIndex: 0,
         manifestId: 'mid',
-        selectedAnnotations: {
-          tid1: ['aid1', 'aid2'],
-          tid2: ['aid3'],
-        },
+        selectedAnnotationId: 'aid1',
         visibleCanvases: ['tid1'],
       },
     },
   };
 
-  expect(getSelectedAnnotationIds(state, { windowId: 'wid' })).toEqual(
-    ['aid1', 'aid2'],
+  expect(getSelectedAnnotationId(state, { windowId: 'wid' })).toEqual(
+    'aid1',
   );
 });
 

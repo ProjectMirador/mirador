@@ -28,10 +28,10 @@ export class CanvasAnnotations extends Component {
   */
   handleClick(event, annotation) {
     const {
-      deselectAnnotation, selectAnnotation, selectedAnnotationIds, windowId,
+      deselectAnnotation, selectAnnotation, selectedAnnotationId, windowId,
     } = this.props;
 
-    if (selectedAnnotationIds.includes(annotation.id)) {
+    if (selectedAnnotationId === annotation.id) {
       deselectAnnotation(windowId, annotation.targetId, annotation.id);
     } else {
       selectAnnotation(windowId, annotation.targetId, annotation.id);
@@ -59,7 +59,7 @@ export class CanvasAnnotations extends Component {
   */
   render() {
     const {
-      annotations, classes, index, label, selectedAnnotationIds, t, totalSize,
+      annotations, classes, index, label, selectedAnnotationId, t, totalSize,
       listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
     } = this.props;
     if (annotations.length === 0) return <></>;
@@ -83,7 +83,7 @@ export class CanvasAnnotations extends Component {
                 )}
                 key={annotation.id}
                 annotationid={annotation.id}
-                selected={selectedAnnotationIds.includes(annotation.id)}
+                selected={selectedAnnotationId === annotation.id}
                 onClick={e => this.handleClick(e, annotation)}
                 onFocus={() => this.handleAnnotationHover(annotation)}
                 onBlur={this.handleAnnotationBlur}
@@ -128,7 +128,7 @@ CanvasAnnotations.propTypes = {
   label: PropTypes.string.isRequired,
   listContainerComponent: PropTypes.elementType,
   selectAnnotation: PropTypes.func.isRequired,
-  selectedAnnotationIds: PropTypes.arrayOf(PropTypes.string),
+  selectedAnnotationId: PropTypes.string,
   t: PropTypes.func.isRequired,
   totalSize: PropTypes.number.isRequired,
   windowId: PropTypes.string.isRequired,
@@ -139,5 +139,5 @@ CanvasAnnotations.defaultProps = {
   hoveredAnnotationIds: [],
   htmlSanitizationRuleSet: 'iiif',
   listContainerComponent: 'li',
-  selectedAnnotationIds: [],
+  selectedAnnotationId: undefined,
 };

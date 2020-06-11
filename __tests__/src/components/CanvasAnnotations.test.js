@@ -94,7 +94,7 @@ describe('CanvasAnnotations', () => {
       wrapper = createWrapper({
         annotations,
         deselectAnnotation,
-        selectedAnnotationIds: ['abc123'],
+        selectedAnnotationId: 'abc123',
       });
 
       wrapper.find(MenuItem).first().simulate('click');

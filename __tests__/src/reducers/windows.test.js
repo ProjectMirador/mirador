@@ -337,31 +337,15 @@ describe('windows reducer', () => {
   });
 
   describe('SELECT_ANNOTATION', () => {
-    it('handles when no selectedAnnotations exist', () => {
-      const beforeState = { abc123: {} };
+    it('sets the selectedAnnotationId', () => {
+      const beforeState = { abc123: { selectedAnnotationId: 'bId' } };
       const action = {
         annotationId: 'aId',
-        targetId: 'cId',
         type: ActionTypes.SELECT_ANNOTATION,
         windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { selectedAnnotations: { cId: ['aId'] } },
-      };
-
-      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
-    });
-
-    it('adds new annotation IDs to existing canvas IDs', () => {
-      const beforeState = { abc123: { selectedAnnotations: { cId: ['prevId'] } } };
-      const action = {
-        annotationId: 'aId',
-        targetId: 'cId',
-        type: ActionTypes.SELECT_ANNOTATION,
-        windowId: 'abc123',
-      };
-      const expectedState = {
-        abc123: { selectedAnnotations: { cId: ['prevId', 'aId'] } },
+        abc123: { selectedAnnotationId: 'aId' },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
@@ -369,31 +353,14 @@ describe('windows reducer', () => {
   });
 
   describe('DESELECT_ANNOTATION', () => {
-    it('remvoves the given annotation Id', () => {
-      const beforeState = { abc123: { selectedAnnotations: { cId: ['aId1', 'aId2'] } } };
+    it('removes the given annotation Id', () => {
+      const beforeState = { abc123: { selectedAnnotationId: 'asdf' } };
       const action = {
-        annotationId: 'aId1',
-        targetId: 'cId',
         type: ActionTypes.DESELECT_ANNOTATION,
         windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { selectedAnnotations: { cId: ['aId2'] } },
-      };
-
-      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
-    });
-
-    it('remvoves the given canvas Id from the selected annotations if there are no more IDs', () => {
-      const beforeState = { abc123: { selectedAnnotations: { cId1: ['aId1'], cId2: ['aId2'] } } };
-      const action = {
-        annotationId: 'aId2',
-        targetId: 'cId2',
-        type: ActionTypes.DESELECT_ANNOTATION,
-        windowId: 'abc123',
-      };
-      const expectedState = {
-        abc123: { selectedAnnotations: { cId1: ['aId1'] } },
+        abc123: { selectedAnnotationId: undefined },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
