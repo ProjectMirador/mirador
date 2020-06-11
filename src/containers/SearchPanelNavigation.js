@@ -29,9 +29,9 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
  * @memberof SearchPanelNavigation
  * @private
  */
-const mapDispatchToProps = (dispatch, { companionWindowId, windowId }) => ({
-  selectContentSearchAnnotation: (...args) => dispatch(
-    actions.selectContentSearchAnnotation(windowId, companionWindowId, ...args),
+const mapDispatchToProps = (dispatch, { windowId }) => ({
+  selectAnnotation: (...args) => dispatch(
+    actions.selectAnnotation(windowId, ...args),
   ),
 });
 

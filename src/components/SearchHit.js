@@ -62,10 +62,10 @@ export class SearchHit extends Component {
   /** */
   handleClick() {
     const {
-      annotationId, selectContentSearchAnnotation,
+      annotation, annotationId, selectAnnotation,
     } = this.props;
 
-    selectContentSearchAnnotation([annotationId]);
+    if (annotation && annotationId) selectAnnotation(annotation.targetId, annotationId);
   }
 
   /** */
@@ -97,7 +97,7 @@ export class SearchHit extends Component {
       <ScrollTo
         containerRef={containerRef}
         offsetTop={96} // offset for the height of the form above
-        scrollTo={selected && !focused}
+        scrollTo={windowSelected && !focused}
       >
         <ListItem
           className={clsx(
@@ -153,6 +153,7 @@ SearchHit.propTypes = {
   adjacent: PropTypes.bool,
   annotation: PropTypes.shape({
     chars: PropTypes.string,
+    targetId: PropTypes.string,
   }),
   annotationId: PropTypes.string,
   annotationLabel: PropTypes.string,
@@ -171,7 +172,7 @@ SearchHit.propTypes = {
     match: PropTypes.string,
   }),
   index: PropTypes.number,
-  selectContentSearchAnnotation: PropTypes.func,
+  selectAnnotation: PropTypes.func,
   selected: PropTypes.bool,
   showDetails: PropTypes.func,
   t: PropTypes.func,
@@ -192,7 +193,7 @@ SearchHit.defaultProps = {
   focused: false,
   hit: undefined,
   index: undefined,
-  selectContentSearchAnnotation: () => {},
+  selectAnnotation: () => {},
   selected: false,
   showDetails: () => {},
   t: k => k,
