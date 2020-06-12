@@ -1,6 +1,7 @@
 import {
   removeIn,
 } from 'immutable';
+import flatten from 'lodash/flatten';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -100,6 +101,31 @@ export const searchesReducer = (state = {}, action) => {
             selectedContentSearchAnnotationIds: action.annotationIds,
           },
         },
+      };
+    case ActionTypes.SELECT_ANNOTATION:
+      if (!state[action.windowId]) return state;
+
+      return {
+        ...state,
+        [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
+          const search = state[action.windowId][key];
+          const searchHasAnnotation = search.data
+            && Object.values(search.data)
+              .filter(resp => resp.json && resp.json.resources)
+              .some(resp => (
+                flatten([resp.json.resources]).some(r => r['@id'] === action.annotationId)
+              ));
+
+          if (searchHasAnnotation) {
+            object[key] = { // eslint-disable-line no-param-reassign
+              ...search,
+              selectedContentSearchAnnotationIds: [action.annotationId],
+            };
+          } else {
+            object[key] = search; // eslint-disable-line no-param-reassign
+          }
+          return object;
+        }, {}),
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};

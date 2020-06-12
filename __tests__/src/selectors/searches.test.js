@@ -4,7 +4,6 @@ import {
   getSortedSearchAnnotationsForCompanionWindow,
   getSortedSearchHitsForCompanionWindow,
   getSelectedContentSearchAnnotationIds,
-  getSelectedContentSearchAnnotations,
   getResourceAnnotationForSearchHit,
   getResourceAnnotationLabel,
   getSearchIsFetching,

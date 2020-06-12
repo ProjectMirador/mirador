@@ -171,19 +171,6 @@ export const getSelectedContentSearchAnnotationIds = createSelector(
     || [],
 );
 
-export const getSelectedContentSearchAnnotations = createSelector(
-  [
-    getSearchAnnotationsForWindow,
-    getSelectedContentSearchAnnotationIds,
-  ],
-  (searchAnnotations, selectedAnnotationIds) => searchAnnotations.map(annotation => ({
-    id: (annotation['@id'] || annotation.id),
-    resources: annotation.resources.filter(
-      r => selectedAnnotationIds && selectedAnnotationIds.includes(r.id),
-    ),
-  })).filter(val => val.resources.length > 0),
-);
-
 export const getResourceAnnotationForSearchHit = createSelector(
   [
     getSearchAnnotationsForCompanionWindow,

@@ -178,41 +178,6 @@ export function* setCanvasforSelectedAnnotation({ annotationId, windowId }) {
 }
 
 /** */
-function getSearchIdsContainingAnnotation(state, { windowId, annotationId }) {
-  const searches = getSearchForWindow(state, { windowId });
-  const companionWindowIds = Object.keys(searches || {});
-  if (companionWindowIds.length === 0) return [];
-
-  return companionWindowIds.filter((companionWindowId) => {
-    const annotations = getSearchAnnotationsForCompanionWindow(state, {
-      companionWindowId, windowId,
-    });
-
-    return annotations.resources.some(r => r.id === annotationId);
-  });
-}
-
-/** @private */
-export function* updateSelectedContentSearchAnnotation({
-  annotationId, windowId,
-}) {
-  // figure out if it was a content search annotation
-  const companionWindowIds = yield select(
-    getSearchIdsContainingAnnotation, { annotationId, windowId },
-  );
-
-  yield all(
-    companionWindowIds
-      .map(companionWindowId => (
-        put(setContentSearchCurrentAnnotation(
-          windowId,
-          companionWindowId,
-          [annotationId],
-        )))),
-  );
-}
-
-/** */
 export default function* windowsSaga() {
   yield all([
     takeEvery(ActionTypes.ADD_WINDOW, fetchWindowManifest),
@@ -221,7 +186,6 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
     takeEvery(ActionTypes.RECEIVE_SEARCH, setCanvasOfFirstSearchResult),
     takeEvery(ActionTypes.SELECT_ANNOTATION, setCanvasforSelectedAnnotation),
-    takeEvery(ActionTypes.SELECT_ANNOTATION, updateSelectedContentSearchAnnotation),
     takeEvery(ActionTypes.FOCUS_WINDOW, panToFocusedWindow),
   ]);
 }

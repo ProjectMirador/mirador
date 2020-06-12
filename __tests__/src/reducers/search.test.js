@@ -203,4 +203,46 @@ describe('search reducer', () => {
       },
     )).toEqual({ foo: {} });
   });
+  it('handles SELECT_ANNOTATION using selectedContentSearchAnnotationIds for relevant searches', () => {
+    const irrelevantSearch = {
+      data: {
+        blah: { json: { resources: [{ '@id': 'not the id' }] } },
+      },
+      selectedContentSearchAnnotationIds: ['not the id'],
+    };
+
+    expect(searchesReducer({
+      foo: {
+        abc123: {
+          data: {
+            'search?page=xyz': {
+              json: {
+                resources: [{ '@id': 'someAnnotationId' }],
+              },
+            },
+          },
+          selectedContentSearchAnnotationIds: ['whatever'],
+        },
+        irrelevantSearch,
+      },
+    }, {
+      annotationId: 'someAnnotationId',
+      type: ActionTypes.SELECT_ANNOTATION,
+      windowId: 'foo',
+    })).toEqual({
+      foo: {
+        abc123: {
+          data: {
+            'search?page=xyz': {
+              json: {
+                resources: [{ '@id': 'someAnnotationId' }],
+              },
+            },
+          },
+          selectedContentSearchAnnotationIds: ['someAnnotationId'],
+        },
+        irrelevantSearch,
+      },
+    });
+  });
 });
