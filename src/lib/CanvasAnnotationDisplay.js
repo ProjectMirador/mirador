@@ -32,6 +32,17 @@ export default class CanvasAnnotationDisplay {
 
   /** */
   svgContext() {
+    let currentPalette;
+    if (this.hovered) {
+      currentPalette = this.palette.hovered;
+    } else if (this.selected) {
+      currentPalette = this.palette.selected;
+    } else {
+      currentPalette = this.palette.default;
+    }
+
+    if (currentPalette.globalAlpha === 0) return;
+
     [...this.svgPaths].forEach((element) => {
       /**
        *  Note: Path2D is not supported in IE11.
@@ -65,18 +76,15 @@ export default class CanvasAnnotationDisplay {
       // Resize the stroke based off of the zoomRatio (currentZoom / maxZoom)
       this.context.lineWidth /= this.zoomRatio;
 
-      let currentPalette;
-      if (this.hovered) {
-        currentPalette = this.palette.hovered;
-      } else if (this.selected) {
-        currentPalette = this.palette.selected;
-      } else {
-        currentPalette = this.palette.default;
-      }
-
       // Reset the color if it is selected or hovered on
       if (this.selected || this.hovered) {
         this.context.strokeStyle = currentPalette.strokeStyle || currentPalette.fillStyle;
+      }
+
+      if (element.attributes['stroke-opacity']) {
+        this.context.globalAlpha = currentPalette.globalAlpha * element.attributes['stroke-opacity'].nodeValue;
+      } else {
+        this.context.globalAlpha = currentPalette.globalAlpha;
       }
 
       this.context.stroke(p);
@@ -84,7 +92,9 @@ export default class CanvasAnnotationDisplay {
       // Wait to set the fill, so we can adjust the globalAlpha value if we need to
       if (element.attributes.fill && element.attributes.fill.nodeValue !== 'none') {
         if (element.attributes['fill-opacity']) {
-          this.context.globalAlpha = element.attributes['fill-opacity'].nodeValue;
+          this.context.globalAlpha = currentPalette.globalAlpha * element.attributes['fill-opacity'].nodeValue;
+        } else {
+          this.context.globalAlpha = currentPalette.globalAlpha;
         }
         this.context.fill(p);
       }
@@ -111,6 +121,8 @@ export default class CanvasAnnotationDisplay {
     Object.keys(currentPalette).forEach((key) => {
       this.context[key] = currentPalette[key];
     });
+
+    if (currentPalette.globalAlpha === 0) return;
 
     if (currentPalette.fillStyle) {
       this.context.fillRect(...fragment);

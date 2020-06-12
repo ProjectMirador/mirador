@@ -10,7 +10,7 @@ function createSubject(args) {
       y: 0,
     },
     palette: {
-      default: { globalAlpha: 0, strokeStyle: 'black' },
+      default: { globalAlpha: 1, strokeStyle: 'black' },
       hovered: { globalAlpha: 1, strokeStyle: 'blue' },
       selected: { globalAlpha: 1, strokeStyle: 'yellow' },
     },
