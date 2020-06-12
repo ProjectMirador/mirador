@@ -56,7 +56,7 @@ const styles = theme => ({
     '&$hovered': {
       backgroundColor: theme.palette.action.hover,
     },
-    '&:hover': {
+    '&:hover,&:focus': {
       backgroundColor: theme.palette.action.hover,
     },
     borderBottom: `0.5px solid ${theme.palette.divider}`,
