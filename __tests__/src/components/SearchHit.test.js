@@ -40,7 +40,7 @@ describe('SearchHit', () => {
     expect(wrapper.find('strong').length).toEqual(1);
 
     wrapper.find('WithStyles(ForwardRef(ListItem))').simulate('click');
-    expect(selectAnnotation).toHaveBeenCalledWith('x', 'foo');
+    expect(selectAnnotation).toHaveBeenCalledWith('foo');
   });
 
   it('renders the annotation char if the hit is not available', () => {

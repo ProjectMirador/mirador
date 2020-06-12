@@ -120,7 +120,7 @@ export function* setCurrentAnnotationsOnCurrentCanvas({
   );
 
   // if the currently selected annotation isn't on this canvas, do a thing.
-  yield put(selectAnnotation(windowId, null, Object.values(annotationBySearch)[0][0]));
+  yield put(selectAnnotation(windowId, Object.values(annotationBySearch)[0][0]));
 }
 
 /** @private */
@@ -161,7 +161,7 @@ export function* setCanvasOfFirstSearchResult({ companionWindowId, windowId }) {
   );
   if (!annotations || annotations.length === 0) return;
 
-  yield put(selectAnnotation(windowId, annotations[0].target, annotations[0].id));
+  yield put(selectAnnotation(windowId, annotations[0].id));
 }
 
 /** @private */

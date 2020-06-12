@@ -12,13 +12,13 @@ export class SearchPanelNavigation extends Component {
   /** */
   nextSearchResult(currentHitIndex) {
     const { searchHits, selectAnnotation } = this.props;
-    selectAnnotation(undefined, searchHits[currentHitIndex + 1].annotations[0]);
+    selectAnnotation(searchHits[currentHitIndex + 1].annotations[0]);
   }
 
   /** */
   previousSearchResult(currentHitIndex) {
     const { searchHits, selectAnnotation } = this.props;
-    selectAnnotation(undefined, searchHits[currentHitIndex - 1].annotations[0]);
+    selectAnnotation(searchHits[currentHitIndex - 1].annotations[0]);
   }
 
   /** */

@@ -32,9 +32,9 @@ export class CanvasAnnotations extends Component {
     } = this.props;
 
     if (selectedAnnotationId === annotation.id) {
-      deselectAnnotation(windowId, annotation.targetId, annotation.id);
+      deselectAnnotation(windowId, annotation.id);
     } else {
-      selectAnnotation(windowId, annotation.targetId, annotation.id);
+      selectAnnotation(windowId, annotation.id);
     }
   }
 

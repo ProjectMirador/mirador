@@ -371,9 +371,9 @@ export class OpenSeadragonViewer extends Component {
     } = this.props;
 
     if (selectedAnnotationId === id) {
-      deselectAnnotation(windowId, targetId, id);
+      deselectAnnotation(windowId, id);
     } else {
-      selectAnnotation(windowId, targetId, id);
+      selectAnnotation(windowId, id);
     }
   }
 

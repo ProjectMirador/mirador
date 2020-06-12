@@ -51,28 +51,24 @@ describe('annotation actions', () => {
 
   it('handles the selectAnnotation action', () => {
     const windowId = 'wId1';
-    const targetId = 'cId1';
     const annotationId = 'aId1';
     const expectedAction = {
       annotationId,
-      targetId,
       type: ActionTypes.SELECT_ANNOTATION,
       windowId,
     };
-    expect(actions.selectAnnotation(windowId, targetId, annotationId)).toEqual(expectedAction);
+    expect(actions.selectAnnotation(windowId, annotationId)).toEqual(expectedAction);
   });
 
   it('handles the deselectAnnotation action', () => {
     const windowId = 'wId1';
-    const targetId = 'cId1';
     const annotationId = 'aId1';
     const expectedAction = {
       annotationId,
-      targetId,
       type: ActionTypes.DESELECT_ANNOTATION,
       windowId,
     };
-    expect(actions.deselectAnnotation(windowId, targetId, annotationId)).toEqual(expectedAction);
+    expect(actions.deselectAnnotation(windowId, annotationId)).toEqual(expectedAction);
   });
 
   it('handles the toggleAnnotationDisplay action', () => {

@@ -217,7 +217,7 @@ describe('window-level sagas', () => {
           annotationIds: ['annoId'], companionWindowId: 'cwid', type: ActionTypes.SET_CONTENT_SEARCH_CURRENT_ANNOTATIONS, windowId: 'abc123',
         })
         .put({
-          annotationId: 'annoId', targetId: null, type: ActionTypes.SELECT_ANNOTATION, windowId: 'abc123',
+          annotationId: 'annoId', type: ActionTypes.SELECT_ANNOTATION, windowId: 'abc123',
         })
         .run();
     });
@@ -301,7 +301,6 @@ describe('window-level sagas', () => {
         ])
         .put({
           annotationId: 'a',
-          targetId: undefined,
           type: 'mirador/SELECT_ANNOTATION',
           windowId: 'y',
         })

@@ -29,9 +29,9 @@ describe('SearchPanelNavigation', () => {
       expect(wrapper.find('WithStyles(ForwardRef(Typography))').text()).toEqual('pagination');
       expect(wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=false]').length).toEqual(2);
       wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=false]').first().props().onClick();
-      expect(selectAnnotation).toHaveBeenCalledWith(undefined, '1');
+      expect(selectAnnotation).toHaveBeenCalledWith('1');
       wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=false]').last().props().onClick();
-      expect(selectAnnotation).toHaveBeenCalledWith(undefined, '3');
+      expect(selectAnnotation).toHaveBeenCalledWith('3');
     });
     it('buttons disabled when no next/prev', () => {
       const wrapper = createWrapper({

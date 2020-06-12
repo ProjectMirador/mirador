@@ -65,7 +65,7 @@ export class SearchHit extends Component {
       annotation, annotationId, selectAnnotation,
     } = this.props;
 
-    if (annotation && annotationId) selectAnnotation(annotation.targetId, annotationId);
+    if (annotation && annotationId) selectAnnotation(annotationId);
   }
 
   /** */

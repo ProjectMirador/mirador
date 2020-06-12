@@ -67,10 +67,9 @@ export function fetchAnnotation(targetId, annotationId) {
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function selectAnnotation(windowId, targetId, annotationId) {
+export function selectAnnotation(windowId, annotationId) {
   return {
     annotationId,
-    targetId,
     type: ActionTypes.SELECT_ANNOTATION,
     windowId,
   };
@@ -84,10 +83,9 @@ export function selectAnnotation(windowId, targetId, annotationId) {
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function deselectAnnotation(windowId, targetId, annotationId) {
+export function deselectAnnotation(windowId, annotationId) {
   return {
     annotationId,
-    targetId,
     type: ActionTypes.DESELECT_ANNOTATION,
     windowId,
   };

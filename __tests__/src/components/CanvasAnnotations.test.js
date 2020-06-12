@@ -84,7 +84,7 @@ describe('CanvasAnnotations', () => {
       });
 
       wrapper.find(MenuItem).first().simulate('click');
-      expect(selectAnnotation).toHaveBeenCalledWith('abc', 'example.com/iiif/12345', 'abc123');
+      expect(selectAnnotation).toHaveBeenCalledWith('abc', 'abc123');
     });
 
     it('triggers the deselectAnnotation prop with the correct arguments when clicking a selected annotation', () => {
@@ -97,7 +97,7 @@ describe('CanvasAnnotations', () => {
       });
 
       wrapper.find(MenuItem).first().simulate('click');
-      expect(deselectAnnotation).toHaveBeenCalledWith('abc', 'example.com/iiif/12345', 'abc123');
+      expect(deselectAnnotation).toHaveBeenCalledWith('abc', 'abc123');
     });
 
     it('highlights annotations on mouse enter', () => {
