@@ -21,8 +21,8 @@ describe('app-level sagas', () => {
       testSaga(importState, action)
         .next()
         .all([
-          call(fetchWindowManifest, { window: { id: 'x', manifestId: 'url' } }),
-          call(fetchWindowManifest, { window: { id: 'y', manifestId: 'url2' } }),
+          call(fetchWindowManifest, { id: 'x', payload: { id: 'x', manifestId: 'url' } }),
+          call(fetchWindowManifest, { id: 'y', payload: { id: 'y', manifestId: 'url2' } }),
         ]);
     });
     it('calls into fetchManifest for each manifest', () => {
