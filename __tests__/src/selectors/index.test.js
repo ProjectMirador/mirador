@@ -1,7 +1,7 @@
 import {
   getAnnotationResourcesByMotivation,
   getLanguagesFromConfigWithCurrent,
-  getSelectedAnnotationIds,
+  getSelectedAnnotationId,
 } from '../../../src/state/selectors';
 
 describe('getAnnotationResourcesByMotivation', () => {
@@ -88,7 +88,7 @@ describe('getLanguagesFromConfigWithCurrent', () => {
   });
 });
 
-it('getSelectedAnnotationIds returns an array of selected annotation IDs from state', () => {
+it('getSelectedAnnotationId returns an array of selected annotation IDs from state', () => {
   const state = {
     manifests: {
       mid: {
@@ -112,16 +112,13 @@ it('getSelectedAnnotationIds returns an array of selected annotation IDs from st
     windows: {
       wid: {
         manifestId: 'mid',
-        selectedAnnotations: {
-          tid1: ['aid1', 'aid2'],
-          tid2: ['aid3'],
-        },
+        selectedAnnotationId: 'aid1',
         visibleCanvases: ['tid1'],
       },
     },
   };
 
-  expect(getSelectedAnnotationIds(state, { windowId: 'wid' })).toEqual(
-    ['aid1', 'aid2'],
+  expect(getSelectedAnnotationId(state, { windowId: 'wid' })).toEqual(
+    'aid1',
   );
 });

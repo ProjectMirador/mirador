@@ -19,12 +19,12 @@ import {
   fetchWindowManifest,
   setWindowDefaultSearchQuery,
   setWindowStartingCanvas,
-  selectAnnotationsOnCurrentCanvas,
   getAnnotationsBySearch,
   updateVisibleCanvases,
   setCanvasOfFirstSearchResult,
   setCanvasforSelectedAnnotation,
   panToFocusedWindow,
+  setCurrentAnnotationsOnCurrentCanvas,
 } from '../../../src/state/sagas/windows';
 import fixture from '../../fixtures/version-2/019.json';
 
@@ -182,20 +182,7 @@ describe('window-level sagas', () => {
     });
   });
 
-  describe('selectAnnotationsOnCurrentCanvas', () => {
-    it('short circuits if an annotation is already selected', () => {
-      const action = {
-        annotationId: ['x'],
-        type: ActionTypes.SET_CANVAS,
-        visibleCanvases: ['a'],
-        windowId: 'abc123',
-      };
-
-      return expectSaga(selectAnnotationsOnCurrentCanvas, action)
-        .run()
-        .then(({ allEffects }) => allEffects.length === 0);
-    });
-
+  describe('setCurrentAnnotationsOnCurrentCanvas', () => {
     it('short circuits if there is no active search', () => {
       const action = {
         type: ActionTypes.SET_CANVAS,
@@ -203,7 +190,7 @@ describe('window-level sagas', () => {
         windowId: 'abc123',
       };
 
-      return expectSaga(selectAnnotationsOnCurrentCanvas, action)
+      return expectSaga(setCurrentAnnotationsOnCurrentCanvas, action)
         .provide([
           [select(getSearchForWindow,
             { windowId: 'abc123' }), {}],
@@ -219,14 +206,19 @@ describe('window-level sagas', () => {
         windowId: 'abc123',
       };
 
-      return expectSaga(selectAnnotationsOnCurrentCanvas, action)
+      return expectSaga(setCurrentAnnotationsOnCurrentCanvas, action)
         .provide([
           [select(getSearchForWindow,
             { windowId: 'abc123' }), { cwid: { } }],
           [select(getAnnotationsBySearch, { canvasIds: ['a', 'b'], companionWindowIds: ['cwid'], windowId: 'abc123' }),
             { cwid: ['annoId'] }],
         ])
-        .put({ annotationsBySearch: { cwid: ['annoId'] }, type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATIONS, windowId: 'abc123' })
+        .put({
+          annotationIds: ['annoId'], companionWindowId: 'cwid', type: ActionTypes.SET_CONTENT_SEARCH_CURRENT_ANNOTATIONS, windowId: 'abc123',
+        })
+        .put({
+          annotationId: 'annoId', type: ActionTypes.SELECT_ANNOTATION, windowId: 'abc123',
+        })
         .run();
     });
   });
@@ -308,9 +300,8 @@ describe('window-level sagas', () => {
           [select(getSortedSearchAnnotationsForCompanionWindow, { companionWindowId, windowId }), [{ id: 'a' }, { id: 'b' }]],
         ])
         .put({
-          annotationId: ['a', 'b'],
-          companionWindowId: 'x',
-          type: 'mirador/SELECT_CONTENT_SEARCH_ANNOTATION',
+          annotationId: 'a',
+          type: 'mirador/SELECT_ANNOTATION',
           windowId: 'y',
         })
         .run();
@@ -336,20 +327,18 @@ describe('window-level sagas', () => {
   describe('setCanvasforSelectedAnnotation', () => {
     it('changes the canvas to that of the selected annotation', () => {
       const annotationId = ['a'];
-      const companionWindowId = 'x';
       const windowId = 'y';
       const action = {
         annotationId,
-        companionWindowId,
-        type: ActionTypes.RECEIVE_SEARCH,
+        type: ActionTypes.SELECT_ANNOTATION,
         windowId,
       };
 
       return expectSaga(setCanvasforSelectedAnnotation, action)
         .provide([
           [select(getVisibleCanvasIds, { windowId }), ['q']],
-          [select(getCanvasForAnnotation, { annotationId: annotationId[0], companionWindowId, windowId }), { id: 'z' }],
-          [call(setCanvas, windowId, 'z', undefined, { annotationId }), { type: 'expectedThunk' }],
+          [select(getCanvasForAnnotation, { annotationId, windowId }), { id: 'z' }],
+          [call(setCanvas, windowId, 'z'), { type: 'expectedThunk' }],
         ])
         .put({ type: 'expectedThunk' })
         .run();
@@ -357,38 +346,34 @@ describe('window-level sagas', () => {
 
     it('does nothing if the canvas is already visible', () => {
       const annotationId = 'a';
-      const companionWindowId = 'x';
       const windowId = 'y';
       const action = {
-        annotationId: [annotationId],
-        companionWindowId,
-        type: ActionTypes.RECEIVE_SEARCH,
+        annotationId,
+        type: ActionTypes.SELECT_ANNOTATION,
         windowId,
       };
 
       return expectSaga(setCanvasforSelectedAnnotation, action)
         .provide([
           [select(getVisibleCanvasIds, { windowId }), ['z']],
-          [select(getCanvasForAnnotation, { annotationId, companionWindowId, windowId }), { id: 'z' }],
+          [select(getCanvasForAnnotation, { annotationId, windowId }), { id: 'z' }],
         ])
         .run().then(({ allEffects }) => allEffects.length === 0);
     });
 
     it('does nothing if the annotation is not on one of our canvases', () => {
       const annotationId = 'a';
-      const companionWindowId = 'x';
       const windowId = 'y';
       const action = {
-        annotationId: [annotationId],
-        companionWindowId,
-        type: ActionTypes.RECEIVE_SEARCH,
+        annotationId,
+        type: ActionTypes.SELECT_ANNOTATION,
         windowId,
       };
 
       return expectSaga(setCanvasforSelectedAnnotation, action)
         .provide([
           [select(getVisibleCanvasIds, { windowId }), ['z']],
-          [select(getCanvasForAnnotation, { annotationId, companionWindowId, windowId }), null],
+          [select(getCanvasForAnnotation, { annotationId, windowId }), null],
         ])
         .run().then(({ allEffects }) => allEffects.length === 0);
     });

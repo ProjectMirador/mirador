@@ -157,32 +157,6 @@ describe('search reducer', () => {
     });
   });
 
-  it('handles SELECT_CONTENT_SEARCH_ANNOTATION', () => {
-    expect(searchesReducer(
-      {
-        foo: {
-          abc123: {
-            selectedContentSearchAnnotation: ['foo'],
-            whatever: true,
-          },
-        },
-      },
-      {
-        annotationId: ['bar'],
-        companionWindowId: 'abc123',
-        type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
-        windowId: 'foo',
-      },
-    )).toEqual({
-      foo: {
-        abc123: {
-          selectedContentSearchAnnotation: ['bar'],
-          whatever: true,
-        },
-      },
-    });
-  });
-
   it('should handle IMPORT_MIRADOR_STATE setting to clean state', () => {
     expect(searchesReducer(
       {
@@ -228,5 +202,47 @@ describe('search reducer', () => {
         windowId: 'foo',
       },
     )).toEqual({ foo: {} });
+  });
+  it('handles SELECT_ANNOTATION using selectedContentSearchAnnotationIds for relevant searches', () => {
+    const irrelevantSearch = {
+      data: {
+        blah: { json: { resources: [{ '@id': 'not the id' }] } },
+      },
+      selectedContentSearchAnnotationIds: ['not the id'],
+    };
+
+    expect(searchesReducer({
+      foo: {
+        abc123: {
+          data: {
+            'search?page=xyz': {
+              json: {
+                resources: [{ '@id': 'someAnnotationId' }],
+              },
+            },
+          },
+          selectedContentSearchAnnotationIds: ['whatever'],
+        },
+        irrelevantSearch,
+      },
+    }, {
+      annotationId: 'someAnnotationId',
+      type: ActionTypes.SELECT_ANNOTATION,
+      windowId: 'foo',
+    })).toEqual({
+      foo: {
+        abc123: {
+          data: {
+            'search?page=xyz': {
+              json: {
+                resources: [{ '@id': 'someAnnotationId' }],
+              },
+            },
+          },
+          selectedContentSearchAnnotationIds: ['someAnnotationId'],
+        },
+        irrelevantSearch,
+      },
+    });
   });
 });

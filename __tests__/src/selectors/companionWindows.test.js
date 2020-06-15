@@ -4,6 +4,7 @@ import {
   getCompanionWindow,
   getCompanionWindowsForPosition,
   selectCompanionWindowDimensions,
+  getCompanionWindowsForContent,
 } from '../../../src/state/selectors/companionWindows';
 
 describe('getThumbnailNavigationPosition', () => {
@@ -174,5 +175,24 @@ describe('selectCompanionWindowDimensions', () => {
       height: 201,
       width: 235 * 2,
     });
+  });
+});
+
+describe('getCompanionWindowsForContent', () => {
+  it('filters the companion windows for a window based on content', () => {
+    const state = {
+      companionWindows: {
+        abc: { content: 'search', id: 'abc' },
+        def: { content: 'search', id: 'def' },
+        xyz: { content: 'annotations', id: 'xyz' },
+      },
+      windows: { a: { companionWindowIds: ['abc', 'def', 'xyz'] } },
+    };
+
+    const props = { content: 'search', windowId: 'a' };
+
+    expect(getCompanionWindowsForContent(state, props).map(cw => cw.id)).toEqual([
+      'abc', 'def',
+    ]);
   });
 });

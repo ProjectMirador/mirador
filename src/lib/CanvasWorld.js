@@ -211,4 +211,14 @@ export default class CanvasWorld {
       worldHeight,
     ];
   }
+
+  /** */
+  canvasAtPoint(point) {
+    const canvasDimensions = this.canvasDimensions.find(c => (
+      c.x <= point.x && point.x <= (c.x + c.width)
+        && c.y <= point.y && point.y <= (c.y + c.height)
+    ));
+
+    return canvasDimensions && canvasDimensions.canvas;
+  }
 }

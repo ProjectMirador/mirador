@@ -7,18 +7,20 @@ import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
 import CanvasWorld from '../lib/CanvasWorld';
 import {
+  getWindow,
   getVisibleCanvasNonTiledResources,
   getCurrentCanvas,
-  getSelectedAnnotationsOnCanvases,
-  getHighlightedAnnotationsOnCanvases,
   getCanvasLabel,
   getSequenceViewingDirection,
   getLayersForVisibleCanvases,
   getVisibleCanvases,
   getViewer,
   getSearchAnnotationsForWindow,
-  getSelectedContentSearchAnnotations,
+  getCompanionWindowsForContent,
   getTheme,
+  getConfig,
+  getPresentAnnotationsOnSelectedCanvases,
+  getSelectedAnnotationId,
 } from '../state/selectors';
 
 /**
@@ -26,13 +28,17 @@ import {
  * @memberof Window
  * @private
  */
-const mapStateToProps = (state, { companionWindowId, windowId }) => ({
+const mapStateToProps = (state, { windowId }) => ({
+  annotations: getPresentAnnotationsOnSelectedCanvases(state, { windowId }),
   canvasWorld: new CanvasWorld(
     getVisibleCanvases(state, { windowId }),
     getLayersForVisibleCanvases(state, { windowId }),
     getSequenceViewingDirection(state, { windowId }),
   ),
-  highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),
+  drawAnnotations: getConfig(state).window.forceDrawAnnotations || getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0,
+  drawSearchAnnotations: getConfig(state).window.forceDrawAnnotations || getCompanionWindowsForContent(state, { content: 'search', windowId }).length > 0,
+  highlightAllAnnotations: getWindow(state, { windowId }).highlightAllAnnotations,
+  hoveredAnnotationIds: getWindow(state, { windowId }).hoveredAnnotationIds,
   label: getCanvasLabel(state, {
     canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
     windowId,
@@ -44,8 +50,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
     state,
     { windowId },
   ),
-  selectedAnnotations: getSelectedAnnotationsOnCanvases(state, { windowId }),
-  selectedContentSearchAnnotations: getSelectedContentSearchAnnotations(state, { windowId }),
+  selectedAnnotationId: getSelectedAnnotationId(state, { windowId }),
   viewer: getViewer(state, { windowId }),
 });
 
@@ -55,6 +60,9 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
  * @private
  */
 const mapDispatchToProps = {
+  deselectAnnotation: actions.deselectAnnotation,
+  hoverAnnotation: actions.hoverAnnotation,
+  selectAnnotation: actions.selectAnnotation,
   updateViewport: actions.updateViewport,
 };
 

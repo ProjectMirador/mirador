@@ -19,7 +19,7 @@ export class AnnotationSettings extends Component {
 
     return (
       <MiradorMenuButton
-        aria-label={t(displayAll ? 'displayNoAnnotations' : 'displayAllAnnotations')}
+        aria-label={t(displayAll ? 'displayNoAnnotations' : 'highlightAllAnnotations')}
         onClick={toggleAnnotationDisplay}
         disabled={displayAllDisabled}
         size="small"

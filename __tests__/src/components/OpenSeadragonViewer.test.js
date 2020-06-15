@@ -345,7 +345,7 @@ describe('OpenSeadragonViewer', () => {
 
       wrapper.setProps(
         {
-          selectedAnnotations: [
+          annotations: [
             new AnnotationList(
               { '@id': 'foo', resources: [{ foo: 'bar' }] },
             ),
@@ -354,7 +354,7 @@ describe('OpenSeadragonViewer', () => {
       );
       wrapper.setProps(
         {
-          selectedAnnotations: [
+          annotations: [
             new AnnotationList(
               { '@id': 'foo', resources: [{ foo: 'bar' }] },
             ),
@@ -363,7 +363,7 @@ describe('OpenSeadragonViewer', () => {
       );
       wrapper.setProps(
         {
-          selectedAnnotations: [
+          annotations: [
             new AnnotationList(
               { '@id': 'bar', resources: [{ foo: 'bar' }] },
             ),
@@ -411,6 +411,8 @@ describe('OpenSeadragonViewer', () => {
       const strokeRect = jest.fn();
       wrapper.instance().osdCanvasOverlay = {
         context2d: {
+          restore: () => {},
+          save: () => {},
           strokeRect,
         },
       };
@@ -426,11 +428,182 @@ describe('OpenSeadragonViewer', () => {
           { '@id': 'foo', resources: [{ on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=10,10,100,200' }] },
         ),
       ];
-      wrapper.instance().annotationsToContext(annotations);
+
+      const palette = {
+        default: { strokeStyle: 'yellow' },
+      };
+
+      wrapper.instance().annotationsToContext(annotations, palette);
       const context = wrapper.instance().osdCanvasOverlay.context2d;
       expect(context.strokeStyle).toEqual('yellow');
       expect(context.lineWidth).toEqual(20);
       expect(strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
+    });
+  });
+
+  describe('onCanvasClick', () => {
+    it('triggers a selectAnnotation for the clicked-on annotation', () => {
+      const selectAnnotation = jest.fn();
+      const forceRedraw = jest.fn();
+
+      wrapper.instance().viewer = {
+        forceRedraw,
+      };
+
+      wrapper.setProps(
+        {
+          annotations: [
+            new AnnotationList(
+              {
+                '@id': 'foo',
+                resources: [{
+                  '@id': 'http://example.org/identifier/annotation/anno-line',
+                  '@type': 'oa:Annotation',
+                  motivation: 'sc:painting',
+                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
+                }],
+              },
+            ),
+          ],
+          selectAnnotation,
+        },
+      );
+
+      wrapper.instance().onCanvasClick({
+        eventSource: { viewport: { pointFromPixel: point => ({ x: 101, y: 101 }) } },
+        position: { x: 0, y: 0 },
+      });
+
+      expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
+    });
+
+    it('triggers a deselectAnnotation for an already-selected annotation', () => {
+      const deselectAnnotation = jest.fn();
+      const forceRedraw = jest.fn();
+
+      wrapper.instance().viewer = {
+        forceRedraw,
+      };
+
+      wrapper.setProps(
+        {
+          annotations: [
+            new AnnotationList(
+              {
+                '@id': 'foo',
+                resources: [{
+                  '@id': 'http://example.org/identifier/annotation/anno-line',
+                  '@type': 'oa:Annotation',
+                  motivation: 'sc:painting',
+                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
+                }],
+              },
+            ),
+          ],
+          deselectAnnotation,
+          selectedAnnotationId: 'http://example.org/identifier/annotation/anno-line',
+        },
+      );
+
+      wrapper.instance().onCanvasClick({
+        eventSource: { viewport: { pointFromPixel: point => ({ x: 101, y: 101 }) } },
+        position: { x: 0, y: 0 },
+      });
+
+      expect(deselectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
+    });
+
+    it('selects the closest annotation', () => {
+      const selectAnnotation = jest.fn();
+      const forceRedraw = jest.fn();
+
+      wrapper.instance().viewer = {
+        forceRedraw,
+      };
+
+      wrapper.setProps(
+        {
+          annotations: [
+            new AnnotationList(
+              {
+                '@id': 'foo',
+                resources: [{
+                  '@id': 'http://example.org/identifier/annotation/anno-line',
+                  '@type': 'oa:Annotation',
+                  motivation: 'sc:painting',
+                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
+                }, {
+                  '@id': 'http://example.org/identifier/annotation/larger-box',
+                  '@type': 'oa:Annotation',
+                  motivation: 'sc:painting',
+                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,250,250',
+                }, {
+                  '@id': 'http://example.org/identifier/annotation/on-another-canvas',
+                  '@type': 'oa:Annotation',
+                  motivation: 'sc:painting',
+                  on: 'http://iiif.io/some-other-canvas#xywh=101,101,3,3',
+                }],
+              },
+            ),
+          ],
+          selectAnnotation,
+        },
+      );
+
+      wrapper.instance().onCanvasClick({
+        eventSource: { viewport: { pointFromPixel: point => ({ x: 101, y: 101 }) } },
+        position: { x: 0, y: 0 },
+      });
+
+      expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
+    });
+  });
+
+  describe('onCanvasMouseMove', () => {
+    it('triggers the hover event for every annotation at that point', () => {
+      const hoverAnnotation = jest.fn();
+      const forceRedraw = jest.fn();
+
+      wrapper.instance().viewer = {
+        forceRedraw,
+        viewport: { pointFromPixel: point => ({ x: 101, y: 101 }) },
+      };
+
+      wrapper.setProps(
+        {
+          annotations: [
+            new AnnotationList(
+              {
+                '@id': 'foo',
+                resources: [{
+                  '@id': 'foo',
+                  '@type': 'oa:Annotation',
+                  motivation: 'sc:painting',
+                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
+                }, {
+                  '@id': 'bar',
+                  '@type': 'oa:Annotation',
+                  motivation: 'sc:painting',
+                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,250,250',
+                }, {
+                  '@id': 'irrelevant-box',
+                  '@type': 'oa:Annotation',
+                  motivation: 'sc:painting',
+                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,50,50',
+                }],
+              },
+            ),
+          ],
+          hoverAnnotation,
+        },
+      );
+
+      wrapper.instance().onCanvasMouseMove({
+        position: { x: 0, y: 0 },
+      });
+      wrapper.instance().onCanvasMouseMove.flush();
+
+      expect(hoverAnnotation).toHaveBeenCalledWith('base', ['foo', 'bar']);
     });
   });
 });

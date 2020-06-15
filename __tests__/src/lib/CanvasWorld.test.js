@@ -140,4 +140,17 @@ describe('CanvasWorld', () => {
       ).toEqual(0);
     });
   });
+  describe('canvasAtPoint', () => {
+    it('returns the canvas  at a particular point', () => {
+      const canvasWorld = new CanvasWorld(canvasSubset);
+
+      expect(canvasWorld.canvasAtPoint({ x: 1, y: 1 }).id).toEqual(canvases[1].id);
+      expect(canvasWorld.canvasAtPoint({ x: 6400, y: 1 }).id).toEqual(canvases[2].id);
+    });
+
+    it('returns undefined if the  point is outside the world', () => {
+      const canvasWorld = new CanvasWorld(canvasSubset);
+      expect(canvasWorld.canvasAtPoint({ x: -1, y: -1 })).toEqual(undefined);
+    });
+  });
 });

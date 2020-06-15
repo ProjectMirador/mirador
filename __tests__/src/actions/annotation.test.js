@@ -51,28 +51,24 @@ describe('annotation actions', () => {
 
   it('handles the selectAnnotation action', () => {
     const windowId = 'wId1';
-    const targetId = 'cId1';
     const annotationId = 'aId1';
     const expectedAction = {
       annotationId,
-      targetId,
       type: ActionTypes.SELECT_ANNOTATION,
       windowId,
     };
-    expect(actions.selectAnnotation(windowId, targetId, annotationId)).toEqual(expectedAction);
+    expect(actions.selectAnnotation(windowId, annotationId)).toEqual(expectedAction);
   });
 
   it('handles the deselectAnnotation action', () => {
     const windowId = 'wId1';
-    const targetId = 'cId1';
     const annotationId = 'aId1';
     const expectedAction = {
       annotationId,
-      targetId,
       type: ActionTypes.DESELECT_ANNOTATION,
       windowId,
     };
-    expect(actions.deselectAnnotation(windowId, targetId, annotationId)).toEqual(expectedAction);
+    expect(actions.deselectAnnotation(windowId, annotationId)).toEqual(expectedAction);
   });
 
   it('handles the toggleAnnotationDisplay action', () => {
@@ -84,14 +80,14 @@ describe('annotation actions', () => {
     expect(actions.toggleAnnotationDisplay(windowId)).toEqual(expectedAction);
   });
 
-  it('handles the highlightAnnotation action', () => {
+  it('handles the hoverAnnotation action', () => {
     const windowId = 'wId1';
-    const annotationId = 'aId1';
+    const annotationIds = ['aId1'];
     const expectedAction = {
-      annotationId,
-      type: ActionTypes.HIGHLIGHT_ANNOTATION,
+      annotationIds,
+      type: ActionTypes.HOVER_ANNOTATION,
       windowId,
     };
-    expect(actions.highlightAnnotation(windowId, annotationId)).toEqual(expectedAction);
+    expect(actions.hoverAnnotation(windowId, annotationIds)).toEqual(expectedAction);
   });
 });

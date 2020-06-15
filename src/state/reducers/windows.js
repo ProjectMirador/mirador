@@ -1,5 +1,5 @@
 import {
-  remove, removeIn, updateIn, merge,
+  removeIn, updateIn, merge,
 } from 'immutable';
 import ActionTypes from '../actions/action-types';
 
@@ -116,54 +116,29 @@ export const windowsReducer = (state = {}, action) => {
             .companionWindowIds.filter(id => id !== action.id),
         },
       };
-    case ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION:
-      return {
-        ...state,
-        [action.windowId]: {
-          ...state[action.windowId],
-          canvasId: action.canvasId,
-          selectedContentSearchAnnotation: action.annotationId,
-        },
-      };
-    case ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATIONS:
-      return {
-        ...state,
-        [action.windowId]: {
-          ...state[action.windowId],
-          selectedContentSearchAnnotation: Object.values(action.annotationsBySearch)[0],
-        },
-      };
     case ActionTypes.SELECT_ANNOTATION:
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          selectedAnnotations: {
-            ...state[action.windowId].selectedAnnotations,
-            [action.targetId]: [
-              ...((state[action.windowId].selectedAnnotations || {})[action.targetId] || []),
-              action.annotationId,
-            ],
-          },
+          selectedAnnotationId: action.annotationId,
         },
       };
     case ActionTypes.DESELECT_ANNOTATION: {
-      const selectedAnnotations = updatedSelectedAnnotations(state, action);
-
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          selectedAnnotations,
+          selectedAnnotationId: undefined,
         },
       };
     }
-    case ActionTypes.HIGHLIGHT_ANNOTATION:
+    case ActionTypes.HOVER_ANNOTATION:
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          highlightedAnnotation: action.annotationId,
+          hoveredAnnotationIds: action.annotationIds,
         },
       };
     case ActionTypes.TOGGLE_ANNOTATION_DISPLAY:
@@ -171,7 +146,7 @@ export const windowsReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          displayAllAnnotations: !state[action.windowId].displayAllAnnotations,
+          highlightAllAnnotations: !state[action.windowId].highlightAllAnnotations,
         },
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:
@@ -188,22 +163,3 @@ export const windowsReducer = (state = {}, action) => {
       return state;
   }
 };
-
-/**
- * Handle removing IDs from selectedAnnotations
- * where empty targetIds are removed from state as well
- */
-function updatedSelectedAnnotations(state, action) {
-  const filteredIds = state[action.windowId]
-    .selectedAnnotations[action.targetId]
-    .filter(id => id !== action.annotationId);
-
-  if (filteredIds.length > 0) {
-    return {
-      ...state[action.windowId].selectedAnnotations,
-      [action.targetId]: filteredIds,
-    };
-  }
-
-  return remove(state[action.windowId].selectedAnnotations, action.targetId);
-}

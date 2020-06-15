@@ -6,7 +6,7 @@ import * as actions from '../state/actions';
 import { GalleryViewThumbnail } from '../components/GalleryViewThumbnail';
 import {
   getSearchAnnotationsForWindow,
-  getSelectedContentSearchAnnotations,
+  getSelectedContentSearchAnnotationIds,
   getCurrentCanvas,
 } from '../state/selectors';
 
@@ -58,18 +58,18 @@ const styles = theme => ({
 /** */
 const mapStateToProps = (state, { canvas, windowId }) => {
   const currentCanvas = getCurrentCanvas(state, { windowId });
-  const selectedAnnotations = getSelectedContentSearchAnnotations(state, { windowId });
-  const annotationResources = flatten(selectedAnnotations.map(a => a.resources));
-  const selectedAnnotationCanvases = annotationResources.map(a => a.targetId);
+  const selectedAnnotationIds = getSelectedContentSearchAnnotationIds(state, { windowId });
   const searchAnnotations = getSearchAnnotationsForWindow(
     state,
     { windowId },
   );
 
+  const canvasAnnotations = flatten(searchAnnotations.map(a => a.resources))
+    .filter(a => a.targetId === canvas.id);
+
   return {
-    annotationsCount: flatten(searchAnnotations.map(a => a.resources))
-      .filter(a => a.targetId === canvas.id).length,
-    annotationSelected: selectedAnnotationCanvases.includes(canvas.id),
+    annotationsCount: canvasAnnotations.length,
+    annotationSelected: canvasAnnotations.some(a => selectedAnnotationIds.includes(a.id)),
     config: state.config.galleryView,
     selected: currentCanvas && currentCanvas.id === canvas.id,
   };

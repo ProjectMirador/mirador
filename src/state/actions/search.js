@@ -81,22 +81,17 @@ export function fetchSearch(windowId, companionWindowId, searchId, query) {
 }
 
 /**
- * selectedContentSearchAnnotation - action creator
+ * setContentSearchCurrentAnnotation - action creator
  *
  * @param  {String} windowId
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function selectContentSearchAnnotation(windowId, companionWindowId, annotationIds) {
+export function setContentSearchCurrentAnnotation(windowId, companionWindowId, annotationIds) {
   return {
-    annotationId: annotationIds,
+    annotationIds,
     companionWindowId,
-    type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
+    type: ActionTypes.SET_CONTENT_SEARCH_CURRENT_ANNOTATIONS,
     windowId,
   };
-}
-
-/** */
-export function selectContentSearchAnnotations(windowId, annotationsBySearch) {
-  return { annotationsBySearch, type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATIONS, windowId };
 }

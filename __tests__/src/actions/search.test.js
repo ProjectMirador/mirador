@@ -97,17 +97,17 @@ describe('search actions', () => {
       });
     });
   });
-  describe('selectContentSearchAnnotation', () => {
-    it('dispatches the SELECT_CONTENT_SEARCH_ANNOTATION action', () => {
+  describe('setContentSearchCurrentAnnotation', () => {
+    it('dispatches the SET_CONTENT_SEARCH_CURRENT_ANNOTATIONS action', () => {
       const windowId = 'foo';
       const companionWindowId = 'cwid';
-      const annotationId = ['abc123'];
+      const annotationIds = ['abc123'];
       expect(
-        actions.selectContentSearchAnnotation(windowId, companionWindowId, annotationId),
+        actions.setContentSearchCurrentAnnotation(windowId, companionWindowId, annotationIds),
       ).toEqual({
-        annotationId,
+        annotationIds,
         companionWindowId,
-        type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION,
+        type: ActionTypes.SET_CONTENT_SEARCH_CURRENT_ANNOTATIONS,
         windowId,
       });
     });
