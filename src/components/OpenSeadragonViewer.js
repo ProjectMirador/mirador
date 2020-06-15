@@ -7,6 +7,7 @@ import ns from '../config/css-ns';
 import AnnotationsOverlay from '../containers/AnnotationsOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
 import { PluginHook } from './PluginHook';
+import { OSDReferences } from '../plugins/OSDReferences';
 
 /**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
@@ -21,6 +22,8 @@ export class OpenSeadragonViewer extends Component {
 
     this.state = { viewer: undefined };
     this.ref = React.createRef();
+    this.apiRef = React.createRef();
+    OSDReferences.set(props.windowId, this.apiRef);
     this.onViewportChange = this.onViewportChange.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
     this.osdUpdating = false;
@@ -39,6 +42,7 @@ export class OpenSeadragonViewer extends Component {
       id: this.ref.current.id,
       ...osdConfig,
     });
+    this.apiRef.current = viewer;
 
     this.setState({ viewer });
 
@@ -64,6 +68,7 @@ export class OpenSeadragonViewer extends Component {
       canvasWorld,
     } = this.props;
     const { viewer } = this.state;
+    this.apiRef.current = viewer;
 
     if (prevState.viewer === undefined) {
       if (viewerConfig) {
@@ -104,6 +109,7 @@ export class OpenSeadragonViewer extends Component {
     const { viewer } = this.state;
 
     viewer.removeAllHandlers();
+    this.apiRef.current = undefined;
   }
 
   /**
