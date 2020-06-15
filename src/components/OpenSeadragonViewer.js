@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import ns from '../config/css-ns';
 import AnnotationsOverlay from '../containers/AnnotationsOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
+import { PluginHook } from './PluginHook';
 
 /**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
@@ -298,6 +299,7 @@ export class OpenSeadragonViewer extends Component {
           { drawAnnotations
             && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
           { enhancedChildren }
+          <PluginHook viewer={viewer} windowId={windowId} />
         </section>
       </>
     );
