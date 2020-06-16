@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles, lighten, darken } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { WorkspaceArea } from '../components/WorkspaceArea';
+import { getConfig, getWindowIds, getWorkspace } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -12,9 +13,10 @@ import { WorkspaceArea } from '../components/WorkspaceArea';
  */
 const mapStateToProps = state => (
   {
-    controlPanelVariant: state.workspace.isWorkspaceAddVisible || Object.keys(state.windows).length > 0 ? undefined : 'wide',
-    isWorkspaceAddVisible: state.workspace.isWorkspaceAddVisible,
-    isWorkspaceControlPanelVisible: state.config.workspaceControlPanel.enabled,
+    controlPanelVariant: getWorkspace(state).isWorkspaceAddVisible || getWindowIds(state).length > 0 ? undefined : 'wide',
+    isWorkspaceAddVisible: getWorkspace(state).isWorkspaceAddVisible,
+    isWorkspaceControlPanelVisible: getConfig(state).workspaceControlPanel.enabled,
+    lang: getConfig(state).language,
   }
 );
 
