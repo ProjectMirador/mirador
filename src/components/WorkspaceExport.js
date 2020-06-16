@@ -4,6 +4,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
@@ -11,6 +14,27 @@ import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogCon
 /**
  */
 export class WorkspaceExport extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+
+    this.state = { copied: false };
+    this.onCopy = this.onCopy.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+  }
+
+  /** Show the snackbar */
+  onCopy() {
+    this.setState({ copied: true });
+  }
+
+  /** Handle closing after the content is copied and the snackbar is done */
+  handleClose() {
+    const { handleClose } = this.props;
+
+    handleClose();
+  }
+
   /**
    * @private
    */
@@ -35,21 +59,45 @@ export class WorkspaceExport extends Component {
     }, null, 2);
   }
 
+
   /**
    * render
    * @return
    */
   render() {
     const {
-      children, container, handleClose, open, t,
+      children, container, open, t,
     } = this.props;
+    const { copied } = this.state;
+
     const exportableState = this.exportableState();
+
+    if (copied) {
+      return (
+        <Snackbar
+          anchorOrigin={{
+            horizontal: 'center',
+            vertical: 'top',
+          }}
+          open
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          message={t('exportCopied')}
+          action={(
+            <IconButton size="small" aria-label={t('dismiss')} color="inherit" onClick={this.handleClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          )}
+        />
+      );
+    }
+
     return (
       <Dialog
         id="workspace-settings"
         container={container}
         open={open}
-        onClose={handleClose}
+        onClose={this.handleClose}
         scroll="paper"
         fullWidth
         maxWidth="sm"
@@ -64,8 +112,9 @@ export class WorkspaceExport extends Component {
           </pre>
         </ScrollIndicatedDialogContent>
         <DialogActions>
-          <Button onClick={() => handleClose()}>{t('cancel')}</Button>
+          <Button onClick={this.handleClose}>{t('cancel')}</Button>
           <CopyToClipboard
+            onCopy={this.onCopy}
             text={exportableState}
           >
             <Button variant="contained" color="primary">{t('copy')}</Button>

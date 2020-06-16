@@ -48,6 +48,7 @@
     "exitFullScreen": "Exit full screen",
     "expandSection": "Expand {{section}} section",
     "expandSidePanel": "Expand sidebar",
+    "exportCopied": "The workspace configuration was copied to your clipboard",
     "fetchManifest": "Add",
     "fullScreen": "Full Screen",
     "gallery": "Gallery",

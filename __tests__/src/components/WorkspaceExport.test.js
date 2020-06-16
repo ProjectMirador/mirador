@@ -1,11 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Dialog from '@material-ui/core/Dialog';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { WorkspaceExport } from '../../../src/components/WorkspaceExport';
 
 describe('WorkspaceExport', () => {
   let wrapper;
-  let handleClose;
+  let handleClose = jest.fn();
   let mockState;
 
   beforeEach(() => {
@@ -37,6 +41,20 @@ describe('WorkspaceExport', () => {
       fullWidth: true,
       maxWidth: 'sm',
     }));
+  });
+
+  it('is closable by clicking the cancel button', () => {
+    expect(wrapper.find(Dialog).find(Button).at(0).text()).toMatch('cancel');
+    wrapper.find(Dialog).find(Button).at(0).simulate('click');
+    expect(handleClose).toHaveBeenCalled();
+  });
+
+  it('reveals a snackbar on copy', () => {
+    expect(wrapper.find(Dialog).find(Button).at(1).text()).toMatch('copy');
+    wrapper.find(Dialog).find(CopyToClipboard).simulate('copy');
+    expect(wrapper.find(Snackbar).length).toBe(1);
+    shallow(wrapper.find(Snackbar).props().action).simulate('click');
+    expect(handleClose).toHaveBeenCalled();
   });
 
   it('renders an exportable version of state', () => {
