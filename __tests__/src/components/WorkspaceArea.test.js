@@ -13,6 +13,7 @@ function createWrapper(props) {
     <WorkspaceArea
       isWorkspaceControlPanelVisible
       classes={{}}
+      lang="en"
       t={k => k}
       {...props}
     />,
@@ -23,6 +24,7 @@ describe('WorkspaceArea', () => {
   it('should render outer element correctly', () => {
     const wrapper = createWrapper();
     expect(wrapper.find('main.mirador-viewer').length).toBe(1);
+    expect(wrapper.find('main').prop('lang')).toEqual('en');
   });
 
   it('should render all needed elements in order', () => {

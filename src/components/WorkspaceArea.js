@@ -20,11 +20,13 @@ export class WorkspaceArea extends Component {
   render() {
     const {
       classes, controlPanelVariant, isWorkspaceAddVisible, isWorkspaceControlPanelVisible, t,
+      lang,
     } = this.props;
 
     return (
       <main
         className={classNames(classes.viewer, ns('viewer'))}
+        lang={lang}
         aria-label={t('workspace')}
       >
         {
@@ -49,10 +51,12 @@ WorkspaceArea.propTypes = {
   controlPanelVariant: PropTypes.string,
   isWorkspaceAddVisible: PropTypes.bool,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
+  lang: PropTypes.string,
   t: PropTypes.func.isRequired,
 };
 
 WorkspaceArea.defaultProps = {
   controlPanelVariant: undefined,
   isWorkspaceAddVisible: false,
+  lang: undefined,
 };
