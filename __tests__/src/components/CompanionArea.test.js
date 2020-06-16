@@ -71,7 +71,7 @@ describe('CompanionArea', () => {
     expect(wrapper.find(MiradorMenuButton).length).toBe(1);
     expect(wrapper.find(MiradorMenuButton).first().children('ArrowRightSharpIcon').length).toBe(1);
     expect(wrapper.find(Slide).prop('direction')).toBe('right');
-
+    expect(wrapper.find(MiradorMenuButton).prop('aria-expanded')).toBe(false);
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
     expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('none');
 
@@ -92,6 +92,7 @@ describe('CompanionArea', () => {
 
     expect(wrapper.find(MiradorMenuButton).length).toBe(1);
     expect(wrapper.find(MiradorMenuButton).first().children('ArrowLeftSharpIcon').length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).prop('aria-expanded')).toBe(true);
 
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
     expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('flex');
