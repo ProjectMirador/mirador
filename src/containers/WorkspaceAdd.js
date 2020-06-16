@@ -63,6 +63,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   workspaceAdd: {
+    boxSizing: 'border-box',
     height: '100%',
     overflowX: 'hidden',
     overflowY: 'auto',
