@@ -62,6 +62,7 @@ export class CompanionArea extends Component {
           && (
             <div className={classes.toggle}>
               <MiradorMenuButton
+                aria-expanded={companionAreaOpen}
                 aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
                 className={classes.toggleButton}
                 key={companionAreaOpen ? 'collapse' : 'expand'}
