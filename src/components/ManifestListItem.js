@@ -88,8 +88,8 @@ export class ManifestListItem extends React.Component {
                   (event) => { handleOpenButtonClick(event, manifestId, addWindow); handleClose(); }
                 }
               >
-                <Grid container spacing={2} className={classes.label}>
-                  <Grid item xs={4} sm={3}>
+                <Grid container spacing={2} className={classes.label} component="span">
+                  <Grid item xs={4} sm={3} component="span">
                     <Img
                       className={ns('manifest-list-item-thumb')}
                       src={[thumbnail]}
@@ -106,7 +106,7 @@ export class ManifestListItem extends React.Component {
                       )}
                     />
                   </Grid>
-                  <Grid item xs={8} sm={9}>
+                  <Grid item xs={8} sm={9} component="span">
                     <Typography component="span" variant="h6">
                       {title || manifestId}
                     </Typography>
