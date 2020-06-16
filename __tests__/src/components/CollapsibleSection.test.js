@@ -42,8 +42,10 @@ describe('CollapsibleSection', () => {
   it('renders the appropriate i18n label based on open state', () => {
     expect(wrapper.state().open).toBe(true);
     expect(wrapper.find(MiradorMenuButton).props()['aria-label']).toEqual('collapseSection');
+    expect(wrapper.find(MiradorMenuButton).prop('aria-expanded')).toEqual(true);
     wrapper.setState({ open: false });
     expect(wrapper.find(MiradorMenuButton).props()['aria-label']).toEqual('expandSection');
+    expect(wrapper.find(MiradorMenuButton).prop('aria-expanded')).toEqual(false);
   });
 
   it('renders children based on the open state', () => {

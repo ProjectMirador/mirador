@@ -33,6 +33,7 @@ export class ManifestInfo extends Component {
             aria-labelledby={`${id}-resource ${id}-resource-heading`}
             id={`${id}-resource-heading`}
             variant="h4"
+            component="h5"
           >
             {manifestLabel}
           </Typography>
