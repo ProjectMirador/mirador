@@ -21,7 +21,6 @@ export class Branding extends Component {
         )}
         <Typography align="center">
           <IconButton
-            align="center"
             component="a"
             href="https://projectmirador.org"
             target="_blank"

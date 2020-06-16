@@ -70,14 +70,14 @@ export class ManifestListItem extends React.Component {
 
     if (error) {
       return (
-        <ListItem divider elevation={1} className={classes.root} data-manifestid={manifestId}>
+        <ListItem divider className={classes.root} data-manifestid={manifestId}>
           <ManifestListItemError manifestId={manifestId} />
         </ListItem>
       );
     }
 
     return (
-      <ListItem divider elevation={1} className={[classes.root, active ? classes.active : ''].join(' ')} data-manifestid={manifestId}>
+      <ListItem divider className={[classes.root, active ? classes.active : ''].join(' ')} data-manifestid={manifestId}>
         {ready ? (
           <Grid container className={ns('manifest-list-item')} spacing={2}>
             <Grid item xs={12} sm={6} className={classes.buttonGrid}>
