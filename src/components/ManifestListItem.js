@@ -91,7 +91,7 @@ export class ManifestListItem extends React.Component {
                 <Grid container spacing={2} className={classes.label} component="span">
                   <Grid item xs={4} sm={3} component="span">
                     <Img
-                      className={ns('manifest-list-item-thumb')}
+                      className={[classes.thumbnail, ns('manifest-list-item-thumb')].join(' ')}
                       src={[thumbnail]}
                       alt=""
                       height="80"
