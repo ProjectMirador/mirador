@@ -23,7 +23,11 @@ export class WorkspaceAddButton extends Component {
           color="primary"
           id="addBtn"
           disableRipple
-          aria-label={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}
+          aria-label={
+            isWorkspaceAddVisible
+              ? t('closeAddResourceMenu')
+              : ((useExtendedFab && t('startHere')) || t('addResource'))
+          }
           className={classes.fab}
           classes={{ primary: classes.fabPrimary, secondary: classes.fabSecondary }}
           variant={useExtendedFab ? 'extended' : 'round'}
