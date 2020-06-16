@@ -53,6 +53,8 @@ const styles = theme => ({
   },
   logo: {
     height: '2.5rem',
+    maxWidth: '100%',
+    objectFit: 'contain',
     paddingRight: 8,
   },
   placeholder: {
@@ -64,6 +66,10 @@ const styles = theme => ({
       borderLeft: `4px solid ${theme.palette.primary.main}`,
     },
     borderLeft: '4px solid transparent',
+  },
+  thumbnail: {
+    maxWidth: '100%',
+    objectFit: 'contain',
   },
 });
 
