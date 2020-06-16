@@ -38,6 +38,7 @@ export class CanvasInfo extends Component {
               }
               id={`${id}-currentItem-${index}-heading`}
               variant="h4"
+              component="h5"
             >
               {canvasLabel}
             </Typography>

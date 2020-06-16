@@ -35,6 +35,7 @@ export class ManifestRelatedLinks extends Component {
           aria-labelledby={`${id}-related ${id}-related-heading`}
           id={`${id}-related-heading`}
           variant="h4"
+          component="h5"
         >
           {t('links')}
         </Typography>
