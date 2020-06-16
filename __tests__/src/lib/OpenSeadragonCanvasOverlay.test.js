@@ -5,11 +5,13 @@ jest.mock('openseadragon');
 
 describe('OpenSeadragonCanvasOverlay', () => {
   let canvasOverlay;
+  const ref = { current: undefined };
   beforeEach(() => {
-    document.body.innerHTML = '<div id="canvas"></div>';
+    document.body.innerHTML = '<div id="canvas"><canvas></div>';
+    ref.current = document.getElementById('canvas');
     OpenSeadragon.mockClear();
     OpenSeadragon.mockImplementation(() => ({
-      canvas: document.getElementById('canvas'),
+      canvas: ref,
       container: {
         clientHeight: 100,
         clientWidth: 200,
@@ -35,22 +37,21 @@ describe('OpenSeadragonCanvasOverlay', () => {
         })),
       },
     }));
-    canvasOverlay = new OpenSeadragonCanvasOverlay(new OpenSeadragon());
+    canvasOverlay = new OpenSeadragonCanvasOverlay(new OpenSeadragon(), ref);
   });
   describe('constructor', () => {
     it('sets up initial values and canvas', () => {
       expect(canvasOverlay.containerHeight).toEqual(0);
       expect(canvasOverlay.containerWidth).toEqual(0);
-      expect(canvasOverlay.canvasDiv.outerHTML).toEqual(
-        '<div style="position: absolute; left: 0px; top: 0px; width: 100%; height: 100%;"><canvas></canvas></div>',
-      );
     });
   });
   describe('context2d', () => {
     it('calls getContext on canvas', () => {
       const contextMock = jest.fn();
-      canvasOverlay.canvas = {
-        getContext: contextMock,
+      ref.current = {
+        firstElementChild: {
+          getContext: contextMock,
+        },
       };
       canvasOverlay.context2d; // eslint-disable-line no-unused-expressions
       expect(contextMock).toHaveBeenCalledTimes(1);
@@ -62,8 +63,10 @@ describe('OpenSeadragonCanvasOverlay', () => {
       const contextMock = jest.fn(() => ({
         clearRect,
       }));
-      canvasOverlay.canvas = {
-        getContext: contextMock,
+      ref.current = {
+        firstElementChild: {
+          getContext: contextMock,
+        },
       };
       canvasOverlay.clear();
       expect(contextMock).toHaveBeenCalledTimes(1);
@@ -92,7 +95,7 @@ describe('OpenSeadragonCanvasOverlay', () => {
           getItemAt: jest.fn(),
         },
       }));
-      canvasOverlay = new OpenSeadragonCanvasOverlay(new OpenSeadragon());
+      canvasOverlay = new OpenSeadragonCanvasOverlay(new OpenSeadragon(), ref);
       canvasOverlay.resize();
       expect(canvasOverlay.imgHeight).toEqual(undefined);
       expect(canvasOverlay.imgWidth).toEqual(undefined);
@@ -109,8 +112,11 @@ describe('OpenSeadragonCanvasOverlay', () => {
         setTransform,
         translate,
       }));
-      canvasOverlay.canvas = {
-        getContext: contextMock,
+      ref.current = {
+        firstElementChild: {
+          getContext: contextMock,
+          setAttribute,
+        },
         setAttribute,
       };
       const update = jest.fn();
