@@ -6,6 +6,9 @@ import { LiveAnnouncer } from 'react-aria-live';
 import {
   ThemeProvider, StylesProvider, createMuiTheme, jssPreset, createGenerateClassName,
 } from '@material-ui/core/styles';
+import { DndProvider } from 'react-dnd';
+import MultiBackend from 'react-dnd-multi-backend';
+import HTML5toTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
 import createI18nInstance from '../i18n';
@@ -70,7 +73,9 @@ export class AppProviders extends Component {
                 jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
                 generateClassName={generateClassName}
               >
-                {children}
+                <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+                  {children}
+                </DndProvider>
               </StylesProvider>
             </ThemeProvider>
           </LiveAnnouncer>

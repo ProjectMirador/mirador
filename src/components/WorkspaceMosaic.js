@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
+  MosaicWithoutDragDropContext, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
 } from 'react-mosaic-component';
 import 'react-mosaic-component/react-mosaic-component.css';
 import difference from 'lodash/difference';
@@ -150,7 +150,7 @@ export class WorkspaceMosaic extends React.Component {
   render() {
     const { layout, classes } = this.props;
     return (
-      <Mosaic
+      <MosaicWithoutDragDropContext
         renderTile={this.tileRenderer}
         initialValue={layout || this.determineWorkspaceLayout()}
         onChange={this.mosaicChange}

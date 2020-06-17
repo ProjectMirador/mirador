@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
+import { DndProvider } from 'react-dnd';
 import { AppProviders } from '../../../src/components/AppProviders';
 import settings from '../../../src/config/settings';
 
@@ -28,6 +29,7 @@ describe('AppProviders', () => {
     expect(wrapper.find(ThemeProvider).length).toBe(1);
     expect(wrapper.find(StylesProvider).length).toBe(1);
     expect(wrapper.find(Fullscreen).length).toBe(1);
+    expect(wrapper.find(DndProvider).length).toBe(1);
   });
 
   it('sets up a theme based on the config passed in merged w/ MaterialUI', () => {
