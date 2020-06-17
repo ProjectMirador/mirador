@@ -4,8 +4,10 @@ import ActionTypes from './action-types';
  * add a manifest to the resource catalog
  * @param {string} manifestId
  */
-export function addResource(manifestId) {
-  return { manifestId, type: ActionTypes.ADD_RESOURCE };
+export function addResource(manifestId, manifestJson = undefined, payload) {
+  return {
+    manifestId, manifestJson, payload, type: ActionTypes.ADD_RESOURCE,
+  };
 }
 
 /** remove a manifest from the resource catalog */

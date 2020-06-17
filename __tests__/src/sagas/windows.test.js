@@ -3,7 +3,7 @@ import { expectSaga } from 'redux-saga-test-plan';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 
 import ActionTypes from '../../../src/state/actions/action-types';
-import { setCanvas } from '../../../src/state/actions';
+import { receiveManifest, setCanvas } from '../../../src/state/actions';
 import {
   getManifests, getManifestoInstance,
   getManifestSearchService, getCompanionWindowIdsForPosition,
@@ -48,6 +48,26 @@ describe('window-level sagas', () => {
         .call(fetchManifest, { manifestId: 'manifest.json' })
         .run();
     });
+
+    it('calls retrieveManifest if a manifest was provided', () => {
+      const manifestJson = { data: '123' };
+      const action = {
+        manifest: manifestJson,
+        window: {
+          id: 'x',
+          manifestId: 'manifest.json',
+        },
+      };
+
+      return expectSaga(fetchWindowManifest, action)
+        .provide([
+          [call(setWindowStartingCanvas, action)],
+          [call(setWindowDefaultSearchQuery, action)],
+        ])
+        .put(receiveManifest('manifest.json', manifestJson))
+        .run();
+    });
+
     it('does not call fetchManifest if the manifest is already available', () => {
       const action = {
         window: {

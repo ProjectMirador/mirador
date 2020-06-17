@@ -321,6 +321,24 @@ describe('IIIF sagas', () => {
         })
         .run();
     });
+
+    it('receives existing manifest data from the action', () => {
+      const manifestJson = { data: '12345' };
+
+      const action = {
+        manifestId: 'manifestId',
+        manifestJson,
+      };
+
+      return expectSaga(fetchResourceManifest, action)
+        .put({
+          manifestId: 'manifestId',
+          manifestJson: { data: '12345' },
+          type: 'mirador/RECEIVE_MANIFEST',
+        })
+        .run();
+    });
+
     it('does nothing if the manifest is already present', () => {
       const action = {
         manifestId: 'manifestId',
