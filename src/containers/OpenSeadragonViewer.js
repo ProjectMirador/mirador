@@ -8,8 +8,6 @@ import * as actions from '../state/actions';
 import CanvasWorld from '../lib/CanvasWorld';
 import {
   getVisibleCanvasNonTiledResources,
-  getCurrentCanvas,
-  getCanvasLabel,
   getSequenceViewingDirection,
   getLayersForVisibleCanvases,
   getVisibleCanvases,
@@ -32,10 +30,6 @@ const mapStateToProps = (state, { windowId }) => ({
   drawAnnotations: getConfig(state).window.forceDrawAnnotations
     || getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0
     || getCompanionWindowsForContent(state, { content: 'search', windowId }).length > 0,
-  label: getCanvasLabel(state, {
-    canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
-    windowId,
-  }),
   nonTiledImages: getVisibleCanvasNonTiledResources(state, { windowId }),
   osdConfig: state.config.osdConfig,
   viewerConfig: getViewer(state, { windowId }),
