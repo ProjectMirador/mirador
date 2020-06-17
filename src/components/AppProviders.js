@@ -6,12 +6,46 @@ import { LiveAnnouncer } from 'react-aria-live';
 import {
   ThemeProvider, StylesProvider, createMuiTheme, jssPreset, createGenerateClassName,
 } from '@material-ui/core/styles';
-import { DndProvider } from 'react-dnd';
+import { DndContext, DndProvider } from 'react-dnd';
 import MultiBackend from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
 import createI18nInstance from '../i18n';
+
+
+/**
+ * Allow applications to opt-out of (or provide their own) drag and drop context
+ */
+const MaybeDndProvider = (props) => {
+  const { dndManager, children } = props;
+  if (dndManager === false) {
+    return children;
+  }
+
+  if (dndManager === undefined) {
+    return (
+      <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+        {children}
+      </DndProvider>
+    );
+  }
+
+  return (
+    <DndContext.Provider value={dndManager}>
+      {children}
+    </DndContext.Provider>
+  );
+};
+
+MaybeDndProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+  dndManager: PropTypes.oneOf([
+    undefined,
+    false,
+    PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  ]).isRequired,
+};
 
 /**
  * This component adds viewer-specific providers.
@@ -49,6 +83,7 @@ export class AppProviders extends Component {
   render() {
     const {
       children, classPrefix, isFullscreenEnabled, setWorkspaceFullscreen, theme, translations,
+      dndManager,
     } = this.props;
 
     const generateClassName = createGenerateClassName({
@@ -73,9 +108,9 @@ export class AppProviders extends Component {
                 jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
                 generateClassName={generateClassName}
               >
-                <DndProvider backend={MultiBackend} options={HTML5toTouch}>
+                <MaybeDndProvider dndManager={dndManager}>
                   {children}
-                </DndProvider>
+                </MaybeDndProvider>
               </StylesProvider>
             </ThemeProvider>
           </LiveAnnouncer>
@@ -88,6 +123,7 @@ export class AppProviders extends Component {
 AppProviders.propTypes = {
   children: PropTypes.node,
   classPrefix: PropTypes.string,
+  dndManager: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   isFullscreenEnabled: PropTypes.bool,
   language: PropTypes.string.isRequired,
   setWorkspaceFullscreen: PropTypes.func.isRequired,
@@ -98,5 +134,6 @@ AppProviders.propTypes = {
 AppProviders.defaultProps = {
   children: null,
   classPrefix: '',
+  dndManager: undefined,
   isFullscreenEnabled: false,
 };
