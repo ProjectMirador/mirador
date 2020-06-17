@@ -122,5 +122,17 @@ describe('Workspace', () => {
 
       expect(addWindow).toHaveBeenCalledWith({ canvasId, manifest: manifestJson, manifestId });
     });
+
+    it('is a no-op if isWorkspaceControlPanelVisible is off', () => {
+      const canvasId = 'canvasId';
+      const manifestId = 'manifest.json';
+      const manifestJson = { data: '123' };
+
+      const addWindow = jest.fn();
+      const wrapper = createWrapper({ addWindow, isWorkspaceControlPanelVisible: false });
+      wrapper.find(IIIFDropTarget).simulate('drop', { canvasId, manifestId, manifestJson });
+
+      expect(addWindow).not.toHaveBeenCalled();
+    });
   });
 });

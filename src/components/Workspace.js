@@ -24,7 +24,9 @@ export class Workspace extends React.Component {
 
   /** */
   handleDrop({ canvasId, manifestId, manifestJson }, props, monitor) {
-    const { addWindow } = this.props;
+    const { addWindow, isWorkspaceControlPanelVisible } = this.props;
+
+    if (!isWorkspaceControlPanelVisible) return;
 
     addWindow({ canvasId, manifest: manifestJson, manifestId });
   }
