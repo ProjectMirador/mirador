@@ -7,6 +7,7 @@ import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
 import WorkspaceElastic from '../containers/WorkspaceElastic';
 import ns from '../config/css-ns';
+import { IIIFDropTarget } from './IIIFDropTarget';
 
 /**
  * Represents a work area that contains any number of windows
@@ -14,6 +15,20 @@ import ns from '../config/css-ns';
  * @private
  */
 export class Workspace extends React.Component {
+  /** */
+  constructor(props) {
+    super(props);
+
+    this.handleDrop = this.handleDrop.bind(this);
+  }
+
+  /** */
+  handleDrop({ canvasId, manifestId, manifestJson }, props, monitor) {
+    const { addWindow } = this.props;
+
+    addWindow({ canvasId, manifest: manifestJson, manifestId });
+  }
+
   /**
    * Determine which workspace to render by configured type
    */
@@ -93,24 +108,27 @@ export class Workspace extends React.Component {
     const { classes, isWorkspaceControlPanelVisible, t } = this.props;
 
     return (
-      <div
-        className={
-          classNames(
-            ns('workspace-viewport'),
-            (isWorkspaceControlPanelVisible && ns('workspace-with-control-panel')),
-            (isWorkspaceControlPanelVisible && classes.workspaceWithControlPanel),
-            classes.workspaceViewport,
-          )
-        }
-      >
-        <Typography variant="srOnly" component="h1">{t('miradorViewer')}</Typography>
-        {this.workspaceByType()}
-      </div>
+      <IIIFDropTarget onDrop={this.handleDrop}>
+        <div
+          className={
+            classNames(
+              ns('workspace-viewport'),
+              (isWorkspaceControlPanelVisible && ns('workspace-with-control-panel')),
+              (isWorkspaceControlPanelVisible && classes.workspaceWithControlPanel),
+              classes.workspaceViewport,
+            )
+          }
+        >
+          <Typography variant="srOnly" component="h1">{t('miradorViewer')}</Typography>
+          {this.workspaceByType()}
+        </div>
+      </IIIFDropTarget>
     );
   }
 }
 
 Workspace.propTypes = {
+  addWindow: PropTypes.func,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   maximizedWindowIds: PropTypes.arrayOf(PropTypes.string),
@@ -121,6 +139,7 @@ Workspace.propTypes = {
 };
 
 Workspace.defaultProps = {
+  addWindow: () => {},
   maximizedWindowIds: [],
   windowIds: [],
 };
