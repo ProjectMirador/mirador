@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import compact from 'lodash/compact';
 import { WindowSideBarCanvasPanel } from '../../../src/components/WindowSideBarCanvasPanel';
 import SidebarIndexList from '../../../src/containers/SidebarIndexList';
 import CompanionWindow from '../../../src/containers/CompanionWindow';
@@ -34,6 +35,14 @@ describe('WindowSideBarCanvasPanel', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(CompanionWindow).props().title).toBe('canvasIndex');
     expect(wrapper.find(SidebarIndexList).length).toBe(1);
+  });
+
+  it('without a treeStructure will not render the table of contents tab', () => {
+    const wrapper = createWrapper();
+    expect(
+      compact(wrapper.find(CompanionWindow).props().titleControls.props.children)
+        .length,
+    ).toBe(2);
   });
 
   describe('handleVariantChange', () => {

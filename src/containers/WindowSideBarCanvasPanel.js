@@ -10,6 +10,7 @@ import {
   getDefaultSidebarVariant,
   getCanvases,
   getVisibleCanvases,
+  getSequenceTreeStructure,
 } from '../state/selectors';
 
 /**
@@ -17,11 +18,13 @@ import {
  */
 const mapStateToProps = (state, { id, windowId }) => {
   const canvases = getCanvases(state, { windowId });
+  const treeStructure = getSequenceTreeStructure(state, { windowId });
   const { config } = state;
   return {
     canvases,
     config,
     selectedCanvases: getVisibleCanvases(state, { windowId }),
+    showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
     variant: getCompanionWindow(state, { companionWindowId: id, windowId }).variant
       || getDefaultSidebarVariant(state, { windowId }),
   };
