@@ -56,6 +56,9 @@ const styles = theme => ({
   selectEmpty: {
     backgroundColor: theme.palette.background.paper,
   },
+  variantTab: {
+    minWidth: 'auto',
+  },
 });
 
 const enhance = compose(
