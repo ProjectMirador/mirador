@@ -33,7 +33,7 @@ export class OpenSeadragonViewer extends Component {
    * React lifecycle event
    */
   componentDidMount() {
-    const { osdConfig } = this.props;
+    const { osdConfig, t, windowId } = this.props;
     if (!this.ref.current) {
       return;
     }
@@ -42,6 +42,14 @@ export class OpenSeadragonViewer extends Component {
       id: this.ref.current.id,
       ...osdConfig,
     });
+
+    const canvas = viewer.canvas && viewer.canvas.firstElementChild;
+    if (canvas) {
+      canvas.setAttribute('role', 'img');
+      canvas.setAttribute('aria-label', t('digitizedView'));
+      canvas.setAttribute('aria-describedby', `osd-info-${windowId}`);
+    }
+
     this.apiRef.current = viewer;
 
     this.setState({ viewer });
@@ -280,7 +288,7 @@ export class OpenSeadragonViewer extends Component {
    */
   render() {
     const {
-      children, classes, label, t, windowId,
+      children, classes, windowId,
       drawAnnotations,
     } = this.props;
     const { viewer } = this.state;
@@ -300,7 +308,8 @@ export class OpenSeadragonViewer extends Component {
           className={classNames(ns('osd-container'), classes.osdContainer)}
           id={`${windowId}-osd`}
           ref={this.ref}
-          aria-label={t('item', { label })}
+          aria-labelledby={`osd-info-${windowId}`}
+          aria-live="polite"
         >
           { drawAnnotations
             && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
@@ -316,7 +325,6 @@ OpenSeadragonViewer.defaultProps = {
   children: null,
   drawAnnotations: false,
   infoResponses: [],
-  label: null,
   nonTiledImages: [],
   osdConfig: {},
   viewerConfig: null,
@@ -328,7 +336,6 @@ OpenSeadragonViewer.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   drawAnnotations: PropTypes.bool,
   infoResponses: PropTypes.arrayOf(PropTypes.object),
-  label: PropTypes.string,
   nonTiledImages: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,
