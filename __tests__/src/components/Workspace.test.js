@@ -5,6 +5,7 @@ import WorkspaceMosaic from '../../../src/containers/WorkspaceMosaic';
 import WorkspaceElastic from '../../../src/containers/WorkspaceElastic';
 import Window from '../../../src/containers/Window';
 import { Workspace } from '../../../src/components/Workspace';
+import { IIIFDropTarget } from '../../../src/components/IIIFDropTarget';
 
 /**
  * Utility function to create a Worksapce
@@ -30,10 +31,12 @@ describe('Workspace', () => {
       const wrapper = createWrapper({ workspaceType: 'elastic' });
 
       expect(wrapper.matchesElement(
-        <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
-          <Typography>miradorViewer</Typography>
-          <WorkspaceElastic />
-        </div>,
+        <IIIFDropTarget>
+          <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
+            <Typography>miradorViewer</Typography>
+            <WorkspaceElastic />
+          </div>
+        </IIIFDropTarget>,
       )).toBe(true);
     });
   });
@@ -42,10 +45,12 @@ describe('Workspace', () => {
       const wrapper = createWrapper();
 
       expect(wrapper.matchesElement(
-        <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
-          <Typography>miradorViewer</Typography>
-          <WorkspaceMosaic />
-        </div>,
+        <IIIFDropTarget>
+          <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
+            <Typography>miradorViewer</Typography>
+            <WorkspaceMosaic />
+          </div>
+        </IIIFDropTarget>,
       )).toBe(true);
     });
   });
@@ -53,11 +58,13 @@ describe('Workspace', () => {
     it('should render <Window/> components as list', () => {
       const wrapper = createWrapper({ workspaceType: 'bubu' });
       expect(wrapper.matchesElement(
-        <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
-          <Typography>miradorViewer</Typography>
-          <Window windowId="1" />
-          <Window windowId="2" />
-        </div>,
+        <IIIFDropTarget>
+          <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
+            <Typography>miradorViewer</Typography>
+            <Window windowId="1" />
+            <Window windowId="2" />
+          </div>
+        </IIIFDropTarget>,
       )).toBe(true);
     });
   });
@@ -65,10 +72,12 @@ describe('Workspace', () => {
     it('should render only maximized <Window/> components', () => {
       const wrapper = createWrapper({ maximizedWindowIds: ['1'] });
       expect(wrapper.matchesElement(
-        <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
-          <Typography>miradorViewer</Typography>
-          <Window windowId="1" className="mirador-workspace-maximized-window" />
-        </div>,
+        <IIIFDropTarget>
+          <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
+            <Typography>miradorViewer</Typography>
+            <Window windowId="1" className="mirador-workspace-maximized-window" />
+          </div>
+        </IIIFDropTarget>,
       )).toBe(true);
     });
   });
@@ -96,6 +105,34 @@ describe('Workspace', () => {
       const wrapper = createWrapper({ isWorkspaceControlPanelVisible: false });
 
       expect(wrapper.find('.mirador-workspace-with-control-panel').length).toBe(0);
+    });
+  });
+
+  describe('drag and drop', () => {
+    it('adds a new window', () => {
+      const canvasId = 'canvasId';
+      const manifestId = 'manifest.json';
+      const manifestJson = { data: '123' };
+
+      const addWindow = jest.fn();
+
+      const wrapper = createWrapper({ addWindow });
+
+      wrapper.find(IIIFDropTarget).simulate('drop', { canvasId, manifestId, manifestJson });
+
+      expect(addWindow).toHaveBeenCalledWith({ canvasId, manifest: manifestJson, manifestId });
+    });
+
+    it('is a no-op if isWorkspaceControlPanelVisible is off', () => {
+      const canvasId = 'canvasId';
+      const manifestId = 'manifest.json';
+      const manifestJson = { data: '123' };
+
+      const addWindow = jest.fn();
+      const wrapper = createWrapper({ addWindow, isWorkspaceControlPanelVisible: false });
+      wrapper.find(IIIFDropTarget).simulate('drop', { canvasId, manifestId, manifestJson });
+
+      expect(addWindow).not.toHaveBeenCalled();
     });
   });
 });

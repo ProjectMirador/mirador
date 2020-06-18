@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Mosaic } from 'react-mosaic-component';
+import { MosaicWithoutDragDropContext } from 'react-mosaic-component';
 import MosaicRenderPreview from '../../../src/containers/MosaicRenderPreview';
 import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
 
@@ -24,9 +24,10 @@ describe('WorkspaceMosaic', () => {
     wrapper = createWrapper({ windows });
   });
   it('should render properly with an initialValue', () => {
-    expect(wrapper.matchesElement(
-      <Mosaic initialValue={{ direction: 'row', first: '1', second: '2' }} />,
-    )).toBe(true);
+    expect(wrapper.find(MosaicWithoutDragDropContext).length).toEqual(1);
+    expect(wrapper.find(MosaicWithoutDragDropContext).prop('initialValue')).toEqual({
+      direction: 'row', first: '1', second: '2',
+    });
   });
   describe('componentDidUpdate', () => {
     it('updates the workspace layout when windows change', () => {

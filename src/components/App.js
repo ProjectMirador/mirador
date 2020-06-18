@@ -18,11 +18,11 @@ export class App extends Component {
    * @return {String} - HTML markup for the component
    */
   render() {
-    const { plugins } = this.props;
+    const { dndManager, plugins } = this.props;
 
     return (
       <PluginProvider plugins={plugins}>
-        <AppProviders>
+        <AppProviders dndManager={dndManager}>
           <AuthenticationSender />
           <AccessTokenSender />
           <Suspense
@@ -37,10 +37,12 @@ export class App extends Component {
 }
 
 App.propTypes = {
+  dndManager: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   plugins: PropTypes.array, // eslint-disable-line react/forbid-prop-types
 };
 
 App.defaultProps = {
+  dndManager: undefined,
   plugins: [],
 };
 

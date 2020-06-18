@@ -10,7 +10,7 @@ export const catalogReducer = (state = [], action) => {
       if (state.some(m => m.manifestId === action.manifestId)) return state;
 
       return [
-        { manifestId: action.manifestId },
+        { manifestId: action.manifestId, ...action.payload },
         ...state,
       ];
     case ActionTypes.REMOVE_RESOURCE:

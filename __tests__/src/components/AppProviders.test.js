@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import Fullscreen from 'react-full-screen';
+import { DndContext, DndProvider } from 'react-dnd';
 import { AppProviders } from '../../../src/components/AppProviders';
 import settings from '../../../src/config/settings';
 
@@ -68,5 +69,20 @@ describe('AppProviders', () => {
       wrapper.setProps({ language: 'de' });
       expect(wrapper.instance().i18n.language).toEqual('de');
     });
+  });
+
+  it('provides a drag and drop context', () => {
+    const wrapper = createWrapper();
+    expect(wrapper.find('MaybeDndProvider').dive().find(DndProvider).length).toBe(1);
+  });
+
+  it('allows apps to opt-out of the drag and drop provider', () => {
+    const wrapper = createWrapper({ dndManager: false });
+    expect(wrapper.find('MaybeDndProvider').dive().find(DndProvider).length).toBe(0);
+  });
+
+  it('allows apps to provide an existing drag and drop context', () => {
+    const wrapper = createWrapper({ dndManager: 'whatever' });
+    expect(wrapper.find('MaybeDndProvider').dive().find(DndContext.Provider).prop('value')).toBe('whatever');
   });
 });

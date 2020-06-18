@@ -1,7 +1,7 @@
 describe('Language Switching', () => {
   describe('Application Language', () => {
     it('allows the user to switch the application language', async () => {
-      await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/');
+      await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/blank.html');
 
       await expect(page).toClick('#menuBtn');
       await expect(page).toMatchElement('ul[role="menu"]');
@@ -13,12 +13,12 @@ describe('Language Switching', () => {
       await expect(page).toMatchElement('li', { text: 'Deutsch' });
       await expect(page).toMatchElement('li', { text: 'English' });
 
-      await expect(page).toMatchElement('[aria-label="Toggle sidebar"]');
-      await expect(page).not.toMatchElement('[aria-label="Seitenleiste umschalten"]');
+      await expect(page).toMatchElement('[aria-label="Start Here"]');
+      await expect(page).not.toMatchElement('[aria-label="Fang hier an"]');
       await expect(page).toClick('li', { text: 'Deutsch' });
       await page.waitFor(1000);
-      await expect(page).not.toMatchElement('[aria-label="Toggle sidebar"]');
-      await expect(page).toMatchElement('[aria-label="Seitenleiste umschalten"]');
+      await expect(page).not.toMatchElement('[aria-label="Start Here"]');
+      await expect(page).toMatchElement('[aria-label="Fang hier an"]');
     });
   });
 });

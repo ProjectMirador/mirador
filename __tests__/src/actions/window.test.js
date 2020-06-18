@@ -152,6 +152,35 @@ describe('window actions', () => {
       expect(action.window.companionWindowIds.length).toEqual(1);
       expect(action.companionWindows[0]).toMatchObject({ content: 'thumbnailNavigation' });
     });
+
+    it('pulls a provided manifest out', () => {
+      const options = {
+        canvasIndex: 1,
+        companionWindows: [],
+        id: 'helloworld',
+        manifest: { data: '123' },
+      };
+
+      const mockState = {
+        config: {
+          thumbnailNavigation: {},
+          window: {
+            defaultSideBarPanel: null,
+          },
+        },
+        windows: {},
+      };
+
+      const mockDispatch = jest.fn(() => ({}));
+      const mockGetState = jest.fn(() => mockState);
+      const thunk = actions.addWindow(options);
+
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+
+      expect(action.manifest).toEqual({ data: '123' });
+    });
   });
 
   describe('updateWindow', () => {

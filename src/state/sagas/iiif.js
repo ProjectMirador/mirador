@@ -182,7 +182,12 @@ export function* fetchAnnotation({ targetId, annotationId }) {
 }
 
 /** */
-export function* fetchResourceManifest({ manifestId }) {
+export function* fetchResourceManifest({ manifestId, manifestJson }) {
+  if (manifestJson) {
+    yield put(receiveManifest(manifestId, manifestJson));
+    return;
+  }
+
   if (!manifestId) return;
 
   const manifests = yield select(getManifests) || {};

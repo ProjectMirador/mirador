@@ -10,6 +10,7 @@ import {
   updateWindow,
   setCanvas,
   fetchSearch,
+  receiveManifest,
 } from '../actions';
 import {
   getSearchForWindow, getSearchAnnotationsForCompanionWindow,
@@ -27,10 +28,15 @@ import { fetchManifest } from './iiif';
 /** */
 export function* fetchWindowManifest(action) {
   const { manifestId } = action.payload || action.window;
+
   if (!manifestId) return;
 
-  const manifests = yield select(getManifests);
-  if (!manifests[manifestId]) yield call(fetchManifest, { manifestId });
+  if (action.manifest) {
+    yield put(receiveManifest(manifestId, action.manifest));
+  } else {
+    const manifests = yield select(getManifests);
+    if (!manifests[manifestId]) yield call(fetchManifest, { manifestId });
+  }
 
   yield call(setWindowStartingCanvas, action);
   yield call(setWindowDefaultSearchQuery, action);

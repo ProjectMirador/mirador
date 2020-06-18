@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { WorkspaceAdd } from '../../../src/components/WorkspaceAdd';
 import ManifestListItem from '../../../src/containers/ManifestListItem';
 import ManifestForm from '../../../src/containers/ManifestForm';
+import { IIIFDropTarget } from '../../../src/components/IIIFDropTarget';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -81,5 +82,32 @@ describe('WorkspaceAdd', () => {
     expect(wrapper.find(Drawer).find(ManifestForm).length).toBe(1);
     wrapper.find(Drawer).find(ManifestForm).props().onCancel();
     expect(wrapper.find(Drawer).props().open).toBe(false);
+  });
+
+  describe('drag and drop', () => {
+    it('adds a new catalog entry from a manifest', () => {
+      const manifestId = 'manifest.json';
+      const manifestJson = { data: '123' };
+
+      const addResource = jest.fn();
+
+      const wrapper = createWrapper({ addResource });
+
+      wrapper.find(IIIFDropTarget).simulate('drop', { manifestId, manifestJson });
+
+      expect(addResource).toHaveBeenCalledWith(manifestId, manifestJson, { provider: 'file' });
+    });
+
+    it('adds a new catalog entry from a manifestId', () => {
+      const manifestId = 'manifest.json';
+
+      const addResource = jest.fn();
+
+      const wrapper = createWrapper({ addResource });
+
+      wrapper.find(IIIFDropTarget).simulate('drop', { manifestId });
+
+      expect(addResource).toHaveBeenCalledWith(manifestId);
+    });
   });
 });

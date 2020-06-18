@@ -46,7 +46,13 @@ const baseConfig = mode => ({
       resourceRegExp: /@blueprintjs\/(core|icons)/, // ignore optional UI framework dependencies
     }),
   ],
-  resolve: { extensions: ['.js'] },
+  resolve: {
+    alias: {
+      // needs shared global state for context to work
+      'react-dnd': path.resolve(path.join(__dirname, 'node_modules', 'react-dnd')),
+    },
+    extensions: ['.js'],
+  },
 });
 
 module.exports = (env, options) => {

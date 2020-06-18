@@ -28,6 +28,15 @@ describe('catalog reducer', () => {
         { manifestId: '1' },
       ]);
     });
+    it('includes payload data', () => {
+      expect(catalogReducer([], {
+        manifestId: '1',
+        payload: { provider: 'file' },
+        type: ActionTypes.ADD_RESOURCE,
+      })).toEqual([
+        { manifestId: '1', provider: 'file' },
+      ]);
+    });
   });
 
   describe('REQUEST_MANIFEST', () => {
