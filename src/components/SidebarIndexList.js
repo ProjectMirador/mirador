@@ -43,7 +43,7 @@ export class SidebarIndexList extends Component {
     }
 
     return (
-      <MenuList autoFocusItem variant="selectedMenu">
+      <MenuList variant="selectedMenu">
         {
           canvasesIdAndLabel.map((canvas, canvasIndex) => {
             const onClick = () => { setCanvas(windowId, canvas.id); }; // eslint-disable-line require-jsdoc, max-len

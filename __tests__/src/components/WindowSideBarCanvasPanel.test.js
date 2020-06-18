@@ -40,7 +40,7 @@ describe('WindowSideBarCanvasPanel', () => {
     it('updates the variant', () => {
       const updateVariant = jest.fn();
       const wrapper = createWrapper({ updateVariant });
-      wrapper.instance().handleVariantChange({ target: { value: 'item' } });
+      wrapper.instance().handleVariantChange({}, 'item');
       expect(updateVariant).toHaveBeenCalledWith('item');
     });
   });

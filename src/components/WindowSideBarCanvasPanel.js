@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Tooltip from '@material-ui/core/Tooltip';
 import RootRef from '@material-ui/core/RootRef';
-import Select from '@material-ui/core/Select';
+import ItemListIcon from '@material-ui/icons/ReorderSharp';
+import TocIcon from '@material-ui/icons/SortSharp';
+import ThumbnailListIcon from '@material-ui/icons/ViewListSharp';
 import CompanionWindow from '../containers/CompanionWindow';
 import SidebarIndexList from '../containers/SidebarIndexList';
 import SidebarIndexTableOfContents from '../containers/SidebarIndexTableOfContents';
@@ -18,19 +20,14 @@ export class WindowSideBarCanvasPanel extends Component {
     super(props);
     this.handleVariantChange = this.handleVariantChange.bind(this);
 
-    this.state = {
-      variantSelectionOpened: false,
-    };
-
     this.containerRef = React.createRef();
   }
 
   /** @private */
-  handleVariantChange(event) {
+  handleVariantChange(event, value) {
     const { updateVariant } = this.props;
 
-    updateVariant(event.target.value);
-    this.setState({ variantSelectionOpened: false });
+    updateVariant(value);
   }
 
   /**
@@ -41,12 +38,10 @@ export class WindowSideBarCanvasPanel extends Component {
       classes,
       id,
       t,
-      toggleDraggingEnabled,
       variant,
       windowId,
     } = this.props;
 
-    const { variantSelectionOpened } = this.state;
     let listComponent;
     if (variant === 'tableOfContents') {
       listComponent = (
@@ -65,6 +60,7 @@ export class WindowSideBarCanvasPanel extends Component {
         />
       );
     }
+
     return (
       <RootRef rootRef={this.containerRef}>
         <CompanionWindow
@@ -72,39 +68,22 @@ export class WindowSideBarCanvasPanel extends Component {
           id={id}
           windowId={windowId}
           titleControls={(
-            <FormControl>
-              <Select
-                MenuProps={{
-                  anchorOrigin: {
-                    horizontal: 'left',
-                    vertical: 'bottom',
-                  },
-                  getContentAnchorEl: null,
-                }}
-                displayEmpty
-                value={variant}
-                onChange={this.handleVariantChange}
-                name="variant"
-                open={variantSelectionOpened}
-                onOpen={(e) => {
-                  toggleDraggingEnabled();
-                  this.setState({ variantSelectionOpened: true });
-                }}
-                onClose={(e) => {
-                  toggleDraggingEnabled();
-                  this.setState({ variantSelectionOpened: false });
-                }}
-                classes={{ select: classes.select }}
-                className={classes.selectEmpty}
-              >
-                <MenuItem value="tableOfContents"><Typography variant="body2">{ t('tableOfContentsList') }</Typography></MenuItem>
-                <MenuItem value="item"><Typography variant="body2">{ t('itemList') }</Typography></MenuItem>
-                <MenuItem value="thumbnail"><Typography variant="body2">{ t('thumbnailList') }</Typography></MenuItem>
-              </Select>
-            </FormControl>
+            <Tabs
+              value={variant}
+              onChange={this.handleVariantChange}
+              variant="fullWidth"
+              indicatorColor="primary"
+              textColor="primary"
+            >
+              <Tooltip title={t('tableOfContentsList')} value="tableOfContents"><Tab className={classes.variantTab} value="tableOfContents" aria-label={t('tableOfContentsList')} aria-controls={`tab-panel-${id}`} icon={<TocIcon style={{ transform: 'scale(-1, 1)' }} />} /></Tooltip>
+              <Tooltip title={t('itemList')} value="item"><Tab className={classes.variantTab} value="item" aria-label={t('itemList')} aria-controls={`tab-panel-${id}`} icon={<ItemListIcon />} /></Tooltip>
+              <Tooltip title={t('thumbnailList')} value="thumbnail"><Tab className={classes.variantTab} value="thumbnail" aria-label={t('thumbnailList')} aria-controls={`tab-panel-${id}`} icon={<ThumbnailListIcon />} /></Tooltip>
+            </Tabs>
           )}
         >
-          {listComponent}
+          <div id={`tab-panel-${id}`}>
+            {listComponent}
+          </div>
         </CompanionWindow>
       </RootRef>
     );
@@ -115,7 +94,6 @@ WindowSideBarCanvasPanel.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   id: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
-  toggleDraggingEnabled: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['item', 'thumbnail', 'tableOfContents']).isRequired,
   windowId: PropTypes.string.isRequired,
