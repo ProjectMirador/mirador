@@ -27,7 +27,7 @@ describe('WorkspaceExport', () => {
       <WorkspaceExport
         open
         handleClose={handleClose}
-        state={mockState}
+        exportableState={mockState}
       />,
     );
   });

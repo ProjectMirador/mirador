@@ -9,7 +9,11 @@ import { WorkspaceExport } from '../components/WorkspaceExport';
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => ({ state });
+const mapStateToProps = state => ({
+  exportableState: state.config.export.state.reduce(
+    (acc, stem) => { acc[stem] = state[stem]; return acc; }, {},
+  ),
+});
 
 const enhance = compose(
   withTranslation(),

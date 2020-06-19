@@ -319,5 +319,17 @@ export default {
     preserveImageSizeOnResize: true,
     preserveViewport: true,
     showNavigationControl: false,
+  },
+  export: {
+    state: [
+      'catalog',
+      'companionWindows',
+      'config',
+      'elasticLayout',
+      'layers',
+      'viewers',
+      'windows',
+      'workspace',
+    ]
   }
 };
