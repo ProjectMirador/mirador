@@ -82,6 +82,8 @@ export class OpenSeadragonViewer extends Component {
       if (viewerConfig) {
         viewer.viewport.panTo(viewerConfig, true);
         viewer.viewport.zoomTo(viewerConfig.zoom, viewerConfig, true);
+        viewerConfig.degrees !== undefined && viewer.viewport.setRotation(viewerConfig.degrees);
+        viewerConfig.flip !== undefined && viewer.viewport.setFlip(viewerConfig.flip);
       }
 
       this.addAllImageSources(!(viewerConfig));
@@ -102,11 +104,19 @@ export class OpenSeadragonViewer extends Component {
 
       if (viewerConfig.x !== viewport.centerSpringX.target.value
         || viewerConfig.y !== viewport.centerSpringY.target.value) {
-        viewer.viewport.panTo(viewerConfig, false);
+        viewport.panTo(viewerConfig, false);
       }
 
       if (viewerConfig.zoom !== viewport.zoomSpring.target.value) {
-        viewer.viewport.zoomTo(viewerConfig.zoom, viewerConfig, false);
+        viewport.zoomTo(viewerConfig.zoom, viewerConfig, false);
+      }
+
+      if (viewerConfig.rotation !== viewport.getRotation()) {
+        viewport.setRotation(viewerConfig.rotation);
+      }
+
+      if (viewerConfig.flip !== viewport.getFlip()) {
+        viewport.setFlip(viewerConfig.flip);
       }
     }
   }
@@ -129,6 +139,8 @@ export class OpenSeadragonViewer extends Component {
     const { viewport } = event.eventSource;
 
     updateViewport(windowId, {
+      flip: viewport.getFlip(),
+      rotation: viewport.getRotation(),
       x: Math.round(viewport.centerSpringX.target.value),
       y: Math.round(viewport.centerSpringY.target.value),
       zoom: viewport.zoomSpring.target.value,

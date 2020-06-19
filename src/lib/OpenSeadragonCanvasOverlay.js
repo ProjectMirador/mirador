@@ -58,7 +58,7 @@ export default class OpenSeadragonCanvasOverlay {
     }
 
     this.viewportOrigin = new OpenSeadragon.Point(0, 0);
-    const boundsRect = this.viewer.viewport.getBounds(true);
+    const boundsRect = this.viewer.viewport.getBoundsNoRotate(true);
     this.viewportOrigin.x = boundsRect.x;
     this.viewportOrigin.y = boundsRect.y * this.imgAspectRatio;
 
@@ -93,6 +93,20 @@ export default class OpenSeadragonCanvasOverlay {
     this.context2d.translate(x, y);
     this.context2d.scale(zoom, zoom);
 
+    const center = this.viewer.viewport.getCenter();
+
+    const flip = this.viewer.viewport.getFlip();
+    if (flip) {
+      this.context2d.translate(center.x * 2, 0);
+      this.context2d.scale(-1, 1);
+    }
+
+    const rotation = this.viewer.viewport.getRotation();
+    if (rotation !== 0) {
+      this.context2d.translate(center.x, center.y);
+      this.context2d.rotate(rotation * Math.PI / 180);
+      this.context2d.translate(-1 * center.x, -1 * center.y);
+    }
     update();
 
     this.context2d.setTransform(1, 0, 0, 1, 0, 0);
