@@ -46,6 +46,7 @@
     "exitFullScreen": "Vollbildmodus verlassen",
     "expandSection": "Bereich {{section}} aufklappen",
     "expandSidePanel": "Seitenleiste aufklappen",
+    "exportCopied": "Die Konfiguration der Arbeitsfläche wurde in die Zwischenablage kopiert.",
     "fetchManifest": "Hinzufügen",
     "fullScreen": "Vollbild",
     "gallery": "Galerie",
