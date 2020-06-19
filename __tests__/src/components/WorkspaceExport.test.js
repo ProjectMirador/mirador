@@ -2,7 +2,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import Snackbar from '@material-ui/core/Snackbar';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { WorkspaceExport } from '../../../src/components/WorkspaceExport';
