@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { WorkspaceExport } from '../components/WorkspaceExport';
+import {
+  getExportableState,
+} from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -10,9 +13,7 @@ import { WorkspaceExport } from '../components/WorkspaceExport';
  * @private
  */
 const mapStateToProps = state => ({
-  exportableState: state.config.export.state.reduce(
-    (acc, stem) => { acc[stem] = state[stem]; return acc; }, {},
-  ),
+  exportableState: getExportableState(state),
 });
 
 const enhance = compose(

@@ -321,15 +321,15 @@ export default {
     showNavigationControl: false,
   },
   export: {
-    state: [
-      'catalog',
-      'companionWindows',
-      'config',
-      'elasticLayout',
-      'layers',
-      'viewers',
-      'windows',
-      'workspace',
-    ]
+    catalog: true,
+    companionWindows: true,
+    config: true,
+    elasticLayout: true,
+    layers: true,
+    // filter out anything re-retrievable:
+    manifests: { filter: ([id, value]) => !id.startsWith('http') },
+    viewers: true,
+    windows: true,
+    workspace: true,
   }
 };

@@ -7,6 +7,33 @@ export function getConfig(state) {
 }
 
 /**
+ * Extract an exportable version of state using the configuration from the config.
+ */
+export function getExportableState(state) {
+  const exportConfig = getConfig(state).export;
+
+  return Object.entries(exportConfig).reduce(
+    (acc, [stem, value]) => {
+      if (value === true) {
+        acc[stem] = state[stem];
+      } else if (value.filter) {
+        acc[stem] = Object.entries(state[stem])
+          .filter(value.filter)
+          .reduce(
+            (stemAcc, [k, v]) => {
+              stemAcc[k] = v; // eslint-disable-line no-param-reassign
+              return stemAcc;
+            },
+            {},
+          );
+      }
+      return acc;
+    },
+    {},
+  );
+}
+
+/**
 * Return languages from config (in state) and indicate which is currently set
 * @param {object} state
 * @return {Array} [ {locale: 'de', label: 'Deutsch', current: true}, ... ]
