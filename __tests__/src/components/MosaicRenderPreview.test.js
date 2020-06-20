@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import MinimalWindow from '../../../src/containers/MinimalWindow';
 import { MosaicRenderPreview } from '../../../src/components/MosaicRenderPreview';
 
 describe('MosaicRenderPreview', () => {
@@ -12,9 +13,9 @@ describe('MosaicRenderPreview', () => {
       />,
     );
 
-    expect(wrapper.find('.mosaic-window-body').length).toBe(1);
+    expect(wrapper.find(MinimalWindow).length).toBe(1);
     expect(
-      wrapper.find('.mosaic-window-body').children().text(),
+      wrapper.find(MinimalWindow).prop('label'),
     ).toEqual('previewWindowTitle The Title Prop');
   });
 });

@@ -9,6 +9,7 @@ import { MinimalWindow } from '../components/MinimalWindow';
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => ({
   allowClose: state.config.window.allowClose,
+  allowWindowSideBar: state.config.window.allowWindowSideBar,
 });
 
 /**
@@ -28,6 +29,11 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
 const styles = theme => ({
   button: {
     marginLeft: 'auto',
+  },
+  title: {
+    ...theme.typography.h6,
+    flexGrow: 1,
+    paddingLeft: theme.spacing(0.5),
   },
   window: {
     backgroundColor: theme.palette.shades.dark,
