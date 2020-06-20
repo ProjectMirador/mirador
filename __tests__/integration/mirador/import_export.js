@@ -14,8 +14,7 @@ describe('Import/Export state', () => {
         y: 1000,
         zoom: 0.001,
       };
-      const f = miradorInstance.actions.importMiradorState(state);
-      miradorInstance.store.dispatch(f);
+      miradorInstance.store.dispatch({ state, type: 'mirador/IMPORT_MIRADOR_STATE' });
       return windows[0];
     });
     const mirador = await page.evaluate(() => miradorInstance.store.getState());

@@ -12,9 +12,6 @@ describe('MiradorViewer', () => {
     instance = new MiradorViewer({});
   });
   describe('constructor', () => {
-    it('returns viewer actions', () => {
-      expect(instance.actions.addWindow).toBeDefined();
-    });
     it('returns viewer store', () => {
       expect(instance.store.dispatch).toBeDefined();
     });
