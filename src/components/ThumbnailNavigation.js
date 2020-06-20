@@ -204,25 +204,27 @@ export class ThumbnailNavigation extends Component {
         onKeyUp={this.handleKeyUp}
         role="grid"
       >
-        <AutoSizer
-          defaultHeight={100}
-          defaultWidth={400}
-        >
-          {({ height, width }) => (
-            <List
-              direction={htmlDir}
-              height={this.areaHeight(height)}
-              itemCount={this.itemCount()}
-              itemSize={this.calculateScaledSize}
-              width={width}
-              layout={(position === 'far-bottom') ? 'horizontal' : 'vertical'}
-              itemData={itemData}
-              ref={this.gridRef}
-            >
-              {ThumbnailCanvasGrouping}
-            </List>
-          )}
-        </AutoSizer>
+        <div role="row" style={{ height: '100%', width: '100%' }}>
+          <AutoSizer
+            defaultHeight={100}
+            defaultWidth={400}
+          >
+            {({ height, width }) => (
+              <List
+                direction={htmlDir}
+                height={this.areaHeight(height)}
+                itemCount={this.itemCount()}
+                itemSize={this.calculateScaledSize}
+                width={width}
+                layout={(position === 'far-bottom') ? 'horizontal' : 'vertical'}
+                itemData={itemData}
+                ref={this.gridRef}
+              >
+                {ThumbnailCanvasGrouping}
+              </List>
+            )}
+          </AutoSizer>
+        </div>
       </Paper>
     );
   }
