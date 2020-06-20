@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import ZoomControls from '../containers/ZoomControls';
 import ViewerInfo from '../containers/ViewerInfo';
 import ViewerNavigation from '../containers/ViewerNavigation';
@@ -26,7 +27,7 @@ export class WindowCanvasNavigationControls extends Component {
       classes, visible, windowId, zoomToWorld,
     } = this.props;
 
-    if (!visible) return (<></>);
+    if (!visible) return (<Typography variant="srOnly" component="div"><ViewerInfo windowId={windowId} /></Typography>);
 
     return (
       <Paper
