@@ -30,6 +30,7 @@ const baseConfig = mode => ({
     minimizer: [
       new TerserPlugin({
         extractComments: true,
+        sourceMap: true,
       }),
     ],
   },
