@@ -9,7 +9,6 @@ import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import AttributionIcon from '@material-ui/icons/CopyrightSharp';
 import LayersIcon from '@material-ui/icons/LayersSharp';
 import SearchIcon from '@material-ui/icons/SearchSharp';
-import { PluginHook } from './PluginHook';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
 /**
  *
@@ -125,7 +124,15 @@ export class WindowSideBarButtons extends Component {
             )}
           />
         )}
-        <PluginHook TabButton={TabButton} PluginComponents={PluginComponents} />
+        { PluginComponents
+          && PluginComponents.map(PluginComponent => (
+            <TabButton
+              key={PluginComponent.value}
+              value={PluginComponent.value}
+              icon={<PluginComponent />}
+            />
+          ))
+        }
       </Tabs>
     );
   }
