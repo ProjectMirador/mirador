@@ -130,11 +130,7 @@ export class AnnotationsOverlay extends Component {
     viewer.removeHandler('canvas-click', this.onCanvasClick);
     viewer.removeHandler('canvas-exit', this.onCanvasExit);
     viewer.removeHandler('update-viewport', this.onUpdateViewport);
-
-    if (viewer.innerTracker
-      && viewer.innerTracker.moveHandler === this.onCanvasMouseMove) {
-      viewer.innerTracker.moveHandler = null;
-    }
+    viewer.removeHandler('mouse-move', this.onCanvasMouseMove);
   }
 
   /** */
@@ -263,10 +259,7 @@ export class AnnotationsOverlay extends Component {
     viewer.addHandler('canvas-click', this.onCanvasClick);
     viewer.addHandler('canvas-exit', this.onCanvasExit);
     viewer.addHandler('update-viewport', this.onUpdateViewport);
-
-    if (viewer.innerTracker) {
-      viewer.innerTracker.moveHandler = this.onCanvasMouseMove;
-    }
+    viewer.addHandler('mouse-move', this.onCanvasMouseMove);
 
     this.updateCanvas = this.canvasUpdateCallback();
   }

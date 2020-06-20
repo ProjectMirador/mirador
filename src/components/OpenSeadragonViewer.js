@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
 import OpenSeadragon from 'openseadragon';
 import classNames from 'classnames';
@@ -24,6 +25,7 @@ export class OpenSeadragonViewer extends Component {
     this.ref = React.createRef();
     this.apiRef = React.createRef();
     OSDReferences.set(props.windowId, this.apiRef);
+    this.onCanvasMouseMove = debounce(this.onCanvasMouseMove.bind(this), 10);
     this.onViewportChange = this.onViewportChange.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
     this.osdUpdating = false;
@@ -62,6 +64,10 @@ export class OpenSeadragonViewer extends Component {
     viewer.addHandler('animation-finish', () => {
       this.osdUpdating = false;
     });
+
+    if (viewer.innerTracker) {
+      viewer.innerTracker.moveHandler = this.onCanvasMouseMove;
+    }
   }
 
   /**
@@ -126,8 +132,19 @@ export class OpenSeadragonViewer extends Component {
   componentWillUnmount() {
     const { viewer } = this.state;
 
+    if (viewer.innerTracker
+      && viewer.innerTracker.moveHandler === this.onCanvasMouseMove) {
+      viewer.innerTracker.moveHandler = null;
+    }
     viewer.removeAllHandlers();
     this.apiRef.current = undefined;
+  }
+
+  /** Shim to provide a mouse-move event coming from the viewer */
+  onCanvasMouseMove(event) {
+    const { viewer } = this.state;
+
+    viewer.raiseEvent('mouse-move', event);
   }
 
   /**
