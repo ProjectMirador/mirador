@@ -7,7 +7,7 @@ import Img from 'react-image';
 import CompanionWindow from '../containers/CompanionWindow';
 import { LabelValueMetadata } from './LabelValueMetadata';
 import ns from '../config/css-ns';
-
+import { PluginHook } from './PluginHook';
 
 /**
  * WindowSideBarInfoPanel
@@ -68,6 +68,8 @@ export class AttributionPanel extends Component {
             />
           </div>
         )}
+
+        <PluginHook {...this.props} />
       </CompanionWindow>
     );
   }

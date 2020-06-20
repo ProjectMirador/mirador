@@ -5,7 +5,7 @@ import Link from '@material-ui/core/Link';
 import classNames from 'classnames';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ns from '../config/css-ns';
-
+import { PluginHook } from './PluginHook';
 
 /**
  * ManifestRelatedLinks
@@ -96,6 +96,7 @@ export class ManifestRelatedLinks extends Component {
             </>
           )}
         </dl>
+        <PluginHook {...this.props} />
       </CollapsibleSection>
     );
   }
