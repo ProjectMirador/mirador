@@ -153,10 +153,17 @@ export class OpenSeadragonViewer extends Component {
   addNonTiledImage(contentResource) {
     const { canvasWorld } = this.props;
     const { viewer } = this.state;
+
+    const type = contentResource.getProperty('type');
+    const format = contentResource.getProperty('format') || '';
+
+    if (!(type === 'Image' || type === 'dctypes:Image' || format.startsWith('image/'))) return Promise.resolve();
+
     return new Promise((resolve, reject) => {
       if (!viewer) {
-        return;
+        reject();
       }
+
       viewer.addSimpleImage({
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
@@ -177,7 +184,7 @@ export class OpenSeadragonViewer extends Component {
     const { viewer } = this.state;
     return new Promise((resolve, reject) => {
       if (!viewer) {
-        return;
+        reject();
       }
 
       const tileSource = infoResponse.json;

@@ -38,6 +38,7 @@ describe('OpenSeadragonViewer', () => {
           },
         }]}
         nonTiledImages={[{
+          getProperty: () => {},
           id: 'http://foo',
         }]}
         windowId="base"
@@ -119,7 +120,14 @@ describe('OpenSeadragonViewer', () => {
       wrapper.instance().viewer = {
         close: () => {},
       };
-      wrapper.setProps({ nonTiledImages: [1, 2, 3, 4] });
+      wrapper.setProps({
+        nonTiledImages: [
+          { getProperty: () => 'Image' },
+          { getProperty: () => 'Image' },
+          { getProperty: () => 'Image' },
+          { getProperty: () => 'Image' },
+        ],
+      });
       const mockAddNonTiledImage = jest.fn();
       wrapper.instance().addNonTiledImage = mockAddNonTiledImage;
       wrapper.instance().addAllImageSources();
@@ -136,6 +144,28 @@ describe('OpenSeadragonViewer', () => {
     it('when a viewer is not available, returns an unresolved Promise', () => {
       expect(wrapper.instance().addTileSource({})).toEqual(expect.any(Promise));
     });
+  });
+
+  describe('addNonTiledImage', () => {
+    it('calls addSimpleImage asynchronously on the OSD viewer', () => {
+      const viewer = {};
+      viewer.addSimpleImage = ({ success }) => { success('event'); };
+      wrapper.instance().setState({ viewer });
+
+      return wrapper.instance()
+        .addNonTiledImage({ getProperty: () => 'Image' })
+        .then((event) => {
+          expect(event).toBe('event');
+        });
+    });
+
+    it('calls addSimpleImage asynchronously on the OSD viewer', () => (
+      wrapper.instance()
+        .addNonTiledImage({ getProperty: () => 'Video' })
+        .then((event) => {
+          expect(event).toBe(undefined);
+        })
+    ));
   });
 
   describe('refreshTileProperties', () => {
