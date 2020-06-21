@@ -49,27 +49,7 @@ describe('MiradorCanvas', () => {
       });
     });
   });
-  describe('processAnnotations', () => {
-    describe('v2', () => {
-      it('fetches annotations for each annotationList', () => {
-        const otherContentInstance = new MiradorCanvas(
-          Utils.parseManifest(otherContentFixture).getSequences()[0].getCanvases()[0],
-        );
-        const fetchMock = jest.fn();
-        otherContentInstance.processAnnotations(fetchMock);
-        expect(fetchMock).toHaveBeenCalledTimes(1);
-      });
-    });
-    describe('v3', () => {
-      it('fetches annotations for external items and receives annotations for items that are embedded', () => {
-        const receiveMock = jest.fn();
-        const fetchMock = jest.fn();
-        v3Instance.processAnnotations(fetchMock, receiveMock);
-        expect(receiveMock).toHaveBeenCalledTimes(1);
-        expect(fetchMock).toHaveBeenCalledTimes(2);
-      });
-    });
-  });
+
   describe('aspectRatio', () => {
     it('calculates a width / height aspectRatio', () => {
       expect(instance.aspectRatio).toBeCloseTo(0.667);

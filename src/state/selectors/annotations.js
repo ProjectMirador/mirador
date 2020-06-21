@@ -4,10 +4,13 @@ import flatten from 'lodash/flatten';
 import AnnotationFactory from '../../lib/AnnotationFactory';
 import { getCanvas, getVisibleCanvasIds } from './canvases';
 
+/** */
+export const getAnnotations = state => state.annotations;
+
 const getAnnotationsOnCanvas = createSelector(
   [
     getCanvas,
-    state => state.annotations,
+    getAnnotations,
   ],
   (canvas, annotations) => {
     if (!annotations || !canvas) return [];

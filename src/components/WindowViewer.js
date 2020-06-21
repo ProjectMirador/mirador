@@ -29,7 +29,7 @@ export class WindowViewer extends Component {
    */
   componentDidMount() {
     const {
-      currentCanvases, fetchInfoResponse, fetchAnnotation, receiveAnnotation,
+      currentCanvases, fetchInfoResponse,
     } = this.props;
 
     if (!this.infoResponseIsInStore()) {
@@ -38,7 +38,6 @@ export class WindowViewer extends Component {
         miradorCanvas.iiifImageResources.forEach((imageResource) => {
           fetchInfoResponse({ imageResource });
         });
-        miradorCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
       });
     }
   }
@@ -49,7 +48,7 @@ export class WindowViewer extends Component {
    */
   componentDidUpdate(prevProps) {
     const {
-      currentCanvases, fetchInfoResponse, fetchAnnotation, receiveAnnotation,
+      currentCanvases, fetchInfoResponse,
     } = this.props;
 
     if (difference(currentCanvases, prevProps.currentCanvases).length > 0
@@ -59,7 +58,6 @@ export class WindowViewer extends Component {
         miradorCanvas.iiifImageResources.forEach((imageResource) => {
           fetchInfoResponse({ imageResource });
         });
-        miradorCanvas.processAnnotations(fetchAnnotation, receiveAnnotation);
       });
     }
   }

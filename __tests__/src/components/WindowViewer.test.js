@@ -6,7 +6,6 @@ import OSDViewer from '../../../src/containers/OpenSeadragonViewer';
 import WindowCanvasNavigationControls from '../../../src/containers/WindowCanvasNavigationControls';
 import fixture from '../../fixtures/version-2/019.json';
 import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
-import otherContentFixture from '../../fixtures/version-2/299843.json';
 
 let currentCanvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
 
@@ -18,7 +17,6 @@ function createWrapper(props) {
       canvasLabel="label"
       infoResponses={{}}
       fetchInfoResponse={() => {}}
-      fetchAnnotation={() => {}}
       currentCanvases={[currentCanvases[1]]}
       view="single"
       windowId="xyz"
@@ -122,16 +120,6 @@ describe('WindowViewer', () => {
         },
       );
       expect(mockFnCanvas2).toHaveBeenCalledTimes(0);
-    });
-    it('calls fetchAnnotation when otherContent is present', () => {
-      const mockFnAnno = jest.fn();
-      const canvases = Utils.parseManifest(otherContentFixture).getSequences()[0].getCanvases();
-      currentCanvases = [canvases[0]];
-
-      wrapper = createWrapper(
-        { currentCanvases, fetchAnnotation: mockFnAnno },
-      );
-      expect(mockFnAnno).toHaveBeenCalledTimes(1);
     });
   });
 

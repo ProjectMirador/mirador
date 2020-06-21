@@ -57,24 +57,6 @@ export default class MiradorCanvas {
       .filter(annotations => annotations && annotations.type === 'AnnotationPage');
   }
 
-  /** */
-  processAnnotations(fetchAnnotation, receiveAnnotation) {
-    // IIIF v2
-    this.annotationListUris.forEach((uri) => {
-      fetchAnnotation(this.canvas.id, uri);
-    });
-    // IIIF v3
-    this.canvasAnnotationPages.forEach((annotation) => {
-      // If there are no items, try to retrieve the referenced resource.
-      // otherwise the resource should be embedded and just add to the store.
-      if (!annotation.items) {
-        fetchAnnotation(this.canvas.id, annotation.id);
-      } else {
-        receiveAnnotation(this.canvas.id, annotation.id, annotation);
-      }
-    });
-  }
-
   /**
    * Will negotiate a v2 or v3 type of resource
    */
