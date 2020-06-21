@@ -1,9 +1,10 @@
 import { call } from 'redux-saga/effects';
-import { testSaga } from 'redux-saga-test-plan';
+import { expectSaga, testSaga } from 'redux-saga-test-plan';
 
-import { importState } from '../../../src/state/sagas/app';
+import { importConfig, importState } from '../../../src/state/sagas/app';
 import { fetchManifest } from '../../../src/state/sagas/iiif';
 import { fetchWindowManifest } from '../../../src/state/sagas/windows';
+import { addWindow } from '../../../src/state/actions';
 
 describe('app-level sagas', () => {
   describe('importState', () => {
@@ -50,6 +51,33 @@ describe('app-level sagas', () => {
       testSaga(importState, action)
         .next()
         .all([]);
+    });
+  });
+
+  describe('importConfig', () => {
+    it('adds windows from the provided config', () => {
+      const action = {
+        config: {
+          thumbnailNavigation: {},
+          windows: [
+            { id: 'x', manifestId: 'a' },
+            { id: 'y', manifestId: 'b' },
+          ],
+        },
+      };
+
+      return expectSaga(importConfig, action)
+        .provide([
+          [call(addWindow, {
+            id: 'x', layoutOrder: 0, manifestId: 'a', thumbnailNavigationPosition: undefined,
+          }), { type: 'thunk1' }],
+          [call(addWindow, {
+            id: 'y', layoutOrder: 1, manifestId: 'b', thumbnailNavigationPosition: undefined,
+          }), { type: 'thunk2' }],
+        ])
+        .put({ type: 'thunk1' })
+        .put({ type: 'thunk2' })
+        .run();
     });
   });
 });

@@ -5,17 +5,6 @@ jest.unmock('react-i18next');
 jest.mock('react-dom');
 jest.mock('isomorphic-unfetch', () => jest.fn(() => Promise.resolve({ json: () => ({}) })));
 
-jest.mock('../../../src/state/selectors', () => ({
-  getCanvasGrouping: () => [],
-  getCompanionWindowIdsForPosition: () => ['cwid'],
-  getManifestoInstance: () => {},
-  getManifests: () => (
-    { 'https://iiif.harvardartmuseums.org/manifests/object/299843': { isFetching: true } }
-  ),
-  getManifestSearchService: () => ({ id: 'http://example.com/search' }),
-  getSearchForWindow: () => {},
-}));
-
 describe('MiradorViewer', () => {
   let instance;
   beforeAll(() => {
@@ -61,7 +50,7 @@ describe('MiradorViewer', () => {
       expect(windows[windowIds[0]].layoutOrder).toBe(0);
       expect(windows[windowIds[1]].layoutOrder).toBe(1);
       expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe('far-bottom');
-      expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe('off');
+      expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe(undefined);
       expect(windows[windowIds[0]].view).toBe(undefined);
       expect(windows[windowIds[1]].view).toBe('book');
 

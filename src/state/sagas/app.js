@@ -1,8 +1,10 @@
 import {
-  all, call, takeEvery,
+  all, call, put, takeEvery,
 } from 'redux-saga/effects';
+import { v4 as uuid } from 'uuid';
 import { fetchManifest } from './iiif';
 import { fetchWindowManifest } from './windows';
+import { addWindow } from '../actions';
 import ActionTypes from '../actions/action-types';
 
 /** */
@@ -16,9 +18,34 @@ export function* importState(action) {
   ]);
 }
 
+/** Add windows from the imported config */
+export function* importConfig({ config: { thumbnailNavigation, windows } }) {
+  if (!windows || windows.length === 0) return;
+
+  const thunks = yield all(
+    windows.map((miradorWindow, layoutOrder) => {
+      const windowId = `window-${uuid()}`;
+      const manifestId = miradorWindow.manifestId || miradorWindow.loadedManifest;
+
+      return call(addWindow, {
+        // these are default values ...
+        id: windowId,
+        layoutOrder,
+        manifestId,
+        thumbnailNavigationPosition: thumbnailNavigation && thumbnailNavigation.defaultPosition,
+        // ... overridden by values from the window configuration ...
+        ...miradorWindow,
+      });
+    }),
+  );
+
+  yield all(thunks.map(thunk => put(thunk)));
+}
+
 /** */
 export default function* appSaga() {
   yield all([
     takeEvery(ActionTypes.IMPORT_MIRADOR_STATE, importState),
+    takeEvery(ActionTypes.IMPORT_CONFIG, importConfig),
   ]);
 }
