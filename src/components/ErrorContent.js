@@ -43,7 +43,7 @@ export class ErrorContent extends Component {
             </ExpansionPanelDetails>
           </ExpansionPanel>
         )}
-        <PluginHook error={error} />
+        <PluginHook {...this.props} />
       </>
     );
   }

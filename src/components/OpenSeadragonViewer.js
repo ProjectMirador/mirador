@@ -333,7 +333,7 @@ export class OpenSeadragonViewer extends Component {
           { drawAnnotations
             && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
           { enhancedChildren }
-          <PluginHook viewer={viewer} windowId={windowId} />
+          <PluginHook viewer={viewer} {...{ ...this.props, children: null }} />
         </section>
       </>
     );
