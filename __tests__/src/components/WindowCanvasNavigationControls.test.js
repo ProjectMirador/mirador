@@ -6,6 +6,7 @@ import { WindowCanvasNavigationControls } from '../../../src/components/WindowCa
 import ViewerInfo from '../../../src/containers/ViewerInfo';
 import ViewerNavigation from '../../../src/containers/ViewerNavigation';
 import ZoomControls from '../../../src/containers/ZoomControls';
+import { PluginHook } from '../../../src/components/PluginHook';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -32,6 +33,7 @@ describe('WindowCanvasNavigationControls', () => {
         <ZoomControls zoomToWorld={zoomToWorld} />
         <ViewerNavigation />
         <ViewerInfo />
+        <PluginHook />
       </Paper>,
     )).toBe(true);
   });

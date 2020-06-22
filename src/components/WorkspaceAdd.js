@@ -16,6 +16,7 @@ import ManifestForm from '../containers/ManifestForm';
 import ManifestListItem from '../containers/ManifestListItem';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { IIIFDropTarget } from './IIIFDropTarget';
+import { PluginHook } from './PluginHook';
 
 /**
  * An area for managing manifests and adding them to workspace
@@ -96,6 +97,7 @@ export class WorkspaceAdd extends React.Component {
           ) : (
             <Paper className={classes.list}>
               <Typography variant="srOnly" component="h1">{t('miradorResources')}</Typography>
+              <PluginHook {...this.props} />
               <List>
                 {manifestList}
               </List>

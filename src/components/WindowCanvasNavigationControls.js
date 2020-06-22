@@ -7,6 +7,7 @@ import ZoomControls from '../containers/ZoomControls';
 import ViewerInfo from '../containers/ViewerInfo';
 import ViewerNavigation from '../containers/ViewerNavigation';
 import ns from '../config/css-ns';
+import { PluginHook } from './PluginHook';
 
 /**
  * Represents the viewer controls in the mirador workspace.
@@ -49,6 +50,8 @@ export class WindowCanvasNavigationControls extends Component {
         />
         <ViewerNavigation windowId={windowId} />
         <ViewerInfo windowId={windowId} />
+
+        <PluginHook {...this.props} />
       </Paper>
     );
   }
