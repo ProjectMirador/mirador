@@ -30,12 +30,14 @@ describe('WorkspaceArea', () => {
   it('should render all needed elements in order', () => {
     const wrapper = createWrapper();
     expect(wrapper.containsMatchingElement(
-      <main>
+      <>
         <WorkspaceControlPanel />
-        <Workspace />
-        <ErrorDialog />
-        <BackgroundPluginArea />
-      </main>,
+        <main>
+          <Workspace />
+          <ErrorDialog />
+          <BackgroundPluginArea />
+        </main>
+      </>,
     )).toBeTruthy();
   });
 

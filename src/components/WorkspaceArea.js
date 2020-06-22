@@ -24,23 +24,25 @@ export class WorkspaceArea extends Component {
     } = this.props;
 
     return (
-      <main
-        className={classNames(classes.viewer, ns('viewer'))}
-        lang={lang}
-        aria-label={t('workspace')}
-      >
+      <>
         {
           isWorkspaceControlPanelVisible
             && <WorkspaceControlPanel variant={controlPanelVariant} />
         }
-        {
-          isWorkspaceAddVisible
-            ? <WorkspaceAdd />
-            : <Workspace />
-        }
-        <ErrorDialog />
-        <BackgroundPluginArea />
-      </main>
+        <main
+          className={classNames(classes.viewer, ns('viewer'))}
+          lang={lang}
+          aria-label={t('workspace')}
+        >
+          {
+            isWorkspaceAddVisible
+              ? <WorkspaceAdd />
+              : <Workspace />
+          }
+          <ErrorDialog />
+          <BackgroundPluginArea />
+        </main>
+      </>
     );
   }
 }
