@@ -285,6 +285,8 @@ describe('OpenSeadragonViewer', () => {
     it('calls the OSD viewport panTo and zoomTo with the component state and forces a redraw', () => {
       const panTo = jest.fn();
       const zoomTo = jest.fn();
+      const setFlip = jest.fn();
+      const setRotation = jest.fn();
       const forceRedraw = jest.fn();
 
       wrapper.setState({
@@ -293,22 +295,37 @@ describe('OpenSeadragonViewer', () => {
           viewport: {
             centerSpringX: { target: { value: 10 } },
             centerSpringY: { target: { value: 10 } },
+            getFlip: () => false,
+            getRotation: () => (0),
             panTo,
+            setFlip,
+            setRotation,
             zoomSpring: { target: { value: 1 } },
             zoomTo,
           },
         },
       });
 
-      wrapper.setProps({ viewerConfig: { x: 0.5, y: 0.5, zoom: 0.1 } });
-      wrapper.setProps({ viewerConfig: { x: 1, y: 0, zoom: 0.5 } });
+      wrapper.setProps({
+        viewerConfig: {
+          flip: false, rotation: 90, x: 0.5, y: 0.5, zoom: 0.1,
+        },
+      });
+
+      wrapper.setProps({
+        viewerConfig: {
+          flip: true, rotation: 0, x: 1, y: 0, zoom: 0.5,
+        },
+      });
 
       expect(panTo).toHaveBeenCalledWith(
-        { x: 1, y: 0, zoom: 0.5 }, false,
+        expect.objectContaining({ x: 1, y: 0, zoom: 0.5 }), false,
       );
       expect(zoomTo).toHaveBeenCalledWith(
-        0.5, { x: 1, y: 0, zoom: 0.5 }, false,
+        0.5, expect.objectContaining({ x: 1, y: 0, zoom: 0.5 }), false,
       );
+      expect(setRotation).toHaveBeenCalledWith(90);
+      expect(setFlip).toHaveBeenCalledWith(true);
       expect(forceRedraw).not.toHaveBeenCalled();
     });
   });
@@ -320,6 +337,8 @@ describe('OpenSeadragonViewer', () => {
           viewport: {
             centerSpringX: { target: { value: 1 } },
             centerSpringY: { target: { value: 0 } },
+            getFlip: () => false,
+            getRotation: () => 90,
             zoomSpring: { target: { value: 0.5 } },
           },
         },
@@ -327,7 +346,9 @@ describe('OpenSeadragonViewer', () => {
 
       expect(updateViewport).toHaveBeenCalledWith(
         'base',
-        { x: 1, y: 0, zoom: 0.5 },
+        {
+          flip: false, rotation: 90, x: 1, y: 0, zoom: 0.5,
+        },
       );
     });
   });

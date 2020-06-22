@@ -17,12 +17,15 @@ describe('OpenSeadragonCanvasOverlay', () => {
         clientWidth: 200,
       },
       viewport: {
-        getBounds: jest.fn(() => ({
+        getBoundsNoRotate: jest.fn(() => ({
           height: 300,
           width: 200,
           x: 40,
           y: 80,
         })),
+        getCenter: () => ({ x: 0, y: 0 }),
+        getFlip: () => false,
+        getRotation: () => 0,
         getZoom: jest.fn(() => (0.75)),
       },
       world: {
@@ -89,7 +92,7 @@ describe('OpenSeadragonCanvasOverlay', () => {
           clientWidth: 200,
         },
         viewport: {
-          getBounds: jest.fn(() => (new OpenSeadragon.Rect(0, 0, 200, 200))),
+          getBoundsNoRotate: jest.fn(() => (new OpenSeadragon.Rect(0, 0, 200, 200))),
         },
         world: {
           getItemAt: jest.fn(),
