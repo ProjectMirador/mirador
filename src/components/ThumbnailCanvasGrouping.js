@@ -50,6 +50,8 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           width: (Number.isInteger(style.width)) ? style.width - SPACING : null,
         }}
         className={ns('thumbnail-nav-container')}
+        role="gridcell"
+        aria-colindex={index + 1}
       >
         <div
           role="button"

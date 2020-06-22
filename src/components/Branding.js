@@ -26,7 +26,7 @@ export class Branding extends Component {
             target="_blank"
             rel="noopener"
           >
-            <MiradorIcon titleAccess="About Project Mirador" fontSize="large" />
+            <MiradorIcon aria-label={t('aboutMirador')} titleAccess={t('aboutMirador')} fontSize="large" />
           </IconButton>
         </Typography>
       </div>
