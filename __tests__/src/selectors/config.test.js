@@ -7,12 +7,30 @@ import {
   getThemeDirection,
   getConfig,
   getRequestsConfig,
+  getExportableState,
 } from '../../../src/state/selectors';
 
 describe('getConfig', () => {
   it('returns the whole config', () => {
     const state = { config: { x: {} } };
     expect(getConfig(state)).toEqual(state.config);
+  });
+});
+
+describe('getExportableState', () => {
+  it('returns whole stems', () => {
+    const a = { some: 'value' };
+    const b = [1, 2, 3];
+    const state = { a, b, config: { export: { a: true, b: true } } };
+    expect(getExportableState(state)).toEqual({ a, b });
+  });
+
+  it('filters out parts of stems', () => {
+    const f = {
+      a: 1, b: 2, c: 3, d: 4,
+    };
+    const state = { config: { export: { f: { filter: ([k, v]) => (v % 2) === 0 } } }, f };
+    expect(getExportableState(state)).toEqual({ f: { b: 2, d: 4 } });
   });
 });
 

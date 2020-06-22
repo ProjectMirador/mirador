@@ -38,25 +38,10 @@ export class WorkspaceExport extends Component {
   /**
    * @private
    */
-  exportableState() {
-    const { state } = this.props;
-    const {
-      companionWindows,
-      config,
-      elasticLayout,
-      viewers,
-      windows,
-      workspace,
-    } = state;
+  exportedState() {
+    const { exportableState } = this.props;
 
-    return JSON.stringify({
-      companionWindows,
-      config,
-      elasticLayout,
-      viewers,
-      windows,
-      workspace,
-    }, null, 2);
+    return JSON.stringify(exportableState, null, 2);
   }
 
 
@@ -69,8 +54,6 @@ export class WorkspaceExport extends Component {
       children, container, open, t,
     } = this.props;
     const { copied } = this.state;
-
-    const exportableState = this.exportableState();
 
     if (copied) {
       return (
@@ -108,14 +91,14 @@ export class WorkspaceExport extends Component {
         <ScrollIndicatedDialogContent>
           {children}
           <pre>
-            {exportableState}
+            {this.exportedState()}
           </pre>
         </ScrollIndicatedDialogContent>
         <DialogActions>
           <Button onClick={this.handleClose}>{t('cancel')}</Button>
           <CopyToClipboard
             onCopy={this.onCopy}
-            text={exportableState}
+            text={this.exportedState()}
           >
             <Button variant="contained" color="primary">{t('copy')}</Button>
           </CopyToClipboard>
@@ -128,9 +111,9 @@ export class WorkspaceExport extends Component {
 WorkspaceExport.propTypes = {
   children: PropTypes.node,
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  exportableState: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
-  state: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func,
 };
 

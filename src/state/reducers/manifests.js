@@ -44,7 +44,7 @@ export const manifestsReducer = (state = {}, action) => {
         return object;
       }, {});
     case ActionTypes.IMPORT_MIRADOR_STATE:
-      return {};
+      return action.state.manifests || {};
     default: return state;
   }
 };

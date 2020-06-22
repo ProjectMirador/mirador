@@ -319,5 +319,17 @@ export default {
     preserveImageSizeOnResize: true,
     preserveViewport: true,
     showNavigationControl: false,
+  },
+  export: {
+    catalog: true,
+    companionWindows: true,
+    config: true,
+    elasticLayout: true,
+    layers: true,
+    // filter out anything re-retrievable:
+    manifests: { filter: ([id, value]) => !id.startsWith('http') },
+    viewers: true,
+    windows: true,
+    workspace: true,
   }
 };
