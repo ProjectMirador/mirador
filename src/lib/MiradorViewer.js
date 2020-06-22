@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import HotApp from '../components/App';
 import createStore from '../state/createStore';
-import * as actions from '../state/actions';
+import { importConfig } from '../state/actions/config';
 import {
   filterValidPlugins,
   getReducersFromPlugins,
@@ -24,7 +24,6 @@ class MiradorViewer {
     this.processConfig();
 
     const viewer = {
-      actions,
       store: this.store,
     };
 
@@ -42,9 +41,7 @@ class MiradorViewer {
    * Process config into actions
    */
   processConfig() {
-    /** merge type for arrays */
-    const action = actions.importConfig(this.config);
-    this.store.dispatch(action);
+    this.store.dispatch(importConfig(this.config));
   }
 }
 
