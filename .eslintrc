@@ -27,6 +27,8 @@
     "sort-keys": ["error", "asc", {
       "caseSensitive": false,
       "natural": false
-    }]
+    }],
+    "react/jsx-props-no-spreading": "off",
+    "arrow-parens": "off",
   }
 }

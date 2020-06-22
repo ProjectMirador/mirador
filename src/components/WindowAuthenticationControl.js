@@ -103,8 +103,7 @@ export class WindowAuthenticationControl extends Component {
                 { t('continue') }
               </Typography>
               )
-              : confirmButton
-            }
+              : confirmButton}
           </span>
         </Button>
         {

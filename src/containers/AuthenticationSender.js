@@ -4,7 +4,6 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { AuthenticationSender } from '../components/AuthenticationSender';
 
-
 /**
  * mapStateToProps - to hook up connect
  * @memberof App

@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-
 /**
  * Opens a new window for click
  */

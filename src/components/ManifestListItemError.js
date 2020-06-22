@@ -51,7 +51,6 @@ export class ManifestListItemError extends Component {
   }
 }
 
-
 ManifestListItemError.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   manifestId: PropTypes.string.isRequired,

@@ -12,7 +12,6 @@ import ErrorContent from '../containers/ErrorContent';
 import WindowAuthenticationControl from '../containers/WindowAuthenticationControl';
 import { PluginHook } from './PluginHook';
 
-
 /**
  * Represents a Window in the mirador workspace
  * @param {object} window
@@ -85,7 +84,8 @@ export class Window extends Component {
         id={windowId}
         className={
           cn(classes.window, ns('window'),
-            maximized ? classes.maximized : null)}
+            maximized ? classes.maximized : null)
+}
         aria-label={t('window', { label })}
       >
         {this.wrappedTopBar()}

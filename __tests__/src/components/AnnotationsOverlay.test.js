@@ -15,7 +15,6 @@ jest.mock('react-dom');
 jest.mock('openseadragon');
 jest.mock('../../../src/lib/OpenSeadragonCanvasOverlay');
 
-
 describe('AnnotationsOverlay', () => {
   let wrapper;
   let viewer;

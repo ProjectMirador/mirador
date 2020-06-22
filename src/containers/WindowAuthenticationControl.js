@@ -13,7 +13,6 @@ import {
 } from '../state/selectors';
 import { WindowAuthenticationControl } from '../components/WindowAuthenticationControl';
 
-
 /**
  * mapStateToProps - to hook up connect
  * @memberof App

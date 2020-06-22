@@ -21,7 +21,6 @@ export class CompanionWindow extends Component {
     return {};
   }
 
-
   /** */
   resizeHandles() {
     const { direction, position } = this.props;
@@ -35,7 +34,6 @@ export class CompanionWindow extends Component {
         opposite: 'left',
       },
     };
-
 
     const base = {
       bottom: false,
@@ -87,7 +85,6 @@ export class CompanionWindow extends Component {
         },
       );
     });
-
 
     return (
       <Paper

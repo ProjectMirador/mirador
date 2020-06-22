@@ -47,7 +47,6 @@ export class WorkspaceArea extends Component {
   }
 }
 
-
 WorkspaceArea.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   controlPanelVariant: PropTypes.string,

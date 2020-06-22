@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import { SearchResults } from '../../../src/components/SearchResults';
 import { ScrollTo } from '../../../src/components/ScrollTo';
 
-
 /**
  * Helper function to create a shallow wrapper around SearchResults
  */

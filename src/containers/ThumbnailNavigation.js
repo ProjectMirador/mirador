@@ -56,7 +56,6 @@ const styles = theme => ({
   },
 });
 
-
 const enhance = compose(
   withStyles(styles),
   withTranslation(),

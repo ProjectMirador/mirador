@@ -40,7 +40,8 @@ export class WindowCanvasNavigationControls extends Component {
             classes.canvasNav,
             this.canvasNavControlsAreStacked() ? ns('canvas-nav-stacked') : null,
             this.canvasNavControlsAreStacked() ? classes.canvasNavStacked : null,
-          )}
+          )
+}
         elevation={0}
       >
         <ZoomControls
@@ -56,7 +57,6 @@ export class WindowCanvasNavigationControls extends Component {
     );
   }
 }
-
 
 WindowCanvasNavigationControls.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),

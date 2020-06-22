@@ -16,7 +16,6 @@ import {
 } from '../state/selectors';
 import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
 
-
 /**
  * mapDispatchToProps - used to hook up connect to action creators
  * @memberof WindowSideButtons

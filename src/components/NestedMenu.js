@@ -46,9 +46,7 @@ export class NestedMenu extends Component {
     return (
       <>
         <MenuItem onClick={this.handleMenuClick} divider={nestedMenuIsOpen} {...otherProps}>
-          {icon
-            && (<ListItemIcon>{icon}</ListItemIcon>)
-          }
+          {icon && (<ListItemIcon>{icon}</ListItemIcon>)}
           <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
             {label}
           </ListItemText>

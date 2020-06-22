@@ -31,7 +31,8 @@ export class MinimalWindow extends Component {
         elevation={1}
         id={windowId}
         className={
-          cn(classes.window, ns('placeholder-window'))}
+          cn(classes.window, ns('placeholder-window'))
+        }
         aria-label={t('window', { label })}
       >
         <AppBar position="relative" color="default">

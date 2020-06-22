@@ -1,4 +1,3 @@
-
 /**
  * MiradorCanvas - adds additional, testable logic around Manifesto's Manifest
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html

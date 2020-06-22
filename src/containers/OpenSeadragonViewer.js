@@ -71,5 +71,4 @@ const enhance = compose(
   withPlugins('OpenSeadragonViewer'),
 );
 
-
 export default enhance(OpenSeadragonViewer);

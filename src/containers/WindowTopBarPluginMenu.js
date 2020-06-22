@@ -15,7 +15,6 @@ const mapStateToProps = state => ({
   containerId: getContainerId(state),
 });
 
-
 /**
  *
  * @param theme

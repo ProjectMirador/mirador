@@ -1,4 +1,3 @@
-
 // Setup Jest to mock fetch
 
 import { JSDOM } from 'jsdom'; // eslint-disable-line import/no-extraneous-dependencies

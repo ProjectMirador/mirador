@@ -3,7 +3,6 @@ import { shallow } from 'enzyme';
 import { SearchHit } from '../../../src/components/SearchHit';
 import { ScrollTo } from '../../../src/components/ScrollTo';
 
-
 /**
  * Helper function to create a shallow wrapper around SearchResults
  */

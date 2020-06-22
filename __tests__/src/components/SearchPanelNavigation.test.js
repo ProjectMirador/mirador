@@ -2,7 +2,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { SearchPanelNavigation } from '../../../src/components/SearchPanelNavigation';
 
-
 /**
  * Helper function to create a shallow wrapper around SearchPanelNavigation
  */

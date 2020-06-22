@@ -10,7 +10,6 @@ const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
 
 jest.mock('openseadragon');
 
-
 describe('OpenSeadragonViewer', () => {
   let wrapper;
   let updateViewport;

@@ -22,7 +22,6 @@ const mapStateToProps = (state, { windowId }) => ({
   selectedCanvases: getVisibleCanvases(state, { windowId }),
 });
 
-
 /** */
 const styles = theme => ({
   section: {

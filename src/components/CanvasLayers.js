@@ -260,7 +260,6 @@ export class CanvasLayers extends Component {
   }
 }
 
-
 CanvasLayers.propTypes = {
   canvas: PropTypes.shape({
     id: PropTypes.string,

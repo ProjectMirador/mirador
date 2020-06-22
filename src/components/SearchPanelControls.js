@@ -80,7 +80,6 @@ export class SearchPanelControls extends Component {
     this.setState({ suggestions: json.terms });
   }
 
-
   /** */
   submitSearch(event) {
     const {

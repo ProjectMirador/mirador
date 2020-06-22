@@ -249,7 +249,6 @@ describe('window actions', () => {
     });
   });
 
-
   describe('setWindowThumbnailPosition', () => {
     it('returns the appropriate action type', () => {
       const id = 'abc123';

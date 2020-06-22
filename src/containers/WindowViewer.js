@@ -1,5 +1,4 @@
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { WindowViewer } from '../components/WindowViewer';
 
