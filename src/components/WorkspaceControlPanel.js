@@ -25,7 +25,7 @@ export class WorkspaceControlPanel extends Component {
         color="default"
         position="absolute"
         component="nav"
-        aria-label={t('workspace')}
+        aria-label={t('workspaceNavigation')}
       >
         <Toolbar disableGutters className={classes.toolbar}>
           <WorkspaceAddButton />
