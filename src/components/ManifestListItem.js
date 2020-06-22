@@ -5,7 +5,7 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
-import Img from 'react-image';
+import { Img } from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
 import ns from '../config/css-ns';
 
