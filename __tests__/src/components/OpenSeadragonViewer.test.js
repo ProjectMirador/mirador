@@ -232,10 +232,13 @@ describe('OpenSeadragonViewer', () => {
     let panTo;
     let zoomTo;
     let addHandler;
+    let innerTracker;
+
     beforeEach(() => {
       panTo = jest.fn();
       zoomTo = jest.fn();
       addHandler = jest.fn();
+      innerTracker = {};
 
       wrapper = shallow(
         <OpenSeadragonViewer
@@ -257,6 +260,7 @@ describe('OpenSeadragonViewer', () => {
       OpenSeadragon.mockImplementation(() => ({
         addHandler,
         addTiledImage: jest.fn().mockResolvedValue('event'),
+        innerTracker,
         viewport: { panTo, zoomTo },
       }));
     });
@@ -278,6 +282,12 @@ describe('OpenSeadragonViewer', () => {
       expect(addHandler).toHaveBeenCalledWith('animation-start', expect.anything());
       expect(addHandler).toHaveBeenCalledWith('animation-finish', expect.anything());
       expect(addHandler).toHaveBeenCalledWith('animation-finish', wrapper.instance().onViewportChange);
+    });
+
+    it('adds a mouse-move handler', () => {
+      wrapper.instance().componentDidMount();
+
+      expect(innerTracker.moveHandler).toEqual(wrapper.instance().onCanvasMouseMove);
     });
   });
 
@@ -350,6 +360,18 @@ describe('OpenSeadragonViewer', () => {
           flip: false, rotation: 90, x: 1, y: 0, zoom: 0.5,
         },
       );
+    });
+  });
+
+  describe('onCanvasMouseMove', () => {
+    it('triggers an OSD event', () => {
+      const viewer = { raiseEvent: jest.fn() };
+      wrapper.setState({ viewer });
+
+      wrapper.instance().onCanvasMouseMove('event');
+      wrapper.instance().onCanvasMouseMove.flush();
+
+      expect(viewer.raiseEvent).toHaveBeenCalledWith('mouse-move', 'event');
     });
   });
 });
