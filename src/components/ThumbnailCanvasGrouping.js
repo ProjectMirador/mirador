@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 import ns from '../config/css-ns';
 
-
 /** */
 export class ThumbnailCanvasGrouping extends PureComponent {
   /** */

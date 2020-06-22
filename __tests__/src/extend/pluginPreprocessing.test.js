@@ -3,7 +3,6 @@ import {
   addPluginReducersToStore,
 } from '../../../src/extend/pluginPreprocessing';
 
-
 describe('filterValidPlugins', () => {
   it('returns empty array if plugin array is empty', () => {
     expect(filterValidPlugins([])).toEqual([]);

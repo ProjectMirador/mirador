@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import ns from '../config/css-ns';
 
-
 /**
  * Renders label/value pair metadata in a dl
  * @prop {object} labelValuePair

@@ -14,7 +14,6 @@ const mapStateToProps = (state, { windowId }) => ({
   manifestTitle: getManifestTitle(state, { windowId }),
 });
 
-
 /**
  * @param theme
  */

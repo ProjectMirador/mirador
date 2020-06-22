@@ -5,7 +5,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 
-
 /**
  * Provide a locale picker
  */
@@ -50,7 +49,6 @@ export class LocalePicker extends Component {
     );
   }
 }
-
 
 LocalePicker.propTypes = {
   availableLocales: PropTypes.arrayOf(PropTypes.string),

@@ -99,7 +99,6 @@ WindowTopBarPluginMenu.propTypes = {
   windowId: PropTypes.string.isRequired,
 };
 
-
 WindowTopBarPluginMenu.defaultProps = {
   classes: {},
   menuIcon: <MoreVertIcon />,

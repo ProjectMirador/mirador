@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NewWindow } from './NewWindow';
 
-
 /**
  * Opens a new window for click
  */

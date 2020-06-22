@@ -13,7 +13,6 @@ function createWrapper(props) {
   );
 }
 
-
 describe('ManifestForm', () => {
   it('renders', () => {
     const wrapper = createWrapper({ addResourcesOpen: false });

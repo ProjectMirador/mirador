@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import Img from 'react-image';
+import { Img } from 'react-image';
 import { AttributionPanel } from '../../../src/components/AttributionPanel';
 import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
 

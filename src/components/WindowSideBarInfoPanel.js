@@ -7,7 +7,6 @@ import ManifestInfo from '../containers/ManifestInfo';
 import ManifestRelatedLinks from '../containers/ManifestRelatedLinks';
 import ns from '../config/css-ns';
 
-
 /**
  * WindowSideBarInfoPanel
  */

@@ -13,7 +13,6 @@ import {
 } from '../state/selectors';
 import * as actions from '../state/actions';
 
-
 /**
  * mapStateToProps - to hook up connect
  */

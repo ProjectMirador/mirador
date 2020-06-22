@@ -5,7 +5,6 @@ import * as actions from '../state/actions';
 import { getTheme } from '../state/selectors';
 import { AppProviders } from '../components/AppProviders';
 
-
 /**
  * mapStateToProps - to hook up connect
  * @memberof App

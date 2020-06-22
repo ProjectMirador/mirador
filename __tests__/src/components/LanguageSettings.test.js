@@ -32,7 +32,6 @@ describe('LanguageSettings', () => {
     },
   ];
 
-
   it('renders a list with a list item for each language passed in props', () => {
     wrapper = createWrapper({ languages });
 

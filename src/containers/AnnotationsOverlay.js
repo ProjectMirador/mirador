@@ -59,5 +59,4 @@ const enhance = compose(
   withPlugins('AnnotationsOverlay'),
 );
 
-
 export default enhance(AnnotationsOverlay);

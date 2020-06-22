@@ -79,7 +79,6 @@ describe('getVisibleNodeIds', () => {
     ]));
     expect(visibleNodeIdsForPrezi2.length).toBe(2);
 
-
     const prezi3XYWHFragmentState = setIn(prezi3State, ['windows', 'w1', 'visibleCanvases'], ['http://foo.test/1/canvas/c3']);
     const visibleNodeIdsForXYWHFragment = getVisibleNodeIds(prezi3XYWHFragmentState, { windowId: 'w1' });
     expect(visibleNodeIdsForXYWHFragment).toEqual(expect.arrayContaining([

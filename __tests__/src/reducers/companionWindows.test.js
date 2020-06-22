@@ -51,7 +51,6 @@ describe('companionWindowsReducer', () => {
     });
   });
 
-
   describe('UPDATE_COMPANION_WINDOW', () => {
     it('updates an existing companion window', () => {
       const action = {

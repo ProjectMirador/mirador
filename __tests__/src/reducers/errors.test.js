@@ -1,4 +1,3 @@
-
 import { errorsReducer } from '../../../src/state/reducers/errors';
 import ActionTypes from '../../../src/state/actions/action-types';
 

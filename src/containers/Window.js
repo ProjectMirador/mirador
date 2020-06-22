@@ -10,7 +10,6 @@ import {
   getWorkspaceType, getWindowDraggability, getWindowViewType, getManifestError,
 } from '../state/selectors';
 
-
 /**
  * mapStateToProps - used to hook up connect to action creators
  * @memberof Window

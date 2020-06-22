@@ -41,7 +41,6 @@ describe('CanvasAnnotations', () => {
     },
   ];
 
-
   it('renders a heading with the appropriate context based on index and totalSize', () => {
     wrapper = createWrapper({ annotations });
 

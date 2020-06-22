@@ -31,7 +31,6 @@ const getPresentAnnotationsCanvas = createSelector(
   ),
 );
 
-
 const getAnnotationsOnSelectedCanvases = createSelector(
   [
     getVisibleCanvasIds,

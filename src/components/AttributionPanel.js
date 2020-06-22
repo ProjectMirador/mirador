@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Skeleton from '@material-ui/lab/Skeleton';
-import Img from 'react-image';
+import { Img } from 'react-image';
 import CompanionWindow from '../containers/CompanionWindow';
 import { LabelValueMetadata } from './LabelValueMetadata';
 import ns from '../config/css-ns';

@@ -3,7 +3,6 @@ import { mount } from 'enzyme';
 import { withPlugins } from '../../../src/extend/withPlugins';
 import PluginContext from '../../../src/extend/PluginContext';
 
-
 /** Mock target component */
 const Target = props => <div>Hello</div>;
 

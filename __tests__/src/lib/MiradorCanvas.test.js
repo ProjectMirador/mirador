@@ -1,7 +1,6 @@
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import MiradorCanvas from '../../../src/lib/MiradorCanvas';
 import fixture from '../../fixtures/version-2/019.json';
-import v3fixture from '../../fixtures/version-3/001.json';
 import serviceFixture from '../../fixtures/version-2/canvasService.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
 import otherContentStringsFixture from '../../fixtures/version-2/BibliographicResource_3000126341277.json';
@@ -9,13 +8,9 @@ import fragmentFixture from '../../fixtures/version-2/hamilton.json';
 
 describe('MiradorCanvas', () => {
   let instance;
-  let v3Instance;
   beforeAll(() => {
     instance = new MiradorCanvas(
       Utils.parseManifest(fixture).getSequences()[0].getCanvases()[0],
-    );
-    v3Instance = new MiradorCanvas(
-      Utils.parseManifest(v3fixture).getSequences()[0].getCanvases()[0],
     );
   });
   describe('annotationListUris', () => {

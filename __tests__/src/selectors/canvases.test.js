@@ -314,7 +314,6 @@ describe('selectNextAuthService', () => {
   });
 });
 
-
 describe('selectCanvasAuthService', () => {
   const resource = {
     service: [

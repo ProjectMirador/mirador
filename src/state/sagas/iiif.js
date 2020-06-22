@@ -210,7 +210,6 @@ export function* refetchInfoResponses({ serviceId }) {
   yield put({ serviceId, type: ActionTypes.CLEAR_ACCESS_TOKEN_QUEUE });
 }
 
-
 /** */
 export default function* iiifSaga() {
   yield all([

@@ -13,7 +13,6 @@ import { create } from 'jss';
 import rtl from 'jss-rtl';
 import createI18nInstance from '../i18n';
 
-
 /**
  * Allow applications to opt-out of (or provide their own) drag and drop context
  */

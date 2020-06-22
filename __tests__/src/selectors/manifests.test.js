@@ -405,7 +405,6 @@ describe('getManifestAutocompleteService', () => {
     expect(getManifestAutocompleteService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/autocomplete');
   });
 
-
   it('is null if no search service is specified', () => {
     const state = { manifests: { x: { json: manifestFixture019 } } };
     expect(getManifestAutocompleteService(state, { manifestId: 'x' })).toBeNull();

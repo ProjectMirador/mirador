@@ -44,7 +44,6 @@ export class WorkspaceExport extends Component {
     return JSON.stringify(exportableState, null, 2);
   }
 
-
   /**
    * render
    * @return

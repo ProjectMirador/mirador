@@ -287,7 +287,6 @@ describe('getSelectedContentSearchAnnotationIds', () => {
   });
 });
 
-
 describe('getResourceAnnotationForSearchHit', () => {
   const companionWindowId = 'cwid';
   const annoId = 'annoId2';
