@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Backdrop from '@material-ui/core/Backdrop';
+import InsertDriveFileSharpIcon from '@material-ui/icons/InsertDriveFileSharp';
+import { grey } from '@material-ui/core/colors';
 import { v4 as uuid } from 'uuid';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { useDrop } from 'react-dnd';
@@ -105,12 +108,15 @@ export const IIIFDropTarget = (props) => {
       handleDrop(item, monitor, props);
     },
   });
-  // TODO: give some indication the app receives drops
-  const isActive = canDrop && isOver; // eslint-disable-line no-unused-vars
+
+  const isActive = canDrop && isOver;
 
   return (
     <div ref={drop}>
       {children}
+      <Backdrop open={isActive} style={{ zIndex: 9999 }}>
+        <InsertDriveFileSharpIcon style={{ color: grey[400], fontSize: 256 }} />
+      </Backdrop>
     </div>
   );
 };
