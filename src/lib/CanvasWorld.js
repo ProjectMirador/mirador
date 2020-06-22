@@ -89,6 +89,8 @@ export default class CanvasWorld {
       c.imageResources.find(r => r.id === contentResource.id)
     ));
     const canvas = this.canvases[miradorCanvasIndex];
+    if (!canvas) return [];
+
     const [x, y, w, h] = this.canvasToWorldCoordinates(canvas.id);
 
     const fragmentOffset = canvas.onFragment(contentResource.id);
