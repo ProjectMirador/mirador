@@ -31,23 +31,6 @@ describe('annotation actions', () => {
       expect(actions.receiveAnnotation(targetId, annotationId, json)).toEqual(expectedAction);
     });
   });
-  describe('fetchAnnotation', () => {
-    describe('success response', () => {
-      beforeEach(() => {
-        fetch.mockResponseOnce(JSON.stringify({ data: '12345' })); // eslint-disable-line no-undef
-      });
-      it('dispatches the REQUEST_ANNOTATION action', () => {
-        expect(actions.fetchAnnotation(
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-          'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-        )).toEqual({
-          annotationId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/list/47174896',
-          targetId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174896',
-          type: 'mirador/REQUEST_ANNOTATION',
-        });
-      });
-    });
-  });
 
   it('handles the selectAnnotation action', () => {
     const windowId = 'wId1';

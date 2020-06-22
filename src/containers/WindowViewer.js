@@ -3,19 +3,13 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { WindowViewer } from '../components/WindowViewer';
-import { getVisibleCanvases } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
  * @memberof WindowViewer
  * @private
  */
-const mapStateToProps = (state, { windowId }) => (
-  {
-    currentCanvases: getVisibleCanvases(state, { windowId }) || [],
-    infoResponses: state.infoResponses,
-  }
-);
+const mapStateToProps = (state, { windowId }) => ({});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

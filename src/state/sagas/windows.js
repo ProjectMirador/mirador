@@ -3,6 +3,7 @@ import {
 } from 'redux-saga/effects';
 import ActionTypes from '../actions/action-types';
 import MiradorManifest from '../../lib/MiradorManifest';
+import MiradorCanvas from '../../lib/MiradorCanvas';
 import {
   setContentSearchCurrentAnnotation,
   selectAnnotation,
@@ -11,6 +12,7 @@ import {
   setCanvas,
   fetchSearch,
   receiveManifest,
+  fetchInfoResponse,
 } from '../actions';
 import {
   getSearchForWindow, getSearchAnnotationsForCompanionWindow,
@@ -22,6 +24,8 @@ import {
   getVisibleCanvasIds,
   getWorkspace,
   getElasticLayout,
+  getCanvases,
+  selectInfoResponses,
 } from '../selectors';
 import { fetchManifest } from './iiif';
 
@@ -183,12 +187,28 @@ export function* setCanvasforSelectedAnnotation({ annotationId, windowId }) {
   yield put(thunk);
 }
 
+/** Fetch info responses for the visible canvases */
+export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowId }) {
+  const canvases = yield select(getCanvases, { windowId });
+  const infoResponses = yield select(selectInfoResponses);
+  const visibleCanvases = (canvases || []).filter(c => visibleCanvasIds.includes(c.id));
+
+  yield all(visibleCanvases.map((canvas) => {
+    const miradorCanvas = new MiradorCanvas(canvas);
+    return all(miradorCanvas.iiifImageResources.map(imageResource => (
+      !infoResponses[imageResource.getServices()[0].id]
+        && put(fetchInfoResponse({ imageResource }))
+    )).filter(Boolean));
+  }));
+}
+
 /** */
 export default function* windowsSaga() {
   yield all([
     takeEvery(ActionTypes.ADD_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.SET_CANVAS, setCurrentAnnotationsOnCurrentCanvas),
+    takeEvery(ActionTypes.SET_CANVAS, fetchInfoResponses),
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
     takeEvery(ActionTypes.RECEIVE_SEARCH, setCanvasOfFirstSearchResult),
     takeEvery(ActionTypes.SELECT_ANNOTATION, setCanvasforSelectedAnnotation),

@@ -50,16 +50,6 @@ export function receiveAnnotationFailure(targetId, annotationId, error) {
 }
 
 /**
- * fetchAnnotation - action creator
- *
- * @param  {String} annotationId
- * @memberof ActionCreators
- */
-export function fetchAnnotation(targetId, annotationId) {
-  return requestAnnotation(targetId, annotationId);
-}
-
-/**
  * selectAnnotation - action creator
  *
  * @param  {String} windowId

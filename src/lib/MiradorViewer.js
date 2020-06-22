@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { v4 as uuid } from 'uuid';
 import HotApp from '../components/App';
 import createStore from '../state/createStore';
 import * as actions from '../state/actions';
@@ -46,22 +45,6 @@ class MiradorViewer {
     /** merge type for arrays */
     const action = actions.importConfig(this.config);
     this.store.dispatch(action);
-    const { config: storedConfig } = this.store.getState();
-
-    storedConfig.windows.forEach((miradorWindow, layoutOrder) => {
-      const windowId = `window-${uuid()}`;
-      const manifestId = miradorWindow.manifestId || miradorWindow.loadedManifest;
-
-      this.store.dispatch(actions.addWindow({
-        // these are default values ...
-        id: windowId,
-        layoutOrder,
-        manifestId,
-        thumbnailNavigationPosition: storedConfig.thumbnailNavigation.defaultPosition,
-        // ... overridden by values from the window configuration ...
-        ...miradorWindow,
-      }));
-    });
   }
 }
 

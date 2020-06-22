@@ -13,6 +13,7 @@ import {
   getSelectedContentSearchAnnotationIds,
   getSortedSearchAnnotationsForCompanionWindow,
   getVisibleCanvasIds, getCanvasForAnnotation,
+  getCanvases, selectInfoResponses,
 } from '../../../src/state/selectors';
 import { fetchManifest } from '../../../src/state/sagas/iiif';
 import {
@@ -25,6 +26,7 @@ import {
   setCanvasforSelectedAnnotation,
   panToFocusedWindow,
   setCurrentAnnotationsOnCurrentCanvas,
+  fetchInfoResponses,
 } from '../../../src/state/sagas/windows';
 import fixture from '../../fixtures/version-2/019.json';
 
@@ -396,6 +398,52 @@ describe('window-level sagas', () => {
           [select(getCanvasForAnnotation, { annotationId, windowId }), null],
         ])
         .run().then(({ allEffects }) => allEffects.length === 0);
+    });
+  });
+
+  describe('fetchInfoResponses', () => {
+    it('requests info responses for each visible canvas', () => {
+      const action = {
+        visibleCanvases: ['http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json'],
+        windowId: 'foo',
+      };
+
+      const manifest = Utils.parseManifest(fixture);
+
+      return expectSaga(fetchInfoResponses, action)
+        .provide([
+          [select(getCanvases, { windowId: 'foo' }), manifest.getSequences()[0].getCanvases()],
+          [select(selectInfoResponses), {}],
+        ])
+        .put.like({
+          action: {
+            infoId: 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44',
+            type: 'mirador/REQUEST_INFO_RESPONSE',
+          },
+        })
+        .run();
+    });
+
+    it('requests nothing if the response is  already in the store', () => {
+      const action = {
+        visibleCanvases: ['http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json'],
+        windowId: 'foo',
+      };
+
+      const manifest = Utils.parseManifest(fixture);
+
+      return expectSaga(fetchInfoResponses, action)
+        .provide([
+          [select(getCanvases, { windowId: 'foo' }), manifest.getSequences()[0].getCanvases()],
+          [select(selectInfoResponses), { 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44': {} }],
+        ])
+        .not.put.like({
+          action: {
+            infoId: 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44',
+            type: 'mirador/REQUEST_INFO_RESPONSE',
+          },
+        })
+        .run();
     });
   });
 });
