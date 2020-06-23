@@ -4,19 +4,23 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getWindow } from '../state/selectors';
+import { getWindowConfig } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';
 
 /** mapStateToProps */
-const mapStateToProps = (state, { windowId }) => ({
-  allowClose: state.config.window.allowClose,
-  allowFullscreen: state.config.window.allowFullscreen,
-  allowMaximize: state.config.window.allowMaximize,
-  allowTopMenuButton: state.config.window.allowTopMenuButton,
-  allowWindowSideBar: state.config.window.allowWindowSideBar,
-  focused: state.workspace.focusedWindowId === windowId,
-  maximized: (getWindow(state, { windowId }) || {}).maximized,
-});
+const mapStateToProps = (state, { windowId }) => {
+  const config = getWindowConfig;
+
+  return {
+    allowClose: config.allowClose,
+    allowFullscreen: config.allowFullscreen,
+    allowMaximize: config.allowMaximize,
+    allowTopMenuButton: config.allowTopMenuButton,
+    allowWindowSideBar: config.allowWindowSideBar,
+    focused: state.workspace.focusedWindowId === windowId,
+    maximized: config.maximized,
+  };
+};
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

@@ -2,10 +2,16 @@ import { createSelector } from 'reselect';
 import {
   getManifestTitle,
 } from './manifests';
-import { getDefaultView, getViewConfigs } from './config';
+import { getConfig } from './config';
 import { getWindows, getWindow } from './getters';
 import { getWorkspaceType } from './workspace';
 import { getSequenceViewingHint, getSequenceBehaviors } from './sequences';
+
+/** */
+export const getWindowConfig = createSelector(
+  [getConfig, getWindow],
+  ({ window: defaultConfig }, windowConfig) => ({ ...defaultConfig, ...windowConfig }),
+);
 
 /**
  * Return the manifest titles for all open windows
@@ -40,15 +46,14 @@ export const getMaximizedWindowsIds = createSelector(
 export const getWindowViewType = createSelector(
   [
     getWindow,
+    getWindowConfig,
     getSequenceViewingHint,
     getSequenceBehaviors,
-    getDefaultView,
-    getViewConfigs,
   ],
-  (window, manifestViewingHint, manifestBehaviors, defaultView, viewConfig) => {
+  (window, { views = [], defaultView }, manifestViewingHint, manifestBehaviors) => {
     if (window && window.view) return window.view;
 
-    const config = viewConfig.find(view => (
+    const config = (views || []).find(view => (
       view.behaviors
       && view.behaviors.some(b => manifestViewingHint === b || manifestBehaviors.includes(b))
     ));
@@ -62,11 +67,10 @@ export const getAllowedWindowViewTypes = createSelector(
   [
     getSequenceViewingHint,
     getSequenceBehaviors,
-    getDefaultView,
-    getViewConfigs,
+    getWindowConfig,
   ],
-  (manifestViewingHint, manifestBehaviors, defaultView, viewConfig) => (
-    viewConfig.reduce((allowedViews, view) => {
+  (manifestViewingHint, manifestBehaviors, { views = [], defaultView }) => (
+    (views || []).reduce((allowedViews, view) => {
       if (
         view.key === defaultView
         || !view.behaviors

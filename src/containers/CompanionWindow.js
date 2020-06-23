@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core';
 import { withSize } from 'react-sizeme';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getCompanionWindow, getThemeDirection } from '../state/selectors';
+import { getCompanionWindow, getThemeDirection, getWindowConfig } from '../state/selectors';
 import { CompanionWindow } from '../components/CompanionWindow';
 
 /**
@@ -15,7 +15,9 @@ import { CompanionWindow } from '../components/CompanionWindow';
  */
 const mapStateToProps = (state, { id, windowId }) => {
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
-  const { defaultSidebarPanelHeight, defaultSidebarPanelWidth } = state.config.window;
+  const {
+    defaultSidebarPanelHeight, defaultSidebarPanelWidth,
+  } = getWindowConfig(state, { windowId });
 
   return {
     ...companionWindow,

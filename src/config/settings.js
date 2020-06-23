@@ -246,14 +246,14 @@ export default {
   },
   translations: { // Translations can be added to inject new languages or override existing labels
   },
-  window: {
+  window: { //global window defaults
     allowClose: true, // Configure if windows can be closed or not
     allowFullscreen: false, // Configure to show a "fullscreen" button in the WindowTopBar
     allowMaximize: true, // Configure if windows can be maximized or not
     allowTopMenuButton: true, // Configure if window view and thumbnail display menu are visible or not
     allowWindowSideBar: true, // Configure if side bar menu is visible or not
     authNewWindowCenter: 'parent', // Configure how to center a new window created by the authentication flow. Options: parent, screen
-    defaultSideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations, search
+    sideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations, search
     defaultSidebarPanelHeight: 201,  // Configure default sidebar height in pixels
     defaultSidebarPanelWidth: 235, // Configure default sidebar width in pixels
     defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
@@ -261,7 +261,7 @@ export default {
     hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
     highlightAllAnnotations: false, // Configure whether to display annotations on the canvas by default
     showLocalePicker: false, // Configure locale picker for multi-lingual metadata
-    sideBarOpenByDefault: false, // Configure if the sidebar (and its content panel) is open by default
+    sideBarOpen: false, // Configure if the sidebar (and its content panel) is open by default
     panels: { // Configure which panels are visible in WindowSideBarButtons
       info: true,
       attribution: true,
@@ -295,6 +295,7 @@ export default {
   },
   workspace: {
     draggingEnabled: true,
+    allowNewWindows: true,
     id: uuid(),
     exposeModeOn: false, // unused?
     height: 5000, // height of the elastic mode's virtual canvas
