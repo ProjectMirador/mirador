@@ -58,30 +58,44 @@ const baseConfig = mode => ({
 
 module.exports = (env, options) => {
   const isProduction = options.mode === 'production';
+  const config = baseConfig(options.mode);
 
   if (isProduction) {
-    return {
-      ...baseConfig(options.mode),
+    const prodConfig = {
+      ...config,
       devtool: 'source-map',
       mode: 'production',
       plugins: [
-        ...(baseConfig.plugins || []),
+        ...(config.plugins || []),
         new webpack.optimize.LimitChunkCountPlugin({
           maxChunks: 1,
         }),
       ],
     };
+
+    return [
+      prodConfig,
+      {
+        ...prodConfig,
+        entry: ['./src/polyfills.js', './src/state/index.js'],
+        output: {
+          ...prodConfig.output,
+          filename: 'mirador-state.min.js',
+          library: 'MiradorState',
+        },
+      },
+    ];
   }
 
   return {
-    ...baseConfig(options.mode),
+    ...config,
     devServer: {
       contentBase: './__tests__/integration/mirador',
       hot: true,
       port: 4444,
     },
     devtool: 'eval-source-map',
-    entry: ['react-hot-loader/patch', ...baseConfig(options.mode).entry],
+    entry: ['react-hot-loader/patch', ...config.entry],
     mode: 'development',
   };
 };
