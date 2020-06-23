@@ -3,12 +3,28 @@ import manifestFixture002 from '../../fixtures/version-2/002.json';
 import manifestFixture015 from '../../fixtures/version-2/015.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import {
+  getWindowConfig,
   getWindowTitles,
   getWindowViewType,
   getWindowDraggability,
   getMaximizedWindowsIds,
   getAllowedWindowViewTypes,
 } from '../../../src/state/selectors/windows';
+
+describe('getWindowConfig', () => {
+  it('merges the current window with the global defaults', () => {
+    const state = {
+      config: {
+        window: { a: '1', b: '2' },
+      },
+      windows: {
+        a: { b: '3', c: '4' },
+      },
+    };
+
+    expect(getWindowConfig(state, { windowId: 'a' })).toEqual({ a: '1', b: '3', c: '4' });
+  });
+});
 
 describe('getMaximizedWindowsIds', () => {
   it('filters windows to only those maximized', () => {

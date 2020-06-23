@@ -13,6 +13,7 @@ import {
   getManifestSearchService,
   getSearchQuery,
   getWindow,
+  getWindowConfig,
 } from '../state/selectors';
 import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
 
@@ -49,7 +50,7 @@ const mapStateToProps = (state, { windowId }) => ({
     windowId,
   }),
   hasSearchService: getManifestSearchService(state, { windowId }) !== null,
-  panels: state.config.window.panels,
+  panels: getWindowConfig(state, { windowId }).panels,
   sideBarPanel: ((getCompanionWindowsForPosition(state, { position: 'left', windowId }))[0] || {}).content,
 });
 
