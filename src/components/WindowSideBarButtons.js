@@ -131,8 +131,7 @@ export class WindowSideBarButtons extends Component {
               value={PluginComponent.value}
               icon={<PluginComponent />}
             />
-          ))
-        }
+          ))}
       </Tabs>
     );
   }
