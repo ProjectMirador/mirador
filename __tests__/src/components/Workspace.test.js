@@ -123,13 +123,13 @@ describe('Workspace', () => {
       expect(addWindow).toHaveBeenCalledWith({ canvasId, manifest: manifestJson, manifestId });
     });
 
-    it('is a no-op if isWorkspaceControlPanelVisible is off', () => {
+    it('is a no-op if allowNewWindows is off', () => {
       const canvasId = 'canvasId';
       const manifestId = 'manifest.json';
       const manifestJson = { data: '123' };
 
       const addWindow = jest.fn();
-      const wrapper = createWrapper({ addWindow, isWorkspaceControlPanelVisible: false });
+      const wrapper = createWrapper({ addWindow, allowNewWindows: false });
       wrapper.find(IIIFDropTarget).simulate('drop', { canvasId, manifestId, manifestJson });
 
       expect(addWindow).not.toHaveBeenCalled();

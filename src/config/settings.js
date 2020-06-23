@@ -295,6 +295,7 @@ export default {
   },
   workspace: {
     draggingEnabled: true,
+    allowNewWindows: true,
     id: uuid(),
     exposeModeOn: false, // unused?
     height: 5000, // height of the elastic mode's virtual canvas

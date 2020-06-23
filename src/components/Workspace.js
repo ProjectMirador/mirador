@@ -24,9 +24,9 @@ export class Workspace extends React.Component {
 
   /** */
   handleDrop({ canvasId, manifestId, manifestJson }, props, monitor) {
-    const { addWindow, isWorkspaceControlPanelVisible } = this.props;
+    const { addWindow, allowNewWindows } = this.props;
 
-    if (!isWorkspaceControlPanelVisible) return;
+    if (!allowNewWindows) return;
 
     addWindow({ canvasId, manifest: manifestJson, manifestId });
   }
@@ -131,6 +131,7 @@ export class Workspace extends React.Component {
 
 Workspace.propTypes = {
   addWindow: PropTypes.func,
+  allowNewWindows: PropTypes.bool,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   maximizedWindowIds: PropTypes.arrayOf(PropTypes.string),
@@ -142,6 +143,7 @@ Workspace.propTypes = {
 
 Workspace.defaultProps = {
   addWindow: () => {},
+  allowNewWindows: true,
   maximizedWindowIds: [],
   windowIds: [],
 };
