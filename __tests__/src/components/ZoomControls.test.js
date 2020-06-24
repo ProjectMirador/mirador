@@ -51,14 +51,14 @@ describe('ZoomControls', () => {
       const button = wrapper.find({ 'aria-label': 'zoomIn' }).first();
       button.props().onClick(); // Trigger the onClick prop
       expect(updateViewport).toHaveBeenCalledTimes(1);
-      expect(updateViewport).toHaveBeenCalledWith('xyz', { x: 100, y: 100, zoom: 2 });
+      expect(updateViewport).toHaveBeenCalledWith('xyz', { zoom: 2 });
     });
 
     it('has a zoom-out button', () => {
       const button = wrapper.find({ 'aria-label': 'zoomOut' }).first();
       button.props().onClick(); // Trigger the onClick prop
       expect(updateViewport).toHaveBeenCalledTimes(1);
-      expect(updateViewport).toHaveBeenCalledWith('xyz', { x: 100, y: 100, zoom: 0.5 });
+      expect(updateViewport).toHaveBeenCalledWith('xyz', { zoom: 0.5 });
     });
 
     it('has a zoom reset button', () => {

@@ -10,6 +10,7 @@ export const viewersReducer = (state = {}, action) => {
       return {
         ...state,
         [action.windowId]: {
+          ...state[action.windowId],
           ...action.payload,
         },
       };

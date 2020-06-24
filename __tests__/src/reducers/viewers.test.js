@@ -5,6 +5,7 @@ describe('viewers reducer', () => {
   it('should handle UPDATE_VIEWPORT', () => {
     expect(viewersReducer({
       abc123: {
+        whatever: true,
         x: 1,
       },
       def456: {
@@ -16,6 +17,7 @@ describe('viewers reducer', () => {
       windowId: 'abc123',
     })).toEqual({
       abc123: {
+        whatever: true,
         x: 0,
         y: 1,
         zoom: 0.5,
