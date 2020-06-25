@@ -26,10 +26,18 @@ describe('filterValidPlugins', () => {
         mode: 'wrap',
         name: 'invalid Plugin 1',
       },
-      {
-        name: 'invalid Plugin 2',
-        target: 'missing-mode',
-      },
+      [
+        {
+          name: 'invalid Plugin 2',
+          target: 'missing-mode',
+        },
+        {
+          component: props => null,
+          mode: 'wrap',
+          name: 'valid plugin, grouped with an invalid one',
+          target: 'WindowTopBar',
+        },
+      ],
     ];
     const result = filterValidPlugins(plugins);
     expect(result.map(r => r.name)).toEqual(['valid plugin 1', 'valid plugin 2']);

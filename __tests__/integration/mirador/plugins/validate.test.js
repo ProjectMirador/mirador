@@ -7,7 +7,6 @@ describe('pass valid and invalid plugins to <WorkspaceControlPanelButtons>', () 
 
   it('valid plugins will be applied <WorkspaceControlPanelButtons>', async () => {
     await expect(page).toMatchElement('#valid-plugin-a');
-    await expect(page).toMatchElement('#valid-plugin-b');
   });
 
   it('invalid plugins will not be applied <WorkspaceControlPanelButtons>', async () => {
