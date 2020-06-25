@@ -39,7 +39,9 @@ const mapDispatchToProps = (dispatch, { windowId, id }) => ({
   onCloseClick: () => dispatch(
     actions.removeCompanionWindow(windowId, id),
   ),
-  updateCompanionWindow: (...args) => dispatch(actions.updateCompanionWindow(...args)),
+  updateCompanionWindow: (...args) => dispatch(
+    actions.updateCompanionWindow(windowId, id, ...args),
+  ),
 });
 
 /**
