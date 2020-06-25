@@ -86,13 +86,12 @@
 
       const miradorInstance = Mirador.viewer(config, [
         validPluginA,
-        validPluginB,
         invalidPluginA,
         invalidPluginB,
         invalidPluginC,
         invalidPluginD,
         invalidPluginE,
-        invalidPluginF,
+        [validPluginB, invalidPluginF],
       ]);
 
      </script>

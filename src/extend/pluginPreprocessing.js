@@ -15,13 +15,20 @@ export function addPluginReducersToStore(store, createRootReducer, plugins) {
 
 /** */
 function splitPluginsByValidation(plugins) {
-  const splittedPlugins = { invalidPlugins: [], validPlugins: [] };
-  plugins.forEach(plugin => (
-    validatePlugin(plugin)
-      ? splittedPlugins.validPlugins.push(plugin)
-      : splittedPlugins.invalidPlugins.push(plugin)
-  ));
-  return splittedPlugins;
+  const invalidPlugins = [];
+  const validPlugins = [];
+  plugins.forEach(plugin => {
+    if (Array.isArray(plugin)) {
+      const allValid = plugin.every(p => validatePlugin(p));
+
+      allValid ? validPlugins.push(...plugin) : invalidPlugins.push(...plugin);
+    } else {
+      validatePlugin(plugin)
+        ? validPlugins.push(plugin)
+        : invalidPlugins.push(plugin);
+    }
+  });
+  return { invalidPlugins, validPlugins };
 }
 
 /** */
