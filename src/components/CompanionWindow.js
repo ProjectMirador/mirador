@@ -67,8 +67,8 @@ export class CompanionWindow extends Component {
    */
   render() {
     const {
-      ariaLabel, classes, paperClassName, id, onCloseClick, updateCompanionWindow, isDisplayed,
-      position, t, windowId, title, children, titleControls, size,
+      ariaLabel, classes, paperClassName, onCloseClick, updateCompanionWindow, isDisplayed,
+      position, t, title, children, titleControls, size,
       defaultSidebarPanelWidth, defaultSidebarPanelHeight,
     } = this.props;
 
@@ -128,7 +128,7 @@ export class CompanionWindow extends Component {
                   && (
                     <MiradorMenuButton
                       aria-label={t('openInCompanionWindow')}
-                      onClick={() => { updateCompanionWindow(windowId, id, { position: 'right' }); }}
+                      onClick={() => { updateCompanionWindow({ position: 'right' }); }}
                     >
                       <OpenInNewIcon style={this.openInNewStyle()} />
                     </MiradorMenuButton>
@@ -140,7 +140,7 @@ export class CompanionWindow extends Component {
                         <MiradorMenuButton
                           aria-label={position === 'bottom' ? t('moveCompanionWindowToRight') : t('moveCompanionWindowToBottom')}
                           className={classes.positionButton}
-                          onClick={() => { updateCompanionWindow(windowId, id, { position: position === 'bottom' ? 'right' : 'bottom' }); }}
+                          onClick={() => { updateCompanionWindow({ position: position === 'bottom' ? 'right' : 'bottom' }); }}
                         >
                           <MoveIcon />
                         </MiradorMenuButton>
@@ -188,7 +188,6 @@ CompanionWindow.propTypes = {
   defaultSidebarPanelHeight: PropTypes.number,
   defaultSidebarPanelWidth: PropTypes.number,
   direction: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
   isDisplayed: PropTypes.bool,
   onCloseClick: PropTypes.func,
   paperClassName: PropTypes.string,
@@ -201,7 +200,6 @@ CompanionWindow.propTypes = {
   ]),
   titleControls: PropTypes.node,
   updateCompanionWindow: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
 };
 
 CompanionWindow.defaultProps = {
