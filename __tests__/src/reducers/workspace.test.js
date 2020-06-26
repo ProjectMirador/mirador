@@ -30,12 +30,12 @@ describe('workspace reducer', () => {
     });
   });
   it('should handle ADD_WINDOW', () => {
-    expect(workspaceReducer([], {
+    expect(workspaceReducer({ windowIds: ['asdf'] }, {
       type: ActionTypes.ADD_WINDOW,
       window: { id: 'abc123' },
     })).toEqual({
       focusedWindowId: 'abc123',
-      windowIds: ['abc123'],
+      windowIds: ['asdf', 'abc123'],
     });
   });
   it('should handle REMOVE_WINDOW (by doing nothing if multiple windows remain)', () => {
