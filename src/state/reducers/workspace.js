@@ -46,7 +46,7 @@ export const workspaceReducer = (
       return {
         ...state,
         focusedWindowId: action.window.id,
-        windowIds: [...(state.windows || []), action.window.id],
+        windowIds: [...(state.windowIds || []), action.window.id],
       };
     case ActionTypes.REMOVE_WINDOW:
       newWindowIds = (state.windowIds || []).filter(v => v !== action.windowId);
