@@ -8,6 +8,7 @@ import {
   getAnnotationResourcesByMotivationForCanvas,
   getCanvasLabel,
   getSelectedAnnotationId,
+  getConfig,
 } from '../state/selectors';
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
 
@@ -31,7 +32,7 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
       state, { canvasId, windowId },
     ),
   ),
-  htmlSanitizationRuleSet: state.config.annotations.htmlSanitizationRuleSet,
+  htmlSanitizationRuleSet: getConfig(state).annotations.htmlSanitizationRuleSet,
   label: getCanvasLabel(state, {
     canvasId,
     windowId,

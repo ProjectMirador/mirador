@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
 import * as actions from '../state/actions';
 import WorkspaceElasticWindow from '../components/WorkspaceElasticWindow';
-import { selectCompanionWindowDimensions } from '../state/selectors';
+import {
+  selectCompanionWindowDimensions, getWorkspace,
+  getElasticLayout,
+} from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -14,8 +17,8 @@ const mapStateToProps = (state, { windowId }) => (
   {
     companionWindowDimensions: selectCompanionWindowDimensions(state, { windowId }),
     focused: state.workspace.focusedWindowId === windowId,
-    layout: state.elasticLayout[windowId],
-    workspace: state.workspace,
+    layout: getElasticLayout(state)[windowId],
+    workspace: getWorkspace(state),
   }
 );
 

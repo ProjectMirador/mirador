@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getContainerId, getShowZoomControlsConfig, getThemeIds } from '../state/selectors';
+import {
+  getContainerId, getShowZoomControlsConfig, getThemeIds,
+  getWorkspace,
+} from '../state/selectors';
 import { WorkspaceMenu } from '../components/WorkspaceMenu';
 
 /**
@@ -22,7 +25,7 @@ const mapDispatchToProps = {
  */
 const mapStateToProps = state => ({
   containerId: getContainerId(state),
-  isWorkspaceAddVisible: state.workspace.isWorkspaceAddVisible,
+  isWorkspaceAddVisible: getWorkspace(state).isWorkspaceAddVisible,
   showThemePicker: getThemeIds(state).length > 0,
   showZoomControls: getShowZoomControlsConfig(state),
 });

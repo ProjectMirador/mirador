@@ -43,7 +43,7 @@ const mapStateToProps = (state, { windowId }) => {
         && infoResponse.isFetching === false
         && infoResponse.error === undefined)),
     nonTiledImages: getVisibleCanvasNonTiledResources(state, { windowId }),
-    osdConfig: state.config.osdConfig,
+    osdConfig: getConfig(state).osdConfig,
     viewerConfig: getViewer(state, { windowId }),
   };
 };

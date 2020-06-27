@@ -5,11 +5,12 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { MinimalWindow } from '../components/MinimalWindow';
+import { getWindowConfig } from '../state/selectors';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => ({
-  allowClose: state.config.window.allowClose,
-  allowWindowSideBar: state.config.window.allowWindowSideBar,
+  allowClose: getWindowConfig(state, { windowId }).allowClose,
+  allowWindowSideBar: getWindowConfig(state, { windowId }).allowWindowSideBar,
 });
 
 /**

@@ -8,6 +8,7 @@ import {
   getSearchAnnotationsForWindow,
   getSelectedContentSearchAnnotationIds,
   getCurrentCanvas,
+  getConfig,
 } from '../state/selectors';
 
 /**
@@ -70,7 +71,7 @@ const mapStateToProps = (state, { canvas, windowId }) => {
   return {
     annotationsCount: canvasAnnotations.length,
     annotationSelected: canvasAnnotations.some(a => selectedAnnotationIds.includes(a.id)),
-    config: state.config.galleryView,
+    config: getConfig(state).galleryView,
     selected: currentCanvas && currentCanvas.id === canvas.id,
   };
 };

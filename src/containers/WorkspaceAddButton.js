@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core';
 import withWidth from '@material-ui/core/withWidth';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
+import { getWindowIds, getWorkspace } from '../state/selectors';
 import { WorkspaceAddButton } from '../components/WorkspaceAddButton';
 
 /**
@@ -13,13 +14,13 @@ import { WorkspaceAddButton } from '../components/WorkspaceAddButton';
  * @private
  */
 const mapStateToProps = (state, { width }) => {
-  const { isWorkspaceAddVisible } = state.workspace;
+  const { isWorkspaceAddVisible } = getWorkspace(state);
   return {
     isWorkspaceAddVisible,
     useExtendedFab: (
       (width !== 'xs')
         && !isWorkspaceAddVisible
-        && Object.keys(state.windows).length === 0
+        && getWindowIds(state).length === 0
     ),
   };
 };
