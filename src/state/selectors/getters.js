@@ -47,3 +47,8 @@ export function getManifest(state, { manifestId, windowId }) {
     || (windowId && (getWindow(state, { windowId }) || {}).manifestId)
   ];
 }
+
+/** */
+export function getCatalog(state) {
+  return miradorSlice(state).catalog || {};
+}

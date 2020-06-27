@@ -3,6 +3,7 @@ import {
   getViewer,
   getWindowManifests,
   getWindows,
+  getCatalog,
 } from '../../../src/state/selectors/getters';
 
 describe('getManifest()', () => {
@@ -90,5 +91,18 @@ describe('getViewer', () => {
     expect(received).toEqual({
       id: 'bar',
     });
+  });
+});
+
+describe('getCatalog', () => {
+  const catalog = [{ a: 1 }];
+  const state = {
+    catalog,
+  };
+
+  it('should return companion windows for a given window id', () => {
+    const received = getCatalog(state);
+
+    expect(received).toEqual(catalog);
   });
 });
