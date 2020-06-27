@@ -41,7 +41,7 @@ function hasLayers(canvases) {
 const mapStateToProps = (state, { windowId }) => ({
   hasAnnotations: getAnnotationResourcesByMotivation(
     state,
-    { motivations: state.config.annotations.filteredMotivations, windowId },
+    { windowId },
   ).length > 0,
   hasAnyLayers: hasLayers(getCanvases(state, { windowId })),
   hasCurrentLayers: hasLayers(getVisibleCanvases(state, { windowId })),
