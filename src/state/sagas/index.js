@@ -20,7 +20,7 @@ function* launchSaga(saga) {
 }
 
 /** */
-function getRootSaga(pluginSagas) {
+function getRootSaga(pluginSagas = []) {
   return function* rootSaga() {
     const sagas = [
       annotations,
