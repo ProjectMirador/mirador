@@ -10,7 +10,7 @@ import { getSequenceViewingHint, getSequenceBehaviors } from './sequences';
 /** */
 export const getWindowConfig = createSelector(
   [getConfig, getWindow],
-  ({ window: defaultConfig }, windowConfig) => ({ ...defaultConfig, ...windowConfig }),
+  ({ window: defaultConfig }, windowConfig = {}) => ({ ...defaultConfig, ...windowConfig }),
 );
 
 /**
