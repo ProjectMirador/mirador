@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
+import { getWindows, getWorkspace } from '../state/selectors';
 import * as actions from '../state/actions';
 import { WorkspaceMosaic } from '../components/WorkspaceMosaic';
 
@@ -12,9 +13,11 @@ import { WorkspaceMosaic } from '../components/WorkspaceMosaic';
  */
 const mapStateToProps = state => (
   {
-    layout: state.workspace.layout,
-    windows: state.windows,
-    workspaceId: state.workspace.id,
+    layout: getWorkspace(state).layout,
+    windowIds: Object.entries(getWindows(state))
+      .sort((a, b) => a[1].layoutOrder - b[1].layoutOrder)
+      .map(val => val[0]),
+    workspaceId: getWorkspace(state).id,
   }
 );
 
