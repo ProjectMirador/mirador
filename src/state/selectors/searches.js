@@ -5,11 +5,15 @@ import AnnotationList from '../../lib/AnnotationList';
 import { getCanvas, getCanvases } from './canvases';
 import { getWindow } from './getters';
 import { getManifestLocale } from './manifests';
+import { miradorSlice } from './utils';
+
+/** Get searches from state */
+const getSearches = (state) => miradorSlice(state).searches;
 
 export const getSearchForWindow = createSelector(
   [
     (state, { windowId }) => windowId,
-    state => state.searches,
+    getSearches,
   ],
   (windowId, searches) => {
     if (!windowId || !searches) return {};

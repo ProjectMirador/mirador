@@ -2,10 +2,12 @@ import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import AnnotationFactory from '../../lib/AnnotationFactory';
+import { miradorSlice } from './utils';
 import { getCanvas, getVisibleCanvasIds } from './canvases';
+import { getWindow } from './getters';
 
 /** */
-export const getAnnotations = state => state.annotations;
+export const getAnnotations = state => miradorSlice(state).annotations;
 
 const getAnnotationsOnCanvas = createSelector(
   [
@@ -34,7 +36,7 @@ const getPresentAnnotationsCanvas = createSelector(
 const getAnnotationsOnSelectedCanvases = createSelector(
   [
     getVisibleCanvasIds,
-    state => state.annotations,
+    getAnnotations,
   ],
   (canvasIds, annotations) => {
     if (!annotations || canvasIds.length === 0) return [];
@@ -104,9 +106,9 @@ export const getAnnotationResourcesByMotivation = createSelector(
  */
 export const getSelectedAnnotationId = createSelector(
   [
-    (state, { windowId }) => state.windows[windowId].selectedAnnotationId,
+    getWindow,
   ],
-  selectedAnnotationId => selectedAnnotationId,
+  ({ selectedAnnotationId }) => selectedAnnotationId,
 );
 
 export const getSelectedAnnotationsOnCanvases = createSelector(

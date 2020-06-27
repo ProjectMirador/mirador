@@ -3,7 +3,7 @@ import {
   getManifestTitle,
 } from './manifests';
 import { getConfig } from './config';
-import { getWindows, getWindow } from './getters';
+import { getWindows, getWindow, getWindowIds } from './getters';
 import { getWorkspaceType } from './workspace';
 import { getSequenceViewingHint, getSequenceBehaviors } from './sequences';
 
@@ -92,7 +92,7 @@ export const getWindowDraggability = createSelector(
   [
     getWorkspaceType,
     getWindow,
-    state => Object.keys(state.windows).length > 1,
+    state => getWindowIds(state).length > 1,
   ],
   (workspaceType, window, manyWindows) => {
     if (workspaceType === 'elastic') return true;

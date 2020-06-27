@@ -1,9 +1,12 @@
 import { createSelector } from 'reselect';
 import deepmerge from 'deepmerge';
+import { miradorSlice } from './utils';
+import { getWorkspace } from './workspace';
 
 /** */
 export function getConfig(state) {
-  return (state && state.config) || {};
+  const slice = miradorSlice(state || {});
+  return slice.config || {};
 }
 
 /**
@@ -49,7 +52,7 @@ export const getLanguagesFromConfigWithCurrent = createSelector(
 
 export const getShowZoomControlsConfig = createSelector(
   [
-    state => state.workspace,
+    getWorkspace,
     getConfig,
   ],
   (workspace, config) => (

@@ -11,3 +11,4 @@ export * from './ranges';
 export * from './layers';
 export * from './sequences';
 export * from './auth';
+export * from './utils';

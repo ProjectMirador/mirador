@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { miradorSlice } from './utils';
 
 /**
  * Return the manifest titles for all open windows
@@ -6,12 +7,12 @@ import { createSelector } from 'reselect';
  * @return {object}
  */
 export function getWindowManifests(state) {
-  return Object.values(state.windows).map(window => window.manifestId);
+  return Object.values(miradorSlice(state).windows).map(window => window.manifestId);
 }
 
 /** */
 export function getWindows(state) {
-  return state.windows || {};
+  return miradorSlice(state).windows || {};
 }
 
 /** */
@@ -21,7 +22,7 @@ export function getWindow(state, { windowId }) {
 
 export const getViewer = createSelector(
   [
-    state => state.viewers,
+    state => miradorSlice(state).viewers,
     (state, { windowId }) => windowId,
   ],
   (viewers, windowId) => viewers[windowId],
@@ -35,7 +36,7 @@ export const getWindowIds = createSelector(
 
 /** */
 export function getManifests(state) {
-  return state.manifests || {};
+  return miradorSlice(state).manifests || {};
 }
 
 /** Get the relevant manifest information */

@@ -3,13 +3,26 @@ import createCachedSelector from 're-reselect';
 import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import getThumbnail from '../../lib/ThumbnailFactory';
+import { getCompanionWindow } from './companionWindows';
 import { getManifest } from './getters';
+import { getConfig } from './config';
 
 /** */
 function createManifestoInstance(json, locale) {
   if (!json) return undefined;
   return Utils.parseManifest(json, locale ? { locale } : undefined);
 }
+
+/** */
+const getLocale = createSelector(
+  [
+    getCompanionWindow,
+    getConfig,
+  ],
+  (companionWindow = {}, config = {}) => (
+    companionWindow.locale || config.language
+  ),
+);
 
 /** Convenience selector to get a manifest (or placeholder) */
 export const getManifestStatus = createSelector(
@@ -30,13 +43,10 @@ const getContextualManifestoInstance = createCachedSelector(
   (manifest, locale) => manifest
     && createManifestoInstance(manifest.json, locale),
 )(
-  (state, props) => [
-    props.manifestId,
-    props.windowId,
-    (state.companionWindows
-      && state.companionWindows[props.companionWindowId]
-      && state.companionWindows[props.companionWindowId].locale)
-      || (state.config && state.config.language),
+  (state, { companionWindowId, manifestId, windowId }) => [
+    manifestId,
+    windowId,
+    getLocale(state, { companionWindowId }),
   ].join(' - '), // Cache key consisting of manifestId, windowId, and locale
 );
 
@@ -63,13 +73,6 @@ function getProperty(property) {
   );
 }
 
-/** */
-function getLocale(state, { companionWindowId }) {
-  return (companionWindowId
-    && state.companionWindows[companionWindowId]
-    && state.companionWindows[companionWindowId].locale)
-    || (state.config && state.config.language);
-}
 /**
  * Get the logo for a manifest
  * @param {object} state

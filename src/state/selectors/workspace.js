@@ -1,13 +1,14 @@
 import { createSelector } from 'reselect';
+import { miradorSlice } from './utils';
 
 /** */
 export function getWorkspace(state) {
-  return state.workspace;
+  return miradorSlice(state).workspace;
 }
 
 /** */
 export function getElasticLayout(state) {
-  return state.elasticLayout;
+  return miradorSlice(state).elasticLayout;
 }
 
 export const getFullScreenEnabled = createSelector(
@@ -19,7 +20,9 @@ export const getFullScreenEnabled = createSelector(
  * @param {object} state
  */
 export function getLatestError(state) {
-  return state.errors.items[0] && state.errors[state.errors.items[0]];
+  const [errorId] = miradorSlice(state).errors.items;
+
+  return miradorSlice(state).errors[errorId];
 }
 
 export const getWorkspaceType = createSelector(

@@ -3,9 +3,13 @@ import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import flatten from 'lodash/flatten';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import MiradorCanvas from '../../lib/MiradorCanvas';
+import { miradorSlice } from './utils';
 import { getWindow } from './getters';
 import { getSequence } from './sequences';
 import { getWindowViewType } from './windows';
+
+/** */
+export const selectInfoResponses = state => miradorSlice(state).infoResponses;
 
 export const getCanvases = createSelector(
   [getSequence],
@@ -171,9 +175,6 @@ export const getCanvasDescription = createSelector(
   [getCanvas],
   canvas => canvas && canvas.getProperty('description'),
 );
-
-/** */
-export const selectInfoResponses = state => state.infoResponses;
 
 export const getVisibleCanvasNonTiledResources = createSelector(
   [
