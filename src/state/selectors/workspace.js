@@ -29,3 +29,13 @@ export const getWorkspaceType = createSelector(
   [getWorkspace],
   ({ type }) => type,
 );
+
+const getFocusedWindowId = createSelector(
+  [getWorkspace],
+  ({ focusedWindowId }) => focusedWindowId,
+);
+
+/** Check if the current window is focused */
+export const isFocused = (state, { windowId }) => (
+  getFocusedWindowId(state) === windowId
+);

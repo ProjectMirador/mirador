@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core';
 import * as actions from '../state/actions';
 import WorkspaceElasticWindow from '../components/WorkspaceElasticWindow';
 import {
-  selectCompanionWindowDimensions, getWorkspace,
+  selectCompanionWindowDimensions, getWorkspace, isFocused,
   getElasticLayout,
 } from '../state/selectors';
 
@@ -16,7 +16,7 @@ import {
 const mapStateToProps = (state, { windowId }) => (
   {
     companionWindowDimensions: selectCompanionWindowDimensions(state, { windowId }),
-    focused: state.workspace.focusedWindowId === windowId,
+    focused: isFocused(state, { windowId }),
     layout: getElasticLayout(state)[windowId],
     workspace: getWorkspace(state),
   }

@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getWindowConfig } from '../state/selectors';
+import { getWindowConfig, isFocused } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';
 
 /** mapStateToProps */
@@ -17,7 +17,7 @@ const mapStateToProps = (state, { windowId }) => {
     allowMaximize: config.allowMaximize,
     allowTopMenuButton: config.allowTopMenuButton,
     allowWindowSideBar: config.allowWindowSideBar,
-    focused: state.workspace.focusedWindowId === windowId,
+    focused: isFocused(state, { windowId }),
     maximized: config.maximized,
   };
 };
