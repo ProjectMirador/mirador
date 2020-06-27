@@ -167,7 +167,6 @@ describe('getWindowDraggability', () => {
   describe('in elastic mode', () => {
     it('is always true', () => {
       const state = {
-        windows: {},
         workspace: { type: 'elastic' },
       };
       const props = {};
@@ -179,8 +178,7 @@ describe('getWindowDraggability', () => {
   describe('in non-elastic mode', () => {
     it('is false if there is only one window', () => {
       const state = {
-        windows: { abc123: {} },
-        workspace: { type: 'mosaic' },
+        workspace: { type: 'mosaic', windowIds: ['abc123'] },
       };
       const props = { windowId: 'abc123' };
 
@@ -190,7 +188,7 @@ describe('getWindowDraggability', () => {
     it('is false when the window is maximized', () => {
       const state = {
         windows: { abc123: { maximized: true }, abc321: { maximized: false } },
-        workspace: { type: 'mosaic' },
+        workspace: { type: 'mosaic', windowIds: ['abc123', 'abc321'] },
       };
       const props = { windowId: 'abc123' };
 
@@ -200,7 +198,7 @@ describe('getWindowDraggability', () => {
     it('is true if there are many windows (as long as the window is not maximized)', () => {
       const state = {
         windows: { abc123: { maximized: false }, abc321: { maximized: false } },
-        workspace: { type: 'mosaic' },
+        workspace: { type: 'mosaic', windowIds: ['abc123', 'abc321'] },
       };
       const props = { windowId: 'abc123' };
 

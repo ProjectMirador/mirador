@@ -5,7 +5,7 @@ import { getWindow, getWindows } from './getters';
 
 /** */
 export function getCompanionWindows(state) {
-  return miradorSlice(state).companionWindows;
+  return miradorSlice(state).companionWindows || {};
 }
 
 export const getCompanionWindow = createSelector(
@@ -13,7 +13,7 @@ export const getCompanionWindow = createSelector(
     getCompanionWindows,
     (state, { companionWindowId }) => companionWindowId,
   ],
-  (companionWindows, companionWindowId) => companionWindows[companionWindowId],
+  (companionWindows, companionWindowId) => companionWindowId && companionWindows[companionWindowId],
 );
 
 /** Return position of thumbnail navigation in a certain window.

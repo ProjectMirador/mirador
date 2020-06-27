@@ -44,8 +44,6 @@ describe('MiradorViewer', () => {
       expect(Object.keys(windowIds).length).toBe(2);
       expect(windows[windowIds[0]].canvasId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892');
       expect(windows[windowIds[1]].canvasId).toBe(undefined);
-      expect(windows[windowIds[0]].layoutOrder).toBe(0);
-      expect(windows[windowIds[1]].layoutOrder).toBe(1);
       expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe('far-bottom');
       expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe(undefined);
       expect(windows[windowIds[0]].view).toBe(undefined);

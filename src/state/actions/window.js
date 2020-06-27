@@ -23,8 +23,8 @@ export function focusWindow(windowId, pan = false) {
  */
 export function addWindow({ companionWindows, manifest, ...options }) {
   return (dispatch, getState) => {
-    const { config, windows } = getState();
-    const numWindows = Object.keys(windows).length;
+    const { config, workspace: { windowIds = [] } } = getState();
+    const numWindows = windowIds.length;
 
     const windowId = options.id || `window-${uuid()}`;
     const cwThumbs = `cw-${uuid()}`;
@@ -63,7 +63,6 @@ export function addWindow({ companionWindows, manifest, ...options }) {
       draggingEnabled: true,
       highlightAllAnnotations: config.window.highlightAllAnnotations || false,
       id: windowId,
-      layoutOrder: numWindows + 1,
       manifestId: null,
       maximized: false,
       rangeId: null,

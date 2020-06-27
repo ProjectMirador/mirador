@@ -1,10 +1,6 @@
 import { createSelector } from 'reselect';
+import { getWorkspace } from './getters';
 import { miradorSlice } from './utils';
-
-/** */
-export function getWorkspace(state) {
-  return miradorSlice(state).workspace;
-}
 
 /** */
 export function getElasticLayout(state) {

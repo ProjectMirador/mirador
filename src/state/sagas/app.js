@@ -23,14 +23,13 @@ export function* importConfig({ config: { thumbnailNavigation, windows } }) {
   if (!windows || windows.length === 0) return;
 
   const thunks = yield all(
-    windows.map((miradorWindow, layoutOrder) => {
+    windows.map((miradorWindow) => {
       const windowId = `window-${uuid()}`;
       const manifestId = miradorWindow.manifestId || miradorWindow.loadedManifest;
 
       return call(addWindow, {
         // these are default values ...
         id: windowId,
-        layoutOrder,
         manifestId,
         thumbnailNavigationPosition: thumbnailNavigation && thumbnailNavigation.defaultPosition,
         // ... overridden by values from the window configuration ...

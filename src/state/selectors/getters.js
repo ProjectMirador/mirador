@@ -29,9 +29,14 @@ export const getViewer = createSelector(
 );
 
 /** */
+export function getWorkspace(state) {
+  return miradorSlice(state).workspace;
+}
+
+/** */
 export const getWindowIds = createSelector(
-  [getWindows],
-  windows => Object.keys(windows),
+  [getWorkspace],
+  ({ windowIds }) => windowIds || [],
 );
 
 /** */
