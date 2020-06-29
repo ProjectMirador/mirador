@@ -112,7 +112,7 @@ export const IIIFDropTarget = (props) => {
   const isActive = canDrop && isOver;
 
   return (
-    <div ref={drop}>
+    <div ref={drop} style={{ height: '100%', width: '100%' }}>
       {children}
       <Backdrop open={isActive} style={{ zIndex: 9999 }}>
         <InsertDriveFileSharpIcon style={{ color: grey[400], fontSize: 256 }} />
