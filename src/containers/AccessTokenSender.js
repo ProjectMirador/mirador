@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
+import { getAccessTokens } from '../state/selectors';
 import { AccessTokenSender } from '../components/AccessTokenSender';
 
 /**
@@ -9,8 +10,8 @@ import { AccessTokenSender } from '../components/AccessTokenSender';
  * @memberof App
  * @private
  */
-const mapStateToProps = ({ accessTokens }) => ({
-  url: accessTokens && (Object.values(accessTokens).find(e => e.isFetching) || {}).id,
+const mapStateToProps = (state) => ({
+  url: (Object.values(getAccessTokens(state)).find(e => e.isFetching) || {}).id,
 });
 
 /**

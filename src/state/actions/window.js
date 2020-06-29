@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import ActionTypes from './action-types';
+import { miradorSlice } from '../selectors/utils';
 
 /**
  * focusWindow - action creator
@@ -23,7 +24,7 @@ export function focusWindow(windowId, pan = false) {
  */
 export function addWindow({ companionWindows, manifest, ...options }) {
   return (dispatch, getState) => {
-    const { config, workspace: { windowIds = [] } } = getState();
+    const { config, workspace: { windowIds = [] } } = miradorSlice(getState());
     const numWindows = windowIds.length;
 
     const windowId = options.id || `window-${uuid()}`;
