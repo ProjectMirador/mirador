@@ -49,16 +49,6 @@ export const windowsReducer = (state = {}, action) => {
           view: action.viewType,
         },
       };
-    case ActionTypes.SET_WINDOW_SIDE_BAR_PANEL:
-      return {
-        ...state,
-        [action.windowId]: {
-          ...state[action.windowId],
-          sideBarPanel: (
-            action.panelType
-          ),
-        },
-      };
     case ActionTypes.UPDATE_WINDOW_POSITION:
       return {
         ...state,

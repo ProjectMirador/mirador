@@ -132,13 +132,6 @@ describe('workspace reducer', () => {
       width: 1000,
     });
   });
-  it('should handle TOGGLE_WORKSPACE_EXPOSE_MODE', () => {
-    expect(workspaceReducer([], {
-      type: ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE,
-    })).toEqual({
-      exposeModeOn: true,
-    });
-  });
   it('should handle SET_CONFIG', () => {
     expect(workspaceReducer({}, {
       config: { workspace: { new: 'stuff' } },

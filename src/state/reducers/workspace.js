@@ -91,8 +91,6 @@ export const workspaceReducer = (
         ...newWorkspaceDimensions,
         viewportPosition,
       };
-    case ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE:
-      return { ...state, exposeModeOn: !state.exposeModeOn };
     case ActionTypes.SET_CONFIG:
     case ActionTypes.IMPORT_CONFIG:
     case ActionTypes.UPDATE_CONFIG:

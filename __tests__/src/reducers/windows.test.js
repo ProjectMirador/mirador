@@ -96,26 +96,6 @@ describe('windows reducer', () => {
     expect(windowsReducer(before, action)).toEqual(after);
   });
 
-  describe('SET_WINDOW_SIDE_BAR_PANEL', () => {
-    it('sets the sideBarPanel value to the given value when it was changed', () => {
-      const action = {
-        panelType: 'info',
-        type: ActionTypes.SET_WINDOW_SIDE_BAR_PANEL,
-        windowId: 'abc123',
-      };
-      const before = {
-        abc123: { sideBarPanel: 'closed' },
-        abc321: { sideBarPanel: 'closed' },
-      };
-      const after = {
-        abc123: { sideBarPanel: 'info' },
-        abc321: { sideBarPanel: 'closed' },
-      };
-
-      expect(windowsReducer(before, action)).toEqual(after);
-    });
-  });
-
   it('should handle SET_CANVAS', () => {
     expect(windowsReducer({
       abc123: {
