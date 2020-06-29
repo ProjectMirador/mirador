@@ -216,7 +216,8 @@ export class OpenSeadragonViewer extends Component {
         reject();
       }
 
-      const tileSource = infoResponse.json;
+      // OSD mutates this object, so we give it a shallow copy
+      const tileSource = { ...infoResponse.json };
       const contentResource = canvasWorld.contentResource(infoResponse.id);
 
       if (!contentResource) return;
