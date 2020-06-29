@@ -297,6 +297,7 @@ export default {
     draggingEnabled: true,
     allowNewWindows: true,
     id: uuid(),
+    isWorkspaceAddVisible: false, // Catalog/Workspace add window feature visible by default
     exposeModeOn: false, // unused?
     height: 5000, // height of the elastic mode's virtual canvas
     showZoomControls: false, // Configure if zoom controls should be displayed by default
