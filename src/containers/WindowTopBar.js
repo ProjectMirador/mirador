@@ -9,7 +9,7 @@ import { WindowTopBar } from '../components/WindowTopBar';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => {
-  const config = getWindowConfig;
+  const config = getWindowConfig(state, { windowId });
 
   return {
     allowClose: config.allowClose,
