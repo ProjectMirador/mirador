@@ -1,13 +1,10 @@
 import { createSelector } from 'reselect';
-
-/** */
-export function getWorkspace(state) {
-  return state.workspace;
-}
+import { getWorkspace } from './getters';
+import { miradorSlice } from './utils';
 
 /** */
 export function getElasticLayout(state) {
-  return state.elasticLayout;
+  return miradorSlice(state).elasticLayout;
 }
 
 export const getFullScreenEnabled = createSelector(
@@ -19,10 +16,22 @@ export const getFullScreenEnabled = createSelector(
  * @param {object} state
  */
 export function getLatestError(state) {
-  return state.errors.items[0] && state.errors[state.errors.items[0]];
+  const [errorId] = miradorSlice(state).errors.items;
+
+  return miradorSlice(state).errors[errorId];
 }
 
 export const getWorkspaceType = createSelector(
   [getWorkspace],
   ({ type }) => type,
+);
+
+const getFocusedWindowId = createSelector(
+  [getWorkspace],
+  ({ focusedWindowId }) => focusedWindowId,
+);
+
+/** Check if the current window is focused */
+export const isFocused = (state, { windowId }) => (
+  getFocusedWindowId(state) === windowId
 );

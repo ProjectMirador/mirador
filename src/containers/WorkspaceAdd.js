@@ -5,13 +5,14 @@ import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { WorkspaceAdd } from '../components/WorkspaceAdd';
+import { getCatalog } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => ({ catalog: state.catalog });
+const mapStateToProps = state => ({ catalog: getCatalog(state) });
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

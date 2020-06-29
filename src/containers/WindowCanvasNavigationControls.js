@@ -7,6 +7,7 @@ import { withPlugins } from '../extend/withPlugins';
 import {
   getCurrentCanvas,
   getCanvasLabel,
+  getWorkspace,
 } from '../state/selectors';
 import { WindowCanvasNavigationControls } from '../components/WindowCanvasNavigationControls';
 
@@ -16,7 +17,7 @@ const mapStateToProps = (state, { windowId }) => ({
     canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
     windowId,
   }),
-  visible: state.workspace.focusedWindowId === windowId,
+  visible: getWorkspace(state).focusedWindowId === windowId,
 });
 
 /**

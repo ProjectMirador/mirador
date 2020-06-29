@@ -1,6 +1,9 @@
 import { v4 as uuid } from 'uuid';
 
 export default {
+  state: {
+    // slice: 'mirador' // Configure the top-level slice of state for mirador selectors
+  },
   canvasNavigation: { // Set the hight and width of canvas thumbnails in the  CanvasNavigation companion window
     height: 50,
     width: 50,

@@ -2,10 +2,21 @@ import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import AnnotationFactory from '../../lib/AnnotationFactory';
+import { miradorSlice } from './utils';
 import { getCanvas, getVisibleCanvasIds } from './canvases';
+import { getConfig } from './config';
+import { getWindow } from './getters';
 
 /** */
-export const getAnnotations = state => state.annotations;
+export const getAnnotations = state => miradorSlice(state).annotations;
+
+const getMotiviation = createSelector(
+  [
+    getConfig,
+    (state, { motivations }) => motivations,
+  ],
+  (config, motivations) => motivations || config.annotations.filteredMotivations,
+);
 
 const getAnnotationsOnCanvas = createSelector(
   [
@@ -34,7 +45,7 @@ const getPresentAnnotationsCanvas = createSelector(
 const getAnnotationsOnSelectedCanvases = createSelector(
   [
     getVisibleCanvasIds,
-    state => state.annotations,
+    getAnnotations,
   ],
   (canvasIds, annotations) => {
     if (!annotations || canvasIds.length === 0) return [];
@@ -66,7 +77,7 @@ export const getPresentAnnotationsOnSelectedCanvases = createSelector(
 export const getAnnotationResourcesByMotivationForCanvas = createSelector(
   [
     getPresentAnnotationsCanvas,
-    (state, { motivations }) => motivations,
+    getMotiviation,
   ],
   (annotations, motivations) => filter(
     flatten(annotations.map(annotation => annotation.resources)),
@@ -85,7 +96,7 @@ export const getAnnotationResourcesByMotivationForCanvas = createSelector(
 export const getAnnotationResourcesByMotivation = createSelector(
   [
     getPresentAnnotationsOnSelectedCanvases,
-    (state, { motivations }) => motivations,
+    getMotiviation,
   ],
   (annotations, motivations) => filter(
     flatten(annotations.map(annotation => annotation.resources)),
@@ -104,9 +115,9 @@ export const getAnnotationResourcesByMotivation = createSelector(
  */
 export const getSelectedAnnotationId = createSelector(
   [
-    (state, { windowId }) => state.windows[windowId].selectedAnnotationId,
+    getWindow,
   ],
-  selectedAnnotationId => selectedAnnotationId,
+  ({ selectedAnnotationId }) => selectedAnnotationId,
 );
 
 export const getSelectedAnnotationsOnCanvases = createSelector(

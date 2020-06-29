@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
+import { getAuth, getConfig } from '../state/selectors';
 import { AuthenticationSender } from '../components/AuthenticationSender';
 
 /**
@@ -9,9 +10,9 @@ import { AuthenticationSender } from '../components/AuthenticationSender';
  * @memberof App
  * @private
  */
-const mapStateToProps = ({ auth, config }) => ({
-  center: config.window.authNewWindowCenter,
-  url: auth && (Object.values(auth).find(e => e.isFetching && e.profile !== 'http://iiif.io/api/auth/1/external') || {}).id,
+const mapStateToProps = (state) => ({
+  center: getConfig(state).window.authNewWindowCenter,
+  url: (Object.values(getAuth(state)).find(e => e.isFetching && e.profile !== 'http://iiif.io/api/auth/1/external') || {}).id,
 });
 
 /**

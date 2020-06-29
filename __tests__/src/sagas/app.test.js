@@ -69,10 +69,10 @@ describe('app-level sagas', () => {
       return expectSaga(importConfig, action)
         .provide([
           [call(addWindow, {
-            id: 'x', layoutOrder: 0, manifestId: 'a', thumbnailNavigationPosition: undefined,
+            id: 'x', manifestId: 'a', thumbnailNavigationPosition: undefined,
           }), { type: 'thunk1' }],
           [call(addWindow, {
-            id: 'y', layoutOrder: 1, manifestId: 'b', thumbnailNavigationPosition: undefined,
+            id: 'y', manifestId: 'b', thumbnailNavigationPosition: undefined,
           }), { type: 'thunk2' }],
         ])
         .put({ type: 'thunk1' })

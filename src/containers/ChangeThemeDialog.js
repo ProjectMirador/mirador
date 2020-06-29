@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getThemeIds } from '../state/selectors';
+import { getThemeIds, getConfig } from '../state/selectors';
 import { ChangeThemeDialog } from '../components/ChangeThemeDialog';
 
 /**
@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  * @private
  */
 const mapStateToProps = state => ({
-  selectedTheme: state.config.selectedTheme,
+  selectedTheme: getConfig(state).selectedTheme,
   themeIds: getThemeIds(state),
 });
 

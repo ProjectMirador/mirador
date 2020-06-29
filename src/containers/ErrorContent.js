@@ -9,6 +9,7 @@ import {
   getManifest,
   getWindow,
   getViewer,
+  getConfig,
 } from '../state/selectors';
 
 /** mapStateToProps */
@@ -19,7 +20,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
     viewer: getViewer(state, { windowId }),
     window: getWindow(state, { windowId }),
   },
-  showJsError: state.config.window.showJsError,
+  showJsError: getConfig(state).window.showJsError,
 });
 
 /**

@@ -1,11 +1,20 @@
 import { createSelector } from 'reselect';
 import groupBy from 'lodash/groupBy';
+import { miradorSlice } from './utils';
 import { getWindow, getWindows } from './getters';
 
 /** */
 export function getCompanionWindows(state) {
-  return state.companionWindows;
+  return miradorSlice(state).companionWindows || {};
 }
+
+export const getCompanionWindow = createSelector(
+  [
+    getCompanionWindows,
+    (state, { companionWindowId }) => companionWindowId,
+  ],
+  (companionWindows, companionWindowId) => companionWindowId && companionWindows[companionWindowId],
+);
 
 /** Return position of thumbnail navigation in a certain window.
 * @param {object} state
@@ -15,7 +24,7 @@ export function getCompanionWindows(state) {
 export const getThumbnailNavigationPosition = createSelector(
   [
     getWindow,
-    state => state.companionWindows,
+    getCompanionWindows,
   ],
   (window, companionWindows) => window
     && companionWindows[window.thumbnailNavigationId]
@@ -57,14 +66,6 @@ const getCompanionWindowsByWindowAndPosition = createSelector(
       ),
     }), {})
   ),
-);
-
-export const getCompanionWindow = createSelector(
-  [
-    getCompanionWindows,
-    (state, { companionWindowId }) => companionWindowId,
-  ],
-  (companionWindows, companionWindowId) => companionWindows[companionWindowId],
 );
 
 /**

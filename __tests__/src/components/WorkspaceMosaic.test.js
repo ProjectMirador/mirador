@@ -9,7 +9,7 @@ function createWrapper(props) {
   return shallow(
     <WorkspaceMosaic
       classes={{}}
-      windows={{}}
+      windowIds={[]}
       workspaceId="foo"
       updateWorkspaceMosaicLayout={() => {}}
       {...props}
@@ -18,10 +18,10 @@ function createWrapper(props) {
 }
 
 describe('WorkspaceMosaic', () => {
-  const windows = { 1: { id: 1 }, 2: { id: 2 } };
+  const windowIds = ['1', '2'];
   let wrapper;
   beforeEach(() => {
-    wrapper = createWrapper({ windows });
+    wrapper = createWrapper({ windowIds });
   });
   it('should render properly with an initialValue', () => {
     expect(wrapper.find(MosaicWithoutDragDropContext).length).toEqual(1);
@@ -34,10 +34,10 @@ describe('WorkspaceMosaic', () => {
       const updateWorkspaceMosaicLayout = jest.fn();
       wrapper = createWrapper({
         updateWorkspaceMosaicLayout,
-        windows,
+        windowIds,
       });
 
-      wrapper.setProps({ windows: { ...windows, 3: { id: 3 } } });
+      wrapper.setProps({ windowIds: [...windowIds, '3'] });
 
       expect(updateWorkspaceMosaicLayout).toHaveBeenCalled();
     });
@@ -46,19 +46,19 @@ describe('WorkspaceMosaic', () => {
       wrapper = createWrapper({
         layout: { first: 1, second: 2 },
         updateWorkspaceMosaicLayout,
-        windows,
+        windowIds,
       });
       wrapper.instance().windowPaths = { 2: ['second'] };
-      wrapper.setProps({ windows: { 1: { id: 1 } } });
+      wrapper.setProps({ windowIds: [1] });
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith(1);
     });
     it('when no windows remain', () => {
       const updateWorkspaceMosaicLayout = jest.fn();
       wrapper = createWrapper({
         updateWorkspaceMosaicLayout,
-        windows,
+        windowIds,
       });
-      wrapper.setProps({ windows: {} });
+      wrapper.setProps({ windowIds: [] });
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith(null);
     });
     it('when the new and old layouts are the same', () => {
@@ -66,9 +66,9 @@ describe('WorkspaceMosaic', () => {
       wrapper = createWrapper({
         layout: { first: 1, second: 2 },
         updateWorkspaceMosaicLayout,
-        windows,
+        windowIds,
       });
-      wrapper.setProps({ layout: { first: 1, second: 2 }, windows });
+      wrapper.setProps({ layout: { first: 1, second: 2 }, windowIds });
       expect(updateWorkspaceMosaicLayout).toHaveBeenCalledTimes(1);
     });
   });
@@ -80,21 +80,21 @@ describe('WorkspaceMosaic', () => {
   });
   describe('determineWorkspaceLayout', () => {
     it('when window ids do not match workspace layout', () => {
-      wrapper = createWrapper({ layout: {}, windows });
+      wrapper = createWrapper({ layout: {}, windowIds });
       expect(wrapper.instance().determineWorkspaceLayout()).toMatchObject({
         direction: 'row', first: '1', second: '2',
       });
     });
     it('by default use workspace.layout', () => {
-      wrapper = createWrapper({ layout: {}, windows: { foo: 'bar' } });
+      wrapper = createWrapper({ layout: {}, windowIds: ['foo'] });
       expect(wrapper.instance().determineWorkspaceLayout()).toEqual('foo');
     });
     it('generates a new layout if windows do not match current layout', () => {
-      wrapper = createWrapper({ layout: { first: 'foo', second: 'bark' }, windows: { foo: 'bar' } });
+      wrapper = createWrapper({ layout: { first: 'foo', second: 'bark' }, windowIds: ['foo'] });
       expect(wrapper.instance().determineWorkspaceLayout()).toEqual('foo');
     });
     it('when window ids match workspace layout', () => {
-      wrapper = createWrapper({ layout: {}, windows: { foo: { id: 'foo' } } });
+      wrapper = createWrapper({ layout: {}, windowIds: ['foo'] });
       expect(wrapper.instance().determineWorkspaceLayout()).toBe('foo');
     });
   });
@@ -124,7 +124,7 @@ describe('WorkspaceMosaic', () => {
       const updateWorkspaceMosaicLayout = jest.fn();
       wrapper = createWrapper({
         updateWorkspaceMosaicLayout,
-        windows,
+        windowIds,
       });
 
       wrapper.instance().mosaicChange();

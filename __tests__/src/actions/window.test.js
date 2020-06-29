@@ -54,7 +54,6 @@ describe('window actions', () => {
           canvasIndex: 1,
           collectionIndex: 0,
           id: 'helloworld',
-          layoutOrder: 3,
           manifestId: null,
           maximized: false,
           rangeId: null,
@@ -73,7 +72,7 @@ describe('window actions', () => {
             sideBarOpenByDefault: false,
           },
         },
-        windows: { a: {}, b: {} },
+        workspace: { windowIds: ['a', 'b'] },
       };
 
       const mockDispatch = jest.fn(() => ({}));
@@ -108,7 +107,7 @@ describe('window actions', () => {
             defaultSideBarPanel: 'info',
           },
         },
-        windows: {},
+        workspace: {},
       };
 
       const mockDispatch = jest.fn(() => ({}));
@@ -138,7 +137,7 @@ describe('window actions', () => {
             defaultSideBarPanel: null,
           },
         },
-        windows: {},
+        workspace: {},
       };
 
       const mockDispatch = jest.fn(() => ({}));
@@ -168,7 +167,7 @@ describe('window actions', () => {
             defaultSideBarPanel: null,
           },
         },
-        windows: {},
+        workspace: {},
       };
 
       const mockDispatch = jest.fn(() => ({}));

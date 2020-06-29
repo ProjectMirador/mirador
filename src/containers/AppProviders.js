@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getTheme } from '../state/selectors';
+import { getConfig, getTheme, getFullScreenEnabled } from '../state/selectors';
 import { AppProviders } from '../components/AppProviders';
 
 /**
@@ -12,11 +12,11 @@ import { AppProviders } from '../components/AppProviders';
  */
 const mapStateToProps = state => (
   {
-    classPrefix: state.config.classPrefix,
-    isFullscreenEnabled: state.workspace.isFullscreenEnabled,
-    language: state.config.language,
+    classPrefix: getConfig(state).classPrefix,
+    isFullscreenEnabled: getFullScreenEnabled(state),
+    language: getConfig(state).language,
     theme: getTheme(state),
-    translations: state.config.translations,
+    translations: getConfig(state).translations,
   }
 );
 

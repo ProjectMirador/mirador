@@ -4,7 +4,10 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { Workspace } from '../components/Workspace';
-import { getMaximizedWindowsIds, getWindowIds, getWorkspaceType } from '../state/selectors';
+import {
+  getMaximizedWindowsIds, getWindowIds, getWorkspaceType,
+  getConfig, getWorkspace,
+} from '../state/selectors';
 import * as actions from '../state/actions';
 
 /**
@@ -14,11 +17,11 @@ import * as actions from '../state/actions';
  */
 const mapStateToProps = state => (
   {
-    allowNewWindows: state.config.workspace.allowNewWindows,
-    isWorkspaceControlPanelVisible: state.config.workspaceControlPanel.enabled,
+    allowNewWindows: getConfig(state).workspace.allowNewWindows,
+    isWorkspaceControlPanelVisible: getConfig(state).workspaceControlPanel.enabled,
     maximizedWindowIds: getMaximizedWindowsIds(state),
     windowIds: getWindowIds(state),
-    workspaceId: state.workspace.id,
+    workspaceId: getWorkspace(state).id,
     workspaceType: getWorkspaceType(state),
   }
 );
