@@ -10,7 +10,7 @@ import { getWindow } from './getters';
 /** */
 export const getAnnotations = state => miradorSlice(state).annotations;
 
-const getMotiviation = createSelector(
+const getMotivation = createSelector(
   [
     getConfig,
     (state, { motivations }) => motivations,
@@ -77,7 +77,7 @@ export const getPresentAnnotationsOnSelectedCanvases = createSelector(
 export const getAnnotationResourcesByMotivationForCanvas = createSelector(
   [
     getPresentAnnotationsCanvas,
-    getMotiviation,
+    getMotivation,
   ],
   (annotations, motivations) => filter(
     flatten(annotations.map(annotation => annotation.resources)),
@@ -96,7 +96,7 @@ export const getAnnotationResourcesByMotivationForCanvas = createSelector(
 export const getAnnotationResourcesByMotivation = createSelector(
   [
     getPresentAnnotationsOnSelectedCanvases,
-    getMotiviation,
+    getMotivation,
   ],
   (annotations, motivations) => filter(
     flatten(annotations.map(annotation => annotation.resources)),
