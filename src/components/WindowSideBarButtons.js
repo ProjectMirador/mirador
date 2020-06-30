@@ -39,6 +39,7 @@ export class WindowSideBarButtons extends Component {
     const {
       classes,
       hasAnnotations,
+      hasAnyAnnotations,
       hasAnyLayers,
       hasCurrentLayers,
       hasSearchResults,
@@ -94,7 +95,7 @@ export class WindowSideBarButtons extends Component {
             icon={(<CanvasIndexIcon />)}
           />
         )}
-        {panels.annotations && (
+        {panels.annotations && (hasAnnotations || hasAnyAnnotations) && (
           <TabButton
             value="annotations"
             icon={(
@@ -141,6 +142,7 @@ WindowSideBarButtons.propTypes = {
   addCompanionWindow: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.string),
   hasAnnotations: PropTypes.bool,
+  hasAnyAnnotations: PropTypes.bool,
   hasAnyLayers: PropTypes.bool,
   hasCurrentLayers: PropTypes.bool,
   hasSearchResults: PropTypes.bool,
@@ -154,6 +156,7 @@ WindowSideBarButtons.propTypes = {
 WindowSideBarButtons.defaultProps = {
   classes: {},
   hasAnnotations: false,
+  hasAnyAnnotations: false,
   hasAnyLayers: false,
   hasCurrentLayers: false,
   hasSearchResults: false,
