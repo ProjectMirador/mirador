@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
+import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import SearchIcon from '@material-ui/icons/SearchSharp';
 import classNames from 'classnames';
+import 'intersection-observer'; // polyfill needed for Safari
+import IntersectionObserver from '@researchgate/react-intersection-observer';
 import MiradorCanvas from '../lib/MiradorCanvas';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 
@@ -18,6 +21,7 @@ export class GalleryViewThumbnail extends Component {
 
     this.handleSelect = this.handleSelect.bind(this);
     this.handleKey = this.handleKey.bind(this);
+    this.handleIntersection = this.handleIntersection.bind(this);
   }
 
   /** @private */
@@ -63,65 +67,109 @@ export class GalleryViewThumbnail extends Component {
     }
   }
 
+  /** */
+  handleIntersection({ isIntersecting }) {
+    const {
+      annotations,
+      canvas,
+      requestAnnotation, receiveAnnotation,
+    } = this.props;
+    if (!isIntersecting) return;
+
+    const { annotationListUris = [], canvasAnnotationPages = [] } = new MiradorCanvas(canvas);
+
+    annotationListUris
+      .filter(uri => !(annotations[uri]))
+      .forEach(uri => requestAnnotation(uri));
+    // IIIF v3
+    canvasAnnotationPages
+      .filter(annotation => !(annotations[annotation.id]))
+      .forEach((annotation) => {
+        // If there are no items, try to retrieve the referenced resource.
+        // otherwise the resource should be embedded and just add to the store.
+        if (!annotation.items) {
+          requestAnnotation(annotation.id);
+        } else {
+          receiveAnnotation(annotation);
+        }
+      });
+  }
+
   /**
    * Renders things
    */
   render() {
     const {
-      annotationsCount, canvas, classes, config, selected,
+      annotationsCount, searchAnnotationsCount,
+      canvas, classes, config, selected,
     } = this.props;
 
     const miradorCanvas = new MiradorCanvas(canvas);
 
     return (
-      <div
-        key={canvas.index}
-        className={
-          classNames(
-            classes.galleryViewItem,
-            selected ? classes.selected : '',
-            annotationsCount > 0 ? classes.hasAnnotations : '',
-          )
-        }
-        onClick={this.handleSelect}
-        onKeyUp={this.handleKey}
-        role="button"
-        tabIndex={0}
-      >
-        <IIIFThumbnail
-          resource={canvas}
-          labelled
-          variant="outside"
-          maxWidth={config.width}
-          maxHeight={config.height}
-          style={{
-            margin: '0 auto',
-            maxWidth: `${Math.ceil(config.height * miradorCanvas.aspectRatio)}px`,
-          }}
+      <IntersectionObserver onChange={this.handleIntersection}>
+        <div
+          key={canvas.index}
+          className={
+            classNames(
+              classes.galleryViewItem,
+              selected ? classes.selected : '',
+              searchAnnotationsCount > 0 ? classes.hasAnnotations : '',
+            )
+          }
+          onClick={this.handleSelect}
+          onKeyUp={this.handleKey}
+          role="button"
+          tabIndex={0}
         >
-          { annotationsCount > 0 && (
-            <Chip
-              avatar={(
-                <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
-                  <SearchIcon fontSize="small" />
-                </Avatar>
-              )}
-              label={annotationsCount}
-              className={
-                classNames(
-                  classes.chip,
-                )
-              }
-              size="small"
-            />
-          )}
-        </IIIFThumbnail>
-      </div>
+          <IIIFThumbnail
+            resource={canvas}
+            labelled
+            variant="outside"
+            maxWidth={config.width}
+            maxHeight={config.height}
+            style={{
+              margin: '0 auto',
+              maxWidth: `${Math.ceil(config.height * miradorCanvas.aspectRatio)}px`,
+            }}
+          >
+            { annotationsCount > 0 && (
+              <Chip
+                avatar={(
+                  <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
+                    <AnnotationIcon className={classes.annotationIcon} />
+                  </Avatar>
+                )}
+                label={annotationsCount}
+                className={
+                  classNames(
+                    classes.annotationsChip,
+                  )
+                }
+                size="small"
+              />
+            )}
+            { searchAnnotationsCount > 0 && (
+              <Chip
+                avatar={(
+                  <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
+                    <SearchIcon fontSize="small" />
+                  </Avatar>
+                )}
+                label={searchAnnotationsCount}
+                className={classNames(classes.searchChip)}
+                size="small"
+              />
+            )}
+          </IIIFThumbnail>
+        </div>
+      </IntersectionObserver>
     );
   }
 }
 
 GalleryViewThumbnail.propTypes = {
+  annotations: PropTypes.objectOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   annotationsCount: PropTypes.number,
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -130,15 +178,22 @@ GalleryViewThumbnail.propTypes = {
     width: PropTypes.number,
   }),
   focusOnCanvas: PropTypes.func.isRequired,
+  receiveAnnotation: PropTypes.func,
+  requestAnnotation: PropTypes.func,
+  searchAnnotationsCount: PropTypes.number,
   selected: PropTypes.bool,
   setCanvas: PropTypes.func.isRequired,
 };
 
 GalleryViewThumbnail.defaultProps = {
+  annotations: {},
   annotationsCount: 0,
   config: {
     height: 100,
     width: null,
   },
+  receiveAnnotation: () => {},
+  requestAnnotation: () => {},
+  searchAnnotationsCount: 0,
   selected: false,
 };

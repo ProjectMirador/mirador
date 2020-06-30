@@ -44,7 +44,10 @@ const getPresentAnnotationsCanvas = createSelector(
 
 const getAnnotationsOnSelectedCanvases = createSelector(
   [
-    getVisibleCanvasIds,
+    (state, { canvasId, ...otherProps }) => (canvasId
+      ? [canvasId]
+      : getVisibleCanvasIds(state, otherProps)
+    ),
     getAnnotations,
   ],
   (canvasIds, annotations) => {
