@@ -83,17 +83,6 @@ export function setWorkspaceViewportDimensions({ width, height }) {
     type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
   };
 }
-/**
- * toggleWorkspaceExposeMode - action creator
- *
- * @param  {Object} position
- * @memberof ActionCreators
- */
-export function toggleWorkspaceExposeMode() {
-  return {
-    type: ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE,
-  };
-}
 
 /**
  * toggleDraggingEnabled - action creator

@@ -62,6 +62,7 @@ const styles = theme => ({
     },
     borderBottom: `0.5px solid ${theme.palette.divider}`,
     cursor: 'pointer',
+    whiteSpace: 'normal',
   },
   chip: {
     backgroundColor: theme.palette.background.paper,

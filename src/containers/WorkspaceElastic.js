@@ -37,9 +37,6 @@ const mapDispatchToProps = (dispatch, props) => ({
       actions.setWorkspaceViewportPosition(position),
     );
   },
-  toggleWorkspaceExposeMode: size => dispatch(
-    actions.toggleWorkspaceExposeMode(),
-  ),
   updateElasticWindowLayout: (windowId, position) => {
     dispatch(
       actions.updateElasticWindowLayout(windowId, position),
