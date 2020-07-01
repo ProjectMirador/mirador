@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import Alert from '@material-ui/lab/Alert';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -29,19 +29,19 @@ export class ErrorContent extends Component {
         </Alert>
 
         {showJsError && (
-          <ExpansionPanel square className={classes.alert}>
-            <ExpansionPanelSummary
+          <Accordion square className={classes.alert}>
+            <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
             >
               <Typography>{t('jsError', { message: error.message, name: error.name })}</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails className={classes.details}>
+            </AccordionSummary>
+            <AccordionDetails className={classes.details}>
               <pre>{ t('jsStack', { stack: error.stack }) }</pre>
               { metadata && (
                 <pre>{JSON.stringify(metadata, null, 2)}</pre>
               )}
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+            </AccordionDetails>
+          </Accordion>
         )}
         <PluginHook {...this.props} />
       </>
