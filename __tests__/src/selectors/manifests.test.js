@@ -247,7 +247,7 @@ describe('getDestructuredMetadata', () => {
     const received = getDestructuredMetadata(iiifResource);
     const expected = [{
       label: 'date',
-      value: 'some date',
+      values: ['some date'],
     }];
 
     expect(received).toEqual(expected);
@@ -267,7 +267,7 @@ describe('getManifestMetadata', () => {
     const received = getManifestMetadata(state, { manifestId: 'x' });
     const expected = [{
       label: 'date',
-      value: 'some date',
+      values: ['some date'],
     }];
 
     expect(received).toEqual(expected);
