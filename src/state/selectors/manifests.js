@@ -191,10 +191,12 @@ export const getManifestRelatedContent = createSelector(
 export const getRequiredStatement = createSelector(
   [getManifestoInstance],
   manifest => manifest
-    && asArray(manifest.getRequiredStatement()).filter(l => l.getValue()).map(labelValuePair => ({
-      label: labelValuePair.getLabel(),
-      value: labelValuePair.getValue(),
-    })),
+    && asArray(manifest.getRequiredStatement())
+      .filter(l => l.getValues().some(v => v))
+      .map(labelValuePair => ({
+        label: labelValuePair.getLabel(),
+        values: labelValuePair.getValues(),
+      })),
 );
 
 /**
