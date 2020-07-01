@@ -288,7 +288,7 @@ export function getDestructuredMetadata(iiifResource) {
   return (iiifResource
     && iiifResource.getMetadata().map(labelValuePair => ({
       label: labelValuePair.getLabel(),
-      value: labelValuePair.getValue(),
+      values: labelValuePair.getValues(),
     }))
   );
 }
