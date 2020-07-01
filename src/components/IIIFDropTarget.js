@@ -109,10 +109,26 @@ export const IIIFDropTarget = (props) => {
     },
   });
 
+  /**
+   * Safari reports drag+drop'ed urls as both a file and uri-list
+   * which gets mis-classified by react-dnd.
+   */
+  const hackForSafari = (e) => {
+    if (!window.safari || !onDrop || !e.dataTransfer) return;
+
+    if (e.dataTransfer.types.includes('Files')
+      && e.dataTransfer.types.includes('text/uri-list')) {
+      const url = e.dataTransfer.getData('text/uri-list');
+
+      if (!url) return;
+      handleDrop({ urls: [url] }, null, props);
+    }
+  };
+
   const isActive = canDrop && isOver;
 
   return (
-    <div ref={drop} style={{ height: '100%', width: '100%' }}>
+    <div ref={drop} onDrop={hackForSafari} style={{ height: '100%', width: '100%' }}>
       {children}
       <Backdrop open={isActive} style={{ zIndex: 9999 }}>
         <InsertDriveFileSharpIcon style={{ color: grey[400], fontSize: 256 }} />
