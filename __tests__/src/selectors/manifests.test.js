@@ -329,10 +329,10 @@ describe('getRequiredStatement', () => {
   it('gets the attribution data for a IIIF v2 manifest', () => {
     const state = { manifests: { x: { json: manifestFixture001 } } };
     const received = getRequiredStatement(state, { manifestId: 'x' });
-    expect(received).toEqual([{ label: null, value: 'http://creativecommons.org/licenses/by-nc-sa/3.0/.' }]);
+    expect(received).toEqual([{ label: null, values: ['http://creativecommons.org/licenses/by-nc-sa/3.0/.'] }]);
   });
 
-  it('suppresses empty the attribution data', () => {
+  it('suppresses empty attribution data', () => {
     const state = { manifests: { x: { json: manifestFixture002 } } };
     const received = getRequiredStatement(state, { manifestId: 'x' });
     expect(received).toEqual([]);
@@ -341,7 +341,7 @@ describe('getRequiredStatement', () => {
   it('gets the required statement data for a IIIF v3 manifest', () => {
     const state = { manifests: { x: { json: manifestFixturev3001 } } };
     const received = getRequiredStatement(state, { manifestId: 'x' });
-    expect(received).toEqual([{ label: 'Terms of Use', value: 'None' }]);
+    expect(received).toEqual([{ label: 'Terms of Use', values: ['None'] }]);
   });
 });
 
