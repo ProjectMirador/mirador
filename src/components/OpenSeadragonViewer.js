@@ -209,7 +209,7 @@ export class OpenSeadragonViewer extends Component {
   /**
    */
   addTileSource(infoResponse) {
-    const { canvasWorld } = this.props;
+    const { canvasWorld, osdConfig: { placeholderFill = 'rgba(0,0,0,0)' } } = this.props;
     const { viewer } = this.state;
     return new Promise((resolve, reject) => {
       if (!viewer) {
@@ -229,6 +229,67 @@ export class OpenSeadragonViewer extends Component {
         ),
         index: canvasWorld.layerIndexOfImageResource(contentResource),
         opacity: canvasWorld.layerOpacityOfImageResource(contentResource),
+        placeholderFillStyle: (img, context) => {
+          let tick = 0.5;
+
+          /** easing function for animating the opacity */
+          const ease = n => 0.15 + 0.25 * (1 - Math.cos(Math.PI * n));
+          /** Animate a loading indicator */
+          const animation = () => {
+            if (
+              !img
+              || !img.viewport
+              || !img.viewer
+              || img.viewer.world.getIndexOfItem(img) < 0
+              || img.getFullyLoaded()
+            ) return;
+
+            tick += 0.015;
+
+            const { viewport } = img;
+            const c1 = viewport.imageToViewerElementCoordinates(new OpenSeadragon.Point(0, 0));
+            const c2 = viewport.imageToViewerElementCoordinates(img.getContentSize());
+            const canvas = [c1.x, c1.y, c2.x - c1.x, c2.y - c1.y];
+
+            // center dot position
+            const radius = canvas[3] / 12;
+            const dot = { radius, x: canvas[0] + canvas[2] / 2, y: canvas[1] + canvas[3] / 2 };
+            const spacing = 2.8;
+            const area = [
+              dot.x - dot.radius * (1 + spacing),
+              dot.y - dot.radius,
+              dot.radius * (2 + 2 * spacing),
+              dot.radius * 2,
+            ];
+
+            context.save();
+            context.clearRect(...area);
+            context.fillStyle = placeholderFill;
+            context.fillRect(...area);
+            context.beginPath();
+            context.fillStyle = `rgba(190, 190, 190, ${ease(tick)})`;
+            context.arc(dot.x - dot.radius * spacing, dot.y, dot.radius, 0, 2 * Math.PI, false);
+            context.fill();
+            context.beginPath();
+            context.fillStyle = `rgba(190, 190, 190, ${ease(tick + 0.15)})`;
+            context.arc(dot.x, dot.y, dot.radius, 0, 2 * Math.PI, false);
+            context.fill();
+            context.beginPath();
+            context.fillStyle = `rgba(190, 190, 190, ${ease(tick + 0.3)})`;
+            context.arc(dot.x + dot.radius * spacing, dot.y, dot.radius, 0, 2 * Math.PI, false);
+            context.fill();
+            context.restore();
+
+            window.requestAnimationFrame(animation);
+          };
+          if (!img.renderingPlaceholder) {
+            img.renderingPlaceholder = true; // eslint-disable-line no-param-reassign
+            setTimeout(() => {
+              window.requestAnimationFrame(animation);
+            }, 750);
+          }
+          return placeholderFill;
+        },
         success: event => resolve(event),
         tileSource,
       });

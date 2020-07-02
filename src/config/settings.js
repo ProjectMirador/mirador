@@ -321,6 +321,7 @@ export default {
   osdConfig: { // Default config used for OpenSeadragon
     alwaysBlend: false,
     blendTime: 0.1,
+    placeholderFill: 'rgba(0,0,0,0.05)',
     preserveImageSizeOnResize: true,
     preserveViewport: true,
     showNavigationControl: false,
