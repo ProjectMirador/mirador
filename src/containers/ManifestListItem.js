@@ -43,9 +43,6 @@ const mapDispatchToProps = { addWindow: actions.addWindow, fetchManifest: action
 const styles = theme => ({
   active: {},
   buttonGrid: {
-    '&:hover': {
-      backgroundColor: theme.palette.action.hover,
-    },
   },
   label: {
     textAlign: 'left',
@@ -64,6 +61,13 @@ const styles = theme => ({
     ...theme.mixins.gutters(),
     '&$active': {
       borderLeft: `4px solid ${theme.palette.primary.main}`,
+    },
+    '&:hover,&:focus-within': {
+      '&$active': {
+        borderLeft: `4px solid ${theme.palette.primary.main}`,
+      },
+      backgroundColor: theme.palette.action.hover,
+      borderLeft: `4px solid ${theme.palette.action.hover}`,
     },
     borderLeft: '4px solid transparent',
   },

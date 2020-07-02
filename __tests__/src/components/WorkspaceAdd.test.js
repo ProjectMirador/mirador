@@ -31,6 +31,15 @@ describe('WorkspaceAdd', () => {
     expect(wrapper.find(ManifestListItem).length).toBe(2);
   });
 
+  it('focuses on the first manifest item', () => {
+    const el = { focus: jest.fn() };
+    const wrapper = createWrapper();
+    expect(wrapper.find(ManifestListItem).at(1).prop('buttonRef')).toBe(undefined);
+    wrapper.find(ManifestListItem).at(0).prop('buttonRef')(el);
+
+    expect(el.focus).toHaveBeenCalled();
+  });
+
   it('without manifests, renders an empty message', () => {
     const wrapper = createWrapper({ catalog: [] });
     expect(wrapper.find(ManifestListItem).length).toEqual(0);
@@ -73,6 +82,15 @@ describe('WorkspaceAdd', () => {
     expect(wrapper.find(Drawer).find(ManifestForm).length).toBe(1);
     wrapper.find(Drawer).find(ManifestForm).props().onSubmit();
     expect(wrapper.find(Drawer).props().open).toBe(false);
+  });
+
+  it('scrolls to the top after an item is added', () => {
+    const ref = { current: { scrollTo: jest.fn() } };
+    const wrapper = createWrapper();
+    wrapper.instance().ref = ref;
+    wrapper.instance().onSubmit();
+
+    expect(ref.current.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', left: 0, top: 0 });
   });
 
   it('passes a cancel action through to the form', () => {

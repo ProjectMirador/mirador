@@ -36,6 +36,7 @@ export class ManifestListItem extends React.Component {
   render() {
     const {
       active,
+      buttonRef,
       manifestId,
       ready,
       title,
@@ -82,6 +83,7 @@ export class ManifestListItem extends React.Component {
           <Grid container className={ns('manifest-list-item')} spacing={2}>
             <Grid item xs={12} sm={6} className={classes.buttonGrid}>
               <ButtonBase
+                ref={buttonRef}
                 className={ns('manifest-list-item-title')}
                 style={{ width: '100%' }}
                 onClick={
@@ -148,6 +150,7 @@ export class ManifestListItem extends React.Component {
 ManifestListItem.propTypes = {
   active: PropTypes.bool,
   addWindow: PropTypes.func.isRequired,
+  buttonRef: PropTypes.elementType,
   classes: PropTypes.objectOf(PropTypes.string),
   error: PropTypes.string,
   fetchManifest: PropTypes.func.isRequired,
@@ -165,6 +168,7 @@ ManifestListItem.propTypes = {
 
 ManifestListItem.defaultProps = {
   active: false,
+  buttonRef: undefined,
   classes: {},
   error: null,
   handleClose: () => {},
