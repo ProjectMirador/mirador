@@ -23,13 +23,16 @@ const styles = theme => ({
   },
   annotationsChip: {
     ...theme.typography.caption,
-    left: '50%',
-    position: 'absolute',
-    top: 10,
-    transform: 'translate(-50%, 0)',
   },
   avatar: {
     backgroundColor: 'transparent',
+  },
+  chips: {
+    opacity: 0.875,
+    position: 'absolute',
+    right: 0,
+    textAlign: 'right',
+    top: 0,
   },
   galleryViewItem: {
     '&$hasAnnotations': {
@@ -61,10 +64,7 @@ const styles = theme => ({
     '&$selected $avatar': {
       backgroundColor: theme.palette.highlights.primary,
     },
-    left: '50%',
-    position: 'absolute',
-    top: 80,
-    transform: 'translate(-50%, 0)',
+    marginTop: 2,
   },
   selected: {},
 });

@@ -133,34 +133,36 @@ export class GalleryViewThumbnail extends Component {
               maxWidth: `${Math.ceil(config.height * miradorCanvas.aspectRatio)}px`,
             }}
           >
-            { annotationsCount > 0 && (
-              <Chip
-                avatar={(
-                  <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
-                    <AnnotationIcon className={classes.annotationIcon} />
-                  </Avatar>
-                )}
-                label={annotationsCount}
-                className={
-                  classNames(
-                    classes.annotationsChip,
-                  )
-                }
-                size="small"
-              />
-            )}
-            { searchAnnotationsCount > 0 && (
-              <Chip
-                avatar={(
-                  <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
-                    <SearchIcon fontSize="small" />
-                  </Avatar>
-                )}
-                label={searchAnnotationsCount}
-                className={classNames(classes.searchChip)}
-                size="small"
-              />
-            )}
+            <div className={classes.chips}>
+              { searchAnnotationsCount > 0 && (
+                <Chip
+                  avatar={(
+                    <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
+                      <SearchIcon fontSize="small" />
+                    </Avatar>
+                  )}
+                  label={searchAnnotationsCount}
+                  className={classNames(classes.searchChip)}
+                  size="small"
+                />
+              )}
+              { annotationsCount > 0 && (
+                <Chip
+                  avatar={(
+                    <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
+                      <AnnotationIcon className={classes.annotationIcon} />
+                    </Avatar>
+                  )}
+                  label={annotationsCount}
+                  className={
+                    classNames(
+                      classes.annotationsChip,
+                    )
+                  }
+                  size="small"
+                />
+              )}
+            </div>
           </IIIFThumbnail>
         </div>
       </IntersectionObserver>
