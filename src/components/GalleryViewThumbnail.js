@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
+import SearchIcon from '@material-ui/icons/SearchSharp';
 import classNames from 'classnames';
 import MiradorCanvas from '../lib/MiradorCanvas';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
@@ -67,7 +68,7 @@ export class GalleryViewThumbnail extends Component {
    */
   render() {
     const {
-      annotationsCount, annotationSelected, canvas, classes, config, selected,
+      annotationsCount, canvas, classes, config, selected,
     } = this.props;
 
     const miradorCanvas = new MiradorCanvas(canvas);
@@ -100,12 +101,15 @@ export class GalleryViewThumbnail extends Component {
         >
           { annotationsCount > 0 && (
             <Chip
-              avatar={<Avatar className={classes.avatar} />}
+              avatar={(
+                <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
+                  <SearchIcon fontSize="small" />
+                </Avatar>
+              )}
               label={annotationsCount}
               className={
                 classNames(
                   classes.chip,
-                  annotationSelected ? classes.selected : '',
                 )
               }
               size="small"
@@ -119,7 +123,6 @@ export class GalleryViewThumbnail extends Component {
 
 GalleryViewThumbnail.propTypes = {
   annotationsCount: PropTypes.number,
-  annotationSelected: PropTypes.bool,
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   config: PropTypes.shape({
@@ -133,7 +136,6 @@ GalleryViewThumbnail.propTypes = {
 
 GalleryViewThumbnail.defaultProps = {
   annotationsCount: 0,
-  annotationSelected: false,
   config: {
     height: 100,
     width: null,

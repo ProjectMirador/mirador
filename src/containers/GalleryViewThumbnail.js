@@ -6,7 +6,6 @@ import * as actions from '../state/actions';
 import { GalleryViewThumbnail } from '../components/GalleryViewThumbnail';
 import {
   getSearchAnnotationsForWindow,
-  getSelectedContentSearchAnnotationIds,
   getCurrentCanvas,
   getConfig,
 } from '../state/selectors';
@@ -16,13 +15,10 @@ import {
  */
 const styles = theme => ({
   avatar: {
-    backgroundColor: theme.palette.hitCounter.default,
+    backgroundColor: 'transparent',
   },
   chip: {
     ...theme.typography.caption,
-    '&$selected $avatar': {
-      backgroundColor: theme.palette.highlights.primary,
-    },
     left: '50%',
     position: 'absolute',
     top: 80,
@@ -59,7 +55,6 @@ const styles = theme => ({
 /** */
 const mapStateToProps = (state, { canvas, windowId }) => {
   const currentCanvas = getCurrentCanvas(state, { windowId });
-  const selectedAnnotationIds = getSelectedContentSearchAnnotationIds(state, { windowId });
   const searchAnnotations = getSearchAnnotationsForWindow(
     state,
     { windowId },
@@ -70,7 +65,6 @@ const mapStateToProps = (state, { canvas, windowId }) => {
 
   return {
     annotationsCount: canvasAnnotations.length,
-    annotationSelected: canvasAnnotations.some(a => selectedAnnotationIds.includes(a.id)),
     config: getConfig(state).galleryView,
     selected: currentCanvas && currentCanvas.id === canvas.id,
   };

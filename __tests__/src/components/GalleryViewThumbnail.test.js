@@ -73,12 +73,5 @@ describe('GalleryView', () => {
       expect(wrapper.find(Chip).prop('label')).toEqual(50);
       expect(wrapper.find(Chip).prop('className')).toEqual('');
     });
-
-    it('shows the number of search annotations on a canvas', () => {
-      wrapper = createWrapper({ annotationsCount: 50, annotationSelected: true });
-      expect(wrapper.find(Chip).length).toEqual(1);
-      expect(wrapper.find(Chip).prop('label')).toEqual(50);
-      expect(wrapper.find(Chip).prop('className')).toEqual('selected');
-    });
   });
 });
