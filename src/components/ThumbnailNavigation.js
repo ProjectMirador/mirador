@@ -38,7 +38,7 @@ export class ThumbnailNavigation extends Component {
     if (prevProps.canvasIndex !== canvasIndex) {
       let index = canvasIndex;
       if (view === 'book') index = Math.ceil(index / 2);
-      this.gridRef.current.scrollToItem(index, 'center');
+      this.gridRef.current.scrollToItem(index, 'smart');
     }
   }
 
