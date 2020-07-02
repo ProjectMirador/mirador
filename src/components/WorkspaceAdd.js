@@ -98,7 +98,7 @@ export class WorkspaceAdd extends React.Component {
             <Paper className={classes.list}>
               <Typography variant="srOnly" component="h1">{t('miradorResources')}</Typography>
               <PluginHook {...this.props} />
-              <List>
+              <List disablePadding>
                 {manifestList}
               </List>
             </Paper>
