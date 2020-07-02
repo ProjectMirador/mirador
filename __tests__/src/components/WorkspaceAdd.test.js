@@ -31,6 +31,15 @@ describe('WorkspaceAdd', () => {
     expect(wrapper.find(ManifestListItem).length).toBe(2);
   });
 
+  it('focuses on the first manifest item', () => {
+    const el = { focus: jest.fn() };
+    const wrapper = createWrapper();
+    expect(wrapper.find(ManifestListItem).at(1).prop('buttonRef')).toBe(undefined);
+    wrapper.find(ManifestListItem).at(0).prop('buttonRef')(el);
+
+    expect(el.focus).toHaveBeenCalled();
+  });
+
   it('without manifests, renders an empty message', () => {
     const wrapper = createWrapper({ catalog: [] });
     expect(wrapper.find(ManifestListItem).length).toEqual(0);

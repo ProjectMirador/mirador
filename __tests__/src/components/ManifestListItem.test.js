@@ -23,9 +23,10 @@ function createWrapper(props) {
 
 describe('ManifestListItem', () => {
   it('renders without an error', () => {
-    const wrapper = createWrapper();
+    const wrapper = createWrapper({ buttonRef: 'ref' });
     expect(wrapper.find('.mirador-manifest-list-item').length).toBe(1);
     expect(wrapper.find(ButtonBase).length).toBe(1);
+    expect(wrapper.find(ButtonBase).getElement().ref).toBe('ref');
     expect(wrapper.find(ButtonBase).find(Typography).children().text()).toEqual('xyz');
   });
   it('adds a class when the item is active', () => {
