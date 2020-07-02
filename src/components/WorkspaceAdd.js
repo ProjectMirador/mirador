@@ -29,9 +29,17 @@ export class WorkspaceAdd extends React.Component {
     super(props);
 
     this.state = { addResourcesOpen: false };
+    this.ref = React.createRef();
 
+    this.onSubmit = this.onSubmit.bind(this);
     this.setAddResourcesVisibility = this.setAddResourcesVisibility.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
+  }
+
+  /** @private */
+  onSubmit() {
+    this.setAddResourcesVisibility(false);
+    this.scrollToTop();
   }
 
   /**
@@ -49,6 +57,16 @@ export class WorkspaceAdd extends React.Component {
       addResource(manifestId, manifestJson, { provider: 'file' });
     } else {
       addResource(manifestId);
+    }
+
+    this.scrollToTop();
+  }
+
+  /** Scroll the list back to the top */
+  scrollToTop() {
+    if (this.ref.current) {
+      const el = this.ref.current;
+      el.scrollTo({ behavior: 'smooth', left: 0, top: 0 });
     }
   }
 
@@ -72,7 +90,7 @@ export class WorkspaceAdd extends React.Component {
 
     return (
       <IIIFDropTarget onDrop={this.handleDrop}>
-        <div className={classNames(ns('workspace-add'), classes.workspaceAdd)}>
+        <div ref={this.ref} className={classNames(ns('workspace-add'), classes.workspaceAdd)}>
           {catalog.length < 1 ? (
             <Grid
               alignItems="center"
@@ -147,7 +165,7 @@ export class WorkspaceAdd extends React.Component {
               </AppBar>
               <ManifestForm
                 addResourcesOpen={addResourcesOpen}
-                onSubmit={() => (this.setAddResourcesVisibility(false))}
+                onSubmit={this.onSubmit}
                 onCancel={() => (this.setAddResourcesVisibility(false))}
               />
             </Paper>

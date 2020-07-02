@@ -75,6 +75,15 @@ describe('WorkspaceAdd', () => {
     expect(wrapper.find(Drawer).props().open).toBe(false);
   });
 
+  it('scrolls to the top after an item is added', () => {
+    const ref = { current: { scrollTo: jest.fn() } };
+    const wrapper = createWrapper();
+    wrapper.instance().ref = ref;
+    wrapper.instance().onSubmit();
+
+    expect(ref.current.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', left: 0, top: 0 });
+  });
+
   it('passes a cancel action through to the form', () => {
     const wrapper = createWrapper();
     wrapper.setState({ addResourcesOpen: true });
