@@ -129,8 +129,10 @@ export function* setCurrentAnnotationsOnCurrentCanvas({
         )))),
   );
 
-  // if the currently selected annotation isn't on this canvas, do a thing.
-  yield put(selectAnnotation(windowId, Object.values(annotationBySearch)[0][0]));
+  if (Object.values(annotationBySearch).length > 0) {
+    // if the currently selected annotation isn't on this canvas, do a thing.
+    yield put(selectAnnotation(windowId, Object.values(annotationBySearch)[0][0]));
+  }
 }
 
 /** @private */
