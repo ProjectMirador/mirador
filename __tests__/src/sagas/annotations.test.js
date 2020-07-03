@@ -1,43 +1,22 @@
 import { select } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 
-import { fetchAnnotations } from '../../../src/state/sagas/annotations';
-import { getAnnotations, getCanvases } from '../../../src/state/selectors';
+import { fetchCanvasAnnotations, fetchAnnotations } from '../../../src/state/sagas/annotations';
+import { getAnnotations, getCanvas } from '../../../src/state/selectors';
 
 describe('annotation sagas', () => {
-  describe('fetchAnnotations', () => {
-    it('requests IIIF v2-style annotations for each visible canvas', () => {
+  describe('fetchCanvasAnnotations', () => {
+    it('requests IIIF v2-style annotations', () => {
       const action = {
-        visibleCanvases: ['a', 'b'],
+        canvasId: 'a',
         windowId: 'foo',
       };
 
-      return expectSaga(fetchAnnotations, action)
+      return expectSaga(fetchCanvasAnnotations, action)
         .provide([
-          [select(getCanvases, { windowId: 'foo' }), [
+          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }),
             { __jsonld: { otherContent: 'annoId' }, id: 'a' },
-            { __jsonld: { otherContent: ['alreadyFetched'] }, id: 'b' },
-          ]],
-          [select(getAnnotations), { a: {}, b: { alreadyFetched: {} } }],
-        ])
-        .put({
-          annotationId: 'annoId',
-          targetId: 'a',
-          type: 'mirador/REQUEST_ANNOTATION',
-        })
-        .run();
-    });
-    it('requests IIIF v3-style annotations for each visible canvas', () => {
-      const action = {
-        visibleCanvases: ['a', 'b'],
-        windowId: 'foo',
-      };
-
-      return expectSaga(fetchAnnotations, action)
-        .provide([
-          [select(getCanvases, { windowId: 'foo' }), [
-            { __jsonld: { annotations: { id: 'annoId', type: 'AnnotationPage' } }, id: 'a' },
-          ]],
+          ],
           [select(getAnnotations), { a: {} }],
         ])
         .put({
@@ -47,19 +26,54 @@ describe('annotation sagas', () => {
         })
         .run();
     });
-    it('handles embedded IIIF v3-style annotations on each visible canvas', () => {
+    it('does not refetch annotations', () => {
       const action = {
-        visibleCanvases: ['a', 'b'],
+        canvasId: 'a',
+        windowId: 'foo',
+      };
+
+      return expectSaga(fetchCanvasAnnotations, action)
+        .provide([
+          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }),
+            { __jsonld: { otherContent: ['annoId'] }, id: 'a' },
+          ],
+          [select(getAnnotations), { a: { annoId: {} } }],
+        ])
+        .run();
+    });
+    it('requests IIIF v3-style annotations', () => {
+      const action = {
+        canvasId: 'a',
+        windowId: 'foo',
+      };
+
+      return expectSaga(fetchCanvasAnnotations, action)
+        .provide([
+          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }),
+            { __jsonld: { annotations: { id: 'annoId', type: 'AnnotationPage' } }, id: 'a' },
+          ],
+          [select(getAnnotations), { a: {} }],
+        ])
+        .put({
+          annotationId: 'annoId',
+          targetId: 'a',
+          type: 'mirador/REQUEST_ANNOTATION',
+        })
+        .run();
+    });
+    it('handles embedded IIIF v3-style annotations', () => {
+      const action = {
+        canvasId: 'a',
         windowId: 'foo',
       };
 
       const annotations = { id: 'annoId', items: [], type: 'AnnotationPage' };
 
-      return expectSaga(fetchAnnotations, action)
+      return expectSaga(fetchCanvasAnnotations, action)
         .provide([
-          [select(getCanvases, { windowId: 'foo' }), [
+          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }),
             { __jsonld: { annotations }, id: 'a' },
-          ]],
+          ],
           [select(getAnnotations), { a: {} }],
         ])
         .put({
@@ -67,6 +81,27 @@ describe('annotation sagas', () => {
           annotationJson: annotations,
           targetId: 'a',
           type: 'mirador/RECEIVE_ANNOTATION',
+        })
+        .run();
+    });
+  });
+  describe('fetchAnnotations', () => {
+    it('requests annotations for each visible canvas', () => {
+      const action = {
+        visibleCanvases: ['a', 'b'],
+        windowId: 'foo',
+      };
+
+      return expectSaga(fetchAnnotations, action)
+        .put({
+          canvasId: 'a',
+          type: 'mirador/REQUEST_CANVAS_ANNOTATIONS',
+          windowId: 'foo',
+        })
+        .put({
+          canvasId: 'b',
+          type: 'mirador/REQUEST_CANVAS_ANNOTATIONS',
+          windowId: 'foo',
         })
         .run();
     });

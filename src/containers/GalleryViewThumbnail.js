@@ -8,7 +8,6 @@ import {
   getSearchAnnotationsForWindow,
   getCurrentCanvas,
   getConfig,
-  getAnnotations,
   getPresentAnnotationsOnSelectedCanvases,
   getCompanionWindowsForContent,
 } from '../state/selectors';
@@ -83,15 +82,18 @@ const mapStateToProps = (state, { canvas, windowId }) => {
   const hasOpenAnnotationsWindow = getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0;
 
   return {
-    annotations: hasOpenAnnotationsWindow
-      ? getAnnotations(state, { windowId })[canvas.id] || {}
-      : {},
-    annotationsCount: hasOpenAnnotationsWindow
-      ? getPresentAnnotationsOnSelectedCanvases(
+    annotationsCount: (() => {
+      if (!hasOpenAnnotationsWindow) return undefined;
+      const annotations = getPresentAnnotationsOnSelectedCanvases(
         state,
         { canvasId: canvas.id },
-      ).reduce((v, a) => v + a.resources.filter(r => r.targetId === canvas.id).length, 0)
-      : 0,
+      );
+
+      return annotations.reduce(
+        (v, a) => (v) + a.resources.filter(r => r.targetId === canvas.id).length,
+        0,
+      );
+    })(),
     config: getConfig(state).galleryView,
     searchAnnotationsCount: canvasAnnotations.length,
     selected: currentCanvas && currentCanvas.id === canvas.id,
@@ -105,10 +107,9 @@ const mapStateToProps = (state, { canvas, windowId }) => {
  */
 const mapDispatchToProps = (dispatch, { canvas, id, windowId }) => ({
   focusOnCanvas: () => dispatch(actions.setWindowViewType(windowId, 'single')),
-  receiveAnnotation: (annotation) => (
-    dispatch(actions.receiveAnnotation(canvas.id, annotation.id, annotation))
+  requestCanvasAnnotations: () => (
+    dispatch(actions.requestCanvasAnnotations(windowId, canvas.id))
   ),
-  requestAnnotation: (...args) => dispatch(actions.requestAnnotation(canvas.id, ...args)),
   setCanvas: (...args) => dispatch(actions.setCanvas(windowId, ...args)),
 });
 

@@ -19,6 +19,8 @@ export class GalleryViewThumbnail extends Component {
   constructor(props) {
     super(props);
 
+    this.state = { requestedAnnotations: false };
+
     this.handleSelect = this.handleSelect.bind(this);
     this.handleKey = this.handleKey.bind(this);
     this.handleIntersection = this.handleIntersection.bind(this);
@@ -70,29 +72,20 @@ export class GalleryViewThumbnail extends Component {
   /** */
   handleIntersection({ isIntersecting }) {
     const {
-      annotations,
-      canvas,
-      requestAnnotation, receiveAnnotation,
+      annotationsCount,
+      requestCanvasAnnotations,
     } = this.props;
-    if (!isIntersecting) return;
 
-    const { annotationListUris = [], canvasAnnotationPages = [] } = new MiradorCanvas(canvas);
+    const { requestedAnnotations } = this.state;
 
-    annotationListUris
-      .filter(uri => !(annotations[uri]))
-      .forEach(uri => requestAnnotation(uri));
-    // IIIF v3
-    canvasAnnotationPages
-      .filter(annotation => !(annotations[annotation.id]))
-      .forEach((annotation) => {
-        // If there are no items, try to retrieve the referenced resource.
-        // otherwise the resource should be embedded and just add to the store.
-        if (!annotation.items) {
-          requestAnnotation(annotation.id);
-        } else {
-          receiveAnnotation(annotation);
-        }
-      });
+    if (
+      !isIntersecting
+      || annotationsCount === undefined
+      || annotationsCount > 0
+      || requestedAnnotations) return;
+
+    this.setState({ requestedAnnotations: true });
+    requestCanvasAnnotations();
   }
 
   /**
@@ -146,7 +139,7 @@ export class GalleryViewThumbnail extends Component {
                   size="small"
                 />
               )}
-              { annotationsCount > 0 && (
+              { (annotationsCount || 0) > 0 && (
                 <Chip
                   avatar={(
                     <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
@@ -171,7 +164,6 @@ export class GalleryViewThumbnail extends Component {
 }
 
 GalleryViewThumbnail.propTypes = {
-  annotations: PropTypes.objectOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   annotationsCount: PropTypes.number,
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -180,22 +172,19 @@ GalleryViewThumbnail.propTypes = {
     width: PropTypes.number,
   }),
   focusOnCanvas: PropTypes.func.isRequired,
-  receiveAnnotation: PropTypes.func,
-  requestAnnotation: PropTypes.func,
+  requestCanvasAnnotations: PropTypes.func,
   searchAnnotationsCount: PropTypes.number,
   selected: PropTypes.bool,
   setCanvas: PropTypes.func.isRequired,
 };
 
 GalleryViewThumbnail.defaultProps = {
-  annotations: {},
-  annotationsCount: 0,
+  annotationsCount: undefined,
   config: {
     height: 100,
     width: null,
   },
-  receiveAnnotation: () => {},
-  requestAnnotation: () => {},
+  requestCanvasAnnotations: () => {},
   searchAnnotationsCount: 0,
   selected: false,
 };

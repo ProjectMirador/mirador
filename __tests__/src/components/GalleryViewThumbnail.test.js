@@ -63,53 +63,38 @@ describe('GalleryView', () => {
   });
 
   describe('on-demand annotation fetching', () => {
-    it('fetches IIIF v2 annotations', () => {
-      const requestAnnotation = jest.fn();
+    it('fetches annotations', () => {
+      const requestCanvasAnnotations = jest.fn();
       const canvas = {
-        __jsonld: {
-          otherContent: [
-            'alreadyFetched',
-            'some-uri',
-          ],
-        },
         getHeight: () => 50,
         getWidth: () => 50,
       };
-      wrapper = createWrapper({ annotations: { alreadyFetched: true }, canvas, requestAnnotation });
+      wrapper = createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
 
       wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: true });
-      expect(requestAnnotation).toHaveBeenCalledWith('some-uri');
-      expect(requestAnnotation).not.toHaveBeenCalledWith('alreadyFetched');
+      expect(requestCanvasAnnotations).toHaveBeenCalled();
     });
-    it('requests IIIF v3-style annotations for each visible canvas', () => {
-      const requestAnnotation = jest.fn();
+    it('does nothing if there is no intersection', () => {
+      const requestCanvasAnnotations = jest.fn();
       const canvas = {
-        __jsonld: {
-          annotations: { id: 'annoId', type: 'AnnotationPage' },
-        },
         getHeight: () => 50,
         getWidth: () => 50,
       };
-      wrapper = createWrapper({ annotations: {}, canvas, requestAnnotation });
+      wrapper = createWrapper({ canvas, requestCanvasAnnotations });
 
-      wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: true });
-      expect(requestAnnotation).toHaveBeenCalledWith('annoId');
+      wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: false });
+      expect(requestCanvasAnnotations).not.toHaveBeenCalled();
     });
-
-    it('handles embedded IIIF v3-style annotations on each visible canvas', () => {
-      const receiveAnnotation = jest.fn();
-      const annotations = { id: 'annoId', items: [], type: 'AnnotationPage' };
+    it('does nothing if there are already some annotations', () => {
+      const requestCanvasAnnotations = jest.fn();
       const canvas = {
-        __jsonld: {
-          annotations,
-        },
         getHeight: () => 50,
         getWidth: () => 50,
       };
-      wrapper = createWrapper({ annotations: {}, canvas, receiveAnnotation });
+      wrapper = createWrapper({ annotationsCount: 5, canvas, requestCanvasAnnotations });
 
       wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: true });
-      expect(receiveAnnotation).toHaveBeenCalledWith(annotations);
+      expect(requestCanvasAnnotations).not.toHaveBeenCalled();
     });
   });
 

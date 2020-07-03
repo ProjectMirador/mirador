@@ -2,6 +2,18 @@ import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('annotation actions', () => {
+  describe('requestCanvasAnnotations', () => {
+    it('requests all the annotations for a canvas', () => {
+      const canvasId = 'foo';
+      const windowId = 'abc123';
+      const expectedAction = {
+        canvasId,
+        type: ActionTypes.REQUEST_CANVAS_ANNOTATIONS,
+        windowId,
+      };
+      expect(actions.requestCanvasAnnotations(windowId, canvasId)).toEqual(expectedAction);
+    });
+  });
   describe('requestAnnotation', () => {
     it('requests an annotation from given a url', () => {
       const targetId = 'foo';
