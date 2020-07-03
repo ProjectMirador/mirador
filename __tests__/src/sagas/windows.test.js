@@ -221,6 +221,28 @@ describe('window-level sagas', () => {
         .then(({ allEffects }) => allEffects.length === 0);
     });
 
+    it('does nothing when there are no annotations targeting the current canvas', () => {
+      const action = {
+        type: ActionTypes.SET_CANVAS,
+        visibleCanvases: ['a', 'b'],
+        windowId: 'abc123',
+      };
+
+      return expectSaga(setCurrentAnnotationsOnCurrentCanvas, action)
+        .provide([
+          [select(getSearchForWindow,
+            { windowId: 'abc123' }), { cwid: { } }],
+          [select(getAnnotationsBySearch, { canvasIds: ['a', 'b'], companionWindowIds: ['cwid'], windowId: 'abc123' }),
+            { }],
+        ])
+        .run()
+        // Assert that nothing did happen, see https://github.com/jfairbank/redux-saga-test-plan/issues/137
+        .then(({ effects }) => {
+          expect(effects.select.length).toEqual(2);
+          expect(effects.put).toBeUndefined();
+        });
+    });
+
     it('selects content search annotations for the current searches', () => {
       const action = {
         type: ActionTypes.SET_CANVAS,
