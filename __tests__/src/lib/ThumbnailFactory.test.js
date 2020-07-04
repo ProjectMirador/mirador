@@ -84,6 +84,23 @@ describe('getThumbnail', () => {
           type: 'Image',
         })).toMatchObject({ url: 'xyz' });
       });
+
+      it('uses embedded sizes to find an appropriate size', () => {
+        const sizes = [
+          { height: 25, width: 25 },
+          { height: 100, width: 100 },
+          { height: 125, width: 125 },
+          { height: 1000, width: 1000 },
+        ];
+        const obj = {
+          ...(iiifService('some-url', {}, { profile: 'level0', sizes })),
+          id: 'xyz',
+          type: 'Image',
+        };
+
+        expect(createImageSubject(obj, { maxHeight: 120, maxWidth: 120 }))
+          .toMatchObject({ height: 125, width: 125 });
+      });
     });
 
     describe('with a IIIF service', () => {
