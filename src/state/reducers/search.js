@@ -1,6 +1,4 @@
-import {
-  removeIn,
-} from 'immutable';
+import omit from 'lodash/omit';
 import flatten from 'lodash/flatten';
 import ActionTypes from '../actions/action-types';
 
@@ -130,14 +128,14 @@ export const searchesReducer = (state = {}, action) => {
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};
     case ActionTypes.REMOVE_WINDOW:
-      return removeIn(state, [action.windowId]);
+      return omit(state, action.windowId);
     case ActionTypes.REMOVE_COMPANION_WINDOW:
       if (!state[action.windowId]) return state;
 
       return {
         ...state,
         [action.windowId]: {
-          ...removeIn(state[action.windowId], [action.id]),
+          ...omit(state[action.windowId], action.id),
         },
       };
     default: return state;

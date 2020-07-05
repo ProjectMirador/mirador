@@ -1,6 +1,6 @@
-import {
-  removeIn, updateIn, merge,
-} from 'immutable';
+import update from 'lodash/fp/update';
+import omit from 'lodash/omit';
+import merge from 'lodash/fp/merge';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -29,10 +29,10 @@ export const windowsReducer = (state = {}, action) => {
       };
 
     case ActionTypes.UPDATE_WINDOW:
-      return updateIn(state, [action.id], orig => merge(orig, action.payload));
+      return update([action.id], orig => merge(orig, action.payload), state);
 
     case ActionTypes.REMOVE_WINDOW:
-      return removeIn(state, [action.windowId]);
+      return omit(state, [action.windowId]);
     case ActionTypes.TOGGLE_WINDOW_SIDE_BAR:
       return {
         ...state,
@@ -72,10 +72,10 @@ export const windowsReducer = (state = {}, action) => {
     case ActionTypes.SET_CANVAS:
       if (!state[action.windowId]) return state;
 
-      return updateIn(state, [action.windowId], orig => merge(orig, {
+      return update([action.windowId], orig => merge(orig, {
         canvasId: action.canvasId,
         visibleCanvases: action.visibleCanvases || [],
-      }));
+      }), state);
     case ActionTypes.ADD_COMPANION_WINDOW:
       return {
         ...state,
