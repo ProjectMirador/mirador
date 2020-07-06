@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import { withPlugins } from '../../../src/extend/withPlugins';
 import PluginContext from '../../../src/extend/PluginContext';
@@ -58,6 +59,24 @@ describe('PluginHoc: if wrap plugins exist for target', () => {
     expect(hoc.find(selector).length).toBe(1);
     expect(hoc.find(selector).props().TargetComponent).toBe(Target);
     expect(hoc.find(selector).props().targetProps).toEqual({ bar: 2, foo: 1 });
+  });
+
+  it('passes the whole wrapped stack to the plugins', () => {
+    /** */ const WrapPluginComponentA = ({ children }) => <div className="pluginA">{children}</div>;
+    WrapPluginComponentA.propTypes = { children: PropTypes.node.isRequired };
+    /** */ const WrapPluginComponentB = props => <div className="pluginB">look i am a plugin</div>;
+    const pluginMap = {
+      Target: {
+        wrap: [
+          { component: WrapPluginComponentA, mode: 'wrap', target: 'Target' },
+          { component: WrapPluginComponentB, mode: 'wrap', target: 'Target' },
+        ],
+      },
+    };
+    const hoc = createPluginHoc(pluginMap);
+    const selector = 'WrapPluginComponentA';
+    expect(hoc.find(selector).length).toBe(1);
+    expect(hoc.find(selector).find('WrapPluginComponentB').length).toBe(1);
   });
 });
 
