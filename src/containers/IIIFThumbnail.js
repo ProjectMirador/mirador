@@ -55,8 +55,8 @@ const styles = theme => ({
   outsideCaption: {
     boxOrient: 'vertical',
     display: '-webkit-box',
-    height: '3em',
     lineClamp: '2',
+    maxHeight: '3em',
   },
   outsideLabel: {},
   outsideRoot: {},
