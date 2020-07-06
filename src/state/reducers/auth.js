@@ -1,4 +1,4 @@
-import { removeIn } from 'immutable';
+import omit from 'lodash/omit';
 
 import ActionTypes from '../actions/action-types';
 import { selectNextAuthService } from '../selectors/canvases';
@@ -52,7 +52,7 @@ export const authReducer = (state = {}, action) => {
         },
       };
     case ActionTypes.RESET_AUTHENTICATION_STATE:
-      return removeIn(state, [action.id]);
+      return omit(state, action.id);
     default: return state;
   }
 };

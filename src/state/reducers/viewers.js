@@ -1,4 +1,5 @@
-import { removeIn, setIn } from 'immutable';
+import set from 'lodash/fp/set';
+import omit from 'lodash/omit';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -15,12 +16,12 @@ export const viewersReducer = (state = {}, action) => {
         },
       };
     case ActionTypes.REMOVE_WINDOW:
-      return removeIn(state, [action.windowId]);
+      return omit(state, action.windowId);
     case ActionTypes.SET_WINDOW_VIEW_TYPE:
-      return setIn(state, [action.windowId], null);
+      return set([action.windowId], null, state);
     case ActionTypes.SET_CANVAS:
       if (!action.preserveViewport) {
-        return setIn(state, [action.windowId], null);
+        return set([action.windowId], null, state);
       }
       return state;
     case ActionTypes.IMPORT_MIRADOR_STATE:

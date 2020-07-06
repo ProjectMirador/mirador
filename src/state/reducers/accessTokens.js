@@ -1,4 +1,4 @@
-import { removeIn } from 'immutable';
+import omit from 'lodash/omit';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ActionTypes from '../actions/action-types';
 
@@ -64,7 +64,7 @@ export function accessTokensReducer(state = {}, action) {
         },
       };
     case ActionTypes.RESET_AUTHENTICATION_STATE:
-      return removeIn(state, [action.tokenServiceId]);
+      return omit(state, action.tokenServiceId);
     default:
       return state;
   }
