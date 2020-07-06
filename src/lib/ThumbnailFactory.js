@@ -3,6 +3,12 @@ import MiradorManifest from './MiradorManifest';
 import MiradorCanvas from './MiradorCanvas';
 
 /** */
+function asArray(value) {
+  if (value === undefined) return [];
+  return Array.isArray(value) ? value : [value];
+}
+
+/** */
 function isLevel0ImageProfile(service) {
   const profile = service.getProfile();
 
@@ -32,7 +38,7 @@ function isLevel2ImageProfile(service) {
 function iiifv3ImageServiceType(service) {
   const type = service.getProperty('type') || [];
 
-  return (Array.isArray(type) ? type : [type]).some(v => v.startsWith('ImageService'));
+  return asArray(type).some(v => v.startsWith('ImageService'));
 }
 
 /** */
@@ -68,9 +74,9 @@ class ThumbnailFactory {
     let size;
     let width;
     let height;
-    let maxHeight;
-    let maxWidth;
     const minDimension = 120;
+    let maxHeight = minDimension;
+    let maxWidth = minDimension;
     const { maxHeight: requestedMaxHeight, maxWidth: requestedMaxWidth } = this.iiifOpts;
 
     if (requestedMaxHeight) maxHeight = Math.max(requestedMaxHeight, minDimension);
@@ -80,16 +86,62 @@ class ThumbnailFactory {
 
     if (!service) return undefined;
 
-    // just bail to a static image, even though sizes might provide something better
-    if (isLevel0ImageProfile(service)) {
-      return ThumbnailFactory.staticImageUrl(resource);
-    }
-
     const aspectRatio = resource.getWidth()
       && resource.getHeight()
       && (resource.getWidth() / resource.getHeight());
 
-    if (maxHeight && maxWidth) {
+    // just bail to a static image, even though sizes might provide something better
+    if (isLevel0ImageProfile(service)) {
+      const sizes = asArray(service.getProperty('sizes'));
+      const serviceHeight = service.getProperty('height');
+      const serviceWidth = service.getProperty('width');
+
+      const target = (requestedMaxWidth && requestedMaxHeight)
+        ? requestedMaxWidth * requestedMaxHeight
+        : maxHeight * maxWidth;
+
+      let closestSize = {
+        default: true,
+        height: serviceHeight || Number.MAX_SAFE_INTEGER,
+        width: serviceWidth || Number.MAX_SAFE_INTEGER,
+      };
+
+      /** Compare the total image area to our target */
+      const imageFitness = (test) => test.width * test.height - target;
+
+      /** Look for the size that's just bigger than we prefer... */
+      closestSize = sizes.reduce(
+        (best, test) => {
+          const score = imageFitness(test);
+
+          if (score < 0) return best;
+
+          return Math.abs(score) < Math.abs(imageFitness(best))
+            ? test
+            : best;
+        }, closestSize,
+      );
+
+      /** .... but not "too" big; we'd rather scale up an image than download too much */
+      if (closestSize.width * closestSize.height > target * 6) {
+        closestSize = sizes.reduce(
+          (best, test) => (
+            Math.abs(imageFitness(test)) < Math.abs(imageFitness(best))
+              ? test
+              : best
+          ), closestSize,
+        );
+      }
+
+      /** Bail if the best available size is the full size.. maybe we'll get lucky with the @id */
+      if (closestSize.default && !serviceHeight && !serviceWidth) {
+        return ThumbnailFactory.staticImageUrl(resource);
+      }
+
+      width = closestSize.width;
+      height = closestSize.height;
+      size = `${width},${height}`;
+    } else if (requestedMaxHeight && requestedMaxWidth) {
       // IIIF level 2, no problem.
       if (isLevel2ImageProfile(service)) {
         size = `!${maxWidth},${maxHeight}`;
@@ -107,11 +159,11 @@ class ThumbnailFactory {
         height = maxHeight;
         if (aspectRatio) width = Math.round(maxHeight * aspectRatio);
       }
-    } else if (maxHeight && !maxWidth) {
+    } else if (requestedMaxHeight && !requestedMaxWidth) {
       size = `,${maxHeight}`;
       height = maxHeight;
       if (aspectRatio) width = Math.round(maxHeight * aspectRatio);
-    } else if (!maxHeight && maxWidth) {
+    } else if (!requestedMaxHeight && requestedMaxWidth) {
       size = `${maxWidth},`;
       width = maxWidth;
       if (aspectRatio) height = Math.round(maxWidth / aspectRatio);
