@@ -40,5 +40,9 @@ export function addPluginsToCompanionWindowsRegistry(plugins) {
 
 /** Connect plugin component to state */
 function connectPluginComponent(plugin) {
-  return connect(plugin.mapStateToProps, plugin.mapDispatchToProps)(plugin.component);
+  return connect(
+    plugin.mapStateToProps,
+    plugin.mapDispatchToProps,
+    ...(plugin.connectOptions || []),
+  )(plugin.component);
 }
