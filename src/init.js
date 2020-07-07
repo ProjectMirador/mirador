@@ -3,7 +3,7 @@ import MiradorViewer from './lib/MiradorViewer';
 /**
  * Default Mirador instantiation
  */
-export default function (config, pluginsOrStruct) {
+function viewer(config, pluginsOrStruct) {
   let struct;
 
   if (Array.isArray(pluginsOrStruct)) {
@@ -14,3 +14,9 @@ export default function (config, pluginsOrStruct) {
 
   return new MiradorViewer(config, struct);
 }
+
+const exports = {
+  viewer,
+};
+
+export default exports;
