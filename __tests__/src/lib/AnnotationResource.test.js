@@ -151,6 +151,11 @@ describe('AnnotationResource', () => {
       expect(new AnnotationResource({ on: { selector: { '@type': 'oa:Choice', default: { value: 'www.example.com/#xywh=10,10,100,200' } } } })
         .fragmentSelector).toEqual([10, 10, 100, 200]);
     });
+
+    it('url without a fragment', () => {
+      expect(new AnnotationResource({ on: { selector: { value: 'www.example.com' } } })
+        .fragmentSelector).toEqual(null);
+    });
   });
   describe('svgSelector', () => {
     it('simple string', () => {

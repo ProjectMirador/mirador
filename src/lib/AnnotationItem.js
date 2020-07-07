@@ -104,13 +104,19 @@ export default class AnnotationItem {
   get fragmentSelector() {
     const { selector } = this;
 
+    let match;
+
     switch (typeof selector) {
       case 'string':
-        return selector.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        match = selector.match(/xywh=(.*)$/);
+        break;
       case 'object':
-        return selector.value.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        match = selector.value.match(/xywh=(.*)$/);
+        break;
       default:
         return null;
     }
+
+    return match && match[1].split(',').map(str => parseInt(str, 10));
   }
 }
