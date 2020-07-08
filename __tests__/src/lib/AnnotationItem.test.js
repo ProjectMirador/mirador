@@ -118,6 +118,10 @@ describe('AnnotationItem', () => {
       expect(new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' })
         .fragmentSelector).toEqual([10, 10, 100, 200]);
     });
+    it('url without a fragment', () => {
+      expect(new AnnotationItem({ target: 'www.example.com' })
+        .fragmentSelector).toEqual(null);
+    });
   });
   describe('svgSelector', () => {
     it('simple string', () => {
