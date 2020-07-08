@@ -3,6 +3,7 @@
 describe('Thumbnail navigation', () => {
   beforeEach(async () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/');
+    await expect(page).toMatchElement('.mirador-window', { polling: 'mutation', timeout: 5000 });
   });
 
   it('navigates a manifest using thumbnail navigation', async () => {

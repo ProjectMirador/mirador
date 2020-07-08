@@ -13,6 +13,9 @@
     <script type="text/javascript">
      var miradorInstance = Mirador.viewer({
        id: 'mirador',
+       theme: {
+         transitions: window.location.port === '4488' ?  { create: () => 'none' } : {},
+       },
        windows: [{
          manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
          canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',

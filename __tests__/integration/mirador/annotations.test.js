@@ -3,8 +3,7 @@
 describe('Annotations in Mirador', () => {
   beforeAll(async () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/');
-    await expect(page).toMatchElement('.mirador-window');
-    await page.waitFor(1000);
+    await expect(page).toMatchElement('.mirador-window', { polling: 'mutation', timeout: 5000 });
   });
   it('stores annotations in state by canvasId', async () => {
     const annotations = await page.evaluate(() => (
@@ -23,8 +22,6 @@ describe('Annotations in Mirador', () => {
     });
 
     await expect(page).toClick(`#${windowId} button[aria-label="Toggle sidebar"]`);
-
-    await page.waitFor(1000);
     await expect(page).toClick(`#${windowId} button[aria-label="Annotations"]`);
 
     await expect(page).toMatchElement(`#${windowId} h3`, { text: 'Annotations' });

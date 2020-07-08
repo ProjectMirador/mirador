@@ -14,6 +14,9 @@
      var miradorInstance = Mirador.viewer({
        id: 'mirador',
        windows: [],
+       theme: {
+         transitions: window.location.port === '4488' ?  { create: () => 'none' } : {},
+       },
      });
     </script>
   </body>
