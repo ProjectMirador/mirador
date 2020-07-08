@@ -1,7 +1,9 @@
 import init from './init';
+import * as state from './state';
 
 const exports = {
-  viewer: init,
+  ...init,
+  ...state,
 };
 
 export default exports;

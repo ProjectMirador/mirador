@@ -61,7 +61,7 @@ module.exports = (env, options) => {
   const config = baseConfig(options.mode);
 
   if (isProduction) {
-    const prodConfig = {
+    return {
       ...config,
       devtool: 'source-map',
       mode: 'production',
@@ -72,19 +72,6 @@ module.exports = (env, options) => {
         }),
       ],
     };
-
-    return [
-      prodConfig,
-      {
-        ...prodConfig,
-        entry: ['./src/polyfills.js', './src/state/index.js'],
-        output: {
-          ...prodConfig.output,
-          filename: 'mirador-state.min.js',
-          library: 'MiradorState',
-        },
-      },
-    ];
   }
 
   return {
@@ -95,7 +82,7 @@ module.exports = (env, options) => {
       port: 4444,
     },
     devtool: 'eval-source-map',
-    entry: ['react-hot-loader/patch', ...config.entry],
+    entry: ['react-hot-loader/patch', './src/polyfills.js', './src/init.js'],
     mode: 'development',
   };
 };
