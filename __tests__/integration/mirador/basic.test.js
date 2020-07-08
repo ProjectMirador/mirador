@@ -1,6 +1,6 @@
 describe('Basic end to end Mirador', () => {
   beforeAll(async () => {
-    await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/');
+    await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/blank.html');
   });
   it('has the correct page title', async () => {
     const title = await page.title();
