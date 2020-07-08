@@ -50,10 +50,15 @@ describe('WindowSideBarButtons (shallow)', () => {
     tab = wrapper.find(Tab).find('[value="annotations"]');
     expect(tab.find(Badge).props().invisible).toBe(false);
 
-    wrapper = createWrapper({ hasAnnotations: false, windowId });
+    wrapper = createWrapper({ hasAnnotations: false, hasAnyAnnotations: true, windowId });
     tab = wrapper.find(Tab).find('[value="annotations"]');
 
     expect(tab.find(Badge).props().invisible).toBe(true);
+  });
+
+  it('hides the annotation panel if there are no annotations', () => {
+    wrapper = createWrapper({ hasAnyAnnotations: false, windowId });
+    expect(wrapper.find('WithStyles(Tab)[value="annotations"]').length).toEqual(0);
   });
 
   it('can hide annotation panel when configured to do so', () => {
