@@ -20,7 +20,7 @@ import {
  * @private
  */
 const mapStateToProps = (state, {
-  annotationId, hit, companionWindowId, windowId,
+  annotationId, hit = { annotations: [] }, companionWindowId, windowId,
 }) => {
   const realAnnoId = annotationId || hit.annotations[0];
   const hitAnnotation = getResourceAnnotationForSearchHit(
