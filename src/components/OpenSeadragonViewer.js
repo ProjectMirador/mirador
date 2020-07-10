@@ -273,19 +273,25 @@ export class OpenSeadragonViewer extends Component {
    */
   infoResponsesMatch(prevInfoResponses) {
     const { infoResponses } = this.props;
+
     if (infoResponses.length === 0 && prevInfoResponses.length === 0) return true;
     if (infoResponses.length !== prevInfoResponses.length) return false;
 
-    return infoResponses.some((infoResponse, index) => {
+    return infoResponses.every((infoResponse, index) => {
       if (!prevInfoResponses[index]) {
         return false;
       }
 
-      if (!infoResponse.json) {
+      if (!infoResponse.json || !prevInfoResponses[index].json) {
         return false;
       }
 
-      if (infoResponse.json['@id'] === (prevInfoResponses[index].json || {})['@id']) {
+      if (infoResponse.json['@id']
+        && infoResponse.json['@id'] === prevInfoResponses[index].json['@id']) {
+        return true;
+      }
+      if (infoResponse.json.id
+        && infoResponse.json.id === prevInfoResponses[index].json.id) {
         return true;
       }
 

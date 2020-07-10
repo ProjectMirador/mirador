@@ -86,6 +86,19 @@ describe('OpenSeadragonViewer', () => {
     it('when the @ids do not match', () => {
       expect(wrapper.instance().infoResponsesMatch([{ id: 'a', json: { '@id': 'http://foo-degraded' } }])).toBe(false);
     });
+    it('when the id props match', () => {
+      wrapper.setProps({
+        infoResponses: [{
+          id: 'a',
+          json: {
+            height: 200,
+            id: 'http://foo',
+            width: 100,
+          },
+        }],
+      });
+      expect(wrapper.instance().infoResponsesMatch([{ id: 'a', json: { id: 'http://foo' } }])).toBe(true);
+    });
   });
 
   describe('nonTiledImagedMatch', () => {
