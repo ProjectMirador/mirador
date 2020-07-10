@@ -1,6 +1,20 @@
 import ActionTypes from './action-types';
 
 /**
+ * Request annotations on a canvas
+ *
+ * NOTE: there is no corresponding reducer; the expected API is sagas will
+ *  pick this action up and act on it accordingly.
+ */
+export function requestCanvasAnnotations(windowId, canvasId) {
+  return {
+    canvasId,
+    type: ActionTypes.REQUEST_CANVAS_ANNOTATIONS,
+    windowId,
+  };
+}
+
+/**
  * requestAnnotation - action creator
  *
  * @param  {String} targetId

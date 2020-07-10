@@ -8,21 +8,30 @@ import {
   getSearchAnnotationsForWindow,
   getCurrentCanvas,
   getConfig,
+  getPresentAnnotationsOnSelectedCanvases,
+  getCompanionWindowsForContent,
 } from '../state/selectors';
 
 /**
  * Styles to be passed to the withStyles HOC
  */
 const styles = theme => ({
+  annotationIcon: {
+    height: '1rem',
+    width: '1rem',
+  },
+  annotationsChip: {
+    ...theme.typography.caption,
+  },
   avatar: {
     backgroundColor: 'transparent',
   },
-  chip: {
-    ...theme.typography.caption,
-    left: '50%',
+  chips: {
+    opacity: 0.875,
     position: 'absolute',
-    top: 80,
-    transform: 'translate(-50%, 0)',
+    right: 0,
+    textAlign: 'right',
+    top: 0,
   },
   galleryViewItem: {
     '&$hasAnnotations': {
@@ -49,6 +58,13 @@ const styles = theme => ({
     width: 'min-content',
   },
   hasAnnotations: {},
+  searchChip: {
+    ...theme.typography.caption,
+    '&$selected $avatar': {
+      backgroundColor: theme.palette.highlights.primary,
+    },
+    marginTop: 2,
+  },
   selected: {},
 });
 
@@ -63,9 +79,23 @@ const mapStateToProps = (state, { canvas, windowId }) => {
   const canvasAnnotations = flatten(searchAnnotations.map(a => a.resources))
     .filter(a => a.targetId === canvas.id);
 
+  const hasOpenAnnotationsWindow = getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0;
+
   return {
-    annotationsCount: canvasAnnotations.length,
+    annotationsCount: (() => {
+      if (!hasOpenAnnotationsWindow) return undefined;
+      const annotations = getPresentAnnotationsOnSelectedCanvases(
+        state,
+        { canvasId: canvas.id },
+      );
+
+      return annotations.reduce(
+        (v, a) => (v) + a.resources.filter(r => r.targetId === canvas.id).length,
+        0,
+      );
+    })(),
     config: getConfig(state).galleryView,
+    searchAnnotationsCount: canvasAnnotations.length,
     selected: currentCanvas && currentCanvas.id === canvas.id,
   };
 };
@@ -75,8 +105,11 @@ const mapStateToProps = (state, { canvas, windowId }) => {
  * @memberof WindowViewer
  * @private
  */
-const mapDispatchToProps = (dispatch, { id, windowId }) => ({
+const mapDispatchToProps = (dispatch, { canvas, id, windowId }) => ({
   focusOnCanvas: () => dispatch(actions.setWindowViewType(windowId, 'single')),
+  requestCanvasAnnotations: () => (
+    dispatch(actions.requestCanvasAnnotations(windowId, canvas.id))
+  ),
   setCanvas: (...args) => dispatch(actions.setCanvas(windowId, ...args)),
 });
 
