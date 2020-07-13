@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const paths = require('./config/paths');
 
 /** */
@@ -82,7 +83,11 @@ module.exports = (env, options) => {
       port: 4444,
     },
     devtool: 'eval-source-map',
-    entry: ['react-hot-loader/patch', './src/polyfills.js', './src/init.js'],
+    entry: ['./src/polyfills.js', './src/init.js'],
     mode: 'development',
+    plugins: [
+      ...(config.plugins || []),
+      new ReactRefreshWebpackPlugin(),
+    ],
   };
 };
