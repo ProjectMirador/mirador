@@ -83,7 +83,6 @@ module.exports = (env, options) => {
       port: 4444,
     },
     devtool: 'eval-source-map',
-    entry: ['./src/polyfills.js', './src/init.js'],
     mode: 'development',
     plugins: [
       ...(config.plugins || []),
