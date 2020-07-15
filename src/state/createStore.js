@@ -11,9 +11,6 @@ import createRootReducer from './reducers/rootReducer';
 import getRootSaga from './sagas';
 import settings from '../config/settings';
 
-// create the saga middleware
-const sagaMiddleware = createSagaMiddleware();
-
 /**
  * Configure Store
  */
@@ -23,6 +20,9 @@ export default function (pluginReducers, pluginSagas = []) {
   const rootReducer = settings.state.slice
     ? combineReducers({ [settings.state.slice]: miradorReducer })
     : miradorReducer;
+
+  // create the saga middleware
+  const sagaMiddleware = createSagaMiddleware();
 
   const store = createStore(
     rootReducer,
