@@ -202,7 +202,7 @@ export function* refetchInfoResponses({ serviceId }) {
   if (!tokenService || tokenService.infoIds === []) return;
 
   yield all(
-    tokenService.infoIds.map(imageId => call(fetchInfoResponse, { imageId, tokenService })),
+    tokenService.infoIds.map(infoId => call(fetchInfoResponse, { infoId, tokenService })),
   );
 
   // TODO: Other resources could be refetched too
