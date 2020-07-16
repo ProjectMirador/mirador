@@ -227,8 +227,8 @@ describe('IIIF sagas', () => {
         .select(getAccessTokens)
         .next({ serviceId: tokenService })
         .all([
-          call(fetchInfoResponse, { imageId: 'x', tokenService }),
-          call(fetchInfoResponse, { imageId: 'y', tokenService }),
+          call(fetchInfoResponse, { infoId: 'x', tokenService }),
+          call(fetchInfoResponse, { infoId: 'y', tokenService }),
         ])
         .next()
         .put({ serviceId, type: 'mirador/CLEAR_ACCESS_TOKEN_QUEUE' });
