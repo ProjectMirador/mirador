@@ -8,12 +8,6 @@ export function filterValidPlugins(plugins) {
 }
 
 /** */
-export function addPluginReducersToStore(store, createRootReducer, plugins) {
-  const pluginReducers = getReducersFromPlugins(plugins);
-  store.replaceReducer(createRootReducer(pluginReducers));
-}
-
-/** */
 function splitPluginsByValidation(plugins) {
   const invalidPlugins = [];
   const validPlugins = [];
