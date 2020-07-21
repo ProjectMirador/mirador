@@ -14,11 +14,11 @@ describe('Language Switching', () => {
       await expect(page).toMatchElement('li', { text: 'English' });
 
       await expect(page).toMatchElement('[aria-label="Start Here"]');
-      await expect(page).not.toMatchElement('[aria-label="Fang hier an"]');
+      await expect(page).not.toMatchElement('[aria-label="Hier starten"]');
       await expect(page).toClick('li', { text: 'Deutsch' });
       await page.waitFor(1000);
       await expect(page).not.toMatchElement('[aria-label="Start Here"]');
-      await expect(page).toMatchElement('[aria-label="Fang hier an"]');
+      await expect(page).toMatchElement('[aria-label="Hier starten"]');
     });
   });
 });
