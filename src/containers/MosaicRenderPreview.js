@@ -16,7 +16,6 @@ const mapStateToProps = (state, { windowId }) => (
 /**
  *
  * @param theme
- * @returns {{ctrlBtn: {margin: (number|string)}}}
  */
 const styles = theme => ({
   preview: {

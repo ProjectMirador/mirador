@@ -104,7 +104,7 @@ export class WorkspaceMosaic extends React.Component {
   /** */
   static renderPreview(mosaicProps) {
     return (
-      <div className="mosaic-preview">
+      <div className="mosaic-preview" aria-hidden>
         <MosaicRenderPreview windowId={mosaicProps.windowId} />
       </div>
     );
