@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import deepmerge from 'deepmerge';
 import HotApp from '../components/App';
 import createStore from '../state/createStore';
 import { importConfig } from '../state/actions/config';
 import {
   filterValidPlugins,
+  getConfigFromPlugins,
   getReducersFromPlugins,
   getSagasFromPlugins,
 } from '../extend/pluginPreprocessing';
@@ -38,10 +40,14 @@ class MiradorViewer {
   }
 
   /**
-   * Process config into actions
+   * Process config with plugin configs into actions
    */
   processConfig() {
-    this.store.dispatch(importConfig(this.config));
+    this.store.dispatch(
+      importConfig(
+        deepmerge(getConfigFromPlugins(this.plugins), this.config),
+      ),
+    );
   }
 }
 
