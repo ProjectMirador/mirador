@@ -64,5 +64,43 @@ describe('MiradorViewer', () => {
 
       expect(config.foo).toBe('bar');
     });
+    it('merges translation configs from multiple plugins', () => {
+      instance = new MiradorViewer({
+        id: 'mirador',
+      },
+      {
+        plugins: [
+          {
+            config: {
+              translations: {
+                en: {
+                  foo: 'bar',
+                },
+              },
+            },
+            mode: 'add',
+            target: 'WindowTopBarPluginArea',
+          },
+          {
+            config: {
+              translations: {
+                en: {
+                  bat: 'bar',
+                },
+              },
+            },
+            mode: 'wrap',
+            target: 'Window',
+          },
+        ],
+      });
+
+      const { config } = instance.store.getState();
+
+      expect(config.translations.en).toEqual(expect.objectContaining({
+        bat: 'bar',
+        foo: 'bar',
+      }));
+    });
   });
 });
