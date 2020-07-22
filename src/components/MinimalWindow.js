@@ -61,6 +61,9 @@ export class MinimalWindow extends Component {
                 aria-label={t('closeWindow')}
                 className={cn(classes.button, ns('window-close'))}
                 onClick={removeWindow}
+                TooltipProps={{
+                  tabIndex: ariaLabel ? '0' : '-1',
+                }}
               >
                 <CloseIcon />
               </MiradorMenuButton>
