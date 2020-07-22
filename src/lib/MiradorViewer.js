@@ -45,7 +45,7 @@ class MiradorViewer {
   processConfig() {
     this.store.dispatch(
       importConfig(
-        deepmerge(getConfigFromPlugins(this.plugins), this.config),
+        deepmerge(this.config, getConfigFromPlugins(this.plugins)),
       ),
     );
   }

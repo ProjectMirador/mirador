@@ -1,3 +1,4 @@
+import deepmerge from 'deepmerge';
 import { validatePlugin } from './pluginValidation';
 
 /** */
@@ -39,7 +40,7 @@ export function getReducersFromPlugins(plugins) {
 
 /**  */
 export function getConfigFromPlugins(plugins) {
-  return plugins && plugins.reduce((acc, plugin) => ({ ...acc, ...plugin.config }), {});
+  return plugins && plugins.reduce((acc, plugin) => (deepmerge(acc, plugin.config || {})), {});
 }
 
 /**  */
