@@ -37,9 +37,18 @@ describe('MiradorViewer', () => {
             view: 'book',
           },
         ],
+      },
+      {
+        plugins: [{
+          config: {
+            foo: 'bar',
+          },
+          mode: 'add',
+          target: 'WindowTopBarPluginArea',
+        }],
       });
 
-      const { windows, catalog } = instance.store.getState();
+      const { windows, catalog, config } = instance.store.getState();
       const windowIds = Object.keys(windows);
       expect(Object.keys(windowIds).length).toBe(2);
       expect(windows[windowIds[0]].canvasId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892');
@@ -52,6 +61,8 @@ describe('MiradorViewer', () => {
       expect(catalog.length).toBe(1);
       expect(catalog[0].manifestId).toBe('http://media.nga.gov/public/manifests/nga_highlights.json');
       expect(catalog[0].provider).toBe('National Gallery of Art');
+
+      expect(config.foo).toBe('bar');
     });
   });
 });

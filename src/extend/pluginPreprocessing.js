@@ -38,6 +38,11 @@ export function getReducersFromPlugins(plugins) {
 }
 
 /**  */
+export function getConfigFromPlugins(plugins) {
+  return plugins && plugins.reduce((acc, plugin) => ({ ...acc, ...plugin.config }), {});
+}
+
+/**  */
 export function getSagasFromPlugins(plugins) {
   return plugins && plugins.filter(plugin => plugin.saga).map(plugin => plugin.saga);
 }
