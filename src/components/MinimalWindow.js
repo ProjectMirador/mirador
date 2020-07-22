@@ -17,6 +17,7 @@ export class MinimalWindow extends Component {
     const {
       allowClose,
       allowWindowSideBar,
+      ariaLabel,
       children,
       classes,
       label,
@@ -33,7 +34,7 @@ export class MinimalWindow extends Component {
         className={
           cn(classes.window, ns('placeholder-window'))
         }
-        aria-label={t('window', { label })}
+        aria-label={label && ariaLabel ? t('window', { label }) : null}
       >
         <AppBar position="relative" color="default">
           <Toolbar
@@ -75,6 +76,7 @@ export class MinimalWindow extends Component {
 MinimalWindow.propTypes = {
   allowClose: PropTypes.bool,
   allowWindowSideBar: PropTypes.bool,
+  ariaLabel: PropTypes.bool,
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string),
   label: PropTypes.string,
@@ -86,6 +88,7 @@ MinimalWindow.propTypes = {
 MinimalWindow.defaultProps = {
   allowClose: true,
   allowWindowSideBar: true,
+  ariaLabel: true,
   children: null,
   classes: {},
   label: '',

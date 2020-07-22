@@ -11,7 +11,7 @@ export function MosaicRenderPreview(props) {
   } = props;
 
   return (
-    <MinimalWindow windowId={`${windowId}-preview`} label={t('previewWindowTitle', { title })} />
+    <MinimalWindow windowId={`${windowId}-preview`} label={t('previewWindowTitle', { title })} ariaLabel={false} />
   );
 }
 

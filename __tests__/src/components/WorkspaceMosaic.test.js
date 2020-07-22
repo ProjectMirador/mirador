@@ -110,7 +110,7 @@ describe('WorkspaceMosaic', () => {
       }));
 
       expect(shallow(shallow(renderedTile).props().renderPreview({ windowId: 1 })).matchesElement(
-        <div className="mosaic-preview">
+        <div className="mosaic-preview" aria-hidden>
           <MosaicRenderPreview windowId={1} />
         </div>,
       )).toBe(true);

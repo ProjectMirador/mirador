@@ -17,5 +17,6 @@ describe('MosaicRenderPreview', () => {
     expect(
       wrapper.find(MinimalWindow).prop('label'),
     ).toEqual('previewWindowTitle The Title Prop');
+    expect(wrapper.find(MinimalWindow).prop('ariaLabel')).toEqual(false);
   });
 });
