@@ -16,14 +16,10 @@ export class ViewerInfo extends Component {
       canvasLabel,
       classes,
       t,
-      windowId,
     } = this.props;
 
     return (
-      <div
-        id={`osd-info-${windowId}`}
-        className={classNames(ns('osd-info'), classes.osdInfo)}
-      >
+      <div className={classNames(ns('osd-info'), classes.osdInfo)}>
         <Typography display="inline" variant="caption" className={ns('canvas-count')}>
           { t('pagination', { current: canvasIndex + 1, total: canvasCount }) }
         </Typography>
@@ -38,7 +34,6 @@ export class ViewerInfo extends Component {
 ViewerInfo.defaultProps = {
   canvasLabel: undefined,
   t: () => {},
-  windowId: PropTypes.string,
 };
 
 ViewerInfo.propTypes = {
@@ -47,5 +42,4 @@ ViewerInfo.propTypes = {
   canvasLabel: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   t: PropTypes.func,
-  windowId: PropTypes.string,
 };

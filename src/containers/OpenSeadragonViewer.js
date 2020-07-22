@@ -9,6 +9,8 @@ import * as actions from '../state/actions';
 import CanvasWorld from '../lib/CanvasWorld';
 import {
   getVisibleCanvasNonTiledResources,
+  getCurrentCanvas,
+  getCanvasLabel,
   getSequenceViewingDirection,
   getLayersForVisibleCanvases,
   getVisibleCanvases,
@@ -42,6 +44,10 @@ const mapStateToProps = (state, { windowId }) => {
       .filter(infoResponse => (infoResponse !== undefined
         && infoResponse.isFetching === false
         && infoResponse.error === undefined)),
+    label: getCanvasLabel(state, {
+      canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
+      windowId,
+    }),
     nonTiledImages: getVisibleCanvasNonTiledResources(state, { windowId }),
     osdConfig: getConfig(state).osdConfig,
     viewerConfig: getViewer(state, { windowId }),

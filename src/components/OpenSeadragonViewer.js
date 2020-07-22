@@ -49,7 +49,7 @@ export class OpenSeadragonViewer extends Component {
     if (canvas) {
       canvas.setAttribute('role', 'img');
       canvas.setAttribute('aria-label', t('digitizedView'));
-      canvas.setAttribute('aria-describedby', `osd-info-${windowId}`);
+      canvas.setAttribute('aria-describedby', `${windowId}-osd`);
     }
 
     this.apiRef.current = viewer;
@@ -331,7 +331,7 @@ export class OpenSeadragonViewer extends Component {
    */
   render() {
     const {
-      children, classes, windowId,
+      children, classes, label, t, windowId,
       drawAnnotations,
     } = this.props;
     const { viewer } = this.state;
@@ -351,7 +351,7 @@ export class OpenSeadragonViewer extends Component {
           className={classNames(ns('osd-container'), classes.osdContainer)}
           id={`${windowId}-osd`}
           ref={this.ref}
-          aria-labelledby={`osd-info-${windowId}`}
+          aria-label={t('item', { label })}
           aria-live="polite"
         >
           { drawAnnotations
@@ -368,6 +368,7 @@ OpenSeadragonViewer.defaultProps = {
   children: null,
   drawAnnotations: false,
   infoResponses: [],
+  label: null,
   nonTiledImages: [],
   osdConfig: {},
   viewerConfig: null,
@@ -379,6 +380,7 @@ OpenSeadragonViewer.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   drawAnnotations: PropTypes.bool,
   infoResponses: PropTypes.arrayOf(PropTypes.object),
+  label: PropTypes.string,
   nonTiledImages: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,
