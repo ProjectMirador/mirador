@@ -9,12 +9,6 @@ import ItemListIcon from '@material-ui/icons/ReorderSharp';
 import TocIcon from '@material-ui/icons/SortSharp';
 import ThumbnailListIcon from '@material-ui/icons/ViewListSharp';
 import Typography from '@material-ui/core/Typography';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardSharp';
 import CompanionWindow from '../containers/CompanionWindow';
 import SidebarIndexList from '../containers/SidebarIndexList';
@@ -129,8 +123,8 @@ WindowSideBarCanvasPanel.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
-  showToc: PropTypes.bool,
   showMultipart: PropTypes.func.isRequired,
+  showToc: PropTypes.bool,
   t: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['item', 'thumbnail', 'tableOfContents']).isRequired,
@@ -138,6 +132,6 @@ WindowSideBarCanvasPanel.propTypes = {
 };
 
 WindowSideBarCanvasPanel.defaultProps = {
-  showToc: false,
   collection: null,
+  showToc: false,
 };

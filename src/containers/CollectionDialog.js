@@ -74,7 +74,6 @@ const styles = theme => ({
   },
 });
 
-
 const enhance = compose(
   withTranslation(),
   withStyles(styles),

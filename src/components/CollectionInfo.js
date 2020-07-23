@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import ViewListIcon from '@material-ui/icons/ViewListSharp';
 import CollapsibleSection from '../containers/CollapsibleSection';
 
-
 /**
  * ManifestInfo
  */

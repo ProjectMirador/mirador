@@ -5,7 +5,6 @@ import {
 } from 'react-mosaic-component';
 import 'react-mosaic-component/react-mosaic-component.css';
 import difference from 'lodash/difference';
-import toPairs from 'lodash/toPairs';
 import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';
