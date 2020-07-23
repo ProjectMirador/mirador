@@ -7,7 +7,7 @@ import {
   getManifest,
   getManifestTitle, getManifestThumbnail, getCanvases,
   getManifestLogo, getManifestProvider, getWindowManifests,
-  getManifestoInstance, getManifestBehaviors,
+  getManifestoInstance, getSequenceBehaviors,
 } from '../state/selectors';
 import * as actions from '../state/actions';
 import { ManifestListItem } from '../components/ManifestListItem';
@@ -29,7 +29,7 @@ const mapStateToProps = (state, { manifestId, provider }) => {
     isCollection,
     isFetching: manifest.isFetching,
     isMultipart: isCollection
-      && getManifestBehaviors(state, { manifestId }).includes('multi-part'),
+      && getSequenceBehaviors(state, { manifestId }).includes('multi-part'),
     manifestLogo: getManifestLogo(state, { manifestId }),
     provider: provider
       || getManifestProvider(state, { manifestId }),

@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getManifest, getManifestoInstance, getManifestBehaviors } from '../state/selectors';
+import { getManifest, getManifestoInstance, getSequenceBehaviors } from '../state/selectors';
 import { CollectionDialog } from '../components/CollectionDialog';
 
 /**
@@ -36,7 +36,7 @@ const mapStateToProps = (state) => {
     collection: collection && getManifestoInstance(state, { manifestId: collection.id }),
     collectionPath,
     error: manifest && manifest.error,
-    isMultipart: getManifestBehaviors(state, { manifestId }).includes('multi-part'),
+    isMultipart: getSequenceBehaviors(state, { manifestId }).includes('multi-part'),
     manifest: manifest && getManifestoInstance(state, { manifestId }),
     manifestId,
     open: state.workspace.collectionDialogOn,
