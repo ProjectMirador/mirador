@@ -99,7 +99,7 @@ export class WindowSideBarCollectionPanel extends Component {
                 </ListItem>
               </List>
             )}
-            <Typography primaryTypographyProps={{ variant: 'h6' }}>
+            <Typography variant="h6">
               { collection && WindowSideBarCollectionPanel.getUseableLabel(collection)}
               { isFetching && <Skeleton className={classes.placeholder} variant="text" />}
             </Typography>
