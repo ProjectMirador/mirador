@@ -67,4 +67,16 @@ describe('ManifestListItem', () => {
     const wrapper = createWrapper();
     expect(wrapper.find('.mirador-manifest-list-item-provider').children().text()).toEqual('addedFromUrl');
   });
+
+  it('when clicking a collection fires the showCollectionDialog', () => {
+    const showCollectionDialog = jest.fn();
+    const wrapper = createWrapper({ isCollection: true, showCollectionDialog });
+    wrapper.find(ButtonBase).simulate('click');
+    expect(showCollectionDialog).toHaveBeenCalledTimes(1);
+  });
+
+  it('displays a collection label for collections', () => {
+    const wrapper = createWrapper({ isCollection: true });
+    expect(wrapper.text()).toContain('collectionxyz');
+  });
 });
