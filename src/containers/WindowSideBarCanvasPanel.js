@@ -58,6 +58,9 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
  * @param theme
  */
 const styles = theme => ({
+  collectionNavigationButton: {
+    textTransform: 'none',
+  },
   label: {
     paddingLeft: theme.spacing(1),
   },

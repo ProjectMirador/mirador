@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
 import RootRef from '@material-ui/core/RootRef';
 import ItemListIcon from '@material-ui/icons/ReorderSharp';
 import TocIcon from '@material-ui/icons/SortSharp';
@@ -106,14 +107,15 @@ export class WindowSideBarCanvasPanel extends Component {
         >
           <div id={`tab-panel-${id}`}>
             { collection && (
-              <ListItem button onClick={showMultipart}>
-                <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
+              <Button
+                fullWidth
+                onClick={showMultipart}
+                endIcon={<ArrowForwardIcon />}
+              >
+                <Typography className={classes.collectionNavigationButton}>
                   {WindowSideBarCanvasPanel.getUseableLabel(collection)}
-                </ListItemText>
-                <ListItemIcon>
-                  <ArrowForwardIcon />
-                </ListItemIcon>
-              </ListItem>
+                </Typography>
+              </Button>
             )}
             {listComponent}
           </div>
