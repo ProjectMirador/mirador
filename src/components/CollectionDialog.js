@@ -142,7 +142,7 @@ export class CollectionDialog extends Component {
     const requiredStatement = manifest
       && asArray(manifest.getRequiredStatement()).filter(l => l.getValue()).map(labelValuePair => ({
         label: labelValuePair.getLabel(),
-        value: labelValuePair.getValue(),
+        values: labelValuePair.getValues(),
       }));
 
     const collections = manifest.getCollections();
