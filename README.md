@@ -5,7 +5,7 @@
 ## For Mirador Users
 You can quickly use and configure Mirador by remixing the [mirador-start](https://mirador-start.glitch.me/) Glitch.
 
-If you are interested in integrating Mirador with plugins into your project, we reccomend using webpack or parcel to integrate the es version of the packages. Examples are here:
+If you are interested in integrating Mirador with plugins into your project, we recommend using webpack or parcel to integrate the es version of the packages. Examples are here:
 
 [https://github.com/ProjectMirador/mirador-integration](https://github.com/ProjectMirador/mirador-integration)
 
