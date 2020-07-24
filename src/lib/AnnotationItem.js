@@ -78,7 +78,7 @@ export default class AnnotationItem {
       case 'string':
         return target;
       case 'object':
-        return target.selector;
+        return flatten(compact(new Array(target.selector)));
       default:
         return null;
     }
@@ -91,10 +91,7 @@ export default class AnnotationItem {
       case 'string':
         return null;
       case 'object':
-        if (selector.type && selector.type === 'SvgSelector') {
-          return selector;
-        }
-        return null;
+        return selector.find(s => s.type && s.type === 'SvgSelector');
       default:
         return null;
     }
@@ -105,13 +102,15 @@ export default class AnnotationItem {
     const { selector } = this;
 
     let match;
+    let fragmentSelector;
 
     switch (typeof selector) {
       case 'string':
         match = selector.match(/xywh=(.*)$/);
         break;
       case 'object':
-        match = selector.value.match(/xywh=(.*)$/);
+        fragmentSelector = selector.find(s => s.type && s.type === 'FragmentSelector');
+        match = fragmentSelector && fragmentSelector.value.match(/xywh=(.*)$/);
         break;
       default:
         return null;

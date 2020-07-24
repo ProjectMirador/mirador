@@ -105,6 +105,12 @@ describe('AnnotationItem', () => {
     it('returns the on string (for simple fragment selector)', () => {
       expect(new AnnotationItem({ target: 'yolo' }).selector).toEqual('yolo');
     });
+    it('returns objects wrapped in an array', () => {
+      expect(new AnnotationItem({ target: { selector: 'yolo' } }).selector).toEqual(['yolo']);
+    });
+    it('handles multiple selectors', () => {
+      expect(new AnnotationItem({ target: { selector: ['yolo', 'foo'] } }).selector).toEqual(['yolo', 'foo']);
+    });
   });
   describe('chars', () => {
     it('with no resource', () => {
@@ -122,6 +128,10 @@ describe('AnnotationItem', () => {
   describe('fragmentSelector', () => {
     it('simple string', () => {
       expect(new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' })
+        .fragmentSelector).toEqual([10, 10, 100, 200]);
+    });
+    it('multiple selectors', () => {
+      expect(new AnnotationItem({ target: { selector: [{ type: 'FragmentSelector', value: '#xywh=10,10,100,200' }] } })
         .fragmentSelector).toEqual([10, 10, 100, 200]);
     });
     it('url without a fragment', () => {
@@ -142,7 +152,7 @@ describe('AnnotationItem', () => {
 
     it('without specified type', () => {
       expect(new AnnotationItem({ target: { selector: { } } })
-        .svgSelector).toEqual(null);
+        .svgSelector).toEqual(undefined);
     });
   });
 });
