@@ -49,6 +49,12 @@ describe('AnnotationItem', () => {
     it('returns null when there is no target', () => {
       expect(new AnnotationItem().targetId).toBeNull();
     });
+
+    it('supports a source id', () => {
+      expect(
+        new AnnotationItem({ target: { source: { id: 'foo' } } }).targetId,
+      ).toEqual('foo');
+    });
   });
 
   describe('motivations', () => {
