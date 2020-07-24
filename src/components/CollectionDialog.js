@@ -138,7 +138,8 @@ export class CollectionDialog extends Component {
     if (error) return null;
     if (!ready) return this.placeholder();
 
-    const rights = manifest && (manifest.getProperty('rights') || manifest.getProperty('license'));
+    const rights = manifest && (asArray(manifest.getProperty('rights') || manifest.getProperty('license')));
+
     const requiredStatement = manifest
       && asArray(manifest.getRequiredStatement()).filter(l => l.getValue()).map(labelValuePair => ({
         label: labelValuePair.getLabel(),
