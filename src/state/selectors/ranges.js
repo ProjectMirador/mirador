@@ -61,7 +61,7 @@ const getVisibleLeafAndBranchNodeIds = createSelector(
     getVisibleCanvasIds,
   ],
   (tree, canvasIds) => {
-    if (canvasIds.length === 0) return [];
+    if (canvasIds.length === 0 || !tree) return [];
     return getVisibleNodeIdsInSubTree(tree.nodes, canvasIds);
   },
 );

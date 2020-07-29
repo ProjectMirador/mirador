@@ -6,11 +6,13 @@ import AttributionPanel from '../containers/AttributionPanel';
 import SearchPanel from '../containers/SearchPanel';
 import LayersPanel from '../containers/LayersPanel';
 import CustomPanel from '../containers/CustomPanel';
+import WindowSideBarCollectionPanel from '../containers/WindowSideBarCollectionPanel';
 
 const map = {
   annotations: WindowSideBarAnnotationsPanel,
   attribution: AttributionPanel,
   canvas: WindowSideBarCanvasPanel,
+  collection: WindowSideBarCollectionPanel,
   custom: CustomPanel,
   info: WindowSideBarInfoPanel,
   layers: LayersPanel,

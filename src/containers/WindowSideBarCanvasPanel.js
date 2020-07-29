@@ -11,6 +11,8 @@ import {
   getCanvases,
   getVisibleCanvases,
   getSequenceTreeStructure,
+  getWindow,
+  getManifestoInstance,
 } from '../state/selectors';
 
 /**
@@ -19,13 +21,18 @@ import {
 const mapStateToProps = (state, { id, windowId }) => {
   const canvases = getCanvases(state, { windowId });
   const treeStructure = getSequenceTreeStructure(state, { windowId });
+  const window = getWindow(state, { windowId });
   const { config } = state;
+  const companionWindow = getCompanionWindow(state, { companionWindowId: id });
+  const collectionPath = window.collectionPath || [];
+  const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
   return {
     canvases,
+    collection: collectionId && getManifestoInstance(state, { manifestId: collectionId }),
     config,
     selectedCanvases: getVisibleCanvases(state, { windowId }),
     showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
-    variant: getCompanionWindow(state, { companionWindowId: id, windowId }).variant
+    variant: companionWindow.variant
       || getDefaultSidebarVariant(state, { windowId }),
   };
 };
@@ -37,6 +44,9 @@ const mapStateToProps = (state, { id, windowId }) => {
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
+  showMultipart: () => dispatch(
+    actions.addOrUpdateCompanionWindow(windowId, { content: 'collection', position: 'right' }),
+  ),
   toggleDraggingEnabled: () => dispatch(actions.toggleDraggingEnabled()),
   updateVariant: variant => dispatch(
     actions.updateCompanionWindow(windowId, id, { variant }),
@@ -48,6 +58,9 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
  * @param theme
  */
 const styles = theme => ({
+  collectionNavigationButton: {
+    textTransform: 'none',
+  },
   label: {
     paddingLeft: theme.spacing(1),
   },

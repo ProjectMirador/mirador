@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
+import Button from '@material-ui/core/Button';
 import RootRef from '@material-ui/core/RootRef';
 import ItemListIcon from '@material-ui/icons/ReorderSharp';
 import TocIcon from '@material-ui/icons/SortSharp';
 import ThumbnailListIcon from '@material-ui/icons/ViewListSharp';
+import Typography from '@material-ui/core/Typography';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForwardSharp';
 import CompanionWindow from '../containers/CompanionWindow';
 import SidebarIndexList from '../containers/SidebarIndexList';
 import SidebarIndexTableOfContents from '../containers/SidebarIndexTableOfContents';
@@ -23,6 +26,15 @@ export class WindowSideBarCanvasPanel extends Component {
     this.containerRef = React.createRef();
   }
 
+  /** */
+  static getUseableLabel(resource, index) {
+    return (resource
+      && resource.getLabel
+      && resource.getLabel().length > 0)
+      ? resource.getLabel().map(label => label.value)[0]
+      : resource.id;
+  }
+
   /** @private */
   handleVariantChange(event, value) {
     const { updateVariant } = this.props;
@@ -36,7 +48,9 @@ export class WindowSideBarCanvasPanel extends Component {
   render() {
     const {
       classes,
+      collection,
       id,
+      showMultipart,
       t,
       variant,
       showToc,
@@ -44,6 +58,7 @@ export class WindowSideBarCanvasPanel extends Component {
     } = this.props;
 
     let listComponent;
+
     if (variant === 'tableOfContents') {
       listComponent = (
         <SidebarIndexTableOfContents
@@ -85,6 +100,17 @@ export class WindowSideBarCanvasPanel extends Component {
           )}
         >
           <div id={`tab-panel-${id}`}>
+            { collection && (
+              <Button
+                fullWidth
+                onClick={showMultipart}
+                endIcon={<ArrowForwardIcon />}
+              >
+                <Typography className={classes.collectionNavigationButton}>
+                  {WindowSideBarCanvasPanel.getUseableLabel(collection)}
+                </Typography>
+              </Button>
+            )}
             {listComponent}
           </div>
         </CompanionWindow>
@@ -95,7 +121,9 @@ export class WindowSideBarCanvasPanel extends Component {
 
 WindowSideBarCanvasPanel.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
+  showMultipart: PropTypes.func.isRequired,
   showToc: PropTypes.bool,
   t: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
@@ -104,5 +132,6 @@ WindowSideBarCanvasPanel.propTypes = {
 };
 
 WindowSideBarCanvasPanel.defaultProps = {
+  collection: null,
   showToc: false,
 };

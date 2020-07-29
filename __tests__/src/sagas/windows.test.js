@@ -3,7 +3,7 @@ import { expectSaga } from 'redux-saga-test-plan';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 
 import ActionTypes from '../../../src/state/actions/action-types';
-import { receiveManifest, setCanvas } from '../../../src/state/actions';
+import { setCanvas } from '../../../src/state/actions';
 import {
   getManifests, getManifestoInstance,
   getManifestSearchService, getCompanionWindowIdsForPosition,
@@ -15,7 +15,7 @@ import {
   getVisibleCanvasIds, getCanvasForAnnotation,
   getCanvases, selectInfoResponses,
 } from '../../../src/state/selectors';
-import { fetchManifest } from '../../../src/state/sagas/iiif';
+import { fetchManifests } from '../../../src/state/sagas/iiif';
 import {
   fetchWindowManifest,
   setWindowDefaultSearchQuery,
@@ -27,12 +27,13 @@ import {
   panToFocusedWindow,
   setCurrentAnnotationsOnCurrentCanvas,
   fetchInfoResponses,
+  setCollectionPath,
 } from '../../../src/state/sagas/windows';
 import fixture from '../../fixtures/version-2/019.json';
 
 describe('window-level sagas', () => {
   describe('fetchWindowManifest', () => {
-    it('calls into fetchManifest for each window', () => {
+    it('calls into fetchManifests for each window', () => {
       const action = {
         window: {
           id: 'x',
@@ -43,48 +44,12 @@ describe('window-level sagas', () => {
       return expectSaga(fetchWindowManifest, action)
         .provide([
           [select(getManifests), {}],
-          [call(fetchManifest, { manifestId: 'manifest.json' }), {}],
+          [call(fetchManifests, 'manifest.json'), {}],
           [call(setWindowStartingCanvas, action)],
           [call(setWindowDefaultSearchQuery, action)],
+          [call(setCollectionPath, { manifestId: 'manifest.json', windowId: 'x' })],
         ])
-        .call(fetchManifest, { manifestId: 'manifest.json' })
-        .run();
-    });
-
-    it('calls retrieveManifest if a manifest was provided', () => {
-      const manifestJson = { data: '123' };
-      const action = {
-        manifest: manifestJson,
-        window: {
-          id: 'x',
-          manifestId: 'manifest.json',
-        },
-      };
-
-      return expectSaga(fetchWindowManifest, action)
-        .provide([
-          [call(setWindowStartingCanvas, action)],
-          [call(setWindowDefaultSearchQuery, action)],
-        ])
-        .put(receiveManifest('manifest.json', manifestJson))
-        .run();
-    });
-
-    it('does not call fetchManifest if the manifest is already available', () => {
-      const action = {
-        window: {
-          id: 'x',
-          manifestId: 'manifest.json',
-        },
-      };
-
-      return expectSaga(fetchWindowManifest, action)
-        .provide([
-          [select(getManifests), { 'manifest.json': {} }],
-          [call(setWindowStartingCanvas, action)],
-          [call(setWindowDefaultSearchQuery, action)],
-        ])
-        .not.call(fetchManifest, { manifestId: 'manifest.json' })
+        .call(fetchManifests, 'manifest.json')
         .run();
     });
     it('calls additional methods after ensuring we have a manifest', () => {
@@ -100,6 +65,7 @@ describe('window-level sagas', () => {
           [select(getManifests), { 'manifest.json': {} }],
           [call(setWindowStartingCanvas, action)],
           [call(setWindowDefaultSearchQuery, action)],
+          [call(setCollectionPath, { manifestId: 'manifest.json', windowId: 'x' })],
         ])
         .call(setWindowStartingCanvas, action)
         .call(setWindowDefaultSearchQuery, action)
@@ -117,7 +83,7 @@ describe('window-level sagas', () => {
         },
       };
 
-      return expectSaga(fetchWindowManifest, action)
+      return expectSaga(setWindowStartingCanvas, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
           [call(setCanvas, 'x', '1', null, { preserveViewport: false }), { type: 'setCanvasThunk' }],
@@ -135,7 +101,7 @@ describe('window-level sagas', () => {
         },
       };
 
-      return expectSaga(fetchWindowManifest, action)
+      return expectSaga(setWindowStartingCanvas, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
           [call(setCanvas, 'x', '1', null, { preserveViewport: true }), { type: 'setCanvasThunk' }],

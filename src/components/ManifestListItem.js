@@ -10,12 +10,6 @@ import ManifestListItemError from '../containers/ManifestListItemError';
 import ns from '../config/css-ns';
 
 /**
- * Handling open button click
- */
-const handleOpenButtonClick = (event, manifest, addWindow) => {
-  addWindow({ manifestId: manifest });
-};
-/**
  * Represents an item in a list of currently-loaded or loading manifests
  * @param {object} props
  * @param {object} [props.manifest = string]
@@ -24,12 +18,38 @@ const handleOpenButtonClick = (event, manifest, addWindow) => {
 /** */
 export class ManifestListItem extends React.Component {
   /** */
+  constructor(props) {
+    super(props);
+    this.handleOpenButtonClick = this.handleOpenButtonClick.bind(this);
+  }
+
+  /** */
   componentDidMount() {
     const {
       fetchManifest, manifestId, ready, isFetching, error, provider,
     } = this.props;
 
     if (!ready && !error && !isFetching && provider !== 'file') fetchManifest(manifestId);
+  }
+
+  /**
+   * Handling open button click
+   */
+  handleOpenButtonClick() {
+    const {
+      addWindow,
+      handleClose,
+      manifestId,
+      showCollectionDialog,
+      isCollection,
+    } = this.props;
+
+    if (isCollection) {
+      showCollectionDialog(manifestId);
+    } else {
+      addWindow({ manifestId });
+      handleClose();
+    }
   }
 
   /** */
@@ -42,13 +62,13 @@ export class ManifestListItem extends React.Component {
       title,
       thumbnail,
       manifestLogo,
-      addWindow,
-      handleClose,
       size,
       classes,
       provider,
       t,
       error,
+      isCollection,
+      isMultipart,
     } = this.props;
 
     const placeholder = (
@@ -86,9 +106,7 @@ export class ManifestListItem extends React.Component {
                 ref={buttonRef}
                 className={ns('manifest-list-item-title')}
                 style={{ width: '100%' }}
-                onClick={
-                  (event) => { handleOpenButtonClick(event, manifestId, addWindow); handleClose(); }
-                }
+                onClick={this.handleOpenButtonClick}
               >
                 <Grid container spacing={2} className={classes.label} component="span">
                   <Grid item xs={4} sm={3} component="span">
@@ -109,6 +127,11 @@ export class ManifestListItem extends React.Component {
                     />
                   </Grid>
                   <Grid item xs={8} sm={9} component="span">
+                    { isCollection && (
+                      <Typography component="div" variant="overline">
+                        { t(isMultipart ? 'multipartCollection' : 'collection') }
+                      </Typography>
+                    )}
                     <Typography component="span" variant="h6">
                       {title || manifestId}
                     </Typography>
@@ -155,11 +178,14 @@ ManifestListItem.propTypes = {
   error: PropTypes.string,
   fetchManifest: PropTypes.func.isRequired,
   handleClose: PropTypes.func,
+  isCollection: PropTypes.bool,
   isFetching: PropTypes.bool,
+  isMultipart: PropTypes.bool,
   manifestId: PropTypes.string.isRequired,
   manifestLogo: PropTypes.string,
   provider: PropTypes.string,
   ready: PropTypes.bool,
+  showCollectionDialog: PropTypes.func.isRequired,
   size: PropTypes.number,
   t: PropTypes.func,
   thumbnail: PropTypes.string,
@@ -172,7 +198,9 @@ ManifestListItem.defaultProps = {
   classes: {},
   error: null,
   handleClose: () => {},
+  isCollection: false,
   isFetching: false,
+  isMultipart: false,
   manifestLogo: null,
   provider: null,
   ready: false,
