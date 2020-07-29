@@ -4,6 +4,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpwardSharp';
@@ -54,8 +56,8 @@ export class WindowSideBarCollectionPanel extends Component {
 
     /** */
     const Item = ({ manifest, ...otherProps }) => (
-      <ListItem
-        className={classes.listItem}
+      <MenuItem
+        className={classes.menuItem}
         alignItems="flex-start"
         button
         component="li"
@@ -72,7 +74,7 @@ export class WindowSideBarCollectionPanel extends Component {
           </ListItemIcon>
         )}
         <ListItemText>{WindowSideBarCollectionPanel.getUseableLabel(manifest)}</ListItemText>
-      </ListItem>
+      </MenuItem>
     );
 
     return (
@@ -106,15 +108,15 @@ export class WindowSideBarCollectionPanel extends Component {
           </>
         )}
       >
-        <List>
+        <MenuList>
           { isFetching && (
-            <ListItem>
+            <MenuItem>
               <ListItemText>
                 <Skeleton className={classes.placeholder} variant="text" />
                 <Skeleton className={classes.placeholder} variant="text" />
                 <Skeleton className={classes.placeholder} variant="text" />
               </ListItemText>
-            </ListItem>
+            </MenuItem>
           )}
           {
             collection && collection.getCollections().map((manifest) => {
@@ -144,7 +146,7 @@ export class WindowSideBarCollectionPanel extends Component {
               );
             })
           }
-        </List>
+        </MenuList>
       </CompanionWindow>
     );
   }

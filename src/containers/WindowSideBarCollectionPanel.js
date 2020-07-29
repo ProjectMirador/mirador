@@ -63,9 +63,10 @@ const styles = theme => ({
   label: {
     paddingLeft: theme.spacing(1),
   },
-  listItem: {
+  menuItem: {
     borderBottom: `0.5px solid ${theme.palette.divider}`,
     paddingRight: theme.spacing(1),
+    whiteSpace: 'normal',
   },
 });
 
