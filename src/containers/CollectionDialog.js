@@ -61,7 +61,7 @@ const styles = theme => ({
     padding: 0,
   },
   light: {
-    color: '#BDBDBD',
+    color: theme.palette.grey[400],
   },
   listitem: {
     '&:focus': {
