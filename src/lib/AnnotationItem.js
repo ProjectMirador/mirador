@@ -29,7 +29,7 @@ export default class AnnotationItem {
       case 'string':
         return target.replace(/#?xywh=(.*)$/, '');
       case 'object':
-        return target.id || (target.source && target.source.id);
+        return (target.source && target.source.id) || target.source || target.id;
       default:
         return null;
     }
