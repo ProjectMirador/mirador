@@ -1,6 +1,5 @@
 import update from 'lodash/fp/update';
 import omit from 'lodash/omit';
-import merge from 'lodash/fp/merge';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -17,7 +16,7 @@ export const elasticLayoutReducer = (state = {}, action) => {
       };
 
     case ActionTypes.UPDATE_ELASTIC_WINDOW_LAYOUT:
-      return update([action.windowId], orig => merge(orig, action.payload), state);
+      return update([action.windowId], orig => ({ ...(orig || {}), ...action.payload }), state);
 
     case ActionTypes.REMOVE_WINDOW:
       return omit(state, action.windowId);
