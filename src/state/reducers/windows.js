@@ -1,6 +1,5 @@
 import update from 'lodash/fp/update';
 import omit from 'lodash/omit';
-import merge from 'lodash/fp/merge';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -29,7 +28,7 @@ export const windowsReducer = (state = {}, action) => {
       };
 
     case ActionTypes.UPDATE_WINDOW:
-      return update([action.id], orig => merge(orig, action.payload), state);
+      return update([action.id], orig => ({ ...(orig || {}), ...action.payload }), state);
 
     case ActionTypes.REMOVE_WINDOW:
       return omit(state, [action.windowId]);
@@ -72,10 +71,12 @@ export const windowsReducer = (state = {}, action) => {
     case ActionTypes.SET_CANVAS:
       if (!state[action.windowId]) return state;
 
-      return update([action.windowId], orig => merge(orig, {
-        canvasId: action.canvasId,
-        visibleCanvases: action.visibleCanvases || [],
-      }), state);
+      return update([action.windowId], orig => (
+        {
+          ...(orig || {}),
+          canvasId: action.canvasId,
+          visibleCanvases: action.visibleCanvases || [],
+        }), state);
     case ActionTypes.ADD_COMPANION_WINDOW:
       return {
         ...state,
