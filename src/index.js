@@ -1,5 +1,5 @@
 import init from './init';
-import * as state from './state';
+import state from './state';
 
 const exports = {
   ...init,
