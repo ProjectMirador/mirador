@@ -10,15 +10,7 @@ import { getConfig } from './config';
 /** */
 function createManifestoInstance(json, locale) {
   if (!json) return undefined;
-  const manifestoObject = Utils.parseManifest(json, locale ? { locale } : undefined);
-  // Local patching of Manifesto so that when its a Collection, it behaves similarly
-  if (typeof manifestoObject.getViewingHint != 'function') {
-    manifestoObject.getViewingHint = () => {};
-  }
-  if (typeof manifestoObject.getSequences != 'function') {
-    manifestoObject.getSequences = () => [];
-  }
-  return manifestoObject;
+  return Utils.parseManifest(json, locale ? { locale } : undefined);
 }
 
 /** */

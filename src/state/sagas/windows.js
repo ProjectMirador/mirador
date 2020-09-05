@@ -33,23 +33,24 @@ import { fetchManifests } from './iiif';
 /** */
 export function* fetchWindowManifest(action) {
   const {
-    collectionPath, id, manifestId,
+    collectionPath, id, iiifContent, manifestId,
   } = action.payload || action.window;
+  const requestingManifest = manifestId || iiifContent;
 
-  if (!manifestId) return;
+  if (!requestingManifest) return;
 
   if (action.manifest) {
-    yield put(receiveManifest(manifestId, action.manifest));
+    yield put(receiveManifest(requestingManifest, action.manifest));
   } else {
-    yield call(fetchManifests, manifestId, ...(collectionPath || []));
+    yield call(fetchManifests, requestingManifest, ...(collectionPath || []));
   }
 
   yield call(setWindowStartingCanvas, action);
   yield call(setWindowDefaultSearchQuery, action);
   if (!collectionPath) {
-    yield call(setCollectionPath, { manifestId, windowId: action.id || action.window.id });
+    yield call(setCollectionPath, { requestingManifest, windowId: action.id || action.window.id });
   }
-  yield call(determineAndShowCollectionDialog, manifestId, id);
+  yield call(determineAndShowCollectionDialog, requestingManifest, id);
 }
 
 /** */
