@@ -95,6 +95,7 @@ export function toggleDraggingEnabled() {
 
 /** */
 export function showCollectionDialog(manifestId, collectionPath = [], windowId = null) {
+  console.log(manifestId, collectionPath);
   return {
     collectionPath,
     manifestId,

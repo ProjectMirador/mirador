@@ -13,6 +13,7 @@ import {
   fetchSearch,
   receiveManifest,
   fetchInfoResponse,
+  showCollectionDialog,
 } from '../actions';
 import {
   getSearchForWindow, getSearchAnnotationsForCompanionWindow,
@@ -31,7 +32,9 @@ import { fetchManifests } from './iiif';
 
 /** */
 export function* fetchWindowManifest(action) {
-  const { collectionPath, manifestId } = action.payload || action.window;
+  const {
+    collectionPath, id, manifestId,
+  } = action.payload || action.window;
 
   if (!manifestId) return;
 
@@ -46,6 +49,7 @@ export function* fetchWindowManifest(action) {
   if (!collectionPath) {
     yield call(setCollectionPath, { manifestId, windowId: action.id || action.window.id });
   }
+  yield call(determineAndShowCollectionDialog, manifestId, id);
 }
 
 /** */
@@ -226,6 +230,15 @@ export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowI
         && put(fetchInfoResponse({ imageResource, windowId }))
     )).filter(Boolean));
   }));
+}
+
+/** */
+export function* determineAndShowCollectionDialog(manifestId, windowId) {
+  const manifestoInstance = yield select(getManifestoInstance, { manifestId });
+  const isCollection = manifestoInstance.isCollection();
+  if (isCollection) {
+    yield put(showCollectionDialog(manifestId, [], windowId));
+  }
 }
 
 /** */
