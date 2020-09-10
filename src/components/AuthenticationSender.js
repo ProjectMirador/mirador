@@ -22,19 +22,21 @@ export class AuthenticationSender extends Component {
 
   /** */
   render() {
-    const { url } = this.props;
+    const { features, url } = this.props;
 
     if (!url) return <></>;
 
-    return <NewWindow name="IiifAuthenticationSender" url={`${url}?origin=${window.origin}`} features="centerscreen" onClose={this.onClose} />;
+    return <NewWindow name="IiifAuthenticationSender" url={`${url}?origin=${window.origin}`} features={features} onClose={this.onClose} />;
   }
 }
 
 AuthenticationSender.propTypes = {
+  features: PropTypes.string,
   handleInteraction: PropTypes.func.isRequired,
   url: PropTypes.string,
 };
 
 AuthenticationSender.defaultProps = {
+  features: 'centerscreen',
   url: undefined,
 };
