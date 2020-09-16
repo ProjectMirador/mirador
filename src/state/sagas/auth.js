@@ -1,5 +1,5 @@
 import {
-  all, call, put, select, takeEvery,
+  all, call, put, select, takeEvery, delay,
 } from 'redux-saga/effects';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import flatten from 'lodash/flatten';
@@ -11,6 +11,15 @@ import {
   getWindows,
 } from '../selectors';
 import { fetchInfoResponse } from './iiif';
+
+/** */
+export function* refetchInfoResponsesOnLogout({ tokenServiceId }) {
+  // delay logout actions to give the cookie service a chance to invalidate our cookies
+  // before we reinitialize openseadragon and rerequest images.
+
+  yield delay(2000);
+  yield call(refetchInfoResponses, { serviceId: tokenServiceId });
+}
 
 /**
  * Figure out what info responses could have used the access token service and:
@@ -55,5 +64,6 @@ export function* refetchInfoResponses({ serviceId }) {
 export default function* authSaga() {
   yield all([
     takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchInfoResponses),
+    takeEvery(ActionTypes.RESET_AUTHENTICATION_STATE, refetchInfoResponsesOnLogout),
   ]);
 }

@@ -5,6 +5,7 @@ import serviceFixture from '../../fixtures/version-2/canvasService.json';
 import ActionTypes from '../../../src/state/actions/action-types';
 import {
   refetchInfoResponses,
+  refetchInfoResponsesOnLogout,
 } from '../../../src/state/sagas/auth';
 import {
   fetchInfoResponse,
@@ -17,6 +18,21 @@ import {
 } from '../../../src/state/selectors';
 
 describe('IIIF Authentication sagas', () => {
+  describe('refetchInfoResponsesOnLogout', () => {
+    it('delays and then refetches info responses', () => {
+      const tokenServiceId = 'whatever';
+      /** stub out delay... ugh. */
+      const provideDelay = ({ fn }, next) => ((fn.name === 'delayP') ? null : next());
+
+      return expectSaga(refetchInfoResponsesOnLogout, { tokenServiceId })
+        .provide([
+          { call: provideDelay },
+          [call(refetchInfoResponses, { serviceId: tokenServiceId }), {}],
+        ])
+        .call(refetchInfoResponses, { serviceId: tokenServiceId })
+        .run();
+    });
+  });
   describe('refetchInfoResponses', () => {
     it('discards info responses that could hvae used the new access token', () => {
       const serviceId = 'https://authentication.example.org/token';
