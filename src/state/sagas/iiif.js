@@ -124,7 +124,7 @@ function* getAccessTokenService(resource) {
   for (let i = 0; i < services.length; i += 1) {
     const authService = services[i];
     const accessTokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token');
-    const token = accessTokens[accessTokenService.id];
+    const token = accessTokenService && accessTokens[accessTokenService.id];
     if (token && token.json) return token;
   }
 

@@ -2,6 +2,7 @@ import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import minimumRequired from '../../fixtures/version-2/minimumRequired.json';
 import minimumRequired3 from '../../fixtures/version-3/minimumRequired.json';
+import settings from '../../../src/config/settings';
 
 import {
   getVisibleCanvases,
@@ -10,10 +11,8 @@ import {
   getCanvas,
   getCanvasLabel,
   selectCanvasAuthService,
-  selectNextAuthService,
   selectInfoResponse,
   getVisibleCanvasNonTiledResources,
-  selectLogoutAuthService,
   getVisibleCanvasIds,
 } from '../../../src/state/selectors/canvases';
 
@@ -251,69 +250,6 @@ describe('getCanvasLabel', () => {
   });
 });
 
-describe('selectNextAuthService', () => {
-  const auth = {};
-  const resource = {
-    service: [
-      {
-        '@id': 'external',
-        profile: 'http://iiif.io/api/auth/1/external',
-      },
-      {
-        '@id': 'kiosk',
-        profile: 'http://iiif.io/api/auth/1/kiosk',
-      },
-      {
-        '@id': 'clickthrough',
-        profile: 'http://iiif.io/api/auth/1/clickthrough',
-      },
-      {
-        '@id': 'login',
-        profile: 'http://iiif.io/api/auth/1/login',
-      },
-      {
-        '@id': 'login2',
-        profile: 'http://iiif.io/api/auth/1/login',
-      },
-    ],
-  };
-
-  const noAuthResource = {};
-
-  it('returns external first', () => {
-    expect(selectNextAuthService({ auth }, resource).id).toEqual('external');
-  });
-
-  it('returns kiosk next', () => {
-    auth.external = { isFetching: false, ok: false };
-    expect(selectNextAuthService({ auth }, resource).id).toEqual('kiosk');
-  });
-
-  it('returns clickthrough next', () => {
-    auth.external = { isFetching: false, ok: false };
-    auth.kiosk = { isFetching: false, ok: false };
-    expect(selectNextAuthService({ auth }, resource).id).toEqual('clickthrough');
-  });
-
-  it('returns logins last', () => {
-    auth.external = { isFetching: false, ok: false };
-    auth.kiosk = { isFetching: false, ok: false };
-    auth.clickthrough = { isFetching: false, ok: false };
-    expect(selectNextAuthService({ auth }, resource).id).toEqual('login');
-    auth.login = { isFetching: false, ok: false };
-    expect(selectNextAuthService({ auth }, resource).id).toEqual('login2');
-  });
-
-  it('returns null if there are no services', () => {
-    expect(selectNextAuthService({ auth }, noAuthResource)).toBeNull();
-  });
-
-  it('returns null if a service is currently in-flight', () => {
-    auth.external = { isFetching: true };
-    expect(selectNextAuthService({ auth }, resource)).toBeNull();
-  });
-});
-
 describe('selectCanvasAuthService', () => {
   const resource = {
     service: [
@@ -338,6 +274,7 @@ describe('selectCanvasAuthService', () => {
 
   const state = {
     auth: {},
+    config: { auth: settings.auth },
     infoResponses: {
       'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
         json: resource,
@@ -357,7 +294,7 @@ describe('selectCanvasAuthService', () => {
   };
 
   it('returns undefined if there is no current canvas', () => {
-    expect(selectCanvasAuthService({ manifests: {} }, { manifestId: 'a' })).toBeUndefined();
+    expect(selectCanvasAuthService({ config: { auth: settings.auth }, manifests: {} }, { manifestId: 'a' })).toBeUndefined();
   });
 
   it('returns the next auth service to try', () => {
@@ -378,34 +315,37 @@ describe('selectCanvasAuthService', () => {
     expect(selectCanvasAuthService({ ...state, auth }, { canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json', manifestId: 'b' }).id).toEqual('external');
     expect(selectCanvasAuthService({ ...state, auth }, { canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1', manifestId: 'b' })).toBeUndefined();
   });
-});
 
-describe('selectLogoutAuthService', () => {
-  it('returns a logout auth service if one exists', () => {
-    const logout = {
-      '@id': 'http://foo/logout',
-      profile: 'http://iiif.io/api/auth/1/logout',
-    };
-    const resource = {
-      service: [
-        {
-          '@id': 'login',
-          profile: 'http://iiif.io/api/auth/1/login',
-          service: [
-            logout,
-          ],
-        },
-      ],
-    };
-    const state = {
-      auth: {
-        login: {
-          ok: true,
-        },
-      },
+  describe('proscribed order', () => {
+    let auth = {};
+    const orderedState = {
+      config: { auth: settings.auth },
       infoResponses: {
         'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
-          json: resource,
+          json: {
+            service: [
+              {
+                '@id': 'external',
+                profile: 'http://iiif.io/api/auth/1/external',
+              },
+              {
+                '@id': 'kiosk',
+                profile: 'http://iiif.io/api/auth/1/kiosk',
+              },
+              {
+                '@id': 'clickthrough',
+                profile: 'http://iiif.io/api/auth/1/clickthrough',
+              },
+              {
+                '@id': 'login',
+                profile: 'http://iiif.io/api/auth/1/login',
+              },
+              {
+                '@id': 'login2',
+                profile: 'http://iiif.io/api/auth/1/login',
+              },
+            ],
+          },
         },
       },
       manifests: {
@@ -414,13 +354,43 @@ describe('selectLogoutAuthService', () => {
         },
       },
     };
-    expect(
-      selectLogoutAuthService(
-        state,
-        { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' },
-      ).id,
-    )
-      .toBe(logout['@id']);
+
+    it('returns external first', () => {
+      auth = {};
+      expect(selectCanvasAuthService({ ...orderedState, auth }, { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' }).id).toEqual('external');
+    });
+
+    it('returns kiosk next', () => {
+      auth = { external: { isFetching: false, ok: false } };
+      expect(selectCanvasAuthService({ ...orderedState, auth }, { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' }).id).toEqual('kiosk');
+    });
+
+    it('returns clickthrough next', () => {
+      auth = {
+        external: { isFetching: false, ok: false },
+        kiosk: { isFetching: false, ok: false },
+      };
+      expect(selectCanvasAuthService({ ...orderedState, auth }, { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' }).id).toEqual('clickthrough');
+    });
+
+    it('returns logins last', () => {
+      auth = {
+        clickthrough: { isFetching: false, ok: false },
+        external: { isFetching: false, ok: false },
+        kiosk: { isFetching: false, ok: false },
+      };
+      expect(selectCanvasAuthService({ ...orderedState, auth }, { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' }).id).toEqual('login');
+    });
+
+    it('returns services within a given type using the order from the manifest', () => {
+      auth = {
+        clickthrough: { isFetching: false, ok: false },
+        external: { isFetching: false, ok: false },
+        kiosk: { isFetching: false, ok: false },
+        login: { isFetching: false, ok: false },
+      };
+      expect(selectCanvasAuthService({ ...orderedState, auth }, { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' }).id).toEqual('login2');
+    });
   });
 });
 
@@ -430,6 +400,7 @@ describe('selectInfoResponse', () => {
 
     const state = {
       auth: {},
+      config: { auth: settings.auth },
       infoResponses: {
         'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
           json: resource,

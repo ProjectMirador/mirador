@@ -337,5 +337,13 @@ export default {
     viewers: true,
     windows: true,
     workspace: true,
+  },
+  auth: {
+    serviceProfiles: [
+      { profile: 'http://iiif.io/api/auth/1/external', external: true },
+      { profile: 'http://iiif.io/api/auth/1/kiosk', kiosk: true },
+      { profile: 'http://iiif.io/api/auth/1/clickthrough' },
+      { profile: 'http://iiif.io/api/auth/1/login' },
+    ]
   }
 };

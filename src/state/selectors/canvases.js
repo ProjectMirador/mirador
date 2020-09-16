@@ -5,6 +5,8 @@ import CanvasGroupings from '../../lib/CanvasGroupings';
 import MiradorCanvas from '../../lib/MiradorCanvas';
 import { miradorSlice } from './utils';
 import { getWindow } from './getters';
+import { getConfig } from './config';
+import { getAuth } from './auth';
 import { getSequence } from './sequences';
 import { getWindowViewType } from './windows';
 
@@ -207,84 +209,42 @@ export const selectInfoResponse = createSelector(
   },
 );
 
-const authServiceProfiles = {
-  clickthrough: true, external: true, kiosk: true, login: true,
-};
-/**
- *
- */
-export function selectNextAuthService({ auth }, resource, filter = authServiceProfiles) {
-  const orderedAuthServiceProfiles = [
-    'http://iiif.io/api/auth/1/external',
-    'http://iiif.io/api/auth/1/kiosk',
-    'http://iiif.io/api/auth/1/clickthrough',
-    'http://iiif.io/api/auth/1/login',
-  ];
-
-  const mapFilterToProfiles = {
-    'http://iiif.io/api/auth/1/clickthrough': 'clickthrough',
-    'http://iiif.io/api/auth/1/external': 'external',
-    'http://iiif.io/api/auth/1/kiosk': 'kiosk',
-    'http://iiif.io/api/auth/1/login': 'login',
-  };
-
-  for (const profile of orderedAuthServiceProfiles) {
-    const services = getServices(resource, profile);
-    for (const service of services) {
-      if (!auth[service.id]) {
-        return filter[mapFilterToProfiles[profile]] && service;
-      }
-
-      if (auth[service.id].isFetching || auth[service.id].ok) return null;
-    }
-  }
-
-  return null;
-}
-
-/** */
-export function selectActiveAuthService(state, resource) {
-  const orderedAuthServiceProfiles = [
-    'http://iiif.io/api/auth/1/login',
-    'http://iiif.io/api/auth/1/clickthrough',
-    'http://iiif.io/api/auth/1/kiosk',
-    'http://iiif.io/api/auth/1/external',
-  ];
-
-  for (const profile of orderedAuthServiceProfiles) {
-    const services = getServices(resource, profile);
-    const service = services.find(s => selectAuthStatus(state, s));
-    if (service) return service;
-  }
-
-  return null;
-}
-
 export const selectCanvasAuthService = createSelector(
   [
     selectInfoResponse,
-    state => state,
+    getCanvas,
+    getConfig,
+    getAuth,
   ],
-  (infoResponse, state) => {
-    const resource = infoResponse && infoResponse.json;
+  (infoResponse, canvas, { auth: { serviceProfiles = [] } }, auth) => {
+    let iiifResource;
+    iiifResource = infoResponse && infoResponse.json && { ...infoResponse.json, options: {} };
 
-    if (!resource) return undefined;
+    if (!iiifResource && canvas) {
+      const miradorCanvas = new MiradorCanvas(canvas);
+      const [image] = miradorCanvas.iiifImageResources;
 
-    return selectNextAuthService(state, resource)
-      || selectActiveAuthService(state, resource);
-  },
-);
+      iiifResource = image && image.getServices()[0];
+    }
 
-export const selectLogoutAuthService = createSelector(
-  [
-    selectInfoResponse,
-    state => state,
-  ],
-  (infoResponse, state) => {
-    if (!infoResponse) return undefined;
-    const authService = selectActiveAuthService(state, infoResponse.json);
-    if (!authService) return undefined;
-    return authService.getService('http://iiif.io/api/auth/1/logout');
+    if (!iiifResource) return undefined;
+
+    const orderedAuthServiceProfiles = serviceProfiles.map(p => p.profile);
+
+    let lastAttemptedService;
+
+    for (const profile of orderedAuthServiceProfiles) {
+      const services = getServices(iiifResource, profile);
+      for (const service of services) {
+        if (!auth[service.id]) return service;
+
+        lastAttemptedService = service;
+
+        if (auth[service.id].isFetching || auth[service.id].ok) return service;
+      }
+    }
+
+    return lastAttemptedService;
   },
 );
 
@@ -299,7 +259,7 @@ export function selectAuthStatus({ auth }, service) {
 
 /** Get all the services that match a profile */
 function getServices(resource, profile) {
-  const services = Utils.getServices({ ...resource, options: {} });
+  const services = Utils.getServices(resource);
 
   return services.filter(service => service.getProfile() === profile);
 }
