@@ -194,22 +194,6 @@ export function* fetchResourceManifest({ manifestId, manifestJson }) {
   if (!manifests[manifestId]) yield* fetchManifest({ manifestId });
 }
 
-/** @private */
-export function* refetchInfoResponses({ serviceId }) {
-  const accessTokens = yield select(getAccessTokens);
-  const tokenService = accessTokens && accessTokens[serviceId];
-
-  if (!tokenService || tokenService.infoIds === []) return;
-
-  yield all(
-    tokenService.infoIds.map(infoId => call(fetchInfoResponse, { infoId, tokenService })),
-  );
-
-  // TODO: Other resources could be refetched too
-
-  yield put({ serviceId, type: ActionTypes.CLEAR_ACCESS_TOKEN_QUEUE });
-}
-
 /** */
 export function* fetchManifests(...manifestIds) {
   const manifests = yield select(getManifests);
@@ -227,7 +211,6 @@ export default function* iiifSaga() {
     takeEvery(ActionTypes.REQUEST_INFO_RESPONSE, fetchInfoResponse),
     takeEvery(ActionTypes.REQUEST_SEARCH, fetchSearchResponse),
     takeEvery(ActionTypes.REQUEST_ANNOTATION, fetchAnnotation),
-    takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchInfoResponses),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),
   ]);
 }
