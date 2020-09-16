@@ -98,9 +98,60 @@ export function* doAuthWorkflow({ infoJson, windowId }) {
     yield put(requestAccessToken(tokenService.id, authService.id));
   }
 }
+
+/** */
+export function* rerequestOnAccessTokenFailure({ infoJson, windowId, tokenServiceId }) {
+  if (!tokenServiceId) return;
+
+  // make sure we have an auth service to try
+  const authService = Utils.getServices(infoJson).find(service => {
+    const tokenService = Utils.getService(service, 'http://iiif.io/api/auth/1/token');
+
+    return tokenService && tokenService.id === tokenServiceId;
+  });
+
+  if (!authService) return;
+
+  // make sure the token ever worked (and might have expired or needs to be re-upped)
+  const accessTokenServices = yield select(getAccessTokens);
+  const service = accessTokenServices[tokenServiceId];
+  if (!(service && service.success)) return;
+
+  yield put(requestAccessToken(tokenServiceId, authService.id));
+}
+
+/** */
+export function* invalidateInvalidAuth({ serviceId }) {
+  const accessTokenServices = yield select(getAccessTokens);
+  const authServices = yield select(getAuth);
+
+  const accessTokenService = accessTokenServices[serviceId];
+  if (!accessTokenService) return;
+  const authService = authServices[accessTokenService.authId];
+  if (!authService) return;
+
+  if (accessTokenService.success) {
+    // if the token ever worked, reset things so we try to get a new cookie
+    yield put(resetAuthenticationState({
+      authServiceId: authService.id,
+      tokenServiceId: accessTokenService.id,
+    }));
+  } else {
+    // if the token never worked, mark the auth service as bad so we could
+    // try to pick a different service
+    yield put(resolveAuthenticationRequest(
+      authService.id,
+      accessTokenService.id,
+      { ok: false },
+    ));
+  }
+}
+
 /** */
 export default function* authSaga() {
   yield all([
+    takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, rerequestOnAccessTokenFailure),
+    takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN_FAILURE, invalidateInvalidAuth),
     takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, doAuthWorkflow),
     takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchInfoResponses),
     takeEvery(ActionTypes.RESET_AUTHENTICATION_STATE, refetchInfoResponsesOnLogout),
