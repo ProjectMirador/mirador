@@ -23,9 +23,11 @@ const mapStateToProps = (state, { windowId }) => {
 
   const accessTokenService = service && (
     Utils.getService(service, 'http://iiif.io/api/auth/1/token')
+    || Utils.getService(service, 'http://iiif.io/api/auth/0/token')
   );
   const logoutService = service && (
     Utils.getService(service, 'http://iiif.io/api/auth/1/logout')
+    || Utils.getService(service, 'http://iiif.io/api/auth/0/logout')
   );
 
   const authStatuses = getAuth(state) || {};

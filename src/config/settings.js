@@ -344,6 +344,10 @@ export default {
       { profile: 'http://iiif.io/api/auth/1/kiosk', kiosk: true },
       { profile: 'http://iiif.io/api/auth/1/clickthrough' },
       { profile: 'http://iiif.io/api/auth/1/login' },
+      { profile: 'http://iiif.io/api/auth/0/external', external: true },
+      { profile: 'http://iiif.io/api/auth/0/kiosk', kiosk: true },
+      { profile: 'http://iiif.io/api/auth/0/clickthrough' },
+      { profile: 'http://iiif.io/api/auth/0/login' }
     ]
   }
 };

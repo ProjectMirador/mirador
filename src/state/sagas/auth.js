@@ -52,7 +52,8 @@ export function* refetchInfoResponses({ serviceId }) {
   const haveThisTokenService = infoResponse => {
     const services = Utils.getServices(infoResponse);
     return services.some(e => {
-      const infoTokenService = Utils.getService(e, 'http://iiif.io/api/auth/1/token');
+      const infoTokenService = Utils.getService(e, 'http://iiif.io/api/auth/1/token')
+        || Utils.getService(e, 'http://iiif.io/api/auth/0/token');
       return infoTokenService && infoTokenService.id === serviceId;
     });
   };
@@ -89,7 +90,8 @@ export function* doAuthWorkflow({ infoJson, windowId }) {
     // start the auth
     yield put(addAuthenticationRequest(windowId, authService.id, authService.getProfile()));
   } else if (profileConfig.external) {
-    const tokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token');
+    const tokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token')
+      || Utils.getService(authService, 'http://iiif.io/api/auth/0/token');
 
     if (!tokenService) return;
     // resolve the auth
@@ -105,7 +107,8 @@ export function* rerequestOnAccessTokenFailure({ infoJson, windowId, tokenServic
 
   // make sure we have an auth service to try
   const authService = Utils.getServices(infoJson).find(service => {
-    const tokenService = Utils.getService(service, 'http://iiif.io/api/auth/1/token');
+    const tokenService = Utils.getService(service, 'http://iiif.io/api/auth/1/token')
+      || Utils.getService(service, 'http://iiif.io/api/auth/0/token');
 
     return tokenService && tokenService.id === tokenServiceId;
   });
