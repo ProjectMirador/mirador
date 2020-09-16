@@ -30,7 +30,13 @@ export class AccessTokenSender extends Component {
     */
     return (
       <IComCom
-        attributes={{ src: `${url}?origin=${window.origin}&messageId=${url}` }}
+        attributes={{
+          ariaHidden: true,
+          height: 1,
+          src: `${url}?origin=${window.origin}&messageId=${url}`,
+          style: { visibility: 'hidden' },
+          width: 1,
+        }}
         handleReceiveMessage={this.onReceiveAccessTokenMessage}
       />
     );
