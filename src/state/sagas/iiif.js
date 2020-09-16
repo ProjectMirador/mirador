@@ -132,7 +132,7 @@ function* getAccessTokenService(resource) {
 }
 
 /** @private */
-export function* fetchInfoResponse({ imageResource, infoId, tokenService: passedTokenService }) {
+export function* fetchInfoResponse({ imageResource, infoId, windowId }) {
   let iiifResource = imageResource;
   if (!iiifResource) {
     iiifResource = yield select(selectInfoResponse, { infoId });
@@ -141,7 +141,7 @@ export function* fetchInfoResponse({ imageResource, infoId, tokenService: passed
   const callbacks = {
     degraded: ({
       json, response, tokenServiceId,
-    }) => receiveDegradedInfoResponse(infoId, json, response.ok, tokenServiceId),
+    }) => receiveDegradedInfoResponse(infoId, json, response.ok, tokenServiceId, windowId),
     failure: ({
       error, json, response, tokenServiceId,
     }) => (

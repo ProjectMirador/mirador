@@ -166,6 +166,7 @@ describe('IIIF sagas', () => {
       const action = {
         imageResource: {},
         infoId: 'infoId',
+        windowId: 'window',
       };
 
       return expectSaga(fetchInfoResponse, action)
@@ -175,6 +176,7 @@ describe('IIIF sagas', () => {
           ok: true,
           tokenServiceId: undefined,
           type: 'mirador/RECEIVE_DEGRADED_INFO_RESPONSE',
+          windowId: 'window',
         })
         .run();
     });

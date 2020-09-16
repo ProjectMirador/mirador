@@ -223,7 +223,7 @@ export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowI
     const miradorCanvas = new MiradorCanvas(canvas);
     return all(miradorCanvas.iiifImageResources.map(imageResource => (
       !infoResponses[imageResource.getServices()[0].id]
-        && put(fetchInfoResponse({ imageResource }))
+        && put(fetchInfoResponse({ imageResource, windowId }))
     )).filter(Boolean));
   }));
 }
