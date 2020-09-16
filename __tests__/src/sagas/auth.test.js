@@ -2,10 +2,12 @@ import { call, select } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import serviceFixture from '../../fixtures/version-2/canvasService.json';
+import settings from '../../../src/config/settings';
 import ActionTypes from '../../../src/state/actions/action-types';
 import {
   refetchInfoResponses,
   refetchInfoResponsesOnLogout,
+  doAuthWorkflow,
 } from '../../../src/state/sagas/auth';
 import {
   fetchInfoResponse,
@@ -15,6 +17,8 @@ import {
   getWindows,
   selectInfoResponses,
   getVisibleCanvases,
+  getAuth,
+  getConfig,
 } from '../../../src/state/selectors';
 
 describe('IIIF Authentication sagas', () => {
@@ -163,6 +167,119 @@ describe('IIIF Authentication sagas', () => {
           [call(fetchInfoResponse, { infoId: iiifInfoId }), {}],
         ])
         .call(fetchInfoResponse, { infoId: iiifInfoId })
+        .run();
+    });
+  });
+  describe('doAuthWorkflow', () => {
+    it('kicks off the first external auth from the info.json', () => {
+      const infoJson = {
+        service: [{
+          '@context': 'http://iiif.io/api/auth/1/context.json',
+          '@id': 'https://authentication.example.com/external',
+          profile: 'http://iiif.io/api/auth/1/external',
+          service: [
+            {
+              '@id': 'https://authentication.example.com/token',
+              profile: 'http://iiif.io/api/auth/1/token',
+            },
+          ],
+        }],
+      };
+      const windowId = 'window';
+      return expectSaga(doAuthWorkflow, { infoJson, windowId })
+        .provide([
+          [select(getAuth), {}],
+          [select(getConfig), { auth: settings.auth }],
+        ])
+        .put({
+          id: 'https://authentication.example.com/external',
+          tokenServiceId: 'https://authentication.example.com/token',
+          type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST,
+        })
+        .put({
+          authId: 'https://authentication.example.com/external',
+          serviceId: 'https://authentication.example.com/token',
+          type: ActionTypes.REQUEST_ACCESS_TOKEN,
+        })
+        .run();
+    });
+
+    it('does nothing if the auth service has been tried already', () => {
+      const infoJson = {
+        service: [{
+          '@context': 'http://iiif.io/api/auth/1/context.json',
+          '@id': 'https://authentication.example.com/external',
+          profile: 'http://iiif.io/api/auth/1/external',
+          service: [
+            {
+              '@id': 'https://authentication.example.com/token',
+              profile: 'http://iiif.io/api/auth/1/token',
+            },
+          ],
+        }],
+      };
+      const windowId = 'window';
+      return expectSaga(doAuthWorkflow, { infoJson, windowId })
+        .provide([
+          [select(getAuth), { 'https://authentication.example.com/external': { ok: false } }],
+          [select(getConfig), { auth: settings.auth }],
+        ])
+        .not.put.like({ type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST })
+        .not.put.like({ type: ActionTypes.REQUEST_ACCESS_TOKEN })
+        .run();
+    });
+
+    it('does nothing if the auth service is "interactive"', () => {
+      const infoJson = {
+        service: [{
+          '@context': 'http://iiif.io/api/auth/1/context.json',
+          '@id': 'https://authentication.example.com/login',
+          profile: 'http://iiif.io/api/auth/1/login',
+          service: [
+            {
+              '@id': 'https://authentication.example.com/token',
+              profile: 'http://iiif.io/api/auth/1/token',
+            },
+          ],
+        }],
+      };
+      const windowId = 'window';
+      return expectSaga(doAuthWorkflow, { infoJson, windowId })
+        .provide([
+          [select(getAuth), {}],
+          [select(getConfig), { auth: settings.auth }],
+        ])
+        .not.put.like({ type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST })
+        .not.put.like({ type: ActionTypes.REQUEST_ACCESS_TOKEN })
+        .run();
+    });
+
+    it('kicks off the kiosk auth from the info.json', () => {
+      const infoJson = {
+        service: [{
+          '@context': 'http://iiif.io/api/auth/1/context.json',
+          '@id': 'https://authentication.example.com/kiosk',
+          profile: 'http://iiif.io/api/auth/1/kiosk',
+          service: [
+            {
+              '@id': 'https://authentication.example.com/token',
+              profile: 'http://iiif.io/api/auth/1/token',
+            },
+          ],
+        }],
+      };
+      const windowId = 'window';
+      return expectSaga(doAuthWorkflow, { infoJson, windowId })
+        .provide([
+          [select(getAuth), {}],
+          [select(getConfig), { auth: settings.auth }],
+        ])
+        .put({
+          id: 'https://authentication.example.com/kiosk',
+          profile: 'http://iiif.io/api/auth/1/kiosk',
+          type: ActionTypes.ADD_AUTHENTICATION_REQUEST,
+          windowId,
+        })
         .run();
     });
   });

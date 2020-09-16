@@ -6,9 +6,18 @@ import flatten from 'lodash/flatten';
 import ActionTypes from '../actions/action-types';
 import MiradorCanvas from '../../lib/MiradorCanvas';
 import {
+  addAuthenticationRequest,
+  resolveAuthenticationRequest,
+  requestAccessToken,
+  resetAuthenticationState,
+} from '../actions';
+import {
   selectInfoResponses,
   getVisibleCanvases,
   getWindows,
+  getConfig,
+  getAuth,
+  getAccessTokens,
 } from '../selectors';
 import { fetchInfoResponse } from './iiif';
 
@@ -60,9 +69,39 @@ export function* refetchInfoResponses({ serviceId }) {
   }));
 }
 
+/** try to start any non-interactive auth flows */
+export function* doAuthWorkflow({ infoJson, windowId }) {
+  const auths = yield select(getAuth);
+  const { auth: { serviceProfiles } } = yield select(getConfig);
+  const nonInteractiveAuthFlowProfiles = serviceProfiles.filter(p => p.external || p.kiosk);
+
+  // try to get an untried, non-interactive auth service
+  const authService = Utils.getServices(infoJson)
+    .filter(s => !auths[s.id])
+    .find(e => nonInteractiveAuthFlowProfiles.some(p => p.profile === e.getProfile()));
+  if (!authService) return;
+
+  const profileConfig = nonInteractiveAuthFlowProfiles.find(
+    p => p.profile === authService.getProfile(),
+  );
+
+  if (profileConfig.kiosk) {
+    // start the auth
+    yield put(addAuthenticationRequest(windowId, authService.id, authService.getProfile()));
+  } else if (profileConfig.external) {
+    const tokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token');
+
+    if (!tokenService) return;
+    // resolve the auth
+    yield put(resolveAuthenticationRequest(authService.id, tokenService.id));
+    // start access tokens
+    yield put(requestAccessToken(tokenService.id, authService.id));
+  }
+}
 /** */
 export default function* authSaga() {
   yield all([
+    takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, doAuthWorkflow),
     takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchInfoResponses),
     takeEvery(ActionTypes.RESET_AUTHENTICATION_STATE, refetchInfoResponsesOnLogout),
   ]);
