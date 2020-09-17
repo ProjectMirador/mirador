@@ -31,7 +31,7 @@ export class AccessTokenSender extends Component {
     return (
       <IComCom
         attributes={{
-          ariaHidden: true,
+          'aria-hidden': true,
           height: 1,
           src: `${url}?origin=${window.origin}&messageId=${url}`,
           style: { visibility: 'hidden' },
