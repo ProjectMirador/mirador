@@ -1,9 +1,17 @@
 import { createSelector } from 'reselect';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import flatten from 'lodash/flatten';
 import MiradorCanvas from '../../lib/MiradorCanvas';
 import { miradorSlice } from './utils';
 import { getConfig } from './config';
-import { selectInfoResponse, getCanvas } from './canvases';
+import { getVisibleCanvases, selectInfoResponses } from './canvases';
+
+export const getAuthProfiles = createSelector(
+  [
+    getConfig,
+  ],
+  ({ auth: { serviceProfiles = [] } }) => serviceProfiles,
+);
 
 /** */
 export const getAccessTokens = state => miradorSlice(state).accessTokens || {};
@@ -11,72 +19,65 @@ export const getAccessTokens = state => miradorSlice(state).accessTokens || {};
 /** */
 export const getAuth = state => miradorSlice(state).auth || {};
 
-export const selectCanvasAuthService = createSelector(
+export const selectCurrentAuthServices = createSelector(
   [
-    selectInfoResponse,
-    getCanvas,
-    getConfig,
+    getVisibleCanvases,
+    selectInfoResponses,
+    getAuthProfiles,
     getAuth,
+    (state, { iiifResources }) => iiifResources,
   ],
-  (infoResponse, canvas, { auth: { serviceProfiles = [] } }, auth) => {
-    let iiifResource;
-    iiifResource = infoResponse && infoResponse.json && { ...infoResponse.json, options: {} };
+  (canvases, infoResponses = {}, serviceProfiles, auth, iiifResources) => {
+    let currentAuthResources = iiifResources;
 
-    if (!iiifResource && canvas) {
-      const miradorCanvas = new MiradorCanvas(canvas);
-      const [image] = miradorCanvas.iiifImageResources;
+    if (!currentAuthResources && canvases) {
+      currentAuthResources = flatten(canvases.map(c => {
+        const miradorCanvas = new MiradorCanvas(c);
+        const images = miradorCanvas.iiifImageResources;
 
-      iiifResource = image && image.getServices()[0];
+        return images.map(i => {
+          const iiifImageService = i.getServices()[0];
+
+          const infoResponse = infoResponses[iiifImageService.id];
+          if (infoResponse && infoResponse.json) {
+            return { ...infoResponse.json, options: {} };
+          }
+
+          return iiifImageService;
+        });
+      }));
     }
 
-    if (!iiifResource) return undefined;
+    if (!currentAuthResources) return [];
+    if (currentAuthResources.length === 0) return [];
 
-    const orderedAuthServiceProfiles = serviceProfiles.map(p => p.profile);
+    const currentAuthServices = currentAuthResources.map(resource => {
+      let lastAttemptedService;
+      const services = Utils.getServices(resource);
 
-    let lastAttemptedService;
+      for (const authProfile of serviceProfiles) {
+        const profiledAuthServices = services.filter(
+          p => authProfile.profile === p.getProfile(),
+        );
 
-    for (const profile of orderedAuthServiceProfiles) {
-      const services = getServices(iiifResource, profile);
-      for (const service of services) {
-        if (!auth[service.id]) return service;
+        for (const service of profiledAuthServices) {
+          lastAttemptedService = service;
 
-        lastAttemptedService = service;
-
-        if (auth[service.id].isFetching || auth[service.id].ok) return service;
+          if (!auth[service.id] || auth[service.id].isFetching || auth[service.id].ok) {
+            return service;
+          }
+        }
       }
-    }
 
-    return lastAttemptedService;
-  },
-);
+      return lastAttemptedService;
+    });
 
-/** */
-export function selectAuthStatus({ auth }, service) {
-  if (!service) return null;
-  if (!auth[service.id]) return null;
-  if (auth[service.id].isFetching) return 'fetching';
-  if (auth[service.id].ok) return 'ok';
-  return 'failed';
-}
+    return Object.values(currentAuthServices.reduce((h, service) => {
+      if (service && !h[service.id]) {
+        h[service.id] = service; // eslint-disable-line no-param-reassign
+      }
 
-/** Get all the services that match a profile */
-function getServices(resource, profile) {
-  const services = Utils.getServices(resource);
-
-  return services.filter(service => service.getProfile() === profile);
-}
-
-/** check if the current auth service is "interactive" */
-export const isInteractiveAuth = createSelector(
-  [
-    selectCanvasAuthService,
-    getConfig,
-  ],
-  (service, { auth: { serviceProfiles = [] } }) => {
-    const profile = service && service.getProfile();
-
-    return serviceProfiles.some(
-      config => config.profile === profile && !(config.external || config.kiosk),
-    );
+      return h;
+    }, {}));
   },
 );

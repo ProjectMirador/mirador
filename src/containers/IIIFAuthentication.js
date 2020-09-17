@@ -5,10 +5,9 @@ import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
-  getCurrentCanvas,
   getAuth,
-  isInteractiveAuth,
-  selectCanvasAuthService,
+  getAuthProfiles,
+  selectCurrentAuthServices,
   getAccessTokens,
 } from '../state/selectors';
 import { IIIFAuthentication } from '../components/IIIFAuthentication';
@@ -19,8 +18,10 @@ import { IIIFAuthentication } from '../components/IIIFAuthentication';
  * @private
  */
 const mapStateToProps = (state, { windowId }) => {
-  const canvasId = (getCurrentCanvas(state, { windowId }) || {}).id;
-  const service = selectCanvasAuthService(state, { canvasId, windowId });
+  const services = selectCurrentAuthServices(state, { windowId });
+
+  // TODO: get the most actionable auth service...
+  const service = services[0];
 
   const accessTokenService = service && (
     Utils.getService(service, 'http://iiif.io/api/auth/1/token')
@@ -31,12 +32,10 @@ const mapStateToProps = (state, { windowId }) => {
     || Utils.getService(service, 'http://iiif.io/api/auth/0/logout')
   );
 
-  const authStatuses = getAuth(state) || {};
+  const authStatuses = getAuth(state);
   const authStatus = service && authStatuses[service.id];
-  const accessTokens = authStatus && accessTokenService && getAccessTokens(state);
-  const accessTokenStatus = accessTokens && Object.values(accessTokens).find(
-    e => e.id === accessTokenService.id,
-  );
+  const accessTokens = getAccessTokens(state);
+  const accessTokenStatus = accessTokenService && accessTokens[accessTokenService.id];
 
   let status;
 
@@ -45,18 +44,20 @@ const mapStateToProps = (state, { windowId }) => {
   } else if (authStatus.ok) {
     status = 'ok';
   } else if (authStatus.isFetching) {
-    if (authStatus.windowId === windowId) {
-      status = 'cookie';
-    }
+    if (authStatus.windowId === windowId) status = 'cookie';
   } else if (accessTokenStatus && accessTokenStatus.isFetching) {
-    if (authStatus.windowId === windowId) {
-      status = 'token';
-    }
+    if (authStatus.windowId === windowId) status = 'token';
   } else {
     status = 'failed';
   }
 
-  const isInteractive = isInteractiveAuth(state, { canvasId, windowId });
+  const authProfiles = getAuthProfiles(state);
+
+  const profile = service && service.getProfile();
+
+  const isInteractive = authProfiles.some(
+    config => config.profile === profile && !(config.external || config.kiosk),
+  );
 
   return {
     accessTokenServiceId: accessTokenService && accessTokenService.id,
@@ -69,7 +70,7 @@ const mapStateToProps = (state, { windowId }) => {
     isInteractive,
     label: service && service.getLabel()[0].value,
     logoutServiceId: logoutService && logoutService.id,
-    profile: service && service.getProfile(),
+    profile,
     status,
   };
 };
