@@ -37,18 +37,18 @@ const mapStateToProps = (state, { windowId }) => {
   const accessTokens = getAccessTokens(state);
   const accessTokenStatus = accessTokenService && accessTokens[accessTokenService.id];
 
-  let status;
+  let status = null;
 
   if (!authStatus) {
     status = null;
   } else if (authStatus.ok) {
     status = 'ok';
+  } else if (authStatus.ok === false) {
+    status = 'failed';
   } else if (authStatus.isFetching) {
     if (authStatus.windowId === windowId) status = 'cookie';
   } else if (accessTokenStatus && accessTokenStatus.isFetching) {
     if (authStatus.windowId === windowId) status = 'token';
-  } else {
-    status = 'failed';
   }
 
   const authProfiles = getAuthProfiles(state);
