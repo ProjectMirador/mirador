@@ -45,7 +45,7 @@ export class IIIFAuthentication extends Component {
       accessTokenServiceId, authServiceId, features,
       logoutServiceId, resetAuthenticationState, openWindow,
     } = this.props;
-    openWindow(logoutServiceId, features);
+    openWindow(logoutServiceId, undefined, features);
 
     resetAuthenticationState({ authServiceId, tokenServiceId: accessTokenServiceId });
   }

@@ -86,7 +86,7 @@ describe('IIIFAuthentication', () => {
 
       wrapper.find(WindowAuthenticationBar).simulate('confirm');
 
-      expect(openWindow).toHaveBeenCalledWith('http://example.com/logout', 'centerscreen');
+      expect(openWindow).toHaveBeenCalledWith('http://example.com/logout', undefined, 'centerscreen');
       expect(resetAuthenticationState).toHaveBeenCalledWith({
         authServiceId: 'http://example.com/auth', tokenServiceId: 'http://example.com/token',
       });
