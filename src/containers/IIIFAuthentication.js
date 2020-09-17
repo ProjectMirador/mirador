@@ -7,6 +7,7 @@ import * as actions from '../state/actions';
 import {
   getCurrentCanvas,
   getAuth,
+  isInteractiveAuth,
   selectCanvasAuthService,
   getAccessTokens,
 } from '../state/selectors';
@@ -37,8 +38,6 @@ const mapStateToProps = (state, { windowId }) => {
     e => e.id === accessTokenService.id,
   );
 
-  const profile = service && service.getProfile();
-
   let status;
 
   if (!authStatus) {
@@ -57,7 +56,7 @@ const mapStateToProps = (state, { windowId }) => {
     status = 'failed';
   }
 
-  const isInteractive = profile !== 'http://iiif.io/api/auth/1/external' && profile !== 'http://iiif.io/api/auth/1/kiosk';
+  const isInteractive = isInteractiveAuth(state, { canvasId, windowId });
 
   return {
     accessTokenServiceId: accessTokenService && accessTokenService.id,
@@ -70,7 +69,7 @@ const mapStateToProps = (state, { windowId }) => {
     isInteractive,
     label: service && service.getLabel()[0].value,
     logoutServiceId: logoutService && logoutService.id,
-    profile,
+    profile: service && service.getProfile(),
     status,
   };
 };
