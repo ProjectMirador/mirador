@@ -2,8 +2,6 @@ import React, { Component, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import PluginProvider from '../extend/PluginProvider';
 import AppProviders from '../containers/AppProviders';
-import AuthenticationSender from '../containers/AuthenticationSender';
-import AccessTokenSender from '../containers/AccessTokenSender';
 
 const WorkspaceArea = lazy(() => import('../containers/WorkspaceArea'));
 
@@ -22,8 +20,6 @@ export class App extends Component {
     return (
       <PluginProvider plugins={plugins}>
         <AppProviders dndManager={dndManager}>
-          <AuthenticationSender />
-          <AccessTokenSender />
           <Suspense
             fallback={<div />}
           >

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { Window } from '../../../src/components/Window';
 import WindowTopBar from '../../../src/containers/WindowTopBar';
 import PrimaryWindow from '../../../src/containers/PrimaryWindow';
-import WindowAuthenticationControl from '../../../src/containers/WindowAuthenticationControl';
+import IIIFAuthentication from '../../../src/containers/IIIFAuthentication';
 import ErrorContent from '../../../src/containers/ErrorContent';
 
 /** create wrapper */
@@ -34,9 +34,9 @@ describe('Window', () => {
     wrapper = createWrapper();
     expect(wrapper.find(PrimaryWindow)).toHaveLength(1);
   });
-  it('renders <WindowAuthenticationControl>', () => {
+  it('renders <WindowAuthenticationBar>', () => {
     wrapper = createWrapper();
-    expect(wrapper.find(WindowAuthenticationControl)).toHaveLength(1);
+    expect(wrapper.find(IIIFAuthentication)).toHaveLength(1);
   });
   it('renders manifest error', () => {
     wrapper = createWrapper({ manifestError: 'Invalid JSON' });

@@ -9,7 +9,7 @@ import PrimaryWindow from '../containers/PrimaryWindow';
 import CompanionArea from '../containers/CompanionArea';
 import MinimalWindow from '../containers/MinimalWindow';
 import ErrorContent from '../containers/ErrorContent';
-import WindowAuthenticationControl from '../containers/WindowAuthenticationControl';
+import IIIFAuthentication from '../containers/IIIFAuthentication';
 import { PluginHook } from './PluginHook';
 
 /**
@@ -44,7 +44,7 @@ export class Window extends Component {
           windowId={windowId}
           windowDraggable={windowDraggable}
         />
-        <WindowAuthenticationControl key="auth" windowId={windowId} />
+        <IIIFAuthentication windowId={windowId} />
       </div>
     );
     if (workspaceType === 'mosaic' && windowDraggable) {

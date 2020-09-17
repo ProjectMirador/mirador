@@ -286,6 +286,10 @@ export class OpenSeadragonViewer extends Component {
         return false;
       }
 
+      if (infoResponse.tokenServiceId !== prevInfoResponses[index].tokenServiceId) {
+        return false;
+      }
+
       if (infoResponse.json['@id']
         && infoResponse.json['@id'] === prevInfoResponses[index].json['@id']) {
         return true;

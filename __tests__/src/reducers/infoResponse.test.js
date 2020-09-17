@@ -92,27 +92,4 @@ describe('info response reducer', () => {
       type: ActionTypes.IMPORT_MIRADOR_STATE,
     })).toEqual({});
   });
-  it('should handle RESET_AUTHENTICATION_STATE', () => {
-    expect(infoResponsesReducer(
-      {
-        abc123: {
-          stuff: 'foo',
-          tokenServiceId: 'abc123',
-        },
-        def456: {
-          stuff: 'foo',
-          tokenServiceId: 'def456',
-        },
-      },
-      {
-        tokenServiceId: 'abc123',
-        type: ActionTypes.RESET_AUTHENTICATION_STATE,
-      },
-    )).toEqual({
-      def456: {
-        stuff: 'foo',
-        tokenServiceId: 'def456',
-      },
-    });
-  });
 });

@@ -6,11 +6,12 @@ import ActionTypes from './action-types';
  * @param  {String} infoId
  * @memberof ActionCreators
  */
-export function requestInfoResponse(infoId, imageResource) {
+export function requestInfoResponse(infoId, imageResource, windowId) {
   return {
     imageResource,
     infoId,
     type: ActionTypes.REQUEST_INFO_RESPONSE,
+    windowId,
   };
 }
 
@@ -38,13 +39,14 @@ export function receiveInfoResponse(infoId, infoJson, ok, tokenServiceId) {
  * @param  {Object} manifestJson
  * @memberof ActionCreators
  */
-export function receiveDegradedInfoResponse(infoId, infoJson, ok, tokenServiceId) {
+export function receiveDegradedInfoResponse(infoId, infoJson, ok, tokenServiceId, windowId) {
   return {
     infoId,
     infoJson,
     ok,
     tokenServiceId,
     type: ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE,
+    windowId,
   };
 }
 
@@ -70,10 +72,10 @@ export function receiveInfoResponseFailure(infoId, error, tokenServiceId) {
  * @param  {String} infoId
  * @memberof ActionCreators
  */
-export function fetchInfoResponse({ imageId, imageResource }) {
+export function fetchInfoResponse({ imageId, imageResource, windowId }) {
   const imageService = imageResource && imageResource.getServices()[0];
   const infoId = (imageId || imageService.id);
-  return requestInfoResponse(infoId, imageService);
+  return requestInfoResponse(infoId, imageService, windowId);
 }
 
 /**

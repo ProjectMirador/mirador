@@ -1,11 +1,10 @@
-import { call, select } from 'redux-saga/effects';
-import { expectSaga, testSaga } from 'redux-saga-test-plan';
+import { select } from 'redux-saga/effects';
+import { expectSaga } from 'redux-saga-test-plan';
 import {
   fetchAnnotation,
   fetchManifest,
   fetchSearchResponse,
   fetchInfoResponse,
-  refetchInfoResponses,
   fetchResourceManifest,
 } from '../../../src/state/sagas/iiif';
 import {
@@ -167,6 +166,7 @@ describe('IIIF sagas', () => {
       const action = {
         imageResource: {},
         infoId: 'infoId',
+        windowId: 'window',
       };
 
       return expectSaga(fetchInfoResponse, action)
@@ -176,6 +176,7 @@ describe('IIIF sagas', () => {
           ok: true,
           tokenServiceId: undefined,
           type: 'mirador/RECEIVE_DEGRADED_INFO_RESPONSE',
+          windowId: 'window',
         })
         .run();
     });
@@ -214,24 +215,6 @@ describe('IIIF sagas', () => {
           type: 'mirador/RECEIVE_INFO_RESPONSE',
         })
         .run();
-    });
-  });
-
-  describe('refetchInfoResponses', () => {
-    it('refetches info responses when a new access token is available', () => {
-      const serviceId = 'serviceId';
-      const tokenService = { id: serviceId, infoIds: ['x', 'y'] };
-
-      testSaga(refetchInfoResponses, { serviceId })
-        .next()
-        .select(getAccessTokens)
-        .next({ serviceId: tokenService })
-        .all([
-          call(fetchInfoResponse, { infoId: 'x', tokenService }),
-          call(fetchInfoResponse, { infoId: 'y', tokenService }),
-        ])
-        .next()
-        .put({ serviceId, type: 'mirador/CLEAR_ACCESS_TOKEN_QUEUE' });
     });
   });
 

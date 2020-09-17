@@ -54,13 +54,6 @@ export const infoResponsesReducer = (state = {}, action) => {
       }, {});
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};
-    case ActionTypes.RESET_AUTHENTICATION_STATE:
-      return Object.keys(state).reduce((object, key) => {
-        if (state[key].tokenServiceId !== action.tokenServiceId) {
-          object[key] = state[key]; // eslint-disable-line no-param-reassign
-        }
-        return object;
-      }, {});
     default: return state;
   }
 };

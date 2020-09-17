@@ -1,18 +1,15 @@
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import ActionTypes from './action-types';
 
 /**
  * addAuthenticationRequest - action creator
  *
  * @param  {String} windowId
- * @param  {String} infoId
  * @param  {String} id
  * @memberof ActionCreators
  */
-export function addAuthenticationRequest(windowId, infoId, id, profile = undefined) {
+export function addAuthenticationRequest(windowId, id, profile = undefined) {
   return {
     id,
-    infoId,
     profile,
     type: ActionTypes.ADD_AUTHENTICATION_REQUEST,
     windowId,
@@ -21,16 +18,19 @@ export function addAuthenticationRequest(windowId, infoId, id, profile = undefin
 
 /**
  * resolveAuthenticationRequest - action creator
+ * Triggered when we might have an IIIF auth cookie available (but we
+ *   can't be really sure until try the access token)
  *
  * @param {String} id
  * @memberof ActionCreators
  */
-export function resolveAuthenticationRequest(id) {
-  return ((dispatch, getState) => {
-    const { auth } = getState();
-
-    dispatch(fetchAccessTokenRequest(id, auth[id].infoId));
-  });
+export function resolveAuthenticationRequest(id, tokenServiceId, props) {
+  return {
+    id,
+    tokenServiceId,
+    type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST,
+    ...props,
+  };
 }
 
 /**
@@ -39,13 +39,11 @@ export function resolveAuthenticationRequest(id) {
  *
  * @param  {String} serviceId
  * @param  {String} authId
- * @param  {String} infoIds
  * @memberof ActionCreators
  */
-export function requestAccessToken(serviceId, authId, infoIds) {
+export function requestAccessToken(serviceId, authId) {
   return {
     authId,
-    infoIds,
     serviceId,
     type: ActionTypes.REQUEST_ACCESS_TOKEN,
   };
@@ -59,8 +57,9 @@ export function requestAccessToken(serviceId, authId, infoIds) {
  * @param  {Object} json
  * @memberof ActionCreators
  */
-export function receiveAccessToken(serviceId, json, infoIds) {
+export function receiveAccessToken(authId, serviceId, json) {
   return {
+    authId,
     json,
     serviceId,
     type: ActionTypes.RECEIVE_ACCESS_TOKEN,
@@ -75,32 +74,13 @@ export function receiveAccessToken(serviceId, json, infoIds) {
  * @param  {Object} error
  * @memberof ActionCreators
  */
-export function receiveAccessTokenFailure(serviceId, error) {
+export function receiveAccessTokenFailure(authId, serviceId, error) {
   return {
+    authId,
     error,
     serviceId,
     type: ActionTypes.RECEIVE_ACCESS_TOKEN_FAILURE,
   };
-}
-
-/** @private */
-export function fetchAccessTokenRequest(id, infoIds, providedServices = undefined) {
-  return ((dispatch, getState) => {
-    const { infoResponses } = getState();
-
-    const infoResponse = infoResponses[infoIds[0]].json;
-
-    const services = providedServices || Utils.getServices(infoResponse);
-
-    const authService = services.find(e => e.id === id);
-
-    if (!authService) return null;
-
-    const accessTokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token');
-
-    dispatch(requestAccessToken(accessTokenService.id, authService.id, infoIds));
-    return null;
-  });
 }
 
 /**
@@ -109,37 +89,19 @@ export function fetchAccessTokenRequest(id, infoIds, providedServices = undefine
  * @param {Object} message
  * @memberof ActionCreators
  */
-export function resolveAccessTokenRequest({ messageId, ...json }) {
-  return ((dispatch, getState) => {
-    const { authId } = getState().accessTokens[messageId];
+export function resolveAccessTokenRequest(authServiceId, tokenServiceId, json) {
+  if (!json.accessToken) return receiveAccessTokenFailure(authServiceId, tokenServiceId, json);
 
-    dispatch({
-      id: authId,
-      ok: !!json.accessToken,
-      type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST,
-    });
-
-    if (json.accessToken) {
-      dispatch(receiveAccessToken(messageId, json));
-    } else {
-      dispatch(receiveAccessTokenFailure(messageId, json));
-    }
-  });
+  return receiveAccessToken(authServiceId, tokenServiceId, json);
 }
 
 /**
  * Resets authentication state for a token service
  */
-export function resetAuthenticationState({ authServiceId }) {
-  return ((dispatch, getState) => {
-    const { accessTokens } = getState();
-
-    const currentService = Object.values(accessTokens)
-      .find(service => service.authId === authServiceId);
-    dispatch({
-      id: authServiceId,
-      tokenServiceId: currentService && currentService.id,
-      type: ActionTypes.RESET_AUTHENTICATION_STATE,
-    });
-  });
+export function resetAuthenticationState({ authServiceId, tokenServiceId }) {
+  return {
+    id: authServiceId,
+    tokenServiceId,
+    type: ActionTypes.RESET_AUTHENTICATION_STATE,
+  };
 }

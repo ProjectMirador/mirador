@@ -115,7 +115,10 @@ export function* fetchManifest({ manifestId }) {
 
 /** @private */
 function* getAccessTokenService(resource) {
-  const services = Utils.getServices({ ...resource, options: {} }).filter(s => s.getProfile().match(/http:\/\/iiif.io\/api\/auth\//));
+  const manifestoCompatibleResource = resource && resource.__jsonld
+    ? resource
+    : { ...resource, options: {} };
+  const services = Utils.getServices(manifestoCompatibleResource).filter(s => s.getProfile().match(/http:\/\/iiif.io\/api\/auth\//));
   if (services.length === 0) return undefined;
 
   const accessTokens = yield select(getAccessTokens);
@@ -123,8 +126,9 @@ function* getAccessTokenService(resource) {
 
   for (let i = 0; i < services.length; i += 1) {
     const authService = services[i];
-    const accessTokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token');
-    const token = accessTokens[accessTokenService.id];
+    const accessTokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token')
+      || Utils.getService(authService, 'http://iiif.io/api/auth/0/token');
+    const token = accessTokenService && accessTokens[accessTokenService.id];
     if (token && token.json) return token;
   }
 
@@ -132,7 +136,7 @@ function* getAccessTokenService(resource) {
 }
 
 /** @private */
-export function* fetchInfoResponse({ imageResource, infoId, tokenService: passedTokenService }) {
+export function* fetchInfoResponse({ imageResource, infoId, windowId }) {
   let iiifResource = imageResource;
   if (!iiifResource) {
     iiifResource = yield select(selectInfoResponse, { infoId });
@@ -141,7 +145,7 @@ export function* fetchInfoResponse({ imageResource, infoId, tokenService: passed
   const callbacks = {
     degraded: ({
       json, response, tokenServiceId,
-    }) => receiveDegradedInfoResponse(infoId, json, response.ok, tokenServiceId),
+    }) => receiveDegradedInfoResponse(infoId, json, response.ok, tokenServiceId, windowId),
     failure: ({
       error, json, response, tokenServiceId,
     }) => (
@@ -194,22 +198,6 @@ export function* fetchResourceManifest({ manifestId, manifestJson }) {
   if (!manifests[manifestId]) yield* fetchManifest({ manifestId });
 }
 
-/** @private */
-export function* refetchInfoResponses({ serviceId }) {
-  const accessTokens = yield select(getAccessTokens);
-  const tokenService = accessTokens && accessTokens[serviceId];
-
-  if (!tokenService || tokenService.infoIds === []) return;
-
-  yield all(
-    tokenService.infoIds.map(infoId => call(fetchInfoResponse, { infoId, tokenService })),
-  );
-
-  // TODO: Other resources could be refetched too
-
-  yield put({ serviceId, type: ActionTypes.CLEAR_ACCESS_TOKEN_QUEUE });
-}
-
 /** */
 export function* fetchManifests(...manifestIds) {
   const manifests = yield select(getManifests);
@@ -227,7 +215,6 @@ export default function* iiifSaga() {
     takeEvery(ActionTypes.REQUEST_INFO_RESPONSE, fetchInfoResponse),
     takeEvery(ActionTypes.REQUEST_SEARCH, fetchSearchResponse),
     takeEvery(ActionTypes.REQUEST_ANNOTATION, fetchAnnotation),
-    takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchInfoResponses),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),
   ]);
 }
