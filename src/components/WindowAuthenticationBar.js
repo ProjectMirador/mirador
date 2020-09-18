@@ -45,7 +45,7 @@ export class WindowAuthenticationBar extends Component {
     const { open } = this.state;
 
     const button = (
-      <Button onClick={this.onSubmit} className={classes.buttonInvert} autoFocus color="secondary" {...ConfirmProps}>
+      <Button onClick={this.onSubmit} className={classes.buttonInvert} color="secondary" {...ConfirmProps}>
         {confirmButton || t('login')}
       </Button>
     );
