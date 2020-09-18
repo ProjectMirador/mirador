@@ -48,7 +48,7 @@ export class ThumbnailNavigation extends Component {
    */
   calculateScaledSize(index) {
     const { thumbnailNavigation, canvasGroupings, position } = this.props;
-    const canvases = canvasGroupings.groupings()[index];
+    const canvases = canvasGroupings[index];
     const world = new CanvasWorld(canvases);
     const bounds = world.worldBounds();
     switch (position) {
@@ -125,7 +125,7 @@ export class ThumbnailNavigation extends Component {
   /** */
   itemCount() {
     const { canvasGroupings } = this.props;
-    return canvasGroupings.groupings().length;
+    return canvasGroupings.length;
   }
 
   /** */
@@ -231,7 +231,7 @@ export class ThumbnailNavigation extends Component {
 }
 
 ThumbnailNavigation.propTypes = {
-  canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvasGroupings: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   canvasIndex: PropTypes.number.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   hasNextCanvas: PropTypes.bool,

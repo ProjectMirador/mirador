@@ -4,7 +4,6 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../state/actions';
 import {
-  getCanvas,
   getCanvasLabel,
   getLayers,
   getSortedLayers,
@@ -13,11 +12,7 @@ import { CanvasLayers } from '../components/CanvasLayers';
 
 /** For connect */
 const mapStateToProps = (state, { canvasId, windowId }) => ({
-  canvas: getCanvas(state, { canvasId, windowId }),
-  label: getCanvasLabel(state, {
-    canvasId,
-    windowId,
-  }),
+  label: getCanvasLabel(state, { canvasId, windowId }),
   layerMetadata: getLayers(state, { canvasId, windowId }),
   layers: getSortedLayers(state, { canvasId, windowId }),
 });
