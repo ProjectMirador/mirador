@@ -10,8 +10,8 @@ import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 function createWrapper(props) {
   return shallow(
     <SidebarIndexThumbnail
-      canvas={{ label: 'yolo' }}
-      otherCanvas={Utils.parseManifest(fixture).getSequences()[0].getCanvases()[1]}
+      canvas={Utils.parseManifest(fixture).getSequences()[0].getCanvases()[1]}
+      label="yolo"
       classes={{}}
       config={{ canvasNavigation: { height: 200, width: 100 } }}
       {...props}

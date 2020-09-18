@@ -9,14 +9,15 @@ export class SidebarIndexThumbnail extends Component {
   /** */
   render() {
     const {
-      classes, otherCanvas, canvas, height, width,
+      classes, canvas, height, label, width,
     } = this.props;
 
     return (
       <>
         <div style={{ minWidth: 50 }}>
           <IIIFThumbnail
-            resource={otherCanvas}
+            label={label}
+            resource={canvas}
             className={classNames(classes.clickable)}
             maxHeight={height}
             maxWidth={width}
@@ -26,7 +27,7 @@ export class SidebarIndexThumbnail extends Component {
           className={classNames(classes.label)}
           variant="body1"
         >
-          {canvas.label}
+          {label}
         </Typography>
       </>
     );
@@ -37,7 +38,7 @@ SidebarIndexThumbnail.propTypes = {
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   height: PropTypes.number,
-  otherCanvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  label: PropTypes.string.isRequired,
   width: PropTypes.number,
 };
 

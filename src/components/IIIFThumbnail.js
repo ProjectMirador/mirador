@@ -4,11 +4,21 @@ import 'intersection-observer'; // polyfill needed for Safari
 import Typography from '@material-ui/core/Typography';
 import IntersectionObserver from '@researchgate/react-intersection-observer';
 import classNames from 'classnames';
+import getThumbnail from '../lib/ThumbnailFactory';
 
 /**
  * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
  */
 export class IIIFThumbnail extends Component {
+  /** */
+  static getUseableLabel(resource, index) {
+    return (resource
+      && resource.getLabel
+      && resource.getLabel().length > 0)
+      ? resource.getLabel().map(label => label.value)[0]
+      : String(index + 1);
+  }
+
   /**
    */
   constructor(props) {
@@ -17,13 +27,32 @@ export class IIIFThumbnail extends Component {
     this.handleIntersection = this.handleIntersection.bind(this);
   }
 
+  /** */
+  componentDidMount() {
+    this.setState(state => ({ ...state, image: this.image() }));
+  }
+
+  /** */
+  componentDidUpdate(prevProps) {
+    const { maxHeight, maxWidth, resource } = this.props;
+
+    if (
+      prevProps.maxHeight !== maxHeight
+      || prevProps.maxWidth !== maxWidth
+      || prevProps.resource !== resource) {
+        this.setState(state => ({ ...state, image: this.image() })); // eslint-disable-line
+    }
+  }
+
   /**
    *
   */
   imageStyles() {
     const {
-      maxHeight, maxWidth, style, image,
+      maxHeight, maxWidth, style,
     } = this.props;
+
+    const image = this.image();
 
     const styleProps = { height: 'auto', width: 'auto' };
 
@@ -74,9 +103,29 @@ export class IIIFThumbnail extends Component {
 
     if (loaded || !event.isIntersecting) return;
 
-    this.setState({
-      loaded: true,
-    });
+    this.setState(state => ({ ...state, loaded: true }));
+  }
+
+  /** */
+  image() {
+    const {
+      thumbnail, resource, maxHeight, maxWidth,
+    } = this.props;
+
+    if (thumbnail) return thumbnail;
+
+    const image = getThumbnail(resource, { maxHeight, maxWidth });
+
+    if (image && image.url) return image;
+
+    return undefined;
+  }
+
+  /** */
+  label() {
+    const { label, resource } = this.props;
+
+    return label || IIIFThumbnail.getUseableLabel(resource);
   }
 
   /**
@@ -85,13 +134,15 @@ export class IIIFThumbnail extends Component {
     const {
       children,
       classes,
-      image,
-      label,
+      imagePlaceholder,
       labelled,
+      thumbnail,
       variant,
     } = this.props;
 
-    const { loaded } = this.state;
+    const { image, loaded } = this.state;
+
+    const { url: src = imagePlaceholder } = (loaded && (thumbnail || image)) || {};
 
     return (
       <div className={classNames(classes.root, { [classes[`${variant}Root`]]: variant })}>
@@ -99,15 +150,15 @@ export class IIIFThumbnail extends Component {
           <img
             alt=""
             role="presentation"
-            src={(loaded && image && image.url) || IIIFThumbnail.defaultImgPlaceholder}
+            src={src}
             style={this.imageStyles()}
             className={classes.image}
           />
         </IntersectionObserver>
-        { labelled && label && (
+        { labelled && (
           <div className={classNames(classes.label, { [classes[`${variant}Label`]]: variant })}>
             <Typography variant="caption" classes={{ root: classNames(classes.caption, { [classes[`${variant}Caption`]]: variant }) }}>
-              {label}
+              {this.label()}
             </Typography>
           </div>
         )}
@@ -117,33 +168,34 @@ export class IIIFThumbnail extends Component {
   }
 }
 
-// Transparent "gray"
-IIIFThumbnail.defaultImgPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
-
 IIIFThumbnail.propTypes = {
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string),
-  image: PropTypes.shape({
-    height: PropTypes.number,
-    url: PropTypes.string.isRequired,
-    width: PropTypes.number,
-  }),
+  imagePlaceholder: PropTypes.string,
   label: PropTypes.string,
   labelled: PropTypes.bool,
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
+  resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  thumbnail: PropTypes.shape({
+    height: PropTypes.number,
+    url: PropTypes.string.isRequired,
+    width: PropTypes.number,
+  }),
   variant: PropTypes.oneOf(['inside', 'outside']),
 };
 
 IIIFThumbnail.defaultProps = {
   children: null,
   classes: {},
-  image: null,
+  // Transparent "gray"
+  imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==',
   label: undefined,
   labelled: false,
   maxHeight: null,
   maxWidth: null,
   style: {},
+  thumbnail: null,
   variant: null,
 };

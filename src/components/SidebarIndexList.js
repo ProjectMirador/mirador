@@ -64,7 +64,7 @@ export class SidebarIndexList extends Component {
                   offsetTop={96} // offset for the height of the form above
                   scrollTo={selectedCanvasIds.includes(canvas.id)}
                 >
-                  <Item canvas={canvas} otherCanvas={canvases[canvasIndex]} />
+                  <Item label={canvas.label} canvas={canvases[canvasIndex]} />
                 </ScrollTo>
               </MenuItem>
             );
