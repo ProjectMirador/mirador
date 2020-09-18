@@ -5,14 +5,14 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { LayersPanel } from '../components/LayersPanel';
 import {
-  getVisibleCanvases,
+  getVisibleCanvasIds,
 } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
  */
 const mapStateToProps = (state, { id, windowId }) => ({
-  canvases: getVisibleCanvases(state, { windowId }),
+  canvasIds: getVisibleCanvasIds(state, { windowId }),
 });
 
 /**

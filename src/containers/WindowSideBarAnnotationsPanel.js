@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import {
-  getVisibleCanvases,
+  getVisibleCanvasIds,
   getAnnotationResourcesByMotivation,
 } from '../state/selectors';
 import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnotationsPanel';
@@ -19,7 +19,7 @@ const mapStateToProps = (state, { windowId }) => ({
     state,
     { windowId },
   ).length,
-  selectedCanvases: getVisibleCanvases(state, { windowId }),
+  canvasIds: getVisibleCanvasIds(state, { windowId }),
 });
 
 /** */

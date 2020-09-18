@@ -19,11 +19,8 @@ function createWrapper(props) {
 
 describe('LayersPanel', () => {
   it('renders layers for each canvas', () => {
-    const canvases = [
-      { id: 'a' },
-      { id: 'b' },
-    ];
-    const wrapper = createWrapper({ canvases });
+    const canvasIds = ['a', 'b'];
+    const wrapper = createWrapper({ canvasIds });
     expect(wrapper.find(CanvasLayers).length).toBe(2);
 
     expect(wrapper.find(CanvasLayers).at(0).props()).toMatchObject({

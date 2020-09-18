@@ -8,8 +8,6 @@ import { WindowSideBarCanvasPanel } from '../components/WindowSideBarCanvasPanel
 import {
   getCompanionWindow,
   getDefaultSidebarVariant,
-  getCanvases,
-  getVisibleCanvases,
   getSequenceTreeStructure,
   getWindow,
   getManifestoInstance,
@@ -19,7 +17,6 @@ import {
  * mapStateToProps - to hook up connect
  */
 const mapStateToProps = (state, { id, windowId }) => {
-  const canvases = getCanvases(state, { windowId });
   const treeStructure = getSequenceTreeStructure(state, { windowId });
   const window = getWindow(state, { windowId });
   const { config } = state;
@@ -27,10 +24,8 @@ const mapStateToProps = (state, { id, windowId }) => {
   const collectionPath = window.collectionPath || [];
   const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
   return {
-    canvases,
     collection: collectionId && getManifestoInstance(state, { manifestId: collectionId }),
     config,
-    selectedCanvases: getVisibleCanvases(state, { windowId }),
     showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
     variant: companionWindow.variant
       || getDefaultSidebarVariant(state, { windowId }),

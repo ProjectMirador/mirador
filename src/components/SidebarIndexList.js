@@ -25,7 +25,7 @@ export class SidebarIndexList extends Component {
       canvases,
       classes,
       containerRef,
-      selectedCanvases,
+      selectedCanvasIds,
       setCanvas,
       variant,
       windowId,
@@ -56,13 +56,13 @@ export class SidebarIndexList extends Component {
                 onClick={onClick}
                 button
                 component="li"
-                selected={!!selectedCanvases.find(c => c.id === canvas.id)}
+                selected={selectedCanvasIds.includes(canvas.id)}
               >
                 <ScrollTo
                   containerRef={containerRef}
                   key={`${canvas.id}-${variant}`}
                   offsetTop={96} // offset for the height of the form above
-                  scrollTo={!!selectedCanvases.find(c => c.id === canvas.id)}
+                  scrollTo={selectedCanvasIds.includes(canvas.id)}
                 >
                   <Item canvas={canvas} otherCanvas={canvases[canvasIndex]} />
                 </ScrollTo>
@@ -79,13 +79,13 @@ SidebarIndexList.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   containerRef: PropTypes.oneOf([PropTypes.func, PropTypes.object]).isRequired,
-  selectedCanvases: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string })),
+  selectedCanvasIds: PropTypes.arrayOf(PropTypes.string),
   setCanvas: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['item', 'thumbnail']),
   windowId: PropTypes.string.isRequired,
 };
 
 SidebarIndexList.defaultProps = {
-  selectedCanvases: [],
+  selectedCanvasIds: [],
   variant: 'item',
 };
