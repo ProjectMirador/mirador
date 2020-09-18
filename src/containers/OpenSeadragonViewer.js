@@ -6,18 +6,15 @@ import flatten from 'lodash/flatten';
 import { withPlugins } from '../extend/withPlugins';
 import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
-import CanvasWorld from '../lib/CanvasWorld';
 import {
   getVisibleCanvasNonTiledResources,
   getCurrentCanvas,
   getCanvasLabel,
-  getSequenceViewingDirection,
-  getLayersForVisibleCanvases,
-  getVisibleCanvases,
   getViewer,
   getConfig,
   getCompanionWindowsForContent,
   selectInfoResponses,
+  getCurrentCanvasWorld,
 } from '../state/selectors';
 
 /**
@@ -26,12 +23,7 @@ import {
  * @private
  */
 const mapStateToProps = (state, { windowId }) => {
-  const canvasWorld = new CanvasWorld(
-    getVisibleCanvases(state, { windowId }),
-    getLayersForVisibleCanvases(state, { windowId }),
-    getSequenceViewingDirection(state, { windowId }),
-  );
-
+  const canvasWorld = getCurrentCanvasWorld(state, { windowId });
   const infoResponses = selectInfoResponses(state);
   const imageServiceIds = flatten(canvasWorld.canvases.map(c => c.imageServiceIds));
 

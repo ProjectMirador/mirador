@@ -4,18 +4,15 @@ import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { AnnotationsOverlay } from '../components/AnnotationsOverlay';
 import * as actions from '../state/actions';
-import CanvasWorld from '../lib/CanvasWorld';
 import {
   getWindow,
-  getSequenceViewingDirection,
-  getLayersForVisibleCanvases,
-  getVisibleCanvases,
   getSearchAnnotationsForWindow,
   getCompanionWindowsForContent,
   getTheme,
   getConfig,
   getPresentAnnotationsOnSelectedCanvases,
   getSelectedAnnotationId,
+  getCurrentCanvasWorld,
 } from '../state/selectors';
 
 /**
@@ -25,11 +22,7 @@ import {
  */
 const mapStateToProps = (state, { windowId }) => ({
   annotations: getPresentAnnotationsOnSelectedCanvases(state, { windowId }),
-  canvasWorld: new CanvasWorld(
-    getVisibleCanvases(state, { windowId }),
-    getLayersForVisibleCanvases(state, { windowId }),
-    getSequenceViewingDirection(state, { windowId }),
-  ),
+  canvasWorld: getCurrentCanvasWorld(state, { windowId }),
   drawAnnotations: getConfig(state).window.forceDrawAnnotations || getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0,
   drawSearchAnnotations: getConfig(state).window.forceDrawAnnotations || getCompanionWindowsForContent(state, { content: 'search', windowId }).length > 0,
   highlightAllAnnotations: getWindow(state, { windowId }).highlightAllAnnotations,
