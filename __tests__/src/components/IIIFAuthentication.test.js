@@ -79,9 +79,15 @@ describe('IIIFAuthentication', () => {
     it('renders a logout button', () => {
       const openWindow = jest.fn();
       const resetAuthenticationState = jest.fn();
-      const wrapper = createWrapper({ openWindow, resetAuthenticationState, status: 'ok' });
+      const wrapper = createWrapper({
+        logoutConfirm: 'exit',
+        openWindow,
+        resetAuthenticationState,
+        status: 'ok',
+      });
+
       expect(wrapper.find(WindowAuthenticationBar).length).toBe(1);
-      expect(wrapper.find(WindowAuthenticationBar).prop('confirmButton')).toEqual('logout');
+      expect(wrapper.find(WindowAuthenticationBar).prop('confirmButton')).toEqual('exit');
       expect(wrapper.find(WindowAuthenticationBar).prop('hasLogoutService')).toEqual(true);
 
       wrapper.find(WindowAuthenticationBar).simulate('confirm');

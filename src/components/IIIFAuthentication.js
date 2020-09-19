@@ -53,14 +53,14 @@ export class IIIFAuthentication extends Component {
   /** Render the auth bar for logged in users */
   renderLoggedIn() {
     const {
-      isInteractive, t,
+      isInteractive, logoutConfirm, t,
     } = this.props;
 
     if (!isInteractive) return null;
 
     return (
       <WindowAuthenticationBar
-        confirmButton={t('logout')}
+        confirmButton={logoutConfirm || t('logout')}
         onConfirm={this.performLogout}
         {...this.defaultAuthBarProps()}
       />
@@ -164,6 +164,7 @@ IIIFAuthentication.propTypes = {
   header: PropTypes.string,
   isInteractive: PropTypes.bool,
   label: PropTypes.string,
+  logoutConfirm: PropTypes.string,
   logoutServiceId: PropTypes.string,
   openWindow: PropTypes.func,
   resetAuthenticationState: PropTypes.func.isRequired,
@@ -183,6 +184,7 @@ IIIFAuthentication.defaultProps = {
   header: undefined,
   isInteractive: true,
   label: undefined,
+  logoutConfirm: undefined,
   logoutServiceId: undefined,
   openWindow: window.open,
   status: null,
