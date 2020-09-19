@@ -56,7 +56,7 @@ export class WindowAuthenticationBar extends Component {
           <div className={classes.topBar}>
             { icon || <LockIcon className={classes.icon} /> }
             <Typography className={classes.label} component="h3" variant="body1" color="inherit">
-              <SanitizedHtml htmlString={label} ruleSet={ruleSet} />
+              { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
             </Typography>
             <PluginHook {...this.props} />
             { button }
@@ -70,7 +70,7 @@ export class WindowAuthenticationBar extends Component {
         <Button fullWidth className={classes.topBar} onClick={() => this.setOpen(true)} component="div" color="inherit">
           { icon || <LockIcon className={classes.icon} /> }
           <Typography className={classes.label} component="h3" variant="body1" color="inherit">
-            <SanitizedHtml htmlString={label} ruleSet="iiif" />
+            { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
           </Typography>
           <PluginHook {...this.props} />
           <span className={classes.fauxButton}>
@@ -86,9 +86,9 @@ export class WindowAuthenticationBar extends Component {
           onClose={() => this.setOpen(false)}
         >
           <Typography variant="body1" color="inherit" className={classes.expanded}>
-            <SanitizedHtml htmlString={header} ruleSet={ruleSet} />
+            { ruleSet ? <SanitizedHtml htmlString={header} ruleSet={ruleSet} /> : header }
             { header && description ? ': ' : '' }
-            <SanitizedHtml htmlString={description} ruleSet={ruleSet} />
+            { ruleSet ? <SanitizedHtml htmlString={description} ruleSet={ruleSet} /> : description }
           </Typography>
           <DialogActions>
             <Button onClick={() => this.setOpen(false)} color="inherit">
