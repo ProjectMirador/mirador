@@ -8,7 +8,7 @@ export class SidebarIndexItem extends Component {
   /** */
   render() {
     const {
-      classes, canvas,
+      classes, label,
     } = this.props;
 
     return (
@@ -17,7 +17,7 @@ export class SidebarIndexItem extends Component {
           className={classNames(classes.label)}
           variant="body1"
         >
-          {canvas.label}
+          {label}
         </Typography>
       </>
     );
@@ -25,6 +25,6 @@ export class SidebarIndexItem extends Component {
 }
 
 SidebarIndexItem.propTypes = {
-  canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  label: PropTypes.string.isRequired,
 };

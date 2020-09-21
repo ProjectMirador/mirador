@@ -15,7 +15,7 @@ export class WindowSideBarAnnotationsPanel extends Component {
   */
   render() {
     const {
-      annotationCount, classes, selectedCanvases, t, windowId, id,
+      annotationCount, classes, canvasIds, t, windowId, id,
     } = this.props;
     return (
       <CompanionWindow
@@ -29,12 +29,12 @@ export class WindowSideBarAnnotationsPanel extends Component {
           <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { number: annotationCount })}</Typography>
         </div>
 
-        {selectedCanvases.map((canvas, index) => (
+        {canvasIds.map((canvasId, index) => (
           <CanvasAnnotations
-            canvasId={canvas.id}
-            key={canvas.id}
+            canvasId={canvasId}
+            key={canvasId}
             index={index}
-            totalSize={selectedCanvases.length}
+            totalSize={canvasIds.length}
             windowId={windowId}
           />
         ))}
@@ -45,15 +45,14 @@ export class WindowSideBarAnnotationsPanel extends Component {
 
 WindowSideBarAnnotationsPanel.propTypes = {
   annotationCount: PropTypes.number.isRequired,
+  canvasIds: PropTypes.arrayOf(PropTypes.string),
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-
   id: PropTypes.string.isRequired,
-  selectedCanvases: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string })),
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };
 
 WindowSideBarAnnotationsPanel.defaultProps = {
-  selectedCanvases: [],
+  canvasIds: [],
   t: key => key,
 };

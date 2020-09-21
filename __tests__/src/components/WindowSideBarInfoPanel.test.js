@@ -34,7 +34,7 @@ describe('WindowSideBarInfoPanel', () => {
     });
 
     it('renders the canvas elements', () => {
-      wrapper = createWrapper({ selectedCanvases: [{ id: '1' }, { id: '2' }] });
+      wrapper = createWrapper({ canvasIds: ['1', '2'] });
       expect(wrapper.find(CanvasInfo).length).toBe(2);
       let canvasInfo = wrapper.find(CanvasInfo).at(0);
 

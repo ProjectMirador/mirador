@@ -36,7 +36,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
     const {
       canvasGroupings, position, height,
     } = data;
-    const currentGroupings = canvasGroupings.groupings()[index];
+    const currentGroupings = canvasGroupings[index];
     const SPACING = 8;
     return (
       <div

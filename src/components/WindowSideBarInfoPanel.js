@@ -20,11 +20,11 @@ export class WindowSideBarInfoPanel extends Component {
     const {
       windowId,
       id,
+      canvasIds,
       classes,
       collectionPath,
       t,
       locale,
-      selectedCanvases,
       setLocale,
       availableLocales,
       showLocalePicker,
@@ -48,13 +48,13 @@ export class WindowSideBarInfoPanel extends Component {
         )}
       >
         {
-          selectedCanvases.map((canvas, index) => (
-            <div key={canvas.id} className={classes.section}>
+          canvasIds.map((canvasId, index) => (
+            <div key={canvasId} className={classes.section}>
               <CanvasInfo
                 id={id}
-                canvasId={canvas.id}
+                canvasId={canvasId}
                 index={index}
-                totalSize={selectedCanvases.length}
+                totalSize={canvasIds.length}
                 windowId={windowId}
               />
             </div>
@@ -80,11 +80,11 @@ export class WindowSideBarInfoPanel extends Component {
 
 WindowSideBarInfoPanel.propTypes = {
   availableLocales: PropTypes.arrayOf(PropTypes.string),
+  canvasIds: PropTypes.arrayOf(PropTypes.string),
   classes: PropTypes.objectOf(PropTypes.string),
   collectionPath: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   locale: PropTypes.string,
-  selectedCanvases: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string })),
   setLocale: PropTypes.func,
   showLocalePicker: PropTypes.bool,
   t: PropTypes.func,
@@ -93,10 +93,10 @@ WindowSideBarInfoPanel.propTypes = {
 
 WindowSideBarInfoPanel.defaultProps = {
   availableLocales: [],
+  canvasIds: [],
   classes: {},
   collectionPath: [],
   locale: '',
-  selectedCanvases: [],
   setLocale: undefined,
   showLocalePicker: false,
   t: key => key,

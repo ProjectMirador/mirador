@@ -70,7 +70,7 @@ export const getVisibleCanvases = createSelector(
 * @param {string} props.windowId
 * @return {Array}
 */
-const getCanvasGroupings = createSelector(
+export const getCanvasGroupings = createSelector(
   [
     getCanvases,
     getWindowViewType,

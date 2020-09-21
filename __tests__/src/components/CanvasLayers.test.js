@@ -1,11 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Utils } from 'manifesto.js';
 import Input from '@material-ui/core/Input';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import manifestFixtureHamilton from '../../fixtures/version-2/hamilton.json';
 import { CanvasLayers } from '../../../src/components/CanvasLayers';
 import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 
@@ -13,7 +11,7 @@ import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 function createWrapper(props) {
   return shallow(
     <CanvasLayers
-      canvas={{ id: 'foo' }}
+      canvasId="foo"
       classes={{}}
       index={0}
       label="A Canvas Label"
@@ -39,7 +37,7 @@ describe('CanvasLayers', () => {
 
   it('renders canvas layers in a list', () => {
     const wrapper = createWrapper({
-      canvas: Utils.parseManifest(manifestFixtureHamilton).getSequences()[0].getCanvasByIndex(0),
+      canvasId: 'https://prtd.app/hamilton/canvas/p1.json',
       layers: [
         { id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg' },
         { id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png' },
@@ -96,7 +94,7 @@ describe('CanvasLayers', () => {
     beforeEach(() => {
       updateLayers = jest.fn();
       const wrapper = createWrapper({
-        canvas: Utils.parseManifest(manifestFixtureHamilton).getSequences()[0].getCanvasByIndex(0),
+        canvasId: 'https://prtd.app/hamilton/canvas/p1.json',
         layers: [
           { id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg' },
           { id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png' },

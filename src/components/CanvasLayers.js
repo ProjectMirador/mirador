@@ -51,7 +51,7 @@ export class CanvasLayers extends Component {
   /** */
   onDragEnd(result) {
     const {
-      canvas, layers, updateLayers, windowId,
+      canvasId, layers, updateLayers, windowId,
     } = this.props;
     if (!result.destination) return;
     if (result.destination.droppableId !== this.droppableId) return;
@@ -68,26 +68,26 @@ export class CanvasLayers extends Component {
       return acc;
     }, {});
 
-    updateLayers(windowId, canvas.id, payload);
+    updateLayers(windowId, canvasId, payload);
   }
 
   /** */
   setLayerVisibility(layerId, value) {
     const {
-      canvas, updateLayers, windowId,
+      canvasId, updateLayers, windowId,
     } = this.props;
 
     const payload = {
       [layerId]: { visibility: value },
     };
 
-    updateLayers(windowId, canvas.id, payload);
+    updateLayers(windowId, canvasId, payload);
   }
 
   /** */
   moveToTop(layerId) {
     const {
-      canvas, layers, updateLayers, windowId,
+      canvasId, layers, updateLayers, windowId,
     } = this.props;
 
     const sortedLayers = reorder(layers.map(l => l.id), layers.findIndex(l => l.id === layerId), 0);
@@ -97,20 +97,20 @@ export class CanvasLayers extends Component {
       return acc;
     }, {});
 
-    updateLayers(windowId, canvas.id, payload);
+    updateLayers(windowId, canvasId, payload);
   }
 
   /** */
   handleOpacityChange(layerId, value) {
     const {
-      canvas, updateLayers, windowId,
+      canvasId, updateLayers, windowId,
     } = this.props;
 
     const payload = {
       [layerId]: { opacity: value / 100.0 },
     };
 
-    updateLayers(windowId, canvas.id, payload);
+    updateLayers(windowId, canvasId, payload);
   }
 
   /** @private */
@@ -261,9 +261,7 @@ export class CanvasLayers extends Component {
 }
 
 CanvasLayers.propTypes = {
-  canvas: PropTypes.shape({
-    id: PropTypes.string,
-  }).isRequired,
+  canvasId: PropTypes.string.isRequired,
   classes: PropTypes.objectOf(PropTypes.string),
   index: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,

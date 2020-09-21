@@ -23,7 +23,7 @@ function createWrapper(props) {
       setCanvas={() => {}}
       config={{ canvasNavigation: { height: 100 } }}
       updateVariant={() => {}}
-      selectedCanvases={[canvases[1]]}
+      selectedCanvasIds={[canvases[1].id]}
       {...props}
     />,
   );
