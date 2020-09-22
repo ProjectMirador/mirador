@@ -82,6 +82,24 @@ export default class MiradorCanvas {
   }
 
   /** */
+  get videoResources() {
+    const resources = flattenDeep([
+      this.canvas.getContent().map(i => i.getBody()),
+    ]);
+
+    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Video'));
+  }
+
+  /** */
+  get audioResources() {
+    const resources = flattenDeep([
+      this.canvas.getContent().map(i => i.getBody()),
+    ]);
+
+    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Sound'));
+  }
+
+  /** */
   get resourceAnnotations() {
     return flattenDeep([
       this.canvas.getImages(),

@@ -184,6 +184,22 @@ export const getVisibleCanvasNonTiledResources = createSelector(
     .filter(resource => resource.getServices().length < 1),
 );
 
+export const getVisibleCanvasVideoResources = createSelector(
+  [
+    getVisibleCanvases,
+  ],
+  canvases => flatten(canvases
+    .map(canvas => new MiradorCanvas(canvas).videoResources)),
+);
+
+export const getVisibleCanvasAudioResources = createSelector(
+  [
+    getVisibleCanvases,
+  ],
+  canvases => flatten(canvases
+    .map(canvas => new MiradorCanvas(canvas).audioResources)),
+);
+
 export const selectInfoResponse = createSelector(
   [
     (state, { infoId }) => infoId,
