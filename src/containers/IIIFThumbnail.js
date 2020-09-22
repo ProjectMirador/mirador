@@ -12,6 +12,7 @@ const styles = theme => ({
     lineHeight: '1.5em',
     wordBreak: 'break-word',
   },
+  image: {},
   insideCaption: {
     color: '#ffffff',
     lineClamp: '1',
@@ -43,6 +44,7 @@ const styles = theme => ({
   },
   outsideLabel: {},
   outsideRoot: {},
+  root: {},
 });
 
 const enhance = compose(
