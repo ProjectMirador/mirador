@@ -5,6 +5,7 @@ import serviceFixture from '../../fixtures/version-2/canvasService.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
 import otherContentStringsFixture from '../../fixtures/version-2/BibliographicResource_3000126341277.json';
 import fragmentFixture from '../../fixtures/version-2/hamilton.json';
+import fragmentFixtureV3 from '../../fixtures/version-3/hamilton.json';
 
 describe('MiradorCanvas', () => {
   let instance;
@@ -72,6 +73,14 @@ describe('MiradorCanvas', () => {
         instance.resourceAnnotation('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg').id,
       ).toEqual('https://prtd.app/hamilton/canvas/p1/anno-02.json');
     });
+    it('returns the containing Annotation for a given contentResource id v3', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(fragmentFixtureV3).getSequences()[0].getCanvases()[0],
+      );
+      expect(
+        instance.resourceAnnotation('https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg').id,
+      ).toEqual('https://dvp.prtd.app/hamilton/canvas/p1/anno-02.json');
+    });
   });
   describe('onFragment', () => {
     it('when a fragment selector exists for a given contentResources id, returns that fragment', () => {
@@ -80,6 +89,14 @@ describe('MiradorCanvas', () => {
       );
       expect(
         instance.onFragment('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg'),
+      ).toEqual([552, 1584, 3360, 2368]);
+    });
+    it('when a fragment selector exists for a given contentResources id, returns that fragment v3', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(fragmentFixtureV3).getSequences()[0].getCanvases()[0],
+      );
+      expect(
+        instance.onFragment('https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg'),
       ).toEqual([552, 1584, 3360, 2368]);
     });
   });
