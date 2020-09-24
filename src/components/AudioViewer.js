@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 /** */
@@ -7,13 +7,15 @@ export class AudioViewer extends Component {
   /** */
   render() {
     const { classes, audioResources } = this.props;
-    const audio = audioResources && audioResources[0];
-    if (!audio) return <></>;
 
     return (
       <div className={classes.container}>
         <audio controls className={classes.audio}>
-          <source src={audio.id} type={audio.getFormat()} />
+          {audioResources.map(audio => (
+            <Fragment key={audio.id}>
+              <source src={audio.id} type={audio.getFormat()} />
+            </Fragment>
+          ))}
         </audio>
       </div>
     );
@@ -22,6 +24,10 @@ export class AudioViewer extends Component {
 }
 
 AudioViewer.propTypes = {
-  audioResources: PropTypes.arrayOf(PropTypes.object).isRequired,
+  audioResources: PropTypes.arrayOf(PropTypes.object),
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+};
+
+AudioViewer.defaultProps = {
+  audioResources: [],
 };
