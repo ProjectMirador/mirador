@@ -95,7 +95,9 @@ export default class MiradorCanvas {
    */
   resourceAnnotation(id) {
     return this.resourceAnnotations.find(
-      anno => anno.getResource().id === id || anno.getBody().id === id,
+      anno => anno.getResource().id === id || flatten(
+        new Array(anno.getBody()),
+      ).some(body => body.id === id),
     );
   }
 
@@ -106,7 +108,11 @@ export default class MiradorCanvas {
   onFragment(id) {
     const resourceAnnotation = this.resourceAnnotation(id);
     if (!resourceAnnotation) return undefined;
-    const fragmentMatch = resourceAnnotation.getProperty('on').match(/xywh=(.*)$/);
+    // IIIF v2
+    const on = resourceAnnotation.getProperty('on');
+    // IIIF v3
+    const target = resourceAnnotation.getProperty('target');
+    const fragmentMatch = (on || target).match(/xywh=(.*)$/);
     if (!fragmentMatch) return undefined;
     return fragmentMatch[1].split(',').map(str => parseInt(str, 10));
   }
