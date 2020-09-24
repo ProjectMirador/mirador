@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { ViewerInfo } from '../components/ViewerInfo';
 import {
-  getCanvasLabel, getCanvases, getCanvasIndex, getVisibleCanvasIds
+  getCanvasLabel, getCanvases, getCanvasIndex, getCurrentCanvas,
 } from '../state/selectors';
 
 /**
@@ -17,7 +17,7 @@ const mapStateToProps = (state, props) => {
   const { windowId } = props;
   const canvases = getCanvases(state, { windowId });
   const canvasIndex = getCanvasIndex(state, { windowId });
-  const canvasId = getVisibleCanvasIds(state, { windowId })[0];
+  const canvasId = (getCurrentCanvas(state, { windowId }) || {}).id;
 
   return {
     canvasCount: canvases.length,
