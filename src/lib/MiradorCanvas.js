@@ -100,6 +100,15 @@ export default class MiradorCanvas {
   }
 
   /** */
+  get vttContent() {
+    const resources = flattenDeep([
+      this.canvas.getContent().map(i => i.getBody()),
+    ]);
+
+    return flatten(resources.filter((resource) => resource.getProperty('format') === 'text/vtt'));
+  }
+
+  /** */
   get resourceAnnotations() {
     return flattenDeep([
       this.canvas.getImages(),

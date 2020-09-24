@@ -192,6 +192,14 @@ export const getVisibleCanvasVideoResources = createSelector(
     .map(canvas => new MiradorCanvas(canvas).videoResources)),
 );
 
+export const getVisibleCanvasCaptions = createSelector(
+  [
+    getVisibleCanvases,
+  ],
+  canvases => flatten(canvases
+    .map(canvas => new MiradorCanvas(canvas).vttContent)),
+);
+
 export const getVisibleCanvasAudioResources = createSelector(
   [
     getVisibleCanvases,
