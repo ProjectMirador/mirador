@@ -89,19 +89,21 @@ export class PrimaryWindow extends Component {
 }
 
 PrimaryWindow.propTypes = {
-  audioResources: PropTypes.arrayOf(PropTypes.object).isRequired,
+  audioResources: PropTypes.arrayOf(PropTypes.object),
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isCollection: PropTypes.bool,
   isCollectionDialogVisible: PropTypes.bool,
   isFetching: PropTypes.bool,
-  videoResources: PropTypes.arrayOf(PropTypes.object).isRequired,
+  videoResources: PropTypes.arrayOf(PropTypes.object),
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,
 };
 
 PrimaryWindow.defaultProps = {
+  audioResources: [],
   isCollection: false,
   isCollectionDialogVisible: false,
   isFetching: false,
+  videoResources: [],
   view: undefined,
 };

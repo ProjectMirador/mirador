@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 /** */
@@ -7,13 +7,15 @@ export class VideoViewer extends Component {
   /** */
   render() {
     const { classes, videoResources } = this.props;
-    const video = videoResources && videoResources[0];
-    if (!video) return <></>;
 
     return (
       <div className={classes.container}>
         <video controls className={classes.video}>
-          <source src={video.id} type={video.getFormat()} />
+          {videoResources.map(video => (
+            <Fragment key={video.id}>
+              <source src={video.id} type={video.getFormat()} />
+            </Fragment>
+          ))}
         </video>
       </div>
     );
@@ -23,5 +25,9 @@ export class VideoViewer extends Component {
 
 VideoViewer.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  videoResources: PropTypes.arrayOf(PropTypes.object).isRequired,
+  videoResources: PropTypes.arrayOf(PropTypes.object),
+};
+
+VideoViewer.defaultProps = {
+  videoResources: [],
 };
