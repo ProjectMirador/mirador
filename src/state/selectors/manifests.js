@@ -290,7 +290,9 @@ export function getDestructuredMetadata(iiifResource) {
   return (iiifResource
     && iiifResource.getMetadata().map(labelValuePair => ({
       label: labelValuePair.getLabel(),
-      values: labelValuePair.getValues(),
+      values: labelValuePair.value
+        .filter(value => value.locale === labelValuePair.defaultLocale)
+        .map(value => value.value),
     }))
   );
 }
