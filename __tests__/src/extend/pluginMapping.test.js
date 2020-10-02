@@ -58,14 +58,32 @@ describe('connectPluginsToStore', () => {
     const ComponentB = props => null;
 
     const plugins = [
-      { component: ComponentA, mode: 'wrap', target: 'Window' },
-      { component: ComponentB, mode: 'add', target: 'TopBar' },
+      {
+        component: ComponentA, mapStateToProps: {}, mode: 'wrap', target: 'Window',
+      },
+      {
+        component: ComponentB, mapDispatchToProps: {}, mode: 'add', target: 'TopBar',
+      },
     ];
 
     const result = connectPluginsToStore(plugins);
     expect(result.length).toBe(2);
     expect(result[0].component.displayName).toBe('Connect(ComponentA)');
     expect(result[1].component.displayName).toBe('Connect(ComponentB)');
+  });
+
+  it('returns plugins unchanged that do not need a connection to the store', () => {
+    /** */
+    const ComponentA = props => null;
+
+    const plugins = [
+      {
+        component: ComponentA, mode: 'wrap', target: 'Window',
+      },
+    ];
+
+    const result = connectPluginsToStore(plugins);
+    expect(result[0].component).toEqual(ComponentA);
   });
 });
 
