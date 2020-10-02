@@ -69,6 +69,9 @@ const mapStateToProps = (state, { windowId }) => {
     header: service && service.getHeader(),
     isInteractive,
     label: service && service.getLabel()[0].value,
+    logoutConfirm: logoutService
+      && logoutService.getLabel()[0]
+      && logoutService.getLabel()[0].value,
     logoutServiceId: logoutService && logoutService.id,
     profile,
     status,

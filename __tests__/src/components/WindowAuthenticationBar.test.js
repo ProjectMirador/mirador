@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import Button from '@material-ui/core/Button';
 import Collapse from '@material-ui/core/Collapse';
 import DialogActions from '@material-ui/core/DialogActions';
+import Typography from '@material-ui/core/Typography';
 import SanitizedHtml from '../../../src/containers/SanitizedHtml';
 import { WindowAuthenticationBar } from '../../../src/components/WindowAuthenticationBar';
 
@@ -69,5 +70,14 @@ describe('AuthenticationControl', () => {
 
     wrapper.find(Button).simulate('click');
     expect(onConfirm).toHaveBeenCalled();
+  });
+
+  it('allows plugins to opt out of HTML sanitization (say, for absolutely trusted sources)', () => {
+    const description = <em>long description</em>;
+    const wrapper = createWrapper({ description, header: 'header', ruleSet: false });
+    expect(wrapper.find(SanitizedHtml).length).toEqual(0);
+    expect(wrapper.find(Typography).at(0).text()).toEqual('Log in to see more');
+    expect(wrapper.find(Typography).at(2).text()).toEqual('header: long description');
+    expect(wrapper.find(Typography).at(2).find('em').text()).toEqual('long description');
   });
 });
