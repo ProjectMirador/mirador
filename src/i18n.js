@@ -11,6 +11,7 @@ import nl from './locales/nl/translation.json';
 import ptBr from './locales/ptBr/translation.json';
 import it from './locales/it/translation.json';
 import sr from './locales/sr/translation.json';
+import lt from './locales/lt/translation.json';
 
 export default () => {
   // Load translations for each language
@@ -21,6 +22,7 @@ export default () => {
     fr,
     it,
     ja,
+    lt,
     nl,
     'pt-BR': ptBr,
     sr,
@@ -29,16 +31,14 @@ export default () => {
   };
 
   const instance = i18n.createInstance();
-  instance
-    .use(initReactI18next)
-    .init({
-      fallbackLng: 'en',
-      interpolation: {
-        escapeValue: false, // react is already safe from xss
-      },
-      lng: 'en',
-      resources,
-    });
+  instance.use(initReactI18next).init({
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false, // react is already safe from xss
+    },
+    lng: 'en',
+    resources,
+  });
 
   return instance;
 };
