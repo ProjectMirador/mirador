@@ -4,6 +4,7 @@ import { PrimaryWindow } from '../../../src/components/PrimaryWindow';
 import WindowSideBar from '../../../src/containers/WindowSideBar';
 import WindowViewer from '../../../src/containers/WindowViewer';
 import GalleryView from '../../../src/containers/GalleryView';
+import CollectionDialog from '../../../src/containers/CollectionDialog';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -36,5 +37,11 @@ describe('PrimaryWindow', () => {
   it('should render <GalleryView> if manifest is present and view is gallery', () => {
     const wrapper = createWrapper({ isFetching: false, view: 'gallery', windowId: 'window-2' });
     expect(wrapper.find(GalleryView)).toHaveLength(1);
+  });
+  it('should render <CollectionDialog> and <SelectCollection> if manifest is collection and isCollectionDialogVisible', () => {
+    const wrapper = createWrapper({ isCollection: true, isCollectionDialogVisible: true });
+    const lazyComponent = wrapper.find('lazy');
+    expect(lazyComponent.type().displayName).toBe('SelectCollection');
+    expect(wrapper.find(CollectionDialog)).toHaveLength(1);
   });
 });

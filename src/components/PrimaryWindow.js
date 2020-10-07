@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, lazy } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import WindowSideBar from '../containers/WindowSideBar';
@@ -6,6 +6,9 @@ import WindowViewer from '../containers/WindowViewer';
 import GalleryView from '../containers/GalleryView';
 import CompanionArea from '../containers/CompanionArea';
 import ns from '../config/css-ns';
+
+const SelectCollection = lazy(() => import('../containers/SelectCollection'));
+SelectCollection.displayName = 'SelectCollection';
 
 /**
  * WindowMiddleContent - component that renders the "middle" area of the
@@ -18,7 +21,16 @@ export class PrimaryWindow extends Component {
    * @return {(String|null)}
    */
   renderViewer() {
-    const { isFetching, view, windowId } = this.props;
+    const {
+      isCollection, isFetching, view, windowId,
+    } = this.props;
+    if (isCollection) {
+      return (
+        <SelectCollection
+          windowId={windowId}
+        />
+      );
+    }
     if (isFetching === false) {
       if (view === 'gallery') {
         return (
@@ -53,12 +65,14 @@ export class PrimaryWindow extends Component {
 
 PrimaryWindow.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  isCollection: PropTypes.bool,
   isFetching: PropTypes.bool,
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,
 };
 
 PrimaryWindow.defaultProps = {
+  isCollection: false,
   isFetching: false,
   view: undefined,
 };
