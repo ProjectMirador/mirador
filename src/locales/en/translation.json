@@ -90,6 +90,7 @@
     "moveCompanionWindowToBottom": "Move to bottom",
     "moveCompanionWindowToRight": "Move to right",
     "nextCanvas": "Next item",
+    "noItemSelected": "No item selected",
     "numItems": "{{number}} items",
     "off": "Off",
     "openCompanionWindow_annotations": "Annotations",

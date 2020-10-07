@@ -102,12 +102,15 @@ export class CollectionDialog extends Component {
 
   /** */
   placeholder() {
-    const { classes, hideCollectionDialog } = this.props;
+    const { classes, containerId, hideCollectionDialog, windowId } = this.props;
 
     return (
       <Dialog
+        className={classes.dialog}
         onClose={hideCollectionDialog}
         open
+        container={document.querySelector(`#${containerId} #${windowId}`)}
+        BackdropProps={{ classes: classes.dialog }}
       >
         <DialogTitle id="select-collection" disableTypography>
           <Skeleton className={classes.placeholder} variant="text" />
@@ -125,12 +128,14 @@ export class CollectionDialog extends Component {
     const {
       classes,
       collection,
+      containerId,
       error,
       hideCollectionDialog,
       isMultipart,
       manifest,
       ready,
       t,
+      windowId,
     } = this.props;
 
     const { filter } = this.state;
@@ -152,7 +157,10 @@ export class CollectionDialog extends Component {
 
     return (
       <Dialog
+        className={classes.dialog}
         onClose={hideCollectionDialog}
+        container={document.querySelector(`#${containerId} #${windowId}`)}
+        BackdropProps={{ classes: { root: classes.dialog }}}
         open
       >
         <DialogTitle id="select-collection" disableTypography>
@@ -260,6 +268,7 @@ CollectionDialog.propTypes = {
 CollectionDialog.defaultProps = {
   collection: null,
   collectionPath: [],
+  containerId: null,
   error: null,
   isMultipart: false,
   ready: false,

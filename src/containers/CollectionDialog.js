@@ -4,7 +4,9 @@ import { withStyles } from '@material-ui/core';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getManifest, getManifestoInstance, getSequenceBehaviors } from '../state/selectors';
+import {
+  getContainerId, getManifest, getManifestoInstance, getSequenceBehaviors,
+} from '../state/selectors';
 import { CollectionDialog } from '../components/CollectionDialog';
 
 /**
@@ -35,6 +37,7 @@ const mapStateToProps = (state) => {
   return {
     collection: collection && getManifestoInstance(state, { manifestId: collection.id }),
     collectionPath,
+    containerId: getContainerId(state),
     error: manifest && manifest.error,
     isMultipart: getSequenceBehaviors(state, { manifestId }).includes('multi-part'),
     manifest: manifest && getManifestoInstance(state, { manifestId }),
@@ -56,6 +59,9 @@ const styles = theme => ({
   },
   dark: {
     color: '#000000',
+  },
+  dialog: {
+    position: 'absolute !important',
   },
   dialogContent: {
     padding: 0,
