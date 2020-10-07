@@ -222,6 +222,7 @@ export default {
     en: 'English',
     fr: 'Français',
     ja: '日本語',
+    lt: 'Lietuvių',
     nl: 'Nederlands',
     'pt-BR': 'Português do Brasil',
     'zh-CN': '中文(简体)',
