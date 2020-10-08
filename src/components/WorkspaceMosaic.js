@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {
   MosaicWithoutDragDropContext, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
 } from 'react-mosaic-component';
-import 'react-mosaic-component/react-mosaic-component.css';
 import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';

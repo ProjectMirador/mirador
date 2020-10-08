@@ -5,6 +5,7 @@ import { withPlugins } from '../extend/withPlugins';
 import { getWorkspace } from '../state/selectors';
 import * as actions from '../state/actions';
 import { WorkspaceMosaic } from '../components/WorkspaceMosaic';
+import globalReactMosaicStyles from '../styles/react-mosaic-component';
 
 /**
  * mapStateToProps - to hook up connect
@@ -41,6 +42,7 @@ const styles = {
       display: 'none !important',
     },
   },
+  ...globalReactMosaicStyles,
 };
 
 const enhance = compose(
