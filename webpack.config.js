@@ -21,10 +21,6 @@ const baseConfig = mode => ({
         },
         test: /\.(js|mjs|jsx)$/,
       },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
     ],
   },
   optimization: {
