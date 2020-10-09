@@ -29,7 +29,7 @@ function asArray(value) {
 }
 
 /**
- * a simple dialog providing the possibility to switch the theme
+ * a dialog providing the possibility to select the collection
  */
 export class CollectionDialog extends Component {
   /** */
@@ -46,6 +46,7 @@ export class CollectionDialog extends Component {
     super(props);
 
     this.state = { filter: null };
+    this.hideDialog = this.hideDialog.bind(this);
   }
 
   /** */
@@ -54,22 +55,39 @@ export class CollectionDialog extends Component {
   }
 
   /** */
+  hideDialog() {
+    const {
+      hideCollectionDialog, hideWindowCollectionDialog, variant, windowId,
+    } = this.props;
+    if (variant === 'window') {
+      hideWindowCollectionDialog(windowId);
+    } else {
+      hideCollectionDialog();
+    }
+  }
+
+  /** */
+  showCollectionDialog(...args) {
+    const { showCollectionDialog, showWindowCollectionDialog, variant } = this.props;
+    return variant === 'window' ? showWindowCollectionDialog(...args) : showCollectionDialog(...args);
+  }
+
+  /** */
   selectCollection(c) {
     const {
       collectionPath,
       manifestId,
-      showCollectionDialog,
       windowId,
     } = this.props;
 
-    showCollectionDialog(c.id, [...collectionPath, manifestId], windowId);
+    this.showCollectionDialog(c.id, [...collectionPath, manifestId], windowId);
   }
 
   /** */
   goToPreviousCollection() {
-    const { collectionPath, showCollectionDialog, windowId } = this.props;
+    const { collectionPath, windowId } = this.props;
 
-    showCollectionDialog(
+    this.showCollectionDialog(
       collectionPath[collectionPath.length - 1],
       collectionPath.slice(0, -1),
       windowId,
@@ -81,7 +99,6 @@ export class CollectionDialog extends Component {
     const {
       addWindow,
       collectionPath,
-      hideCollectionDialog,
       manifestId,
       setWorkspaceAddVisibility,
       updateWindow,
@@ -96,21 +113,21 @@ export class CollectionDialog extends Component {
       addWindow({ collectionPath: [...collectionPath, manifestId], manifestId: m.id });
     }
 
-    hideCollectionDialog();
+    this.hideDialog();
     setWorkspaceAddVisibility(false);
   }
 
   /** */
   placeholder() {
-    const { classes, containerId, hideCollectionDialog, windowId } = this.props;
+    const { classes, containerId, windowId } = this.props;
 
     return (
       <Dialog
         className={classes.dialog}
-        onClose={hideCollectionDialog}
+        onClose={this.hideDialog}
         open
         container={document.querySelector(`#${containerId} #${windowId}`)}
-        BackdropProps={{ classes: classes.dialog }}
+        BackdropProps={this.backdropProps()}
       >
         <DialogTitle id="select-collection" disableTypography>
           <Skeleton className={classes.placeholder} variant="text" />
@@ -124,13 +141,18 @@ export class CollectionDialog extends Component {
   }
 
   /** */
+  backdropProps() {
+    const { classes } = this.props;
+    return { classes: { root: classes.dialog } };
+  }
+
+  /** */
   render() {
     const {
       classes,
       collection,
       containerId,
       error,
-      hideCollectionDialog,
       isMultipart,
       manifest,
       ready,
@@ -158,9 +180,9 @@ export class CollectionDialog extends Component {
     return (
       <Dialog
         className={classes.dialog}
-        onClose={hideCollectionDialog}
+        onClose={this.hideDialog}
         container={document.querySelector(`#${containerId} #${windowId}`)}
-        BackdropProps={{ classes: { root: classes.dialog }}}
+        BackdropProps={this.backdropProps()}
         open
       >
         <DialogTitle id="select-collection" disableTypography>
@@ -195,7 +217,7 @@ export class CollectionDialog extends Component {
                   <>
                     <Typography variant="subtitle2" component="dt">{t('rights')}</Typography>
                     { rights.map(v => (
-                      <Typography variant="body1" component="dd">
+                      <Typography variant="body1" component="dd" key={v}>
                         <Link target="_blank" rel="noopener noreferrer" href={v}>
                           {v}
                         </Link>
@@ -238,7 +260,7 @@ export class CollectionDialog extends Component {
           )}
         </ScrollIndicatedDialogContent>
         <DialogActions>
-          <Button onClick={hideCollectionDialog}>
+          <Button onClick={this.hideDialog}>
             {t('close')}
           </Button>
         </DialogActions>
@@ -252,16 +274,20 @@ CollectionDialog.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   collectionPath: PropTypes.arrayOf(PropTypes.string),
+  containerId: PropTypes.string,
   error: PropTypes.string,
   hideCollectionDialog: PropTypes.func.isRequired,
+  hideWindowCollectionDialog: PropTypes.func.isRequired,
   isMultipart: PropTypes.bool,
   manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   manifestId: PropTypes.string.isRequired,
   ready: PropTypes.bool,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   showCollectionDialog: PropTypes.func.isRequired,
+  showWindowCollectionDialog: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
+  variant: PropTypes.oneOf(['window', 'workspace']),
   windowId: PropTypes.string,
 };
 
@@ -272,5 +298,6 @@ CollectionDialog.defaultProps = {
   error: null,
   isMultipart: false,
   ready: false,
+  variant: 'workspace',
   windowId: null,
 };

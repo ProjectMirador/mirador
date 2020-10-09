@@ -5,6 +5,7 @@ import WindowSideBar from '../containers/WindowSideBar';
 import WindowViewer from '../containers/WindowViewer';
 import GalleryView from '../containers/GalleryView';
 import CompanionArea from '../containers/CompanionArea';
+import CollectionDialog from '../containers/CollectionDialog';
 import ns from '../config/css-ns';
 
 const SelectCollection = lazy(() => import('../containers/SelectCollection'));
@@ -22,13 +23,16 @@ export class PrimaryWindow extends Component {
    */
   renderViewer() {
     const {
-      isCollection, isFetching, view, windowId,
+      isCollection, isCollectionDialogVisible, isFetching, view, windowId,
     } = this.props;
     if (isCollection) {
       return (
-        <SelectCollection
-          windowId={windowId}
-        />
+        <>
+          { isCollectionDialogVisible && <CollectionDialog variant="window" windowId={windowId} /> }
+          <SelectCollection
+            windowId={windowId}
+          />
+        </>
       );
     }
     if (isFetching === false) {
@@ -66,6 +70,7 @@ export class PrimaryWindow extends Component {
 PrimaryWindow.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isCollection: PropTypes.bool,
+  isCollectionDialogVisible: PropTypes.bool,
   isFetching: PropTypes.bool,
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,
@@ -73,6 +78,7 @@ PrimaryWindow.propTypes = {
 
 PrimaryWindow.defaultProps = {
   isCollection: false,
+  isCollectionDialogVisible: false,
   isFetching: false,
   view: undefined,
 };

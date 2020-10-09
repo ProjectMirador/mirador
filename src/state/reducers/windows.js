@@ -150,6 +150,24 @@ export const windowsReducer = (state = {}, action) => {
           suggestedSearches: undefined,
         },
       };
+    case ActionTypes.SHOW_WINDOW_COLLECTION_DIALOG:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          collectionDialogOn: true,
+          collectionManifestId: action.manifestId,
+          collectionPath: action.collectionPath,
+        },
+      };
+    case ActionTypes.HIDE_WINDOW_COLLECTION_DIALOG:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          collectionDialogOn: false,
+        },
+      };
     default:
       return state;
   }

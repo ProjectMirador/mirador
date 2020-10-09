@@ -381,4 +381,38 @@ describe('windows reducer', () => {
       type: ActionTypes.IMPORT_MIRADOR_STATE,
     })).toEqual({ new: 'stuff' });
   });
+
+  describe('SHOW_WINDOW_COLLECTION_DIALOG', () => {
+    it('handles SHOW_WINDOW_COLLECTION_DIALOG by toggling the given window\'s collection dialog', () => {
+      const beforeState = { abc123: { collectionDialogOn: false } };
+      const action = {
+        collectionPath: [], manifestId: 'def456', type: ActionTypes.SHOW_WINDOW_COLLECTION_DIALOG, windowId: 'abc123',
+      };
+      const expectedState = {
+        abc123: { collectionDialogOn: true, collectionManifestId: 'def456', collectionPath: [] },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+    });
+  });
+
+  describe('HIDE_WINDOW_COLLECTION_DIALOG', () => {
+    it('handles HIDE_WINDOW_COLLECTION_DIALOG by toggling the given window\'s collection dialog', () => {
+      const beforeState = {
+        abc123: {
+          collectionDialogOn: true, collectionManifestId: 'def456', collectionPath: [],
+        },
+      };
+      const action = {
+        type: ActionTypes.HIDE_WINDOW_COLLECTION_DIALOG,
+        windowId: 'abc123',
+      };
+
+      const expectedState = {
+        abc123: { collectionDialogOn: false, collectionManifestId: 'def456', collectionPath: [] },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
+    });
+  });
 });

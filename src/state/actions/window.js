@@ -186,3 +186,21 @@ export function setWindowViewType(windowId, viewType) {
     windowId,
   };
 }
+
+/** */
+export function showWindowCollectionDialog(manifestId, collectionPath = [], windowId) {
+  return {
+    collectionPath,
+    manifestId,
+    type: ActionTypes.SHOW_WINDOW_COLLECTION_DIALOG,
+    windowId,
+  };
+}
+
+/** */
+export function hideWindowCollectionDialog(windowId) {
+  return {
+    type: ActionTypes.HIDE_WINDOW_COLLECTION_DIALOG,
+    windowId,
+  };
+}

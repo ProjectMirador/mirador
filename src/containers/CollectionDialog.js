@@ -5,7 +5,7 @@ import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
-  getContainerId, getManifest, getManifestoInstance, getSequenceBehaviors,
+  getContainerId, getManifest, getManifestoInstance, getSequenceBehaviors, getWindow,
 } from '../state/selectors';
 import { CollectionDialog } from '../components/CollectionDialog';
 
@@ -17,8 +17,10 @@ import { CollectionDialog } from '../components/CollectionDialog';
 const mapDispatchToProps = {
   addWindow: actions.addWindow,
   hideCollectionDialog: actions.hideCollectionDialog,
+  hideWindowCollectionDialog: actions.hideWindowCollectionDialog,
   setWorkspaceAddVisibility: actions.setWorkspaceAddVisibility,
   showCollectionDialog: actions.showCollectionDialog,
+  showWindowCollectionDialog: actions.showWindowCollectionDialog,
   updateWindow: actions.updateWindow,
 };
 
@@ -27,8 +29,10 @@ const mapDispatchToProps = {
  * @memberof CollectionDialog
  * @private
  */
-const mapStateToProps = (state) => {
-  const { collectionPath, collectionManifestId: manifestId } = state.workspace;
+const mapStateToProps = (state, { variant, windowId }) => {
+  const { collectionPath, collectionManifestId: manifestId } = variant === 'window'
+    ? getWindow(state, { windowId })
+    : state.workspace;
   const manifest = getManifest(state, { manifestId });
 
   const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
@@ -44,7 +48,7 @@ const mapStateToProps = (state) => {
     manifestId,
     open: state.workspace.collectionDialogOn,
     ready: manifest && !!manifest.json,
-    windowId: state.workspace.collectionUpdateWindowId,
+    windowId: state.workspace.collectionUpdateWindowId || windowId,
   };
 };
 
