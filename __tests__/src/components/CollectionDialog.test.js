@@ -41,4 +41,10 @@ describe('CollectionDialog', () => {
     expect(wrapper.find(DialogActions).find(Button).first().simulate('click'));
     expect(hideCollectionDialog).toHaveBeenCalled();
   });
+  it('clicking the hide button fires hideWindowCollectionDialog in window variant', () => {
+    const hideWindowCollectionDialog = jest.fn();
+    const wrapper = createWrapper({ hideWindowCollectionDialog, variant: 'window' });
+    expect(wrapper.find(DialogActions).find(Button).first().simulate('click'));
+    expect(hideWindowCollectionDialog).toHaveBeenCalled();
+  });
 });
