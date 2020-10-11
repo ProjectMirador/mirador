@@ -235,8 +235,7 @@ export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowI
 /** */
 export function* determineAndShowCollectionDialog(manifestId, windowId) {
   const manifestoInstance = yield select(getManifestoInstance, { manifestId });
-  const isCollection = manifestoInstance.isCollection();
-  if (isCollection) {
+  if (manifestoInstance && manifestoInstance.isCollection()) {
     yield put(showWindowCollectionDialog(manifestId, [], windowId));
   }
 }

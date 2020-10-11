@@ -17,6 +17,7 @@ import {
 } from '../../../src/state/selectors';
 import { fetchManifests } from '../../../src/state/sagas/iiif';
 import {
+  determineAndShowCollectionDialog,
   fetchWindowManifest,
   setWindowDefaultSearchQuery,
   setWindowStartingCanvas,
@@ -30,6 +31,7 @@ import {
   setCollectionPath,
 } from '../../../src/state/sagas/windows';
 import fixture from '../../fixtures/version-2/019.json';
+import collectionFixture from '../../fixtures/version-2/collection.json';
 
 describe('window-level sagas', () => {
   describe('fetchWindowManifest', () => {
@@ -40,10 +42,12 @@ describe('window-level sagas', () => {
           manifestId: 'manifest.json',
         },
       };
+      const manifest = Utils.parseManifest(fixture);
 
       return expectSaga(fetchWindowManifest, action)
         .provide([
           [select(getManifests), {}],
+          [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
           [call(fetchManifests, 'manifest.json'), {}],
           [call(setWindowStartingCanvas, action)],
           [call(setWindowDefaultSearchQuery, action)],
@@ -66,9 +70,11 @@ describe('window-level sagas', () => {
           [call(setWindowStartingCanvas, action)],
           [call(setWindowDefaultSearchQuery, action)],
           [call(setCollectionPath, { manifestId: 'manifest.json', windowId: 'x' })],
+          [call(determineAndShowCollectionDialog, 'manifest.json', 'x')],
         ])
         .call(setWindowStartingCanvas, action)
         .call(setWindowDefaultSearchQuery, action)
+        .call(determineAndShowCollectionDialog, 'manifest.json', 'x')
         .run();
     });
   });
@@ -429,6 +435,44 @@ describe('window-level sagas', () => {
           action: {
             infoId: 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44',
             type: 'mirador/REQUEST_INFO_RESPONSE',
+          },
+        })
+        .run();
+    });
+  });
+
+  describe('determineAndShowCollectionDialog', () => {
+    it('shows the collection dialog if it is a collection', () => {
+      const manifest = Utils.parseManifest(collectionFixture);
+
+      return expectSaga(determineAndShowCollectionDialog, 'manifest.json', 'x')
+        .provide([
+          [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
+        ])
+        .put.like({
+          action: {
+            collectionPath: [],
+            manifestId: 'manifest.json',
+            type: 'mirador/SHOW_WINDOW_COLLECTION_DIALOG',
+            windowId: 'x',
+          },
+        })
+        .run();
+    });
+
+    it('does nothing if not a collection', () => {
+      const manifest = Utils.parseManifest(fixture);
+
+      return expectSaga(determineAndShowCollectionDialog, 'manifest.json', 'x')
+        .provide([
+          [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
+        ])
+        .not.put.like({
+          action: {
+            collectionPath: [],
+            manifestId: 'manifest.json',
+            type: 'mirador/SHOW_WINDOW_COLLECTION_DIALOG',
+            windowId: 'x',
           },
         })
         .run();
