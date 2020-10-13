@@ -9,6 +9,7 @@ describe('MiradorViewer', () => {
   let instance;
   beforeAll(() => {
     ReactDOM.render = jest.fn();
+    ReactDOM.unmountComponentAtNode = jest.fn();
     instance = new MiradorViewer({});
   });
   describe('constructor', () => {
@@ -101,6 +102,12 @@ describe('MiradorViewer', () => {
         bat: 'bar',
         foo: 'bar',
       }));
+    });
+  });
+  describe('unmount', () => {
+    it('unmounts via ReactDOM', () => {
+      instance.unmount();
+      expect(ReactDOM.unmountComponentAtNode).toHaveBeenCalled();
     });
   });
 });
