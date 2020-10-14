@@ -12,7 +12,7 @@ import { AppProviders } from '../components/AppProviders';
  */
 const mapStateToProps = state => (
   {
-    classPrefix: getConfig(state).classPrefix,
+    createGenerateClassNameOptions: getConfig(state).createGenerateClassNameOptions,
     isFullscreenEnabled: getFullScreenEnabled(state),
     language: getConfig(state).language,
     theme: getTheme(state),

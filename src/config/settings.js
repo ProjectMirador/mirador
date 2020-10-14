@@ -234,7 +234,9 @@ export default {
     htmlSanitizationRuleSet: 'iiif', // See src/lib/htmlRules.js for acceptable values
     filteredMotivations: ['oa:commenting', 'oa:tagging', 'sc:painting', 'commenting', 'tagging'],
   },
-  classPrefix: 'mirador',
+  createGenerateClassNameOptions: { // Options passed directly to createGenerateClassName in Material-UI https://material-ui.com/styles/api/#creategenerateclassname-options-class-name-generator
+    productionPrefix: 'mirador',
+  },
   requests: {
     preprocessors: [ // Functions that receive HTTP requests and manipulate them (e.g. to add headers)
       // (url, options) => (url.match('info.json') && { ...options, myCustomThing: 'blah' })
