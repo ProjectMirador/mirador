@@ -81,13 +81,12 @@ export class AppProviders extends Component {
   /** */
   render() {
     const {
-      children, classPrefix, isFullscreenEnabled, setWorkspaceFullscreen, theme, translations,
+      children, createGenerateClassNameOptions, isFullscreenEnabled,
+      setWorkspaceFullscreen, theme, translations,
       dndManager,
     } = this.props;
 
-    const generateClassName = createGenerateClassName({
-      productionPrefix: classPrefix,
-    });
+    const generateClassName = createGenerateClassName(createGenerateClassNameOptions);
 
     Object.keys(translations).forEach((lng) => {
       this.i18n.addResourceBundle(lng, 'translation', translations[lng], true, true);
@@ -121,7 +120,7 @@ export class AppProviders extends Component {
 
 AppProviders.propTypes = {
   children: PropTypes.node,
-  classPrefix: PropTypes.string,
+  createGenerateClassNameOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   dndManager: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   isFullscreenEnabled: PropTypes.bool,
   language: PropTypes.string.isRequired,
@@ -132,7 +131,7 @@ AppProviders.propTypes = {
 
 AppProviders.defaultProps = {
   children: null,
-  classPrefix: '',
+  createGenerateClassNameOptions: {},
   dndManager: undefined,
   isFullscreenEnabled: false,
 };
