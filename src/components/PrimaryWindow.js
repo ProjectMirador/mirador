@@ -28,7 +28,8 @@ export class PrimaryWindow extends Component {
    */
   renderViewer() {
     const {
-      audioResources, isCollection, isCollectionDialogVisible, isFetching, videoResources, view, windowId,
+      audioResources, isCollection, isCollectionDialogVisible,
+      isFetching, videoResources, view, windowId,
     } = this.props;
     if (isCollection) {
       return (
