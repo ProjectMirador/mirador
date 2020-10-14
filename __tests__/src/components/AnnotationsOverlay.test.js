@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 import OpenSeadragon from 'openseadragon';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
