@@ -2,6 +2,8 @@ import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import minimumRequired from '../../fixtures/version-2/minimumRequired.json';
 import minimumRequired3 from '../../fixtures/version-3/minimumRequired.json';
+import audioFixture from '../../fixtures/version-3/0002-mvm-audio.json';
+import videoFixture from '../../fixtures/version-3/0015-start.json';
 import settings from '../../../src/config/settings';
 
 import {
@@ -12,6 +14,9 @@ import {
   getCanvasLabel,
   selectInfoResponse,
   getVisibleCanvasNonTiledResources,
+  getVisibleCanvasVideoResources,
+  getVisibleCanvasAudioResources,
+  getVisibleCanvasCaptions,
   getVisibleCanvasIds,
 } from '../../../src/state/selectors/canvases';
 
@@ -374,5 +379,77 @@ describe('getVisibleCanvasNonTiledResources', () => {
     expect(getVisibleCanvasNonTiledResources(
       state, { windowId: 'a' },
     )[0].id).toBe('http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png');
+  });
+
+  describe('getVisibleCanvasVideoResources', () => {
+    it('returns canvases resources', () => {
+      const state = {
+        manifests: {
+          'https://iiif.io/api/cookbook/recipe/0015-start/manifest.json': {
+            id: 'https://iiif.io/api/cookbook/recipe/0015-start/manifest.json',
+            json: videoFixture,
+          },
+        },
+        windows: {
+          a: {
+            manifestId: 'https://iiif.io/api/cookbook/recipe/0015-start/manifest.json',
+            visibleCanvases: [
+              'https://iiif.io/api/cookbook/recipe/0015-start/canvas/segment1',
+            ],
+          },
+        },
+      };
+      expect(getVisibleCanvasVideoResources(
+        state, { windowId: 'a' },
+      )[0].id).toBe('https://fixtures.iiif.io/video/indiana/30-minute-clock/medium/30-minute-clock.mp4');
+    });
+  });
+
+  describe('getVisibleCanvasCaptions', () => {
+    it('returns canvases resources', () => {
+      const state = {
+        manifests: {
+          'https://iiif.io/api/cookbook/recipe/0015-start/manifest.json': {
+            id: 'https://iiif.io/api/cookbook/recipe/0015-start/manifest.json',
+            json: videoFixture,
+          },
+        },
+        windows: {
+          a: {
+            manifestId: 'https://iiif.io/api/cookbook/recipe/0015-start/manifest.json',
+            visibleCanvases: [
+              'https://iiif.io/api/cookbook/recipe/0015-start/canvas/segment1',
+            ],
+          },
+        },
+      };
+      expect(getVisibleCanvasCaptions(
+        state, { windowId: 'a' },
+      )[0].id).toBe('https://example.com/file.vtt');
+    });
+  });
+
+  describe('getVisibleCanvasAudioResources', () => {
+    it('returns canvases resources', () => {
+      const state = {
+        manifests: {
+          'https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest.json': {
+            id: 'https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest.json',
+            json: audioFixture,
+          },
+        },
+        windows: {
+          a: {
+            manifestId: 'https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest.json',
+            visibleCanvases: [
+              'https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas',
+            ],
+          },
+        },
+      };
+      expect(getVisibleCanvasAudioResources(
+        state, { windowId: 'a' },
+      )[0].id).toBe('https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4');
+    });
   });
 });

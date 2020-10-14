@@ -6,6 +6,8 @@ import otherContentFixture from '../../fixtures/version-2/299843.json';
 import otherContentStringsFixture from '../../fixtures/version-2/BibliographicResource_3000126341277.json';
 import fragmentFixture from '../../fixtures/version-2/hamilton.json';
 import fragmentFixtureV3 from '../../fixtures/version-3/hamilton.json';
+import audioFixture from '../../fixtures/version-3/0002-mvm-audio.json';
+import videoFixture from '../../fixtures/version-3/0015-start.json';
 
 describe('MiradorCanvas', () => {
   let instance;
@@ -98,6 +100,30 @@ describe('MiradorCanvas', () => {
       expect(
         instance.onFragment('https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg'),
       ).toEqual([552, 1584, 3360, 2368]);
+    });
+  });
+  describe('videoResources', () => {
+    it('returns video', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(videoFixture).getSequences()[0].getCanvases()[0],
+      );
+      expect(instance.videoResources.length).toEqual(1);
+    });
+  });
+  describe('audioResources', () => {
+    it('returns audio', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(audioFixture).getSequences()[0].getCanvases()[0],
+      );
+      expect(instance.audioResources.length).toEqual(1);
+    });
+  });
+  describe('vttContent', () => {
+    it('returns vttContent', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(videoFixture).getSequences()[0].getCanvases()[0],
+      );
+      expect(instance.vttContent.length).toEqual(1);
     });
   });
 });
