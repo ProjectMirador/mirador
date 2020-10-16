@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import createCachedSelector from 're-reselect';
-import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
+import { PropertyValue } from 'manifesto.js/dist-esmodule/PropertyValue';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import getThumbnail from '../../lib/ThumbnailFactory';
 import { getCompanionWindow } from './companionWindows';
@@ -12,9 +12,6 @@ function createManifestoInstance(json, locale) {
   if (!json) return undefined;
   const manifestoObject = Utils.parseManifest(json, locale ? { locale } : undefined);
   // Local patching of Manifesto so that when its a Collection, it behaves similarly
-  if (typeof manifestoObject.getViewingHint != 'function') {
-    manifestoObject.getViewingHint = () => {};
-  }
   if (typeof manifestoObject.getSequences != 'function') {
     manifestoObject.getSequences = () => [];
   }
@@ -109,7 +106,7 @@ export const getManifestProvider = createSelector(
   ],
   (provider, locale) => provider
     && provider[0].label
-    && LanguageMap.parse(provider[0].label, locale).map(label => label.value)[0],
+    && PropertyValue.parse(provider[0].label, locale).getValue(),
 );
 
 /**
@@ -138,8 +135,8 @@ export const getManifestHomepage = createSelector(
   (homepages, locale) => homepages
     && asArray(homepages).map(homepage => (
       {
-        label: LanguageMap.parse(homepage.label, locale)
-          .map(label => label.value)[0],
+        label: PropertyValue.parse(homepage.label, locale)
+          .getValue(),
         value: homepage.id || homepage['@id'],
       }
     )),
@@ -158,7 +155,7 @@ export const getManifestRenderings = createSelector(
   manifest => manifest
     && manifest.getRenderings().map(rendering => (
       {
-        label: rendering.getLabel().map(label => label.value)[0],
+        label: rendering.getLabel().getValue(),
         value: rendering.id,
       }
     )),
@@ -181,8 +178,8 @@ export const getManifestRelatedContent = createSelector(
     && asArray(seeAlso).map(related => (
       {
         format: related.format,
-        label: LanguageMap.parse(related.label, locale)
-          .map(label => label.value)[0],
+        label: PropertyValue.parse(related.label, locale)
+          .getValue(),
         value: related.id || related['@id'],
       }
     )),
@@ -202,7 +199,7 @@ export const getRequiredStatement = createSelector(
     && asArray(manifest.getRequiredStatement())
       .filter(l => l.getValues().some(v => v))
       .map(labelValuePair => ({
-        label: labelValuePair.getLabel(),
+        label: (labelValuePair.label && labelValuePair.label.getValue()) || null,
         values: labelValuePair.getValues(),
       })),
 );
@@ -223,7 +220,7 @@ export const getRights = createSelector(
   ],
   (rights, license, locale) => {
     const data = rights || license;
-    return asArray(LanguageMap.parse(data, locale).map(label => label.value));
+    return asArray(PropertyValue.parse(data, locale).getValues());
   },
 );
 
@@ -256,7 +253,7 @@ export function getManifestThumbnail(state, props) {
 export const getManifestTitle = createSelector(
   [getManifestoInstance],
   manifest => manifest
-    && manifest.getLabel().map(label => label.value)[0],
+    && manifest.getLabel().getValue(),
 );
 
 /**
@@ -270,7 +267,7 @@ export const getManifestTitle = createSelector(
 export const getManifestDescription = createSelector(
   [getManifestoInstance],
   manifest => manifest
-    && manifest.getDescription().map(label => label.value)[0],
+    && manifest.getDescription().getValue(),
 );
 
 /**

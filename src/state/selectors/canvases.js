@@ -160,7 +160,7 @@ export const getCanvasLabel = createSelector(
   [getCanvas],
   canvas => (canvas && (
     canvas.getLabel().length > 0
-      ? canvas.getLabel().map(label => label.value)[0]
+      ? canvas.getLabel().getValue()
       : String(canvas.index + 1)
   )),
 );

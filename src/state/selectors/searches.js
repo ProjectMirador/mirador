@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
+import { PropertyValue } from 'manifesto.js/dist-esmodule/PropertyValue';
 import flatten from 'lodash/flatten';
 import AnnotationList from '../../lib/AnnotationList';
 import { getCanvas, getCanvases } from './canvases';
@@ -195,7 +195,7 @@ export const getResourceAnnotationLabel = createSelector(
       !(resourceAnnotation && resourceAnnotation.resource && resourceAnnotation.resource.label)
     ) return [];
 
-    return LanguageMap.parse(resourceAnnotation.resource.label, locale).map(label => label.value);
+    return PropertyValue.parse(resourceAnnotation.resource.label, locale).getValues();
   },
 );
 

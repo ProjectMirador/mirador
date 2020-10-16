@@ -34,7 +34,7 @@ export class CanvasLayers extends Component {
     return (resource
       && resource.getLabel
       && resource.getLabel().length > 0)
-      ? resource.getLabel().map(label => label.value)[0]
+      ? resource.getLabel().getValue()
       : String(index + 1);
   }
 
