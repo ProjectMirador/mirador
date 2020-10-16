@@ -217,6 +217,7 @@ describe('getManifestRelatedContent', () => {
     expect(received).toEqual([
       {
         format: 'application/mods+xml',
+        label: null,
         value: 'https://purl.stanford.edu/sn904cj3429.mods',
       },
     ]);

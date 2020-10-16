@@ -319,7 +319,7 @@ describe('getResourceAnnotationForSearchHit', () => {
 describe('getResourceAnnotationLabel', () => {
   const companionWindowId = 'cwid';
   const annoId = 'annoId2';
-  it('returns the label from a LanguageMap JSON object', () => {
+  it('returns the label from a PropertyValue JSON object', () => {
     const state = {
       companionWindows: {
         [companionWindowId]: { locale: 'en' },
@@ -350,7 +350,7 @@ describe('getResourceAnnotationLabel', () => {
     ).toEqual(['The Annotation Label']);
   });
 
-  it('returns an empty array if the annotation resource does not have a label (to be consistent w/ the return of LanguageMap.parse)', () => {
+  it('returns an empty array if the annotation resource does not have a label (to be consistent w/ the return of PropertyValue.parse)', () => {
     const state = {
       companionWindows: {
         [companionWindowId]: { locale: 'en' },

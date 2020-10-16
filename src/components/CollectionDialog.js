@@ -37,7 +37,7 @@ export class CollectionDialog extends Component {
     return (resource
       && resource.getLabel
       && resource.getLabel().length > 0)
-      ? resource.getLabel().map(label => label.value)[0]
+      ? resource.getLabel().getValue()
       : String(index + 1);
   }
 
@@ -172,7 +172,7 @@ export class CollectionDialog extends Component {
 
     const requiredStatement = manifest
       && asArray(manifest.getRequiredStatement()).filter(l => l.getValue()).map(labelValuePair => ({
-        label: labelValuePair.getLabel(),
+        label: null,
         values: labelValuePair.getValues(),
       }));
 
