@@ -34,7 +34,7 @@ export class PrimaryWindow extends Component {
     if (isCollection) {
       return (
         <>
-          { isCollectionDialogVisible && <CollectionDialog variant="window" windowId={windowId} /> }
+          { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
           <SelectCollection
             windowId={windowId}
           />

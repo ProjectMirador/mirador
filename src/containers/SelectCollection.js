@@ -20,7 +20,7 @@ const mapStateToProps = (state, { windowId }) => {
 };
 
 const mapDispatchToProps = {
-  showWindowCollectionDialog: actions.showWindowCollectionDialog,
+  showCollectionDialog: actions.showCollectionDialog,
 };
 /** */
 const styles = (theme) => ({

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import CollectionDialog from '../containers/CollectionDialog';
 import ErrorDialog from '../containers/ErrorDialog';
 import WorkspaceControlPanel from '../containers/WorkspaceControlPanel';
 import Workspace from '../containers/Workspace';
@@ -22,7 +21,6 @@ export class WorkspaceArea extends Component {
     const {
       classes,
       controlPanelVariant,
-      isCollectionDialogVisible,
       isWorkspaceAddVisible,
       isWorkspaceControlPanelVisible,
       lang,
@@ -47,7 +45,6 @@ export class WorkspaceArea extends Component {
           }
           <ErrorDialog />
           <BackgroundPluginArea />
-          { isCollectionDialogVisible && <CollectionDialog /> }
         </main>
       </>
     );
@@ -57,7 +54,6 @@ export class WorkspaceArea extends Component {
 WorkspaceArea.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   controlPanelVariant: PropTypes.string,
-  isCollectionDialogVisible: PropTypes.bool,
   isWorkspaceAddVisible: PropTypes.bool,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   lang: PropTypes.string,
@@ -66,7 +62,6 @@ WorkspaceArea.propTypes = {
 
 WorkspaceArea.defaultProps = {
   controlPanelVariant: undefined,
-  isCollectionDialogVisible: false,
   isWorkspaceAddVisible: false,
   lang: undefined,
 };

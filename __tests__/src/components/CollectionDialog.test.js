@@ -12,6 +12,7 @@ import collection from '../../fixtures/version-2/collection.json';
 /** */
 function createWrapper(props) {
   const manifest = Utils.parseManifest(props.manifest ? props.manifest : collection);
+  CollectionDialog.prototype.dialogContainer = () => true;
   return shallow(
     <CollectionDialog
       addWindow={() => {}}
@@ -40,11 +41,5 @@ describe('CollectionDialog', () => {
     const wrapper = createWrapper({ hideCollectionDialog });
     expect(wrapper.find(DialogActions).find(Button).first().simulate('click'));
     expect(hideCollectionDialog).toHaveBeenCalled();
-  });
-  it('clicking the hide button fires hideWindowCollectionDialog in window variant', () => {
-    const hideWindowCollectionDialog = jest.fn();
-    const wrapper = createWrapper({ hideWindowCollectionDialog, variant: 'window' });
-    expect(wrapper.find(DialogActions).find(Button).first().simulate('click'));
-    expect(hideWindowCollectionDialog).toHaveBeenCalled();
   });
 });

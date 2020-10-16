@@ -453,7 +453,7 @@ describe('window-level sagas', () => {
           action: {
             collectionPath: [],
             manifestId: 'manifest.json',
-            type: 'mirador/SHOW_WINDOW_COLLECTION_DIALOG',
+            type: 'mirador/SHOW_COLLECTION_DIALOG',
             windowId: 'x',
           },
         })
@@ -471,7 +471,7 @@ describe('window-level sagas', () => {
           action: {
             collectionPath: [],
             manifestId: 'manifest.json',
-            type: 'mirador/SHOW_WINDOW_COLLECTION_DIALOG',
+            type: 'mirador/SHOW_COLLECTION_DIALOG',
             windowId: 'x',
           },
         })

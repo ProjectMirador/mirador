@@ -14,7 +14,6 @@ import { getConfig, getWindowIds, getWorkspace } from '../state/selectors';
 const mapStateToProps = state => (
   {
     controlPanelVariant: getWorkspace(state).isWorkspaceAddVisible || getWindowIds(state).length > 0 ? undefined : 'wide',
-    isCollectionDialogVisible: getWorkspace(state).collectionDialogOn,
     isWorkspaceAddVisible: getWorkspace(state).isWorkspaceAddVisible,
     isWorkspaceControlPanelVisible: getConfig(state).workspaceControlPanel.enabled,
     lang: getConfig(state).language,

@@ -19,9 +19,9 @@ export class SelectCollection extends Component {
   /** */
   openCollectionDialog() {
     const {
-      collectionPath, manifestId, showWindowCollectionDialog, windowId,
+      collectionPath, manifestId, showCollectionDialog, windowId,
     } = this.props;
-    showWindowCollectionDialog(manifestId, collectionPath.slice(0, -1), windowId);
+    showCollectionDialog(manifestId, collectionPath.slice(0, -1), windowId);
   }
 
   /** */
@@ -54,7 +54,7 @@ export class SelectCollection extends Component {
 SelectCollection.propTypes = {
   collectionPath: PropTypes.arrayOf(PropTypes.string),
   manifestId: PropTypes.string,
-  showWindowCollectionDialog: PropTypes.func.isRequired,
+  showCollectionDialog: PropTypes.func.isRequired,
   t: PropTypes.func,
   windowId: PropTypes.string,
 };

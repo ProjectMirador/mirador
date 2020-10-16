@@ -53,6 +53,5 @@ export default function* appSaga() {
     takeEvery(ActionTypes.IMPORT_MIRADOR_STATE, importState),
     takeEvery(ActionTypes.IMPORT_CONFIG, importConfig),
     takeEvery(ActionTypes.SHOW_COLLECTION_DIALOG, fetchCollectionManifests),
-    takeEvery(ActionTypes.SHOW_WINDOW_COLLECTION_DIALOG, fetchCollectionManifests),
   ]);
 }

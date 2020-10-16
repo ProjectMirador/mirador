@@ -48,7 +48,6 @@ const mapStateToProps = (state, { manifestId, provider }) => {
 const mapDispatchToProps = {
   addWindow: actions.addWindow,
   fetchManifest: actions.fetchManifest,
-  showCollectionDialog: actions.showCollectionDialog,
 };
 
 /**

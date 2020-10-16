@@ -188,19 +188,19 @@ export function setWindowViewType(windowId, viewType) {
 }
 
 /** */
-export function showWindowCollectionDialog(manifestId, collectionPath = [], windowId) {
+export function showCollectionDialog(manifestId, collectionPath = [], windowId) {
   return {
     collectionPath,
     manifestId,
-    type: ActionTypes.SHOW_WINDOW_COLLECTION_DIALOG,
+    type: ActionTypes.SHOW_COLLECTION_DIALOG,
     windowId,
   };
 }
 
 /** */
-export function hideWindowCollectionDialog(windowId) {
+export function hideCollectionDialog(windowId) {
   return {
-    type: ActionTypes.HIDE_WINDOW_COLLECTION_DIALOG,
+    type: ActionTypes.HIDE_COLLECTION_DIALOG,
     windowId,
   };
 }

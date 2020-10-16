@@ -17,10 +17,8 @@ import { CollectionDialog } from '../components/CollectionDialog';
 const mapDispatchToProps = {
   addWindow: actions.addWindow,
   hideCollectionDialog: actions.hideCollectionDialog,
-  hideWindowCollectionDialog: actions.hideWindowCollectionDialog,
   setWorkspaceAddVisibility: actions.setWorkspaceAddVisibility,
   showCollectionDialog: actions.showCollectionDialog,
-  showWindowCollectionDialog: actions.showWindowCollectionDialog,
   updateWindow: actions.updateWindow,
 };
 
@@ -29,10 +27,8 @@ const mapDispatchToProps = {
  * @memberof CollectionDialog
  * @private
  */
-const mapStateToProps = (state, { variant, windowId }) => {
-  const { collectionPath, collectionManifestId: manifestId } = variant === 'window'
-    ? getWindow(state, { windowId })
-    : state.workspace;
+const mapStateToProps = (state, { windowId }) => {
+  const { collectionPath, collectionManifestId: manifestId } = getWindow(state, { windowId });
   const manifest = getManifest(state, { manifestId });
 
   const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
@@ -48,7 +44,7 @@ const mapStateToProps = (state, { variant, windowId }) => {
     manifestId,
     open: state.workspace.collectionDialogOn,
     ready: manifest && !!manifest.json,
-    windowId: state.workspace.collectionUpdateWindowId || windowId,
+    windowId,
   };
 };
 

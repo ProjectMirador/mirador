@@ -382,11 +382,11 @@ describe('windows reducer', () => {
     })).toEqual({ new: 'stuff' });
   });
 
-  describe('SHOW_WINDOW_COLLECTION_DIALOG', () => {
-    it('handles SHOW_WINDOW_COLLECTION_DIALOG by toggling the given window\'s collection dialog', () => {
+  describe('SHOW_COLLECTION_DIALOG', () => {
+    it('handles SHOW_COLLECTION_DIALOG by toggling the given window\'s collection dialog', () => {
       const beforeState = { abc123: { collectionDialogOn: false } };
       const action = {
-        collectionPath: [], manifestId: 'def456', type: ActionTypes.SHOW_WINDOW_COLLECTION_DIALOG, windowId: 'abc123',
+        collectionPath: [], manifestId: 'def456', type: ActionTypes.SHOW_COLLECTION_DIALOG, windowId: 'abc123',
       };
       const expectedState = {
         abc123: { collectionDialogOn: true, collectionManifestId: 'def456', collectionPath: [] },
@@ -396,15 +396,15 @@ describe('windows reducer', () => {
     });
   });
 
-  describe('HIDE_WINDOW_COLLECTION_DIALOG', () => {
-    it('handles HIDE_WINDOW_COLLECTION_DIALOG by toggling the given window\'s collection dialog', () => {
+  describe('HIDE_COLLECTION_DIALOG', () => {
+    it('handles HIDE_COLLECTION_DIALOG by toggling the given window\'s collection dialog', () => {
       const beforeState = {
         abc123: {
           collectionDialogOn: true, collectionManifestId: 'def456', collectionPath: [],
         },
       };
       const action = {
-        type: ActionTypes.HIDE_WINDOW_COLLECTION_DIALOG,
+        type: ActionTypes.HIDE_COLLECTION_DIALOG,
         windowId: 'abc123',
       };
 
