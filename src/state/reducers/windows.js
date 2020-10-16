@@ -150,7 +150,7 @@ export const windowsReducer = (state = {}, action) => {
           suggestedSearches: undefined,
         },
       };
-    case ActionTypes.SHOW_WINDOW_COLLECTION_DIALOG:
+    case ActionTypes.SHOW_COLLECTION_DIALOG:
       return {
         ...state,
         [action.windowId]: {
@@ -160,7 +160,7 @@ export const windowsReducer = (state = {}, action) => {
           collectionPath: action.collectionPath,
         },
       };
-    case ActionTypes.HIDE_WINDOW_COLLECTION_DIALOG:
+    case ActionTypes.HIDE_COLLECTION_DIALOG:
       return {
         ...state,
         [action.windowId]: {

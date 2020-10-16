@@ -57,19 +57,10 @@ export class CollectionDialog extends Component {
   /** */
   hideDialog() {
     const {
-      hideCollectionDialog, hideWindowCollectionDialog, variant, windowId,
+      hideCollectionDialog, windowId,
     } = this.props;
-    if (variant === 'window') {
-      hideWindowCollectionDialog(windowId);
-    } else {
-      hideCollectionDialog();
-    }
-  }
 
-  /** */
-  showCollectionDialog(...args) {
-    const { showCollectionDialog, showWindowCollectionDialog, variant } = this.props;
-    return variant === 'window' ? showWindowCollectionDialog(...args) : showCollectionDialog(...args);
+    hideCollectionDialog(windowId);
   }
 
   /** */
@@ -77,17 +68,18 @@ export class CollectionDialog extends Component {
     const {
       collectionPath,
       manifestId,
+      showCollectionDialog,
       windowId,
     } = this.props;
 
-    this.showCollectionDialog(c.id, [...collectionPath, manifestId], windowId);
+    showCollectionDialog(c.id, [...collectionPath, manifestId], windowId);
   }
 
   /** */
   goToPreviousCollection() {
-    const { collectionPath, windowId } = this.props;
+    const { collectionPath, showCollectionDialog, windowId } = this.props;
 
-    this.showCollectionDialog(
+    showCollectionDialog(
       collectionPath[collectionPath.length - 1],
       collectionPath.slice(0, -1),
       windowId,
@@ -118,15 +110,21 @@ export class CollectionDialog extends Component {
   }
 
   /** */
+  dialogContainer() {
+    const { containerId, windowId } = this.props;
+    return document.querySelector(`#${containerId} #${windowId}`);
+  }
+
+  /** */
   placeholder() {
-    const { classes, containerId, windowId } = this.props;
+    const { classes } = this.props;
 
     return (
       <Dialog
         className={classes.dialog}
         onClose={this.hideDialog}
         open
-        container={document.querySelector(`#${containerId} #${windowId}`)}
+        container={this.dialogContainer()}
         BackdropProps={this.backdropProps()}
       >
         <DialogTitle id="select-collection" disableTypography>
@@ -151,18 +149,23 @@ export class CollectionDialog extends Component {
     const {
       classes,
       collection,
-      containerId,
       error,
       isMultipart,
       manifest,
       ready,
       t,
-      windowId,
     } = this.props;
 
     const { filter } = this.state;
 
     if (error) return null;
+    // If this component is optimistically rendering ahead of the window its in
+    // force a re-render so that it is placed correctly. The right thing here is
+    // to maybe pass a ref.
+    if (!this.dialogContainer()) {
+      this.forceUpdate();
+      return <></>;
+    }
     if (!ready) return this.placeholder();
 
     const rights = manifest && (asArray(manifest.getProperty('rights') || manifest.getProperty('license')));
@@ -181,7 +184,7 @@ export class CollectionDialog extends Component {
       <Dialog
         className={classes.dialog}
         onClose={this.hideDialog}
-        container={document.querySelector(`#${containerId} #${windowId}`)}
+        container={this.dialogContainer()}
         BackdropProps={this.backdropProps()}
         open
       >
@@ -277,17 +280,14 @@ CollectionDialog.propTypes = {
   containerId: PropTypes.string,
   error: PropTypes.string,
   hideCollectionDialog: PropTypes.func.isRequired,
-  hideWindowCollectionDialog: PropTypes.func.isRequired,
   isMultipart: PropTypes.bool,
   manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   manifestId: PropTypes.string.isRequired,
   ready: PropTypes.bool,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   showCollectionDialog: PropTypes.func.isRequired,
-  showWindowCollectionDialog: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
-  variant: PropTypes.oneOf(['window', 'workspace']),
   windowId: PropTypes.string,
 };
 
@@ -298,6 +298,5 @@ CollectionDialog.defaultProps = {
   error: null,
   isMultipart: false,
   ready: false,
-  variant: 'workspace',
   windowId: null,
 };

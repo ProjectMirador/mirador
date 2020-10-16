@@ -13,7 +13,7 @@ import {
   fetchSearch,
   receiveManifest,
   fetchInfoResponse,
-  showWindowCollectionDialog,
+  showCollectionDialog,
 } from '../actions';
 import {
   getSearchForWindow, getSearchAnnotationsForCompanionWindow,
@@ -236,7 +236,7 @@ export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowI
 export function* determineAndShowCollectionDialog(manifestId, windowId) {
   const manifestoInstance = yield select(getManifestoInstance, { manifestId });
   if (manifestoInstance && manifestoInstance.isCollection()) {
-    yield put(showWindowCollectionDialog(manifestId, [], windowId));
+    yield put(showCollectionDialog(manifestId, [], windowId));
   }
 }
 

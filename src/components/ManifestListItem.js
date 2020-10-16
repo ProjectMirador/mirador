@@ -40,16 +40,10 @@ export class ManifestListItem extends React.Component {
       addWindow,
       handleClose,
       manifestId,
-      showCollectionDialog,
-      isCollection,
     } = this.props;
 
-    if (isCollection) {
-      showCollectionDialog(manifestId);
-    } else {
-      addWindow({ manifestId });
-      handleClose();
-    }
+    addWindow({ manifestId });
+    handleClose();
   }
 
   /** */
@@ -185,7 +179,6 @@ ManifestListItem.propTypes = {
   manifestLogo: PropTypes.string,
   provider: PropTypes.string,
   ready: PropTypes.bool,
-  showCollectionDialog: PropTypes.func.isRequired,
   size: PropTypes.number,
   t: PropTypes.func,
   thumbnail: PropTypes.string,
