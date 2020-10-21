@@ -1,0 +1,1083 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/manifest.json",
+  "@type": "sc:Manifest",
+  "label": "Urn\u00e4sch, Gemeindearchiv Urn\u00e4sch, Fragment",
+  "metadata": [
+    {
+      "label": "Location",
+      "value": "Urn\u00e4sch"
+    },
+    {
+      "label": "Collection Name",
+      "value": "Gemeindearchiv Urn\u00e4sch"
+    },
+    {
+      "label": "Shelfmark",
+      "value": "Fragment"
+    },
+    {
+      "label": "Document Type",
+      "value": "Fragment"
+    },
+    {
+      "label": "DOI",
+      "value": "10.5076/e-codices-gau-Fragment"
+    },
+    {
+      "label": "Title (English)",
+      "value": "Psalterium iuxta Hebraeos (Fragment)"
+    },
+    {
+      "label": "Material",
+      "value": "Parchment"
+    },
+    {
+      "label": "Place of Origin (English)",
+      "value": "St. Gall"
+    },
+    {
+      "label": "Date of Origin (English)",
+      "value": "around 900 or 10th century"
+    },
+    {
+      "label": "Number of Pages",
+      "value": "2"
+    },
+    {
+      "label": "Dimensions",
+      "value": "21.6 x 37 cm (Fragm. 1), 21.7 x 20 cm (Fragm. 2)"
+    },
+    {
+      "label": "Online Since",
+      "value": "2015-10-08"
+    },
+    {
+      "label": "Summary (English)",
+      "value": "These are two well preserved fragments of a <i>Psalterium iuxta Hebraeos</i>, which were probably written in the 10th century at the monastery of St. Gall, following the model of <a href=\"http://www.e-codices.unifr.ch/en/list/one/csg/0019\">Cod. Sang. 19</a>. In 1963 both fragments were detached from a messenger bag; they are held in the town archive of Urn\u00e4sch (Appenzell Ausserrhoden)."
+    },
+    {
+      "label": "Century",
+      "value": "9th century"
+    },
+    {
+      "label": "Century",
+      "value": "10th century"
+    },
+    {
+      "label": "Liturgica christiana",
+      "value": "Bible"
+    },
+    {
+      "label": "Liturgica christiana",
+      "value": "Psalter"
+    },
+    {
+      "label": "Text Language",
+      "value": "Latin"
+    }
+  ],
+  "description": [
+    {
+      "@value": "These are two well preserved fragments of a Psalterium iuxta Hebraeos, which were probably written in the 10th century at the monastery of St. Gall, following the model of Cod. Sang. 19. In 1963 both fragments were detached from a messenger bag; they are held in the town archive of Urn\u00e4sch (Appenzell Ausserrhoden).",
+      "@language": "en"
+    }
+  ],
+  "license": "http://creativecommons.org/licenses/by-nc/4.0/",
+  "attribution": "e-codices - Virtual Manuscript Library of Switzerland",
+  "logo": "https://www.e-codices.ch/img/logo-for-iiif-manifest.png",
+  "service": [
+    {
+      "@context": "https://www.w3.org/ns/webmention",
+      "@id": "https://www.e-codices.unifr.ch/webmention/receive",
+      "profile": "https://www.w3.org/ns/webmention",
+      "label": "e-codices Webmention Service"
+    }
+  ],
+  "related": "https://www.e-codices.ch/en/list/one/gau/Fragment",
+  "within": "https://www.e-codices.ch/en/list/gau",
+  "seeAlso": [
+    {
+      "@id": "https://www.e-codices.unifr.ch/xml/tei_published/gau-Fragment_Solovey.xml",
+      "@format": "application/tei+xml"
+    }
+  ],
+  "sequences": [
+    {
+      "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1740.json",
+      "@type": "sc:Sequence",
+      "label": [
+        {
+          "@value": "Standard",
+          "@language": "de"
+        },
+        {
+          "@value": "Normal Sequence",
+          "@language": "en"
+        },
+        {
+          "@value": "S\u00e9quence normale",
+          "@language": "fr"
+        },
+        {
+          "@value": "Sequenza normale",
+          "@language": "it"
+        }
+      ],
+      "canvases": [
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001a.json",
+          "@type": "sc:Canvas",
+          "label": "fragm1a",
+          "height": 6132,
+          "width": 8176,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag001a.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001a.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001a.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 6132,
+                "width": 8176,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001a.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001b.json",
+          "@type": "sc:Canvas",
+          "label": "fragm1b",
+          "height": 6132,
+          "width": 8176,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag001b.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001b.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001b.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 6132,
+                "width": 8176,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001b.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002a.json",
+          "@type": "sc:Canvas",
+          "label": "fragm2a",
+          "height": 6132,
+          "width": 8176,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag002a.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002a.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002a.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 6132,
+                "width": 8176,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002a.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002b.json",
+          "@type": "sc:Canvas",
+          "label": "fragm2b",
+          "height": 6132,
+          "width": 8176,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag002b.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002b.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002b.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 6132,
+                "width": 8176,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002b.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat.json",
+          "@type": "sc:Canvas",
+          "label": "Casing",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_mat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            },
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_mat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat1.json",
+          "@type": "sc:Canvas",
+          "label": "Casing 1",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_mat1.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat1.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat1.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat1.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            },
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_mat1.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat1.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat1.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat1.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat2.json",
+          "@type": "sc:Canvas",
+          "label": "Casing 2",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_mat2.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat2.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat2.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat2.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat3.json",
+          "@type": "sc:Canvas",
+          "label": "Casing 3",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_mat3.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat3.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat3.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat3.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_1_MassSa.json",
+          "@type": "sc:Canvas",
+          "label": "Ruler on page",
+          "height": 6132,
+          "width": 8176,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_1_MassSa.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_1_MassSa.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_1_MassSa.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 6132,
+                "width": 8176,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_1_MassSa.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_1_ProfilSa.json",
+          "@type": "sc:Canvas",
+          "label": "QP card on page",
+          "height": 6132,
+          "width": 8176,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_1_ProfilSa.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_1_ProfilSa.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_1_ProfilSa.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 6132,
+                "width": 8176,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_1_ProfilSa.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_MassMat.json",
+          "@type": "sc:Canvas",
+          "label": "Ruler",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_MassMat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_MassMat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_MassMat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_MassMat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            },
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_MassMat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_MassMat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_MassMat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_MassMat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_ProfilMat.json",
+          "@type": "sc:Canvas",
+          "label": "Color profile",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_ProfilMat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_ProfilMat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_ProfilMat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_ProfilMat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            },
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_ProfilMat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_ProfilMat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_ProfilMat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_ProfilMat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_ProfilSG.json",
+          "@type": "sc:Canvas",
+          "label": "Digital Colorchecker",
+          "height": 6132,
+          "width": 8176,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_ProfilSG.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_ProfilSG.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_ProfilSG.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 6132,
+                "width": 8176,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_ProfilSG.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json",
+      "@type": "sc:Sequence",
+      "label": [
+        {
+          "@value": "Lesefreundliche Sequenz",
+          "@language": "de"
+        },
+        {
+          "@value": "Reader-friendly Sequence",
+          "@language": "en"
+        },
+        {
+          "@value": "S\u00e9quence adapt\u00e9e pour la lecture",
+          "@language": "fr"
+        },
+        {
+          "@value": "Sequenza facilitata per la lettura",
+          "@language": "it"
+        }
+      ],
+      "canvases": [
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001a_1r.json",
+          "@type": "sc:Canvas",
+          "label": "fragm1a_1r",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag001a_1r.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001a_1r.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001a_1r.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001a_1r.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001b_1v.json",
+          "@type": "sc:Canvas",
+          "label": "fragm1b_1v",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag001b_1v.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001b_1v.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001b_1v.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001b_1v.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001b_2r.json",
+          "@type": "sc:Canvas",
+          "label": "fragm1b_2r",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag001b_2r.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001b_2r.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001b_2r.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001b_2r.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001a_2v.json",
+          "@type": "sc:Canvas",
+          "label": "fragm1a_2v",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag001a_2v.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001a_2v.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001a_2v.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001a_2v.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002a_1r.json",
+          "@type": "sc:Canvas",
+          "label": "fragm2a_1r",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag002a_1r.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002a_1r.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002a_1r.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002a_1r.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002b_1v.json",
+          "@type": "sc:Canvas",
+          "label": "fragm2b_1v",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag002b_1v.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002b_1v.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002b_1v.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002b_1v.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002b_2r.json",
+          "@type": "sc:Canvas",
+          "label": "fragm2b_2r",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag002b_2r.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002b_2r.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002b_2r.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002b_2r.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002a_2v.json",
+          "@type": "sc:Canvas",
+          "label": "fragm2a_2v",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag002a_2v.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag002a_2v.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002a_2v.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag002a_2v.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_1_MassS.json",
+          "@type": "sc:Canvas",
+          "label": "Ruler on page",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_1_MassS.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_1_MassS.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_1_MassS.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_1_MassS.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_1_ProfilS.json",
+          "@type": "sc:Canvas",
+          "label": "QP card on page",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_1_ProfilS.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_1_ProfilS.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_1_ProfilS.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_1_ProfilS.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_2_MassS.json",
+          "@type": "sc:Canvas",
+          "label": "Ruler on page a",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_2_MassS.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_2_MassS.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_2_MassS.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_2_MassS.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_2_ProfilS.json",
+          "@type": "sc:Canvas",
+          "label": "QP card on page a",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_2_ProfilS.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_2_ProfilS.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_2_ProfilS.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_2_ProfilS.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat.json",
+          "@type": "sc:Canvas",
+          "label": "Casing",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_mat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            },
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_mat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat1.json",
+          "@type": "sc:Canvas",
+          "label": "Casing 1",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_mat1.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat1.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat1.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat1.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            },
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_mat1.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_mat1.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat1.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_mat1.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_MassMat.json",
+          "@type": "sc:Canvas",
+          "label": "Ruler",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_MassMat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_MassMat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_MassMat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_MassMat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            },
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_MassMat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_MassMat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_MassMat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_MassMat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_ProfilMat.json",
+          "@type": "sc:Canvas",
+          "label": "Color profile",
+          "height": 8176,
+          "width": 6132,
+          "images": [
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_ProfilMat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_ProfilMat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_ProfilMat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_ProfilMat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            },
+            {
+              "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_ProfilMat.json",
+              "@type": "oa:Annotation",
+              "motivation": "sc:painting",
+              "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_ProfilMat.json",
+              "resource": {
+                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_ProfilMat.jp2/full/full/0/default/jpg",
+                "@type": "dctypes:Image",
+                "format": "image/jpeg",
+                "height": 8176,
+                "width": 6132,
+                "service": {
+                  "@context": "http://iiif.io/api/image/2/context.json",
+                  "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_ProfilMat.jp2",
+                  "profile": "http://iiif.io/api/image/2/level2.json"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": []
+}

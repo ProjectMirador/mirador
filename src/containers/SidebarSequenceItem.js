@@ -1,7 +1,6 @@
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { SidebarSequenceItem } from '../components/SidebarSequenceItem';
 
@@ -23,7 +22,6 @@ const styles = (theme) => ({
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
-  connect(null, null),
   withPlugins('SidebarSequenceItem'),
 );
 
