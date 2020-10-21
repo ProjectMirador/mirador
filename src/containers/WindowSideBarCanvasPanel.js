@@ -9,6 +9,7 @@ import {
   getCompanionWindow,
   getDefaultSidebarVariant,
   getSequenceTreeStructure,
+  getSequences,
   getWindow,
   getManifestoInstance,
 } from '../state/selectors';
@@ -23,9 +24,12 @@ const mapStateToProps = (state, { id, windowId }) => {
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
   const collectionPath = window.collectionPath || [];
   const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
+  const sequences = getSequences(state, { windowId });
+
   return {
     collection: collectionId && getManifestoInstance(state, { manifestId: collectionId }),
     config,
+    sequences,
     showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
     variant: companionWindow.variant
       || getDefaultSidebarVariant(state, { windowId }),

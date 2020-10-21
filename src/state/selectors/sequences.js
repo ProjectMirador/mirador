@@ -50,6 +50,13 @@ export const getSequence = createSelector(
   },
 );
 
+export const getSequenceCanvases = createSelector(
+  [
+    (state, { sequence }) => sequence,
+  ],
+  sequence => (sequence && sequence.getCanvases()) || [],
+);
+
 /** Return the canvas index for a certain window.
 * @param {object} state
 * @param {String} windowId

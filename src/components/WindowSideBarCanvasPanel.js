@@ -13,16 +13,14 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForwardSharp';
 import CompanionWindow from '../containers/CompanionWindow';
 import SidebarIndexList from '../containers/SidebarIndexList';
 import SidebarIndexTableOfContents from '../containers/SidebarIndexTableOfContents';
+import SidebarSequenceList from '../containers/SidebarSequenceList';
 
-/**
- * a panel showing the canvases for a given manifest
- */
+/** */
 export class WindowSideBarCanvasPanel extends Component {
   /** */
   constructor(props) {
     super(props);
     this.handleVariantChange = this.handleVariantChange.bind(this);
-
     this.containerRef = React.createRef();
   }
 
@@ -53,12 +51,12 @@ export class WindowSideBarCanvasPanel extends Component {
       showMultipart,
       t,
       variant,
+      sequences,
       showToc,
       windowId,
     } = this.props;
 
     let listComponent;
-
     if (variant === 'tableOfContents') {
       listComponent = (
         <SidebarIndexTableOfContents
@@ -67,12 +65,25 @@ export class WindowSideBarCanvasPanel extends Component {
           windowId={windowId}
         />
       );
+    } else if (sequences && sequences.length > 1) {
+      listComponent = (
+        <SidebarSequenceList
+          id={id}
+          t={t}
+          containerRef={this.containerRef}
+          windowId={windowId}
+          variant={variant}
+          sequences={sequences}
+        />
+      );
     } else {
       listComponent = (
         <SidebarIndexList
           id={id}
+          t={t}
           containerRef={this.containerRef}
           windowId={windowId}
+          sequence={sequences[0]}
         />
       );
     }
@@ -94,13 +105,14 @@ export class WindowSideBarCanvasPanel extends Component {
               {showToc && (
                 <Tooltip title={t('tableOfContentsList')} value="tableOfContents"><Tab className={classes.variantTab} value="tableOfContents" aria-label={t('tableOfContentsList')} aria-controls={`tab-panel-${id}`} icon={<TocIcon style={{ transform: 'scale(-1, 1)' }} />} /></Tooltip>
               )}
+
               <Tooltip title={t('itemList')} value="item"><Tab className={classes.variantTab} value="item" aria-label={t('itemList')} aria-controls={`tab-panel-${id}`} icon={<ItemListIcon />} /></Tooltip>
               <Tooltip title={t('thumbnailList')} value="thumbnail"><Tab className={classes.variantTab} value="thumbnail" aria-label={t('thumbnailList')} aria-controls={`tab-panel-${id}`} icon={<ThumbnailListIcon />} /></Tooltip>
             </Tabs>
           )}
         >
           <div id={`tab-panel-${id}`}>
-            { collection && (
+            {collection && (
               <Button
                 fullWidth
                 onClick={showMultipart}
@@ -123,6 +135,7 @@ WindowSideBarCanvasPanel.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
+  sequences: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   showMultipart: PropTypes.func.isRequired,
   showToc: PropTypes.bool,
   t: PropTypes.func.isRequired,

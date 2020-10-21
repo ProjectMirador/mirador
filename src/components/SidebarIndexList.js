@@ -9,6 +9,12 @@ import SidebarIndexThumbnail from '../containers/SidebarIndexThumbnail';
 
 /** */
 export class SidebarIndexList extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+    this.state = { prevSequenceId: '' };
+  }
+
   /** @private */
   getIdAndLabelOfCanvases() {
     const { canvases } = this.props;
@@ -19,10 +25,20 @@ export class SidebarIndexList extends Component {
     }));
   }
 
+  /** @private */
+  updateCurrentSequence(sequenceId) {
+    const { updateSequence } = this.props;
+
+    updateSequence(sequenceId);
+    this.setState({ prevSequenceId: sequenceId });
+  }
+
   /** */
   render() {
     const {
       canvases,
+      sequence,
+      sequences,
       classes,
       containerRef,
       selectedCanvasIds,
@@ -30,6 +46,8 @@ export class SidebarIndexList extends Component {
       variant,
       windowId,
     } = this.props;
+
+    const { prevSequenceId } = this.state;
 
     const canvasesIdAndLabel = this.getIdAndLabelOfCanvases(canvases);
     let Item;
@@ -46,7 +64,12 @@ export class SidebarIndexList extends Component {
       <MenuList variant="selectedMenu">
         {
           canvasesIdAndLabel.map((canvas, canvasIndex) => {
-            const onClick = () => { setCanvas(windowId, canvas.id); }; // eslint-disable-line require-jsdoc, max-len
+            let onClick;
+            if (sequences && sequences.length > 1 && prevSequenceId !== sequence.id) {
+              onClick = () => { this.updateCurrentSequence(sequence.id); setCanvas(windowId, canvas.id); }; // eslint-disable-line require-jsdoc, max-len
+            } else {
+              onClick = () => { setCanvas(windowId, canvas.id); }; // eslint-disable-line require-jsdoc, max-len
+            }
 
             return (
               <MenuItem
@@ -78,9 +101,12 @@ export class SidebarIndexList extends Component {
 SidebarIndexList.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  containerRef: PropTypes.oneOf([PropTypes.func, PropTypes.object]).isRequired,
+  containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.object]).isRequired,
   selectedCanvasIds: PropTypes.arrayOf(PropTypes.string),
+  sequence: PropTypes.shape({ id: PropTypes.string }).isRequired,
+  sequences: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   setCanvas: PropTypes.func.isRequired,
+  updateSequence: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['item', 'thumbnail']),
   windowId: PropTypes.string.isRequired,
 };

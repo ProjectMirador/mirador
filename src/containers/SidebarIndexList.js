@@ -6,7 +6,8 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
   getCompanionWindow,
-  getCanvases,
+  getSequences,
+  getSequenceCanvases,
   getVisibleCanvasIds,
 } from '../state/selectors';
 import { SidebarIndexList } from '../components/SidebarIndexList';
@@ -14,9 +15,10 @@ import { SidebarIndexList } from '../components/SidebarIndexList';
 /**
  * mapStateToProps - to hook up connect
  */
-const mapStateToProps = (state, { id, windowId }) => ({
-  canvases: getCanvases(state, { windowId }),
+const mapStateToProps = (state, { id, sequence, windowId }) => ({
+  canvases: getSequenceCanvases(state, { sequence, windowId }),
   selectedCanvasIds: getVisibleCanvasIds(state, { windowId }),
+  sequences: getSequences(state, { windowId }),
   variant: getCompanionWindow(state, { companionWindowId: id, windowId }).variant,
 });
 
@@ -27,6 +29,9 @@ const mapStateToProps = (state, { id, windowId }) => ({
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
+  updateSequence: (sequenceId) => dispatch(
+    actions.updateWindow(windowId, { sequenceId }),
+  ),
 });
 
 /**
