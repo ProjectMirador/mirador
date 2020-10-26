@@ -10,6 +10,9 @@ import TocIcon from '@material-ui/icons/SortSharp';
 import ThumbnailListIcon from '@material-ui/icons/ViewListSharp';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardSharp';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import CompanionWindow from '../containers/CompanionWindow';
 import SidebarIndexList from '../containers/SidebarIndexList';
 import SidebarIndexTableOfContents from '../containers/SidebarIndexTableOfContents';
@@ -19,15 +22,6 @@ import SidebarIndexTableOfContents from '../containers/SidebarIndexTableOfConten
  */
 export class WindowSideBarCanvasPanel extends Component {
   /** */
-  static getUseableLabel(resource, index) {
-    return (resource
-      && resource.getLabel
-      && resource.getLabel().length > 0)
-      ? resource.getLabel().map(label => label.value)[0]
-      : String(index + 1);
-  }
-
-  /** */
   constructor(props) {
     super(props);
     this.handleSequenceChange = this.handleSequenceChange.bind(this);
@@ -35,7 +29,6 @@ export class WindowSideBarCanvasPanel extends Component {
 
     this.state = {
       sequenceSelectionOpened: false,
-      variantSelectionOpened: false,
     };
 
     this.containerRef = React.createRef();
@@ -51,21 +44,22 @@ export class WindowSideBarCanvasPanel extends Component {
   }
 
   /** @private */
-  handleSequenceChange(event) {
-    const { updateSequence } = this.props;
+  async handleSequenceChange(event) {
+    const { setCanvas, updateSequence } = this.props;
+    await updateSequence(event.target.value);
 
-    updateSequence(event.target.value);
+    const { windowId, canvases } = this.props;
+    const firstCanvasId = canvases[0].id;
+    setCanvas(windowId, firstCanvasId);
 
     this.setState({ sequenceSelectionOpened: false });
   }
 
   /** @private */
-  handleVariantChange(event) {
+  handleVariantChange(event, value) {
     const { updateVariant } = this.props;
 
-    updateVariant(event.target.value);
-
-    this.setState({ variantSelectionOpened: false });
+    updateVariant(value);
   }
 
   /**
@@ -73,6 +67,7 @@ export class WindowSideBarCanvasPanel extends Component {
    */
   render() {
     const {
+      canvases,
       classes,
       collection,
       id,
@@ -80,12 +75,13 @@ export class WindowSideBarCanvasPanel extends Component {
       sequenceId,
       sequences,
       t,
+      toggleDraggingEnabled,
       variant,
       showToc,
       windowId,
     } = this.props;
 
-    const { sequenceSelectionOpened, variantSelectionOpened } = this.state;
+    const { sequenceSelectionOpened } = this.state;
     let listComponent;
 
     if (variant === 'tableOfContents') {
@@ -114,19 +110,6 @@ export class WindowSideBarCanvasPanel extends Component {
           windowId={windowId}
           titleControls={(
             <>
-            <Tabs
-              value={variant}
-              onChange={this.handleVariantChange}
-              variant="fullWidth"
-              indicatorColor="primary"
-              textColor="primary"
-            >
-              {showToc && (
-                <Tooltip title={t('tableOfContentsList')} value="tableOfContents"><Tab className={classes.variantTab} value="tableOfContents" aria-label={t('tableOfContentsList')} aria-controls={`tab-panel-${id}`} icon={<TocIcon style={{ transform: 'scale(-1, 1)' }} />} /></Tooltip>
-              )}
-              <Tooltip title={t('itemList')} value="item"><Tab className={classes.variantTab} value="item" aria-label={t('itemList')} aria-controls={`tab-panel-${id}`} icon={<ItemListIcon />} /></Tooltip>
-              <Tooltip title={t('thumbnailList')} value="thumbnail"><Tab className={classes.variantTab} value="thumbnail" aria-label={t('thumbnailList')} aria-controls={`tab-panel-${id}`} icon={<ThumbnailListIcon />} /></Tooltip>
-            </Tabs>
               {
                 sequences && sequences.length > 1 && (
                   <FormControl>
@@ -157,38 +140,22 @@ export class WindowSideBarCanvasPanel extends Component {
                       { sequences.map((s, i) => <MenuItem value={s.id} key={s.id}><Typography variant="body2">{ WindowSideBarCanvasPanel.getUseableLabel(s, i) }</Typography></MenuItem>) }
                     </Select>
                   </FormControl>
-                )}
+                )
+              }
               <div className={classes.break} />
-              <FormControl>
-                <Select
-                  MenuProps={{
-                    anchorOrigin: {
-                      horizontal: 'left',
-                      vertical: 'bottom',
-                    },
-                    getContentAnchorEl: null,
-                  }}
-                  displayEmpty
-                  value={variant}
-                  onChange={this.handleVariantChange}
-                  name="variant"
-                  open={variantSelectionOpened}
-                  onOpen={(e) => {
-                    toggleDraggingEnabled();
-                    this.setState({ variantSelectionOpened: true });
-                  }}
-                  onClose={(e) => {
-                    toggleDraggingEnabled();
-                    this.setState({ variantSelectionOpened: false });
-                  }}
-                  classes={{ select: classes.select }}
-                  className={classes.selectEmpty}
-                >
-                  <MenuItem value="tableOfContents"><Typography variant="body2">{ t('tableOfContentsList') }</Typography></MenuItem>
-                  <MenuItem value="item"><Typography variant="body2">{ t('itemList') }</Typography></MenuItem>
-                  <MenuItem value="thumbnail"><Typography variant="body2">{ t('thumbnailList') }</Typography></MenuItem>
-                </Select>
-              </FormControl>
+              <Tabs
+                value={variant}
+                onChange={this.handleVariantChange}
+                variant="fullWidth"
+                indicatorColor="primary"
+                textColor="primary"
+              >
+                {showToc && (
+                  <Tooltip title={t('tableOfContentsList')} value="tableOfContents"><Tab className={classes.variantTab} value="tableOfContents" aria-label={t('tableOfContentsList')} aria-controls={`tab-panel-${id}`} icon={<TocIcon style={{ transform: 'scale(-1, 1)' }} />} /></Tooltip>
+                )}
+                <Tooltip title={t('itemList')} value="item"><Tab className={classes.variantTab} value="item" aria-label={t('itemList')} aria-controls={`tab-panel-${id}`} icon={<ItemListIcon />} /></Tooltip>
+                <Tooltip title={t('thumbnailList')} value="thumbnail"><Tab className={classes.variantTab} value="thumbnail" aria-label={t('thumbnailList')} aria-controls={`tab-panel-${id}`} icon={<ThumbnailListIcon />} /></Tooltip>
+              </Tabs>
             </>
           )}
         >
@@ -213,13 +180,15 @@ export class WindowSideBarCanvasPanel extends Component {
 }
 
 WindowSideBarCanvasPanel.propTypes = {
+  canvases: PropTypes.arrayOf(PropTypes.object),
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
-  showMultipart: PropTypes.func.isRequired,
-  showToc: PropTypes.bool,
   sequenceId: PropTypes.string,
   sequences: PropTypes.arrayOf(PropTypes.object),
+  setCanvas: PropTypes.func.isRequired,
+  showMultipart: PropTypes.func.isRequired,
+  showToc: PropTypes.bool,
   t: PropTypes.func.isRequired,
   toggleDraggingEnabled: PropTypes.func.isRequired,
   updateSequence: PropTypes.func.isRequired,
@@ -229,8 +198,9 @@ WindowSideBarCanvasPanel.propTypes = {
 };
 
 WindowSideBarCanvasPanel.defaultProps = {
+  canvases: [],
   collection: null,
-  showToc: false,
   sequenceId: null,
   sequences: [],
+  showToc: false,
 };

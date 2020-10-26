@@ -6,6 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { WindowSideBarCanvasPanel } from '../components/WindowSideBarCanvasPanel';
 import {
+  getCanvases,
   getCompanionWindow,
   getDefaultSidebarVariant,
   getSequenceTreeStructure,
@@ -26,12 +27,13 @@ const mapStateToProps = (state, { id, windowId }) => {
   const collectionPath = window.collectionPath || [];
   const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
   return {
+    canvases: getCanvases(state, { windowId }),
     collection: collectionId && getManifestoInstance(state, { manifestId: collectionId }),
     config,
-    showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
-    variant: companionWindow.variant || getDefaultSidebarVariant(state, { windowId }),
     sequenceId: getSequence(state, { windowId }).id,
     sequences: getSequences(state, { windowId }),
+    showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
+    variant: companionWindow.variant || getDefaultSidebarVariant(state, { windowId }),
   };
 };
 
@@ -59,12 +61,12 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
  * @param theme
  */
 const styles = theme => ({
-  collectionNavigationButton: {
-    textTransform: 'none',
-  },
   break: {
     flexBasis: '100%',
     height: 0,
+  },
+  collectionNavigationButton: {
+    textTransform: 'none',
   },
   label: {
     paddingLeft: theme.spacing(1),
