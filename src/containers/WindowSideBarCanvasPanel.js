@@ -6,7 +6,6 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { WindowSideBarCanvasPanel } from '../components/WindowSideBarCanvasPanel';
 import {
-  getCanvases,
   getCompanionWindow,
   getDefaultSidebarVariant,
   getSequenceTreeStructure,
@@ -47,7 +46,6 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   showMultipart: () => dispatch(
     actions.addOrUpdateCompanionWindow(windowId, { content: 'collection', position: 'right' }),
   ),
-  toggleDraggingEnabled: () => dispatch(actions.toggleDraggingEnabled()),
   updateSequence: sequenceId => dispatch(
     actions.updateWindow(windowId, { sequenceId }),
   ),
