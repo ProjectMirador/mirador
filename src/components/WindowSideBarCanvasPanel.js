@@ -40,13 +40,10 @@ export class WindowSideBarCanvasPanel extends Component {
   }
 
   /** @private */
-  async handleSequenceChange(event) {
-    const { setCanvas, updateSequence } = this.props;
-    await updateSequence(event.target.value);
+  handleSequenceChange(event) {
+    const { updateSequence } = this.props;
 
-    const { windowId, canvases } = this.props;
-    const firstCanvasId = canvases[0].id;
-    setCanvas(windowId, firstCanvasId);
+    updateSequence(event.target.value);
   }
 
   /** @private */
@@ -162,13 +159,11 @@ export class WindowSideBarCanvasPanel extends Component {
 }
 
 WindowSideBarCanvasPanel.propTypes = {
-  canvases: PropTypes.arrayOf(PropTypes.object),
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
   sequenceId: PropTypes.string,
   sequences: PropTypes.arrayOf(PropTypes.object),
-  setCanvas: PropTypes.func.isRequired,
   showMultipart: PropTypes.func.isRequired,
   showToc: PropTypes.bool,
   t: PropTypes.func.isRequired,

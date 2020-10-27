@@ -26,7 +26,6 @@ const mapStateToProps = (state, { id, windowId }) => {
   const collectionPath = window.collectionPath || [];
   const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
   return {
-    canvases: getCanvases(state, { windowId }),
     collection: collectionId && getManifestoInstance(state, { manifestId: collectionId }),
     config,
     sequenceId: getSequence(state, { windowId }).id,
@@ -42,7 +41,6 @@ const mapStateToProps = (state, { id, windowId }) => {
  * @private
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
-  setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
   showMultipart: () => dispatch(
     actions.addOrUpdateCompanionWindow(windowId, { content: 'collection', position: 'right' }),
   ),

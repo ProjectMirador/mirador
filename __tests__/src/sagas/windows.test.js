@@ -28,6 +28,7 @@ import {
   panToFocusedWindow,
   setCurrentAnnotationsOnCurrentCanvas,
   fetchInfoResponses,
+  setCanvasOnNewSequence,
   setCollectionPath,
 } from '../../../src/state/sagas/windows';
 import fixture from '../../fixtures/version-2/019.json';
@@ -76,6 +77,36 @@ describe('window-level sagas', () => {
         .call(setWindowDefaultSearchQuery, action)
         .call(determineAndShowCollectionDialog, 'manifest.json', 'x')
         .run();
+    });
+  });
+
+  describe('setCanvasOnNewSequence', () => {
+    it('when a sequenceId is provided, set the canvasId', () => {
+      const action = {
+        id: 'x',
+        payload: {
+          sequenceId: 'foo',
+        },
+      };
+
+      return expectSaga(setCanvasOnNewSequence, action)
+        .provide([
+          [select(getCanvases, { windowId: 'x' }), [{ id: 'a' }, { id: 'b' }]],
+          [call(setCanvas, 'x', 'a'), { type: 'setCanvasThunk' }],
+        ])
+        .put({ type: 'setCanvasThunk' })
+        .run();
+    });
+    it('when a sequenceId is not provided, return', () => {
+      const action = {
+        id: 'x',
+      };
+
+      return expectSaga(setCanvasOnNewSequence, action)
+        .provide([
+        ])
+        .run()
+        .then(({ allEffects }) => allEffects.length === 0);
     });
   });
 
