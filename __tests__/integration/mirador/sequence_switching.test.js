@@ -13,7 +13,7 @@ describe('Window Sidebar Sequence Dropdown', () => {
     await expect(page).toClick('[data-manifestid="http://localhost:4488/__tests__/fixtures/version-2/multipleSequences.json"] button');
   });
 
-  it('allows the user to switch the application', async () => {
+  it('allows the user to switch the sequence', async () => {
     const windows = await page.evaluate(() => (
       miradorInstance.store.getState().windows
     ));
