@@ -14,7 +14,6 @@ function createWrapper(props) {
       id="abc123"
       label="The Section Label"
       t={k => k}
-
       {...props}
     >
       <span>Child content</span>

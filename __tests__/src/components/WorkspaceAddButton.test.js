@@ -14,7 +14,6 @@ function createWrapper(props) {
       setWorkspaceAddVisibility={() => {}}
       t={str => str}
       useExtendedFab
-
       {...props}
     />,
   );
