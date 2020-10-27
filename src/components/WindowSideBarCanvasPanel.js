@@ -27,10 +27,6 @@ export class WindowSideBarCanvasPanel extends Component {
     this.handleSequenceChange = this.handleSequenceChange.bind(this);
     this.handleVariantChange = this.handleVariantChange.bind(this);
 
-    this.state = {
-      sequenceSelectionOpened: false,
-    };
-
     this.containerRef = React.createRef();
   }
 
@@ -51,8 +47,6 @@ export class WindowSideBarCanvasPanel extends Component {
     const { windowId, canvases } = this.props;
     const firstCanvasId = canvases[0].id;
     setCanvas(windowId, firstCanvasId);
-
-    this.setState({ sequenceSelectionOpened: false });
   }
 
   /** @private */
@@ -67,7 +61,6 @@ export class WindowSideBarCanvasPanel extends Component {
    */
   render() {
     const {
-      canvases,
       classes,
       collection,
       id,
@@ -75,13 +68,11 @@ export class WindowSideBarCanvasPanel extends Component {
       sequenceId,
       sequences,
       t,
-      toggleDraggingEnabled,
       variant,
       showToc,
       windowId,
     } = this.props;
 
-    const { sequenceSelectionOpened } = this.state;
     let listComponent;
 
     if (variant === 'tableOfContents') {
@@ -125,15 +116,6 @@ export class WindowSideBarCanvasPanel extends Component {
                       value={sequenceId}
                       onChange={this.handleSequenceChange}
                       name="sequenceId"
-                      open={sequenceSelectionOpened}
-                      onOpen={(e) => {
-                        toggleDraggingEnabled();
-                        this.setState({ sequenceSelectionOpened: true });
-                      }}
-                      onClose={(e) => {
-                        toggleDraggingEnabled();
-                        this.setState({ sequenceSelectionOpened: false });
-                      }}
                       classes={{ select: classes.select }}
                       className={classes.selectEmpty}
                     >
@@ -190,7 +172,6 @@ WindowSideBarCanvasPanel.propTypes = {
   showMultipart: PropTypes.func.isRequired,
   showToc: PropTypes.bool,
   t: PropTypes.func.isRequired,
-  toggleDraggingEnabled: PropTypes.func.isRequired,
   updateSequence: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['item', 'thumbnail', 'tableOfContents']).isRequired,
@@ -198,7 +179,6 @@ WindowSideBarCanvasPanel.propTypes = {
 };
 
 WindowSideBarCanvasPanel.defaultProps = {
-  canvases: [],
   collection: null,
   sequenceId: null,
   sequences: [],
