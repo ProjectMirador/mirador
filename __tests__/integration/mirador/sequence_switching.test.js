@@ -28,8 +28,8 @@ describe('Window Sidebar Sequence Dropdown', () => {
     await expect(page).toMatchElement(`#${windowId} button[aria-label="Index"]`);
     await expect(page).toClick(`#${windowId} button[aria-label="Index"]`);
     await expect(page).toClick('#mui-component-select-sequenceId');
-    await expect(page).toMatchElement('#sequence-1');
-    await expect(page).toClick('#sequence-1');
+    await expect(page).toMatchElement('[data-value="https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json"]');
+    await expect(page).toClick('[data-value="https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json"]');
     await expect(page).toMatchElement('p', { text: 'fragm1a_1r' });
   });
 });
