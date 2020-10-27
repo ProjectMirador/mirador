@@ -53,6 +53,18 @@ export function* fetchWindowManifest(action) {
 }
 
 /** */
+export function* setCanvasOnNewSequence(action) {
+  const windowId = action.id;
+  if (!action || !action.payload || !action.payload.sequenceId) return;
+
+  const canvases = yield select(getCanvases, { windowId });
+  if (!canvases || !canvases[0] || !canvases[0].id) return;
+
+  const thunk = yield call(setCanvas, windowId, canvases[0].id);
+  yield put(thunk);
+}
+
+/** */
 export function* setCollectionPath({ manifestId, windowId }) {
   const manifestoInstance = yield select(getManifestoInstance, { manifestId });
 
@@ -245,6 +257,7 @@ export default function* windowsSaga() {
   yield all([
     takeEvery(ActionTypes.ADD_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchWindowManifest),
+    takeEvery(ActionTypes.UPDATE_WINDOW, setCanvasOnNewSequence),
     takeEvery(ActionTypes.SET_CANVAS, setCurrentAnnotationsOnCurrentCanvas),
     takeEvery(ActionTypes.SET_CANVAS, fetchInfoResponses),
     takeEvery(ActionTypes.UPDATE_COMPANION_WINDOW, fetchCollectionManifests),
