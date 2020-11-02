@@ -1,0 +1,59 @@
+{
+    "@context": [
+      "http://iiif.io/api/presentation/3/context.json"
+    ],
+    "id": "http://foo.test/1/manifest",
+    "type": "Manifest",
+    "label": {
+      "none": ["Version 3 manifest for multiple ranges (sequences behavior) related tests"]
+    },
+    "items": [
+      {
+        "id": "http://foo.test/1/canvas/c1",
+        "type": "Canvas",
+        "label":{"none":["Test Canvas 1"]}
+      },
+      {
+        "id": "http://foo.test/1/canvas/c2",
+        "type": "Canvas",
+        "label":{"none":["Test Canvas 2"]}
+      },
+      {
+        "id": "http://foo.test/1/canvas/c3",
+        "type": "Canvas",
+        "label":{"none":["Test Canvas 3"]}
+      }
+    ],
+    "structures": [
+      {
+        "id": "http://foo.test/1/range/root",
+        "type": "Range",
+        "behavior": "sequence",
+        "items": [
+          {
+            "id": "http://foo.test/1/canvas/c1",
+            "type": "Canvas",
+            "label":{"none":["Test Canvas 1"]}
+          }
+        ]
+      },
+      {
+        "id": "http://foo.test/1/range/second",
+        "type": "Range",
+        "behavior": "sequence",
+        "items": [
+          {
+            "id": "http://foo.test/1/canvas/c2",
+            "type": "Canvas",
+            "label":{"none":["Test Canvas 2"]}
+          },
+          {
+            "id": "http://foo.test/1/canvas/c3",
+            "type": "Canvas",
+            "label":{"none":["Test Canvas 3"]}
+          }
+        ]
+      }
+    ]
+  }
+  

@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { TreeNode } from 'manifesto.js/dist-esmodule/TreeNode';
+import { v3 } from 'uuid';
 import {
   getManifestoInstance,
 } from './manifests';
@@ -16,6 +17,20 @@ export const getSequences = createSelector(
 
     if (v2TopRanges.length === 0 && topRangesOrRoot.length === 1) {
       v3RangeSequences = topRangesOrRoot[0].getRanges().filter(r => r.getBehavior() === 'sequence');
+
+      if (v3RangeSequences.length > 0 && manifest.items && manifest.items.length > 0
+          && manifest.items[0].items && manifest.items[0].items.length > 0) {
+        const canvases = manifest.items[0].items;
+
+        v3RangeSequences.map((sequence) => {
+          const updatedSequence = sequence;
+          updatedSequence.items = sequence.canvases.map(canvasId => {
+            const fullCanvas = canvases.find(c => c.id === canvasId);
+            return fullCanvas;
+          });
+          return updatedSequence;
+        });
+      }
     }
 
     const sequences = [].concat(
@@ -37,10 +52,8 @@ export const getSequence = createSelector(
   ],
   (sequences, window, sequenceId) => {
     if (!sequences) return null;
-
     if (sequenceId || (window && window.sequenceId)) {
       const currentSequence = sequences.find(s => s.id === (sequenceId || window.sequenceId));
-
       if (currentSequence) return currentSequence;
     }
 
@@ -58,10 +71,18 @@ export const getCanvasIndex = createSelector(
     getWindow,
     getSequence,
   ],
-  (window, sequence) => (
-    (sequence && window && window.canvasId
-      && sequence.getCanvasById(window.canvasId))
-    || {}).index || 0,
+  (window, sequence) => {
+    let canvas;
+
+    if (sequence && window && window.canvasId
+      && typeof sequence.getCanvasById == 'function') {
+      canvas = sequence.getCanvasById(window.canvasId);
+    } else {
+      canvas = {};
+    }
+
+    return canvas.index || 0;
+  },
 );
 
 /**
