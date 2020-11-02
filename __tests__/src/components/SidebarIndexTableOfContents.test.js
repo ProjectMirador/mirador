@@ -96,20 +96,19 @@ describe('SidebarIndexTableOfContents', () => {
   it('toggles branch nodes on click, but not leaf nodes', () => {
     const wrapper = createWrapper({ setCanvas, toggleNode });
     const treeView = wrapper.children(TreeView).at(0);
-
-    const node0 = treeView.childAt(0);
+    const node0 = treeView.childAt(0).childAt(0);
     expect(node0.prop('nodeId')).toBe('0-0');
     node0.simulate('click');
     node0.simulate('click');
     expect(toggleNode).toHaveBeenCalledTimes(2);
 
-    const node00 = node0.children().at(0);
+    const node00 = node0.children().at(0).childAt(0);
     expect(node00.prop('nodeId')).toBe('0-0-0');
     node00.simulate('click');
     node00.simulate('click');
     expect(toggleNode).toHaveBeenCalledTimes(2);
 
-    const node1 = treeView.childAt(1);
+    const node1 = treeView.childAt(1).childAt(0);
     expect(node1.prop('nodeId')).toBe('0-1');
     node1.simulate('click');
     expect(toggleNode).toHaveBeenCalledTimes(3);
@@ -123,14 +122,14 @@ describe('SidebarIndexTableOfContents', () => {
     });
     const treeView = wrapper.children(TreeView).at(0);
 
-    const node0 = treeView.childAt(0);
+    const node0 = treeView.childAt(0).childAt(0);
     expect(node0.prop('nodeId')).toBe('0-0');
     node0.simulate(...createKeydownProps('ArrowLeft'));
     expect(toggleNode).toHaveBeenCalledTimes(1);
 
-    const node00 = node0.children().at(0);
+    const node00 = node0.children().at(0).childAt(0);
     expect(node00.prop('nodeId')).toBe('0-0-0');
-    const node1 = treeView.childAt(1);
+    const node1 = treeView.childAt(1).childAt(0);
     expect(node1.prop('nodeId')).toBe('0-1');
 
     node00.simulate(...createKeydownProps('ArrowLeft'));
@@ -145,16 +144,16 @@ describe('SidebarIndexTableOfContents', () => {
       toggleNode,
     });
     const treeView = wrapper.children(TreeView).at(0);
-    const node0 = treeView.childAt(0);
+    const node0 = treeView.childAt(0).childAt(0);
     expect(node0.prop('nodeId')).toBe('0-0');
-    const node00 = node0.children().at(0);
+    const node00 = node0.children().at(0).childAt(0);
     expect(node00.prop('nodeId')).toBe('0-0-0');
 
     node0.simulate(...createKeydownProps('ArrowRight'));
     node00.simulate(...createKeydownProps('ArrowRight'));
     expect(toggleNode).toHaveBeenCalledTimes(0);
 
-    const node1 = treeView.childAt(1);
+    const node1 = treeView.childAt(1).childAt(0);
     expect(node1.prop('nodeId')).toBe('0-1');
     node1.simulate(...createKeydownProps('ArrowRight'));
     expect(toggleNode).toHaveBeenCalledTimes(1);
@@ -163,7 +162,7 @@ describe('SidebarIndexTableOfContents', () => {
   it('toggles branch nodes (but not leaf nodes) with Space or Enter key', () => {
     const wrapper = createWrapper({ setCanvas, toggleNode });
     const treeView = wrapper.children(TreeView).at(0);
-    const node0 = treeView.childAt(0);
+    const node0 = treeView.childAt(0).childAt(0);
     node0.simulate(...createKeydownProps('Enter'));
     expect(toggleNode).toHaveBeenCalledTimes(1);
     node0.simulate(...createKeydownProps(' '));
@@ -174,26 +173,26 @@ describe('SidebarIndexTableOfContents', () => {
     node0.children().at(0).simulate(...createKeydownProps('Enter'));
     node0.children().at(0).simulate(...createKeydownProps(' '));
     expect(toggleNode).toHaveBeenCalledTimes(3);
-    treeView.childAt(1).simulate(...createKeydownProps('Enter'));
-    treeView.childAt(1).simulate(...createKeydownProps(' '));
+    treeView.childAt(1).childAt(0).simulate(...createKeydownProps('Enter'));
+    treeView.childAt(1).childAt(0).simulate(...createKeydownProps(' '));
     expect(toggleNode).toHaveBeenCalledTimes(5);
   });
 
   it('calls setCanvas only on click for ranges with canvases that do not have children', () => {
     const wrapper = createWrapper({ setCanvas, toggleNode });
     const treeView = wrapper.children(TreeView).at(0);
-    const node0 = treeView.childAt(0);
+    const node0 = treeView.childAt(0).childAt(0);
     expect(node0.prop('nodeId')).toBe('0-0');
     node0.simulate('click');
     expect(setCanvas).toHaveBeenCalledTimes(0);
-    node0.childAt(0).simulate('click');
+    node0.childAt(0).childAt(0).simulate('click');
     expect(setCanvas).toHaveBeenCalledTimes(1);
-    node0.childAt(1).simulate('click');
+    node0.childAt(1).childAt(0).simulate('click');
     expect(setCanvas).toHaveBeenCalledTimes(2);
-    node0.childAt(2).simulate('click');
+    node0.childAt(2).childAt(0).simulate('click');
     expect(setCanvas).toHaveBeenCalledTimes(3);
 
-    const node1 = treeView.childAt(1);
+    const node1 = treeView.childAt(1).childAt(0);
     expect(node1.prop('nodeId')).toBe('0-1');
     node1.simulate(...createKeydownProps('ArrowRight'));
     expect(setCanvas).toHaveBeenCalledTimes(3);
@@ -206,7 +205,7 @@ describe('SidebarIndexTableOfContents', () => {
       windowId: 'w1',
     });
     const treeView = version2wrapper.children(TreeView).at(0);
-    const node3 = treeView.childAt(3);
+    const node3 = treeView.childAt(3).childAt(0);
     expect(node3.prop('nodeId')).toBe('0-3');
     node3.simulate('click');
     expect(setCanvas).toHaveBeenCalledWith('w1', 'http://foo.test/1/canvas/c11');
@@ -218,19 +217,18 @@ describe('SidebarIndexTableOfContents', () => {
       windowId: 'w1',
     });
     const treeViewVersion3 = version3wrapper.children(TreeView).at(0);
-    const rootNode = treeViewVersion3.childAt(0);
-
-    const version3node1 = rootNode.childAt(1);
+    const rootNode = treeViewVersion3.childAt(0).childAt(0);
+    const version3node1 = rootNode.childAt(1).childAt(0);
     expect(version3node1.prop('nodeId')).toBe('0-0-1');
     version3node1.simulate('click');
     expect(setCanvas).toHaveBeenLastCalledWith('w1', 'http://foo.test/1/canvas/c7');
 
-    const version3node2 = rootNode.childAt(2);
+    const version3node2 = rootNode.childAt(2).childAt(0);
     expect(version3node2.prop('nodeId')).toBe('0-0-2');
     version3node2.simulate('click');
     expect(setCanvas).toHaveBeenLastCalledWith('w1', 'http://foo.test/1/canvas/c9');
 
-    const version3node3 = rootNode.childAt(3);
+    const version3node3 = rootNode.childAt(3).childAt(0);
     expect(version3node3.prop('nodeId')).toBe('0-0-3');
     version3node3.simulate('click');
     expect(setCanvas).toHaveBeenLastCalledWith('w1', 'http://foo.test/1/canvas/c10');
@@ -239,7 +237,7 @@ describe('SidebarIndexTableOfContents', () => {
   it('does not select a canvas when opening a node with the right arrow key', () => {
     const wrapper = createWrapper({ setCanvas, toggleNode });
     const treeView = wrapper.children(TreeView).at(0);
-    const node0 = treeView.childAt(0);
+    const node0 = treeView.childAt(0).childAt(0);
     expect(node0.prop('nodeId')).toBe('0-0');
     node0.simulate(...createKeydownProps('ArrowRight'));
     expect(setCanvas).toHaveBeenCalledTimes(0);
@@ -249,7 +247,7 @@ describe('SidebarIndexTableOfContents', () => {
   it('does not select a canvas when closing a node with the left arrow key', () => {
     const wrapper = createWrapper({ expandedNodeIds: ['0-0'], setCanvas, toggleNode });
     const treeView = wrapper.children(TreeView).at(0);
-    const node0 = treeView.childAt(0);
+    const node0 = treeView.childAt(0).childAt(0);
     expect(node0.prop('nodeId')).toBe('0-0');
     node0.simulate(...createKeydownProps('ArrowLeft'));
     expect(setCanvas).toHaveBeenCalledTimes(0);

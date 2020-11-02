@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
-import RootRef from '@material-ui/core/RootRef';
 import Typography from '@material-ui/core/Typography';
 import CompanionWindow from '../containers/CompanionWindow';
 import SearchPanelControls from '../containers/SearchPanelControls';
@@ -32,47 +31,46 @@ export class SearchPanel extends Component {
     } = this.props;
 
     return (
-      <RootRef rootRef={this.containerRef}>
-        <CompanionWindow
-          ariaLabel={t('searchTitle')}
-          title={(
-            <>
-              {t('searchTitle')}
-              {
-                query && query !== '' && (
-                  <Chip
-                    className={classes.clearChip}
-                    color="secondary"
-                    label={t('clearSearch')}
-                    onClick={removeSearch}
-                    onDelete={removeSearch}
-                    size="small"
-                    variant="outlined"
-                  />
-                )
-              }
-            </>
-          )}
+      <CompanionWindow
+        ariaLabel={t('searchTitle')}
+        title={(
+          <>
+            {t('searchTitle')}
+            {
+              query && query !== '' && (
+                <Chip
+                  className={classes.clearChip}
+                  color="secondary"
+                  label={t('clearSearch')}
+                  onClick={removeSearch}
+                  onDelete={removeSearch}
+                  size="small"
+                  variant="outlined"
+                />
+              )
+            }
+          </>
+        )}
+        windowId={windowId}
+        id={id}
+        titleControls={<SearchPanelControls companionWindowId={id} windowId={windowId} />}
+        ref={this.containerRef}
+      >
+        <SearchResults
+          containerRef={this.containerRef}
+          companionWindowId={id}
           windowId={windowId}
-          id={id}
-          titleControls={<SearchPanelControls companionWindowId={id} windowId={windowId} />}
-        >
-          <SearchResults
-            containerRef={this.containerRef}
-            companionWindowId={id}
-            windowId={windowId}
-          />
-          {
-            fetchSearch && suggestedSearches && query === '' && suggestedSearches.map(search => (
-              <Typography component="p" key={search} variant="body1">
-                <Button className={classes.inlineButton} color="secondary" onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}>
-                  {t('suggestSearch', { query: search })}
-                </Button>
-              </Typography>
-            ))
-          }
-        </CompanionWindow>
-      </RootRef>
+        />
+        {
+          fetchSearch && suggestedSearches && query === '' && suggestedSearches.map(search => (
+            <Typography component="p" key={search} variant="body1">
+              <Button className={classes.inlineButton} color="secondary" onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}>
+                {t('suggestSearch', { query: search })}
+              </Button>
+            </Typography>
+          ))
+        }
+      </CompanionWindow>
     );
   }
 }

@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withSize } from 'react-sizeme';
 import { withPlugins } from '../extend/withPlugins';
+import { withRef } from '../extend/withRef';
 import * as actions from '../state/actions';
 import { getCompanionWindow, getThemeDirection, getWindowConfig } from '../state/selectors';
 import { CompanionWindow } from '../components/CompanionWindow';
@@ -130,6 +131,7 @@ const styles = theme => ({
 });
 
 const enhance = compose(
+  withRef(),
   withTranslation(),
   withStyles(styles),
   withSize(),
