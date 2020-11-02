@@ -172,7 +172,10 @@ export class CompanionWindow extends Component {
               )
             }
           </Toolbar>
-          <Paper className={classes.content} elevation={0}>
+          <Paper
+            className={[classes.content, ns('scrollto-scrollable')].join(' ')}
+            elevation={0}
+          >
             {childrenWithAdditionalProps}
           </Paper>
         </Rnd>

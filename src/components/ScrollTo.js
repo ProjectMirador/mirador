@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import RootRef from '@material-ui/core/RootRef';
 
 /**
  * ScrollTo ~
@@ -37,8 +36,9 @@ export class ScrollTo extends Component {
   containerBoundingRect() {
     const { containerRef } = this.props;
 
-    if (!containerRef || !containerRef.current) return {};
-    return containerRef.current.getBoundingClientRect();
+    if (!containerRef || !containerRef.current || !containerRef.current.domEl) return {};
+
+    return containerRef.current.domEl.getBoundingClientRect();
   }
 
   /**
@@ -56,6 +56,17 @@ export class ScrollTo extends Component {
     if (!this.scrollToRef || !this.scrollToRef.current) return null;
 
     return this.scrollToRef.current;
+  }
+
+  /**
+   * The container provided in the containersRef dome structure in which scrolling
+   * should happen.
+  */
+  scrollabelContainer() {
+    const { containerRef } = this.props;
+
+    if (!containerRef || !containerRef.current || !containerRef.current.domEl) return null;
+    return containerRef.current.domEl.getElementsByClassName('mirador-scrollto-scrollable')[0];
   }
 
   /**
@@ -78,12 +89,14 @@ export class ScrollTo extends Component {
    * Scroll to the element if it is set to be scolled and is not visible
   */
   scrollToElement() {
-    const { scrollTo } = this.props;
+    const { offsetTop, scrollTo } = this.props;
     if (!scrollTo) return;
     if (!this.elementToScrollTo()) return;
     if (this.elementIsVisible()) return;
-
-    this.elementToScrollTo().scrollIntoView({ block: 'center' });
+    if (!this.scrollabelContainer()) return;
+    const scrollBy = this.elementToScrollTo().offsetTop
+      - (this.containerBoundingRect().height / 2) + offsetTop;
+    this.scrollabelContainer().scrollTo(0, scrollBy);
   }
 
   /**
@@ -95,9 +108,9 @@ export class ScrollTo extends Component {
     if (!scrollTo) return children;
 
     return (
-      <RootRef rootRef={this.scrollToRef}>
+      <div ref={this.scrollToRef}>
         {children}
-      </RootRef>
+      </div>
     );
   }
 }

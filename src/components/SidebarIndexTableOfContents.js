@@ -66,23 +66,23 @@ export class SidebarIndexTableOfContents extends Component {
     }
     return (
       nodes.map(node => (
-        <TreeItem
-          key={node.id}
-          nodeId={node.id}
-          classes={{
-            content: classes.content,
-            group: classes.group,
-            label: classes.label,
-            root: classes.treeItemRoot,
-            selected: classes.selected,
-          }}
-          label={(
-            <ScrollTo
-              containerRef={containerRef}
-              key={`${node.id}-scroll`}
-              offsetTop={96} // offset for the height of the form above
-              scrollTo={nodeIdToScrollTo === node.id}
-            >
+        <ScrollTo
+          containerRef={containerRef}
+          key={`${node.id}-scroll`}
+          offsetTop={96} // offset for the height of the form above
+          scrollTo={nodeIdToScrollTo === node.id}
+        >
+          <TreeItem
+            key={node.id}
+            nodeId={node.id}
+            classes={{
+              content: classes.content,
+              group: classes.group,
+              label: classes.label,
+              root: classes.treeItemRoot,
+              selected: classes.selected,
+            }}
+            label={(
               <div
                 className={clsx({
                   [classes.visibleNode]: visibleNodeIds.indexOf(node.id) !== -1,
@@ -90,18 +90,18 @@ export class SidebarIndexTableOfContents extends Component {
               >
                 {node.label}
               </div>
-            </ScrollTo>
-          )}
-          onClick={() => this.selectTreeItem(node)}
-          onKeyDown={e => this.handleKeyPressed(e, node)}
-        >
-          {node.nodes && node.nodes.length > 0 ? this.buildTreeItems(
-            node.nodes,
-            visibleNodeIds,
-            containerRef,
-            nodeIdToScrollTo,
-          ) : null}
-        </TreeItem>
+            )}
+            onClick={() => this.selectTreeItem(node)}
+            onKeyDown={e => this.handleKeyPressed(e, node)}
+          >
+            {node.nodes && node.nodes.length > 0 ? this.buildTreeItems(
+              node.nodes,
+              visibleNodeIds,
+              containerRef,
+              nodeIdToScrollTo,
+            ) : null}
+          </TreeItem>
+        </ScrollTo>
       ))
     );
   }
