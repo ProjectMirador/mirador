@@ -34,8 +34,8 @@ describe('getSequences', () => {
     };
     const state = { manifests: { x: { json: manifest } } };
     const sequences = getSequences(state, { manifestId: 'x' });
-    expect(sequences.length).toEqual(3);
-    expect(sequences.map(s => s.id)).toEqual(['https://iiif.bodleian.ox.ac.uk/iiif/sequence/9cca8fdd-4a61-4429-8ac1-f648764b4d6d_default.json', 'a', 'b']);
+    expect(sequences.length).toEqual(1);
+    expect(sequences.map(s => s.id)).toEqual(['https://iiif.bodleian.ox.ac.uk/iiif/sequence/9cca8fdd-4a61-4429-8ac1-f648764b4d6d_default.json']);
   });
   describe('with a v3 manifest', () => {
     const manifest = {
