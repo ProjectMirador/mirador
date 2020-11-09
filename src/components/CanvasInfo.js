@@ -49,7 +49,7 @@ export class CanvasInfo extends Component {
           </Typography>
         )}
 
-        {canvasMetadata.length > 0 && (
+        {canvasMetadata && canvasMetadata.length > 0 && (
           <LabelValueMetadata labelValuePairs={canvasMetadata} />
         )}
         <PluginHook {...this.props} />
