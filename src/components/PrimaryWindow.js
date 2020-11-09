@@ -28,13 +28,12 @@ export class PrimaryWindow extends Component {
    */
   renderViewer() {
     const {
-      audioResources, isCollection, isCollectionDialogVisible,
+      audioResources, isCollection,
       isFetching, videoResources, view, windowId,
     } = this.props;
     if (isCollection) {
       return (
         <>
-          { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
           <SelectCollection
             windowId={windowId}
           />
@@ -76,11 +75,12 @@ export class PrimaryWindow extends Component {
    * Render the component
    */
   render() {
-    const { windowId, classes } = this.props;
+    const { isCollectionDialogVisible, windowId, classes } = this.props;
     return (
       <div className={classNames(ns('primary-window'), classes.primaryWindow)}>
         <WindowSideBar windowId={windowId} />
         <CompanionArea windowId={windowId} position="left" />
+        { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
         <Suspense fallback={<div />}>
           {this.renderViewer()}
         </Suspense>
