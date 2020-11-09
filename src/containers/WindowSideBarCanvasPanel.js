@@ -25,10 +25,11 @@ const mapStateToProps = (state, { id, windowId }) => {
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
   const collectionPath = window.collectionPath || [];
   const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
+  const sequence = getSequence(state, { windowId });
   return {
     collection: collectionId && getManifestoInstance(state, { manifestId: collectionId }),
     config,
-    sequenceId: getSequence(state, { windowId }).id,
+    sequenceId: sequence && sequence.id,
     sequences: getSequences(state, { windowId }),
     showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
     variant: companionWindow.variant || getDefaultSidebarVariant(state, { windowId }),
