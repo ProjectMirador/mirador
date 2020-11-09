@@ -39,6 +39,15 @@ export class SearchHit extends Component {
     }
   }
 
+  /** */
+  handleClick() {
+    const {
+      annotation, annotationId, selectAnnotation,
+    } = this.props;
+
+    if (annotation && annotationId) selectAnnotation(annotationId);
+  }
+
   /**
    * Pass content describing the hit to the announcer prop (intended for screen readers)
    */
@@ -57,15 +66,6 @@ export class SearchHit extends Component {
       truncatedHit.match,
       truncatedHit.after,
     ].join(' '));
-  }
-
-  /** */
-  handleClick() {
-    const {
-      annotation, annotationId, selectAnnotation,
-    } = this.props;
-
-    if (annotation && annotationId) selectAnnotation(annotationId);
   }
 
   /** */

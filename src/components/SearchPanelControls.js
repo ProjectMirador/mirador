@@ -40,18 +40,6 @@ export class SearchPanelControls extends Component {
   }
 
   /** */
-  getSuggestions(value, { showEmpty = false } = {}) {
-    const { suggestions } = this.state;
-
-    const inputValue = deburr(value.trim()).toLowerCase();
-    const inputLength = inputValue.length;
-
-    return inputLength === 0 && !showEmpty
-      ? []
-      : suggestions;
-  }
-
-  /** */
   handleChange(event, value, reason) {
     if (value) {
       this.setState({
@@ -61,6 +49,18 @@ export class SearchPanelControls extends Component {
 
       this.fetchAutocomplete(value);
     }
+  }
+
+  /** */
+  getSuggestions(value, { showEmpty = false } = {}) {
+    const { suggestions } = this.state;
+
+    const inputValue = deburr(value.trim()).toLowerCase();
+    const inputLength = inputValue.length;
+
+    return inputLength === 0 && !showEmpty
+      ? []
+      : suggestions;
   }
 
   /** */

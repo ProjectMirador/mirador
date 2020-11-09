@@ -36,19 +36,6 @@ export class WorkspaceAdd extends React.Component {
     this.handleDrop = this.handleDrop.bind(this);
   }
 
-  /** @private */
-  onSubmit() {
-    this.setAddResourcesVisibility(false);
-    this.scrollToTop();
-  }
-
-  /**
-   * @private
-   */
-  setAddResourcesVisibility(bool) {
-    this.setState({ addResourcesOpen: bool });
-  }
-
   /** */
   handleDrop({ manifestId, manifestJson }, props, monitor) {
     const { addResource } = this.props;
@@ -60,6 +47,19 @@ export class WorkspaceAdd extends React.Component {
     }
 
     this.scrollToTop();
+  }
+
+  /** @private */
+  onSubmit() {
+    this.setAddResourcesVisibility(false);
+    this.scrollToTop();
+  }
+
+  /**
+   * @private
+   */
+  setAddResourcesVisibility(bool) {
+    this.setState({ addResourcesOpen: bool });
   }
 
   /** Scroll the list back to the top */

@@ -27,6 +27,20 @@ function getStartCanvasId(node) {
 /** */
 export class SidebarIndexTableOfContents extends Component {
   /** */
+  handleKeyPressed(event, node) {
+    const { expandedNodeIds, toggleNode } = this.props;
+    if (event.key === 'Enter'
+      || event.key === ' '
+      || event.key === 'Spacebar') {
+      this.selectTreeItem(node);
+    }
+    if ((event.key === 'ArrowLeft' && expandedNodeIds.indexOf(node.id) !== -1)
+      || (event.key === 'ArrowRight' && expandedNodeIds.indexOf(node.id) === -1 && node.nodes.length > 0)) {
+      toggleNode(node.id);
+    }
+  }
+
+  /** */
   selectTreeItem(node) {
     const { setCanvas, toggleNode, windowId } = this.props;
     if (node.nodes.length > 0) {
@@ -42,20 +56,6 @@ export class SidebarIndexTableOfContents extends Component {
     const target = getStartCanvasId(node);
     const canvasId = target.indexOf('#') === -1 ? target : target.substr(0, target.indexOf('#'));
     setCanvas(windowId, canvasId);
-  }
-
-  /** */
-  handleKeyPressed(event, node) {
-    const { expandedNodeIds, toggleNode } = this.props;
-    if (event.key === 'Enter'
-      || event.key === ' '
-      || event.key === 'Spacebar') {
-      this.selectTreeItem(node);
-    }
-    if ((event.key === 'ArrowLeft' && expandedNodeIds.indexOf(node.id) !== -1)
-      || (event.key === 'ArrowRight' && expandedNodeIds.indexOf(node.id) === -1 && node.nodes.length > 0)) {
-      toggleNode(node.id);
-    }
   }
 
   /** */
