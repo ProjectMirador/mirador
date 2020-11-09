@@ -45,6 +45,18 @@ export class IIIFThumbnail extends Component {
   }
 
   /**
+   * Handles the intersection (visibility) of a given thumbnail, by requesting
+   * the image and then updating the state.
+   */
+  handleIntersection(event) {
+    const { loaded } = this.state;
+
+    if (loaded || !event.isIntersecting) return;
+
+    this.setState(state => ({ ...state, loaded: true }));
+  }
+
+  /**
    *
   */
   imageStyles() {
@@ -92,18 +104,6 @@ export class IIIFThumbnail extends Component {
       ...styleProps,
       ...style,
     };
-  }
-
-  /**
-   * Handles the intersection (visibility) of a given thumbnail, by requesting
-   * the image and then updating the state.
-   */
-  handleIntersection(event) {
-    const { loaded } = this.state;
-
-    if (loaded || !event.isIntersecting) return;
-
-    this.setState(state => ({ ...state, loaded: true }));
   }
 
   /** */

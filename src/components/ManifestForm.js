@@ -37,20 +37,6 @@ export class ManifestForm extends Component {
   }
 
   /**
-   * formSubmit - triggers manifest update and sets lastRequested
-   * @param  {Event} event
-   * @private
-   */
-  formSubmit(event) {
-    const { addResource, onSubmit } = this.props;
-    const { formValue } = this.state;
-    event.preventDefault();
-    onSubmit();
-    addResource(formValue);
-    this.setState({ formValue: '' });
-  }
-
-  /**
    * Reset the form state
    */
   handleCancel() {
@@ -71,6 +57,20 @@ export class ManifestForm extends Component {
     that.setState({
       formValue: event.target.value,
     });
+  }
+
+  /**
+   * formSubmit - triggers manifest update and sets lastRequested
+   * @param  {Event} event
+   * @private
+   */
+  formSubmit(event) {
+    const { addResource, onSubmit } = this.props;
+    const { formValue } = this.state;
+    event.preventDefault();
+    onSubmit();
+    addResource(formValue);
+    this.setState({ formValue: '' });
   }
 
   /**
