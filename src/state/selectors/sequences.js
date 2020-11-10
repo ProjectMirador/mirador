@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { TreeNode } from 'manifesto.js/dist-esmodule/TreeNode';
-import { v3 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import {
   getManifestoInstance,
 } from './manifests';
@@ -23,19 +23,29 @@ export const getSequences = createSelector(
         const canvases = manifest.items[0].items;
 
         v3RangeSequences.map((sequence) => {
-          const updatedSequence = sequence;
-          updatedSequence.items = sequence.canvases.map(canvasId => {
-            const fullCanvas = canvases.find(c => c.id === canvasId);
-            return fullCanvas;
-          });
-          return updatedSequence;
+          if (sequence.items.length === 0) {
+            const updatedSequence = sequence;
+            updatedSequence.items = sequence.canvases.map(canvasId => {
+              const fullCanvas = canvases.find(c => c.id === canvasId);
+              return fullCanvas;
+            });
+            return updatedSequence;
+          }
+          return sequence;
         });
       }
     }
 
+    // v3 sequence (not range sequence): assign id if not there
+    const manifestSequences = manifest.getSequences();
+    if (v3RangeSequences && manifestSequences && manifestSequences.length > 0
+       && !manifestSequences[0].id) {
+      manifestSequences[0].id = uuid();
+    }
+
     const sequences = [].concat(
       // v2: multi-sequence manifests, or v3: items
-      manifest.getSequences(),
+      manifestSequences,
       // v3: all top-level ranges with behavior=sequence
       v3RangeSequences,
     );

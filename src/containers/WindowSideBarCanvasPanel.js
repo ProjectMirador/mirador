@@ -65,15 +65,24 @@ const styles = theme => ({
   collectionNavigationButton: {
     textTransform: 'none',
   },
+  formControl: {
+    maxWidth: 190,
+  },
   label: {
     paddingLeft: theme.spacing(1),
   },
   select: {
+    '& .MuiSelect-icon': {
+      backgroundColor: 'white',
+    },
     '&:focus': {
       backgroundColor: theme.palette.background.paper,
     },
   },
   selectEmpty: {
+    '& .MuiSelect-icon': {
+      backgroundColor: 'white',
+    },
     backgroundColor: theme.palette.background.paper,
   },
   variantTab: {

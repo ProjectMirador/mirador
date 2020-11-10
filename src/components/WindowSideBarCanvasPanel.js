@@ -88,7 +88,6 @@ export class WindowSideBarCanvasPanel extends Component {
         />
       );
     }
-
     return (
       <CompanionWindow
         title={t('canvasIndex')}
@@ -100,7 +99,7 @@ export class WindowSideBarCanvasPanel extends Component {
           <>
             {
               sequences && sequences.length > 1 && (
-                <FormControl>
+                <FormControl className={classes.formControl}>
                   <Select
                     MenuProps={{
                       anchorOrigin: {
@@ -110,7 +109,7 @@ export class WindowSideBarCanvasPanel extends Component {
                       getContentAnchorEl: null,
                     }}
                     displayEmpty
-                    value={sequenceId}
+                    value={sequenceId || ''}
                     onChange={this.handleSequenceChange}
                     name="sequenceId"
                     classes={{ select: classes.select }}
