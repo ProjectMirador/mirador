@@ -20,20 +20,20 @@ describe('ScrollTo', () => {
   const scrollToElAboveBoundingRect = { bottom: -200, top: -300 };
   const scrollToElBelowBoundingRect = { bottom: 601, top: 501 };
   const visibleScrollToElBoundingRect = { bottom: 300, top: 200 };
-  const containerBoundingRect = { bottom: 500, top: 0 };
+  const containerBoundingRect = { bottom: 500, height: 440, top: 0 };
 
-  it('wraps the given children in a RootRef element', () => {
+  it('wraps the given children in a div element', () => {
     wrapper = createWrapper();
-
-    expect(wrapper.find('RootRef').length).toBe(1);
-    expect(wrapper.find('RootRef').children().text()).toEqual('Child Prop');
+    expect(wrapper.find('div').length).toBe(1);
+    expect(wrapper.find('div').children().text()).toEqual('Child Prop');
   });
 
   describe('when updating the scrollTo prop', () => {
     describe('when setting from true to false', () => {
       it('does not scroll to the selected element', () => {
-        const scrollIntoView = jest.fn();
-        jest.spyOn(ScrollTo.prototype, 'elementToScrollTo').mockImplementation(() => ({ scrollIntoView }));
+        const scrollTo = jest.fn();
+        jest.spyOn(ScrollTo.prototype, 'elementToScrollTo').mockImplementation(() => ({ offsetTop: 450 }));
+        jest.spyOn(ScrollTo.prototype, 'scrollabelContainer').mockImplementation(() => ({ scrollTo }));
         jest.spyOn(ScrollTo.prototype, 'containerBoundingRect').mockImplementation(() => ({
           ...containerBoundingRect,
         }));
@@ -44,14 +44,15 @@ describe('ScrollTo', () => {
         wrapper.setProps({ scrollTo: false });
 
         // It is called once when initially rendered w/ true
-        expect(scrollIntoView).not.toHaveBeenCalledTimes(2);
+        expect(scrollTo).not.toHaveBeenCalledTimes(2);
       });
     });
 
     describe('when set from false to true', () => {
       it('scrolls to the selected element when it is hidden above the container', () => {
-        const scrollIntoView = jest.fn();
-        jest.spyOn(ScrollTo.prototype, 'elementToScrollTo').mockImplementation(() => ({ scrollIntoView }));
+        const scrollTo = jest.fn();
+        jest.spyOn(ScrollTo.prototype, 'elementToScrollTo').mockImplementation(() => ({ offsetTop: 450 }));
+        jest.spyOn(ScrollTo.prototype, 'scrollabelContainer').mockImplementation(() => ({ scrollTo }));
         jest.spyOn(ScrollTo.prototype, 'containerBoundingRect').mockImplementation(() => ({
           ...containerBoundingRect,
         }));
@@ -61,12 +62,13 @@ describe('ScrollTo', () => {
         wrapper = createWrapper({ scrollTo: false });
         wrapper.setProps({ scrollTo: true });
 
-        expect(scrollIntoView).toHaveBeenCalledWith({ block: 'center' });
+        expect(scrollTo).toHaveBeenCalledWith(0, 230);
       });
 
       it('scrolls to the selected element when it is hidden above the container', () => {
-        const scrollIntoView = jest.fn();
-        jest.spyOn(ScrollTo.prototype, 'elementToScrollTo').mockImplementation(() => ({ scrollIntoView }));
+        const scrollTo = jest.fn();
+        jest.spyOn(ScrollTo.prototype, 'elementToScrollTo').mockImplementation(() => ({ offsetTop: 450 }));
+        jest.spyOn(ScrollTo.prototype, 'scrollabelContainer').mockImplementation(() => ({ scrollTo }));
         jest.spyOn(ScrollTo.prototype, 'containerBoundingRect').mockImplementation(() => ({
           ...containerBoundingRect,
         }));
@@ -76,12 +78,13 @@ describe('ScrollTo', () => {
         wrapper = createWrapper({ scrollTo: false });
         wrapper.setProps({ scrollTo: true });
 
-        expect(scrollIntoView).toHaveBeenCalledWith({ block: 'center' });
+        expect(scrollTo).toHaveBeenCalledWith(0, 230);
       });
 
       it('does not scroll to the selected element when it is visible', () => {
-        const scrollIntoView = jest.fn();
-        jest.spyOn(ScrollTo.prototype, 'elementToScrollTo').mockImplementation(() => ({ scrollIntoView }));
+        const scrollTo = jest.fn();
+        jest.spyOn(ScrollTo.prototype, 'elementToScrollTo').mockImplementation(() => ({ offsetTop: 450 }));
+        jest.spyOn(ScrollTo.prototype, 'scrollabelContainer').mockImplementation(() => ({ scrollTo }));
         jest.spyOn(ScrollTo.prototype, 'containerBoundingRect').mockImplementation(() => ({
           ...containerBoundingRect,
         }));
@@ -91,7 +94,7 @@ describe('ScrollTo', () => {
         wrapper = createWrapper({ scrollTo: false });
         wrapper.setProps({ scrollTo: true });
 
-        expect(scrollIntoView).not.toHaveBeenCalled();
+        expect(scrollTo).not.toHaveBeenCalled();
       });
     });
   });

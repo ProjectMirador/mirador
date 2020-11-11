@@ -11,6 +11,8 @@ import {
   getSequenceTreeStructure,
   getWindow,
   getManifestoInstance,
+  getSequence,
+  getSequences,
 } from '../state/selectors';
 
 /**
@@ -23,12 +25,14 @@ const mapStateToProps = (state, { id, windowId }) => {
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
   const collectionPath = window.collectionPath || [];
   const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
+  const sequence = getSequence(state, { windowId });
   return {
     collection: collectionId && getManifestoInstance(state, { manifestId: collectionId }),
     config,
+    sequenceId: sequence && sequence.id,
+    sequences: getSequences(state, { windowId }),
     showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
-    variant: companionWindow.variant
-      || getDefaultSidebarVariant(state, { windowId }),
+    variant: companionWindow.variant || getDefaultSidebarVariant(state, { windowId }),
   };
 };
 
@@ -38,11 +42,12 @@ const mapStateToProps = (state, { id, windowId }) => {
  * @private
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
-  setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
   showMultipart: () => dispatch(
     actions.addOrUpdateCompanionWindow(windowId, { content: 'collection', position: 'right' }),
   ),
-  toggleDraggingEnabled: () => dispatch(actions.toggleDraggingEnabled()),
+  updateSequence: sequenceId => dispatch(
+    actions.updateWindow(windowId, { sequenceId }),
+  ),
   updateVariant: variant => dispatch(
     actions.updateCompanionWindow(windowId, id, { variant }),
   ),
@@ -53,6 +58,10 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
  * @param theme
  */
 const styles = theme => ({
+  break: {
+    flexBasis: '100%',
+    height: 0,
+  },
   collectionNavigationButton: {
     textTransform: 'none',
   },

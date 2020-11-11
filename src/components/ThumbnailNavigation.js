@@ -42,6 +42,27 @@ export class ThumbnailNavigation extends Component {
     }
   }
 
+  /** */
+  handleKeyUp(e) {
+    const { position } = this.props;
+    let nextKey = 'ArrowRight';
+    let previousKey = 'ArrowLeft';
+    if (position === 'far-right') {
+      nextKey = 'ArrowDown';
+      previousKey = 'ArrowUp';
+    }
+    switch (e.key) {
+      case nextKey:
+        this.nextCanvas();
+        break;
+      case previousKey:
+        this.previousCanvas();
+        break;
+      default:
+        break;
+    }
+  }
+
   /**
    * When on right, row height
    * When on bottom, column width
@@ -126,27 +147,6 @@ export class ThumbnailNavigation extends Component {
   itemCount() {
     const { canvasGroupings } = this.props;
     return canvasGroupings.length;
-  }
-
-  /** */
-  handleKeyUp(e) {
-    const { position } = this.props;
-    let nextKey = 'ArrowRight';
-    let previousKey = 'ArrowLeft';
-    if (position === 'far-right') {
-      nextKey = 'ArrowDown';
-      previousKey = 'ArrowUp';
-    }
-    switch (e.key) {
-      case nextKey:
-        this.nextCanvas();
-        break;
-      case previousKey:
-        this.previousCanvas();
-        break;
-      default:
-        break;
-    }
   }
 
   /**

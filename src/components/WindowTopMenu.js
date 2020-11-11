@@ -27,7 +27,8 @@ export class WindowTopMenu extends Component {
    */
   render() {
     const {
-      containerId, handleClose, anchorEl, toggleDraggingEnabled, windowId,
+      containerId, handleClose, anchorEl, showThumbnailNavigationSettings,
+      toggleDraggingEnabled, windowId,
     } = this.props;
 
     return (
@@ -51,7 +52,8 @@ export class WindowTopMenu extends Component {
         orientation="horizontal"
       >
         <WindowViewSettings windowId={windowId} handleClose={handleClose} />
-        <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />
+        {showThumbnailNavigationSettings
+          && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}
         <PluginHookWithHeader {...this.props} />
       </Menu>
     );
@@ -62,10 +64,12 @@ WindowTopMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   containerId: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
+  showThumbnailNavigationSettings: PropTypes.bool,
   toggleDraggingEnabled: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };
 
 WindowTopMenu.defaultProps = {
   anchorEl: null,
+  showThumbnailNavigationSettings: true,
 };

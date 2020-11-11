@@ -49,6 +49,19 @@ export class CanvasLayers extends Component {
   }
 
   /** */
+  handleOpacityChange(layerId, value) {
+    const {
+      canvasId, updateLayers, windowId,
+    } = this.props;
+
+    const payload = {
+      [layerId]: { opacity: value / 100.0 },
+    };
+
+    updateLayers(windowId, canvasId, payload);
+  }
+
+  /** */
   onDragEnd(result) {
     const {
       canvasId, layers, updateLayers, windowId,
@@ -96,19 +109,6 @@ export class CanvasLayers extends Component {
       acc[layer.id] = { index: sortedLayers.indexOf(layer.id) };
       return acc;
     }, {});
-
-    updateLayers(windowId, canvasId, payload);
-  }
-
-  /** */
-  handleOpacityChange(layerId, value) {
-    const {
-      canvasId, updateLayers, windowId,
-    } = this.props;
-
-    const payload = {
-      [layerId]: { opacity: value / 100.0 },
-    };
 
     updateLayers(windowId, canvasId, payload);
   }

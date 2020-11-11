@@ -23,16 +23,16 @@ export class WorkspaceExport extends Component {
     this.handleClose = this.handleClose.bind(this);
   }
 
-  /** Show the snackbar */
-  onCopy() {
-    this.setState({ copied: true });
-  }
-
   /** Handle closing after the content is copied and the snackbar is done */
   handleClose() {
     const { handleClose } = this.props;
 
     handleClose();
+  }
+
+  /** Show the snackbar */
+  onCopy() {
+    this.setState({ copied: true });
   }
 
   /**

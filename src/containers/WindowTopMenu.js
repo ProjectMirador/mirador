@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { WindowTopMenu } from '../components/WindowTopMenu';
-import { getContainerId } from '../state/selectors';
+import { getConfig, getContainerId } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -13,6 +13,7 @@ import { getContainerId } from '../state/selectors';
  */
 const mapStateToProps = state => ({
   containerId: getContainerId(state),
+  showThumbnailNavigationSettings: getConfig(state).thumbnailNavigation.displaySettings,
 });
 
 /**

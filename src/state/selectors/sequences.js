@@ -21,8 +21,6 @@ export const getSequences = createSelector(
     const sequences = [].concat(
       // v2: multi-sequence manifests, or v3: items
       manifest.getSequences(),
-      // v2: top ranges
-      v2TopRanges,
       // v3: all top-level ranges with behavior=sequence
       v3RangeSequences,
     );

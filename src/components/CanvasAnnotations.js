@@ -96,7 +96,7 @@ export class CanvasAnnotations extends Component {
                   <div>
                     {
                       annotation.tags.map(tag => (
-                        <Chip size="small" variant="outlined" label={tag} id={tag} className={classes.chip} />
+                        <Chip size="small" variant="outlined" label={tag} id={tag} className={classes.chip} key={tag.toString()} />
                       ))
                     }
                   </div>
