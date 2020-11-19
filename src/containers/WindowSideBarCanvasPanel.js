@@ -73,7 +73,7 @@ const styles = theme => ({
   },
   select: {
     '& .MuiSelect-icon': {
-      backgroundColor: 'white',
+      backgroundColor: theme.palette.background.paper,
     },
     '&:focus': {
       backgroundColor: theme.palette.background.paper,
@@ -81,7 +81,7 @@ const styles = theme => ({
   },
   selectEmpty: {
     '& .MuiSelect-icon': {
-      backgroundColor: 'white',
+      backgroundColor: theme.palette.background.paper,
     },
     backgroundColor: theme.palette.background.paper,
   },

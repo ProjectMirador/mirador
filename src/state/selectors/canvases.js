@@ -49,24 +49,23 @@ export const getCurrentCanvas = createSelector(
     getWindow,
   ],
   (sequence, window) => {
-    let canvas;
     if (!sequence || !window) return undefined;
 
     if (!window.canvasId && (typeof sequence.getCanvasByIndex == 'function')) {
-      canvas = sequence.getCanvasByIndex(0);
-    } else if (!window.canvasId) {
+      return sequence.getCanvasByIndex(0);
+    }
+
+    if (!window.canvasId) {
       const { items } = sequence;
       const [firstCanvas] = items;
-      canvas = firstCanvas;
+      return firstCanvas;
     }
 
     if (typeof sequence.getCanvasById == 'function') {
-      canvas = sequence.getCanvasById(window.canvasId);
-    } else if (sequence.items) {
-      canvas = sequence.items.filter(c => c.id === window.canvasId) || [];
+      return sequence.getCanvasById(window.canvasId);
     }
 
-    return canvas;
+    return sequence.items.filter(c => c.id === window.canvasId) || [];
   },
 );
 

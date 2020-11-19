@@ -18,8 +18,14 @@ export const getSequences = createSelector(
     if (v2TopRanges.length === 0 && topRangesOrRoot.length === 1) {
       v3RangeSequences = topRangesOrRoot[0].getRanges().filter(r => r.getBehavior() === 'sequence');
 
+      /**  Add manifesto canvases (items) to the ranges if 'items' property of ranges
+       *  is empty
+       */
       if (v3RangeSequences.length > 0 && manifest.items && manifest.items.length > 0
           && manifest.items[0].items && manifest.items[0].items.length > 0) {
+        /** Use manifesto canvases provided in manifest 'items' property to populate
+         * range 'items'/canvases
+        */
         const canvases = manifest.items[0].items;
 
         v3RangeSequences.map((sequence) => {
@@ -36,7 +42,10 @@ export const getSequences = createSelector(
       }
     }
 
-    // v3 sequence (not range sequence): assign id if not there
+    /** v3 sequence (not range sequence): assign id if not there
+     * Case: only sequence (not range) for v3 manifest is created by manifesto from all
+     * the items/canvases to display as default; this has id listed as undefined
+    */
     const manifestSequences = manifest.getSequences();
     if (v3RangeSequences && manifestSequences && manifestSequences.length > 0
        && !manifestSequences[0].id) {
