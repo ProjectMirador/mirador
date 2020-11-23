@@ -41,7 +41,7 @@ export class AttributionPanel extends Component {
           )}
           {
             rights && rights.length > 0 && (
-              <>
+              <dl className={ns('label-value-metadata')}>
                 <Typography variant="subtitle2" component="dt">{t('rights')}</Typography>
                 { rights.map(v => (
                   <Typography variant="body1" component="dd" key={v.toString()}>
@@ -50,7 +50,7 @@ export class AttributionPanel extends Component {
                     </Link>
                   </Typography>
                 )) }
-              </>
+              </dl>
             )
           }
         </div>
