@@ -73,7 +73,7 @@ export function* refetchInfoResponses({ serviceId }) {
 /** try to start any non-interactive auth flows */
 export function* doAuthWorkflow({ infoJson, windowId }) {
   const auths = yield select(getAuth);
-  const { auth: { serviceProfiles } } = yield select(getConfig);
+  const { auth: { serviceProfiles = [] } = {} } = yield select(getConfig);
   const nonInteractiveAuthFlowProfiles = serviceProfiles.filter(p => p.external || p.kiosk);
 
   // try to get an untried, non-interactive auth service

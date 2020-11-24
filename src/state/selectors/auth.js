@@ -10,7 +10,7 @@ export const getAuthProfiles = createSelector(
   [
     getConfig,
   ],
-  ({ auth: { serviceProfiles = [] } }) => serviceProfiles,
+  ({ auth: { serviceProfiles = [] } = {} }) => serviceProfiles,
 );
 
 /** */
