@@ -41,12 +41,12 @@ export class SearchPanelControls extends Component {
 
   /** */
   handleChange(event, value, reason) {
-    if (value) {
-      this.setState({
-        search: value,
-        suggestions: [],
-      });
+    this.setState({
+      search: value,
+      suggestions: [],
+    });
 
+    if (value) {
       this.fetchAutocomplete(value);
     }
   }
