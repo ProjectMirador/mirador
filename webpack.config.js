@@ -33,6 +33,7 @@ const baseConfig = mode => ({
   },
   output: {
     filename: 'mirador.min.js',
+    hashFunction: 'md5',
     library: 'Mirador',
     libraryExport: 'default',
     libraryTarget: 'umd',
