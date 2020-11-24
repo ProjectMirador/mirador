@@ -62,6 +62,13 @@ describe('GalleryView', () => {
     expect(focusOnCanvas).toHaveBeenCalled();
   });
 
+  it('sets the canvas if the user hits a key (non-space or non-enter) while on a canvas', () => {
+    const setCanvas = jest.fn();
+    wrapper = createWrapper({ selected: true, setCanvas });
+    wrapper.find('div[role="button"]').first().simulate('keyUp', { key: 'd' });
+    expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
+  });
+
   describe('on-demand annotation fetching', () => {
     it('fetches annotations', () => {
       const requestCanvasAnnotations = jest.fn();

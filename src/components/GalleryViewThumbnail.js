@@ -65,7 +65,7 @@ export class GalleryViewThumbnail extends Component {
     if (enterOrSpace) {
       focusOnCanvas();
     } else {
-      setCanvas(canvas.index, canvas.id);
+      setCanvas(canvas.id);
     }
   }
 
