@@ -41,6 +41,11 @@ export class SearchPanelControls extends Component {
 
   /** */
   handleChange(event, value, reason) {
+    // For some reason the value gets reset to an empty value from the
+    // useAutocomplete hook sometimes, we just ignore these cases
+    if (reason === 'reset' && !value) {
+      return;
+    }
     this.setState({
       search: value,
       suggestions: [],
@@ -121,6 +126,7 @@ export class SearchPanelControls extends Component {
             noOptionsText=""
             onChange={this.selectItem}
             onInputChange={this.handleChange}
+            freeSolo={true}
             renderInput={params => (
               <TextField
                 {...params}
