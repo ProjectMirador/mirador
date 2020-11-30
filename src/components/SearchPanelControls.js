@@ -2,12 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import deburr from 'lodash/deburr';
 import debounce from 'lodash/debounce';
+import isObject from 'lodash/isObject';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/SearchSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import SearchPanelNavigation from '../containers/SearchPanelNavigation';
+
+/** Sometimes an autocomplete match can be a simple string, other times an object
+    with a `match` property, this function abstracts that away */
+const getMatch = (option) => (isObject(option) ? option.match : option);
 
 /** */
 export class SearchPanelControls extends Component {
@@ -25,8 +30,7 @@ export class SearchPanelControls extends Component {
   }
 
   /**
-   * Set the component's local search state
-   * to blank when the query has been cleared
+   * Update the query in the component state if the query has changed in the redux store
    */
   componentDidUpdate(prevProps) {
     const { query } = this.props;
@@ -41,6 +45,11 @@ export class SearchPanelControls extends Component {
 
   /** */
   handleChange(event, value, reason) {
+    // For some reason the value gets reset to an empty value from the
+    // useAutocomplete hook sometimes, we just ignore these cases
+    if (reason === 'reset' && !value) {
+      return;
+    }
     this.setState({
       search: value,
       suggestions: [],
@@ -93,8 +102,8 @@ export class SearchPanelControls extends Component {
 
   /** */
   selectItem(_event, selectedItem, _reason) {
-    if (selectedItem && selectedItem.match) {
-      this.setState({ search: selectedItem.match }, this.submitSearch);
+    if (selectedItem && getMatch(selectedItem)) {
+      this.setState({ search: getMatch(selectedItem) }, this.submitSearch);
     }
   }
 
@@ -113,14 +122,15 @@ export class SearchPanelControls extends Component {
             id={id}
             inputValue={search}
             options={suggestions}
-            getOptionLabel={option => option.match}
+            getOptionLabel={getMatch}
             getOptionSelected={(option, value) => (
-              deburr(option.match.trim()).toLowerCase()
-                === deburr(value.match.trim()).toLowerCase()
+              deburr(getMatch(option).trim()).toLowerCase()
+                === deburr(getMatch(value).trim()).toLowerCase()
             )}
             noOptionsText=""
             onChange={this.selectItem}
             onInputChange={this.handleChange}
+            freeSolo
             renderInput={params => (
               <TextField
                 {...params}
