@@ -369,23 +369,5 @@ describe('IIIF Authentication sagas', () => {
         })
         .run();
     });
-
-    it('marks the auth service as failed if the auth token was not successfully used', () => {
-      const authId = 'authId';
-      const serviceId = 'serviceId';
-
-      return expectSaga(invalidateInvalidAuth, { serviceId })
-        .provide([
-          [select(getAccessTokens), { [serviceId]: { authId, id: serviceId } }],
-          [select(getAuth), { [authId]: { id: authId } }],
-        ])
-        .put({
-          id: authId,
-          ok: false,
-          tokenServiceId: serviceId,
-          type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST,
-        })
-        .run();
-    });
   });
 });

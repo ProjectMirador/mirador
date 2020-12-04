@@ -139,14 +139,6 @@ export function* invalidateInvalidAuth({ serviceId }) {
       authServiceId: authService.id,
       tokenServiceId: accessTokenService.id,
     }));
-  } else {
-    // if the token never worked, mark the auth service as bad so we could
-    // try to pick a different service
-    yield put(resolveAuthenticationRequest(
-      authService.id,
-      accessTokenService.id,
-      { ok: false },
-    ));
   }
 }
 
