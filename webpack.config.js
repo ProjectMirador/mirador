@@ -74,7 +74,10 @@ module.exports = (env, options) => {
   return {
     ...config,
     devServer: {
-      contentBase: './__tests__/integration/mirador',
+      contentBase: [
+        './__tests__/integration/mirador',
+        './__tests__/fixtures',
+      ],
       hot: true,
       port: 4444,
     },
