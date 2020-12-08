@@ -4,8 +4,6 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { CustomPanel } from '../components/CustomPanel';
-import {
-} from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
