@@ -10,7 +10,8 @@
   "sideEffects": false,
   "scripts": {
     "clean": "rm -rf ./dist",
-    "lint": "node_modules/.bin/eslint ./ && npm run lint:translations",
+    "lint": "node_modules/.bin/eslint ./ && npm run lint:translations && npm run lint:containers",
+    "lint:containers": "node ./scripts/container-lint.js",
     "lint:translations": "node ./scripts/i18n-lint.js",
     "server": "node_modules/.bin/http-server --cors",
     "test": "npm run build && npm run lint && npm run size && jest -c jest.json",
