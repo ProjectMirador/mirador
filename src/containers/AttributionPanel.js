@@ -46,7 +46,7 @@ const enhance = compose(
   withStyles(styles),
   withTranslation(),
   connect(mapStateToProps),
-  withPlugins('ManifestInfo'),
+  withPlugins('AttributionPanel'),
 );
 
 export default enhance(AttributionPanel);
