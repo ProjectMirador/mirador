@@ -6,11 +6,11 @@ export class AudioViewer extends Component {
   /* eslint-disable jsx-a11y/media-has-caption */
   /** */
   render() {
-    const { classes, audioResources } = this.props;
+    const { classes, audioOptions, audioResources } = this.props;
 
     return (
       <div className={classes.container}>
-        <audio controls className={classes.audio}>
+        <audio controls className={classes.audio} {...audioOptions}>
           {audioResources.map(audio => (
             <Fragment key={audio.id}>
               <source src={audio.id} type={audio.getFormat()} />
@@ -24,10 +24,12 @@ export class AudioViewer extends Component {
 }
 
 AudioViewer.propTypes = {
+  audioOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   audioResources: PropTypes.arrayOf(PropTypes.object),
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 AudioViewer.defaultProps = {
+  audioOptions: {},
   audioResources: [],
 };

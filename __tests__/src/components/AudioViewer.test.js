@@ -7,6 +7,7 @@ function createWrapper(props, suspenseFallback) {
   return shallow(
     <AudioViewer
       classes={{}}
+      audioOptions={{ crossOrigin: 'anonymous' }}
       {...props}
     />,
   );
@@ -24,6 +25,14 @@ describe('AudioViewer', () => {
       }, true);
       expect(wrapper.contains(<source src="1" type="video/mp4" />));
       expect(wrapper.contains(<source src="2" type="video/mp4" />));
+    });
+    it('passes through configurable options', () => {
+      wrapper = createWrapper({
+        audioResources: [
+          { getFormat: () => 'audio/mp3', id: 1 },
+        ],
+      }, true);
+      expect(wrapper.exists('audio[crossOrigin="anonymous"]')).toBe(true); // eslint-disable-line jsx-a11y/media-has-caption
     });
     it('captions', () => {
       wrapper = createWrapper({
