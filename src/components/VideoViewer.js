@@ -19,7 +19,7 @@ export class VideoViewer extends Component {
           ))}
           {captions.map(caption => (
             <Fragment key={caption.id}>
-              <track src={caption.id} label={caption.getLabel()} srcLang={caption.getProperty('language')} />
+              <track src={caption.id} label={caption.getDefaultLabel()} srcLang={caption.getProperty('language')} />
             </Fragment>
           ))}
         </video>

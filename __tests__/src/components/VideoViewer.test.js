@@ -37,8 +37,8 @@ describe('VideoViewer', () => {
     it('captions', () => {
       wrapper = createWrapper({
         captions: [
-          { getLabel: () => 'English', getProperty: () => 'en', id: 1 },
-          { getLabel: () => 'French', getProperty: () => 'fr', id: 2 },
+          { getDefaultLabel: () => 'English', getProperty: () => 'en', id: 1 },
+          { getDefaultLabel: () => 'French', getProperty: () => 'fr', id: 2 },
         ],
         videoResources: [
           { getFormat: () => 'video/mp4', id: 1 },

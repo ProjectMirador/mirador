@@ -40,8 +40,8 @@ describe('AudioViewer', () => {
           { getFormat: () => 'video/mp4', id: 1 },
         ],
         captions: [
-          { getLabel: () => 'English', getProperty: () => 'en', id: 1 },
-          { getLabel: () => 'French', getProperty: () => 'fr', id: 2 },
+          { getDefaultLabel: () => 'English', getProperty: () => 'en', id: 1 },
+          { getDefaultLabel: () => 'French', getProperty: () => 'fr', id: 2 },
         ],
       }, true);
       expect(wrapper.contains(<track src={1} label="English" srcLang="en" />)).toBe(true);
