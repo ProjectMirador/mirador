@@ -23,8 +23,8 @@ describe('AudioViewer', () => {
           { getFormat: () => 'video/mp4', id: 2 },
         ],
       }, true);
-      expect(wrapper.contains(<source src="1" type="video/mp4" />));
-      expect(wrapper.contains(<source src="2" type="video/mp4" />));
+      expect(wrapper.contains(<source src={1} type="video/mp4" />)).toBe(true);
+      expect(wrapper.contains(<source src={2} type="video/mp4" />)).toBe(true);
     });
     it('passes through configurable options', () => {
       wrapper = createWrapper({
@@ -44,8 +44,8 @@ describe('AudioViewer', () => {
           { getLabel: () => 'French', getProperty: () => 'fr', id: 2 },
         ],
       }, true);
-      expect(wrapper.contains(<track src="1" label="English" srcLang="en" />));
-      expect(wrapper.contains(<track src="2" label="French" srcLang="fr" />));
+      expect(wrapper.contains(<track src={1} label="English" srcLang="en" />)).toBe(true);
+      expect(wrapper.contains(<track src={2} label="French" srcLang="fr" />)).toBe(true);
     });
   });
 });
