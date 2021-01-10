@@ -204,3 +204,36 @@ export function hideCollectionDialog(windowId) {
     windowId,
   };
 }
+
+/** */
+export function setWindowCurrentTime(windowId, currentTime) {
+  return ((dispatch) => {
+    dispatch({
+      currentTime,
+      type: ActionTypes.SET_CURRENT_TIME,
+      windowId,
+    });
+  });
+}
+
+/** */
+export function setWindowPaused(windowId, paused) {
+  return ((dispatch) => {
+    dispatch({
+      paused: (paused === undefined) ? true : paused,
+      type: ActionTypes.SET_VIDEO_PAUSED,
+      windowId,
+    });
+  });
+}
+
+/** */
+export function setWindowMuted(windowId, muted) {
+  return ((dispatch) => {
+    dispatch({
+      muted: (muted === undefined) ? false : muted,
+      type: ActionTypes.SET_VIDEO_MUTED,
+      windowId,
+    });
+  });
+}

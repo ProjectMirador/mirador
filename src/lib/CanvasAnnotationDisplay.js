@@ -5,7 +5,7 @@
 export default class CanvasAnnotationDisplay {
   /** */
   constructor({
-    resource, palette, zoomRatio, offset, selected, hovered,
+    resource, palette, zoomRatio, offset, selected, hovered, imageSource, canvasSize,
   }) {
     this.resource = resource;
     this.palette = palette;
@@ -13,6 +13,8 @@ export default class CanvasAnnotationDisplay {
     this.offset = offset;
     this.selected = selected;
     this.hovered = hovered;
+    this.imageSource = imageSource;
+    this.canvasSize = canvasSize;
   }
 
   /** */
@@ -104,7 +106,8 @@ export default class CanvasAnnotationDisplay {
 
   /** */
   fragmentContext() {
-    const fragment = this.resource.fragmentSelector;
+    const fragment = this.resource.fragmentSelector || this.canvasSize;
+    if (!fragment) { return; }
     fragment[0] += this.offset.x;
     fragment[1] += this.offset.y;
 
@@ -129,6 +132,10 @@ export default class CanvasAnnotationDisplay {
     } else {
       this.context.lineWidth = 1 / this.zoomRatio;
       this.context.strokeRect(...fragment);
+    }
+
+    if (this.imageSource) {
+      this.context.drawImage(this.imageSource, ...fragment);
     }
 
     this.context.restore();

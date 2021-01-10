@@ -75,6 +75,7 @@ export const windowsReducer = (state = {}, action) => {
         {
           ...(orig || {}),
           canvasId: action.canvasId,
+          currentTime: 0,
           visibleCanvases: action.visibleCanvases || [],
         }), state);
     case ActionTypes.ADD_COMPANION_WINDOW:
@@ -166,6 +167,30 @@ export const windowsReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           collectionDialogOn: false,
+        },
+      };
+    case ActionTypes.SET_CURRENT_TIME:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          currentTime: action.currentTime,
+        },
+      };
+    case ActionTypes.SET_VIDEO_PAUSED:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          paused: !!action.paused,
+        },
+      };
+    case ActionTypes.SET_VIDEO_MUTED:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          muted: !!action.muted,
         },
       };
     default:

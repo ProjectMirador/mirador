@@ -27,7 +27,7 @@ export default class AnnotationItem {
     const target = this.target[0];
     switch (typeof target) {
       case 'string':
-        return target.replace(/#?xywh=(.*)$/, '');
+        return target.replace(/#(.*)$/, '');
       case 'object':
         return (target.source && target.source.id) || target.source || target.id;
       default:
@@ -106,16 +106,50 @@ export default class AnnotationItem {
 
     switch (typeof selector) {
       case 'string':
-        match = selector.match(/xywh=(.*)$/);
+        match = selector.match(/xywh=(.*?)(&|$)/);
         break;
       case 'object':
         fragmentSelector = selector.find(s => s.type && s.type === 'FragmentSelector');
-        match = fragmentSelector && fragmentSelector.value.match(/xywh=(.*)$/);
+        match = fragmentSelector && fragmentSelector.value.match(/xywh=(.*?)(&|$)/);
         break;
       default:
         return null;
     }
 
-    return match && match[1].split(',').map(str => parseInt(str, 10));
+    if (match) {
+      const params = match[1].split(',');
+      if (params.length === 4) {
+        return params.map(str => parseInt(str, 10));
+      }
+    }
+    return null;
+  }
+
+  /** */
+  get temporalfragmentSelector() {
+    const { selector } = this;
+
+    let match;
+    let temporalfragmentSelector;
+
+    switch (typeof selector) {
+      case 'string':
+        match = selector.match(/t=(.*?)(&|$)/);
+        break;
+      case 'object':
+        temporalfragmentSelector = selector.find(s => s.type && s.type === 'FragmentSelector');
+        match = temporalfragmentSelector && temporalfragmentSelector.value.match(/t=(.*?)(&|$)/);
+        break;
+      default:
+        return null;
+    }
+
+    if (match) {
+      const params = match[1].split(',');
+      if (params.length < 3) {
+        return params.map(str => parseFloat(str));
+      }
+    }
+    return null;
   }
 }

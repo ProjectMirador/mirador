@@ -1,3 +1,23 @@
+## Mirador with support for displaying annotations on videos
+
+### Project
+https://dh.l.u-tokyo.ac.jp/activity/iiif/video-annotation
+
+### Demo
+- https://dzkimgs.l.u-tokyo.ac.jp/videos/m3/cat_video.html
+- https://dzkimgs.l.u-tokyo.ac.jp/videos/m3/video.html
+
+### Manifest Sample
+- https://dzkimgs.l.u-tokyo.ac.jp/videos/cat2020/manifest.json
+- https://dzkimgs.l.u-tokyo.ac.jp/videos/iiif_in_japan_2017/manifest.json
+
+### Prebuilt
+https://dzkimgs.l.u-tokyo.ac.jp/videos/m3/mirador.min.js
+
+### License
+This project is dual-licensed under the Apache License 2.0 and the MIT license. See [LICENSE](LICENSE) for details.
+
+---
 *NOTE: This README reflects the latest version of Mirador, Mirador 3. For previous versions, please reference that release's README directly. Latest 2.x release: [v.2.7.0](https://github.com/ProjectMirador/mirador/tree/v2.7.0)*
 # Mirador
 ![Node.js CI](https://github.com/ProjectMirador/mirador/workflows/Node.js%20CI/badge.svg) [![codecov](https://codecov.io/gh/ProjectMirador/mirador/branch/master/graph/badge.svg)](https://codecov.io/gh/ProjectMirador/mirador) 
