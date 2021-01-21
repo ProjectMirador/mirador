@@ -42,15 +42,16 @@ export const getSequences = createSelector(
       }
     }
 
-    /** v3 sequence (not range sequence): assign id if not there
-     * Case: only sequence (not range) for v3 manifest is created by manifesto from all
-     * the items/canvases to display as default; this has id listed as undefined
-    */
-    const manifestSequences = manifest.getSequences();
-    if (v3RangeSequences && manifestSequences && manifestSequences.length > 0
-       && !manifestSequences[0].id) {
-      manifestSequences[0].id = uuid();
-    }
+      /** v3 sequence (not range sequence): assign id if not there
+       * Case: only sequence (not range) for v3 manifest is created by manifesto from all
+       * the items/canvases to display as default; this has id listed as undefined
+      */
+      const manifestSequences = manifest.getSequences();
+      if (v3RangeSequences && manifestSequences && manifestSequences.length > 0
+        && !manifestSequences[0].id) {
+          manifestSequences[0].id = uuid();
+          manifestSequences[0].label = 'Table of Contents';
+        }
 
     const sequences = [].concat(
       // v2: multi-sequence manifests, or v3: items
@@ -91,17 +92,14 @@ export const getCanvasIndex = createSelector(
     getSequence,
   ],
   (window, sequence) => {
-    let canvas;
-
+    let canvas = {};
+  
     if (sequence && window && window.canvasId
-      && typeof sequence.getCanvasById == 'function') {
+      && typeof sequence.getCanvasById === 'function') {
       canvas = sequence.getCanvasById(window.canvasId);
-    } else {
-      canvas = {};
     }
-
     return canvas.index || 0;
-  },
+   },
 );
 
 /**
