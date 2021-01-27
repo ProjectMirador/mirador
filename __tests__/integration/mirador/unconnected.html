@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">    
+    <title>Mirador</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <style>
+        #removeButton {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            z-index: 9000;
+            padding: 16px;
+            background: tomato;
+        }
+    </style>
+  </head>
+  <body>
+    <button id="removeButton">Remove mount element</button>
+    <script src="../../../dist/mirador.min.js"></script>
+    <script>
+        var manifestId = 'https://data.ucd.ie/api/img/manifests/ucdlib:33064'
+        var mountElement = document.createElement('div')
+        mountElement.id = 'mountElement'
+
+        // Instantiate Mirador passing the mount element directly rather then the elements id.
+        mirador = Mirador.viewer({}, { mountElement: mountElement })
+        
+        // Perform actions while the mount element is still unconnected.
+        mirador.store.dispatch(
+            Mirador.actions.addWindow(
+                { id: 'win-1', manifestId: manifestId }))
+        
+        // Connect the mount element to the DOM to render the viewer.
+        document.body.append(mountElement)
+
+        document.getElementById('removeButton').onclick = function() {
+            // Remove the mount element.
+            // This results in dangling <style> elements under <head>
+            document.body.remove(mountElement)
+
+            // Unmount Mirador while the mount element is already disconnected from DOM.
+            // This should remove the dangling <style> elements under <head>
+            mirador.unmount()
+        }
+    </script>    
+  </body>
+</html>

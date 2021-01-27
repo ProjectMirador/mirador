@@ -20,6 +20,7 @@ class MiradorViewer {
    */
   constructor(config, viewerConfig = {}) {
     this.config = config;
+    this.mountElement = viewerConfig.mountElement;
     this.plugins = filterValidPlugins(viewerConfig.plugins || []);
     this.store = viewerConfig.store
       || createStore(getReducersFromPlugins(this.plugins), getSagasFromPlugins(this.plugins));
@@ -29,7 +30,7 @@ class MiradorViewer {
       <Provider store={this.store}>
         <HotApp plugins={this.plugins} />
       </Provider>,
-      document.getElementById(config.id),
+      this.mountElement || document.getElementById(config.id),
     );
   }
 
@@ -48,7 +49,7 @@ class MiradorViewer {
    * Cleanup method to unmount Mirador from the dom
    */
   unmount() {
-    ReactDOM.unmountComponentAtNode(document.getElementById(this.config.id));
+    ReactDOM.unmountComponentAtNode(this.mountElement || document.getElementById(this.config.id));
   }
 }
 
