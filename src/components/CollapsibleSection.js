@@ -49,7 +49,7 @@ export class CollapsibleSection extends Component {
             aria-label={
               t(
                 open ? 'collapseSection' : 'expandSection',
-                { section: label.toLowerCase() },
+                { section: label },
               )
             }
             aria-expanded={open}
