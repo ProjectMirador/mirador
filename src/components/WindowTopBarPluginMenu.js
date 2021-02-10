@@ -56,6 +56,7 @@ export class WindowTopBarPluginMenu extends Component {
     return (
       <>
         <MiradorMenuButton
+          aria-expanded={!!anchorEl}
           aria-haspopup="true"
           aria-label={t('windowPluginMenu')}
           aria-owns={open ? windowPluginMenuId : undefined}

@@ -47,6 +47,7 @@ export class WindowTopBar extends Component {
             {allowWindowSideBar && (
               <MiradorMenuButton
                 aria-expanded={sideBarOpen}
+                aria-haspopup
                 aria-label={sideBarOpen ? t('hideWindowSideBar') : t('showWindowSideBar')}
                 onClick={toggleWindowSideBar}
                 className={ns('window-menu-btn')}
