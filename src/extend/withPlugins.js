@@ -43,7 +43,8 @@ function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-u
       );
     };
 
-    return plugins.wrap.reverse().reduce(pluginWrapper, <TargetComponent {...passDownProps} />);
+    return plugins.wrap.slice().reverse()
+      .reduce(pluginWrapper, <TargetComponent {...passDownProps} />);
   }
   const whatever = React.forwardRef(PluginHoc);
 
