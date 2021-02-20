@@ -12,6 +12,7 @@ import ptBr from './locales/ptBr/translation.json';
 import it from './locales/it/translation.json';
 import sr from './locales/sr/translation.json';
 import lt from './locales/lt/translation.json';
+import vi from './locales/vi/translation.json';
 
 export default () => {
   // Load translations for each language
@@ -26,6 +27,7 @@ export default () => {
     nl,
     'pt-BR': ptBr,
     sr,
+	  vi,
     'zh-CN': zhCn,
     'zh-TW': zhTw,
   };
