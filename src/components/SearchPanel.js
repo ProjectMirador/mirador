@@ -39,7 +39,7 @@ export class SearchPanel extends Component {
             {
               query && query !== '' && (
                 <Chip
-                  ariaLabel={t('clearSearchAria')}
+                  aria-label={t('clearSearchAria')}
                   className={classes.clearChip}
                   color="secondary"
                   label={t('clearSearch')}
