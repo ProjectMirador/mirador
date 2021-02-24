@@ -27,7 +27,7 @@ export default () => {
     nl,
     'pt-BR': ptBr,
     sr,
-	  vi,
+    vi,
     'zh-CN': zhCn,
     'zh-TW': zhTw,
   };
