@@ -106,6 +106,7 @@
     "previousCanvas": "Vorheriges Objekt",
     "related": "Verwandtes",
     "resource": "Ressource",
+    "resultsRemaining": "{{numLeft}} übrig",
     "retry": "Erneut versuchen",
     "right": "Rechts",
     "rights": "Lizenz",

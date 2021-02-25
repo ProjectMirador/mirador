@@ -109,6 +109,7 @@
     "previousCanvas": "Previous item",
     "related": "Related",
     "resource": "Resource",
+    "resultsRemaining": "{{numLeft}} remaining",
     "retry": "Retry",
     "right": "Right",
     "rights": "License",

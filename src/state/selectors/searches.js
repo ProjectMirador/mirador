@@ -57,6 +57,22 @@ export const getSearchIsFetching = createSelector(
   results => results.some(result => result.isFetching),
 );
 
+export const getSearchNumTotal = createSelector(
+  [
+    getSearchForCompanionWindow,
+  ],
+  (results) => {
+    if (!results || !results.data) return undefined;
+
+    const resultWithWithin = Object.values(results.data).find(result => (
+      !result.isFetching
+        && result.json
+        && result.json.within
+    ));
+    return resultWithWithin?.json?.within?.total;
+  },
+);
+
 export const getNextSearchId = createSelector(
   [
     getSearchForCompanionWindow,

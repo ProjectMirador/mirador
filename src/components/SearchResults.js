@@ -89,6 +89,7 @@ export class SearchResults extends Component {
       query,
       searchAnnotations,
       searchHits,
+      searchNumTotal,
       t,
       windowId,
     } = this.props;
@@ -122,8 +123,14 @@ export class SearchResults extends Component {
           </LiveMessenger>
         </List>
         { nextSearch && (
-          <Button color="secondary" onClick={() => fetchSearch(windowId, companionWindowId, nextSearch, query)}>
+          <Button
+            className={classes.moreButton}
+            color="secondary"
+            onClick={() => fetchSearch(windowId, companionWindowId, nextSearch, query)}
+          >
             {t('moreResults')}
+            <br />
+            {`(${t('resultsRemaining', { numLeft: searchNumTotal - searchHits.length })})`}
           </Button>
         )}
       </>
@@ -144,6 +151,7 @@ SearchResults.propTypes = {
   query: PropTypes.string,
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),
   searchHits: PropTypes.arrayOf(PropTypes.object),
+  searchNumTotal: PropTypes.number,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
@@ -156,5 +164,6 @@ SearchResults.defaultProps = {
   query: undefined,
   searchAnnotations: [],
   searchHits: [],
+  searchNumTotal: undefined,
   t: k => k,
 };
