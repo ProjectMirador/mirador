@@ -130,7 +130,7 @@ export class SearchResults extends Component {
           >
             {t('moreResults')}
             <br />
-            {`(${t('resultsRemaining', { numLeft: searchNumTotal - searchHits.length })})`}
+            {`(${t('searchResultsRemaining', { numLeft: searchNumTotal - searchHits.length })})`}
           </Button>
         )}
       </>
