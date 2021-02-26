@@ -268,6 +268,7 @@ export default {
     highlightAllAnnotations: false, // Configure whether to display annotations on the canvas by default
     showLocalePicker: false, // Configure locale picker for multi-lingual metadata
     sideBarOpen: false, // Configure if the sidebar (and its content panel) is open by default
+    switchCanvasOnSearch: true, // Configure if Mirador should automatically switch to the canvas of the first search result
     panels: { // Configure which panels are visible in WindowSideBarButtons
       info: true,
       attribution: true,
