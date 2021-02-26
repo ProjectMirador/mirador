@@ -49,9 +49,9 @@ export class SearchPanelNavigation extends Component {
 
     const currentHitIndex = searchHits
       .findIndex(val => val.annotations.includes(selectedContentSearchAnnotation[0]));
-    let lengthText = searchHits.length;
+    let totalLengthText = searchHits.length;
     if (searchHits.length < numTotal) {
-      lengthText += '+';
+      totalLengthText += '+';
     }
     return (
       <>
@@ -65,7 +65,7 @@ export class SearchPanelNavigation extends Component {
               <ChevronLeftIcon style={iconStyle} />
             </MiradorMenuButton>
             <span style={{ unicodeBidi: 'plaintext' }}>
-              {t('pagination', { current: currentHitIndex + 1, total: lengthText })}
+              {t('pagination', { current: currentHitIndex + 1, total: totalLengthText })}
             </span>
             <MiradorMenuButton
               aria-label={t('searchNextResult')}
