@@ -77,7 +77,7 @@ class ThumbnailFactory {
     const minDimension = 120;
     let maxHeight = minDimension;
     let maxWidth = minDimension;
-    const { maxHeight: requestedMaxHeight, maxWidth: requestedMaxWidth } = this.iiifOpts;
+    const { maxHeight: requestedMaxHeight, maxWidth: requestedMaxWidth, tileFormat } = this.iiifOpts;
 
     if (requestedMaxHeight) maxHeight = Math.max(requestedMaxHeight, minDimension);
     if (requestedMaxWidth) maxWidth = Math.max(requestedMaxWidth, minDimension);
@@ -176,7 +176,7 @@ class ThumbnailFactory {
     const region = 'full';
     const quality = Utils.getImageQuality(service.getProfile());
     const id = service.id.replace(/\/+$/, '');
-    const format = 'jpg';
+    const format = tileFormat;
     return {
       height,
       url: [id, region, size, 0, `${quality}.${format}`].join('/'),

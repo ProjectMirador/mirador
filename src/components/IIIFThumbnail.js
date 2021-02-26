@@ -34,12 +34,13 @@ export class IIIFThumbnail extends Component {
 
   /** */
   componentDidUpdate(prevProps) {
-    const { maxHeight, maxWidth, resource } = this.props;
+    const { maxHeight, maxWidth, resource, tileFormat } = this.props;
 
     if (
       prevProps.maxHeight !== maxHeight
       || prevProps.maxWidth !== maxWidth
-      || prevProps.resource !== resource) {
+      || prevProps.resource !== resource
+      || prevProps.tileFormat !== tileFormat) {
         this.setState(state => ({ ...state, image: this.image() })); // eslint-disable-line
     }
   }
@@ -109,12 +110,12 @@ export class IIIFThumbnail extends Component {
   /** */
   image() {
     const {
-      thumbnail, resource, maxHeight, maxWidth,
+      thumbnail, resource, maxHeight, maxWidth, tileFormat
     } = this.props;
 
     if (thumbnail) return thumbnail;
 
-    const image = getThumbnail(resource, { maxHeight, maxWidth });
+    const image = getThumbnail(resource, { maxHeight, maxWidth, tileFormat });
 
     if (image && image.url) return image;
 
@@ -176,6 +177,7 @@ IIIFThumbnail.propTypes = {
   labelled: PropTypes.bool,
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
+  tileFormat: PropTypes.string,
   resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   thumbnail: PropTypes.shape({
@@ -195,6 +197,7 @@ IIIFThumbnail.defaultProps = {
   labelled: false,
   maxHeight: null,
   maxWidth: null,
+  tileFormat: "webp",
   style: {},
   thumbnail: null,
   variant: null,
