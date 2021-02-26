@@ -233,6 +233,13 @@ export var OpenSeadragonViewer = /*#__PURE__*/function (_Component) {
       var _this$props4 = this.props,
           nonTiledImages = _this$props4.nonTiledImages,
           infoResponses = _this$props4.infoResponses;
+
+      if (this.props.tileFormat) {
+        infoResponses.forEach(function (response) {
+          response.json.tileFormat = _this3.props.tileFormat;
+        });
+      }
+
       Promise.all(infoResponses.map(function (infoResponse) {
         return _this3.addTileSource(infoResponse);
       }), nonTiledImages.map(function (image) {

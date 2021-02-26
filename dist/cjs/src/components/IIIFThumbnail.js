@@ -7,6 +7,10 @@ exports.IIIFThumbnail = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _redux = require("redux");
+
+var _reactRedux = require("react-redux");
+
 require("intersection-observer");
 
 var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
@@ -16,6 +20,8 @@ var _reactIntersectionObserver = _interopRequireDefault(require("@researchgate/r
 var _classnames = _interopRequireDefault(require("classnames"));
 
 var _ThumbnailFactory = _interopRequireDefault(require("../lib/ThumbnailFactory"));
+
+var _selectors = require("../state/selectors");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -65,6 +71,7 @@ var IIIFThumbnail = /*#__PURE__*/function (_Component) {
     _classCallCheck(this, IIIFThumbnail);
 
     _this = _super.call(this, props);
+    console.log('>>>>', props);
     _this.state = {
       loaded: false
     };
@@ -95,9 +102,10 @@ var IIIFThumbnail = /*#__PURE__*/function (_Component) {
       var _this$props = this.props,
           maxHeight = _this$props.maxHeight,
           maxWidth = _this$props.maxWidth,
-          resource = _this$props.resource;
+          resource = _this$props.resource,
+          tileFormat = _this$props.tileFormat;
 
-      if (prevProps.maxHeight !== maxHeight || prevProps.maxWidth !== maxWidth || prevProps.resource !== resource) {
+      if (prevProps.maxHeight !== maxHeight || prevProps.maxWidth !== maxWidth || prevProps.resource !== resource || prevProps.tileFormat !== tileFormat) {
         this.setState(function (state) {
           return _objectSpread(_objectSpread({}, state), {}, {
             image: _this3.image()
@@ -184,11 +192,13 @@ var IIIFThumbnail = /*#__PURE__*/function (_Component) {
           thumbnail = _this$props3.thumbnail,
           resource = _this$props3.resource,
           maxHeight = _this$props3.maxHeight,
-          maxWidth = _this$props3.maxWidth;
+          maxWidth = _this$props3.maxWidth,
+          tileFormat = _this$props3.tileFormat;
       if (thumbnail) return thumbnail;
       var image = (0, _ThumbnailFactory["default"])(resource, {
         maxHeight: maxHeight,
-        maxWidth: maxWidth
+        maxWidth: maxWidth,
+        tileFormat: tileFormat
       });
       if (image && image.url) return image;
       return undefined;
@@ -255,7 +265,6 @@ var IIIFThumbnail = /*#__PURE__*/function (_Component) {
   return IIIFThumbnail;
 }(_react.Component);
 
-exports.IIIFThumbnail = IIIFThumbnail;
 IIIFThumbnail.defaultProps = {
   children: null,
   classes: {},
@@ -265,7 +274,19 @@ IIIFThumbnail.defaultProps = {
   labelled: false,
   maxHeight: null,
   maxWidth: null,
+  tileFormat: undefined,
   style: {},
   thumbnail: null,
   variant: null
 };
+/**
+ * @private
+ */
+
+var addTileFormatToProps = (0, _redux.compose)((0, _reactRedux.connect)(function (state) {
+  return {
+    tileFormat: (0, _selectors.getConfig)(state).tileFormat
+  };
+}));
+var IIIFThumbnailWithStateProps = addTileFormatToProps(IIIFThumbnail);
+exports.IIIFThumbnail = IIIFThumbnailWithStateProps;

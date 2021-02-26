@@ -86,7 +86,8 @@ var ThumbnailFactory = /*#__PURE__*/function () {
       var maxWidth = minDimension;
       var _this$iiifOpts = this.iiifOpts,
           requestedMaxHeight = _this$iiifOpts.maxHeight,
-          requestedMaxWidth = _this$iiifOpts.maxWidth;
+          requestedMaxWidth = _this$iiifOpts.maxWidth,
+          tileFormat = _this$iiifOpts.tileFormat;
       if (requestedMaxHeight) maxHeight = Math.max(requestedMaxHeight, minDimension);
       if (requestedMaxWidth) maxWidth = Math.max(requestedMaxWidth, minDimension);
       var service = iiifImageService(resource);
@@ -167,7 +168,7 @@ var ThumbnailFactory = /*#__PURE__*/function () {
       var region = 'full';
       var quality = Utils.getImageQuality(service.getProfile());
       var id = service.id.replace(/\/+$/, '');
-      var format = 'jpg';
+      var format = tileFormat;
       return {
         height: height,
         url: [id, region, size, 0, "".concat(quality, ".").concat(format)].join('/'),

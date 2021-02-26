@@ -25,17 +25,20 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 import React, { Component } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import 'intersection-observer'; // polyfill needed for Safari
 
 import Typography from '@material-ui/core/Typography';
 import IntersectionObserver from '@researchgate/react-intersection-observer';
 import classNames from 'classnames';
 import getThumbnail from '../lib/ThumbnailFactory';
+import { getConfig } from '../state/selectors';
 /**
  * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
  */
 
-export var IIIFThumbnail = /*#__PURE__*/function (_Component) {
+var IIIFThumbnail = /*#__PURE__*/function (_Component) {
   _inherits(IIIFThumbnail, _Component);
 
   var _super = _createSuper(IIIFThumbnail);
@@ -48,6 +51,7 @@ export var IIIFThumbnail = /*#__PURE__*/function (_Component) {
     _classCallCheck(this, IIIFThumbnail);
 
     _this = _super.call(this, props);
+    console.log('>>>>', props);
     _this.state = {
       loaded: false
     };
@@ -78,9 +82,10 @@ export var IIIFThumbnail = /*#__PURE__*/function (_Component) {
       var _this$props = this.props,
           maxHeight = _this$props.maxHeight,
           maxWidth = _this$props.maxWidth,
-          resource = _this$props.resource;
+          resource = _this$props.resource,
+          tileFormat = _this$props.tileFormat;
 
-      if (prevProps.maxHeight !== maxHeight || prevProps.maxWidth !== maxWidth || prevProps.resource !== resource) {
+      if (prevProps.maxHeight !== maxHeight || prevProps.maxWidth !== maxWidth || prevProps.resource !== resource || prevProps.tileFormat !== tileFormat) {
         this.setState(function (state) {
           return _objectSpread(_objectSpread({}, state), {}, {
             image: _this3.image()
@@ -167,11 +172,13 @@ export var IIIFThumbnail = /*#__PURE__*/function (_Component) {
           thumbnail = _this$props3.thumbnail,
           resource = _this$props3.resource,
           maxHeight = _this$props3.maxHeight,
-          maxWidth = _this$props3.maxWidth;
+          maxWidth = _this$props3.maxWidth,
+          tileFormat = _this$props3.tileFormat;
       if (thumbnail) return thumbnail;
       var image = getThumbnail(resource, {
         maxHeight: maxHeight,
-        maxWidth: maxWidth
+        maxWidth: maxWidth,
+        tileFormat: tileFormat
       });
       if (image && image.url) return image;
       return undefined;
@@ -237,6 +244,7 @@ export var IIIFThumbnail = /*#__PURE__*/function (_Component) {
 
   return IIIFThumbnail;
 }(Component);
+
 IIIFThumbnail.defaultProps = {
   children: null,
   classes: {},
@@ -246,7 +254,19 @@ IIIFThumbnail.defaultProps = {
   labelled: false,
   maxHeight: null,
   maxWidth: null,
+  tileFormat: undefined,
   style: {},
   thumbnail: null,
   variant: null
 };
+/**
+ * @private
+ */
+
+var addTileFormatToProps = compose(connect(function (state) {
+  return {
+    tileFormat: getConfig(state).tileFormat
+  };
+}));
+var IIIFThumbnailWithStateProps = addTileFormatToProps(IIIFThumbnail);
+export { IIIFThumbnailWithStateProps as IIIFThumbnail };

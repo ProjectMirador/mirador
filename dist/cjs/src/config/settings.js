@@ -413,6 +413,7 @@ var _default = {
     preserveViewport: true,
     showNavigationControl: false
   },
+  tileFormat: "webp",
   "export": {
     catalog: true,
     companionWindows: true,
