@@ -117,6 +117,7 @@
     "searchNextResult": "Next result",
     "searchNoResults": "No results found",
     "searchPreviousResult": "Previous result",
+    "searchResultsRemaining": "{{numLeft}} remaining",
     "searchSubmitAria": "Submit search",
     "searchTitle": "Search",
     "selectWorkspaceMenu": "Select workspace type",

@@ -114,6 +114,7 @@
     "searchNextResult": "Nächster Treffer",
     "searchNoResults": "Keine Treffer",
     "searchPreviousResult": "Vorheriger Treffer",
+    "searchResultsRemaining": "{{numLeft}} weitere",
     "searchSubmitAria": "Suchen",
     "searchTitle": "Suche",
     "selectWorkspaceMenu": "Wählen Sie einen Arbeitsflächentyp",
