@@ -167,6 +167,15 @@ export class OpenSeadragonViewer extends Component {
   /** */
   addAllImageSources(zoomAfterAdd = true) {
     const { nonTiledImages, infoResponses } = this.props;
+    
+
+    if( this.props.osdConfig.tileFormat ){
+      infoResponses.forEach( response => {
+        response.json.tileFormat = this.props.osdConfig.tileFormat
+      })
+    }
+    console.log(this.props , infoResponses)
+
     Promise.all(
       infoResponses.map(infoResponse => this.addTileSource(infoResponse)),
       nonTiledImages.map(image => this.addNonTiledImage(image)),
