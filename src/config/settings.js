@@ -329,8 +329,8 @@ export default {
     preserveImageSizeOnResize: true,
     preserveViewport: true,
     showNavigationControl: false,
-    tileFormat:"webp"
   },
+  tileFormat:"webp",
   export: {
     catalog: true,
     companionWindows: true,

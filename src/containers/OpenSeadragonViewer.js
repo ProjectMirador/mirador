@@ -42,6 +42,7 @@ const mapStateToProps = (state, { windowId }) => {
     }),
     nonTiledImages: getVisibleCanvasNonTiledResources(state, { windowId }),
     osdConfig: getConfig(state).osdConfig,
+    tileFormat: getConfig(state).tileFormat,
     viewerConfig: getViewer(state, { windowId }),
   };
 };

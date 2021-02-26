@@ -20,6 +20,7 @@ export class OpenSeadragonViewer extends Component {
    */
   constructor(props) {
     super(props);
+    
 
     this.state = { viewer: undefined };
     this.ref = React.createRef();
@@ -169,12 +170,11 @@ export class OpenSeadragonViewer extends Component {
     const { nonTiledImages, infoResponses } = this.props;
     
 
-    if( this.props.osdConfig.tileFormat ){
+    if( this.props.tileFormat ){
       infoResponses.forEach( response => {
-        response.json.tileFormat = this.props.osdConfig.tileFormat
+        response.json.tileFormat = this.props.tileFormat
       })
     }
-    console.log(this.props , infoResponses)
 
     Promise.all(
       infoResponses.map(infoResponse => this.addTileSource(infoResponse)),

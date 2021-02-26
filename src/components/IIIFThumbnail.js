@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import 'intersection-observer'; // polyfill needed for Safari
 import Typography from '@material-ui/core/Typography';
 import IntersectionObserver from '@researchgate/react-intersection-observer';
 import classNames from 'classnames';
 import getThumbnail from '../lib/ThumbnailFactory';
+import {
+  getConfig,
+} from '../state/selectors';
 
 /**
  * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
  */
-export class IIIFThumbnail extends Component {
+class IIIFThumbnail extends Component {
   /** */
   static getUseableLabel(resource, index) {
     return (resource
@@ -23,6 +28,7 @@ export class IIIFThumbnail extends Component {
    */
   constructor(props) {
     super(props);
+    console.log('>>>>', props)
     this.state = { loaded: false };
     this.handleIntersection = this.handleIntersection.bind(this);
   }
@@ -197,8 +203,24 @@ IIIFThumbnail.defaultProps = {
   labelled: false,
   maxHeight: null,
   maxWidth: null,
-  tileFormat: "webp",
+  tileFormat: undefined,
   style: {},
   thumbnail: null,
   variant: null,
 };
+
+
+/**
+ * @private
+ */
+const addTileFormatToProps = compose(
+  connect((state) => {
+    return {
+      tileFormat: getConfig(state).tileFormat,
+    };
+  })
+);
+
+const IIIFThumbnailWithStateProps = addTileFormatToProps(IIIFThumbnail);
+
+export { IIIFThumbnailWithStateProps as IIIFThumbnail }
