@@ -1,0 +1,46 @@
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
+import { withPlugins } from '../extend/withPlugins';
+import { GalleryView } from '../components/GalleryView';
+import { getCanvases, getSequenceViewingDirection } from '../state/selectors';
+/**
+ * mapStateToProps - to hook up connect
+ * @memberof WindowViewer
+ * @private
+ */
+
+var mapStateToProps = function mapStateToProps(state, _ref) {
+  var windowId = _ref.windowId;
+  return {
+    canvases: getCanvases(state, {
+      windowId: windowId
+    }),
+    viewingDirection: getSequenceViewingDirection(state, {
+      windowId: windowId
+    })
+  };
+};
+/**
+ * Styles to be passed to the withStyles HOC
+ */
+
+
+var styles = function styles(theme) {
+  return {
+    galleryContainer: {
+      alignItems: 'flex-start',
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      overflowX: 'hidden',
+      overflowY: 'scroll',
+      padding: '50px 0 50px 20px',
+      width: '100%'
+    }
+  };
+};
+
+var enhance = compose(withStyles(styles), connect(mapStateToProps), withPlugins('GalleryView') // further HOC go here
+);
+export default enhance(GalleryView);
