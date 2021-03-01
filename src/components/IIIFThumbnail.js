@@ -203,7 +203,7 @@ IIIFThumbnail.defaultProps = {
   labelled: false,
   maxHeight: null,
   maxWidth: null,
-  tileFormat: undefined,
+  tileFormat: "jpg",
   style: {},
   thumbnail: null,
   variant: null,
