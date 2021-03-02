@@ -1,8 +1,10 @@
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { IIIFThumbnail } from '../components/IIIFThumbnail';
+import { getConfig } from '../state/selectors';
 
 /**
  * Styles for withStyles HOC
@@ -48,6 +50,9 @@ const styles = theme => ({
 });
 
 const enhance = compose(
+  connect((state) => ({
+    tileFormat: getConfig(state).tileFormat,
+  })),
   withStyles(styles),
   withTranslation(),
   withPlugins('IIIFThumbnail'),

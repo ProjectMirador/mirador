@@ -77,7 +77,11 @@ class ThumbnailFactory {
     const minDimension = 120;
     let maxHeight = minDimension;
     let maxWidth = minDimension;
-    const { maxHeight: requestedMaxHeight, maxWidth: requestedMaxWidth, tileFormat } = this.iiifOpts;
+    const {
+      maxHeight: requestedMaxHeight,
+      maxWidth: requestedMaxWidth,
+      tileFormat,
+    } = this.iiifOpts;
 
     if (requestedMaxHeight) maxHeight = Math.max(requestedMaxHeight, minDimension);
     if (requestedMaxWidth) maxWidth = Math.max(requestedMaxWidth, minDimension);

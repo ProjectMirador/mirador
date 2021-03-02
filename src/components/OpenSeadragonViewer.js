@@ -20,7 +20,6 @@ export class OpenSeadragonViewer extends Component {
    */
   constructor(props) {
     super(props);
-    
 
     this.state = { viewer: undefined };
     this.ref = React.createRef();
@@ -167,13 +166,12 @@ export class OpenSeadragonViewer extends Component {
 
   /** */
   addAllImageSources(zoomAfterAdd = true) {
-    const { nonTiledImages, infoResponses } = this.props;
-    
+    const { nonTiledImages, infoResponses, tileFormat } = this.props;
 
-    if( this.props.tileFormat ){
-      infoResponses.forEach( response => {
-        response.json.tileFormat = this.props.tileFormat
-      })
+    if (tileFormat) {
+      infoResponses.forEach(response => {
+        response.json.tileFormat = tileFormat;
+      });
     }
 
     Promise.all(
@@ -384,6 +382,7 @@ OpenSeadragonViewer.defaultProps = {
   label: null,
   nonTiledImages: [],
   osdConfig: {},
+  tileFormat: null,
   viewerConfig: null,
 };
 
@@ -397,6 +396,7 @@ OpenSeadragonViewer.propTypes = {
   nonTiledImages: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   t: PropTypes.func.isRequired,
+  tileFormat: PropTypes.string,
   updateViewport: PropTypes.func.isRequired,
   viewerConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windowId: PropTypes.string.isRequired,

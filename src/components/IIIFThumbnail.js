@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import 'intersection-observer'; // polyfill needed for Safari
 import Typography from '@material-ui/core/Typography';
 import IntersectionObserver from '@researchgate/react-intersection-observer';
 import classNames from 'classnames';
 import getThumbnail from '../lib/ThumbnailFactory';
-import {
-  getConfig,
-} from '../state/selectors';
 
 /**
  * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
@@ -28,7 +23,7 @@ class IIIFThumbnail extends Component {
    */
   constructor(props) {
     super(props);
-    console.log('>>>>', props)
+    console.log('>>>>', props);
     this.state = { loaded: false };
     this.handleIntersection = this.handleIntersection.bind(this);
   }
@@ -40,7 +35,9 @@ class IIIFThumbnail extends Component {
 
   /** */
   componentDidUpdate(prevProps) {
-    const { maxHeight, maxWidth, resource, tileFormat } = this.props;
+    const {
+      maxHeight, maxWidth, resource, tileFormat,
+    } = this.props;
 
     if (
       prevProps.maxHeight !== maxHeight
@@ -116,7 +113,7 @@ class IIIFThumbnail extends Component {
   /** */
   image() {
     const {
-      thumbnail, resource, maxHeight, maxWidth, tileFormat
+      thumbnail, resource, maxHeight, maxWidth, tileFormat,
     } = this.props;
 
     if (thumbnail) return thumbnail;
@@ -183,7 +180,6 @@ IIIFThumbnail.propTypes = {
   labelled: PropTypes.bool,
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
-  tileFormat: PropTypes.string,
   resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   thumbnail: PropTypes.shape({
@@ -191,6 +187,7 @@ IIIFThumbnail.propTypes = {
     url: PropTypes.string.isRequired,
     width: PropTypes.number,
   }),
+  tileFormat: PropTypes.string,
   variant: PropTypes.oneOf(['inside', 'outside']),
 };
 
@@ -203,24 +200,10 @@ IIIFThumbnail.defaultProps = {
   labelled: false,
   maxHeight: null,
   maxWidth: null,
-  tileFormat: "jpg",
   style: {},
   thumbnail: null,
+  tileFormat: 'jpg',
   variant: null,
 };
 
-
-/**
- * @private
- */
-const addTileFormatToProps = compose(
-  connect((state) => {
-    return {
-      tileFormat: getConfig(state).tileFormat,
-    };
-  })
-);
-
-const IIIFThumbnailWithStateProps = addTileFormatToProps(IIIFThumbnail);
-
-export { IIIFThumbnailWithStateProps as IIIFThumbnail }
+export { IIIFThumbnail };
