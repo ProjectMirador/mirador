@@ -79,8 +79,6 @@ export class WorkspaceAdd extends React.Component {
     } = this.props;
     const { addResourcesOpen } = this.state;
 
-    console.log(catalog);
-
     const manifestList = catalog.map((resource, index) => (
       <ManifestListItem
         {...(index === 0 && { buttonRef: (ref => ref && ref.focus()) })}
