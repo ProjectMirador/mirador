@@ -49,12 +49,17 @@ const styles = theme => ({
   root: {},
 });
 
+
+const mapStateToProps = (state, { windowId }) => {
+  return {
+    tileFormat: getWindow(state, { windowId }).tileFormat,
+  };
+};
+
 const enhance = compose(
-  connect((state) => ({
-    tileFormat: getConfig(state).tileFormat,
-  })),
   withStyles(styles),
   withTranslation(),
+  connect(mapStateToProps),
   withPlugins('IIIFThumbnail'),
 );
 

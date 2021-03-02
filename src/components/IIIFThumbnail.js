@@ -23,7 +23,6 @@ class IIIFThumbnail extends Component {
    */
   constructor(props) {
     super(props);
-    console.log('>>>>', props);
     this.state = { loaded: false };
     this.handleIntersection = this.handleIntersection.bind(this);
   }

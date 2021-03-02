@@ -180,7 +180,7 @@ class ThumbnailFactory {
     const region = 'full';
     const quality = Utils.getImageQuality(service.getProfile());
     const id = service.id.replace(/\/+$/, '');
-    const format = tileFormat;
+    const format = tileFormat || 'jpg';
     return {
       height,
       url: [id, region, size, 0, `${quality}.${format}`].join('/'),
