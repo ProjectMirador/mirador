@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { IIIFThumbnail } from '../components/IIIFThumbnail';
-import { getConfig } from '../state/selectors';
+import { getWindow } from '../state/selectors';
 
 /**
  * Styles for withStyles HOC
@@ -49,12 +49,14 @@ const styles = theme => ({
   root: {},
 });
 
-
-const mapStateToProps = (state, { windowId }) => {
-  return {
-    tileFormat: getWindow(state, { windowId }).tileFormat,
-  };
-};
+/**
+ * mapStateToProps - used to hook up connect to action creators
+ * @memberof Window
+ * @private
+ */
+const mapStateToProps = (state, { windowId }) => ({
+  tileFormat: getWindow(state, { windowId }).tileFormat,
+});
 
 const enhance = compose(
   withStyles(styles),

@@ -67,7 +67,9 @@ var mapStateToProps = function mapStateToProps(state, _ref) {
       windowId: windowId
     }),
     osdConfig: (0, _selectors.getConfig)(state).osdConfig,
-    tileFormat: (0, _selectors.getConfig)(state).tileFormat,
+    tileFormat: (0, _selectors.getWindow)(state, {
+      windowId: windowId
+    }).tileFormat,
     viewerConfig: (0, _selectors.getViewer)(state, {
       windowId: windowId
     })

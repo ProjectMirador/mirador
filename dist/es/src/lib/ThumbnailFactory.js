@@ -168,7 +168,7 @@ var ThumbnailFactory = /*#__PURE__*/function () {
       var region = 'full';
       var quality = Utils.getImageQuality(service.getProfile());
       var id = service.id.replace(/\/+$/, '');
-      var format = tileFormat;
+      var format = tileFormat || 'jpg';
       return {
         height: height,
         url: [id, region, size, 0, "".concat(quality, ".").concat(format)].join('/'),

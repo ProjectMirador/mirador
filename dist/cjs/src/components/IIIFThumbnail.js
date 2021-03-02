@@ -7,10 +7,6 @@ exports.IIIFThumbnail = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _redux = require("redux");
-
-var _reactRedux = require("react-redux");
-
 require("intersection-observer");
 
 var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
@@ -20,8 +16,6 @@ var _reactIntersectionObserver = _interopRequireDefault(require("@researchgate/r
 var _classnames = _interopRequireDefault(require("classnames"));
 
 var _ThumbnailFactory = _interopRequireDefault(require("../lib/ThumbnailFactory"));
-
-var _selectors = require("../state/selectors");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -71,7 +65,6 @@ var IIIFThumbnail = /*#__PURE__*/function (_Component) {
     _classCallCheck(this, IIIFThumbnail);
 
     _this = _super.call(this, props);
-    console.log('>>>>', props);
     _this.state = {
       loaded: false
     };
@@ -265,6 +258,7 @@ var IIIFThumbnail = /*#__PURE__*/function (_Component) {
   return IIIFThumbnail;
 }(_react.Component);
 
+exports.IIIFThumbnail = IIIFThumbnail;
 IIIFThumbnail.defaultProps = {
   children: null,
   classes: {},
@@ -274,19 +268,8 @@ IIIFThumbnail.defaultProps = {
   labelled: false,
   maxHeight: null,
   maxWidth: null,
-  tileFormat: "jpg",
   style: {},
   thumbnail: null,
+  tileFormat: 'jpg',
   variant: null
 };
-/**
- * @private
- */
-
-var addTileFormatToProps = (0, _redux.compose)((0, _reactRedux.connect)(function (state) {
-  return {
-    tileFormat: (0, _selectors.getConfig)(state).tileFormat
-  };
-}));
-var IIIFThumbnailWithStateProps = addTileFormatToProps(IIIFThumbnail);
-exports.IIIFThumbnail = IIIFThumbnailWithStateProps;

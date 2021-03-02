@@ -25,15 +25,12 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 import React, { Component } from 'react';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import 'intersection-observer'; // polyfill needed for Safari
 
 import Typography from '@material-ui/core/Typography';
 import IntersectionObserver from '@researchgate/react-intersection-observer';
 import classNames from 'classnames';
 import getThumbnail from '../lib/ThumbnailFactory';
-import { getConfig } from '../state/selectors';
 /**
  * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
  */
@@ -51,7 +48,6 @@ var IIIFThumbnail = /*#__PURE__*/function (_Component) {
     _classCallCheck(this, IIIFThumbnail);
 
     _this = _super.call(this, props);
-    console.log('>>>>', props);
     _this.state = {
       loaded: false
     };
@@ -254,19 +250,9 @@ IIIFThumbnail.defaultProps = {
   labelled: false,
   maxHeight: null,
   maxWidth: null,
-  tileFormat: "jpg",
   style: {},
   thumbnail: null,
+  tileFormat: 'jpg',
   variant: null
 };
-/**
- * @private
- */
-
-var addTileFormatToProps = compose(connect(function (state) {
-  return {
-    tileFormat: getConfig(state).tileFormat
-  };
-}));
-var IIIFThumbnailWithStateProps = addTileFormatToProps(IIIFThumbnail);
-export { IIIFThumbnailWithStateProps as IIIFThumbnail };
+export { IIIFThumbnail };

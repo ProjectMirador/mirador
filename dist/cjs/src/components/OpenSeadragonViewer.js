@@ -256,11 +256,12 @@ var OpenSeadragonViewer = /*#__PURE__*/function (_Component) {
       var zoomAfterAdd = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
       var _this$props4 = this.props,
           nonTiledImages = _this$props4.nonTiledImages,
-          infoResponses = _this$props4.infoResponses;
+          infoResponses = _this$props4.infoResponses,
+          tileFormat = _this$props4.tileFormat;
 
-      if (this.props.tileFormat) {
+      if (tileFormat) {
         infoResponses.forEach(function (response) {
-          response.json.tileFormat = _this3.props.tileFormat;
+          response.json.tileFormat = tileFormat;
         });
       }
 
@@ -492,5 +493,6 @@ OpenSeadragonViewer.defaultProps = {
   label: null,
   nonTiledImages: [],
   osdConfig: {},
+  tileFormat: null,
   viewerConfig: null
 };

@@ -7,6 +7,8 @@ exports["default"] = void 0;
 
 var _redux = require("redux");
 
+var _reactRedux = require("react-redux");
+
 var _reactI18next = require("react-i18next");
 
 var _styles = require("@material-ui/core/styles");
@@ -14,6 +16,8 @@ var _styles = require("@material-ui/core/styles");
 var _withPlugins = require("../extend/withPlugins");
 
 var _IIIFThumbnail = require("../components/IIIFThumbnail");
+
+var _selectors = require("../state/selectors");
 
 /**
  * Styles for withStyles HOC
@@ -59,8 +63,23 @@ var styles = function styles(theme) {
     root: {}
   };
 };
+/**
+ * mapStateToProps - used to hook up connect to action creators
+ * @memberof Window
+ * @private
+ */
 
-var enhance = (0, _redux.compose)((0, _styles.withStyles)(styles), (0, _reactI18next.withTranslation)(), (0, _withPlugins.withPlugins)('IIIFThumbnail'));
+
+var mapStateToProps = function mapStateToProps(state, _ref) {
+  var windowId = _ref.windowId;
+  return {
+    tileFormat: (0, _selectors.getWindow)(state, {
+      windowId: windowId
+    }).tileFormat
+  };
+};
+
+var enhance = (0, _redux.compose)((0, _styles.withStyles)(styles), (0, _reactI18next.withTranslation)(), (0, _reactRedux.connect)(mapStateToProps), (0, _withPlugins.withPlugins)('IIIFThumbnail'));
 
 var _default = enhance(_IIIFThumbnail.IIIFThumbnail);
 

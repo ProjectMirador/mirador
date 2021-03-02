@@ -6,7 +6,7 @@ import flatten from 'lodash/flatten';
 import { withPlugins } from '../extend/withPlugins';
 import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
-import { getVisibleCanvasNonTiledResources, getCurrentCanvas, getCanvasLabel, getViewer, getConfig, getCompanionWindowsForContent, selectInfoResponses, getCurrentCanvasWorld } from '../state/selectors';
+import { getVisibleCanvasNonTiledResources, getCurrentCanvas, getCanvasLabel, getViewer, getConfig, getCompanionWindowsForContent, selectInfoResponses, getCurrentCanvasWorld, getWindow } from '../state/selectors';
 /**
  * mapStateToProps - used to hook up connect to action creators
  * @memberof Window
@@ -46,7 +46,9 @@ var mapStateToProps = function mapStateToProps(state, _ref) {
       windowId: windowId
     }),
     osdConfig: getConfig(state).osdConfig,
-    tileFormat: getConfig(state).tileFormat,
+    tileFormat: getWindow(state, {
+      windowId: windowId
+    }).tileFormat,
     viewerConfig: getViewer(state, {
       windowId: windowId
     })
