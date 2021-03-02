@@ -92,7 +92,8 @@ var ThumbnailCanvasGrouping = /*#__PURE__*/function (_PureComponent) {
           style = _this$props.style,
           data = _this$props.data,
           classes = _this$props.classes,
-          currentCanvasId = _this$props.currentCanvasId;
+          currentCanvasId = _this$props.currentCanvasId,
+          tileFormat = _this$props.tileFormat;
       var canvasGroupings = data.canvasGroupings,
           position = data.position,
           height = data.height;
@@ -131,7 +132,8 @@ var ThumbnailCanvasGrouping = /*#__PURE__*/function (_PureComponent) {
           resource: canvas,
           labelled: true,
           maxHeight: position === 'far-right' ? style.height - 1.5 * SPACING : height - 1.5 * SPACING,
-          variant: "inside"
+          variant: "inside",
+          tileFormat: tileFormat
         });
       })));
     }
@@ -141,3 +143,6 @@ var ThumbnailCanvasGrouping = /*#__PURE__*/function (_PureComponent) {
 }(_react.PureComponent);
 
 exports.ThumbnailCanvasGrouping = ThumbnailCanvasGrouping;
+ThumbnailCanvasGrouping.defaultProps = {
+  tileFormat: null
+};

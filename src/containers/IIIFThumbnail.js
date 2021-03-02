@@ -1,10 +1,8 @@
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { IIIFThumbnail } from '../components/IIIFThumbnail';
-import { getWindow } from '../state/selectors';
 
 /**
  * Styles for withStyles HOC
@@ -49,19 +47,9 @@ const styles = theme => ({
   root: {},
 });
 
-/**
- * mapStateToProps - used to hook up connect to action creators
- * @memberof Window
- * @private
- */
-const mapStateToProps = (state, { windowId }) => ({
-  tileFormat: getWindow(state, { windowId }).tileFormat,
-});
-
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
-  connect(mapStateToProps),
   withPlugins('IIIFThumbnail'),
 );
 

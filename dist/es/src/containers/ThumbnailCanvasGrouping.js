@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getCurrentCanvas } from '../state/selectors';
+import { getCurrentCanvas, getWindow } from '../state/selectors';
 import { ThumbnailCanvasGrouping } from '../components/ThumbnailCanvasGrouping';
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -36,7 +36,10 @@ var mapStateToProps = function mapStateToProps(state, _ref2) {
   return {
     currentCanvasId: (getCurrentCanvas(state, {
       windowId: data.windowId
-    }) || {}).id
+    }) || {}).id,
+    tileFormat: getWindow(state, {
+      windowId: data.windowId
+    }).tileFormat
   };
 };
 /**

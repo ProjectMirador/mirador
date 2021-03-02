@@ -255,7 +255,8 @@ function getManifestThumbnail(state, props) {
   if (!manifest) return undefined;
   var thumbnail = (0, _ThumbnailFactory["default"])(manifest, {
     maxHeight: 80,
-    maxWidth: 120
+    maxWidth: 120,
+    tileFormat: props.tileFormat
   });
   return thumbnail && thumbnail.url;
 }

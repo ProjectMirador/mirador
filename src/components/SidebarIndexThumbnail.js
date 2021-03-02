@@ -9,7 +9,7 @@ export class SidebarIndexThumbnail extends Component {
   /** */
   render() {
     const {
-      classes, canvas, height, label, width,
+      classes, canvas, height, label, width, tileFormat,
     } = this.props;
 
     return (
@@ -21,6 +21,7 @@ export class SidebarIndexThumbnail extends Component {
             className={classNames(classes.clickable)}
             maxHeight={height}
             maxWidth={width}
+            tileFormat={tileFormat}
           />
         </div>
         <Typography
@@ -39,10 +40,12 @@ SidebarIndexThumbnail.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   height: PropTypes.number,
   label: PropTypes.string.isRequired,
+  tileFormat: PropTypes.string,
   width: PropTypes.number,
 };
 
 SidebarIndexThumbnail.defaultProps = {
   height: undefined,
+  tileFormat: null,
   width: undefined,
 };

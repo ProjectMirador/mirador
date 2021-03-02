@@ -99,6 +99,9 @@ var mapStateToProps = function mapStateToProps(state, _ref) {
   var searchAnnotations = (0, _selectors.getSearchAnnotationsForWindow)(state, {
     windowId: windowId
   });
+  var window = (0, _selectors.getWindow)(state, {
+    windowId: windowId
+  });
   var canvasAnnotations = (0, _flatten["default"])(searchAnnotations.map(function (a) {
     return a.resources;
   })).filter(function (a) {
@@ -122,7 +125,8 @@ var mapStateToProps = function mapStateToProps(state, _ref) {
     }(),
     config: (0, _selectors.getConfig)(state).galleryView,
     searchAnnotationsCount: canvasAnnotations.length,
-    selected: currentCanvas && currentCanvas.id === canvas.id
+    selected: currentCanvas && currentCanvas.id === canvas.id,
+    tileFormat: window.tileFormat
   };
 };
 /**

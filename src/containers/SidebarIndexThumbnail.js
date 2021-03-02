@@ -4,16 +4,20 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { SidebarIndexThumbnail } from '../components/SidebarIndexThumbnail';
-import { getConfig } from '../state/selectors';
+import { getConfig, getWindow } from '../state/selectors';
 
 /**
  * mapStateToProps - used to hook up state to props
  * @memberof SidebarIndexThumbnail
  * @private
  */
-const mapStateToProps = (state, { data }) => ({
-  ...(getConfig(state).canvasNavigation || {}),
-});
+const mapStateToProps = (state, { windowId }) => {
+  const window = getWindow(state, { windowId });
+  return {
+    ...(getConfig(state).canvasNavigation || {}),
+    tileFormat: window.tileFormat,
+  };
+};
 
 /**
  * Styles for withStyles HOC

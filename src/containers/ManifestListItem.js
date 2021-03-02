@@ -13,7 +13,9 @@ import * as actions from '../state/actions';
 import { ManifestListItem } from '../components/ManifestListItem';
 
 /** */
-const mapStateToProps = (state, { manifestId, provider }) => {
+const mapStateToProps = (state, {
+  manifestId, provider, tileFormat, ...rest
+}) => {
   const manifest = getManifest(state, { manifestId }) || {};
   const manifesto = getManifestoInstance(state, { manifestId });
   const isCollection = (
@@ -35,7 +37,7 @@ const mapStateToProps = (state, { manifestId, provider }) => {
       || getManifestProvider(state, { manifestId }),
     ready: !!manifest.json,
     size,
-    thumbnail: getManifestThumbnail(state, { manifestId }),
+    thumbnail: getManifestThumbnail(state, { manifestId, tileFormat }),
     title: getManifestTitle(state, { manifestId }),
   };
 };

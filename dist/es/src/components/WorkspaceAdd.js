@@ -133,6 +133,7 @@ export var WorkspaceAdd = /*#__PURE__*/function (_React$Component) {
           t = _this$props.t,
           classes = _this$props.classes;
       var addResourcesOpen = this.state.addResourcesOpen;
+      console.log(catalog);
       var manifestList = catalog.map(function (resource, index) {
         return /*#__PURE__*/React.createElement(ManifestListItem, Object.assign({}, index === 0 && {
           buttonRef: function buttonRef(ref) {
@@ -142,6 +143,7 @@ export var WorkspaceAdd = /*#__PURE__*/function (_React$Component) {
           key: resource.manifestId,
           manifestId: resource.manifestId,
           provider: resource.provider,
+          tileFormat: resource.tileFormat,
           handleClose: function handleClose() {
             return setWorkspaceAddVisibility(false);
           }

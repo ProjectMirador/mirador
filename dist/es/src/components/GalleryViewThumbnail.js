@@ -126,7 +126,8 @@ export var GalleryViewThumbnail = /*#__PURE__*/function (_Component) {
           canvas = _this$props4.canvas,
           classes = _this$props4.classes,
           config = _this$props4.config,
-          selected = _this$props4.selected;
+          selected = _this$props4.selected,
+          tileFormat = _this$props4.tileFormat;
       var miradorCanvas = new MiradorCanvas(canvas);
       return /*#__PURE__*/React.createElement(IntersectionObserver, {
         onChange: this.handleIntersection
@@ -143,6 +144,7 @@ export var GalleryViewThumbnail = /*#__PURE__*/function (_Component) {
         variant: "outside",
         maxWidth: config.width,
         maxHeight: config.height,
+        tileFormat: tileFormat,
         style: {
           margin: '0 auto',
           maxWidth: "".concat(Math.ceil(config.height * miradorCanvas.aspectRatio), "px")
@@ -187,5 +189,6 @@ GalleryViewThumbnail.defaultProps = {
   },
   requestCanvasAnnotations: function requestCanvasAnnotations() {},
   searchAnnotationsCount: 0,
-  selected: false
+  selected: false,
+  tileFormat: null
 };

@@ -31,8 +31,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  * @private
  */
 var mapStateToProps = function mapStateToProps(state, _ref) {
-  var data = _ref.data;
-  return _objectSpread({}, (0, _selectors.getConfig)(state).canvasNavigation || {});
+  var windowId = _ref.windowId;
+  var window = (0, _selectors.getWindow)(state, {
+    windowId: windowId
+  });
+  return _objectSpread(_objectSpread({}, (0, _selectors.getConfig)(state).canvasNavigation || {}), {}, {
+    tileFormat: window.tileFormat
+  });
 };
 /**
  * Styles for withStyles HOC

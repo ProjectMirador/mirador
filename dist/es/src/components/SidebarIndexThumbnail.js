@@ -45,7 +45,8 @@ export var SidebarIndexThumbnail = /*#__PURE__*/function (_Component) {
           canvas = _this$props.canvas,
           height = _this$props.height,
           label = _this$props.label,
-          width = _this$props.width;
+          width = _this$props.width,
+          tileFormat = _this$props.tileFormat;
       return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
         style: {
           minWidth: 50
@@ -55,7 +56,8 @@ export var SidebarIndexThumbnail = /*#__PURE__*/function (_Component) {
         resource: canvas,
         className: classNames(classes.clickable),
         maxHeight: height,
-        maxWidth: width
+        maxWidth: width,
+        tileFormat: tileFormat
       })), /*#__PURE__*/React.createElement(Typography, {
         className: classNames(classes.label),
         variant: "body1"
@@ -67,5 +69,6 @@ export var SidebarIndexThumbnail = /*#__PURE__*/function (_Component) {
 }(Component);
 SidebarIndexThumbnail.defaultProps = {
   height: undefined,
+  tileFormat: null,
   width: undefined
 };

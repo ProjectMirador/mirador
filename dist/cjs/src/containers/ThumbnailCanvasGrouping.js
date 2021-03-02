@@ -54,7 +54,10 @@ var mapStateToProps = function mapStateToProps(state, _ref2) {
   return {
     currentCanvasId: ((0, _selectors.getCurrentCanvas)(state, {
       windowId: data.windowId
-    }) || {}).id
+    }) || {}).id,
+    tileFormat: (0, _selectors.getWindow)(state, {
+      windowId: data.windowId
+    }).tileFormat
   };
 };
 /**

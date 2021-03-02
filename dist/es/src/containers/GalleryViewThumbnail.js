@@ -10,7 +10,7 @@ import flatten from 'lodash/flatten';
 import { withStyles } from '@material-ui/core/styles';
 import * as actions from '../state/actions';
 import { GalleryViewThumbnail } from '../components/GalleryViewThumbnail';
-import { getSearchAnnotationsForWindow, getCurrentCanvas, getConfig, getPresentAnnotationsOnSelectedCanvases, getCompanionWindowsForContent } from '../state/selectors';
+import { getSearchAnnotationsForWindow, getCurrentCanvas, getConfig, getPresentAnnotationsOnSelectedCanvases, getCompanionWindowsForContent, getWindow } from '../state/selectors';
 /**
  * Styles to be passed to the withStyles HOC
  */
@@ -80,6 +80,9 @@ var mapStateToProps = function mapStateToProps(state, _ref) {
   var searchAnnotations = getSearchAnnotationsForWindow(state, {
     windowId: windowId
   });
+  var window = getWindow(state, {
+    windowId: windowId
+  });
   var canvasAnnotations = flatten(searchAnnotations.map(function (a) {
     return a.resources;
   })).filter(function (a) {
@@ -103,7 +106,8 @@ var mapStateToProps = function mapStateToProps(state, _ref) {
     }(),
     config: getConfig(state).galleryView,
     searchAnnotationsCount: canvasAnnotations.length,
-    selected: currentCanvas && currentCanvas.id === canvas.id
+    selected: currentCanvas && currentCanvas.id === canvas.id,
+    tileFormat: window.tileFormat
   };
 };
 /**

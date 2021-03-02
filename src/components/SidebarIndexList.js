@@ -64,7 +64,7 @@ export class SidebarIndexList extends Component {
                   component="li"
                   selected={selectedCanvasIds.includes(canvas.id)}
                 >
-                  <Item label={canvas.label} canvas={canvases[canvasIndex]} />
+                  <Item label={canvas.label} canvas={canvases[canvasIndex]} windowId={windowId} />
                 </MenuItem>
               </ScrollTo>
             );

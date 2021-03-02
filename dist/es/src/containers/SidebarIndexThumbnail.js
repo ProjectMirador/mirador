@@ -10,7 +10,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { SidebarIndexThumbnail } from '../components/SidebarIndexThumbnail';
-import { getConfig } from '../state/selectors';
+import { getConfig, getWindow } from '../state/selectors';
 /**
  * mapStateToProps - used to hook up state to props
  * @memberof SidebarIndexThumbnail
@@ -18,8 +18,13 @@ import { getConfig } from '../state/selectors';
  */
 
 var mapStateToProps = function mapStateToProps(state, _ref) {
-  var data = _ref.data;
-  return _objectSpread({}, getConfig(state).canvasNavigation || {});
+  var windowId = _ref.windowId;
+  var window = getWindow(state, {
+    windowId: windowId
+  });
+  return _objectSpread(_objectSpread({}, getConfig(state).canvasNavigation || {}), {}, {
+    tileFormat: window.tileFormat
+  });
 };
 /**
  * Styles for withStyles HOC

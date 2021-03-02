@@ -100,7 +100,8 @@ export var SidebarIndexList = /*#__PURE__*/function (_Component) {
           selected: selectedCanvasIds.includes(canvas.id)
         }, /*#__PURE__*/React.createElement(Item, {
           label: canvas.label,
-          canvas: canvases[canvasIndex]
+          canvas: canvases[canvasIndex],
+          windowId: windowId
         })));
       }));
     }

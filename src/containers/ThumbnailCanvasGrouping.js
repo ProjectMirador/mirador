@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getCurrentCanvas } from '../state/selectors';
+import { getCurrentCanvas, getWindow } from '../state/selectors';
 import { ThumbnailCanvasGrouping } from '../components/ThumbnailCanvasGrouping';
 
 /**
@@ -23,6 +23,7 @@ const mapDispatchToProps = (dispatch, { data }) => ({
  */
 const mapStateToProps = (state, { data }) => ({
   currentCanvasId: (getCurrentCanvas(state, { windowId: data.windowId }) || {}).id,
+  tileFormat: getWindow(state, { windowId: data.windowId }).tileFormat,
 });
 
 /**

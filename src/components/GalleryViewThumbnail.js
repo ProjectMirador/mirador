@@ -94,7 +94,7 @@ export class GalleryViewThumbnail extends Component {
   render() {
     const {
       annotationsCount, searchAnnotationsCount,
-      canvas, classes, config, selected,
+      canvas, classes, config, selected, tileFormat,
     } = this.props;
 
     const miradorCanvas = new MiradorCanvas(canvas);
@@ -121,6 +121,7 @@ export class GalleryViewThumbnail extends Component {
             variant="outside"
             maxWidth={config.width}
             maxHeight={config.height}
+            tileFormat={tileFormat}
             style={{
               margin: '0 auto',
               maxWidth: `${Math.ceil(config.height * miradorCanvas.aspectRatio)}px`,
@@ -176,6 +177,7 @@ GalleryViewThumbnail.propTypes = {
   searchAnnotationsCount: PropTypes.number,
   selected: PropTypes.bool,
   setCanvas: PropTypes.func.isRequired,
+  tileFormat: PropTypes.string,
 };
 
 GalleryViewThumbnail.defaultProps = {
@@ -187,4 +189,5 @@ GalleryViewThumbnail.defaultProps = {
   requestCanvasAnnotations: () => {},
   searchAnnotationsCount: 0,
   selected: false,
+  tileFormat: null,
 };

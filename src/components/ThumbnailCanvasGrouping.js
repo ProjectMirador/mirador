@@ -31,7 +31,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
   render() {
     const {
-      index, style, data, classes, currentCanvasId,
+      index, style, data, classes, currentCanvasId, tileFormat,
     } = this.props;
     const {
       canvasGroupings, position, height,
@@ -79,6 +79,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
               labelled
               maxHeight={(position === 'far-right') ? style.height - (1.5 * SPACING) : height - (1.5 * SPACING)}
               variant="inside"
+              tileFormat={tileFormat}
             />
           ))}
         </div>
@@ -94,4 +95,9 @@ ThumbnailCanvasGrouping.propTypes = {
   index: PropTypes.number.isRequired,
   setCanvas: PropTypes.func.isRequired,
   style: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  tileFormat: PropTypes.string,
+};
+
+ThumbnailCanvasGrouping.defaultProps = {
+  tileFormat: null,
 };

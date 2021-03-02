@@ -10,6 +10,7 @@ import {
   getConfig,
   getPresentAnnotationsOnSelectedCanvases,
   getCompanionWindowsForContent,
+  getWindow,
 } from '../state/selectors';
 
 /**
@@ -76,6 +77,8 @@ const mapStateToProps = (state, { canvas, windowId }) => {
     { windowId },
   );
 
+  const window = getWindow(state, { windowId });
+
   const canvasAnnotations = flatten(searchAnnotations.map(a => a.resources))
     .filter(a => a.targetId === canvas.id);
 
@@ -97,6 +100,7 @@ const mapStateToProps = (state, { canvas, windowId }) => {
     config: getConfig(state).galleryView,
     searchAnnotationsCount: canvasAnnotations.length,
     selected: currentCanvas && currentCanvas.id === canvas.id,
+    tileFormat: window.tileFormat,
   };
 };
 
