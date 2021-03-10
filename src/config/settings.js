@@ -4,7 +4,7 @@ export default {
   state: {
     // slice: 'mirador' // Configure the top-level slice of state for mirador selectors
   },
-  canvasNavigation: { // Set the hight and width of canvas thumbnails in the  CanvasNavigation companion window
+  canvasNavigation: { // Set the height and width of canvas thumbnails in the  CanvasNavigation companion window
     height: 50,
     width: 50,
   },
