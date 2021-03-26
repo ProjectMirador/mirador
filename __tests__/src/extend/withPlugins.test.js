@@ -126,6 +126,7 @@ describe('PluginHoc: if wrap plugins AND add plugins exist for target', () => {
   });
   it('renders the first wrap plugin, renders add plugins if plugin/props are passed through', () => {
     /** */ const WrapPluginComponentA = plugin => (
+      // eslint-disable-next-line react/destructuring-assignment
       <plugin.TargetComponent {...plugin.targetProps} {...plugin} />
     );
     /** */ const WrapPluginComponentB = props => <div>look i am a plugin</div>;

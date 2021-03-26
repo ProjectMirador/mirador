@@ -34,7 +34,7 @@ describe('CanvasAnnotationDisplay', () => {
       expect(subject.svgContext).toHaveBeenCalled();
       expect(subject.fragmentContext).not.toHaveBeenCalled();
     });
-    it('selects fragmentSelector if no svg present', () => {
+    it('selects fragmentSelector if present and if no svg is present', () => {
       const context = {
         stroke: jest.fn(),
       };
@@ -46,6 +46,19 @@ describe('CanvasAnnotationDisplay', () => {
       subject.toContext(context);
       expect(subject.svgContext).not.toHaveBeenCalled();
       expect(subject.fragmentContext).toHaveBeenCalled();
+    });
+    it('ignores annotations without selectors', () => {
+      const context = {
+        stroke: jest.fn(),
+      };
+      const subject = createSubject({
+        resource: new AnnotationResource({ on: 'www.example.com' }),
+      });
+      subject.svgContext = jest.fn();
+      subject.fragmentContext = jest.fn();
+      subject.toContext(context);
+      expect(subject.svgContext).not.toHaveBeenCalled();
+      expect(subject.fragmentContext).not.toHaveBeenCalled();
     });
   });
   describe('svgString', () => {
