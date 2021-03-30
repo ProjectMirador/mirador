@@ -67,6 +67,53 @@ class ThumbnailFactory {
   }
 
   /**
+   * Chooses the best available image size based on a target area (w x h) value.
+   * @param {Object} service A IIIF Image API service that has a `sizes` array
+   * @param {Number} targetArea The target area value to compare potential sizes against
+   * @return {Object|undefined} The best size, or undefined if none are acceptable
+   */
+  static selectBestImageSize(service, targetArea) {
+    const sizes = asArray(service.getProperty('sizes'));
+
+    let closestSize = {
+      default: true,
+      height: service.getProperty('height') || Number.MAX_SAFE_INTEGER,
+      width: service.getProperty('width') || Number.MAX_SAFE_INTEGER,
+    };
+
+    /** Compare the total image area to our target */
+    const imageFitness = (test) => test.width * test.height - targetArea;
+
+    /** Look for the size that's just bigger than we prefer... */
+    closestSize = sizes.reduce(
+      (best, test) => {
+        const score = imageFitness(test);
+
+        if (score < 0) return best;
+
+        return Math.abs(score) < Math.abs(imageFitness(best))
+          ? test
+          : best;
+      }, closestSize,
+    );
+
+    /** .... but not "too" big; we'd rather scale up an image than download too much */
+    if (closestSize.width * closestSize.height > targetArea * 6) {
+      closestSize = sizes.reduce(
+        (best, test) => (
+          Math.abs(imageFitness(test)) < Math.abs(imageFitness(best))
+            ? test
+            : best
+        ), closestSize,
+      );
+    }
+
+    if (closestSize.default) return undefined;
+
+    return closestSize;
+  }
+
+  /**
    * Creates a canonical image request for a thumb
    * @param {Number} height
    */
@@ -92,49 +139,13 @@ class ThumbnailFactory {
 
     // just bail to a static image, even though sizes might provide something better
     if (isLevel0ImageProfile(service)) {
-      const sizes = asArray(service.getProperty('sizes'));
-      const serviceHeight = service.getProperty('height');
-      const serviceWidth = service.getProperty('width');
-
       const target = (requestedMaxWidth && requestedMaxHeight)
         ? requestedMaxWidth * requestedMaxHeight
         : maxHeight * maxWidth;
-
-      let closestSize = {
-        default: true,
-        height: serviceHeight || Number.MAX_SAFE_INTEGER,
-        width: serviceWidth || Number.MAX_SAFE_INTEGER,
-      };
-
-      /** Compare the total image area to our target */
-      const imageFitness = (test) => test.width * test.height - target;
-
-      /** Look for the size that's just bigger than we prefer... */
-      closestSize = sizes.reduce(
-        (best, test) => {
-          const score = imageFitness(test);
-
-          if (score < 0) return best;
-
-          return Math.abs(score) < Math.abs(imageFitness(best))
-            ? test
-            : best;
-        }, closestSize,
-      );
-
-      /** .... but not "too" big; we'd rather scale up an image than download too much */
-      if (closestSize.width * closestSize.height > target * 6) {
-        closestSize = sizes.reduce(
-          (best, test) => (
-            Math.abs(imageFitness(test)) < Math.abs(imageFitness(best))
-              ? test
-              : best
-          ), closestSize,
-        );
-      }
+      const closestSize = ThumbnailFactory.selectBestImageSize(service, target);
 
       /** Bail if the best available size is the full size.. maybe we'll get lucky with the @id */
-      if (closestSize.default && !serviceHeight && !serviceWidth) {
+      if (!closestSize && !service.getProperty('height') && !service.getProperty('width')) {
         return ThumbnailFactory.staticImageUrl(resource);
       }
 
@@ -263,4 +274,4 @@ function getBestThumbnail(resource, iiifOpts) {
   return new ThumbnailFactory(resource, iiifOpts).get();
 }
 
-export default getBestThumbnail;
+export { getBestThumbnail as default, ThumbnailFactory };

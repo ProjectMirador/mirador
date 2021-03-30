@@ -1,5 +1,7 @@
-import { ManifestResource, Resource, Utils } from 'manifesto.js/dist-esmodule';
-import getThumbnail from '../../../src/lib/ThumbnailFactory';
+import {
+  ManifestResource, Resource, Service, Utils,
+} from 'manifesto.js/dist-esmodule';
+import getThumbnail, { ThumbnailFactory } from '../../../src/lib/ThumbnailFactory';
 import fixture from '../../fixtures/version-2/019.json';
 
 const manifest = Utils.parseManifest(fixture);
@@ -243,5 +245,44 @@ describe('getThumbnail', () => {
       });
       expect(getThumbnail(collection)).toMatchObject({ url: 'https://example.org/manifest1/thumbnail.jpg' });
     });
+  });
+});
+
+describe('selectBestImageSize', () => {
+  const targetWidth = 120;
+  const targetHeight = 120;
+
+  it('selects the smallest size larger than the target, if one is available', () => {
+    const sizes = [
+      { height: 75, width: 75 },
+      { height: 150, width: 150 },
+      { height: 300, width: 300 },
+    ];
+    const service = new Service({
+      id: 'arbitrary-url',
+      profile: 'level0',
+      sizes,
+      type: 'ImageService3',
+    });
+
+    expect(ThumbnailFactory.selectBestImageSize(service, targetWidth * targetHeight))
+      .toEqual(sizes[1]);
+  });
+
+  it('selects the largest size smaller than the target, if none larger are available', () => {
+    const sizes = [
+      { height: 25, width: 25 },
+      { height: 50, width: 50 },
+      { height: 75, width: 75 },
+    ];
+    const service = new Service({
+      id: 'arbitrary-url',
+      profile: 'level0',
+      sizes,
+      type: 'ImageService3',
+    });
+
+    expect(ThumbnailFactory.selectBestImageSize(service, targetWidth * targetHeight))
+      .toEqual(sizes[2]);
   });
 });
