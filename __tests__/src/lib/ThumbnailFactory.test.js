@@ -6,7 +6,10 @@ const manifest = Utils.parseManifest(fixture);
 const canvas = manifest.getSequences()[0].getCanvases()[0];
 
 /** */
-function createSubject(jsonld, iiifOpts) {
+function createSubject(jsonld, resourceType, iiifOpts) {
+  if (resourceType === 'Image') {
+    return createImageSubject(jsonld, iiifOpts);
+  }
   return getThumbnail(new ManifestResource(jsonld, {}), iiifOpts);
 }
 
@@ -43,36 +46,42 @@ describe('getThumbnail', () => {
     { height: 1000, width: 1000 },
   ];
 
+  describe('with a IIIF resource', () => {
+    for (const type of ['Collection', 'Manifest', 'Canvas', 'Image']) {
+
   describe('with a thumbnail', () => {
     it('return the thumbnail and metadata', () => {
-      expect(createSubject({ '@id': 'xyz', '@type': 'Whatever', thumbnail: { '@id': url, height: 70, width: 50 } })).toMatchObject({ height: 70, url, width: 50 });
+      expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: { '@id': url, height: 70, width: 50 } }, type)).toMatchObject({ height: 70, url, width: 50 });
     });
 
     it('return the IIIF service of the thumbnail', () => {
-      expect(createSubject({ '@id': 'xyz', '@type': 'Whatever', thumbnail: iiifLevel1Service })).toMatchObject({ url: `${url}/full/,120/0/default.jpg` });
+      expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel1Service }, type)).toMatchObject({ url: `${url}/full/,120/0/default.jpg` });
     });
 
     describe('with image size constraints', () => {
       it('does nothing with a static resource', () => {
-        expect(createSubject({ '@id': 'xyz', '@type': 'Whatever', thumbnail: { '@id': url } }, { maxWidth: 50 })).toMatchObject({ url });
+        expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: { '@id': url } }, type, { maxWidth: 50 })).toMatchObject({ url });
       });
 
       it('does nothing with a IIIF level 0 service', () => {
-        expect(createSubject({ '@id': 'xyz', '@type': 'Whatever', thumbnail: iiifLevel0Service }, { maxWidth: 50 })).toMatchObject({ url: 'arbitrary-url' });
+        expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel0Service }, type, { maxWidth: 50 })).toMatchObject({ url: 'arbitrary-url' });
       });
 
       it('calculates constraints for a IIIF level 1 service', () => {
-        expect(createSubject({ '@id': 'xyz', '@type': 'Whatever', thumbnail: iiifLevel1Service }, { maxWidth: 150 })).toMatchObject({ height: 300, url: `${url}/full/150,/0/default.jpg`, width: 150 });
+        expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel1Service }, type, { maxWidth: 150 })).toMatchObject({ height: 300, url: `${url}/full/150,/0/default.jpg`, width: 150 });
       });
 
       it('calculates constraints for a IIIF level 2 service', () => {
-        expect(createSubject({ '@id': 'xyz', '@type': 'Whatever', thumbnail: iiifLevel2Service }, { maxHeight: 200, maxWidth: 150 })).toMatchObject({ height: 200, url: `${url}/full/!150,200/0/default.jpg`, width: 100 });
+        expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel2Service }, type, { maxHeight: 200, maxWidth: 150 })).toMatchObject({ height: 200, url: `${url}/full/!150,200/0/default.jpg`, width: 100 });
       });
 
       it('applies a minumum size to image constraints to encourage asset reuse', () => {
-        expect(createSubject({ '@id': 'xyz', '@type': 'Whatever', thumbnail: iiifLevel2Service }, { maxHeight: 100, maxWidth: 100 })).toMatchObject({ height: 120, url: `${url}/full/!120,120/0/default.jpg`, width: 60 });
+        expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel2Service }, type, { maxHeight: 100, maxWidth: 100 })).toMatchObject({ height: 120, url: `${url}/full/!120,120/0/default.jpg`, width: 60 });
       });
     });
+  });
+
+    }
   });
 
   describe('with an image resource', () => {
@@ -125,7 +134,7 @@ describe('getThumbnail', () => {
 
   describe('with a canvas', () => {
     it('uses the thumbnail', () => {
-      expect(createSubject({ ...canvas.__jsonld, thumbnail: { ...iiifLevel1Service } })).toMatchObject({ url: `${url}/full/,120/0/default.jpg` });
+      expect(createSubject({ ...canvas.__jsonld, thumbnail: { ...iiifLevel1Service } }, 'Canvas')).toMatchObject({ url: `${url}/full/,120/0/default.jpg` });
     });
 
     it('uses the first image resource', () => {
