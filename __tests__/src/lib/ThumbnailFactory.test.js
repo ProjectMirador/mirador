@@ -36,6 +36,12 @@ describe('getThumbnail', () => {
   const iiifLevel0Service = iiifService(url, {}, { profile: 'level0' });
   const iiifLevel1Service = iiifService(url, { height: 2000, width: 1000 }, { profile: 'level1' });
   const iiifLevel2Service = iiifService(url, { height: 2000, width: 1000 }, { profile: 'level2' });
+  const sizes = [
+    { height: 25, width: 25 },
+    { height: 100, width: 100 },
+    { height: 125, width: 125 },
+    { height: 1000, width: 1000 },
+  ];
 
   describe('with a thumbnail', () => {
     it('return the thumbnail and metadata', () => {
@@ -86,12 +92,6 @@ describe('getThumbnail', () => {
       });
 
       it('uses embedded sizes to find an appropriate size', () => {
-        const sizes = [
-          { height: 25, width: 25 },
-          { height: 100, width: 100 },
-          { height: 125, width: 125 },
-          { height: 1000, width: 1000 },
-        ];
         const obj = {
           ...(iiifService('some-url', {}, { profile: 'level0', sizes })),
           id: 'xyz',
@@ -131,9 +131,49 @@ describe('getThumbnail', () => {
     it('uses the first image resource', () => {
       expect(getThumbnail(canvas)).toMatchObject({ url: 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/,120/0/default.jpg' });
     });
+
+    it('uses the width and height of a thumbnail without a IIIF Image API service', () => {
+      const myCanvas = {
+        ...canvas.__jsonld,
+        thumbnail: {
+          height: 240,
+          id: 'arbitrary-url',
+          width: 180,
+        },
+      };
+      expect(createSubject(myCanvas, 'Canvas')).toMatchObject({ height: 240, url: 'arbitrary-url', width: 180 });
+    });
+
+    it('uses embedded sizes of a IIIF Image API service to find an appropriate size', () => {
+      const myCanvas = {
+        ...canvas.__jsonld,
+        thumbnail: {
+          height: 100,
+          id: 'arbitrary-url',
+          service: [{
+            id: url,
+            profile: 'level2',
+            sizes,
+            type: 'ImageService3',
+          }],
+          width: 100,
+        },
+      };
+      expect(createSubject(myCanvas, 'Canvas', { maxHeight: 120, maxWidth: 120 }))
+        .toMatchObject({ height: 125, url: `${url}/full/125,125/0/default.jpg`, width: 125 });
+    });
   });
 
   describe('with a manifest', () => {
+    it('does nothing with a plain URL', () => {
+      const manifestWithThumbnail = Utils.parseManifest({
+        ...manifest.__jsonld,
+        thumbnail: url,
+      });
+
+      expect(getThumbnail(manifestWithThumbnail, { maxWidth: 50 })).toMatchObject({ url });
+    });
+
     it('uses the thumbnail', () => {
       const manifestWithThumbnail = Utils.parseManifest({
         ...manifest.__jsonld,
