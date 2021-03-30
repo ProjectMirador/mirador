@@ -48,39 +48,37 @@ describe('getThumbnail', () => {
 
   describe('with a IIIF resource', () => {
     for (const type of ['Collection', 'Manifest', 'Canvas', 'Image']) {
+      describe('with a thumbnail', () => {
+        it('return the thumbnail and metadata', () => {
+          expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: { '@id': url, height: 70, width: 50 } }, type)).toMatchObject({ height: 70, url, width: 50 });
+        });
 
-  describe('with a thumbnail', () => {
-    it('return the thumbnail and metadata', () => {
-      expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: { '@id': url, height: 70, width: 50 } }, type)).toMatchObject({ height: 70, url, width: 50 });
-    });
+        it('return the IIIF service of the thumbnail', () => {
+          expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel1Service }, type)).toMatchObject({ url: `${url}/full/,120/0/default.jpg` });
+        });
 
-    it('return the IIIF service of the thumbnail', () => {
-      expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel1Service }, type)).toMatchObject({ url: `${url}/full/,120/0/default.jpg` });
-    });
+        describe('with image size constraints', () => {
+          it('does nothing with a static resource', () => {
+            expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: { '@id': url } }, type, { maxWidth: 50 })).toMatchObject({ url });
+          });
 
-    describe('with image size constraints', () => {
-      it('does nothing with a static resource', () => {
-        expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: { '@id': url } }, type, { maxWidth: 50 })).toMatchObject({ url });
+          it('does nothing with a IIIF level 0 service', () => {
+            expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel0Service }, type, { maxWidth: 50 })).toMatchObject({ url: 'arbitrary-url' });
+          });
+
+          it('calculates constraints for a IIIF level 1 service', () => {
+            expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel1Service }, type, { maxWidth: 150 })).toMatchObject({ height: 300, url: `${url}/full/150,/0/default.jpg`, width: 150 });
+          });
+
+          it('calculates constraints for a IIIF level 2 service', () => {
+            expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel2Service }, type, { maxHeight: 200, maxWidth: 150 })).toMatchObject({ height: 200, url: `${url}/full/!150,200/0/default.jpg`, width: 100 });
+          });
+
+          it('applies a minumum size to image constraints to encourage asset reuse', () => {
+            expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel2Service }, type, { maxHeight: 100, maxWidth: 100 })).toMatchObject({ height: 120, url: `${url}/full/!120,120/0/default.jpg`, width: 60 });
+          });
+        });
       });
-
-      it('does nothing with a IIIF level 0 service', () => {
-        expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel0Service }, type, { maxWidth: 50 })).toMatchObject({ url: 'arbitrary-url' });
-      });
-
-      it('calculates constraints for a IIIF level 1 service', () => {
-        expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel1Service }, type, { maxWidth: 150 })).toMatchObject({ height: 300, url: `${url}/full/150,/0/default.jpg`, width: 150 });
-      });
-
-      it('calculates constraints for a IIIF level 2 service', () => {
-        expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel2Service }, type, { maxHeight: 200, maxWidth: 150 })).toMatchObject({ height: 200, url: `${url}/full/!150,200/0/default.jpg`, width: 100 });
-      });
-
-      it('applies a minumum size to image constraints to encourage asset reuse', () => {
-        expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel2Service }, type, { maxHeight: 100, maxWidth: 100 })).toMatchObject({ height: 120, url: `${url}/full/!120,120/0/default.jpg`, width: 60 });
-      });
-    });
-  });
-
     }
   });
 
