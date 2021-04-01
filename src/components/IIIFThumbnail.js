@@ -98,6 +98,12 @@ export class IIIFThumbnail extends Component {
       styleProps.height = maxHeight;
     } else if (!thumbHeight && thumbWidth) {
       styleProps.width = maxWidth;
+    } else {
+      // The thumbnail wasn't retrieved via an Image API service,
+      // and its dimensions are not specified in the JSON-LD
+      // (note that this may result in a blurry image)
+      styleProps.width = maxWidth;
+      styleProps.height = maxHeight;
     }
 
     return {
