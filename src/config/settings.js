@@ -344,6 +344,14 @@ export default {
     windows: true,
     workspace: true,
   },
+  audioOptions: { // Additional props passed to <audio> element
+    controls: true,
+    crossOrigin: 'anonymous',
+  },
+  videoOptions: { // Additional props passed to <audio> element
+    controls: true,
+    crossOrigin: 'anonymous',
+  },
   auth: {
     serviceProfiles: [
       { profile: 'http://iiif.io/api/auth/1/external', external: true },

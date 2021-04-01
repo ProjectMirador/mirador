@@ -4,12 +4,14 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import { AudioViewer } from '../components/AudioViewer';
-import { getVisibleCanvasAudioResources } from '../state/selectors';
+import { getConfig, getVisibleCanvasAudioResources, getVisibleCanvasCaptions } from '../state/selectors';
 
 /** */
 const mapStateToProps = (state, { windowId }) => (
   {
+    audioOptions: getConfig(state).audioOptions,
     audioResources: getVisibleCanvasAudioResources(state, { windowId }) || [],
+    captions: getVisibleCanvasCaptions(state, { windowId }) || [],
   }
 );
 
