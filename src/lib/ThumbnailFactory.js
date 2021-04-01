@@ -67,8 +67,66 @@ class ThumbnailFactory {
   }
 
   /**
-   * Creates a canonical image request for a thumb
-   * @param {Number} height
+   * Selects the image resource that is representative of the given canvas.
+   * @param {Object} canvas A Manifesto Canvas
+   * @return {Object} A Manifesto Image Resource
+   */
+  static getPreferredImage(canvas) {
+    const miradorCanvas = new MiradorCanvas(canvas);
+    return miradorCanvas.iiifImageResources[0] || miradorCanvas.imageResource;
+  }
+
+  /**
+   * Chooses the best available image size based on a target area (w x h) value.
+   * @param {Object} service A IIIF Image API service that has a `sizes` array
+   * @param {Number} targetArea The target area value to compare potential sizes against
+   * @return {Object|undefined} The best size, or undefined if none are acceptable
+   */
+  static selectBestImageSize(service, targetArea) {
+    const sizes = asArray(service.getProperty('sizes'));
+
+    let closestSize = {
+      default: true,
+      height: service.getProperty('height') || Number.MAX_SAFE_INTEGER,
+      width: service.getProperty('width') || Number.MAX_SAFE_INTEGER,
+    };
+
+    /** Compare the total image area to our target */
+    const imageFitness = (test) => test.width * test.height - targetArea;
+
+    /** Look for the size that's just bigger than we prefer... */
+    closestSize = sizes.reduce(
+      (best, test) => {
+        const score = imageFitness(test);
+
+        if (score < 0) return best;
+
+        return Math.abs(score) < Math.abs(imageFitness(best))
+          ? test
+          : best;
+      }, closestSize,
+    );
+
+    /** .... but not "too" big; we'd rather scale up an image than download too much */
+    if (closestSize.width * closestSize.height > targetArea * 6) {
+      closestSize = sizes.reduce(
+        (best, test) => (
+          Math.abs(imageFitness(test)) < Math.abs(imageFitness(best))
+            ? test
+            : best
+        ), closestSize,
+      );
+    }
+
+    if (closestSize.default) return undefined;
+
+    return closestSize;
+  }
+
+  /**
+   * Determines the appropriate thumbnail to use to represent an Image Resource.
+   * @param {Object} resource The Image Resource from which to derive a thumbnail
+   * @return {Object} The thumbnail URL and any spatial dimensions that can be determined
    */
   iiifThumbnailUrl(resource) {
     let size;
@@ -84,63 +142,26 @@ class ThumbnailFactory {
 
     const service = iiifImageService(resource);
 
-    if (!service) return undefined;
+    if (!service) return ThumbnailFactory.staticImageUrl(resource);
 
     const aspectRatio = resource.getWidth()
       && resource.getHeight()
       && (resource.getWidth() / resource.getHeight());
+    const target = (requestedMaxWidth && requestedMaxHeight)
+      ? requestedMaxWidth * requestedMaxHeight
+      : maxHeight * maxWidth;
+    const closestSize = ThumbnailFactory.selectBestImageSize(service, target);
 
-    // just bail to a static image, even though sizes might provide something better
-    if (isLevel0ImageProfile(service)) {
-      const sizes = asArray(service.getProperty('sizes'));
-      const serviceHeight = service.getProperty('height');
-      const serviceWidth = service.getProperty('width');
-
-      const target = (requestedMaxWidth && requestedMaxHeight)
-        ? requestedMaxWidth * requestedMaxHeight
-        : maxHeight * maxWidth;
-
-      let closestSize = {
-        default: true,
-        height: serviceHeight || Number.MAX_SAFE_INTEGER,
-        width: serviceWidth || Number.MAX_SAFE_INTEGER,
-      };
-
-      /** Compare the total image area to our target */
-      const imageFitness = (test) => test.width * test.height - target;
-
-      /** Look for the size that's just bigger than we prefer... */
-      closestSize = sizes.reduce(
-        (best, test) => {
-          const score = imageFitness(test);
-
-          if (score < 0) return best;
-
-          return Math.abs(score) < Math.abs(imageFitness(best))
-            ? test
-            : best;
-        }, closestSize,
-      );
-
-      /** .... but not "too" big; we'd rather scale up an image than download too much */
-      if (closestSize.width * closestSize.height > target * 6) {
-        closestSize = sizes.reduce(
-          (best, test) => (
-            Math.abs(imageFitness(test)) < Math.abs(imageFitness(best))
-              ? test
-              : best
-          ), closestSize,
-        );
-      }
-
-      /** Bail if the best available size is the full size.. maybe we'll get lucky with the @id */
-      if (closestSize.default && !serviceHeight && !serviceWidth) {
-        return ThumbnailFactory.staticImageUrl(resource);
-      }
-
+    if (closestSize) {
+      // Embedded service advertises an appropriate size
       width = closestSize.width;
       height = closestSize.height;
       size = `${width},${height}`;
+    } else if (isLevel0ImageProfile(service)) {
+      /** Bail if the best available size is the full size.. maybe we'll get lucky with the @id */
+      if (!service.getProperty('height') && !service.getProperty('width')) {
+        return ThumbnailFactory.staticImageUrl(resource);
+      }
     } else if (requestedMaxHeight && requestedMaxWidth) {
       // IIIF level 2, no problem.
       if (isLevel2ImageProfile(service)) {
@@ -184,77 +205,76 @@ class ThumbnailFactory {
     };
   }
 
-  /** */
-  getThumbnail(resource, { requireIiif, quirksMode }) {
-    if (!resource) return undefined;
-    const thumb = resource.getThumbnail();
-    if (thumb && iiifImageService(thumb)) return this.iiifThumbnailUrl(thumb);
+  /**
+   * Determines the content resource from which to derive a thumbnail to represent a given resource.
+   * This method is recursive.
+   * @param {Object} resource A IIIF resource to derive a thumbnail from
+   * @return {Object|undefined} The Image Resource to derive a thumbnail from, or undefined
+   * if no appropriate resource exists
+   */
+  getSourceContentResource(resource) {
+    const thumbnail = resource.getThumbnail();
 
-    if (requireIiif) return undefined;
-    if (thumb && typeof thumb.__jsonld !== 'string') return ThumbnailFactory.staticImageUrl(thumb);
+    // Any resource type may have a thumbnail
+    if (thumbnail) {
+      if (typeof thumbnail.__jsonld === 'string') return thumbnail.__jsonld;
 
-    if (!quirksMode) return undefined;
+      // Prefer an image's ImageService over its image's thumbnail
+      // Note that Collection, Manifest, and Canvas don't have `getType()`
+      if (!resource.isCollection() && !resource.isManifest() && !resource.isCanvas()) {
+        if (resource.getType() === 'image' && iiifImageService(resource) && !iiifImageService(thumbnail)) {
+          return resource;
+        }
+      }
 
-    return (thumb && typeof thumb.__jsonld === 'string') ? { url: thumb.__jsonld } : undefined;
+      return thumbnail;
+    }
+
+    if (resource.isCollection()) {
+      const firstManifest = resource.getManifests()[0];
+      if (firstManifest) return this.getSourceContentResource(firstManifest);
+
+      return undefined;
+    }
+
+    if (resource.isManifest()) {
+      const miradorManifest = new MiradorManifest(resource);
+      const canvas = miradorManifest.startCanvas || miradorManifest.canvasAt(0);
+      if (canvas) return this.getSourceContentResource(canvas);
+
+      return undefined;
+    }
+
+    if (resource.isCanvas()) {
+      const image = ThumbnailFactory.getPreferredImage(resource);
+      if (image) return this.getSourceContentResource(image);
+
+      return undefined;
+    }
+
+    if (resource.getType() === 'image') {
+      return resource;
+    }
+
+    return undefined;
   }
 
-  /** */
-  getResourceThumbnail(resource) {
-    const thumb = this.getThumbnail(resource, { requireIiif: true });
-
-    if (thumb) return thumb;
-
-    if (iiifImageService(resource)) return this.iiifThumbnailUrl(resource);
-    if (['image', 'dctypes:Image'].includes(resource.getProperty('type'))) return ThumbnailFactory.staticImageUrl(resource);
-
-    return this.getThumbnail(resource, { quirksMode: true, requireIiif: false });
-  }
-
-  /** */
-  getIIIFThumbnail(canvas) {
-    const thumb = this.getThumbnail(canvas, { requireIiif: true });
-    if (thumb) return thumb;
-
-    const miradorCanvas = new MiradorCanvas(canvas);
-
-    const preferredCanvasResource = miradorCanvas.iiifImageResources[0]
-     || canvas.imageResource;
-
-    return (preferredCanvasResource && this.getResourceThumbnail(preferredCanvasResource))
-      || this.getThumbnail(canvas, { quirksMode: true, requireIiif: false });
-  }
-
-  /** */
-  getManifestThumbnail(manifest) {
-    const thumb = this.getThumbnail(manifest, { requireIiif: true });
-    if (thumb) return thumb;
-
-    const miradorManifest = new MiradorManifest(manifest);
-    const canvas = miradorManifest.startCanvas || miradorManifest.canvasAt(0);
-
-    return (canvas && this.getIIIFThumbnail(canvas))
-      || this.getThumbnail(manifest, { quirksMode: true, requireIiif: false });
-  }
-
-  /** */
-  getCollectionThumbnail(collection) {
-    const thumb = this.getThumbnail(collection, { requireIiif: true });
-    if (thumb) return thumb;
-
-    const firstManifest = this.resource.getManifests()[0];
-
-    return (firstManifest && this.getManifestThumbnail(firstManifest))
-      || this.getThumbnail(collection, { quirksMode: true, requireIiif: false });
-  }
-
-  /** */
+  /**
+   * Gets a thumbnail representing the resource.
+   * @return {Object|undefined} A thumbnail representing the resource, or undefined if none could
+   * be determined
+   */
   get() {
     if (!this.resource) return undefined;
 
-    if (this.resource.isCanvas()) return this.getIIIFThumbnail(this.resource);
-    if (this.resource.isManifest()) return this.getManifestThumbnail(this.resource);
-    if (this.resource.isCollection()) return this.getCollectionThumbnail(this.resource);
-    return this.getResourceThumbnail(this.resource, { requireIiif: true });
+    // Determine which content resource we should use to derive a thumbnail
+    const sourceContentResource = this.getSourceContentResource(this.resource);
+    if (!sourceContentResource) return undefined;
+
+    // Special treatment for external resources
+    if (typeof sourceContentResource === 'string') return { url: sourceContentResource };
+
+    return this.iiifThumbnailUrl(sourceContentResource);
   }
 }
 
@@ -263,4 +283,4 @@ function getBestThumbnail(resource, iiifOpts) {
   return new ThumbnailFactory(resource, iiifOpts).get();
 }
 
-export default getBestThumbnail;
+export { getBestThumbnail as default, ThumbnailFactory };

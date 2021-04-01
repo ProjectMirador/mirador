@@ -72,11 +72,6 @@ describe('IIIFThumbnail', () => {
     expect(wrapper.find('img').props().style).toMatchObject({ height: 60, width: 50 });
   });
 
-  it('relaxes constraints when the image dimensions are unknown', () => {
-    wrapper = createWrapper({ thumbnail: { url } });
-    expect(wrapper.find('img').props().style).toMatchObject({ height: 'auto', width: 'auto' });
-  });
-
   it('constrains what it can when the image dimensions are unknown', () => {
     wrapper = createWrapper({ maxHeight: 90, thumbnail: { height: 120, url } });
     expect(wrapper.find('img').props().style).toMatchObject({ height: 90, width: 'auto' });
