@@ -343,9 +343,11 @@ export default {
     workspace: true,
   },
   audioOptions: { // Additional props passed to <audio> element
+    controls: true,
     crossOrigin: 'anonymous',
   },
   videoOptions: { // Additional props passed to <audio> element
+    controls: true,
     crossOrigin: 'anonymous',
   },
   auth: {

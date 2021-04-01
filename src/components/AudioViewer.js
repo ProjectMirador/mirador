@@ -12,7 +12,7 @@ export class AudioViewer extends Component {
 
     return (
       <div className={classes.container}>
-        <audio controls className={classes.audio} {...audioOptions}>
+        <audio className={classes.audio} {...audioOptions}>
           {audioResources.map(audio => (
             <Fragment key={audio.id}>
               <source src={audio.id} type={audio.getFormat()} />

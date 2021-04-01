@@ -11,7 +11,7 @@ export class VideoViewer extends Component {
     } = this.props;
     return (
       <div className={classes.container}>
-        <video controls className={classes.video} {...videoOptions}>
+        <video className={classes.video} {...videoOptions}>
           {videoResources.map(video => (
             <Fragment key={video.id}>
               <source src={video.id} type={video.getFormat()} />
