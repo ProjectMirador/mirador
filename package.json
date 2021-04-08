@@ -33,7 +33,7 @@
   "repository": "https://github.com/ProjectMirador/mirador",
   "dependencies": {
     "@material-ui/core": "^4.11.0",
-    "@material-ui/icons": "~4.9.1",
+    "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.53",
     "@researchgate/react-intersection-observer": "^1.0.0",
     "classnames": "^2.2.6",
@@ -97,7 +97,7 @@
     "codecov": "^3.7.0",
     "core-js": "^3.4.8",
     "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-adapter-react-16": "^1.15.0",
     "eslint": "^6.0.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-react-app": "^3.0.5",
