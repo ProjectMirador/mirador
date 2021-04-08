@@ -18,9 +18,11 @@ const mirador2 = {
   ALLOWED_TAGS: ['a', 'b', 'br', 'i', 'img', 'p', 'span', 'strong', 'em', 'ul', 'ol', 'li'],
 };
 
-export default {
+const htmlRules = {
   iiif,
   liberal,
   mirador2,
   noHtml,
 };
+
+export default htmlRules;
