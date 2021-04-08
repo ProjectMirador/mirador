@@ -48,8 +48,10 @@ export function addWindow({ companionWindows, manifest, ...options }) {
       defaultCompanionWindows.unshift(
         {
           content: options.sideBarPanel
+            || (options.defaultSearchQuery && 'search')
             || config.window.defaultSideBarPanel
             || config.window.sideBarPanel,
+
           default: true,
           id: `cw-${uuid()}`,
           position: 'left',
@@ -72,8 +74,8 @@ export function addWindow({ companionWindows, manifest, ...options }) {
       rotation: null,
       selectedAnnotations: {},
       sideBarOpen: config.window.sideBarOpenByDefault !== undefined
-        ? config.window.sideBarOpenByDefault
-        : config.window.sideBarOpen,
+        ? config.window.sideBarOpenByDefault || !!options.defaultSearchQuery
+        : config.window.sideBarOpen || !!options.defaultSearchQuery,
       sideBarPanel: options.sideBarPanel
         || config.window.defaultSideBarPanel
         || config.window.sideBarPanel,
