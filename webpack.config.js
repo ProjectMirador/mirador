@@ -1,8 +1,8 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const paths = require('./config/paths');
 
 /** */
 const baseConfig = mode => ({
@@ -10,7 +10,7 @@ const baseConfig = mode => ({
   module: {
     rules: [
       {
-        include: paths.appPath, // CRL
+        include: path.resolve(fs.realpathSync(process.cwd()), '.'), // CRL
         loader: require.resolve('babel-loader'),
         options: {
           // Save disk space when time isn't as important

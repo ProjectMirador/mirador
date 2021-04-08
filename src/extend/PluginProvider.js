@@ -16,7 +16,7 @@ export default function PluginProvider(props) {
     const connectedPlugins = connectPluginsToStore(plugins);
     addPluginsToCompanionWindowsRegistry(connectedPlugins);
     setPluginMap(createTargetToPluginMapping(connectedPlugins));
-  }, []);
+  }, [plugins]);
 
   return (
     <PluginContext.Provider value={pluginMap}>

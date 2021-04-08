@@ -14,8 +14,10 @@ import sr from './locales/sr/translation.json';
 import lt from './locales/lt/translation.json';
 import vi from './locales/vi/translation.json';
 
-export default () => {
-  // Load translations for each language
+/**
+ * Load translations for each language
+ */
+function createI18nInstance() {
   const resources = {
     ar,
     de,
@@ -43,4 +45,6 @@ export default () => {
   });
 
   return instance;
-};
+}
+
+export default createI18nInstance;

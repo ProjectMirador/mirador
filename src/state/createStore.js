@@ -14,7 +14,7 @@ import settings from '../config/settings';
 /**
  * Configure Store
  */
-export default function (pluginReducers, pluginSagas = []) {
+function configureStore(pluginReducers, pluginSagas = []) {
   const miradorReducer = createRootReducer(pluginReducers);
 
   const rootReducer = settings.state.slice
@@ -38,3 +38,5 @@ export default function (pluginReducers, pluginSagas = []) {
 
   return store;
 }
+
+export default configureStore;
