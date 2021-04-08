@@ -1,4 +1,3 @@
-import normalizeUrl from 'normalize-url';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -18,7 +17,18 @@ export const infoResponsesReducer = (state = {}, action) => {
       return {
         ...state,
         [action.infoId]: {
-          degraded: !action.ok || !(normalizeUrl(action.infoId, { stripAuthentication: false }) === normalizeUrl(action.infoJson.id || action.infoJson['@id'], { stripAuthentication: false })),
+          degraded: false,
+          id: action.infoId,
+          isFetching: false,
+          json: action.infoJson,
+          tokenServiceId: action.tokenServiceId,
+        },
+      };
+    case ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE:
+      return {
+        ...state,
+        [action.infoId]: {
+          degraded: true,
           id: action.infoId,
           isFetching: false,
           json: action.infoJson,
@@ -44,13 +54,6 @@ export const infoResponsesReducer = (state = {}, action) => {
       }, {});
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};
-    case ActionTypes.RESET_AUTHENTICATION_STATE:
-      return Object.keys(state).reduce((object, key) => {
-        if (state[key].tokenServiceId !== action.tokenServiceId) {
-          object[key] = state[key]; // eslint-disable-line no-param-reassign
-        }
-        return object;
-      }, {});
     default: return state;
   }
 };

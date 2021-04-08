@@ -13,9 +13,9 @@ import {
   getManifestSearchService,
   getSearchQuery,
   getWindow,
+  getWindowConfig,
 } from '../state/selectors';
 import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
-
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -33,6 +33,16 @@ function hasLayers(canvases) {
   return canvases && canvases.some(c => new MiradorCanvas(c).imageResources.length > 1);
 }
 
+/** */
+function hasAnnotations(canvases) {
+  return canvases && canvases.some(c => {
+    const canvas = new MiradorCanvas(c);
+
+    return canvas.annotationListUris.length > 0
+      || canvas.canvasAnnotationPages.length > 0;
+  });
+}
+
 /**
  * mapStateToProps - used to hook up connect to state
  * @memberof WindowSideButtons
@@ -41,8 +51,9 @@ function hasLayers(canvases) {
 const mapStateToProps = (state, { windowId }) => ({
   hasAnnotations: getAnnotationResourcesByMotivation(
     state,
-    { motivations: state.config.annotations.filteredMotivations, windowId },
+    { windowId },
   ).length > 0,
+  hasAnyAnnotations: hasAnnotations(getCanvases(state, { windowId })),
   hasAnyLayers: hasLayers(getCanvases(state, { windowId })),
   hasCurrentLayers: hasLayers(getVisibleCanvases(state, { windowId })),
   hasSearchResults: getWindow(state, { windowId }).suggestedSearches || getSearchQuery(state, {
@@ -50,7 +61,7 @@ const mapStateToProps = (state, { windowId }) => ({
     windowId,
   }),
   hasSearchService: getManifestSearchService(state, { windowId }) !== null,
-  panels: state.config.window.panels,
+  panels: getWindowConfig(state, { windowId }).panels,
   sideBarPanel: ((getCompanionWindowsForPosition(state, { position: 'left', windowId }))[0] || {}).content,
 });
 

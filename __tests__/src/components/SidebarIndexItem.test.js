@@ -7,7 +7,7 @@ import { SidebarIndexItem } from '../../../src/components/SidebarIndexItem';
 function createWrapper(props) {
   return shallow(
     <SidebarIndexItem
-      canvas={{ label: 'yolo' }}
+      label="yolo"
       classes={{}}
       {...props}
     />,

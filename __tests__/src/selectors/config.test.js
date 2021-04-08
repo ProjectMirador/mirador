@@ -5,7 +5,34 @@ import {
   getThemeIds,
   getContainerId,
   getThemeDirection,
+  getConfig,
+  getRequestsConfig,
+  getExportableState,
 } from '../../../src/state/selectors';
+
+describe('getConfig', () => {
+  it('returns the whole config', () => {
+    const state = { config: { x: {} } };
+    expect(getConfig(state)).toEqual(state.config);
+  });
+});
+
+describe('getExportableState', () => {
+  it('returns whole stems', () => {
+    const a = { some: 'value' };
+    const b = [1, 2, 3];
+    const state = { a, b, config: { export: { a: true, b: true } } };
+    expect(getExportableState(state)).toEqual({ a, b });
+  });
+
+  it('filters out parts of stems', () => {
+    const f = {
+      a: 1, b: 2, c: 3, d: 4,
+    };
+    const state = { config: { export: { f: { filter: ([k, v]) => (v % 2) === 0 } } }, f };
+    expect(getExportableState(state)).toEqual({ f: { b: 2, d: 4 } });
+  });
+});
 
 describe('getLanguagesFromConfigWithCurrent', () => {
   it('returns an array of objects with locale, label, and current properties', () => {
@@ -105,5 +132,12 @@ describe('getThemeDirection', () => {
   it('returns ltr as default', () => {
     const state = { config: { theme: { } } };
     expect(getThemeDirection(state)).toBe('ltr');
+  });
+});
+
+describe('getRequestsConfig', () => {
+  it('returns the requests configration', () => {
+    const state = { config: { requests: 'whatever' } };
+    expect(getRequestsConfig(state)).toEqual('whatever');
   });
 });

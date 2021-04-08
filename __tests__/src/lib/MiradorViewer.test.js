@@ -5,21 +5,14 @@ jest.unmock('react-i18next');
 jest.mock('react-dom');
 jest.mock('isomorphic-unfetch', () => jest.fn(() => Promise.resolve({ json: () => ({}) })));
 
-jest.mock('../../../src/state/selectors', () => ({
-  getCompanionWindowIdsForPosition: () => ['cwid'],
-  getManifestSearchService: () => ({ id: 'http://example.com/search' }),
-}));
-
 describe('MiradorViewer', () => {
   let instance;
   beforeAll(() => {
     ReactDOM.render = jest.fn();
+    ReactDOM.unmountComponentAtNode = jest.fn();
     instance = new MiradorViewer({});
   });
   describe('constructor', () => {
-    it('returns viewer actions', () => {
-      expect(instance.actions.addWindow).toBeDefined();
-    });
     it('returns viewer store', () => {
       expect(instance.store.dispatch).toBeDefined();
     });
@@ -30,10 +23,10 @@ describe('MiradorViewer', () => {
   describe('processConfig', () => {
     it('transforms config values to actions to dispatch to store', () => {
       instance = new MiradorViewer({
+        catalog: [
+          { manifestId: 'http://media.nga.gov/public/manifests/nga_highlights.json', provider: 'National Gallery of Art' },
+        ],
         id: 'mirador',
-        manifests: {
-          'http://media.nga.gov/public/manifests/nga_highlights.json': { provider: 'National Gallery of Art' },
-        },
         windows: [
           {
             canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
@@ -45,48 +38,76 @@ describe('MiradorViewer', () => {
             view: 'book',
           },
         ],
+      },
+      {
+        plugins: [{
+          config: {
+            foo: 'bar',
+          },
+          mode: 'add',
+          target: 'WindowTopBarPluginArea',
+        }],
       });
 
-      const { windows, manifests } = instance.store.getState();
+      const { windows, catalog, config } = instance.store.getState();
       const windowIds = Object.keys(windows);
       expect(Object.keys(windowIds).length).toBe(2);
       expect(windows[windowIds[0]].canvasId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892');
       expect(windows[windowIds[1]].canvasId).toBe(undefined);
-      expect(windows[windowIds[0]].layoutOrder).toBe(0);
-      expect(windows[windowIds[1]].layoutOrder).toBe(1);
       expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe('far-bottom');
-      expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe('off');
+      expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe(undefined);
       expect(windows[windowIds[0]].view).toBe(undefined);
       expect(windows[windowIds[1]].view).toBe('book');
 
-      const manifestIds = Object.keys(manifests);
-      expect(Object.keys(manifestIds).length).toBe(2);
-      expect(manifests['http://media.nga.gov/public/manifests/nga_highlights.json'].provider).toBe('National Gallery of Art');
+      expect(catalog.length).toBe(2);
+      expect(catalog[0].manifestId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843');
+      expect(catalog[1].manifestId).toBe('http://media.nga.gov/public/manifests/nga_highlights.json');
+      expect(catalog[1].provider).toBe('National Gallery of Art');
+      expect(config.foo).toBe('bar');
     });
-
-    /** */
-    function flushPromises() {
-      return new Promise(resolve => setImmediate(resolve));
-    }
-
-    it('dispatches pre-configured searches', async () => {
+    it('merges translation configs from multiple plugins', () => {
       instance = new MiradorViewer({
         id: 'mirador',
-        windows: [
+      },
+      {
+        plugins: [
           {
-            defaultSearchQuery: 'NSF',
-            manifestId: 'https://purl.stanford.edu/fg165hz3589/iiif/manifest',
+            config: {
+              translations: {
+                en: {
+                  foo: 'bar',
+                },
+              },
+            },
+            mode: 'add',
+            target: 'WindowTopBarPluginArea',
+          },
+          {
+            config: {
+              translations: {
+                en: {
+                  bat: 'bar',
+                },
+              },
+            },
+            mode: 'wrap',
+            target: 'Window',
           },
         ],
       });
 
-      await flushPromises();
+      const { config } = instance.store.getState();
 
-      const { searches, windows } = instance.store.getState();
-      const windowIds = Object.keys(windows);
-      const searchWindowIds = Object.keys(searches);
-      expect(Object.keys(searchWindowIds).length).toBe(1);
-      expect(searches[windowIds[0]].cwid.query).toBe('NSF');
+      expect(config.translations.en).toEqual(expect.objectContaining({
+        bat: 'bar',
+        foo: 'bar',
+      }));
+    });
+  });
+  describe('unmount', () => {
+    it('unmounts via ReactDOM', () => {
+      instance.unmount();
+      expect(ReactDOM.unmountComponentAtNode).toHaveBeenCalled();
     });
   });
 });

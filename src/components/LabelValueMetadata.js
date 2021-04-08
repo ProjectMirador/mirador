@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import ns from '../config/css-ns';
 
-
 /**
  * Renders label/value pair metadata in a dl
  * @prop {object} labelValuePair
@@ -30,7 +29,7 @@ export class LabelValueMetadata extends Component {
         {labelValuePairs.reduce((acc, labelValuePair, i) => acc.concat([
           <Typography component="dt" key={`label-${i}`} variant="subtitle2">{labelValuePair.label || defaultLabel}</Typography>,
           <Typography style={{ marginBottom: '.5em', marginLeft: '0px' }} component="dd" key={`value-${i}`} variant="body1">
-            <SanitizedHtml htmlString={labelValuePair.value} ruleSet="iiif" />
+            <SanitizedHtml htmlString={labelValuePair.values.join(', ')} ruleSet="iiif" />
           </Typography>,
         ]), [])}
       </dl>

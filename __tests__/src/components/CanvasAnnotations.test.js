@@ -2,18 +2,17 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
 import { CanvasAnnotations } from '../../../src/components/CanvasAnnotations';
 
 /** Utility function to wrap CanvasAnnotations */
 function createWrapper(props) {
   return shallow(
     <CanvasAnnotations
-      allAnnotationsAreHighlighted={false}
       classes={{}}
       deselectAnnotation={() => {}}
-      highlightAnnotation={() => {}}
+      hoverAnnotation={() => {}}
       index={0}
       label="A Canvas Label"
       selectAnnotation={() => {}}
@@ -42,7 +41,6 @@ describe('CanvasAnnotations', () => {
     },
   ];
 
-
   it('renders a heading with the appropriate context based on index and totalSize', () => {
     wrapper = createWrapper({ annotations });
 
@@ -60,19 +58,14 @@ describe('CanvasAnnotations', () => {
   it('renders a List w/ a ListItem for every annotation', () => {
     wrapper = createWrapper({ annotations });
 
-    expect(wrapper.find(List).length).toEqual(1);
-    expect(wrapper.find(ListItem).length).toEqual(2);
+    expect(wrapper.find(MenuList).length).toEqual(1);
+    expect(wrapper.find(MenuItem).length).toEqual(2);
   });
 
   it('renders a Chip for every tag', () => {
     wrapper = createWrapper({ annotations });
 
     expect(wrapper.find(Chip).length).toEqual(2);
-  });
-
-  it('pass through the annotation to make plugins life easier', () => {
-    wrapper = createWrapper({ annotations });
-    expect(wrapper.find(ListItem).first().dive().props().annotation.id).toEqual('abc123');
   });
 
   it('renders nothing when there are no annotations', () => {
@@ -89,8 +82,8 @@ describe('CanvasAnnotations', () => {
         selectAnnotation,
       });
 
-      wrapper.find(ListItem).first().simulate('click');
-      expect(selectAnnotation).toHaveBeenCalledWith('abc', 'example.com/iiif/12345', 'abc123');
+      wrapper.find(MenuItem).first().simulate('click');
+      expect(selectAnnotation).toHaveBeenCalledWith('abc', 'abc123');
     });
 
     it('triggers the deselectAnnotation prop with the correct arguments when clicking a selected annotation', () => {
@@ -99,95 +92,68 @@ describe('CanvasAnnotations', () => {
       wrapper = createWrapper({
         annotations,
         deselectAnnotation,
-        selectedAnnotationIds: ['abc123'],
+        selectedAnnotationId: 'abc123',
       });
 
-      wrapper.find(ListItem).first().simulate('click');
-      expect(deselectAnnotation).toHaveBeenCalledWith('abc', 'example.com/iiif/12345', 'abc123');
+      wrapper.find(MenuItem).first().simulate('click');
+      expect(deselectAnnotation).toHaveBeenCalledWith('abc', 'abc123');
     });
 
-    describe('when allAnnotationsAreHighlighted is true', () => {
-      it('does not highlight annotations on mouse enter', () => {
-        const highlightAnnotation = jest.fn();
+    it('highlights annotations on mouse enter', () => {
+      const hoverAnnotation = jest.fn();
 
-        wrapper = createWrapper({
-          allAnnotationsAreHighlighted: true,
-          annotations: [
-            {
-              content: 'Annotation',
-              id: 'annoId',
-              tags: [],
-              targetId: 'example.com/iiif/12345',
-            },
-          ],
-          highlightAnnotation,
-        });
-
-        wrapper.find(ListItem).first().simulate('mouseEnter');
-        expect(highlightAnnotation).not.toHaveBeenCalled();
-
-        wrapper.find(ListItem).first().simulate('mouseLeave');
-        expect(highlightAnnotation).not.toHaveBeenCalled();
+      wrapper = createWrapper({
+        annotations: [
+          {
+            content: 'Annotation',
+            id: 'annoId',
+            tags: [],
+            targetId: 'example.com/iiif/12345',
+          },
+        ],
+        hoverAnnotation,
       });
+
+      wrapper.find(MenuItem).first().simulate('mouseEnter');
+      expect(hoverAnnotation).toHaveBeenCalledWith('abc', ['annoId']);
     });
 
-    describe('when allAnnotationsAreHighlighted is false', () => {
-      it('highlights annotations on mouse enter', () => {
-        const highlightAnnotation = jest.fn();
+    it('highlights annotations on focus', () => {
+      const hoverAnnotation = jest.fn();
 
-        wrapper = createWrapper({
-          annotations: [
-            {
-              content: 'Annotation',
-              id: 'annoId',
-              tags: [],
-              targetId: 'example.com/iiif/12345',
-            },
-          ],
-          highlightAnnotation,
-        });
-
-        wrapper.find(ListItem).first().simulate('mouseEnter');
-        expect(highlightAnnotation).toHaveBeenCalledWith('abc', 'annoId');
+      wrapper = createWrapper({
+        annotations: [
+          {
+            content: 'Annotation',
+            id: 'annoId',
+            tags: [],
+            targetId: 'example.com/iiif/12345',
+          },
+        ],
+        hoverAnnotation,
       });
 
-      it('highlights annotations on focus', () => {
-        const highlightAnnotation = jest.fn();
+      wrapper.find(MenuItem).first().simulate('focus');
+      expect(hoverAnnotation).toHaveBeenCalledWith('abc', ['annoId']);
+    });
 
-        wrapper = createWrapper({
-          annotations: [
-            {
-              content: 'Annotation',
-              id: 'annoId',
-              tags: [],
-              targetId: 'example.com/iiif/12345',
-            },
-          ],
-          highlightAnnotation,
-        });
+    it('sets the highlighted annotation to null on mouse leave', () => {
+      const hoverAnnotation = jest.fn();
 
-        wrapper.find(ListItem).first().simulate('focus');
-        expect(highlightAnnotation).toHaveBeenCalledWith('abc', 'annoId');
+      wrapper = createWrapper({
+        annotations: [
+          {
+            content: 'Annotation',
+            id: 'annoId',
+            tags: [],
+            targetId: 'example.com/iiif/12345',
+          },
+        ],
+        hoverAnnotation,
       });
 
-      it('sets the highlighted annotation to null on mouse leave', () => {
-        const highlightAnnotation = jest.fn();
-
-        wrapper = createWrapper({
-          annotations: [
-            {
-              content: 'Annotation',
-              id: 'annoId',
-              tags: [],
-              targetId: 'example.com/iiif/12345',
-            },
-          ],
-          highlightAnnotation,
-        });
-
-        wrapper.find(ListItem).first().simulate('mouseLeave');
-        expect(highlightAnnotation).toHaveBeenCalledWith('abc', null);
-      });
+      wrapper.find(MenuItem).first().simulate('mouseLeave');
+      expect(hoverAnnotation).toHaveBeenCalledWith('abc', []);
     });
   });
 });

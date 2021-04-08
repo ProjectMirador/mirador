@@ -94,14 +94,6 @@ describe('workspace actions', () => {
       })).toEqual(expectedAction);
     });
   });
-  describe('toggleWorkspaceExposeMode', () => {
-    it('should set the exposeMode to true', () => {
-      const expectedAction = {
-        type: ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE,
-      };
-      expect(actions.toggleWorkspaceExposeMode()).toEqual(expectedAction);
-    });
-  });
   describe('toggleDraggingEnabled', () => {
     it('should set the draggingEnabled to false', () => {
       const expectedAction = {

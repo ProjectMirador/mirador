@@ -1,65 +1,91 @@
 const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const paths = require('./config/paths');
 
-const babelLoaderConfig = {
-  include: paths.appPath, // CRL
-  loader: require.resolve('babel-loader'),
-  options: {
-    // Save disk space when time isn't as important
-    cacheCompression: true,
-    cacheDirectory: true,
-    compact: true,
-  },
-  test: /\.(js|mjs|jsx)$/,
-};
-const baseConfig = [
-  {
-    entry: ['./src/polyfills.js', './src/index.js'],
-    module: {
-      rules: [
-        babelLoaderConfig,
-        {
-          test: /\.css$/i,
-          use: ['style-loader', 'css-loader'],
+/** */
+const baseConfig = mode => ({
+  entry: ['./src/polyfills.js', './src/index.js'],
+  module: {
+    rules: [
+      {
+        include: paths.appPath, // CRL
+        loader: require.resolve('babel-loader'),
+        options: {
+          // Save disk space when time isn't as important
+          cacheCompression: true,
+          cacheDirectory: true,
+          compact: true,
+          envName: mode,
         },
-      ],
-    },
-    optimization: {
-      minimizer: [
-        new TerserPlugin({
-          extractComments: true,
-        }),
-      ],
-    },
-    output: {
-      filename: 'mirador.min.js',
-      library: 'Mirador',
-      libraryExport: 'default',
-      libraryTarget: 'umd',
-      path: path.join(__dirname, 'dist'),
-      publicPath: '/dist/',
-    },
-    plugins: [
-      new webpack.IgnorePlugin({
-        resourceRegExp: /@blueprintjs\/(core|icons)/, // ignore optional UI framework dependencies
+        test: /\.(js|mjs|jsx)$/,
+      },
+    ],
+  },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        extractComments: true,
+        sourceMap: true,
       }),
     ],
-    resolve: { extensions: ['.js'] },
   },
-];
+  output: {
+    filename: 'mirador.min.js',
+    library: 'Mirador',
+    libraryExport: 'default',
+    libraryTarget: 'umd',
+    path: path.join(__dirname, 'dist'),
+    publicPath: '/dist/',
+  },
+  plugins: [
+    new webpack.IgnorePlugin({
+      resourceRegExp: /@blueprintjs\/(core|icons)/, // ignore optional UI framework dependencies
+    }),
+  ],
+  resolve: {
+    alias: {
+      // needs shared global state for context to work
+      'react-dnd': path.resolve(path.join(__dirname, 'node_modules', 'react-dnd')),
+    },
+    extensions: ['.js'],
+  },
+});
 
 module.exports = (env, options) => {
   const isProduction = options.mode === 'production';
-  return baseConfig.map((config) => {
-    if (isProduction) {
-      config.plugins.push(new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1,
-      }));
-    } else {
-      config.devtool = 'eval-source-map'; // eslint-disable-line no-param-reassign
-    }
-    return config;
-  });
+  const config = baseConfig(options.mode);
+
+  if (isProduction) {
+    return {
+      ...config,
+      devtool: 'source-map',
+      mode: 'production',
+      plugins: [
+        ...(config.plugins || []),
+        new webpack.optimize.LimitChunkCountPlugin({
+          maxChunks: 1,
+        }),
+      ],
+    };
+  }
+
+  return {
+    ...config,
+    devServer: {
+      contentBase: [
+        './__tests__/integration/mirador',
+        './__tests__/fixtures',
+      ],
+      hot: true,
+      port: 4444,
+    },
+    devtool: 'eval-source-map',
+    mode: 'development',
+    plugins: [
+      ...(config.plugins || []),
+      new ReactRefreshWebpackPlugin(),
+    ],
+  };
 };

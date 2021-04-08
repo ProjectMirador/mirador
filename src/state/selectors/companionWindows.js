@@ -1,12 +1,20 @@
 import { createSelector } from 'reselect';
 import groupBy from 'lodash/groupBy';
-import { getWindow, getWindows } from './windows';
-
+import { miradorSlice } from './utils';
+import { getWindow, getWindows } from './getters';
 
 /** */
 export function getCompanionWindows(state) {
-  return state.companionWindows;
+  return miradorSlice(state).companionWindows || {};
 }
+
+export const getCompanionWindow = createSelector(
+  [
+    getCompanionWindows,
+    (state, { companionWindowId }) => companionWindowId,
+  ],
+  (companionWindows, companionWindowId) => companionWindowId && companionWindows[companionWindowId],
+);
 
 /** Return position of thumbnail navigation in a certain window.
 * @param {object} state
@@ -16,7 +24,7 @@ export function getCompanionWindows(state) {
 export const getThumbnailNavigationPosition = createSelector(
   [
     getWindow,
-    state => state.companionWindows,
+    getCompanionWindows,
   ],
   (window, companionWindows) => window
     && companionWindows[window.thumbnailNavigationId]
@@ -60,14 +68,6 @@ const getCompanionWindowsByWindowAndPosition = createSelector(
   ),
 );
 
-export const getCompanionWindow = createSelector(
-  [
-    getCompanionWindows,
-    (state, { companionWindowId }) => companionWindowId,
-  ],
-  (companionWindows, companionWindowId) => companionWindows[companionWindowId],
-);
-
 /**
  * Return companion windows of a window
  * @param {String} windowId
@@ -101,6 +101,23 @@ export const getCompanionWindowsForPosition = createSelector(
     (state, { position }) => ({ position }),
   ],
   (companionWindows, { position }) => companionWindows[position] || EMPTY_ARRAY,
+);
+
+/**
+* Return the companion window string from state in a given windowId and content type
+* @param {object} state
+* @param {String} windowId
+* @param {String} position
+* @return {String}
+*/
+export const getCompanionWindowsForContent = createSelector(
+  [
+    getCompanionWindowsOfWindow,
+    (state, { content }) => ({ content }),
+  ],
+  (companionWindows, { content }) => (
+    [].concat(...Object.values(companionWindows)).filter(w => w.content === content)
+  ),
 );
 
 const EMPTY_ARRAY = [];

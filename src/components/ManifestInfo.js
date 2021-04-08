@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { LabelValueMetadata } from './LabelValueMetadata';
-
+import { PluginHook } from './PluginHook';
 
 /**
  * ManifestInfo
@@ -33,6 +33,7 @@ export class ManifestInfo extends Component {
             aria-labelledby={`${id}-resource ${id}-resource-heading`}
             id={`${id}-resource-heading`}
             variant="h4"
+            component="h5"
           >
             {manifestLabel}
           </Typography>
@@ -47,6 +48,8 @@ export class ManifestInfo extends Component {
         {manifestMetadata.length > 0 && (
           <LabelValueMetadata labelValuePairs={manifestMetadata} />
         )}
+
+        <PluginHook {...this.props} />
       </CollapsibleSection>
     );
   }

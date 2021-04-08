@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { WorkspaceAdd } from '../../../src/components/WorkspaceAdd';
 import ManifestListItem from '../../../src/containers/ManifestListItem';
 import ManifestForm from '../../../src/containers/ManifestForm';
+import { IIIFDropTarget } from '../../../src/components/IIIFDropTarget';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -28,6 +29,15 @@ describe('WorkspaceAdd', () => {
   it('renders a list item for each manifest in the state', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(ManifestListItem).length).toBe(2);
+  });
+
+  it('focuses on the first manifest item', () => {
+    const el = { focus: jest.fn() };
+    const wrapper = createWrapper();
+    expect(wrapper.find(ManifestListItem).at(1).prop('buttonRef')).toBe(undefined);
+    wrapper.find(ManifestListItem).at(0).prop('buttonRef')(el);
+
+    expect(el.focus).toHaveBeenCalled();
   });
 
   it('without manifests, renders an empty message', () => {
@@ -74,6 +84,15 @@ describe('WorkspaceAdd', () => {
     expect(wrapper.find(Drawer).props().open).toBe(false);
   });
 
+  it('scrolls to the top after an item is added', () => {
+    const ref = { current: { scrollTo: jest.fn() } };
+    const wrapper = createWrapper();
+    wrapper.instance().ref = ref;
+    wrapper.instance().onSubmit();
+
+    expect(ref.current.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', left: 0, top: 0 });
+  });
+
   it('passes a cancel action through to the form', () => {
     const wrapper = createWrapper();
     wrapper.setState({ addResourcesOpen: true });
@@ -81,5 +100,32 @@ describe('WorkspaceAdd', () => {
     expect(wrapper.find(Drawer).find(ManifestForm).length).toBe(1);
     wrapper.find(Drawer).find(ManifestForm).props().onCancel();
     expect(wrapper.find(Drawer).props().open).toBe(false);
+  });
+
+  describe('drag and drop', () => {
+    it('adds a new catalog entry from a manifest', () => {
+      const manifestId = 'manifest.json';
+      const manifestJson = { data: '123' };
+
+      const addResource = jest.fn();
+
+      const wrapper = createWrapper({ addResource });
+
+      wrapper.find(IIIFDropTarget).simulate('drop', { manifestId, manifestJson });
+
+      expect(addResource).toHaveBeenCalledWith(manifestId, manifestJson, { provider: 'file' });
+    });
+
+    it('adds a new catalog entry from a manifestId', () => {
+      const manifestId = 'manifest.json';
+
+      const addResource = jest.fn();
+
+      const wrapper = createWrapper({ addResource });
+
+      wrapper.find(IIIFDropTarget).simulate('drop', { manifestId });
+
+      expect(addResource).toHaveBeenCalledWith(manifestId);
+    });
   });
 });

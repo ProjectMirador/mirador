@@ -58,7 +58,10 @@
       const addPluginA = {
         target: 'WorkspaceControlPanelButtons',
         mode: 'add',
-        component: AddPluginComponentA,
+        config: {
+          foo: 'bar',
+        },
+        component: <AddPluginComponentA />,
       };
 
       const addPluginB = {
@@ -85,7 +88,7 @@
         component: AddPluginComponentE,
       };
 
-      const miradorInstance = Mirador.viewer(config, [addPluginA, addPluginB, addPluginC, wrapPluginD, addPluginE]);
+      const miradorInstance = Mirador.viewer(config, [[addPluginA, addPluginB], addPluginC, wrapPluginD, addPluginE]);
 
      </script>
   </body>

@@ -3,7 +3,6 @@ import curry from 'lodash/curry';
 import isEmpty from 'lodash/isEmpty';
 import PluginContext from './PluginContext';
 
-
 /** withPlugins should be the innermost HOC */
 function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-underscore-dangle
   /** */
@@ -12,42 +11,40 @@ function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-u
 
     const passDownProps = {
       ...props,
+      ...(ref ? { ref } : {}),
     };
 
-    if (ref) passDownProps.ref = ref;
+    const plugins = (pluginMap || {})[targetName];
 
-    if (isEmpty(pluginMap)) {
+    if (isEmpty(plugins) || (isEmpty(plugins.wrap) && isEmpty(plugins.add))) {
       return <TargetComponent {...passDownProps} />;
     }
 
-    const plugins = pluginMap[targetName];
+    const PluginComponents = (plugins.add || []).map(plugin => plugin.component);
+    const targetComponent = (
+      <TargetComponent {...passDownProps} PluginComponents={PluginComponents} />
+    );
 
-    if (isEmpty(plugins)) {
-      return <TargetComponent {...passDownProps} />;
-    }
+    if (isEmpty(plugins.wrap)) return targetComponent;
 
-    if (!isEmpty(plugins.wrap) && !isEmpty(plugins.add)) {
-      const WrapPluginComponent = plugins.wrap[0].component;
-      const AddPluginComponents = plugins.add.map(plugin => plugin.component);
+    /** */
+    const pluginWrapper = (children, plugin) => {
+      const WrapPluginComponent = plugin.component;
+
       return (
         <WrapPluginComponent
           targetProps={passDownProps}
           {...passDownProps}
-          PluginComponents={AddPluginComponents}
+          PluginComponents={PluginComponents}
           TargetComponent={TargetComponent}
-        />
+        >
+          {children}
+        </WrapPluginComponent>
       );
-    }
+    };
 
-    if (!isEmpty(plugins.wrap)) {
-      const PluginComponent = plugins.wrap[0].component;
-      return <PluginComponent targetProps={passDownProps} TargetComponent={TargetComponent} />;
-    }
-
-    if (!isEmpty(plugins.add)) {
-      const PluginComponents = plugins.add.map(plugin => plugin.component);
-      return <TargetComponent {...passDownProps} PluginComponents={PluginComponents} />;
-    }
+    return plugins.wrap.slice().reverse()
+      .reduce(pluginWrapper, <TargetComponent {...passDownProps} />);
   }
   const whatever = React.forwardRef(PluginHoc);
 

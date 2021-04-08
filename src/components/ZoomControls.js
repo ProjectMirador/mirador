@@ -25,8 +25,6 @@ export class ZoomControls extends Component {
     const { windowId, updateViewport, viewer } = this.props;
 
     updateViewport(windowId, {
-      x: viewer.x,
-      y: viewer.y,
       zoom: viewer.zoom * 2,
     });
   }
@@ -38,8 +36,6 @@ export class ZoomControls extends Component {
     const { windowId, updateViewport, viewer } = this.props;
 
     updateViewport(windowId, {
-      x: viewer.x,
-      y: viewer.y,
       zoom: viewer.zoom / 2,
     });
   }

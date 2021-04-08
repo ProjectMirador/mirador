@@ -1,6 +1,5 @@
-import {
-  removeIn,
-} from 'immutable';
+import omit from 'lodash/omit';
+import flatten from 'lodash/flatten';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -60,10 +59,6 @@ export const searchesReducer = (state = {}, action) => {
                 json: action.searchJson,
               },
             },
-            selectedContentSearchAnnotation: searchStruct.selectedContentSearchAnnotation
-              && searchStruct.selectedContentSearchAnnotation.length > 0
-              ? searchStruct.selectedContentSearchAnnotation
-              : (action.annotationId && [action.annotationId]),
           },
         },
       };
@@ -94,28 +89,38 @@ export const searchesReducer = (state = {}, action) => {
           return object;
         }, {}),
       };
-    case ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION:
+    case ActionTypes.SET_CONTENT_SEARCH_CURRENT_ANNOTATIONS:
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
           [action.companionWindowId]: {
             ...searchStruct,
-            selectedContentSearchAnnotation: action.annotationId,
+            selectedContentSearchAnnotationIds: action.annotationIds,
           },
         },
       };
-    case ActionTypes.SET_CANVAS:
-      if (Object.keys(action.searches).length === 0) return state;
+    case ActionTypes.SELECT_ANNOTATION:
+      if (!state[action.windowId]) return state;
 
       return {
         ...state,
         [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
-          if (Object.keys(action.searches).includes(key)) {
+          const search = state[action.windowId][key];
+          const searchHasAnnotation = search.data
+            && Object.values(search.data)
+              .filter(resp => resp.json && resp.json.resources)
+              .some(resp => (
+                flatten([resp.json.resources]).some(r => r['@id'] === action.annotationId)
+              ));
+
+          if (searchHasAnnotation) {
             object[key] = { // eslint-disable-line no-param-reassign
-              ...state[action.windowId][key],
-              selectedContentSearchAnnotation: action.searches[key],
+              ...search,
+              selectedContentSearchAnnotationIds: [action.annotationId],
             };
+          } else {
+            object[key] = search; // eslint-disable-line no-param-reassign
           }
           return object;
         }, {}),
@@ -123,14 +128,14 @@ export const searchesReducer = (state = {}, action) => {
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};
     case ActionTypes.REMOVE_WINDOW:
-      return removeIn(state, [action.windowId]);
+      return omit(state, action.windowId);
     case ActionTypes.REMOVE_COMPANION_WINDOW:
       if (!state[action.windowId]) return state;
 
       return {
         ...state,
         [action.windowId]: {
-          ...removeIn(state[action.windowId], [action.id]),
+          ...omit(state[action.windowId], action.id),
         },
       };
     default: return state;

@@ -9,6 +9,7 @@ import {
   getNextSearchId,
   getSearchQuery,
   getSearchIsFetching,
+  getSearchNumTotal,
   getSortedSearchHitsForCompanionWindow,
   getSortedSearchAnnotationsForCompanionWindow,
 } from '../state/selectors';
@@ -25,6 +26,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   searchAnnotations:
     getSortedSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId }),
   searchHits: getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
+  searchNumTotal: getSearchNumTotal(state, { companionWindowId, windowId }),
 });
 
 const mapDispatchToProps = {
@@ -33,6 +35,9 @@ const mapDispatchToProps = {
 
 /** */
 const styles = theme => ({
+  moreButton: {
+    width: '100%',
+  },
   navigation: {
     textTransform: 'none',
   },

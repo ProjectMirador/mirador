@@ -16,7 +16,10 @@ export default class AnnotationResource {
 
   /** */
   get id() {
-    this._id = this._id || this.resource['@id'] || uuid(); // eslint-disable-line no-underscore-dangle
+    this._id = this._id
+      || this.resource['@id']
+      || (this.resources[0] && this.resources[0]['@id'])
+      || uuid();
     return this._id; // eslint-disable-line no-underscore-dangle
   }
 
@@ -53,9 +56,9 @@ export default class AnnotationResource {
   /** */
   get tags() {
     if (this.isOnlyTag()) {
-      return this.resources.map(r => r.value);
+      return this.resources.map(r => r.chars);
     }
-    return this.resources.filter(r => r['@type'] === 'oa:Tag').map(r => r.value);
+    return this.resources.filter(r => r['@type'] === 'oa:Tag').map(r => r.chars);
   }
 
   /** */
@@ -102,13 +105,19 @@ export default class AnnotationResource {
   get fragmentSelector() {
     const { selector } = this;
 
+    let match;
+
     switch (typeof selector) {
       case 'string':
-        return selector.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        match = selector.match(/xywh=(.*)$/);
+        break;
       case 'object':
-        return selector.value.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        match = selector.value.match(/xywh=(.*)$/);
+        break;
       default:
         return null;
     }
+
+    return match && match[1].split(',').map(str => parseInt(str, 10));
   }
 }

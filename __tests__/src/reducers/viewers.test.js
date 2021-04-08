@@ -5,6 +5,7 @@ describe('viewers reducer', () => {
   it('should handle UPDATE_VIEWPORT', () => {
     expect(viewersReducer({
       abc123: {
+        whatever: true,
         x: 1,
       },
       def456: {
@@ -16,6 +17,7 @@ describe('viewers reducer', () => {
       windowId: 'abc123',
     })).toEqual({
       abc123: {
+        whatever: true,
         x: 0,
         y: 1,
         zoom: 0.5,
@@ -60,7 +62,7 @@ describe('viewers reducer', () => {
       },
     });
   });
-  it('should handle SET_CANVAS', () => {
+  it('should handle SET_CANVAS and throwaway if !preserveViewport', () => {
     expect(viewersReducer({
       abc123: {
         foo: 'bar',
@@ -73,6 +75,27 @@ describe('viewers reducer', () => {
       windowId: 'abc123',
     })).toEqual({
       abc123: null,
+      def456: {
+        foo: 'bar',
+      },
+    });
+  });
+  it('should handle SET_CANVAS and not throwaway viewports if preserveViewport', () => {
+    expect(viewersReducer({
+      abc123: {
+        foo: 'bar',
+      },
+      def456: {
+        foo: 'bar',
+      },
+    }, {
+      preserveViewport: true,
+      type: ActionTypes.SET_CANVAS,
+      windowId: 'abc123',
+    })).toEqual({
+      abc123: {
+        foo: 'bar',
+      },
       def456: {
         foo: 'bar',
       },

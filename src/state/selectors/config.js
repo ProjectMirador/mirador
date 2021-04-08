@@ -1,9 +1,39 @@
 import { createSelector } from 'reselect';
 import deepmerge from 'deepmerge';
+import { miradorSlice } from './utils';
+import { getWorkspace } from './getters';
 
 /** */
-function getConfig(state) {
-  return state.config || {};
+export function getConfig(state) {
+  const slice = miradorSlice(state || {});
+  return slice.config || {};
+}
+
+/**
+ * Extract an exportable version of state using the configuration from the config.
+ */
+export function getExportableState(state) {
+  const exportConfig = getConfig(state).export;
+
+  return Object.entries(exportConfig).reduce(
+    (acc, [stem, value]) => {
+      if (value === true) {
+        acc[stem] = state[stem];
+      } else if (value.filter) {
+        acc[stem] = Object.entries(state[stem])
+          .filter(value.filter)
+          .reduce(
+            (stemAcc, [k, v]) => {
+              stemAcc[k] = v; // eslint-disable-line no-param-reassign
+              return stemAcc;
+            },
+            {},
+          );
+      }
+      return acc;
+    },
+    {},
+  );
 }
 
 /**
@@ -22,7 +52,7 @@ export const getLanguagesFromConfigWithCurrent = createSelector(
 
 export const getShowZoomControlsConfig = createSelector(
   [
-    state => state.workspace,
+    getWorkspace,
     getConfig,
   ],
   (workspace, config) => (
@@ -47,17 +77,12 @@ export const getContainerId = createSelector(
   ({ id }) => id,
 );
 
-export const getDefaultView = createSelector(
-  [getConfig],
-  ({ window }) => window && window.defaultView,
-);
-
-export const getViewConfigs = createSelector(
-  [getConfig],
-  ({ window }) => (window && window.views) || [],
-);
-
 export const getThemeDirection = createSelector(
   [getConfig],
   ({ theme }) => theme.direction || 'ltr',
+);
+
+export const getRequestsConfig = createSelector(
+  [getConfig],
+  ({ requests }) => requests || {},
 );

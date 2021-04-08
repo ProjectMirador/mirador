@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import NavigationIcon from '@material-ui/icons/PlayCircleOutlineSharp';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
 
@@ -98,6 +97,44 @@ describe('ViewerNavigation', () => {
 
     it('sets the dir="rtl"', () => {
       expect(wrapper.find('div').props().dir).toBe('rtl');
+    });
+  });
+
+  describe('when viewingDirection is top-to-bottom', () => {
+    beforeEach(() => {
+      wrapper = createWrapper({
+        hasNextCanvas: true,
+        hasPreviousCanvas: true,
+        setNextCanvas,
+        setPreviousCanvas,
+        viewingDirection: 'top-to-bottom',
+      });
+    });
+
+    it('changes the arrow styles', () => {
+      const previous = wrapper.find(MiradorMenuButton).first().children('PlayCircleOutlineSharpIcon').props();
+      const next = wrapper.find(MiradorMenuButton).last().children('PlayCircleOutlineSharpIcon').props();
+      expect(previous.style).toEqual({ transform: 'rotate(270deg)' });
+      expect(next.style).toEqual({ transform: 'rotate(90deg)' });
+    });
+  });
+
+  describe('when viewingDirection is bottom-to-top', () => {
+    beforeEach(() => {
+      wrapper = createWrapper({
+        hasNextCanvas: true,
+        hasPreviousCanvas: true,
+        setNextCanvas,
+        setPreviousCanvas,
+        viewingDirection: 'bottom-to-top',
+      });
+    });
+
+    it('changes the arrow styles', () => {
+      const previous = wrapper.find(MiradorMenuButton).first().children('PlayCircleOutlineSharpIcon').props();
+      const next = wrapper.find(MiradorMenuButton).last().children('PlayCircleOutlineSharpIcon').props();
+      expect(previous.style).toEqual({ transform: 'rotate(90deg)' });
+      expect(next.style).toEqual({ transform: 'rotate(270deg)' });
     });
   });
 });

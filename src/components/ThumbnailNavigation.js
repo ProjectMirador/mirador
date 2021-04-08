@@ -42,13 +42,34 @@ export class ThumbnailNavigation extends Component {
     }
   }
 
+  /** */
+  handleKeyUp(e) {
+    const { position } = this.props;
+    let nextKey = 'ArrowRight';
+    let previousKey = 'ArrowLeft';
+    if (position === 'far-right') {
+      nextKey = 'ArrowDown';
+      previousKey = 'ArrowUp';
+    }
+    switch (e.key) {
+      case nextKey:
+        this.nextCanvas();
+        break;
+      case previousKey:
+        this.previousCanvas();
+        break;
+      default:
+        break;
+    }
+  }
+
   /**
    * When on right, row height
    * When on bottom, column width
    */
   calculateScaledSize(index) {
     const { thumbnailNavigation, canvasGroupings, position } = this.props;
-    const canvases = canvasGroupings.groupings()[index];
+    const canvases = canvasGroupings[index];
     const world = new CanvasWorld(canvases);
     const bounds = world.worldBounds();
     switch (position) {
@@ -125,28 +146,7 @@ export class ThumbnailNavigation extends Component {
   /** */
   itemCount() {
     const { canvasGroupings } = this.props;
-    return canvasGroupings.groupings().length;
-  }
-
-  /** */
-  handleKeyUp(e) {
-    const { position } = this.props;
-    let nextKey = 'ArrowRight';
-    let previousKey = 'ArrowLeft';
-    if (position === 'far-right') {
-      nextKey = 'ArrowDown';
-      previousKey = 'ArrowUp';
-    }
-    switch (e.key) {
-      case nextKey:
-        this.nextCanvas();
-        break;
-      case previousKey:
-        this.previousCanvas();
-        break;
-      default:
-        break;
-    }
+    return canvasGroupings.length;
   }
 
   /**
@@ -204,32 +204,34 @@ export class ThumbnailNavigation extends Component {
         onKeyUp={this.handleKeyUp}
         role="grid"
       >
-        <AutoSizer
-          defaultHeight={100}
-          defaultWidth={400}
-        >
-          {({ height, width }) => (
-            <List
-              direction={htmlDir}
-              height={this.areaHeight(height)}
-              itemCount={this.itemCount()}
-              itemSize={this.calculateScaledSize}
-              width={width}
-              layout={(position === 'far-bottom') ? 'horizontal' : 'vertical'}
-              itemData={itemData}
-              ref={this.gridRef}
-            >
-              {ThumbnailCanvasGrouping}
-            </List>
-          )}
-        </AutoSizer>
+        <div role="row" style={{ height: '100%', width: '100%' }}>
+          <AutoSizer
+            defaultHeight={100}
+            defaultWidth={400}
+          >
+            {({ height, width }) => (
+              <List
+                direction={htmlDir}
+                height={this.areaHeight(height)}
+                itemCount={this.itemCount()}
+                itemSize={this.calculateScaledSize}
+                width={width}
+                layout={(position === 'far-bottom') ? 'horizontal' : 'vertical'}
+                itemData={itemData}
+                ref={this.gridRef}
+              >
+                {ThumbnailCanvasGrouping}
+              </List>
+            )}
+          </AutoSizer>
+        </div>
       </Paper>
     );
   }
 }
 
 ThumbnailNavigation.propTypes = {
-  canvasGroupings: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvasGroupings: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   canvasIndex: PropTypes.number.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   hasNextCanvas: PropTypes.bool,

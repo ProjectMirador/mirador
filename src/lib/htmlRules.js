@@ -1,4 +1,3 @@
-
 // Only remove security related tags and attributes. Allow each other.
 const liberal = {};
 

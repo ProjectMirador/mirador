@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import ActionTypes from './action-types';
+import { miradorSlice } from '../selectors/utils';
 
 /**
  * focusWindow - action creator
@@ -8,26 +9,10 @@ import ActionTypes from './action-types';
  * @memberof ActionCreators
  */
 export function focusWindow(windowId, pan = false) {
-  return (dispatch, getState) => {
-    const { elasticLayout, workspace } = getState();
-
-    let position;
-
-    if (pan) {
-      const {
-        x, y, width, height,
-      } = elasticLayout[windowId];
-
-      const { viewportPosition: { width: viewWidth, height: viewHeight } } = workspace;
-      position = { x: (x + width / 2) - viewWidth / 2, y: (y + height / 2) - viewHeight / 2 };
-    } else {
-      position = {};
-    }
-    dispatch({
-      position,
-      type: ActionTypes.FOCUS_WINDOW,
-      windowId,
-    });
+  return {
+    pan,
+    type: ActionTypes.FOCUS_WINDOW,
+    windowId,
   };
 }
 
@@ -37,11 +22,12 @@ export function focusWindow(windowId, pan = false) {
  * @param  {Object} options
  * @memberof ActionCreators
  */
-export function addWindow({ companionWindows, ...options }) {
+export function addWindow({ companionWindows, manifest, ...options }) {
   return (dispatch, getState) => {
-    const { config, windows } = getState();
-    const numWindows = Object.keys(windows).length;
+    const { config, workspace: { windowIds = [] } } = miradorSlice(getState());
+    const numWindows = windowIds.length;
 
+    const windowId = options.id || `window-${uuid()}`;
     const cwThumbs = `cw-${uuid()}`;
 
     const defaultCompanionWindows = [
@@ -51,19 +37,25 @@ export function addWindow({ companionWindows, ...options }) {
         id: cwThumbs,
         position: options.thumbnailNavigationPosition
           || config.thumbnailNavigation.defaultPosition,
+        windowId,
       },
       ...(
         (companionWindows || []).map((cw, i) => ({ ...cw, id: `cw-${uuid()}` }))
       ),
     ];
 
-    if (config.window.defaultSideBarPanel) {
+    if (options.sideBarPanel || config.window.defaultSideBarPanel || config.window.sideBarPanel) {
       defaultCompanionWindows.unshift(
         {
-          content: options.defaultSearchQuery ? 'search' : config.window.defaultSideBarPanel,
+          content: options.sideBarPanel
+            || (options.defaultSearchQuery && 'search')
+            || config.window.defaultSideBarPanel
+            || config.window.sideBarPanel,
+
           default: true,
           id: `cw-${uuid()}`,
           position: 'left',
+          windowId,
         },
       );
     }
@@ -73,17 +65,20 @@ export function addWindow({ companionWindows, ...options }) {
       collectionIndex: 0,
       companionAreaOpen: true,
       companionWindowIds: defaultCompanionWindows.map(cw => cw.id),
-      displayAllAnnotations: config.displayAllAnnotations || false,
       draggingEnabled: true,
-      id: `window-${uuid()}`,
-      layoutOrder: numWindows + 1,
+      highlightAllAnnotations: config.window.highlightAllAnnotations || false,
+      id: windowId,
       manifestId: null,
       maximized: false,
       rangeId: null,
       rotation: null,
       selectedAnnotations: {},
-      sideBarOpen: config.window.sideBarOpenByDefault || !!options.defaultSearchQuery,
-      sideBarPanel: config.window.defaultSideBarPanel,
+      sideBarOpen: config.window.sideBarOpenByDefault !== undefined
+        ? config.window.sideBarOpenByDefault || !!options.defaultSearchQuery
+        : config.window.sideBarOpen || !!options.defaultSearchQuery,
+      sideBarPanel: options.sideBarPanel
+        || config.window.defaultSideBarPanel
+        || config.window.sideBarPanel,
       thumbnailNavigationId: cwThumbs,
     };
 
@@ -97,9 +92,19 @@ export function addWindow({ companionWindows, ...options }) {
     dispatch({
       companionWindows: defaultCompanionWindows,
       elasticLayout,
+      manifest,
       type: ActionTypes.ADD_WINDOW,
       window: { ...defaultOptions, ...options },
     });
+  };
+}
+
+/** */
+export function updateWindow(id, payload) {
+  return {
+    id,
+    payload,
+    type: ActionTypes.UPDATE_WINDOW,
   };
 }
 
@@ -122,15 +127,6 @@ export function minimizeWindow(windowId) {
 }
 
 /** */
-export function updateWindow(id, payload) {
-  return {
-    id,
-    payload,
-    type: ActionTypes.UPDATE_WINDOW,
-  };
-}
-
-/** */
 export function setCompanionAreaOpen(id, companionAreaOpen) {
   return {
     id,
@@ -146,16 +142,9 @@ export function setCompanionAreaOpen(id, companionAreaOpen) {
  * @memberof ActionCreators
  */
 export function removeWindow(windowId) {
-  return (dispatch, getState) => {
-    const { windows } = getState();
-    const { companionWindowIds } = windows[windowId];
-
-    dispatch({
-      companionWindowIds,
-      type: ActionTypes.REMOVE_WINDOW,
-      windowId,
-      windows,
-    });
+  return {
+    type: ActionTypes.REMOVE_WINDOW,
+    windowId,
   };
 }
 
@@ -200,6 +189,24 @@ export function setWindowViewType(windowId, viewType) {
   return {
     type: ActionTypes.SET_WINDOW_VIEW_TYPE,
     viewType,
+    windowId,
+  };
+}
+
+/** */
+export function showCollectionDialog(manifestId, collectionPath = [], windowId) {
+  return {
+    collectionPath,
+    manifestId,
+    type: ActionTypes.SHOW_COLLECTION_DIALOG,
+    windowId,
+  };
+}
+
+/** */
+export function hideCollectionDialog(windowId) {
+  return {
+    type: ActionTypes.HIDE_COLLECTION_DIALOG,
     windowId,
   };
 }

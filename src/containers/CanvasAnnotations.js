@@ -7,8 +7,8 @@ import * as actions from '../state/actions';
 import {
   getAnnotationResourcesByMotivationForCanvas,
   getCanvasLabel,
-  getSelectedAnnotationIds,
-  getWindow,
+  getSelectedAnnotationId,
+  getConfig,
 } from '../state/selectors';
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
 
@@ -27,18 +27,17 @@ function getIdAndContentOfResources(resources) {
 
 /** For connect */
 const mapStateToProps = (state, { canvasId, windowId }) => ({
-  allAnnotationsAreHighlighted: getWindow(state, { windowId }).displayAllAnnotations,
   annotations: getIdAndContentOfResources(
     getAnnotationResourcesByMotivationForCanvas(
-      state, { canvasId, motivations: state.config.annotations.filteredMotivations, windowId },
+      state, { canvasId, windowId },
     ),
   ),
-  htmlSanitizationRuleSet: state.config.annotations.htmlSanitizationRuleSet,
+  htmlSanitizationRuleSet: getConfig(state).annotations.htmlSanitizationRuleSet,
   label: getCanvasLabel(state, {
     canvasId,
     windowId,
   }),
-  selectedAnnotationIds: getSelectedAnnotationIds(state, { windowId }),
+  selectedAnnotationId: getSelectedAnnotationId(state, { windowId }),
 });
 
 /**
@@ -48,24 +47,29 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
  */
 const mapDispatchToProps = {
   deselectAnnotation: actions.deselectAnnotation,
-  highlightAnnotation: actions.highlightAnnotation,
+  hoverAnnotation: actions.hoverAnnotation,
   selectAnnotation: actions.selectAnnotation,
 };
 
 /** For withStlyes */
 const styles = theme => ({
   annotationListItem: {
-    '&:hover': {
+    '&$hovered': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&:hover,&:focus': {
       backgroundColor: theme.palette.action.hover,
     },
     borderBottom: `0.5px solid ${theme.palette.divider}`,
     cursor: 'pointer',
+    whiteSpace: 'normal',
   },
   chip: {
     backgroundColor: theme.palette.background.paper,
     marginRight: theme.spacing(0.5),
     marginTop: theme.spacing(1),
   },
+  hovered: {},
   sectionHeading: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),

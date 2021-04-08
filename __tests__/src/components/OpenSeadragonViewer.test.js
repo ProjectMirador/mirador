@@ -3,23 +3,18 @@ import { shallow } from 'enzyme';
 import OpenSeadragon from 'openseadragon';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
-import OpenSeadragonCanvasOverlay from '../../../src/lib/OpenSeadragonCanvasOverlay';
-import AnnotationList from '../../../src/lib/AnnotationList';
 import CanvasWorld from '../../../src/lib/CanvasWorld';
 import fixture from '../../fixtures/version-2/019.json';
 
 const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
 
 jest.mock('openseadragon');
-jest.mock('../../../src/lib/OpenSeadragonCanvasOverlay');
-
 
 describe('OpenSeadragonViewer', () => {
   let wrapper;
   let updateViewport;
   beforeEach(() => {
     OpenSeadragon.mockClear();
-    OpenSeadragonCanvasOverlay.mockClear();
 
     updateViewport = jest.fn();
 
@@ -42,6 +37,7 @@ describe('OpenSeadragonViewer', () => {
           },
         }]}
         nonTiledImages={[{
+          getProperty: () => {},
           id: 'http://foo',
         }]}
         windowId="base"
@@ -69,48 +65,6 @@ describe('OpenSeadragonViewer', () => {
     }));
   });
 
-  describe('annotationsMatch', () => {
-    it('is false if the annotations are a different size', () => {
-      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }, { id: 2, resources: [{ id: 'rid2' }] }];
-
-      expect(
-        OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(false);
-    });
-
-    it('is true if the previous annotation\'s resource IDs all match', () => {
-      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-
-      expect(
-        OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(true);
-    });
-
-    it('is true if both are empty', () => {
-      expect(OpenSeadragonViewer.annotationsMatch([], [])).toBe(true);
-    });
-
-    it('is false if the previous annotation\'s resource IDs do not match', () => {
-      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid2' }] }];
-
-      expect(
-        OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(false);
-    });
-
-    it('returns true if the annotation resources IDs are empty (to prevent unecessary rerender)', () => {
-      const currentAnnotations = [{ id: 1, resources: [] }];
-      const previousAnnotations = [{ id: 1, resources: [] }];
-
-      expect(
-        OpenSeadragonViewer.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(true);
-    });
-  });
-
   describe('infoResponsesMatch', () => {
     it('when they do not match', () => {
       expect(wrapper.instance().infoResponsesMatch([])).toBe(false);
@@ -123,10 +77,27 @@ describe('OpenSeadragonViewer', () => {
       expect(wrapper.instance().infoResponsesMatch([])).toBe(true);
     });
     it('when the @ids do match', () => {
-      expect(wrapper.instance().infoResponsesMatch([{ id: 'a', json: { '@id': 'http://foo' } }])).toBe(true);
+      const newInfos = [
+        { id: 'a', json: { '@id': 'http://foo' } },
+        { id: 'b', json: { '@id': 'http://bar' } },
+      ];
+      expect(wrapper.instance().infoResponsesMatch(newInfos)).toBe(true);
     });
     it('when the @ids do not match', () => {
       expect(wrapper.instance().infoResponsesMatch([{ id: 'a', json: { '@id': 'http://foo-degraded' } }])).toBe(false);
+    });
+    it('when the id props match', () => {
+      wrapper.setProps({
+        infoResponses: [{
+          id: 'a',
+          json: {
+            height: 200,
+            id: 'http://foo',
+            width: 100,
+          },
+        }],
+      });
+      expect(wrapper.instance().infoResponsesMatch([{ id: 'a', json: { id: 'http://foo' } }])).toBe(true);
     });
   });
 
@@ -161,7 +132,14 @@ describe('OpenSeadragonViewer', () => {
       wrapper.instance().viewer = {
         close: () => {},
       };
-      wrapper.setProps({ nonTiledImages: [1, 2, 3, 4] });
+      wrapper.setProps({
+        nonTiledImages: [
+          { getProperty: () => 'Image' },
+          { getProperty: () => 'Image' },
+          { getProperty: () => 'Image' },
+          { getProperty: () => 'Image' },
+        ],
+      });
       const mockAddNonTiledImage = jest.fn();
       wrapper.instance().addNonTiledImage = mockAddNonTiledImage;
       wrapper.instance().addAllImageSources();
@@ -180,6 +158,28 @@ describe('OpenSeadragonViewer', () => {
     });
   });
 
+  describe('addNonTiledImage', () => {
+    it('calls addSimpleImage asynchronously on the OSD viewer', () => {
+      const viewer = {};
+      viewer.addSimpleImage = ({ success }) => { success('event'); };
+      wrapper.instance().setState({ viewer });
+
+      return wrapper.instance()
+        .addNonTiledImage({ getProperty: () => 'Image' })
+        .then((event) => {
+          expect(event).toBe('event');
+        });
+    });
+
+    it('calls addSimpleImage asynchronously on the OSD viewer', () => (
+      wrapper.instance()
+        .addNonTiledImage({ getProperty: () => 'Video' })
+        .then((event) => {
+          expect(event).toBe(undefined);
+        })
+    ));
+  });
+
   describe('refreshTileProperties', () => {
     it('updates the index and opacity of the OSD tiles from the canvas world', () => {
       const setOpacity = jest.fn();
@@ -191,13 +191,15 @@ describe('OpenSeadragonViewer', () => {
       };
       wrapper.setProps({ canvasWorld });
       wrapper.instance().loaded = true;
-      wrapper.instance().viewer = {
-        world: {
-          getItemAt: i => ({ setOpacity, source: { id: i } }),
-          getItemCount: () => 2,
-          setItemIndex,
+      wrapper.setState({
+        viewer: {
+          world: {
+            getItemAt: i => ({ setOpacity, source: { id: i } }),
+            getItemCount: () => 2,
+            setItemIndex,
+          },
         },
-      };
+      });
 
       wrapper.instance().refreshTileProperties();
 
@@ -212,14 +214,19 @@ describe('OpenSeadragonViewer', () => {
 
   describe('fitBounds', () => {
     it('calls OSD viewport.fitBounds with provided x, y, w, h', () => {
-      wrapper.instance().viewer = {
-        viewport: {
-          fitBounds: jest.fn(),
+      const fitBounds = jest.fn();
+
+      wrapper.setState({
+        viewer: {
+          viewport: {
+            fitBounds,
+          },
         },
-      };
+      });
+
       wrapper.instance().fitBounds(1, 2, 3, 4);
       expect(
-        wrapper.instance().viewer.viewport.fitBounds,
+        fitBounds,
       ).toHaveBeenCalledWith(expect.any(OpenSeadragon.Rect), true);
     });
   });
@@ -237,17 +244,20 @@ describe('OpenSeadragonViewer', () => {
     let panTo;
     let zoomTo;
     let addHandler;
+    let innerTracker;
+
     beforeEach(() => {
       panTo = jest.fn();
       zoomTo = jest.fn();
       addHandler = jest.fn();
+      innerTracker = {};
 
       wrapper = shallow(
         <OpenSeadragonViewer
           classes={{}}
           tileSources={[{ '@id': 'http://foo' }]}
           windowId="base"
-          viewer={{ x: 1, y: 0, zoom: 0.5 }}
+          viewerConfig={{ x: 1, y: 0, zoom: 0.5 }}
           config={{}}
           updateViewport={updateViewport}
           canvasWorld={new CanvasWorld([])}
@@ -262,6 +272,7 @@ describe('OpenSeadragonViewer', () => {
       OpenSeadragon.mockImplementation(() => ({
         addHandler,
         addTiledImage: jest.fn().mockResolvedValue('event'),
+        innerTracker,
         viewport: { panTo, zoomTo },
       }));
     });
@@ -285,14 +296,10 @@ describe('OpenSeadragonViewer', () => {
       expect(addHandler).toHaveBeenCalledWith('animation-finish', wrapper.instance().onViewportChange);
     });
 
-    it('sets up a OpenSeadragonCanvasOverlay', () => {
+    it('adds a mouse-move handler', () => {
       wrapper.instance().componentDidMount();
-      expect(OpenSeadragonCanvasOverlay).toHaveBeenCalledTimes(1);
-    });
 
-    it('sets up a listener on update-viewport', () => {
-      wrapper.instance().componentDidMount();
-      expect(addHandler).toHaveBeenCalledWith('update-viewport', expect.anything());
+      expect(innerTracker.moveHandler).toEqual(wrapper.instance().onCanvasMouseMove);
     });
   });
 
@@ -300,77 +307,48 @@ describe('OpenSeadragonViewer', () => {
     it('calls the OSD viewport panTo and zoomTo with the component state and forces a redraw', () => {
       const panTo = jest.fn();
       const zoomTo = jest.fn();
+      const setFlip = jest.fn();
+      const setRotation = jest.fn();
       const forceRedraw = jest.fn();
 
-      wrapper.instance().viewer = {
-        forceRedraw,
-        viewport: {
-          centerSpringX: { target: { value: 10 } },
-          centerSpringY: { target: { value: 10 } },
-          panTo,
-          zoomSpring: { target: { value: 1 } },
-          zoomTo,
+      wrapper.setState({
+        viewer: {
+          forceRedraw,
+          viewport: {
+            centerSpringX: { target: { value: 10 } },
+            centerSpringY: { target: { value: 10 } },
+            getFlip: () => false,
+            getRotation: () => (0),
+            panTo,
+            setFlip,
+            setRotation,
+            zoomSpring: { target: { value: 1 } },
+            zoomTo,
+          },
         },
-      };
+      });
 
-      wrapper.setProps({ viewer: { x: 0.5, y: 0.5, zoom: 0.1 } });
-      wrapper.setProps({ viewer: { x: 1, y: 0, zoom: 0.5 } });
+      wrapper.setProps({
+        viewerConfig: {
+          flip: false, rotation: 90, x: 0.5, y: 0.5, zoom: 0.1,
+        },
+      });
+
+      wrapper.setProps({
+        viewerConfig: {
+          flip: true, rotation: 0, x: 1, y: 0, zoom: 0.5,
+        },
+      });
 
       expect(panTo).toHaveBeenCalledWith(
-        { x: 1, y: 0, zoom: 0.5 }, false,
+        expect.objectContaining({ x: 1, y: 0, zoom: 0.5 }), false,
       );
       expect(zoomTo).toHaveBeenCalledWith(
-        0.5, { x: 1, y: 0, zoom: 0.5 }, false,
+        0.5, expect.objectContaining({ x: 1, y: 0, zoom: 0.5 }), false,
       );
+      expect(setRotation).toHaveBeenCalledWith(90);
+      expect(setFlip).toHaveBeenCalledWith(true);
       expect(forceRedraw).not.toHaveBeenCalled();
-    });
-
-    it('sets up canvasUpdate to add annotations to the canvas and forces a redraw', () => {
-      const clear = jest.fn();
-      const resize = jest.fn();
-      const canvasUpdate = jest.fn();
-      const forceRedraw = jest.fn();
-
-      wrapper.instance().osdCanvasOverlay = {
-        canvasUpdate,
-        clear,
-        resize,
-      };
-
-      wrapper.instance().viewer = { forceRedraw };
-
-      wrapper.setProps(
-        {
-          selectedAnnotations: [
-            new AnnotationList(
-              { '@id': 'foo', resources: [{ foo: 'bar' }] },
-            ),
-          ],
-        },
-      );
-      wrapper.setProps(
-        {
-          selectedAnnotations: [
-            new AnnotationList(
-              { '@id': 'foo', resources: [{ foo: 'bar' }] },
-            ),
-          ],
-        },
-      );
-      wrapper.setProps(
-        {
-          selectedAnnotations: [
-            new AnnotationList(
-              { '@id': 'bar', resources: [{ foo: 'bar' }] },
-            ),
-          ],
-        },
-      );
-      wrapper.instance().updateCanvas();
-      expect(clear).toHaveBeenCalledTimes(1);
-      expect(resize).toHaveBeenCalledTimes(1);
-      expect(canvasUpdate).toHaveBeenCalledTimes(1);
-      expect(forceRedraw).toHaveBeenCalled();
     });
   });
 
@@ -381,6 +359,8 @@ describe('OpenSeadragonViewer', () => {
           viewport: {
             centerSpringX: { target: { value: 1 } },
             centerSpringY: { target: { value: 0 } },
+            getFlip: () => false,
+            getRotation: () => 90,
             zoomSpring: { target: { value: 0.5 } },
           },
         },
@@ -388,45 +368,22 @@ describe('OpenSeadragonViewer', () => {
 
       expect(updateViewport).toHaveBeenCalledWith(
         'base',
-        { x: 1, y: 0, zoom: 0.5 },
+        {
+          flip: false, rotation: 90, x: 1, y: 0, zoom: 0.5,
+        },
       );
     });
   });
 
-  describe('onUpdateViewport', () => {
-    it('fires updateCanvas', () => {
-      const updateCanvas = jest.fn();
-      wrapper.instance().updateCanvas = updateCanvas;
-      wrapper.instance().onUpdateViewport();
-      expect(updateCanvas).toHaveBeenCalledTimes(1);
-    });
-  });
+  describe('onCanvasMouseMove', () => {
+    it('triggers an OSD event', () => {
+      const viewer = { raiseEvent: jest.fn() };
+      wrapper.setState({ viewer });
 
-  describe('annotationsToContext', () => {
-    it('converts the annotations to canvas and checks that the canvas is displayed', () => {
-      const strokeRect = jest.fn();
-      wrapper.instance().osdCanvasOverlay = {
-        context2d: {
-          strokeRect,
-        },
-      };
-      wrapper.instance().viewer = {
-        viewport: {
-          getMaxZoom: () => (1),
-          getZoom: () => (0.05),
-        },
-      };
+      wrapper.instance().onCanvasMouseMove('event');
+      wrapper.instance().onCanvasMouseMove.flush();
 
-      const annotations = [
-        new AnnotationList(
-          { '@id': 'foo', resources: [{ on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=10,10,100,200' }] },
-        ),
-      ];
-      wrapper.instance().annotationsToContext(annotations);
-      const context = wrapper.instance().osdCanvasOverlay.context2d;
-      expect(context.strokeStyle).toEqual('yellow');
-      expect(context.lineWidth).toEqual(20);
-      expect(strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
+      expect(viewer.raiseEvent).toHaveBeenCalledWith('mouse-move', 'event');
     });
   });
 });

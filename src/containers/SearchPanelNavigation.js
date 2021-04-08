@@ -7,6 +7,7 @@ import { SearchPanelNavigation } from '../components/SearchPanelNavigation';
 import * as actions from '../state/actions';
 import {
   getSelectedContentSearchAnnotationIds,
+  getSearchNumTotal,
   getSortedSearchHitsForCompanionWindow,
   getThemeDirection,
 } from '../state/selectors';
@@ -18,6 +19,7 @@ import {
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   direction: getThemeDirection(state),
+  numTotal: getSearchNumTotal(state, { companionWindowId, windowId }),
   searchHits: getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
   selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, {
     companionWindowId, windowId,
@@ -29,9 +31,9 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
  * @memberof SearchPanelNavigation
  * @private
  */
-const mapDispatchToProps = (dispatch, { companionWindowId, windowId }) => ({
-  selectContentSearchAnnotation: (...args) => dispatch(
-    actions.selectContentSearchAnnotation(windowId, companionWindowId, ...args),
+const mapDispatchToProps = (dispatch, { windowId }) => ({
+  selectAnnotation: (...args) => dispatch(
+    actions.selectAnnotation(windowId, ...args),
   ),
 });
 

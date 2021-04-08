@@ -1,7 +1,22 @@
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
+import {
+  getManifestoInstance, getVisibleCanvasAudioResources, getVisibleCanvasVideoResources, getWindow,
+} from '../state/selectors';
 import { PrimaryWindow } from '../components/PrimaryWindow';
+
+/** */
+const mapStateToProps = (state, { windowId }) => {
+  const manifestoInstance = getManifestoInstance(state, { windowId });
+  return {
+    audioResources: getVisibleCanvasAudioResources(state, { windowId }) || [],
+    isCollection: manifestoInstance && manifestoInstance.isCollection(),
+    isCollectionDialogVisible: getWindow(state, { windowId }).collectionDialogOn,
+    videoResources: getVisibleCanvasVideoResources(state, { windowId }) || [],
+  };
+};
 
 const styles = {
   primaryWindow: {
@@ -13,6 +28,7 @@ const styles = {
 
 const enhance = compose(
   withStyles(styles),
+  connect(mapStateToProps, null),
   withPlugins('PrimaryWindow'),
 );
 

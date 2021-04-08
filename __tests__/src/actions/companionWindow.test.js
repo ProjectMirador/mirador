@@ -14,66 +14,17 @@ describe('companionWindow actions', () => {
         foo: 'bar',
         position: 'right',
       };
-      const mockState = {
-        companionWindows: {},
-        windows: {
-          abc123: { companionWindowIds: [] },
-        },
-      };
 
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
-      const thunk = actions.addCompanionWindow('abc123', payload);
-      thunk(mockDispatch, mockGetState);
-
-      const action = mockDispatch.mock.calls[0][0];
+      const action = actions.addCompanionWindow('abc123', payload);
 
       expect(action.type).toBe(ActionTypes.ADD_COMPANION_WINDOW);
-      expect(action.payload).toMatchObject(payload);
-      expect(action.payload.id).toMatch(/cw-.*/);
-    });
-
-    it('should set the correct default values', () => {
-      const payload = {};
-      const defaults = { foo: 'bar' };
-
-      const mockState = {
-        companionWindows: {},
-        windows: {
-          abc123: { companionWindowIds: [] },
-        },
-      };
-
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
-      const thunk = actions.addCompanionWindow('abc123', payload, defaults);
-      thunk(mockDispatch, mockGetState);
-
-      const action = mockDispatch.mock.calls[0][0];
-
-      expect(action.payload.foo).toBe('bar');
-    });
-
-    it('should generate a new companionWindow ID', () => {
-      const payload = {};
-
-      const mockState = {
-        companionWindows: {},
-        windows: {
-          abc123: { companionWindowIds: [] },
-        },
-      };
-
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
-
-      const thunk = actions.addCompanionWindow('abc123', payload);
-      thunk(mockDispatch, mockGetState);
-      const action = mockDispatch.mock.calls[0][0];
-
       expect(action.id).toEqual(
         expect.stringMatching(/^cw-\w+-\w+/),
       );
+      expect(action.windowId).toEqual('abc123');
+      expect(action.payload).toMatchObject(payload);
+      expect(action.payload.id).toEqual(action.id);
+      expect(action.payload.windowId).toEqual(action.windowId);
     });
   });
 

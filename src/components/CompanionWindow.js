@@ -21,7 +21,6 @@ export class CompanionWindow extends Component {
     return {};
   }
 
-
   /** */
   resizeHandles() {
     const { direction, position } = this.props;
@@ -35,7 +34,6 @@ export class CompanionWindow extends Component {
         opposite: 'left',
       },
     };
-
 
     const base = {
       bottom: false,
@@ -69,8 +67,9 @@ export class CompanionWindow extends Component {
    */
   render() {
     const {
-      ariaLabel, classes, paperClassName, id, onCloseClick, updateCompanionWindow, isDisplayed,
-      position, t, windowId, title, children, titleControls, size, defaultSidebarPanelWidth,
+      ariaLabel, classes, paperClassName, onCloseClick, updateCompanionWindow, isDisplayed,
+      position, t, title, children, titleControls, size,
+      defaultSidebarPanelWidth, defaultSidebarPanelHeight,
     } = this.props;
 
     const isBottom = (position === 'bottom' || position === 'far-bottom');
@@ -87,7 +86,6 @@ export class CompanionWindow extends Component {
       );
     });
 
-
     return (
       <Paper
         className={[classes.root, position === 'bottom' ? classes.horizontal : classes.vertical, classes[`companionWindow-${position}`], ns(`companion-window-${position}`), paperClassName].join(' ')}
@@ -103,7 +101,7 @@ export class CompanionWindow extends Component {
           className={[classes.rnd]}
           style={{ display: 'flex', position: 'relative' }}
           default={{
-            height: isBottom ? 201 : '100%',
+            height: isBottom ? defaultSidebarPanelHeight : '100%',
             width: isBottom ? 'auto' : defaultSidebarPanelWidth,
           }}
           disableDragging
@@ -130,7 +128,7 @@ export class CompanionWindow extends Component {
                   && (
                     <MiradorMenuButton
                       aria-label={t('openInCompanionWindow')}
-                      onClick={() => { updateCompanionWindow(windowId, id, { position: 'right' }); }}
+                      onClick={() => { updateCompanionWindow({ position: 'right' }); }}
                     >
                       <OpenInNewIcon style={this.openInNewStyle()} />
                     </MiradorMenuButton>
@@ -142,7 +140,7 @@ export class CompanionWindow extends Component {
                         <MiradorMenuButton
                           aria-label={position === 'bottom' ? t('moveCompanionWindowToRight') : t('moveCompanionWindowToBottom')}
                           className={classes.positionButton}
-                          onClick={() => { updateCompanionWindow(windowId, id, { position: position === 'bottom' ? 'right' : 'bottom' }); }}
+                          onClick={() => { updateCompanionWindow({ position: position === 'bottom' ? 'right' : 'bottom' }); }}
                         >
                           <MoveIcon />
                         </MiradorMenuButton>
@@ -174,7 +172,10 @@ export class CompanionWindow extends Component {
               )
             }
           </Toolbar>
-          <Paper className={classes.content} elevation={0}>
+          <Paper
+            className={[classes.content, ns('scrollto-scrollable')].join(' ')}
+            elevation={0}
+          >
             {childrenWithAdditionalProps}
           </Paper>
         </Rnd>
@@ -187,9 +188,9 @@ CompanionWindow.propTypes = {
   ariaLabel: PropTypes.string,
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  defaultSidebarPanelHeight: PropTypes.number,
   defaultSidebarPanelWidth: PropTypes.number,
   direction: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
   isDisplayed: PropTypes.bool,
   onCloseClick: PropTypes.func,
   paperClassName: PropTypes.string,
@@ -202,12 +203,12 @@ CompanionWindow.propTypes = {
   ]),
   titleControls: PropTypes.node,
   updateCompanionWindow: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
 };
 
 CompanionWindow.defaultProps = {
   ariaLabel: undefined,
   children: undefined,
+  defaultSidebarPanelHeight: 201,
   defaultSidebarPanelWidth: 235,
   isDisplayed: false,
   onCloseClick: () => {},

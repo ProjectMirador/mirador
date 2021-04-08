@@ -1,25 +1,8 @@
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { IIIFThumbnail } from '../components/IIIFThumbnail';
-import getThumbnail from '../lib/ThumbnailFactory';
-
-/** */
-function getLabel(resource) {
-  return resource.getLabel().length > 0
-    ? resource.getLabel().map(label => label.value)[0]
-    : String(resource.index + 1);
-}
-
-/** */
-const mapStateToProps = (state, {
-  label, labelled, maxHeight, maxWidth, resource, thumbnail,
-}) => ({
-  image: thumbnail || getThumbnail(resource, { maxHeight, maxWidth }),
-  label: labelled && (label || getLabel(resource)),
-});
 
 /**
  * Styles for withStyles HOC
@@ -29,6 +12,7 @@ const styles = theme => ({
     lineHeight: '1.5em',
     wordBreak: 'break-word',
   },
+  image: {},
   insideCaption: {
     color: '#ffffff',
     lineClamp: '1',
@@ -55,17 +39,17 @@ const styles = theme => ({
   outsideCaption: {
     boxOrient: 'vertical',
     display: '-webkit-box',
-    height: '3em',
     lineClamp: '2',
+    maxHeight: '3em',
   },
   outsideLabel: {},
   outsideRoot: {},
+  root: {},
 });
 
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
-  connect(mapStateToProps),
   withPlugins('IIIFThumbnail'),
 );
 

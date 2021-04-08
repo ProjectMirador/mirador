@@ -4,6 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import WorkspaceElastic from '../components/WorkspaceElastic';
+import {
+  getElasticLayout,
+  getWorkspace,
+} from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -12,8 +16,8 @@ import WorkspaceElastic from '../components/WorkspaceElastic';
  */
 const mapStateToProps = state => (
   {
-    elasticLayout: state.elasticLayout,
-    workspace: state.workspace,
+    elasticLayout: getElasticLayout(state),
+    workspace: getWorkspace(state),
   }
 );
 
@@ -33,9 +37,6 @@ const mapDispatchToProps = (dispatch, props) => ({
       actions.setWorkspaceViewportPosition(position),
     );
   },
-  toggleWorkspaceExposeMode: size => dispatch(
-    actions.toggleWorkspaceExposeMode(),
-  ),
   updateElasticWindowLayout: (windowId, position) => {
     dispatch(
       actions.updateElasticWindowLayout(windowId, position),

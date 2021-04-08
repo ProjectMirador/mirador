@@ -1,13 +1,9 @@
 import init from './init';
-import * as actions from './state/actions';
-import * as selectors from './state/selectors';
-
-export * from './state/reducers';
+import state from './state';
 
 const exports = {
-  actions,
-  selectors,
-  viewer: init,
+  ...init,
+  ...state,
 };
 
 export default exports;

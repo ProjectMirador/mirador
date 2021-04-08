@@ -1,4 +1,3 @@
-
 describe('pass valid and invalid plugins to <WorkspaceControlPanelButtons>', () => {
   beforeAll(async () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/plugins/validate.html');
@@ -8,7 +7,6 @@ describe('pass valid and invalid plugins to <WorkspaceControlPanelButtons>', () 
 
   it('valid plugins will be applied <WorkspaceControlPanelButtons>', async () => {
     await expect(page).toMatchElement('#valid-plugin-a');
-    await expect(page).toMatchElement('#valid-plugin-b');
   });
 
   it('invalid plugins will not be applied <WorkspaceControlPanelButtons>', async () => {

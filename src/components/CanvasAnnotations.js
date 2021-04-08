@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import Chip from '@material-ui/core/Chip';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import MenuList from '@material-ui/core/MenuList';
+import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import SanitizedHtml from '../containers/SanitizedHtml';
@@ -18,8 +19,8 @@ export class CanvasAnnotations extends Component {
     super(props);
 
     this.handleClick = this.handleClick.bind(this);
-    this.handleAnnotationHighlight = this.handleAnnotationHighlight.bind(this);
-    this.handleAnnotationUnHighlight = this.handleAnnotationUnHighlight.bind(this);
+    this.handleAnnotationHover = this.handleAnnotationHover.bind(this);
+    this.handleAnnotationBlur = this.handleAnnotationBlur.bind(this);
   }
 
   /**
@@ -27,30 +28,28 @@ export class CanvasAnnotations extends Component {
   */
   handleClick(event, annotation) {
     const {
-      deselectAnnotation, selectAnnotation, selectedAnnotationIds, windowId,
+      deselectAnnotation, selectAnnotation, selectedAnnotationId, windowId,
     } = this.props;
 
-    if (selectedAnnotationIds.includes(annotation.id)) {
-      deselectAnnotation(windowId, annotation.targetId, annotation.id);
+    if (selectedAnnotationId === annotation.id) {
+      deselectAnnotation(windowId, annotation.id);
     } else {
-      selectAnnotation(windowId, annotation.targetId, annotation.id);
+      selectAnnotation(windowId, annotation.id);
     }
   }
 
   /** */
-  handleAnnotationHighlight(annotation) {
-    const { allAnnotationsAreHighlighted, highlightAnnotation, windowId } = this.props;
-    if (allAnnotationsAreHighlighted) return;
+  handleAnnotationHover(annotation) {
+    const { hoverAnnotation, windowId } = this.props;
 
-    highlightAnnotation(windowId, annotation.id);
+    hoverAnnotation(windowId, [annotation.id]);
   }
 
   /** */
-  handleAnnotationUnHighlight() {
-    const { allAnnotationsAreHighlighted, highlightAnnotation, windowId } = this.props;
-    if (allAnnotationsAreHighlighted) return;
+  handleAnnotationBlur() {
+    const { hoverAnnotation, windowId } = this.props;
 
-    highlightAnnotation(windowId, null);
+    hoverAnnotation(windowId, []);
   }
 
   /**
@@ -58,8 +57,8 @@ export class CanvasAnnotations extends Component {
   */
   render() {
     const {
-      annotations, classes, index, label, selectedAnnotationIds, t, totalSize,
-      listContainerComponent, htmlSanitizationRuleSet,
+      annotations, classes, index, label, selectedAnnotationId, t, totalSize,
+      listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
     } = this.props;
     if (annotations.length === 0) return <></>;
 
@@ -68,22 +67,26 @@ export class CanvasAnnotations extends Component {
         <Typography className={classes.sectionHeading} variant="overline">
           {t('annotationCanvasLabel', { context: `${index + 1}/${totalSize}`, label })}
         </Typography>
-        <List>
+        <MenuList autoFocusItem variant="selectedMenu">
           {
             annotations.map(annotation => (
-              <ListItem
+              <MenuItem
                 button
                 component={listContainerComponent}
-                className={classes.annotationListItem}
+                className={clsx(
+                  classes.annotationListItem,
+                  {
+                    [classes.hovered]: hoveredAnnotationIds.includes(annotation.id),
+                  },
+                )}
                 key={annotation.id}
-                annotation={annotation}
                 annotationid={annotation.id}
-                selected={selectedAnnotationIds.includes(annotation.id)}
+                selected={selectedAnnotationId === annotation.id}
                 onClick={e => this.handleClick(e, annotation)}
-                onFocus={() => this.handleAnnotationHighlight(annotation)}
-                onBlur={this.handleAnnotationUnHighlight}
-                onMouseEnter={() => this.handleAnnotationHighlight(annotation)}
-                onMouseLeave={this.handleAnnotationUnHighlight}
+                onFocus={() => this.handleAnnotationHover(annotation)}
+                onBlur={this.handleAnnotationBlur}
+                onMouseEnter={() => this.handleAnnotationHover(annotation)}
+                onMouseLeave={this.handleAnnotationBlur}
               >
                 <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
                   <SanitizedHtml
@@ -93,22 +96,21 @@ export class CanvasAnnotations extends Component {
                   <div>
                     {
                       annotation.tags.map(tag => (
-                        <Chip size="small" variant="outlined" label={tag} id={tag} className={classes.chip} />
+                        <Chip size="small" variant="outlined" label={tag} id={tag} className={classes.chip} key={tag.toString()} />
                       ))
                     }
                   </div>
                 </ListItemText>
-              </ListItem>
+              </MenuItem>
             ))
           }
-        </List>
+        </MenuList>
       </>
     );
   }
 }
 
 CanvasAnnotations.propTypes = {
-  allAnnotationsAreHighlighted: PropTypes.bool.isRequired,
   annotations: PropTypes.arrayOf(
     PropTypes.shape({
       content: PropTypes.string.isRequired,
@@ -117,13 +119,14 @@ CanvasAnnotations.propTypes = {
   ),
   classes: PropTypes.objectOf(PropTypes.string),
   deselectAnnotation: PropTypes.func.isRequired,
-  highlightAnnotation: PropTypes.func.isRequired,
+  hoverAnnotation: PropTypes.func.isRequired,
+  hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   htmlSanitizationRuleSet: PropTypes.string,
   index: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
   listContainerComponent: PropTypes.elementType,
   selectAnnotation: PropTypes.func.isRequired,
-  selectedAnnotationIds: PropTypes.arrayOf(PropTypes.string),
+  selectedAnnotationId: PropTypes.string,
   t: PropTypes.func.isRequired,
   totalSize: PropTypes.number.isRequired,
   windowId: PropTypes.string.isRequired,
@@ -131,7 +134,8 @@ CanvasAnnotations.propTypes = {
 CanvasAnnotations.defaultProps = {
   annotations: [],
   classes: {},
+  hoveredAnnotationIds: [],
   htmlSanitizationRuleSet: 'iiif',
   listContainerComponent: 'li',
-  selectedAnnotationIds: [],
+  selectedAnnotationId: undefined,
 };

@@ -19,40 +19,49 @@ export class WorkspaceArea extends Component {
    */
   render() {
     const {
-      classes, controlPanelVariant, isWorkspaceAddVisible, isWorkspaceControlPanelVisible, t,
+      classes,
+      controlPanelVariant,
+      isWorkspaceAddVisible,
+      isWorkspaceControlPanelVisible,
+      lang,
+      t,
     } = this.props;
 
     return (
-      <main
-        className={classNames(classes.viewer, ns('viewer'))}
-        aria-label={t('workspace')}
-      >
+      <>
         {
           isWorkspaceControlPanelVisible
             && <WorkspaceControlPanel variant={controlPanelVariant} />
         }
-        {
-          isWorkspaceAddVisible
-            ? <WorkspaceAdd />
-            : <Workspace />
-        }
-        <ErrorDialog />
-        <BackgroundPluginArea />
-      </main>
+        <main
+          className={classNames(classes.viewer, ns('viewer'))}
+          lang={lang}
+          aria-label={t('workspace')}
+        >
+          {
+            isWorkspaceAddVisible
+              ? <WorkspaceAdd />
+              : <Workspace />
+          }
+          <ErrorDialog />
+          <BackgroundPluginArea />
+        </main>
+      </>
     );
   }
 }
-
 
 WorkspaceArea.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   controlPanelVariant: PropTypes.string,
   isWorkspaceAddVisible: PropTypes.bool,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
+  lang: PropTypes.string,
   t: PropTypes.func.isRequired,
 };
 
 WorkspaceArea.defaultProps = {
   controlPanelVariant: undefined,
   isWorkspaceAddVisible: false,
+  lang: undefined,
 };

@@ -43,7 +43,7 @@ describe('CompanionWindow', () => {
       const button = companionWindow.find(MiradorMenuButton);
       button.props().onClick(); // Trigger the onClick prop
       expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
-      expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'right' });
+      expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'right' });
     });
   });
 
@@ -94,7 +94,7 @@ describe('CompanionWindow', () => {
     const button = companionWindow.find(MiradorMenuButton).first();
     button.props().onClick(); // Trigger the onClick prop
     expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
-    expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'bottom' });
+    expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'bottom' });
   });
 
   describe('when the companion window is on the bottom', () => {
@@ -109,7 +109,7 @@ describe('CompanionWindow', () => {
     const button = companionWindow.find(MiradorMenuButton).first();
     button.props().onClick(); // Trigger the onClick prop
     expect(updateCompanionWindow).toHaveBeenCalledTimes(1);
-    expect(updateCompanionWindow).toHaveBeenCalledWith('x', 'abc123', { position: 'right' });
+    expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'right' });
   });
 
   it('renders title controls when available', () => {

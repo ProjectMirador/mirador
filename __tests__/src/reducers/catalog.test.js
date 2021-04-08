@@ -28,21 +28,30 @@ describe('catalog reducer', () => {
         { manifestId: '1' },
       ]);
     });
-  });
-
-  describe('REQUEST_MANIFEST', () => {
-    it('adds new manifests to the state', () => {
+    it('includes payload data', () => {
       expect(catalogReducer([], {
         manifestId: '1',
-        type: ActionTypes.REQUEST_MANIFEST,
+        payload: { provider: 'file' },
+        type: ActionTypes.ADD_RESOURCE,
+      })).toEqual([
+        { manifestId: '1', provider: 'file' },
+      ]);
+    });
+  });
+
+  describe('ADD_WINDOW', () => {
+    it('adds new manifests to the state', () => {
+      expect(catalogReducer([], {
+        type: ActionTypes.ADD_WINDOW,
+        window: { manifestId: '1' },
       })).toEqual([
         { manifestId: '1' },
       ]);
     });
     it('adds new manifests to the top of state', () => {
       expect(catalogReducer([{ manifestId: '2' }], {
-        manifestId: '1',
-        type: ActionTypes.REQUEST_MANIFEST,
+        type: ActionTypes.ADD_WINDOW,
+        window: { manifestId: '1' },
       })).toEqual([
         { manifestId: '1' },
         { manifestId: '2' },
@@ -50,8 +59,8 @@ describe('catalog reducer', () => {
     });
     it('deduplicate manifests', () => {
       expect(catalogReducer([{ manifestId: '1' }], {
-        manifestId: '1',
-        type: ActionTypes.REQUEST_MANIFEST,
+        type: ActionTypes.ADD_WINDOW,
+        window: { manifestId: '1' },
       })).toEqual([
         { manifestId: '1' },
       ]);

@@ -57,11 +57,21 @@ export class CompanionArea extends Component {
 
     return (
       <div className={[classes.root, this.areaLayoutClass(), ns(`companion-area-${position}`)].join(' ')}>
+        <Slide in={companionAreaOpen} direction={this.slideDirection()}>
+          <div className={[ns('companion-windows'), companionWindowIds.length > 0 && classes[position], this.areaLayoutClass()].join(' ')} style={{ display: companionAreaOpen ? 'flex' : 'none' }}>
+            {
+              companionWindowIds.map(id => (
+                <CompanionWindowFactory id={id} key={id} windowId={windowId} />
+              ))
+            }
+          </div>
+        </Slide>
         {
           setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindowIds.length > 0
           && (
             <div className={classes.toggle}>
               <MiradorMenuButton
+                aria-expanded={companionAreaOpen}
                 aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
                 className={classes.toggleButton}
                 key={companionAreaOpen ? 'collapse' : 'expand'}
@@ -73,15 +83,6 @@ export class CompanionArea extends Component {
             </div>
           )
         }
-        <Slide in={companionAreaOpen} direction={this.slideDirection()}>
-          <div className={[ns('companion-windows'), companionWindowIds.length > 0 && classes[position], this.areaLayoutClass()].join(' ')} style={{ display: companionAreaOpen ? 'flex' : 'none' }}>
-            {
-              companionWindowIds.map(id => (
-                <CompanionWindowFactory id={id} key={id} windowId={windowId} />
-              ))
-            }
-          </div>
-        </Slide>
       </div>
     );
   }

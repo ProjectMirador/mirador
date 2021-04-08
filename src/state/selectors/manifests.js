@@ -1,23 +1,33 @@
 import { createSelector } from 'reselect';
 import createCachedSelector from 're-reselect';
-import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
+import { PropertyValue } from 'manifesto.js/dist-esmodule/PropertyValue';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import getThumbnail from '../../lib/ThumbnailFactory';
+import { getCompanionWindow } from './companionWindows';
+import { getManifest } from './getters';
+import { getConfig } from './config';
 
 /** */
 function createManifestoInstance(json, locale) {
   if (!json) return undefined;
-  return Utils.parseManifest(json, locale ? { locale } : undefined);
+  const manifestoObject = Utils.parseManifest(json, locale ? { locale } : undefined);
+  // Local patching of Manifesto so that when its a Collection, it behaves similarly
+  if (typeof manifestoObject.getSequences != 'function') {
+    manifestoObject.getSequences = () => [];
+  }
+  return manifestoObject;
 }
 
-
-/** Get the relevant manifest information */
-export function getManifest(state, { manifestId, windowId }) {
-  return state.manifests && state.manifests[
-    manifestId
-    || (windowId && state.windows && state.windows[windowId] && state.windows[windowId].manifestId)
-  ];
-}
+/** */
+const getLocale = createSelector(
+  [
+    getCompanionWindow,
+    getConfig,
+  ],
+  (companionWindow = {}, config = {}) => (
+    companionWindow.locale || config.language
+  ),
+);
 
 /** Convenience selector to get a manifest (or placeholder) */
 export const getManifestStatus = createSelector(
@@ -25,21 +35,34 @@ export const getManifestStatus = createSelector(
   manifest => manifest || { missing: true },
 );
 
+/** Convenience selector to get a manifest loading error */
+export const getManifestError = createSelector(
+  [getManifest],
+  manifest => manifest && manifest.error,
+);
+
 /** Instantiate a manifesto instance */
-export const getManifestoInstance = createCachedSelector(
+const getContextualManifestoInstance = createCachedSelector(
   getManifest,
   getLocale,
   (manifest, locale) => manifest
     && createManifestoInstance(manifest.json, locale),
 )(
-  (state, props) => [
-    props.manifestId,
-    props.windowId,
-    (state.companionWindows
-      && state.companionWindows[props.companionWindowId]
-      && state.companionWindows[props.companionWindowId].locale)
-      || (state.config && state.config.language),
+  (state, { companionWindowId, manifestId, windowId }) => [
+    manifestId,
+    windowId,
+    getLocale(state, { companionWindowId }),
   ].join(' - '), // Cache key consisting of manifestId, windowId, and locale
+);
+
+/** Instantiate a manifesto instance */
+export const getManifestoInstance = createSelector(
+  getContextualManifestoInstance,
+  (state, { json }) => json,
+  getLocale,
+  (manifesto, manifestJson, locale) => (
+    manifestJson && createManifestoInstance(manifestJson, locale)
+  ) || manifesto,
 );
 
 export const getManifestLocale = createSelector(
@@ -55,13 +78,6 @@ function getProperty(property) {
   );
 }
 
-/** */
-function getLocale(state, { companionWindowId }) {
-  return (companionWindowId
-    && state.companionWindows[companionWindowId]
-    && state.companionWindows[companionWindowId].locale)
-    || (state.config && state.config.language);
-}
 /**
  * Get the logo for a manifest
  * @param {object} state
@@ -90,7 +106,7 @@ export const getManifestProvider = createSelector(
   ],
   (provider, locale) => provider
     && provider[0].label
-    && LanguageMap.parse(provider[0].label, locale).map(label => label.value)[0],
+    && PropertyValue.parse(provider[0].label, locale).getValue(),
 );
 
 /**
@@ -119,8 +135,8 @@ export const getManifestHomepage = createSelector(
   (homepages, locale) => homepages
     && asArray(homepages).map(homepage => (
       {
-        label: LanguageMap.parse(homepage.label, locale)
-          .map(label => label.value)[0],
+        label: PropertyValue.parse(homepage.label, locale)
+          .getValue(),
         value: homepage.id || homepage['@id'],
       }
     )),
@@ -139,7 +155,7 @@ export const getManifestRenderings = createSelector(
   manifest => manifest
     && manifest.getRenderings().map(rendering => (
       {
-        label: rendering.getLabel().map(label => label.value)[0],
+        label: rendering.getLabel().getValue(),
         value: rendering.id,
       }
     )),
@@ -162,8 +178,8 @@ export const getManifestRelatedContent = createSelector(
     && asArray(seeAlso).map(related => (
       {
         format: related.format,
-        label: LanguageMap.parse(related.label, locale)
-          .map(label => label.value)[0],
+        label: PropertyValue.parse(related.label, locale)
+          .getValue(),
         value: related.id || related['@id'],
       }
     )),
@@ -180,10 +196,12 @@ export const getManifestRelatedContent = createSelector(
 export const getRequiredStatement = createSelector(
   [getManifestoInstance],
   manifest => manifest
-    && asArray(manifest.getRequiredStatement()).filter(l => l.getValue()).map(labelValuePair => ({
-      label: labelValuePair.getLabel(),
-      value: labelValuePair.getValue(),
-    })),
+    && asArray(manifest.getRequiredStatement())
+      .filter(l => l.getValues().some(v => v))
+      .map(labelValuePair => ({
+        label: (labelValuePair.label && labelValuePair.label.getValue()) || null,
+        values: labelValuePair.getValues(),
+      })),
 );
 
 /**
@@ -202,7 +220,7 @@ export const getRights = createSelector(
   ],
   (rights, license, locale) => {
     const data = rights || license;
-    return asArray(LanguageMap.parse(data, locale).map(label => label.value));
+    return asArray(PropertyValue.parse(data, locale).getValues());
   },
 );
 
@@ -225,29 +243,6 @@ export function getManifestThumbnail(state, props) {
 }
 
 /**
-* Return the logo of a manifest or null
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
-*/
-export const getManifestCanvases = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) {
-      return [];
-    }
-
-    if (!manifest.getSequences || !manifest.getSequences()[0]) {
-      return [];
-    }
-
-    return manifest.getSequences()[0].getCanvases();
-  },
-);
-
-/**
 * Return manifest title
 * @param {object} state
 * @param {object} props
@@ -258,7 +253,7 @@ export const getManifestCanvases = createSelector(
 export const getManifestTitle = createSelector(
   [getManifestoInstance],
   manifest => manifest
-    && manifest.getLabel().map(label => label.value)[0],
+    && manifest.getLabel().getValue(),
 );
 
 /**
@@ -272,7 +267,7 @@ export const getManifestTitle = createSelector(
 export const getManifestDescription = createSelector(
   [getManifestoInstance],
   manifest => manifest
-    && manifest.getDescription().map(label => label.value)[0],
+    && manifest.getDescription().getValue(),
 );
 
 /**
@@ -300,7 +295,7 @@ export function getDestructuredMetadata(iiifResource) {
   return (iiifResource
     && iiifResource.getMetadata().map(labelValuePair => ({
       label: labelValuePair.getLabel(),
-      value: labelValuePair.getValue(),
+      values: labelValuePair.getValues(),
     }))
   );
 }
@@ -350,56 +345,6 @@ export const getMetadataLocales = createSelector(
   manifest => getLocales(manifest),
 );
 
-/**
- * Returns the viewing hint for the first sequence in the manifest or the manifest
- * @param {object} state
- * @param {object} props
- * @param {string} props.manifestId
- * @param {string} props.windowId
- * @return {Number}
- */
-export const getManifestViewingHint = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return null;
-    const viewingHint = (manifest.getSequences()[0] && manifest.getSequences()[0].getViewingHint())
-      || manifest.getViewingHint();
-    if (viewingHint) return viewingHint;
-    return null;
-  },
-);
-
-/**
- * Returns the behaviors viewing hint for the manifest
- * @param {object} state
- * @param {object} props
- * @param {string} props.manifestId
- * @param {string} props.windowId
- * @return {Number}
- */
-export const getManifestBehaviors = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return [];
-    const behaviors = manifest.getProperty('behavior');
-
-    if (!behaviors) return [];
-    if (Array.isArray(behaviors)) return behaviors;
-    return [behaviors];
-  },
-);
-
-export const getManifestViewingDirection = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return null;
-    const viewingDirection = manifest.getSequences()[0].getViewingDirection()
-      || manifest.getViewingDirection();
-    if (viewingDirection) return viewingDirection;
-    return null;
-  },
-);
-
 /** */
 export const getManifestSearchService = createSelector(
   [getManifestoInstance],
@@ -422,14 +367,5 @@ export const getManifestAutocompleteService = createSelector(
     );
 
     return autocompleteService && autocompleteService;
-  },
-);
-
-/** */
-export const getManifestTreeStructure = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest) return null;
-    return manifest.getDefaultTree();
   },
 );

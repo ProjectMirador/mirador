@@ -1,6 +1,5 @@
-
 /**
- * MiradorCanvas - adds additional, testable logic around Manifesto's Manifest
+ * MiradorManifest - adds additional, testable logic around Manifesto's Manifest
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
  */
 export default class MiradorManifest {
@@ -34,5 +33,13 @@ export default class MiradorManifest {
     }
 
     return (canvasId && sequence.getCanvasById(canvasId)) || undefined;
+  }
+
+  /** */
+  canvasAt(index) {
+    const sequence = this.manifest.getSequences()[0];
+    const canvases = sequence && sequence.getCanvases();
+
+    return canvases && canvases[index];
   }
 }

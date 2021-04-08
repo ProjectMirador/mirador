@@ -7,10 +7,11 @@ import { SearchHit } from '../components/SearchHit';
 import * as actions from '../state/actions';
 import {
   getCanvasLabel,
-  getVisibleCanvases,
+  getVisibleCanvasIds,
   getResourceAnnotationForSearchHit,
   getResourceAnnotationLabel,
   getSelectedContentSearchAnnotationIds,
+  getSelectedAnnotationId,
 } from '../state/selectors';
 
 /**
@@ -19,7 +20,7 @@ import {
  * @private
  */
 const mapStateToProps = (state, {
-  annotationId, hit, companionWindowId, windowId,
+  annotationId, hit = { annotations: [] }, companionWindowId, windowId,
 }) => {
   const realAnnoId = annotationId || hit.annotations[0];
   const hitAnnotation = getResourceAnnotationForSearchHit(
@@ -28,11 +29,15 @@ const mapStateToProps = (state, {
   const annotationLabel = getResourceAnnotationLabel(
     state, { annotationUri: realAnnoId, companionWindowId, windowId },
   );
-  const selectedCanvasIds = getVisibleCanvases(state, { windowId }).map(canvas => canvas.id);
+  const selectedCanvasIds = getVisibleCanvasIds(state, { windowId });
 
-  const selectedAnnotation = getSelectedContentSearchAnnotationIds(state, {
+  const selectedContentSearchAnnotationsIds = getSelectedContentSearchAnnotationIds(state, {
     companionWindowId, windowId,
   });
+
+  const windowSelectedAnnotationId = getSelectedAnnotationId(state, { windowId });
+
+  const allAnnoIds = [annotationId, ...hit.annotations];
 
   return {
     adjacent: selectedCanvasIds.includes(hitAnnotation.targetId),
@@ -43,8 +48,10 @@ const mapStateToProps = (state, {
       canvasId: hitAnnotation.targetId,
       windowId,
     }),
-    selected: selectedAnnotation[0] === realAnnoId,
-    windowSelected: getSelectedContentSearchAnnotationIds(state, { windowId })[0] === realAnnoId,
+    selected: selectedContentSearchAnnotationsIds[0]
+      && allAnnoIds.includes(selectedContentSearchAnnotationsIds[0]),
+    windowSelected: windowSelectedAnnotationId
+      && allAnnoIds.includes(windowSelectedAnnotationId),
   };
 };
 
@@ -53,9 +60,9 @@ const mapStateToProps = (state, {
  * @memberof SearchPanelNavigation
  * @private
  */
-const mapDispatchToProps = (dispatch, { companionWindowId, windowId }) => ({
-  selectContentSearchAnnotation: (...args) => dispatch(
-    actions.selectContentSearchAnnotation(windowId, companionWindowId, ...args),
+const mapDispatchToProps = (dispatch, { windowId }) => ({
+  selectAnnotation: (...args) => dispatch(
+    actions.selectAnnotation(windowId, ...args),
   ),
 });
 

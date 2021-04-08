@@ -127,7 +127,7 @@
         {
           "id": "http://foo.test/1/range/0-0-3",
           "type": "Range",
-          "label": { "none": "missing start canvas" },
+          "label": { "none": ["missing start canvas"] },
           "items": [
             {
               "id": "http://foo.test/1/canvas/c10",

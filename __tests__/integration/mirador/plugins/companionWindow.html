@@ -22,14 +22,13 @@
         </div>
       );
 
-      const AddPluginComponentB = ({TabButton, PluginComponents, dispatch, ...otherProps}) => (
-        <TabButton id="add-plugin-companion-window-button" {...otherProps} label="P" value="pluginComponentA" />
+      const AddPluginComponentB = () => (
+        <span id="add-plugin-companion-window-button">Plugin</span>
       );
+      AddPluginComponentB.value = 'pluginComponentA';
 
       const addPluginA = {
-        target: 'CompanionWindowFactory',
         companionWindowKey: 'pluginComponentA',
-        mode: 'add',
         component: AddPluginComponentA,
       };
 

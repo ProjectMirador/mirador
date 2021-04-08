@@ -84,7 +84,8 @@ module.exports = function (api) {
         'lodash',
       ],
     },
-    ]];
+    ],
+  ].filter(Boolean);
 
   return {
     plugins,

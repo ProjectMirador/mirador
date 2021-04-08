@@ -1,18 +1,22 @@
 import { createSelector } from 'reselect';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import flatten from 'lodash/flatten';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import MiradorCanvas from '../../lib/MiradorCanvas';
-import { getManifestoInstance } from './manifests';
-import { getWindow, getWindowViewType } from './windows';
+import { miradorSlice } from './utils';
+import { getWindow } from './getters';
+import { getSequence } from './sequences';
+import { getWindowViewType } from './windows';
+
+/** */
+export const selectInfoResponses = state => miradorSlice(state).infoResponses;
 
 export const getCanvases = createSelector(
-  [getManifestoInstance],
-  manifest => manifest && manifest.getSequences()[0].getCanvases(),
+  [getSequence],
+  sequence => (sequence && sequence.getCanvases()) || [],
 );
 
 /**
-* Return the canvas selected by an index
+* Return the canvas selected by an id
 * @param {object} state
 * @param {object} props
 * @param {string} props.manifestId
@@ -21,39 +25,41 @@ export const getCanvases = createSelector(
 */
 export const getCanvas = createSelector(
   [
-    getManifestoInstance,
-    (state, { canvasIndex }) => canvasIndex,
+    getSequence,
     (state, { canvasId }) => canvasId,
   ],
-  (manifest, canvasIndex, canvasId) => {
-    if (!manifest) return undefined;
+  (sequence, canvasId) => {
+    if (!sequence || !canvasId) return undefined;
 
-    if (canvasId !== undefined) return manifest.getSequences()[0].getCanvasById(canvasId);
-    return manifest.getSequences()[0].getCanvasByIndex(canvasIndex);
+    return sequence.getCanvasById(canvasId);
   },
 );
 
 export const getCurrentCanvas = createSelector(
   [
-    getManifestoInstance,
+    getSequence,
     getWindow,
   ],
-  (manifest, window) => {
-    if (!manifest || !window) return undefined;
+  (sequence, window) => {
+    if (!sequence || !window) return undefined;
 
-    if (!window.canvasId) return manifest.getSequences()[0].getCanvasByIndex(0);
+    if (!window.canvasId) return sequence.getCanvasByIndex(0);
 
-    return manifest.getSequences()[0].getCanvasById(window.canvasId);
+    return sequence.getCanvasById(window.canvasId);
   },
 );
 
 /** */
-export function getVisibleCanvases(state, args) {
-  const canvas = getCurrentCanvas(state, { ...args });
-  if (!canvas) return undefined;
+export const getVisibleCanvasIds = createSelector(
+  [getWindow],
+  window => (window && (window.visibleCanvases || (window.canvasId && [window.canvasId]))) || [],
+);
 
-  return getCanvasGrouping(state, { ...args, canvasId: canvas.id });
-}
+/** */
+export const getVisibleCanvases = createSelector(
+  [getVisibleCanvasIds, getCanvases],
+  (canvasIds, canvases) => (canvases || []).filter(c => canvasIds.includes(c.id)),
+);
 
 /**
 * Return the current canvases grouped by how they'll appear in the viewer
@@ -64,7 +70,7 @@ export function getVisibleCanvases(state, args) {
 * @param {string} props.windowId
 * @return {Array}
 */
-const getCanvasGroupings = createSelector(
+export const getCanvasGroupings = createSelector(
   [
     getCanvases,
     getWindowViewType,
@@ -90,7 +96,7 @@ export const getCanvasGrouping = createSelector(
     getCanvasGroupings,
     (state, { canvasId }) => canvasId,
   ],
-  (groupings, canvasId, view) => (groupings
+  (groupings, canvasId) => (groupings
       && groupings.find(group => group.some(c => c.id === canvasId))) || [],
 );
 
@@ -109,7 +115,7 @@ export const getNextCanvasGrouping = createSelector(
     getCurrentCanvas,
   ],
   (groupings, canvas, view) => {
-    if (!groupings) return undefined;
+    if (!groupings || !canvas) return undefined;
     const currentGroupIndex = groupings.findIndex(group => group.some(c => c.id === canvas.id));
 
     if (currentGroupIndex < 0 || currentGroupIndex + 1 >= groupings.length) return undefined;
@@ -134,7 +140,7 @@ export const getPreviousCanvasGrouping = createSelector(
     getCurrentCanvas,
   ],
   (groupings, canvas, view) => {
-    if (!groupings) return undefined;
+    if (!groupings || !canvas) return undefined;
 
     const currentGroupIndex = groupings.findIndex(group => group.some(c => c.id === canvas.id));
 
@@ -154,7 +160,7 @@ export const getCanvasLabel = createSelector(
   [getCanvas],
   canvas => (canvas && (
     canvas.getLabel().length > 0
-      ? canvas.getLabel().map(label => label.value)[0]
+      ? canvas.getLabel().getValue()
       : String(canvas.index + 1)
   )),
 );
@@ -169,9 +175,6 @@ export const getCanvasDescription = createSelector(
   canvas => canvas && canvas.getProperty('description'),
 );
 
-/** */
-export const selectInfoResponses = state => state.infoResponses;
-
 export const getVisibleCanvasNonTiledResources = createSelector(
   [
     getVisibleCanvases,
@@ -181,116 +184,48 @@ export const getVisibleCanvasNonTiledResources = createSelector(
     .filter(resource => resource.getServices().length < 1),
 );
 
+export const getVisibleCanvasVideoResources = createSelector(
+  [
+    getVisibleCanvases,
+  ],
+  canvases => flatten(canvases
+    .map(canvas => new MiradorCanvas(canvas).videoResources)),
+);
+
+export const getVisibleCanvasCaptions = createSelector(
+  [
+    getVisibleCanvases,
+  ],
+  canvases => flatten(canvases
+    .map(canvas => new MiradorCanvas(canvas).vttContent)),
+);
+
+export const getVisibleCanvasAudioResources = createSelector(
+  [
+    getVisibleCanvases,
+  ],
+  canvases => flatten(canvases
+    .map(canvas => new MiradorCanvas(canvas).audioResources)),
+);
+
 export const selectInfoResponse = createSelector(
   [
+    (state, { infoId }) => infoId,
     getCanvas,
     selectInfoResponses,
   ],
-  (canvas, infoResponses) => {
-    if (!canvas) return undefined;
-    const miradorCanvas = new MiradorCanvas(canvas);
-    const image = miradorCanvas.iiifImageResources[0];
-    const iiifServiceId = image && image.getServices()[0].id;
+  (infoId, canvas, infoResponses) => {
+    let iiifServiceId = infoId;
+
+    if (!infoId) {
+      if (!canvas) return undefined;
+      const miradorCanvas = new MiradorCanvas(canvas);
+      const image = miradorCanvas.iiifImageResources[0];
+      iiifServiceId = image && image.getServices()[0].id;
+    }
 
     return iiifServiceId && infoResponses[iiifServiceId]
     && !infoResponses[iiifServiceId].isFetching
     && infoResponses[iiifServiceId];
   },
 );
-
-const authServiceProfiles = {
-  clickthrough: true, external: true, kiosk: true, login: true,
-};
-/**
- *
- */
-export function selectNextAuthService({ auth }, resource, filter = authServiceProfiles) {
-  const orderedAuthServiceProfiles = [
-    'http://iiif.io/api/auth/1/external',
-    'http://iiif.io/api/auth/1/kiosk',
-    'http://iiif.io/api/auth/1/clickthrough',
-    'http://iiif.io/api/auth/1/login',
-  ];
-
-  const mapFilterToProfiles = {
-    'http://iiif.io/api/auth/1/clickthrough': 'clickthrough',
-    'http://iiif.io/api/auth/1/external': 'external',
-    'http://iiif.io/api/auth/1/kiosk': 'kiosk',
-    'http://iiif.io/api/auth/1/login': 'login',
-  };
-
-  for (const profile of orderedAuthServiceProfiles) {
-    const services = getServices(resource, profile);
-    for (const service of services) {
-      if (!auth[service.id]) {
-        return filter[mapFilterToProfiles[profile]] && service;
-      }
-
-      if (auth[service.id].isFetching || auth[service.id].ok) return null;
-    }
-  }
-
-  return null;
-}
-
-/** */
-export function selectActiveAuthService(state, resource) {
-  const orderedAuthServiceProfiles = [
-    'http://iiif.io/api/auth/1/login',
-    'http://iiif.io/api/auth/1/clickthrough',
-    'http://iiif.io/api/auth/1/kiosk',
-    'http://iiif.io/api/auth/1/external',
-  ];
-
-  for (const profile of orderedAuthServiceProfiles) {
-    const services = getServices(resource, profile);
-    const service = services.find(s => selectAuthStatus(state, s));
-    if (service) return service;
-  }
-
-  return null;
-}
-
-export const selectCanvasAuthService = createSelector(
-  [
-    selectInfoResponse,
-    state => state,
-  ],
-  (infoResponse, state) => {
-    const resource = infoResponse && infoResponse.json;
-
-    if (!resource) return undefined;
-
-    return selectNextAuthService(state, resource)
-      || selectActiveAuthService(state, resource);
-  },
-);
-
-export const selectLogoutAuthService = createSelector(
-  [
-    selectInfoResponse,
-    state => state,
-  ],
-  (infoResponse, state) => {
-    if (!infoResponse) return undefined;
-    const authService = selectActiveAuthService(state, infoResponse.json);
-    if (!authService) return undefined;
-    return authService.getService('http://iiif.io/api/auth/1/logout');
-  },
-);
-
-/** */
-export function selectAuthStatus({ auth }, service) {
-  if (!service) return null;
-  if (!auth[service.id]) return null;
-  if (auth[service.id].isFetching) return 'fetching';
-  if (auth[service.id].ok) return 'ok';
-  return 'failed';
-}
-
-/** Get all the services that match a profile */
-function getServices(resource, profile) {
-  const services = Utils.getServices({ ...resource, options: {} });
-
-  return services.filter(service => service.getProfile() === profile);
-}

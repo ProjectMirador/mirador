@@ -33,11 +33,12 @@ const styles = theme => ({
     overflowX: 'hidden',
   },
   root: {
+    height: 64,
     [theme.breakpoints.up('sm')]: {
       height: '100%',
       left: 0,
       right: 'auto',
-      width: 'auto',
+      width: 64,
     },
   },
   toolbar: {
@@ -50,6 +51,7 @@ const styles = theme => ({
     },
   },
   wide: {
+    width: 'auto',
   },
   workspaceButtons: {
     [theme.breakpoints.up('sm')]: {

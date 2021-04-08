@@ -14,7 +14,6 @@ function createWrapper(props) {
       setWorkspaceAddVisibility={() => {}}
       t={str => str}
       useExtendedFab
-
       {...props}
     />,
   );
@@ -39,6 +38,7 @@ describe('WorkspaceAddButton', () => {
         startHere
       </Fab>,
     )).toBe(true);
+    expect(wrapper.find(Fab).prop('aria-label')).toMatch('startHere');
   });
 
   it('renders a button to close the load window area', () => {
@@ -49,6 +49,7 @@ describe('WorkspaceAddButton', () => {
 
     wrapper.find(Fab).simulate('click');
     expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(false);
+    expect(wrapper.find(Fab).prop('aria-label')).toMatch('closeAddResourceMenu');
   });
 
   describe('when the useExtendedFab prop is false', () => {
@@ -56,6 +57,7 @@ describe('WorkspaceAddButton', () => {
       const wrapper = createWrapper({ useExtendedFab: false });
 
       expect(wrapper.find(Typography).length).toEqual(0);
+      expect(wrapper.find(Fab).prop('aria-label')).toMatch('addResource');
     });
 
     it('the Fab does not have extended variant prop', () => {

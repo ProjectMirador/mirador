@@ -12,7 +12,7 @@ export class LayersPanel extends Component {
    */
   render() {
     const {
-      canvases,
+      canvasIds,
       id,
       t,
       windowId,
@@ -24,12 +24,12 @@ export class LayersPanel extends Component {
         id={id}
         windowId={windowId}
       >
-        {canvases.map((canvas, index) => (
+        {canvasIds.map((canvasId, index) => (
           <CanvasLayers
-            canvasId={canvas.id}
+            canvasId={canvasId}
             index={index}
-            key={canvas.id}
-            totalSize={canvases.length}
+            key={canvasId}
+            totalSize={canvasIds.length}
             windowId={windowId}
           />
         ))}
@@ -39,14 +39,12 @@ export class LayersPanel extends Component {
 }
 
 LayersPanel.propTypes = {
-  canvases: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-  })),
+  canvasIds: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };
 
 LayersPanel.defaultProps = {
-  canvases: [],
+  canvasIds: [],
 };

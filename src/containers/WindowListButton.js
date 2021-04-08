@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
+import { getWindowIds, getWorkspace } from '../state/selectors';
 import { WindowListButton } from '../components/WindowListButton';
 
 /** */
-const mapStateToProps = ({ windows, workspace }) => ({
-  disabled: workspace.isWorkspaceAddVisible,
-  windowCount: Object.keys(windows).length,
+const mapStateToProps = (state) => ({
+  disabled: getWorkspace(state).isWorkspaceAddVisible,
+  windowCount: getWindowIds(state).length,
 });
 
 /**

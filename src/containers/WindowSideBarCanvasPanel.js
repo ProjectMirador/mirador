@@ -8,22 +8,31 @@ import { WindowSideBarCanvasPanel } from '../components/WindowSideBarCanvasPanel
 import {
   getCompanionWindow,
   getDefaultSidebarVariant,
-  getManifestCanvases,
-  getVisibleCanvases,
+  getSequenceTreeStructure,
+  getWindow,
+  getManifestoInstance,
+  getSequence,
+  getSequences,
 } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
  */
 const mapStateToProps = (state, { id, windowId }) => {
-  const canvases = getManifestCanvases(state, { windowId });
+  const treeStructure = getSequenceTreeStructure(state, { windowId });
+  const window = getWindow(state, { windowId });
   const { config } = state;
+  const companionWindow = getCompanionWindow(state, { companionWindowId: id });
+  const collectionPath = window.collectionPath || [];
+  const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
+  const sequence = getSequence(state, { windowId });
   return {
-    canvases,
+    collection: collectionId && getManifestoInstance(state, { manifestId: collectionId }),
     config,
-    selectedCanvases: getVisibleCanvases(state, { windowId }),
-    variant: getCompanionWindow(state, { companionWindowId: id, windowId }).variant
-      || getDefaultSidebarVariant(state, { windowId }),
+    sequenceId: sequence && sequence.id,
+    sequences: getSequences(state, { windowId }),
+    showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
+    variant: companionWindow.variant || getDefaultSidebarVariant(state, { windowId }),
   };
 };
 
@@ -33,8 +42,12 @@ const mapStateToProps = (state, { id, windowId }) => {
  * @private
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
-  setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
-  toggleDraggingEnabled: () => dispatch(actions.toggleDraggingEnabled()),
+  showMultipart: () => dispatch(
+    actions.addOrUpdateCompanionWindow(windowId, { content: 'collection', position: 'right' }),
+  ),
+  updateSequence: sequenceId => dispatch(
+    actions.updateWindow(windowId, { sequenceId }),
+  ),
   updateVariant: variant => dispatch(
     actions.updateCompanionWindow(windowId, id, { variant }),
   ),
@@ -45,6 +58,13 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
  * @param theme
  */
 const styles = theme => ({
+  break: {
+    flexBasis: '100%',
+    height: 0,
+  },
+  collectionNavigationButton: {
+    textTransform: 'none',
+  },
   label: {
     paddingLeft: theme.spacing(1),
   },
@@ -55,6 +75,9 @@ const styles = theme => ({
   },
   selectEmpty: {
     backgroundColor: theme.palette.background.paper,
+  },
+  variantTab: {
+    minWidth: 'auto',
   },
 });
 

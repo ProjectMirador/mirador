@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { v4 as uuid } from 'uuid';
-import { App } from '../components/App';
+import deepmerge from 'deepmerge';
+import HotApp from '../components/App';
 import createStore from '../state/createStore';
-import * as actions from '../state/actions';
-import { getCompanionWindowIdsForPosition, getManifestSearchService } from '../state/selectors';
+import { importConfig } from '../state/actions/config';
+import {
+  filterValidPlugins,
+  getConfigFromPlugins,
+  getReducersFromPlugins,
+  getSagasFromPlugins,
+} from '../extend/pluginPreprocessing';
 
 /**
  * Default Mirador instantiation
@@ -15,72 +20,35 @@ class MiradorViewer {
    */
   constructor(config, viewerConfig = {}) {
     this.config = config;
-    this.plugins = viewerConfig.plugins || [];
-    this.store = viewerConfig.store || createStore();
+    this.plugins = filterValidPlugins(viewerConfig.plugins || []);
+    this.store = viewerConfig.store
+      || createStore(getReducersFromPlugins(this.plugins), getSagasFromPlugins(this.plugins));
     this.processConfig();
-
-    const viewer = {
-      actions,
-      store: this.store,
-    };
 
     ReactDOM.render(
       <Provider store={this.store}>
-        <App plugins={this.plugins} />
+        <HotApp plugins={this.plugins} />
       </Provider>,
       document.getElementById(config.id),
     );
-
-    return viewer;
   }
 
   /**
-   * Process config into actions
+   * Process config with plugin configs into actions
    */
   processConfig() {
-    /** merge type for arrays */
-    const action = actions.importConfig(this.config);
-    this.store.dispatch(action);
-    const { config: storedConfig } = this.store.getState();
+    this.store.dispatch(
+      importConfig(
+        deepmerge(getConfigFromPlugins(this.plugins), this.config),
+      ),
+    );
+  }
 
-    storedConfig.windows.forEach((miradorWindow, layoutOrder) => {
-      const windowId = `window-${uuid()}`;
-      const manifestId = miradorWindow.manifestId || miradorWindow.loadedManifest;
-      const manifestAction = this.store.dispatch(actions.fetchManifest(manifestId));
-      const windowAction = this.store.dispatch(actions.addWindow({
-        // these are default values ...
-        id: windowId,
-        layoutOrder,
-        manifestId,
-        thumbnailNavigationPosition: storedConfig.thumbnailNavigation.defaultPosition,
-        // ... overridden by values from the window configuration ...
-        ...miradorWindow,
-      }));
-
-      Promise.all([manifestAction, windowAction]).then(() => {
-        if (miradorWindow.defaultSearchQuery) {
-          const state = this.store.getState();
-          const companionWindowId = getCompanionWindowIdsForPosition(state, { position: 'left', windowId })[0];
-          const searchService = getManifestSearchService(state, { windowId });
-          const searchId = searchService && `${searchService.id}?q=${miradorWindow.defaultSearchQuery}`;
-
-          companionWindowId && searchId && this.store.dispatch(
-            actions.fetchSearch(
-              windowId,
-              companionWindowId,
-              searchId,
-              miradorWindow.defaultSearchQuery,
-            ),
-          );
-        }
-      });
-    });
-
-    Object.keys(storedConfig.manifests || {}).forEach((manifestId) => {
-      this.store.dispatch(
-        actions.requestManifest(manifestId, storedConfig.manifests[manifestId]),
-      );
-    });
+  /**
+   * Cleanup method to unmount Mirador from the dom
+   */
+  unmount() {
+    ReactDOM.unmountComponentAtNode(document.getElementById(this.config.id));
   }
 }
 

@@ -5,9 +5,12 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
+  getCompanionWindow,
   getManifestLocale,
   getMetadataLocales,
-  getVisibleCanvases,
+  getVisibleCanvasIds,
+  getWindowConfig,
+  getWindow,
 } from '../state/selectors';
 import { WindowSideBarInfoPanel } from '../components/WindowSideBarInfoPanel';
 
@@ -18,9 +21,11 @@ import { WindowSideBarInfoPanel } from '../components/WindowSideBarInfoPanel';
  */
 const mapStateToProps = (state, { id, windowId }) => ({
   availableLocales: getMetadataLocales(state, { companionWindowId: id, windowId }),
-  locale: state.companionWindows[id].locale || getManifestLocale(state, { windowId }),
-  selectedCanvases: getVisibleCanvases(state, { windowId }),
-  showLocalePicker: state.config.window.showLocalePicker,
+  canvasIds: getVisibleCanvasIds(state, { windowId }),
+  collectionPath: (getWindow(state, { windowId }) || {}).collectionPath,
+  locale: getCompanionWindow(state, { companionWindowId: id }).locale
+    || getManifestLocale(state, { windowId }),
+  showLocalePicker: getWindowConfig(state, { windowId }).showLocalePicker,
 });
 
 /** */

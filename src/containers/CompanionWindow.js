@@ -4,8 +4,9 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withSize } from 'react-sizeme';
 import { withPlugins } from '../extend/withPlugins';
+import { withRef } from '../extend/withRef';
 import * as actions from '../state/actions';
-import { getCompanionWindow, getThemeDirection } from '../state/selectors';
+import { getCompanionWindow, getThemeDirection, getWindowConfig } from '../state/selectors';
 import { CompanionWindow } from '../components/CompanionWindow';
 
 /**
@@ -15,10 +16,13 @@ import { CompanionWindow } from '../components/CompanionWindow';
  */
 const mapStateToProps = (state, { id, windowId }) => {
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
-  const { defaultSidebarPanelWidth } = state.config.window;
+  const {
+    defaultSidebarPanelHeight, defaultSidebarPanelWidth,
+  } = getWindowConfig(state, { windowId });
 
   return {
     ...companionWindow,
+    defaultSidebarPanelHeight,
     defaultSidebarPanelWidth,
     direction: getThemeDirection(state),
     isDisplayed: (companionWindow
@@ -36,7 +40,9 @@ const mapDispatchToProps = (dispatch, { windowId, id }) => ({
   onCloseClick: () => dispatch(
     actions.removeCompanionWindow(windowId, id),
   ),
-  updateCompanionWindow: (...args) => dispatch(actions.updateCompanionWindow(...args)),
+  updateCompanionWindow: (...args) => dispatch(
+    actions.updateCompanionWindow(windowId, id, ...args),
+  ),
 });
 
 /**
@@ -125,6 +131,7 @@ const styles = theme => ({
 });
 
 const enhance = compose(
+  withRef(),
   withTranslation(),
   withStyles(styles),
   withSize(),

@@ -5,10 +5,14 @@ import dualStrategyAnno from '../../fixtures/version-2/annotationMiradorDual.jso
 /** */
 function createSubject(args) {
   return new CanvasAnnotationDisplay({
-    color: 'blue',
     offset: {
       x: -100,
       y: 0,
+    },
+    palette: {
+      default: { globalAlpha: 1, strokeStyle: 'black' },
+      hovered: { globalAlpha: 1, strokeStyle: 'blue' },
+      selected: { globalAlpha: 1, strokeStyle: 'yellow' },
     },
     zoomRatio: 0.5,
     ...args,
@@ -30,7 +34,7 @@ describe('CanvasAnnotationDisplay', () => {
       expect(subject.svgContext).toHaveBeenCalled();
       expect(subject.fragmentContext).not.toHaveBeenCalled();
     });
-    it('selects fragmentSelector if no svg present', () => {
+    it('selects fragmentSelector if present and if no svg is present', () => {
       const context = {
         stroke: jest.fn(),
       };
@@ -42,6 +46,19 @@ describe('CanvasAnnotationDisplay', () => {
       subject.toContext(context);
       expect(subject.svgContext).not.toHaveBeenCalled();
       expect(subject.fragmentContext).toHaveBeenCalled();
+    });
+    it('ignores annotations without selectors', () => {
+      const context = {
+        stroke: jest.fn(),
+      };
+      const subject = createSubject({
+        resource: new AnnotationResource({ on: 'www.example.com' }),
+      });
+      subject.svgContext = jest.fn();
+      subject.fragmentContext = jest.fn();
+      subject.toContext(context);
+      expect(subject.svgContext).not.toHaveBeenCalled();
+      expect(subject.fragmentContext).not.toHaveBeenCalled();
     });
   });
   describe('svgString', () => {
@@ -90,15 +107,18 @@ describe('CanvasAnnotationDisplay', () => {
       });
       subject.context = context;
       subject.svgContext();
-      expect(subject.context.strokeStyle).toBe('blue');
+      expect(subject.context.strokeStyle).toBe('yellow');
     });
   });
   describe('fragmentContext', () => {
     it('draws the fragment with selected arguments', () => {
       const context = {
+        restore: jest.fn(),
+        save: jest.fn(),
         strokeRect: jest.fn(),
       };
       const subject = createSubject({
+        hovered: true,
         resource: new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }),
       });
       subject.context = context;

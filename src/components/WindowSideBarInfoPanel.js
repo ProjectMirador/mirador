@@ -4,9 +4,9 @@ import CompanionWindow from '../containers/CompanionWindow';
 import CanvasInfo from '../containers/CanvasInfo';
 import LocalePicker from '../containers/LocalePicker';
 import ManifestInfo from '../containers/ManifestInfo';
+import CollectionInfo from '../containers/CollectionInfo';
 import ManifestRelatedLinks from '../containers/ManifestRelatedLinks';
 import ns from '../config/css-ns';
-
 
 /**
  * WindowSideBarInfoPanel
@@ -20,10 +20,11 @@ export class WindowSideBarInfoPanel extends Component {
     const {
       windowId,
       id,
+      canvasIds,
       classes,
+      collectionPath,
       t,
       locale,
-      selectedCanvases,
       setLocale,
       availableLocales,
       showLocalePicker,
@@ -47,18 +48,23 @@ export class WindowSideBarInfoPanel extends Component {
         )}
       >
         {
-          selectedCanvases.map((canvas, index) => (
-            <div key={canvas.id} className={classes.section}>
+          canvasIds.map((canvasId, index) => (
+            <div key={canvasId} className={classes.section}>
               <CanvasInfo
                 id={id}
-                canvasId={canvas.id}
+                canvasId={canvasId}
                 index={index}
-                totalSize={selectedCanvases.length}
+                totalSize={canvasIds.length}
                 windowId={windowId}
               />
             </div>
           ))
         }
+        { collectionPath.length > 0 && (
+          <div className={classes.section}>
+            <CollectionInfo id={id} windowId={windowId} />
+          </div>
+        )}
 
         <div className={classes.section}>
           <ManifestInfo id={id} windowId={windowId} />
@@ -74,10 +80,11 @@ export class WindowSideBarInfoPanel extends Component {
 
 WindowSideBarInfoPanel.propTypes = {
   availableLocales: PropTypes.arrayOf(PropTypes.string),
+  canvasIds: PropTypes.arrayOf(PropTypes.string),
   classes: PropTypes.objectOf(PropTypes.string),
+  collectionPath: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   locale: PropTypes.string,
-  selectedCanvases: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string })),
   setLocale: PropTypes.func,
   showLocalePicker: PropTypes.bool,
   t: PropTypes.func,
@@ -86,9 +93,10 @@ WindowSideBarInfoPanel.propTypes = {
 
 WindowSideBarInfoPanel.defaultProps = {
   availableLocales: [],
+  canvasIds: [],
   classes: {},
+  collectionPath: [],
   locale: '',
-  selectedCanvases: [],
   setLocale: undefined,
   showLocalePicker: false,
   t: key => key,

@@ -1,5 +1,18 @@
-import fetch from 'isomorphic-unfetch';
 import ActionTypes from './action-types';
+
+/**
+ * Request annotations on a canvas
+ *
+ * NOTE: there is no corresponding reducer; the expected API is sagas will
+ *  pick this action up and act on it accordingly.
+ */
+export function requestCanvasAnnotations(windowId, canvasId) {
+  return {
+    canvasId,
+    type: ActionTypes.REQUEST_CANVAS_ANNOTATIONS,
+    windowId,
+  };
+}
 
 /**
  * requestAnnotation - action creator
@@ -51,22 +64,6 @@ export function receiveAnnotationFailure(targetId, annotationId, error) {
 }
 
 /**
- * fetchAnnotation - action creator
- *
- * @param  {String} annotationId
- * @memberof ActionCreators
- */
-export function fetchAnnotation(targetId, annotationId) {
-  return ((dispatch) => {
-    dispatch(requestAnnotation(targetId, annotationId));
-    return fetch(annotationId)
-      .then(response => response.json())
-      .then(json => dispatch(receiveAnnotation(targetId, annotationId, json)))
-      .catch(error => dispatch(receiveAnnotationFailure(targetId, annotationId, error)));
-  });
-}
-
-/**
  * selectAnnotation - action creator
  *
  * @param  {String} windowId
@@ -74,10 +71,9 @@ export function fetchAnnotation(targetId, annotationId) {
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function selectAnnotation(windowId, targetId, annotationId) {
+export function selectAnnotation(windowId, annotationId) {
   return {
     annotationId,
-    targetId,
     type: ActionTypes.SELECT_ANNOTATION,
     windowId,
   };
@@ -91,10 +87,9 @@ export function selectAnnotation(windowId, targetId, annotationId) {
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function deselectAnnotation(windowId, targetId, annotationId) {
+export function deselectAnnotation(windowId, annotationId) {
   return {
     annotationId,
-    targetId,
     type: ActionTypes.DESELECT_ANNOTATION,
     windowId,
   };
@@ -118,8 +113,8 @@ export function toggleAnnotationDisplay(windowId) {
  * @param  {String} windowId
  * @memberof ActionCreators
  */
-export function highlightAnnotation(windowId, annotationId) {
+export function hoverAnnotation(windowId, annotationIds) {
   return {
-    annotationId, type: ActionTypes.HIGHLIGHT_ANNOTATION, windowId,
+    annotationIds, type: ActionTypes.HOVER_ANNOTATION, windowId,
   };
 }

@@ -1,27 +1,5 @@
-import update from 'lodash/update';
-import { connect } from 'react-redux';
+import deepmerge from 'deepmerge';
 import { validatePlugin } from './pluginValidation';
-import CompanionWindowRegistry from '../lib/CompanionWindowRegistry';
-
-/**
- * Returns a mapping from targets to plugins and modes
- *
- * @param {Array} plugins
- * @return {Object} - looks like:
- *
- *  {
- *    'WorkspacePanel': {
- *      wrap:     [plugin3, ...],
- *      add:      [plugin4, ...],
- *    },
- *    ...
- *  }
- */
-export function createTargetToPluginMapping(plugins) {
-  return plugins.reduce((map, plugin) => (
-    update(map, [plugin.target, plugin.mode], x => [...x || [], plugin])
-  ), {});
-}
 
 /** */
 export function filterValidPlugins(plugins) {
@@ -31,36 +9,21 @@ export function filterValidPlugins(plugins) {
 }
 
 /** */
-export function connectPluginsToStore(plugins) {
-  return plugins.map(plugin => (
-    { ...plugin, component: connectPluginComponent(plugin) }
-  ));
-}
-
-/** */
-export function addPluginReducersToStore(store, createRootReducer, plugins) {
-  const pluginReducers = getReducersFromPlugins(plugins);
-  store.replaceReducer(createRootReducer(pluginReducers));
-}
-
-/** */
-export function addPluginsToCompanionWindowsRegistry(plugins) {
-  plugins.filter(p => p.companionWindowKey).forEach((plugin) => {
-    CompanionWindowRegistry[plugin.companionWindowKey] = plugin.component;
-  });
-
-  return CompanionWindowRegistry;
-}
-
-/** */
 function splitPluginsByValidation(plugins) {
-  const splittedPlugins = { invalidPlugins: [], validPlugins: [] };
-  plugins.forEach(plugin => (
-    validatePlugin(plugin)
-      ? splittedPlugins.validPlugins.push(plugin)
-      : splittedPlugins.invalidPlugins.push(plugin)
-  ));
-  return splittedPlugins;
+  const invalidPlugins = [];
+  const validPlugins = [];
+  plugins.forEach(plugin => {
+    if (Array.isArray(plugin)) {
+      const allValid = plugin.every(p => validatePlugin(p));
+
+      allValid ? validPlugins.push(...plugin) : invalidPlugins.push(...plugin);
+    } else {
+      validatePlugin(plugin)
+        ? validPlugins.push(plugin)
+        : invalidPlugins.push(plugin);
+    }
+  });
+  return { invalidPlugins, validPlugins };
 }
 
 /** */
@@ -70,12 +33,17 @@ function logInvalidPlugins(plugins) {
   ));
 }
 
-/** Connect plugin component to state */
-function connectPluginComponent(plugin) {
-  return connect(plugin.mapStateToProps, plugin.mapDispatchToProps)(plugin.component);
+/**  */
+export function getReducersFromPlugins(plugins) {
+  return plugins && plugins.reduce((acc, plugin) => ({ ...acc, ...plugin.reducers }), {});
 }
 
 /**  */
-function getReducersFromPlugins(plugins) {
-  return plugins && plugins.reduce((acc, plugin) => ({ ...acc, ...plugin.reducers }), {});
+export function getConfigFromPlugins(plugins) {
+  return plugins && plugins.reduce((acc, plugin) => (deepmerge(acc, plugin.config || {})), {});
+}
+
+/**  */
+export function getSagasFromPlugins(plugins) {
+  return plugins && plugins.filter(plugin => plugin.saga).map(plugin => plugin.saga);
 }

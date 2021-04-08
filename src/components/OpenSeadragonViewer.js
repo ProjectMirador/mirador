@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
 import OpenSeadragon from 'openseadragon';
 import classNames from 'classnames';
 import ns from '../config/css-ns';
-import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
+import AnnotationsOverlay from '../containers/AnnotationsOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
-import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
+import { PluginHook } from './PluginHook';
+import { OSDReferences } from '../plugins/OSDReferences';
 
 /**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
@@ -14,40 +16,16 @@ import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
  */
 export class OpenSeadragonViewer extends Component {
   /**
-   * annotationsMatch - compares previous annotations to current to determine
-   * whether to add a new updateCanvas method to draw annotations
-   * @param  {Array} currentAnnotations
-   * @param  {Array} prevAnnotations
-   * @return {Boolean}
-   */
-  static annotationsMatch(currentAnnotations, prevAnnotations) {
-    if (currentAnnotations.length === 0 && prevAnnotations.length === 0) return true;
-    if (currentAnnotations.length !== prevAnnotations.length) return false;
-    return currentAnnotations.every((annotation, index) => {
-      const newIds = annotation.resources.map(r => r.id);
-      const prevIds = prevAnnotations[index].resources.map(r => r.id);
-      if (newIds.length === 0 && prevIds.length === 0) return true;
-      if (newIds.length !== prevIds.length) return false;
-
-      if ((annotation.id === prevAnnotations[index].id) && (isEqual(newIds, prevIds))) {
-        return true;
-      }
-      return false;
-    });
-  }
-
-  /**
    * @param {Object} props
    */
   constructor(props) {
     super(props);
 
-    this.viewer = null;
-    this.osdCanvasOverlay = null;
-    // An initial value for the updateCanvas method
-    this.updateCanvas = () => {};
+    this.state = { viewer: undefined };
     this.ref = React.createRef();
-    this.onUpdateViewport = this.onUpdateViewport.bind(this);
+    this.apiRef = React.createRef();
+    OSDReferences.set(props.windowId, this.apiRef);
+    this.onCanvasMouseMove = debounce(this.onCanvasMouseMove.bind(this), 10);
     this.onViewportChange = this.onViewportChange.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
     this.osdUpdating = false;
@@ -57,34 +35,39 @@ export class OpenSeadragonViewer extends Component {
    * React lifecycle event
    */
   componentDidMount() {
-    const { osdConfig, viewer } = this.props;
+    const { osdConfig, t, windowId } = this.props;
     if (!this.ref.current) {
       return;
     }
 
-    this.viewer = new OpenSeadragon({
+    const viewer = new OpenSeadragon({
       id: this.ref.current.id,
       ...osdConfig,
     });
 
-    this.osdCanvasOverlay = new OpenSeadragonCanvasOverlay(this.viewer);
-    this.viewer.addHandler('update-viewport', this.onUpdateViewport);
+    const canvas = viewer.canvas && viewer.canvas.firstElementChild;
+    if (canvas) {
+      canvas.setAttribute('role', 'img');
+      canvas.setAttribute('aria-label', t('digitizedView'));
+      canvas.setAttribute('aria-describedby', `${windowId}-osd`);
+    }
+
+    this.apiRef.current = viewer;
+
+    this.setState({ viewer });
+
     // Set a flag when OSD starts animating (so that viewer updates are not used)
-    this.viewer.addHandler('animation-start', () => {
+    viewer.addHandler('animation-start', () => {
       this.osdUpdating = true;
     });
-    this.viewer.addHandler('animation-finish', this.onViewportChange);
-    this.viewer.addHandler('animation-finish', () => {
+    viewer.addHandler('animation-finish', this.onViewportChange);
+    viewer.addHandler('animation-finish', () => {
       this.osdUpdating = false;
     });
 
-    this.updateCanvas = this.canvasUpdateCallback();
-
-    if (viewer) {
-      this.viewer.viewport.panTo(viewer, true);
-      this.viewer.viewport.zoomTo(viewer.zoom, viewer, true);
+    if (viewer.innerTracker) {
+      viewer.innerTracker.moveHandler = this.onCanvasMouseMove;
     }
-    this.addAllImageSources(!(viewer));
   }
 
   /**
@@ -93,55 +76,53 @@ export class OpenSeadragonViewer extends Component {
    * they are added.
    * When the viewport state changes, pan or zoom the OSD viewer as appropriate
    */
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const {
-      viewer,
+      viewerConfig,
       canvasWorld,
-      highlightedAnnotations, selectedAnnotations,
-      searchAnnotations, selectedContentSearchAnnotations,
     } = this.props;
-    const highlightsUpdated = !OpenSeadragonViewer.annotationsMatch(
-      highlightedAnnotations, prevProps.highlightedAnnotations,
-    );
-    const selectionsUpdated = !OpenSeadragonViewer.annotationsMatch(
-      selectedAnnotations, prevProps.selectedAnnotations,
-    );
-    const searchAnnotationsUpdated = !OpenSeadragonViewer.annotationsMatch(
-      searchAnnotations, prevProps.searchAnnotations,
-    );
+    const { viewer } = this.state;
+    this.apiRef.current = viewer;
 
-    const selectedContentSearchAnnotationsUpdated = !OpenSeadragonViewer.annotationsMatch(
-      selectedContentSearchAnnotations, prevProps.selectedContentSearchAnnotations,
-    );
+    if (prevState.viewer === undefined) {
+      if (viewerConfig) {
+        viewer.viewport.panTo(viewerConfig, true);
+        viewer.viewport.zoomTo(viewerConfig.zoom, viewerConfig, true);
+        viewerConfig.degrees !== undefined && viewer.viewport.setRotation(viewerConfig.degrees);
+        viewerConfig.flip !== undefined && viewer.viewport.setFlip(viewerConfig.flip);
+      }
 
-    if (
-      searchAnnotationsUpdated
-      || selectedContentSearchAnnotationsUpdated
-      || highlightsUpdated
-      || selectionsUpdated
-    ) {
-      this.updateCanvas = this.canvasUpdateCallback();
-      this.viewer.forceRedraw();
+      this.addAllImageSources(!(viewerConfig));
+
+      return;
     }
 
     if (!this.infoResponsesMatch(prevProps.infoResponses)
       || !this.nonTiledImagedMatch(prevProps.nonTiledImages)
     ) {
-      this.viewer.close();
+      viewer.close();
       const canvasesChanged = !(isEqual(canvasWorld.canvasIds, prevProps.canvasWorld.canvasIds));
-      this.addAllImageSources((canvasesChanged || !viewer));
+      this.addAllImageSources((canvasesChanged || !viewerConfig));
     } else if (!isEqual(canvasWorld.layers, prevProps.canvasWorld.layers)) {
       this.refreshTileProperties();
-    } else if (viewer && !this.osdUpdating) {
-      const { viewport } = this.viewer;
+    } else if (viewerConfig && !this.osdUpdating) {
+      const { viewport } = viewer;
 
-      if (viewer.x !== viewport.centerSpringX.target.value
-        || viewer.y !== viewport.centerSpringY.target.value) {
-        this.viewer.viewport.panTo(viewer, false);
+      if (viewerConfig.x !== viewport.centerSpringX.target.value
+        || viewerConfig.y !== viewport.centerSpringY.target.value) {
+        viewport.panTo(viewerConfig, false);
       }
 
-      if (viewer.zoom !== viewport.zoomSpring.target.value) {
-        this.viewer.viewport.zoomTo(viewer.zoom, viewer, false);
+      if (viewerConfig.zoom !== viewport.zoomSpring.target.value) {
+        viewport.zoomTo(viewerConfig.zoom, viewerConfig, false);
+      }
+
+      if (viewerConfig.rotation !== viewport.getRotation()) {
+        viewport.setRotation(viewerConfig.rotation);
+      }
+
+      if (viewerConfig.flip !== viewport.getFlip()) {
+        viewport.setFlip(viewerConfig.flip);
       }
     }
   }
@@ -149,14 +130,21 @@ export class OpenSeadragonViewer extends Component {
   /**
    */
   componentWillUnmount() {
-    this.viewer.removeAllHandlers();
+    const { viewer } = this.state;
+
+    if (viewer.innerTracker
+      && viewer.innerTracker.moveHandler === this.onCanvasMouseMove) {
+      viewer.innerTracker.moveHandler = null;
+    }
+    viewer.removeAllHandlers();
+    this.apiRef.current = undefined;
   }
 
-  /**
-   * onUpdateViewport - fires during OpenSeadragon render method.
-   */
-  onUpdateViewport(event) {
-    this.updateCanvas();
+  /** Shim to provide a mouse-move event coming from the viewer */
+  onCanvasMouseMove(event) {
+    const { viewer } = this.state;
+
+    viewer.raiseEvent('mouse-move', event);
   }
 
   /**
@@ -168,37 +156,11 @@ export class OpenSeadragonViewer extends Component {
     const { viewport } = event.eventSource;
 
     updateViewport(windowId, {
+      flip: viewport.getFlip(),
+      rotation: viewport.getRotation(),
       x: Math.round(viewport.centerSpringX.target.value),
       y: Math.round(viewport.centerSpringY.target.value),
       zoom: viewport.zoomSpring.target.value,
-    });
-  }
-
-  /** */
-  canvasUpdateCallback() {
-    return () => {
-      this.osdCanvasOverlay.clear();
-      this.osdCanvasOverlay.resize();
-      this.osdCanvasOverlay.canvasUpdate(this.renderAnnotations.bind(this));
-    };
-  }
-
-  /**
-   * annotationsToContext - converts anontations to a canvas context
-   */
-  annotationsToContext(annotations, color = 'yellow', selected = false) {
-    const { canvasWorld } = this.props;
-    const context = this.osdCanvasOverlay.context2d;
-    const zoomRatio = this.viewer.viewport.getZoom(true) / this.viewer.viewport.getMaxZoom();
-    annotations.forEach((annotation) => {
-      annotation.resources.forEach((resource) => {
-        if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-        const offset = canvasWorld.offsetByCanvas(resource.targetId);
-        const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
-          color, offset, resource, selected, zoomRatio,
-        });
-        canvasAnnotationDisplay.toContext(context);
-      });
     });
   }
 
@@ -219,11 +181,19 @@ export class OpenSeadragonViewer extends Component {
   /** */
   addNonTiledImage(contentResource) {
     const { canvasWorld } = this.props;
+    const { viewer } = this.state;
+
+    const type = contentResource.getProperty('type');
+    const format = contentResource.getProperty('format') || '';
+
+    if (!(type === 'Image' || type === 'dctypes:Image' || format.startsWith('image/'))) return Promise.resolve();
+
     return new Promise((resolve, reject) => {
-      if (!this.viewer) {
-        return;
+      if (!viewer) {
+        reject();
       }
-      this.viewer.addSimpleImage({
+
+      viewer.addSimpleImage({
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
           ...canvasWorld.contentResourceToWorldCoordinates(contentResource),
@@ -240,17 +210,19 @@ export class OpenSeadragonViewer extends Component {
    */
   addTileSource(infoResponse) {
     const { canvasWorld } = this.props;
+    const { viewer } = this.state;
     return new Promise((resolve, reject) => {
-      if (!this.viewer) {
-        return;
+      if (!viewer) {
+        reject();
       }
 
-      const tileSource = infoResponse.json;
+      // OSD mutates this object, so we give it a shallow copy
+      const tileSource = { ...infoResponse.json };
       const contentResource = canvasWorld.contentResource(infoResponse.id);
 
       if (!contentResource) return;
 
-      this.viewer.addTiledImage({
+      viewer.addTiledImage({
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
           ...canvasWorld.contentResourceToWorldCoordinates(contentResource),
@@ -266,7 +238,7 @@ export class OpenSeadragonViewer extends Component {
   /** */
   refreshTileProperties() {
     const { canvasWorld } = this.props;
-    const { world } = this.viewer;
+    const { viewer: { world } } = this.state;
 
     const items = [];
     for (let i = 0; i < world.getItemCount(); i += 1) {
@@ -285,7 +257,9 @@ export class OpenSeadragonViewer extends Component {
   /**
    */
   fitBounds(x, y, w, h, immediately = true) {
-    this.viewer.viewport.fitBounds(
+    const { viewer } = this.state;
+
+    viewer.viewport.fitBounds(
       new OpenSeadragon.Rect(x, y, w, h),
       immediately,
     );
@@ -299,18 +273,29 @@ export class OpenSeadragonViewer extends Component {
    */
   infoResponsesMatch(prevInfoResponses) {
     const { infoResponses } = this.props;
-    if (infoResponses.length === 0 && prevInfoResponses.length === 0) return true;
 
-    return infoResponses.some((infoResponse, index) => {
+    if (infoResponses.length === 0 && prevInfoResponses.length === 0) return true;
+    if (infoResponses.length !== prevInfoResponses.length) return false;
+
+    return infoResponses.every((infoResponse, index) => {
       if (!prevInfoResponses[index]) {
         return false;
       }
 
-      if (!infoResponse.json) {
+      if (!infoResponse.json || !prevInfoResponses[index].json) {
         return false;
       }
 
-      if (infoResponse.json['@id'] === (prevInfoResponses[index].json || {})['@id']) {
+      if (infoResponse.tokenServiceId !== prevInfoResponses[index].tokenServiceId) {
+        return false;
+      }
+
+      if (infoResponse.json['@id']
+        && infoResponse.json['@id'] === prevInfoResponses[index].json['@id']) {
+        return true;
+      }
+      if (infoResponse.json.id
+        && infoResponse.json.id === prevInfoResponses[index].json.id) {
         return true;
       }
 
@@ -345,34 +330,15 @@ export class OpenSeadragonViewer extends Component {
     this.fitBounds(...canvasWorld.worldBounds(), immediately);
   }
 
-  /** */
-  renderAnnotations() {
-    const {
-      searchAnnotations,
-      selectedContentSearchAnnotations,
-      highlightedAnnotations,
-      selectedAnnotations,
-      palette,
-    } = this.props;
-
-    this.annotationsToContext(searchAnnotations, palette.highlights.secondary);
-    this.annotationsToContext(
-      selectedContentSearchAnnotations,
-      palette.highlights.primary,
-      true,
-    );
-
-    this.annotationsToContext(highlightedAnnotations, palette.highlights.secondary);
-    this.annotationsToContext(selectedAnnotations, palette.highlights.primary, true);
-  }
-
   /**
    * Renders things
    */
   render() {
     const {
       children, classes, label, t, windowId,
+      drawAnnotations,
     } = this.props;
+    const { viewer } = this.state;
 
     const enhancedChildren = React.Children.map(children, child => (
       React.cloneElement(
@@ -390,8 +356,12 @@ export class OpenSeadragonViewer extends Component {
           id={`${windowId}-osd`}
           ref={this.ref}
           aria-label={t('item', { label })}
+          aria-live="polite"
         >
+          { drawAnnotations
+            && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
           { enhancedChildren }
+          <PluginHook viewer={viewer} {...{ ...this.props, children: null }} />
         </section>
       </>
     );
@@ -400,33 +370,25 @@ export class OpenSeadragonViewer extends Component {
 
 OpenSeadragonViewer.defaultProps = {
   children: null,
-  highlightedAnnotations: [],
+  drawAnnotations: false,
   infoResponses: [],
   label: null,
   nonTiledImages: [],
   osdConfig: {},
-  palette: {},
-  searchAnnotations: [],
-  selectedAnnotations: [],
-  selectedContentSearchAnnotations: [],
-  viewer: null,
+  viewerConfig: null,
 };
 
 OpenSeadragonViewer.propTypes = {
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  highlightedAnnotations: PropTypes.arrayOf(PropTypes.object),
+  drawAnnotations: PropTypes.bool,
   infoResponses: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
   nonTiledImages: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  searchAnnotations: PropTypes.arrayOf(PropTypes.object),
-  selectedAnnotations: PropTypes.arrayOf(PropTypes.object),
-  selectedContentSearchAnnotations: PropTypes.arrayOf(PropTypes.object),
   t: PropTypes.func.isRequired,
   updateViewport: PropTypes.func.isRequired,
-  viewer: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  viewerConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windowId: PropTypes.string.isRequired,
 };

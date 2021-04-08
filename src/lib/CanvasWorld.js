@@ -89,6 +89,8 @@ export default class CanvasWorld {
       c.imageResources.find(r => r.id === contentResource.id)
     ));
     const canvas = this.canvases[miradorCanvasIndex];
+    if (!canvas) return [];
+
     const [x, y, w, h] = this.canvasToWorldCoordinates(canvas.id);
 
     const fragmentOffset = canvas.onFragment(contentResource.id);
@@ -210,5 +212,15 @@ export default class CanvasWorld {
       worldWidth,
       worldHeight,
     ];
+  }
+
+  /** */
+  canvasAtPoint(point) {
+    const canvasDimensions = this.canvasDimensions.find(c => (
+      c.x <= point.x && point.x <= (c.x + c.width)
+        && c.y <= point.y && point.y <= (c.y + c.height)
+    ));
+
+    return canvasDimensions && canvasDimensions.canvas;
   }
 }

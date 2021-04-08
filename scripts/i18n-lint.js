@@ -43,7 +43,6 @@ files.forEach((fileName) => {
 
 const completeKeys = normalizedFiles[defaultLocaleFile].slice().sort();
 
-
 Object.keys(normalizedFiles).forEach((fileName) => {
   const unsorted = unsortedKeys(normalizedFiles[fileName]);
   const missing = missingKeys(completeKeys, normalizedFiles[fileName]);

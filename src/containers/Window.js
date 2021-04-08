@@ -6,10 +6,9 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { Window } from '../components/Window';
 import {
-  getManifest, getManifestTitle, getThumbnailNavigationPosition, getWindow,
-  getWorkspaceType, getWindowDraggability, getWindowViewType,
+  getManifestStatus, getManifestTitle, getThumbnailNavigationPosition, getWindow,
+  getWorkspaceType, getWindowDraggability, getWindowViewType, getManifestError,
 } from '../state/selectors';
-
 
 /**
  * mapStateToProps - used to hook up connect to action creators
@@ -17,9 +16,9 @@ import {
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
+  isFetching: getManifestStatus(state, { windowId }).isFetching,
   label: getManifestTitle(state, { windowId }),
-  manifest: getManifest(state, { windowId }),
-  manifestId: (getWindow(state, { windowId }) || {}).manifestId,
+  manifestError: getManifestError(state, { windowId }),
   maximized: (getWindow(state, { windowId }) || {}).maximized,
   sideBarOpen: (getWindow(state, { windowId }) || {}).sideBarOpen,
   thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId }),
@@ -35,7 +34,6 @@ const mapStateToProps = (state, { windowId }) => ({
  * @private
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
-  fetchManifest: (...args) => dispatch(actions.fetchManifest(...args)),
   focusWindow: () => dispatch(actions.focusWindow(windowId)),
 });
 

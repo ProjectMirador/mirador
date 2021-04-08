@@ -5,7 +5,7 @@ import Link from '@material-ui/core/Link';
 import classNames from 'classnames';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ns from '../config/css-ns';
-
+import { PluginHook } from './PluginHook';
 
 /**
  * ManifestRelatedLinks
@@ -35,6 +35,7 @@ export class ManifestRelatedLinks extends Component {
           aria-labelledby={`${id}-related ${id}-related-heading`}
           id={`${id}-related-heading`}
           variant="h4"
+          component="h5"
         >
           {t('links')}
         </Typography>
@@ -95,6 +96,7 @@ export class ManifestRelatedLinks extends Component {
             </>
           )}
         </dl>
+        <PluginHook {...this.props} />
       </CollapsibleSection>
     );
   }

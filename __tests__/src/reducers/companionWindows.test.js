@@ -51,7 +51,6 @@ describe('companionWindowsReducer', () => {
     });
   });
 
-
   describe('UPDATE_COMPANION_WINDOW', () => {
     it('updates an existing companion window', () => {
       const action = {
@@ -96,16 +95,15 @@ describe('companionWindowsReducer', () => {
   describe('REMOVE_WINDOW', () => {
     it('should remove a companion window', () => {
       const action = {
-        companionWindowIds: ['a', 'b'],
-        id: 'abc123',
         type: ActionTypes.REMOVE_WINDOW,
+        windowId: 'abc123',
       };
       const beforeState = {
-        a: {},
-        b: {},
-        c: {},
+        a: { windowId: 'abc123' },
+        b: { windowId: 'abc123' },
+        c: { windowId: 'other' },
       };
-      const expectedState = { c: {} };
+      const expectedState = { c: { windowId: 'other' } };
       expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
     });
   });

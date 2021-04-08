@@ -5,7 +5,6 @@ import CompanionWindow from '../../../src/containers/CompanionWindow';
 import SearchResults from '../../../src/containers/SearchResults';
 import { SearchPanel } from '../../../src/components/SearchPanel';
 
-
 /**
  * Helper function to create a shallow wrapper around SearchPanel
  */

@@ -13,10 +13,10 @@ import { AnnotationSettings } from '../components/AnnotationSettings';
  * Mapping redux state to component props using connect
  */
 const mapStateToProps = (state, { windowId }) => ({
-  displayAll: getWindow(state, { windowId }).displayAllAnnotations,
+  displayAll: getWindow(state, { windowId }).highlightAllAnnotations,
   displayAllDisabled: getAnnotationResourcesByMotivation(
     state,
-    { motivations: state.config.annotations.filteredMotivations, windowId },
+    { windowId },
   ).length < 2,
 });
 

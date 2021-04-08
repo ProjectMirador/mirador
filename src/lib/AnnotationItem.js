@@ -29,7 +29,7 @@ export default class AnnotationItem {
       case 'string':
         return target.replace(/#?xywh=(.*)$/, '');
       case 'object':
-        return target.id;
+        return (target.source && target.source.id) || target.source || target.id;
       default:
         return null;
     }
@@ -78,7 +78,7 @@ export default class AnnotationItem {
       case 'string':
         return target;
       case 'object':
-        return target.selector;
+        return flatten(compact(new Array(target.selector)));
       default:
         return null;
     }
@@ -91,10 +91,7 @@ export default class AnnotationItem {
       case 'string':
         return null;
       case 'object':
-        if (selector.type && selector.type === 'SvgSelector') {
-          return selector;
-        }
-        return null;
+        return selector.find(s => s.type && s.type === 'SvgSelector');
       default:
         return null;
     }
@@ -104,13 +101,21 @@ export default class AnnotationItem {
   get fragmentSelector() {
     const { selector } = this;
 
+    let match;
+    let fragmentSelector;
+
     switch (typeof selector) {
       case 'string':
-        return selector.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        match = selector.match(/xywh=(.*)$/);
+        break;
       case 'object':
-        return selector.value.match(/xywh=(.*)$/)[1].split(',').map(str => parseInt(str, 10));
+        fragmentSelector = selector.find(s => s.type && s.type === 'FragmentSelector');
+        match = fragmentSelector && fragmentSelector.value.match(/xywh=(.*)$/);
+        break;
       default:
         return null;
     }
+
+    return match && match[1].split(',').map(str => parseInt(str, 10));
   }
 }

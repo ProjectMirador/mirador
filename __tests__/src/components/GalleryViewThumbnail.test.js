@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import Chip from '@material-ui/core/Chip';
+import IntersectionObserver from '@researchgate/react-intersection-observer';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryViewThumbnail } from '../../../src/components/GalleryViewThumbnail';
 import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
@@ -61,6 +62,49 @@ describe('GalleryView', () => {
     expect(focusOnCanvas).toHaveBeenCalled();
   });
 
+  it('sets the canvas if the user hits a key (non-space or non-enter) while on a canvas', () => {
+    const setCanvas = jest.fn();
+    wrapper = createWrapper({ selected: true, setCanvas });
+    wrapper.find('div[role="button"]').first().simulate('keyUp', { key: 'd' });
+    expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
+  });
+
+  describe('on-demand annotation fetching', () => {
+    it('fetches annotations', () => {
+      const requestCanvasAnnotations = jest.fn();
+      const canvas = {
+        getHeight: () => 50,
+        getWidth: () => 50,
+      };
+      wrapper = createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
+
+      wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: true });
+      expect(requestCanvasAnnotations).toHaveBeenCalled();
+    });
+    it('does nothing if there is no intersection', () => {
+      const requestCanvasAnnotations = jest.fn();
+      const canvas = {
+        getHeight: () => 50,
+        getWidth: () => 50,
+      };
+      wrapper = createWrapper({ canvas, requestCanvasAnnotations });
+
+      wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: false });
+      expect(requestCanvasAnnotations).not.toHaveBeenCalled();
+    });
+    it('does nothing if there are already some annotations', () => {
+      const requestCanvasAnnotations = jest.fn();
+      const canvas = {
+        getHeight: () => 50,
+        getWidth: () => 50,
+      };
+      wrapper = createWrapper({ annotationsCount: 5, canvas, requestCanvasAnnotations });
+
+      wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: true });
+      expect(requestCanvasAnnotations).not.toHaveBeenCalled();
+    });
+  });
+
   describe('annotation count chip', () => {
     it('hides the chip if there are no annotations', () => {
       wrapper = createWrapper({ annotationsCount: 0 });
@@ -71,14 +115,19 @@ describe('GalleryView', () => {
       wrapper = createWrapper({ annotationsCount: 50 });
       expect(wrapper.find(Chip).length).toEqual(1);
       expect(wrapper.find(Chip).prop('label')).toEqual(50);
-      expect(wrapper.find(Chip).prop('className')).toEqual('');
+    });
+  });
+
+  describe('search annotation count chip', () => {
+    it('hides the chip if there are no annotations', () => {
+      wrapper = createWrapper({ searchAnnotationsCount: 0 });
+      expect(wrapper.find(Chip).length).toEqual(0);
     });
 
     it('shows the number of search annotations on a canvas', () => {
-      wrapper = createWrapper({ annotationsCount: 50, annotationSelected: true });
+      wrapper = createWrapper({ searchAnnotationsCount: 50 });
       expect(wrapper.find(Chip).length).toEqual(1);
       expect(wrapper.find(Chip).prop('label')).toEqual(50);
-      expect(wrapper.find(Chip).prop('className')).toEqual('selected');
     });
   });
 });

@@ -26,8 +26,7 @@ export function MiradorMenuButton(props) {
     <IconButton {...iconButtonProps}>
       {badge
         ? <Badge {...BadgeProps}>{children}</Badge>
-        : children
-      }
+        : children}
     </IconButton>
   );
 

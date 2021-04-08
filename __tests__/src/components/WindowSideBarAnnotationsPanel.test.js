@@ -44,10 +44,7 @@ describe('WindowSideBarAnnotationsPanel', () => {
 
   it('renders a CanvasAnnotations for every selected canvas', () => {
     wrapper = createWrapper({
-      selectedCanvases: [
-        { id: 'abc', index: 0 },
-        { id: 'xyz', index: 1 },
-      ],
+      canvasIds: ['abc', 'xyz'],
     });
 
     expect(wrapper.find(CanvasAnnotations).length).toBe(2);

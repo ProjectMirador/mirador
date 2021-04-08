@@ -4,7 +4,9 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { ViewerInfo } from '../components/ViewerInfo';
-import { getCanvasLabel, getManifestCanvases, getCanvasIndex } from '../state/selectors';
+import {
+  getCanvasLabel, getCanvases, getCanvasIndex, getCurrentCanvas,
+} from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -13,14 +15,15 @@ import { getCanvasLabel, getManifestCanvases, getCanvasIndex } from '../state/se
  */
 const mapStateToProps = (state, props) => {
   const { windowId } = props;
-  const canvases = getManifestCanvases(state, { windowId });
+  const canvases = getCanvases(state, { windowId });
   const canvasIndex = getCanvasIndex(state, { windowId });
+  const canvasId = (getCurrentCanvas(state, { windowId }) || {}).id;
 
   return {
     canvasCount: canvases.length,
     canvasIndex,
     canvasLabel: getCanvasLabel(state, {
-      canvasIndex,
+      canvasId,
       windowId,
     }),
   };

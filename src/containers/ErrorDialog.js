@@ -1,14 +1,10 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import {
-  first,
-  omit,
-  values,
-} from 'lodash';
 import { withPlugins } from '../extend/withPlugins';
 import { ErrorDialog } from '../components/ErrorDialog';
 import * as actions from '../state/actions';
+import { getLatestError } from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -16,8 +12,7 @@ import * as actions from '../state/actions';
  * @private
  */
 const mapStateToProps = state => ({
-  /* extract 'items' value and get first key-value-pair (an error) */
-  error: first(values(omit(state.errors, 'items'))),
+  error: getLatestError(state),
 });
 
 /**

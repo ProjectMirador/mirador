@@ -5,12 +5,26 @@ import ActionTypes from '../actions/action-types';
  */
 export const catalogReducer = (state = [], action) => {
   switch (action.type) {
-    case ActionTypes.REQUEST_MANIFEST: // falls through, for now at least.
     case ActionTypes.ADD_RESOURCE:
       if (state.some(m => m.manifestId === action.manifestId)) return state;
 
       return [
-        { manifestId: action.manifestId },
+        { manifestId: action.manifestId, ...action.payload },
+        ...state,
+      ];
+    case ActionTypes.ADD_WINDOW:
+      if (state.some(m => m.manifestId === action.window.manifestId)) return state;
+
+      return [
+        { manifestId: action.window.manifestId },
+        ...state,
+      ];
+    case ActionTypes.UPDATE_WINDOW:
+      if (!action.payload.manifestId) return state;
+      if (state.some(m => m.manifestId === action.payload.manifestId)) return state;
+
+      return [
+        { manifestId: action.payload.manifestId },
         ...state,
       ];
     case ActionTypes.REMOVE_RESOURCE:

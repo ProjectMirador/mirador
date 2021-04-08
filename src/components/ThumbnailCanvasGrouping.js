@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 import ns from '../config/css-ns';
 
-
 /** */
 export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
@@ -37,7 +36,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
     const {
       canvasGroupings, position, height,
     } = data;
-    const currentGroupings = canvasGroupings.groupings()[index];
+    const currentGroupings = canvasGroupings[index];
     const SPACING = 8;
     return (
       <div
@@ -50,6 +49,8 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           width: (Number.isInteger(style.width)) ? style.width - SPACING : null,
         }}
         className={ns('thumbnail-nav-container')}
+        role="gridcell"
+        aria-colindex={index + 1}
       >
         <div
           role="button"

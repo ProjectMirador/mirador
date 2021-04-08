@@ -5,10 +5,12 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { MinimalWindow } from '../components/MinimalWindow';
+import { getWindowConfig } from '../state/selectors';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => ({
-  allowClose: state.config.window.allowClose,
+  allowClose: getWindowConfig(state, { windowId }).allowClose,
+  allowWindowSideBar: getWindowConfig(state, { windowId }).allowWindowSideBar,
 });
 
 /**
@@ -28,6 +30,11 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
 const styles = theme => ({
   button: {
     marginLeft: 'auto',
+  },
+  title: {
+    ...theme.typography.h6,
+    flexGrow: 1,
+    paddingLeft: theme.spacing(0.5),
   },
   window: {
     backgroundColor: theme.palette.shades.dark,

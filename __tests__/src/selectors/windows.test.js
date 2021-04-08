@@ -3,29 +3,38 @@ import manifestFixture002 from '../../fixtures/version-2/002.json';
 import manifestFixture015 from '../../fixtures/version-2/015.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import {
+  getWindowConfig,
   getWindowTitles,
   getWindowViewType,
-  getViewer,
   getWindowDraggability,
-  getCanvasIndex,
-  getWindowManifests,
-  getWindows,
   getMaximizedWindowsIds,
   getAllowedWindowViewTypes,
 } from '../../../src/state/selectors/windows';
 
-describe('getWindows', () => {
-  it('should return windows from state', () => {
+describe('getWindowConfig', () => {
+  it('merges the current window with the global defaults', () => {
     const state = {
+      config: {
+        window: { a: '1', b: '2' },
+      },
       windows: {
-        a: { manifestId: 'amanifest' },
-        b: { manifestId: 'bmanifest' },
+        a: { b: '3', c: '4' },
       },
     };
 
-    const received = getWindows(state);
+    expect(getWindowConfig(state, { windowId: 'a' })).toEqual({ a: '1', b: '3', c: '4' });
+  });
+  it('gracefully handles missing windows', () => {
+    const state = {
+      config: {
+        window: { a: '1', b: '2' },
+      },
+      windows: {
+        a: {},
+      },
+    };
 
-    expect(received).toEqual(state.windows);
+    expect(getWindowConfig(state, { windowId: 'c' })).toEqual({ a: '1', b: '2' });
   });
 });
 
@@ -64,39 +73,6 @@ describe('getWindowTitles', () => {
       a: 'Bodleian Library Human Freaks 2 (33)',
       b: 'Test 2 Manifest: Metadata Pairs',
     });
-  });
-});
-
-describe('getWindowManifests', () => {
-  it('should return manifest titles for the open windows', () => {
-    const state = {
-      windows: {
-        a: { manifestId: 'amanifest' },
-        b: { manifestId: 'bmanifest' },
-      },
-    };
-
-    const received = getWindowManifests(state);
-
-    expect(received).toEqual(['amanifest', 'bmanifest']);
-  });
-});
-
-describe('getCanvasIndex', () => {
-  it('returns the current canvasIndex for the window', () => {
-    const state = {
-      manifests: {
-        y: { json: { ...manifestFixture015 } },
-      },
-      windows: {
-        a: { canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json', manifestId: 'y' },
-      },
-    };
-
-    expect(getCanvasIndex(state, { windowId: 'a' })).toEqual(1);
-  });
-  it('defaults to the first canvas', () => {
-    expect(getCanvasIndex({}, {})).toEqual(0);
   });
 });
 
@@ -187,29 +163,10 @@ describe('getAllowedWindowViewTypes', () => {
   });
 });
 
-describe('getViewer', () => {
-  const state = {
-    viewers: {
-      bar: {
-        id: 'bar',
-      },
-    },
-  };
-
-  it('should return companion windows for a given window id', () => {
-    const received = getViewer(state, { windowId: 'bar' });
-
-    expect(received).toEqual({
-      id: 'bar',
-    });
-  });
-});
-
 describe('getWindowDraggability', () => {
   describe('in elastic mode', () => {
     it('is always true', () => {
       const state = {
-        windows: {},
         workspace: { type: 'elastic' },
       };
       const props = {};
@@ -221,8 +178,7 @@ describe('getWindowDraggability', () => {
   describe('in non-elastic mode', () => {
     it('is false if there is only one window', () => {
       const state = {
-        windows: { abc123: {} },
-        workspace: { type: 'mosaic' },
+        workspace: { type: 'mosaic', windowIds: ['abc123'] },
       };
       const props = { windowId: 'abc123' };
 
@@ -232,7 +188,7 @@ describe('getWindowDraggability', () => {
     it('is false when the window is maximized', () => {
       const state = {
         windows: { abc123: { maximized: true }, abc321: { maximized: false } },
-        workspace: { type: 'mosaic' },
+        workspace: { type: 'mosaic', windowIds: ['abc123', 'abc321'] },
       };
       const props = { windowId: 'abc123' };
 
@@ -242,7 +198,7 @@ describe('getWindowDraggability', () => {
     it('is true if there are many windows (as long as the window is not maximized)', () => {
       const state = {
         windows: { abc123: { maximized: false }, abc321: { maximized: false } },
-        workspace: { type: 'mosaic' },
+        workspace: { type: 'mosaic', windowIds: ['abc123', 'abc321'] },
       };
       const props = { windowId: 'abc123' };
 

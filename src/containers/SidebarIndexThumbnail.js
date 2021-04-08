@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { SidebarIndexThumbnail } from '../components/SidebarIndexThumbnail';
+import { getConfig } from '../state/selectors';
 
 /**
  * mapStateToProps - used to hook up state to props
@@ -11,7 +12,7 @@ import { SidebarIndexThumbnail } from '../components/SidebarIndexThumbnail';
  * @private
  */
 const mapStateToProps = (state, { data }) => ({
-  config: state.config,
+  ...(getConfig(state).canvasNavigation || {}),
 });
 
 /**

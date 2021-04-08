@@ -1,23 +1,19 @@
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import MiradorCanvas from '../../../src/lib/MiradorCanvas';
 import fixture from '../../fixtures/version-2/019.json';
-import v3fixture from '../../fixtures/version-3/001.json';
-import imagev1Fixture from '../../fixtures/version-2/Osbornfa1.json';
-import emptyCanvasFixture from '../../fixtures/version-2/emptyCanvas.json';
 import serviceFixture from '../../fixtures/version-2/canvasService.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';
 import otherContentStringsFixture from '../../fixtures/version-2/BibliographicResource_3000126341277.json';
 import fragmentFixture from '../../fixtures/version-2/hamilton.json';
+import fragmentFixtureV3 from '../../fixtures/version-3/hamilton.json';
+import audioFixture from '../../fixtures/version-3/0002-mvm-audio.json';
+import videoFixture from '../../fixtures/version-3/0015-start.json';
 
 describe('MiradorCanvas', () => {
   let instance;
-  let v3Instance;
   beforeAll(() => {
     instance = new MiradorCanvas(
       Utils.parseManifest(fixture).getSequences()[0].getCanvases()[0],
-    );
-    v3Instance = new MiradorCanvas(
-      Utils.parseManifest(v3fixture).getSequences()[0].getCanvases()[0],
     );
   });
   describe('annotationListUris', () => {
@@ -51,27 +47,7 @@ describe('MiradorCanvas', () => {
       });
     });
   });
-  describe('processAnnotations', () => {
-    describe('v2', () => {
-      it('fetches annotations for each annotationList', () => {
-        const otherContentInstance = new MiradorCanvas(
-          Utils.parseManifest(otherContentFixture).getSequences()[0].getCanvases()[0],
-        );
-        const fetchMock = jest.fn();
-        otherContentInstance.processAnnotations(fetchMock);
-        expect(fetchMock).toHaveBeenCalledTimes(1);
-      });
-    });
-    describe('v3', () => {
-      it('fetches annotations for external items and receives annotations for items that are embedded', () => {
-        const receiveMock = jest.fn();
-        const fetchMock = jest.fn();
-        v3Instance.processAnnotations(fetchMock, receiveMock);
-        expect(receiveMock).toHaveBeenCalledTimes(1);
-        expect(fetchMock).toHaveBeenCalledTimes(2);
-      });
-    });
-  });
+
   describe('aspectRatio', () => {
     it('calculates a width / height aspectRatio', () => {
       expect(instance.aspectRatio).toBeCloseTo(0.667);
@@ -99,6 +75,14 @@ describe('MiradorCanvas', () => {
         instance.resourceAnnotation('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg').id,
       ).toEqual('https://prtd.app/hamilton/canvas/p1/anno-02.json');
     });
+    it('returns the containing Annotation for a given contentResource id v3', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(fragmentFixtureV3).getSequences()[0].getCanvases()[0],
+      );
+      expect(
+        instance.resourceAnnotation('https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg').id,
+      ).toEqual('https://dvp.prtd.app/hamilton/canvas/p1/anno-02.json');
+    });
   });
   describe('onFragment', () => {
     it('when a fragment selector exists for a given contentResources id, returns that fragment', () => {
@@ -108,6 +92,38 @@ describe('MiradorCanvas', () => {
       expect(
         instance.onFragment('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg'),
       ).toEqual([552, 1584, 3360, 2368]);
+    });
+    it('when a fragment selector exists for a given contentResources id, returns that fragment v3', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(fragmentFixtureV3).getSequences()[0].getCanvases()[0],
+      );
+      expect(
+        instance.onFragment('https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg'),
+      ).toEqual([552, 1584, 3360, 2368]);
+    });
+  });
+  describe('videoResources', () => {
+    it('returns video', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(videoFixture).getSequences()[0].getCanvases()[0],
+      );
+      expect(instance.videoResources.length).toEqual(1);
+    });
+  });
+  describe('audioResources', () => {
+    it('returns audio', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(audioFixture).getSequences()[0].getCanvases()[0],
+      );
+      expect(instance.audioResources.length).toEqual(1);
+    });
+  });
+  describe('vttContent', () => {
+    it('returns vttContent', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(videoFixture).getSequences()[0].getCanvases()[0],
+      );
+      expect(instance.vttContent.length).toEqual(1);
     });
   });
 });

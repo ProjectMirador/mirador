@@ -3,6 +3,7 @@
 describe('Thumbnail navigation', () => {
   beforeEach(async () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/');
+    await expect(page).toMatchElement('.mirador-window', { polling: 'mutation', timeout: 5000 });
   });
 
   it('navigates a manifest using thumbnail navigation', async () => {
@@ -22,14 +23,13 @@ describe('Thumbnail navigation', () => {
   it('displays on right side', async () => {
     await expect(page).toMatchElement('.mirador-thumb-navigation');
     await expect(page).toMatchElement('.mirador-companion-area-far-bottom .mirador-thumb-navigation');
-    await page.evaluate(() => {
+    const windowId = await page.evaluate(() => {
       const { windows } = miradorInstance.store.getState();
-      miradorInstance.store.dispatch(
-        miradorInstance.actions.setWindowThumbnailPosition(
-          Object.keys(windows)[0], 'far-right',
-        ),
-      );
+      return Object.keys(windows)[0];
     });
+
+    await expect(page).toClick(`#${windowId} button[aria-label="Window views & thumbnail display"]`);
+    await expect(page).toClick('li', { text: 'Right' });
     await expect(page).toMatchElement('.mirador-companion-area-far-right .mirador-thumb-navigation');
   });
 });

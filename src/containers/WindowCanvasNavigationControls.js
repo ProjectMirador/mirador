@@ -4,19 +4,12 @@ import { withSize } from 'react-sizeme';
 import { withStyles } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withPlugins } from '../extend/withPlugins';
-import {
-  getCurrentCanvas,
-  getCanvasLabel,
-} from '../state/selectors';
+import { getWorkspace } from '../state/selectors';
 import { WindowCanvasNavigationControls } from '../components/WindowCanvasNavigationControls';
 
 /** */
 const mapStateToProps = (state, { windowId }) => ({
-  canvasLabel: getCanvasLabel(state, {
-    canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
-    windowId,
-  }),
-  visible: state.workspace.focusedWindowId === windowId,
+  visible: getWorkspace(state).focusedWindowId === windowId,
 });
 
 /**

@@ -30,29 +30,30 @@ describe('workspace reducer', () => {
     });
   });
   it('should handle ADD_WINDOW', () => {
-    expect(workspaceReducer([], {
+    expect(workspaceReducer({ windowIds: ['asdf'] }, {
       type: ActionTypes.ADD_WINDOW,
       window: { id: 'abc123' },
     })).toEqual({
       focusedWindowId: 'abc123',
+      windowIds: ['asdf', 'abc123'],
     });
   });
   it('should handle REMOVE_WINDOW (by doing nothing if multiple windows remain)', () => {
-    expect(workspaceReducer({ focusedWindowId: 'asdf' }, {
+    expect(workspaceReducer({ focusedWindowId: 'asdf', windowIds: ['abc123', 'asdf'] }, {
       type: ActionTypes.REMOVE_WINDOW,
       windowId: 'abc123',
-      windows: { abc123: {}, def123: {}, ghi123: {} },
     })).toEqual({
       focusedWindowId: 'asdf',
+      windowIds: ['asdf'],
     });
   });
   it('should handle REMOVE_WINDOW (by focusing the window if it is the last one remaining)', () => {
-    expect(workspaceReducer([], {
+    expect(workspaceReducer({ focusedWindowId: 'abc123', windowIds: ['abc123', 'def123'] }, {
       type: ActionTypes.REMOVE_WINDOW,
       windowId: 'abc123',
-      windows: { abc123: {}, def123: {} },
     })).toEqual({
       focusedWindowId: 'def123',
+      windowIds: ['def123'],
     });
   });
   it('should handle SET_WORKSPACE_FULLSCREEN', () => {
@@ -129,13 +130,6 @@ describe('workspace reducer', () => {
         y: 0,
       },
       width: 1000,
-    });
-  });
-  it('should handle TOGGLE_WORKSPACE_EXPOSE_MODE', () => {
-    expect(workspaceReducer([], {
-      type: ActionTypes.TOGGLE_WORKSPACE_EXPOSE_MODE,
-    })).toEqual({
-      exposeModeOn: true,
     });
   });
   it('should handle SET_CONFIG', () => {

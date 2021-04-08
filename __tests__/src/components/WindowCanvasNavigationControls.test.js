@@ -1,10 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import { WindowCanvasNavigationControls } from '../../../src/components/WindowCanvasNavigationControls';
 import ViewerInfo from '../../../src/containers/ViewerInfo';
 import ViewerNavigation from '../../../src/containers/ViewerNavigation';
 import ZoomControls from '../../../src/containers/ZoomControls';
+import { PluginHook } from '../../../src/components/PluginHook';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -31,13 +33,14 @@ describe('WindowCanvasNavigationControls', () => {
         <ZoomControls zoomToWorld={zoomToWorld} />
         <ViewerNavigation />
         <ViewerInfo />
+        <PluginHook />
       </Paper>,
     )).toBe(true);
   });
 
-  it('renders nothing when visible=false', () => {
+  it('renders only a screen-reader accessibile version when visible=false', () => {
     wrapper = createWrapper({ visible: false });
-    expect(wrapper.matchesElement(<></>)).toBe(true);
+    expect(wrapper.matchesElement(<Typography variant="srOnly"><ViewerInfo /></Typography>)).toBe(true);
   });
 
   it('sets the proper class/ZoomControls prop dependent on the size/width prop', () => {

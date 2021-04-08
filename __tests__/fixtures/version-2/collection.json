@@ -1,0 +1,292 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json", 
+  "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/collection.json", 
+  "@type": "sc:Collection", 
+  "label": "Collection of Test Cases", 
+  "manifests": [
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/1/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 1 Manifest: Minimum Required Fields"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/2/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 2 Manifest: Metadata Pairs"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/3/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 3 Manifest: Metadata Pairs with Languages"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/4/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 4 Manifest: Metadata Pairs with Multiple Values in same Language"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/5/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 5 Manifest: Description field"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/6/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 6 Manifest: Multiple Descriptions"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/7/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 7 Manifest: Rights Metadata"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/8/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 8 Manifest: SeeAlso link / Manifest"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/9/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 9 Manifest: Service link / Manifest"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/10/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 10 Manifest: Service link as Object"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/11/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 11 Manifest: ViewingDirection: l-t-r"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/12/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 12 Manifest: ViewingDirection: r-t-l"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/13/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 13 Manifest: ViewingDirection: t-t-b"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/14/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 14 Manifest: ViewingDirection: b-t-t"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/15/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 15 Manifest: ViewingHint: paged"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/16/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 16 Manifest: ViewingHint: continuous"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/17/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 17 Manifest: ViewingHint: individuals"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/18/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 18 Manifest: Non Standard Keys"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 19 Manifest: Multiple Canvases"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/20/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 20 Manifest: Multiple Sequences"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/21/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 21 Manifest: Sequence with Metadata"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/22/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 22 Manifest: /Sequence/ with non l-t-r viewingDirection"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/23/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 23 Manifest: /Sequence/ with non paged viewingHint"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/24/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 24 Manifest: Image with IIIF Service"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/25/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 25 Manifest: Image with IIIF Service, embedded info"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/26/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 26 Manifest: Image different size to Canvas"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/27/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 27 Manifest: No Image"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/28/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 28 Manifest: Choice of Image"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/29/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 29 Manifest: Choice of Image with IIIF Service"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/30/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 30 Manifest: Main + Detail Image"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/31/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 31 Manifest: Detail with IIIF Service"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/32/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 32 Manifest: Multiple Detail Images"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/33/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 33 Manifest: Detail Image with Choice"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/34/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 34 Manifest: Detail Image with Choice, and 'no image' as option"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/35/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 35 Manifest: Partial Image as Main Image"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/36/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 36 Manifest: Partial Image as Main Image with IIIF Service"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/37/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 37 Manifest: Partial Image as Detail Image"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/38/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 38 Manifest: Partial Image as Detail Image with IIIF Service"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/39/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 39 Manifest: Image with CSS Rotation"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/40/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 40 Manifest: Multiple Languages for Metadata Labels"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/41/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 41 Manifest: Main Image with Server side Rotation"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/43/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 43 Manifest: Embedded Transcription on Canvas"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/44/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 44 Manifest: Embedded Transcription on Fragment Segment"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/45/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 45 Manifest: External text/plain Transcription on Canvas"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/46/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 46 Manifest: External text/plain Transcription on Segment"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/47/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 47 Manifest: Embedded HTML Transcription on Canvas"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/48/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 48 Manifest: Embedded HTML Transcription on Segment"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/51/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 51 Manifest: Embedded Comment on a Canvas"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/52/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 52 Manifest: Embedded Comment on a Segment"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/54/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 54 Manifest: Comment in HTML"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/61/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 61 Manifest: Embedded Transcription on Selector Segment"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/62/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": [
+        {
+          "@value": "62: quelque titre", 
+          "@language": "fr"
+        }, 
+        {
+          "@value": "62: some title", 
+          "@language": "en"
+        }
+      ]
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/63/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 63 Manifest: Description in Multiple Languages"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/64/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 64 Manifest: Description in HTML"
+    }, 
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/65/manifest.json", 
+      "@type": "sc:Manifest", 
+      "label": "Test 65 Manifest: Sequence with startCanvas"
+    }
+  ]
+}

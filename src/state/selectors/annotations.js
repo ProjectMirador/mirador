@@ -2,12 +2,26 @@ import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
 import flatten from 'lodash/flatten';
 import AnnotationFactory from '../../lib/AnnotationFactory';
-import { getCanvas, getVisibleCanvases } from './canvases';
+import { miradorSlice } from './utils';
+import { getCanvas, getVisibleCanvasIds } from './canvases';
+import { getConfig } from './config';
+import { getWindow } from './getters';
+
+/** */
+export const getAnnotations = state => miradorSlice(state).annotations;
+
+const getMotivation = createSelector(
+  [
+    getConfig,
+    (state, { motivations }) => motivations,
+  ],
+  (config, motivations) => motivations || config.annotations.filteredMotivations,
+);
 
 const getAnnotationsOnCanvas = createSelector(
   [
     getCanvas,
-    state => state.annotations,
+    getAnnotations,
   ],
   (canvas, annotations) => {
     if (!annotations || !canvas) return [];
@@ -28,23 +42,25 @@ const getPresentAnnotationsCanvas = createSelector(
   ),
 );
 
-
 const getAnnotationsOnSelectedCanvases = createSelector(
   [
-    getVisibleCanvases,
-    state => state.annotations,
+    (state, { canvasId, ...otherProps }) => (canvasId
+      ? [canvasId]
+      : getVisibleCanvasIds(state, otherProps)
+    ),
+    getAnnotations,
   ],
-  (canvases, annotations) => {
-    if (!annotations || !canvases) return [];
+  (canvasIds, annotations) => {
+    if (!annotations || canvasIds.length === 0) return [];
     return flatten(
-      canvases.map(c => c.id).map(
+      canvasIds.map(
         targetId => annotations[targetId] && Object.values(annotations[targetId]),
       ),
     );
   },
 );
 
-const getPresentAnnotationsOnSelectedCanvases = createSelector(
+export const getPresentAnnotationsOnSelectedCanvases = createSelector(
   [
     getAnnotationsOnSelectedCanvases,
   ],
@@ -64,7 +80,7 @@ const getPresentAnnotationsOnSelectedCanvases = createSelector(
 export const getAnnotationResourcesByMotivationForCanvas = createSelector(
   [
     getPresentAnnotationsCanvas,
-    (state, { motivations }) => motivations,
+    getMotivation,
   ],
   (annotations, motivations) => filter(
     flatten(annotations.map(annotation => annotation.resources)),
@@ -83,7 +99,7 @@ export const getAnnotationResourcesByMotivationForCanvas = createSelector(
 export const getAnnotationResourcesByMotivation = createSelector(
   [
     getPresentAnnotationsOnSelectedCanvases,
-    (state, { motivations }) => motivations,
+    getMotivation,
   ],
   (annotations, motivations) => filter(
     flatten(annotations.map(annotation => annotation.resources)),
@@ -100,47 +116,22 @@ export const getAnnotationResourcesByMotivation = createSelector(
  * @param {Array} targetIds
  * @return {Array}
  */
-export const getSelectedAnnotationIds = createSelector(
+export const getSelectedAnnotationId = createSelector(
   [
-    (state, { windowId }) => state.windows[windowId].selectedAnnotations,
-    getVisibleCanvases,
+    getWindow,
   ],
-  (selectedAnnotations, canvases) => (
-    (canvases && flatten(
-      canvases.map(c => c.id).map(targetId => selectedAnnotations && selectedAnnotations[targetId]),
-    )) || []
-  ),
+  ({ selectedAnnotationId }) => selectedAnnotationId,
 );
 
 export const getSelectedAnnotationsOnCanvases = createSelector(
   [
     getPresentAnnotationsOnSelectedCanvases,
-    getSelectedAnnotationIds,
+    getSelectedAnnotationId,
   ],
-  (canvasAnnotations, selectedAnnotationIds) => canvasAnnotations.map(annotation => ({
+  (canvasAnnotations, selectedAnnotationId) => canvasAnnotations.map(annotation => ({
     id: (annotation['@id'] || annotation.id),
     resources: annotation.resources.filter(
-      r => selectedAnnotationIds && selectedAnnotationIds.includes(r.id),
+      r => selectedAnnotationId === r.id,
     ),
   })).filter(val => val.resources.length > 0),
-);
-
-export const getHighlightedAnnotationsOnCanvases = createSelector(
-  [
-    getPresentAnnotationsOnSelectedCanvases,
-    (state, { windowId }) => state.windows[windowId].highlightedAnnotation,
-    (state, { windowId }) => state.windows[windowId].displayAllAnnotations,
-  ],
-  (canvasAnnotations, highlightedAnnotation, displayAllAnnotations) => {
-    if (displayAllAnnotations) return canvasAnnotations;
-    if (highlightedAnnotation) {
-      return canvasAnnotations.map(annotation => ({
-        id: (annotation['@id'] || annotation.id),
-        resources: annotation.resources.filter(
-          r => highlightedAnnotation && highlightedAnnotation === r.id,
-        ),
-      })).filter(val => val.resources.length > 0);
-    }
-    return [];
-  },
 );

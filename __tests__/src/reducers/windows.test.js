@@ -1,6 +1,5 @@
 import { windowsReducer } from '../../../src/state/reducers/windows';
 import ActionTypes from '../../../src/state/actions/action-types';
-import manifestJson from '../../fixtures/version-2/019.json';
 
 describe('windows reducer', () => {
   it('should handle ADD_WINDOW', () => {
@@ -28,28 +27,6 @@ describe('windows reducer', () => {
       def456: {
         id: 'def456',
       },
-    });
-  });
-  it('should handle RECEIVE_MANIFEST', () => {
-    const state = {
-      window: {
-        canvasIndex: 1,
-        manifestId: 'a',
-      },
-      window2: {
-      },
-    };
-    expect(windowsReducer(state, {
-      manifestId: 'a',
-      manifestJson,
-      type: ActionTypes.RECEIVE_MANIFEST,
-    })).toEqual({
-      window: {
-        canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
-        canvasIndex: undefined,
-        manifestId: 'a',
-      },
-      window2: {},
     });
   });
   it('should handle MAXIMIZE_WINDOW', () => {
@@ -119,31 +96,12 @@ describe('windows reducer', () => {
     expect(windowsReducer(before, action)).toEqual(after);
   });
 
-  describe('SET_WINDOW_SIDE_BAR_PANEL', () => {
-    it('sets the sideBarPanel value to the given value when it was changed', () => {
-      const action = {
-        panelType: 'info',
-        type: ActionTypes.SET_WINDOW_SIDE_BAR_PANEL,
-        windowId: 'abc123',
-      };
-      const before = {
-        abc123: { sideBarPanel: 'closed' },
-        abc321: { sideBarPanel: 'closed' },
-      };
-      const after = {
-        abc123: { sideBarPanel: 'info' },
-        abc321: { sideBarPanel: 'closed' },
-      };
-
-      expect(windowsReducer(before, action)).toEqual(after);
-    });
-  });
-
   it('should handle SET_CANVAS', () => {
     expect(windowsReducer({
       abc123: {
         canvasId: 'http://example.com/canvas/1',
         id: 'abc123',
+        visibleCanvases: ['http://example.com/canvas/1'],
       },
       def456: {
         canvasId: 'http://example.com/canvas/1',
@@ -151,14 +109,14 @@ describe('windows reducer', () => {
       },
     }, {
       canvasId: 'http://example.com/canvas/5',
-      selectedContentSearchAnnotation: 'xyz',
       type: ActionTypes.SET_CANVAS,
+      visibleCanvases: ['http://example.com/canvas/5'],
       windowId: 'abc123',
     })).toEqual({
       abc123: {
         canvasId: 'http://example.com/canvas/5',
         id: 'abc123',
-        selectedContentSearchAnnotation: 'xyz',
+        visibleCanvases: ['http://example.com/canvas/5'],
       },
       def456: {
         canvasId: 'http://example.com/canvas/1',
@@ -277,16 +235,13 @@ describe('windows reducer', () => {
       },
     });
 
-    // on the left, replaces all ids of windows in that position and sets some additional properties
+    // on the left, sets some additional properties
     expect(windowsReducer({
       abc123: {
-        companionWindowIds: ['left123'],
+        companionWindowIds: [],
         id: 'abc123',
       },
     }, {
-      companionWindows: {
-        left123: { position: 'left' },
-      },
       id: 'xyz',
       payload: {
         content: 'content',
@@ -362,31 +317,15 @@ describe('windows reducer', () => {
   });
 
   describe('SELECT_ANNOTATION', () => {
-    it('handles when no selectedAnnotations exist', () => {
-      const beforeState = { abc123: {} };
+    it('sets the selectedAnnotationId', () => {
+      const beforeState = { abc123: { selectedAnnotationId: 'bId' } };
       const action = {
         annotationId: 'aId',
-        targetId: 'cId',
         type: ActionTypes.SELECT_ANNOTATION,
         windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { selectedAnnotations: { cId: ['aId'] } },
-      };
-
-      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
-    });
-
-    it('adds new annotation IDs to existing canvas IDs', () => {
-      const beforeState = { abc123: { selectedAnnotations: { cId: ['prevId'] } } };
-      const action = {
-        annotationId: 'aId',
-        targetId: 'cId',
-        type: ActionTypes.SELECT_ANNOTATION,
-        windowId: 'abc123',
-      };
-      const expectedState = {
-        abc123: { selectedAnnotations: { cId: ['prevId', 'aId'] } },
+        abc123: { selectedAnnotationId: 'aId' },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
@@ -394,31 +333,14 @@ describe('windows reducer', () => {
   });
 
   describe('DESELECT_ANNOTATION', () => {
-    it('remvoves the given annotation Id', () => {
-      const beforeState = { abc123: { selectedAnnotations: { cId: ['aId1', 'aId2'] } } };
+    it('removes the given annotation Id', () => {
+      const beforeState = { abc123: { selectedAnnotationId: 'asdf' } };
       const action = {
-        annotationId: 'aId1',
-        targetId: 'cId',
         type: ActionTypes.DESELECT_ANNOTATION,
         windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { selectedAnnotations: { cId: ['aId2'] } },
-      };
-
-      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
-    });
-
-    it('remvoves the given canvas Id from the selected annotations if there are no more IDs', () => {
-      const beforeState = { abc123: { selectedAnnotations: { cId1: ['aId1'], cId2: ['aId2'] } } };
-      const action = {
-        annotationId: 'aId2',
-        targetId: 'cId2',
-        type: ActionTypes.DESELECT_ANNOTATION,
-        windowId: 'abc123',
-      };
-      const expectedState = {
-        abc123: { selectedAnnotations: { cId1: ['aId1'] } },
+        abc123: { selectedAnnotationId: undefined },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
@@ -427,40 +349,26 @@ describe('windows reducer', () => {
 
   describe('TOGGLE_ANNOTATION_DISPLAY', () => {
     it('handles TOGGLE_ANNOTATION_DISPLAY by toggling the given window\'s displayAllAnnotation value', () => {
-      const beforeState = { abc123: { displayAllAnnotations: false } };
+      const beforeState = { abc123: { highlightAllAnnotations: false } };
       const action = {
         type: ActionTypes.TOGGLE_ANNOTATION_DISPLAY, windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { displayAllAnnotations: true },
+        abc123: { highlightAllAnnotations: true },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
     });
   });
 
-  describe('HIGHLIGHT_ANNOTATION', () => {
+  describe('HOVER_ANNOTATION', () => {
     it('sets the highlightedAnnotation attribute on the given window', () => {
       const beforeState = { abc123: {} };
       const action = {
-        annotationId: 'aaa123', type: ActionTypes.HIGHLIGHT_ANNOTATION, windowId: 'abc123',
+        annotationIds: ['aaa123'], type: ActionTypes.HOVER_ANNOTATION, windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { highlightedAnnotation: 'aaa123' },
-      };
-
-      expect(windowsReducer(beforeState, action)).toEqual(expectedState);
-    });
-  });
-
-  describe('SELECT_CONTENT_SEARCH_ANNOTATION', () => {
-    it('sets the highlightedAnnotation attribute on the given window', () => {
-      const beforeState = { abc123: {} };
-      const action = {
-        annotationId: ['aaa123'], canvasId: 'info:canvas/5', type: ActionTypes.SELECT_CONTENT_SEARCH_ANNOTATION, windowId: 'abc123',
-      };
-      const expectedState = {
-        abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] },
+        abc123: { hoveredAnnotationIds: ['aaa123'] },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
@@ -474,25 +382,34 @@ describe('windows reducer', () => {
     })).toEqual({ new: 'stuff' });
   });
 
-  describe('RECEIVE_SEARCH', () => {
-    it('set the canvas index and annotation id if provided', () => {
-      const beforeState = { abc123: {} };
+  describe('SHOW_COLLECTION_DIALOG', () => {
+    it('handles SHOW_COLLECTION_DIALOG by toggling the given window\'s collection dialog', () => {
+      const beforeState = { abc123: { collectionDialogOn: false } };
       const action = {
-        annotationId: 'aaa123', canvasId: 'info:canvas/5', type: ActionTypes.RECEIVE_SEARCH, windowId: 'abc123',
+        collectionPath: [], manifestId: 'def456', type: ActionTypes.SHOW_COLLECTION_DIALOG, windowId: 'abc123',
       };
       const expectedState = {
-        abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] },
+        abc123: { collectionDialogOn: true, collectionManifestId: 'def456', collectionPath: [] },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
     });
-    it('passes through existing data otherwise', () => {
-      const beforeState = { abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] } };
-      const action = {
-        type: ActionTypes.RECEIVE_SEARCH, windowId: 'abc123',
+  });
+
+  describe('HIDE_COLLECTION_DIALOG', () => {
+    it('handles HIDE_COLLECTION_DIALOG by toggling the given window\'s collection dialog', () => {
+      const beforeState = {
+        abc123: {
+          collectionDialogOn: true, collectionManifestId: 'def456', collectionPath: [],
+        },
       };
+      const action = {
+        type: ActionTypes.HIDE_COLLECTION_DIALOG,
+        windowId: 'abc123',
+      };
+
       const expectedState = {
-        abc123: { canvasId: 'info:canvas/5', selectedContentSearchAnnotation: ['aaa123'] },
+        abc123: { collectionDialogOn: false, collectionManifestId: 'def456', collectionPath: [] },
       };
 
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);

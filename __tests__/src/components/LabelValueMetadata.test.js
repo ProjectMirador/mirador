@@ -13,11 +13,11 @@ describe('LabelValueMetadata', () => {
       labelValuePair = [
         {
           label: 'Label 1',
-          value: 'Value 1',
+          values: ['Value 1'],
         },
         {
           label: 'Label 2',
-          value: 'Value 2',
+          values: ['Value 2'],
         },
       ];
       wrapper = shallow(
@@ -67,11 +67,11 @@ describe('LabelValueMetadata', () => {
     beforeEach(() => {
       labelValuePair = [
         {
-          value: 'Value 1',
+          values: ['Value 1'],
         },
         {
           label: 'Label 2',
-          value: 'Value 2',
+          values: ['Value 2'],
         },
       ];
       wrapper = shallow(

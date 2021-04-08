@@ -2,8 +2,10 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
+import { getWorkspace } from '../state/selectors';
 import * as actions from '../state/actions';
 import { WorkspaceMosaic } from '../components/WorkspaceMosaic';
+import globalReactMosaicStyles from '../styles/react-mosaic-component';
 
 /**
  * mapStateToProps - to hook up connect
@@ -12,9 +14,9 @@ import { WorkspaceMosaic } from '../components/WorkspaceMosaic';
  */
 const mapStateToProps = state => (
   {
-    layout: state.workspace.layout,
-    windows: state.windows,
-    workspaceId: state.workspace.id,
+    layout: getWorkspace(state).layout,
+    windowIds: getWorkspace(state).windowIds,
+    workspaceId: getWorkspace(state).id,
   }
 );
 
@@ -40,6 +42,7 @@ const styles = {
       display: 'none !important',
     },
   },
+  ...globalReactMosaicStyles,
 };
 
 const enhance = compose(

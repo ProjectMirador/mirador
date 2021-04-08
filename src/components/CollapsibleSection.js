@@ -41,6 +41,7 @@ export class CollapsibleSection extends Component {
             id={id}
             onClick={this.toggleSection}
             variant="overline"
+            component="h4"
           >
             {label}
           </Typography>
@@ -48,9 +49,10 @@ export class CollapsibleSection extends Component {
             aria-label={
               t(
                 open ? 'collapseSection' : 'expandSection',
-                { section: label.toLowerCase() },
+                { section: label },
               )
             }
+            aria-expanded={open}
             className={classes.button}
             onClick={this.toggleSection}
           >

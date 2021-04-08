@@ -4,7 +4,11 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { Workspace } from '../components/Workspace';
-import { getMaximizedWindowsIds, getWindowIds, getWorkspaceType } from '../state/selectors';
+import {
+  getMaximizedWindowsIds, getWindowIds, getWorkspaceType,
+  getConfig, getWorkspace,
+} from '../state/selectors';
+import * as actions from '../state/actions';
 
 /**
  * mapStateToProps - to hook up connect
@@ -13,13 +17,23 @@ import { getMaximizedWindowsIds, getWindowIds, getWorkspaceType } from '../state
  */
 const mapStateToProps = state => (
   {
-    isWorkspaceControlPanelVisible: state.config.workspaceControlPanel.enabled,
+    allowNewWindows: getConfig(state).workspace.allowNewWindows,
+    isWorkspaceControlPanelVisible: getConfig(state).workspaceControlPanel.enabled,
     maximizedWindowIds: getMaximizedWindowsIds(state),
     windowIds: getWindowIds(state),
-    workspaceId: state.workspace.id,
+    workspaceId: getWorkspace(state).id,
     workspaceType: getWorkspaceType(state),
   }
 );
+
+/**
+ * mapDispatchToProps - used to hook up connect to action creators
+ * @memberof Workspace
+ * @private
+ */
+const mapDispatchToProps = {
+  addWindow: actions.addWindow,
+};
 
 /**
  * @param theme
@@ -50,7 +64,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withPlugins('Workspace'),
   // further HOC go here
 );

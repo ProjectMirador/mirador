@@ -9,9 +9,8 @@ import PrimaryWindow from '../containers/PrimaryWindow';
 import CompanionArea from '../containers/CompanionArea';
 import MinimalWindow from '../containers/MinimalWindow';
 import ErrorContent from '../containers/ErrorContent';
-import WindowAuthenticationControl from '../containers/WindowAuthenticationControl';
+import IIIFAuthentication from '../containers/IIIFAuthentication';
 import { PluginHook } from './PluginHook';
-
 
 /**
  * Represents a Window in the mirador workspace
@@ -30,31 +29,22 @@ export class Window extends Component {
     return { error, hasError: true };
   }
 
-  /** */
-  componentDidMount(prevProps) {
-    const { fetchManifest, manifest, manifestId } = this.props;
-    if (manifestId && (!manifest || !manifest.isFetching)) {
-      fetchManifest(manifestId);
-    }
-  }
-
   /**
    * wrappedTopBar - will conditionally wrap a WindowTopBar for needed
    * additional functionality based on workspace type
    */
   wrappedTopBar() {
     const {
-      manifest, windowId, workspaceType, windowDraggable,
+      windowId, workspaceType, windowDraggable,
     } = this.props;
 
     const topBar = (
       <div>
         <WindowTopBar
           windowId={windowId}
-          manifest={manifest}
           windowDraggable={windowDraggable}
         />
-        <WindowAuthenticationControl key="auth" windowId={windowId} />
+        <IIIFAuthentication windowId={windowId} />
       </div>
     );
     if (workspaceType === 'mosaic' && windowDraggable) {
@@ -71,7 +61,9 @@ export class Window extends Component {
    */
   render() {
     const {
-      focusWindow, label, manifest, maximized, sideBarOpen, view, windowId, classes, t,
+      focusWindow, label, isFetching, maximized, sideBarOpen,
+      view, windowId, classes, t,
+      manifestError,
     } = this.props;
 
     const { error, hasError } = this.state;
@@ -92,17 +84,19 @@ export class Window extends Component {
         id={windowId}
         className={
           cn(classes.window, ns('window'),
-            maximized ? classes.maximized : null)}
+            maximized ? classes.maximized : null)
+}
         aria-label={t('window', { label })}
       >
         {this.wrappedTopBar()}
+        { manifestError && <ErrorContent error={{ stack: manifestError }} windowId={windowId} /> }
         <div className={classes.middle}>
           <div className={classes.middleLeft}>
             <div className={classes.primaryWindow}>
               <PrimaryWindow
                 view={view}
                 windowId={windowId}
-                manifest={manifest}
+                isFetching={isFetching}
                 sideBarOpen={sideBarOpen}
               />
             </div>
@@ -126,11 +120,10 @@ Window.contextType = MosaicWindowContext;
 
 Window.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
-  fetchManifest: PropTypes.func.isRequired,
   focusWindow: PropTypes.func,
+  isFetching: PropTypes.bool,
   label: PropTypes.string,
-  manifest: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  manifestId: PropTypes.string,
+  manifestError: PropTypes.string,
   maximized: PropTypes.bool,
   sideBarOpen: PropTypes.bool,
   t: PropTypes.func.isRequired,
@@ -143,9 +136,9 @@ Window.propTypes = {
 Window.defaultProps = {
   classes: {},
   focusWindow: () => {},
+  isFetching: false,
   label: null,
-  manifest: null,
-  manifestId: undefined,
+  manifestError: null,
   maximized: false,
   sideBarOpen: false,
   view: undefined,

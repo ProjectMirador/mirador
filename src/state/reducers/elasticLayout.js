@@ -1,4 +1,5 @@
-import { updateIn, merge } from 'immutable';
+import update from 'lodash/fp/update';
+import omit from 'lodash/omit';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -15,15 +16,10 @@ export const elasticLayoutReducer = (state = {}, action) => {
       };
 
     case ActionTypes.UPDATE_ELASTIC_WINDOW_LAYOUT:
-      return updateIn(state, [action.windowId], orig => merge(orig, action.payload));
+      return update([action.windowId], orig => ({ ...(orig || {}), ...action.payload }), state);
 
     case ActionTypes.REMOVE_WINDOW:
-      return Object.keys(state).reduce((object, key) => {
-        if (key !== action.windowId) {
-          object[key] = state[key]; // eslint-disable-line no-param-reassign
-        }
-        return object;
-      }, {});
+      return omit(state, action.windowId);
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.elasticLayout || {};
     default:

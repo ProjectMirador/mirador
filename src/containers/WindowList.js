@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getContainerId, getWindowTitles } from '../state/selectors';
+import { getContainerId, getWindowIds, getWindowTitles } from '../state/selectors';
 import { WindowList } from '../components/WindowList';
 
 /**
@@ -24,7 +24,7 @@ const mapStateToProps = state => (
   {
     containerId: getContainerId(state),
     titles: getWindowTitles(state),
-    windowIds: Object.keys(state.windows),
+    windowIds: getWindowIds(state),
   }
 );
 

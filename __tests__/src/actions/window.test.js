@@ -3,71 +3,23 @@ import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('window actions', () => {
   describe('focusWindow', () => {
-    it('should return correct action object with pan=true', () => {
+    it('should return correct action object', () => {
       const expectedAction = {
-        position: { x: 25, y: -13 },
+        pan: false,
         type: ActionTypes.FOCUS_WINDOW,
         windowId: 'window',
       };
 
-      const mockState = {
-        companionWindows: {},
-        elasticLayout: {
-          window: {
-            height: 50,
-            width: 50,
-            x: 50,
-            y: 12,
-          },
-        },
-        windows: {
-          window: {
-          },
-        },
-        workspace: {
-          viewportPosition: {
-            height: 100,
-            width: 100,
-          },
-        },
-      };
-
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
-      const thunk = actions.focusWindow('window', true);
-
-      thunk(mockDispatch, mockGetState);
-
-      const action = mockDispatch.mock.calls[0][0];
-      expect(action).toEqual(expectedAction);
+      expect(actions.focusWindow('window')).toEqual(expectedAction);
     });
-    it('should return correct action object with pan=false', () => {
+    it('should return the action object with panning', () => {
       const expectedAction = {
-        position: {},
+        pan: true,
         type: ActionTypes.FOCUS_WINDOW,
         windowId: 'window',
       };
 
-      const mockState = {
-        companionWindows: {},
-        elasticLayout: {
-          windows: {
-            window: { x: 50, y: 12 },
-          },
-        },
-        windows: {
-          window: {},
-        },
-      };
-
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
-      const thunk = actions.focusWindow('window');
-
-      thunk(mockDispatch, mockGetState);
-
-      const action = mockDispatch.mock.calls[0][0];
-      expect(action).toEqual(expectedAction);
+      expect(actions.focusWindow('window', true)).toEqual(expectedAction);
     });
   });
 
@@ -83,10 +35,12 @@ describe('window actions', () => {
           {
             content: 'info',
             position: 'left',
+            windowId: 'helloworld',
           },
           {
             content: 'thumbnailNavigation',
             position: 'off',
+            windowId: 'helloworld',
           },
         ],
         elasticLayout: {
@@ -100,7 +54,6 @@ describe('window actions', () => {
           canvasIndex: 1,
           collectionIndex: 0,
           id: 'helloworld',
-          layoutOrder: 3,
           manifestId: null,
           maximized: false,
           rangeId: null,
@@ -119,7 +72,7 @@ describe('window actions', () => {
             sideBarOpenByDefault: false,
           },
         },
-        windows: { a: {}, b: {} },
+        workspace: { windowIds: ['a', 'b'] },
       };
 
       const mockDispatch = jest.fn(() => ({}));
@@ -154,7 +107,7 @@ describe('window actions', () => {
             defaultSideBarPanel: 'info',
           },
         },
-        windows: {},
+        workspace: {},
       };
 
       const mockDispatch = jest.fn(() => ({}));
@@ -184,7 +137,7 @@ describe('window actions', () => {
             defaultSideBarPanel: null,
           },
         },
-        windows: {},
+        workspace: {},
       };
 
       const mockDispatch = jest.fn(() => ({}));
@@ -197,6 +150,60 @@ describe('window actions', () => {
 
       expect(action.window.companionWindowIds.length).toEqual(1);
       expect(action.companionWindows[0]).toMatchObject({ content: 'thumbnailNavigation' });
+    });
+
+    it('enables a window to override the panel being displayed', () => {
+      const options = {
+        id: 'helloworld',
+        sideBarPanel: 'canvas',
+      };
+      const mockState = {
+        companionWindows: {},
+        config: {
+          thumbnailNavigation: {},
+          window: {
+            defaultSideBarPanel: 'info',
+          },
+        },
+        workspace: {},
+      };
+      const mockDispatch = jest.fn(() => ({}));
+      const mockGetState = jest.fn(() => mockState);
+      const thunk = actions.addWindow(options);
+
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+      expect(action.window.sideBarPanel).toEqual('canvas');
+    });
+
+    it('pulls a provided manifest out', () => {
+      const options = {
+        canvasIndex: 1,
+        companionWindows: [],
+        id: 'helloworld',
+        manifest: { data: '123' },
+      };
+
+      const mockState = {
+        config: {
+          thumbnailNavigation: {},
+          window: {
+            defaultSideBarPanel: null,
+          },
+        },
+        workspace: {},
+      };
+
+      const mockDispatch = jest.fn(() => ({}));
+      const mockGetState = jest.fn(() => mockState);
+      const thunk = actions.addWindow(options);
+
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+
+      expect(action.manifest).toEqual({ data: '123' });
     });
   });
 
@@ -214,34 +221,10 @@ describe('window actions', () => {
   });
 
   describe('removeWindow', () => {
-    it('removes the window and returns windowId', () => {
-      const id = 'abc123';
-      const expectedAction = {
-        companionWindowIds: ['a', 'b', 'c'],
-        type: ActionTypes.REMOVE_WINDOW,
-        windowId: id,
-        windows: {
-          abc123: {
-            companionWindowIds: ['a', 'b', 'c'],
-          },
-        },
-      };
-
-      const mockState = {
-        companionWindows: {},
-        windows: {
-          abc123: { companionWindowIds: ['a', 'b', 'c'] },
-        },
-      };
-
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
-      const thunk = actions.removeWindow(id);
-
-      thunk(mockDispatch, mockGetState);
-
-      const action = mockDispatch.mock.calls[0][0];
-      expect(action).toEqual(expectedAction);
+    it('should return correct action object', () => {
+      const action = actions.removeWindow('window-123');
+      expect(action.type).toBe(ActionTypes.REMOVE_WINDOW);
+      expect(action.windowId).toBe('window-123');
     });
   });
 
@@ -289,7 +272,6 @@ describe('window actions', () => {
       expect(actions.setCompanionAreaOpen(id, true)).toEqual(expectedAction);
     });
   });
-
 
   describe('setWindowThumbnailPosition', () => {
     it('returns the appropriate action type', () => {

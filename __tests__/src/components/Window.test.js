@@ -3,7 +3,8 @@ import { shallow } from 'enzyme';
 import { Window } from '../../../src/components/Window';
 import WindowTopBar from '../../../src/containers/WindowTopBar';
 import PrimaryWindow from '../../../src/containers/PrimaryWindow';
-import WindowAuthenticationControl from '../../../src/containers/WindowAuthenticationControl';
+import IIIFAuthentication from '../../../src/containers/IIIFAuthentication';
+import ErrorContent from '../../../src/containers/ErrorContent';
 
 /** create wrapper */
 function createWrapper(props, context) {
@@ -13,7 +14,6 @@ function createWrapper(props, context) {
       manifestId="foo"
       classes={{}}
       t={k => k}
-      fetchManifest={() => {}}
       {...props}
     />,
     { context },
@@ -34,15 +34,16 @@ describe('Window', () => {
     wrapper = createWrapper();
     expect(wrapper.find(PrimaryWindow)).toHaveLength(1);
   });
-  it('renders <WindowAuthenticationControl>', () => {
+  it('renders <WindowAuthenticationBar>', () => {
     wrapper = createWrapper();
-    expect(wrapper.find(WindowAuthenticationControl)).toHaveLength(1);
+    expect(wrapper.find(IIIFAuthentication)).toHaveLength(1);
   });
-  it('should dispatch fetchManifest when component mounts but manifest is not preset', () => {
-    const mockFetchManifest = jest.fn();
-    wrapper = createWrapper({ fetchManifest: mockFetchManifest });
-    expect(mockFetchManifest).toHaveBeenCalled();
+  it('renders manifest error', () => {
+    wrapper = createWrapper({ manifestError: 'Invalid JSON' });
+    expect(wrapper.find(ErrorContent)).toHaveLength(1);
+    expect(wrapper.find(ErrorContent).prop('error')).toEqual({ stack: 'Invalid JSON' });
   });
+
   describe('when workspaceType is mosaic', () => {
     xit('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {
       const connectDragSource = jest.fn(component => component);

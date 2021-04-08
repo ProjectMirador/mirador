@@ -57,24 +57,6 @@ export default class MiradorCanvas {
       .filter(annotations => annotations && annotations.type === 'AnnotationPage');
   }
 
-  /** */
-  processAnnotations(fetchAnnotation, receiveAnnotation) {
-    // IIIF v2
-    this.annotationListUris.forEach((uri) => {
-      fetchAnnotation(this.canvas.id, uri);
-    });
-    // IIIF v3
-    this.canvasAnnotationPages.forEach((annotation) => {
-      // If there are no items, try to retrieve the referenced resource.
-      // otherwise the resource should be embedded and just add to the store.
-      if (!annotation.items) {
-        fetchAnnotation(this.canvas.id, annotation.id);
-      } else {
-        receiveAnnotation(this.canvas.id, annotation.id, annotation);
-      }
-    });
-  }
-
   /**
    * Will negotiate a v2 or v3 type of resource
    */
@@ -100,6 +82,33 @@ export default class MiradorCanvas {
   }
 
   /** */
+  get videoResources() {
+    const resources = flattenDeep([
+      this.canvas.getContent().map(i => i.getBody()),
+    ]);
+
+    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Video'));
+  }
+
+  /** */
+  get audioResources() {
+    const resources = flattenDeep([
+      this.canvas.getContent().map(i => i.getBody()),
+    ]);
+
+    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Sound'));
+  }
+
+  /** */
+  get vttContent() {
+    const resources = flattenDeep([
+      this.canvas.getContent().map(i => i.getBody()),
+    ]);
+
+    return flatten(resources.filter((resource) => resource.getProperty('format') === 'text/vtt'));
+  }
+
+  /** */
   get resourceAnnotations() {
     return flattenDeep([
       this.canvas.getImages(),
@@ -113,7 +122,9 @@ export default class MiradorCanvas {
    */
   resourceAnnotation(id) {
     return this.resourceAnnotations.find(
-      anno => anno.getResource().id === id || anno.getBody().id === id,
+      anno => anno.getResource().id === id || flatten(
+        new Array(anno.getBody()),
+      ).some(body => body.id === id),
     );
   }
 
@@ -124,7 +135,11 @@ export default class MiradorCanvas {
   onFragment(id) {
     const resourceAnnotation = this.resourceAnnotation(id);
     if (!resourceAnnotation) return undefined;
-    const fragmentMatch = resourceAnnotation.getProperty('on').match(/xywh=(.*)$/);
+    // IIIF v2
+    const on = resourceAnnotation.getProperty('on');
+    // IIIF v3
+    const target = resourceAnnotation.getProperty('target');
+    const fragmentMatch = (on || target).match(/xywh=(.*)$/);
     if (!fragmentMatch) return undefined;
     return fragmentMatch[1].split(',').map(str => parseInt(str, 10));
   }
@@ -152,7 +167,7 @@ export default class MiradorCanvas {
    */
   getLabel() {
     return this.canvas.getLabel().length > 0
-      ? this.canvas.getLabel().map(label => label.value)[0]
+      ? this.canvas.getLabel().getValue()
       : String(this.canvas.index + 1);
   }
 }

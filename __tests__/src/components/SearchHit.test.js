@@ -3,7 +3,6 @@ import { shallow } from 'enzyme';
 import { SearchHit } from '../../../src/components/SearchHit';
 import { ScrollTo } from '../../../src/components/ScrollTo';
 
-
 /**
  * Helper function to create a shallow wrapper around SearchResults
  */
@@ -11,6 +10,7 @@ function createWrapper(props) {
   return shallow(
     <SearchHit
       announcer={() => {}}
+      annotation={{ targetId: 'x' }}
       annotationId="foo"
       classes={{ windowSelected: 'windowSelected' }}
       hit={{
@@ -30,8 +30,8 @@ function createWrapper(props) {
 
 describe('SearchHit', () => {
   it('renders a ListItem for each hit', () => {
-    const selectContentSearchAnnotation = jest.fn();
-    const wrapper = createWrapper({ selectContentSearchAnnotation });
+    const selectAnnotation = jest.fn();
+    const wrapper = createWrapper({ selectAnnotation });
     expect(wrapper.find('WithStyles(ForwardRef(ListItem))').length).toEqual(1);
     expect(wrapper.find('WithStyles(ForwardRef(ListItem))').prop('selected')).toEqual(true);
     expect(wrapper.find('WithStyles(ForwardRef(ListItem))').prop('className')).toEqual('windowSelected');
@@ -39,7 +39,7 @@ describe('SearchHit', () => {
     expect(wrapper.find('strong').length).toEqual(1);
 
     wrapper.find('WithStyles(ForwardRef(ListItem))').simulate('click');
-    expect(selectContentSearchAnnotation).toHaveBeenCalledWith(['foo']);
+    expect(selectAnnotation).toHaveBeenCalledWith('foo');
   });
 
   it('renders the annotation char if the hit is not available', () => {

@@ -1,4 +1,3 @@
-
 describe('add plugins for companion windows', () => {
   beforeAll(async () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/plugins/companionWindow.html');

@@ -1,32 +1,15 @@
-import normalizeUrl from 'normalize-url';
-import { removeIn } from 'immutable';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import omit from 'lodash/omit';
 import ActionTypes from '../actions/action-types';
 
 /** */
 export function accessTokensReducer(state = {}, action) {
-  let authService;
-  let tokenService;
-
   switch (action.type) {
-    case ActionTypes.RECEIVE_INFO_RESPONSE:
-      if (action.ok && normalizeUrl(action.infoId, { stripAuthentication: false }) === normalizeUrl(action.infoJson.id || action.infoJson['@id'], { stripAuthentication: false })) return state;
-
-      authService = Utils.getService({ ...action.infoJson, options: {} }, 'http://iiif.io/api/auth/1/external');
-      if (!authService) return state;
-
-      tokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token');
-      if (!tokenService || state[tokenService.id]) return state;
-
+    case ActionTypes.RESOLVE_AUTHENTICATION_REQUEST:
       return {
         ...state,
-        [tokenService.id]: {
-          authId: authService.id,
-          id: tokenService.id,
-          infoIds: [].concat(
-            (state[tokenService.id] && state[tokenService.id].infoIds) || [],
-            action.infoId,
-          ),
+        [action.tokenServiceId]: {
+          authId: action.id,
+          id: action.tokenServiceId,
           isFetching: true,
         },
       };
@@ -36,7 +19,6 @@ export function accessTokensReducer(state = {}, action) {
         [action.serviceId]: {
           authId: action.authId,
           id: action.serviceId,
-          infoIds: action.infoIds,
           isFetching: true,
         },
       };
@@ -45,7 +27,6 @@ export function accessTokensReducer(state = {}, action) {
         ...state,
         [action.serviceId]: {
           ...state[action.serviceId],
-          infoIds: [],
           isFetching: false,
           json: action.json,
         },
@@ -60,7 +41,18 @@ export function accessTokensReducer(state = {}, action) {
         },
       };
     case ActionTypes.RESET_AUTHENTICATION_STATE:
-      return removeIn(state, [action.tokenServiceId]);
+      return omit(state, action.tokenServiceId);
+    case ActionTypes.RECEIVE_INFO_RESPONSE:
+      if (!action.tokenServiceId) return state;
+      if (state[action.tokenServiceId].success) return state;
+
+      return {
+        ...state,
+        [action.tokenServiceId]: {
+          ...state[action.tokenServiceId],
+          success: true,
+        },
+      };
     default:
       return state;
   }

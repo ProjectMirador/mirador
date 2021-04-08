@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { LabelValueMetadata } from './LabelValueMetadata';
-
+import { PluginHook } from './PluginHook';
 
 /**
  * CanvasInfo
@@ -30,29 +30,29 @@ export class CanvasInfo extends Component {
         id={`${id}-currentItem-${index}`}
         label={t('currentItem', { context: `${index + 1}/${totalSize}` })}
       >
-        <>
-          {canvasLabel && (
-            <Typography
-              aria-labelledby={
-                `${id}-currentItem-${index} ${id}-currentItem-${index}-heading`
-              }
-              id={`${id}-currentItem-${index}-heading`}
-              variant="h4"
-            >
-              {canvasLabel}
-            </Typography>
-          )}
+        {canvasLabel && (
+          <Typography
+            aria-labelledby={
+              `${id}-currentItem-${index} ${id}-currentItem-${index}-heading`
+            }
+            id={`${id}-currentItem-${index}-heading`}
+            variant="h4"
+            component="h5"
+          >
+            {canvasLabel}
+          </Typography>
+        )}
 
-          {canvasDescription && (
-            <Typography variant="body1">
-              <SanitizedHtml htmlString={canvasDescription} ruleSet="iiif" />
-            </Typography>
-          )}
+        {canvasDescription && (
+          <Typography variant="body1">
+            <SanitizedHtml htmlString={canvasDescription} ruleSet="iiif" />
+          </Typography>
+        )}
 
-          {canvasMetadata.length > 0 && (
-            <LabelValueMetadata labelValuePairs={canvasMetadata} />
-          )}
-        </>
+        {canvasMetadata && canvasMetadata.length > 0 && (
+          <LabelValueMetadata labelValuePairs={canvasMetadata} />
+        )}
+        <PluginHook {...this.props} />
       </CollapsibleSection>
     );
   }

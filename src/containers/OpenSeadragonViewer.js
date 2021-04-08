@@ -2,23 +2,19 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
+import flatten from 'lodash/flatten';
 import { withPlugins } from '../extend/withPlugins';
 import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
-import CanvasWorld from '../lib/CanvasWorld';
 import {
   getVisibleCanvasNonTiledResources,
   getCurrentCanvas,
-  getSelectedAnnotationsOnCanvases,
-  getHighlightedAnnotationsOnCanvases,
   getCanvasLabel,
-  getManifestViewingDirection,
-  getLayersForVisibleCanvases,
-  getVisibleCanvases,
   getViewer,
-  getSearchAnnotationsForWindow,
-  getSelectedContentSearchAnnotations,
-  getTheme,
+  getConfig,
+  getCompanionWindowsForContent,
+  selectInfoResponses,
+  getCurrentCanvasWorld,
 } from '../state/selectors';
 
 /**
@@ -26,28 +22,29 @@ import {
  * @memberof Window
  * @private
  */
-const mapStateToProps = (state, { companionWindowId, windowId }) => ({
-  canvasWorld: new CanvasWorld(
-    getVisibleCanvases(state, { windowId }),
-    getLayersForVisibleCanvases(state, { windowId }),
-    getManifestViewingDirection(state, { windowId }),
-  ),
-  highlightedAnnotations: getHighlightedAnnotationsOnCanvases(state, { windowId }),
-  label: getCanvasLabel(state, {
-    canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
-    windowId,
-  }),
-  nonTiledImages: getVisibleCanvasNonTiledResources(state, { windowId }),
-  osdConfig: state.config.osdConfig,
-  palette: getTheme(state).palette,
-  searchAnnotations: getSearchAnnotationsForWindow(
-    state,
-    { windowId },
-  ),
-  selectedAnnotations: getSelectedAnnotationsOnCanvases(state, { windowId }),
-  selectedContentSearchAnnotations: getSelectedContentSearchAnnotations(state, { windowId }),
-  viewer: getViewer(state, { windowId }),
-});
+const mapStateToProps = (state, { windowId }) => {
+  const canvasWorld = getCurrentCanvasWorld(state, { windowId });
+  const infoResponses = selectInfoResponses(state);
+  const imageServiceIds = flatten(canvasWorld.canvases.map(c => c.imageServiceIds));
+
+  return {
+    canvasWorld,
+    drawAnnotations: getConfig(state).window.forceDrawAnnotations
+      || getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0
+      || getCompanionWindowsForContent(state, { content: 'search', windowId }).length > 0,
+    infoResponses: imageServiceIds.map(id => infoResponses[id])
+      .filter(infoResponse => (infoResponse !== undefined
+        && infoResponse.isFetching === false
+        && infoResponse.error === undefined)),
+    label: getCanvasLabel(state, {
+      canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
+      windowId,
+    }),
+    nonTiledImages: getVisibleCanvasNonTiledResources(state, { windowId }),
+    osdConfig: getConfig(state).osdConfig,
+    viewerConfig: getViewer(state, { windowId }),
+  };
+};
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -71,6 +68,5 @@ const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('OpenSeadragonViewer'),
 );
-
 
 export default enhance(OpenSeadragonViewer);

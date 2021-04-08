@@ -10,6 +10,9 @@ describe('AnnotationResource', () => {
       const expected = annoResource.id;
       expect(annoResource.id).toEqual(expected);
     });
+    it('handles the case where an id is only present in the resource', () => {
+      expect(new AnnotationResource({ resource: [{ '@id': 'bar' }] }).id).toEqual('bar');
+    });
   });
 
   describe('isOnlyTag', () => {
@@ -26,14 +29,14 @@ describe('AnnotationResource', () => {
   describe('tags', () => {
     it('when only motivation', () => {
       expect(
-        new AnnotationResource({ resource: [{ '@type': 'oa:Tag', value: 'yo' }, { '@type': 'oa:Tag', value: 'lo' }] }).tags,
+        new AnnotationResource({ resource: [{ '@type': 'oa:Tag', chars: 'yo' }, { '@type': 'oa:Tag', chars: 'lo' }] }).tags,
       ).toEqual(['yo', 'lo']);
     });
     it('when multiple motivations', () => {
       expect(
         new AnnotationResource({
           motivation: ['oa:commenting', 'oa:tagging'],
-          resource: [{ '@type': 'oa:commenting', value: 'yo' }, { '@type': 'oa:Tag', value: 'lo' }],
+          resource: [{ '@type': 'oa:commenting', chars: 'yo' }, { '@type': 'oa:Tag', chars: 'lo' }],
         }).tags,
       ).toEqual(['lo']);
     });
@@ -147,6 +150,11 @@ describe('AnnotationResource', () => {
     it('choice selector', () => {
       expect(new AnnotationResource({ on: { selector: { '@type': 'oa:Choice', default: { value: 'www.example.com/#xywh=10,10,100,200' } } } })
         .fragmentSelector).toEqual([10, 10, 100, 200]);
+    });
+
+    it('url without a fragment', () => {
+      expect(new AnnotationResource({ on: { selector: { value: 'www.example.com' } } })
+        .fragmentSelector).toEqual(null);
     });
   });
   describe('svgSelector', () => {

@@ -1,7 +1,10 @@
 import { v4 as uuid } from 'uuid';
 
 export default {
-  canvasNavigation: { // Set the hight and width of canvas thumbnails in the  CanvasNavigation companion window
+  state: {
+    // slice: 'mirador' // Configure the top-level slice of state for mirador selectors
+  },
+  canvasNavigation: { // Set the height and width of canvas thumbnails in the  CanvasNavigation companion window
     height: 50,
     width: 50,
   },
@@ -57,6 +60,17 @@ export default {
         secondary: '#00BFFF',
       },
       section_divider: 'rgba(0, 0, 0, 0.25)',
+      annotations: {
+        hidden: { globalAlpha: 0 },
+        default: { strokeStyle: '#00BFFF', globalAlpha: 1 },
+        hovered: { strokeStyle: '#BF00FF', globalAlpha: 1 },
+        selected: { strokeStyle: '#ffff00', globalAlpha: 1 },
+      },
+      search: {
+        default: { fillStyle: '#00BFFF', globalAlpha: 0.3 },
+        hovered: { fillStyle: '#00FFFF', globalAlpha: 0.3 },
+        selected: { fillStyle: '#ffff00', globalAlpha: 0.3 },
+      }
     },
     typography: {
       body1: {
@@ -208,40 +222,61 @@ export default {
     en: 'English',
     fr: 'Français',
     ja: '日本語',
+    lt: 'Lietuvių',
     nl: 'Nederlands',
     'pt-BR': 'Português do Brasil',
+	  vi:'Tiếng Việt',
     'zh-CN': '中文(简体)',
     'zh-TW': '中文(繁體)',
     it: "Italiano",
+    sr: 'Српски',
   },
   annotations: {
     htmlSanitizationRuleSet: 'iiif', // See src/lib/htmlRules.js for acceptable values
     filteredMotivations: ['oa:commenting', 'oa:tagging', 'sc:painting', 'commenting', 'tagging'],
   },
-  classPrefix: 'mirador',
-  displayAllAnnotations: false, // Configure if annotations to be displayed on the canvas by default when fetched
-  resourceHeaders: {}, // Headers to send with IIIF Presentation API resource requests
+  createGenerateClassNameOptions: { // Options passed directly to createGenerateClassName in Material-UI https://material-ui.com/styles/api/#creategenerateclassname-options-class-name-generator
+    productionPrefix: 'mirador',
+  },
+  requests: {
+    preprocessors: [ // Functions that receive HTTP requests and manipulate them (e.g. to add headers)
+      // (url, options) => (url.match('info.json') && { ...options, myCustomThing: 'blah' })
+    ],
+    postprocessors: [ // Functions that receive HTTP responses and manipulates them before adding to store
+      // An example of manipulating the response for an annotation request
+      // (url, action) => {
+      //   if (action.annotationId) {
+      //     action.annotationJson = {};
+      //   }
+      // }
+    ]
+  },
   translations: { // Translations can be added to inject new languages or override existing labels
   },
-  window: {
+  window: { //global window defaults
     allowClose: true, // Configure if windows can be closed or not
     allowFullscreen: false, // Configure to show a "fullscreen" button in the WindowTopBar
     allowMaximize: true, // Configure if windows can be maximized or not
     allowTopMenuButton: true, // Configure if window view and thumbnail display menu are visible or not
     allowWindowSideBar: true, // Configure if side bar menu is visible or not
     authNewWindowCenter: 'parent', // Configure how to center a new window created by the authentication flow. Options: parent, screen
-    defaultSideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations, search
+    sideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations, search
+    defaultSidebarPanelHeight: 201,  // Configure default sidebar height in pixels
     defaultSidebarPanelWidth: 235, // Configure default sidebar width in pixels
     defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
+    forceDrawAnnotations: false,
     hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
+    highlightAllAnnotations: false, // Configure whether to display annotations on the canvas by default
     showLocalePicker: false, // Configure locale picker for multi-lingual metadata
-    sideBarOpenByDefault: false, // Configure if the sidebar (and its content panel) is open by default
+    sideBarOpen: false, // Configure if the sidebar (and its content panel) is open by default
+    switchCanvasOnSearch: true, // Configure if Mirador should automatically switch to the canvas of the first search result
     panels: { // Configure which panels are visible in WindowSideBarButtons
       info: true,
       attribution: true,
       canvas: true,
       annotations: true,
       search: true,
+      layers: true,
     },
     views: [
       { key: 'single', behaviors: ['individuals'] },
@@ -264,16 +299,19 @@ export default {
   ],
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
+    displaySettings: true, // Display the settings for this in WindowTopMenu
     height: 130, // height of entire ThumbnailNavigation area when position is "far-bottom"
     width: 100, // width of one canvas (doubled for book view) in ThumbnailNavigation area when position is "far-right"
   },
   workspace: {
     draggingEnabled: true,
+    allowNewWindows: true,
     id: uuid(),
+    isWorkspaceAddVisible: false, // Catalog/Workspace add window feature visible by default
     exposeModeOn: false, // unused?
     height: 5000, // height of the elastic mode's virtual canvas
     showZoomControls: false, // Configure if zoom controls should be displayed by default
-    type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic"
+    type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic". If "mosaic" or "elastic" are not selected no worksapce type will be used.
     viewportPosition: { // center coordinates for the elastic mode workspace
       x: 0,
       y: 0,
@@ -293,5 +331,37 @@ export default {
     preserveImageSizeOnResize: true,
     preserveViewport: true,
     showNavigationControl: false,
+  },
+  export: {
+    catalog: true,
+    companionWindows: true,
+    config: true,
+    elasticLayout: true,
+    layers: true,
+    // filter out anything re-retrievable:
+    manifests: { filter: ([id, value]) => !id.startsWith('http') },
+    viewers: true,
+    windows: true,
+    workspace: true,
+  },
+  audioOptions: { // Additional props passed to <audio> element
+    controls: true,
+    crossOrigin: 'anonymous',
+  },
+  videoOptions: { // Additional props passed to <audio> element
+    controls: true,
+    crossOrigin: 'anonymous',
+  },
+  auth: {
+    serviceProfiles: [
+      { profile: 'http://iiif.io/api/auth/1/external', external: true },
+      { profile: 'http://iiif.io/api/auth/1/kiosk', kiosk: true },
+      { profile: 'http://iiif.io/api/auth/1/clickthrough' },
+      { profile: 'http://iiif.io/api/auth/1/login' },
+      { profile: 'http://iiif.io/api/auth/0/external', external: true },
+      { profile: 'http://iiif.io/api/auth/0/kiosk', kiosk: true },
+      { profile: 'http://iiif.io/api/auth/0/clickthrough' },
+      { profile: 'http://iiif.io/api/auth/0/login' }
+    ]
   }
 };

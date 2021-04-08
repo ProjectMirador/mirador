@@ -15,7 +15,6 @@ import WindowMaxIcon from './icons/WindowMaxIcon';
 import WindowMinIcon from './icons/WindowMinIcon';
 import ns from '../config/css-ns';
 
-
 /**
  * WindowTopBar
  */

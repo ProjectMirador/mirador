@@ -39,15 +39,24 @@ export class SearchHit extends Component {
     }
   }
 
+  /** */
+  handleClick() {
+    const {
+      annotation, annotationId, selectAnnotation,
+    } = this.props;
+
+    if (annotation && annotationId) selectAnnotation(annotationId);
+  }
+
   /**
    * Pass content describing the hit to the announcer prop (intended for screen readers)
    */
   announceHit() {
     const {
-      annotationLabel, announcer, canvasLabel, hit, index, t, total,
+      annotation, annotationLabel, announcer, canvasLabel, hit, index, t, total,
     } = this.props;
     if (!hit) return;
-    const truncatedHit = new TruncatedHit(hit);
+    const truncatedHit = new TruncatedHit(hit, annotation);
 
     announcer([
       t('pagination', { current: index + 1, total }),
@@ -57,15 +66,6 @@ export class SearchHit extends Component {
       truncatedHit.match,
       truncatedHit.after,
     ].join(' '));
-  }
-
-  /** */
-  handleClick() {
-    const {
-      annotationId, selectContentSearchAnnotation,
-    } = this.props;
-
-    selectContentSearchAnnotation([annotationId]);
   }
 
   /** */
@@ -89,7 +89,7 @@ export class SearchHit extends Component {
 
     if (focused && !selected) return null;
 
-    const truncatedHit = focused ? hit : hit && new TruncatedHit(hit);
+    const truncatedHit = focused ? hit : hit && new TruncatedHit(hit, annotation);
     const truncated = hit && truncatedHit.before !== hit.before && truncatedHit.after !== hit.after;
     const canvasLabelHtmlId = `${companionWindowId}-${index}`;
 
@@ -97,7 +97,7 @@ export class SearchHit extends Component {
       <ScrollTo
         containerRef={containerRef}
         offsetTop={96} // offset for the height of the form above
-        scrollTo={selected && !focused}
+        scrollTo={windowSelected && !focused}
       >
         <ListItem
           className={clsx(
@@ -153,6 +153,7 @@ SearchHit.propTypes = {
   adjacent: PropTypes.bool,
   annotation: PropTypes.shape({
     chars: PropTypes.string,
+    targetId: PropTypes.string,
   }),
   annotationId: PropTypes.string,
   annotationLabel: PropTypes.string,
@@ -171,7 +172,7 @@ SearchHit.propTypes = {
     match: PropTypes.string,
   }),
   index: PropTypes.number,
-  selectContentSearchAnnotation: PropTypes.func,
+  selectAnnotation: PropTypes.func,
   selected: PropTypes.bool,
   showDetails: PropTypes.func,
   t: PropTypes.func,
@@ -192,7 +193,7 @@ SearchHit.defaultProps = {
   focused: false,
   hit: undefined,
   index: undefined,
-  selectContentSearchAnnotation: () => {},
+  selectAnnotation: () => {},
   selected: false,
   showDetails: () => {},
   t: k => k,

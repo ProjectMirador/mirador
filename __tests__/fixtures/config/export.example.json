@@ -159,7 +159,7 @@
       "de": "Deutsch",
       "en": "English"
     },
-    "displayAllAnnotations": false,
+    "highlightAllAnnotations": false,
     "translations": {},
     "window": {
       "allowClose": true,
@@ -241,7 +241,7 @@
         "cw-b86f0558-6f04-4b56-ac9b-34b7e0769db3",
         "cw-b15df6ac-9069-4f16-bd19-e11c6aaa3911"
       ],
-      "displayAllAnnotations": false,
+      "highlightAllAnnotations": false,
       "height": 400,
       "id": "window-404c667d-e1e0-4ae7-aaf2-98e08bb627bd",
       "manifestId": "https://wellcomelibrary.org/iiif/b18035723/manifest",
@@ -263,7 +263,7 @@
         "cw-c4934b3c-2411-40b1-9088-5e066276620f",
         "cw-76580e14-4d7a-4ea5-84a6-5de052941a3d"
       ],
-      "displayAllAnnotations": false,
+      "highlightAllAnnotations": false,
       "height": 400,
       "id": "window-f48761a4-4388-4ddd-aff6-9a331410aad3",
       "manifestId": "https://demos.biblissima.fr/iiif/metadata/florus-dispersus/manifest.json",

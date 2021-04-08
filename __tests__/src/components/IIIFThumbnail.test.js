@@ -18,9 +18,9 @@ function createWrapper(props) {
 describe('IIIFThumbnail', () => {
   let wrapper;
   const url = 'http://example.com/iiif/image';
-  const image = { height: 120, url, width: 100 };
+  const thumbnail = { height: 120, url, width: 100 };
   beforeEach(() => {
-    wrapper = createWrapper({ image });
+    wrapper = createWrapper({ thumbnail });
   });
 
   it('renders properly', () => {
@@ -55,36 +55,31 @@ describe('IIIFThumbnail', () => {
   });
 
   it('can be constrained by maxHeight', () => {
-    wrapper = createWrapper({ image, maxHeight: 100 });
+    wrapper = createWrapper({ maxHeight: 100, thumbnail });
 
     expect(wrapper.find('img').props().style).toMatchObject({ height: 100, width: 'auto' });
   });
 
   it('can be constrained by maxWidth', () => {
-    wrapper = createWrapper({ image, maxWidth: 80 });
+    wrapper = createWrapper({ maxWidth: 80, thumbnail });
 
     expect(wrapper.find('img').props().style).toMatchObject({ height: 'auto', width: 80 });
   });
 
   it('can be constrained by maxWidth and maxHeight', () => {
-    wrapper = createWrapper({ image, maxHeight: 90, maxWidth: 50 });
+    wrapper = createWrapper({ maxHeight: 90, maxWidth: 50, thumbnail });
 
     expect(wrapper.find('img').props().style).toMatchObject({ height: 60, width: 50 });
   });
 
-  it('relaxes constraints when the image dimensions are unknown', () => {
-    wrapper = createWrapper({ image: { url } });
-    expect(wrapper.find('img').props().style).toMatchObject({ height: 'auto', width: 'auto' });
-  });
-
   it('constrains what it can when the image dimensions are unknown', () => {
-    wrapper = createWrapper({ image: { height: 120, url }, maxHeight: 90 });
+    wrapper = createWrapper({ maxHeight: 90, thumbnail: { height: 120, url } });
     expect(wrapper.find('img').props().style).toMatchObject({ height: 90, width: 'auto' });
   });
 
   it('renders a provided label', () => {
     wrapper = createWrapper({
-      classes: { label: 'label' }, image, label: 'Some label', labelled: true,
+      classes: { label: 'label' }, label: 'Some label', labelled: true, thumbnail,
     });
     expect(
       wrapper.find('div.label').at(0).matchesElement(
@@ -94,7 +89,7 @@ describe('IIIFThumbnail', () => {
   });
 
   it('renders children', () => {
-    wrapper = createWrapper({ children: <span id="hi" />, image });
+    wrapper = createWrapper({ children: <span id="hi" />, thumbnail });
     expect(wrapper.find('span').length).toEqual(1);
   });
 });

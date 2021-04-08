@@ -28,7 +28,7 @@ describe('ThumbnailCanvasGrouping', () => {
   let setCanvas;
   const data = {
     canvasGroupings: new CanvasGroupings(Utils.parseManifest(manifestJson)
-      .getSequences()[0].getCanvases()),
+      .getSequences()[0].getCanvases()).groupings(),
     height: 131,
     position: 'far-bottom',
   };

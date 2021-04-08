@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import ZoomControls from '../containers/ZoomControls';
 import ViewerInfo from '../containers/ViewerInfo';
 import ViewerNavigation from '../containers/ViewerNavigation';
 import ns from '../config/css-ns';
+import { PluginHook } from './PluginHook';
 
 /**
  * Represents the viewer controls in the mirador workspace.
@@ -26,7 +28,7 @@ export class WindowCanvasNavigationControls extends Component {
       classes, visible, windowId, zoomToWorld,
     } = this.props;
 
-    if (!visible) return (<></>);
+    if (!visible) return (<Typography variant="srOnly" component="div"><ViewerInfo windowId={windowId} /></Typography>);
 
     return (
       <Paper
@@ -38,7 +40,8 @@ export class WindowCanvasNavigationControls extends Component {
             classes.canvasNav,
             this.canvasNavControlsAreStacked() ? ns('canvas-nav-stacked') : null,
             this.canvasNavControlsAreStacked() ? classes.canvasNavStacked : null,
-          )}
+          )
+}
         elevation={0}
       >
         <ZoomControls
@@ -48,11 +51,12 @@ export class WindowCanvasNavigationControls extends Component {
         />
         <ViewerNavigation windowId={windowId} />
         <ViewerInfo windowId={windowId} />
+
+        <PluginHook {...this.props} />
       </Paper>
     );
   }
 }
-
 
 WindowCanvasNavigationControls.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),

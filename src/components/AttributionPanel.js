@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Skeleton from '@material-ui/lab/Skeleton';
-import Img from 'react-image';
+import { Img } from 'react-image';
 import CompanionWindow from '../containers/CompanionWindow';
 import { LabelValueMetadata } from './LabelValueMetadata';
 import ns from '../config/css-ns';
-
+import { PluginHook } from './PluginHook';
 
 /**
  * WindowSideBarInfoPanel
@@ -41,16 +41,16 @@ export class AttributionPanel extends Component {
           )}
           {
             rights && rights.length > 0 && (
-              <>
+              <dl className={ns('label-value-metadata')}>
                 <Typography variant="subtitle2" component="dt">{t('rights')}</Typography>
                 { rights.map(v => (
-                  <Typography variant="body1" component="dd">
+                  <Typography variant="body1" component="dd" key={v.toString()}>
                     <Link target="_blank" rel="noopener noreferrer" href={v}>
                       {v}
                     </Link>
                   </Typography>
                 )) }
-              </>
+              </dl>
             )
           }
         </div>
@@ -68,6 +68,8 @@ export class AttributionPanel extends Component {
             />
           </div>
         )}
+
+        <PluginHook {...this.props} />
       </CompanionWindow>
     );
   }

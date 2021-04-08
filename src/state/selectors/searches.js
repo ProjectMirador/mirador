@@ -1,15 +1,19 @@
 import { createSelector } from 'reselect';
-import { LanguageMap } from 'manifesto.js/dist-esmodule/LanguageMap';
+import { PropertyValue } from 'manifesto.js/dist-esmodule/PropertyValue';
 import flatten from 'lodash/flatten';
 import AnnotationList from '../../lib/AnnotationList';
 import { getCanvas, getCanvases } from './canvases';
-import { getWindow } from './windows';
+import { getWindow } from './getters';
 import { getManifestLocale } from './manifests';
+import { miradorSlice } from './utils';
+
+/** Get searches from state */
+const getSearches = (state) => miradorSlice(state).searches;
 
 export const getSearchForWindow = createSelector(
   [
     (state, { windowId }) => windowId,
-    state => state.searches,
+    getSearches,
   ],
   (windowId, searches) => {
     if (!windowId || !searches) return {};
@@ -51,6 +55,22 @@ export const getSearchIsFetching = createSelector(
     getSearchResponsesForCompanionWindow,
   ],
   results => results.some(result => result.isFetching),
+);
+
+export const getSearchNumTotal = createSelector(
+  [
+    getSearchForCompanionWindow,
+  ],
+  (results) => {
+    if (!results || !results.data) return undefined;
+
+    const resultWithWithin = Object.values(results.data).find(result => (
+      !result.isFetching
+        && result.json
+        && result.json.within
+    ));
+    return resultWithWithin?.json?.within?.total;
+  },
 );
 
 export const getNextSearchId = createSelector(
@@ -114,7 +134,7 @@ const searchResultsToAnnotation = (results) => {
       id: anno.id,
       resources: anno.resources,
     };
-  }).filter(a => a);
+  }).filter(Boolean);
 
   return {
     id: (annotations.find(a => a.id) || {}).id,
@@ -167,22 +187,8 @@ export const getSelectedContentSearchAnnotationIds = createSelector(
     getWindow,
     getSearchForCompanionWindow,
   ],
-  (window, search) => (search && search.selectedContentSearchAnnotation)
-    || (window && window.selectedContentSearchAnnotation)
+  (window, search) => (search && search.selectedContentSearchAnnotationIds)
     || [],
-);
-
-export const getSelectedContentSearchAnnotations = createSelector(
-  [
-    getSearchAnnotationsForWindow,
-    getSelectedContentSearchAnnotationIds,
-  ],
-  (searchAnnotations, selectedAnnotationIds) => searchAnnotations.map(annotation => ({
-    id: (annotation['@id'] || annotation.id),
-    resources: annotation.resources.filter(
-      r => selectedAnnotationIds && selectedAnnotationIds.includes(r.id),
-    ),
-  })).filter(val => val.resources.length > 0),
 );
 
 export const getResourceAnnotationForSearchHit = createSelector(
@@ -205,7 +211,7 @@ export const getResourceAnnotationLabel = createSelector(
       !(resourceAnnotation && resourceAnnotation.resource && resourceAnnotation.resource.label)
     ) return [];
 
-    return LanguageMap.parse(resourceAnnotation.resource.label, locale).map(label => label.value);
+    return PropertyValue.parse(resourceAnnotation.resource.label, locale).getValues();
   },
 );
 

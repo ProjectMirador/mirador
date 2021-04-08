@@ -12,7 +12,9 @@ function createWrapper(props, fixture = manifestJson) {
   return shallow(
     <ThumbnailNavigation
       canvasGroupings={
-        new CanvasGroupings(Utils.parseManifest(fixture).getSequences()[0].getCanvases())
+        new CanvasGroupings(
+          Utils.parseManifest(fixture).getSequences()[0].getCanvases(),
+        ).groupings()
       }
       canvasIndex={1}
       classes={{}}

@@ -1,0 +1,118 @@
+{
+    "@context": "http://iiif.io/api/presentation/2/context.json",
+    "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/manifest.json",
+    "@type": "sc:Manifest",
+    "label": "Urn\u00e4sch, Gemeindearchiv Urn\u00e4sch, Fragment",
+    "metadata": [
+        {
+            "label": "Location",
+            "value": "Urn\u00e4sch"
+        }
+    ],
+    "description": [
+        {
+            "@value": "These are two well preserved fragments of a Psalterium iuxta Hebraeos, which were probably written in the 10th century at the monastery of St. Gall, following the model of Cod. Sang. 19. In 1963 both fragments were detached from a messenger bag; they are held in the town archive of Urn\u00e4sch (Appenzell Ausserrhoden).",
+            "@language": "en"
+        }
+    ],
+    "license": "http://creativecommons.org/licenses/by-nc/4.0/",
+    "attribution": "e-codices - Virtual Manuscript Library of Switzerland",
+    "logo": "https://www.e-codices.ch/img/logo-for-iiif-manifest.png",
+    "service": [
+        {
+            "@context": "https://www.w3.org/ns/webmention",
+            "@id": "https://www.e-codices.unifr.ch/webmention/receive",
+            "profile": "https://www.w3.org/ns/webmention",
+            "label": "e-codices Webmention Service"
+        }
+    ],
+    "related": "https://www.e-codices.ch/en/list/one/gau/Fragment",
+    "within": "https://www.e-codices.ch/en/list/gau",
+    "seeAlso": [
+        {
+            "@id": "https://www.e-codices.unifr.ch/xml/tei_published/gau-Fragment_Solovey.xml",
+            "@format": "application/tei+xml"
+        }
+    ],
+    "sequences": [
+        {
+            "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1740.json",
+            "@type": "sc:Sequence",
+            "label": [
+                {
+                    "@value": "Standard",
+                    "@language": "de"
+                }
+            ],
+            "canvases": [
+                {
+                    "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001a.json",
+                    "@type": "sc:Canvas",
+                    "label": "fragm1a",
+                    "height": 6132,
+                    "width": 8176,
+                    "images": [
+                        {
+                            "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag001a.json",
+                            "@type": "oa:Annotation",
+                            "motivation": "sc:painting",
+                            "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001a.json",
+                            "resource": {
+                                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001a.jp2/full/full/0/default/jpg",
+                                "@type": "dctypes:Image",
+                                "format": "image/jpeg",
+                                "height": 6132,
+                                "width": 8176,
+                                "service": {
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001a.jp2",
+                                    "profile": "http://iiif.io/api/image/2/level2.json"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json",
+            "@type": "sc:Sequence",
+            "label": [
+                {
+                    "@value": "Lesefreundliche Sequenz",
+                    "@language": "de"
+                }
+            ],
+            "canvases": [
+                {
+                    "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001a_1r.json",
+                    "@type": "sc:Canvas",
+                    "label": "fragm1a_1r",
+                    "height": 8176,
+                    "width": 6132,
+                    "images": [
+                        {
+                            "@id": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/annotation/gau-Fragment_frag001a_1r.json",
+                            "@type": "oa:Annotation",
+                            "motivation": "sc:painting",
+                            "on": "https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/canvas/gau-Fragment_frag001a_1r.json",
+                            "resource": {
+                                "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001a_1r.jp2/full/full/0/default/jpg",
+                                "@type": "dctypes:Image",
+                                "format": "image/jpeg",
+                                "height": 8176,
+                                "width": 6132,
+                                "service": {
+                                    "@context": "http://iiif.io/api/image/2/context.json",
+                                    "@id": "https://www.e-codices.unifr.ch/loris/gau/gau-Fragment/gau-Fragment_frag001a_1r.jp2",
+                                    "profile": "http://iiif.io/api/image/2/level2.json"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "structures": []
+}

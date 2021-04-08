@@ -39,6 +39,9 @@
     <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
     <script type="text/javascript">
      var miradorInstance = Mirador.viewer({
+       createGenerateClassNameOptions: {
+         seed: 'one'
+       },
        id: 'instanceOne',
        windows: [{
          manifestId: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/e800b13a-6699-49ae-9bc2-c9b8c35b7a25.json',
@@ -48,12 +51,18 @@
        }
      });
      var miradorInstance = Mirador.viewer({
+       createGenerateClassNameOptions: {
+         seed: 'two'
+       },
        id: 'instanceTwo',
        windows: [{
          manifestId: 'https://candra.dhii.jp/iiif/blackjacky/b001/manifest.json',
        }]
      });
      var miradorInstance = Mirador.viewer({
+       createGenerateClassNameOptions: {
+         seed: 'three'
+       },
        id: 'instanceThree',
        windows: [{
          manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',

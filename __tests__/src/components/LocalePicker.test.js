@@ -40,7 +40,6 @@ describe('LocalePicker', () => {
     expect(wrapper.find(MenuItem).length).toBe(2);
   });
 
-
   it('triggers setLocale prop when clicking a list item', () => {
     const setLocale = jest.fn();
 

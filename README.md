@@ -1,26 +1,40 @@
-*NOTE: This README reflects the in development version of Mirador 3. For previous versions, please reference that release's README directly. Latest 2.x release: [v.2.7.0](https://github.com/ProjectMirador/mirador/tree/v2.7.0)*
+*NOTE: This README reflects the latest version of Mirador, Mirador 3. For previous versions, please reference that release's README directly. Latest 2.x release: [v.2.7.0](https://github.com/ProjectMirador/mirador/tree/v2.7.0)*
 # Mirador
-[![Build Status](https://travis-ci.org/ProjectMirador/mirador.svg?branch=master)](https://travis-ci.org/ProjectMirador/mirador) [![codecov](https://codecov.io/gh/ProjectMirador/mirador/branch/master/graph/badge.svg)](https://codecov.io/gh/ProjectMirador/mirador)
+![Node.js CI](https://github.com/ProjectMirador/mirador/workflows/Node.js%20CI/badge.svg) [![codecov](https://codecov.io/gh/ProjectMirador/mirador/branch/master/graph/badge.svg)](https://codecov.io/gh/ProjectMirador/mirador) 
 
 ## For Mirador Users
 You can quickly use and configure Mirador by remixing the [mirador-start](https://mirador-start.glitch.me/) Glitch.
 
+We recommend installing Mirador using a JavaScript package manager like [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/).
+
+```sh
+$ npm install mirador 
+
+# or
+
+$ yarn add mirador
+```
+
+If you are interested in integrating Mirador with plugins into your project, we recommend using webpack or parcel to integrate the es version of the packages. Examples are here:
+
+[https://github.com/ProjectMirador/mirador-integration](https://github.com/ProjectMirador/mirador-integration)
+
 ## Adding translations to Mirador
 For help with adding a translation, see [src/locales/README.md](src/locales/README.md)
 
-## Running Mirador locally
+## Running Mirador locally for development
 
 Mirador local development requires [nodejs](https://nodejs.org/en/download/) to be installed.
 
 1. Run `npm install` to install the dependencies.
 
-## Starting the project
+### Starting the project
 
 ```sh
 $ npm start
 ```
 
-Then navigate to [http://127.0.0.1:4444/\_\_tests\_\_/integration/mirador/](http://127.0.0.1:4444/\_\_tests\_\_/integration/mirador/)
+Then navigate to [http://127.0.0.1:4444/](http://127.0.0.1:4444/)
 
 ### Instantiating Mirador
 
