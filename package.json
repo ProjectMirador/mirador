@@ -97,7 +97,7 @@
     "codecov": "^3.7.0",
     "core-js": "^3.4.8",
     "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-adapter-react-16": "^1.15.0",
     "eslint": "^6.0.0",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-react-app": "^3.0.5",
