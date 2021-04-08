@@ -44,10 +44,12 @@ export function addWindow({ companionWindows, manifest, ...options }) {
       ),
     ];
 
-    if (config.window.defaultSideBarPanel || config.window.sideBarPanel) {
+    if (options.sideBarPanel || config.window.defaultSideBarPanel || config.window.sideBarPanel) {
       defaultCompanionWindows.unshift(
         {
-          content: config.window.defaultSideBarPanel || config.window.sideBarPanel,
+          content: options.sideBarPanel
+            || config.window.defaultSideBarPanel
+            || config.window.sideBarPanel,
           default: true,
           id: `cw-${uuid()}`,
           position: 'left',
@@ -72,7 +74,9 @@ export function addWindow({ companionWindows, manifest, ...options }) {
       sideBarOpen: config.window.sideBarOpenByDefault !== undefined
         ? config.window.sideBarOpenByDefault
         : config.window.sideBarOpen,
-      sideBarPanel: config.window.defaultSideBarPanel || config.window.sideBarPanel,
+      sideBarPanel: options.sideBarPanel
+        || config.window.defaultSideBarPanel
+        || config.window.sideBarPanel,
       thumbnailNavigationId: cwThumbs,
     };
 
