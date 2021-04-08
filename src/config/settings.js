@@ -276,7 +276,7 @@ export default {
       canvas: true,
       annotations: true,
       search: true,
-      layers: false,
+      layers: true,
     },
     views: [
       { key: 'single', behaviors: ['individuals'] },
