@@ -123,7 +123,6 @@
     "react-refresh": "^0.8.3",
     "redux-mock-store": "^1.5.1",
     "redux-saga-test-plan": "^4.0.0-rc.3",
-    "supertest": "^4.0.2",
     "terser-webpack-plugin": "^4.0.0",
     "unfetch": "^4.1.0",
     "url-polyfill": "^1.1.7",
