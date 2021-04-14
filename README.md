@@ -85,6 +85,20 @@ $ npm run lint
 ```
 
 ## Debugging
-Useful browser extensions for debugging/development purposes
+
+### Local instance
+
+The following browser extensions are useful for debugging a local development instance of Mirador:
+
  - [React DevTools](https://github.com/facebook/react-devtools)
  - [Redux DevTools](https://github.com/zalmoxisus/redux-devtools-extension)
+
+### Test suite
+
+To debug the test suite, run:
+
+```sh
+$ npm run test:debug
+```
+
+then spin up a [nodejs inspector client](https://nodejs.org/en/docs/guides/debugging-getting-started/#inspector-clients) and set some breakpoints. See [here](https://www.digitalocean.com/community/tutorials/how-to-debug-node-js-with-the-built-in-debugger-and-chrome-devtools#step-3-%E2%80%94-debugging-node-js-with-chrome-devtools) for a guide to debugging with Chrome DevTools.
