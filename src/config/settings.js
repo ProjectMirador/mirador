@@ -225,7 +225,7 @@ export default {
     lt: 'Lietuvių',
     nl: 'Nederlands',
     'pt-BR': 'Português do Brasil',
-	  vi:'Tiếng Việt',
+    vi:'Tiếng Việt',
     'zh-CN': '中文(简体)',
     'zh-TW': '中文(繁體)',
     it: "Italiano",
