@@ -115,7 +115,7 @@
     "http-server": "^0.12.3",
     "jest": "^26.0.1",
     "jest-fetch-mock": "^3.0.0",
-    "jest-puppeteer": "^4.1.1",
+    "jest-puppeteer": "^5.0.2",
     "jsdom": "15.1.1",
     "puppeteer": "^4.0.0",
     "react": "^16.8.6",
