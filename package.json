@@ -116,7 +116,7 @@
     "jest": "^26.0.1",
     "jest-fetch-mock": "^3.0.0",
     "jest-puppeteer": "^5.0.2",
-    "jsdom": "15.1.1",
+    "jsdom": "^16.5.3",
     "puppeteer": "^9.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
