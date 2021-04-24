@@ -11,6 +11,7 @@ import nl from './locales/nl/translation.json';
 import ptBr from './locales/ptBr/translation.json';
 import it from './locales/it/translation.json';
 import sr from './locales/sr/translation.json';
+import sv from './locales/sv/translation.json';
 import lt from './locales/lt/translation.json';
 import vi from './locales/vi/translation.json';
 
@@ -29,6 +30,7 @@ function createI18nInstance() {
     nl,
     'pt-BR': ptBr,
     sr,
+    sv,
     vi,
     'zh-CN': zhCn,
     'zh-TW': zhTw,

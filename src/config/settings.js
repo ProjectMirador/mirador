@@ -230,6 +230,7 @@ export default {
     'zh-TW': '中文(繁體)',
     it: "Italiano",
     sr: 'Српски',
+    sv: 'Svenska'
   },
   annotations: {
     htmlSanitizationRuleSet: 'iiif', // See src/lib/htmlRules.js for acceptable values
