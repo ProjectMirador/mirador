@@ -14,16 +14,25 @@ class MiradorViewer {
   /**
    */
   constructor(config, viewerConfig = {}) {
-    this.plugins = filterValidPlugins(viewerConfig.plugins);
+    this.plugins = filterValidPlugins(viewerConfig.plugins || []);
     this.config = config;
     this.store = viewerConfig.store
       || createPluggableStore(this.config, this.plugins);
 
     config.id && ReactDOM.render(
+      this.render(),
+      document.getElementById(config.id),
+    );
+  }
+
+  /**
+   * Render the mirador viewer
+   */
+  render() {
+    return (
       <Provider store={this.store}>
         <HotApp plugins={this.plugins} />
-      </Provider>,
-      document.getElementById(config.id),
+      </Provider>
     );
   }
 
