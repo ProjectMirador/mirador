@@ -10,7 +10,7 @@ describe('MiradorViewer', () => {
   beforeAll(() => {
     ReactDOM.render = jest.fn();
     ReactDOM.unmountComponentAtNode = jest.fn();
-    instance = new MiradorViewer({});
+    instance = new MiradorViewer({ id: 'mirador' });
   });
   describe('constructor', () => {
     it('returns viewer store', () => {

@@ -25,7 +25,7 @@ class MiradorViewer {
       || createStore(getReducersFromPlugins(this.plugins), getSagasFromPlugins(this.plugins));
     this.processConfig();
 
-    ReactDOM.render(
+    config.id && ReactDOM.render(
       <Provider store={this.store}>
         <HotApp plugins={this.plugins} />
       </Provider>,
@@ -48,7 +48,7 @@ class MiradorViewer {
    * Cleanup method to unmount Mirador from the dom
    */
   unmount() {
-    ReactDOM.unmountComponentAtNode(document.getElementById(this.config.id));
+    this.config.id && ReactDOM.unmountComponentAtNode(document.getElementById(this.config.id));
   }
 }
 
