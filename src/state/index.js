@@ -4,12 +4,10 @@ import * as sagas from './sagas';
 import * as selectors from './selectors';
 import createStore from './createStore';
 
-const exports = {
+export default {
   actions,
   createStore,
   reducers,
   sagas,
   selectors,
 };
-
-export default exports;
