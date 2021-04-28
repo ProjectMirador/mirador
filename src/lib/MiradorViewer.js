@@ -28,10 +28,10 @@ class MiradorViewer {
   /**
    * Render the mirador viewer
    */
-  render() {
+  render(props = {}) {
     return (
       <Provider store={this.store}>
-        <HotApp plugins={this.plugins} />
+        <HotApp plugins={this.plugins} {...props} />
       </Provider>
     );
   }
