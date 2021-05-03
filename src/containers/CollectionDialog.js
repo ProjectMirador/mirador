@@ -78,6 +78,9 @@ const styles = theme => ({
     },
     cursor: 'pointer',
   },
+  collectionItem: {
+    whiteSpace: 'normal',
+  }
 });
 
 const enhance = compose(
