@@ -244,7 +244,7 @@ export class CollectionDialog extends Component {
               {
                 collections.map(c => (
                   <MenuItem key={c.id} onClick={() => { this.selectCollection(c);}} className={classes.collectionItem}>
-                      {CollectionDialog.getUseableLabel(c)}
+                    {CollectionDialog.getUseableLabel(c)}
                   </MenuItem>
                 ))
               }
@@ -255,7 +255,7 @@ export class CollectionDialog extends Component {
               {
                 manifest.getManifests().map(m => (
                   <MenuItem key={m.id} onClick={() => { this.selectManifest(m);}} className={classes.collectionItem}>
-                      {CollectionDialog.getUseableLabel(m)}
+                    {CollectionDialog.getUseableLabel(m)}
                   </MenuItem>
                 ))
               }

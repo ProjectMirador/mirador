@@ -54,6 +54,9 @@ const styles = theme => ({
     padding: '16px',
     paddingTop: 0,
   },
+  collectionItem: {
+    whiteSpace: 'normal',
+  },
   collectionMetadata: {
     padding: '16px',
   },
@@ -78,9 +81,6 @@ const styles = theme => ({
     },
     cursor: 'pointer',
   },
-  collectionItem: {
-    whiteSpace: 'normal',
-  }
 });
 
 const enhance = compose(
