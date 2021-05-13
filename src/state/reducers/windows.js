@@ -112,6 +112,7 @@ export const windowsReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
+          menuAnnotationSelected: action.onSidebar,
           selectedAnnotationId: action.annotationId,
         },
       };
@@ -120,6 +121,7 @@ export const windowsReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
+          menuAnnotationSelected: action.onSidebar,
           selectedAnnotationId: undefined,
         },
       };
@@ -138,6 +140,14 @@ export const windowsReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           highlightAllAnnotations: !state[action.windowId].highlightAllAnnotations,
+        },
+      };
+    case ActionTypes.TOGGLE_ANNOTATION_IMAGE:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          openedAnnotationImageId: action.annotationId,
         },
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:

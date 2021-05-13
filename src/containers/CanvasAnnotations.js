@@ -6,10 +6,12 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
   getAnnotationResourcesByMotivationForCanvas,
+  getPresentAnnotationsOnSelectedCanvases,
   getCanvasLabel,
   getSelectedAnnotationId,
   getConfig,
 } from '../state/selectors';
+
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
 
 /**
@@ -31,6 +33,9 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
     getAnnotationResourcesByMotivationForCanvas(
       state, { canvasId, windowId },
     ),
+  ),
+  fullAnnotations: getPresentAnnotationsOnSelectedCanvases(
+    state, { windowId },
   ),
   htmlSanitizationRuleSet: getConfig(state).annotations.htmlSanitizationRuleSet,
   label: getCanvasLabel(state, {

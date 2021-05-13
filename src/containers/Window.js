@@ -20,6 +20,9 @@ const mapStateToProps = (state, { windowId }) => ({
   label: getManifestTitle(state, { windowId }),
   manifestError: getManifestError(state, { windowId }),
   maximized: (getWindow(state, { windowId }) || {}).maximized,
+  openedAnnotationImageId: getWindow(state, {
+    windowId,
+  }).openedAnnotationImageId,
   sideBarOpen: (getWindow(state, { windowId }) || {}).sideBarOpen,
   thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId }),
   view: getWindowViewType(state, { windowId }),
