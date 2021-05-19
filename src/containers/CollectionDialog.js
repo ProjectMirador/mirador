@@ -54,6 +54,9 @@ const styles = theme => ({
     padding: '16px',
     paddingTop: 0,
   },
+  collectionItem: {
+    whiteSpace: 'normal',
+  },
   collectionMetadata: {
     padding: '16px',
   },
