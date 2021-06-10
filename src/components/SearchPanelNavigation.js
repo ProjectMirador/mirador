@@ -42,13 +42,17 @@ export class SearchPanelNavigation extends Component {
   */
   render() {
     const {
-      searchHits, selectedContentSearchAnnotation, classes, t, direction,
+      numTotal, searchHits, selectedContentSearchAnnotation, classes, t, direction,
     } = this.props;
 
     const iconStyle = direction === 'rtl' ? { transform: 'rotate(180deg)' } : {};
 
     const currentHitIndex = searchHits
       .findIndex(val => val.annotations.includes(selectedContentSearchAnnotation[0]));
+    let lengthText = searchHits.length;
+    if (searchHits.length < numTotal) {
+      lengthText += '+';
+    }
     return (
       <>
         {(searchHits.length > 0) && (
@@ -61,7 +65,7 @@ export class SearchPanelNavigation extends Component {
               <ChevronLeftIcon style={iconStyle} />
             </MiradorMenuButton>
             <span style={{ unicodeBidi: 'plaintext' }}>
-              {t('pagination', { current: currentHitIndex + 1, total: searchHits.length })}
+              {t('pagination', { current: currentHitIndex + 1, total: lengthText })}
             </span>
             <MiradorMenuButton
               aria-label={t('searchNextResult')}
@@ -79,6 +83,7 @@ export class SearchPanelNavigation extends Component {
 SearchPanelNavigation.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   direction: PropTypes.string.isRequired,
+  numTotal: PropTypes.number,
   searchHits: PropTypes.arrayOf(PropTypes.object),
   searchService: PropTypes.shape({
     id: PropTypes.string,
@@ -90,6 +95,7 @@ SearchPanelNavigation.propTypes = {
 };
 SearchPanelNavigation.defaultProps = {
   classes: {},
+  numTotal: undefined,
   searchHits: [],
   t: key => key,
 };

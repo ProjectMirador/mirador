@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuItem from '@material-ui/core/MenuItem';
+import CheckIcon from '@material-ui/icons/CheckSharp';
 import { LanguageSettings } from '../../../src/components/LanguageSettings';
 
 /**
@@ -63,7 +64,7 @@ describe('LanguageSettings', () => {
       wrapper
         .find(MenuItem)
         .first()
-        .find('CheckSharpIcon')
+        .find(CheckIcon)
         .length,
     ).toBe(1);
   });

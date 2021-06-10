@@ -18,7 +18,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
-  withPlugins('WindowTopMenuButtons'),
+  withPlugins('WindowTopMenuButton'),
 );
 
 export default enhance(WindowTopMenuButton);

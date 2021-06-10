@@ -2,6 +2,8 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ExpandLessIcon from '@material-ui/icons/ExpandLessSharp';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMoreSharp';
 import MenuItem from '@material-ui/core/MenuItem';
 import { NestedMenu } from '../../../src/components/NestedMenu';
 
@@ -61,11 +63,11 @@ describe('NestedMenu', () => {
     wrapper = createWrapper();
 
     expect(wrapper.state().nestedMenuIsOpen).toBe(false);
-    expect(wrapper.find('ExpandMoreSharpIcon').length).toBe(1);
-    expect(wrapper.find('ExpandLessSharpIcon').length).toBe(0);
+    expect(wrapper.find(ExpandMoreIcon).length).toBe(1);
+    expect(wrapper.find(ExpandLessIcon).length).toBe(0);
     wrapper.setState({ nestedMenuIsOpen: true });
-    expect(wrapper.find('ExpandMoreSharpIcon').length).toBe(0);
-    expect(wrapper.find('ExpandLessSharpIcon').length).toBe(1);
+    expect(wrapper.find(ExpandMoreIcon).length).toBe(0);
+    expect(wrapper.find(ExpandLessIcon).length).toBe(1);
   });
 
   it("renders the component's children based on the nestedMenuIsOpen state", () => {

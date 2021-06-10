@@ -27,6 +27,7 @@ import {
   getElasticLayout,
   getCanvases,
   selectInfoResponses,
+  getWindowConfig,
 } from '../selectors';
 import { fetchManifests } from './iiif';
 
@@ -202,6 +203,10 @@ export function* updateVisibleCanvases({ windowId }) {
 
 /** @private */
 export function* setCanvasOfFirstSearchResult({ companionWindowId, windowId }) {
+  const { switchCanvasOnSearch } = yield select(getWindowConfig, { windowId });
+  if (!switchCanvasOnSearch) {
+    return;
+  }
   const selectedIds = yield select(getSelectedContentSearchAnnotationIds, {
     companionWindowId, windowId,
   });

@@ -1,6 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Slide from '@material-ui/core/Slide';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeftSharp';
+import ArrowRightIcon from '@material-ui/icons/ArrowRightSharp';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { CompanionArea } from '../../../src/components/CompanionArea';
 import CompanionWindowFactory from '../../../src/containers/CompanionWindowFactory';
@@ -69,7 +71,7 @@ describe('CompanionArea', () => {
     });
 
     expect(wrapper.find(MiradorMenuButton).length).toBe(1);
-    expect(wrapper.find(MiradorMenuButton).first().children('ArrowRightSharpIcon').length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).first().children(ArrowRightIcon).length).toBe(1);
     expect(wrapper.find(Slide).prop('direction')).toBe('right');
     expect(wrapper.find(MiradorMenuButton).prop('aria-expanded')).toBe(false);
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
@@ -91,7 +93,7 @@ describe('CompanionArea', () => {
     });
 
     expect(wrapper.find(MiradorMenuButton).length).toBe(1);
-    expect(wrapper.find(MiradorMenuButton).first().children('ArrowLeftSharpIcon').length).toBe(1);
+    expect(wrapper.find(MiradorMenuButton).first().children(ArrowLeftIcon).length).toBe(1);
     expect(wrapper.find(MiradorMenuButton).prop('aria-expanded')).toBe(true);
 
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);

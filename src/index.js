@@ -1,9 +1,7 @@
 import init from './init';
 import state from './state';
 
-const exports = {
+export default {
   ...init,
   ...state,
 };
-
-export default exports;

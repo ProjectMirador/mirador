@@ -4,12 +4,13 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import { VideoViewer } from '../components/VideoViewer';
-import { getVisibleCanvasCaptions, getVisibleCanvasVideoResources } from '../state/selectors';
+import { getConfig, getVisibleCanvasCaptions, getVisibleCanvasVideoResources } from '../state/selectors';
 
 /** */
 const mapStateToProps = (state, { windowId }) => (
   {
     captions: getVisibleCanvasCaptions(state, { windowId }) || [],
+    videoOptions: getConfig(state).videoOptions,
     videoResources: getVisibleCanvasVideoResources(state, { windowId }) || [],
   }
 );

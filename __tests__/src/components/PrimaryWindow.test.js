@@ -20,6 +20,13 @@ describe('PrimaryWindow', () => {
     const wrapper = createWrapper();
     expect(wrapper.find('.mirador-primary-window')).toHaveLength(1);
   });
+  it('should only render children when available', () => {
+    const wrapper = createWrapper({ children: <span>hi</span>, isFetching: false });
+    expect(wrapper.find('span')).toHaveLength(1);
+    const suspenseComponent = wrapper.find('Suspense');
+    const lazyComponent = suspenseComponent.dive().find('lazy');
+    expect(lazyComponent).toHaveLength(0);
+  });
   it('should render <WindowSideBar>', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(WindowSideBar)).toHaveLength(1);
