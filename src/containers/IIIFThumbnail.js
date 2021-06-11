@@ -1,8 +1,20 @@
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
+import {
+  getConfig,
+} from '../state/selectors';
 import { IIIFThumbnail } from '../components/IIIFThumbnail';
+
+/**
+ * mapStateToProps - to hook up connect
+ * @private
+ */
+const mapStateToProps = (state) => ({
+  thumbnailsConfig: getConfig(state).thumbnails,
+});
 
 /**
  * Styles for withStyles HOC
@@ -50,6 +62,7 @@ const styles = theme => ({
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
+  connect(mapStateToProps),
   withPlugins('IIIFThumbnail'),
 );
 
