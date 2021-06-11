@@ -139,6 +139,7 @@
     "tryAgain": "Try again",
     "untitled": "[Untitled]",
     "view": "View",
+    "viewWorkspaceConfiguration": "View workspace configuration",
     "welcome": "Welcome to Mirador",
     "window": "Window: {{label}}",
     "windowMenu": "Window views & thumbnail display",
