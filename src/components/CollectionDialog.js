@@ -13,20 +13,11 @@ import {
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackSharp';
 import Skeleton from '@material-ui/lab/Skeleton';
+import asArray from '../lib/asArray';
 import { LabelValueMetadata } from './LabelValueMetadata';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 import ManifestInfo from '../containers/ManifestInfo';
-
-/**
- */
-function asArray(value) {
-  if (!Array.isArray(value)) {
-    return [value];
-  }
-
-  return value;
-}
 
 /**
  * a dialog providing the possibility to select the collection
