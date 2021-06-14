@@ -63,9 +63,9 @@ describe('ManifestListItem', () => {
     expect(wrapper.find('.mirador-manifest-list-item-provider').children().text()).toEqual('ACME');
   });
 
-  it('displays a placeholder provider if no information is given', () => {
+  it('displays nothing  if no information is given', () => {
     const wrapper = createWrapper();
-    expect(wrapper.find('.mirador-manifest-list-item-provider').children().text()).toEqual('addedFromUrl');
+    expect(wrapper.find('.mirador-manifest-list-item-provider').children().length).toEqual(0);
   });
 
   it('displays a collection label for collections', () => {
