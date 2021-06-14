@@ -67,7 +67,7 @@ const styles = theme => ({
     position: 'absolute !important',
   },
   dialogContent: {
-    padding: 0,
+    padding: theme.spacing(1),
   },
   light: {
     color: theme.palette.grey[400],
