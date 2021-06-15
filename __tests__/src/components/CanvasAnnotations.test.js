@@ -5,6 +5,7 @@ import Chip from '@material-ui/core/Chip';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import { CanvasAnnotations } from '../../../src/components/CanvasAnnotations';
+import { ScrollTo } from '../../../src/components/ScrollTo';
 
 /** Utility function to wrap CanvasAnnotations */
 function createWrapper(props) {
@@ -60,6 +61,14 @@ describe('CanvasAnnotations', () => {
 
     expect(wrapper.find(MenuList).length).toEqual(1);
     expect(wrapper.find(MenuItem).length).toEqual(2);
+  });
+
+  it('scrolls to the selected annotation', () => {
+    wrapper = createWrapper({ annotations, selectedAnnotationId: 'abc123' });
+
+    expect(wrapper.find(ScrollTo).length).toEqual(2);
+    expect(wrapper.find(ScrollTo).first().prop('scrollTo')).toEqual(true);
+    expect(wrapper.find(ScrollTo).last().prop('scrollTo')).toEqual(false);
   });
 
   it('renders a Chip for every tag', () => {
