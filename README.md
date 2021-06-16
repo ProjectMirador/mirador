@@ -1,4 +1,4 @@
-*NOTE: This README reflects the latest version of Mirador, Mirador 3. For previous versions, please reference that release's README directly. Latest 2.x release: [v.2.7.0](https://github.com/ProjectMirador/mirador/tree/v2.7.0)*
+⚠️ This project is for Mirador 3, the latest version of Mirador. For Mirador 2, please see [ProjectMirador/mirador2](https://github.com/projectmirador/mirador2) or legacy documentation on the [Mirador 2 wiki](https://github.com/ProjectMirador/mirador-2-wiki/wiki). Please note that the community's focus is on Mirador 3, and are unlikely to accept pull requests or provide support for Mirador 2.
 # Mirador
 ![Node.js CI](https://github.com/ProjectMirador/mirador/workflows/Node.js%20CI/badge.svg) [![codecov](https://codecov.io/gh/ProjectMirador/mirador/branch/master/graph/badge.svg)](https://codecov.io/gh/ProjectMirador/mirador) 
 
