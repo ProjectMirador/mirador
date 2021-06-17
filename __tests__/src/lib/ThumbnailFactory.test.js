@@ -248,6 +248,66 @@ describe('getThumbnail', () => {
   });
 });
 
+describe('picking the best format', () => {
+  const url = 'http://example.com';
+
+  it('defaults to jpg', () => {
+    const myCanvas = {
+      ...canvas.__jsonld,
+      thumbnail: {
+        height: 100,
+        id: 'arbitrary-url',
+        service: [{
+          id: url,
+          profile: 'level2',
+          type: 'ImageService3',
+        }],
+        width: 100,
+      },
+    };
+    expect(createSubject(myCanvas, 'Canvas'))
+      .toMatchObject({ url: `${url}/full/,120/0/default.jpg` });
+  });
+
+  it('uses the preferred format of the service', () => {
+    const myCanvas = {
+      ...canvas.__jsonld,
+      thumbnail: {
+        height: 100,
+        id: 'arbitrary-url',
+        service: [{
+          id: url,
+          preferredFormats: ['webp'],
+          profile: 'level2',
+          type: 'ImageService3',
+        }],
+        width: 100,
+      },
+    };
+    expect(createSubject(myCanvas, 'Canvas'))
+      .toMatchObject({ url: `${url}/full/,120/0/default.webp` });
+  });
+
+  it('can be filtered by application preferred formats', () => {
+    const myCanvas = {
+      ...canvas.__jsonld,
+      thumbnail: {
+        height: 100,
+        id: 'arbitrary-url',
+        service: [{
+          id: url,
+          preferredFormats: ['webp', 'png'],
+          profile: 'level2',
+          type: 'ImageService3',
+        }],
+        width: 100,
+      },
+    };
+    expect(createSubject(myCanvas, 'Canvas', { preferredFormats: ['png', 'jpg'] }))
+      .toMatchObject({ url: `${url}/full/,120/0/default.png` });
+  });
+});
+
 describe('selectBestImageSize', () => {
   const targetWidth = 120;
   const targetHeight = 120;

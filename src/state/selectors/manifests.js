@@ -234,10 +234,13 @@ export const getRights = createSelector(
 */
 export function getManifestThumbnail(state, props) {
   const manifest = getManifestoInstance(state, props);
+  const { thumbnails = {} } = getConfig(state);
 
   if (!manifest) return undefined;
 
-  const thumbnail = getThumbnail(manifest, { maxHeight: 80, maxWidth: 120 });
+  const thumbnail = getThumbnail(manifest, {
+    maxHeight: 80, maxWidth: 120, preferredFormats: thumbnails.preferredFormats,
+  });
 
   return thumbnail && thumbnail.url;
 }
