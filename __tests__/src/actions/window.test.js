@@ -45,7 +45,7 @@ describe('window actions', () => {
         ],
         elasticLayout: {
           height: 400,
-          width: 400,
+          width: 480,
           x: 260,
           y: 300,
         },

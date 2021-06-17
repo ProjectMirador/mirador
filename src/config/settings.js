@@ -285,6 +285,10 @@ export default {
       { key: 'scroll', behaviors: ['continuous'] },
       { key: 'gallery' },
     ],
+    elastic: {
+      height: 400,
+      width: 480
+    }
   },
   windows: [ // Array of windows to be open when mirador initializes (each object should at least provide a manifestId key with the value of the IIIF presentation manifest to load)
     /**
