@@ -5,6 +5,8 @@ import * as actions from '../state/actions';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getAnnotationResourcesByMotivation,
+  getPresentAnnotationsOnSelectedCanvases,
+  getSelectedAnnotationId,
   getWindow,
 } from '../state/selectors';
 import { AnnotationSettings } from '../components/AnnotationSettings';
@@ -13,11 +15,13 @@ import { AnnotationSettings } from '../components/AnnotationSettings';
  * Mapping redux state to component props using connect
  */
 const mapStateToProps = (state, { windowId }) => ({
+  annotations: getPresentAnnotationsOnSelectedCanvases(state, { windowId }),
   displayAll: getWindow(state, { windowId }).highlightAllAnnotations,
   displayAllDisabled: getAnnotationResourcesByMotivation(
     state,
     { windowId },
   ).length < 2,
+  selectedAnnotationId: getSelectedAnnotationId(state, { windowId }),
 });
 
 /**
@@ -26,6 +30,9 @@ const mapStateToProps = (state, { windowId }) => ({
 const mapDispatchToProps = (dispatch, { windowId }) => ({
   toggleAnnotationDisplay: () => {
     dispatch(actions.toggleAnnotationDisplay(windowId));
+  },
+  toggleAnnotationImage: (windowID, annotationId) => {
+    dispatch(actions.toggleAnnotationImage(windowID, annotationId));
   },
 });
 

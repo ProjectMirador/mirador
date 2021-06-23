@@ -158,6 +158,21 @@ export function toggleWindowSideBar(windowId) {
 }
 
 /**
+ * selectAnnotation - action creator
+ *
+ * @param  {String} windowId
+ * @param  {String} annotationId
+ * @memberof ActionCreators
+ */
+export function toggleAnnotationImage(windowId, annotationId = undefined) {
+  return {
+    annotationId,
+    type: ActionTypes.TOGGLE_ANNOTATION_IMAGE,
+    windowId,
+  };
+}
+
+/**
  * setWindowThumbnailPosition - action creator
  *
  * @param  {String} windowId

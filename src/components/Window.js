@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import Paper from '@material-ui/core/Paper';
 import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
+import AnnotationImageDialog from '../containers/AnnotationImageDialog';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
@@ -61,7 +62,7 @@ export class Window extends Component {
    */
   render() {
     const {
-      focusWindow, label, isFetching, maximized, sideBarOpen,
+      focusWindow, label, isFetching, maximized, openedAnnotationImageId, sideBarOpen,
       view, windowId, classes, t,
       manifestError,
     } = this.props;
@@ -110,6 +111,7 @@ export class Window extends Component {
           </div>
         </div>
         <CompanionArea windowId={windowId} position="far-bottom" />
+        <AnnotationImageDialog windowId={windowId} />
         <PluginHook {...this.props} />
       </Paper>
     );
@@ -125,6 +127,7 @@ Window.propTypes = {
   label: PropTypes.string,
   manifestError: PropTypes.string,
   maximized: PropTypes.bool,
+  openedAnnotationImageId: PropTypes.string,
   sideBarOpen: PropTypes.bool,
   t: PropTypes.func.isRequired,
   view: PropTypes.string,
@@ -140,6 +143,7 @@ Window.defaultProps = {
   label: null,
   manifestError: null,
   maximized: false,
+  openedAnnotationImageId: undefined,
   sideBarOpen: false,
   view: undefined,
   windowDraggable: null,
