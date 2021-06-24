@@ -3,6 +3,7 @@ import createCachedSelector from 're-reselect';
 import { PropertyValue } from 'manifesto.js/dist-esmodule/PropertyValue';
 import { Utils } from 'manifesto.js/dist-esmodule/Utils';
 import getThumbnail from '../../lib/ThumbnailFactory';
+import asArray from '../../lib/asArray';
 import { getCompanionWindow } from './companionWindows';
 import { getManifest } from './getters';
 import { getConfig } from './config';
@@ -108,16 +109,6 @@ export const getManifestProvider = createSelector(
     && provider[0].label
     && PropertyValue.parse(provider[0].label, locale).getValue(),
 );
-
-/**
- */
-function asArray(value) {
-  if (!Array.isArray(value)) {
-    return [value];
-  }
-
-  return value;
-}
 
 /**
 * Return the IIIF v3 homepage of a manifest or null
