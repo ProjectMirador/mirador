@@ -14,6 +14,7 @@ import sr from './locales/sr/translation.json';
 import sv from './locales/sv/translation.json';
 import lt from './locales/lt/translation.json';
 import vi from './locales/vi/translation.json';
+import nbNo from './locales/nbNo/translation.json';
 
 /**
  * Load translations for each language
@@ -27,6 +28,7 @@ function createI18nInstance() {
     it,
     ja,
     lt,
+    'nb-NO': nbNo,
     nl,
     'pt-BR': ptBr,
     sr,
