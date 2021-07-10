@@ -240,7 +240,11 @@
     {
       "id": "https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json",
       "type": "Canvas",
-      "label": "Whole Page",
+      "label": {
+        "en": [
+          "Whole Page"
+        ]
+      },
       "width": 5776,
       "height": 9125,
       "items": [

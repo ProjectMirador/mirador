@@ -8,8 +8,10 @@ import MiradorCanvas from '../../lib/MiradorCanvas';
 
 /** Fetch annotations for a given canvas */
 export function* fetchCanvasAnnotations({ canvasId, windowId }) {
-  const canvas = yield select(getCanvas, { canvasId, windowId });
+  let canvas = yield select(getCanvas, { canvasId, windowId });
   const annotations = yield select(getAnnotations);
+
+  canvas = Array.isArray(canvas) ? canvas[0] : canvas;
   const miradorCanvas = new MiradorCanvas(canvas);
 
   return yield all([

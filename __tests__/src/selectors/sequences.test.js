@@ -13,6 +13,8 @@ import {
   getSequenceBehaviors,
 } from '../../../src/state/selectors/sequences';
 
+jest.mock('uuid', () => ({ v4: () => '00000000-0000-0000-0000-000000000000' }));
+
 describe('getSequences', () => {
   describe('with a v2 manifest', () => {
     const state = { manifests: { x: { json: manifestFixtureGau } } };
@@ -49,7 +51,7 @@ describe('getSequences', () => {
     const state = { manifests: { x: { json: manifest } } };
     const sequences = getSequences(state, { manifestId: 'x' });
     expect(sequences.length).toEqual(3);
-    expect(sequences.map(s => s.id)).toEqual([undefined, 'a', 'b']);
+    expect(sequences.map(s => s.id)).toEqual(['00000000-0000-0000-0000-000000000000', 'a', 'b']);
   });
 });
 

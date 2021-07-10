@@ -20,6 +20,7 @@ import {
   getCanvasGrouping, getWindow, getManifestoInstance,
   getCompanionWindowIdsForPosition, getManifestSearchService,
   getCanvasForAnnotation,
+  getSequence,
   getSelectedContentSearchAnnotationIds,
   getSortedSearchAnnotationsForCompanionWindow,
   getVisibleCanvasIds,
@@ -35,6 +36,9 @@ import { fetchManifests } from './iiif';
 export function* fetchWindowManifest(action) {
   const {
     collectionPath, id, manifestId,
+  } = action.payload || action.window;
+  const {
+    canvasId, canvasIndex, sequenceId, manifestId
   } = action.payload || action.window;
 
   if (!manifestId) return;
@@ -99,16 +103,29 @@ export function* setWindowStartingCanvas(action) {
     );
     yield put(thunk);
   } else {
-    const manifestoInstance = yield select(getManifestoInstance, { manifestId });
-    if (manifestoInstance) {
-      // set the startCanvas
-      const miradorManifest = new MiradorManifest(manifestoInstance);
-      const startCanvas = miradorManifest.startCanvas
-        || miradorManifest.canvasAt(canvasIndex || 0)
-        || miradorManifest.canvasAt(0);
+    const currentSequence = yield select(getSequence, { windowId, sequenceId });
+    
+    if(currentSequence){
+      let cIndex = canvasIndex ? canvasIndex : 0
+      const startCanvas = currentSequence.getCanvasByIndex(cIndex)
+      
       if (startCanvas) {
-        const thunk = yield call(setCanvas, windowId, startCanvas.id);
-        yield put(thunk);
+       const thunk = yield call(setCanvas, windowId, startCanvas.id);
+       yield put(thunk);
+      }
+    } else {
+      const manifestoInstance = yield select(getManifestoInstance, { manifestId });
+      
+      if (manifestoInstance) {
+        // set the startCanvas
+        const miradorManifest = new MiradorManifest(manifestoInstance);
+        const startCanvas = miradorManifest.startCanvas
+          || miradorManifest.canvasAt(canvasIndex || 0)
+          || miradorManifest.canvasAt(0);
+        if (startCanvas) {
+          const thunk = yield call(setCanvas, windowId, startCanvas.id);
+          yield put(thunk);
+        }
       }
     }
   }

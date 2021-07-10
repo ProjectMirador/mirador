@@ -12,7 +12,8 @@ export const selectInfoResponses = state => miradorSlice(state).infoResponses;
 
 export const getCanvases = createSelector(
   [getSequence],
-  sequence => (sequence && sequence.getCanvases()) || [],
+  sequence => (sequence && ((sequence.getCanvases && sequence.getCanvases()) || sequence.items))
+    || [],
 );
 
 /**
@@ -29,9 +30,16 @@ export const getCanvas = createSelector(
     (state, { canvasId }) => canvasId,
   ],
   (sequence, canvasId) => {
+    let canvas;
     if (!sequence || !canvasId) return undefined;
 
-    return sequence.getCanvasById(canvasId);
+    if (typeof sequence.getCanvasById == 'function') {
+      canvas = sequence.getCanvasById(canvasId);
+    } else if (sequence.items) {
+      canvas = sequence.items.filter(c => c.id === canvasId) || [];
+    }
+
+    return canvas;
   },
 );
 
@@ -43,9 +51,21 @@ export const getCurrentCanvas = createSelector(
   (sequence, window) => {
     if (!sequence || !window) return undefined;
 
-    if (!window.canvasId) return sequence.getCanvasByIndex(0);
+    if (!window.canvasId && (typeof sequence.getCanvasByIndex == 'function')) {
+      return sequence.getCanvasByIndex(0);
+    }
 
-    return sequence.getCanvasById(window.canvasId);
+    if (!window.canvasId) {
+      const { items } = sequence;
+      const [firstCanvas] = items;
+      return firstCanvas;
+    }
+
+    if (typeof sequence.getCanvasById == 'function') {
+      return sequence.getCanvasById(window.canvasId);
+    }
+
+    return sequence.items.filter(c => c.id === window.canvasId) || [];
   },
 );
 
