@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import Chip from '@material-ui/core/Chip';
 import IntersectionObserver from '@researchgate/react-intersection-observer';
 import manifestJson from '../../fixtures/version-2/019.json';

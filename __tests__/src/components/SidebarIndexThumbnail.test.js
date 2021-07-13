@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import fixture from '../../fixtures/version-2/019.json';
 import { SidebarIndexThumbnail } from '../../../src/components/SidebarIndexThumbnail';
 import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';

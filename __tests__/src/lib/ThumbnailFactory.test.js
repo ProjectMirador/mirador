@@ -1,6 +1,6 @@
 import {
   ManifestResource, Resource, Service, Utils,
-} from 'manifesto.js/dist-esmodule';
+} from 'manifesto.js';
 import getThumbnail, { ThumbnailFactory } from '../../../src/lib/ThumbnailFactory';
 import fixture from '../../fixtures/version-2/019.json';
 
