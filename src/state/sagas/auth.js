@@ -1,7 +1,7 @@
 import {
   all, call, put, select, takeEvery, delay,
 } from 'redux-saga/effects';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import flatten from 'lodash/flatten';
 import ActionTypes from '../actions/action-types';
 import MiradorCanvas from '../../lib/MiradorCanvas';
