@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import flatten from 'lodash/flatten';
 import MiradorCanvas from '../../lib/MiradorCanvas';
 import { miradorSlice } from './utils';

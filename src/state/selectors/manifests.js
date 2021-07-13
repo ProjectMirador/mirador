@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 import createCachedSelector from 're-reselect';
-import { PropertyValue } from 'manifesto.js/dist-esmodule/PropertyValue';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { PropertyValue, Utils } from 'manifesto.js';
 import getThumbnail from '../../lib/ThumbnailFactory';
 import asArray from '../../lib/asArray';
 import { getCompanionWindow } from './companionWindows';
