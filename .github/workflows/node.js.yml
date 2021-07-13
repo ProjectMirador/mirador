@@ -20,6 +20,6 @@ jobs:
       with:
         node-version: 14.x
     - run: npm install -g codecov
-    - run: npm install
+    - run: npm ci
     - run: npm test
     - run: codecov
