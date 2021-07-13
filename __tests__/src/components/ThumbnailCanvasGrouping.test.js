@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import { ThumbnailCanvasGrouping } from '../../../src/components/ThumbnailCanvasGrouping';
 import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';

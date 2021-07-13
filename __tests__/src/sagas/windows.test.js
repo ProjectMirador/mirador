@@ -1,6 +1,6 @@
 import { call, select } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 
 import ActionTypes from '../../../src/state/actions/action-types';
 import { setCanvas } from '../../../src/state/actions';

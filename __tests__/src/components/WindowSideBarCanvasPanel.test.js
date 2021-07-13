@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import compact from 'lodash/compact';
 import { WindowSideBarCanvasPanel } from '../../../src/components/WindowSideBarCanvasPanel';
 import SidebarIndexList from '../../../src/containers/SidebarIndexList';
