@@ -61,20 +61,22 @@ export class AppProviders extends Component {
   /**
    * Set i18n language on component mount
    */
-  componentDidMount() {
-    const { language } = this.props;
+  async componentDidMount() {
+    const { language, updateUserLanguages } = this.props;
 
-    this.i18n.changeLanguage(language);
+    await this.i18n.changeLanguage(language);
+    updateUserLanguages(this.i18n.languages);
   }
 
   /**
    * Update the i18n language if it is changed
    */
-  componentDidUpdate(prevProps) {
-    const { language } = this.props;
+  async componentDidUpdate(prevProps) {
+    const { language, updateUserLanguages } = this.props;
 
     if (prevProps.language !== language) {
-      this.i18n.changeLanguage(language);
+      await this.i18n.changeLanguage(language);
+      updateUserLanguages(this.i18n.languages);
     }
   }
 
@@ -127,6 +129,7 @@ AppProviders.propTypes = {
   setWorkspaceFullscreen: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   translations: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  updateUserLanguages: PropTypes.func.isRequired,
 };
 
 AppProviders.defaultProps = {

@@ -13,6 +13,7 @@ import {
   getManifestoInstance,
   getSequence,
   getSequences,
+  getUserLanguages,
 } from '../state/selectors';
 
 /**
@@ -29,6 +30,7 @@ const mapStateToProps = (state, { id, windowId }) => {
   return {
     collection: collectionId && getManifestoInstance(state, { manifestId: collectionId }),
     config,
+    languages: getUserLanguages(state),
     sequenceId: sequence && sequence.id,
     sequences: getSequences(state, { windowId }),
     showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,

@@ -21,8 +21,8 @@ const mapDispatchToProps = (dispatch, { data }) => ({
  * @memberof ThumbnailCanvasGrouping
  * @private
  */
-const mapStateToProps = (state, { data }) => ({
-  currentCanvasId: (getCurrentCanvas(state, { windowId: data.windowId }) || {}).id,
+const mapStateToProps = (state, { data: { windowId } }) => ({
+  currentCanvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
 });
 
 /**

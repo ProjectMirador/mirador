@@ -10,6 +10,7 @@ import {
   getManifestoInstance,
   getDefaultSidebarVariant,
   getWindow,
+  getUserLanguages,
 } from '../state/selectors';
 import { WindowSideBarCollectionPanel } from '../components/WindowSideBarCollectionPanel';
 
@@ -35,6 +36,7 @@ const mapStateToProps = (state, { id, windowId }) => {
     collectionPath,
     error: collection && collection.error,
     isFetching: collection && collection.isFetching,
+    languages: getUserLanguages(state),
     manifestId: manifest && manifest.id,
     parentCollection: parentCollection
       && getManifestoInstance(state, { manifestId: parentCollection.id }),

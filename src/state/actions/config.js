@@ -47,3 +47,12 @@ export function importMiradorState(state) {
   };
   return { state: newState, type: ActionTypes.IMPORT_MIRADOR_STATE };
 }
+
+/** Update the user's langauge preferences.
+ *
+ * @param {Array[string]} list of language codes in descending order of preference
+ * @memberof ActionCreators
+ */
+export function updateUserLanguages(languages) {
+  return { languages, type: ActionTypes.UPDATE_USER_LANGUAGES };
+}

@@ -9,7 +9,7 @@ export class SidebarIndexThumbnail extends Component {
   /** */
   render() {
     const {
-      classes, canvas, height, label, width,
+      classes, canvas, height, label, languages, width,
     } = this.props;
 
     return (
@@ -21,6 +21,7 @@ export class SidebarIndexThumbnail extends Component {
             className={classNames(classes.clickable)}
             maxHeight={height}
             maxWidth={width}
+            languages={languages}
           />
         </div>
         <Typography
@@ -39,6 +40,7 @@ SidebarIndexThumbnail.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   height: PropTypes.number,
   label: PropTypes.string.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.string).isRequired,
   width: PropTypes.number,
 };
 

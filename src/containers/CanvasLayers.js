@@ -7,12 +7,14 @@ import {
   getCanvasLabel,
   getLayers,
   getSortedLayers,
+  getUserLanguages,
 } from '../state/selectors';
 import { CanvasLayers } from '../components/CanvasLayers';
 
 /** For connect */
 const mapStateToProps = (state, { canvasId, windowId }) => ({
   label: getCanvasLabel(state, { canvasId, windowId }),
+  languages: getUserLanguages(state),
   layerMetadata: getLayers(state, { canvasId, windowId }),
   layers: getSortedLayers(state, { canvasId, windowId }),
 });

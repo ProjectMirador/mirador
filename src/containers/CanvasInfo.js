@@ -15,9 +15,13 @@ import { CanvasInfo } from '../components/CanvasInfo';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { canvasId, id, windowId }) => ({
+const mapStateToProps = (state, {
+  canvasId, id, windowId,
+}) => ({
   canvasDescription: getCanvasDescription(state, { canvasId, companionWindowId: id, windowId }),
-  canvasLabel: getCanvasLabel(state, { canvasId, companionWindowId: id, windowId }),
+  canvasLabel: getCanvasLabel(state, {
+    canvasId, companionWindowId: id, windowId,
+  }),
   canvasMetadata: getDestructuredMetadata(
     getCanvas(state, { canvasId, companionWindowId: id, windowId }),
   ),

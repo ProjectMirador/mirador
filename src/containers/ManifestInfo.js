@@ -6,6 +6,7 @@ import {
   getManifestDescription,
   getManifestTitle,
   getManifestMetadata,
+  getCompanionWindowLanguages,
 } from '../state/selectors';
 import { ManifestInfo } from '../components/ManifestInfo';
 
@@ -14,13 +15,16 @@ import { ManifestInfo } from '../components/ManifestInfo';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { id, manifestId, windowId }) => ({
-  manifestDescription: getManifestDescription(state, {
-    companionWindowId: id, manifestId, windowId,
-  }),
-  manifestLabel: getManifestTitle(state, { companionWindowId: id, manifestId, windowId }),
-  manifestMetadata: getManifestMetadata(state, { companionWindowId: id, manifestId, windowId }),
-});
+const mapStateToProps = (state, { id, manifestId, windowId }) => {
+  const langs = getCompanionWindowLanguages(state, { companionWindowId: id });
+  return {
+    manifestDescription: getManifestDescription(state, {
+      manifestId, windowId,
+    }, langs),
+    manifestLabel: getManifestTitle(state, { manifestId, windowId }, langs),
+    manifestMetadata: getManifestMetadata(state, { manifestId, windowId }, langs),
+  };
+};
 
 const enhance = compose(
   withTranslation(),

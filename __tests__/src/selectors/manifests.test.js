@@ -8,7 +8,6 @@ import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provid
 import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
 import {
   getManifestoInstance,
-  getManifestLocale,
   getDestructuredMetadata,
   getManifestStatus,
   getManifestLogo,
@@ -279,14 +278,6 @@ describe('getManifestMetadata', () => {
     const received = getDestructuredMetadata(iiifResource);
 
     expect(received).toEqual([]);
-  });
-});
-
-describe('getManifestLocale', () => {
-  it('gets the default locale for the manifest', () => {
-    const state = { manifests: { x: { json: manifestFixture002 } } };
-    const received = getManifestLocale(state, { manifestId: 'x' });
-    expect(received).toEqual('en');
   });
 });
 

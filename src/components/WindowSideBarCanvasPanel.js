@@ -30,11 +30,11 @@ export class WindowSideBarCanvasPanel extends Component {
   }
 
   /** */
-  static getUseableLabel(resource, index) {
+  static getUseableLabel(resource, index, langs) {
     return (resource
       && resource.getLabel
       && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
+      ? resource.getLabel().getValue(langs)
       : resource.id;
   }
 
@@ -60,6 +60,7 @@ export class WindowSideBarCanvasPanel extends Component {
       classes,
       collection,
       id,
+      languages,
       showMultipart,
       sequenceId,
       sequences,
@@ -116,7 +117,7 @@ export class WindowSideBarCanvasPanel extends Component {
                     classes={{ select: classes.select }}
                     className={classes.selectEmpty}
                   >
-                    { sequences.map((s, i) => <MenuItem value={s.id} key={s.id}><Typography variant="body2">{ WindowSideBarCanvasPanel.getUseableLabel(s, i) }</Typography></MenuItem>) }
+                    { sequences.map((s, i) => <MenuItem value={s.id} key={s.id}><Typography variant="body2">{ WindowSideBarCanvasPanel.getUseableLabel(s, i, languages) }</Typography></MenuItem>) }
                   </Select>
                 </FormControl>
               )
@@ -146,7 +147,7 @@ export class WindowSideBarCanvasPanel extends Component {
               endIcon={<ArrowForwardIcon />}
             >
               <Typography className={classes.collectionNavigationButton}>
-                {WindowSideBarCanvasPanel.getUseableLabel(collection)}
+                {WindowSideBarCanvasPanel.getUseableLabel(collection, 0, languages)}
               </Typography>
             </Button>
           )}
@@ -161,6 +162,7 @@ WindowSideBarCanvasPanel.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.string).isRequired,
   sequenceId: PropTypes.string,
   sequences: PropTypes.arrayOf(PropTypes.object),
   showMultipart: PropTypes.func.isRequired,

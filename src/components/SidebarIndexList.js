@@ -11,11 +11,11 @@ import SidebarIndexThumbnail from '../containers/SidebarIndexThumbnail';
 export class SidebarIndexList extends Component {
   /** @private */
   getIdAndLabelOfCanvases() {
-    const { canvases } = this.props;
+    const { canvases, languages } = this.props;
 
     return canvases.map((canvas, index) => ({
       id: canvas.id,
-      label: new MiradorCanvas(canvas).getLabel(),
+      label: new MiradorCanvas(canvas).getLabel(languages),
     }));
   }
 
@@ -25,6 +25,7 @@ export class SidebarIndexList extends Component {
       canvases,
       classes,
       containerRef,
+      languages,
       selectedCanvasIds,
       setCanvas,
       variant,
@@ -64,7 +65,11 @@ export class SidebarIndexList extends Component {
                   component="li"
                   selected={selectedCanvasIds.includes(canvas.id)}
                 >
-                  <Item label={canvas.label} canvas={canvases[canvasIndex]} />
+                  <Item
+                    label={canvas.label}
+                    canvas={canvases[canvasIndex]}
+                    languages={languages}
+                  />
                 </MenuItem>
               </ScrollTo>
             );
@@ -79,6 +84,7 @@ SidebarIndexList.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   containerRef: PropTypes.oneOf([PropTypes.func, PropTypes.object]).isRequired,
+  languages: PropTypes.arrayOf(PropTypes.string).isRequired,
   selectedCanvasIds: PropTypes.arrayOf(PropTypes.string),
   setCanvas: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['item', 'thumbnail']),

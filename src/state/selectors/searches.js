@@ -4,8 +4,8 @@ import flatten from 'lodash/flatten';
 import AnnotationList from '../../lib/AnnotationList';
 import { getCanvas, getCanvases } from './canvases';
 import { getWindow } from './getters';
-import { getManifestLocale } from './manifests';
 import { miradorSlice } from './utils';
+import { getUserLanguages } from './config';
 
 /** Get searches from state */
 const getSearches = (state) => miradorSlice(state).searches;
@@ -204,14 +204,14 @@ export const getResourceAnnotationForSearchHit = createSelector(
 export const getResourceAnnotationLabel = createSelector(
   [
     getResourceAnnotationForSearchHit,
-    getManifestLocale,
+    getUserLanguages,
   ],
-  (resourceAnnotation, locale) => {
+  (resourceAnnotation, userLangs) => {
     if (
       !(resourceAnnotation && resourceAnnotation.resource && resourceAnnotation.resource.label)
     ) return [];
 
-    return PropertyValue.parse(resourceAnnotation.resource.label, locale).getValues();
+    return PropertyValue.parse(resourceAnnotation.resource.label).getValues(userLangs);
   },
 );
 

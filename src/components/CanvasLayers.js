@@ -30,11 +30,11 @@ const reorder = (list, startIndex, endIndex) => {
 /** */
 export class CanvasLayers extends Component {
   /** */
-  static getUseableLabel(resource, index) {
+  static getUseableLabel(resource, index, langs) {
     return (resource
       && resource.getLabel
       && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
+      ? resource.getLabel().getValue(langs)
       : String(index + 1);
   }
 
@@ -117,6 +117,7 @@ export class CanvasLayers extends Component {
   renderLayer(resource, index) {
     const {
       classes,
+      languages,
       layerMetadata,
       t,
     } = this.props;
@@ -143,7 +144,7 @@ export class CanvasLayers extends Component {
             component="div"
             variant="body1"
           >
-            {CanvasLayers.getUseableLabel(resource, index)}
+            {CanvasLayers.getUseableLabel(resource, index, languages)}
             <div>
               <MiradorMenuButton aria-label={t(layer.visibility ? 'layer_hide' : 'layer_show')} edge="start" size="small" onClick={() => { this.setLayerVisibility(resource.id, !layer.visibility); }}>
                 { layer.visibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }
@@ -265,6 +266,7 @@ CanvasLayers.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   index: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
+  languages: PropTypes.arrayOf(PropTypes.string).isRequired,
   layerMetadata: PropTypes.objectOf(PropTypes.shape({
     opacity: PropTypes.number,
   })),

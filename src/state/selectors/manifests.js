@@ -3,31 +3,77 @@ import createCachedSelector from 're-reselect';
 import { PropertyValue, Utils } from 'manifesto.js';
 import getThumbnail from '../../lib/ThumbnailFactory';
 import asArray from '../../lib/asArray';
-import { getCompanionWindow } from './companionWindows';
 import { getManifest } from './getters';
-import { getConfig } from './config';
+import { getConfig, getUserLanguages } from './config';
+
+/** Modify a selector that returns one or more property values to allow overriding
+ *  the default language.
+ *
+ * By default this will use the languages in `config.userLanguages`, but this can be
+ * overridden by passing a third parameter to the selector with an alternative list
+ * of languages in descending order of preference.
+ *
+ * Supported return types of selectors are currently:
+ * - Single property value
+ * - Array of property values
+ * - Array of objects with a `value`/`values` and/or `label` attribute that is a property value
+ *
+ * Currently used to implement customizable locale selection in companion windows.
+ *
+ * @param {function} selector to wrap
+ * @param {multiple} whether all values for the given language should be retrieved from the
+ *                   property value(s)
+ */
+function createLanguageOverrideSelector(selector, multiple) {
+  return (state, params, overrideLangs) => {
+    const langs = overrideLangs ?? getUserLanguages(state);
+    const rv = selector(state, params);
+    if (rv?.getValue) {
+      // Single property value
+      return multiple ? asArray(rv?.getValues(langs)) : rv?.getValue(langs);
+    }
+    if (Array.isArray(rv)) {
+      if (rv[0]?.getValue) {
+        // Array of property values
+        return multiple
+          ? rv.flatMap(v => asArray(v.getValues(langs)))
+          : rv.map(v => v.getValue(langs));
+      }
+      if (rv[0]?.value?.getValue || rv[0]?.label?.getValue || rv[0]?.values?.getValues) {
+        // Array of { label, value?, values? } objects, with value/values and/or label
+        // being the property value
+        // NOTE: In this case the `multiple` parameter is ignored, and instead the cardinality
+        //       is decided based on the presence of the `value` or `values` key
+        return rv.map(({
+          value, values, label, ...rest
+        }) => {
+          const out = rest;
+          out.label = label?.getValue ? label.getValue(langs) : (label ?? null);
+          if (value !== undefined) {
+            out.value = value?.getValue ? value.getValue(langs) : value;
+          }
+          if (values !== undefined) {
+            out.values = values?.getValues ? values.getValues(langs) : values;
+          }
+          return out;
+        });
+      }
+    }
+    // Unknown type, don't override languages, return selected value
+    return rv;
+  };
+}
 
 /** */
-function createManifestoInstance(json, locale) {
+function createManifestoInstance(json) {
   if (!json) return undefined;
-  const manifestoObject = Utils.parseManifest(json, locale ? { locale } : undefined);
+  const manifestoObject = Utils.parseManifest(json);
   // Local patching of Manifesto so that when its a Collection, it behaves similarly
   if (typeof manifestoObject.getSequences != 'function') {
     manifestoObject.getSequences = () => [];
   }
   return manifestoObject;
 }
-
-/** */
-const getLocale = createSelector(
-  [
-    getCompanionWindow,
-    getConfig,
-  ],
-  (companionWindow = {}, config = {}) => (
-    companionWindow.locale || config.language
-  ),
-);
 
 /** Convenience selector to get a manifest (or placeholder) */
 export const getManifestStatus = createSelector(
@@ -44,30 +90,22 @@ export const getManifestError = createSelector(
 /** Instantiate a manifesto instance */
 const getContextualManifestoInstance = createCachedSelector(
   getManifest,
-  getLocale,
-  (manifest, locale) => manifest
-    && createManifestoInstance(manifest.json, locale),
+  manifest => manifest
+    && createManifestoInstance(manifest.json),
 )(
-  (state, { companionWindowId, manifestId, windowId }) => [
+  (state, { manifestId, windowId }) => [
     manifestId,
     windowId,
-    getLocale(state, { companionWindowId }),
-  ].join(' - '), // Cache key consisting of manifestId, windowId, and locale
+  ].join(' - '), // Cache key consisting of manifestId and windowId
 );
 
 /** Instantiate a manifesto instance */
 export const getManifestoInstance = createSelector(
   getContextualManifestoInstance,
   (state, { json }) => json,
-  getLocale,
-  (manifesto, manifestJson, locale) => (
-    manifestJson && createManifestoInstance(manifestJson, locale)
+  (manifesto, manifestJson) => (
+    manifestJson && createManifestoInstance(manifestJson)
   ) || manifesto,
-);
-
-export const getManifestLocale = createSelector(
-  [getManifestoInstance],
-  manifest => manifest && manifest.options && manifest.options.locale && manifest.options.locale.replace(/-.*$/, ''),
 );
 
 /** */
@@ -97,16 +135,16 @@ export const getManifestLogo = createSelector(
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
+* @param {Array[string]} custom language preference for retrieving values out of property values
 * @return {String|null}
 */
-export const getManifestProvider = createSelector(
-  [
-    getProperty('provider'),
-    getManifestLocale,
-  ],
-  (provider, locale) => provider
-    && provider[0].label
-    && PropertyValue.parse(provider[0].label, locale).getValue(),
+export const getManifestProvider = createLanguageOverrideSelector(
+  createSelector(
+    [getProperty('provider')],
+    provider => provider
+      && provider[0].label
+      && PropertyValue.parse(provider[0].label),
+  ),
 );
 
 /**
@@ -115,21 +153,20 @@ export const getManifestProvider = createSelector(
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
-* @return {String|null}
+* @param {Array[string]} custom language preference for retrieving values out of property values
+* @return {Array[object]|null}
 */
-export const getManifestHomepage = createSelector(
-  [
-    getProperty('homepage'),
-    getManifestLocale,
-  ],
-  (homepages, locale) => homepages
-    && asArray(homepages).map(homepage => (
-      {
-        label: PropertyValue.parse(homepage.label, locale)
-          .getValue(),
-        value: homepage.id || homepage['@id'],
-      }
-    )),
+export const getManifestHomepage = createLanguageOverrideSelector(
+  createSelector(
+    [getProperty('homepage')],
+    homepages => homepages
+      && asArray(homepages).map(homepage => (
+        {
+          label: PropertyValue.parse(homepage.label),
+          value: homepage.id || homepage['@id'],
+        }
+      )),
+  ),
 );
 
 /**
@@ -138,17 +175,20 @@ export const getManifestHomepage = createSelector(
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
-* @return {String|null}
+* @param {Array[string]} custom language preference for retrieving values out of property values
+* @return {Array[object]|null}
 */
-export const getManifestRenderings = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
-    && manifest.getRenderings().map(rendering => (
-      {
-        label: rendering.getLabel().getValue(),
-        value: rendering.id,
-      }
-    )),
+export const getManifestRenderings = createLanguageOverrideSelector(
+  createSelector(
+    [getManifestoInstance],
+    manifest => manifest
+      && manifest.getRenderings().map(rendering => (
+        {
+          label: rendering.getLabel(),
+          value: rendering.id,
+        }
+      )),
+  ),
 );
 
 /**
@@ -157,22 +197,21 @@ export const getManifestRenderings = createSelector(
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
-* @return {String|null}
+* @param {Array[string]} custom language preference for retrieving values out of property values
+* @return {Array[object]|null}
 */
-export const getManifestRelatedContent = createSelector(
-  [
-    getProperty('seeAlso'),
-    getManifestLocale,
-  ],
-  (seeAlso, locale) => seeAlso
-    && asArray(seeAlso).map(related => (
-      {
-        format: related.format,
-        label: PropertyValue.parse(related.label, locale)
-          .getValue(),
-        value: related.id || related['@id'],
-      }
-    )),
+export const getManifestRelatedContent = createLanguageOverrideSelector(
+  createSelector(
+    [getProperty('seeAlso')],
+    seeAlso => seeAlso
+      && asArray(seeAlso).map(related => (
+        {
+          format: related.format,
+          label: PropertyValue.parse(related.label),
+          value: related.id || related['@id'],
+        }
+      )),
+  ),
 );
 
 /**
@@ -181,17 +220,20 @@ export const getManifestRelatedContent = createSelector(
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
-* @return {String|null}
+* @param {Array[string]} custom language preference for retrieving values out of property values
+* @return {Array[object]}
 */
-export const getRequiredStatement = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
-    && asArray(manifest.getRequiredStatement())
-      .filter(l => l.getValues().some(v => v))
-      .map(labelValuePair => ({
-        label: (labelValuePair.label && labelValuePair.label.getValue()) || null,
-        values: labelValuePair.getValues(),
-      })),
+export const getRequiredStatement = createLanguageOverrideSelector(
+  createSelector(
+    [getManifestoInstance],
+    manifest => manifest
+      && asArray(manifest.getRequiredStatement())
+        .filter(l => l.getValues().some(v => v))
+        .map(labelValuePair => ({
+          label: labelValuePair.label,
+          values: labelValuePair,
+        })),
+  ),
 );
 
 /**
@@ -200,18 +242,21 @@ export const getRequiredStatement = createSelector(
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
-* @return {String|null}
+* @param {string[]?} overrideLanguages
+* @return {Array[string]|null}
 */
-export const getRights = createSelector(
-  [
-    getProperty('rights'),
-    getProperty('license'),
-    getManifestLocale,
-  ],
-  (rights, license, locale) => {
-    const data = rights || license;
-    return asArray(PropertyValue.parse(data, locale).getValues());
-  },
+export const getRights = createLanguageOverrideSelector(
+  createSelector(
+    [
+      getProperty('rights'),
+      getProperty('license'),
+      getUserLanguages,
+    ],
+    (rights, license) => {
+      const data = rights || license;
+      return PropertyValue.parse(data);
+    },
+  ), true,
 );
 
 /**
@@ -241,12 +286,14 @@ export function getManifestThumbnail(state, props) {
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
+* @param {Array[string]} custom language preference for retrieving values out of property values
 * @return {String}
 */
-export const getManifestTitle = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
-    && manifest.getLabel().getValue(),
+export const getManifestTitle = createLanguageOverrideSelector(
+  createSelector(
+    [getManifestoInstance],
+    manifest => manifest?.getLabel(),
+  ),
 );
 
 /**
@@ -255,12 +302,15 @@ export const getManifestTitle = createSelector(
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
+* @param {Array[string]} custom language preference for retrieving values out of property values
 * @return {String}
 */
-export const getManifestDescription = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
-    && manifest.getDescription().getValue(),
+export const getManifestDescription = createLanguageOverrideSelector(
+  createSelector(
+    [getManifestoInstance],
+    manifest => manifest
+      && manifest.getDescription(),
+  ),
 );
 
 /**
@@ -277,34 +327,36 @@ export const getManifestUrl = createSelector(
 );
 
 /**
-* Return metadata in a label / value structure
-* This is a potential seam for pulling the i18n locale from
-* state and plucking out the appropriate language.
-* For now we're just getting the first.
+* Return metadata in a label / value structure.
+
 * @param {object} Manifesto IIIF Resource (e.g. canvas, manifest)
+* @param {Array[string]} Languages in descending order of preference
 * @return {Array[Object]}
 */
-export function getDestructuredMetadata(iiifResource) {
+export function getDestructuredMetadata(iiifResource, langs) {
   return (iiifResource
     && iiifResource.getMetadata().map(labelValuePair => ({
-      label: labelValuePair.getLabel(),
-      values: labelValuePair.getValues(),
+      label: labelValuePair.getLabel(langs),
+      values: labelValuePair.getValues(langs),
     }))
   );
 }
 
 /**
- * Return manifest metadata in a label / value structure
+ * Return manifest metadata in a label / value structure.
+ *
  * @param {object} state
  * @param {object} props
  * @param {string} props.manifestId
  * @param {string} props.windowId
+ * @param {string[]?} Override default language preferences
  * @return {Array[Object]}
  */
-export const getManifestMetadata = createSelector(
-  [getManifestoInstance],
-  manifest => manifest && getDestructuredMetadata(manifest),
-);
+export const getManifestMetadata = (state, { manifestId, windowId }, overrideLangs) => {
+  const langs = overrideLangs ?? getUserLanguages(state);
+  const manifest = getManifestoInstance(state, { manifestId, windowId });
+  return manifest && getDestructuredMetadata(manifest, langs);
+};
 
 /** */
 function getLocalesForStructure(item) {

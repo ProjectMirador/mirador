@@ -24,12 +24,12 @@ import ManifestInfo from '../containers/ManifestInfo';
  */
 export class CollectionDialog extends Component {
   /** */
-  static getUseableLabel(resource, index) {
+  static getUseableLabel(resource, langs) {
     return (resource
       && resource.getLabel
       && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
-      : String(index + 1);
+      ? resource.getLabel().getValue(langs)
+      : resource.id;
   }
 
   /** */
@@ -142,6 +142,7 @@ export class CollectionDialog extends Component {
       collection,
       error,
       isMultipart,
+      languages,
       manifest,
       ready,
       t,
@@ -164,7 +165,7 @@ export class CollectionDialog extends Component {
     const requiredStatement = manifest
       && asArray(manifest.getRequiredStatement()).filter(l => l.getValue()).map(labelValuePair => ({
         label: null,
-        values: labelValuePair.getValues(),
+        values: labelValuePair.getValues(languages),
       }));
 
     const collections = manifest.getCollections();
@@ -184,7 +185,7 @@ export class CollectionDialog extends Component {
             { t(isMultipart ? 'multipartCollection' : 'collection') }
           </Typography>
           <Typography variant="h3">
-            {CollectionDialog.getUseableLabel(manifest)}
+            {CollectionDialog.getUseableLabel(manifest, languages)}
           </Typography>
         </DialogTitle>
         <ScrollIndicatedDialogContent className={classes.dialogContent}>
@@ -193,7 +194,7 @@ export class CollectionDialog extends Component {
               startIcon={<ArrowBackIcon />}
               onClick={() => this.goToPreviousCollection()}
             >
-              {CollectionDialog.getUseableLabel(collection)}
+              {CollectionDialog.getUseableLabel(collection, languages)}
             </Button>
           )}
 
@@ -239,7 +240,7 @@ export class CollectionDialog extends Component {
                     onClick={() => { this.selectCollection(c); }}
                     className={classes.collectionItem}
                   >
-                    {CollectionDialog.getUseableLabel(c)}
+                    {CollectionDialog.getUseableLabel(c, languages)}
                   </MenuItem>
                 ))
               }
@@ -254,7 +255,7 @@ export class CollectionDialog extends Component {
                     onClick={() => { this.selectManifest(m); }}
                     className={classes.collectionItem}
                   >
-                    {CollectionDialog.getUseableLabel(m)}
+                    {CollectionDialog.getUseableLabel(m, languages)}
                   </MenuItem>
                 ))
               }
@@ -280,6 +281,7 @@ CollectionDialog.propTypes = {
   error: PropTypes.string,
   hideCollectionDialog: PropTypes.func.isRequired,
   isMultipart: PropTypes.bool,
+  languages: PropTypes.arrayOf(PropTypes.string).isRequired,
   manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   manifestId: PropTypes.string.isRequired,
   ready: PropTypes.bool,

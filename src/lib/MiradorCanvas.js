@@ -165,9 +165,9 @@ export default class MiradorCanvas {
   /**
    * Get the canvas label
    */
-  getLabel() {
+  getLabel(languages) {
     return this.canvas.getLabel().length > 0
-      ? this.canvas.getLabel().getValue()
+      ? this.canvas.getLabel().getValue(languages)
       : String(this.canvas.index + 1);
   }
 }

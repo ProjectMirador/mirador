@@ -10,6 +10,7 @@ import {
   getVisibleNodeIds,
   getExpandedNodeIds,
   getNodeIdToScrollTo,
+  getUserLanguages,
 } from '../state/selectors';
 import * as actions from '../state/actions';
 
@@ -18,6 +19,7 @@ import * as actions from '../state/actions';
  */
 const mapStateToProps = (state, { id, windowId }) => ({
   expandedNodeIds: getExpandedNodeIds(state, { companionWindowId: id, windowId }),
+  languages: getUserLanguages(state),
   nodeIdToScrollTo: getNodeIdToScrollTo(state, { companionWindowId: id, windowId }),
   treeStructure: getSequenceTreeStructure(state, { windowId }),
   visibleNodeIds: getVisibleNodeIds(state, { companionWindowId: id, windowId }),

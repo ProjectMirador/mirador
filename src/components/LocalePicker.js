@@ -17,11 +17,17 @@ export class LocalePicker extends Component {
     const {
       availableLocales,
       classes,
-      locale,
       setLocale,
+      userLanguages,
     } = this.props;
+    let { locale } = this.props;
 
     if (!setLocale || availableLocales.length < 2) return <></>;
+    // If `locale` is not among the available locales, it should be the first available
+    // locale that matches the language preferences from the `userLanguages` store value
+    if (availableLocales.indexOf(locale) < 0) {
+      locale = userLanguages.find(l => availableLocales.indexOf(l) >= 0) ?? availableLocales[0];
+    }
     return (
       <FormControl>
         <Select
@@ -55,6 +61,7 @@ LocalePicker.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   locale: PropTypes.string,
   setLocale: PropTypes.func,
+  userLanguages: PropTypes.arrayOf(PropTypes.string),
 };
 
 LocalePicker.defaultProps = {
@@ -62,4 +69,5 @@ LocalePicker.defaultProps = {
   classes: {},
   locale: '',
   setLocale: undefined,
+  userLanguages: [],
 };

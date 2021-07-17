@@ -5,7 +5,8 @@ import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
-  getContainerId, getManifest, getManifestoInstance, getSequenceBehaviors, getWindow,
+  getContainerId, getManifest, getManifestoInstance, getSequenceBehaviors,
+  getUserLanguages, getWindow,
 } from '../state/selectors';
 import { CollectionDialog } from '../components/CollectionDialog';
 
@@ -40,6 +41,7 @@ const mapStateToProps = (state, { windowId }) => {
     containerId: getContainerId(state),
     error: manifest && manifest.error,
     isMultipart: getSequenceBehaviors(state, { manifestId }).includes('multi-part'),
+    languages: getUserLanguages(state),
     manifest: manifest && getManifestoInstance(state, { manifestId }),
     manifestId,
     open: state.workspace.collectionDialogOn,
