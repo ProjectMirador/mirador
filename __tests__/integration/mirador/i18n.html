@@ -20,7 +20,9 @@
          transitions: window.location.port === '4488' ?  { create: () => 'none' } : {},
        },
        windows: [{
-         manifestId: `${baseUrl}/version-2/i18n.json`,
+         manifestId: window. window.location.port
+          ? `${baseUrl}/version-2/i18n.json`
+          : `${baseUrl}/__tests__/fixtures/version-2/i18n.json`,
          thumbnailNavigationPosition: 'far-bottom',
          showLocalePicker: true,
        }],
