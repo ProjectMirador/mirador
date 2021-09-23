@@ -14,11 +14,14 @@ function createWrapper(props) {
 }
 
 describe('ManifestForm', () => {
-  it('renders', () => {
+  it('renders nothing if it is not open', () => {
     const wrapper = createWrapper({ addResourcesOpen: false });
+    expect(wrapper.find('ForwardRef(TextField)[label="addManifestUrl"]').length).toBe(0);
+  });
+
+  it('renders the form fields', () => {
+    const wrapper = createWrapper({ addResourcesOpen: true });
     expect(wrapper.find('ForwardRef(TextField)[label="addManifestUrl"]').length).toBe(1);
-    wrapper.setProps({ addResourcesOpen: true });
-    expect(wrapper.find('ForwardRef(TextField)[label="addManifestUrl"] input').instance()).toEqual(document.activeElement);
     expect(wrapper.find('button[type="submit"]').length).toBe(1);
   });
 

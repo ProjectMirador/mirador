@@ -98,6 +98,12 @@ export class IIIFThumbnail extends Component {
       styleProps.height = maxHeight;
     } else if (!thumbHeight && thumbWidth) {
       styleProps.width = maxWidth;
+    } else {
+      // The thumbnail wasn't retrieved via an Image API service,
+      // and its dimensions are not specified in the JSON-LD
+      // (note that this may result in a blurry image)
+      styleProps.width = maxWidth;
+      styleProps.height = maxHeight;
     }
 
     return {
@@ -109,12 +115,12 @@ export class IIIFThumbnail extends Component {
   /** */
   image() {
     const {
-      thumbnail, resource, maxHeight, maxWidth,
+      thumbnail, resource, maxHeight, maxWidth, thumbnailsConfig,
     } = this.props;
 
     if (thumbnail) return thumbnail;
 
-    const image = getThumbnail(resource, { maxHeight, maxWidth });
+    const image = getThumbnail(resource, { ...thumbnailsConfig, maxHeight, maxWidth });
 
     if (image && image.url) return image;
 
@@ -183,6 +189,7 @@ IIIFThumbnail.propTypes = {
     url: PropTypes.string.isRequired,
     width: PropTypes.number,
   }),
+  thumbnailsConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   variant: PropTypes.oneOf(['inside', 'outside']),
 };
 
@@ -197,5 +204,6 @@ IIIFThumbnail.defaultProps = {
   maxWidth: null,
   style: {},
   thumbnail: null,
+  thumbnailsConfig: {},
   variant: null,
 };

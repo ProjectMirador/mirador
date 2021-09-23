@@ -11,11 +11,15 @@ import nl from './locales/nl/translation.json';
 import ptBr from './locales/ptBr/translation.json';
 import it from './locales/it/translation.json';
 import sr from './locales/sr/translation.json';
+import sv from './locales/sv/translation.json';
 import lt from './locales/lt/translation.json';
 import vi from './locales/vi/translation.json';
+import nbNo from './locales/nbNo/translation.json';
 
-export default () => {
-  // Load translations for each language
+/**
+ * Load translations for each language
+ */
+function createI18nInstance() {
   const resources = {
     ar,
     de,
@@ -24,9 +28,11 @@ export default () => {
     it,
     ja,
     lt,
+    'nb-NO': nbNo,
     nl,
     'pt-BR': ptBr,
     sr,
+    sv,
     vi,
     'zh-CN': zhCn,
     'zh-TW': zhTw,
@@ -43,4 +49,6 @@ export default () => {
   });
 
   return instance;
-};
+}
+
+export default createI18nInstance;

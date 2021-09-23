@@ -17,8 +17,5 @@
     "<rootDir>/**/__tests__/**/*.{js,jsx}",
     "<rootDir>/src/**/?(*.)(spec|test|unit).{js,jsx}"
   ],
-  "transformIgnorePatterns": [
-    "<rootDir>/node_modules/(?!manifesto.js)"
-  ],
   "preset": "jest-puppeteer"
 }

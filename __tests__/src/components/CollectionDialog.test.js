@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import { CollectionDialog } from '../../../src/components/CollectionDialog';
 import collection from '../../fixtures/version-2/collection.json';
 

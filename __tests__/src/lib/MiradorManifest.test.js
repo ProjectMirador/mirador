@@ -1,4 +1,4 @@
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import MiradorManifest from '../../../src/lib/MiradorManifest';
 
 /** */

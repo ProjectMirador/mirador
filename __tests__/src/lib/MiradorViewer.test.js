@@ -1,4 +1,5 @@
 import ReactDOM from 'react-dom';
+import { shallow } from 'enzyme';
 import MiradorViewer from '../../../src/lib/MiradorViewer';
 
 jest.unmock('react-i18next');
@@ -10,7 +11,7 @@ describe('MiradorViewer', () => {
   beforeAll(() => {
     ReactDOM.render = jest.fn();
     ReactDOM.unmountComponentAtNode = jest.fn();
-    instance = new MiradorViewer({});
+    instance = new MiradorViewer({ id: 'mirador' });
   });
   describe('constructor', () => {
     it('returns viewer store', () => {
@@ -104,6 +105,15 @@ describe('MiradorViewer', () => {
       }));
     });
   });
+
+  describe('render', () => {
+    it('passes props through to the App component', () => {
+      const rendered = shallow(instance.render({ some: 'prop' }));
+      expect(rendered.find('App').length).toBe(1);
+      expect(rendered.find('App').prop('some')).toBe('prop');
+    });
+  });
+
   describe('unmount', () => {
     it('unmounts via ReactDOM', () => {
       instance.unmount();

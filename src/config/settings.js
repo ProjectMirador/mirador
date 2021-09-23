@@ -4,7 +4,7 @@ export default {
   state: {
     // slice: 'mirador' // Configure the top-level slice of state for mirador selectors
   },
-  canvasNavigation: { // Set the hight and width of canvas thumbnails in the  CanvasNavigation companion window
+  canvasNavigation: { // Set the height and width of canvas thumbnails in the  CanvasNavigation companion window
     height: 50,
     width: 50,
   },
@@ -224,12 +224,14 @@ export default {
     ja: '日本語',
     lt: 'Lietuvių',
     nl: 'Nederlands',
+    'nb-NO': 'Norwegian Bokmål',
     'pt-BR': 'Português do Brasil',
-	  vi:'Tiếng Việt',
+    vi:'Tiếng Việt',
     'zh-CN': '中文(简体)',
     'zh-TW': '中文(繁體)',
     it: "Italiano",
     sr: 'Српски',
+    sv: 'Svenska'
   },
   annotations: {
     htmlSanitizationRuleSet: 'iiif', // See src/lib/htmlRules.js for acceptable values
@@ -276,7 +278,7 @@ export default {
       canvas: true,
       annotations: true,
       search: true,
-      layers: false,
+      layers: true,
     },
     views: [
       { key: 'single', behaviors: ['individuals'] },
@@ -284,6 +286,10 @@ export default {
       { key: 'scroll', behaviors: ['continuous'] },
       { key: 'gallery' },
     ],
+    elastic: {
+      height: 400,
+      width: 480
+    }
   },
   windows: [ // Array of windows to be open when mirador initializes (each object should at least provide a manifestId key with the value of the IIIF presentation manifest to load)
     /**
@@ -297,6 +303,9 @@ export default {
     // ../lib/MiradorViewer.js `windowAction`
     */
   ],
+  thumbnails: {
+    preferredFormats: ['jpg', 'png', 'webp', 'tif'],
+  },
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     displaySettings: true, // Display the settings for this in WindowTopMenu
@@ -343,6 +352,14 @@ export default {
     viewers: true,
     windows: true,
     workspace: true,
+  },
+  audioOptions: { // Additional props passed to <audio> element
+    controls: true,
+    crossOrigin: 'anonymous',
+  },
+  videoOptions: { // Additional props passed to <audio> element
+    controls: true,
+    crossOrigin: 'anonymous',
   },
   auth: {
     serviceProfiles: [

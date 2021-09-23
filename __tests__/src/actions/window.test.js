@@ -45,7 +45,7 @@ describe('window actions', () => {
         ],
         elasticLayout: {
           height: 400,
-          width: 400,
+          width: 480,
           x: 260,
           y: 300,
         },
@@ -150,6 +150,31 @@ describe('window actions', () => {
 
       expect(action.window.companionWindowIds.length).toEqual(1);
       expect(action.companionWindows[0]).toMatchObject({ content: 'thumbnailNavigation' });
+    });
+
+    it('enables a window to override the panel being displayed', () => {
+      const options = {
+        id: 'helloworld',
+        sideBarPanel: 'canvas',
+      };
+      const mockState = {
+        companionWindows: {},
+        config: {
+          thumbnailNavigation: {},
+          window: {
+            defaultSideBarPanel: 'info',
+          },
+        },
+        workspace: {},
+      };
+      const mockDispatch = jest.fn(() => ({}));
+      const mockGetState = jest.fn(() => mockState);
+      const thunk = actions.addWindow(options);
+
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+      expect(action.window.sideBarPanel).toEqual('canvas');
     });
 
     it('pulls a provided manifest out', () => {

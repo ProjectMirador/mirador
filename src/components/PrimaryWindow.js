@@ -75,14 +75,16 @@ export class PrimaryWindow extends Component {
    * Render the component
    */
   render() {
-    const { isCollectionDialogVisible, windowId, classes } = this.props;
+    const {
+      isCollectionDialogVisible, windowId, classes, children,
+    } = this.props;
     return (
       <div className={classNames(ns('primary-window'), classes.primaryWindow)}>
         <WindowSideBar windowId={windowId} />
         <CompanionArea windowId={windowId} position="left" />
         { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
         <Suspense fallback={<div />}>
-          {this.renderViewer()}
+          {children || this.renderViewer()}
         </Suspense>
       </div>
     );
@@ -91,6 +93,7 @@ export class PrimaryWindow extends Component {
 
 PrimaryWindow.propTypes = {
   audioResources: PropTypes.arrayOf(PropTypes.object),
+  children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isCollection: PropTypes.bool,
   isCollectionDialogVisible: PropTypes.bool,
@@ -102,6 +105,7 @@ PrimaryWindow.propTypes = {
 
 PrimaryWindow.defaultProps = {
   audioResources: [],
+  children: undefined,
   isCollection: false,
   isCollectionDialogVisible: false,
   isFetching: false,
