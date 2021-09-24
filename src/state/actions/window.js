@@ -209,3 +209,11 @@ export function hideCollectionDialog(windowId) {
     windowId,
   };
 }
+
+export function shiftBookView(windowId, doShift) {
+  return {
+    type: ActionTypes.SHIFT_BOOK_VIEW,
+    windowId,
+    doShift,
+  };
+}

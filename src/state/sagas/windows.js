@@ -198,7 +198,12 @@ export function* panToFocusedWindow({ pan, windowId }) {
 export function* updateVisibleCanvases({ windowId }) {
   const { canvasId } = yield select(getWindow, { windowId });
   const visibleCanvases = yield select(getCanvasGrouping, { canvasId, windowId });
-  yield put(updateWindow(windowId, { visibleCanvases: (visibleCanvases || []).map(c => c.id) }));
+  // Fetch info responses in case a previously unseen canvas has become visible through the new view
+  yield call(fetchInfoResponses, { visibleCanvases: visibleCanvases.map(c => c.id), windowId });
+  yield put(updateWindow(windowId, {
+    canvasId: visibleCanvases[0].id,
+    visibleCanvases: (visibleCanvases || []).map(c => c.id),
+  }));
 }
 
 /** @private */
@@ -270,5 +275,6 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.RECEIVE_SEARCH, setCanvasOfFirstSearchResult),
     takeEvery(ActionTypes.SELECT_ANNOTATION, setCanvasforSelectedAnnotation),
     takeEvery(ActionTypes.FOCUS_WINDOW, panToFocusedWindow),
+    takeEvery(ActionTypes.SHIFT_BOOK_VIEW, updateVisibleCanvases),
   ]);
 }

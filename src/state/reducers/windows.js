@@ -168,6 +168,14 @@ export const windowsReducer = (state = {}, action) => {
           collectionDialogOn: false,
         },
       };
+    case ActionTypes.SHIFT_BOOK_VIEW:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          shiftBookView: action.doShift ?? false,
+        },
+      };
     default:
       return state;
   }

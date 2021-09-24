@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getAllowedWindowViewTypes, getWindowViewType } from '../state/selectors';
+import { getAllowedWindowViewTypes, getWindowConfig, getWindowViewType } from '../state/selectors';
 import { WindowViewSettings } from '../components/WindowViewSettings';
 
 /**
@@ -12,7 +12,10 @@ import { WindowViewSettings } from '../components/WindowViewSettings';
  * @memberof ManifestListItem
  * @private
  */
-const mapDispatchToProps = { setWindowViewType: actions.setWindowViewType };
+const mapDispatchToProps = (dispatch, { windowId }) => ({
+  setShiftBookView: (doShift) => dispatch(actions.shiftBookView(windowId, doShift)),
+  setWindowViewType: (viewType) => dispatch(actions.setWindowViewType(windowId, viewType)),
+});
 
 /**
  * mapStateToProps - to hook up connect
@@ -23,6 +26,7 @@ const mapStateToProps = (state, { windowId }) => (
   {
     viewTypes: getAllowedWindowViewTypes(state, { windowId }),
     windowViewType: getWindowViewType(state, { windowId }),
+    shiftBookView: getWindowConfig(state, { windowId }).shiftBookView ?? false,
   }
 );
 
