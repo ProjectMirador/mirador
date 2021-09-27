@@ -19,6 +19,7 @@ const mapStateToProps = (state, { windowId }) => {
     allowWindowSideBar: config.allowWindowSideBar,
     focused: isFocused(state, { windowId }),
     maximized: config.maximized,
+    shiftBookView: config.shiftBookView,
   };
 };
 

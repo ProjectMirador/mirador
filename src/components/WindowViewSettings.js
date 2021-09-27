@@ -8,6 +8,7 @@ import ScrollViewIcon from '@material-ui/icons/ViewColumn';
 import PropTypes from 'prop-types';
 import BookViewIcon from './icons/BookViewIcon';
 import GalleryViewIcon from './icons/GalleryViewIcon';
+import ShiftBookViewIcon from './icons/ShiftBookViewIcon';
 
 /**
  *
@@ -72,17 +73,31 @@ export class WindowViewSettings extends Component {
         <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('view')}</ListSubheader>
         { viewTypes.map(value => menuItem({ Icon: iconMap[value], value })) }
         {windowViewType === 'book' && (
-          <MenuItem>
-            <FormControlLabel
-              label={t('shiftPages')}
-              control={(
-                <Switch
-                  checked={shiftBookView}
-                  onChange={() => setShiftBookView(!shiftBookView)}
-                />
-              )}
-            />
-          </MenuItem>
+          <>
+            <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('viewOptions')}</ListSubheader>
+            <MenuItem
+              onClick={() => setShiftBookView(!shiftBookView)}
+            >
+              <FormControlLabel
+                classes={{
+                  root: shiftBookView
+                    ? classes.shiftToggleEnabled
+                    : classes.shiftToggle,
+                }}
+                label={t('shiftPages')}
+                control={(
+                  <ShiftBookViewIcon
+                    classes={{
+                      colorPrimary: classes.shiftToggleEnabledColor,
+                      fontSizeLarge: classes.shiftToggleIcon,
+                    }}
+                    color={shiftBookView ? 'primary' : undefined}
+                    fontSize="large"
+                  />
+                )}
+              />
+            </MenuItem>
+          </>
         )}
       </>
     );

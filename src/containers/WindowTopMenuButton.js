@@ -10,6 +10,9 @@ import { WindowTopMenuButton } from '../components/WindowTopMenuButton';
  * @returns {{ctrlBtn: {margin: (number|string)}}}
  */
 const styles = theme => ({
+  badge: {
+    backgroundColor: theme.palette.notification.main,
+  },
   ctrlBtnSelected: {
     backgroundColor: theme.palette.action.selected,
   },

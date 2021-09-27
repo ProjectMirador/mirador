@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import WindowTopMenu from '../containers/WindowTopMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import WindowOptionsIcon from './icons/WindowOptionsIcon';
+import { Badge } from '@material-ui/core';
 
 /**
  */
@@ -42,7 +43,7 @@ export class WindowTopMenuButton extends Component {
    * @return
    */
   render() {
-    const { classes, t, windowId } = this.props;
+    const { classes, shiftBookView, t, windowId } = this.props;
     const { anchorEl } = this.state;
 
     return (
@@ -54,7 +55,9 @@ export class WindowTopMenuButton extends Component {
           className={anchorEl ? classes.ctrlBtnSelected : null}
           onClick={this.handleMenuClick}
         >
-          <WindowOptionsIcon />
+          <Badge classes={{ badge: classes.badge }} invisible={!shiftBookView} variant="dot">
+            <WindowOptionsIcon />
+          </Badge>
         </MiradorMenuButton>
         <WindowTopMenu
           windowId={windowId}
@@ -68,10 +71,12 @@ export class WindowTopMenuButton extends Component {
 
 WindowTopMenuButton.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  shiftBookView: PropTypes.bool,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };
 
 WindowTopMenuButton.defaultProps = {
+  shiftBookView: false,
   t: key => key,
 };
