@@ -72,6 +72,8 @@ const ActionTypes = {
   REMOVE_RESOURCE: 'mirador/REMOVE_RESOURCE',
   SHOW_COLLECTION_DIALOG: 'mirador/SHOW_COLLECTION_DIALOG',
   HIDE_COLLECTION_DIALOG: 'mirador/HIDE_COLLECTION_DIALOG',
+
+  SHIFT_BOOK_VIEW: 'mirador/SHIFT_BOOK_VIEW',
 };
 
 export default ActionTypes;

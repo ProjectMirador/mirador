@@ -4,21 +4,21 @@
 export default class CanvasGroupings {
   /**
    */
-  constructor(canvases, viewType = 'single') {
+  constructor(canvases, viewType = 'single', shiftBookView = false) {
     this.canvases = canvases;
     this.viewType = viewType;
+    this.shiftBookView = shiftBookView;
     this._groupings = null; // eslint-disable-line no-underscore-dangle
   }
 
   /**
    */
   getCanvases(index) {
-    switch (this.viewType) {
-      case 'book':
-        return this.groupings()[Math.ceil(index / 2)];
-      default:
-        return this.groupings()[index];
+    if (this.viewType === 'single') {
+      return this.groupings()[index];
     }
+    const canvasId = this.canvases[index];
+    return this.groupings().find(g => g.indexOf(canvasId) >= 0);
   }
 
   /**
@@ -41,12 +41,14 @@ export default class CanvasGroupings {
         groupings.push([canvas]);
         return;
       }
-      // Odd page
-      if (i % 2 !== 0) {
+      const isOddPage = i % 2 !== 0;
+      const isEvenPage = !isOddPage;
+      if ((isOddPage && !this.shiftBookView) || (isEvenPage && this.shiftBookView)) {
+        // Odd page unshifted, or even page shifted
         groupings.push([canvas]);
       } else {
-        // Even page
-        groupings[Math.ceil(i / 2)].push(canvas);
+        // Odd page shifted, or even page unshifted
+        groupings[groupings.length - 1].push(canvas);
       }
     });
     this._groupings = groupings; // eslint-disable-line no-underscore-dangle

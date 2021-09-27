@@ -27,7 +27,11 @@ export class WindowTopBar extends Component {
     const {
       removeWindow, windowId, classes, toggleWindowSideBar, t, windowDraggable,
       maximizeWindow, maximized, minimizeWindow, focused, allowClose, allowMaximize,
+<<<<<<< HEAD
       focusWindow, allowFullscreen, allowTopMenuButton, allowWindowSideBar, sideBarOpen,
+=======
+      focusWindow, allowFullscreen, allowTopMenuButton, allowWindowSideBar, shiftBookView,
+>>>>>>> bookview-improvements
     } = this.props;
 
     return (
@@ -58,7 +62,7 @@ export class WindowTopBar extends Component {
               windowId={windowId}
             />
             {allowTopMenuButton && (
-              <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
+              <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} shiftBookView={shiftBookView} />
             )}
             <WindowTopBarPluginArea windowId={windowId} />
             <WindowTopBarPluginMenu windowId={windowId} />
@@ -104,6 +108,7 @@ WindowTopBar.propTypes = {
   minimizeWindow: PropTypes.func,
   removeWindow: PropTypes.func.isRequired,
   sideBarOpen: PropTypes.bool,
+  shiftBookView: PropTypes.bool,
   t: PropTypes.func,
   toggleWindowSideBar: PropTypes.func.isRequired,
   windowDraggable: PropTypes.bool,
@@ -122,6 +127,7 @@ WindowTopBar.defaultProps = {
   maximizeWindow: () => {},
   minimizeWindow: () => {},
   sideBarOpen: false,
+  shiftBookView: false,
   t: key => key,
   windowDraggable: true,
 };

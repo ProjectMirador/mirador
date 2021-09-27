@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import Switch from '@material-ui/core/Switch';
 import SingleIcon from '@material-ui/icons/CropOriginalSharp';
 import ScrollViewIcon from '@material-ui/icons/ViewColumn';
 import PropTypes from 'prop-types';
 import BookViewIcon from './icons/BookViewIcon';
 import GalleryViewIcon from './icons/GalleryViewIcon';
+import ShiftBookViewIcon from './icons/ShiftBookViewIcon';
 
 /**
  *
@@ -24,9 +26,9 @@ export class WindowViewSettings extends Component {
    * @private
    */
   handleChange(value) {
-    const { windowId, setWindowViewType } = this.props;
+    const { setWindowViewType } = this.props;
 
-    setWindowViewType(windowId, value);
+    setWindowViewType(value);
   }
 
   /**
@@ -36,7 +38,7 @@ export class WindowViewSettings extends Component {
    */
   render() {
     const {
-      classes, handleClose, t, windowViewType, viewTypes,
+      classes, setShiftBookView, handleClose, shiftBookView, t, windowViewType, viewTypes,
     } = this.props;
 
     const iconMap = {
@@ -70,6 +72,33 @@ export class WindowViewSettings extends Component {
       <>
         <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('view')}</ListSubheader>
         { viewTypes.map(value => menuItem({ Icon: iconMap[value], value })) }
+        {windowViewType === 'book' && (
+          <>
+            <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('viewOptions')}</ListSubheader>
+            <MenuItem
+              onClick={() => setShiftBookView(!shiftBookView)}
+            >
+              <FormControlLabel
+                classes={{
+                  root: shiftBookView
+                    ? classes.shiftToggleEnabled
+                    : classes.shiftToggle,
+                }}
+                label={t('shiftPages')}
+                control={(
+                  <ShiftBookViewIcon
+                    classes={{
+                      colorPrimary: classes.shiftToggleEnabledColor,
+                      fontSizeLarge: classes.shiftToggleIcon,
+                    }}
+                    color={shiftBookView ? 'primary' : undefined}
+                    fontSize="large"
+                  />
+                )}
+              />
+            </MenuItem>
+          </>
+        )}
       </>
     );
   }
@@ -78,14 +107,17 @@ export class WindowViewSettings extends Component {
 WindowViewSettings.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   handleClose: PropTypes.func,
+  setShiftBookView: PropTypes.func,
   setWindowViewType: PropTypes.func.isRequired,
+  shiftBookView: PropTypes.bool,
   t: PropTypes.func,
   viewTypes: PropTypes.arrayOf(PropTypes.string),
-  windowId: PropTypes.string.isRequired,
   windowViewType: PropTypes.string.isRequired,
 };
 WindowViewSettings.defaultProps = {
   handleClose: () => {},
+  setShiftBookView: () => {},
+  shiftBookView: false,
   t: key => key,
   viewTypes: [],
 };

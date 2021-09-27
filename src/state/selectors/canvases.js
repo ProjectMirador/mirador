@@ -5,7 +5,7 @@ import MiradorCanvas from '../../lib/MiradorCanvas';
 import { miradorSlice } from './utils';
 import { getWindow } from './getters';
 import { getSequence } from './sequences';
-import { getWindowViewType } from './windows';
+import { getWindowConfig, getWindowViewType } from './windows';
 
 /** */
 export const selectInfoResponses = state => miradorSlice(state).infoResponses;
@@ -74,11 +74,13 @@ export const getCanvasGroupings = createSelector(
   [
     getCanvases,
     getWindowViewType,
+    getWindowConfig,
   ],
-  (canvases, view) => (canvases
+  (canvases, view, { shiftBookView = false }) => (canvases
       && new CanvasGroupings(
         canvases,
         view,
+        shiftBookView,
       ).groupings()),
 );
 
