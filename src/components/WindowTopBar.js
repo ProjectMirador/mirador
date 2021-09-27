@@ -27,11 +27,8 @@ export class WindowTopBar extends Component {
     const {
       removeWindow, windowId, classes, toggleWindowSideBar, t, windowDraggable,
       maximizeWindow, maximized, minimizeWindow, focused, allowClose, allowMaximize,
-<<<<<<< HEAD
       focusWindow, allowFullscreen, allowTopMenuButton, allowWindowSideBar, sideBarOpen,
-=======
-      focusWindow, allowFullscreen, allowTopMenuButton, allowWindowSideBar, shiftBookView,
->>>>>>> bookview-improvements
+      shiftBookView,
     } = this.props;
 
     return (
