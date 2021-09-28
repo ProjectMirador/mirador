@@ -224,6 +224,7 @@ export default {
     ja: '日本語',
     lt: 'Lietuvių',
     nl: 'Nederlands',
+    pl: 'Polski',
     'nb-NO': 'Norwegian Bokmål',
     'pt-BR': 'Português do Brasil',
     vi:'Tiếng Việt',
