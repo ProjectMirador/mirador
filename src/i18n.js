@@ -8,6 +8,7 @@ import zhTw from './locales/zhTw/translation.json';
 import fr from './locales/fr/translation.json';
 import ja from './locales/ja/translation.json';
 import nl from './locales/nl/translation.json';
+import pl from './locales/pl/translation.json';
 import ptBr from './locales/ptBr/translation.json';
 import it from './locales/it/translation.json';
 import sr from './locales/sr/translation.json';
@@ -30,6 +31,7 @@ function createI18nInstance() {
     lt,
     'nb-NO': nbNo,
     nl,
+    pl,
     'pt-BR': ptBr,
     sr,
     sv,
