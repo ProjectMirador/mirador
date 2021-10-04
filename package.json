@@ -1,6 +1,6 @@
 {
   "name": "@mdz/mirador",
-  "version": "3.2.0-mdz.3",
+  "version": "3.2.0-mdz.4",
   "description": "An open-source, web-based 'multi-up' viewer that supports zoom-pan-rotate functionality, ability to display/compare simple images, and images with annotations.",
   "main": "dist/cjs/src/index.js",
   "module": "dist/es/src/index.js",
@@ -24,7 +24,7 @@
     "build:watch": "webpack --watch --mode=development",
     "prepublishOnly": "npm run clean && npm run build:es && npm run build:cjs && npm run build",
     "size": "bundlewatch --config bundlewatch.config.json",
-    "start": "NODE_ENV=development webpack serve --open"
+    "start": "NODE_ENV=development webpack serve"
   },
   "license": "Apache-2.0",
   "contributors": [
