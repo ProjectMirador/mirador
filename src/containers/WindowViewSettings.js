@@ -42,19 +42,14 @@ const styles = theme => ({
     borderBottom: `2px solid ${theme.palette.secondary.main}`,
     color: theme.palette.secondary.main,
   },
-  // FIXME: Yuck, isn't there a good way to compose these with MUI4? :-(
   shiftToggle: {
-    padding: '0 1rem',
-  },
-  shiftToggleEnabled: {
-    color: theme.palette.notification.main,
-    padding: '0 1rem',
-  },
-  shiftToggleEnabledColor: {
-    color: theme.palette.notification.main,
+    flexDirection: 'column',
+    whiteSpace: 'break-spaces',
+    marginLeft: '16px',
   },
   shiftToggleIcon: {
-    width: '6rem'
+    height: '18px',
+    width: 'auto',
   }
 });
 

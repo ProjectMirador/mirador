@@ -11,7 +11,7 @@ import { WindowTopMenuButton } from '../components/WindowTopMenuButton';
  */
 const styles = theme => ({
   badge: {
-    backgroundColor: theme.palette.notification.main,
+    backgroundColor: theme.palette.secondary.main,
   },
   ctrlBtnSelected: {
     backgroundColor: theme.palette.action.selected,

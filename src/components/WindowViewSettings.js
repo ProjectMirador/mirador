@@ -80,18 +80,16 @@ export class WindowViewSettings extends Component {
             >
               <FormControlLabel
                 classes={{
-                  root: shiftBookView
-                    ? classes.shiftToggleEnabled
-                    : classes.shiftToggle,
+                  label: shiftBookView ? classes.selectedLabel : classes.label,
+                  root: classes.shiftToggle,
                 }}
                 label={t('shiftPages')}
                 control={(
                   <ShiftBookViewIcon
                     classes={{
-                      colorPrimary: classes.shiftToggleEnabledColor,
                       fontSizeLarge: classes.shiftToggleIcon,
                     }}
-                    color={shiftBookView ? 'primary' : undefined}
+                    color={shiftBookView ? 'secondary' : undefined}
                     fontSize="large"
                   />
                 )}
