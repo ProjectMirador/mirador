@@ -1,6 +1,6 @@
 {
   "name": "@mdz/mirador",
-  "version": "3.2.0-mdz.5",
+  "version": "3.2.0-mdz.6",
   "description": "An open-source, web-based 'multi-up' viewer that supports zoom-pan-rotate functionality, ability to display/compare simple images, and images with annotations.",
   "main": "dist/cjs/src/index.js",
   "module": "dist/es/src/index.js",
