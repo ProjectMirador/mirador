@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getWindowConfig, isFocused } from '../state/selectors';
+import { getWindowConfig, getWindowViewType, isFocused } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';
 
 /** mapStateToProps */
@@ -20,7 +20,7 @@ const mapStateToProps = (state, { windowId }) => {
     focused: isFocused(state, { windowId }),
     maximized: config.maximized,
     shiftBookView: config.shiftBookView,
-    viewType: config.view,
+    viewType: getWindowViewType(state, { windowId }),
   };
 };
 
