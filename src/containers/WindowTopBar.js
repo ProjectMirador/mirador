@@ -21,6 +21,7 @@ const mapStateToProps = (state, { windowId }) => {
     maximized: config.maximized,
     sideBarOpen: (getWindow(state, { windowId }) || {}).sideBarOpen,
     shiftBookView: config.shiftBookView,
+    viewType: config.view,
   };
 };
 
