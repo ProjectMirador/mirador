@@ -43,7 +43,7 @@ export class WindowTopMenuButton extends Component {
    * @return
    */
   render() {
-    const { classes, shiftBookView, t, windowId } = this.props;
+    const { classes, viewIsModified, t, windowId } = this.props;
     const { anchorEl } = this.state;
 
     return (
@@ -55,7 +55,7 @@ export class WindowTopMenuButton extends Component {
           className={anchorEl ? classes.ctrlBtnSelected : null}
           onClick={this.handleMenuClick}
         >
-          <Badge classes={{ badge: classes.badge }} invisible={!shiftBookView} variant="dot">
+          <Badge classes={{ badge: classes.badge }} invisible={!viewIsModified} variant="dot">
             <WindowOptionsIcon />
           </Badge>
         </MiradorMenuButton>
@@ -71,7 +71,7 @@ export class WindowTopMenuButton extends Component {
 
 WindowTopMenuButton.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  shiftBookView: PropTypes.bool,
+  viewIsModified: PropTypes.bool,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };

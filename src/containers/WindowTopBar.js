@@ -20,6 +20,7 @@ const mapStateToProps = (state, { windowId }) => {
     focused: isFocused(state, { windowId }),
     maximized: config.maximized,
     shiftBookView: config.shiftBookView,
+    viewType: config.view,
   };
 };
 
