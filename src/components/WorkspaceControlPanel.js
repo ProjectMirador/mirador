@@ -4,8 +4,7 @@ import classNames from 'classnames';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import WorkspaceAddButton from '../containers/WorkspaceAddButton';
-import WorkspaceControlPanelButtons
-  from '../containers/WorkspaceControlPanelButtons';
+import WorkspaceControlPanelButtons from '../containers/WorkspaceControlPanelButtons';
 import Branding from '../containers/Branding';
 import ns from '../config/css-ns';
 
