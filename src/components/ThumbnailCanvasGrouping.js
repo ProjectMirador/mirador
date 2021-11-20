@@ -44,7 +44,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           ...style,
           boxSizing: 'content-box',
           height: (Number.isInteger(style.height)) ? style.height - SPACING : null,
-          left: style.left + SPACING,
+          left: (Number.isInteger(style.left)) ? style.left + SPACING : null,
           top: style.top + SPACING,
           width: (Number.isInteger(style.width)) ? style.width - SPACING : null,
         }}
