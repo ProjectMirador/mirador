@@ -91,6 +91,7 @@
     "mosaicDescription": "Move and size windows in relation to each other, within the visible frame.",
     "moveCompanionWindowToBottom": "Move to bottom",
     "moveCompanionWindowToRight": "Move to right",
+    "multipartCollection": "Multipart Collection",
     "nextCanvas": "Next item",
     "noItemSelected": "No item selected",
     "numItems": "{{number}} item",
