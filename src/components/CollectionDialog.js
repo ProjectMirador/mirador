@@ -13,20 +13,11 @@ import {
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBackSharp';
 import Skeleton from '@material-ui/lab/Skeleton';
+import asArray from '../lib/asArray';
 import { LabelValueMetadata } from './LabelValueMetadata';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 import ManifestInfo from '../containers/ManifestInfo';
-
-/**
- */
-function asArray(value) {
-  if (!Array.isArray(value)) {
-    return [value];
-  }
-
-  return value;
-}
 
 /**
  * a dialog providing the possibility to select the collection
@@ -243,7 +234,11 @@ export class CollectionDialog extends Component {
             <MenuList>
               {
                 collections.map(c => (
-                  <MenuItem key={c.id} onClick={() => { this.selectCollection(c); }}>
+                  <MenuItem
+                    key={c.id}
+                    onClick={() => { this.selectCollection(c); }}
+                    className={classes.collectionItem}
+                  >
                     {CollectionDialog.getUseableLabel(c)}
                   </MenuItem>
                 ))
@@ -254,7 +249,11 @@ export class CollectionDialog extends Component {
             <MenuList>
               {
                 manifest.getManifests().map(m => (
-                  <MenuItem key={m.id} onClick={() => { this.selectManifest(m); }}>
+                  <MenuItem
+                    key={m.id}
+                    onClick={() => { this.selectManifest(m); }}
+                    className={classes.collectionItem}
+                  >
                     {CollectionDialog.getUseableLabel(m)}
                   </MenuItem>
                 ))

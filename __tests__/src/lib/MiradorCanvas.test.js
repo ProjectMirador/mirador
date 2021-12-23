@@ -1,4 +1,4 @@
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import MiradorCanvas from '../../../src/lib/MiradorCanvas';
 import fixture from '../../fixtures/version-2/019.json';
 import serviceFixture from '../../fixtures/version-2/canvasService.json';

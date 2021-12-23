@@ -115,12 +115,12 @@ export class IIIFThumbnail extends Component {
   /** */
   image() {
     const {
-      thumbnail, resource, maxHeight, maxWidth,
+      thumbnail, resource, maxHeight, maxWidth, thumbnailsConfig,
     } = this.props;
 
     if (thumbnail) return thumbnail;
 
-    const image = getThumbnail(resource, { maxHeight, maxWidth });
+    const image = getThumbnail(resource, { ...thumbnailsConfig, maxHeight, maxWidth });
 
     if (image && image.url) return image;
 
@@ -189,6 +189,7 @@ IIIFThumbnail.propTypes = {
     url: PropTypes.string.isRequired,
     width: PropTypes.number,
   }),
+  thumbnailsConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   variant: PropTypes.oneOf(['inside', 'outside']),
 };
 
@@ -203,5 +204,6 @@ IIIFThumbnail.defaultProps = {
   maxWidth: null,
   style: {},
   thumbnail: null,
+  thumbnailsConfig: {},
   variant: null,
 };

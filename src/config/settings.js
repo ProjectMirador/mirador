@@ -222,14 +222,18 @@ export default {
     en: 'English',
     fr: 'Français',
     ja: '日本語',
+    kr: '한국어',
     lt: 'Lietuvių',
     nl: 'Nederlands',
+    'nb-NO': 'Norwegian Bokmål',
+    pl: 'Polski',
     'pt-BR': 'Português do Brasil',
-	  vi:'Tiếng Việt',
+    vi:'Tiếng Việt',
     'zh-CN': '中文(简体)',
     'zh-TW': '中文(繁體)',
     it: "Italiano",
     sr: 'Српски',
+    sv: 'Svenska'
   },
   annotations: {
     htmlSanitizationRuleSet: 'iiif', // See src/lib/htmlRules.js for acceptable values
@@ -284,6 +288,10 @@ export default {
       { key: 'scroll', behaviors: ['continuous'] },
       { key: 'gallery' },
     ],
+    elastic: {
+      height: 400,
+      width: 480
+    }
   },
   windows: [ // Array of windows to be open when mirador initializes (each object should at least provide a manifestId key with the value of the IIIF presentation manifest to load)
     /**
@@ -297,6 +305,9 @@ export default {
     // ../lib/MiradorViewer.js `windowAction`
     */
   ],
+  thumbnails: {
+    preferredFormats: ['jpg', 'png', 'webp', 'tif'],
+  },
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     displaySettings: true, // Display the settings for this in WindowTopMenu

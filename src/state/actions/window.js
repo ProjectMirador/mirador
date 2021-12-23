@@ -83,8 +83,7 @@ export function addWindow({ companionWindows, manifest, ...options }) {
     };
 
     const elasticLayout = {
-      height: 400,
-      width: 400,
+      ...(config.window.elastic || { height: 400, width: 480 }),
       x: 200 + (Math.floor(numWindows / 10) * 50 + (numWindows * 30) % 300),
       y: 200 + ((numWindows * 50) % 300),
     };

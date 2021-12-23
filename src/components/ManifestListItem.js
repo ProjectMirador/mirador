@@ -104,21 +104,25 @@ export class ManifestListItem extends React.Component {
               >
                 <Grid container spacing={2} className={classes.label} component="span">
                   <Grid item xs={4} sm={3} component="span">
-                    <Img
-                      className={[classes.thumbnail, ns('manifest-list-item-thumb')].join(' ')}
-                      src={[thumbnail]}
-                      alt=""
-                      height="80"
-                      unloader={(
-                        <Skeleton
-                          variant="rect"
-                          animation={false}
-                          className={classes.placeholder}
-                          height={80}
-                          width={120}
+                    { thumbnail
+                      ? (
+                        <Img
+                          className={[classes.thumbnail, ns('manifest-list-item-thumb')].join(' ')}
+                          src={[thumbnail]}
+                          alt=""
+                          height="80"
+                          unloader={(
+                            <Skeleton
+                              variant="rect"
+                              animation={false}
+                              className={classes.placeholder}
+                              height={80}
+                              width={120}
+                            />
+                          )}
                         />
-                      )}
-                    />
+                      )
+                      : <Skeleton className={classes.placeholder} variant="rect" height={80} width={120} />}
                   </Grid>
                   <Grid item xs={8} sm={9} component="span">
                     { isCollection && (
@@ -134,26 +138,29 @@ export class ManifestListItem extends React.Component {
               </ButtonBase>
             </Grid>
             <Grid item xs={8} sm={4}>
-              <Typography className={ns('manifest-list-item-provider')}>{provider || t('addedFromUrl')}</Typography>
-              <Typography>{t('numItems', { number: size })}</Typography>
+              <Typography className={ns('manifest-list-item-provider')}>{provider}</Typography>
+              <Typography>{t('numItems', { count: size, number: size })}</Typography>
             </Grid>
 
             <Grid item xs={4} sm={2}>
-              <Img
-                src={[manifestLogo]}
-                alt=""
-                role="presentation"
-                className={classes.logo}
-                unloader={(
-                  <Skeleton
-                    variant="rect"
-                    animation={false}
-                    className={classes.placeholder}
-                    height={60}
-                    width={60}
-                  />
+              { manifestLogo
+                && (
+                <Img
+                  src={[manifestLogo]}
+                  alt=""
+                  role="presentation"
+                  className={classes.logo}
+                  unloader={(
+                    <Skeleton
+                      variant="rect"
+                      animation={false}
+                      className={classes.placeholder}
+                      height={60}
+                      width={60}
+                    />
+                  )}
+                />
                 )}
-              />
             </Grid>
           </Grid>
         ) : (

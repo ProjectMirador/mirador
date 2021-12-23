@@ -31,7 +31,7 @@ export class WindowSideBarCollectionPanel extends Component {
 
     const behaviors = collection.getProperty('behavior');
 
-    if (Array.isArray(behaviors)) return collection.includes('multi-part');
+    if (Array.isArray(behaviors)) return behaviors.includes('multi-part');
 
     return behaviors === 'multi-part';
   }

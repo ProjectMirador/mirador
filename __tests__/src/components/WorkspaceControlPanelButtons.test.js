@@ -2,8 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import WorkspaceMenuButton from '../../../src/containers/WorkspaceMenuButton';
 import FullScreenButton from '../../../src/containers/FullScreenButton';
-import { WorkspaceControlPanelButtons }
-  from '../../../src/components/WorkspaceControlPanelButtons';
+import { WorkspaceControlPanelButtons } from '../../../src/components/WorkspaceControlPanelButtons';
 import { PluginHook } from '../../../src/components/PluginHook';
 
 describe('WorkspaceControlPanelButtons', () => {

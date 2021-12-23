@@ -1,4 +1,4 @@
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';

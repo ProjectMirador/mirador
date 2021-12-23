@@ -30,5 +30,6 @@
     }],
     "react/jsx-props-no-spreading": "off",
     "arrow-parens": "off",
+    "import/no-anonymous-default-export": "off"
   }
 }

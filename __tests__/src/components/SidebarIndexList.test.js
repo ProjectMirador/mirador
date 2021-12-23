@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import { SidebarIndexList } from '../../../src/components/SidebarIndexList';
 import SidebarIndexItem from '../../../src/containers/SidebarIndexItem';
 import manifestJson from '../../fixtures/version-2/019.json';

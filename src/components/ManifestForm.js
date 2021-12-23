@@ -18,22 +18,9 @@ export class ManifestForm extends Component {
       formValue: '',
     };
 
-    this.inputRef = React.createRef();
     this.formSubmit = this.formSubmit.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  /**
-   *
-   * @param {*} prevProps
-   * @param {*} prevState
-   */
-  componentDidUpdate() {
-    const { addResourcesOpen } = this.props;
-    if (this.inputRef && this.inputRef.current && addResourcesOpen) {
-      this.inputRef.current.focus();
-    }
   }
 
   /**
@@ -80,16 +67,19 @@ export class ManifestForm extends Component {
   render() {
     const { formValue } = this.state;
     const {
+      addResourcesOpen,
       classes,
       onCancel,
       t,
     } = this.props;
+    if (!addResourcesOpen) return null;
+
     return (
       <form onSubmit={this.formSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={8} md={9}>
             <TextField
-              inputRef={this.inputRef}
+              autoFocus
               fullWidth
               value={formValue}
               id="manifestURL"

@@ -1,12 +1,7 @@
 import { Utils } from 'manifesto.js';
 import MiradorManifest from './MiradorManifest';
 import MiradorCanvas from './MiradorCanvas';
-
-/** */
-function asArray(value) {
-  if (value === undefined) return [];
-  return Array.isArray(value) ? value : [value];
-}
+import asArray from './asArray';
 
 /** */
 function isLevel0ImageProfile(service) {
@@ -197,12 +192,47 @@ class ThumbnailFactory {
     const region = 'full';
     const quality = Utils.getImageQuality(service.getProfile());
     const id = service.id.replace(/\/+$/, '');
-    const format = 'jpg';
+    const format = this.getFormat(service);
     return {
       height,
       url: [id, region, size, 0, `${quality}.${format}`].join('/'),
       width,
     };
+  }
+
+  /**
+   * Figure out what format thumbnail to use by looking at the preferred formats
+   * on offer, and selecting a format shared in common with the application's
+   * preferred format list.
+   *
+   * Fall back to jpg, which is required to work for all IIIF services.
+   */
+  getFormat(service) {
+    const { preferredFormats = [] } = this.iiifOpts;
+    const servicePreferredFormats = service.getProperty('preferredFormats');
+
+    if (!servicePreferredFormats) return 'jpg';
+
+    const filteredFormats = servicePreferredFormats.filter(
+      value => preferredFormats.includes(value),
+    );
+
+    // this is a format found in common between the preferred formats of the service
+    // and the application
+    if (filteredFormats[0]) return filteredFormats[0];
+
+    // IIIF Image API guarantees jpg support; if it wasn't provided by the service
+    // but the application is fine with it, we might as well try it.
+    if (!servicePreferredFormats.includes('jpg') && preferredFormats.includes('jpg')) {
+      return 'jpg';
+    }
+
+    // there were no formats in common, and the application didn't want jpg... so
+    // just trust that the IIIF service is advertising something useful?
+    if (servicePreferredFormats[0]) return servicePreferredFormats[0];
+
+    // JPG support is guaranteed by the spec, so it's a good worst-case fallback
+    return 'jpg';
   }
 
   /**
