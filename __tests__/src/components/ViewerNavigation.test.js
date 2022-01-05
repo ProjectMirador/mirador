@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import NavigationIcon from '@material-ui/icons/PlayCircleOutlineSharp';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
 
@@ -89,8 +90,8 @@ describe('ViewerNavigation', () => {
     });
 
     it('changes the arrow styles', () => {
-      const previous = wrapper.find(MiradorMenuButton).first().children('PlayCircleOutlineSharpIcon').props();
-      const next = wrapper.find(MiradorMenuButton).last().children('PlayCircleOutlineSharpIcon').props();
+      const previous = wrapper.find(MiradorMenuButton).first().children(NavigationIcon).props();
+      const next = wrapper.find(MiradorMenuButton).last().children(NavigationIcon).props();
       expect(previous.style).toEqual({});
       expect(next.style).toEqual({ transform: 'rotate(180deg)' });
     });
@@ -112,8 +113,8 @@ describe('ViewerNavigation', () => {
     });
 
     it('changes the arrow styles', () => {
-      const previous = wrapper.find(MiradorMenuButton).first().children('PlayCircleOutlineSharpIcon').props();
-      const next = wrapper.find(MiradorMenuButton).last().children('PlayCircleOutlineSharpIcon').props();
+      const previous = wrapper.find(MiradorMenuButton).first().children(NavigationIcon).props();
+      const next = wrapper.find(MiradorMenuButton).last().children(NavigationIcon).props();
       expect(previous.style).toEqual({ transform: 'rotate(270deg)' });
       expect(next.style).toEqual({ transform: 'rotate(90deg)' });
     });
@@ -131,8 +132,8 @@ describe('ViewerNavigation', () => {
     });
 
     it('changes the arrow styles', () => {
-      const previous = wrapper.find(MiradorMenuButton).first().children('PlayCircleOutlineSharpIcon').props();
-      const next = wrapper.find(MiradorMenuButton).last().children('PlayCircleOutlineSharpIcon').props();
+      const previous = wrapper.find(MiradorMenuButton).first().children(NavigationIcon).props();
+      const next = wrapper.find(MiradorMenuButton).last().children(NavigationIcon).props();
       expect(previous.style).toEqual({ transform: 'rotate(90deg)' });
       expect(next.style).toEqual({ transform: 'rotate(270deg)' });
     });

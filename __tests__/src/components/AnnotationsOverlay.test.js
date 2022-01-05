@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import OpenSeadragon from 'openseadragon';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import { AnnotationsOverlay } from '../../../src/components/AnnotationsOverlay';
 import OpenSeadragonCanvasOverlay from '../../../src/lib/OpenSeadragonCanvasOverlay';
 import AnnotationList from '../../../src/lib/AnnotationList';

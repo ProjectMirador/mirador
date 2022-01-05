@@ -1,4 +1,4 @@
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 import fixture from '../../fixtures/version-2/019.json';
 import fragmentFixture from '../../fixtures/version-2/hamilton.json';
 import CanvasWorld from '../../../src/lib/CanvasWorld';

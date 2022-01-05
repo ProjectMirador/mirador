@@ -6,6 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { VideoViewer } from '../components/VideoViewer';
 import {
+  getConfig,
   getCurrentCanvas,
   getCurrentCanvasWorld,
   getWindowMutedStatus,
@@ -20,6 +21,7 @@ const mapStateToProps = (state, { windowId }) => ({
   currentTime: getWindowCurrentTime(state, { windowId }),
   muted: getWindowMutedStatus(state, { windowId }),
   paused: getWindowPausedStatus(state, { windowId }),
+  videoOptions: getConfig(state).videoOptions,
 });
 
 /** */

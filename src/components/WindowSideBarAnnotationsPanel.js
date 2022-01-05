@@ -10,6 +10,13 @@ import ns from '../config/css-ns';
  * WindowSideBarAnnotationsPanel ~
 */
 export class WindowSideBarAnnotationsPanel extends Component {
+  /** */
+  constructor(props) {
+    super(props);
+
+    this.containerRef = React.createRef();
+  }
+
   /**
    * Returns the rendered component
   */
@@ -23,15 +30,18 @@ export class WindowSideBarAnnotationsPanel extends Component {
         paperClassName={ns('window-sidebar-annotation-panel')}
         windowId={windowId}
         id={id}
+        ref={this.containerRef}
+        otherRef={this.containerRef}
         titleControls={<AnnotationSettings windowId={windowId} />}
       >
         <div className={classes.section}>
-          <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { number: annotationCount })}</Typography>
+          <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
         </div>
 
         {canvasIds.map((canvasId, index) => (
           <CanvasAnnotations
             canvasId={canvasId}
+            containerRef={this.containerRef}
             key={canvasId}
             index={index}
             totalSize={canvasIds.length}

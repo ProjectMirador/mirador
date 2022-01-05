@@ -44,10 +44,14 @@ export function addWindow({ companionWindows, manifest, ...options }) {
       ),
     ];
 
-    if (config.window.defaultSideBarPanel || config.window.sideBarPanel) {
+    if (options.sideBarPanel || config.window.defaultSideBarPanel || config.window.sideBarPanel) {
       defaultCompanionWindows.unshift(
         {
-          content: config.window.defaultSideBarPanel || config.window.sideBarPanel,
+          content: options.sideBarPanel
+            || (options.defaultSearchQuery && 'search')
+            || config.window.defaultSideBarPanel
+            || config.window.sideBarPanel,
+
           default: true,
           id: `cw-${uuid()}`,
           position: 'left',
@@ -70,15 +74,16 @@ export function addWindow({ companionWindows, manifest, ...options }) {
       rotation: null,
       selectedAnnotations: {},
       sideBarOpen: config.window.sideBarOpenByDefault !== undefined
-        ? config.window.sideBarOpenByDefault
-        : config.window.sideBarOpen,
-      sideBarPanel: config.window.defaultSideBarPanel || config.window.sideBarPanel,
+        ? config.window.sideBarOpenByDefault || !!options.defaultSearchQuery
+        : config.window.sideBarOpen || !!options.defaultSearchQuery,
+      sideBarPanel: options.sideBarPanel
+        || config.window.defaultSideBarPanel
+        || config.window.sideBarPanel,
       thumbnailNavigationId: cwThumbs,
     };
 
     const elasticLayout = {
-      height: 400,
-      width: 400,
+      ...(config.window.elastic || { height: 400, width: 480 }),
       x: 200 + (Math.floor(numWindows / 10) * 50 + (numWindows * 30) % 300),
       y: 200 + ((numWindows * 50) % 300),
     };

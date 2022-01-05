@@ -18,7 +18,7 @@ https://dzkimgs.l.u-tokyo.ac.jp/videos/m3/mirador.min.js
 This project is dual-licensed under the Apache License 2.0 and the MIT license. See [LICENSE](LICENSE) for details.
 
 ---
-*NOTE: This README reflects the latest version of Mirador, Mirador 3. For previous versions, please reference that release's README directly. Latest 2.x release: [v.2.7.0](https://github.com/ProjectMirador/mirador/tree/v2.7.0)*
+⚠️ This project is for Mirador 3, the latest version of Mirador. For Mirador 2, please see [ProjectMirador/mirador2](https://github.com/projectmirador/mirador2) or legacy documentation on the [Mirador 2 wiki](https://github.com/ProjectMirador/mirador-2-wiki/wiki). Please note that the community's focus is on Mirador 3, and are unlikely to accept pull requests or provide support for Mirador 2.
 # Mirador
 ![Node.js CI](https://github.com/ProjectMirador/mirador/workflows/Node.js%20CI/badge.svg) [![codecov](https://codecov.io/gh/ProjectMirador/mirador/branch/master/graph/badge.svg)](https://codecov.io/gh/ProjectMirador/mirador) 
 
@@ -105,6 +105,20 @@ $ npm run lint
 ```
 
 ## Debugging
-Useful browser extensions for debugging/development purposes
+
+### Local instance
+
+The following browser extensions are useful for debugging a local development instance of Mirador:
+
  - [React DevTools](https://github.com/facebook/react-devtools)
  - [Redux DevTools](https://github.com/zalmoxisus/redux-devtools-extension)
+
+### Test suite
+
+To debug the test suite, run:
+
+```sh
+$ npm run test:debug
+```
+
+then spin up a [nodejs inspector client](https://nodejs.org/en/docs/guides/debugging-getting-started/#inspector-clients) and set some breakpoints. See [here](https://www.digitalocean.com/community/tutorials/how-to-debug-node-js-with-the-built-in-debugger-and-chrome-devtools#step-3-%E2%80%94-debugging-node-js-with-chrome-devtools) for a guide to debugging with Chrome DevTools.

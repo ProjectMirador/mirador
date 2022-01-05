@@ -4,6 +4,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Input from '@material-ui/core/Input';
 import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/SearchSharp';
 import { SearchPanelControls } from '../../../src/components/SearchPanelControls';
 
 /**
@@ -56,7 +57,7 @@ describe('SearchPanelControls', () => {
       .dive()
       .dive();
     expect(divedInput.find(CircularProgress).length).toEqual(0);
-    expect(divedInput.find('SearchSharpIcon').length).toEqual(1);
+    expect(divedInput.find(SearchIcon).length).toEqual(1);
     expect(divedInput.find('Connect(WithPlugins(MiradorMenuButton))[type="submit"]').length).toEqual(1);
   });
 

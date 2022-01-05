@@ -1,6 +1,6 @@
 import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
@@ -85,7 +85,7 @@ export class VideoViewer extends Component {
   /** */
   render() {
     const {
-      canvas, classes, currentTime, windowId,
+      canvas, classes, currentTime, videoOptions, windowId,
     } = this.props;
 
     const videoResources = flatten(
@@ -119,7 +119,7 @@ export class VideoViewer extends Component {
         <div className={classes.flexFill}>
           { video && (
             <>
-              <video className={classes.video} key={video.id} ref={this.videoRef}>
+              <video className={classes.video} key={video.id} ref={this.videoRef} {...videoOptions}>
                 <source src={video.id} type={video.getFormat()} />
               </video>
               <AnnotationsOverlayVideo windowId={windowId} videoRef={this.videoRef} videoTarget={videoTargetTemporalfragment} key={`${windowId} ${video.id}`} />
@@ -141,6 +141,7 @@ VideoViewer.propTypes = {
   paused: PropTypes.bool,
   setCurrentTime: PropTypes.func,
   setPaused: PropTypes.func,
+  videoOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windowId: PropTypes.string.isRequired,
 };
 
@@ -151,4 +152,5 @@ VideoViewer.defaultProps = {
   paused: true,
   setCurrentTime: () => {},
   setPaused: () => {},
+  videoOptions: {},
 };

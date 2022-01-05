@@ -1,5 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
+import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { FullScreenButton } from '../../../src/components/FullScreenButton';
 
@@ -36,7 +38,7 @@ describe('FullScreenButton', () => {
     });
 
     it('has the FullscreenIcon', () => {
-      expect(menuButton.children('FullscreenSharpIcon').length).toBe(1);
+      expect(menuButton.children(FullscreenIcon).length).toBe(1);
     });
 
     it('has the proper aria-label i18n key', () => {
@@ -58,7 +60,7 @@ describe('FullScreenButton', () => {
     });
 
     it('has the FullscreenExitIcon', () => {
-      expect(menuButton.children('FullscreenExitSharpIcon').length).toBe(1);
+      expect(menuButton.children(FullscreenExitIcon).length).toBe(1);
     });
 
     it('has the proper aria-label', () => {

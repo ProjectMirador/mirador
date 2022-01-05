@@ -1,6 +1,6 @@
 import { call, select } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
-import { Utils } from 'manifesto.js/dist-esmodule/Utils';
+import { Utils } from 'manifesto.js';
 
 import ActionTypes from '../../../src/state/actions/action-types';
 import { setCanvas } from '../../../src/state/actions';
@@ -14,6 +14,7 @@ import {
   getSortedSearchAnnotationsForCompanionWindow,
   getVisibleCanvasIds, getCanvasForAnnotation,
   getCanvases, selectInfoResponses,
+  getWindowConfig,
 } from '../../../src/state/selectors';
 import { fetchManifests } from '../../../src/state/sagas/iiif';
 import {
@@ -343,6 +344,7 @@ describe('window-level sagas', () => {
 
       return expectSaga(setCanvasOfFirstSearchResult, action)
         .provide([
+          [select(getWindowConfig, { windowId }), { switchCanvasOnSearch: true }],
           [select(getSelectedContentSearchAnnotationIds, { companionWindowId, windowId }), []],
           [select(getSortedSearchAnnotationsForCompanionWindow, { companionWindowId, windowId }), [{ id: 'a' }, { id: 'b' }]],
         ])
@@ -365,7 +367,24 @@ describe('window-level sagas', () => {
 
       return expectSaga(setCanvasOfFirstSearchResult, action)
         .provide([
+          [select(getWindowConfig, { windowId }), { switchCanvasOnSearch: true }],
           [select(getSelectedContentSearchAnnotationIds, { companionWindowId, windowId }), ['y']],
+        ])
+        .run().then(({ allEffects }) => allEffects.length === 0);
+    });
+
+    it('does nothing if canvas switching for searches is disabled', () => {
+      const companionWindowId = 'x';
+      const windowId = 'y';
+      const action = {
+        companionWindowId,
+        type: ActionTypes.RECEIVE_SEARCH,
+        windowId,
+      };
+
+      return expectSaga(setCanvasOfFirstSearchResult, action)
+        .provide([
+          [select(getWindowConfig, { windowId }), { switchCanvasOnSearch: false }],
         ])
         .run().then(({ allEffects }) => allEffects.length === 0);
     });
