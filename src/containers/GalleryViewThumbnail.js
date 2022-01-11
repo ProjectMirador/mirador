@@ -2,6 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import flatten from 'lodash/flatten';
 import { withStyles } from '@material-ui/core/styles';
+import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { GalleryViewThumbnail } from '../components/GalleryViewThumbnail';
 import {
@@ -116,6 +117,7 @@ const mapDispatchToProps = (dispatch, { canvas, id, windowId }) => ({
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
+  withPlugins('GalleryViewThumbnail'),
   // further HOC go here
 );
 
