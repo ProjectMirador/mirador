@@ -19,11 +19,20 @@ export class GalleryViewThumbnail extends Component {
   constructor(props) {
     super(props);
 
+    this.myRef = React.createRef();
     this.state = { requestedAnnotations: false };
 
     this.handleSelect = this.handleSelect.bind(this);
     this.handleKey = this.handleKey.bind(this);
     this.handleIntersection = this.handleIntersection.bind(this);
+  }
+
+  // eslint-disable-next-line require-jsdoc
+  componentDidMount() {
+    const { selected } = this.props;
+    if (selected) {
+      this.myRef.current?.scrollIntoView(true);
+    }
   }
 
   /** @private */
@@ -112,6 +121,7 @@ export class GalleryViewThumbnail extends Component {
           }
           onClick={this.handleSelect}
           onKeyUp={this.handleKey}
+          ref={this.myRef}
           role="button"
           tabIndex={0}
         >
