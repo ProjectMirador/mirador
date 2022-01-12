@@ -19,6 +19,8 @@ export const configReducer = (state = initialState, action) => {
       return action.config;
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.config || {};
+    case ActionTypes.UPDATE_USER_LANGUAGES:
+      return { ...state, userLanguages: action.languages };
     default:
       return state;
   }

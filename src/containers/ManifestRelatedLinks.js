@@ -8,6 +8,7 @@ import {
   getManifestRelatedContent,
   getManifestRenderings,
   getManifestUrl,
+  getCompanionWindowLanguages,
 } from '../state/selectors';
 import { ManifestRelatedLinks } from '../components/ManifestRelatedLinks';
 
@@ -16,12 +17,15 @@ import { ManifestRelatedLinks } from '../components/ManifestRelatedLinks';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { id, windowId }) => ({
-  homepage: getManifestHomepage(state, { windowId }),
-  manifestUrl: getManifestUrl(state, { windowId }),
-  renderings: getManifestRenderings(state, { windowId }),
-  seeAlso: getManifestRelatedContent(state, { windowId }),
-});
+const mapStateToProps = (state, { id, windowId }) => {
+  const langs = getCompanionWindowLanguages(state, { companionWindowId: id });
+  return {
+    homepage: getManifestHomepage(state, { windowId }, langs),
+    manifestUrl: getManifestUrl(state, { windowId }),
+    renderings: getManifestRenderings(state, { windowId }, langs),
+    seeAlso: getManifestRelatedContent(state, { windowId }, langs),
+  };
+};
 
 const styles = {
   labelValueMetadata: {

@@ -2,7 +2,9 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getConfig, getTheme, getFullScreenEnabled } from '../state/selectors';
+import {
+  getConfig, getTheme, getFullScreenEnabled, getUserLanguages,
+} from '../state/selectors';
 import { AppProviders } from '../components/AppProviders';
 
 /**
@@ -17,6 +19,7 @@ const mapStateToProps = state => (
     language: getConfig(state).language,
     theme: getTheme(state),
     translations: getConfig(state).translations,
+    userLanguages: getUserLanguages(state),
   }
 );
 
@@ -27,6 +30,7 @@ const mapStateToProps = state => (
  */
 const mapDispatchToProps = {
   setWorkspaceFullscreen: actions.setWorkspaceFullscreen,
+  updateUserLanguages: actions.updateUserLanguages,
 };
 
 const enhance = compose(

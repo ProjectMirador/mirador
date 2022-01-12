@@ -11,12 +11,12 @@ import getThumbnail from '../lib/ThumbnailFactory';
  */
 export class IIIFThumbnail extends Component {
   /** */
-  static getUseableLabel(resource, index) {
+  static getUseableLabel(resource, langs) {
     return (resource
       && resource.getLabel
       && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
-      : String(index + 1);
+      ? resource.getLabel().getValue(langs)
+      : resource.id;
   }
 
   /**
@@ -129,9 +129,9 @@ export class IIIFThumbnail extends Component {
 
   /** */
   label() {
-    const { label, resource } = this.props;
+    const { label, resource, languages } = this.props;
 
-    return label || IIIFThumbnail.getUseableLabel(resource);
+    return label || IIIFThumbnail.getUseableLabel(resource, languages);
   }
 
   /**
@@ -180,6 +180,7 @@ IIIFThumbnail.propTypes = {
   imagePlaceholder: PropTypes.string,
   label: PropTypes.string,
   labelled: PropTypes.bool,
+  languages: PropTypes.arrayOf(PropTypes.string).isRequired,
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
   resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types

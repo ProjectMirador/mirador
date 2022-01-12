@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import groupBy from 'lodash/groupBy';
 import { miradorSlice } from './utils';
 import { getWindow, getWindows } from './getters';
+import { getUserLanguages } from './config';
 
 /** */
 export function getCompanionWindows(state) {
@@ -167,4 +168,12 @@ export const selectCompanionWindowDimensions = createSelector(
 
     return { height, width };
   },
+);
+
+export const getCompanionWindowLanguages = createSelector(
+  [getCompanionWindow, getUserLanguages],
+  ({ locale }, languages) => (
+    locale
+      ? [locale, ...languages.filter(l => l !== locale)]
+      : languages),
 );

@@ -8,6 +8,7 @@ import {
   getCompanionWindow,
   getCanvases,
   getVisibleCanvasIds,
+  getCompanionWindowLanguages,
 } from '../state/selectors';
 import { SidebarIndexList } from '../components/SidebarIndexList';
 
@@ -16,6 +17,7 @@ import { SidebarIndexList } from '../components/SidebarIndexList';
  */
 const mapStateToProps = (state, { id, windowId }) => ({
   canvases: getCanvases(state, { windowId }),
+  languages: getCompanionWindowLanguages(state, { companionWindowId: id }),
   selectedCanvasIds: getVisibleCanvasIds(state, { windowId }),
   variant: getCompanionWindow(state, { companionWindowId: id, windowId }).variant,
 });

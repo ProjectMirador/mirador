@@ -9,6 +9,7 @@ import {
   getAuthProfiles,
   selectCurrentAuthServices,
   getAccessTokens,
+  getUserLanguages,
 } from '../state/selectors';
 import { IIIFAuthentication } from '../components/IIIFAuthentication';
 
@@ -59,6 +60,8 @@ const mapStateToProps = (state, { windowId }) => {
     config => config.profile === profile && !(config.external || config.kiosk),
   );
 
+  const langs = getUserLanguages(state);
+
   return {
     accessTokenServiceId: accessTokenService && accessTokenService.id,
     authServiceId: service && service.id,
@@ -68,11 +71,9 @@ const mapStateToProps = (state, { windowId }) => {
     failureHeader: service && service.getFailureHeader(),
     header: service && service.getHeader(),
     isInteractive,
-    label: service && service.getLabel()[0].value,
-    logoutConfirm: logoutService
-      && logoutService.getLabel()[0]
-      && logoutService.getLabel()[0].value,
-    logoutServiceId: logoutService && logoutService.id,
+    label: service && service.getLabel().getValue(langs),
+    logoutConfirm: logoutService?.getValue(langs) !== undefined,
+    logoutServiceId: logoutService?.id,
     profile,
     status,
   };

@@ -4,7 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import {
-  getConfig,
+  getConfig, getUserLanguages,
 } from '../state/selectors';
 import { IIIFThumbnail } from '../components/IIIFThumbnail';
 
@@ -12,7 +12,10 @@ import { IIIFThumbnail } from '../components/IIIFThumbnail';
  * mapStateToProps - to hook up connect
  * @private
  */
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, { languages }) => ({
+  // Allow the user to provide an explicit language selection, only fall back to global language
+  // settings if not set
+  languages: languages ?? getUserLanguages(state),
   thumbnailsConfig: getConfig(state).thumbnails,
 });
 

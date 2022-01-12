@@ -6,6 +6,7 @@ import { miradorSlice } from './utils';
 import { getWindow } from './getters';
 import { getSequence } from './sequences';
 import { getWindowViewType } from './windows';
+import { getUserLanguages } from './config';
 
 /** */
 export const selectInfoResponses = state => miradorSlice(state).infoResponses;
@@ -154,13 +155,14 @@ export const getPreviousCanvasGrouping = createSelector(
 /**
 * Return canvas label, or alternatively return the given index + 1 to be displayed
 * @param {object} canvas
-* @return {String|Integer}
+* @param {string[]} languages
+* @return {PropertyValue}
 */
 export const getCanvasLabel = createSelector(
-  [getCanvas],
-  canvas => (canvas && (
+  [getCanvas, getUserLanguages],
+  (canvas, languages) => (canvas && (
     canvas.getLabel().length > 0
-      ? canvas.getLabel().getValue()
+      ? canvas.getLabel().getValue(languages)
       : String(canvas.index + 1)
   )),
 );

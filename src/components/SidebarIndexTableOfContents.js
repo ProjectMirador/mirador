@@ -59,7 +59,7 @@ export class SidebarIndexTableOfContents extends Component {
   }
 
   /** */
-  buildTreeItems(nodes, visibleNodeIds, containerRef, nodeIdToScrollTo) {
+  buildTreeItems(nodes, visibleNodeIds, containerRef, nodeIdToScrollTo, languages) {
     const { classes } = this.props;
     if (!nodes) {
       return null;
@@ -88,7 +88,7 @@ export class SidebarIndexTableOfContents extends Component {
                   [classes.visibleNode]: visibleNodeIds.indexOf(node.id) !== -1,
                 })}
               >
-                {node.label}
+                {node.data?.getLabel()?.getValue(languages)}
               </div>
             )}
             onClick={() => this.selectTreeItem(node)}
@@ -110,6 +110,7 @@ export class SidebarIndexTableOfContents extends Component {
   render() {
     const {
       classes, treeStructure, visibleNodeIds, expandedNodeIds, containerRef, nodeIdToScrollTo,
+      languages,
     } = this.props;
 
     if (!treeStructure) {
@@ -125,7 +126,9 @@ export class SidebarIndexTableOfContents extends Component {
           defaultEndIcon={<></>}
           expanded={expandedNodeIds}
         >
-          {this.buildTreeItems(treeStructure.nodes, visibleNodeIds, containerRef, nodeIdToScrollTo)}
+          {this.buildTreeItems(
+            treeStructure.nodes, visibleNodeIds, containerRef, nodeIdToScrollTo, languages,
+          )}
         </TreeView>
       </>
     );
@@ -139,6 +142,7 @@ SidebarIndexTableOfContents.propTypes = {
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   ]).isRequired,
   expandedNodeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  languages: PropTypes.arrayOf(PropTypes.string).isRequired,
   nodeIdToScrollTo: PropTypes.func.isRequired,
   setCanvas: PropTypes.func.isRequired,
   toggleNode: PropTypes.func.isRequired,

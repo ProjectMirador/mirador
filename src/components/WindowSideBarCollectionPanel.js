@@ -15,11 +15,11 @@ import IIIFThumbnail from '../containers/IIIFThumbnail';
 /** */
 export class WindowSideBarCollectionPanel extends Component {
   /** */
-  static getUseableLabel(resource, index) {
+  static getUseableLabel(resource, langs) {
     return (resource
       && resource.getLabel
       && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
+      ? resource.getLabel().getValue(langs)
       : resource.id;
   }
 
@@ -45,6 +45,7 @@ export class WindowSideBarCollectionPanel extends Component {
       collection,
       id,
       isFetching,
+      languages,
       manifestId,
       parentCollection,
       updateCompanionWindow,
@@ -70,10 +71,13 @@ export class WindowSideBarCollectionPanel extends Component {
               resource={manifest}
               maxHeight={canvasNavigation.height}
               maxWidth={canvasNavigation.width}
+              languages={languages}
             />
           </ListItemIcon>
         )}
-        <ListItemText>{WindowSideBarCollectionPanel.getUseableLabel(manifest)}</ListItemText>
+        <ListItemText>
+          {WindowSideBarCollectionPanel.getUseableLabel(manifest, languages)}
+        </ListItemText>
       </MenuItem>
     );
 
@@ -96,13 +100,16 @@ export class WindowSideBarCollectionPanel extends Component {
                     <ArrowUpwardIcon />
                   </ListItemIcon>
                   <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-                    {WindowSideBarCollectionPanel.getUseableLabel(parentCollection)}
+                    {WindowSideBarCollectionPanel.getUseableLabel(
+                      parentCollection, languages,
+                    )}
                   </ListItemText>
                 </ListItem>
               </List>
             )}
             <Typography variant="h6">
-              { collection && WindowSideBarCollectionPanel.getUseableLabel(collection)}
+              { collection
+                  && WindowSideBarCollectionPanel.getUseableLabel(collection, languages)}
               { isFetching && <Skeleton className={classes.placeholder} variant="text" />}
             </Typography>
           </>
@@ -164,6 +171,7 @@ WindowSideBarCollectionPanel.propTypes = {
   error: PropTypes.string,
   id: PropTypes.string.isRequired,
   isFetching: PropTypes.bool,
+  languages: PropTypes.arrayOf(PropTypes.string).isRequired,
   manifestId: PropTypes.string.isRequired,
   parentCollection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   ready: PropTypes.bool,

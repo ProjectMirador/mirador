@@ -26,6 +26,7 @@ export class WindowSideBarInfoPanel extends Component {
       t,
       locale,
       setLocale,
+      userLanguages,
       availableLocales,
       showLocalePicker,
     } = this.props;
@@ -43,6 +44,7 @@ export class WindowSideBarInfoPanel extends Component {
               locale={locale}
               setLocale={setLocale}
               availableLocales={availableLocales}
+              userLanguages={userLanguages}
             />
             )
         )}
@@ -88,6 +90,7 @@ WindowSideBarInfoPanel.propTypes = {
   setLocale: PropTypes.func,
   showLocalePicker: PropTypes.bool,
   t: PropTypes.func,
+  userLanguages: PropTypes.arrayOf(PropTypes.string),
   windowId: PropTypes.string.isRequired,
 };
 
@@ -100,4 +103,5 @@ WindowSideBarInfoPanel.defaultProps = {
   setLocale: undefined,
   showLocalePicker: false,
   t: key => key,
+  userLanguages: [],
 };

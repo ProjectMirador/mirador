@@ -50,6 +50,20 @@ export const getLanguagesFromConfigWithCurrent = createSelector(
   })),
 );
 
+/**
+ * Return all languages accepted by the user, with the explicitely configured language
+ * from `config.langauge` in the first position. The remaining languages are based on
+ * the user's browser settings and are used to pick the next-best language in case the
+ * there is no value for the primary language in a given IIIF Property Value.
+ *
+ * @param {object} state
+ * @returns all languages understood by the user in descending order of preference
+ */
+export const getUserLanguages = createSelector(
+  [getConfig],
+  (config) => config.userLanguages ?? [config.language].filter(l => l !== undefined),
+);
+
 export const getShowZoomControlsConfig = createSelector(
   [
     getWorkspace,

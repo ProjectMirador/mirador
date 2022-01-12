@@ -5,12 +5,12 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
-  getCompanionWindow,
-  getManifestLocale,
   getMetadataLocales,
   getVisibleCanvasIds,
   getWindowConfig,
   getWindow,
+  getCompanionWindowLanguages,
+  getUserLanguages,
 } from '../state/selectors';
 import { WindowSideBarInfoPanel } from '../components/WindowSideBarInfoPanel';
 
@@ -19,14 +19,17 @@ import { WindowSideBarInfoPanel } from '../components/WindowSideBarInfoPanel';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { id, windowId }) => ({
-  availableLocales: getMetadataLocales(state, { companionWindowId: id, windowId }),
-  canvasIds: getVisibleCanvasIds(state, { windowId }),
-  collectionPath: (getWindow(state, { windowId }) || {}).collectionPath,
-  locale: getCompanionWindow(state, { companionWindowId: id }).locale
-    || getManifestLocale(state, { windowId }),
-  showLocalePicker: getWindowConfig(state, { windowId }).showLocalePicker,
-});
+const mapStateToProps = (state, { id, windowId }) => {
+  const langs = getCompanionWindowLanguages(state, { companionWindowId: id });
+  return {
+    availableLocales: getMetadataLocales(state, { companionWindowId: id, windowId }),
+    canvasIds: getVisibleCanvasIds(state, { windowId }),
+    collectionPath: (getWindow(state, { windowId }) || {}).collectionPath,
+    locale: langs[0],
+    showLocalePicker: getWindowConfig(state, { windowId }).showLocalePicker,
+    userLanguages: getUserLanguages(state),
+  };
+};
 
 /** */
 const mapDispatchToProps = (dispatch, { windowId, id }) => ({
