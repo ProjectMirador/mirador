@@ -7,11 +7,18 @@ jest.mock('react-dom');
 jest.mock('isomorphic-unfetch', () => jest.fn(() => Promise.resolve({ json: () => ({}) })));
 
 describe('MiradorViewer', () => {
+  let container;
   let instance;
   beforeAll(() => {
+    container = document.createElement('div');
+    container.id = 'mirador';
+    document.body.appendChild(container);
     ReactDOM.render = jest.fn();
     ReactDOM.unmountComponentAtNode = jest.fn();
     instance = new MiradorViewer({ id: 'mirador' });
+  });
+  afterAll(() => {
+    document.body.removeChild(container);
   });
   describe('constructor', () => {
     it('returns viewer store', () => {
