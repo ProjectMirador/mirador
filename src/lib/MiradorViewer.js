@@ -19,10 +19,13 @@ class MiradorViewer {
     this.store = viewerConfig.store
       || createPluggableStore(this.config, this.plugins);
 
-    config.id && ReactDOM.render(
-      this.render(),
-      document.getElementById(config.id),
-    );
+    if (config.id) {
+      this.container = document.getElementById(config.id);
+      config.id && ReactDOM.render(
+        this.render(),
+        this.container,
+      );
+    }
   }
 
   /**
@@ -40,7 +43,7 @@ class MiradorViewer {
    * Cleanup method to unmount Mirador from the dom
    */
   unmount() {
-    this.config.id && ReactDOM.unmountComponentAtNode(document.getElementById(this.config.id));
+    this.container && ReactDOM.unmountComponentAtNode(this.container);
   }
 }
 
