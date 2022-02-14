@@ -33,7 +33,7 @@
   ],
   "repository": "https://github.com/ProjectMirador/mirador",
   "dependencies": {
-    "@material-ui/core": "^4.11.0",
+    "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.53",
     "@researchgate/react-intersection-observer": "^1.0.0",
