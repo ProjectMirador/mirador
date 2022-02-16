@@ -6,6 +6,8 @@ import manifestFixtureSn904cj3429 from '../../fixtures/version-2/sn904cj3429.jso
 import manifestFixturev3001 from '../../fixtures/version-3/001.json';
 import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
 import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
+import manifestFixtureRelatedObjects from '../../fixtures/version-2/related-objects.json';
+import manifestFixtureRelatedUrls from '../../fixtures/version-2/related-url.json';
 import {
   getManifestoInstance,
   getManifestLocale,
@@ -163,6 +165,36 @@ describe('getManifestHomepage', () => {
       {
         label: 'View on Digital Bodleian',
         value: 'https://digital.bodleian.ox.ac.uk/inquire/p/9cca8fdd-4a61-4429-8ac1-f648764b4d6d',
+      },
+    ]);
+  });
+
+  it('should return related urls as homepage', () => {
+    const state = { manifests: { x: { json: manifestFixtureRelatedUrls } } };
+    const received = getManifestHomepage(state, { manifestId: 'x' });
+    expect(received).toEqual([
+      {
+        label: 'http://example.com/related1',
+        value: 'http://example.com/related1',
+      },
+      {
+        label: 'http://example.com/related2',
+        value: 'http://example.com/related2',
+      },
+    ]);
+  });
+
+  it('should return related objects as homepage', () => {
+    const state = { manifests: { x: { json: manifestFixtureRelatedObjects } } };
+    const received = getManifestHomepage(state, { manifestId: 'x' });
+    expect(received).toEqual([
+      {
+        label: '1st related',
+        value: 'http://example.com/related1',
+      },
+      {
+        label: 'http://example.com/related2',
+        value: 'http://example.com/related2',
       },
     ]);
   });

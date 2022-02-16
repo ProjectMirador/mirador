@@ -120,16 +120,29 @@ export const getManifestProvider = createSelector(
 export const getManifestHomepage = createSelector(
   [
     getProperty('homepage'),
+    getProperty('related'),
     getManifestLocale,
   ],
-  (homepages, locale) => homepages
+  (homepages, relatedLinks, locale) => ((homepages
     && asArray(homepages).map(homepage => (
       {
         label: PropertyValue.parse(homepage.label, locale)
           .getValue(),
         value: homepage.id || homepage['@id'],
       }
-    )),
+    ))) || (relatedLinks
+    && asArray(relatedLinks).map(related => (
+      typeof related === 'string'
+        ? {
+          label: related,
+          value: related,
+        } : {
+          label: PropertyValue.parse(related.label, locale)
+            .getValue() || related.id || related['@id'],
+          value: related.id || related['@id'],
+        }
+    )))
+  ),
 );
 
 /**
