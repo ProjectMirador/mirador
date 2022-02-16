@@ -153,13 +153,14 @@ export const getManifestRenderings = createSelector(
 
 /**
 * Return the IIIF v2/v3 seeAlso data from a manifest or null
+*
 * @param {object} state
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
 * @return {String|null}
 */
-export const getManifestRelatedContent = createSelector(
+export const getManifestSeeAlso = createSelector(
   [
     getProperty('seeAlso'),
     getManifestLocale,
@@ -172,6 +173,48 @@ export const getManifestRelatedContent = createSelector(
           .getValue(),
         value: related.id || related['@id'],
       }
+    )),
+);
+
+/**
+* Return the IIIF v2/v3 seeAlso data from a manifest or null
+*
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {String|null}
+* @deprecated This does not actually return the content of "related" and
+* might be removed in a future version.
+* @see getManifestSeeAlso
+*/
+export const getManifestRelatedContent = getManifestSeeAlso;
+
+/**
+* Return the IIIF v2 realated links manifest or null
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {String|null}
+*/
+export const getManifestRelated = createSelector(
+  [
+    getProperty('related'),
+    getManifestLocale,
+  ],
+  (relatedLinks, locale) => relatedLinks
+    && asArray(relatedLinks).map(related => (
+      typeof related === 'string'
+        ? {
+          value: related,
+        }
+        : {
+          format: related.format,
+          label: PropertyValue.parse(related.label, locale)
+            .getValue(),
+          value: related.id || related['@id'],
+        }
     )),
 );
 
