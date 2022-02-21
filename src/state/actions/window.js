@@ -61,6 +61,7 @@ export function addWindow({ companionWindows, manifest, ...options }) {
     }
 
     const defaultOptions = {
+      autoScrollAnnotationList: true,
       canvasId: undefined,
       collectionIndex: 0,
       companionAreaOpen: true,
@@ -222,6 +223,17 @@ export function setWindowCurrentTime(windowId, currentTime) {
 }
 
 /** */
+export function setWindowSeekTo(windowId, seekToTime) {
+  return ((dispatch) => {
+    dispatch({
+      seekToTime,
+      type: ActionTypes.SET_SEEK_TO_TIME,
+      windowId,
+    });
+  });
+}
+
+/** */
 export function setWindowPaused(windowId, paused) {
   return ((dispatch) => {
     dispatch({
@@ -238,6 +250,28 @@ export function setWindowMuted(windowId, muted) {
     dispatch({
       muted: (muted === undefined) ? false : muted,
       type: ActionTypes.SET_VIDEO_MUTED,
+      windowId,
+    });
+  });
+}
+
+/** */
+export function setWindowTextTrackDisabled(windowId, disabled) {
+  return ((dispatch) => {
+    dispatch({
+      textTrackDisabled: (disabled === undefined) ? true : disabled,
+      type: ActionTypes.SET_VIDEO_TEXTTRACK_DISABLED,
+      windowId,
+    });
+  });
+}
+
+/** */
+export function setWindowHasTextTrack(windowId, hasTextTrack) {
+  return ((dispatch) => {
+    dispatch({
+      hasTextTrack: (hasTextTrack === undefined) ? false : hasTextTrack,
+      type: ActionTypes.SET_VIDEO_HAS_TEXTTRACK,
       windowId,
     });
   });

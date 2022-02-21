@@ -13,6 +13,7 @@ import {
   getConfig,
   getCurrentCanvas,
   getWindowCurrentTime,
+  getWindowSeekToTime,
   getWindowPausedStatus,
   getPresentAnnotationsOnSelectedCanvases,
   getSelectedAnnotationId,
@@ -39,6 +40,7 @@ const mapStateToProps = (state, { windowId }) => ({
     state,
     { windowId },
   ),
+  seekToTime: getWindowSeekToTime(state, { windowId }),
   selectedAnnotationId: getSelectedAnnotationId(state, { windowId }),
 });
 

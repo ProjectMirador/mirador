@@ -58,7 +58,7 @@ export class CanvasAnnotations extends Component {
   */
   render() {
     const {
-      annotations, classes, index, label, selectedAnnotationId, t, totalSize,
+      annotations, autoScroll, classes, index, label, selectedAnnotationId, t, totalSize,
       listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
       containerRef,
     } = this.props;
@@ -76,7 +76,7 @@ export class CanvasAnnotations extends Component {
                 containerRef={containerRef}
                 key={`${annotation.id}-scroll`}
                 offsetTop={96} // offset for the height of the form above
-                scrollTo={selectedAnnotationId === annotation.id}
+                scrollTo={autoScroll ? (selectedAnnotationId === annotation.id) : false}
               >
                 <MenuItem
                   button
@@ -126,6 +126,7 @@ CanvasAnnotations.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   ),
+  autoScroll: PropTypes.bool,
   classes: PropTypes.objectOf(PropTypes.string),
   containerRef: PropTypes.oneOfType([
     PropTypes.func,
@@ -146,6 +147,7 @@ CanvasAnnotations.propTypes = {
 };
 CanvasAnnotations.defaultProps = {
   annotations: [],
+  autoScroll: true,
   classes: {},
   containerRef: undefined,
   hoveredAnnotationIds: [],

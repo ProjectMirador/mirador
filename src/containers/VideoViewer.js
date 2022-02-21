@@ -12,21 +12,26 @@ import {
   getWindowMutedStatus,
   getWindowPausedStatus,
   getWindowCurrentTime,
+  getWindowTextTrackDisabledStatus,
+  getPresentAnnotationsOnSelectedCanvases,
 } from '../state/selectors';
 
 /** */
 const mapStateToProps = (state, { windowId }) => ({
+  annotations: getPresentAnnotationsOnSelectedCanvases(state, { windowId }),
   canvas: (getCurrentCanvas(state, { windowId }) || {}),
   canvasWorld: getCurrentCanvasWorld(state, { windowId }),
   currentTime: getWindowCurrentTime(state, { windowId }),
   muted: getWindowMutedStatus(state, { windowId }),
   paused: getWindowPausedStatus(state, { windowId }),
+  textTrackDisabled: getWindowTextTrackDisabledStatus(state, { windowId }),
   videoOptions: getConfig(state).videoOptions,
 });
 
 /** */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
   setCurrentTime: (...args) => dispatch(actions.setWindowCurrentTime(windowId, ...args)),
+  setHasTextTrack: (...args) => dispatch(actions.setWindowHasTextTrack(windowId, ...args)),
   setPaused: (...args) => dispatch(actions.setWindowPaused(windowId, ...args)),
 });
 
@@ -46,7 +51,7 @@ const styles = () => ({
     height: '100%',
     maxHeight: '100%',
     maxWidth: '100%',
-    'object-fit': 'scale-down',
+    'object-fit': 'contain', // 'scale-down',
     'object-position': 'left top',
     width: '100%',
   },

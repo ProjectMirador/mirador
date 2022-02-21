@@ -87,6 +87,7 @@ export class AnnotationsOverlayVideo extends Component {
     } else {
       this.temporalOffset = 0;
     }
+    this.currentTimeNearestAnnotationId = null;
 
     this.state = {
       showProgress: false,
@@ -111,13 +112,14 @@ export class AnnotationsOverlayVideo extends Component {
       hoveredAnnotationIds, selectedAnnotationId,
       highlightAllAnnotations,
       paused,
-      setCurrentTime,
-      setPaused,
+      seekToTime,
     } = this.props;
 
     this.initializeViewer();
 
+    let prevVideoPausedState;
     if (this.video) {
+      prevVideoPausedState = this.video.paused;
       if (this.video.paused && !paused) {
         const promise = this.video.play();
         if (promise !== undefined) {
@@ -125,6 +127,15 @@ export class AnnotationsOverlayVideo extends Component {
         }
       } else if (!this.video.paused && paused) {
         this.video.pause();
+      }
+      if (seekToTime !== prevProps.seekToTime) {
+        if (seekToTime !== undefined) {
+          this.seekTo(seekToTime, true);
+          return;
+        }
+      }
+      if (this.video.seeking) {
+        return;
       }
       if (currentTime !== prevProps.currentTime) {
         if (paused && this.video.paused) {
@@ -154,27 +165,58 @@ export class AnnotationsOverlayVideo extends Component {
 
     const selectedAnnotationsUpdated = selectedAnnotationId !== prevProps.selectedAnnotationId;
     if (selectedAnnotationsUpdated && selectedAnnotationId) {
-      setPaused(true);
-      this.video && this.video.pause();
+      if (this.currentTimeNearestAnnotationId
+        && this.currentTimeNearestAnnotationId === selectedAnnotationId) {
+        // go through
+      } else {
+        annotations.forEach((annotation) => {
+          annotation.resources.forEach((resource) => {
+            if (resource.id !== selectedAnnotationId) return;
+            if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
+            if (!AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) {
+              const temporalfragment = resource.temporalfragmentSelector;
+              if (temporalfragment && temporalfragment.length > 0 && this.video) {
+                const seekto = temporalfragment[0] || 0;
+                this.seekTo(seekto, !prevVideoPausedState);
+              }
+            }
+          });
+        });
+      }
+    }
+
+    // auto scroll
+    if (this.video && !this.video.paused) {
+      let minElapsedTimeAfterStart = Number.MAX_VALUE;
+      let candidateAnnotation;
       annotations.forEach((annotation) => {
         annotation.resources.forEach((resource) => {
-          if (resource.id !== selectedAnnotationId) return;
           if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-          if (!AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) {
+          if (AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) {
             const temporalfragment = resource.temporalfragmentSelector;
             if (temporalfragment && temporalfragment.length > 0 && this.video) {
               const seekto = temporalfragment[0] || 0;
-              setPaused(true);
-              this.video.pause();
-              setCurrentTime(seekto);
-              const videoTime = seekto - this.temporalOffset;
-              if (videoTime >= 0) {
-                this.video.currentTime = videoTime;
+              const elapsedTimeAfterStart = currentTime - seekto;
+              if (elapsedTimeAfterStart >= 0 && elapsedTimeAfterStart < minElapsedTimeAfterStart) {
+                minElapsedTimeAfterStart = elapsedTimeAfterStart;
+                candidateAnnotation = resource.resource;
               }
             }
           }
         });
       });
+      if (candidateAnnotation) {
+        if (candidateAnnotation.id !== prevProps.selectedAnnotationId) {
+          const {
+            selectAnnotation,
+            windowId,
+          } = this.props;
+          if (selectedAnnotationId !== candidateAnnotation.id) {
+            selectAnnotation(windowId, candidateAnnotation.id);
+          }
+          this.currentTimeNearestAnnotationId = candidateAnnotation.id;
+        }
+      }
     }
 
     const redrawAnnotations = drawAnnotations !== prevProps.drawAnnotations
@@ -230,17 +272,12 @@ export class AnnotationsOverlayVideo extends Component {
   /** */
   onVideoPlaying(event) {
     if (this.video && this.video.currentTime !== 0) {
-      const { currentTime } = this.props;
+      const { currentTime, seekToTime } = this.props;
       const currentTimeToVideoTime = currentTime - this.temporalOffset;
       const diff = Math.abs(currentTimeToVideoTime - this.video.currentTime);
       const acceptableDiff = 1; // sec.
-      if (diff > acceptableDiff) {
-        const { setCurrentTime, setPaused } = this.props;
-        // In the flow of pausing, adjusting currentTime, and resuming playback,
-        // it is necessary to handle cases where the user explicitly pauses playback.
-        setPaused(true);
-        setCurrentTime(this.video.currentTime + this.temporalOffset); // rewind time
-        setPaused(false);
+      if (diff > acceptableDiff && seekToTime === undefined) {
+        this.seekTo(this.video.currentTime + this.temporalOffset, true);
       }
     }
     this.setState({ showProgress: false });
@@ -395,6 +432,19 @@ export class AnnotationsOverlayVideo extends Component {
       }
     }
     return imageSource;
+  }
+
+  /** @private */
+  seekTo(seekTo, resume) {
+    const { setCurrentTime, setPaused } = this.props;
+    setPaused(true);
+    setCurrentTime(seekTo);
+    this.video.addEventListener('seeked', function seeked(event) {
+      event.currentTarget.removeEventListener(event.type, seeked);
+      if (resume) {
+        setPaused(false);
+      }
+    });
   }
 
   /** @private */
@@ -600,6 +650,7 @@ AnnotationsOverlayVideo.defaultProps = {
   palette: {},
   paused: true,
   searchAnnotations: [],
+  seekToTime: undefined,
   selectAnnotation: () => {},
   selectedAnnotationId: undefined,
   setCurrentTime: () => {},
@@ -621,6 +672,7 @@ AnnotationsOverlayVideo.propTypes = {
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   paused: PropTypes.bool,
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),
+  seekToTime: PropTypes.number,
   selectAnnotation: PropTypes.func,
   selectedAnnotationId: PropTypes.string,
   setCurrentTime: PropTypes.func,

@@ -69,7 +69,10 @@ export const getSearchNumTotal = createSelector(
         && result.json
         && result.json.within
     ));
-    return resultWithWithin?.json?.within?.total;
+    if (resultWithWithin && resultWithWithin.json && resultWithWithin.json.within) {
+      return resultWithWithin.json.within.total;
+    }
+    return undefined;
   },
 );
 

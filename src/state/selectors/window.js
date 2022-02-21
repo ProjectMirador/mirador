@@ -12,6 +12,17 @@ export const getWindowCurrentTime = createSelector(
   },
 );
 
+export const getWindowSeekToTime = createSelector(
+  [
+    getWindow,
+  ],
+  (window) => {
+    if (!window) return undefined;
+
+    return window.seekToTime;
+  },
+);
+
 export const getWindowPausedStatus = createSelector(
   [
     getWindow,
@@ -31,5 +42,27 @@ export const getWindowMutedStatus = createSelector(
     if (!window) return undefined;
 
     return window.muted;
+  },
+);
+
+export const getWindowTextTrackDisabledStatus = createSelector(
+  [
+    getWindow,
+  ],
+  (window) => {
+    if (!window) return undefined;
+
+    return window.textTrackDisabled;
+  },
+);
+
+export const getWindowHasTextTrack = createSelector(
+  [
+    getWindow,
+  ],
+  (window) => {
+    if (!window) return undefined;
+
+    return window.hasTextTrack;
   },
 );

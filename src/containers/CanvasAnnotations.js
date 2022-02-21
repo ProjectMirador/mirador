@@ -9,6 +9,7 @@ import {
   getCanvasLabel,
   getSelectedAnnotationId,
   getConfig,
+  getWindow,
 } from '../state/selectors';
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
 
@@ -32,6 +33,7 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
       state, { canvasId, windowId },
     ),
   ),
+  autoScroll: getWindow(state, { windowId }).autoScrollAnnotationList,
   htmlSanitizationRuleSet: getConfig(state).annotations.htmlSanitizationRuleSet,
   label: getCanvasLabel(state, {
     canvasId,

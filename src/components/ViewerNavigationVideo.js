@@ -1,3 +1,5 @@
+import ClosedCaption from '@material-ui/icons/ClosedCaption';
+import ClosedCaptionOutlined from '@material-ui/icons/ClosedCaptionOutlined';
 import React, { Component } from 'react';
 import PauseRoundedIcon from '@material-ui/icons/PauseRounded';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
@@ -19,13 +21,9 @@ export class ViewerNavigationVideo extends Component {
 
   /** */
   handleChange = (event, newValue) => {
-    const { paused, setCurrentTime, setPaused } = this.props;
+    const { paused, setCurrentTime, setSeekTo } = this.props;
     if (!paused) {
-      // In the flow of pausing, adjusting currentTime, and resuming playback,
-      // it is necessary to handle cases where the user explicitly pauses playback.
-      setPaused(true);
-      setCurrentTime(newValue);
-      setPaused(false);
+      setSeekTo(newValue);
     } else {
       setCurrentTime(newValue);
     }
@@ -39,10 +37,13 @@ export class ViewerNavigationVideo extends Component {
       classes,
       currentTime,
       duration,
+      hasTextTrack,
       muted,
       paused,
       setMuted,
       setPaused,
+      setTextTrackDisabled,
+      textTrackDisabled,
     } = this.props;
 
     const start = (duration > 3600 || duration === undefined) ? 11 : 14;
@@ -79,6 +80,15 @@ export class ViewerNavigationVideo extends Component {
         >
           { muted ? <VolumeOffIcon /> : <VolumeUpIcon /> }
         </MiradorMenuButton>
+        { hasTextTrack && (
+          <MiradorMenuButton
+            aria-label={textTrackDisabled ? 'CC show' : 'CC hide'}
+            className={textTrackDisabled ? ns('next-canvas-button') : ns('next-canvas-button')}
+            onClick={() => { setTextTrackDisabled(!textTrackDisabled); }}
+          >
+            { textTrackDisabled ? <ClosedCaptionOutlined /> : <ClosedCaption /> }
+          </MiradorMenuButton>
+        )}
         <span className={classes.divider} />
       </div>
     );
@@ -89,19 +99,27 @@ ViewerNavigationVideo.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   currentTime: PropTypes.number,
   duration: PropTypes.number,
+  hasTextTrack: PropTypes.bool,
   muted: PropTypes.bool,
   paused: PropTypes.bool,
   setCurrentTime: PropTypes.func,
   setMuted: PropTypes.func,
   setPaused: PropTypes.func,
+  setSeekTo: PropTypes.func,
+  setTextTrackDisabled: PropTypes.func,
+  textTrackDisabled: PropTypes.bool,
 };
 
 ViewerNavigationVideo.defaultProps = {
   currentTime: 0,
   duration: undefined,
+  hasTextTrack: false,
   muted: false,
   paused: true,
   setCurrentTime: () => {},
   setMuted: () => {},
   setPaused: () => {},
+  setSeekTo: () => {},
+  setTextTrackDisabled: () => {},
+  textTrackDisabled: true,
 };
