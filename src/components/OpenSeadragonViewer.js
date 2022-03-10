@@ -383,7 +383,7 @@ OpenSeadragonViewer.propTypes = {
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   drawAnnotations: PropTypes.bool,
-  infoResponses: PropTypes.arrayOf(PropTypes.object),
+  infoResponses: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   label: PropTypes.string,
   nonTiledImages: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types

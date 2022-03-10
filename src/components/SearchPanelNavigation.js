@@ -84,7 +84,7 @@ SearchPanelNavigation.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   direction: PropTypes.string.isRequired,
   numTotal: PropTypes.number,
-  searchHits: PropTypes.arrayOf(PropTypes.object),
+  searchHits: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   searchService: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
