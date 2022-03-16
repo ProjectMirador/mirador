@@ -162,7 +162,7 @@ WindowSideBarCanvasPanel.propTypes = {
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
   sequenceId: PropTypes.string,
-  sequences: PropTypes.arrayOf(PropTypes.object),
+  sequences: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   showMultipart: PropTypes.func.isRequired,
   showToc: PropTypes.bool,
   t: PropTypes.func.isRequired,

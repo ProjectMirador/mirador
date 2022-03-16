@@ -92,13 +92,13 @@ export class PrimaryWindow extends Component {
 }
 
 PrimaryWindow.propTypes = {
-  audioResources: PropTypes.arrayOf(PropTypes.object),
+  audioResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isCollection: PropTypes.bool,
   isCollectionDialogVisible: PropTypes.bool,
   isFetching: PropTypes.bool,
-  videoResources: PropTypes.arrayOf(PropTypes.object),
+  videoResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,
 };

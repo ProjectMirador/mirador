@@ -179,7 +179,10 @@ export class WorkspaceAdd extends React.Component {
 
 WorkspaceAdd.propTypes = {
   addResource: PropTypes.func,
-  catalog: PropTypes.arrayOf(PropTypes.object),
+  catalog: PropTypes.arrayOf(PropTypes.shape({
+    manifestId: PropTypes.string.isRequired,
+    provider: PropTypes.string,
+  })),
   classes: PropTypes.objectOf(PropTypes.string),
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   t: PropTypes.func,
