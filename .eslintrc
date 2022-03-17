@@ -29,6 +29,8 @@
       "natural": false
     }],
     "react/jsx-props-no-spreading": "off",
+    "react/function-component-definition": "off",
+    "default-param-last": "off",
     "arrow-parens": "off",
     "import/no-anonymous-default-export": "off",
     "max-len": ["error", {
