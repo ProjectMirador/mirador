@@ -203,8 +203,8 @@ export default class CanvasWorld {
    * lined up horizontally starting from left to right.
    */
   worldBounds() {
-    const worldWidth = Math.max(...this.canvasDimensions.map(c => c.x + c.width));
-    const worldHeight = Math.max(...this.canvasDimensions.map(c => c.y + c.height));
+    const worldWidth = Math.max(0, ...this.canvasDimensions.map(c => c.x + c.width));
+    const worldHeight = Math.max(0, ...this.canvasDimensions.map(c => c.y + c.height));
 
     return [
       0,
