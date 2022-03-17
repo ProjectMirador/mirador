@@ -10,46 +10,52 @@ const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
 
 jest.mock('openseadragon');
 
+/**
+ * Helper function to create a shallow wrapper around OpenSeadragonViewer
+ */
+function createWrapper(props) {
+  return shallow(
+    <OpenSeadragonViewer
+      classes={{}}
+      infoResponses={[{
+        id: 'a',
+        json: {
+          '@id': 'http://foo',
+          height: 200,
+          width: 100,
+        },
+      }, {
+        id: 'b',
+        json: {
+          '@id': 'http://bar',
+          height: 201,
+          width: 150,
+        },
+      }]}
+      nonTiledImages={[{
+        getProperty: () => {},
+        id: 'http://foo',
+      }]}
+      windowId="base"
+      config={{}}
+      updateViewport={jest.fn()}
+      t={k => k}
+      canvasWorld={new CanvasWorld(canvases)}
+      {...props}
+    >
+      <div className="foo" />
+      <div className="bar" />
+    </OpenSeadragonViewer>,
+  );
+}
+
 describe('OpenSeadragonViewer', () => {
   let wrapper;
   let updateViewport;
   beforeEach(() => {
     OpenSeadragon.mockClear();
-
-    updateViewport = jest.fn();
-
-    wrapper = shallow(
-      <OpenSeadragonViewer
-        classes={{}}
-        infoResponses={[{
-          id: 'a',
-          json: {
-            '@id': 'http://foo',
-            height: 200,
-            width: 100,
-          },
-        }, {
-          id: 'b',
-          json: {
-            '@id': 'http://bar',
-            height: 201,
-            width: 150,
-          },
-        }]}
-        nonTiledImages={[{
-          getProperty: () => {},
-          id: 'http://foo',
-        }]}
-        windowId="base"
-        config={{}}
-        updateViewport={updateViewport}
-        t={k => k}
-        canvasWorld={new CanvasWorld(canvases)}
-      >
-        <div className="foo" />
-        <div className="bar" />
-      </OpenSeadragonViewer>,
-    );
+    wrapper = createWrapper({});
+    updateViewport = wrapper.instance().props.updateViewport;
   });
   it('renders the component', () => {
     expect(wrapper.find('.mirador-osd-container').length).toBe(1);
@@ -70,10 +76,7 @@ describe('OpenSeadragonViewer', () => {
       expect(wrapper.instance().infoResponsesMatch([])).toBe(false);
     });
     it('with an empty array', () => {
-      wrapper.instance().viewer = {
-        close: () => {},
-      };
-      wrapper.setProps({ infoResponses: [] });
+      wrapper = createWrapper({ infoResponses: [] });
       expect(wrapper.instance().infoResponsesMatch([])).toBe(true);
     });
     it('when the @ids do match', () => {
@@ -87,7 +90,7 @@ describe('OpenSeadragonViewer', () => {
       expect(wrapper.instance().infoResponsesMatch([{ id: 'a', json: { '@id': 'http://foo-degraded' } }])).toBe(false);
     });
     it('when the id props match', () => {
-      wrapper.setProps({
+      wrapper = createWrapper({
         infoResponses: [{
           id: 'a',
           json: {
@@ -106,10 +109,7 @@ describe('OpenSeadragonViewer', () => {
       expect(wrapper.instance().nonTiledImagedMatch([])).toBe(false);
     });
     it('with an empty array', () => {
-      wrapper.instance().viewer = {
-        close: () => {},
-      };
-      wrapper.setProps({ nonTiledImages: [] });
+      wrapper = createWrapper({ nonTiledImages: [] });
       expect(wrapper.instance().nonTiledImagedMatch([])).toBe(true);
     });
     it('when the ids do match', () => {
@@ -118,21 +118,17 @@ describe('OpenSeadragonViewer', () => {
   });
 
   describe('addAllImageSources', () => {
-    it('calls addTileSource for every tileSources and then zoomsToWorld', () => {
-      wrapper.instance().viewer = {
-        close: () => {},
-      };
-      wrapper.setProps({ infoResponses: [1, 2, 3, 4] });
+    it('calls addTileSource for every tileSources and then zoomsToWorld', async () => {
+      wrapper = createWrapper({ infoResponses: [1, 2, 3, 4] });
+      wrapper.setState({ viewer: { viewport: { fitBounds: () => {} }, world: { getItemCount: () => 0 } } });
       const mockAddTileSource = jest.fn();
       wrapper.instance().addTileSource = mockAddTileSource;
-      wrapper.instance().addAllImageSources();
+      await wrapper.instance().addAllImageSources();
       expect(mockAddTileSource).toHaveBeenCalledTimes(4);
     });
-    it('calls addNonTileSource for every nonTiledImage and then zoomsToWorld', () => {
-      wrapper.instance().viewer = {
-        close: () => {},
-      };
-      wrapper.setProps({
+
+    it('calls addNonTileSource for every nonTiledImage and then zoomsToWorld', async () => {
+      wrapper = createWrapper({
         nonTiledImages: [
           { getProperty: () => 'Image' },
           { getProperty: () => 'Image' },
@@ -140,22 +136,18 @@ describe('OpenSeadragonViewer', () => {
           { getProperty: () => 'Image' },
         ],
       });
+      const instance = wrapper.instance();
       const mockAddNonTiledImage = jest.fn();
       wrapper.instance().addNonTiledImage = mockAddNonTiledImage;
-      wrapper.instance().addAllImageSources();
+      await instance.addAllImageSources();
       expect(mockAddNonTiledImage).toHaveBeenCalledTimes(4);
     });
   });
 
   describe('addTileSource', () => {
-    it('calls addTiledImage asynchronously on the OSD viewer', async () => {
-      wrapper.instance().addTileSource({}).then((event) => {
-        expect(event).toBe('event');
-      });
-    });
-    it('when a viewer is not available, returns an unresolved Promise', () => {
-      expect(wrapper.instance().addTileSource({})).toEqual(expect.any(Promise));
-    });
+    it('when a viewer is not available, returns an unresolved Promise', () => (
+      expect(wrapper.instance().addTileSource({})).rejects.toBeUndefined()
+    ));
   });
 
   describe('addNonTiledImage', () => {
@@ -189,17 +181,15 @@ describe('OpenSeadragonViewer', () => {
         layerIndexOfImageResource: i => 1 - i,
         layerOpacityOfImageResource: i => 0.5,
       };
-      wrapper.setProps({ canvasWorld });
+      wrapper = createWrapper({ canvasWorld });
       wrapper.instance().loaded = true;
-      wrapper.setState({
-        viewer: {
-          world: {
-            getItemAt: i => ({ setOpacity, source: { id: i } }),
-            getItemCount: () => 2,
-            setItemIndex,
-          },
+      wrapper.instance().state.viewer = {
+        world: {
+          getItemAt: i => ({ setOpacity, source: { id: i } }),
+          getItemCount: () => 2,
+          setItemIndex,
         },
-      });
+      };
 
       wrapper.instance().refreshTileProperties();
 
