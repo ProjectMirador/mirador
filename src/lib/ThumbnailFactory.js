@@ -309,4 +309,5 @@ function getBestThumbnail(resource, iiifOpts) {
   return new ThumbnailFactory(resource, iiifOpts).get();
 }
 
-export { getBestThumbnail as default, ThumbnailFactory };
+export { ThumbnailFactory };
+export default getBestThumbnail;
