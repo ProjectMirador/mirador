@@ -8,7 +8,7 @@ describe('Mirador Invalid API Response Handler Test', () => {
     await page.evaluate(() => {
       document.querySelector('.mirador-add-resource-button').click();
     });
-    await page.waitFor(50);
+    await page.waitForTimeout(50);
     await expect(page).toFill('#manifestURL', uri);
 
     await expect(page).toClick('#fetchBtn');
@@ -34,7 +34,7 @@ describe('Mirador Invalid API Response Handler Test', () => {
 
     await expect(page).toClick('button', { text: 'Dismiss' });
 
-    await page.waitFor(() => !document.querySelector('li[data-manifestid="http://127.0.0.1:4488/__tests__/fixtures/version-2/broken"]'));
+    await page.waitForFunction(() => !document.querySelector('li[data-manifestid="http://127.0.0.1:4488/__tests__/fixtures/version-2/broken"]'));
 
     await expect(page).not.toMatchElement(
       'p',
