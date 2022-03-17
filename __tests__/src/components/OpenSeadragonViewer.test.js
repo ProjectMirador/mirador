@@ -270,12 +270,8 @@ describe('OpenSeadragonViewer', () => {
     it('calls the OSD viewport panTo and zoomTo with the component state', () => {
       wrapper.instance().componentDidMount();
 
-      expect(panTo).toHaveBeenCalledWith(
-        { x: 1, y: 0, zoom: 0.5 }, true,
-      );
-      expect(zoomTo).toHaveBeenCalledWith(
-        0.5, { x: 1, y: 0, zoom: 0.5 }, true,
-      );
+      expect(panTo).toHaveBeenCalledWith({ x: 1, y: 0, zoom: 0.5 }, true);
+      expect(zoomTo).toHaveBeenCalledWith(0.5, { x: 1, y: 0, zoom: 0.5 }, true);
     });
 
     it('adds animation-start/finish flag for rerendering performance', () => {
@@ -330,12 +326,8 @@ describe('OpenSeadragonViewer', () => {
         },
       });
 
-      expect(panTo).toHaveBeenCalledWith(
-        expect.objectContaining({ x: 1, y: 0, zoom: 0.5 }), false,
-      );
-      expect(zoomTo).toHaveBeenCalledWith(
-        0.5, expect.objectContaining({ x: 1, y: 0, zoom: 0.5 }), false,
-      );
+      expect(panTo).toHaveBeenCalledWith(expect.objectContaining({ x: 1, y: 0, zoom: 0.5 }), false);
+      expect(zoomTo).toHaveBeenCalledWith(0.5, expect.objectContaining({ x: 1, y: 0, zoom: 0.5 }), false);
       expect(setRotation).toHaveBeenCalledWith(90);
       expect(setFlip).toHaveBeenCalledWith(true);
       expect(forceRedraw).not.toHaveBeenCalled();

@@ -25,12 +25,8 @@ describe('Mirador Invalid API Response Handler Test', () => {
   it('renders an error message when a manifest cannot be loaded (and allows it to be dismissed)', async () => {
     await fetchManifest('http://127.0.0.1:4488/__tests__/fixtures/version-2/broken');
 
-    await expect(page).toMatchElement(
-      'p', { text: 'The resource cannot be added:', timeout: 2000 },
-    );
-    await expect(page).toMatchElement(
-      'p', { text: 'http://127.0.0.1:4488/__tests__/fixtures/version-2/broken' },
-    );
+    await expect(page).toMatchElement('p', { text: 'The resource cannot be added:', timeout: 2000 });
+    await expect(page).toMatchElement('p', { text: 'http://127.0.0.1:4488/__tests__/fixtures/version-2/broken' });
 
     await expect(page).toClick('button', { text: 'Dismiss' });
 

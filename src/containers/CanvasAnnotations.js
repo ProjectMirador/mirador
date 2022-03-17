@@ -28,9 +28,7 @@ function getIdAndContentOfResources(resources) {
 /** For connect */
 const mapStateToProps = (state, { canvasId, windowId }) => ({
   annotations: getIdAndContentOfResources(
-    getAnnotationResourcesByMotivationForCanvas(
-      state, { canvasId, windowId },
-    ),
+    getAnnotationResourcesByMotivationForCanvas(state, { canvasId, windowId }),
   ),
   htmlSanitizationRuleSet: getConfig(state).annotations.htmlSanitizationRuleSet,
   label: getCanvasLabel(state, {

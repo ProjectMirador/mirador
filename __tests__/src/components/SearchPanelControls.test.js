@@ -36,9 +36,7 @@ describe('SearchPanelControls', () => {
     const value = 'somestring';
     wrapper.find(Autocomplete).prop('onChange')({}, { match: value }, {});
     expect(wrapper.state().search).toEqual(value);
-    expect(fetchSearch).toHaveBeenCalledWith(
-      'window', 'cw', 'http://example.com/search?q=somestring', 'somestring',
-    );
+    expect(fetchSearch).toHaveBeenCalledWith('window', 'cw', 'http://example.com/search?q=somestring', 'somestring');
   });
   it('renders a text input through the renderInput prop', () => {
     const wrapper = createWrapper();

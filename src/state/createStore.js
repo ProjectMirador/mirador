@@ -27,9 +27,7 @@ function configureStore(pluginReducers, pluginSagas = []) {
   const store = createStore(
     rootReducer,
     composeWithDevTools(
-      applyMiddleware(
-        thunkMiddleware, sagaMiddleware,
-      ),
+      applyMiddleware(thunkMiddleware, sagaMiddleware),
     ),
   );
 
