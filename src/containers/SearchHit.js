@@ -23,7 +23,14 @@ const mapStateToProps = (state, {
   annotationId, hit = { annotations: [] }, companionWindowId, windowId,
 }) => {
   const realAnnoId = annotationId || hit.annotations[0];
-  const hitAnnotation = getResourceAnnotationForSearchHit(state, { annotationUri: realAnnoId, companionWindowId, windowId });
+  const hitAnnotation = getResourceAnnotationForSearchHit(
+    state,
+    {
+      annotationUri: realAnnoId,
+      companionWindowId,
+      windowId,
+    },
+  );
   const annotationLabel = getResourceAnnotationLabel(state, { annotationUri: realAnnoId, companionWindowId, windowId });
   const selectedCanvasIds = getVisibleCanvasIds(state, { windowId });
 

@@ -154,7 +154,14 @@ export function* setCurrentAnnotationsOnCurrentCanvas({
   const companionWindowIds = Object.keys(searches || {});
   if (companionWindowIds.length === 0) return;
 
-  const annotationBySearch = yield select(getAnnotationsBySearch, { canvasIds: visibleCanvases, companionWindowIds, windowId });
+  const annotationBySearch = yield select(
+    getAnnotationsBySearch,
+    {
+      canvasIds: visibleCanvases,
+      companionWindowIds,
+      windowId,
+    },
+  );
 
   yield all(
     Object.keys(annotationBySearch)

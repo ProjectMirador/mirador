@@ -63,7 +63,12 @@ function* fetchIiifResourceWithAuth(url, iiifResource, options, { degraded, fail
     }
   }
 
-  const { error, json, response } = yield call(fetchIiifResource, url, urlOptions, { failure: arg => arg, success: arg => arg });
+  const { error, json, response } = yield call(
+    fetchIiifResource,
+    url,
+    urlOptions,
+    { failure: arg => arg, success: arg => arg },
+  );
 
   // Hard error either requesting the resource or deserializing the JSON.
   if (error) {

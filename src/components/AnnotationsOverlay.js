@@ -86,7 +86,10 @@ export class AnnotationsOverlay extends Component {
     this.initializeViewer();
 
     const annotationsUpdated = !AnnotationsOverlay.annotationsMatch(annotations, prevProps.annotations);
-    const searchAnnotationsUpdated = !AnnotationsOverlay.annotationsMatch(searchAnnotations, prevProps.searchAnnotations);
+    const searchAnnotationsUpdated = !AnnotationsOverlay.annotationsMatch(
+      searchAnnotations,
+      prevProps.searchAnnotations,
+    );
 
     const hoveredAnnotationsUpdated = (
       xor(hoveredAnnotationIds, prevProps.hoveredAnnotationIds).length > 0
