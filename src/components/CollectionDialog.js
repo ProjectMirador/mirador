@@ -155,7 +155,7 @@ export class CollectionDialog extends Component {
     // to maybe pass a ref.
     if (!this.dialogContainer()) {
       this.forceUpdate();
-      return <></>;
+      return null;
     }
     if (!ready) return this.placeholder();
 

@@ -59,7 +59,7 @@ describe('LabelValueMetadata', () => {
 
     it('renders an empty fragment instead of an empty dl', () => {
       expect(wrapper.find('dl').length).toEqual(0);
-      expect(wrapper.matchesElement(<></>)).toBe(true);
+      expect(wrapper.isEmptyRender()).toBe(true);
     });
   });
 

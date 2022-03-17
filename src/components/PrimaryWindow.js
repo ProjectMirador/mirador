@@ -33,11 +33,9 @@ export class PrimaryWindow extends Component {
     } = this.props;
     if (isCollection) {
       return (
-        <>
-          <SelectCollection
-            windowId={windowId}
-          />
-        </>
+        <SelectCollection
+          windowId={windowId}
+        />
       );
     }
     if (isFetching === false) {

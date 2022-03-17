@@ -17,7 +17,7 @@ export class LabelValueMetadata extends Component {
     const { defaultLabel, labelValuePairs } = this.props;
 
     if (labelValuePairs.length === 0) {
-      return (<></>);
+      return null;
     }
 
     /* eslint-disable react/no-array-index-key */

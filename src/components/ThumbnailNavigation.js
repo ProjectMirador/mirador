@@ -181,7 +181,7 @@ export class ThumbnailNavigation extends Component {
       windowId,
     } = this.props;
     if (position === 'off') {
-      return <></>;
+      return null;
     }
     const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
     const itemData = {

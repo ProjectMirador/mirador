@@ -388,7 +388,7 @@ export class AnnotationsOverlay extends Component {
   render() {
     const { viewer } = this.props;
 
-    if (!viewer) return <></>;
+    if (!viewer) return null;
 
     return ReactDOM.createPortal(
       (

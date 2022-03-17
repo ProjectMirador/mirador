@@ -355,20 +355,18 @@ export class OpenSeadragonViewer extends Component {
     ));
 
     return (
-      <>
-        <section
-          className={classNames(ns('osd-container'), classes.osdContainer)}
-          id={`${windowId}-osd`}
-          ref={this.ref}
-          aria-label={t('item', { label })}
-          aria-live="polite"
-        >
-          { drawAnnotations
+      <section
+        className={classNames(ns('osd-container'), classes.osdContainer)}
+        id={`${windowId}-osd`}
+        ref={this.ref}
+        aria-label={t('item', { label })}
+        aria-live="polite"
+      >
+        { drawAnnotations
             && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
-          { enhancedChildren }
-          <PluginHook viewer={viewer} {...{ ...this.props, children: null }} />
-        </section>
-      </>
+        { enhancedChildren }
+        <PluginHook viewer={viewer} {...{ ...this.props, children: null }} />
+      </section>
     );
   }
 }
