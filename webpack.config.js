@@ -27,7 +27,6 @@ const baseConfig = mode => ({
     minimizer: [
       new TerserPlugin({
         extractComments: true,
-        sourceMap: true,
       }),
     ],
   },
@@ -75,12 +74,12 @@ module.exports = (env, options) => {
   return {
     ...config,
     devServer: {
-      contentBase: [
+      hot: true,
+      port: 4444,
+      static: [
         './__tests__/integration/mirador',
         './__tests__/fixtures',
       ],
-      hot: true,
-      port: 4444,
     },
     devtool: 'eval-source-map',
     mode: 'development',
