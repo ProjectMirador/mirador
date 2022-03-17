@@ -7,7 +7,7 @@
     "page": true,
     "document": true
   },
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "plugins": ["jest"],
   "rules": {
     "import/prefer-default-export": "off",
