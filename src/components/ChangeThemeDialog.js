@@ -32,7 +32,6 @@ export class ChangeThemeDialog extends Component {
   */
   constructor(props) {
     super(props);
-    this.selectedItemRef = React.createRef();
     this.handleThemeChange = this.handleThemeChange.bind(this);
   }
 

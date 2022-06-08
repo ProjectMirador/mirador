@@ -49,7 +49,7 @@ export class WindowTopBarPluginMenu extends Component {
     } = this.props;
     const { anchorEl } = this.state;
 
-    if (!PluginComponents || PluginComponents.length === 0) return (<></>);
+    if (!PluginComponents || PluginComponents.length === 0) return null;
 
     return (
       <>

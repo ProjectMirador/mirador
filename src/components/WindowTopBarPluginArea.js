@@ -8,9 +8,7 @@ export class WindowTopBarPluginArea extends Component {
   /** */
   render() {
     return (
-      <>
-        <PluginHook {...this.props} />
-      </>
+      <PluginHook {...this.props} />
     );
   }
 }

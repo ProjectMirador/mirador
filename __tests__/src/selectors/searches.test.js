@@ -309,9 +309,7 @@ describe('getResourceAnnotationForSearchHit', () => {
     };
 
     expect(
-      getResourceAnnotationForSearchHit(
-        state, { annotationUri: annoId, companionWindowId, windowId: 'a' },
-      ).resource['@id'],
+      getResourceAnnotationForSearchHit(state, { annotationUri: annoId, companionWindowId, windowId: 'a' }).resource['@id'],
     ).toEqual(annoId);
   });
 });
@@ -344,9 +342,7 @@ describe('getResourceAnnotationLabel', () => {
     };
 
     expect(
-      getResourceAnnotationLabel(
-        state, { annotationUri: annoId, companionWindowId, windowId: 'a' },
-      ),
+      getResourceAnnotationLabel(state, { annotationUri: annoId, companionWindowId, windowId: 'a' }),
     ).toEqual(['The Annotation Label']);
   });
 
@@ -369,9 +365,7 @@ describe('getResourceAnnotationLabel', () => {
     };
 
     expect(
-      getResourceAnnotationLabel(
-        state, { annotationUri: annoId, companionWindowId, windowId: 'a' },
-      ),
+      getResourceAnnotationLabel(state, { annotationUri: annoId, companionWindowId, windowId: 'a' }),
     ).toEqual([]);
   });
 });

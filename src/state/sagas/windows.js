@@ -94,9 +94,7 @@ export function* setWindowStartingCanvas(action) {
   const windowId = action.id || action.window.id;
 
   if (canvasId) {
-    const thunk = yield call(
-      setCanvas, windowId, canvasId, null, { preserveViewport: !!action.payload },
-    );
+    const thunk = yield call(setCanvas, windowId, canvasId, null, { preserveViewport: !!action.payload });
     yield put(thunk);
   } else {
     const manifestoInstance = yield select(getManifestoInstance, { manifestId });
@@ -157,7 +155,12 @@ export function* setCurrentAnnotationsOnCurrentCanvas({
   if (companionWindowIds.length === 0) return;
 
   const annotationBySearch = yield select(
-    getAnnotationsBySearch, { canvasIds: visibleCanvases, companionWindowIds, windowId },
+    getAnnotationsBySearch,
+    {
+      canvasIds: visibleCanvases,
+      companionWindowIds,
+      windowId,
+    },
   );
 
   yield all(
@@ -213,9 +216,7 @@ export function* setCanvasOfFirstSearchResult({ companionWindowId, windowId }) {
 
   if (selectedIds.length !== 0) return;
 
-  const annotations = yield select(
-    getSortedSearchAnnotationsForCompanionWindow, { companionWindowId, windowId },
-  );
+  const annotations = yield select(getSortedSearchAnnotationsForCompanionWindow, { companionWindowId, windowId });
   if (!annotations || annotations.length === 0) return;
 
   yield put(selectAnnotation(windowId, annotations[0].id));

@@ -21,7 +21,7 @@ export class LocalePicker extends Component {
       setLocale,
     } = this.props;
 
-    if (!setLocale || availableLocales.length < 2) return <></>;
+    if (!setLocale || availableLocales.length < 2) return null;
     return (
       <FormControl>
         <Select

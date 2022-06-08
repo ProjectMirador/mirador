@@ -85,11 +85,10 @@ export class AnnotationsOverlay extends Component {
 
     this.initializeViewer();
 
-    const annotationsUpdated = !AnnotationsOverlay.annotationsMatch(
-      annotations, prevProps.annotations,
-    );
+    const annotationsUpdated = !AnnotationsOverlay.annotationsMatch(annotations, prevProps.annotations);
     const searchAnnotationsUpdated = !AnnotationsOverlay.annotationsMatch(
-      searchAnnotations, prevProps.searchAnnotations,
+      searchAnnotations,
+      prevProps.searchAnnotations,
     );
 
     const hoveredAnnotationsUpdated = (
@@ -389,7 +388,7 @@ export class AnnotationsOverlay extends Component {
   render() {
     const { viewer } = this.props;
 
-    if (!viewer) return <></>;
+    if (!viewer) return null;
 
     return ReactDOM.createPortal(
       (

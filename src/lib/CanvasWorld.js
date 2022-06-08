@@ -136,7 +136,7 @@ export default class CanvasWorld {
   /** Get the IIIF content resource for an image */
   contentResource(infoResponseId) {
     const miradorCanvas = this.canvases.find(c => c.imageServiceIds.some(id => (
-      normalizeUrl(id, { stripAuthentication: false })
+      id && infoResponseId && normalizeUrl(id, { stripAuthentication: false })
         === normalizeUrl(infoResponseId, { stripAuthentication: false }))));
     if (!miradorCanvas) return undefined;
     return miradorCanvas.imageResources

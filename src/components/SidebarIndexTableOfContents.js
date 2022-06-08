@@ -113,21 +113,19 @@ export class SidebarIndexTableOfContents extends Component {
     } = this.props;
 
     if (!treeStructure) {
-      return <></>;
+      return null;
     }
 
     return (
-      <>
-        <TreeView
-          className={classes.root}
-          defaultCollapseIcon={<ExpandMoreIcon color="action" />}
-          defaultExpandIcon={<ChevronRightIcon color="action" />}
-          defaultEndIcon={<></>}
-          expanded={expandedNodeIds}
-        >
-          {this.buildTreeItems(treeStructure.nodes, visibleNodeIds, containerRef, nodeIdToScrollTo)}
-        </TreeView>
-      </>
+      <TreeView
+        className={classes.root}
+        defaultCollapseIcon={<ExpandMoreIcon color="action" />}
+        defaultExpandIcon={<ChevronRightIcon color="action" />}
+        defaultEndIcon={null}
+        expanded={expandedNodeIds}
+      >
+        {this.buildTreeItems(treeStructure.nodes, visibleNodeIds, containerRef, nodeIdToScrollTo)}
+      </TreeView>
     );
   }
 }
