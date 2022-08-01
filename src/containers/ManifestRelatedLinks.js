@@ -5,8 +5,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getManifestHomepage,
-  getManifestRelatedContent,
+  getManifestRelated,
   getManifestRenderings,
+  getManifestSeeAlso,
   getManifestUrl,
 } from '../state/selectors';
 import { ManifestRelatedLinks } from '../components/ManifestRelatedLinks';
@@ -19,8 +20,9 @@ import { ManifestRelatedLinks } from '../components/ManifestRelatedLinks';
 const mapStateToProps = (state, { id, windowId }) => ({
   homepage: getManifestHomepage(state, { windowId }),
   manifestUrl: getManifestUrl(state, { windowId }),
+  related: getManifestRelated(state, { windowId }),
   renderings: getManifestRenderings(state, { windowId }),
-  seeAlso: getManifestRelatedContent(state, { windowId }),
+  seeAlso: getManifestSeeAlso(state, { windowId }),
 });
 
 const styles = {

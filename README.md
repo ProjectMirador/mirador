@@ -19,6 +19,14 @@ If you are interested in integrating Mirador with plugins into your project, we 
 
 [https://github.com/ProjectMirador/mirador-integration](https://github.com/ProjectMirador/mirador-integration)
 
+If you want to simply embed Mirador in an HTML page without further customization, include the Mirador UMD build:
+
+```
+<script src="https://unpkg.com/mirador@latest/dist/mirador.min.js"></script>
+```
+
+More examples of embedding Mirador can be found at [https://github.com/ProjectMirador/mirador/wiki/M3-Embedding-in-Another-Environment#in-an-html-document-with-javascript](https://github.com/ProjectMirador/mirador/wiki/M3-Embedding-in-Another-Environment#in-an-html-document-with-javascript).
+
 ## Adding translations to Mirador
 For help with adding a translation, see [src/locales/README.md](src/locales/README.md)
 

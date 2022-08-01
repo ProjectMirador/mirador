@@ -53,30 +53,29 @@ export class SearchPanelNavigation extends Component {
     if (searchHits.length < numTotal) {
       lengthText += '+';
     }
+
+    if (searchHits.length === 0) return null;
+
     return (
-      <>
-        {(searchHits.length > 0) && (
-          <Typography variant="body2" align="center" classes={classes}>
-            <MiradorMenuButton
-              aria-label={t('searchPreviousResult')}
-              disabled={!this.hasPreviousResult(currentHitIndex)}
-              onClick={() => this.previousSearchResult(currentHitIndex)}
-            >
-              <ChevronLeftIcon style={iconStyle} />
-            </MiradorMenuButton>
-            <span style={{ unicodeBidi: 'plaintext' }}>
-              {t('pagination', { current: currentHitIndex + 1, total: lengthText })}
-            </span>
-            <MiradorMenuButton
-              aria-label={t('searchNextResult')}
-              disabled={!this.hasNextResult(currentHitIndex)}
-              onClick={() => this.nextSearchResult(currentHitIndex)}
-            >
-              <ChevronRightIcon style={iconStyle} />
-            </MiradorMenuButton>
-          </Typography>
-        )}
-      </>
+      <Typography variant="body2" align="center" classes={classes}>
+        <MiradorMenuButton
+          aria-label={t('searchPreviousResult')}
+          disabled={!this.hasPreviousResult(currentHitIndex)}
+          onClick={() => this.previousSearchResult(currentHitIndex)}
+        >
+          <ChevronLeftIcon style={iconStyle} />
+        </MiradorMenuButton>
+        <span style={{ unicodeBidi: 'plaintext' }}>
+          {t('pagination', { current: currentHitIndex + 1, total: lengthText })}
+        </span>
+        <MiradorMenuButton
+          aria-label={t('searchNextResult')}
+          disabled={!this.hasNextResult(currentHitIndex)}
+          onClick={() => this.nextSearchResult(currentHitIndex)}
+        >
+          <ChevronRightIcon style={iconStyle} />
+        </MiradorMenuButton>
+      </Typography>
     );
   }
 }
@@ -84,7 +83,7 @@ SearchPanelNavigation.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   direction: PropTypes.string.isRequired,
   numTotal: PropTypes.number,
-  searchHits: PropTypes.arrayOf(PropTypes.object),
+  searchHits: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   searchService: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,

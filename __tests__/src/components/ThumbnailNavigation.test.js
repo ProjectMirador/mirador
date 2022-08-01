@@ -100,6 +100,12 @@ describe('ThumbnailNavigation', () => {
       expect(wrapper.instance().areaHeight()).toEqual(150);
       expect(rightWrapper.instance().areaHeight(99)).toEqual(99);
     });
+    describe('without any canvases', () => {
+      it('returns the default for the calculated size', () => {
+        wrapper = createWrapper({ canvasGroupings: new CanvasGroupings([]).groupings() });
+        expect(wrapper.instance().calculateScaledSize(0)).toEqual(108);
+      });
+    });
   });
   describe('keyboard navigation', () => {
     const setNextCanvas = jest.fn();

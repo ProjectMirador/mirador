@@ -69,7 +69,9 @@ export class ThumbnailNavigation extends Component {
    */
   calculateScaledSize(index) {
     const { thumbnailNavigation, canvasGroupings, position } = this.props;
-    const canvases = canvasGroupings[index] || [];
+    const canvases = canvasGroupings[index];
+    if (!canvases) return thumbnailNavigation.width + this.spacing;
+
     const world = new CanvasWorld(canvases);
     const bounds = world.worldBounds();
     switch (position) {
@@ -181,7 +183,7 @@ export class ThumbnailNavigation extends Component {
       windowId,
     } = this.props;
     if (position === 'off') {
-      return <></>;
+      return null;
     }
     const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
     const itemData = {

@@ -4,7 +4,7 @@ describe('how plugins relate to state', () => {
   beforeAll(async () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/plugins/state.html');
     await expect(page).toMatchElement('.mirador-viewer');
-    await page.waitFor(1000);
+    await page.waitForTimeout(1000);
   });
 
   it('plugin can read from state', async () => {

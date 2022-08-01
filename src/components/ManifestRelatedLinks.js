@@ -20,6 +20,7 @@ export class ManifestRelatedLinks extends Component {
       classes,
       homepage,
       manifestUrl,
+      related,
       renderings,
       seeAlso,
       id,
@@ -68,17 +69,34 @@ export class ManifestRelatedLinks extends Component {
               }
             </>
           )}
+          { related && (
+            <>
+              <Typography variant="subtitle2" component="dt">{t('iiif_related')}</Typography>
+              {
+                related.map(relatedItem => (
+                  <Typography key={relatedItem.value} variant="body1" component="dd">
+                    <Link target="_blank" rel="noopener noreferrer" href={relatedItem.value}>
+                      {relatedItem.label || relatedItem.value}
+                    </Link>
+                    { relatedItem.format && (
+                      <Typography component="span">{` (${relatedItem.format})`}</Typography>
+                    )}
+                  </Typography>
+                ))
+              }
+            </>
+          )}
           { seeAlso && (
             <>
               <Typography variant="subtitle2" component="dt">{t('iiif_seeAlso')}</Typography>
               {
-                seeAlso.map(related => (
-                  <Typography key={related.value} variant="body1" component="dd">
-                    <Link target="_blank" rel="noopener noreferrer" href={related.value}>
-                      {related.label || related.value}
+                seeAlso.map(seeAlsoItem => (
+                  <Typography key={seeAlsoItem.value} variant="body1" component="dd">
+                    <Link target="_blank" rel="noopener noreferrer" href={seeAlsoItem.value}>
+                      {seeAlsoItem.label || seeAlsoItem.value}
                     </Link>
-                    { related.format && (
-                      <Typography component="span">{` (${related.format})`}</Typography>
+                    { seeAlsoItem.format && (
+                      <Typography component="span">{` (${seeAlsoItem.format})`}</Typography>
                     )}
                   </Typography>
                 ))
@@ -110,6 +128,11 @@ ManifestRelatedLinks.propTypes = {
   })),
   id: PropTypes.string.isRequired,
   manifestUrl: PropTypes.string,
+  related: PropTypes.arrayOf(PropTypes.shape({
+    format: PropTypes.string,
+    label: PropTypes.string,
+    value: PropTypes.string,
+  })),
   renderings: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     value: PropTypes.string,
@@ -125,6 +148,7 @@ ManifestRelatedLinks.propTypes = {
 ManifestRelatedLinks.defaultProps = {
   homepage: null,
   manifestUrl: null,
+  related: null,
   renderings: null,
   seeAlso: null,
   t: key => key,

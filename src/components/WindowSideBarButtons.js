@@ -10,6 +10,28 @@ import AttributionIcon from '@material-ui/icons/CopyrightSharp';
 import LayersIcon from '@material-ui/icons/LayersSharp';
 import SearchIcon from '@material-ui/icons/SearchSharp';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
+
+/** */
+function TabButton({ t, value, ...tabProps }) {
+  return (
+    <Tooltip title={t('openCompanionWindow', { context: value })}>
+      <Tab
+        {...tabProps}
+        value={value}
+        aria-label={
+          t('openCompanionWindow', { context: value })
+        }
+        disableRipple
+      />
+    </Tooltip>
+  );
+}
+
+TabButton.propTypes = {
+  t: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+};
+
 /**
  *
  */
@@ -50,21 +72,6 @@ export class WindowSideBarButtons extends Component {
       t,
     } = this.props;
 
-    /** */
-    const TabButton = props => (
-      <Tooltip title={t('openCompanionWindow', { context: props.value })}>
-        <Tab
-          {...props}
-          classes={{ root: classes.tab, selected: classes.tabSelected }}
-          aria-label={
-            t('openCompanionWindow', { context: props.value })
-          }
-          disableRipple
-          onKeyUp={this.handleKeyUp}
-        />
-      </Tooltip>
-    );
-
     return (
       <Tabs
         classes={{ flexContainer: classes.tabsFlexContainer, indicator: classes.tabsIndicator }}
@@ -80,24 +87,36 @@ export class WindowSideBarButtons extends Component {
         { panels.info && (
           <TabButton
             value="info"
+            onKeyUp={this.handleKeyUp}
+            classes={{ root: classes.tab, selected: classes.tabSelected }}
+            t={t}
             icon={(<InfoIcon />)}
           />
         )}
         { panels.attribution && (
           <TabButton
             value="attribution"
+            onKeyUp={this.handleKeyUp}
+            classes={{ root: classes.tab, selected: classes.tabSelected }}
+            t={t}
             icon={(<AttributionIcon />)}
           />
         )}
         { panels.canvas && (
           <TabButton
             value="canvas"
+            onKeyUp={this.handleKeyUp}
+            classes={{ root: classes.tab, selected: classes.tabSelected }}
+            t={t}
             icon={(<CanvasIndexIcon />)}
           />
         )}
         {panels.annotations && (hasAnnotations || hasAnyAnnotations) && (
           <TabButton
             value="annotations"
+            onKeyUp={this.handleKeyUp}
+            classes={{ root: classes.tab, selected: classes.tabSelected }}
+            t={t}
             icon={(
               <Badge classes={{ badge: classes.badge }} invisible={!hasAnnotations} variant="dot">
                 <AnnotationIcon />
@@ -108,6 +127,9 @@ export class WindowSideBarButtons extends Component {
         {panels.search && hasSearchService && (
           <TabButton
             value="search"
+            onKeyUp={this.handleKeyUp}
+            classes={{ root: classes.tab, selected: classes.tabSelected }}
+            t={t}
             icon={(
               <Badge classes={{ badge: classes.badge }} invisible={!hasSearchResults} variant="dot">
                 <SearchIcon />
@@ -118,6 +140,9 @@ export class WindowSideBarButtons extends Component {
         { panels.layers && hasAnyLayers && (
           <TabButton
             value="layers"
+            onKeyUp={this.handleKeyUp}
+            classes={{ root: classes.tab, selected: classes.tabSelected }}
+            t={t}
             icon={(
               <Badge classes={{ badge: classes.badge }} invisible={!hasCurrentLayers} variant="dot">
                 <LayersIcon />
@@ -128,6 +153,9 @@ export class WindowSideBarButtons extends Component {
         { PluginComponents
           && PluginComponents.map(PluginComponent => (
             <TabButton
+              onKeyUp={this.handleKeyUp}
+              classes={{ root: classes.tab, selected: classes.tabSelected }}
+              t={t}
               key={PluginComponent.value}
               value={PluginComponent.value}
               icon={<PluginComponent />}

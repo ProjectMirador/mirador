@@ -90,27 +90,23 @@ class ThumbnailFactory {
     const imageFitness = (test) => test.width * test.height - targetArea;
 
     /** Look for the size that's just bigger than we prefer... */
-    closestSize = sizes.reduce(
-      (best, test) => {
-        const score = imageFitness(test);
+    closestSize = sizes.reduce((best, test) => {
+      const score = imageFitness(test);
 
-        if (score < 0) return best;
+      if (score < 0) return best;
 
-        return Math.abs(score) < Math.abs(imageFitness(best))
-          ? test
-          : best;
-      }, closestSize,
-    );
+      return Math.abs(score) < Math.abs(imageFitness(best))
+        ? test
+        : best;
+    }, closestSize);
 
     /** .... but not "too" big; we'd rather scale up an image than download too much */
     if (closestSize.width * closestSize.height > targetArea * 6) {
-      closestSize = sizes.reduce(
-        (best, test) => (
-          Math.abs(imageFitness(test)) < Math.abs(imageFitness(best))
-            ? test
-            : best
-        ), closestSize,
-      );
+      closestSize = sizes.reduce((best, test) => (
+        Math.abs(imageFitness(test)) < Math.abs(imageFitness(best))
+          ? test
+          : best
+      ), closestSize);
     }
 
     if (closestSize.default) return undefined;
@@ -313,4 +309,5 @@ function getBestThumbnail(resource, iiifOpts) {
   return new ThumbnailFactory(resource, iiifOpts).get();
 }
 
-export { getBestThumbnail as default, ThumbnailFactory };
+export { ThumbnailFactory };
+export default getBestThumbnail;
