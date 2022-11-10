@@ -76,7 +76,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "url": "^0.11.0",
-    "uuid": "^8.1.0"
+    "uuid": "^8.1.0 || ^9.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.6",
