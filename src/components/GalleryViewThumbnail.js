@@ -5,7 +5,6 @@ import Chip from '@material-ui/core/Chip';
 import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import SearchIcon from '@material-ui/icons/SearchSharp';
 import classNames from 'classnames';
-import 'intersection-observer'; // polyfill needed for Safari
 import IntersectionObserver from '@researchgate/react-intersection-observer';
 import MiradorCanvas from '../lib/MiradorCanvas';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
