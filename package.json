@@ -63,7 +63,7 @@
     "react-i18next": "^11.7.0 || ^12.0.0",
     "react-image": "^4.0.1",
     "react-mosaic-component": "^4.0.1",
-    "react-redux": "^7.1.0",
+    "react-redux": "^7.1.0 || ^8.0.0",
     "react-resize-observer": "^1.1.1",
     "react-rnd": "^10.1",
     "react-sizeme": "^2.6.7 || ^3.0.0",
