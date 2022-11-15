@@ -6,7 +6,7 @@ describe('Companion Windows', () => {
     await expect(page).toFill('#manifestURL', 'http://127.0.0.1:4488/__tests__/fixtures/version-2/001.json');
     await expect(page).toClick('#fetchBtn');
     await expect(page).toClick('[data-manifestid="http://127.0.0.1:4488/__tests__/fixtures/version-2/001.json"] button');
-    await page.waitFor(300);
+    await page.waitForTimeout(300);
     await expect(page).toMatchElement('.mirador-window');
   });
 

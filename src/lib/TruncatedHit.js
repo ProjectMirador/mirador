@@ -25,16 +25,12 @@ export default class TruncatedHit {
   /** */
   get before() {
     if (!this.hit.before) return '';
-    return this.hit.before.substring(
-      this.hit.before.length - this.charsOnSide, this.hit.before.length,
-    );
+    return this.hit.before.substring(this.hit.before.length - this.charsOnSide, this.hit.before.length);
   }
 
   /** */
   get after() {
     if (!this.hit.after) return '';
-    return this.hit.after.substring(
-      0, Math.min(this.hit.after.length, this.charsOnSide),
-    );
+    return this.hit.after.substring(0, Math.min(this.hit.after.length, this.charsOnSide));
   }
 }

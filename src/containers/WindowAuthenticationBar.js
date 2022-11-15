@@ -13,9 +13,7 @@ import { WindowAuthenticationBar } from '../components/WindowAuthenticationBar';
 const styles = theme => ({
   buttonInvert: {
     '&:hover': {
-      backgroundColor: alpha(
-        theme.palette.secondary.contrastText, 1 - theme.palette.action.hoverOpacity,
-      ),
+      backgroundColor: alpha(theme.palette.secondary.contrastText, 1 - theme.palette.action.hoverOpacity),
     },
     backgroundColor: theme.palette.secondary.contrastText,
     marginLeft: theme.spacing(5),

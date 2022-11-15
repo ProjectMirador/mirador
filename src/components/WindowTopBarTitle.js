@@ -4,6 +4,19 @@ import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 import ErrorIcon from '@material-ui/icons/ErrorOutlineSharp';
 
+/** */
+function TitleTypography({ children, ...props }) {
+  return (
+    <Typography variant="h2" noWrap color="inherit" {...props}>
+      {children}
+    </Typography>
+  );
+}
+
+TitleTypography.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 /**
  * WindowTopBarTitle
  */
@@ -17,17 +30,10 @@ export class WindowTopBarTitle extends Component {
       classes, error, hideWindowTitle, isFetching, manifestTitle,
     } = this.props;
 
-    /** */
-    const TitleTypography = props => (
-      <Typography variant="h2" noWrap color="inherit" className={classes.title} {...props}>
-        {props.children}
-      </Typography>
-    );
-
     let title = null;
     if (isFetching) {
       title = (
-        <TitleTypography>
+        <TitleTypography className={classes.title}>
           <Skeleton variant="text" />
         </TitleTypography>
       );
@@ -35,7 +41,7 @@ export class WindowTopBarTitle extends Component {
       title = (
         <>
           <ErrorIcon color="error" />
-          <TitleTypography color="textSecondary">
+          <TitleTypography color="textSecondary" className={classes.title}>
             {error}
           </TitleTypography>
         </>
@@ -44,7 +50,7 @@ export class WindowTopBarTitle extends Component {
       title = (<div className={classes.title} />);
     } else {
       title = (
-        <TitleTypography>
+        <TitleTypography className={classes.title}>
           {manifestTitle}
         </TitleTypography>
       );

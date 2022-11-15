@@ -21,12 +21,9 @@ describe('WindowTopBarPluginMenu', () => {
   let wrapper;
 
   describe('when there are no plugins present', () => {
-    it('renders a Fragment (and no Button/Menu/PluginHook)', () => {
+    it('renders nothing (and no Button/Menu/PluginHook)', () => {
       wrapper = createWrapper();
-      expect(wrapper.find('Fragment').length).toBe(1);
-      expect(wrapper.find(Menu).length).toBe(0);
-      expect(wrapper.find(MiradorMenuButton).length).toBe(0);
-      expect(wrapper.find(PluginHook).length).toBe(0);
+      expect(wrapper.isEmptyRender()).toBe(true);
     });
   });
 

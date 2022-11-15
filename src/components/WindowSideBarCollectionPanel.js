@@ -13,6 +13,40 @@ import CompanionWindow from '../containers/CompanionWindow';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 
 /** */
+function Item({
+  manifest, canvasNavigation, variant, ...otherProps
+}) {
+  return (
+    <MenuItem
+      alignItems="flex-start"
+      button
+      component="li"
+      {...otherProps}
+    >
+      { variant === 'thumbnail' && (
+        <ListItemIcon>
+          <IIIFThumbnail
+            resource={manifest}
+            maxHeight={canvasNavigation.height}
+            maxWidth={canvasNavigation.width}
+          />
+        </ListItemIcon>
+      )}
+      <ListItemText>{WindowSideBarCollectionPanel.getUseableLabel(manifest)}</ListItemText>
+    </MenuItem>
+  );
+}
+
+Item.propTypes = {
+  canvasNavigation: PropTypes.shape({
+    height: PropTypes.number,
+    width: PropTypes.number,
+  }).isRequired,
+  manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  variant: PropTypes.string.isRequired,
+};
+
+/** */
 export class WindowSideBarCollectionPanel extends Component {
   /** */
   static getUseableLabel(resource, index) {
@@ -53,29 +87,6 @@ export class WindowSideBarCollectionPanel extends Component {
       variant,
       windowId,
     } = this.props;
-
-    /** */
-    const Item = ({ manifest, ...otherProps }) => (
-      <MenuItem
-        className={classes.menuItem}
-        alignItems="flex-start"
-        button
-        component="li"
-        selected={manifestId === manifest.id}
-        {...otherProps}
-      >
-        { variant === 'thumbnail' && (
-          <ListItemIcon>
-            <IIIFThumbnail
-              resource={manifest}
-              maxHeight={canvasNavigation.height}
-              maxWidth={canvasNavigation.width}
-            />
-          </ListItemIcon>
-        )}
-        <ListItemText>{WindowSideBarCollectionPanel.getUseableLabel(manifest)}</ListItemText>
-      </MenuItem>
-    );
 
     return (
       <CompanionWindow
@@ -127,7 +138,15 @@ export class WindowSideBarCollectionPanel extends Component {
               };
 
               return (
-                <Item key={manifest.id} onClick={onClick} manifest={manifest} />
+                <Item
+                  key={manifest.id}
+                  onClick={onClick}
+                  canvasNavigation={canvasNavigation}
+                  manifest={manifest}
+                  variant={variant}
+                  className={classes.menuItem}
+                  selected={manifestId === manifest.id}
+                />
               );
             })
           }
@@ -142,7 +161,15 @@ export class WindowSideBarCollectionPanel extends Component {
               };
 
               return (
-                <Item key={manifest.id} onClick={onClick} manifest={manifest} />
+                <Item
+                  key={manifest.id}
+                  onClick={onClick}
+                  canvasNavigation={canvasNavigation}
+                  manifest={manifest}
+                  variant={variant}
+                  className={classes.menuItem}
+                  selected={manifestId === manifest.id}
+                />
               );
             })
           }
@@ -159,14 +186,11 @@ WindowSideBarCollectionPanel.propTypes = {
   }).isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  collectionId: PropTypes.string.isRequired,
   collectionPath: PropTypes.arrayOf(PropTypes.string),
-  error: PropTypes.string,
   id: PropTypes.string.isRequired,
   isFetching: PropTypes.bool,
   manifestId: PropTypes.string.isRequired,
   parentCollection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  ready: PropTypes.bool,
   t: PropTypes.func,
   updateCompanionWindow: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
@@ -177,10 +201,8 @@ WindowSideBarCollectionPanel.propTypes = {
 WindowSideBarCollectionPanel.defaultProps = {
   collection: null,
   collectionPath: [],
-  error: null,
   isFetching: false,
   parentCollection: null,
-  ready: false,
   t: k => k,
   variant: null,
 };

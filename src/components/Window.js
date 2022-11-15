@@ -83,8 +83,11 @@ export class Window extends Component {
         elevation={1}
         id={windowId}
         className={
-          cn(classes.window, ns('window'),
-            maximized ? classes.maximized : null)
+          cn(
+            classes.window,
+            ns('window'),
+            maximized ? classes.maximized : null,
+          )
 }
         aria-label={t('window', { label })}
       >

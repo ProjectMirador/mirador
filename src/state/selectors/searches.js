@@ -111,8 +111,8 @@ export const getSortedSearchHitsForCompanionWindow = createSelector(
   [
     getSearchHitsForCompanionWindow,
     getCanvases,
-    (state, { companionWindowId, windowId }) => annotationUri => getResourceAnnotationForSearchHit(
-      state, { annotationUri, companionWindowId, windowId },
+    (state, { companionWindowId, windowId }) => (
+      annotationUri => getResourceAnnotationForSearchHit(state, { annotationUri, companionWindowId, windowId })
     ),
   ],
   (searchHits, canvases, annotationForSearchHit) => {
@@ -232,9 +232,7 @@ const getAnnotationById = createSelector(
 export const getCanvasForAnnotation = createSelector(
   [
     getAnnotationById,
-    (state, { windowId }) => canvasId => getCanvas(
-      state, { canvasId, windowId },
-    ),
+    (state, { windowId }) => canvasId => getCanvas(state, { canvasId, windowId }),
   ],
   (annotation, getCanvasById) => {
     const canvasId = annotation && annotation.targetId;

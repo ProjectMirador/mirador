@@ -18,23 +18,21 @@ export class WindowSideBar extends Component {
     } = this.props;
 
     return (
-      <>
-        <Drawer
-          variant="persistent"
-          className={classNames(classes.drawer)}
-          classes={{ paper: classNames(classes.paper) }}
-          anchor={direction === 'rtl' ? 'right' : 'left'}
-          PaperProps={{
-            'aria-label': t('sidebarPanelsNavigation'),
-            component: 'nav',
-            style: { height: '100%', position: 'relative' },
-          }}
-          SlideProps={{ direction: direction === 'rtl' ? 'left' : 'right', mountOnEnter: true, unmountOnExit: true }}
-          open={sideBarOpen}
-        >
-          <WindowSideBarButtons windowId={windowId} />
-        </Drawer>
-      </>
+      <Drawer
+        variant="persistent"
+        className={classNames(classes.drawer)}
+        classes={{ paper: classNames(classes.paper) }}
+        anchor={direction === 'rtl' ? 'right' : 'left'}
+        PaperProps={{
+          'aria-label': t('sidebarPanelsNavigation'),
+          component: 'nav',
+          style: { height: '100%', position: 'relative' },
+        }}
+        SlideProps={{ direction: direction === 'rtl' ? 'left' : 'right', mountOnEnter: true, unmountOnExit: true }}
+        open={sideBarOpen}
+      >
+        <WindowSideBarButtons windowId={windowId} />
+      </Drawer>
     );
   }
 }

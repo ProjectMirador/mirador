@@ -62,7 +62,7 @@ export class CanvasAnnotations extends Component {
       listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
       containerRef,
     } = this.props;
-    if (annotations.length === 0) return <></>;
+    if (annotations.length === 0) return null;
 
     return (
       <>

@@ -60,7 +60,7 @@ export class CompanionWindowFactory extends Component {
 
     const type = CompanionWindowRegistry[content];
 
-    if (!type) return <></>;
+    if (!type) return null;
 
     return React.createElement(type, { id, windowId });
   }

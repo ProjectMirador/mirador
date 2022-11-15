@@ -167,10 +167,11 @@ export class OpenSeadragonViewer extends Component {
   /** */
   addAllImageSources(zoomAfterAdd = true) {
     const { nonTiledImages, infoResponses } = this.props;
-    Promise.all(
-      infoResponses.map(infoResponse => this.addTileSource(infoResponse)),
-      nonTiledImages.map(image => this.addNonTiledImage(image)),
-    ).then(() => {
+
+    return Promise.allSettled([
+      ...infoResponses.map(infoResponse => this.addTileSource(infoResponse)),
+      ...nonTiledImages.map(image => this.addNonTiledImage(image)),
+    ]).then(() => {
       if (infoResponses[0] || nonTiledImages[0]) {
         if (zoomAfterAdd) this.zoomToWorld();
         this.refreshTileProperties();
@@ -193,7 +194,7 @@ export class OpenSeadragonViewer extends Component {
         reject();
       }
 
-      viewer.addSimpleImage({
+      resolve(viewer.addSimpleImage({
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
           ...canvasWorld.contentResourceToWorldCoordinates(contentResource),
@@ -202,7 +203,7 @@ export class OpenSeadragonViewer extends Component {
         opacity: canvasWorld.layerOpacityOfImageResource(contentResource),
         success: event => resolve(event),
         url: contentResource.id,
-      });
+      }));
     });
   }
 
@@ -238,7 +239,11 @@ export class OpenSeadragonViewer extends Component {
   /** */
   refreshTileProperties() {
     const { canvasWorld } = this.props;
-    const { viewer: { world } } = this.state;
+    const { viewer } = this.state;
+
+    if (!viewer) return;
+
+    const { world } = viewer;
 
     const items = [];
     for (let i = 0; i < world.getItemCount(); i += 1) {
@@ -259,7 +264,7 @@ export class OpenSeadragonViewer extends Component {
   fitBounds(x, y, w, h, immediately = true) {
     const { viewer } = this.state;
 
-    viewer.viewport.fitBounds(
+    viewer && viewer.viewport && viewer.viewport.fitBounds(
       new OpenSeadragon.Rect(x, y, w, h),
       immediately,
     );
@@ -350,20 +355,18 @@ export class OpenSeadragonViewer extends Component {
     ));
 
     return (
-      <>
-        <section
-          className={classNames(ns('osd-container'), classes.osdContainer)}
-          id={`${windowId}-osd`}
-          ref={this.ref}
-          aria-label={t('item', { label })}
-          aria-live="polite"
-        >
-          { drawAnnotations
+      <section
+        className={classNames(ns('osd-container'), classes.osdContainer)}
+        id={`${windowId}-osd`}
+        ref={this.ref}
+        aria-label={t('item', { label })}
+        aria-live="polite"
+      >
+        { drawAnnotations
             && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
-          { enhancedChildren }
-          <PluginHook viewer={viewer} {...{ ...this.props, children: null }} />
-        </section>
-      </>
+        { enhancedChildren }
+        <PluginHook viewer={viewer} {...{ ...this.props, children: null }} />
+      </section>
     );
   }
 }
@@ -383,7 +386,7 @@ OpenSeadragonViewer.propTypes = {
   children: PropTypes.node,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   drawAnnotations: PropTypes.bool,
-  infoResponses: PropTypes.arrayOf(PropTypes.object),
+  infoResponses: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   label: PropTypes.string,
   nonTiledImages: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
