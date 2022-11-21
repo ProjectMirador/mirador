@@ -1,0 +1,13 @@
+
+upstream_tests:
+  image: ghcr.io/puppeteer/puppeteer:latest
+  before_script:
+    - npm ci
+  script:
+    - npm run test:ci
+  artifacts:
+    when: always
+    paths:
+      - junit.xml
+    reports:
+      junit: junit.xml
