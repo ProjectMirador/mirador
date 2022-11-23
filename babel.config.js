@@ -47,7 +47,6 @@ module.exports = function (api) {
   const plugins = [
     'babel-plugin-macros',
     '@babel/plugin-transform-destructuring',
-    // TODO loose: which options is ignored in depencies ?
     ['@babel/plugin-proposal-private-methods', { loose: true }],
     ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
     ['@babel/plugin-proposal-class-properties', { loose: true }],
