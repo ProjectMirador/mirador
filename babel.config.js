@@ -47,44 +47,19 @@ module.exports = function (api) {
   const plugins = [
     'babel-plugin-macros',
     '@babel/plugin-transform-destructuring',
-    [
-      '@babel/plugin-proposal-class-properties',
-      {
-        loose: true,
-      },
-    ],
-    [
-      '@babel/plugin-proposal-object-rest-spread',
-      {
-        useBuiltIns: true,
-      },
-    ],
-    [
-      '@babel/plugin-transform-runtime',
-      {
-        corejs: false,
-        helpers: false, // Needed to support IE/Edge
-        regenerator: true,
-      },
-    ],
-    [
-      '@babel/plugin-transform-regenerator',
-      {
-        async: false,
-      },
-    ],
-    ['transform-react-remove-prop-types',
-      {
-        ignoreFilenames: ['node_modules'],
-        removeImport: true,
-      },
-    ],
-    ['lodash', {
-      id: [
-        'lodash',
-      ],
+    ['@babel/plugin-proposal-private-methods', { loose: true }],
+    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+    ['@babel/plugin-proposal-class-properties', { loose: true }],
+    ['@babel/plugin-proposal-object-rest-spread', { useBuiltIns: true }],
+    ['@babel/plugin-transform-runtime', {
+      corejs: false,
+      helpers: false, // Needed to support IE/Edge
+      regenerator: true,
     },
     ],
+    ['@babel/plugin-transform-regenerator', { async: false }],
+    ['transform-react-remove-prop-types', { ignoreFilenames: ['node_modules'], removeImport: true }],
+    ['lodash', { id: ['lodash'] }],
   ].filter(Boolean);
 
   return {
