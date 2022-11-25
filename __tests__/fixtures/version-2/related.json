@@ -1,0 +1,16 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://example.com/iiif/manifest/related-urls.json",
+  "@type": "sc:Manifest",
+  "related": [
+    "http://example.com/related1",
+    {
+      "@id": "http://example.com/related2"
+    },
+    {
+      "@id": "http://example.com/related3",
+      "format": "text/html",
+      "label": "Something related"
+    }
+  ]
+}

@@ -138,6 +138,7 @@ export default class AnnotationItem {
         break;
       case 'object':
         temporalfragmentSelector = selector.find(s => s.type && s.type === 'FragmentSelector');
+        // TODO regex for t=5,10 t=,10 t=5 ? cf w3c media fragments
         match = temporalfragmentSelector && temporalfragmentSelector.value.match(/t=(.*?)(&|$)/);
         break;
       default:

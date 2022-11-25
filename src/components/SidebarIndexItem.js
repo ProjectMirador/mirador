@@ -12,14 +12,12 @@ export class SidebarIndexItem extends Component {
     } = this.props;
 
     return (
-      <>
-        <Typography
-          className={classNames(classes.label)}
-          variant="body1"
-        >
-          {label}
-        </Typography>
-      </>
+      <Typography
+        className={classNames(classes.label)}
+        variant="body1"
+      >
+        {label}
+      </Typography>
     );
   }
 }

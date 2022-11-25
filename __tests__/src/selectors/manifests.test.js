@@ -6,6 +6,7 @@ import manifestFixtureSn904cj3429 from '../../fixtures/version-2/sn904cj3429.jso
 import manifestFixturev3001 from '../../fixtures/version-3/001.json';
 import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
 import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
+import manifestFixtureRelated from '../../fixtures/version-2/related.json';
 import {
   getManifestoInstance,
   getManifestLocale,
@@ -18,8 +19,10 @@ import {
   getManifestTitle,
   getManifestThumbnail,
   getManifestMetadata,
+  getManifestRelated,
   getManifestRelatedContent,
   getManifestRenderings,
+  getManifestSeeAlso,
   getManifestUrl,
   getMetadataLocales,
   getRequiredStatement,
@@ -210,6 +213,33 @@ describe('getManifestRenderings', () => {
   });
 });
 
+describe('getManifestRelated', () => {
+  it('should return manifest related', () => {
+    const state = { manifests: { x: { json: manifestFixtureRelated } } };
+    const received = getManifestRelated(state, { manifestId: 'x' });
+    expect(received).toEqual([
+      {
+        value: 'http://example.com/related1',
+      },
+      {
+        format: undefined,
+        label: null,
+        value: 'http://example.com/related2',
+      },
+      {
+        format: 'text/html',
+        label: 'Something related',
+        value: 'http://example.com/related3',
+      },
+    ]);
+  });
+
+  it('should return undefined if manifest undefined', () => {
+    const received = getManifestRelated({ manifests: {} }, { manifestId: 'x' });
+    expect(received).toBeUndefined();
+  });
+});
+
 describe('getManifestRelatedContent', () => {
   it('should return manifest seeAlso content', () => {
     const state = { manifests: { x: { json: manifestFixtureSn904cj3429 } } };
@@ -225,6 +255,25 @@ describe('getManifestRelatedContent', () => {
 
   it('should return undefined if manifest undefined', () => {
     const received = getManifestRelatedContent({ manifests: {} }, { manifestId: 'x' });
+    expect(received).toBeUndefined();
+  });
+});
+
+describe('getManifestSeeAlso', () => {
+  it('should return manifest seeAlso content', () => {
+    const state = { manifests: { x: { json: manifestFixtureSn904cj3429 } } };
+    const received = getManifestSeeAlso(state, { manifestId: 'x' });
+    expect(received).toEqual([
+      {
+        format: 'application/mods+xml',
+        label: null,
+        value: 'https://purl.stanford.edu/sn904cj3429.mods',
+      },
+    ]);
+  });
+
+  it('should return undefined if manifest undefined', () => {
+    const received = getManifestSeeAlso({ manifests: {} }, { manifestId: 'x' });
     expect(received).toBeUndefined();
   });
 });

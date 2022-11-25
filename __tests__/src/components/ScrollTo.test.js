@@ -10,7 +10,7 @@ function createWrapper(props) {
       scrollTo
       {...props}
     >
-      <>Child Prop</>
+      Child Prop
     </ScrollTo>,
   );
 }

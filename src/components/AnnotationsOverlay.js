@@ -85,11 +85,10 @@ export class AnnotationsOverlay extends Component {
 
     this.initializeViewer();
 
-    const annotationsUpdated = !AnnotationsOverlay.annotationsMatch(
-      annotations, prevProps.annotations,
-    );
+    const annotationsUpdated = !AnnotationsOverlay.annotationsMatch(annotations, prevProps.annotations);
     const searchAnnotationsUpdated = !AnnotationsOverlay.annotationsMatch(
-      searchAnnotations, prevProps.searchAnnotations,
+      searchAnnotations,
+      prevProps.searchAnnotations,
     );
 
     const hoveredAnnotationsUpdated = (
@@ -389,7 +388,7 @@ export class AnnotationsOverlay extends Component {
   render() {
     const { viewer } = this.props;
 
-    if (!viewer) return <></>;
+    if (!viewer) return null;
 
     return ReactDOM.createPortal(
       (
@@ -423,7 +422,7 @@ AnnotationsOverlay.defaultProps = {
 };
 
 AnnotationsOverlay.propTypes = {
-  annotations: PropTypes.arrayOf(PropTypes.object),
+  annotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   deselectAnnotation: PropTypes.func,
   drawAnnotations: PropTypes.bool,
@@ -432,7 +431,7 @@ AnnotationsOverlay.propTypes = {
   hoverAnnotation: PropTypes.func,
   hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  searchAnnotations: PropTypes.arrayOf(PropTypes.object),
+  searchAnnotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   selectAnnotation: PropTypes.func,
   selectedAnnotationId: PropTypes.string,
   viewer: PropTypes.object, // eslint-disable-line react/forbid-prop-types

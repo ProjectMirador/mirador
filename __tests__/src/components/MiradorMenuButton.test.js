@@ -11,7 +11,7 @@ import { MiradorMenuButton } from '../../../src/components/MiradorMenuButton';
 function createWrapper(props) {
   return shallow(
     <MiradorMenuButton aria-label="The Label" containerId="mirador" {...props}>
-      <>icon</>
+      icon
     </MiradorMenuButton>,
   );
 }

@@ -13,11 +13,11 @@ import { NestedMenu } from '../../../src/components/NestedMenu';
 function createWrapper(props) {
   return shallow(
     <NestedMenu
-      icon={<>GivenIcon</>}
+      icon="GivenIcon"
       label="GivenLabel"
       {...props}
     >
-      <>GivenChildren</>
+      GivenChildren
     </NestedMenu>,
   );
 }

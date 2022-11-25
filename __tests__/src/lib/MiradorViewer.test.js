@@ -7,11 +7,18 @@ jest.mock('react-dom');
 jest.mock('isomorphic-unfetch', () => jest.fn(() => Promise.resolve({ json: () => ({}) })));
 
 describe('MiradorViewer', () => {
+  let container;
   let instance;
   beforeAll(() => {
+    container = document.createElement('div');
+    container.id = 'mirador';
+    document.body.appendChild(container);
     ReactDOM.render = jest.fn();
     ReactDOM.unmountComponentAtNode = jest.fn();
     instance = new MiradorViewer({ id: 'mirador' });
+  });
+  afterAll(() => {
+    document.body.removeChild(container);
   });
   describe('constructor', () => {
     it('returns viewer store', () => {
@@ -23,32 +30,34 @@ describe('MiradorViewer', () => {
   });
   describe('processConfig', () => {
     it('transforms config values to actions to dispatch to store', () => {
-      instance = new MiradorViewer({
-        catalog: [
-          { manifestId: 'http://media.nga.gov/public/manifests/nga_highlights.json', provider: 'National Gallery of Art' },
-        ],
-        id: 'mirador',
-        windows: [
-          {
-            canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
-            loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-            thumbnailNavigationPosition: 'far-bottom',
-          },
-          {
-            loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-            view: 'book',
-          },
-        ],
-      },
-      {
-        plugins: [{
-          config: {
-            foo: 'bar',
-          },
-          mode: 'add',
-          target: 'WindowTopBarPluginArea',
-        }],
-      });
+      instance = new MiradorViewer(
+        {
+          catalog: [
+            { manifestId: 'http://media.nga.gov/public/manifests/nga_highlights.json', provider: 'National Gallery of Art' },
+          ],
+          id: 'mirador',
+          windows: [
+            {
+              canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
+              loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+              thumbnailNavigationPosition: 'far-bottom',
+            },
+            {
+              loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+              view: 'book',
+            },
+          ],
+        },
+        {
+          plugins: [{
+            config: {
+              foo: 'bar',
+            },
+            mode: 'add',
+            target: 'WindowTopBarPluginArea',
+          }],
+        },
+      );
 
       const { windows, catalog, config } = instance.store.getState();
       const windowIds = Object.keys(windows);
@@ -67,35 +76,37 @@ describe('MiradorViewer', () => {
       expect(config.foo).toBe('bar');
     });
     it('merges translation configs from multiple plugins', () => {
-      instance = new MiradorViewer({
-        id: 'mirador',
-      },
-      {
-        plugins: [
-          {
-            config: {
-              translations: {
-                en: {
-                  foo: 'bar',
+      instance = new MiradorViewer(
+        {
+          id: 'mirador',
+        },
+        {
+          plugins: [
+            {
+              config: {
+                translations: {
+                  en: {
+                    foo: 'bar',
+                  },
                 },
               },
+              mode: 'add',
+              target: 'WindowTopBarPluginArea',
             },
-            mode: 'add',
-            target: 'WindowTopBarPluginArea',
-          },
-          {
-            config: {
-              translations: {
-                en: {
-                  bat: 'bar',
+            {
+              config: {
+                translations: {
+                  en: {
+                    bat: 'bar',
+                  },
                 },
               },
+              mode: 'wrap',
+              target: 'Window',
             },
-            mode: 'wrap',
-            target: 'Window',
-          },
-        ],
-      });
+          ],
+        },
+      );
 
       const { config } = instance.store.getState();
 

@@ -22,7 +22,7 @@ export class AccessTokenSender extends Component {
   /** */
   render() {
     const { url } = this.props;
-    if (!url) return <></>;
+    if (!url) return null;
 
     /**
     login, clickthrough/kiosk open @id, wait for close

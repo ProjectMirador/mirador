@@ -355,9 +355,7 @@ describe('getVisibleCanvasNonTiledResources', () => {
         },
       },
     };
-    expect(getVisibleCanvasNonTiledResources(
-      state, { windowId: 'a' },
-    )[0].id).toBe('http://iiif.io/api/presentation/2.0/example/fixtures/resources/page1-full.png');
+    expect(getVisibleCanvasNonTiledResources(state, { windowId: 'a' })[0].id).toBe('http://iiif.io/api/presentation/2.0/example/fixtures/resources/page1-full.png');
   });
   it('works for v3 Presentation API', () => {
     const state = {
@@ -376,9 +374,7 @@ describe('getVisibleCanvasNonTiledResources', () => {
         },
       },
     };
-    expect(getVisibleCanvasNonTiledResources(
-      state, { windowId: 'a' },
-    )[0].id).toBe('http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png');
+    expect(getVisibleCanvasNonTiledResources(state, { windowId: 'a' })[0].id).toBe('http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png');
   });
 
   describe('getVisibleCanvasVideoResources', () => {
@@ -399,9 +395,7 @@ describe('getVisibleCanvasNonTiledResources', () => {
           },
         },
       };
-      expect(getVisibleCanvasVideoResources(
-        state, { windowId: 'a' },
-      )[0].id).toBe('https://fixtures.iiif.io/video/indiana/30-minute-clock/medium/30-minute-clock.mp4');
+      expect(getVisibleCanvasVideoResources(state, { windowId: 'a' })[0].id).toBe('https://fixtures.iiif.io/video/indiana/30-minute-clock/medium/30-minute-clock.mp4');
     });
   });
 
@@ -423,9 +417,7 @@ describe('getVisibleCanvasNonTiledResources', () => {
           },
         },
       };
-      expect(getVisibleCanvasCaptions(
-        state, { windowId: 'a' },
-      )[0].id).toBe('https://example.com/file.vtt');
+      expect(getVisibleCanvasCaptions(state, { windowId: 'a' })[0].id).toBe('https://example.com/file.vtt');
     });
   });
 
@@ -447,9 +439,7 @@ describe('getVisibleCanvasNonTiledResources', () => {
           },
         },
       };
-      expect(getVisibleCanvasAudioResources(
-        state, { windowId: 'a' },
-      )[0].id).toBe('https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4');
+      expect(getVisibleCanvasAudioResources(state, { windowId: 'a' })[0].id).toBe('https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4');
     });
   });
 });

@@ -20,7 +20,7 @@ describe('AccessTokenSender', () => {
 
   it('renders nothing if there is no url', () => {
     wrapper = createWrapper({});
-    expect(wrapper.matchesElement(<></>)).toBe(true);
+    expect(wrapper.isEmptyRender()).toBe(true);
   });
 
   it('renders properly', () => {

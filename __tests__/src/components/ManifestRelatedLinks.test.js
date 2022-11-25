@@ -21,6 +21,16 @@ describe('ManifestRelatedLinks', () => {
             },
           ]}
           manifestUrl="http://example.com/"
+          related={[
+            {
+              value: 'http://example.com/related',
+            },
+            {
+              format: 'video/ogg',
+              label: 'Video',
+              value: 'http://example.com/video',
+            },
+          ]}
           renderings={[
             {
               label: 'PDF Version',
@@ -81,16 +91,42 @@ describe('ManifestRelatedLinks', () => {
       ).toBe(true);
     });
 
-    it('renders manifest seeAlso information', () => {
+    it('renders related information', () => {
       expect(
         wrapper.find(Typography).at(5)
+          .matchesElement(
+            <Typography component="dt">iiif_related</Typography>,
+          ),
+      ).toBe(true);
+
+      expect(
+        wrapper.find(Typography).at(6)
+          .matchesElement(
+            <Typography component="dd"><Link href="http://example.com/related">http://example.com/related</Link></Typography>,
+          ),
+      ).toBe(true);
+
+      expect(
+        wrapper.find(Typography).at(7)
+          .matchesElement(
+            <Typography component="dd">
+              <Link href="http://example.com/video">Video</Link>
+              <Typography>(video/ogg)</Typography>
+            </Typography>,
+          ),
+      ).toBe(true);
+    });
+
+    it('renders manifest seeAlso information', () => {
+      expect(
+        wrapper.find(Typography).at(9)
           .matchesElement(
             <Typography component="dt">iiif_seeAlso</Typography>,
           ),
       ).toBe(true);
 
       expect(
-        wrapper.find(Typography).at(6)
+        wrapper.find(Typography).at(10)
           .matchesElement(
             <Typography component="dd">
               <Link href="http://example.com/a">A</Link>
@@ -100,7 +136,7 @@ describe('ManifestRelatedLinks', () => {
       ).toBe(true);
 
       expect(
-        wrapper.find(Typography).at(8)
+        wrapper.find(Typography).at(12)
           .matchesElement(
             <Typography component="dd"><Link href="http://example.com/b">http://example.com/b</Link></Typography>,
           ),
@@ -109,14 +145,14 @@ describe('ManifestRelatedLinks', () => {
 
     it('renders manifest links', () => {
       expect(
-        wrapper.find(Typography).at(9)
+        wrapper.find(Typography).at(13)
           .matchesElement(
             <Typography component="dt">iiif_manifest</Typography>,
           ),
       ).toBe(true);
 
       expect(
-        wrapper.find(Typography).at(10)
+        wrapper.find(Typography).at(14)
           .matchesElement(
             <Typography component="dd"><Link href="http://example.com/">http://example.com/</Link></Typography>,
           ),

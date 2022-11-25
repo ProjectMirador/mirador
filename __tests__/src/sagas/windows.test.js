@@ -218,8 +218,10 @@ describe('window-level sagas', () => {
 
       return expectSaga(setCurrentAnnotationsOnCurrentCanvas, action)
         .provide([
-          [select(getSearchForWindow,
-            { windowId: 'abc123' }), {}],
+          [select(
+            getSearchForWindow,
+            { windowId: 'abc123' },
+          ), {}],
         ])
         .run()
         .then(({ allEffects }) => allEffects.length === 0);
@@ -234,8 +236,10 @@ describe('window-level sagas', () => {
 
       return expectSaga(setCurrentAnnotationsOnCurrentCanvas, action)
         .provide([
-          [select(getSearchForWindow,
-            { windowId: 'abc123' }), { cwid: { } }],
+          [select(
+            getSearchForWindow,
+            { windowId: 'abc123' },
+          ), { cwid: { } }],
           [select(getAnnotationsBySearch, { canvasIds: ['a', 'b'], companionWindowIds: ['cwid'], windowId: 'abc123' }),
             { }],
         ])
@@ -256,8 +260,10 @@ describe('window-level sagas', () => {
 
       return expectSaga(setCurrentAnnotationsOnCurrentCanvas, action)
         .provide([
-          [select(getSearchForWindow,
-            { windowId: 'abc123' }), { cwid: { } }],
+          [select(
+            getSearchForWindow,
+            { windowId: 'abc123' },
+          ), { cwid: { } }],
           [select(getAnnotationsBySearch, { canvasIds: ['a', 'b'], companionWindowIds: ['cwid'], windowId: 'abc123' }),
             { cwid: ['annoId'] }],
         ])

@@ -29,9 +29,7 @@ export class WindowViewer extends Component {
 
     const { hasError } = this.state;
 
-    if (hasError) {
-      return <></>;
-    }
+    if (hasError) return null;
 
     return (
       <Suspense fallback={<div />}>

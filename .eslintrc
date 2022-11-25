@@ -7,7 +7,6 @@
     "page": true,
     "document": true
   },
-  "parser": "babel-eslint",
   "plugins": ["jest"],
   "rules": {
     "import/prefer-default-export": "off",
@@ -29,7 +28,16 @@
       "natural": false
     }],
     "react/jsx-props-no-spreading": "off",
+    "react/function-component-definition": "off",
+    "default-param-last": "off",
     "arrow-parens": "off",
-    "import/no-anonymous-default-export": "off"
+    "import/no-anonymous-default-export": "off",
+    "max-len": ["error", {
+      "code": 120,
+      "ignoreComments": true,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true,
+      "ignoreRegExpLiterals": true
+    }]
   }
 }
