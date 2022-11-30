@@ -5,6 +5,7 @@ import SyncDisabledIcon from '@material-ui/icons/SyncDisabled';
 import VisibilityIcon from '@material-ui/icons/VisibilitySharp';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOffSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import { VideoViewersReferences } from '../plugins/VideoViewersReferences';
 
 /**
  * AnnotationSettings is a component to handle various annotation
@@ -16,9 +17,11 @@ export class AnnotationSettings extends Component {
   */
   render() {
     const {
-      autoScroll, autoScrollDisabled,
+      windowId, autoScroll, autoScrollDisabled,
       displayAll, displayAllDisabled, t, toggleAnnotationAutoScroll, toggleAnnotationDisplay,
     } = this.props;
+
+    const mediaIsVideo = typeof VideoViewersReferences.get(windowId) !== 'undefined';
 
     return (
       <>
@@ -30,6 +33,7 @@ export class AnnotationSettings extends Component {
         >
           { displayAll ? <VisibilityIcon /> : <VisibilityOffIcon /> }
         </MiradorMenuButton>
+        { mediaIsVideo && (
         <MiradorMenuButton
           aria-label={autoScroll ? 'Disable auto scroll' : 'Enable auto scroll'}
           onClick={toggleAnnotationAutoScroll}
@@ -38,6 +42,7 @@ export class AnnotationSettings extends Component {
         >
           { autoScroll ? <SyncIcon /> : <SyncDisabledIcon /> }
         </MiradorMenuButton>
+        )}
       </>
     );
   }
