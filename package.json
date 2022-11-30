@@ -9,6 +9,7 @@
   ],
   "sideEffects": false,
   "scripts": {
+    "prepare": "npm run clean && npm run build:es && npm run build:cjs",
     "clean": "rm -rf ./dist",
     "lint": "node_modules/.bin/eslint ./ && npm run lint:translations && npm run lint:containers",
     "lint:containers": "node ./scripts/container-lint.js",
