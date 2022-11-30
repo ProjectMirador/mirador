@@ -3,6 +3,7 @@ upstream_tests:
   image: ghcr.io/puppeteer/puppeteer:latest
   before_script:
     - npm ci
+    - npm run build
   script:
     - npm run test:ci
   artifacts:
