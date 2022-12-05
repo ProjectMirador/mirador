@@ -16,6 +16,7 @@ import sr from './locales/sr/translation.json';
 import sv from './locales/sv/translation.json';
 import lt from './locales/lt/translation.json';
 import vi from './locales/vi/translation.json';
+import bg from './locales/bg/translation.json';
 import nbNo from './locales/nbNo/translation.json';
 
 /**
@@ -40,6 +41,7 @@ function createI18nInstance() {
     vi,
     'zh-CN': zhCn,
     'zh-TW': zhTw,
+    bg
   };
 
   const instance = i18n.createInstance();
