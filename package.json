@@ -15,7 +15,7 @@
     "lint:containers": "node ./scripts/container-lint.js",
     "lint:translations": "node ./scripts/i18n-lint.js",
     "server": "node_modules/.bin/http-server --cors",
-    "test:ci": "jest -c jest.json --ci --reporters=jest-junit --watchAll=false",
+    "test:ci": "jest -c jest.json --ci --reporters=default --reporters=jest-junit --watchAll=false --runInBand",
     "test": "npm run build && npm run lint && npm run size && jest -c jest.json",
     "test:debug": "node --inspect node_modules/.bin/jest -c jest.json --runInBand",
     "test:watch": "jest -c jest.json --watch",
