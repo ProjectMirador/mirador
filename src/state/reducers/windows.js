@@ -75,7 +75,6 @@ export const windowsReducer = (state = {}, action) => {
         {
           ...(orig || {}),
           canvasId: action.canvasId,
-          currentTime: 0,
           visibleCanvases: action.visibleCanvases || [],
         }), state);
     case ActionTypes.ADD_COMPANION_WINDOW:

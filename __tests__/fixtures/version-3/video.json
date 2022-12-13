@@ -1,0 +1,41 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://preview.iiif.io/cookbook/master/recipe/0003-mvm-video/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "Video Example 3"
+    ]
+  },
+  "items": [
+    {
+      "id": "https://preview.iiif.io/cookbook/master/recipe/0003-mvm-video/canvas",
+      "type": "Canvas",
+      "height": 360,
+      "width": 640,
+      "duration": 1801.055,
+      "items": [
+        {
+          "id": "https://preview.iiif.io/cookbook/master/recipe/0003-mvm-video/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://preview.iiif.io/cookbook/master/recipe/0003-mvm-video/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://fixtures.iiif.io/video/indiana/30-minute-clock/medium/30-minute-clock.mp4",
+                "type": "Video",
+                "height": 360,
+                "width": 640,
+                "duration": 1801.055,
+                "format": "video/mp4"
+              },
+              "target": "https://preview.iiif.io/cookbook/master/recipe/0003-mvm-video/canvas"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
