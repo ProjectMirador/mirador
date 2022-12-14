@@ -10,6 +10,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import CanvasOverlayVideo from '../lib/CanvasOverlayVideo';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
+import { VideosReferences } from '../plugins/VideosReferences';
 
 /** AnnotationsOverlayVideo - based on AnnotationsOverlay */
 export class AnnotationsOverlayVideo extends Component {
@@ -64,6 +65,7 @@ export class AnnotationsOverlayVideo extends Component {
     super(props);
 
     this.ref = React.createRef();
+    VideosReferences.set(props.windowId, this);
     this.canvasOverlay = null;
     // An initial value for the updateCanvas method
     this.updateCanvas = () => {};
@@ -621,12 +623,8 @@ export class AnnotationsOverlayVideo extends Component {
    * Renders things
    */
   render() {
-    const { annotations, searchAnnotations } = this.props;
     const { showProgress } = this.state;
     const circularProgress = (<CircularProgress style={{ left: '50%', position: 'absolute', top: '50%' }} />);
-    if (annotations.length === 0 && searchAnnotations.length === 0) {
-      return (<>{ showProgress && circularProgress }</>);
-    }
     return (
       <>
         <canvas ref={this.ref} style={{ left: 0, position: 'absolute', top: 0 }} />

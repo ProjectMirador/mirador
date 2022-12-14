@@ -5,7 +5,7 @@ import SyncDisabledIcon from '@material-ui/icons/SyncDisabled';
 import VisibilityIcon from '@material-ui/icons/VisibilitySharp';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOffSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
-import { VideoViewersReferences } from '../plugins/VideoViewersReferences';
+import { VideosReferences } from '../plugins/VideosReferences';
 
 /**
  * AnnotationSettings is a component to handle various annotation
@@ -21,7 +21,7 @@ export class AnnotationSettings extends Component {
       displayAll, displayAllDisabled, t, toggleAnnotationAutoScroll, toggleAnnotationDisplay,
     } = this.props;
 
-    const mediaIsVideo = typeof VideoViewersReferences.get(windowId) !== 'undefined';
+    const mediaIsVideo = typeof VideosReferences.get(windowId) !== 'undefined';
 
     return (
       <>
