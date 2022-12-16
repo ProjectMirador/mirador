@@ -25,6 +25,7 @@ import nbNo from './locales/nbNo/translation.json';
 function createI18nInstance() {
   const resources = {
     ar,
+    bg,
     de,
     en,
     fr,
@@ -41,7 +42,6 @@ function createI18nInstance() {
     vi,
     'zh-CN': zhCn,
     'zh-TW': zhTw,
-    bg
   };
 
   const instance = i18n.createInstance();
