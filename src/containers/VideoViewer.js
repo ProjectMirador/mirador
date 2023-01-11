@@ -48,11 +48,7 @@ const styles = () => ({
     width: '100%',
   },
   video: {
-    height: '100%',
-    maxHeight: '100%',
-    maxWidth: '100%',
-    'object-fit': 'contain', // 'scale-down',
-    'object-position': 'left top',
+    height: 'auto',
     width: '100%',
   },
 });

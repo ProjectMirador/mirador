@@ -1,4 +1,4 @@
-export const VideoViewersReferences = {
+export const VideosReferences = {
   /** */
   get(windowId) {
     return this.refs[windowId];

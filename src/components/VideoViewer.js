@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
 import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavigationControlsVideo';
-import { VideoViewersReferences } from '../plugins/VideoViewersReferences';
 
 /** */
 export class VideoViewer extends Component {
@@ -13,8 +12,6 @@ export class VideoViewer extends Component {
   constructor(props) {
     super(props);
     this.videoRef = React.createRef();
-    this.apiRef = React.createRef();
-    VideoViewersReferences.set(props.windowId, this);
 
     this.state = {
       start: 0,
@@ -159,7 +156,7 @@ export class VideoViewer extends Component {
       };
     }
     return (
-      <div className={classes.flexContainer} ref={this.apiRef}>
+      <div className={classes.flexContainer}>
         <div className={classes.flexFill}>
           { video && (
             <>
