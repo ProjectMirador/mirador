@@ -31,18 +31,16 @@ describe('SearchResults', () => {
   it('renders a SearchHit for each hit', () => {
     const selectContentSearchAnnotation = jest.fn();
     const wrapper = createWrapper({ selectContentSearchAnnotation });
-    const searchHits = wrapper.find('LiveMessenger').props().children({});
-
+    const searchHits = wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))');
     expect(searchHits.length).toEqual(1);
-    expect(searchHits[0].type.displayName).toEqual('Connect(WithStyles(WithPlugins(SearchHit)))');
-    expect(searchHits[0].props.index).toEqual(0);
+    expect(searchHits.first().props().index).toEqual(0);
   });
 
   it('can focus on a single item', () => {
     const wrapper = createWrapper({});
-    const searchHits = wrapper.find('LiveMessenger').props().children({});
+    const searchHits = wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))');
 
-    searchHits[0].props.showDetails();
+    searchHits.first().props().showDetails();
     expect(wrapper.state().focused).toEqual(true);
   });
 
@@ -55,14 +53,6 @@ describe('SearchResults', () => {
     expect(wrapper.state().focused).toEqual(false);
   });
 
-  it('passes announcePolite function to the SearchHits', () => {
-    const announcePolite = jest.fn();
-    const wrapper = createWrapper({});
-    const searchHits = wrapper.find('LiveMessenger').props().children({ announcePolite });
-
-    expect(searchHits[0].props.announcer).toEqual(announcePolite);
-  });
-
   describe('annotation-only search results', () => {
     it('renders a SearchHit for each annotation', () => {
       const wrapper = createWrapper({
@@ -70,13 +60,13 @@ describe('SearchResults', () => {
         searchHits: [],
       });
 
-      const searchHits = wrapper.find('LiveMessenger').props().children({});
+      const searchHits = wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))');
       expect(searchHits.length).toEqual(2);
-      expect(searchHits[0].props.index).toEqual(0);
-      expect(searchHits[0].props.annotationId).toEqual('x');
+      expect(searchHits.get(0).props.index).toEqual(0);
+      expect(searchHits.get(0).props.annotationId).toEqual('x');
 
-      expect(searchHits[1].props.index).toEqual(1);
-      expect(searchHits[1].props.annotationId).toEqual('y');
+      expect(searchHits.get(1).props.index).toEqual(1);
+      expect(searchHits.get(1).props.annotationId).toEqual('y');
     });
   });
 
