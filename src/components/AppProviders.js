@@ -7,8 +7,8 @@ import {
   ThemeProvider, StylesProvider, createTheme, jssPreset, createGenerateClassName,
 } from '@material-ui/core/styles';
 import { DndContext, DndProvider } from 'react-dnd';
-import MultiBackend from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch';
+import { MultiBackend } from 'react-dnd-multi-backend';
+import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
 import createI18nInstance from '../i18n';

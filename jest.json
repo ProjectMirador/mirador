@@ -18,5 +18,8 @@
     "<rootDir>/**/__tests__/**/*.{js,jsx}",
     "<rootDir>/src/**/?(*.)(spec|test|unit).{js,jsx}"
   ],
-  "preset": "jest-puppeteer"
+  "preset": "jest-puppeteer",
+  "transformIgnorePatterns": [
+    "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch)"
+  ]
 }
