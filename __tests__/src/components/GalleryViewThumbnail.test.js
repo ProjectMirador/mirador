@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { Utils } from 'manifesto.js';
 import Chip from '@material-ui/core/Chip';
-import IntersectionObserver from '@researchgate/react-intersection-observer';
+import { InView } from 'react-intersection-observer';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryViewThumbnail } from '../../../src/components/GalleryViewThumbnail';
 import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
@@ -78,7 +78,7 @@ describe('GalleryView', () => {
       };
       wrapper = createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
 
-      wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: true });
+      wrapper.find(InView).simulate('change', { isIntersecting: true });
       expect(requestCanvasAnnotations).toHaveBeenCalled();
     });
     it('does nothing if there is no intersection', () => {
@@ -89,7 +89,7 @@ describe('GalleryView', () => {
       };
       wrapper = createWrapper({ canvas, requestCanvasAnnotations });
 
-      wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: false });
+      wrapper.find(InView).simulate('change', { isIntersecting: false });
       expect(requestCanvasAnnotations).not.toHaveBeenCalled();
     });
     it('does nothing if there are already some annotations', () => {
@@ -100,7 +100,7 @@ describe('GalleryView', () => {
       };
       wrapper = createWrapper({ annotationsCount: 5, canvas, requestCanvasAnnotations });
 
-      wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: true });
+      wrapper.find(InView).simulate('change', { isIntersecting: true });
       expect(requestCanvasAnnotations).not.toHaveBeenCalled();
     });
   });

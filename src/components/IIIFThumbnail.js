@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import IntersectionObserver from '@researchgate/react-intersection-observer';
+import { InView } from 'react-intersection-observer';
 import classNames from 'classnames';
 import getThumbnail from '../lib/ThumbnailFactory';
 
@@ -47,10 +47,10 @@ export class IIIFThumbnail extends Component {
    * Handles the intersection (visibility) of a given thumbnail, by requesting
    * the image and then updating the state.
    */
-  handleIntersection(event) {
+  handleIntersection(inView, _entry) {
     const { loaded } = this.state;
 
-    if (loaded || !event.isIntersecting) return;
+    if (loaded || !inView) return;
 
     this.setState(state => ({ ...state, loaded: true }));
   }
@@ -151,7 +151,7 @@ export class IIIFThumbnail extends Component {
 
     return (
       <div className={classNames(classes.root, { [classes[`${variant}Root`]]: variant })}>
-        <IntersectionObserver onChange={this.handleIntersection}>
+        <InView as="span" onChange={this.handleIntersection}>
           <img
             alt=""
             role="presentation"
@@ -159,7 +159,7 @@ export class IIIFThumbnail extends Component {
             style={this.imageStyles()}
             className={classes.image}
           />
-        </IntersectionObserver>
+        </InView>
         { labelled && (
           <div className={classNames(classes.label, { [classes[`${variant}Label`]]: variant })}>
             <Typography variant="caption" classes={{ root: classNames(classes.caption, { [classes[`${variant}Caption`]]: variant }) }}>
