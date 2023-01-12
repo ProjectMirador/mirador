@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import Backdrop from '@material-ui/core/Backdrop';
 import InsertDriveFileSharpIcon from '@material-ui/icons/InsertDriveFileSharp';

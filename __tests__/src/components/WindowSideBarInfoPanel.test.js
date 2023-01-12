@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { WindowSideBarInfoPanel } from '../../../src/components/WindowSideBarInfoPanel';
 import CanvasInfo from '../../../src/containers/CanvasInfo';

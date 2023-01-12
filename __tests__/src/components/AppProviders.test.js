@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
 import { DndContext, DndProvider } from 'react-dnd';

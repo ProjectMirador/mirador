@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -26,7 +26,7 @@ export class WindowSideBarCanvasPanel extends Component {
     this.handleSequenceChange = this.handleSequenceChange.bind(this);
     this.handleVariantChange = this.handleVariantChange.bind(this);
 
-    this.containerRef = React.createRef();
+    this.containerRef = createRef();
   }
 
   /** */

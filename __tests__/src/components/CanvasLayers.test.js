@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import Input from '@material-ui/core/Input';
 import Slider from '@material-ui/core/Slider';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';

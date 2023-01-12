@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import BookmarksIcon from '@material-ui/icons/BookmarksSharp';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';

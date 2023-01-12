@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { WindowViewer } from '../../../src/components/WindowViewer';
 import WindowCanvasNavigationControls from '../../../src/containers/WindowCanvasNavigationControls';

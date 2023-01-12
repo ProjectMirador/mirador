@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import { withPlugins } from '../../../src/extend/withPlugins';

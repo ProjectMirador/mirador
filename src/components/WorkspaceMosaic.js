@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   MosaicWithoutDragDropContext, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
@@ -15,7 +15,7 @@ import MosaicLayout from '../lib/MosaicLayout';
  * @memberof Workspace
  * @private
  */
-export class WorkspaceMosaic extends React.Component {
+export class WorkspaceMosaic extends Component {
   /**
    */
   constructor(props) {

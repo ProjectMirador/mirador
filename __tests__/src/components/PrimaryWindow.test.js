@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { PrimaryWindow } from '../../../src/components/PrimaryWindow';
 import WindowSideBar from '../../../src/containers/WindowSideBar';

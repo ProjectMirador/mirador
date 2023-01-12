@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { Window } from '../../../src/components/Window';
 import WindowTopBar from '../../../src/containers/WindowTopBar';

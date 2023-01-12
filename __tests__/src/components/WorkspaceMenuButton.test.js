@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { WorkspaceMenuButton } from '../../../src/components/WorkspaceMenuButton';

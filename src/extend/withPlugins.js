@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { forwardRef, useContext } from 'react';
 import curry from 'lodash/curry';
 import isEmpty from 'lodash/isEmpty';
 import PluginContext from './PluginContext';
@@ -46,7 +46,7 @@ function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-u
     return plugins.wrap.slice().reverse()
       .reduce(pluginWrapper, <TargetComponent {...passDownProps} />);
   }
-  const whatever = React.forwardRef(PluginHoc);
+  const whatever = forwardRef(PluginHoc);
 
   whatever.displayName = `WithPlugins(${targetName})`;
   return whatever;

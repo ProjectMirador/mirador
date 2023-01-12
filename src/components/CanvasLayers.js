@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { v4 as uuid } from 'uuid';

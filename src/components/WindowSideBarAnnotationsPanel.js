@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import AnnotationSettings from '../containers/AnnotationSettings';
@@ -14,7 +14,7 @@ export class WindowSideBarAnnotationsPanel extends Component {
   constructor(props) {
     super(props);
 
-    this.containerRef = React.createRef();
+    this.containerRef = createRef();
   }
 
   /**
