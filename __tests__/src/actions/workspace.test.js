@@ -13,24 +13,6 @@ describe('workspace actions', () => {
       expect(actions.updateWorkspace(options)).toEqual(expectedAction);
     });
   });
-  describe('setWorkspaceFullscreen', () => {
-    it('should return correct action type if set to true', () => {
-      const receivedAction = actions.setWorkspaceFullscreen(true);
-      const expectedAction = {
-        isFullscreenEnabled: true,
-        type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
-      };
-      expect(receivedAction).toEqual(expectedAction);
-    });
-    it('should return correct action type if set to false', () => {
-      const receivedAction = actions.setWorkspaceFullscreen(false);
-      const expectedAction = {
-        isFullscreenEnabled: false,
-        type: ActionTypes.SET_WORKSPACE_FULLSCREEN,
-      };
-      expect(receivedAction).toEqual(expectedAction);
-    });
-  });
   describe('updateWorkspaceMosaicLayout', () => {
     it('should updates mosaic layout', () => {
       const options = { foo: 'bar' };

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Fullscreen from 'react-full-screen';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
 import { LiveAnnouncer } from 'react-aria-live';
 import {
@@ -12,6 +12,7 @@ import HTML5toTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
 import createI18nInstance from '../i18n';
+import FullScreenContext from '../contexts/FullScreenContext';
 
 /**
  * Allow applications to opt-out of (or provide their own) drag and drop context
@@ -44,6 +45,25 @@ MaybeDndProvider.propTypes = {
     false,
     PropTypes.object, // eslint-disable-line react/forbid-prop-types
   ]).isRequired,
+};
+
+/**
+ * Shim to inject the full screen handle into a context
+ */
+const FullScreenShim = ({ children }) => {
+  const handle = useFullScreenHandle();
+
+  return (
+    <FullScreen handle={handle}>
+      <FullScreenContext.Provider value={handle}>
+        {children}
+      </FullScreenContext.Provider>
+    </FullScreen>
+  );
+};
+
+FullScreenShim.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 /**
@@ -81,8 +101,8 @@ export class AppProviders extends Component {
   /** */
   render() {
     const {
-      children, createGenerateClassNameOptions, isFullscreenEnabled,
-      setWorkspaceFullscreen, theme, translations,
+      children, createGenerateClassNameOptions,
+      theme, translations,
       dndManager,
     } = this.props;
 
@@ -93,10 +113,7 @@ export class AppProviders extends Component {
     });
 
     return (
-      <Fullscreen
-        enabled={isFullscreenEnabled}
-        onChange={setWorkspaceFullscreen}
-      >
+      <FullScreenShim>
         <I18nextProvider i18n={this.i18n}>
           <LiveAnnouncer>
             <ThemeProvider
@@ -113,7 +130,7 @@ export class AppProviders extends Component {
             </ThemeProvider>
           </LiveAnnouncer>
         </I18nextProvider>
-      </Fullscreen>
+      </FullScreenShim>
     );
   }
 }
@@ -122,9 +139,7 @@ AppProviders.propTypes = {
   children: PropTypes.node,
   createGenerateClassNameOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   dndManager: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  isFullscreenEnabled: PropTypes.bool,
   language: PropTypes.string.isRequired,
-  setWorkspaceFullscreen: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   translations: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
@@ -133,5 +148,4 @@ AppProviders.defaultProps = {
   children: null,
   createGenerateClassNameOptions: {},
   dndManager: undefined,
-  isFullscreenEnabled: false,
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
-import Fullscreen from 'react-full-screen';
 import { DndContext, DndProvider } from 'react-dnd';
 import { AppProviders } from '../../../src/components/AppProviders';
 import settings from '../../../src/config/settings';
@@ -14,7 +13,6 @@ function createWrapper(props) {
     <AppProviders
       language="en"
       isFullscreenEnabled={false}
-      setWorkspaceFullscreen={() => {}}
       theme={settings.theme}
       translations={{}}
       t={k => k}
@@ -28,7 +26,6 @@ describe('AppProviders', () => {
     const wrapper = createWrapper();
     expect(wrapper.find(ThemeProvider).length).toBe(1);
     expect(wrapper.find(StylesProvider).length).toBe(1);
-    expect(wrapper.find(Fullscreen).length).toBe(1);
   });
 
   it('sets up a theme based on the config passed in merged w/ MaterialUI', () => {
@@ -42,23 +39,6 @@ describe('AppProviders', () => {
   it('sets up translations based on the config passed in', () => {
     const wrapper = createWrapper({ translations: { en: { off: 'on' } } });
     expect(wrapper.instance().i18n.t('off')).toEqual('on');
-  });
-
-  it('should pass setWorkspaceFullscreen to Fullscreen.onChange', () => {
-    const mockFn = jest.fn();
-    const wrapper = createWrapper({ setWorkspaceFullscreen: mockFn });
-    expect(wrapper.find(Fullscreen).first().prop('onChange'))
-      .toBe(mockFn);
-  });
-
-  it('should pass isFullscreenEnabled to Fullscreen.enabled', () => {
-    let wrapper = createWrapper({ isFullscreenEnabled: false });
-    expect(wrapper.find(Fullscreen).first().prop('enabled'))
-      .toEqual(false);
-
-    wrapper = createWrapper({ isFullscreenEnabled: true });
-    expect(wrapper.find(Fullscreen).first().prop('enabled'))
-      .toEqual(true);
   });
 
   describe('componentDidUpdate()', () => {
