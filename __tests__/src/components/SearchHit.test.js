@@ -82,6 +82,7 @@ describe('SearchHit', () => {
       wrapper.setProps({ selected: true });
       expect(announcer).toHaveBeenCalledWith(
         'pagination The Canvas Label The Annotation Label Light up the moose , and start the chai',
+        'polite',
       );
     });
 
