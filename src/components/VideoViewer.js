@@ -68,6 +68,8 @@ export class VideoViewer extends Component {
       if (video.muted !== muted) {
         video.muted = muted;
       }
+      // Fix the out of sync between video and slidebar
+      video.currentTime = currentTime;
       if (video.textTracks && video.textTracks.length > 0) {
         const newMode = textTrackDisabled ? 'hidden' : 'showing';
         if (video.textTracks[0].mode !== newMode) {
