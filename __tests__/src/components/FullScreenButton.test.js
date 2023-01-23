@@ -4,18 +4,21 @@ import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
 import { FullScreenButton } from '../../../src/components/FullScreenButton';
+import FullScreenContext from '../../../src/contexts/FullScreenContext';
 
 /** */
-function createWrapper(props) {
+function createWrapper(props, contextProps = { active: false }) {
   return shallow(
     <FullScreenButton
       classes={{}}
       className="xyz"
-      setWorkspaceFullscreen={() => {}}
-      isFullscreenEnabled={false}
       {...props}
     />,
-  );
+    {
+      wrappingComponent: FullScreenContext.Provider,
+      wrappingComponentProps: { value: { enter: () => { }, exit: () => { }, ...contextProps } },
+    },
+  ).dive();
 }
 
 describe('FullScreenButton', () => {
@@ -30,10 +33,10 @@ describe('FullScreenButton', () => {
   });
 
   describe('when not in fullscreen', () => {
-    let setWorkspaceFullscreen;
+    let enter;
     beforeAll(() => {
-      setWorkspaceFullscreen = jest.fn();
-      wrapper = createWrapper({ setWorkspaceFullscreen });
+      enter = jest.fn();
+      wrapper = createWrapper({}, { enter });
       menuButton = wrapper.find(MiradorMenuButton);
     });
 
@@ -45,17 +48,17 @@ describe('FullScreenButton', () => {
       expect(menuButton.props()['aria-label']).toEqual('workspaceFullScreen');
     });
 
-    it('triggers the setWorkspaceFullscreen prop with the appropriate boolean', () => {
+    it('triggers the handle enter with the appropriate boolean', () => {
       menuButton.props().onClick(); // Trigger the onClick prop
-      expect(setWorkspaceFullscreen).toHaveBeenCalledWith(true);
+      expect(enter).toHaveBeenCalled();
     });
   });
 
   describe('when in fullscreen', () => {
-    let setWorkspaceFullscreen;
+    let exit;
     beforeAll(() => {
-      setWorkspaceFullscreen = jest.fn();
-      wrapper = createWrapper({ isFullscreenEnabled: true, setWorkspaceFullscreen });
+      exit = jest.fn();
+      wrapper = createWrapper({}, { active: true, exit });
       menuButton = wrapper.find(MiradorMenuButton);
     });
 
@@ -67,9 +70,9 @@ describe('FullScreenButton', () => {
       expect(menuButton.props()['aria-label']).toEqual('exitFullScreen');
     });
 
-    it('triggers the setWorkspaceFullscreen prop with the appropriate boolean', () => {
+    it('triggers the handle exit with the appropriate boolean', () => {
       menuButton.props().onClick(); // Trigger the onClick prop
-      expect(setWorkspaceFullscreen).toHaveBeenCalledWith(false);
+      expect(exit).toHaveBeenCalled();
     });
   });
 });
