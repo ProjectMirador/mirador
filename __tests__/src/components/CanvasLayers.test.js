@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import Input from '@material-ui/core/Input';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { CanvasLayers } from '../../../src/components/CanvasLayers';
 import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 
