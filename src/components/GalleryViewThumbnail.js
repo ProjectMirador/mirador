@@ -5,8 +5,7 @@ import Chip from '@material-ui/core/Chip';
 import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import SearchIcon from '@material-ui/icons/SearchSharp';
 import classNames from 'classnames';
-import 'intersection-observer'; // polyfill needed for Safari
-import IntersectionObserver from '@researchgate/react-intersection-observer';
+import { InView } from 'react-intersection-observer';
 import MiradorCanvas from '../lib/MiradorCanvas';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 
@@ -109,7 +108,7 @@ export class GalleryViewThumbnail extends Component {
     const miradorCanvas = new MiradorCanvas(canvas);
 
     return (
-      <IntersectionObserver onChange={this.handleIntersection}>
+      <InView onChange={this.handleIntersection}>
         <div
           key={canvas.index}
           className={
@@ -168,7 +167,7 @@ export class GalleryViewThumbnail extends Component {
             </div>
           </IIIFThumbnail>
         </div>
-      </IntersectionObserver>
+      </InView>
     );
   }
 }
