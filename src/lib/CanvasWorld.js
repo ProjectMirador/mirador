@@ -1,4 +1,3 @@
-import normalizeUrl from 'normalize-url';
 import MiradorCanvas from './MiradorCanvas';
 
 /**
@@ -136,13 +135,10 @@ export default class CanvasWorld {
   /** Get the IIIF content resource for an image */
   contentResource(infoResponseId) {
     const miradorCanvas = this.canvases.find(c => c.imageServiceIds.some(id => (
-      id && infoResponseId && normalizeUrl(id, { stripAuthentication: false })
-        === normalizeUrl(infoResponseId, { stripAuthentication: false }))));
+      id && infoResponseId && (new URL(id).href === new URL(infoResponseId).href))));
     if (!miradorCanvas) return undefined;
     return miradorCanvas.imageResources
-      .find(r => (
-        normalizeUrl(r.getServices()[0].id, { stripAuthentication: false })
-        === normalizeUrl(infoResponseId, { stripAuthentication: false })));
+      .find(r => (new URL(r.getServices()[0].id).href === new URL(infoResponseId).href));
   }
 
   /** @private */

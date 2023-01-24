@@ -2,7 +2,6 @@ import {
   all, call, put, select, takeEvery,
 } from 'redux-saga/effects';
 import { Utils } from 'manifesto.js';
-import normalizeUrl from 'normalize-url';
 import ActionTypes from '../actions/action-types';
 import {
   receiveManifest, receiveManifestFailure, receiveInfoResponse,
@@ -79,8 +78,7 @@ function* fetchIiifResourceWithAuth(url, iiifResource, options, { degraded, fail
 
   const id = json['@id'] || json.id;
   if (response.ok) {
-    if (normalizeUrl(id, { stripAuthentication: false })
-      === normalizeUrl(url.replace(/info\.json$/, ''), { stripAuthentication: false })) {
+    if (new URL(id).href === new URL(url.replace(/info\.json$/, '').href)) {
       yield put(success({ json, response, tokenServiceId }));
       return;
     }
