@@ -48,7 +48,6 @@
     "jss-rtl": "^0.3.0",
     "lodash": "^4.17.11",
     "manifesto.js": "^4.2.0",
-    "normalize-url": "^4.5.0",
     "openseadragon": "^2.4.2",
     "prop-types": "^15.6.2",
     "re-reselect": "^4.0.0",
