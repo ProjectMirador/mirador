@@ -59,8 +59,9 @@ export class CanvasAnnotations extends Component {
     console.log("open");
     let manifestId = 'https://preview.iiif.io/cookbook/master/recipe/0003-mvm-video/manifest.json' // For testing purposes
 
-    const { addResource } = this.props;
+    const { addResource, addWindow } = this.props;
     addResource(manifestId);
+    addWindow({ manifestId });
   }
 
   /**
@@ -136,6 +137,7 @@ export class CanvasAnnotations extends Component {
 
 CanvasAnnotations.propTypes = {
   addResource: PropTypes.func.isRequired,
+  addWindow: PropTypes.func.isRequired,
   annotations: PropTypes.arrayOf(
     PropTypes.shape({
       content: PropTypes.string.isRequired,
