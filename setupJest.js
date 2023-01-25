@@ -1,7 +1,7 @@
 // Setup Jest to mock fetch
 
 import { JSDOM } from 'jsdom'; // eslint-disable-line import/no-extraneous-dependencies
-import fetch from 'jest-fetch-mock'; // eslint-disable-line import/no-extraneous-dependencies
+import fetchMock from 'jest-fetch-mock'; // eslint-disable-line import/no-extraneous-dependencies
 import Enzyme from 'enzyme'; // eslint-disable-line import/no-extraneous-dependencies
 import Adapter from 'enzyme-adapter-react-16'; // eslint-disable-line import/no-extraneous-dependencies
 
@@ -11,8 +11,7 @@ const { window } = jsdom;
 jest.setTimeout(10000);
 
 window.HTMLCanvasElement.prototype.getContext = () => {};
-jest.setMock('isomorphic-unfetch', fetch);
-require('jest-fetch-mock').enableMocks(); // eslint-disable-line import/no-extraneous-dependencies
+fetchMock.enableMocks();
 
 global.window = window;
 global.navigator = {
