@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
 
+
+
 /**
  * CanvasAnnotations ~
 */
@@ -22,6 +24,7 @@ export class CanvasAnnotations extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleAnnotationHover = this.handleAnnotationHover.bind(this);
     this.handleAnnotationBlur = this.handleAnnotationBlur.bind(this);
+    this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
   }
 
   /**
@@ -48,9 +51,16 @@ export class CanvasAnnotations extends Component {
 
   /** */
   handleAnnotationBlur() {
+    console.log('handleAnnotationBlur');
     const { hoverAnnotation, windowId } = this.props;
-
     hoverAnnotation(windowId, []);
+  }
+  handleOpenManifestSideToSide(annotation) {
+    console.log("open");
+    let manifestId = 'https://preview.iiif.io/cookbook/master/recipe/0003-mvm-video/manifest.json' // For testing purposes
+
+    const { addResource } = this.props;
+    addResource(manifestId);
   }
 
   /**
@@ -108,6 +118,11 @@ export class CanvasAnnotations extends Component {
                         ))
                       }
                     </div>
+                    <div>
+                      {annotation.format != 'application/json' && (
+                        <button onClick={e => this.handleOpenManifestSideToSide(e, annotation)}>Ouvrir le manifest</button>
+                      )}
+                    </div>
                   </ListItemText>
                 </MenuItem>
               </ScrollTo>
@@ -120,6 +135,7 @@ export class CanvasAnnotations extends Component {
 }
 
 CanvasAnnotations.propTypes = {
+  addResource: PropTypes.func.isRequired,
   annotations: PropTypes.arrayOf(
     PropTypes.shape({
       content: PropTypes.string.isRequired,

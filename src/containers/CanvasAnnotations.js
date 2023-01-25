@@ -46,6 +46,8 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
  * @private
  */
 const mapDispatchToProps = {
+  addResource: actions.addResource,
+  addWindow: actions.addWindow,
   deselectAnnotation: actions.deselectAnnotation,
   hoverAnnotation: actions.hoverAnnotation,
   selectAnnotation: actions.selectAnnotation,
