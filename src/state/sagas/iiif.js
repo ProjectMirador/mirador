@@ -1,7 +1,6 @@
 import {
   all, call, put, select, takeEvery,
 } from 'redux-saga/effects';
-import fetch from 'isomorphic-unfetch';
 import { Utils } from 'manifesto.js';
 import normalizeUrl from 'normalize-url';
 import ActionTypes from '../actions/action-types';
