@@ -130,5 +130,8 @@
   "peerDependencies": {
     "react": "^16.8.3",
     "react-dom": "^16.8.3"
+  },
+  "overrides": {
+    "jest-environment-node": "29.4.0"
   }
 }
