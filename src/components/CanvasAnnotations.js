@@ -6,10 +6,10 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import BookmarksIcon from '@material-ui/icons/BookmarksSharp';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
-
-
+import { MiradorMenuButton } from './MiradorMenuButton';
 
 /**
  * CanvasAnnotations ~
@@ -128,7 +128,13 @@ export class CanvasAnnotations extends Component {
                     </div>
                     <div>
                       {isManifest(annotation.id) && (
-                        <button onClick={e => this.handleOpenManifestSideToSide(e, annotation)}>Ouvrir le manifest</button>
+                        <MiradorMenuButton
+                          aria-haspopup="true"
+                          aria-label={t('openManifestInOtherWindow')}
+                          onClick={(e) => { this.handleOpenManifestSideToSide(e, annotation); }}
+                        >
+                          <BookmarksIcon />
+                        </MiradorMenuButton>
                       )}
                     </div>
                   </ListItemText>

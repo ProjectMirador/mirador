@@ -101,6 +101,7 @@
     "openCompanionWindow_layers": "Calques",
     "openCompanionWindow_search": "Rechercher",
     "openInCompanionWindow": "Ouvrir dans un panneau séparé",
+    "openManifestInOtherWindow" : "Ouvrir le manifeste dans une autre fenêtre Mirador",
     "openWindows": "Fenêtres ouvertes",
     "pagination": "{{current}} sur {{total}}",
     "position": "Position",
