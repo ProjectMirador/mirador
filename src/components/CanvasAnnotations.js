@@ -55,10 +55,10 @@ export class CanvasAnnotations extends Component {
     const { hoverAnnotation, windowId } = this.props;
     hoverAnnotation(windowId, []);
   }
-  handleOpenManifestSideToSide(annotation) {
-    console.log("open");
-    let manifestId = 'https://preview.iiif.io/cookbook/master/recipe/0003-mvm-video/manifest.json' // For testing purposes
 
+  /** */
+  handleOpenManifestSideToSide(e, annotation) {
+    const manifestId = annotation.id;
     const { addResource, addWindow } = this.props;
     addResource(manifestId);
     addWindow({ manifestId });
@@ -74,6 +74,13 @@ export class CanvasAnnotations extends Component {
       containerRef,
     } = this.props;
     if (annotations.length === 0) return null;
+
+    /** Check if id match the pattern of a manifest. <url_manifest>#manifest */
+    function isManifest(id) {
+      return id.match(
+        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#manifest$/g,
+      );
+    }
 
     return (
       <>
@@ -120,7 +127,7 @@ export class CanvasAnnotations extends Component {
                       }
                     </div>
                     <div>
-                      {annotation.format != 'application/json' && (
+                      {isManifest(annotation.id) && (
                         <button onClick={e => this.handleOpenManifestSideToSide(e, annotation)}>Ouvrir le manifest</button>
                       )}
                     </div>
