@@ -7,9 +7,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import DashboardIcon from '@material-ui/icons/Dashboard';
-import SanitizedHtml from '../containers/SanitizedHtml';
-import { ScrollTo } from './ScrollTo';
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMoreSharp';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 import { MiradorMenuButton } from './MiradorMenuButton';
+import { ScrollTo } from './ScrollTo';
+import SanitizedHtml from '../containers/SanitizedHtml';
 
 /**
  * CanvasAnnotations ~
@@ -51,14 +56,12 @@ export class CanvasAnnotations extends Component {
 
   /** */
   handleAnnotationBlur() {
-    console.log('handleAnnotationBlur');
     const { hoverAnnotation, windowId } = this.props;
     hoverAnnotation(windowId, []);
   }
 
   /** */
-  handleOpenManifestSideToSide(e, annotation) {
-    const manifestId = annotation.id;
+  handleOpenManifestSideToSide(e, manifestId) {
     const { addResource, addWindow } = this.props;
     addResource(manifestId);
     addWindow({ manifestId });
@@ -75,13 +78,21 @@ export class CanvasAnnotations extends Component {
     } = this.props;
     if (annotations.length === 0) return null;
 
-    /** Check if id match the pattern of a manifest. <url_manifest>#manifest */
-    function isManifest(id) {
-      return id.match(
-        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#manifest$/g,
+    /** */
+    function searchManifest(text) {
+      return text.match(
+        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#manifest/g,
       );
     }
 
+    annotations.forEach((annotation, i) => {
+      // eslint-disable-next-line react/prop-types
+      annotations[i].idIsManifest = !!searchManifest(annotation.id);
+      // eslint-disable-next-line react/prop-types
+      annotations[i].manifestsInContent = searchManifest(annotation.content);
+    });
+
+    console.log(annotations);
     return (
       <>
         <Typography className={classes.sectionHeading} variant="overline">
@@ -127,18 +138,55 @@ export class CanvasAnnotations extends Component {
                       }
                     </div>
                     <div>
-                      {isManifest(annotation.id) && (
-                        <div>
+                      {
+                        (annotation.idIsManifest || annotation.manifestsInContent) && (
+                          <div>
+                            <Accordion>
+                              <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                              >
+                                <Typography className={classes.heading}>Accordion 1</Typography>
+                              </AccordionSummary>
+                              <AccordionDetails>
+                                <Typography>
+                                  {annotation.idIsManifest && (
+                                    <div>
+                                      <div>{annotation.id}</div>
+                                      <MiradorMenuButton
+                                        aria-haspopup="true"
+                                        aria-label={t('openManifestInOtherWindow', { manifest: annotation.id })}
+                                        titleAccess={t('openManifestInOtherWindow', { manifest: annotation.id })}
+                                        onClick={(e) => { this.handleOpenManifestSideToSide(e, annotation.id); }}
+                                      >
+                                        <PlaylistAddIcon />
+                                      </MiradorMenuButton>
+                                    </div>
+                                  )}
+                                </Typography>
+                              </AccordionDetails>
+                            </Accordion>
+                            <h4>Manifests found :</h4>
+                          </div>
+
+                        )
+                      }
+
+                      {annotation.manifestsInContent && annotation.manifestsInContent.map(manifestId => (
+                        <div className={classes.manifestOpeningWrapper}>
+                          <div>{manifestId}</div>
                           <MiradorMenuButton
                             aria-haspopup="true"
                             aria-label={t('openManifestInOtherWindow')}
-                            onClick={(e) => { this.handleOpenManifestSideToSide(e, annotation); }}
+                            titleAccess={t('openManifestInOtherWindow')}
+                            onClick={(e) => { this.handleOpenManifestSideToSide(e, manifestId); }}
+                            className={classes.manifestOpeningButton}
                           >
-                            <DashboardIcon />
+                            <PlaylistAddIcon />
                           </MiradorMenuButton>
                         </div>
-
-                      )}
+                      ))}
                     </div>
                   </ListItemText>
                 </MenuItem>

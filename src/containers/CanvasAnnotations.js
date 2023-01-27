@@ -72,6 +72,15 @@ const styles = theme => ({
     marginTop: theme.spacing(1),
   },
   hovered: {},
+  manifestOpeningIcon: {
+    width: '30%',
+  },
+  manifestOpeningLink: {
+    width: '70%',
+  },
+  manifestOpeningWrapper: {
+    display: 'flex',
+  },
   sectionHeading: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
