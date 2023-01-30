@@ -5,9 +5,11 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { AnnotationManifestsAccordion } from '../components/AnnotationManifestsAccordion';
 import * as actions from '../state/actions';
+import { getConfig } from '../state/selectors';
 
 /** For connect */
 const mapStateToProps = (state, { canvasId, windowId }) => ({
+  htmlSanitizationRuleSet: getConfig(state).annotations.htmlSanitizationRuleSet,
 });
 
 /**
@@ -20,7 +22,7 @@ const mapDispatchToProps = {
   addWindow: actions.addWindow,
 };
 
-/** For withStlyes */
+/** For withStyles */
 const styles = theme => ({
   manifestOpeningIcon: {
     width: '30%',

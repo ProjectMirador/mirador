@@ -9,17 +9,16 @@ import PropTypes from 'prop-types';
 import { MiradorMenuButton } from './MiradorMenuButton';
 
 /**
- * AnnotationManifestsAccordion ~
+ * AnnotationManifestsAccordion
  */
 export class AnnotationManifestsAccordion extends Component {
   /**
-   * constructor -
+   * constructor
    */
   constructor(props) {
     super(props);
     this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
   }
-
 
   /** */
   handleOpenManifestSideToSide(e, manifestId) {
@@ -31,7 +30,7 @@ export class AnnotationManifestsAccordion extends Component {
   /** */
   render() {
     const {
-      classes, annotation, t
+      classes, annotation, t,
     } = this.props;
 
     /** */
@@ -45,7 +44,7 @@ export class AnnotationManifestsAccordion extends Component {
     annotation.idIsManifest = !!searchManifest(annotation.id);
     annotation.manifestsInContent = searchManifest(annotation.content);
 
-    if (annotation.manifestsInContent === null) {
+    if (annotation.manifestsInContent === null && annotation.idIsManifest) {
       return null;
     }
 
@@ -54,7 +53,7 @@ export class AnnotationManifestsAccordion extends Component {
         <div>
           <Accordion>
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon/>}
+              expandIcon={<ExpandMoreIcon />}
             >
               <Typography className={classes.heading}>Manifests found :</Typography>
             </AccordionSummary>
@@ -72,7 +71,7 @@ export class AnnotationManifestsAccordion extends Component {
                       }}
                       className={classes.manifestOpeningButton}
                     >
-                      <PlaylistAddIcon/>
+                      <PlaylistAddIcon />
                     </MiradorMenuButton>
                   </div>
                 )}
@@ -104,12 +103,13 @@ export class AnnotationManifestsAccordion extends Component {
 AnnotationManifestsAccordion.propsTypes = {
   addResource: PropTypes.func.isRequired,
   addWindow: PropTypes.func.isRequired,
-  annotation:
-    PropTypes.shape({
+  annotation: PropTypes.objectOf(
+    {
       id: PropTypes.string.isRequired,
       idIsManifest: PropTypes.bool,
       manifestsInContent: PropTypes.arrayOf(PropTypes.string),
-    }),
+    },
+  ),
   classes: PropTypes.objectOf(PropTypes.string),
   t: PropTypes.func.isRequired,
 };

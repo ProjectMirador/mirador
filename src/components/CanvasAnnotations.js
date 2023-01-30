@@ -8,7 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { ScrollTo } from './ScrollTo';
 import SanitizedHtml from '../containers/SanitizedHtml';
-import { AnnotationManifestsAccordion } from './AnnotationManifestsAccordion';
+import AnnotationManifestsAccordion from '../containers/AnnotationManifestsAccordion';
 
 /**
  * CanvasAnnotations ~
@@ -43,7 +43,6 @@ export class CanvasAnnotations extends Component {
   /** */
   handleAnnotationHover(annotation) {
     const { hoverAnnotation, windowId } = this.props;
-
     hoverAnnotation(windowId, [annotation.id]);
   }
 

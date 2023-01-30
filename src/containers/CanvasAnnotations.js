@@ -51,7 +51,7 @@ const mapDispatchToProps = {
   selectAnnotation: actions.selectAnnotation,
 };
 
-/** For withStlyes */
+/** For withStyles */
 const styles = theme => ({
   annotationListItem: {
     '&$hovered': {
