@@ -6,7 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import PropTypes from 'prop-types';
-import { MiradorMenuButton } from './MiradorMenuButton';
+import { Card, CardActionArea, CardActions, CardContent, CardMedia, Fab } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 
 /**
  * AnnotationManifestsAccordion
@@ -29,6 +30,7 @@ export class AnnotationManifestsAccordion extends Component {
   }
 
   /** */
+  // eslint-disable-next-line class-methods-use-this,require-jsdoc
   handleOpenAccordion(e) {
     e.stopPropagation();
   }
@@ -46,17 +48,14 @@ export class AnnotationManifestsAccordion extends Component {
       );
     }
 
-    annotation.idIsManifest = !!searchManifest(annotation.id);
-    annotation.manifestsInContent = searchManifest(annotation.content);
+    annotation.manifests = searchManifest(annotation.content.concat(annotation.id));
 
-    if (annotation.manifestsInContent === null && !annotation.idIsManifest) {
+    if (annotation.manifests === null) {
       return null;
     }
 
     return (
-      (annotation.idIsManifest || annotation.manifestsInContent) && (
         <div>
-          {annotation.idIsManifest}
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -66,43 +65,40 @@ export class AnnotationManifestsAccordion extends Component {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                {annotation.idIsManifest && (
-                  <div className={classes.manifestOpeningWrapper}>
-                    <div>{annotation.id}</div>
-                    <MiradorMenuButton
-                      aria-haspopup="true"
-                      aria-label={t('openManifestInOtherWindow', { manifest: annotation.id })}
-                      titleAccess={t('openManifestInOtherWindow', { manifest: annotation.id })}
-                      onClick={(e) => {
-                        this.handleOpenManifestSideToSide(e, annotation.id);
-                      }}
-                      className={classes.manifestOpeningButton}
-                    >
-                      <PlaylistAddIcon />
-                    </MiradorMenuButton>
-                  </div>
-                )}
-                {annotation.manifestsInContent && annotation.manifestsInContent.map(manifestId => (
-                  <div className={classes.manifestOpeningWrapper}>
-                    <div>{manifestId}</div>
-                    <MiradorMenuButton
-                      aria-haspopup="true"
-                      aria-label={t('openManifestInOtherWindow')}
-                      titleAccess={t('openManifestInOtherWindow')}
-                      onClick={(e) => {
-                        this.handleOpenManifestSideToSide(e, manifestId);
-                      }}
-                      className={classes.manifestOpeningButton}
-                    >
-                      <PlaylistAddIcon />
-                    </MiradorMenuButton>
-                  </div>
+                {annotation.manifests.map(manifestId => (
+                  <Card className={classes.root}>
+                    <CardActionArea>
+                      <CardMedia
+                        component="img"
+                        alt="Contemplative Reptile"
+                        height="140"
+                        image="https://www.tetras-libre.fr/themes/tetras/img/logo.svg"
+                        title="Tetras tooltip"
+                      />
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          Lizard
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                          Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                          across all continents except Antarctica
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                    <CardActions>
+                      <Button size="small" color="primary">
+                        Share
+                      </Button>
+                      <Button size="small" color="primary">
+                        Learn More
+                      </Button>
+                    </CardActions>
+                  </Card>
                 ))}
               </Typography>
             </AccordionDetails>
           </Accordion>
         </div>
-      )
     );
   }
 }
@@ -112,9 +108,9 @@ AnnotationManifestsAccordion.propsTypes = {
   addWindow: PropTypes.func.isRequired,
   annotation: PropTypes.shape(
     {
+      content: PropTypes.string.isRequired,
       id: PropTypes.string.isRequired,
-      idIsManifest: PropTypes.bool,
-      manifestsInContent: PropTypes.arrayOf(PropTypes.string),
+      manifests: PropTypes.arrayOf(PropTypes.string),
     },
   ),
   classes: PropTypes.objectOf(PropTypes.string),
