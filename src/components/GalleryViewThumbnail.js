@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
@@ -18,7 +18,7 @@ export class GalleryViewThumbnail extends Component {
   constructor(props) {
     super(props);
 
-    this.myRef = React.createRef();
+    this.myRef = createRef();
     this.state = { requestedAnnotations: false };
 
     this.handleSelect = this.handleSelect.bind(this);

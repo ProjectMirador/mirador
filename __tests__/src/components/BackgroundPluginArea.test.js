@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { BackgroundPluginArea } from '../../../src/components/BackgroundPluginArea';
 import { PluginHook } from '../../../src/components/PluginHook';

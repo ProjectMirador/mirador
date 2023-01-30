@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import OpenSeadragon from 'openseadragon';
 import { Utils } from 'manifesto.js';

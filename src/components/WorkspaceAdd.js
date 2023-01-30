@@ -1,4 +1,4 @@
-import React from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import AddIcon from '@material-ui/icons/AddSharp';
@@ -23,13 +23,13 @@ import { PluginHook } from './PluginHook';
  * @memberof Workspace
  * @private
  */
-export class WorkspaceAdd extends React.Component {
+export class WorkspaceAdd extends Component {
   /** */
   constructor(props) {
     super(props);
 
     this.state = { addResourcesOpen: false };
-    this.ref = React.createRef();
+    this.ref = createRef();
 
     this.onSubmit = this.onSubmit.bind(this);
     this.setAddResourcesVisibility = this.setAddResourcesVisibility.bind(this);

@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';

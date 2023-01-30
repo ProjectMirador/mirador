@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { createElement, Component } from 'react';
 import PropTypes from 'prop-types';
 import CompanionWindowRegistry from '../lib/CompanionWindowRegistry';
 import CompanionWindow from '../containers/CompanionWindow';
@@ -62,7 +62,7 @@ export class CompanionWindowFactory extends Component {
 
     if (!type) return null;
 
-    return React.createElement(type, { id, windowId });
+    return createElement(type, { id, windowId });
   }
 }
 

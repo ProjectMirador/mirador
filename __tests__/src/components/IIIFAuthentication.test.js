@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import WindowAuthenticationBar from '../../../src/containers/WindowAuthenticationBar';
 import { NewWindow } from '../../../src/components/NewWindow';

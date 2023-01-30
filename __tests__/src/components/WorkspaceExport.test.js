@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import Dialog from '@material-ui/core/Dialog';
 import Button from '@material-ui/core/Button';

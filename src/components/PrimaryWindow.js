@@ -1,4 +1,4 @@
-import React, { Component, lazy, Suspense } from 'react';
+import { Component, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import WindowSideBar from '../containers/WindowSideBar';

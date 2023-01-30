@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Rnd } from 'react-rnd';
 import Window from '../containers/Window';
@@ -9,7 +9,7 @@ import ns from '../config/css-ns';
  * @memberof Workspace
  * @private
  */
-class WorkspaceElasticWindow extends React.Component {
+class WorkspaceElasticWindow extends Component {
   /**
    */
   render() {

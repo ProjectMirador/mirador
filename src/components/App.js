@@ -1,4 +1,4 @@
-import React, { Component, lazy, Suspense } from 'react';
+import { Component, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import PluginProvider from '../extend/PluginProvider';
 import AppProviders from '../containers/AppProviders';

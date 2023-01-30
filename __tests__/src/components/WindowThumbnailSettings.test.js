@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ListSubheader from '@material-ui/core/ListSubheader';

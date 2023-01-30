@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Menu from '@material-ui/core//Menu';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import PropTypes from 'prop-types';

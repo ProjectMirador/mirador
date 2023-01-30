@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
 import PropTypes from 'prop-types';

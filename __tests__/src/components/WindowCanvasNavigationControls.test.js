@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';

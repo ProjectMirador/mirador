@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { InView } from 'react-intersection-observer';
 import Typography from '@material-ui/core/Typography';

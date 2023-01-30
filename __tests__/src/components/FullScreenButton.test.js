@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
