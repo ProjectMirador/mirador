@@ -30,7 +30,6 @@ export class CanvasAnnotations extends Component {
     this.handleAnnotationHover = this.handleAnnotationHover.bind(this);
     this.handleAnnotationBlur = this.handleAnnotationBlur.bind(this);
     this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
-    this.handleAccordion = this.handleAccordion.bind(this);
   }
 
   /**
@@ -66,10 +65,6 @@ export class CanvasAnnotations extends Component {
     const { addResource, addWindow } = this.props;
     addResource(manifestId);
     addWindow({ manifestId });
-  }
-
-  handleAccordion() {
-    console.log("openAccordion");
   }
 
   /**
@@ -142,11 +137,54 @@ export class CanvasAnnotations extends Component {
                         ))
                       }
                     </div>
-
                   </ListItemText>
-
                 </MenuItem>
+                {
+                  (annotation.idIsManifest || annotation.manifestsInContent) && (
+                    <div>
+                      <Accordion>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                        >
+                          <Typography className={classes.heading}>Manifests found :</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <Typography>
+                            {annotation.idIsManifest && (
+                              <div className={classes.manifestOpeningWrapper}>
+                                <div>{annotation.id}</div>
+                                <MiradorMenuButton
+                                  aria-haspopup="true"
+                                  aria-label={t('openManifestInOtherWindow', { manifest: annotation.id })}
+                                  titleAccess={t('openManifestInOtherWindow', { manifest: annotation.id })}
+                                  onClick={(e) => { this.handleOpenManifestSideToSide(e, annotation.id); }}
+                                  className={classes.manifestOpeningButton}
+                                >
+                                  <PlaylistAddIcon />
+                                </MiradorMenuButton>
+                              </div>
+                            )}
+                            {annotation.manifestsInContent && annotation.manifestsInContent.map(manifestId => (
+                              <div className={classes.manifestOpeningWrapper}>
+                                <div>{manifestId}</div>
+                                <MiradorMenuButton
+                                  aria-haspopup="true"
+                                  aria-label={t('openManifestInOtherWindow')}
+                                  titleAccess={t('openManifestInOtherWindow')}
+                                  onClick={(e) => { this.handleOpenManifestSideToSide(e, manifestId); }}
+                                  className={classes.manifestOpeningButton}
+                                >
+                                  <PlaylistAddIcon />
+                                </MiradorMenuButton>
+                              </div>
+                            ))}
+                          </Typography>
+                        </AccordionDetails>
+                      </Accordion>
+                    </div>
 
+                  )
+                }
               </ScrollTo>
             ))
           }
