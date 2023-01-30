@@ -57,12 +57,11 @@ export class CanvasAnnotations extends Component {
   */
   render() {
     const {
-      annotations, autoScroll, classes, index, label, selectedAnnotationId, t, totalSize,
       listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
+      annotations, autoScroll, classes, index, label, selectedAnnotationId, t, totalSize,
       containerRef,
     } = this.props;
     if (annotations.length === 0) return null;
-    console.log(annotations);
     return (
       <>
         <Typography className={classes.sectionHeading} variant="overline">
@@ -106,13 +105,15 @@ export class CanvasAnnotations extends Component {
                           <Chip size="small" variant="outlined" label={tag} id={tag} className={classes.chip} key={tag.toString()} />
                         ))
                       }
+                      <AnnotationManifestsAccordion
+                        annotation={annotation}
+                        t={t}
+                      />
                     </div>
                   </ListItemText>
+
                 </MenuItem>
-                <AnnotationManifestsAccordion
-                  annotation={annotation}
-                  t={t}
-                />
+
               </ScrollTo>
             ))
           }

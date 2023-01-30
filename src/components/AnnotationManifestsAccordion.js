@@ -18,6 +18,7 @@ export class AnnotationManifestsAccordion extends Component {
   constructor(props) {
     super(props);
     this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
+    this.handleOpenAccordion = this.handleOpenAccordion.bind(this);
   }
 
   /** */
@@ -25,6 +26,11 @@ export class AnnotationManifestsAccordion extends Component {
     const { addResource, addWindow } = this.props;
     addResource(manifestId);
     addWindow({ manifestId });
+  }
+
+  /** */
+  handleOpenAccordion(e) {
+    e.stopPropagation();
   }
 
   /** */
@@ -40,20 +46,21 @@ export class AnnotationManifestsAccordion extends Component {
       );
     }
 
-    console.log(annotation);
     annotation.idIsManifest = !!searchManifest(annotation.id);
     annotation.manifestsInContent = searchManifest(annotation.content);
 
-    if (annotation.manifestsInContent === null && annotation.idIsManifest) {
+    if (annotation.manifestsInContent === null && !annotation.idIsManifest) {
       return null;
     }
 
     return (
       (annotation.idIsManifest || annotation.manifestsInContent) && (
         <div>
+          {annotation.idIsManifest}
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
+              onClick={(e) => this.handleOpenAccordion(e)}
             >
               <Typography className={classes.heading}>Manifests found :</Typography>
             </AccordionSummary>
@@ -103,7 +110,7 @@ export class AnnotationManifestsAccordion extends Component {
 AnnotationManifestsAccordion.propsTypes = {
   addResource: PropTypes.func.isRequired,
   addWindow: PropTypes.func.isRequired,
-  annotation: PropTypes.objectOf(
+  annotation: PropTypes.shape(
     {
       id: PropTypes.string.isRequired,
       idIsManifest: PropTypes.bool,
@@ -115,7 +122,6 @@ AnnotationManifestsAccordion.propsTypes = {
 };
 
 AnnotationManifestsAccordion.defaultProps = {
-  annotation: {},
   classes: {},
   htmlSanitizationRuleSet: 'iiif',
   listContainerComponent: 'li',
