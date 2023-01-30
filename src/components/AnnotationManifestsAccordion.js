@@ -4,22 +4,50 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreSharp';
 import Typography from '@material-ui/core/Typography';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import { MiradorMenuButton } from './MiradorMenuButton';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import PropTypes from 'prop-types';
+import { MiradorMenuButton } from './MiradorMenuButton';
 
-
+/**
+ * AnnotationManifestsAccordion ~
+ */
 export class AnnotationManifestsAccordion extends Component {
-
+  /**
+   * constructor -
+   */
   constructor(props) {
     super(props);
+    this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
   }
 
-  render() {
 
+  /** */
+  handleOpenManifestSideToSide(e, manifestId) {
+    const { addResource, addWindow } = this.props;
+    addResource(manifestId);
+    addWindow({ manifestId });
+  }
+
+  /** */
+  render() {
     const {
-      classes,
-      annotation
+      classes, annotation, t
     } = this.props;
+
+    /** */
+    function searchManifest(text) {
+      return text.match(
+        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#manifest/g,
+      );
+    }
+
+    console.log(annotation);
+    annotation.idIsManifest = !!searchManifest(annotation.id);
+    annotation.manifestsInContent = searchManifest(annotation.content);
+
+    if (annotation.manifestsInContent === null) {
+      return null;
+    }
 
     return (
       (annotation.idIsManifest || annotation.manifestsInContent) && (
@@ -60,7 +88,7 @@ export class AnnotationManifestsAccordion extends Component {
                       }}
                       className={classes.manifestOpeningButton}
                     >
-                      <PlaylistAddIcon/>
+                      <PlaylistAddIcon />
                     </MiradorMenuButton>
                   </div>
                 ))}
@@ -68,9 +96,27 @@ export class AnnotationManifestsAccordion extends Component {
             </AccordionDetails>
           </Accordion>
         </div>
-
       )
-    )
+    );
   }
-
 }
+
+AnnotationManifestsAccordion.propsTypes = {
+  addResource: PropTypes.func.isRequired,
+  addWindow: PropTypes.func.isRequired,
+  annotation:
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      idIsManifest: PropTypes.bool,
+      manifestsInContent: PropTypes.arrayOf(PropTypes.string),
+    }),
+  classes: PropTypes.objectOf(PropTypes.string),
+  t: PropTypes.func.isRequired,
+};
+
+AnnotationManifestsAccordion.defaultProps = {
+  annotation: {},
+  classes: {},
+  htmlSanitizationRuleSet: 'iiif',
+  listContainerComponent: 'li',
+};
