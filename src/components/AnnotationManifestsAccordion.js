@@ -50,6 +50,8 @@ export class AnnotationManifestsAccordion extends Component {
 
     annotation.manifests = searchManifest(annotation.content.concat(annotation.id));
 
+    // TODO fetch url to get image and label
+
     if (annotation.manifests === null) {
       return null;
     }
@@ -71,26 +73,29 @@ export class AnnotationManifestsAccordion extends Component {
                       <CardMedia
                         component="img"
                         alt="Contemplative Reptile"
-                        height="140"
+                        height="100"
+                        width="100%"
                         image="https://www.tetras-libre.fr/themes/tetras/img/logo.svg"
                         title="Tetras tooltip"
                       />
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
-                          Lizard
+                          Label de mon manifest
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                          Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                          across all continents except Antarctica
+                          Description de mon manifest
                         </Typography>
                       </CardContent>
                     </CardActionArea>
                     <CardActions>
-                      <Button size="small" color="primary">
-                        Share
-                      </Button>
-                      <Button size="small" color="primary">
-                        Learn More
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={(e) => {
+                          this.handleOpenManifestSideToSide(e, manifestId);
+                        }}
+                      >
+                        Open in new panel
                       </Button>
                     </CardActions>
                   </Card>
