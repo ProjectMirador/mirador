@@ -229,3 +229,15 @@ export const selectInfoResponse = createSelector(
     && infoResponses[iiifServiceId];
   },
 );
+
+export const getCurrentCanvasDuration = createSelector(
+  [
+    getCurrentCanvas,
+  ],
+  (canvas) => {
+    if (canvas && canvas.__jsonld && 'duration' in canvas.__jsonld) {
+      return canvas.__jsonld.duration;
+    }
+    return undefined;
+  },
+);
