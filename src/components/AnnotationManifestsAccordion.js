@@ -6,7 +6,9 @@ import Typography from '@material-ui/core/Typography';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import PropTypes from 'prop-types';
-import { Card, CardActionArea, CardActions, CardContent, CardMedia, Fab } from '@material-ui/core';
+import {
+  Card, CardActionArea, CardActions, CardContent, CardMedia, Fab,
+} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
 /**
@@ -20,6 +22,23 @@ export class AnnotationManifestsAccordion extends Component {
     super(props);
     this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
     this.handleOpenAccordion = this.handleOpenAccordion.bind(this);
+
+    /** */
+    function searchManifest(text) {
+      return text.match(
+        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#manifest/g,
+      );
+    }
+
+    const { annotation } = this.props;
+    annotation.manifests = searchManifest(annotation.content.concat(annotation.id));
+
+    if (annotation.manifests) {
+      annotation.manifests = annotation.manifests.map(id => ({ id }));
+    } else {
+      annotation.manifests = [];
+    }
+    this.state = { annotation };
   }
 
   /** */
@@ -31,79 +50,110 @@ export class AnnotationManifestsAccordion extends Component {
 
   /** */
   // eslint-disable-next-line class-methods-use-this,require-jsdoc
-  handleOpenAccordion(e) {
+  async handleOpenAccordion(e, manifestClicked) {
+    const { annotation } = this.state;
+    const manifestFound = annotation.manifests.find(manifest => manifest.id === manifestClicked.id);
+
+    const fetchResult = await fetch(manifestFound.id)
+      .then((response) => response.json())
+      .then((jsonData) => {
+        if (jsonData.type === 'Manifest') {
+          return jsonData;
+        }
+        return null;
+      }).then((jsonStr) => {
+        console.log(this.annotation.id);
+      });
+
     e.stopPropagation();
+  }
+
+  async function loadManifest(manifests) {
+    return Promise.all(requestsArray.map((request) => {
+      return fetch(request).then((response) => {
+        return response.json();
+      }).then((data) => {
+        if (data.type === 'Manifest') {
+          return data;
+        }
+        return null;
+      });
+    }));
+  }
+
+  /** */
+  componentDidMount() {
+    const { annotation } = this.state;
+    searchManifestAndAddButton(annotation.manifests)
+      .then((values) => {
+        if (values) {
+          this.setState({
+            manifests: valuesFlat,
+          });
+        }
+      });
   }
 
   /** */
   render() {
     const {
-      classes, annotation, t,
+      classes, t,
     } = this.props;
 
-    /** */
-    function searchManifest(text) {
-      return text.match(
-        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#manifest/g,
-      );
-    }
-
-    annotation.manifests = searchManifest(annotation.content.concat(annotation.id));
-
-    // TODO fetch url to get image and label
+    const { annotation } = this.state;
 
     if (annotation.manifests === null) {
       return null;
     }
 
     return (
-        <div>
+      <div>
+        {annotation.manifests.map(manifestId => (
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              onClick={(e) => this.handleOpenAccordion(e)}
+              onClick={(e) => this.handleOpenAccordion(e, manifestId)}
             >
-              <Typography className={classes.heading}>Manifests found :</Typography>
+              <Typography className={classes.heading}>Manifests found:</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                {annotation.manifests.map(manifestId => (
-                  <Card className={classes.root}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        alt="Contemplative Reptile"
-                        height="100"
-                        width="100%"
-                        image="https://www.tetras-libre.fr/themes/tetras/img/logo.svg"
-                        title="Tetras tooltip"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                          Label de mon manifest
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                          Description de mon manifest
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                    <CardActions>
-                      <Button
-                        size="small"
-                        color="primary"
-                        onClick={(e) => {
-                          this.handleOpenManifestSideToSide(e, manifestId);
-                        }}
-                      >
-                        Open in new panel
-                      </Button>
-                    </CardActions>
-                  </Card>
-                ))}
+                <Card className={classes.root}>
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      alt="Contemplative Reptile"
+                      height="100"
+                      width="100%"
+                      image="https://www.tetras-libre.fr/themes/tetras/img/logo.svg"
+                      title="Tetras tooltip"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="h2">
+                        Label de mon manifest
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" component="p">
+                        Description de mon manifest
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions>
+                    <Button
+                      size="small"
+                      color="primary"
+                      onClick={(e) => {
+                        this.handleOpenManifestSideToSide(e, manifestId);
+                      }}
+                    >
+                      Open in new panel
+                    </Button>
+                  </CardActions>
+                </Card>
               </Typography>
             </AccordionDetails>
           </Accordion>
-        </div>
+        ))}
+      </div>
     );
   }
 }
