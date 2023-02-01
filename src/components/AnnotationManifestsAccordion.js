@@ -10,6 +10,7 @@ import {
   Card, CardActionArea, CardActions, CardContent, CardMedia, Fab,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import async from 'async';
 
 /**
  * AnnotationManifestsAccordion
@@ -50,46 +51,31 @@ export class AnnotationManifestsAccordion extends Component {
 
   /** */
   // eslint-disable-next-line class-methods-use-this,require-jsdoc
-  async handleOpenAccordion(e, manifestClicked) {
-    const { annotation } = this.state;
-    const manifestFound = annotation.manifests.find(manifest => manifest.id === manifestClicked.id);
-
-    const fetchResult = await fetch(manifestFound.id)
-      .then((response) => response.json())
-      .then((jsonData) => {
-        if (jsonData.type === 'Manifest') {
-          return jsonData;
-        }
-        return null;
-      }).then((jsonStr) => {
-        console.log(this.annotation.id);
-      });
-
+  handleOpenAccordion(e) {
     e.stopPropagation();
-  }
-
-  async function loadManifest(manifests) {
-    return Promise.all(requestsArray.map((request) => {
-      return fetch(request).then((response) => {
-        return response.json();
-      }).then((data) => {
-        if (data.type === 'Manifest') {
-          return data;
-        }
-        return null;
-      });
-    }));
   }
 
   /** */
   componentDidMount() {
     const { annotation } = this.state;
-    searchManifestAndAddButton(annotation.manifests)
+
+    /** */
+    async function loadManifest(manifests) {
+      return Promise.all(manifests.map((manifest) => fetch(manifest.id)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.type === 'Manifest') {
+            return data;
+          }
+          return null;
+        })));
+    }
+
+    loadManifest(annotation.manifests)
       .then((values) => {
         if (values) {
-          this.setState({
-            manifests: valuesFlat,
-          });
+          annotation.manifests = values;
+          this.setState({ annotation });
         }
       });
   }
@@ -97,8 +83,10 @@ export class AnnotationManifestsAccordion extends Component {
   /** */
   render() {
     const {
-      classes, t,
+      classes, t, i18n,
     } = this.props;
+
+    const language = i18n.language;
 
     const { annotation } = this.state;
 
@@ -108,11 +96,11 @@ export class AnnotationManifestsAccordion extends Component {
 
     return (
       <div>
-        {annotation.manifests.map(manifestId => (
+        {annotation.manifests.map(manifest => (
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              onClick={(e) => this.handleOpenAccordion(e, manifestId)}
+              onClick={(e) => this.handleOpenAccordion(e)}
             >
               <Typography className={classes.heading}>Manifests found:</Typography>
             </AccordionSummary>
@@ -130,10 +118,7 @@ export class AnnotationManifestsAccordion extends Component {
                     />
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="h2">
-                        Label de mon manifest
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" component="p">
-                        Description de mon manifest
+                        {manifest.label ? manifest.label.en : manifest.id}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -142,7 +127,7 @@ export class AnnotationManifestsAccordion extends Component {
                       size="small"
                       color="primary"
                       onClick={(e) => {
-                        this.handleOpenManifestSideToSide(e, manifestId);
+                        this.handleOpenManifestSideToSide(e, manifest.id);
                       }}
                     >
                       Open in new panel
