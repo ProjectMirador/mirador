@@ -119,7 +119,7 @@ export class AnnotationManifestsAccordion extends Component {
               <Typography>
                 <Card className={classes.root}>
                   <CardActionArea>
-                    {/* <CardMedia
+                    {/* <CardMedia // TODO add thumbnail of manifest
                       component="img"
                       alt="Contemplative Reptile"
                       height="100"
