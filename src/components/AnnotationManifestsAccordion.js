@@ -113,20 +113,20 @@ export class AnnotationManifestsAccordion extends Component {
               expandIcon={<ExpandMoreIcon />}
               onClick={(e) => this.handleOpenAccordion(e)}
             >
-              <Typography className={classes.heading}>{t('manifestsFound')}</Typography>
+              <Typography className={classes.heading}>{t('manifestFound')}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
                 <Card className={classes.root}>
                   <CardActionArea>
-                    <CardMedia
+                    {/* <CardMedia
                       component="img"
                       alt="Contemplative Reptile"
                       height="100"
                       width="100%"
                       image="https://www.tetras-libre.fr/themes/tetras/img/logo.svg"
                       title="Tetras tooltip"
-                    />
+                    /> */}
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="h2">
                         {manifest.label ? manifest.label.en : manifest.id}
