@@ -4,13 +4,12 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMoreSharp';
 import Typography from '@material-ui/core/Typography';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import PropTypes from 'prop-types';
 import {
   Card, CardActionArea, CardActions, CardContent, CardMedia, Fab,
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import async from 'async';
+import Tooltip from '@material-ui/core/Tooltip';
 
 /**
  * AnnotationManifestsAccordion
@@ -45,26 +44,13 @@ export class AnnotationManifestsAccordion extends Component {
     /** Merge array even if some are null) */
     const concat = (...arrays) => [].concat(...arrays.filter(Array.isArray));
 
-    annotation.manifests = concat(searchManifestInContent(annotation.content),searchManifestInID(annotation.id));
+    annotation.manifests = concat(searchManifestInContent(annotation.content), searchManifestInID(annotation.id));
     if (annotation.manifests) {
       annotation.manifests = annotation.manifests.map(id => ({ id }));
     } else {
       annotation.manifests = [];
     }
     this.state = { annotation };
-  }
-
-  /** */
-  handleOpenManifestSideToSide(e, manifestId) {
-    const { addResource, addWindow } = this.props;
-    addResource(manifestId);
-    addWindow({ manifestId });
-  }
-
-  /** */
-  // eslint-disable-next-line class-methods-use-this,require-jsdoc
-  handleOpenAccordion(e) {
-    e.stopPropagation();
   }
 
   /** */
@@ -93,6 +79,19 @@ export class AnnotationManifestsAccordion extends Component {
   }
 
   /** */
+  handleOpenManifestSideToSide(e, manifestId) {
+    const { addResource, addWindow } = this.props;
+    addResource(manifestId);
+    addWindow({ manifestId });
+  }
+
+  /** */
+  // eslint-disable-next-line class-methods-use-this,require-jsdoc
+  handleOpenAccordion(e) {
+    e.stopPropagation();
+  }
+
+  /** */
   render() {
     const {
       classes, t, i18n,
@@ -114,7 +113,7 @@ export class AnnotationManifestsAccordion extends Component {
               expandIcon={<ExpandMoreIcon />}
               onClick={(e) => this.handleOpenAccordion(e)}
             >
-              <Typography className={classes.heading}>Manifests found:</Typography>
+              <Typography className={classes.heading}>{t('manifestsFound')}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
@@ -135,15 +134,17 @@ export class AnnotationManifestsAccordion extends Component {
                     </CardContent>
                   </CardActionArea>
                   <CardActions>
-                    <Button
-                      size="small"
-                      color="primary"
-                      onClick={(e) => {
-                        this.handleOpenManifestSideToSide(e, manifest.id);
-                      }}
-                    >
-                      Open in new panel
-                    </Button>
+                    <Tooltip title={t('openManifestInOtherWindow', { manifest: manifest.id })}>
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={(e) => {
+                          this.handleOpenManifestSideToSide(e, manifest.id);
+                        }}
+                      >
+                        {t('openInCompanionWindow')}
+                      </Button>
+                    </Tooltip>
                   </CardActions>
                 </Card>
               </Typography>

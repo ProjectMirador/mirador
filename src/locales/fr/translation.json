@@ -78,6 +78,7 @@
     "login": "Se connecter",
     "logout": "Se déconnecter",
     "manifestError": "Cette ressource ne peut pas être ajoutée :",
+    "manifestFound": "Manifests trouvés:",
     "maximizeWindow": "Agrandir cette fenêtre",
     "minimizeWindow": "Réduire cette fenêtre",
     "mirador": "Mirador",
