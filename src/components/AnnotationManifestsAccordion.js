@@ -24,16 +24,28 @@ export class AnnotationManifestsAccordion extends Component {
     this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
     this.handleOpenAccordion = this.handleOpenAccordion.bind(this);
 
-    /** */
-    function searchManifest(text) {
+    /** Search manifest directly in content. We consider all the links with #manifest at the end are manifest */
+    function searchManifestInContent(text) {
       return text.match(
-        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#manifest/g,
+        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#manifest/gi,
       );
     }
 
-    const { annotation } = this.props;
-    annotation.manifests = searchManifest(annotation.content.concat(annotation.id));
+    /** Search if the annotation is a manifest. URL must be resolvable for the annotation. So the manifest url is added at the end of the id */
+    function searchManifestInID(id) {
+      const match = id.match(
+        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)/gi,
+      );
 
+      return match ? match[0].split('#').slice(-1) : null;
+    }
+
+    const { annotation } = this.props;
+
+    /** Merge array even if some are null) */
+    const concat = (...arrays) => [].concat(...arrays.filter(Array.isArray));
+
+    annotation.manifests = concat(searchManifestInContent(annotation.content),searchManifestInID(annotation.id));
     if (annotation.manifests) {
       annotation.manifests = annotation.manifests.map(id => ({ id }));
     } else {
@@ -148,8 +160,8 @@ AnnotationManifestsAccordion.propsTypes = {
   addWindow: PropTypes.func.isRequired,
   annotation: PropTypes.shape(
     {
-      content: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired,
+      content: PropTypes.string,
+      id: PropTypes.string,
       manifests: PropTypes.arrayOf(PropTypes.string),
     },
   ),
