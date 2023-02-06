@@ -111,9 +111,7 @@ export class CanvasAnnotations extends Component {
                       />
                     </div>
                   </ListItemText>
-
                 </MenuItem>
-
               </ScrollTo>
             ))
           }
