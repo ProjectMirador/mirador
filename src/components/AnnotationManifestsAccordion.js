@@ -129,7 +129,7 @@ export class AnnotationManifestsAccordion extends Component {
                     /> */}
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="h2">
-                        {manifest.label ? manifest.label.en : manifest.id}
+                        { manifest.label ? manifest.label[language] : manifest.id }
                       </Typography>
                     </CardContent>
                   </CardActionArea>
