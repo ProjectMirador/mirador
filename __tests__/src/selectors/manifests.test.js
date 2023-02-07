@@ -23,6 +23,7 @@ import {
   getManifestRelatedContent,
   getManifestRenderings,
   getManifestSeeAlso,
+  getManifestSummary,
   getManifestUrl,
   getMetadataLocales,
   getRequiredStatement,
@@ -141,6 +142,19 @@ describe('getManifestDescription', () => {
 
   it('should return undefined if manifest undefined', () => {
     const received = getManifestDescription({ manifests: {} }, { manifestId: 'x' });
+    expect(received).toBeUndefined();
+  });
+});
+
+describe('getManifestSummary', () => {
+  it('should return manifest summary', () => {
+    const state = { manifests: { x: { json: manifestFixturev3001 } } };
+    const received = getManifestSummary(state, { manifestId: 'x' });
+    expect(received).toBe('[Handbill of Mr. Becket, [1787] ]');
+  });
+
+  it('should return undefined if manifest undefined', () => {
+    const received = getManifestSummary({ manifests: {} }, { manifestId: 'x' });
     expect(received).toBeUndefined();
   });
 });

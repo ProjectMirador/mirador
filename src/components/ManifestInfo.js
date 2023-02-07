@@ -17,6 +17,7 @@ export class ManifestInfo extends Component {
   render() {
     const {
       manifestDescription,
+      manifestSummary,
       manifestLabel,
       manifestMetadata,
       id,
@@ -45,6 +46,12 @@ export class ManifestInfo extends Component {
           </Typography>
         )}
 
+        {manifestSummary && (
+          <Typography variant="body1">
+            <SanitizedHtml htmlString={manifestSummary} ruleSet="iiif" />
+          </Typography>
+        )}
+
         {manifestMetadata.length > 0 && (
           <LabelValueMetadata labelValuePairs={manifestMetadata} />
         )}
@@ -60,6 +67,7 @@ ManifestInfo.propTypes = {
   manifestDescription: PropTypes.string,
   manifestLabel: PropTypes.string,
   manifestMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  manifestSummary: PropTypes.string,
   t: PropTypes.func,
 };
 
@@ -67,5 +75,6 @@ ManifestInfo.defaultProps = {
   manifestDescription: null,
   manifestLabel: null,
   manifestMetadata: [],
+  manifestSummary: null,
   t: key => key,
 };
