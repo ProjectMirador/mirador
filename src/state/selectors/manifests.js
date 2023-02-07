@@ -293,17 +293,34 @@ export const getManifestTitle = createSelector(
 );
 
 /**
-* Return manifest description
+* Return manifest description (IIIF v2) -- distinct from any description field nested under metadata
 * @param {object} state
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
-* @return {String}
+* @return {String|null}
 */
 export const getManifestDescription = createSelector(
   [getManifestoInstance],
   manifest => manifest
     && manifest.getDescription().getValue(),
+);
+
+/**
+* Return manifest summary (IIIF v3)
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {String|null}
+*/
+export const getManifestSummary = createSelector(
+  [
+    getProperty('summary'),
+    getManifestLocale,
+  ],
+  (summary, locale) => summary
+    && PropertyValue.parse(summary, locale).getValue(),
 );
 
 /**

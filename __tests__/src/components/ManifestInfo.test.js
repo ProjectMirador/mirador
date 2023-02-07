@@ -17,6 +17,7 @@ describe('ManifestInfo', () => {
           manifestLabel="The Manifest Label"
           manifestDescription="The Manifest Description"
           manifestMetadata={metadata}
+          manifestSummary="The Manifest Summary"
           t={str => str}
         />,
       );
@@ -39,6 +40,16 @@ describe('ManifestInfo', () => {
         wrapper.find(Typography).at(1).matchesElement(
           <Typography>
             <SanitizedHtml htmlString="The Manifest Description" ruleSet="iiif" />
+          </Typography>,
+        ),
+      ).toBe(true);
+    });
+
+    it('renders manifest summary in SanitizedHtml component', () => {
+      expect(
+        wrapper.find(Typography).at(2).matchesElement(
+          <Typography>
+            <SanitizedHtml htmlString="The Manifest Summary" ruleSet="iiif" />
           </Typography>,
         ),
       ).toBe(true);
