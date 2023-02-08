@@ -114,6 +114,7 @@
     "jest-puppeteer": "^7.0.0",
     "jsdom": "^21.0.0",
     "puppeteer": "^19.0.0",
+    "raf": "^3.4.1",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-refresh": "^0.14.0",

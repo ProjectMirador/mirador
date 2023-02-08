@@ -1,6 +1,7 @@
 // Setup Jest to mock fetch
 
 import { JSDOM } from 'jsdom'; // eslint-disable-line import/no-extraneous-dependencies
+import raf from 'raf'; // eslint-disable-line import/no-extraneous-dependencies
 import fetchMock from 'jest-fetch-mock'; // eslint-disable-line import/no-extraneous-dependencies
 import Enzyme from 'enzyme'; // eslint-disable-line import/no-extraneous-dependencies
 import Adapter from 'enzyme-adapter-react-16'; // eslint-disable-line import/no-extraneous-dependencies
@@ -46,6 +47,9 @@ const copyProps = (src, target) => {
     ...Object.getOwnPropertyDescriptors(target),
   });
 };
+
+// jsdom does not support requestAnimationFrame
+raf.polyfill(global.window);
 
 /*
   avoid 'ReferenceError: HTMLElement is not defined'
