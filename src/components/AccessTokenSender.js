@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import IComCom from 'icomcom-react';
+import { IIIFIFrameCommunication } from './IIIFIFrameCommunication';
 
 /**
  * Opens a new window for click
@@ -29,12 +29,13 @@ export class AccessTokenSender extends Component {
     external, no-op
     */
     return (
-      <IComCom
+      <IIIFIFrameCommunication
         attributes={{
           'aria-hidden': true,
           height: 1,
           src: `${url}?origin=${window.origin}&messageId=${url}`,
           style: { visibility: 'hidden' },
+          title: 'AccessTokenSender',
           width: 1,
         }}
         handleReceiveMessage={this.onReceiveAccessTokenMessage}

@@ -86,7 +86,9 @@ export function receiveAccessTokenFailure(authId, serviceId, error) {
 /**
  * resolveAccessTokenRequest - action creator
  *
- * @param {Object} message
+ * @param {String} authServiceId
+ * @param {String} tokenServiceId
+ * @param {Object} json
  * @memberof ActionCreators
  */
 export function resolveAccessTokenRequest(authServiceId, tokenServiceId, json) {
