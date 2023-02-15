@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import Menu from '@material-ui/core/Menu';
 import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';

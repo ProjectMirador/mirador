@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
 import { ManifestInfo } from '../../../src/components/ManifestInfo';

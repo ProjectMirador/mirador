@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Rnd } from 'react-rnd';
 import ResizeObserver from 'react-resize-observer';
@@ -11,7 +11,7 @@ import ns from '../config/css-ns';
  * @memberof Workspace
  * @private
  */
-class WorkspaceElastic extends React.Component {
+class WorkspaceElastic extends Component {
   /**
    */
   render() {

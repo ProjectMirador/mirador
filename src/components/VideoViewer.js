@@ -1,6 +1,6 @@
 import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
-import React, { Component, Fragment } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
@@ -11,7 +11,7 @@ export class VideoViewer extends Component {
   /** */
   constructor(props) {
     super(props);
-    this.videoRef = React.createRef();
+    this.videoRef = createRef();
 
     this.state = {
       start: 0,

@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import {
+  createRef, Children, cloneElement, Component,
+} from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
@@ -22,8 +24,8 @@ export class OpenSeadragonViewer extends Component {
     super(props);
 
     this.state = { viewer: undefined };
-    this.ref = React.createRef();
-    this.apiRef = React.createRef();
+    this.ref = createRef();
+    this.apiRef = createRef();
     OSDReferences.set(props.windowId, this.apiRef);
     this.onCanvasMouseMove = debounce(this.onCanvasMouseMove.bind(this), 10);
     this.onViewportChange = this.onViewportChange.bind(this);
@@ -345,8 +347,8 @@ export class OpenSeadragonViewer extends Component {
     } = this.props;
     const { viewer } = this.state;
 
-    const enhancedChildren = React.Children.map(children, child => (
-      React.cloneElement(
+    const enhancedChildren = Children.map(children, child => (
+      cloneElement(
         child,
         {
           zoomToWorld: this.zoomToWorld,

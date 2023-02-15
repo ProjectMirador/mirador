@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import AppBar from '@material-ui/core/AppBar';
 import createStore from '../../../src/state/createStore';

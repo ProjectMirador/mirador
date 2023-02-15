@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
@@ -64,7 +64,7 @@ export class AnnotationsOverlayVideo extends Component {
   constructor(props) {
     super(props);
 
-    this.ref = React.createRef();
+    this.ref = createRef();
     VideosReferences.set(props.windowId, this);
     this.canvasOverlay = null;
     // An initial value for the updateCanvas method

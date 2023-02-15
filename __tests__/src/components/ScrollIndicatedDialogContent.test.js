@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import DialogContent from '@material-ui/core/DialogContent';
 import { ScrollIndicatedDialogContent } from '../../../src/components/ScrollIndicatedDialogContent';

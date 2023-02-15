@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -9,7 +9,7 @@ export class ScrollTo extends Component {
   constructor(props) {
     super(props);
 
-    this.scrollToRef = React.createRef();
+    this.scrollToRef = createRef();
   }
 
   /** */

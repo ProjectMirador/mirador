@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { MosaicWithoutDragDropContext } from 'react-mosaic-component';
 import MosaicRenderPreview from '../../../src/containers/MosaicRenderPreview';

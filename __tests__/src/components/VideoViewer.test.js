@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { Utils } from 'manifesto.js';
 import AnnotationFactory from '../../../src/lib/AnnotationFactory';

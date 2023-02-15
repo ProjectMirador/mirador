@@ -1,4 +1,3 @@
-import React from 'react';
 import { mount } from 'enzyme';
 import Badge from '@material-ui/core/Badge';
 import Tabs from '@material-ui/core/Tabs';

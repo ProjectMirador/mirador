@@ -98,16 +98,16 @@ describe('IIIF sagas', () => {
 
   describe('fetchInfoResponse', () => {
     it('fetches a IIIF info response', () => {
-      fetch.mockResponseOnce(JSON.stringify({ id: 'infoId' }));
+      fetch.mockResponseOnce(JSON.stringify({ id: 'http://server/prefix/infoId' }));
       const action = {
         imageResource: {},
-        infoId: 'infoId',
+        infoId: 'http://server/prefix/infoId',
       };
 
       return expectSaga(fetchInfoResponse, action)
         .put({
-          infoId: 'infoId',
-          infoJson: { id: 'infoId' },
+          infoId: 'http://server/prefix/infoId',
+          infoJson: { id: 'http://server/prefix/infoId' },
           ok: true,
           tokenServiceId: undefined,
           type: 'mirador/RECEIVE_INFO_RESPONSE',

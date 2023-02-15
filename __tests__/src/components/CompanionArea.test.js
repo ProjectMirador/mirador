@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import Slide from '@material-ui/core/Slide';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeftSharp';

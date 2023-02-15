@@ -1,6 +1,6 @@
 import ClosedCaption from '@material-ui/icons/ClosedCaption';
 import ClosedCaptionOutlined from '@material-ui/icons/ClosedCaptionOutlined';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PauseRoundedIcon from '@material-ui/icons/PauseRounded';
 import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
 import PropTypes from 'prop-types';

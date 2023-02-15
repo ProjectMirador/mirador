@@ -1,6 +1,5 @@
-import React from 'react';
 import { shallow } from 'enzyme';
-import IntersectionObserver from '@researchgate/react-intersection-observer';
+import { InView } from 'react-intersection-observer';
 import Typography from '@material-ui/core/Typography';
 import { IIIFThumbnail } from '../../../src/components/IIIFThumbnail';
 
@@ -26,9 +25,9 @@ describe('IIIFThumbnail', () => {
   it('renders properly', () => {
     expect(wrapper.matchesElement(
       <div>
-        <IntersectionObserver onChange={wrapper.instance().handleIntersection}>
+        <InView onChange={wrapper.instance().handleIntersection}>
           <img alt="" />
-        </IntersectionObserver>
+        </InView>
       </div>,
     )).toBe(true);
   });
@@ -37,9 +36,9 @@ describe('IIIFThumbnail', () => {
     wrapper = createWrapper({});
     expect(wrapper.matchesElement(
       <div>
-        <IntersectionObserver onChange={wrapper.instance().handleIntersection}>
+        <InView onChange={wrapper.instance().handleIntersection}>
           <img alt="" />
-        </IntersectionObserver>
+        </InView>
       </div>,
     )).toBe(true);
     expect(wrapper.find('img').props().src).toMatch(/data:image\/png;base64/);

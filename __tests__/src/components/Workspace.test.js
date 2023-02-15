@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
 import WorkspaceMosaic from '../../../src/containers/WorkspaceMosaic';

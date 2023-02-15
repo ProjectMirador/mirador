@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import AutoSizer from 'react-virtualized-auto-sizer';
@@ -23,7 +23,7 @@ export class ThumbnailNavigation extends Component {
     this.handleKeyUp = this.handleKeyUp.bind(this);
     this.nextCanvas = this.nextCanvas.bind(this);
     this.previousCanvas = this.previousCanvas.bind(this);
-    this.gridRef = React.createRef();
+    this.gridRef = createRef();
   }
 
   /**

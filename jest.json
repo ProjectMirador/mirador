@@ -8,7 +8,8 @@
   "coverageDirectory": "<rootDir>/coverage",
   "coverageReporters": ["html", "lcov"],
   "moduleNameMapper": {
-    "\\.s?css$": "<rootDir>/__mocks__/css.js"
+    "\\.s?css$": "<rootDir>/__mocks__/css.js",
+    "^uuid$": "uuid"
   },
   "setupFiles": [
     "<rootDir>/setupJest.js"

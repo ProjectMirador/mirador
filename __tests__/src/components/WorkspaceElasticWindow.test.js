@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { Rnd } from 'react-rnd';
 import WorkspaceElasticWindow from '../../../src/components/WorkspaceElasticWindow';

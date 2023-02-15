@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import WorkspaceControlPanel from '../../../src/containers/WorkspaceControlPanel';
 import Workspace from '../../../src/containers/Workspace';

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Slide from '@material-ui/core/Slide';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeftSharp';
