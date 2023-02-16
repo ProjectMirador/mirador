@@ -1,9 +1,6 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-/** This component is heavily based on the IComCom library
- * See https://github.com/infinum/icomcom-react
- */
 export function IIIFIFrameCommunication({ handleReceiveMessage, ...props}) {
   // Attaches the 'message' event listener to the window.
   useEffect(() => {
