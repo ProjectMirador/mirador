@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
  * See https://github.com/infinum/icomcom-react
  */
 export function IIIFIFrameCommunication({ handleReceiveMessage, ...props}) {
-  const _frame = useRef(null);
-
   // Attaches the 'message' event listener to the window.
   useEffect(() => {
     // make sure we have the handle function from props, and pass in the event
@@ -27,7 +25,6 @@ export function IIIFIFrameCommunication({ handleReceiveMessage, ...props}) {
     // iframe "title" attribute is passed in via props for accessibility
     // eslint-disable-next-line jsx-a11y/iframe-has-title
     <iframe
-      ref={_frame}
       {...props}
     />
   );
