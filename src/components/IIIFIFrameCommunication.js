@@ -7,18 +7,12 @@ import PropTypes from 'prop-types';
 export function IIIFIFrameCommunication({ handleReceiveMessage, ...props}) {
   // Attaches the 'message' event listener to the window.
   useEffect(() => {
-    // make sure we have the handle function from props, and pass in the event
-    /** */
-    function onReceiveMessage(event) {
-      if (handleReceiveMessage) {
-        handleReceiveMessage(event);
-      }
-    }
+    if (!handleReceiveMessage) return;
 
-    window.addEventListener('message', onReceiveMessage);
+    window.addEventListener('message', handleReceiveMessage);
 
     // cleanup function
-    return () => window.removeEventListener('message', onReceiveMessage, false);
+    return () => window.removeEventListener('message', handleReceiveMessage, false);
   }, [handleReceiveMessage]);
 
   return (
