@@ -5,14 +5,8 @@ import { IIIFIFrameCommunication } from '../../../src/components/IIIFIFrameCommu
 function createWrapper(props) {
   return shallow(
     <IIIFIFrameCommunication
-      attributes={{
-        'aria-hidden': true,
-        height: 1,
-        src: 'https://iiifauth.digtest.co.uk/auth/token/login/01_Icarus_Breughel.jpg?origin=http://localhost:4444&messageId=https://iiifauth.digtest.co.uk/auth/token/login/01_Icarus_Breughel.jpg',
-        style: { visibility: 'hidden' },
-        title: 'AccessTokenSender',
-        width: 1,
-      }}
+      src='https://iiifauth.digtest.co.uk/auth/token/login/01_Icarus_Breughel.jpg?origin=http://localhost:4444&messageId=https://iiifauth.digtest.co.uk/auth/token/login/01_Icarus_Breughel.jpg'
+      title='AccessTokenSender'
       handleReceiveMessage={() => {}}
     />,
   );
