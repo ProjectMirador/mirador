@@ -29,7 +29,7 @@ describe('AccessTokenSender', () => {
     });
     wrapper = createWrapper({ url: 'http://example.com' });
     expect(wrapper.find('IIIFIFrameCommunication').length).toBe(1);
-    expect(wrapper.find('IIIFIFrameCommunication').props().attributes.src).toBe('http://example.com?origin=http://localhost&messageId=http://example.com');
+    expect(wrapper.find('IIIFIFrameCommunication').props().src).toBe('http://example.com?origin=http://localhost&messageId=http://example.com');
   });
 
   it('triggers an action when the iframe sends a message', () => {

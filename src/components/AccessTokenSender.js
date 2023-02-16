@@ -30,14 +30,8 @@ export class AccessTokenSender extends Component {
     */
     return (
       <IIIFIFrameCommunication
-        attributes={{
-          'aria-hidden': true,
-          height: 1,
-          src: `${url}?origin=${window.origin}&messageId=${url}`,
-          style: { visibility: 'hidden' },
-          title: 'AccessTokenSender',
-          width: 1,
-        }}
+        src={`${url}?origin=${window.origin}&messageId=${url}`}
+        title='AccessTokenSender'
         handleReceiveMessage={this.onReceiveAccessTokenMessage}
       />
     );
