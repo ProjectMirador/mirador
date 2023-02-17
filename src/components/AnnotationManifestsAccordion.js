@@ -25,6 +25,9 @@ export class AnnotationManifestsAccordion extends Component {
 
     /** Search manifest directly in content. We consider all the links with #manifest at the end are manifest */
     function searchManifestInContent(text) {
+      if (text == null) {
+        return null;
+      }
       return text.match(
         /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#manifest/gi,
       );
@@ -107,26 +110,20 @@ export class AnnotationManifestsAccordion extends Component {
 
     return (
       <div>
-        {annotation.manifests.map(manifest => (
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              onClick={(e) => this.handleOpenAccordion(e)}
-            >
-              <Typography className={classes.heading}>{t('manifestFound')}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
+        <Typography className="test">TEST AG</Typography>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            onClick={(e) => this.handleOpenAccordion(e)}
+          >
+            <Typography className={classes.heading}>{t('manifestFound')}</Typography>
+
+          </AccordionSummary>
+          <AccordionDetails className={'manifestContainer'}>
+            {annotation.manifests.map(manifest => (
+              <Typography >
                 <Card className={classes.root}>
                   <CardActionArea>
-                    {/* <CardMedia // TODO add thumbnail of manifest
-                      component="img"
-                      alt="Contemplative Reptile"
-                      height="100"
-                      width="100%"
-                      image="https://www.tetras-libre.fr/themes/tetras/img/logo.svg"
-                      title="Tetras tooltip"
-                    /> */}
                     <CardContent>
                       <Typography gutterBottom variant="h5" component="h2">
                         { manifest.label ? manifest.label[language] : manifest.id }
@@ -148,9 +145,9 @@ export class AnnotationManifestsAccordion extends Component {
                   </CardActions>
                 </Card>
               </Typography>
-            </AccordionDetails>
-          </Accordion>
-        ))}
+            ))}
+          </AccordionDetails>
+        </Accordion>
       </div>
     );
   }

@@ -24,14 +24,16 @@ const mapDispatchToProps = {
 
 /** For withStyles */
 const styles = theme => ({
-  manifestOpeningIcon: {
-    width: '30%',
-  },
-  manifestOpeningLink: {
-    width: '70%',
-  },
-  manifestOpeningWrapper: {
+  manifestContainer: {
+    backgroundColor: 'red',
     display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+  },
+  test: {
+    backgroundColor: 'red',
+    color: 'red',
+    fontColor: 'red',
   },
 });
 
