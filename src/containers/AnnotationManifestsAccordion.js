@@ -25,15 +25,10 @@ const mapDispatchToProps = {
 /** For withStyles */
 const styles = theme => ({
   manifestContainer: {
-    backgroundColor: 'red',
     display: 'flex',
     flexDirection: 'column',
     flexWrap: 'wrap',
-  },
-  test: {
-    backgroundColor: 'red',
-    color: 'red',
-    fontColor: 'red',
+    gap: '10px',
   },
 });
 

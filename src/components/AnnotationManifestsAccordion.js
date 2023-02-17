@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
+import { removeDuplicates } from '../helper/utils';
 
 /**
  * AnnotationManifestsAccordion
@@ -53,6 +54,8 @@ export class AnnotationManifestsAccordion extends Component {
     } else {
       annotation.manifests = [];
     }
+
+    annotation.manifests = removeDuplicates(annotation.manifests);
     this.state = { annotation };
   }
 
@@ -110,7 +113,6 @@ export class AnnotationManifestsAccordion extends Component {
 
     return (
       <div>
-        <Typography className="test">TEST AG</Typography>
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -119,7 +121,7 @@ export class AnnotationManifestsAccordion extends Component {
             <Typography className={classes.heading}>{t('manifestFound')}</Typography>
 
           </AccordionSummary>
-          <AccordionDetails className={'manifestContainer'}>
+          <AccordionDetails className={classes.manifestContainer}>
             {annotation.manifests.map(manifest => (
               <Typography >
                 <Card className={classes.root}>
