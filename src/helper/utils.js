@@ -2,11 +2,4 @@
  * Remove duplicate elements in array
  *
  * */
-export const removeDuplicates = (arr) => {
-  return arr.reduce((acc, curr) => {
-    if (!acc.includes(curr)) {
-      acc.push(curr);
-    }
-    return acc;
-  }, []);
-};
+export const removeDuplicates = (arr) => [...new Map(arr.map(v => [v.id, v])).values()];

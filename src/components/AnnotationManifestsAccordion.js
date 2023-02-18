@@ -127,7 +127,7 @@ export class AnnotationManifestsAccordion extends Component {
                 <Card className={classes.root}>
                   <CardActionArea>
                     <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
+                      <Typography>
                         { manifest.label ? manifest.label[language] : manifest.id }
                       </Typography>
                     </CardContent>

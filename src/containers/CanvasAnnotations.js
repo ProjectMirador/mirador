@@ -70,11 +70,15 @@ const styles = theme => ({
     marginTop: theme.spacing(1),
   },
   hovered: {},
+  manifestLabel: {
+    fontSize: '10px',
+  },
   sectionHeading: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
     paddingTop: theme.spacing(2),
   },
+
 });
 
 const enhance = compose(
