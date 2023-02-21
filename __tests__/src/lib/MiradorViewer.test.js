@@ -4,7 +4,6 @@ import MiradorViewer from '../../../src/lib/MiradorViewer';
 
 jest.unmock('react-i18next');
 jest.mock('react-dom');
-jest.mock('isomorphic-unfetch', () => jest.fn(() => Promise.resolve({ json: () => ({}) })));
 
 describe('MiradorViewer', () => {
   let container;

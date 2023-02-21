@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import Drawer from '@material-ui/core/Drawer';
 import { WindowSideBar } from '../../../src/components/WindowSideBar';

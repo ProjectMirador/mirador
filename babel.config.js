@@ -23,7 +23,6 @@ module.exports = function (api) {
           node: 'current',
         },
       },
-      '@babel/preset-react',
     ],
     (isProductionEnv || isDevelopmentEnv) && [
       '@babel/preset-env',
@@ -39,6 +38,7 @@ module.exports = function (api) {
       '@babel/preset-react',
       {
         development: isDevelopmentEnv || isTestEnv,
+        runtime: 'automatic',
         useBuiltIns: true,
       },
     ],

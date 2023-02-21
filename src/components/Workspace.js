@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Grid from '@material-ui/core/Grid';
@@ -14,7 +14,7 @@ import { IIIFDropTarget } from './IIIFDropTarget';
  * @memberof Workspace
  * @private
  */
-export class Workspace extends React.Component {
+export class Workspace extends Component {
   /** */
   constructor(props) {
     super(props);

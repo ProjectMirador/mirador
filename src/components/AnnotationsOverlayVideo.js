@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
@@ -64,7 +64,7 @@ export class AnnotationsOverlayVideo extends Component {
   constructor(props) {
     super(props);
 
-    this.ref = React.createRef();
+    this.ref = createRef();
     VideosReferences.set(props.windowId, this);
     this.canvasOverlay = null;
     // An initial value for the updateCanvas method
@@ -417,13 +417,14 @@ export class AnnotationsOverlayVideo extends Component {
     return { height: 0, width: 0 };
   }
 
-  /** @private */
+  /** @private - Returns the first Image body */
   getResourceImage(resource) {
-    let imageSource;
-    if (resource.body && resource.body.length > 0 && resource.body[0].type === 'Image') {
-      const src = resource.body[0].id;
+    const imageSource = [];
+
+    for (const body of resource.body.filter(b => b.type === 'Image')) {
+      const src = body.id;
       if (this.imagesReady[src]) {
-        imageSource = this.imagesReady[src];
+        imageSource.push(this.imagesReady[src]);
       } else if (!this.imagesLoading.includes(src)) {
         this.imagesLoading.push(src);
         const img = new Image();
@@ -433,7 +434,8 @@ export class AnnotationsOverlayVideo extends Component {
         img.src = src;
       }
     }
-    return imageSource;
+
+    return imageSource[0];
   }
 
   /** @private */

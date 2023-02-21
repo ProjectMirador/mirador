@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import WorkspaceMenuButton from '../../../src/containers/WorkspaceMenuButton';
 import FullScreenButton from '../../../src/containers/FullScreenButton';

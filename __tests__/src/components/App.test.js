@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import PluginProvider from '../../../src/extend/PluginProvider';
 import AppProviders from '../../../src/containers/AppProviders';

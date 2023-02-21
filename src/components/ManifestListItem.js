@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import ListItem from '@material-ui/core/ListItem';
 import ButtonBase from '@material-ui/core/ButtonBase';
@@ -16,7 +16,7 @@ import ns from '../config/css-ns';
  */
 
 /** */
-export class ManifestListItem extends React.Component {
+export class ManifestListItem extends Component {
   /** */
   constructor(props) {
     super(props);

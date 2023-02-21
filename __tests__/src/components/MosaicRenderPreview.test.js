@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import MinimalWindow from '../../../src/containers/MinimalWindow';
 import { MosaicRenderPreview } from '../../../src/components/MosaicRenderPreview';

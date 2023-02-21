@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import SyncIcon from '@material-ui/icons/Sync';
 import SyncDisabledIcon from '@material-ui/icons/SyncDisabled';

@@ -1,6 +1,6 @@
 import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
-import React, { Component, Fragment } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
@@ -11,7 +11,7 @@ export class VideoViewer extends Component {
   /** */
   constructor(props) {
     super(props);
-    this.videoRef = React.createRef();
+    this.videoRef = createRef();
 
     this.state = {
       start: 0,
@@ -21,18 +21,11 @@ export class VideoViewer extends Component {
 
   /** */
   componentDidMount() {
-    const { annotations, setHasTextTrack, setPaused } = this.props;
+    const { setPaused, setHasTextTrack } = this.props;
     setPaused(true);
-    const vttContent = flatten(
-      flattenDeep([
-        annotations.map(annotation => annotation.resources.map(
-          resources_ => resources_.resource,
-        )),
-      ]).filter(resource => resource.body && resource.body[0] && resource.body[0].format === 'text/vtt'),
-    );
-    if (vttContent && vttContent.length > 0) {
-      setHasTextTrack(true);
-    }
+
+    const video = this.videoRef.current;
+    if (video && video.textTracks.length > 0) setHasTextTrack(true);
   }
 
   /** */
@@ -69,7 +62,7 @@ export class VideoViewer extends Component {
         video.muted = muted;
       }
       if (video.textTracks && video.textTracks.length > 0) {
-        const newMode = textTrackDisabled ? 'hidden' : 'showing';
+        const newMode = textTrackDisabled ? 'disabled' : 'showing';
         if (video.textTracks[0].mode !== newMode) {
           video.textTracks[0].mode = newMode;
         }
@@ -135,13 +128,10 @@ export class VideoViewer extends Component {
         }),
       ]).filter((resource) => resource.body && resource.body[0].__jsonld && resource.body[0].__jsonld.type === 'Video'),
     );
-    const vttContent = flatten(
-      flattenDeep([
-        annotations.map(annotation => annotation.resources.map(
-          resources_ => resources_.resource,
-        )),
-      ]).filter(resource => resource.body && resource.body[0] && resource.body[0].format === 'text/vtt'),
-    );
+
+    const vttContent = annotations
+      .flatMap(annoPage => annoPage.json.items.map(anno => anno.body))
+      .flat().filter((body) => body.format === 'text/vtt');
 
     // Only one video can be displayed at a time in this implementation.
     const len = videoResources.length;
@@ -149,12 +139,6 @@ export class VideoViewer extends Component {
       ? videoResources[len - 1].body[0] : null;
     const videoTargetTemporalfragment = len > 0
       ? videoResources[len - 1].temporalfragment : [];
-    let caption = null;
-    if (vttContent && vttContent.length > 0) {
-      caption = {
-        id: vttContent[0].body[0].id,
-      };
-    }
     return (
       <div className={classes.flexContainer}>
         <div className={classes.flexFill}>
@@ -162,9 +146,7 @@ export class VideoViewer extends Component {
             <>
               <video className={classes.video} key={video.id} ref={this.videoRef} {...videoOptions}>
                 <source src={video.id} type={video.getFormat()} />
-                { caption && (
-                  <track src={caption.id} />
-                )}
+                { vttContent.map(vttc => (<track key={vttc.id} src={vttc.id} srcLang={vttc.language} />)) }
               </video>
               <AnnotationsOverlayVideo windowId={windowId} videoRef={this.videoRef} videoTarget={videoTargetTemporalfragment} key={`${windowId} ${video.id}`} />
             </>

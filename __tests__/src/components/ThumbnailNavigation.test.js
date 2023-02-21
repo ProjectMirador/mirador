@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { Utils } from 'manifesto.js';
 import { ThumbnailNavigation } from '../../../src/components/ThumbnailNavigation';

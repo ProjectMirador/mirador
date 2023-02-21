@@ -1,5 +1,5 @@
-import React from 'react';
+import { createContext } from 'react';
 
-const PluginContext = React.createContext();
+const PluginContext = createContext();
 
 export default PluginContext;

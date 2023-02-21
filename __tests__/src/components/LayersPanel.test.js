@@ -1,4 +1,3 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import CanvasLayers from '../../../src/containers/CanvasLayers';
 import { LayersPanel } from '../../../src/components/LayersPanel';

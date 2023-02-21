@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Badge from '@material-ui/core/Badge';
 import Tabs from '@material-ui/core/Tabs';
