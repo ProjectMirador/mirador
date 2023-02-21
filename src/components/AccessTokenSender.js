@@ -31,7 +31,7 @@ export class AccessTokenSender extends Component {
     return (
       <IIIFIFrameCommunication
         src={`${url}?origin=${window.origin}&messageId=${url}`}
-        title='AccessTokenSender'
+        title="AccessTokenSender"
         handleReceiveMessage={this.onReceiveAccessTokenMessage}
       />
     );

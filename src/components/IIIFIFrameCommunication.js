@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-export function IIIFIFrameCommunication({ handleReceiveMessage, ...props}) {
+/**
+ *  Handle IIIF Auth token validation using iframe message events
+ */
+export function IIIFIFrameCommunication({ handleReceiveMessage, ...props }) {
   // Attaches the 'message' event listener to the window.
   useEffect(() => {
-    if (!handleReceiveMessage) return;
+    if (!handleReceiveMessage) return undefined;
 
     window.addEventListener('message', handleReceiveMessage);
 
