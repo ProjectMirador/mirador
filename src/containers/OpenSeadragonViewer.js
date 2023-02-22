@@ -58,6 +58,7 @@ const mapDispatchToProps = {
 const styles = {
   osdContainer: {
     flex: 1,
+    pointer: 'grab',
     position: 'relative',
   },
 };
