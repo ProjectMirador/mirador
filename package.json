@@ -127,5 +127,10 @@
   "peerDependencies": {
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
+  },
+  "overrides": {
+    "babel-plugin-lodash": {
+      "@babel/types": "~7.20.0"
+    }
   }
 }
