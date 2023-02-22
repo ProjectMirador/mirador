@@ -107,7 +107,7 @@ export class AnnotationManifestsAccordion extends Component {
 
     const { annotation } = this.state;
 
-    if (annotation.manifests === null) {
+    if (annotation.manifests === null || annotation.manifests.length === 0) {
       return null;
     }
 
