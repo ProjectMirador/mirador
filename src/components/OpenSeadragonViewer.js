@@ -63,7 +63,6 @@ export class OpenSeadragonViewer extends Component {
     });
 
     viewer.addHandler('canvas-release', () => {
-      console.log('canvas-release!');
       this.setState({ grabbing: false });
     });
 
