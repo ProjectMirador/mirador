@@ -8,6 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
+import AnnotationManifestsAccordion from '../containers/AnnotationManifestsAccordion';
 
 /**
  * CanvasAnnotations ~
@@ -63,7 +64,6 @@ export class CanvasAnnotations extends Component {
       containerRef,
     } = this.props;
     if (annotations.length === 0) return null;
-
     return (
       <>
         <Typography className={classes.sectionHeading} variant="overline">
@@ -107,6 +107,10 @@ export class CanvasAnnotations extends Component {
                           <Chip size="small" variant="outlined" label={tag} id={tag} className={classes.chip} key={tag.toString()} />
                         ))
                       }
+                      <AnnotationManifestsAccordion
+                        annotation={annotation}
+                        t={t}
+                      />
                     </div>
                   </ListItemText>
                 </MenuItem>
