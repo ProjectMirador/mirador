@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import fetchMock from 'jest-fetch-mock';
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Enzyme from 'enzyme'; // eslint-disable-line import/no-extraneous-dependencies
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17'; // eslint-disable-line import/no-extraneous-dependencies
 
 jest.setTimeout(10000);
 
