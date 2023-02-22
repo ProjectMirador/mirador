@@ -6,8 +6,8 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-import { ScrollTo } from './ScrollTo';
 import SanitizedHtml from '../containers/SanitizedHtml';
+import { ScrollTo } from './ScrollTo';
 import AnnotationManifestsAccordion from '../containers/AnnotationManifestsAccordion';
 
 /**
@@ -43,12 +43,14 @@ export class CanvasAnnotations extends Component {
   /** */
   handleAnnotationHover(annotation) {
     const { hoverAnnotation, windowId } = this.props;
+
     hoverAnnotation(windowId, [annotation.id]);
   }
 
   /** */
   handleAnnotationBlur() {
     const { hoverAnnotation, windowId } = this.props;
+
     hoverAnnotation(windowId, []);
   }
 
@@ -57,8 +59,8 @@ export class CanvasAnnotations extends Component {
   */
   render() {
     const {
-      listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
       annotations, autoScroll, classes, index, label, selectedAnnotationId, t, totalSize,
+      listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
       containerRef,
     } = this.props;
     if (annotations.length === 0) return null;
