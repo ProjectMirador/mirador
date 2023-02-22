@@ -11,6 +11,9 @@
     "\\.s?css$": "<rootDir>/__mocks__/css.js",
     "^uuid$": "uuid"
   },
+  "transformIgnorePatterns": [
+    "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch)"
+  ],
   "setupFiles": [
     "<rootDir>/setupJest.js"
   ],
