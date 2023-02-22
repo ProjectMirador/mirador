@@ -88,6 +88,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^14.4.3",
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
     "babel-jest": "^29.3.1",
