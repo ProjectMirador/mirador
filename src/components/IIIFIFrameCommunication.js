@@ -25,7 +25,7 @@ export function IIIFIFrameCommunication({ handleReceiveMessage, ...props }) {
 }
 
 IIIFIFrameCommunication.propTypes = {
-  ariaHidden: PropTypes.bool,
+  'aria-hidden': PropTypes.bool,
   frameBorder: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   handleReceiveMessage: PropTypes.func,
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -37,7 +37,7 @@ IIIFIFrameCommunication.propTypes = {
 };
 
 IIIFIFrameCommunication.defaultProps = {
-  ariaHidden: true,
+  'aria-hidden': true,
   frameBorder: 0,
   handleReceiveMessage: undefined,
   height: 1,
