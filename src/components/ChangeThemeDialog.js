@@ -17,18 +17,6 @@ import PropTypes from 'prop-types';
  */
 export class ChangeThemeDialog extends Component {
   /**
-   * Set the initial focus when the dialog enters
-   * Find the selected item by using the current theme
-   * in a selector on the value attribute (which we need to set)
-  */
-  static setInitialFocus(dialogElement, selectedTheme) {
-    const selectedListItem = dialogElement.querySelectorAll(`li[value="${selectedTheme}"]`);
-    if (!selectedListItem || selectedListItem.length === 0) return;
-
-    selectedListItem[0].focus();
-  }
-
-  /**
   */
   constructor(props) {
     super(props);
@@ -58,16 +46,15 @@ export class ChangeThemeDialog extends Component {
     return (
       <Dialog
         onClose={handleClose}
-        onEntered={dialog => ChangeThemeDialog.setInitialFocus(dialog, selectedTheme)}
         open={open}
       >
-        <DialogTitle id="change-the-dialog-title" disableTypography>
+        <DialogTitle disableTypography>
           <Typography variant="h2">
             {t('changeTheme')}
           </Typography>
         </DialogTitle>
         <DialogContent className={classes.dialogContent}>
-          <MenuList>
+          <MenuList autoFocusItem>
             {
               themeIds.map(value => (
                 <MenuItem
