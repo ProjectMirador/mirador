@@ -18,5 +18,6 @@
     "<rootDir>/**/__tests__/**/*.{js,jsx}",
     "<rootDir>/src/**/?(*.)(spec|test|unit).{js,jsx}"
   ],
-  "preset": "jest-puppeteer"
+  "preset": "jest-puppeteer",
+  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"]
 }

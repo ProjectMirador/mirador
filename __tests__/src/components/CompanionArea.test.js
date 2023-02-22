@@ -74,7 +74,7 @@ describe('CompanionArea', () => {
     expect(wrapper.find(Slide).prop('direction')).toBe('right');
     expect(wrapper.find(MiradorMenuButton).prop('aria-expanded')).toBe(false);
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
-    expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('none');
+    expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('none'); // eslint-disable-line jest-dom/prefer-to-have-style
 
     wrapper.find(MiradorMenuButton).first().props().onClick(); // Trigger the onClick prop
 
@@ -96,7 +96,7 @@ describe('CompanionArea', () => {
     expect(wrapper.find(MiradorMenuButton).prop('aria-expanded')).toBe(true);
 
     expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
-    expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('flex');
+    expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('flex'); // eslint-disable-line jest-dom/prefer-to-have-style
 
     wrapper.find(MiradorMenuButton).first().props().onClick(); // Trigger the onClick prop
 

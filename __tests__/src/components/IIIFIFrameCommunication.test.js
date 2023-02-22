@@ -1,21 +1,22 @@
-import { shallow, mount } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 import { IIIFIFrameCommunication } from '../../../src/components/IIIFIFrameCommunication';
 
 /** */
 function createWrapper(props) {
-  return shallow(
+  render(
     <IIIFIFrameCommunication
       src="https://iiifauth.digtest.co.uk/auth/token/login/01_Icarus_Breughel.jpg?origin=http://localhost:4444&messageId=https://iiifauth.digtest.co.uk/auth/token/login/01_Icarus_Breughel.jpg"
       title="AccessTokenSender"
       handleReceiveMessage={() => {}}
+      {...props}
     />,
   );
 }
 
 describe('IIIFIFrameCommunication', () => {
   it('should render an iframe', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find('iframe')).toHaveLength(1);
+    createWrapper();
+    expect(screen.getByTitle('AccessTokenSender', { hidden: true })).toBeInTheDocument();
   });
 });
 
@@ -32,13 +33,13 @@ describe('Register event listener', () => {
       events[event] = undefined;
     });
     const props = { handleReceiveMessage: jest.fn() };
-    const wrapper = mount(<IIIFIFrameCommunication {...props} />);
+    const view = render(<IIIFIFrameCommunication {...props} />);
     events.message();
 
     expect(props.handleReceiveMessage).toBeCalledTimes(1);
     expect(window.addEventListener).toBeCalledWith('message', expect.any(Function));
 
-    wrapper.unmount();
+    view.unmount();
     expect(window.removeEventListener).toBeCalledWith('message', expect.any(Function), false);
   });
 });

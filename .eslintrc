@@ -2,12 +2,12 @@
   "env": {
     "jest/globals": true
   },
-  "extends": ["airbnb","react-app"],
+  "extends": ["airbnb","react-app", "plugin:jest-dom/recommended", "plugin:testing-library/react"],
   "globals": {
     "page": true,
     "document": true
   },
-  "plugins": ["jest", "react", "react-hooks"],
+  "plugins": ["jest", "jest-dom", "react", "react-hooks", "testing-library"],
   "rules": {
     "import/prefer-default-export": "off",
     "no-console": "off",
@@ -41,6 +41,13 @@
     }],
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "react-hooks/exhaustive-deps": "error"
+    "react-hooks/exhaustive-deps": "error",
+    "testing-library/render-result-naming-convention": "off",
+    "testing-library/no-render-in-setup": [
+      "error",
+      {
+        "allowTestingFrameworkSetupHook": "beforeEach"
+      }
+    ]
   }
 }
