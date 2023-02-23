@@ -21,10 +21,31 @@ global.navigator = {
 
 /* eslint-disable  require-jsdoc, class-methods-use-this */
 class IntersectionObserverPolyfill {
-  observe() {
+  constructor(callback, options) {
+    this.callback = callback;
+    this.elements = [];
+    IntersectionObserverPolyfill.register(this);
+  }
+
+  observe(el) {
+    this.elements.push(el);
+  }
+
+  unobserve() {
   }
 
   disconnect() {
+  }
+
+  static register(obj) {
+    this.observers = this.observers || [];
+    this.observers.push(obj);
+  }
+
+  static triggerAll(attr = { intersectionRatio: 1, isIntersecting: true }) {
+    this.observers.forEach((obs) => {
+      obs.callback(obs.elements.map(el => ({ ...attr, target: el })));
+    });
   }
 }
 /* eslint-enable  require-jsdoc, class-methods-use-this */
