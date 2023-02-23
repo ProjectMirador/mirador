@@ -23,7 +23,7 @@ export class OpenSeadragonViewer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { viewer: undefined };
+    this.state = { grabbing: false, viewer: undefined };
     this.ref = createRef();
     this.apiRef = createRef();
     OSDReferences.set(props.windowId, this.apiRef);
@@ -57,6 +57,14 @@ export class OpenSeadragonViewer extends Component {
     this.apiRef.current = viewer;
 
     this.setState({ viewer });
+
+    viewer.addHandler('canvas-drag', () => {
+      this.setState({ grabbing: true });
+    });
+
+    viewer.addHandler('canvas-drag-end', () => {
+      this.setState({ grabbing: false });
+    });
 
     // Set a flag when OSD starts animating (so that viewer updates are not used)
     viewer.addHandler('animation-start', () => {
@@ -345,7 +353,7 @@ export class OpenSeadragonViewer extends Component {
       children, classes, label, t, windowId,
       drawAnnotations,
     } = this.props;
-    const { viewer } = this.state;
+    const { viewer, grabbing } = this.state;
 
     const enhancedChildren = Children.map(children, child => (
       cloneElement(
@@ -359,6 +367,7 @@ export class OpenSeadragonViewer extends Component {
     return (
       <section
         className={classNames(ns('osd-container'), classes.osdContainer)}
+        style={{ cursor: grabbing ? 'grabbing' : undefined }}
         id={`${windowId}-osd`}
         ref={this.ref}
         aria-label={t('item', { label })}
