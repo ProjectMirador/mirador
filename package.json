@@ -121,9 +121,9 @@
     "jest-puppeteer": "^7.0.0",
     "jsdom": "^21.0.0",
     "puppeteer": "^19.0.0",
-    "react": "^16.14.0",
+    "react": "^17.0.0",
     "react-dnd-test-backend": "^16.0.1",
-    "react-dom": "^16.14.0",
+    "react-dom": "^17.0.0",
     "react-refresh": "^0.14.0",
     "redux-mock-store": "^1.5.1",
     "redux-saga-test-plan": "^4.0.0-rc.3",
@@ -133,7 +133,7 @@
     "webpack-dev-server": "^4.7.4"
   },
   "peerDependencies": {
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0"
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0"
   }
 }
