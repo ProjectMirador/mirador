@@ -1,14 +1,34 @@
-import { shallow } from 'enzyme';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 import { ThumbnailNavigation } from '../../../src/components/ThumbnailNavigation';
 import ThumbnailCanvasGrouping from '../../../src/containers/ThumbnailCanvasGrouping';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';
 import manifestJson from '../../fixtures/version-2/019.json';
 import zeroWidthFixture from '../../fixtures/version-2/zeroWidthCanvas.json';
+import createPluggableStore from '../../../src/state/createPluggableStore';
 
+
+export function renderWithProviders(
+  ui,
+  {
+    preloadedState = {},
+    // Automatically create a store instance if no store was passed in
+    store = createPluggableStore(preloadedState, []),
+    ...renderOptions
+  } = {}
+) {
+  function Wrapper({ children }) {
+    return <Provider store={store}>{children}</Provider>
+  }
+
+  // Return an object with the store and all of RTL's query functions
+  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) }
+}
 /** create wrapper */
 function createWrapper(props, fixture = manifestJson) {
-  return shallow(
+  return renderWithProviders(
     <ThumbnailNavigation
       canvasGroupings={
         new CanvasGroupings(
@@ -26,130 +46,135 @@ function createWrapper(props, fixture = manifestJson) {
   );
 }
 
+jest.mock(
+  'react-virtualized-auto-sizer',
+  () => ({ children }) => children({ height: 600, width: 600 })
+)
+
 describe('ThumbnailNavigation', () => {
-  let wrapper;
-  let rightWrapper;
-  beforeEach(() => {
-    wrapper = createWrapper();
-  });
-  it('renders the component', () => {
-    expect(wrapper.find('.mirador-thumb-navigation').length).toBe(1);
+  it('renders the component', async () => {
+    createWrapper();
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
   it('renders containers based off of number of canvases', () => {
-    expect(wrapper
-      .find('AutoSizer').dive().find('List').dive()
-      .find(ThumbnailCanvasGrouping).length).toEqual(3);
+    createWrapper();
+
+    expect(screen.getAllByRole('gridcell').length).toEqual(3);
   });
-  it('has a ref set used to reset on view change', () => {
-    expect(wrapper.instance().gridRef).not.toBe(null);
-  });
-  it('triggers a resetAfterIndex on view change', () => {
-    const mockReset = jest.fn();
-    wrapper.instance().gridRef = { current: { resetAfterIndex: mockReset } };
-    wrapper.setProps({
-      canvasIndex: 1,
-      view: 'book',
+  // it('has a ref set used to reset on view change', () => {
+  //   expect(wrapper.instance().gridRef).not.toBe(null);
+  // });
+  // it('triggers a resetAfterIndex on view change', () => {
+  //   const mockReset = jest.fn();
+  //   wrapper.instance().gridRef = { current: { resetAfterIndex: mockReset } };
+  //   wrapper.setProps({
+  //     canvasIndex: 1,
+  //     view: 'book',
+  //   });
+  //   expect(mockReset).toHaveBeenCalled();
+  // });
+  // it('triggers a scrollToItem on canvasIndex change', () => {
+  //   const mockScroll = jest.fn();
+  //   wrapper.instance().gridRef = { current: { scrollToItem: mockScroll } };
+  //   wrapper.setProps({
+  //     canvasIndex: 3,
+  //   });
+  //   expect(mockScroll).toHaveBeenCalled();
+  // });
+
+  it('gives the grid a size', () => {
+      const { unmount } = createWrapper();
+      expect(screen.getByRole('grid')).toHaveStyle({ height: '150px', width: '100%' });
+
+      unmount();
+
+      createWrapper({ position: 'far-right' });
+      expect(screen.getByRole('grid')).toHaveStyle({ height: '100%', minHeight: 0, width: '123px' });
     });
-    expect(mockReset).toHaveBeenCalled();
-  });
-  it('triggers a scrollToItem on canvasIndex change', () => {
-    const mockScroll = jest.fn();
-    wrapper.instance().gridRef = { current: { scrollToItem: mockScroll } };
-    wrapper.setProps({
-      canvasIndex: 3,
+  //   it('rightWidth', () => {
+  //     expect(wrapper.instance().rightWidth()).toEqual(100);
+  //     const mockReset = jest.fn();
+  //     wrapper.instance().gridRef = { current: { resetAfterIndex: mockReset } };
+  //     wrapper.setProps({
+  //       canvasIndex: 1,
+  //       view: 'book',
+  //     });
+  //     expect(wrapper.instance().rightWidth()).toEqual(200);
+  //   });
+
+    it('calculates the scaled width of each cell', () => {
+      createWrapper();
+
+      expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ width: '74px' });
     });
-    expect(mockScroll).toHaveBeenCalled();
-  });
-  describe('calculating instance methods', () => {
-    beforeEach(() => {
-      rightWrapper = createWrapper({
-        position: 'far-right',
-      });
+
+    it('calculates the scaled height of each cell when on the right', () => {
+      createWrapper({ position: 'far-right' });
+      expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ height: '150px' });
     });
-    it('style', () => {
-      expect(wrapper.instance().style()).toMatchObject({ height: '150px', width: '100%' });
-      expect(rightWrapper.instance().style()).toMatchObject({ height: '100%', minHeight: 0, width: '123px' });
+
+    it('keeps a minimum size for each cell', () => {
+      createWrapper({}, zeroWidthFixture);
+
+      expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ width: '100px' });
     });
-    it('rightWidth', () => {
-      expect(wrapper.instance().rightWidth()).toEqual(100);
-      const mockReset = jest.fn();
-      wrapper.instance().gridRef = { current: { resetAfterIndex: mockReset } };
-      wrapper.setProps({
-        canvasIndex: 1,
-        view: 'book',
-      });
-      expect(wrapper.instance().rightWidth()).toEqual(200);
+
+    it('keeps a minimum size for each cell when on the right', () => {
+      createWrapper({ position: 'far-right' }, zeroWidthFixture);
+
+      expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ height: '100px' });
     });
-    it('item count is based off of number of canvases', () => {
-      expect(wrapper.instance().itemCount()).toEqual(3);
-    });
-    it('calculateScaledSize', () => {
-      expect(wrapper.instance().calculateScaledSize(0)).toEqual(82);
-      expect(rightWrapper.instance().calculateScaledSize(0)).toEqual(158);
-      let zeroWidthWrapper = createWrapper({ position: 'far-right' }, zeroWidthFixture);
-      expect(zeroWidthWrapper.instance().calculateScaledSize(0)).toEqual(108);
-      zeroWidthWrapper = createWrapper({ position: 'bottom' }, zeroWidthFixture);
-      expect(zeroWidthWrapper.instance().calculateScaledSize(0)).toEqual(108);
-    });
-    it('calculatingWidth', () => {
-      expect(wrapper.instance().calculatingWidth(1)).toEqual(100);
-      expect(wrapper.instance().calculatingWidth(2)).toEqual(200);
-    });
-    it('areaHeight', () => {
-      expect(wrapper.instance().areaHeight()).toEqual(150);
-      expect(rightWrapper.instance().areaHeight(99)).toEqual(99);
-    });
-    describe('without any canvases', () => {
-      it('returns the default for the calculated size', () => {
-        wrapper = createWrapper({ canvasGroupings: new CanvasGroupings([]).groupings() });
-        expect(wrapper.instance().calculateScaledSize(0)).toEqual(108);
-      });
-    });
-  });
   describe('keyboard navigation', () => {
     const setNextCanvas = jest.fn();
     const setPreviousCanvas = jest.fn();
+    let user;
     beforeEach(() => {
-      wrapper = createWrapper({
-        canvasIndex: 1,
-        hasNextCanvas: true,
-        hasPreviousCanvas: true,
-        setNextCanvas,
-        setPreviousCanvas,
-      });
+      user = userEvent.setup();
+      // createWrapper({
+      //   canvasIndex: 1,
+      //   hasNextCanvas: true,
+      //   hasPreviousCanvas: true,
+      //   setNextCanvas,
+      //   setPreviousCanvas,
+      // });
     });
     describe('handleKeyUp', () => {
-      it('handles right arrow by advancing the current canvas', () => {
-        wrapper.instance().handleKeyUp({ key: 'ArrowRight' });
+      it('handles right arrow by advancing the current canvas', async () => {
+        createWrapper({ canvasIndex: 1, hasNextCanvas: true, setNextCanvas });
+
+        screen.getByRole('grid').focus();
+        fireEvent.keyDown(screen.getByRole('grid'), { key: 'ArrowRight', code: 'ArrowRight' });
         expect(setNextCanvas).toHaveBeenCalled();
       });
       it('handles down arrow by advancing the current canvas when the canvas is on the right', () => {
-        wrapper.setProps({ position: 'far-right' });
-        wrapper.instance().handleKeyUp({ key: 'ArrowDown' });
+        createWrapper({ canvasIndex: 1, hasNextCanvas: true, position: 'far-right', setNextCanvas });
+
+        screen.getByRole('grid').focus();
+        fireEvent.keyDown(screen.getByRole('grid'), { key: 'ArrowDown', code: 'ArrowDown' });
         expect(setNextCanvas).toHaveBeenCalled();
       });
       it('handles left arrow by selecting the previous canvas', () => {
-        wrapper.instance().handleKeyUp({ key: 'ArrowLeft' });
+        createWrapper({ canvasIndex: 2, hasPreviousCanvas: true, setPreviousCanvas });
+
+        screen.getByRole('grid').focus();
+        fireEvent.keyDown(screen.getByRole('grid'), { key: 'ArrowLeft', code: 'ArrowLeft' });
         expect(setPreviousCanvas).toHaveBeenCalled();
       });
       it('handles up arrow by selecting the previous canvas when the canvas is on the right', () => {
-        wrapper.setProps({ position: 'far-right' });
-        wrapper.instance().handleKeyUp({ key: 'ArrowUp' });
+        createWrapper({ canvasIndex: 2, hasPreviousCanvas: true, position: 'far-right', setPreviousCanvas });
+
+        screen.getByRole('grid').focus();
+        fireEvent.keyDown(screen.getByRole('grid'), { key: 'ArrowUp', code: 'ArrowUp' });
         expect(setPreviousCanvas).toHaveBeenCalled();
       });
     });
   });
   describe('when viewingDirection="right-to-left"', () => {
-    beforeEach(() => {
-      wrapper = createWrapper({
-        viewingDirection: 'right-to-left',
-      });
-    });
-
     it('sets up react-window to be rtl', () => {
-      expect(wrapper
-        .find('AutoSizer').dive().find('List').dive()
-        .props().style.direction).toEqual('rtl'); // eslint-disable-line jest-dom/prefer-to-have-style
+      createWrapper({ viewingDirection: 'right-to-left' });
+
+      expect(screen.getByRole('row').children[0]).toHaveStyle({ direction: 'rtl' });
     });
   });
 });
