@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import createCachedSelector from 're-reselect';
 import { PropertyValue, Utils } from 'manifesto.js';
 import getThumbnail from '../../lib/ThumbnailFactory';
+import getLogo from '../../lib/ProviderLogoFactory';
 import asArray from '../../lib/asArray';
 import { getCompanionWindow } from './companionWindows';
 import { getManifest } from './getters';
@@ -78,17 +79,12 @@ function getProperty(property) {
   );
 }
 
-/**
- * Get the logo for a manifest
- * @param {object} state
- * @param {object} props
- * @param {string} props.manifestId
- * @param {string} props.windowId
- * @return {String|null}
- */
-export const getManifestLogo = createSelector(
-  [getManifestoInstance],
-  manifest => manifest && manifest.getLogo(),
+/** */
+export const getManifestProvider = createSelector(
+  [
+    getProperty('provider'),
+  ],
+  (provider) => provider,
 );
 
 /**
@@ -99,7 +95,7 @@ export const getManifestLogo = createSelector(
 * @param {string} props.windowId
 * @return {String|null}
 */
-export const getManifestProvider = createSelector(
+export const getManifestProviderName = createSelector(
   [
     getProperty('provider'),
     getManifestLocale,
@@ -107,6 +103,40 @@ export const getManifestProvider = createSelector(
   (provider, locale) => provider
     && provider[0].label
     && PropertyValue.parse(provider[0].label, locale).getValue(),
+);
+
+/**
+ * Return the IIIF v3 provider logo
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @return {String|null}
+ */
+export const getProviderLogo = createSelector(
+  [getManifestProvider],
+  (provider) => {
+    // There may be more than 1 provider. We are only dealing with the first one (provider[0]) here.
+    if (provider) {
+      return getLogo(provider[0], {
+        maxHeight: 80, maxWidth: 120,
+      });
+    }
+    return null;
+  },
+);
+
+/**
+ * Get the logo for a manifest
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @return {String|null}
+ */
+export const getManifestLogo = createSelector(
+  [getManifestoInstance, getProviderLogo],
+  (manifest, v3logo) => v3logo || (manifest && manifest.getLogo()),
 );
 
 /**
