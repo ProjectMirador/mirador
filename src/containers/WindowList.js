@@ -3,8 +3,9 @@ import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getContainerId, getWindowIds, getWindowTitles } from '../state/selectors';
+import { getWindowIds, getWindowTitles } from '../state/selectors';
 import { WindowList } from '../components/WindowList';
+import { withWorkspaceContext } from '../contexts/WorkspaceContext';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -22,7 +23,6 @@ const mapDispatchToProps = {
  */
 const mapStateToProps = state => (
   {
-    containerId: getContainerId(state),
     titles: getWindowTitles(state),
     windowIds: getWindowIds(state),
   }
@@ -30,6 +30,7 @@ const mapStateToProps = state => (
 
 const enhance = compose(
   withTranslation(),
+  withWorkspaceContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowList'),
 );

@@ -8,7 +8,6 @@ import { WorkspaceOptionsMenu } from '../../../src/components/WorkspaceOptionsMe
 function createShallow(props) {
   return shallow(
     <WorkspaceOptionsMenu
-      containerId="mirador"
       handleClose={() => {}}
       t={k => k}
       {...props}

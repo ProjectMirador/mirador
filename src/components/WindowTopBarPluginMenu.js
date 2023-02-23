@@ -4,7 +4,6 @@ import MoreVertIcon from '@material-ui/icons/MoreVertSharp';
 import Menu from '@material-ui/core/Menu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { PluginHook } from './PluginHook';
-import ns from '../config/css-ns';
 
 /**
  *
@@ -45,7 +44,7 @@ export class WindowTopBarPluginMenu extends Component {
    */
   render() {
     const {
-      classes, containerId, PluginComponents, t, windowId, menuIcon,
+      classes, container, PluginComponents, t, windowId, menuIcon,
     } = this.props;
     const { anchorEl } = this.state;
 
@@ -65,7 +64,7 @@ export class WindowTopBarPluginMenu extends Component {
 
         <Menu
           id={`window-plugin-menu_${windowId}`}
-          container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
+          container={container?.current}
           anchorEl={anchorEl}
           anchorOrigin={{
             horizontal: 'right',
@@ -90,7 +89,7 @@ WindowTopBarPluginMenu.propTypes = {
   classes: PropTypes.shape({
     ctrlBtnSelected: PropTypes.string,
   }),
-  containerId: PropTypes.string.isRequired,
+  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   menuIcon: PropTypes.element,
   PluginComponents: PropTypes.arrayOf(
     PropTypes.node,
@@ -101,6 +100,7 @@ WindowTopBarPluginMenu.propTypes = {
 
 WindowTopBarPluginMenu.defaultProps = {
   classes: {},
+  container: null,
   menuIcon: <MoreVertIcon />,
   PluginComponents: [],
 };

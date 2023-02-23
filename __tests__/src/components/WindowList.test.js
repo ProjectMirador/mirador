@@ -16,7 +16,6 @@ describe('WindowList', () => {
 
     wrapper = shallow(
       <WindowList
-        containerId="mirador"
         anchorEl={{}}
         titles={titles}
         windowIds={[]}
@@ -34,7 +33,6 @@ describe('WindowList', () => {
     beforeEach(() => {
       wrapper = shallow(
         <WindowList
-          containerId="mirador"
           anchorEl={{}}
           titles={titles}
           windowIds={['xyz']}
@@ -63,7 +61,6 @@ describe('WindowList', () => {
 
       wrapper = shallow(
         <WindowList
-          containerId="mirador"
           anchorEl={{}}
           titles={titles}
           windowIds={['xyz']}

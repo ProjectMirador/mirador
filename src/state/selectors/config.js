@@ -72,6 +72,7 @@ export const getThemeIds = createSelector(
   ({ themes }) => Object.keys(themes),
 );
 
+/* @deprecated */
 export const getContainerId = createSelector(
   [getConfig],
   ({ id }) => id,
