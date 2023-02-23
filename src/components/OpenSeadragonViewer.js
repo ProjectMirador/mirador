@@ -58,11 +58,11 @@ export class OpenSeadragonViewer extends Component {
 
     this.setState({ viewer });
 
-    viewer.addHandler('canvas-press', () => {
+    viewer.addHandler('canvas-drag', () => {
       this.setState({ grabbing: true });
     });
 
-    viewer.addHandler('canvas-release', () => {
+    viewer.addHandler('canvas-drag-end', () => {
       this.setState({ grabbing: false });
     });
 
