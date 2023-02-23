@@ -367,7 +367,7 @@ export class OpenSeadragonViewer extends Component {
     return (
       <section
         className={classNames(ns('osd-container'), classes.osdContainer)}
-        style={{ cursor: grabbing ? 'grabbing' : 'grab' }}
+        style={{ cursor: grabbing ? 'grabbing' : undefined }}
         id={`${windowId}-osd`}
         ref={this.ref}
         aria-label={t('item', { label })}
