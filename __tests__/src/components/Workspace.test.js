@@ -1,6 +1,5 @@
 import { shallow } from 'enzyme';
 import Typography from '@material-ui/core/Typography';
-import WorkspaceMosaic from '../../../src/containers/WorkspaceMosaic';
 import WorkspaceElastic from '../../../src/containers/WorkspaceElastic';
 import Window from '../../../src/containers/Window';
 import { Workspace } from '../../../src/components/Workspace';
@@ -17,7 +16,7 @@ function createWrapper(props) {
       isWorkspaceControlPanelVisible
       windowIds={['1', '2']}
       workspaceId="foo"
-      workspaceType="mosaic"
+      workspaceType="elastic"
       t={k => k}
       {...props}
     />,
@@ -34,20 +33,6 @@ describe('Workspace', () => {
           <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
             <Typography>miradorViewer</Typography>
             <WorkspaceElastic />
-          </div>
-        </IIIFDropTarget>,
-      )).toBe(true);
-    });
-  });
-  describe('if workspace type is mosaic', () => {
-    it('should render <WorkspaceMosaic/> properly', () => {
-      const wrapper = createWrapper();
-
-      expect(wrapper.matchesElement(
-        <IIIFDropTarget>
-          <div className="mirador-workspace-viewport mirador-workspace-with-control-panel">
-            <Typography>miradorViewer</Typography>
-            <WorkspaceMosaic />
           </div>
         </IIIFDropTarget>,
       )).toBe(true);

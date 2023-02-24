@@ -15,6 +15,7 @@ import {
   searchesReducer,
   layersReducer,
   catalogReducer,
+  gridLayoutReducer,
 } from '.';
 
 /**
@@ -32,6 +33,7 @@ export default function createRootReducer(pluginReducers) {
     config: configReducer,
     elasticLayout: elasticLayoutReducer,
     errors: errorsReducer,
+    gridLayout: gridLayoutReducer,
     infoResponses: infoResponsesReducer,
     layers: layersReducer,
     manifests: manifestsReducer,

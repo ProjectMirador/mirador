@@ -119,6 +119,28 @@ export class WorkspaceSelectionDialog extends Component {
                 </div>
               </Card>
             </MenuItem>
+            <MenuItem
+              className={classes.menuItem}
+              onClick={() => this.handleWorkspaceTypeChange('grid')}
+              selected={workspaceType === 'grid'}
+              value="grid"
+            >
+              <Card className={classes.card}>
+                <WorkspaceTypeMosaicIcon
+                  className={classes.svgIcon}
+                  viewBox="0 0 120 90"
+                />
+                <div className={classes.details}>
+                  <CardContent
+                    className={classes.content}
+                    classes={{ root: classes.root }}
+                  >
+                    <Typography className={classes.headline} component="p" variant="h3">{t('grid')}</Typography>
+                    <Typography variant="body1">{t('gridDescription')}</Typography>
+                  </CardContent>
+                </div>
+              </Card>
+            </MenuItem>
           </MenuList>
         </ScrollIndicatedDialogContent>
       </Dialog>

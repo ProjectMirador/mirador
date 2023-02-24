@@ -4,8 +4,8 @@ import classNames from 'classnames';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Window from '../containers/Window';
-import WorkspaceMosaic from '../containers/WorkspaceMosaic';
 import WorkspaceElastic from '../containers/WorkspaceElastic';
+import WorkspaceGrid from '../containers/WorkspaceGrid';
 import ns from '../config/css-ns';
 import { IIIFDropTarget } from './IIIFDropTarget';
 
@@ -45,8 +45,8 @@ export class Workspace extends Component {
     switch (workspaceType) {
       case 'elastic':
         return <WorkspaceElastic />;
-      case 'mosaic':
-        return <WorkspaceMosaic />;
+      case 'grid':
+        return <WorkspaceGrid />;
       default:
         return windowIds.map(windowId => (
           <Window

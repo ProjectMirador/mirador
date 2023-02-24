@@ -323,7 +323,7 @@ export default {
     exposeModeOn: false, // unused?
     height: 5000, // height of the elastic mode's virtual canvas
     showZoomControls: false, // Configure if zoom controls should be displayed by default
-    type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic". If "mosaic" or "elastic" are not selected no worksapce type will be used.
+    type: 'grid', // Which workspace type to load by default. Other possible values are "elastic". If "mosaic" or "elastic" are not selected no worksapce type will be used.
     viewportPosition: { // center coordinates for the elastic mode workspace
       x: 0,
       y: 0,

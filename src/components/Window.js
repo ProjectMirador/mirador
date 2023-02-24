@@ -2,7 +2,6 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import Paper from '@material-ui/core/Paper';
-import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
@@ -35,24 +34,19 @@ export class Window extends Component {
    */
   wrappedTopBar() {
     const {
-      windowId, workspaceType, windowDraggable,
+      dragHandle, windowId, windowDraggable,
     } = this.props;
 
     const topBar = (
-      <div>
+      <div ref={dragHandle}>
         <WindowTopBar
           windowId={windowId}
           windowDraggable={windowDraggable}
+          dragHandle={dragHandle}
         />
         <IIIFAuthentication windowId={windowId} />
       </div>
     );
-    if (workspaceType === 'mosaic' && windowDraggable) {
-      const { mosaicWindowActions } = this.context;
-      return mosaicWindowActions.connectDragSource(
-        topBar,
-      );
-    }
     return topBar;
   }
 
@@ -119,10 +113,12 @@ export class Window extends Component {
   }
 }
 
-Window.contextType = MosaicWindowContext;
-
 Window.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
+  dragHandle: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
   focusWindow: PropTypes.func,
   isFetching: PropTypes.bool,
   label: PropTypes.string,
@@ -133,11 +129,11 @@ Window.propTypes = {
   view: PropTypes.string,
   windowDraggable: PropTypes.bool,
   windowId: PropTypes.string.isRequired,
-  workspaceType: PropTypes.string,
 };
 
 Window.defaultProps = {
   classes: {},
+  dragHandle: null,
   focusWindow: () => {},
   isFetching: false,
   label: null,
@@ -146,5 +142,4 @@ Window.defaultProps = {
   sideBarOpen: false,
   view: undefined,
   windowDraggable: null,
-  workspaceType: null,
 };
