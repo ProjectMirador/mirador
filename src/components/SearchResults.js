@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import BackIcon from '@material-ui/icons/ArrowBackSharp';
-import { LiveMessenger } from 'react-aria-live';
+import { announce } from '@react-aria/live-announcer';
 import SearchHit from '../containers/SearchHit';
 import { ScrollTo } from './ScrollTo';
 
@@ -32,7 +32,7 @@ export class SearchResults extends Component {
    * Return SearchHits for every hit in the response
    * Return SearchHits for every annotation in the response if there are no hits
    */
-  renderSearchHitsAndAnnotations(announcer) {
+  renderSearchHitsAndAnnotations() {
     const {
       companionWindowId,
       containerRef,
@@ -47,7 +47,7 @@ export class SearchResults extends Component {
     if (searchHits.length === 0 && searchAnnotations.length > 0) {
       return searchAnnotations.map((anno, index) => (
         <SearchHit
-          announcer={announcer}
+          announcer={announce}
           annotationId={anno.id}
           companionWindowId={companionWindowId}
           containerRef={containerRef}
@@ -63,7 +63,7 @@ export class SearchResults extends Component {
 
     return searchHits.map((hit, index) => (
       <SearchHit
-        announcer={announcer}
+        announcer={announce}
         containerRef={containerRef}
         companionWindowId={companionWindowId}
         key={hit.annotations[0]}
@@ -118,9 +118,7 @@ export class SearchResults extends Component {
           </Typography>
         )}
         <List disablePadding>
-          <LiveMessenger>
-            {({ announcePolite }) => this.renderSearchHitsAndAnnotations(announcePolite) }
-          </LiveMessenger>
+          { this.renderSearchHitsAndAnnotations() }
         </List>
         { nextSearch && (
           <Button

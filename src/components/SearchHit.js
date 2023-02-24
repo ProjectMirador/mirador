@@ -55,17 +55,20 @@ export class SearchHit extends Component {
     const {
       annotation, annotationLabel, announcer, canvasLabel, hit, index, t, total,
     } = this.props;
-    if (!hit) return;
+    if (!hit || !announcer) return;
     const truncatedHit = new TruncatedHit(hit, annotation);
 
-    announcer([
-      t('pagination', { current: index + 1, total }),
-      canvasLabel,
-      annotationLabel,
-      truncatedHit.before,
-      truncatedHit.match,
-      truncatedHit.after,
-    ].join(' '));
+    announcer(
+      [
+        t('pagination', { current: index + 1, total }),
+        canvasLabel,
+        annotationLabel,
+        truncatedHit.before,
+        truncatedHit.match,
+        truncatedHit.after,
+      ].join(' '),
+      'polite',
+    );
   }
 
   /** */
@@ -157,7 +160,7 @@ SearchHit.propTypes = {
   }),
   annotationId: PropTypes.string,
   annotationLabel: PropTypes.string,
-  announcer: PropTypes.func.isRequired,
+  announcer: PropTypes.func,
   canvasLabel: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string,
@@ -186,6 +189,7 @@ SearchHit.defaultProps = {
   annotation: undefined,
   annotationId: undefined,
   annotationLabel: undefined,
+  announcer: undefined,
   canvasLabel: undefined,
   classes: {},
   companionWindowId: undefined,
