@@ -6,6 +6,8 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import SearchIcon from '@material-ui/icons/SearchSharp';
+import InputBase from '@material-ui/core/InputBase';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
 import AnnotationManifestsAccordion from '../containers/AnnotationManifestsAccordion';
@@ -69,6 +71,20 @@ export class CanvasAnnotations extends Component {
         <Typography className={classes.sectionHeading} variant="overline">
           {t('annotationCanvasLabel', { context: `${index + 1}/${totalSize}`, label })}
         </Typography>
+
+        <div className={classes.search}>
+          <div className={classes.searchIcon}>
+            <SearchIcon />
+          </div>
+          <InputBase
+            placeholder="Search…"
+            classes={{
+              input: classes.inputInput,
+              root: classes.inputRoot,
+            }}
+            inputProps={{ 'aria-label': 'search' }}
+          />
+        </div>
         <MenuList autoFocusItem variant="selectedMenu">
           {
             annotations.map(annotation => (
