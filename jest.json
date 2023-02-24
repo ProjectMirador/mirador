@@ -19,5 +19,8 @@
     "<rootDir>/src/**/?(*.)(spec|test|unit).{js,jsx}"
   ],
   "preset": "jest-puppeteer",
-  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"]
+  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"],
+  "transformIgnorePatterns": [
+    "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch)"
+  ]
 }
