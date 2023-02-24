@@ -55,7 +55,7 @@ describe('SearchPanelControls', () => {
       .dive();
     expect(divedInput.find(CircularProgress).length).toEqual(0);
     expect(divedInput.find(SearchIcon).length).toEqual(1);
-    expect(divedInput.find('Connect(WithPlugins(MiradorMenuButton))[type="submit"]').length).toEqual(1);
+    expect(divedInput.find('WithWorkspaceContext(WithPlugins(MiradorMenuButton))[type="submit"]').length).toEqual(1);
   });
 
   it('endAdornment has a CircularProgress indicator when there the current search is fetching', () => {

@@ -8,7 +8,6 @@ import { WindowTopBarPluginMenu } from '../../../src/components/WindowTopBarPlug
 function createWrapper(props) {
   return shallow(
     <WindowTopBarPluginMenu
-      containerId="abc123-container"
       t={k => k}
       windowId="abc123"
       {...props}

@@ -1,18 +1,11 @@
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { getContainerId } from '../state/selectors';
+import { withWorkspaceContext } from '../contexts/WorkspaceContext';
 import { WorkspaceOptionsMenu } from '../components/WorkspaceOptionsMenu';
 
-/** Used for connect */
-const mapStateToProps = state => ({
-  containerId: getContainerId(state),
-});
-
-// containerId: getContainerId(state),/
 const enhance = compose(
   withTranslation(),
-  connect(mapStateToProps, null),
+  withWorkspaceContext,
 );
 
 export default enhance(WorkspaceOptionsMenu);

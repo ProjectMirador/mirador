@@ -4,7 +4,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import PropTypes from 'prop-types';
-import ns from '../config/css-ns';
 
 /**
  */
@@ -35,7 +34,7 @@ export class WindowList extends Component {
    */
   render() {
     const {
-      containerId, handleClose, anchorEl, windowIds, focusWindow, t,
+      container, handleClose, anchorEl, windowIds, focusWindow, t,
     } = this.props;
 
     return (
@@ -49,7 +48,7 @@ export class WindowList extends Component {
           vertical: 'top',
         }}
         id="window-list-menu"
-        container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
+        container={container?.current}
         disableAutoFocusItem
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -82,7 +81,7 @@ export class WindowList extends Component {
 
 WindowList.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  containerId: PropTypes.string.isRequired,
+  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   focusWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   t: PropTypes.func,
@@ -92,6 +91,7 @@ WindowList.propTypes = {
 
 WindowList.defaultProps = {
   anchorEl: null,
+  container: null,
   t: key => key,
   titles: {},
 };

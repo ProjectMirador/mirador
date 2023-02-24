@@ -7,7 +7,6 @@ import { WorkspaceMenu } from '../../../src/components/WorkspaceMenu';
 function createShallow(props) {
   return shallow(
     <WorkspaceMenu
-      containerId="mirador"
       showThemePicker
       {...props}
     />,

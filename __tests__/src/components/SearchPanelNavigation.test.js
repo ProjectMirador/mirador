@@ -25,10 +25,10 @@ describe('SearchPanelNavigation', () => {
         selectedContentSearchAnnotation: ['2'],
       });
       expect(wrapper.find('WithStyles(ForwardRef(Typography))').text()).toEqual('pagination');
-      expect(wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=false]').length).toEqual(2);
-      wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=false]').first().props().onClick();
+      expect(wrapper.find('WithWorkspaceContext(WithPlugins(MiradorMenuButton))[disabled=false]').length).toEqual(2);
+      wrapper.find('WithWorkspaceContext(WithPlugins(MiradorMenuButton))[disabled=false]').first().props().onClick();
       expect(selectAnnotation).toHaveBeenCalledWith('1');
-      wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=false]').last().props().onClick();
+      wrapper.find('WithWorkspaceContext(WithPlugins(MiradorMenuButton))[disabled=false]').last().props().onClick();
       expect(selectAnnotation).toHaveBeenCalledWith('3');
     });
     it('buttons disabled when no next/prev', () => {
@@ -36,7 +36,7 @@ describe('SearchPanelNavigation', () => {
         searchHits: [{ annotations: ['1'] }],
         selectedContentSearchAnnotation: ['1'],
       });
-      expect(wrapper.find('Connect(WithPlugins(MiradorMenuButton))[disabled=true]').length).toEqual(2);
+      expect(wrapper.find('WithWorkspaceContext(WithPlugins(MiradorMenuButton))[disabled=true]').length).toEqual(2);
     });
   });
 });

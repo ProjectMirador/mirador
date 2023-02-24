@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
 import WindowViewSettings from '../containers/WindowViewSettings';
 import { PluginHook } from './PluginHook';
-import ns from '../config/css-ns';
 
 /** Renders plugins */
 function PluginHookWithHeader(props) {
@@ -27,14 +26,14 @@ export class WindowTopMenu extends Component {
    */
   render() {
     const {
-      containerId, handleClose, anchorEl, showThumbnailNavigationSettings,
+      container, handleClose, anchorEl, showThumbnailNavigationSettings,
       toggleDraggingEnabled, windowId,
     } = this.props;
 
     return (
       <Menu
         id={`window-menu_${windowId}`}
-        container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
+        container={container?.current}
         anchorEl={anchorEl}
         anchorOrigin={{
           horizontal: 'right',
@@ -64,7 +63,7 @@ export class WindowTopMenu extends Component {
 
 WindowTopMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  containerId: PropTypes.string.isRequired,
+  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
   showThumbnailNavigationSettings: PropTypes.bool,
   toggleDraggingEnabled: PropTypes.func.isRequired,
@@ -73,5 +72,6 @@ WindowTopMenu.propTypes = {
 
 WindowTopMenu.defaultProps = {
   anchorEl: null,
+  container: null,
   showThumbnailNavigationSettings: true,
 };

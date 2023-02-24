@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import LanguageSettings from '../containers/LanguageSettings';
 import { NestedMenu } from './NestedMenu';
 import WorkspaceSelectionDialog from '../containers/WorkspaceSelectionDialog';
-import ns from '../config/css-ns';
 import ChangeThemeDialog from '../containers/ChangeThemeDialog';
 import { PluginHook } from './PluginHook';
 
@@ -65,7 +64,7 @@ export class WorkspaceMenu extends Component {
    */
   render() {
     const {
-      containerId,
+      container,
       handleClose,
       anchorEl,
       showThemePicker,
@@ -80,13 +79,11 @@ export class WorkspaceMenu extends Component {
       workspaceSelection,
     } = this.state;
 
-    const container = document.querySelector(`#${containerId} .${ns('viewer')}`);
-
     return (
       <>
         <Menu
           id="workspace-menu"
-          container={container}
+          container={container?.current}
           anchorEl={anchorEl}
           anchorOrigin={{
             horizontal: 'right',
@@ -133,7 +130,7 @@ export class WorkspaceMenu extends Component {
         </Menu>
         {Boolean(changeTheme.open) && (
           <ChangeThemeDialog
-            container={container}
+            container={container?.current}
             handleClose={this.handleMenuItemClose('changeTheme')}
             open={Boolean(changeTheme.open)}
           />
@@ -141,7 +138,7 @@ export class WorkspaceMenu extends Component {
         {Boolean(workspaceSelection.open) && (
           <WorkspaceSelectionDialog
             open={Boolean(workspaceSelection.open)}
-            container={container}
+            container={container?.current}
             handleClose={this.handleMenuItemClose('workspaceSelection')}
           />
         )}
@@ -152,7 +149,7 @@ export class WorkspaceMenu extends Component {
 
 WorkspaceMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  containerId: PropTypes.string.isRequired,
+  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
   isWorkspaceAddVisible: PropTypes.bool,
   showThemePicker: PropTypes.bool,
@@ -163,6 +160,7 @@ WorkspaceMenu.propTypes = {
 
 WorkspaceMenu.defaultProps = {
   anchorEl: null,
+  container: null,
   isWorkspaceAddVisible: false,
   showThemePicker: false,
   showZoomControls: false,
