@@ -1,5 +1,5 @@
 import { shallow } from 'enzyme';
-import { MosaicWithoutDragDropContext } from 'react-mosaic-component';
+import { Mosaic } from 'react-mosaic-component';
 import MosaicRenderPreview from '../../../src/containers/MosaicRenderPreview';
 import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
 
@@ -23,8 +23,8 @@ describe('WorkspaceMosaic', () => {
     wrapper = createWrapper({ windowIds });
   });
   it('should render properly with an initialValue', () => {
-    expect(wrapper.find(MosaicWithoutDragDropContext).length).toEqual(1);
-    expect(wrapper.find(MosaicWithoutDragDropContext).prop('initialValue')).toEqual({
+    expect(wrapper.dive().find(Mosaic).length).toEqual(1);
+    expect(wrapper.dive().find(Mosaic).prop('initialValue')).toEqual({
       direction: 'row', first: '1', second: '2',
     });
   });
@@ -101,7 +101,8 @@ describe('WorkspaceMosaic', () => {
     it('when window is available', () => {
       const renderedTile = wrapper.instance().tileRenderer('1', 'foo');
       expect(renderedTile).not.toBeNull();
-      expect(shallow(renderedTile).find('DropTarget(DragSource(InternalMosaicWindow))').length).toEqual(1);
+      expect(shallow(renderedTile).find('ConnectedInternalMosaicWindow').length).toEqual(1);
+      expect(shallow(renderedTile).find('WithStyles(Connect(WithPlugins(Window)))').length).toEqual(1);
       expect(shallow(renderedTile).props()).toEqual(expect.objectContaining({
         additionalControls: [],
         path: 'foo',
