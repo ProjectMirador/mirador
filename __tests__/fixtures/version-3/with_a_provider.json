@@ -10,18 +10,18 @@
       "id": "https://example.org/about",
       "type": "Agent",
       "label": {"en": ["Example Organization"]},
-      "homepage": {
+      "homepage": [{
         "id": "https://example.org/",
         "type": "Text",
         "label": {"en": ["Example Organization Homepage"]},
         "format": "text/html"
-      },
-      "logo": {
+      }],
+      "logo": [{
         "id": "https://example.org/images/logo.png",
         "type": "Image",
         "height": 100,
         "width": 120
-      },
+      }],
       "seeAlso": [
         {
           "id": "https://data.example.org/about/us.jsonld",
