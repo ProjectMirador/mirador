@@ -104,20 +104,6 @@ export const getManifestProviderName = createSelector(
     && PropertyValue.parse(provider[0].label, locale).getValue(),
 );
 
-/** */
-function providerLogo(provider) {
-  if (!provider) return null;
-  const logo = provider[0] && provider[0].logo && provider[0].logo[0];
-  return logo || null;
-}
-
-/** */
-function thumbnailUrl(thumbnail) {
-  if (!thumbnail) return null;
-  if (typeof thumbnail === 'string') return thumbnail;
-  return thumbnail && thumbnail.url;
-}
-
 /**
  * Return the IIIF v3 provider logo
  * @param {object} state
@@ -127,10 +113,9 @@ function thumbnailUrl(thumbnail) {
 export const getProviderLogo = createSelector(
   [getManifestProvider],
   (provider) => {
-    const logo = providerLogo(provider);
+    const logo = provider && provider[0] && provider[0].logo && provider[0].logo[0];
     if (!logo) return null;
-    const thumbnail = getThumbnail(new Resource(logo));
-    return thumbnailUrl(thumbnail);
+    return getThumbnail(new Resource(logo))?.url;
   },
 );
 
