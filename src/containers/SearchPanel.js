@@ -41,9 +41,9 @@ const styles = theme => ({
 });
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
   withTranslation(),
+  connect(mapStateToProps, mapDispatchToProps),
   withPlugins('SearchPanel'),
 );
 
