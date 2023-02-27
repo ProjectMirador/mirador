@@ -21,10 +21,31 @@ global.navigator = {
 
 /* eslint-disable  require-jsdoc, class-methods-use-this */
 class IntersectionObserverPolyfill {
-  observe() {
+  constructor(callback, options) {
+    this.callback = callback;
+    this.elements = [];
+    IntersectionObserverPolyfill.register(this);
+  }
+
+  observe(el) {
+    this.elements.push(el);
+  }
+
+  unobserve() {
   }
 
   disconnect() {
+  }
+
+  static register(obj) {
+    this.observers = this.observers || [];
+    this.observers.push(obj);
+  }
+
+  static triggerAll(attr = { intersectionRatio: 1, isIntersecting: true }) {
+    this.observers.forEach((obs) => {
+      obs.callback(obs.elements.map(el => ({ ...attr, target: el })));
+    });
   }
 }
 /* eslint-enable  require-jsdoc, class-methods-use-this */
@@ -61,6 +82,11 @@ copyProps(window, global);
 Enzyme.configure({ adapter: new Adapter() });
 
 jest.mock('react-i18next', () => ({
+  I18nextProvider: ({ children }) => children,
+  initReactI18next: {
+    init: jest.fn(),
+    type: '3rdParty',
+  },
   // this mock makes sure any components using the translate HoC receive the t function as a prop
   withTranslation: () => (Component) => {
     Component.defaultProps = { // eslint-disable-line no-param-reassign

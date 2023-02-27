@@ -149,7 +149,7 @@ describe('ThumbnailNavigation', () => {
     it('sets up react-window to be rtl', () => {
       expect(wrapper
         .find('AutoSizer').dive().find('List').dive()
-        .props().style.direction).toEqual('rtl');
+        .props().style.direction).toEqual('rtl'); // eslint-disable-line jest-dom/prefer-to-have-style
     });
   });
 });
