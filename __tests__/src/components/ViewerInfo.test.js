@@ -1,10 +1,9 @@
-import { shallow } from 'enzyme';
-import { Typography } from '@material-ui/core';
+import { render, screen } from '@testing-library/react';
 import { ViewerInfo } from '../../../src/components/ViewerInfo';
 
 /** create wrapper */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <ViewerInfo
       classes={{}}
       canvasCount={8}
@@ -17,15 +16,9 @@ function createWrapper(props) {
 }
 
 describe('ViewerNavigation', () => {
-  let wrapper;
-
   it('renders the component', () => {
-    wrapper = createWrapper();
-
-    expect(wrapper.find(Typography).length).toBe(2);
-    expect(wrapper.find(Typography).at(0)
-      .matchesElement(<Typography>pagination</Typography>)).toBe(true);
-    expect(wrapper.find(Typography).at(1)
-      .matchesElement(<Typography> • testLabel</Typography>)).toBe(true);
+    createWrapper();
+    expect(screen.getByText('pagination', { selector: 'span' })).toBeInTheDocument();
+    expect(screen.getByText(/testLabel/i, { selector: 'span' })).toBeInTheDocument();
   });
 });
