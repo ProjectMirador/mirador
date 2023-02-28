@@ -94,9 +94,9 @@ const styles = theme => ({
   },
   search: {
     '&:hover': {
-      backgroundColor: alpha(theme.palette.common.white, 0.25),
+      backgroundColor: 'grey',
     },
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    backgroundColor: 'lightgray',
     borderRadius: theme.shape.borderRadius,
     marginLeft: 0,
     marginRight: theme.spacing(2),

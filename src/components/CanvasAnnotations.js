@@ -11,6 +11,7 @@ import InputBase from '@material-ui/core/InputBase';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
 import AnnotationManifestsAccordion from '../containers/AnnotationManifestsAccordion';
+import { filterAnnotation } from '../helper/utils';
 
 /**
  * CanvasAnnotations ~
@@ -25,6 +26,9 @@ export class CanvasAnnotations extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleAnnotationHover = this.handleAnnotationHover.bind(this);
     this.handleAnnotationBlur = this.handleAnnotationBlur.bind(this);
+    this.handleAnnotationSearch = this.handleAnnotationSearch.bind(this);
+
+    this.state = { };
   }
 
   /**
@@ -56,16 +60,30 @@ export class CanvasAnnotations extends Component {
     hoverAnnotation(windowId, []);
   }
 
+  /** */
+  handleAnnotationSearch(event) {
+    this.setState({ inputSearch: event.target.value });
+  }
+
   /**
    * Returns the rendered component
   */
   render() {
     const {
-      annotations, autoScroll, classes, index, label, selectedAnnotationId, t, totalSize,
+      autoScroll, classes, index, label, selectedAnnotationId, t, totalSize,
       listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
       containerRef,
     } = this.props;
-    if (annotations.length === 0) return null;
+
+    let { annotations } = this.props;
+
+    const { inputSearch } = this.state;
+
+    if (inputSearch != undefined && inputSearch !== '') {
+      annotations = filterAnnotation(annotations, inputSearch);
+    }
+
+
     return (
       <>
         <Typography className={classes.sectionHeading} variant="overline">
@@ -83,6 +101,7 @@ export class CanvasAnnotations extends Component {
               root: classes.inputRoot,
             }}
             inputProps={{ 'aria-label': 'search' }}
+            onChange={this.handleAnnotationSearch}
           />
         </div>
         <MenuList autoFocusItem variant="selectedMenu">
