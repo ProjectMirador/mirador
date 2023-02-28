@@ -24,7 +24,8 @@
       "<rootDir>/src/**/?(*.)(spec|test|unit).{js,jsx}"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>/__tests__/integration"
+      "<rootDir>/__tests__/integration",
+      "<rootDir>/__tests__/utils"
     ],
     "preset": "jest-puppeteer",
     "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"],
