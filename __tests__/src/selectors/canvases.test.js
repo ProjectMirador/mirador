@@ -4,6 +4,7 @@ import minimumRequired from '../../fixtures/version-2/minimumRequired.json';
 import minimumRequired3 from '../../fixtures/version-3/minimumRequired.json';
 import audioFixture from '../../fixtures/version-3/0002-mvm-audio.json';
 import videoFixture from '../../fixtures/version-3/0015-start.json';
+import videoWithAnnoCaptions from '../../fixtures/version-3/video_with_annotation_captions.json';
 import settings from '../../../src/config/settings';
 
 import {
@@ -400,7 +401,7 @@ describe('getVisibleCanvasNonTiledResources', () => {
   });
 
   describe('getVisibleCanvasCaptions', () => {
-    it('returns canvases resources', () => {
+    it('returns v2 canvases resources', () => {
       const state = {
         manifests: {
           'https://iiif.io/api/cookbook/recipe/0015-start/manifest.json': {
@@ -418,6 +419,25 @@ describe('getVisibleCanvasNonTiledResources', () => {
         },
       };
       expect(getVisibleCanvasCaptions(state, { windowId: 'a' })[0].id).toBe('https://example.com/file.vtt');
+    });
+    it('returns v3 canvases resources', () => {
+      const state = {
+        manifests: {
+          'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/manifest.json': {
+            id: 'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/manifest.json',
+            json: videoWithAnnoCaptions,
+          },
+        },
+        windows: {
+          b: {
+            manifestId: 'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/manifest.json',
+            visibleCanvases: [
+              'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/canvas',
+            ],
+          },
+        },
+      };
+      expect(getVisibleCanvasCaptions(state, { windowId: 'b' })[0].id).toBe('https://fixtures.iiif.io/video/indiana/lunchroom_manners/lunchroom_manners.vtt');
     });
   });
 

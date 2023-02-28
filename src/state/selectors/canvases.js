@@ -196,8 +196,12 @@ export const getVisibleCanvasCaptions = createSelector(
   [
     getVisibleCanvases,
   ],
-  canvases => flatten(canvases
-    .map(canvas => new MiradorCanvas(canvas).vttContent)),
+  canvases => flatten(canvases.map(canvas => {
+    const miradorCanvas = new MiradorCanvas(canvas);
+    // prefer v3, fallback to v2, which can also be an empty array if no captions exist.
+    if (miradorCanvas.v3VttContent.length) return miradorCanvas.v3VttContent;
+    return miradorCanvas.v2VttContent;
+  })),
 );
 
 export const getVisibleCanvasAudioResources = createSelector(
