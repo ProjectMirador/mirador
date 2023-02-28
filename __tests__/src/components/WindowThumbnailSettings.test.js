@@ -36,15 +36,14 @@ describe('WindowThumbnailSettings', () => {
     expect(screen.getByRole('menuitem', { name: /right/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
     expect(screen.getByRole('menuitem', { name: /off/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
   });
- /*it('for far-right it should set the correct label active (by setting the secondary color)', () => {
-    createWrapper({ thumbnailNavigationPosition: 'far-bottom' });
+  it('for far-right it should set the correct label active (by setting the secondary color)', () => {
+    createWrapper({ thumbnailNavigationPosition: 'far-right' });
     // eslint-disable-next-line
     screen.debug();
-    createWrapper({ thumbnailNavigationPosition: 'far-right' });
     expect(screen.getByRole('menuitem', { name: /right/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
     expect(screen.getByRole('menuitem', { name: /off/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
     expect(screen.getByRole('menuitem', { name: /bottom/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
-  });*/
+  });
 /*
   it('updates state when the thumbnail config selection changes', () => {
     const setWindowThumbnailPosition = jest.fn();
