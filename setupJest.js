@@ -1,23 +1,16 @@
-// Setup Jest to mock fetch
-
-import { JSDOM } from 'jsdom'; // eslint-disable-line import/no-extraneous-dependencies
-import raf from 'raf'; // eslint-disable-line import/no-extraneous-dependencies
-import fetchMock from 'jest-fetch-mock'; // eslint-disable-line import/no-extraneous-dependencies
-import Enzyme from 'enzyme'; // eslint-disable-line import/no-extraneous-dependencies
-import Adapter from 'enzyme-adapter-react-16'; // eslint-disable-line import/no-extraneous-dependencies
-
-const jsdom = new JSDOM('<!doctype html><html><body><div id="main"></div></body></html>', { url: 'https://localhost' });
-const { window } = jsdom;
+/* eslint-disable import/no-extraneous-dependencies */
+import fetchMock from 'jest-fetch-mock';
+import Enzyme from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
 jest.setTimeout(10000);
 
-window.HTMLCanvasElement.prototype.getContext = () => {};
-fetchMock.enableMocks();
+const { TextEncoder } = require('util');
 
-global.window = window;
-global.navigator = {
-  userAgent: 'node.js',
-};
+global.TextEncoder = TextEncoder;
+
+// Setup Jest to mock fetch
+fetchMock.enableMocks();
 
 /* eslint-disable  require-jsdoc, class-methods-use-this */
 class IntersectionObserverPolyfill {
@@ -57,28 +50,6 @@ function Path2D() {
 }
 
 global.Path2D = Path2D;
-/**
- * copy object property descriptors from `src` to `target`
- * @param {*} src
- * @param {*} target
- */
-const copyProps = (src, target) => {
-  Object.defineProperties(target, {
-    ...Object.getOwnPropertyDescriptors(src),
-    ...Object.getOwnPropertyDescriptors(target),
-  });
-};
-
-// jsdom does not support requestAnimationFrame
-raf.polyfill(global.window);
-
-/*
-  avoid 'ReferenceError: HTMLElement is not defined'
-  see https://github.com/airbnb/enzyme/blob/master/docs/guides/jsdom.md
-  for further information
-*/
-copyProps(window, global);
-
 Enzyme.configure({ adapter: new Adapter() });
 
 jest.mock('react-i18next', () => ({
