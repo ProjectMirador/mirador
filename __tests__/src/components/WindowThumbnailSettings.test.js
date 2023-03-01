@@ -1,7 +1,5 @@
-import { render, screen, userEvent } from '@testing-library/react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import MenuItem from '@material-ui/core/MenuItem';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { WindowThumbnailSettings } from '../../../src/components/WindowThumbnailSettings';
 
 /** create wrapper */
@@ -21,8 +19,6 @@ function createWrapper(props) {
 describe('WindowThumbnailSettings', () => {
   it('renders all elements correctly', () => {
     createWrapper();
-    // eslint-disable-next-line
-    screen.debug();
     expect(screen.getByRole('presentation', { selector: 'li' })).toBeInTheDocument();
     expect(screen.getByRole('menuitem', { name: /off/ })).toBeInTheDocument();
     expect(screen.getByRole('menuitem', { name: /bottom/ })).toBeInTheDocument();
@@ -30,36 +26,37 @@ describe('WindowThumbnailSettings', () => {
   });
   it('for far-bottom it should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ thumbnailNavigationPosition: 'far-bottom' });
-    // eslint-disable-next-line
-    screen.debug();
     expect(screen.getByRole('menuitem', { name: /bottom/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
     expect(screen.getByRole('menuitem', { name: /right/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
     expect(screen.getByRole('menuitem', { name: /off/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
   });
   it('for far-right it should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ thumbnailNavigationPosition: 'far-right' });
-    // eslint-disable-next-line
-    screen.debug();
     expect(screen.getByRole('menuitem', { name: /right/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
     expect(screen.getByRole('menuitem', { name: /off/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
     expect(screen.getByRole('menuitem', { name: /bottom/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
   });
 
-  it('updates state when the thumbnail config selection changes', () => {
+  it('updates state when the thumbnail config selection changes', async () => {
     const setWindowThumbnailPosition = jest.fn();
     const user = userEvent.setup();
     createWrapper({ setWindowThumbnailPosition });
+    const menuItems = screen.queryAllByRole('menuitem');
+    expect(menuItems.length).toBe(3);
+    expect(menuItems[0]).toBeInTheDocument();
+    expect(menuItems[1]).toBeInTheDocument();
+    expect(menuItems[2]).toBeInTheDocument();
 
-    // wrapper.find(MenuItem).at(0).simulate('click');
-    // expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'off');
-    // wrapper.find(MenuItem).at(2).simulate('click');
-    // expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'far-right');
+    await user.click(menuItems[0]);
+    expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'off');
+    await user.click(menuItems[1]);
+    expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'far-bottom');
+    await user.click(menuItems[2]);
+    expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'far-right');
   });
 
-/*
   it('when rtl flips an icon', () => {
-    const wrapper = createWrapper({ direction: 'rtl' });
-    expect(wrapper.find(FormControlLabel).at(2).props().control.props.style).toEqual({ transform: 'rotate(180deg)' });
+    createWrapper({ direction: 'rtl' });
+    expect(screen.getByRole('menuitem', { name: /right/ }).querySelector('svg')).toHaveStyle('transform: rotate(180deg);'); // eslint-disable-line testing-library/no-node-access
   });
-*/
 });
