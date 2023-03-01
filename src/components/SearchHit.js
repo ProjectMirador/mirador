@@ -93,7 +93,7 @@ export class SearchHit extends Component {
     if (focused && !selected) return null;
 
     const truncatedHit = focused ? hit : hit && new TruncatedHit(hit, annotation);
-    const truncated = hit && truncatedHit.before !== hit.before && truncatedHit.after !== hit.after;
+    const truncated = hit && (truncatedHit.before !== hit.before || truncatedHit.after !== hit.after);
     const canvasLabelHtmlId = `${companionWindowId}-${index}`;
 
     return (
