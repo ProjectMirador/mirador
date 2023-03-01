@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, userEvent } from '@testing-library/react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -44,20 +44,22 @@ describe('WindowThumbnailSettings', () => {
     expect(screen.getByRole('menuitem', { name: /off/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
     expect(screen.getByRole('menuitem', { name: /bottom/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
   });
-/*
+
   it('updates state when the thumbnail config selection changes', () => {
     const setWindowThumbnailPosition = jest.fn();
-    const wrapper = createWrapper({ setWindowThumbnailPosition });
+    const user = userEvent.setup();
+    createWrapper({ setWindowThumbnailPosition });
 
-    wrapper.find(MenuItem).at(0).simulate('click');
-    expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'off');
-    wrapper.find(MenuItem).at(2).simulate('click');
-    expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'far-right');
+    // wrapper.find(MenuItem).at(0).simulate('click');
+    // expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'off');
+    // wrapper.find(MenuItem).at(2).simulate('click');
+    // expect(setWindowThumbnailPosition).toHaveBeenCalledWith('xyz', 'far-right');
   });
 
+/*
   it('when rtl flips an icon', () => {
     const wrapper = createWrapper({ direction: 'rtl' });
     expect(wrapper.find(FormControlLabel).at(2).props().control.props.style).toEqual({ transform: 'rotate(180deg)' });
   });
-  */
+*/
 });
