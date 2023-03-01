@@ -39,12 +39,14 @@ export class SearchPanel extends Component {
             {
               query && query !== '' && (
                 <Chip
+                  role="button"
                   className={classes.clearChip}
                   color="secondary"
                   label={t('clearSearch')}
                   onClick={removeSearch}
                   onDelete={removeSearch}
                   size="small"
+                  tabIndex={0}
                   variant="outlined"
                 />
               )
