@@ -20,7 +20,7 @@ export class ThumbnailNavigation extends Component {
     this.spacing = 8; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
     this.calculateScaledSize = this.calculateScaledSize.bind(this);
     this.itemCount = this.itemCount.bind(this);
-    this.handleKeyUp = this.handleKeyUp.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
     this.nextCanvas = this.nextCanvas.bind(this);
     this.previousCanvas = this.previousCanvas.bind(this);
     this.gridRef = createRef();
@@ -43,7 +43,7 @@ export class ThumbnailNavigation extends Component {
   }
 
   /** */
-  handleKeyUp(e) {
+  handleKeyDown(e) {
     const { position } = this.props;
     let nextKey = 'ArrowRight';
     let previousKey = 'ArrowLeft';
@@ -203,7 +203,7 @@ export class ThumbnailNavigation extends Component {
         elevation={0}
         style={this.style()}
         tabIndex={0}
-        onKeyUp={this.handleKeyUp}
+        onKeyDown={this.handleKeyDown}
         role="grid"
       >
         <div role="row" style={{ height: '100%', width: '100%' }}>
