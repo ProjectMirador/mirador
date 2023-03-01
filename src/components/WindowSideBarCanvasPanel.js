@@ -115,6 +115,7 @@ export class WindowSideBarCanvasPanel extends Component {
                     name="sequenceId"
                     classes={{ select: classes.select }}
                     className={classes.selectEmpty}
+                    data-testid="sequence-select"
                   >
                     { sequences.map((s, i) => <MenuItem value={s.id} key={s.id}><Typography variant="body2">{ WindowSideBarCanvasPanel.getUseableLabel(s, i) }</Typography></MenuItem>) }
                   </Select>

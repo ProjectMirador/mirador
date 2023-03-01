@@ -1,9 +1,8 @@
-import { shallow } from 'enzyme';
+import { screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
-import compact from 'lodash/compact';
+import { renderWithProviders } from '../../utils/store';
 import { WindowSideBarCanvasPanel } from '../../../src/components/WindowSideBarCanvasPanel';
-import SidebarIndexList from '../../../src/containers/SidebarIndexList';
-import CompanionWindow from '../../../src/containers/CompanionWindow';
 import manifestJson from '../../fixtures/version-2/019.json';
 
 /**
@@ -20,7 +19,7 @@ function createWrapper(props) {
     sequences = Utils.parseManifest(manifestJson).getSequences();
   }
 
-  return shallow(
+  return renderWithProviders(
     <WindowSideBarCanvasPanel
       id="asdf"
       canvases={canvases}
@@ -32,47 +31,57 @@ function createWrapper(props) {
       updateVariant={() => {}}
       selectedCanvases={[canvases[1]]}
       sequences={sequences}
+      sequenceId={sequences[0].id}
       variant="item"
       {...props}
     />,
+    { preloadedState: { companionWindows: { asdf: { content: 'canvases' } } } },
   );
 }
 
 describe('WindowSideBarCanvasPanel', () => {
   it('renders SidebarIndexList', () => {
-    const wrapper = createWrapper({ multipleSequences: false });
-    expect(wrapper.find(CompanionWindow).props().title).toBe('canvasIndex');
-    expect(wrapper.find(SidebarIndexList).length).toBe(1);
+    createWrapper({ multipleSequences: false });
+
+    expect(screen.getByRole('heading', { name: 'canvasIndex' })).toBeInTheDocument();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
   it('without a treeStructure will not render the table of contents tab', () => {
-    const wrapper = createWrapper({ multipleSequences: false });
-    expect(
-      compact(wrapper.find(CompanionWindow).props().titleControls.props.children)
-        .length,
-    ).toBe(2);
+    createWrapper({ multipleSequences: false });
+
+    expect(screen.queryByRole('tab', { name: 'tableOfContentsList' })).not.toBeInTheDocument();
   });
 
   it('renders form control when multiple sequences present', () => {
-    const wrapper = createWrapper({ multipleSequences: true });
+    createWrapper({ multipleSequences: true, showToc: true });
 
-    expect(wrapper.find(CompanionWindow).props().titleControls.props.children[0]
-      .type.displayName.includes('FormControl')).toBe(true);
+    expect(screen.getByRole('tab', { name: 'tableOfContentsList' })).toBeInTheDocument();
   });
 
-  it('renders correct number of sequences in form control', () => {
-    const wrapper = createWrapper({ multipleSequences: true });
+  it('renders correct number of sequences in form control', async () => {
+    const user = userEvent.setup();
+    const updateSequence = jest.fn();
+    createWrapper({ multipleSequences: true, updateSequence });
 
-    expect(wrapper.find(CompanionWindow).props().titleControls.props.children[0]
-      .props.children.props.children.length).toBe(2);
+    expect(screen.getByTestId('sequence-select')).toHaveTextContent('a');
+    await user.click(within(screen.getByTestId('sequence-select')).getByRole('button'));
+
+    const listbox = within(screen.getByRole('listbox'));
+    expect(listbox.getAllByRole('option')).toHaveLength(2);
+
+    await user.click(listbox.getByRole('option', { name: 'b' }));
+    expect(updateSequence).toHaveBeenCalledWith('b');
   });
 
   describe('handleVariantChange', () => {
-    it('updates the variant', () => {
+    it('updates the variant', async () => {
+      const user = userEvent.setup();
       const updateVariant = jest.fn();
-      const wrapper = createWrapper({ multipleSequences: false, updateVariant });
-      wrapper.instance().handleVariantChange({}, 'item');
-      expect(updateVariant).toHaveBeenCalledWith('item');
+      createWrapper({ multipleSequences: false, updateVariant });
+
+      await user.click(screen.getByRole('tab', { name: 'thumbnailList' }));
+      expect(updateVariant).toHaveBeenCalledWith('thumbnail');
     });
   });
 });
