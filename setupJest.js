@@ -2,6 +2,8 @@
 import fetchMock from 'jest-fetch-mock';
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import i18next from 'i18next';
+import en from './src/locales/en/translation.json';
 
 jest.setTimeout(10000);
 
@@ -53,6 +55,13 @@ function Path2D() {
 
 global.Path2D = Path2D;
 Enzyme.configure({ adapter: new Adapter() });
+
+i18next.init({
+  lng: 'en',
+  resources: {
+    en,
+  },
+});
 
 jest.mock('react-i18next', () => ({
   I18nextProvider: ({ children }) => children,
