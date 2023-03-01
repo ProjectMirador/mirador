@@ -92,7 +92,7 @@ export class CanvasAnnotations extends Component {
 
     return (
       <>
-        <div className={classes.form}>
+        <div className={classes.headerAnnotationPanel}>
           <TextField
             label={t('searchPlaceholderAnnotation')}
             onChange={this.handleAnnotationSearch}

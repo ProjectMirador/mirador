@@ -75,18 +75,25 @@ const styles = theme => ({
   },
   footerAnnotationPanel: {
     background: theme.palette.background.paper,
+    borderTop: `.5px solid ${theme.palette.section_divider}`,
     bottom: 0,
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    paddingTop: theme.spacing(2),
     position: 'sticky',
-  },
-  form: {
-    background: theme.palette.background.paper,
-    padding: theme.spacing(0, 1, 0, 1),
-    position: 'sticky',
-    top: 0,
-    zIndex: 10,
   },
   grow: {
     flexGrow: 1,
+  },
+  headerAnnotationPanel: {
+    background: theme.palette.background.paper,
+    borderBottom: `.5px solid ${theme.palette.section_divider}`,
+    marginBottom: theme.spacing(1),
+    padding: theme.spacing(0, 1, 1, 1),
+    position: 'sticky',
+    top: 0,
+    zIndex: 10,
   },
   hovered: {},
   manifestLabel: {
