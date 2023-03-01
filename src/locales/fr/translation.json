@@ -92,6 +92,7 @@
     "moveCompanionWindowToRight": "Déplacer à droite",
     "nextCanvas": "Suivant",
     "noItemSelected": "Aucun élément sélectionné",
+    "noAnnotationFound": "Aucune annotation trouvé",
     "numItems_one": "{{number}} image",
     "numItems_other": "{{number}} images",
     "off": "aucun",

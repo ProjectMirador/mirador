@@ -96,6 +96,7 @@
     "multipartCollection": "Multipart Collection",
     "nextCanvas": "Next item",
     "noItemSelected": "No item selected",
+    "noAnnotationFound": "No annotation found",
     "numItems_one": "{{number}} item",
     "numItems_other": "{{number}} items",
     "off": "Off",

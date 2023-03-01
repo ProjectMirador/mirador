@@ -154,6 +154,14 @@ export class CanvasAnnotations extends Component {
               </ScrollTo>
             ))
           }
+          {annotations.length == 0
+            && (
+            <MenuItem>
+              <Typography>
+                {t('noAnnotationFound')}
+              </Typography>
+            </MenuItem>
+            )}
         </MenuList>
       </>
     );
