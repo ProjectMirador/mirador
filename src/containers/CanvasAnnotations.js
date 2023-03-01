@@ -69,6 +69,9 @@ const styles = theme => ({
     marginRight: theme.spacing(0.5),
     marginTop: theme.spacing(1),
   },
+  form: {
+    padding: theme.spacing(0, 1, 0, 1),
+  },
   grow: {
     flexGrow: 1,
   },

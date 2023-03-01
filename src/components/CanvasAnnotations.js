@@ -8,10 +8,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/SearchSharp';
 import InputBase from '@material-ui/core/InputBase';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import TextField from '@material-ui/core/TextField';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
 import AnnotationManifestsAccordion from '../containers/AnnotationManifestsAccordion';
 import { filterAnnotation } from '../helper/utils';
+import { MiradorMenuButton } from './MiradorMenuButton';
 
 /**
  * CanvasAnnotations ~
@@ -77,31 +80,29 @@ export class CanvasAnnotations extends Component {
 
     let { annotations } = this.props;
 
+    if (annotations.length === 0) return null;
+
     const { inputSearch } = this.state;
 
     if (inputSearch != undefined && inputSearch !== '') {
       annotations = filterAnnotation(annotations, inputSearch);
     }
 
-
     return (
       <>
-        <Typography className={classes.sectionHeading} variant="overline">
-          {t('annotationCanvasLabel', { context: `${index + 1}/${totalSize}`, label })}
-        </Typography>
-
-        <div className={classes.search}>
-          <div className={classes.searchIcon}>
-            <SearchIcon />
-          </div>
-          <InputBase
-            placeholder="Search…"
-            classes={{
-              input: classes.inputInput,
-              root: classes.inputRoot,
-            }}
-            inputProps={{ 'aria-label': 'search' }}
+        <div className={classes.form}>
+          <TextField
+            label={t('searchPlaceholderAnnotation')}
             onChange={this.handleAnnotationSearch}
+            InputProps={{
+              endAdornment: (
+                <div className={classes.endAdornment}>
+                  <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
+                    <SearchIcon />
+                  </MiradorMenuButton>
+                </div>
+              ),
+            }}
           />
         </div>
         <MenuList autoFocusItem variant="selectedMenu">

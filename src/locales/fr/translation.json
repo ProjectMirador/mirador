@@ -117,6 +117,7 @@
     "searchInputLabel": "Chercher un mot",
     "searchNextResult": "Résultat suivant",
     "searchNoResults": "Aucun résultat trouvé",
+    "searchPlaceholderAnnotation" : "Rechercher...",
     "searchPreviousResult": "Résultat précédent",
     "searchSubmitAria": "Lancer la recherche",
     "searchTitle": "Rechercher",
