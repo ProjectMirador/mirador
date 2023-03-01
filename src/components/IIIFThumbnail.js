@@ -1,70 +1,43 @@
-import { Component } from 'react';
+import {
+  Component, useMemo, useEffect, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import { InView } from 'react-intersection-observer';
+import { useInView } from 'react-intersection-observer';
 import classNames from 'classnames';
 import getThumbnail from '../lib/ThumbnailFactory';
 
 /**
- * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
+ * A lazy-loaded image that uses IntersectionObserver to determine when to
+ * try to load the image (or even calculate that the image url/height/width are)
  */
-export class IIIFThumbnail extends Component {
-  /** */
-  static getUseableLabel(resource, index) {
-    return (resource
-      && resource.getLabel
-      && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
-      : String(index + 1);
-  }
-
-  /**
-   */
-  constructor(props) {
-    super(props);
-    this.state = { loaded: false };
-    this.handleIntersection = this.handleIntersection.bind(this);
-  }
-
-  /** */
-  componentDidMount() {
-    this.setState(state => ({ ...state, image: this.image() }));
-  }
-
-  /** */
-  componentDidUpdate(prevProps) {
-    const { maxHeight, maxWidth, resource } = this.props;
-
-    if (
-      prevProps.maxHeight !== maxHeight
-      || prevProps.maxWidth !== maxWidth
-      || prevProps.resource !== resource) {
-        this.setState(state => ({ ...state, image: this.image() })); // eslint-disable-line
-    }
-  }
+const LazyLoadedImage = ({
+  placeholder, style = {}, thumbnail, resource, maxHeight, maxWidth, thumbnailsConfig, ...props
+}) => {
+  const { ref, inView } = useInView();
+  const [loaded, setLoaded] = useState(false);
 
   /**
    * Handles the intersection (visibility) of a given thumbnail, by requesting
    * the image and then updating the state.
    */
-  handleIntersection(inView, _entry) {
-    const { loaded } = this.state;
-
+  useEffect(() => {
     if (loaded || !inView) return;
 
-    this.setState(state => ({ ...state, loaded: true }));
-  }
+    setLoaded(true);
+  }, [inView, loaded]);
 
-  /**
-   *
-  */
-  imageStyles() {
-    const {
-      maxHeight, maxWidth, style,
-    } = this.props;
+  const image = useMemo(() => {
+    if (thumbnail) return thumbnail;
 
-    const image = this.image();
+    const i = getThumbnail(resource, { ...thumbnailsConfig, maxHeight, maxWidth });
 
+    if (i && i.url) return i;
+
+    return undefined;
+  }, [resource, thumbnail, maxWidth, maxHeight, thumbnailsConfig]);
+
+  const imageStyles = useMemo(() => {
     const styleProps = { height: 'auto', width: 'auto' };
 
     if (!image) return { ...style, height: maxHeight || 'auto', width: maxWidth || 'auto' };
@@ -109,21 +82,53 @@ export class IIIFThumbnail extends Component {
       ...styleProps,
       ...style,
     };
-  }
+  }, [image, maxWidth, maxHeight, style]);
 
+  const { url: src = placeholder } = (loaded && (thumbnail || image)) || {};
+
+  return (
+    <img
+      ref={ref}
+      alt=""
+      role="presentation"
+      src={src}
+      style={imageStyles}
+      {...props}
+    />
+  );
+};
+
+LazyLoadedImage.propTypes = {
+  maxHeight: PropTypes.number.isRequired,
+  maxWidth: PropTypes.number.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  thumbnail: PropTypes.shape({
+    height: PropTypes.number,
+    url: PropTypes.string.isRequired,
+    width: PropTypes.number,
+  }),
+  thumbnailsConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+};
+
+LazyLoadedImage.defaultProps = {
+  style: {},
+  thumbnail: null,
+  thumbnailsConfig: {},
+};
+
+/**
+ * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
+ */
+export class IIIFThumbnail extends Component {
   /** */
-  image() {
-    const {
-      thumbnail, resource, maxHeight, maxWidth, thumbnailsConfig,
-    } = this.props;
-
-    if (thumbnail) return thumbnail;
-
-    const image = getThumbnail(resource, { ...thumbnailsConfig, maxHeight, maxWidth });
-
-    if (image && image.url) return image;
-
-    return undefined;
+  static getUseableLabel(resource, index) {
+    return (resource
+      && resource.getLabel
+      && resource.getLabel().length > 0)
+      ? resource.getLabel().getValue()
+      : String(index + 1);
   }
 
   /** */
@@ -141,25 +146,28 @@ export class IIIFThumbnail extends Component {
       classes,
       imagePlaceholder,
       labelled,
+      maxHeight,
+      maxWidth,
+      resource,
+      style,
       thumbnail,
+      thumbnailsConfig,
       variant,
     } = this.props;
 
-    const { image, loaded } = this.state;
-
-    const { url: src = imagePlaceholder } = (loaded && (thumbnail || image)) || {};
-
     return (
       <div className={classNames(classes.root, { [classes[`${variant}Root`]]: variant })}>
-        <InView as="span" onChange={this.handleIntersection}>
-          <img
-            alt=""
-            role="presentation"
-            src={src}
-            style={this.imageStyles()}
-            className={classes.image}
-          />
-        </InView>
+        <LazyLoadedImage
+          placeholder={imagePlaceholder}
+          thumbnail={thumbnail}
+          resource={resource}
+          maxHeight={maxHeight}
+          maxWidth={maxWidth}
+          thumbnailsConfig={thumbnailsConfig}
+          style={style}
+          className={classes.image}
+        />
+
         { labelled && (
           <div className={classNames(classes.label, { [classes[`${variant}Label`]]: variant })}>
             <Typography variant="caption" classes={{ root: classNames(classes.caption, { [classes[`${variant}Caption`]]: variant }) }}>
