@@ -23,7 +23,6 @@ const mapStateToProps = (state, { windowId }) => ({
   sideBarOpen: (getWindow(state, { windowId }) || {}).sideBarOpen,
   thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId }),
   view: getWindowViewType(state, { windowId }),
-  window: getWindow(state, { windowId }),
   windowDraggable: getWindowDraggability(state, { windowId }),
   workspaceType: getWorkspaceType(state),
 });

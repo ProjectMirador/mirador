@@ -6,21 +6,51 @@
     "!src/containers/**/*.{js,jsx}"
   ],
   "coverageDirectory": "<rootDir>/coverage",
-  "coverageReporters": ["html", "lcov"],
-  "moduleNameMapper": {
-    "\\.s?css$": "<rootDir>/__mocks__/css.js",
-    "^uuid$": "uuid"
-  },
-  "setupFiles": [
-    "<rootDir>/setupJest.js"
+  "coverageReporters": [
+    "html",
+    "lcov"
   ],
-  "testMatch": [
-    "<rootDir>/**/__tests__/**/*.{js,jsx}",
-    "<rootDir>/src/**/?(*.)(spec|test|unit).{js,jsx}"
-  ],
-  "preset": "jest-puppeteer",
-  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"],
-  "transformIgnorePatterns": [
-    "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch)"
-  ]
+  "projects": [{
+    "displayName": "unit",
+    "moduleNameMapper": {
+      "\\.s?css$": "<rootDir>/__mocks__/css.js",
+      "^uuid$": "uuid"
+    },
+    "setupFiles": [
+      "<rootDir>/setupJest.js"
+    ],
+    "testMatch": [
+      "<rootDir>/**/__tests__/**/*.{js,jsx}",
+      "<rootDir>/src/**/?(*.)(spec|test|unit).{js,jsx}"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/__tests__/integration",
+      "<rootDir>/__tests__/utils"
+    ],
+    "preset": "jest-puppeteer",
+    "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch)"
+    ],
+    "testEnvironment": "jsdom"
+  }, {
+    "displayName": "integration",
+    "moduleNameMapper": {
+      "\\.s?css$": "<rootDir>/__mocks__/css.js",
+      "^uuid$": "uuid"
+    },
+    "setupFiles": [
+      "<rootDir>/setupJest.js"
+    ],
+    "testMatch": [
+      "<rootDir>/**/__tests__/integration/**/*.{js,jsx}"
+    ],
+    "preset": "jest-puppeteer",
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-dom/extend-expect"
+    ],
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch)"
+    ]
+  }]
 }
