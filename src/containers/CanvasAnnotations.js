@@ -99,52 +99,8 @@ const styles = theme => ({
   menuButton: {
     marginRight: theme.spacing(2),
   },
-  search: {
-    '&:hover': {
-      backgroundColor: 'grey',
-    },
-    backgroundColor: 'lightgray',
-    borderRadius: theme.shape.borderRadius,
-    marginLeft: 0,
-    marginRight: theme.spacing(2),
-    position: 'relative',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
+  searchAnnotationsTextfield: {
     width: '100%',
-  },
-  searchIcon: {
-    alignItems: 'center',
-    display: 'flex',
-    height: '100%',
-    justifyContent: 'center',
-    padding: theme.spacing(0, 2),
-    pointerEvents: 'none',
-    position: 'absolute',
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionHeading: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    paddingTop: theme.spacing(2),
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
   },
 });
 

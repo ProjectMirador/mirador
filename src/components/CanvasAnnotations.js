@@ -94,6 +94,7 @@ export class CanvasAnnotations extends Component {
           <TextField
             label={t('searchPlaceholderAnnotation')}
             onChange={this.handleAnnotationSearch}
+            className={classes.searchAnnotationsTextfield}
             InputProps={{
               endAdornment: (
                 <div className={classes.endAdornment}>
