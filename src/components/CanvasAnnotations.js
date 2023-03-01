@@ -100,7 +100,7 @@ export class CanvasAnnotations extends Component {
             InputProps={{
               endAdornment: (
                 <div className={classes.endAdornment}>
-                  <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
+                  <MiradorMenuButton aria-label={t('searchAnnotationTooltip')} type="submit">
                     <SearchIcon />
                   </MiradorMenuButton>
                 </div>
