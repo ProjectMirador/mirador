@@ -73,8 +73,17 @@ const styles = theme => ({
     position: 'absolute',
     right: 0,
   },
+  footerAnnotationPanel: {
+    background: theme.palette.background.paper,
+    bottom: 0,
+    position: 'sticky',
+  },
   form: {
+    background: theme.palette.background.paper,
     padding: theme.spacing(0, 1, 0, 1),
+    position: 'sticky',
+    top: 0,
+    zIndex: 10,
   },
   grow: {
     flexGrow: 1,

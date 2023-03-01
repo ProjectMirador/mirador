@@ -88,6 +88,8 @@ export class CanvasAnnotations extends Component {
       annotations = filterAnnotation(annotations, inputSearch);
     }
 
+    const annotationCount = annotations.length;
+
     return (
       <>
         <div className={classes.form}>
@@ -163,6 +165,9 @@ export class CanvasAnnotations extends Component {
             </MenuItem>
             )}
         </MenuList>
+        <div className={classes.footerAnnotationPanel}>
+          <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
+        </div>
       </>
     );
   }
