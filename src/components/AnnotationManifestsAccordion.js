@@ -24,16 +24,6 @@ export class AnnotationManifestsAccordion extends Component {
     this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
     this.handleOpenAccordion = this.handleOpenAccordion.bind(this);
 
-    /** Search manifest directly in content. We consider all the links with #manifest at the end are manifest */
-    function searchManifestInContent(text) {
-      if (text == null) {
-        return null;
-      }
-      return text.match(
-        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#manifest/gi,
-      );
-    }
-
     /** Search if the annotation is a manifest. URL must be resolvable for the annotation. So the manifest url is added at the end of the id */
     function searchManifestInID(id) {
       const match = id.match(
@@ -45,17 +35,13 @@ export class AnnotationManifestsAccordion extends Component {
 
     const { annotation } = this.props;
 
-    /** Merge array even if some are null) */
-    const concat = (...arrays) => [].concat(...arrays.filter(Array.isArray));
-
-    annotation.manifests = concat(searchManifestInContent(annotation.content), searchManifestInID(annotation.id));
+    annotation.manifests = searchManifestInID(annotation.id);
     if (annotation.manifests) {
       annotation.manifests = annotation.manifests.map(id => ({ id }));
     } else {
       annotation.manifests = [];
     }
 
-    annotation.manifests = removeDuplicates(annotation.manifests);
     this.state = { annotation };
   }
 
