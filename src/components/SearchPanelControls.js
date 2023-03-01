@@ -117,7 +117,7 @@ export class SearchPanelControls extends Component {
     const id = `search-${companionWindowId}`;
     return (
       <>
-        <form onSubmit={this.submitSearch} className={classes.form}>
+        <form aria-label={t('searchTitle')} onSubmit={this.submitSearch} className={classes.form}>
           <Autocomplete
             id={id}
             inputValue={search}
