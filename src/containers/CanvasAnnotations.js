@@ -69,6 +69,10 @@ const styles = theme => ({
     marginRight: theme.spacing(0.5),
     marginTop: theme.spacing(1),
   },
+  endAdornment: {
+    position: 'absolute',
+    right: 0,
+  },
   form: {
     padding: theme.spacing(0, 1, 0, 1),
   },
