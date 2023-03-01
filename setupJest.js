@@ -2,10 +2,13 @@
 import fetchMock from 'jest-fetch-mock';
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import sizeMe from 'react-sizeme';
 import i18next from 'i18next';
 import en from './src/locales/en/translation.json';
 
 jest.setTimeout(10000);
+
+sizeMe.noPlaceholders = true;
 
 const { TextEncoder } = require('util');
 
