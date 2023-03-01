@@ -79,7 +79,7 @@ export class SearchPanelControls extends Component {
     if (!autocompleteService) return;
     if (!value) return;
 
-    fetch(`${autocompleteService.id}?q=${value}`)
+    fetch(`${autocompleteService.id}?${new URLSearchParams({ q: value })}`)
       .then(response => response.json())
       .then(this.receiveAutocomplete);
   }
@@ -97,7 +97,7 @@ export class SearchPanelControls extends Component {
     const { search } = this.state;
     event && event.preventDefault();
     if (!search) return;
-    fetchSearch(windowId, companionWindowId, `${searchService.id}?q=${search}`, search);
+    fetchSearch(windowId, companionWindowId, `${searchService.id}?${new URLSearchParams({ q: search })}`, search);
   }
 
   /** */
