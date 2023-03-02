@@ -127,7 +127,7 @@ export class AnnotationManifestsAccordion extends Component {
                           this.handleOpenManifestSideToSide(e, manifest.id);
                         }}
                       >
-                        {t('openInCompanionWindow')}
+                        {t('open')}
                       </Button>
                     </Tooltip>
                   </CardActions>
