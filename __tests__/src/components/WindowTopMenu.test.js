@@ -26,9 +26,9 @@ function createAnchor() {
 }
 
 describe('WindowTopMenu', () => {
-  it('renders all needed elements', () => {
+  it('renders all needed elements when open', () => {
     createAnchor();
-    renderWithProviders(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} />);
+    renderWithProviders(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
 
     expect(screen.getByRole('menu')).toBeInTheDocument();
 
@@ -46,9 +46,9 @@ describe('WindowTopMenu', () => {
     expect(menuItems[4]).toHaveTextContent('right');
   });
 
-  it('does not display without anchorEl passed to the component', () => {
+  it('does not display unless open', () => {
     createAnchor();
-    renderWithProviders(<Subject />);
+    renderWithProviders(<Subject open={false} />);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
@@ -62,6 +62,7 @@ describe('WindowTopMenu', () => {
     renderWithProviders(<Subject
       anchorEl={anchorEl}
       handleClose={handleClose}
+      open
       toggleDraggingEnabled={toggleDraggingEnabled}
     />);
 

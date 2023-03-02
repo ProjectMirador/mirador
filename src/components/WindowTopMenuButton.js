@@ -14,6 +14,7 @@ export class WindowTopMenuButton extends Component {
     super(props);
     this.state = {
       anchorEl: null,
+      open: false,
     };
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.handleMenuClose = this.handleMenuClose.bind(this);
@@ -24,7 +25,8 @@ export class WindowTopMenuButton extends Component {
    */
   handleMenuClick(event) {
     this.setState({
-      anchorEl: event.currentTarget,
+      anchorEl: event.target,
+      open: true,
     });
   }
 
@@ -34,6 +36,7 @@ export class WindowTopMenuButton extends Component {
   handleMenuClose() {
     this.setState({
       anchorEl: null,
+      open: false,
     });
   }
 
@@ -43,15 +46,15 @@ export class WindowTopMenuButton extends Component {
    */
   render() {
     const { classes, t, windowId } = this.props;
-    const { anchorEl } = this.state;
-
+    const { open, anchorEl } = this.state;
+    const menuId = `window-menu_${windowId}`;
     return (
       <>
         <MiradorMenuButton
           aria-haspopup="true"
           aria-label={t('windowMenu')}
-          aria-owns={anchorEl ? `window-menu_${windowId}` : undefined}
-          className={anchorEl ? classes.ctrlBtnSelected : null}
+          aria-owns={open ? menuId : undefined}
+          className={open ? classes.ctrlBtnSelected : null}
           onClick={this.handleMenuClick}
         >
           <WindowOptionsIcon />
@@ -60,6 +63,8 @@ export class WindowTopMenuButton extends Component {
           windowId={windowId}
           anchorEl={anchorEl}
           handleClose={this.handleMenuClose}
+          id={menuId}
+          open={open}
         />
       </>
     );

@@ -26,15 +26,13 @@ export class WindowTopMenu extends Component {
    */
   render() {
     const {
-      container, handleClose, anchorEl, showThumbnailNavigationSettings,
-      toggleDraggingEnabled, windowId,
+      container, handleClose, showThumbnailNavigationSettings,
+      toggleDraggingEnabled, windowId, anchorEl, open,
     } = this.props;
 
     return (
       <Menu
-        id={`window-menu_${windowId}`}
         container={container?.current}
-        anchorEl={anchorEl}
         anchorOrigin={{
           horizontal: 'right',
           vertical: 'bottom',
@@ -43,14 +41,15 @@ export class WindowTopMenu extends Component {
           horizontal: 'right',
           vertical: 'top',
         }}
-        getContentAnchorEl={null}
-        open={Boolean(anchorEl)}
         onClose={handleClose}
         TransitionProps={{
           onEntering: toggleDraggingEnabled,
           onExit: toggleDraggingEnabled,
         }}
         orientation="horizontal"
+        getContentAnchorEl={null}
+        anchorEl={anchorEl}
+        open={open}
       >
         <WindowViewSettings windowId={windowId} handleClose={handleClose} />
         {showThumbnailNavigationSettings
@@ -65,6 +64,7 @@ WindowTopMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
+  open: PropTypes.bool,
   showThumbnailNavigationSettings: PropTypes.bool,
   toggleDraggingEnabled: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
@@ -73,5 +73,6 @@ WindowTopMenu.propTypes = {
 WindowTopMenu.defaultProps = {
   anchorEl: null,
   container: null,
+  open: false,
   showThumbnailNavigationSettings: true,
 };
