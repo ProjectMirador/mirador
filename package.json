@@ -122,6 +122,7 @@
     "jsdom": "^21.0.0",
     "puppeteer": "^19.0.0",
     "react": "^16.14.0",
+    "react-dnd-test-backend": "^16.0.1",
     "react-dom": "^16.14.0",
     "react-refresh": "^0.14.0",
     "redux-mock-store": "^1.5.1",

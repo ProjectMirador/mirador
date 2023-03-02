@@ -18,7 +18,7 @@ export class FullScreenButton extends Component {
     } = this.props;
     return (
       <FullScreenContext.Consumer>
-        { handle => (
+        { handle => (handle && (
           <MiradorMenuButton
             className={className}
             aria-label={handle.active ? t('exitFullScreen') : t('workspaceFullScreen')}
@@ -26,7 +26,7 @@ export class FullScreenButton extends Component {
           >
             {handle.active ? <FullscreenExitIcon /> : <FullscreenIcon />}
           </MiradorMenuButton>
-        )}
+        ))}
       </FullScreenContext.Consumer>
     );
   }
