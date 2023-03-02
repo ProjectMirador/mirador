@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getWindowIds, getWindowTitles } from '../state/selectors';
+import { getFocusedWindowId, getWindowIds, getWindowTitles } from '../state/selectors';
 import { WindowList } from '../components/WindowList';
 import { withWorkspaceContext } from '../contexts/WorkspaceContext';
 
@@ -23,6 +23,7 @@ const mapDispatchToProps = {
  */
 const mapStateToProps = state => (
   {
+    focusedWindowId: getFocusedWindowId(state),
     titles: getWindowTitles(state),
     windowIds: getWindowIds(state),
   }

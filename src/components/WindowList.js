@@ -9,16 +9,6 @@ import PropTypes from 'prop-types';
  */
 export class WindowList extends Component {
   /**
-   * Given the menuElement passed in by the onEntering callback,
-   * find the 2nd ListItem element (avoiding the header) and focus it
-  */
-  static focus2ndListIitem(menuElement) {
-    if (!menuElement.querySelectorAll('li') || menuElement.querySelectorAll('li').length < 2) return;
-
-    menuElement.querySelectorAll('li')[1].focus(); // The 2nd LI
-  }
-
-  /**
    * Get the title for a window from its manifest title
    * @private
    */
@@ -34,7 +24,7 @@ export class WindowList extends Component {
    */
   render() {
     const {
-      container, handleClose, anchorEl, windowIds, focusWindow, t,
+      container, handleClose, anchorEl, windowIds, focusWindow, focusedWindowId, t,
     } = this.props;
 
     return (
@@ -49,13 +39,10 @@ export class WindowList extends Component {
         }}
         id="window-list-menu"
         container={container?.current}
-        disableAutoFocusItem
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        TransitionProps={{
-          onEntering: WindowList.focus2ndListIitem,
-        }}
+        autoFocusItem
       >
         <ListSubheader role="presentation" selected={false} disabled tabIndex="-1">
           {t('openWindows')}
@@ -64,6 +51,7 @@ export class WindowList extends Component {
           windowIds.map((windowId, i) => (
             <MenuItem
               key={windowId}
+              selected={windowId === focusedWindowId}
               onClick={(e) => { focusWindow(windowId, true); handleClose(e); }}
             >
               <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
@@ -82,6 +70,7 @@ export class WindowList extends Component {
 WindowList.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  focusedWindowId: PropTypes.string,
   focusWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   t: PropTypes.func,
@@ -92,6 +81,7 @@ WindowList.propTypes = {
 WindowList.defaultProps = {
   anchorEl: null,
   container: null,
+  focusedWindowId: null,
   t: key => key,
   titles: {},
 };
