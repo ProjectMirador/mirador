@@ -57,7 +57,7 @@ export class AnnotationManifestsAccordion extends Component {
   handleOpenAccordion(e) {
     const { annotation } = this.state;
     /** */
-    async function loadManifest(manifests) {
+    async function load(manifests) {
       return Promise.all(manifests.map((manifest) => fetch(manifest.id)
         .then((response) => response.json())
         .then((data) => {
@@ -68,7 +68,7 @@ export class AnnotationManifestsAccordion extends Component {
         })));
     }
 
-    loadManifest(annotation.manifests)
+    load(annotation.manifests)
       .then((values) => {
         if (values) {
           annotation.manifests = values;
@@ -100,7 +100,6 @@ export class AnnotationManifestsAccordion extends Component {
             onClick={(e) => this.handleOpenAccordion(e)}
           >
             <Typography className={classes.heading}>{t('manifestFound')}</Typography>
-
           </AccordionSummary>
           <AccordionDetails className={classes.manifestContainer}>
             {annotation.manifests.map(manifest => (
