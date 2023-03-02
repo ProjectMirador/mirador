@@ -1,11 +1,8 @@
-import { shallow } from 'enzyme';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { WindowList } from '../../../src/components/WindowList';
 
 describe('WindowList', () => {
-  let wrapper;
   let handleClose;
   let focusWindow;
   let titles;
@@ -14,9 +11,9 @@ describe('WindowList', () => {
     focusWindow = jest.fn();
     titles = {};
 
-    wrapper = shallow(
+    render(
       <WindowList
-        anchorEl={{}}
+        open
         titles={titles}
         windowIds={[]}
         handleClose={handleClose}
@@ -26,14 +23,14 @@ describe('WindowList', () => {
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find(Menu).length).toBe(1);
+    expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
   describe('with a window without a matching manifest', () => {
     beforeEach(() => {
-      wrapper = shallow(
+      render(
         <WindowList
-          anchorEl={{}}
+          open
           titles={titles}
           windowIds={['xyz']}
           handleClose={handleClose}
@@ -42,14 +39,11 @@ describe('WindowList', () => {
       );
     });
 
-    it('renders without an error', () => {
-      expect(wrapper.find(MenuItem).length).toBe(1);
-      expect(wrapper.find(MenuItem).key()).toBe('xyz');
-      expect(
-        wrapper.find(MenuItem)
-          .matchesElement(<MenuItem><ListItemText>untitled</ListItemText></MenuItem>),
-      ).toBe(true);
-      wrapper.find(MenuItem).simulate('click', {});
+    it('renders without an error', async () => {
+      const user = userEvent.setup();
+      expect(screen.getByRole('menuitem')).toBeInTheDocument();
+      await user.click(screen.getByRole('menuitem', { name: 'untitled' }));
+
       expect(handleClose).toBeCalled();
       expect(focusWindow).toBeCalledWith('xyz', true);
     });
@@ -59,9 +53,9 @@ describe('WindowList', () => {
     beforeEach(() => {
       titles = { xyz: 'Some title' };
 
-      wrapper = shallow(
+      render(
         <WindowList
-          anchorEl={{}}
+          open
           titles={titles}
           windowIds={['xyz']}
           handleClose={handleClose}
@@ -71,30 +65,28 @@ describe('WindowList', () => {
     });
 
     it('renders without an error', () => {
-      expect(wrapper.find(MenuItem).length).toBe(1);
-      expect(wrapper.find(MenuItem).key()).toBe('xyz');
-      expect(
-        wrapper.find(MenuItem)
-          .matchesElement(<MenuItem><ListItemText>Some title</ListItemText></MenuItem>),
-      ).toBe(true);
+      expect(screen.getByRole('menuitem', { name: 'Some title' })).toBeInTheDocument();
     });
   });
 
-  describe('focus2ndListIitem', () => {
-    const mockListItem = jest.fn();
-    /** */
-    const mockSingleItemMenu = { querySelectorAll: () => [{ focus: mockListItem }] };
-    /** */
-    const mockMultiItemMenu = { querySelectorAll: () => ['Header', { focus: mockListItem }] };
+  describe('with a focused window', () => {
+    beforeEach(() => {
+      titles = { abc: 'Abc', xyz: 'Some title' };
 
-    it('does not set focus if there is only one list item (the header)', () => {
-      WindowList.focus2ndListIitem(mockSingleItemMenu);
-      expect(mockListItem).not.toHaveBeenCalled();
+      render(
+        <WindowList
+          open
+          titles={titles}
+          windowIds={['abc', 'xyz']}
+          focusedWindowId="xyz"
+          handleClose={handleClose}
+          focusWindow={focusWindow}
+        />,
+      );
     });
 
-    it('sets focus on the 2nd list item', () => {
-      WindowList.focus2ndListIitem(mockMultiItemMenu);
-      expect(mockListItem).toHaveBeenCalled();
+    it('puts focus on the currently focused window', () => {
+      expect(screen.getByRole('menuitem', { name: 'Some title' })).toHaveFocus();
     });
   });
 });

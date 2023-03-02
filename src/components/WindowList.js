@@ -24,7 +24,8 @@ export class WindowList extends Component {
    */
   render() {
     const {
-      container, handleClose, anchorEl, windowIds, focusWindow, focusedWindowId, t,
+      container, handleClose, windowIds, focusWindow, focusedWindowId, t,
+      ...menuProps
     } = this.props;
 
     return (
@@ -39,10 +40,8 @@ export class WindowList extends Component {
         }}
         id="window-list-menu"
         container={container?.current}
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
         onClose={handleClose}
-        autoFocusItem
+        {...menuProps}
       >
         <ListSubheader role="presentation" selected={false} disabled tabIndex="-1">
           {t('openWindows')}
@@ -68,7 +67,6 @@ export class WindowList extends Component {
 }
 
 WindowList.propTypes = {
-  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   focusedWindowId: PropTypes.string,
   focusWindow: PropTypes.func.isRequired,
@@ -79,7 +77,6 @@ WindowList.propTypes = {
 };
 
 WindowList.defaultProps = {
-  anchorEl: null,
   container: null,
   focusedWindowId: null,
   t: key => key,
