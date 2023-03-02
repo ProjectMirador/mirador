@@ -54,7 +54,7 @@ export class WorkspaceOptionsMenu extends Component {
   */
   render() {
     const {
-      anchorEl, container, handleClose, t,
+      anchorEl, container, handleClose, t, open,
     } = this.props;
     const { exportWorkspace, importWorkspace } = this.state;
 
@@ -72,7 +72,7 @@ export class WorkspaceOptionsMenu extends Component {
             horizontal: 'left',
             vertical: 'top',
           }}
-          open={Boolean(anchorEl)}
+          open={open}
           onClose={handleClose}
         >
           <MenuItem
@@ -121,10 +121,12 @@ WorkspaceOptionsMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
+  open: PropTypes.bool,
   t: PropTypes.func.isRequired,
 };
 
 WorkspaceOptionsMenu.defaultProps = {
   anchorEl: null,
   container: null,
+  open: false,
 };

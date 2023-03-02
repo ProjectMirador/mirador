@@ -80,7 +80,7 @@ export class WorkspaceExport extends Component {
 
     return (
       <Dialog
-        id="workspace-settings"
+        id="workspace-export"
         container={container}
         open={open}
         onClose={this.handleClose}
