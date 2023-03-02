@@ -1,10 +1,7 @@
-import { shallow } from 'enzyme';
-import Dialog from '@material-ui/core/Dialog';
-import TextField from '@material-ui/core/TextField';
+import { screen, render } from '@testing-library/react';
 import { WorkspaceImport } from '../../../src/components/WorkspaceImport';
 
 describe('WorkspaceImport', () => {
-  let wrapper;
   let handleClose;
   let mockState;
 
@@ -14,7 +11,7 @@ describe('WorkspaceImport', () => {
       configImportValue: {},
     };
 
-    wrapper = shallow(
+    render(
       <WorkspaceImport
         open
         handleClose={handleClose}
@@ -24,17 +21,12 @@ describe('WorkspaceImport', () => {
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find(Dialog).length).toBe(1);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
   it('renders sizing props', () => {
-    expect(wrapper.find(Dialog).props()).toEqual(expect.objectContaining({
-      fullWidth: true,
-      maxWidth: 'sm',
-    }));
+    expect(screen.getByRole('dialog')).toHaveClass('MuiDialog-paperWidthSm');
   });
   it('renders TextField props', () => {
-    expect(wrapper.find(TextField).props()).toEqual(expect.objectContaining({
-      inputProps: { autoFocus: 'autofocus' },
-    }));
+    expect(screen.getByRole('textbox')).toHaveFocus();
   });
 });
