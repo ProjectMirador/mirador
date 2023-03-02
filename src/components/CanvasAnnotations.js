@@ -6,9 +6,15 @@ import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import SearchIcon from '@material-ui/icons/SearchSharp';
+import InputBase from '@material-ui/core/InputBase';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import TextField from '@material-ui/core/TextField';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
 import AnnotationManifestsAccordion from '../containers/AnnotationManifestsAccordion';
+import { filterAnnotation } from '../helper/utils';
+import { MiradorMenuButton } from './MiradorMenuButton';
 
 /**
  * CanvasAnnotations ~
@@ -23,6 +29,9 @@ export class CanvasAnnotations extends Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleAnnotationHover = this.handleAnnotationHover.bind(this);
     this.handleAnnotationBlur = this.handleAnnotationBlur.bind(this);
+    this.handleAnnotationSearch = this.handleAnnotationSearch.bind(this);
+
+    this.state = { };
   }
 
   /**
@@ -54,21 +63,51 @@ export class CanvasAnnotations extends Component {
     hoverAnnotation(windowId, []);
   }
 
+  /** */
+  handleAnnotationSearch(event) {
+    this.setState({ inputSearch: event.target.value });
+  }
+
   /**
    * Returns the rendered component
   */
   render() {
     const {
-      annotations, autoScroll, classes, index, label, selectedAnnotationId, t, totalSize,
+      autoScroll, classes, index, label, selectedAnnotationId, t, totalSize,
       listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
       containerRef,
     } = this.props;
+
+    let { annotations } = this.props;
+
     if (annotations.length === 0) return null;
+
+    const { inputSearch } = this.state;
+
+    if (inputSearch != undefined && inputSearch !== '') {
+      annotations = filterAnnotation(annotations, inputSearch);
+    }
+
+    const annotationCount = annotations.length;
+
     return (
       <>
-        <Typography className={classes.sectionHeading} variant="overline">
-          {t('annotationCanvasLabel', { context: `${index + 1}/${totalSize}`, label })}
-        </Typography>
+        <div className={classes.headerAnnotationPanel}>
+          <TextField
+            label={t('searchPlaceholderAnnotation')}
+            onChange={this.handleAnnotationSearch}
+            className={classes.searchAnnotationsTextfield}
+            InputProps={{
+              endAdornment: (
+                <div className={classes.endAdornment}>
+                  <MiradorMenuButton aria-label={t('searchAnnotationTooltip')} type="submit">
+                    <SearchIcon />
+                  </MiradorMenuButton>
+                </div>
+              ),
+            }}
+          />
+        </div>
         <MenuList autoFocusItem variant="selectedMenu">
           {
             annotations.map(annotation => (
@@ -117,7 +156,18 @@ export class CanvasAnnotations extends Component {
               </ScrollTo>
             ))
           }
+          {annotations.length == 0
+            && (
+            <MenuItem>
+              <Typography>
+                {t('noAnnotationFound')}
+              </Typography>
+            </MenuItem>
+            )}
         </MenuList>
+        <div className={classes.footerAnnotationPanel}>
+          <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
+        </div>
       </>
     );
   }

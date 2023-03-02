@@ -1,7 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
+import { alpha, withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
@@ -69,16 +69,39 @@ const styles = theme => ({
     marginRight: theme.spacing(0.5),
     marginTop: theme.spacing(1),
   },
+  endAdornment: {
+    position: 'absolute',
+    right: 0,
+  },
+  footerAnnotationPanel: {
+    background: theme.palette.background.paper,
+    borderTop: `.5px solid ${theme.palette.section_divider}`,
+    bottom: 0,
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    paddingTop: theme.spacing(2),
+    position: 'sticky',
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  headerAnnotationPanel: {
+    background: theme.palette.background.paper,
+    borderBottom: `.5px solid ${theme.palette.section_divider}`,
+    marginBottom: theme.spacing(1),
+    padding: theme.spacing(0, 1, 1, 1),
+    position: 'sticky',
+    top: 0,
+    zIndex: 10,
+  },
   hovered: {},
   manifestLabel: {
     fontSize: '10px',
   },
-  sectionHeading: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    paddingTop: theme.spacing(2),
+  searchAnnotationsTextfield: {
+    width: '100%',
   },
-
 });
 
 const enhance = compose(
