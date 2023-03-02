@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { WindowViewer } from '../../../src/components/WindowViewer';
 import { renderWithProviders } from '../../utils/store';
 
