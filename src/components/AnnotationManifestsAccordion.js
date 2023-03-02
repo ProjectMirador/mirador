@@ -10,7 +10,6 @@ import {
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
-import { removeDuplicates } from '../helper/utils';
 
 /**
  * AnnotationManifestsAccordion
@@ -45,10 +44,18 @@ export class AnnotationManifestsAccordion extends Component {
     this.state = { annotation };
   }
 
-  /** */
-  componentDidMount() {
-    const { annotation } = this.state;
 
+  /** */
+  handleOpenManifestSideToSide(e, manifestId) {
+    const { addResource, addWindow } = this.props;
+    addResource(manifestId);
+    addWindow({ manifestId });
+  }
+
+  /** */
+  // eslint-disable-next-line class-methods-use-this,require-jsdoc
+  handleOpenAccordion(e) {
+    const { annotation } = this.state;
     /** */
     async function loadManifest(manifests) {
       return Promise.all(manifests.map((manifest) => fetch(manifest.id)
@@ -68,18 +75,6 @@ export class AnnotationManifestsAccordion extends Component {
           this.setState({ annotation });
         }
       });
-  }
-
-  /** */
-  handleOpenManifestSideToSide(e, manifestId) {
-    const { addResource, addWindow } = this.props;
-    addResource(manifestId);
-    addWindow({ manifestId });
-  }
-
-  /** */
-  // eslint-disable-next-line class-methods-use-this,require-jsdoc
-  handleOpenAccordion(e) {
     e.stopPropagation();
   }
 
