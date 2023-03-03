@@ -3,19 +3,14 @@ import { WorkspaceImport } from '../../../src/components/WorkspaceImport';
 
 describe('WorkspaceImport', () => {
   let handleClose;
-  let mockState;
 
   beforeEach(() => {
     handleClose = jest.fn();
-    mockState = {
-      configImportValue: {},
-    };
 
     render(
       <WorkspaceImport
         open
         handleClose={handleClose}
-        state={mockState}
       />,
     );
   });
