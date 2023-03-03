@@ -29,7 +29,7 @@ describe('ViewerNavigation', () => {
       setPreviousCanvas,
     });
     const buttons = screen.queryAllByRole('button');
-    expect(buttons[0].closest('div')).toBeInTheDocument();
+    expect(buttons[0].closest('div')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
   });
   describe('when next canvases are present', () => {
     it('nextCanvas button is not disabled', () => {
@@ -121,7 +121,7 @@ describe('ViewerNavigation', () => {
         viewingDirection: 'right-to-left',
       });
       const buttons = screen.queryAllByRole('button');
-      expect(buttons[0].closest('div')).toHaveAttribute('dir', 'rtl');
+      expect(buttons[0].closest('div')).toHaveAttribute('dir', 'rtl'); // eslint-disable-line testing-library/no-node-access
     });
   });
 
