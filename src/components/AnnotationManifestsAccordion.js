@@ -10,7 +10,6 @@ import {
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
-import { removeDuplicates } from '../helper/utils';
 
 /**
  * AnnotationManifestsAccordion
@@ -45,30 +44,6 @@ export class AnnotationManifestsAccordion extends Component {
     this.state = { annotation };
   }
 
-  /** */
-  componentDidMount() {
-    const { annotation } = this.state;
-
-    /** */
-    async function loadManifest(manifests) {
-      return Promise.all(manifests.map((manifest) => fetch(manifest.id)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.type === 'Manifest') {
-            return data;
-          }
-          return null;
-        })));
-    }
-
-    loadManifest(annotation.manifests)
-      .then((values) => {
-        if (values) {
-          annotation.manifests = values;
-          this.setState({ annotation });
-        }
-      });
-  }
 
   /** */
   handleOpenManifestSideToSide(e, manifestId) {
@@ -80,6 +55,26 @@ export class AnnotationManifestsAccordion extends Component {
   /** */
   // eslint-disable-next-line class-methods-use-this,require-jsdoc
   handleOpenAccordion(e) {
+    const { annotation } = this.state;
+    /** */
+    async function load(manifests) {
+      return Promise.all(manifests.map((manifest) => fetch(manifest.id)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.type === 'Manifest') {
+            return data;
+          }
+          return null;
+        })));
+    }
+
+    load(annotation.manifests)
+      .then((values) => {
+        if (values) {
+          annotation.manifests = values;
+          this.setState({ annotation });
+        }
+      });
     e.stopPropagation();
   }
 
@@ -105,7 +100,6 @@ export class AnnotationManifestsAccordion extends Component {
             onClick={(e) => this.handleOpenAccordion(e)}
           >
             <Typography className={classes.heading}>{t('manifestFound')}</Typography>
-
           </AccordionSummary>
           <AccordionDetails className={classes.manifestContainer}>
             {annotation.manifests.map(manifest => (
@@ -127,7 +121,7 @@ export class AnnotationManifestsAccordion extends Component {
                           this.handleOpenManifestSideToSide(e, manifest.id);
                         }}
                       >
-                        {t('openInCompanionWindow')}
+                        {t('open')}
                       </Button>
                     </Tooltip>
                   </CardActions>
