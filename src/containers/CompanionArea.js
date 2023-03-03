@@ -38,7 +38,7 @@ const styles = theme => ({
   },
   toggle: {
     backgroundColor: theme.palette.background.paper,
-    border: `1px solid ${theme.palette.shades.dark}`,
+    border: `1px solid ${theme.palette.shades?.dark}`,
     borderRadius: 0,
     height: '48px',
     left: '100%',
