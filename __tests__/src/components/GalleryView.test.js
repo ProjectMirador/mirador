@@ -1,10 +1,8 @@
-import { render, screen } from '@testing-library/react';
-import { renderWithProviders } from '../../utils/store';
+import { screen } from '@testing-library/react';
 import { Utils } from 'manifesto.js';
-import Paper from '@material-ui/core/Paper';
+import { renderWithProviders } from '../../utils/store';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryView } from '../../../src/components/GalleryView';
-import GalleryViewThumbnail from '../../../src/containers/GalleryViewThumbnail';
 
 /** create wrapper */
 function createWrapper(props) {
@@ -22,27 +20,25 @@ describe('GalleryView', () => {
   let setCanvas;
   beforeEach(() => {
     setCanvas = jest.fn();
-    createWrapper({ setCanvas });
   });
   it('renders the component', () => {
-    // eslint-disable-next-line
-    screen.debug();
-    // expect(wrapper.find(Paper).length).toBe(1);
-    // expect(wrapper.find(Paper).prop('component')).toEqual('section');
+    createWrapper({ setCanvas });
+    const buttons = screen.queryAllByRole('button');
+    expect(buttons[0].closest('section')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
   });
-  /*it('renders gallery items for all canvases', () => {
-    expect(wrapper.find(GalleryViewThumbnail).length).toBe(3);
-  });*/
+  it('renders gallery items for all canvases', () => {
+    createWrapper({ setCanvas });
+    const buttons = screen.queryAllByRole('button');
+    expect(buttons.length).toBe(3);
+  });
 
-  /*describe('when viewingDirection="right-to-left"', () => {
-    beforeEach(() => {
-      wrapper = createWrapper({
+  describe('when viewingDirection="right-to-left"', () => {
+    it('sets up Paper to be rtl', () => {
+      createWrapper({
         viewingDirection: 'right-to-left',
       });
+      const buttons = screen.queryAllByRole('button');
+      expect(buttons[0].closest('section')).toHaveAttribute('dir', 'rtl'); // eslint-disable-line testing-library/no-node-access
     });
-
-    it('sets up Paper to be rtl', () => {
-      expect(wrapper.find('WithStyles(ForwardRef(Paper))').props().dir).toEqual('rtl');
-    });
-  });*/
+  });
 });
