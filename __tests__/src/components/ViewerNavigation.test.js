@@ -28,7 +28,8 @@ describe('ViewerNavigation', () => {
       setNextCanvas,
       setPreviousCanvas,
     });
-    expect(screen.getByRole('navigation', { selector: 'div' })).toBeInTheDocument();
+    const buttons = screen.queryAllByRole('button');
+    expect(buttons[0].closest('div')).toBeInTheDocument();
   });
   describe('when next canvases are present', () => {
     it('nextCanvas button is not disabled', () => {
@@ -119,7 +120,8 @@ describe('ViewerNavigation', () => {
         setPreviousCanvas,
         viewingDirection: 'right-to-left',
       });
-      expect(screen.getByRole('navigation', { selector: 'div' })).toHaveAttribute('dir', 'rtl');
+      const buttons = screen.queryAllByRole('button');
+      expect(buttons[0].closest('div')).toHaveAttribute('dir', 'rtl');
     });
   });
 

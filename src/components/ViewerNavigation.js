@@ -41,7 +41,6 @@ export class ViewerNavigation extends Component {
 
     return (
       <div
-        role="navigation"
         className={classNames(ns('osd-navigation'), classes.osdNavigation)}
         dir={htmlDir}
       >
