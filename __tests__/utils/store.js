@@ -1,7 +1,10 @@
 import { Provider } from 'react-redux';
 import { render } from '@testing-library/react';
 import PropTypes from 'prop-types';
-import createPluggableStore from '../../src/state/createPluggableStore';
+import { createStore } from 'redux';
+import createRootReducer from '../../src/state/reducers/rootReducer';
+
+const rootReducer = createRootReducer();
 
 /**
  * Hook up our rendered object to redux
@@ -11,7 +14,7 @@ export function renderWithProviders(
   {
     preloadedState = {},
     // Automatically create a store instance if no store was passed in
-    store = createPluggableStore(preloadedState, []),
+    store = createStore(rootReducer, preloadedState),
     ...renderOptions
   } = {},
 ) {
