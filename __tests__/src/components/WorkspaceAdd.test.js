@@ -1,128 +1,162 @@
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { shallow } from 'enzyme';
-import AppBar from '@material-ui/core/AppBar';
-import Drawer from '@material-ui/core/Drawer';
-import Fab from '@material-ui/core/Fab';
-import Typography from '@material-ui/core/Typography';
+import userEvent from '@testing-library/user-event';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { renderWithProviders } from '../../utils/store';
 import { WorkspaceAdd } from '../../../src/components/WorkspaceAdd';
-import ManifestListItem from '../../../src/containers/ManifestListItem';
-import ManifestForm from '../../../src/containers/ManifestForm';
-import { IIIFDropTarget } from '../../../src/components/IIIFDropTarget';
+import manifestFixture001 from '../../fixtures/version-2/001.json';
+import manifestFixture002 from '../../fixtures/version-2/002.json';
 
 /** create wrapper */
 function createWrapper(props) {
-  return shallow(
-    <WorkspaceAdd
-      setWorkspaceAddVisibility={() => {}}
-      catalog={[
-        { manifestId: 'bar' },
-        { manifestId: 'foo' },
-      ]}
-      classes={{}}
-      t={str => str}
-      {...props}
-    />,
+  return renderWithProviders(
+    <DndProvider backend={HTML5Backend}>
+      <WorkspaceAdd
+        setWorkspaceAddVisibility={() => {}}
+        catalog={[
+          { manifestId: 'bar' },
+          { manifestId: 'foo' },
+        ]}
+        classes={{}}
+        t={str => str}
+        {...props}
+      />
+    </DndProvider>,
+    { preloadedState: { manifests: { bar: { id: 'bar', isFetching: false, json: manifestFixture001 }, foo: { id: 'foo', isFetching: false, json: manifestFixture002 } } } },
   );
 }
 
 describe('WorkspaceAdd', () => {
   it('renders a list item for each manifest in the state', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find(ManifestListItem).length).toBe(2);
+    createWrapper();
+
+    expect(screen.getAllByRole('listitem')).toHaveLength(2);
   });
 
   it('focuses on the first manifest item', () => {
-    const el = { focus: jest.fn() };
-    const wrapper = createWrapper();
-    expect(wrapper.find(ManifestListItem).at(1).prop('buttonRef')).toBe(undefined);
-    wrapper.find(ManifestListItem).at(0).prop('buttonRef')(el);
+    createWrapper();
 
-    expect(el.focus).toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: 'Bodleian Library Human Freaks 2 (33)' })).toHaveFocus();
   });
 
   it('without manifests, renders an empty message', () => {
-    const wrapper = createWrapper({ catalog: [] });
-    expect(wrapper.find(ManifestListItem).length).toEqual(0);
-    expect(wrapper.find(Typography).first().children().text()).toEqual('emptyResourceList');
+    createWrapper({ catalog: [] });
+
+    expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
+    expect(screen.getByText('emptyResourceList')).toBeInTheDocument();
   });
 
-  it('toggles the workspace visibility', () => {
+  it('toggles the workspace visibility', async () => {
+    const user = userEvent.setup();
     const setWorkspaceAddVisibility = jest.fn();
-    const wrapper = createWrapper({ setWorkspaceAddVisibility });
+    createWrapper({ setWorkspaceAddVisibility });
 
-    wrapper.find(ManifestListItem).first().props().handleClose();
+    await user.click(screen.getByRole('button', { name: 'Bodleian Library Human Freaks 2 (33)' }));
+
     expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(false);
   });
 
-  it('has a button to add new resources', () => {
-    const wrapper = createWrapper();
+  it('has a button to add new resources', async () => {
+    const user = userEvent.setup();
+    createWrapper();
 
-    expect(wrapper.find(Fab).length).toBe(1);
-    wrapper.find(Fab).simulate('click');
-    expect(wrapper.state().addResourcesOpen).toBe(true);
-    expect(wrapper.find(Fab).props().disabled).toBe(true);
+    const fab = screen.getByRole('button', { name: 'addResource' });
+
+    expect(fab).toBeInTheDocument();
+    await user.click(fab);
+
+    expect(fab).toBeDisabled();
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'closeAddResourceForm' }));
+
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
-  it('has a toggle-able drawer to add new resources', () => {
-    const wrapper = createWrapper();
-    wrapper.setState({ addResourcesOpen: true });
+  it('hides the form on submit', async () => {
+    const user = userEvent.setup();
+    createWrapper();
 
-    expect(wrapper.find(Drawer).props().open).toBe(true);
-    expect(wrapper.find(Drawer).find(Typography).dive().dive()
-      .text()).toBe('addResource');
+    await user.click(screen.getByRole('button', { name: 'addResource' }));
 
-    wrapper.find(Drawer).find(AppBar).simulate('click');
-    expect(wrapper.find(Drawer).find(Typography).props().open).not.toBe(true);
-  });
+    await user.type(screen.getByRole('textbox'), 'abc');
+    await user.click(screen.getByRole('button', { name: 'fetchManifest' }));
 
-  it('passes a submit action through to the form', () => {
-    const wrapper = createWrapper();
-    wrapper.setState({ addResourcesOpen: true });
-
-    expect(wrapper.find(Drawer).find(ManifestForm).length).toBe(1);
-    wrapper.find(Drawer).find(ManifestForm).props().onSubmit();
-    expect(wrapper.find(Drawer).props().open).toBe(false);
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
   it('scrolls to the top after an item is added', () => {
     const ref = { current: { scrollTo: jest.fn() } };
-    const wrapper = createWrapper();
+    const wrapper = shallow(
+      <WorkspaceAdd
+        setWorkspaceAddVisibility={() => { }}
+        catalog={[
+          { manifestId: 'bar' },
+          { manifestId: 'foo' },
+        ]}
+        classes={{}}
+        t={str => str}
+      />,
+    );
     wrapper.instance().ref = ref;
     wrapper.instance().onSubmit();
 
     expect(ref.current.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', left: 0, top: 0 });
   });
 
-  it('passes a cancel action through to the form', () => {
-    const wrapper = createWrapper();
-    wrapper.setState({ addResourcesOpen: true });
+  it('hides the form on cancel action', async () => {
+    const user = userEvent.setup();
+    createWrapper();
 
-    expect(wrapper.find(Drawer).find(ManifestForm).length).toBe(1);
-    wrapper.find(Drawer).find(ManifestForm).props().onCancel();
-    expect(wrapper.find(Drawer).props().open).toBe(false);
+    await user.click(screen.getByRole('button', { name: 'addResource' }));
+
+    await user.type(screen.getByRole('textbox'), 'abc');
+    await user.click(screen.getByRole('button', { name: 'cancel' }));
+
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
   describe('drag and drop', () => {
-    it('adds a new catalog entry from a manifest', () => {
-      const manifestId = 'manifest.json';
-      const manifestJson = { data: '123' };
+    it('adds a new catalog entry from a manifest', async () => {
+      const manifestJson = '{ "data": "123" }';
 
       const addResource = jest.fn();
 
-      const wrapper = createWrapper({ addResource });
+      createWrapper({ addResource });
+      const dropTarget = screen.getByRole('list');
 
-      wrapper.find(IIIFDropTarget).simulate('drop', { manifestId, manifestJson });
+      const file = new File([manifestJson], 'manifest.json', { type: 'application/json' });
+      const dataTransfer = {
+        files: [file],
+        types: ['Files'],
+      };
 
-      expect(addResource).toHaveBeenCalledWith(manifestId, manifestJson, { provider: 'file' });
+      fireEvent.dragStart(dropTarget, { dataTransfer });
+      fireEvent.dragEnter(dropTarget, { dataTransfer });
+      fireEvent.dragOver(dropTarget, { dataTransfer });
+      fireEvent.drop(dropTarget, { dataTransfer });
+
+      await waitFor(() => expect(addResource).toHaveBeenCalledWith(expect.stringMatching(/^[0-9a-f-]+$/), manifestJson, { provider: 'file' }));
     });
 
-    it('adds a new catalog entry from a manifestId', () => {
+    it('adds a new catalog entry from a IIIF drag and drop icon', () => {
       const manifestId = 'manifest.json';
 
       const addResource = jest.fn();
 
-      const wrapper = createWrapper({ addResource });
+      createWrapper({ addResource });
+      const dropTarget = screen.getByRole('list');
 
-      wrapper.find(IIIFDropTarget).simulate('drop', { manifestId });
+      const dataTransfer = {
+        getData: () => 'https://iiif.io/?manifest=manifest.json',
+        types: ['Url'],
+      };
+
+      fireEvent.dragStart(dropTarget, { dataTransfer });
+      fireEvent.dragEnter(dropTarget, { dataTransfer });
+      fireEvent.dragOver(dropTarget, { dataTransfer });
+      fireEvent.drop(dropTarget, { dataTransfer });
 
       expect(addResource).toHaveBeenCalledWith(manifestId);
     });

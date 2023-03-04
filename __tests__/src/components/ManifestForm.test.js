@@ -1,9 +1,10 @@
-import { mount } from 'enzyme';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { ManifestForm } from '../../../src/components/ManifestForm';
 
 /** create wrapper */
 function createWrapper(props) {
-  return mount(
+  return render(
     <ManifestForm
       addResource={() => {}}
       t={str => str}
@@ -14,40 +15,41 @@ function createWrapper(props) {
 
 describe('ManifestForm', () => {
   it('renders nothing if it is not open', () => {
-    const wrapper = createWrapper({ addResourcesOpen: false });
-    expect(wrapper.find('ForwardRef(TextField)[label="addManifestUrl"]').length).toBe(0);
+    createWrapper({ addResourcesOpen: false });
+
+    expect(screen.queryByRole('textbox', { name: 'addManifestUrl' })).not.toBeInTheDocument();
   });
 
   it('renders the form fields', () => {
-    const wrapper = createWrapper({ addResourcesOpen: true });
-    expect(wrapper.find('ForwardRef(TextField)[label="addManifestUrl"]').length).toBe(1);
-    expect(wrapper.find('button[type="submit"]').length).toBe(1);
+    createWrapper({ addResourcesOpen: true });
+
+    expect(screen.getByRole('textbox', { name: 'addManifestUrl' })).toBeInTheDocument();
+    expect(screen.getByRole('button')).toHaveAttribute('type', 'submit');
   });
 
-  it('has a cancel button when a cancel action is provided', () => {
+  it('has a cancel button when a cancel action is provided', async () => {
+    const user = userEvent.setup();
     const onCancel = jest.fn();
-    const wrapper = createWrapper({ addResourcesOpen: true, onCancel });
-    wrapper.setState({ formValue: 'asdf' });
+    createWrapper({ addResourcesOpen: true, onCancel });
 
-    expect(wrapper.find('button[onClick]').length).toBe(1);
+    await user.type(screen.getByRole('textbox', { name: 'addManifestUrl' }), 'asdf');
 
-    wrapper.find('button[onClick]').simulate('click');
+    await user.click(screen.getByRole('button', { name: 'cancel' }));
 
     expect(onCancel).toHaveBeenCalled();
-    expect(wrapper.state().formValue).toBe('');
+    expect(screen.getByRole('textbox')).toHaveValue('');
   });
 
-  it('triggers an action when the form is submitted', () => {
+  it('triggers an action when the form is submitted', async () => {
+    const user = userEvent.setup();
     const addResource = jest.fn();
     const onSubmit = jest.fn();
-    const wrapper = createWrapper({ addResource, addResourcesOpen: true, onSubmit });
-    wrapper.setState({ formValue: 'asdf' });
+    createWrapper({ addResource, addResourcesOpen: true, onSubmit });
+    await user.type(screen.getByRole('textbox', { name: 'addManifestUrl' }), 'http://example.com/iiif');
+    await user.click(screen.getByRole('button', { name: 'fetchManifest' }));
 
-    wrapper.setState({ formValue: 'http://example.com/iiif' });
-
-    wrapper.find('form').simulate('submit', { preventDefault: () => {} });
     expect(addResource).toHaveBeenCalledWith('http://example.com/iiif');
     expect(onSubmit).toHaveBeenCalled();
-    expect(wrapper.state().formValue).toBe('');
+    expect(screen.getByRole('textbox')).toHaveValue('');
   });
 });
