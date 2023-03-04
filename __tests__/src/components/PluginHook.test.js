@@ -1,34 +1,41 @@
-import { shallow } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 import { PluginHook } from '../../../src/components/PluginHook';
 
-it('renders nothing when no plugins passed', () => {
-  const wrapper = shallow(<PluginHook />);
-  expect(wrapper).toEqual({});
-});
+/** */
+const mockComponentA = () => (
+  <div data-testid="testA" />
+);
 
 /** */
-const PluginComponentA = props => <div>A</div>;
-/** */
-const PluginComponentB = props => <div>B</div>;
+const mockComponentB = () => (
+  <div data-testid="testB" />
+);
 
-it('renders plugin components if some passed', () => {
-  const wrapper = shallow(
-    <PluginHook
-      PluginComponents={[PluginComponentA, PluginComponentB]}
-    />,
-  );
+describe('WindowTopBarPluginArea', () => {
+  it('renders nothing when no plugins passed', () => {
+    render(<PluginHook />);
+    expect(screen.queryByTestId('testA')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('testB')).not.toBeInTheDocument();
+  });
 
-  expect(wrapper.find(PluginComponentA).length).toBe(1);
-  expect(wrapper.find(PluginComponentB).length).toBe(1);
-});
+  it('renders plugin components if some passed', () => {
+    render(
+      <PluginHook
+        PluginComponents={[mockComponentA, mockComponentB]}
+      />,
+    );
+    expect(screen.getByTestId('testA')).toBeInTheDocument();
+    expect(screen.getByTestId('testB')).toBeInTheDocument();
+  });
 
-it('does not pass classes to PluginComponents (which will throw warnings for styles plugins)', () => {
-  const wrapper = shallow(
-    <PluginHook
-      classes={{ someLocal: 'classes' }}
-      PluginComponents={[PluginComponentA]}
-    />,
-  );
-
-  expect(wrapper.find(PluginComponentA).props().classes).toBeUndefined();
+  it('does not pass classes to PluginComponents (which will throw warnings for styles plugins)', () => {
+    render(
+      <PluginHook
+        classes={{ someLocal: 'classes' }}
+        PluginComponents={[mockComponentA]}
+      />,
+    );
+    // if called with nothing passed as args, .toHaveClass checks for existence of any classes
+    expect(screen.getByTestId('testA')).not.toHaveClass();
+  });
 });
