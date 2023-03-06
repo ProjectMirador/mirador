@@ -12,6 +12,8 @@ global.TextEncoder = TextEncoder;
 // Setup Jest to mock fetch
 fetchMock.enableMocks();
 
+if (typeof Element !== 'undefined') Element.prototype.scrollTo = () => {};
+
 /* eslint-disable  require-jsdoc, class-methods-use-this */
 class IntersectionObserverPolyfill {
   constructor(callback, options) {

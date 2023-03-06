@@ -1,13 +1,11 @@
-import { shallow } from 'enzyme';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import ListItem from '@material-ui/core/ListItem';
-import Typography from '@material-ui/core/Typography';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { renderWithProviders } from '../../utils/store';
 import { ManifestListItem } from '../../../src/components/ManifestListItem';
-import ManifestListItemError from '../../../src/containers/ManifestListItemError';
 
 /** */
 function createWrapper(props) {
-  return shallow(
+  return renderWithProviders(
     <ManifestListItem
       manifestId="http://example.com"
       title="xyz"
@@ -22,53 +20,49 @@ function createWrapper(props) {
 
 describe('ManifestListItem', () => {
   it('renders without an error', () => {
-    const wrapper = createWrapper({ buttonRef: 'ref' });
-    expect(wrapper.find('.mirador-manifest-list-item').length).toBe(1);
-    expect(wrapper.find(ButtonBase).length).toBe(1);
-    expect(wrapper.find(ButtonBase).getElement().ref).toBe('ref');
-    expect(wrapper.find(ButtonBase).find(Typography).children().text()).toEqual('xyz');
+    createWrapper({ buttonRef: 'ref' });
+
+    expect(screen.getByRole('listitem')).toHaveAttribute('data-manifestid', 'http://example.com');
+    expect(screen.getByRole('button')).toHaveTextContent('xyz');
   });
   it('adds a class when the item is active', () => {
-    const wrapper = createWrapper({ active: true, classes: { active: 'active' } });
-    expect(wrapper.find('.active').length).toEqual(1);
+    createWrapper({ active: true, classes: { active: 'active' } });
+
+    expect(screen.getByRole('listitem')).toHaveClass('active');
   });
   it('renders a placeholder element until real data is available', () => {
-    const wrapper = createWrapper({ ready: false });
+    const { container } = createWrapper({ ready: false });
 
-    expect(wrapper.find('.mirador-manifest-list-item').length).toBe(1);
-    expect(wrapper.find('WithStyles(ForwardRef(Skeleton))').length > 0).toBe(true);
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(container.querySelectorAll('.MuiSkeleton-rect').length).toBeGreaterThan(0); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
   it('renders an error message if fetching the manifest failed', () => {
-    const wrapper = createWrapper({ error: 'This is an error message' });
+    createWrapper({ error: 'This is an error message' });
 
-    expect(wrapper.find(ListItem).length).toBe(1);
-    expect(wrapper.find(ManifestListItemError).length).toBe(1);
+    expect(screen.getByText('manifestError')).toBeInTheDocument();
+    expect(screen.getByText('http://example.com')).toBeInTheDocument();
   });
-  it('updates and adds window when button clicked', () => {
+  it('updates and adds window when button clicked', async () => {
+    const user = userEvent.setup();
     const addWindow = jest.fn();
-    const wrapper = createWrapper({ addWindow });
-    wrapper.find(ButtonBase).simulate('click');
+    createWrapper({ addWindow });
+
+    await user.click(screen.getByRole('button'));
     expect(addWindow).toHaveBeenCalledTimes(1);
   });
   it('uses the manifest id if the title is not available', () => {
-    const wrapper = createWrapper({ ready: true, title: null });
-
-    expect(wrapper.find(ButtonBase).length).toBe(1);
-    expect(wrapper.find(ButtonBase).find(Typography).children().text()).toEqual('http://example.com');
+    createWrapper({ ready: true, title: null });
+    expect(screen.getByRole('button')).toHaveTextContent('http://example.com');
   });
 
   it('displays the provider information', () => {
-    const wrapper = createWrapper({ provider: 'ACME' });
-    expect(wrapper.find('.mirador-manifest-list-item-provider').children().text()).toEqual('ACME');
-  });
-
-  it('displays nothing  if no information is given', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find('.mirador-manifest-list-item-provider').children().length).toEqual(0);
+    createWrapper({ provider: 'ACME' });
+    expect(screen.getByText('ACME', { container: '.mirador-manifest-list-item-provider' })).toHaveTextContent('ACME');
   });
 
   it('displays a collection label for collections', () => {
-    const wrapper = createWrapper({ isCollection: true });
-    expect(wrapper.text()).toContain('collectionxyz');
+    createWrapper({ isCollection: true });
+
+    expect(screen.getByText('xyz', { container: '.MuiTypography-h6' })).toBeInTheDocument();
   });
 });
