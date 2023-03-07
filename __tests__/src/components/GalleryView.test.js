@@ -22,9 +22,8 @@ describe('GalleryView', () => {
     setCanvas = jest.fn();
   });
   it('renders the component', () => {
-    createWrapper({ setCanvas });
-    const buttons = screen.queryAllByRole('button');
-    expect(buttons[0].closest('section')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
+    const { container } = createWrapper({ setCanvas });
+    expect(container.querySelector('section')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
   it('renders gallery items for all canvases', () => {
     createWrapper({ setCanvas });
