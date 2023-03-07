@@ -28,6 +28,12 @@ export function renderWithProviders(
     children: PropTypes.node.isRequired,
   };
 
+  const rendered = render(ui, { wrapper: Wrapper, ...renderOptions });
+
   // Return an object with the store and all of RTL's query functions
-  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
+  return {
+    store,
+    ...rendered,
+    rerender: (newUi, options) => render(newUi, { container: rendered.container, wrapper: Wrapper, ...options }),
+  };
 }

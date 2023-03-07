@@ -72,7 +72,7 @@ const styles = theme => ({
     position: 'relative',
   },
   thumbnailArea: {
-    backgroundColor: theme.palette.shades.dark,
+    backgroundColor: theme.palette.shades?.dark,
   },
   thumbnailAreaBottom: {
   },
@@ -86,7 +86,7 @@ const styles = theme => ({
       top: 0,
       zIndex: theme.zIndex.modal - 1,
     },
-    backgroundColor: theme.palette.shades.dark,
+    backgroundColor: theme.palette.shades?.dark,
     borderRadius: 0,
     display: 'flex',
     flexDirection: 'column',
