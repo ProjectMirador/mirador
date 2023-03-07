@@ -56,7 +56,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
-  withWidth(),
+  withWidth({ initialWidth: 'xs' }),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WorkspaceAddButton'),
 );
