@@ -18,11 +18,15 @@ export class AnnotationManifestsItem extends Component {
     super(props);
     this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
 
-   /*  const {
-      fetchManifest, manifestId, ready, isFetching, error, provider,
-    } = props;
+  }
 
-    if (!ready && !error && !isFetching && provider !== 'file') fetchManifest(manifestId); */
+  /** */
+  componentDidMount() {
+    const {
+      fetchManifest, manifestId, ready, isFetching, error, provider,
+    } = this.props;
+
+    if (!ready && !error && !isFetching && provider !== 'file') fetchManifest(manifestId);
   }
 
   /** */
@@ -35,13 +39,22 @@ export class AnnotationManifestsItem extends Component {
   /** */
   render() {
     const {
-      classes, t, language, manifestId,
+      classes, t, language, manifestId, thumbnail
     } = this.props;
 
     return (
       <Typography>
         <Card className={classes.root}>
           <CardActionArea>
+            {
+              thumbnail && (
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={[thumbnail]}
+                  alt="green iguana"
+                />
+              )}
             <CardContent>
               <Typography>
                 { manifestId }
