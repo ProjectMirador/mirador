@@ -108,7 +108,7 @@
     "openCompanionWindow_layers": "Layers",
     "openCompanionWindow_search": "Search",
     "openInCompanionWindow": "Open in separate panel",
-    "openManifestInOtherWindow" : "Open {{manifest}} manifest in other Mirador window",
+    "openManifestInOtherWindow" : "Open {{manifestId}} manifest in other Mirador window",
     "openWindows": "Current open windows",
     "pagination": "{{current}} of {{total}}",
     "position": "Position",
