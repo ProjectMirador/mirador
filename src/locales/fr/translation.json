@@ -112,6 +112,8 @@
     "previousCanvas": "Précédent",
     "related": "En relation",
     "resource": "Ressource",
+    "resourceError": "Erreur lors du changement de la ressource {{ manifestId }}",
+    "resourceLoading": "Chargement en cours de la ressource ... ",
     "retry": "Réessayer",
     "right": "Droite",
     "rights": "Licence",

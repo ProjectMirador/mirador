@@ -7,6 +7,7 @@ import {
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import ns from '../config/css-ns';
+import ErrorIcon from '@material-ui/icons/ErrorOutlineSharp';
 
 /**
  * AnnotationManifestsItem
@@ -42,18 +43,16 @@ export class AnnotationManifestsItem extends Component {
       classes, t, manifestId, thumbnail, title, description, error, ready
     } = this.props;
 
-    if (!ready) {
+    if (error) {
       return (
-        <Typography>
-          Chargement de la ressource en cours
-        </Typography>
+        <Typography>{t('resourceError', { manifestId })}</Typography>
       );
     }
 
-    if (error) {
+    if (!ready) {
       return (
         <Typography>
-          Impossible de charger le manifest
+          <Typography>{t('resourceLoading')}</Typography>
         </Typography>
       );
     }

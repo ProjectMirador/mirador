@@ -116,6 +116,8 @@
     "previousCanvas": "Previous item",
     "related": "Related",
     "resource": "Resource",
+    "resourceError": "Error when loading ressource from {{ manifestId }}",
+    "resourceLoading": "Loading ressource ... ",
     "retry": "Retry",
     "right": "Right",
     "rights": "License",
