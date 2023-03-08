@@ -22,6 +22,26 @@ export class AnnotationManifestsAccordion extends Component {
     super(props);
     this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
     this.handleOpenAccordion = this.handleOpenAccordion.bind(this);
+
+    /** Search if the annotation is a manifest. URL must be resolvable for the annotation. So the manifest url is added at the end of the id */
+    function searchManifestInID(id) {
+      const match = id.match(
+        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)/gi,
+      );
+
+      return match ? match[0].split('#').slice(-1) : null;
+    }
+
+    const { annotation } = this.props;
+
+    annotation.manifests = searchManifestInID(annotation.id);
+    if (annotation.manifests) {
+      annotation.manifests = annotation.manifests.map(id => ({ id }));
+    } else {
+      annotation.manifests = [];
+    }
+
+    this.state = { annotation };
   }
 
 
@@ -37,7 +57,7 @@ export class AnnotationManifestsAccordion extends Component {
   handleOpenAccordion(e) {
     const { annotation } = this.state;
     /** */
-   /*  async function load(manifests) {
+    async function load(manifests) {
       return Promise.all(manifests.map((manifest) => fetch(manifest.id)
         .then((response) => response.json())
         .then((data) => {
@@ -55,27 +75,20 @@ export class AnnotationManifestsAccordion extends Component {
           this.setState({ annotation });
         }
       });
-    e.stopPropagation(); */
-
-    // We work onlu on the first manifest
-
- /*    const {
-      fetchManifest
-    } = this.props;
-    fetchManifest(annotation.manifests[0]); */
-
+    e.stopPropagation();
   }
 
   /** */
   render() {
     const {
-      classes, t, i18n, manifests
+      classes, t, i18n,
     } = this.props;
 
     const language = i18n.language;
 
+    const { annotation } = this.state;
 
-    if (manifests === null || manifests.length === 0) {
+    if (annotation.manifests === null || annotation.manifests.length === 0) {
       return null;
     }
 
@@ -89,8 +102,8 @@ export class AnnotationManifestsAccordion extends Component {
             <Typography className={classes.heading}>{t('manifestFound')}</Typography>
           </AccordionSummary>
           <AccordionDetails className={classes.manifestContainer}>
-            {manifests.map(manifest => (
-              <Typography>
+            {annotation.manifests.map(manifest => (
+              <Typography >
                 <Card className={classes.root}>
                   <CardActionArea>
                     <CardContent>
@@ -129,20 +142,15 @@ AnnotationManifestsAccordion.propsTypes = {
     {
       content: PropTypes.string,
       id: PropTypes.string,
-
+      manifests: PropTypes.arrayOf(PropTypes.string),
     },
   ),
   classes: PropTypes.objectOf(PropTypes.string),
-  fetchManifest: PropTypes.func.isRequired,
-  manifests: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func.isRequired,
-  thumbnail: PropTypes.string,
-  title: PropTypes.string,
 };
 
 AnnotationManifestsAccordion.defaultProps = {
   classes: {},
   htmlSanitizationRuleSet: 'iiif',
   listContainerComponent: 'li',
-  manifests: [],
 };
