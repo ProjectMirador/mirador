@@ -30,6 +30,7 @@ export class AnnotationManifestsAccordion extends Component {
 
     const { annotation } = this.props;
 
+    annotation.manifestsOpen = false;
     annotation.manifests = searchManifestInID(annotation.id);
     if (annotation.manifests) {
       annotation.manifests = annotation.manifests.map(id => ({ id }));
@@ -43,7 +44,10 @@ export class AnnotationManifestsAccordion extends Component {
   /** */
   // eslint-disable-next-line class-methods-use-this,require-jsdoc
   handleOpenAccordion(e) {
+    let { annotation } = this.state;
+    annotation.manifestsOpen = true;
     e.stopPropagation();
+    this.state = { annotation };
   }
 
   /** */
@@ -67,16 +71,20 @@ export class AnnotationManifestsAccordion extends Component {
           >
             <Typography className={classes.heading}>{t('manifestFound')}</Typography>
           </AccordionSummary>
-          <AccordionDetails className={classes.manifestContainer}>
-            {annotation.manifests.map(manifest => (
-              <AnnotationManifestsItem
-                manifestId={manifest.id}
-                language={i18n.language}
-                key={manifest}
-                t={t}
-              />
-            ))}
-          </AccordionDetails>
+          {
+            annotation.manifestsOpen && (
+            <AccordionDetails className={classes.manifestContainer}>
+              {annotation.manifests.map(manifest => (
+                <AnnotationManifestsItem
+                  manifestId={manifest.id}
+                  language={i18n.language}
+                  key={manifest}
+                  t={t}
+                />
+              ))}
+            </AccordionDetails>
+            )
+          }
         </Accordion>
       </div>
     );
@@ -90,6 +98,7 @@ AnnotationManifestsAccordion.propsTypes = {
       content: PropTypes.string,
       id: PropTypes.string,
       manifests: PropTypes.arrayOf(PropTypes.string),
+      manifestsOpen: PropTypes.boolean,
     },
   ),
   classes: PropTypes.objectOf(PropTypes.string),

@@ -6,6 +6,7 @@ import {
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
+import ns from '../config/css-ns';
 
 /**
  * AnnotationManifestsItem
@@ -39,7 +40,7 @@ export class AnnotationManifestsItem extends Component {
   /** */
   render() {
     const {
-      classes, t, language, manifestId, thumbnail
+      classes, t, language, manifestId, thumbnail, title, description
     } = this.props;
 
     return (
@@ -49,16 +50,24 @@ export class AnnotationManifestsItem extends Component {
             {
               thumbnail && (
                 <CardMedia
+                  className={classes.thumbnail}
                   component="img"
                   height="140"
-                  image={[thumbnail]}
+                  image={thumbnail}
                   alt="green iguana"
                 />
-              )}
+              )
+            }
             <CardContent>
               <Typography>
-                { manifestId }
+                { title || manifestId }
               </Typography>
+              {
+                description && (
+                  <Typography>
+                    { description }
+                  </Typography>
+                )}
             </CardContent>
           </CardActionArea>
           <CardActions>
@@ -84,14 +93,15 @@ AnnotationManifestsItem.propsTypes = {
   addResource: PropTypes.func.isRequired,
   addWindow: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.string),
+  description: PropTypes.string,
+  error: PropTypes.string,
   fetchManifest: PropTypes.func.isRequired,
-  manifests: PropTypes.arrayOf(PropTypes.string),
-  t: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool,
   manifestLogo: PropTypes.string,
+  manifests: PropTypes.arrayOf(PropTypes.string),
   provider: PropTypes.string,
   ready: PropTypes.bool,
-  isFetching: PropTypes.bool,
-  error: PropTypes.string,
+  t: PropTypes.func.isRequired,
   thumbnail: PropTypes.string,
   title: PropTypes.string,
 };

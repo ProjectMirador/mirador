@@ -6,7 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { AnnotationManifestsItem } from '../components/AnnotationManifestsItem';
 import {
-  getManifest, getManifestLogo,
+  getManifest, getManifestDescription, getManifestLogo,
   getManifestProvider, getManifestThumbnail, getManifestTitle,
   getWindowManifests,
 } from '../state/selectors';
@@ -16,7 +16,9 @@ const mapStateToProps = (state, { manifestId }) => {
   const manifest = getManifest(state, { manifestId }) || {};
 
   return {
-    active: getWindowManifests(state).includes(manifestId),
+    active: getWindowManifests(state)
+      .includes(manifestId),
+    description: getManifestDescription(state, { manifestId }),
     error: manifest.error,
     isFetching: manifest.isFetching,
     manifestLogo: getManifestLogo(state, { manifestId }),
