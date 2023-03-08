@@ -18,7 +18,6 @@ export class AnnotationManifestsItem extends Component {
   constructor(props) {
     super(props);
     this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
-
   }
 
   /** */
@@ -40,51 +39,66 @@ export class AnnotationManifestsItem extends Component {
   /** */
   render() {
     const {
-      classes, t, language, manifestId, thumbnail, title, description
+      classes, t, manifestId, thumbnail, title, description, error, ready
     } = this.props;
 
+    if (!ready) {
+      return (
+        <Typography>
+          Chargement de la ressource en cours
+        </Typography>
+      );
+    }
+
+    if (error) {
+      return (
+        <Typography>
+          Impossible de charger le manifest
+        </Typography>
+      );
+    }
+
     return (
-      <Typography>
-        <Card className={classes.root}>
-          <CardActionArea>
+      <Card className={classes.root}>
+        <CardActionArea>
+          {
+            thumbnail && (
+              <CardMedia
+                className={classes.thumbnail}
+                component="img"
+                height="140"
+                image={thumbnail}
+                alt="green iguana"
+              />
+            )
+          }
+          <CardContent>
+            <Typography>
+              { title || manifestId }
+            </Typography>
             {
-              thumbnail && (
-                <CardMedia
-                  className={classes.thumbnail}
-                  component="img"
-                  height="140"
-                  image={thumbnail}
-                  alt="green iguana"
-                />
+              description && (
+                <Typography>
+                  { description }
+                </Typography>
               )
-            }
-            <CardContent>
-              <Typography>
-                { title || manifestId }
-              </Typography>
-              {
-                description && (
-                  <Typography>
-                    { description }
-                  </Typography>
-                )}
-            </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Tooltip title={t('openManifestInOtherWindow', { manifestId })}>
-              <Button
-                size="small"
-                color="primary"
-                onClick={(e) => {
-                  this.handleOpenManifestSideToSide(e, manifestId);
-                }}
-              >
-                {t('open')}
-              </Button>
-            </Tooltip>
-          </CardActions>
-        </Card>
-      </Typography>
+}
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <Tooltip title={t('openManifestInOtherWindow', { manifestId })}>
+            <Button
+              size="small"
+              color="primary"
+              onClick={(e) => {
+                this.handleOpenManifestSideToSide(e, manifestId);
+              }}
+            >
+              {t('open')}
+            </Button>
+          </Tooltip>
+        </CardActions>
+      </Card>
     );
   }
 }
