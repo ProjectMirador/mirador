@@ -1,11 +1,27 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, act } from '@testing-library/react';
 import { renderWithProviders } from '../../utils/store';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
-import { InView } from 'react-intersection-observer';
+import { useInView } from 'react-intersection-observer';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryViewThumbnail } from '../../../src/components/GalleryViewThumbnail';
 import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
+import { intersectionMockInstance, mockIntersection, mockIsIntersecting } from 'react-intersection-observer/test-utils';
+
+const HookComponent = ({ props }, { options }) => {
+  const [ref, inView] = useInView(options)
+  return (
+    <GalleryViewThumbnail
+    ref={ref}
+    canvas={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()[0]}
+    classes={{ selected: 'selected' }}
+    focusOnCanvas={() => {}}
+    setCanvas={() => {}}
+    inView={inView.toString()}
+    {...props}
+    />
+  )
+}
 
 /** create wrapper */
 function createWrapper(props) {
@@ -95,11 +111,27 @@ describe('GalleryView', () => {
         isCanvas: jest.fn(),
         getType: jest.fn(),
       };
-      createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
+      //const { InView } = renderWithProviders(({ children }) => children({ inView: true, ref: null }));
+      //createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
+      const { getByRole } = renderWithProviders(<HookComponent />, { annotationsCount: 0, canvas, requestCanvasAnnotations }, {});
+      const wrapper = screen.getByRole('presentation');
+      // Set the intersection state on the wrapper.
+      mockIsIntersecting(wrapper, true);
+      const instance = intersectionMockInstance(wrapper);
+      expect(instance.observe).toHaveBeenCalledWith(wrapper);
       // eslint-disable-next-line
       screen.debug();
+      //act(() => {
+      //  mockIntersection(getByRole('presentation'), true);
+      //})
+
+      //const img = container.querySelector('img');
+
+      //act(() => {
+      //  global.IntersectionObserver.triggerAll();
+      //});
       // wrapper.find(InView).simulate('change', { isIntersecting: true });
-      // expect(requestCanvasAnnotations).toHaveBeenCalled();
+      expect(requestCanvasAnnotations).toHaveBeenCalled();
     });
     /* it('does nothing if there is no intersection', () => {
       const requestCanvasAnnotations = jest.fn();
