@@ -43,6 +43,13 @@ export class SearchPanelControls extends Component {
     }
   }
 
+  /**
+   * Cancel the debounce function when the component unmounts
+   */
+  componentWillUnmount() {
+    this.fetchAutocomplete.cancel();
+  }
+
   /** */
   handleChange(event, value, reason) {
     // For some reason the value gets reset to an empty value from the
