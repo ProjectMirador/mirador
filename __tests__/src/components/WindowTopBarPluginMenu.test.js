@@ -36,9 +36,10 @@ describe('WindowTopBarPluginMenu', () => {
 
   describe('when there are plugins present', () => {
     let user;
+    let wrapper;
     beforeEach(() => {
       user = userEvent.setup();
-      renderWithProviders(<Subject PluginComponents={[mockComponentA]} />);
+      wrapper = renderWithProviders(<Subject PluginComponents={[mockComponentA]} />);
     });
 
     it('renders the Button', async () => {
@@ -53,10 +54,8 @@ describe('WindowTopBarPluginMenu', () => {
       await user.click(screen.getByRole('button', { name: 'windowPluginMenu' }));
       expect(screen.getByRole('menu')).toBeInTheDocument();
 
-      // close
-      // To close this menu there needs to be a click outside the menu area
-      // This is really hard to simulate in RTL since it is hard to render elements outside this component
-      // For now we can assume that the MUI <Menu> component will properly close
+      await user.keyboard('{Escape}');
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
   });
 });
