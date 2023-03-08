@@ -1,39 +1,28 @@
-import { shallow } from 'enzyme';
-import CanvasLayers from '../../../src/containers/CanvasLayers';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../../utils/store';
 import { LayersPanel } from '../../../src/components/LayersPanel';
 
 /**
  * Helper function to create a shallow wrapper around AttributionPanel
  */
 function createWrapper(props) {
-  return shallow(
+  return renderWithProviders(
     <LayersPanel
       id="xyz"
       t={str => str}
       windowId="window"
       {...props}
     />,
+    { preloadedState: { companionWindows: { xyz: { content: 'layers' } } } },
   );
 }
 
 describe('LayersPanel', () => {
   it('renders layers for each canvas', () => {
     const canvasIds = ['a', 'b'];
-    const wrapper = createWrapper({ canvasIds });
-    expect(wrapper.find(CanvasLayers).length).toBe(2);
+    createWrapper({ canvasIds });
 
-    expect(wrapper.find(CanvasLayers).at(0).props()).toMatchObject({
-      canvasId: 'a',
-      index: 0,
-      totalSize: 2,
-      windowId: 'window',
-    });
-
-    expect(wrapper.find(CanvasLayers).at(1).props()).toMatchObject({
-      canvasId: 'b',
-      index: 1,
-      totalSize: 2,
-      windowId: 'window',
-    });
+    expect(screen.getAllByText('annotationCanvasLabel').length).toBe(2);
+    expect(screen.getAllByRole('list').length).toBe(2);
   });
 });

@@ -1,17 +1,15 @@
-import { shallow } from 'enzyme';
-import Typography from '@material-ui/core/Typography';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { CanvasInfo } from '../../../src/components/CanvasInfo';
-import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
-import CollapsibleSection from '../../../src/containers/CollapsibleSection';
-import SanitizedHtml from '../../../src/containers/SanitizedHtml';
 
 describe('CanvasInfo', () => {
-  const metadata = [{ label: {}, value: {} }];
-  let wrapper;
+  const metadata = [{ label: 'some label', values: ['some value'] }];
+  let user;
 
   describe('when metadata is present', () => {
     beforeEach(() => {
-      wrapper = shallow(
+      user = userEvent.setup();
+      render(
         <CanvasInfo
           canvasLabel="The Canvas Label"
           canvasDescription="The Canvas Description"
@@ -22,46 +20,38 @@ describe('CanvasInfo', () => {
       );
     });
 
-    it('renders the content in a CollapsibleSection', () => {
-      expect(wrapper.find(CollapsibleSection).length).toBe(1);
+    it('renders the content in a CollapsibleSection', async () => {
+      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('currentItem');
+      expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(/The Canvas Label/);
+
+      await user.click(screen.getByRole('button'));
+
+      expect(screen.queryByRole('heading', { level: 5 })).not.toBeInTheDocument();
     });
 
     it('renders canvas label', () => {
-      expect(
-        wrapper.find(Typography).at(0).matchesElement(
-          <Typography>The Canvas Label</Typography>,
-        ),
-      ).toBe(true);
+      expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(/The Canvas Label/);
     });
 
-    it('renders canvas description in SanitizedHtml component', () => {
-      expect(
-        wrapper.find(Typography).at(1).matchesElement(
-          <Typography>
-            <SanitizedHtml htmlString="The Canvas Description" ruleSet="iiif" />
-          </Typography>,
-        ),
-      ).toBe(true);
+    it('renders canvas description', () => {
+      expect(screen.getByText('The Canvas Description')).toBeInTheDocument();
     });
 
     it('renders canvas metadata in LabelValueMetadata component', () => {
-      expect(
-        wrapper.find(LabelValueMetadata).at(0).matchesElement(
-          <LabelValueMetadata labelValuePairs={metadata} />,
-        ),
-      ).toBe(true);
+      expect(screen.getByText('some label')).toBeInTheDocument();
+      expect(screen.getByText('some value')).toBeInTheDocument();
     });
   });
 
   describe('when metadata is not present', () => {
     beforeEach(() => {
-      wrapper = shallow(
+      render(
         <CanvasInfo id="xyz" />,
       );
     });
 
     it('does not render empty elements elements', () => {
-      expect(wrapper.find(LabelValueMetadata).length).toBe(0);
+      expect(screen.queryByRole('heading', { level: 5 })).not.toBeInTheDocument();
     });
   });
 });

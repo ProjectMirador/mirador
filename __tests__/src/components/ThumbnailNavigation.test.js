@@ -1,37 +1,11 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { PropTypes } from 'prop-types';
-import { Provider } from 'react-redux';
 import { Utils } from 'manifesto.js';
+import { renderWithProviders } from '../../utils/store';
 import { ThumbnailNavigation } from '../../../src/components/ThumbnailNavigation';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';
 import manifestJson from '../../fixtures/version-2/019.json';
 import zeroWidthFixture from '../../fixtures/version-2/zeroWidthCanvas.json';
-import createPluggableStore from '../../../src/state/createPluggableStore';
-
-/**
- * Hook up our rendered object to redux
- */
-export function renderWithProviders(
-  ui,
-  {
-    preloadedState = {},
-    // Automatically create a store instance if no store was passed in
-    store = createPluggableStore(preloadedState, []),
-    ...renderOptions
-  } = {},
-) {
-  /** :nodoc: */
-  function Wrapper({ children }) {
-    return <Provider store={store}>{children}</Provider>;
-  }
-
-  Wrapper.propTypes = {
-    children: PropTypes.node.isRequired,
-  };
-
-  // Return an object with the store and all of RTL's query functions
-  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
-}
 
 /**
  * create a simple wrapper for rendering our component

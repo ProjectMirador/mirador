@@ -42,7 +42,7 @@ LabelValueMetadata.propTypes = {
   defaultLabel: PropTypes.string,
   labelValuePairs: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
-    value: PropTypes.string,
+    values: PropTypes.arrayOf(PropTypes.string),
   })).isRequired,
 };
 

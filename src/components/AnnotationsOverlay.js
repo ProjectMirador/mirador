@@ -126,6 +126,7 @@ export class AnnotationsOverlay extends Component {
   componentWillUnmount() {
     const { viewer } = this.props;
 
+    this.onCanvasMouseMove.cancel();
     viewer.removeHandler('canvas-click', this.onCanvasClick);
     viewer.removeHandler('canvas-exit', this.onCanvasExit);
     viewer.removeHandler('update-viewport', this.onUpdateViewport);

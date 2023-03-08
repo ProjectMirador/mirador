@@ -55,7 +55,7 @@ const styles = theme => ({
       '&:hover': {
         backgroundColor: theme.palette.action.hover,
       },
-      backgroundColor: theme.palette.shades.light,
+      backgroundColor: theme.palette.shades?.light,
     },
     '&$dragging': {
       '& $dragHandle, & $dragHandle:hover': {

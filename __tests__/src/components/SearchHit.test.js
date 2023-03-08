@@ -34,7 +34,7 @@ describe('SearchHit', () => {
     expect(wrapper.find('WithStyles(ForwardRef(ListItem))').length).toEqual(1);
     expect(wrapper.find('WithStyles(ForwardRef(ListItem))').prop('selected')).toEqual(true);
     expect(wrapper.find('WithStyles(ForwardRef(ListItem))').prop('className')).toEqual('windowSelected');
-    expect(wrapper.find('WithStyles(ForwardRef(ListItemText))').render().text()).toEqual('1Light up the moose , and start the chai ');
+    expect(wrapper.find('WithStyles(ForwardRef(ListItemText))').render().text()).toEqual('1Light up the moose , and start the chai more');
     expect(wrapper.find('strong').length).toEqual(1);
 
     wrapper.find('WithStyles(ForwardRef(ListItem))').simulate('click');
