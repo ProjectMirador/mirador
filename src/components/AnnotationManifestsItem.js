@@ -17,6 +17,12 @@ export class AnnotationManifestsItem extends Component {
   constructor(props) {
     super(props);
     this.handleOpenManifestSideToSide = this.handleOpenManifestSideToSide.bind(this);
+
+   /*  const {
+      fetchManifest, manifestId, ready, isFetching, error, provider,
+    } = props;
+
+    if (!ready && !error && !isFetching && provider !== 'file') fetchManifest(manifestId); */
   }
 
   /** */
@@ -27,18 +33,9 @@ export class AnnotationManifestsItem extends Component {
   }
 
   /** */
-  componentDidMount() {
-    const {
-      fetchManifest, manifestId, ready, isFetching, error, provider,
-    } = this.props;
-
-    if (!ready && !error && !isFetching && provider !== 'file') fetchManifest(manifestId);
-  }
-
-  /** */
   render() {
     const {
-      classes, t, language, manifest,
+      classes, t, language, manifestId,
     } = this.props;
 
     return (
@@ -47,17 +44,17 @@ export class AnnotationManifestsItem extends Component {
           <CardActionArea>
             <CardContent>
               <Typography>
-                { manifest.label ? manifest.label[language] : manifest.id }
+                { manifestId }
               </Typography>
             </CardContent>
           </CardActionArea>
           <CardActions>
-            <Tooltip title={t('openManifestInOtherWindow', { manifest: manifest.id })}>
+            <Tooltip title={t('openManifestInOtherWindow', { manifestId })}>
               <Button
                 size="small"
                 color="primary"
                 onClick={(e) => {
-                  this.handleOpenManifestSideToSide(e, manifest.id);
+                  this.handleOpenManifestSideToSide(e, manifestId);
                 }}
               >
                 {t('open')}
@@ -77,8 +74,22 @@ AnnotationManifestsItem.propsTypes = {
   fetchManifest: PropTypes.func.isRequired,
   manifests: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func.isRequired,
+  manifestLogo: PropTypes.string,
+  provider: PropTypes.string,
+  ready: PropTypes.bool,
+  isFetching: PropTypes.bool,
+  error: PropTypes.string,
+  thumbnail: PropTypes.string,
+  title: PropTypes.string,
 };
 
 AnnotationManifestsItem.defaultProps = {
   classes: {},
+  error: null,
+  isFetching: false,
+  manifestLogo: null,
+  provider: null,
+  ready: false,
+  thumbnail: null,
+  title: null,
 };

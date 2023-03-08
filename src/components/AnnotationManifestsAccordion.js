@@ -5,12 +5,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMoreSharp';
 import Typography from '@material-ui/core/Typography';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import PropTypes from 'prop-types';
-import {
-  Card, CardActionArea, CardActions, CardContent, CardMedia, Fab,
-} from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
-import { AnnotationManifestsItem } from './AnnotationManifestsItem';
+import AnnotationManifestsItem from '../containers/AnnotationManifestsItem';
 
 /**
  * AnnotationManifestsAccordion
@@ -78,6 +73,7 @@ export class AnnotationManifestsAccordion extends Component {
                 manifestId={manifest.id}
                 language={i18n.language}
                 key={manifest}
+                t={t}
               />
             ))}
           </AccordionDetails>

@@ -6,11 +6,9 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { AnnotationManifestsItem } from '../components/AnnotationManifestsItem';
 import {
-  getCanvases,
   getManifest, getManifestLogo,
-  getManifestoInstance, getManifestProvider, getManifestThumbnail, getManifestTitle,
-  getSequenceBehaviors,
-  getWindowManifests
+  getManifestProvider, getManifestThumbnail, getManifestTitle,
+  getWindowManifests,
 } from '../state/selectors';
 
 /** For connect */
