@@ -1,69 +1,61 @@
-import { shallow } from 'enzyme';
-import Menu from '@material-ui/core/Menu';
-import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
-import { PluginHook } from '../../../src/components/PluginHook';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import React from 'react';
+import { renderWithProviders } from '../../utils/store';
 import { WindowTopBarPluginMenu } from '../../../src/components/WindowTopBarPluginMenu';
 
 /** create wrapper */
-function createWrapper(props) {
-  return shallow(
+function Subject({ ...props }) {
+  return (
     <WindowTopBarPluginMenu
       t={k => k}
       windowId="abc123"
       {...props}
-    />,
+    />
   );
+}
+// needs to be a non-functional component to accept forwardRef the way we have it set up
+/**  */
+class mockComponentA extends React.Component {
+  /**  */
+  render() {
+    return (
+      <div data-testid="testA" />
+    );
+  }
 }
 
 describe('WindowTopBarPluginMenu', () => {
-  let wrapper;
-
   describe('when there are no plugins present', () => {
     it('renders nothing (and no Button/Menu/PluginHook)', () => {
-      wrapper = createWrapper();
-      expect(wrapper.isEmptyRender()).toBe(true);
+      renderWithProviders(<Subject />);
+      expect(screen.queryByTestId('testA')).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'windowPluginMenu' })).not.toBeInTheDocument();
     });
   });
 
   describe('when there are plugins present', () => {
-    const PluginComponents = ['Plugin1', 'Plugin2'];
-
-    it('renders the Button, Menu, and PluginHook', () => {
-      wrapper = createWrapper({ PluginComponents });
-
-      expect(wrapper.find(Menu).length).toBe(1);
-      expect(wrapper.find(MiradorMenuButton).length).toBe(1);
-      expect(wrapper.find(PluginHook).length).toBe(1);
+    let user;
+    let wrapper;
+    beforeEach(() => {
+      user = userEvent.setup();
+      wrapper = renderWithProviders(<Subject PluginComponents={[mockComponentA]} />);
     });
 
-    it('the Menu is controlled by the Button clicks/local state', () => {
-      wrapper = createWrapper({ PluginComponents });
-
-      expect(wrapper.find(Menu).props().open).toBe(false);
-      expect(wrapper.state().anchorEl).toBeNull();
-
-      wrapper.find(MiradorMenuButton).simulate('click', { currentTarget: 'Button' });
-      expect(wrapper.find(Menu).props().open).toBe(true);
-      expect(wrapper.state().anchorEl).toEqual('Button');
+    it('renders the Button', async () => {
+      expect(screen.getByRole('button', { name: 'windowPluginMenu' })).toBeInTheDocument();
     });
 
-    it('the onClose prop of the Menu updates the open prop/state', () => {
-      wrapper = createWrapper({ PluginComponents });
-      wrapper.setState({ anchorEl: 'Button' });
-      expect(wrapper.find(Menu).props().open).toBe(true);
+    it('the Menu is controlled by the Button clicks', async () => {
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('testA')).not.toBeInTheDocument();
 
-      wrapper.find(Menu).props().onClose();
-      expect(wrapper.find(Menu).props().open).toBe(false);
-      expect(wrapper.state().anchorEl).toBeNull();
-    });
+      // open
+      await user.click(screen.getByRole('button', { name: 'windowPluginMenu' }));
+      expect(screen.getByRole('menu')).toBeInTheDocument();
 
-    it('explicitly passes the local close handler to the PluginHook', () => {
-      wrapper = createWrapper({ PluginComponents });
-
-      wrapper.setState({ anchorEl: 'Button' });
-      expect(wrapper.state().anchorEl).toEqual('Button');
-      expect(wrapper.find(PluginHook).props().handleClose());
-      expect(wrapper.state().anchorEl).toBeNull();
+      await user.keyboard('{Escape}');
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
   });
 });
