@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { DndProvider } from 'react-dnd';
 import { TestBackend } from 'react-dnd-test-backend';
 import { renderWithProviders } from '../../utils/store';
@@ -54,7 +54,7 @@ describe('WorkspaceArea', () => {
 
       expect(screen.queryByRole('heading', { level: 1, name: 'miradorViewer' })).not.toBeInTheDocument();
       expect(screen.getByRole('main')).toHaveTextContent('emptyResourceList');
-      expect(screen.getByRole('button', { name: 'addResource' })).toBeInTheDocument();
+      expect(within(screen.getByRole('main')).getByRole('button', { name: 'addResource' })).toBeInTheDocument();
     });
   });
 });

@@ -26,7 +26,7 @@ export const getWorkspaceType = createSelector(
   ({ type }) => type,
 );
 
-const getFocusedWindowId = createSelector(
+export const getFocusedWindowId = createSelector(
   [getWorkspace],
   ({ focusedWindowId }) => focusedWindowId,
 );
