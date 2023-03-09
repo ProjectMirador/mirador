@@ -4,7 +4,6 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { AnnotationManifestsAccordion } from '../components/AnnotationManifestsAccordion';
-import * as actions from '../state/actions';
 import { getConfig } from '../state/selectors';
 
 /** For connect */
@@ -18,8 +17,7 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
  * @private
  */
 const mapDispatchToProps = {
-  addResource: actions.addResource,
-  addWindow: actions.addWindow,
+
 };
 
 /** For withStyles */
