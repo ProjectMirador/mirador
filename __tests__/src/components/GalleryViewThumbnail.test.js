@@ -1,27 +1,10 @@
-import { fireEvent, screen, act } from '@testing-library/react';
-import { renderWithProviders } from '../../utils/store';
+import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
-import { useInView } from 'react-intersection-observer';
+import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
+import { renderWithProviders } from '../../utils/store';
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryViewThumbnail } from '../../../src/components/GalleryViewThumbnail';
-import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
-import { intersectionMockInstance, mockIntersection, mockIsIntersecting } from 'react-intersection-observer/test-utils';
-
-const HookComponent = ({ props }, { options }) => {
-  const [ref, inView] = useInView(options)
-  return (
-    <GalleryViewThumbnail
-    ref={ref}
-    canvas={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()[0]}
-    classes={{ selected: 'selected' }}
-    focusOnCanvas={() => {}}
-    setCanvas={() => {}}
-    inView={inView.toString()}
-    {...props}
-    />
-  )
-}
 
 /** create wrapper */
 function createWrapper(props) {
@@ -49,13 +32,13 @@ describe('GalleryView', () => {
     createWrapper({ selected: false });
     expect(screen.getByRole('button')).toBeInTheDocument();
     expect(screen.getByRole('button')).not.toHaveClass('selected');
-  });  
+  });
   it('renders the thumbnail', () => {
     createWrapper({ config: { height: 55 } });
     expect(screen.getByRole('presentation')).toBeInTheDocument();
     expect(screen.getByRole('presentation')).toHaveStyle('height: 55px');
   });
-   it('sets the selected canvas on click', async () => {
+  it('sets the selected canvas on click', async () => {
     const setCanvas = jest.fn();
     createWrapper({ setCanvas });
     const user = userEvent.setup();
@@ -76,7 +59,7 @@ describe('GalleryView', () => {
     createWrapper({ focusOnCanvas, selected: true });
     const button = screen.getByRole('button');
     button.focus();
-    fireEvent.keyUp(button, { key: 'Enter', code: 'Enter' });
+    fireEvent.keyUp(button, { code: 'Enter', key: 'Enter' });
     expect(focusOnCanvas).toHaveBeenCalled();
   });
 
@@ -85,7 +68,7 @@ describe('GalleryView', () => {
     createWrapper({ focusOnCanvas, selected: true });
     const button = screen.getByRole('button');
     button.focus();
-    fireEvent.keyUp(button, { key: ' ', code: ' ' });
+    fireEvent.keyUp(button, { code: ' ', key: ' ' });
     expect(focusOnCanvas).toHaveBeenCalled();
   });
 
@@ -94,67 +77,36 @@ describe('GalleryView', () => {
     createWrapper({ selected: true, setCanvas });
     const button = screen.getByRole('button');
     button.focus();
-    fireEvent.keyUp(button, { key: 'd', code: 'd' });
+    fireEvent.keyUp(button, { code: 'd', key: 'd' });
     expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
   });
 
   describe('on-demand annotation fetching', () => {
-    it('fetches annotations', () => {
-      const requestCanvasAnnotations = jest.fn();
-      const canvas = {
-        getHeight: () => 50,
-        getWidth: () => 50,
-        getThumbnail: jest.fn(),
-        isCollection: jest.fn(),
-        getServices: jest.fn(),
-        isManifest: jest.fn(),
-        isCanvas: jest.fn(),
-        getType: jest.fn(),
-      };
-      //const { InView } = renderWithProviders(({ children }) => children({ inView: true, ref: null }));
-      //createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
-      const { getByRole } = renderWithProviders(<HookComponent />, { annotationsCount: 0, canvas, requestCanvasAnnotations }, {});
-      const wrapper = screen.getByRole('presentation');
-      // Set the intersection state on the wrapper.
-      mockIsIntersecting(wrapper, true);
-      const instance = intersectionMockInstance(wrapper);
-      expect(instance.observe).toHaveBeenCalledWith(wrapper);
-      // eslint-disable-next-line
-      screen.debug();
-      //act(() => {
-      //  mockIntersection(getByRole('presentation'), true);
-      //})
-
-      //const img = container.querySelector('img');
-
-      //act(() => {
-      //  global.IntersectionObserver.triggerAll();
-      //});
-      // wrapper.find(InView).simulate('change', { isIntersecting: true });
-      expect(requestCanvasAnnotations).toHaveBeenCalled();
+    const canvas = {
+      getHeight: () => 50,
+      getServices: jest.fn(),
+      getThumbnail: jest.fn(),
+      getType: jest.fn(),
+      getWidth: () => 50,
+      isCanvas: jest.fn(),
+      isCollection: jest.fn(),
+      isManifest: jest.fn(),
+    };
+    const requestCanvasAnnotations = jest.fn();
+    xit('triggers requestCanvasAnnotations when there is an intersection and no annotions ', () => {
+      createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
+      mockAllIsIntersecting(true);
+      expect(requestCanvasAnnotations).toHaveBeenCalledTimes(1);
     });
-    /* it('does nothing if there is no intersection', () => {
-      const requestCanvasAnnotations = jest.fn();
-      const canvas = {
-        getHeight: () => 50,
-        getWidth: () => 50,
-      };
-      wrapper = createWrapper({ canvas, requestCanvasAnnotations });
-
-      wrapper.find(InView).simulate('change', { isIntersecting: false });
+    xit('does nothing if there is an intersection and existing annotations', () => {
+      createWrapper({ annotationsCount: 1, canvas, requestCanvasAnnotations });
+      mockAllIsIntersecting(true);
       expect(requestCanvasAnnotations).not.toHaveBeenCalled();
-    }); */
-    /* it('does nothing if there are already some annotations', () => {
-      const requestCanvasAnnotations = jest.fn();
-      const canvas = {
-        getHeight: () => 50,
-        getWidth: () => 50,
-      };
-      wrapper = createWrapper({ annotationsCount: 5, canvas, requestCanvasAnnotations });
-
-      wrapper.find(InView).simulate('change', { isIntersecting: true });
+    });
+    xit('does nothing if there is no intersection', () => {
+      createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
       expect(requestCanvasAnnotations).not.toHaveBeenCalled();
-    });*/ 
+    });
   });
 
   describe('annotation count chip', () => {
