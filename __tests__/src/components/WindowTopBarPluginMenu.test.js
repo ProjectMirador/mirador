@@ -36,10 +36,9 @@ describe('WindowTopBarPluginMenu', () => {
 
   describe('when there are plugins present', () => {
     let user;
-    let wrapper;
     beforeEach(() => {
       user = userEvent.setup();
-      wrapper = renderWithProviders(<Subject PluginComponents={[mockComponentA]} />);
+      renderWithProviders(<Subject PluginComponents={[mockComponentA]} />);
     });
 
     it('renders the Button', async () => {
