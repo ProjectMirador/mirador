@@ -33,6 +33,16 @@ describe('GalleryView', () => {
     expect(screen.getByRole('button')).toBeInTheDocument();
     expect(screen.getByRole('button')).not.toHaveClass('selected');
   });
+  it('sets a mirador-current-canvas-grouping class when the canvas is selected', () => {
+    createWrapper({ selected: true });
+    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toHaveClass('selected');
+  });
+  it('does not set a mirador-current-canvas-grouping class when the canvas is not selected', () => {
+    createWrapper({ selected: false });
+    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button')).not.toHaveClass('selected');
+  });  
   it('renders the thumbnail', () => {
     createWrapper({ config: { height: 55 } });
     expect(screen.getByRole('presentation')).toBeInTheDocument();
