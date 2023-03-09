@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import {
@@ -6,8 +6,6 @@ import {
 } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
-import ns from '../config/css-ns';
-import ErrorIcon from '@material-ui/icons/ErrorOutlineSharp';
 
 /**
  * AnnotationManifestsItem
@@ -27,7 +25,9 @@ export class AnnotationManifestsItem extends Component {
       fetchManifest, manifestId, ready, isFetching, error, provider,
     } = this.props;
 
-    if (!ready && !error && !isFetching && provider !== 'file') fetchManifest(manifestId);
+    if (!ready && !error && !isFetching && provider !== 'file') {
+      fetchManifest(manifestId);
+    }
   }
 
   /** */
@@ -45,7 +45,7 @@ export class AnnotationManifestsItem extends Component {
 
     if (error) {
       return (
-        <Typography>{t('resourceError', { manifestId })}</Typography>
+        <Typography className={classes.errorMessage}>{t('resourceError', { manifestId })}</Typography>
       );
     }
 
@@ -81,7 +81,7 @@ export class AnnotationManifestsItem extends Component {
                   { description }
                 </Typography>
               )
-}
+            }
           </CardContent>
         </CardActionArea>
         <CardActions>

@@ -42,6 +42,9 @@ const mapDispatchToProps = {
 
 /** For withStyles */
 const styles = theme => ({
+  errorMessage: {
+    color: theme.palette.error.main,
+  },
   logo: {
     height: '2.5rem',
     maxWidth: '100%',
