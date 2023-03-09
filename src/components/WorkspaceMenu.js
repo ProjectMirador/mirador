@@ -66,11 +66,12 @@ export class WorkspaceMenu extends Component {
     const {
       container,
       handleClose,
-      anchorEl,
       showThemePicker,
       isWorkspaceAddVisible,
       t,
       showZoomControls,
+      toggleZoomControls,
+      ...menuProps
     } = this.props;
 
     const {
@@ -82,9 +83,7 @@ export class WorkspaceMenu extends Component {
     return (
       <>
         <Menu
-          id="workspace-menu"
           container={container?.current}
-          anchorEl={anchorEl}
           anchorOrigin={{
             horizontal: 'right',
             vertical: 'top',
@@ -93,8 +92,8 @@ export class WorkspaceMenu extends Component {
             horizontal: 'left',
             vertical: 'top',
           }}
-          open={Boolean(anchorEl)}
           onClose={handleClose}
+          {...menuProps}
         >
           <MenuItem
             aria-haspopup="true"
@@ -148,7 +147,6 @@ export class WorkspaceMenu extends Component {
 }
 
 WorkspaceMenu.propTypes = {
-  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
   isWorkspaceAddVisible: PropTypes.bool,
@@ -159,7 +157,6 @@ WorkspaceMenu.propTypes = {
 };
 
 WorkspaceMenu.defaultProps = {
-  anchorEl: null,
   container: null,
   isWorkspaceAddVisible: false,
   showThemePicker: false,
