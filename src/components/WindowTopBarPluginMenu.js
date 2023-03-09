@@ -16,6 +16,7 @@ export class WindowTopBarPluginMenu extends Component {
     super(props);
     this.state = {
       anchorEl: null,
+      open: false,
     };
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.handleMenuClose = this.handleMenuClose.bind(this);
@@ -27,6 +28,7 @@ export class WindowTopBarPluginMenu extends Component {
   handleMenuClick(event) {
     this.setState({
       anchorEl: event.currentTarget,
+      open: true,
     });
   }
 
@@ -36,6 +38,7 @@ export class WindowTopBarPluginMenu extends Component {
   handleMenuClose() {
     this.setState({
       anchorEl: null,
+      open: false,
     });
   }
 
@@ -46,8 +49,8 @@ export class WindowTopBarPluginMenu extends Component {
     const {
       classes, container, PluginComponents, t, windowId, menuIcon,
     } = this.props;
-    const { anchorEl } = this.state;
-
+    const { anchorEl, open } = this.state;
+    const windowPluginMenuId = `window-plugin-menu_${windowId}`;
     if (!PluginComponents || PluginComponents.length === 0) return null;
 
     return (
@@ -55,15 +58,15 @@ export class WindowTopBarPluginMenu extends Component {
         <MiradorMenuButton
           aria-haspopup="true"
           aria-label={t('windowPluginMenu')}
-          aria-owns={anchorEl ? `window-plugin-menu_${windowId}` : undefined}
-          className={anchorEl ? classes.ctrlBtnSelected : null}
+          aria-owns={open ? windowPluginMenuId : undefined}
+          className={open ? classes.ctrlBtnSelected : null}
           onClick={this.handleMenuClick}
         >
           {menuIcon}
         </MiradorMenuButton>
 
         <Menu
-          id={`window-plugin-menu_${windowId}`}
+          id={windowPluginMenuId}
           container={container?.current}
           anchorEl={anchorEl}
           anchorOrigin={{
@@ -75,7 +78,7 @@ export class WindowTopBarPluginMenu extends Component {
             vertical: 'top',
           }}
           getContentAnchorEl={null}
-          open={Boolean(anchorEl)}
+          open={open}
           onClose={() => this.handleMenuClose()}
         >
           <PluginHook handleClose={() => this.handleMenuClose()} {...this.props} />
@@ -86,11 +89,13 @@ export class WindowTopBarPluginMenu extends Component {
 }
 
 WindowTopBarPluginMenu.propTypes = {
+  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   classes: PropTypes.shape({
     ctrlBtnSelected: PropTypes.string,
   }),
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   menuIcon: PropTypes.element,
+  open: PropTypes.bool,
   PluginComponents: PropTypes.arrayOf(
     PropTypes.node,
   ),
@@ -99,8 +104,10 @@ WindowTopBarPluginMenu.propTypes = {
 };
 
 WindowTopBarPluginMenu.defaultProps = {
+  anchorEl: null,
   classes: {},
   container: null,
   menuIcon: <MoreVertIcon />,
+  open: false,
   PluginComponents: [],
 };

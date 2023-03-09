@@ -1,10 +1,10 @@
-import { shallow } from 'enzyme';
-import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { AnnotationSettings } from '../../../src/components/AnnotationSettings';
 
 /** */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <AnnotationSettings
       displayAll={false}
       displayAllDisabled={false}
@@ -17,17 +17,18 @@ function createWrapper(props) {
 }
 
 describe('AnnotationSettings', () => {
-  let wrapper;
   const toggleAnnotationDisplayMock = jest.fn();
 
   it('renders a MiradorMenuButton', () => {
-    wrapper = createWrapper();
-    expect(wrapper.find(MiradorMenuButton).length).toBe(1);
+    createWrapper();
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
-  it('calls the toggleAnnotationDisplay prop function on click', () => {
-    wrapper = createWrapper({ toggleAnnotationDisplay: toggleAnnotationDisplayMock });
-    wrapper.find(MiradorMenuButton).simulate('click');
+  it('calls the toggleAnnotationDisplay prop function on click', async () => {
+    const user = userEvent.setup();
+
+    createWrapper({ toggleAnnotationDisplay: toggleAnnotationDisplayMock });
+    await user.click(screen.getByRole('button'));
 
     expect(toggleAnnotationDisplayMock).toHaveBeenCalledTimes(1);
   });

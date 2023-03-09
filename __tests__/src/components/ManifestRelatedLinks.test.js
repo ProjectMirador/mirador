@@ -1,15 +1,11 @@
-import { shallow } from 'enzyme';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import CollapsibleSection from '../../../src/containers/CollapsibleSection';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { ManifestRelatedLinks } from '../../../src/components/ManifestRelatedLinks';
 
 describe('ManifestRelatedLinks', () => {
-  let wrapper;
-
   describe('when metadata is present', () => {
     beforeEach(() => {
-      wrapper = shallow(
+      render(
         <ManifestRelatedLinks
           classes={{}}
           id="xyz"
@@ -52,110 +48,44 @@ describe('ManifestRelatedLinks', () => {
       );
     });
 
-    it('renders the content in a CollapsibleSection', () => {
-      expect(wrapper.find(CollapsibleSection).length).toBe(1);
+    it('renders the content in a CollapsibleSection', async () => {
+      const user = userEvent.setup();
+      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('related');
+      expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(/links/);
+
+      await user.click(screen.getByRole('button', { name: 'collapseSection' }));
+
+      expect(screen.queryByRole('heading', { level: 5 })).not.toBeInTheDocument();
     });
 
     it('renders manifest homepage information', () => {
-      expect(
-        wrapper.find(Typography).at(1)
-          .matchesElement(
-            <Typography component="dt">iiif_homepage</Typography>,
-          ),
-      ).toBe(true);
+      expect(screen.getByText('iiif_homepage').tagName).toEqual('DT');
 
-      expect(
-        wrapper.find(Typography).at(2)
-          .matchesElement(
-            <Typography component="dd"><Link href="http://example.com/">Home page</Link></Typography>,
-          ),
-      ).toBe(true);
+      expect(screen.getByRole('link', { name: 'Home page' })).toHaveAttribute('href', 'http://example.com/');
     });
 
     it('renders manifest renderings information', () => {
-      expect(
-        wrapper.find(Typography).at(3)
-          .matchesElement(
-            <Typography component="dt">iiif_renderings</Typography>,
-          ),
-      ).toBe(true);
-
-      expect(
-        wrapper.find(Typography).at(4)
-          .matchesElement(
-            <Typography component="dd">
-              <Link href="http://example.com/pdf">PDF Version</Link>
-            </Typography>,
-          ),
-      ).toBe(true);
+      expect(screen.getByText('iiif_renderings').tagName).toEqual('DT');
+      expect(screen.getByRole('link', { name: 'PDF Version' })).toHaveAttribute('href', 'http://example.com/pdf');
     });
 
     it('renders related information', () => {
-      expect(
-        wrapper.find(Typography).at(5)
-          .matchesElement(
-            <Typography component="dt">iiif_related</Typography>,
-          ),
-      ).toBe(true);
-
-      expect(
-        wrapper.find(Typography).at(6)
-          .matchesElement(
-            <Typography component="dd"><Link href="http://example.com/related">http://example.com/related</Link></Typography>,
-          ),
-      ).toBe(true);
-
-      expect(
-        wrapper.find(Typography).at(7)
-          .matchesElement(
-            <Typography component="dd">
-              <Link href="http://example.com/video">Video</Link>
-              <Typography>(video/ogg)</Typography>
-            </Typography>,
-          ),
-      ).toBe(true);
+      expect(screen.getByText('iiif_related').tagName).toEqual('DT');
+      expect(screen.getByRole('link', { name: 'http://example.com/related' })).toHaveAttribute('href', 'http://example.com/related');
+      expect(screen.getByRole('link', { name: 'Video' })).toHaveAttribute('href', 'http://example.com/video');
+      expect(screen.getByText('(video/ogg)')).toBeInTheDocument();
     });
 
     it('renders manifest seeAlso information', () => {
-      expect(
-        wrapper.find(Typography).at(9)
-          .matchesElement(
-            <Typography component="dt">iiif_seeAlso</Typography>,
-          ),
-      ).toBe(true);
-
-      expect(
-        wrapper.find(Typography).at(10)
-          .matchesElement(
-            <Typography component="dd">
-              <Link href="http://example.com/a">A</Link>
-              <Typography>(text/html)</Typography>
-            </Typography>,
-          ),
-      ).toBe(true);
-
-      expect(
-        wrapper.find(Typography).at(12)
-          .matchesElement(
-            <Typography component="dd"><Link href="http://example.com/b">http://example.com/b</Link></Typography>,
-          ),
-      ).toBe(true);
+      expect(screen.getByText('iiif_seeAlso').tagName).toEqual('DT');
+      expect(screen.getByRole('link', { name: 'A' })).toHaveAttribute('href', 'http://example.com/a');
+      expect(screen.getByText('(text/html)')).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: 'http://example.com/b' })).toHaveAttribute('href', 'http://example.com/b');
     });
 
     it('renders manifest links', () => {
-      expect(
-        wrapper.find(Typography).at(13)
-          .matchesElement(
-            <Typography component="dt">iiif_manifest</Typography>,
-          ),
-      ).toBe(true);
-
-      expect(
-        wrapper.find(Typography).at(14)
-          .matchesElement(
-            <Typography component="dd"><Link href="http://example.com/">http://example.com/</Link></Typography>,
-          ),
-      ).toBe(true);
+      expect(screen.getByText('iiif_manifest').tagName).toEqual('DT');
+      expect(screen.getByRole('link', { name: 'http://example.com/' })).toHaveAttribute('href', 'http://example.com/');
     });
   });
 });

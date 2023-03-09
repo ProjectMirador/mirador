@@ -147,6 +147,7 @@ export class OpenSeadragonViewer extends Component {
       viewer.innerTracker.moveHandler = null;
     }
     viewer.removeAllHandlers();
+    this.onCanvasMouseMove.cancel();
     this.apiRef.current = undefined;
   }
 

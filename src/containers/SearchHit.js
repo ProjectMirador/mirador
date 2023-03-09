@@ -31,6 +31,7 @@ const mapStateToProps = (state, {
       windowId,
     },
   );
+
   const annotationLabel = getResourceAnnotationLabel(state, { annotationUri: realAnnoId, companionWindowId, windowId });
   const selectedCanvasIds = getVisibleCanvasIds(state, { windowId });
 
@@ -75,7 +76,7 @@ const styles = theme => ({
   focused: {},
   hitCounter: {
     ...theme.typography.subtitle2,
-    backgroundColor: theme.palette.hitCounter.default,
+    backgroundColor: theme.palette.hitCounter?.default,
     height: 30,
     marginRight: theme.spacing(1),
     verticalAlign: 'inherit',
@@ -91,17 +92,17 @@ const styles = theme => ({
   listItem: {
     '&$adjacent': {
       '& $hitCounter': {
-        backgroundColor: theme.palette.highlights.secondary,
+        backgroundColor: theme.palette.highlights?.secondary,
       },
       '&$windowSelected': {
         '& $hitCounter': {
-          backgroundColor: theme.palette.highlights.primary,
+          backgroundColor: theme.palette.highlights?.primary,
         },
       },
     },
     '&$windowSelected': {
       '& $hitCounter': {
-        backgroundColor: theme.palette.highlights.primary,
+        backgroundColor: theme.palette.highlights?.primary,
       },
       '&$focused': {
         '&:hover': {
