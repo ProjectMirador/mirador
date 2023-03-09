@@ -68,17 +68,17 @@ const mapStateToProps = (state, { windowId }) => ({
 /** */
 const style = theme => ({
   badge: {
-    backgroundColor: theme.palette.notification.main,
+    backgroundColor: theme.palette.notification?.main,
   },
   tab: {
     '&:active': {
-      backgroundColor: theme.palette.action.active,
+      backgroundColor: theme.palette.action?.active,
     },
     '&:focus': {
       '@media (hover: none)': {
         backgroundColor: 'transparent',
       },
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.action?.hover,
       textDecoration: 'none',
       // Reset on touch devices, it doesn't add specificity
     },
@@ -86,7 +86,7 @@ const style = theme => ({
       '@media (hover: none)': {
         backgroundColor: 'transparent',
       },
-      backgroundColor: theme.palette.action.hover,
+      backgroundColor: theme.palette.action?.hover,
       textDecoration: 'none',
       // Reset on touch devices, it doesn't add specificity
     },
@@ -95,7 +95,7 @@ const style = theme => ({
     minWidth: 'auto',
   },
   tabSelected: {
-    borderRight: `2px solid ${theme.palette.primary.main}`,
+    borderRight: `2px solid ${theme.palette.primary?.main}`,
   },
   tabsFlexContainer: {
     flexDirection: 'column',
