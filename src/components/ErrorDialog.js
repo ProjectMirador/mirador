@@ -31,7 +31,7 @@ export class ErrorDialog extends Component {
         <DialogTitle id="error-dialog-title" disableTypography>
           <Typography variant="h2">{t('errorDialogTitle')}</Typography>
         </DialogTitle>
-        <DialogContent disableTypography>
+        <DialogContent>
           <DialogContentText variant="body2" noWrap color="inherit">
             {`${error.message}`}
           </DialogContentText>
