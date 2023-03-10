@@ -1,14 +1,11 @@
-import { shallow } from 'enzyme';
-import Slide from '@material-ui/core/Slide';
-import ArrowLeftIcon from '@material-ui/icons/ArrowLeftSharp';
-import ArrowRightIcon from '@material-ui/icons/ArrowRightSharp';
-import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { renderWithProviders } from '../../utils/store';
 import { CompanionArea } from '../../../src/components/CompanionArea';
-import CompanionWindowFactory from '../../../src/containers/CompanionWindowFactory';
 
 /** */
 function createWrapper(props) {
-  return shallow(
+  return renderWithProviders(
     <CompanionArea
       classes={{ horizontal: 'horizontal' }}
       direction="ltr"
@@ -19,109 +16,85 @@ function createWrapper(props) {
       t={key => key}
       {...props}
     />,
+    { preloadedState: { companionWindows: { baz: { content: 'attribution' }, foo: { content: 'info' } } } },
   );
 }
 
 describe('CompanionArea', () => {
   it('should render all <CompanionWindow>', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find(CompanionWindowFactory).length).toBe(2);
-    expect(wrapper.find(Slide).prop('direction')).toBe('left');
-  });
+    createWrapper();
 
-  it('when rtl, the left slide should be from the right', () => {
-    const wrapper = createWrapper({
-      direction: 'rtl',
-    });
-    expect(wrapper.find(CompanionWindowFactory).length).toBe(2);
-    expect(wrapper.find(Slide).prop('direction')).toBe('right');
-  });
-
-  it('when rtl, the right slide should be from the left', () => {
-    const wrapper = createWrapper({
-      direction: 'rtl',
-      position: 'left',
-    });
-    expect(wrapper.find(CompanionWindowFactory).length).toBe(2);
-    expect(wrapper.find(Slide).prop('direction')).toBe('left');
+    expect(screen.getAllByRole('complementary')).toHaveLength(2);
   });
 
   it('should add the appropriate classes when the companion area fills the full width', () => {
-    const wrapper = createWrapper({ position: 'bottom' });
-    expect(wrapper.find('div.horizontal').length).toBe(2);
-    expect(wrapper.find(Slide).prop('direction')).toBe('up');
+    const { container } = createWrapper({ position: 'bottom' });
+
+    expect(container.querySelector('.mirador-companion-area-bottom')).toHaveClass('horizontal'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
 
-  it('should pass correct props to the <CompanionWindow> components', () => {
-    const wrapper = createWrapper();
-    const props = wrapper.find(CompanionWindowFactory).at(0).props();
-    expect(props.id).toBe('foo');
-    expect(props.windowId).toBe('abc123');
+  it('renders the appropriate <CompanionWindow> components', () => {
+    createWrapper();
+
+    expect(screen.getByRole('heading', { name: 'aboutThisItem' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'attributionTitle' })).toBeInTheDocument();
   });
 
-  it('has a toggle to show the companion area window in the left position', () => {
+  it('has a toggle to show the companion area window in the left position', async () => {
     const setCompanionAreaOpen = jest.fn();
+    const user = userEvent.setup();
 
-    const wrapper = createWrapper({
+    createWrapper({
       companionAreaOpen: false,
       position: 'left',
       setCompanionAreaOpen,
       sideBarOpen: true,
     });
 
-    expect(wrapper.find(MiradorMenuButton).length).toBe(1);
-    expect(wrapper.find(MiradorMenuButton).first().children(ArrowRightIcon).length).toBe(1);
-    expect(wrapper.find(Slide).prop('direction')).toBe('right');
-    expect(wrapper.find(MiradorMenuButton).prop('aria-expanded')).toBe(false);
-    expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
-    expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('none'); // eslint-disable-line jest-dom/prefer-to-have-style
+    expect(screen.getByRole('button', { name: 'expandSidePanel' })).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
 
-    wrapper.find(MiradorMenuButton).first().props().onClick(); // Trigger the onClick prop
+    await user.click(screen.getByRole('button', { name: 'expandSidePanel' }));
 
     expect(setCompanionAreaOpen).toHaveBeenCalledWith('abc123', true);
   });
 
-  it('has a toggle to hide the companion area window in the left position', () => {
+  it('has a toggle to hide the companion area window in the left position', async () => {
     const setCompanionAreaOpen = jest.fn();
+    const user = userEvent.setup();
 
-    const wrapper = createWrapper({
+    createWrapper({
       companionAreaOpen: true,
       position: 'left',
       setCompanionAreaOpen,
       sideBarOpen: true,
     });
 
-    expect(wrapper.find(MiradorMenuButton).length).toBe(1);
-    expect(wrapper.find(MiradorMenuButton).first().children(ArrowLeftIcon).length).toBe(1);
-    expect(wrapper.find(MiradorMenuButton).prop('aria-expanded')).toBe(true);
-
-    expect(wrapper.find('div.mirador-companion-windows').length).toBe(1);
-    expect(wrapper.find('div.mirador-companion-windows').props().style.display).toBe('flex'); // eslint-disable-line jest-dom/prefer-to-have-style
-
-    wrapper.find(MiradorMenuButton).first().props().onClick(); // Trigger the onClick prop
+    expect(screen.getByRole('button', { name: 'collapseSidePanel' })).toHaveAttribute('aria-expanded', 'true');
+    await user.click(screen.getByRole('button', { name: 'collapseSidePanel' }));
 
     expect(setCompanionAreaOpen).toHaveBeenCalledWith('abc123', false);
   });
 
   it('does not show a toggle if the sidebar is collapsed', () => {
-    const wrapper = createWrapper({
+    createWrapper({
       companionAreaOpen: true,
       position: 'left',
       setCompanionAreaOpen: () => {},
       sideBarOpen: false,
     });
 
-    expect(wrapper.find(MiradorMenuButton).length).toBe(0);
+    expect(screen.queryByRole('button', { name: 'collapseSidePanel' })).not.toBeInTheDocument();
   });
 
   it('does not show a toggle in other positions', () => {
-    const wrapper = createWrapper({
+    createWrapper({
       companionAreaOpen: true,
       position: 'whatever',
       setCompanionAreaOpen: () => {},
       sideBarOpen: true,
     });
 
-    expect(wrapper.find(MiradorMenuButton).length).toBe(0);
+    expect(screen.queryByRole('button', { name: 'collapseSidePanel' })).not.toBeInTheDocument();
   });
 });
