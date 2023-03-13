@@ -5,8 +5,7 @@ describe('Annotations in Mirador', () => {
     await page.goto('http://127.0.0.1:4488/__tests__/integration/mirador/');
     await expect(page).toMatchElement('.mirador-window[aria-label="Window: Self-Portrait Dedicated to Paul Gauguin"]', { polling: 'mutation', timeout: 5000 });
   });
-
-  xit('stores annotations in state by canvasId', async () => {
+  it('stores annotations in state by canvasId', async () => {
     const annotations = await page.evaluate(() => (
       miradorInstance.store.getState().annotations
     ));
@@ -14,7 +13,7 @@ describe('Annotations in Mirador', () => {
   });
 
   // Note that this test is tied to a specific record showing up by default (299843.json)
-  xit('renders annotation in a companion window/sidebar panel', async () => {
+  it('renders annotation in a companion window/sidebar panel', async () => {
     const windowId = await page.evaluate(() => {
       const { windows } = miradorInstance.store.getState();
 
