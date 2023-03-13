@@ -30,6 +30,7 @@ class WorkspaceElastic extends Component {
     return (
       <div style={{ height: '100%', position: 'relative', width: '100%' }}>
         <ResizeObserver
+          onReflow={() => {}}
           onResize={(rect) => { setWorkspaceViewportDimensions(rect); }}
         />
 

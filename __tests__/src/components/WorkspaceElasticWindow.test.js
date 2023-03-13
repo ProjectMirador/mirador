@@ -1,27 +1,33 @@
-import { shallow } from 'enzyme';
-import { Rnd } from 'react-rnd';
+import userEvent from '@testing-library/user-event';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { renderWithProviders } from '../../utils/store';
 import WorkspaceElasticWindow from '../../../src/components/WorkspaceElasticWindow';
 
 /** create wrapper */
 function createWrapper(props) {
-  return shallow(
-    <WorkspaceElasticWindow
-      layout={{}}
-      workspace={{
-        focusedWindowId: '2',
-        height: 5000,
-        viewportPosition: {
-          x: 20,
-          y: 20,
-        },
-        width: 5000,
-      }}
-      updateElasticWindowLayout={() => {}}
-      {...props}
-    />,
+  return renderWithProviders(
+    <DndProvider backend={HTML5Backend}>
+      <WorkspaceElasticWindow
+        layout={{}}
+        workspace={{
+          focusedWindowId: '2',
+          height: 5000,
+          viewportPosition: {
+            x: 20,
+            y: 20,
+          },
+          width: 5000,
+        }}
+        updateElasticWindowLayout={() => {}}
+        {...props}
+      />
+    </DndProvider>,
+    { preloadedState: { companionWindows: {}, windows: { 1: { companionWindowIds: [] } }, workspace: {} } },
   );
 }
 
+/* eslint-disable testing-library/no-container, testing-library/no-node-access */
 describe('WorkspaceElasticWindow', () => {
   const layout = {
     height: 200,
@@ -31,72 +37,99 @@ describe('WorkspaceElasticWindow', () => {
     y: 20,
   };
 
-  let wrapper;
-  beforeEach(() => {
-    wrapper = createWrapper({ layout });
-  });
   it('should render properly with an initialValue', () => {
-    expect(wrapper
-      .find(Rnd)
-      .prop('size'))
-      .toEqual({
-        height: 200,
-        width: 200,
-      });
-    expect(wrapper
-      .find(Rnd)
-      .prop('position'))
-      .toEqual({
-        x: 2520,
-        y: 2520,
-      });
+    const { container } = createWrapper({ layout });
+    const el = container.firstChild;
+
+    expect(el).toHaveClass('react-draggable');
+    expect(el).toHaveStyle({ height: '200px', transform: 'translate(5040px,5040px)', width: '200px' });
   });
   describe('focused window', () => {
     it('adds a class to the focused window', () => {
-      wrapper = createWrapper({ focused: true, layout });
-      expect(wrapper.find(Rnd).hasClass('mirador-workspace-focused-window'));
+      const { container } = createWrapper({ classes: { focused: 'focused-window' }, focused: true, layout });
+      const el = container.firstChild;
+
+      expect(el).toHaveClass('focused-window');
     });
   });
   describe('window behaviour', () => {
-    it('when windows are dragged', () => {
+    it('when windows are dragged', async () => {
+      const user = userEvent.setup();
       const mockDragStop = jest.fn();
-      wrapper = createWrapper({
+      const { container } = createWrapper({
         layout,
         updateElasticWindowLayout: mockDragStop,
       });
-      wrapper
-        .find(Rnd)
-        .props()
-        .onDragStop('myevent', {
-          x: 200,
-          y: 200,
-        });
+
+      const el = container.querySelector('.mirador-window-top-bar');
+
+      const coords = {
+        clientX: 200,
+        clientY: 200,
+      };
+
+      await user.pointer([
+        { keys: '[MouseLeft>]', target: el },
+        { coords, keys: '[/MouseLeft]', target: el },
+      ]);
+
       expect(mockDragStop).toHaveBeenCalledWith('1', {
-        x: -2300,
-        y: -2300,
+        x: 20 + 200,
+        y: 20 + 200,
       });
     });
-    it('when windows are resized', () => {
+    it('when windows are resized', async () => {
+      const user = userEvent.setup();
       const mockOnResize = jest.fn();
-      wrapper = createWrapper({
+      const { container } = createWrapper({
         layout,
         updateElasticWindowLayout: mockOnResize,
       });
-      wrapper
-        .find(Rnd)
-        .props()
-        .onResize('myevent', 'direction', {
-          style: {
-            height: '200px',
-            width: '400px',
-          },
-        }, {}, { x: 0, y: 0 });
-      expect(mockOnResize).toHaveBeenCalledWith('1', {
+
+      container.getBoundingClientRect = () => ({
+        left: -2500,
+        offsetHeight: 5000,
+        offsetWidth: 5000,
+        top: -2500,
+      });
+
+      const el = container.querySelector('[style="position: absolute; user-select: none; width: 20px; height: 20px; right: -10px; bottom: -10px; cursor: se-resize;"]');
+
+      const oldCoords = {
+        clientX: 0,
+        clientY: 0,
+        layerX: 0,
+        layerY: 0,
+        movementX: 0,
+        movementY: 0,
+        offsetX: 0,
+        offsetY: 0,
+        x: 0,
+        y: 0,
+      };
+
+      const coords = {
+        clientX: 400,
+        clientY: 200,
+        layerX: 100,
+        layerY: 100,
+        movementX: 200,
+        movementY: 200,
+        offsetX: 300,
+        offsetY: 300,
+        x: 400,
+        y: 400,
+      };
+
+      await user.pointer([
+        { coords: oldCoords, keys: '[MouseLeft>]', target: el },
+        { coords },
+        { coords, keys: '[/MouseLeft]', target: el },
+      ]);
+      expect(mockOnResize).toHaveBeenCalledWith('1', expect.objectContaining({
         height: 200,
         width: 400,
-        x: -2500,
-        y: -2500,
-      });
+      }));
     });
   });
 });
