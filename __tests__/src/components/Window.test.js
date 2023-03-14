@@ -1,60 +1,101 @@
-import { shallow } from 'enzyme';
+import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../../utils/store';
 import { Window } from '../../../src/components/Window';
-import WindowTopBar from '../../../src/containers/WindowTopBar';
-import PrimaryWindow from '../../../src/containers/PrimaryWindow';
-import IIIFAuthentication from '../../../src/containers/IIIFAuthentication';
-import ErrorContent from '../../../src/containers/ErrorContent';
 
 /** create wrapper */
-function createWrapper(props, context) {
-  return shallow(
+function createWrapper(props, state, renderOptions) {
+  return renderWithProviders(
     <Window
-      windowId="123"
+      windowId="xyz"
       manifestId="foo"
       classes={{}}
       t={k => k}
       {...props}
     />,
-    { context },
+    {
+      preloadedState: {
+        windows: {
+          xyz: {
+            collectionDialogOn: false,
+            companionWindowIds: [],
+          },
+        },
+      },
+    },
+    { renderOptions },
   );
 }
 
 describe('Window', () => {
-  let wrapper;
   it('should render outer element', () => {
-    wrapper = createWrapper();
-    expect(wrapper.find('.mirador-window')).toHaveLength(1);
+    createWrapper();
+    expect(screen.getByLabelText('window')).toHaveClass('mirador-window');
   });
   it('should render <WindowTopBar>', () => {
-    wrapper = createWrapper();
-    expect(wrapper.find(WindowTopBar)).toHaveLength(1);
+    createWrapper();
+    expect(screen.getByRole('navigation', { accessibleName: 'windowNavigation' })).toBeInTheDocument();
   });
   it('should render <PrimaryWindow>', () => {
-    wrapper = createWrapper();
-    expect(wrapper.find(PrimaryWindow)).toHaveLength(1);
+    createWrapper();
+    expect(document.querySelector('.mirador-primary-window')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
   });
-  it('renders <WindowAuthenticationBar>', () => {
-    wrapper = createWrapper();
-    expect(wrapper.find(IIIFAuthentication)).toHaveLength(1);
+  // See ErrorContent.test.js for futher testing of this functionality
+  it('renders alert box when there is an error', async () => {
+    createWrapper({ manifestError: 'Invalid JSON' });
+    expect(screen.getByRole('alert')).toBeInTheDocument();
   });
-  it('renders manifest error', () => {
-    wrapper = createWrapper({ manifestError: 'Invalid JSON' });
-    expect(wrapper.find(ErrorContent)).toHaveLength(1);
-    expect(wrapper.find(ErrorContent).prop('error')).toEqual({ stack: 'Invalid JSON' });
-  });
-
   describe('when workspaceType is mosaic', () => {
-    xit('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {
+    it('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {
       const connectDragSource = jest.fn(component => component);
-      wrapper = createWrapper({ windowDraggable: true, workspaceType: 'mosaic' }, { mosaicWindowActions: { connectDragSource } });
-      expect(wrapper.find(WindowTopBar)).toHaveLength(1);
+      renderWithProviders(
+        <MosaicWindowContext.Provider value={{ mosaicWindowActions: { connectDragSource } }}>
+          <Window
+            windowId="xyz"
+            manifestId="foo"
+            classes={{}}
+            t={k => k}
+            windowDraggable
+            workspaceType="mosaic"
+          />
+        </MosaicWindowContext.Provider>,
+        {
+          preloadedState: {
+            windows: {
+              xyz: {
+                collectionDialogOn: false,
+                companionWindowIds: [],
+              },
+            },
+          },
+        },
+      );
       expect(connectDragSource).toHaveBeenCalled();
     });
-
     it('does not call the context mosaicWindowActions connectDragSource when the windowDraggable is set to false', () => {
       const connectDragSource = jest.fn(component => component);
-      wrapper = createWrapper({ windowDraggable: false, workspaceType: 'mosaic' }, { mosaicWindowActions: { connectDragSource } });
-      expect(wrapper.find(WindowTopBar)).toHaveLength(1);
+      renderWithProviders(
+        <MosaicWindowContext.Provider value={{ mosaicWindowActions: { connectDragSource } }}>
+          <Window
+            windowId="xyz"
+            manifestId="foo"
+            classes={{}}
+            t={k => k}
+            windowDraggable={false}
+            workspaceType="mosaic"
+          />
+        </MosaicWindowContext.Provider>,
+        {
+          preloadedState: {
+            windows: {
+              xyz: {
+                collectionDialogOn: false,
+                companionWindowIds: [],
+              },
+            },
+          },
+        },
+      );
       expect(connectDragSource).not.toHaveBeenCalled();
     });
   });
