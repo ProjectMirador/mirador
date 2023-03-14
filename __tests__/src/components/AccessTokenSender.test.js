@@ -1,11 +1,11 @@
-import { shallow } from 'enzyme';
+import { render } from '@testing-library/react';
 import { AccessTokenSender } from '../../../src/components/AccessTokenSender';
 
 /**
  * Helper function to create a shallow wrapper around ErrorDialog
  */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <AccessTokenSender
       t={key => key}
       handleAccessTokenMessage={() => {}}
@@ -15,36 +15,28 @@ function createWrapper(props) {
 }
 
 describe('AccessTokenSender', () => {
-  let wrapper;
-
   it('renders nothing if there is no url', () => {
-    wrapper = createWrapper({});
-    expect(wrapper.isEmptyRender()).toBe(true);
+    const { container } = createWrapper({});
+    expect(container).toBeEmptyDOMElement();
   });
 
   it('renders properly', () => {
-    Object.defineProperty(window, 'origin', {
-      value: 'http://localhost',
-      writable: true,
-    });
-    wrapper = createWrapper({ url: 'http://example.com' });
-    expect(wrapper.find('IIIFIFrameCommunication').length).toBe(1);
-    expect(wrapper.find('IIIFIFrameCommunication').props().src).toBe('http://example.com?origin=http://localhost&messageId=http://example.com');
+    const { container } = createWrapper({ url: 'http://example.com' });
+
+    expect(container.querySelector('iframe')).toHaveAttribute('src', 'http://example.com?origin=http://localhost&messageId=http://example.com'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
 
   it('triggers an action when the iframe sends a message', () => {
     const handleAccessTokenMessage = jest.fn();
-    wrapper = createWrapper({ handleAccessTokenMessage, url: 'http://example.com' });
-    expect(wrapper.find('IIIFIFrameCommunication').props().handleReceiveMessage).toEqual(wrapper.instance().onReceiveAccessTokenMessage);
-
-    wrapper.instance().onReceiveAccessTokenMessage({ data: { messageId: 'http://example.com' } });
+    createWrapper({ handleAccessTokenMessage, url: 'http://example.com' });
+    window.dispatchEvent(new MessageEvent('message', { data: { messageId: 'http://example.com' } }));
     expect(handleAccessTokenMessage).toHaveBeenCalledWith({ messageId: 'http://example.com' });
   });
 
   it('ignores iframe messages with the wrong messageId', () => {
     const handleAccessTokenMessage = jest.fn();
-    wrapper = createWrapper({ handleAccessTokenMessage, url: 'http://example.com' });
-    wrapper.instance().onReceiveAccessTokenMessage({ data: { messageId: 'http://example.com/123' } });
+    createWrapper({ handleAccessTokenMessage, url: 'http://example.com' });
+    window.dispatchEvent(new MessageEvent('message', { data: { messageId: 'http://example.com/123' } }));
     expect(handleAccessTokenMessage).not.toHaveBeenCalled();
   });
 });
