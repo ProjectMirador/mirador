@@ -34,7 +34,7 @@ describe('ErrorContent', () => {
     expect(screen.getByText('Technical details')).toBeInTheDocument();
     expect(document.querySelector('pre')).toHaveTextContent('Invalid JSON'); // eslint-disable-line testing-library/no-node-access
   });
-  it('renders the alert title with no details when showJsError is false ', async () => {
+  it('does not render the alert when showJsError is false ', async () => {
     renderWithProviders(
       <ErrorContent
         error={new Error('Invalid JSON')}
