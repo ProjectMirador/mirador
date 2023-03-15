@@ -38,6 +38,7 @@ export class SelectCollection extends Component {
             </em>
           </Typography>
           <Button
+            aria-label="show collection"
             color="primary"
             variant="contained"
             onClick={this.openCollectionDialog}
