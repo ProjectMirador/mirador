@@ -102,18 +102,20 @@ describe('GalleryView', () => {
       isCollection: jest.fn(),
       isManifest: jest.fn(),
     };
-    const requestCanvasAnnotations = jest.fn();
-    xit('triggers requestCanvasAnnotations when there is an intersection and no annotions ', () => {
+    let requestCanvasAnnotations;
+
+    beforeEach(() => { requestCanvasAnnotations = jest.fn(); });
+    it('triggers requestCanvasAnnotations when there is an intersection and no annotions ', () => {
       createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
       mockAllIsIntersecting(true);
       expect(requestCanvasAnnotations).toHaveBeenCalledTimes(1);
     });
-    xit('does nothing if there is an intersection and existing annotations', () => {
+    it('does nothing if there is an intersection and existing annotations', () => {
       createWrapper({ annotationsCount: 1, canvas, requestCanvasAnnotations });
       mockAllIsIntersecting(true);
       expect(requestCanvasAnnotations).not.toHaveBeenCalled();
     });
-    xit('does nothing if there is no intersection', () => {
+    it('does nothing if there is no intersection', () => {
       createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
       expect(requestCanvasAnnotations).not.toHaveBeenCalled();
     });

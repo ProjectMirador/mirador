@@ -78,7 +78,7 @@ export class GalleryViewThumbnail extends Component {
   }
 
   /** */
-  handleIntersection({ isIntersecting }) {
+  handleIntersection(_inView, { isIntersecting }) {
     const {
       annotationsCount,
       requestCanvasAnnotations,
