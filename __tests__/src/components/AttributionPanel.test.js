@@ -1,6 +1,7 @@
-import { screen } from '@testing-library/react';
-import { shallow } from 'enzyme';
-import { Img } from 'react-image';
+/**
+ * @jest-environment-options { "resources": "usable" }
+ */
+import { screen, waitFor } from '@testing-library/react';
 import { renderWithProviders } from '../../utils/store';
 import { AttributionPanel } from '../../../src/components/AttributionPanel';
 
@@ -46,18 +47,9 @@ describe('AttributionPanel', () => {
   it('renders the manifest logo', async () => {
     const manifestLogo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
 
-    const wrapper = shallow(<AttributionPanel
-      id="xyz"
-      t={str => str}
-      windowId="window"
-      manifestLogo={manifestLogo}
-    />);
+    const { container } = createWrapper({ manifestLogo });
+    await waitFor(() => { expect(container.querySelector('img')).toBeInTheDocument(); }); // eslint-disable-line testing-library/no-container, testing-library/no-node-access
 
-    expect(wrapper.find(Img).length).toBe(1);
-    expect(wrapper.find(Img).props().src).toEqual([manifestLogo]);
-
-    // TODO: lazy loading doesn't seem to trigger in the test environment
-    // createWrapper({ manifestLogo });
-    // expect(await screen.findByRole('image')).toHaveAttribute('src', manifestLogo);
+    expect(container.querySelector('img')).toHaveAttribute('src', manifestLogo); // eslint-disable-line testing-library/no-container, testing-library/no-node-access
   });
 });
