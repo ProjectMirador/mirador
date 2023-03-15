@@ -18,6 +18,7 @@ export class GalleryView extends Component {
     return (
       <Paper
         component="section"
+        aria-label="gallery section"
         dir={htmlDir}
         square
         elevation={0}
