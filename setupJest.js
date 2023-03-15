@@ -4,6 +4,7 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import sizeMe from 'react-sizeme';
 import i18next from 'i18next';
+import { setupIntersectionMocking } from 'react-intersection-observer/test-utils';
 import en from './src/locales/en/translation.json';
 
 jest.setTimeout(10000);
@@ -19,38 +20,7 @@ fetchMock.enableMocks();
 
 if (typeof Element !== 'undefined') Element.prototype.scrollTo = () => {};
 
-/* eslint-disable  require-jsdoc, class-methods-use-this */
-class IntersectionObserverPolyfill {
-  constructor(callback, options) {
-    this.callback = callback;
-    this.elements = [];
-    IntersectionObserverPolyfill.register(this);
-  }
-
-  observe(el) {
-    this.elements.push(el);
-  }
-
-  unobserve() {
-  }
-
-  disconnect() {
-  }
-
-  static register(obj) {
-    this.observers = this.observers || [];
-    this.observers.push(obj);
-  }
-
-  static triggerAll(attr = { intersectionRatio: 1, isIntersecting: true }) {
-    this.observers.forEach((obs) => {
-      obs.callback(obs.elements.map(el => ({ ...attr, target: el })));
-    });
-  }
-}
-/* eslint-enable  require-jsdoc, class-methods-use-this */
-
-global.IntersectionObserver = IntersectionObserverPolyfill;
+setupIntersectionMocking(jest.fn);
 
 /** */
 function Path2D() {

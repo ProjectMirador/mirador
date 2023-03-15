@@ -1,4 +1,5 @@
 import { render, screen, act } from '@testing-library/react';
+import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
 import { IIIFThumbnail } from '../../../src/components/IIIFThumbnail';
 
 /**
@@ -35,7 +36,7 @@ describe('IIIFThumbnail', () => {
     const img = container.querySelector('img');
 
     act(() => {
-      global.IntersectionObserver.triggerAll();
+      mockAllIsIntersecting(true);
     });
 
     expect(img).toHaveAttribute('src', url);
