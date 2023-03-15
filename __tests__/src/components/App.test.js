@@ -1,11 +1,10 @@
-import { shallow } from 'enzyme';
-import PluginProvider from '../../../src/extend/PluginProvider';
-import AppProviders from '../../../src/containers/AppProviders';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '../../utils/store';
 import { App } from '../../../src/components/App';
 
 /** */
 function createWrapper(props) {
-  return shallow(
+  return renderWithProviders(
     <App
       {...props}
     />,
@@ -13,10 +12,12 @@ function createWrapper(props) {
 }
 
 describe('App', () => {
-  it('should render all needed elements ', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find(PluginProvider).length).toBe(1);
-    expect(wrapper.find(AppProviders).length).toBe(1);
-    expect(wrapper.find('Suspense').length).toBe(1);
+  it('should asynchronously render all needed elements', async () => {
+    createWrapper();
+
+    expect(screen.queryByRole('main')).not.toBeInTheDocument();
+    await screen.findByText('welcome');
+
+    expect(screen.getByRole('main')).toBeInTheDocument();
   });
 });
