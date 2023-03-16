@@ -1,5 +1,6 @@
-import { shallow } from 'enzyme';
-import { screen } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { renderWithProviders } from '../../utils/store';
 import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
 
@@ -114,16 +115,41 @@ describe('WorkspaceMosaic', () => {
     });
   });
   describe('mosaicChange', () => {
-    it('calls the provided prop to update layout', () => {
+    it('calls the provided prop to update layout', async () => {
       const updateWorkspaceMosaicLayout = jest.fn();
-      wrapper = shallow(<WorkspaceMosaic
-        classes={{}}
-        windowIds={windowIds}
-        workspaceId="foo"
-        updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout}
-      />);
 
-      wrapper.instance().mosaicChange();
+      const { container } = renderWithProviders(
+        <DndProvider backend={HTML5Backend}>
+          <WorkspaceMosaic
+            classes={{}}
+            windowIds={['1', '2']}
+            workspaceId="foo"
+            updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout}
+          />
+        </DndProvider>,
+        {
+          preloadedState: {
+            windows: {
+              1: { companionWindowIds: [], maximized: false },
+              2: { companionWindowIds: [], maximized: false },
+            },
+            workspace: {
+              type: 'mosaic',
+              windowIds: ['1', '2'],
+            },
+          },
+        },
+      );
+
+      const dragTarget = screen.getAllByLabelText('windowNavigation')[0];
+      const dropTarget = container.querySelector('.mirador-mosaic > .drop-target-container > .drop-target.top'); // eslint-disable-line testing-library/no-container
+
+      fireEvent.dragStart(dragTarget);
+      fireEvent.drag(dragTarget);
+      fireEvent.dragEnter(dropTarget);
+      fireEvent.dragOver(dropTarget);
+      fireEvent.drop(dropTarget);
+
       expect(updateWorkspaceMosaicLayout).toBeCalled();
     });
   });
