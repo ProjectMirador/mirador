@@ -49,24 +49,24 @@ export class SidebarIndexList extends Component {
             const onClick = () => { setCanvas(windowId, canvas.id); }; // eslint-disable-line require-jsdoc, max-len
 
             return (
-              <ScrollTo
-                containerRef={containerRef}
-                key={`${canvas.id}-${variant}`}
-                offsetTop={96} // offset for the height of the form above
-                scrollTo={selectedCanvasIds.includes(canvas.id)}
+              <MenuItem
+                key={canvas.id}
+                className={classes.listItem}
+                alignItems="flex-start"
+                onClick={onClick}
+                button
+                component="li"
+                selected={selectedCanvasIds.includes(canvas.id)}
               >
-                <MenuItem
-                  key={canvas.id}
-                  className={classes.listItem}
-                  alignItems="flex-start"
-                  onClick={onClick}
-                  button
-                  component="li"
-                  selected={selectedCanvasIds.includes(canvas.id)}
+                <ScrollTo
+                  containerRef={containerRef}
+                  key={`${canvas.id}-${variant}`}
+                  offsetTop={96} // offset for the height of the form above
+                  scrollTo={selectedCanvasIds.includes(canvas.id)}
                 >
                   <Item label={canvas.label} canvas={canvases[canvasIndex]} />
-                </MenuItem>
-              </ScrollTo>
+                </ScrollTo>
+              </MenuItem>
             );
           })
         }

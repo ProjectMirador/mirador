@@ -77,3 +77,27 @@ export function toggleNode(windowId, id, nodeId) {
     });
   };
 }
+
+/** Update the expanded nodes state */
+export function expandNodes(windowId, id, nodeIds) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const expandedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId: id }, true);
+    const payload = {};
+
+    expandedNodeIds.forEach(nodeId => {
+      payload[nodeId] = { expanded: false };
+    });
+
+    nodeIds.forEach(nodeId => {
+      payload[nodeId] = { expanded: true };
+    });
+
+    return dispatch({
+      id,
+      payload,
+      type: ActionTypes.TOGGLE_TOC_NODE,
+      windowId,
+    });
+  };
+}
