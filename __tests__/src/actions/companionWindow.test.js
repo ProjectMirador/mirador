@@ -2,7 +2,7 @@ import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 jest.mock('../../../src/state/selectors', () => ({
-  getManuallyExpandedNodeIds: (state, args, expanded) => (expanded ? ['openVisible', 'open'] : ['closedVisible', 'closed']),
+  ...jest.requireActual('../../../src/state/selectors'),
   getVisibleNodeIds: (state, args) => ['openVisible', 'closedVisible', 'visible'],
 }));
 
@@ -53,13 +53,73 @@ describe('companionWindow actions', () => {
     });
   });
 
+  describe('expandNodes', () => {
+    let mockDispatch;
+    let mockGetState;
+    let mockState;
+
+    beforeEach(() => {
+      mockState = {
+        companionWindows: {
+          cw1: {},
+        },
+      };
+      mockDispatch = jest.fn(() => ({}));
+      mockGetState = jest.fn(() => mockState);
+    });
+
+    it('marks the provided nodes as expanded', () => {
+      const thunk = actions.expandNodes('window1', 'cw1', ['a', 'b', 'c']);
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+      expect(action.id).toBe('cw1');
+      expect(action.windowId).toBe('window1');
+      expect(action.type).toBe(ActionTypes.TOGGLE_TOC_NODE);
+      expect(action.payload).toMatchObject({ a: { expanded: true }, b: { expanded: true }, c: { expanded: true } });
+    });
+
+    it('marks currently expanded nodes as collapsed', () => {
+      mockState.companionWindows = {
+        cw1: {
+          tocNodes: {
+            a: { expanded: true },
+            b: { expanded: true },
+            c: { expanded: true },
+          },
+        },
+      };
+
+      const thunk = actions.expandNodes('window1', 'cw1', ['a']);
+      thunk(mockDispatch, mockGetState);
+
+      const action = mockDispatch.mock.calls[0][0];
+      expect(action.id).toBe('cw1');
+      expect(action.windowId).toBe('window1');
+      expect(action.type).toBe(ActionTypes.TOGGLE_TOC_NODE);
+      expect(action.payload).toMatchObject({ a: { expanded: true }, b: { expanded: false }, c: { expanded: false } });
+    });
+  });
+
   describe('toggleNode', () => {
     let mockDispatch;
     let mockGetState;
+    let mockState;
 
     beforeEach(() => {
+      mockState = {
+        companionWindows: {
+          cw1: {
+            tocNodes: {
+              closedVisible: { expanded: false },
+              open: { expanded: true },
+              openVisible: { expanded: true },
+            },
+          },
+        },
+      };
       mockDispatch = jest.fn(() => ({}));
-      mockGetState = jest.fn(() => ({}));
+      mockGetState = jest.fn(() => mockState);
     });
 
     it('returns a collapsing action for visible nodes that are not present in the state', () => {

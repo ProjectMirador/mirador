@@ -24,28 +24,62 @@ function getStartCanvasId(node) {
   return node.data.getCanvasIds()[0];
 }
 
+/** Traverse through the manifesto tree to find a node with a given id */
+function deepFind(treeNode, id) {
+  if (treeNode.id === id) {
+    return treeNode;
+  }
+
+  let result = null;
+
+  if (treeNode.nodes) {
+    for (let i = 0; result == null && i < treeNode.nodes.length; i += 1) {
+      result = deepFind(treeNode.nodes[i], id);
+    }
+  }
+
+  return result;
+}
+
 /** */
 export class SidebarIndexTableOfContents extends Component {
   /** */
-  handleKeyPressed(event, node) {
-    const { expandedNodeIds, toggleNode } = this.props;
-    if (event.key === 'Enter'
-      || event.key === ' '
-      || event.key === 'Spacebar') {
-      this.selectTreeItem(node);
+  constructor(props) {
+    super(props);
+    this.handleNodeSelect = this.handleNodeSelect.bind(this);
+    this.handleNodeToggle = this.handleNodeToggle.bind(this);
+  }
+
+  /** */
+  handleKeyPressed(event, nodeId) {
+    const { toggleNode } = this.props;
+
+    if (event.key === 'Enter') {
+      this.selectTreeItem(nodeId);
     }
-    if ((event.key === 'ArrowLeft' && expandedNodeIds.indexOf(node.id) !== -1)
-      || (event.key === 'ArrowRight' && expandedNodeIds.indexOf(node.id) === -1 && node.nodes.length > 0)) {
-      toggleNode(node.id);
+
+    if (event.key === ' ' || event.key === 'Spacebar') {
+      toggleNode(nodeId);
     }
   }
 
   /** */
-  selectTreeItem(node) {
-    const { setCanvas, toggleNode, windowId } = this.props;
-    if (node.nodes.length > 0) {
-      toggleNode(node.id);
-    }
+  handleNodeSelect(_event, nodeId) {
+    this.selectTreeItem(nodeId);
+  }
+
+  /** */
+  handleNodeToggle(_event, nodeIds) {
+    const { expandNodes } = this.props;
+
+    expandNodes(nodeIds);
+  }
+
+  /** */
+  selectTreeItem(nodeId) {
+    const { setCanvas, treeStructure, windowId } = this.props;
+
+    const node = deepFind(treeStructure, nodeId);
 
     // Do not select if there are no canvases listed or it has children
     if (!node.data.getCanvasIds()
@@ -59,54 +93,6 @@ export class SidebarIndexTableOfContents extends Component {
   }
 
   /** */
-  buildTreeItems(nodes, visibleNodeIds, containerRef, nodeIdToScrollTo) {
-    const { classes } = this.props;
-    if (!nodes) {
-      return null;
-    }
-    return (
-      nodes.map(node => (
-        <ScrollTo
-          containerRef={containerRef}
-          key={`${node.id}-scroll`}
-          offsetTop={96} // offset for the height of the form above
-          scrollTo={nodeIdToScrollTo === node.id}
-        >
-          <TreeItem
-            key={node.id}
-            nodeId={node.id}
-            classes={{
-              content: classes.content,
-              group: classes.group,
-              label: classes.label,
-              root: classes.treeItemRoot,
-              selected: classes.selected,
-            }}
-            label={(
-              <div
-                className={clsx({
-                  [classes.visibleNode]: visibleNodeIds.indexOf(node.id) !== -1,
-                })}
-              >
-                {node.label}
-              </div>
-            )}
-            onClick={() => this.selectTreeItem(node)}
-            onKeyDown={e => this.handleKeyPressed(e, node)}
-          >
-            {node.nodes && node.nodes.length > 0 ? this.buildTreeItems(
-              node.nodes,
-              visibleNodeIds,
-              containerRef,
-              nodeIdToScrollTo,
-            ) : null}
-          </TreeItem>
-        </ScrollTo>
-      ))
-    );
-  }
-
-  /** */
   render() {
     const {
       classes, treeStructure, visibleNodeIds, expandedNodeIds, containerRef, nodeIdToScrollTo,
@@ -116,15 +102,51 @@ export class SidebarIndexTableOfContents extends Component {
       return null;
     }
 
+    /** Render the tree structure recursively */
+    const renderTree = (node) => (
+      <ScrollTo
+        containerRef={containerRef}
+        key={node.id}
+        nodeId={node.id}
+        offsetTop={96} // offset for the height of the form above
+        scrollTo={nodeIdToScrollTo === node.id}
+      >
+        <TreeItem
+          nodeId={node.id}
+          classes={{
+            content: classes.content,
+            group: classes.group,
+            label: classes.label,
+            root: classes.treeItemRoot,
+            selected: classes.selected,
+          }}
+          onKeyDown={e => this.handleKeyPressed(e, node.id)}
+          label={(
+            <div
+              className={clsx({
+                [classes.visibleNode]: visibleNodeIds.indexOf(node.id) !== -1,
+              })}
+            >
+              {node.label}
+            </div>
+        )}
+        >
+          {Array.isArray(node.nodes) ? node.nodes.map((n) => renderTree(n)) : null}
+        </TreeItem>
+      </ScrollTo>
+    );
+
     return (
       <TreeView
         className={classes.root}
         defaultCollapseIcon={<ExpandMoreIcon color="action" />}
         defaultExpandIcon={<ChevronRightIcon color="action" />}
         defaultEndIcon={null}
+        onNodeSelect={this.handleNodeSelect}
+        onNodeToggle={this.handleNodeToggle}
         expanded={expandedNodeIds}
       >
-        {this.buildTreeItems(treeStructure.nodes, visibleNodeIds, containerRef, nodeIdToScrollTo)}
+        { Array.isArray(treeStructure.nodes) ? treeStructure.nodes.map(n => renderTree(n)) : null }
       </TreeView>
     );
   }
@@ -137,6 +159,7 @@ SidebarIndexTableOfContents.propTypes = {
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   ]).isRequired,
   expandedNodeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  expandNodes: PropTypes.func.isRequired,
   nodeIdToScrollTo: PropTypes.func.isRequired,
   setCanvas: PropTypes.func.isRequired,
   toggleNode: PropTypes.func.isRequired,
