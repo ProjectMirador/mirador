@@ -66,7 +66,7 @@ const styles = theme => ({
     },
   },
   visibleNode: {
-    backgroundColor: alpha(theme.palette.highlights.primary, 0.35),
+    backgroundColor: alpha(theme.palette.highlights?.primary || theme.palette.action.selected, 0.35),
     display: 'inline',
   },
 });
