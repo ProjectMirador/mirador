@@ -1,8 +1,6 @@
 import { screen, fireEvent } from '@testing-library/react';
-import { shallow } from 'enzyme';
 import userEvent from '@testing-library/user-event';
 import { Resource } from 'manifesto.js';
-import { DragDropContext } from '@hello-pangea/dnd';
 import { renderWithProviders } from '../../utils/store';
 import { CanvasLayers } from '../../../src/components/CanvasLayers';
 
@@ -51,19 +49,31 @@ describe('CanvasLayers', () => {
     expect(screen.getAllByRole('spinbutton', { name: 'layer_opacity' }).length).toEqual(2);
   });
 
-  // TODO: Convert this to RTL
-  it('handles drag + drop of layers', () => {
+  it('handles drag + drop of layers', async () => {
     const updateLayers = jest.fn();
-
-    const wrapper = shallow(
-      <CanvasLayers canvasId="foo" windowId="abc" layers={[{ id: 'a' }, { id: 'b' }]} updateLayers={updateLayers} />,
-    );
-    const { droppableId } = wrapper.instance();
-
-    wrapper.find(DragDropContext).simulate('dragEnd', {
-      destination: { droppableId, index: 0 },
-      source: { droppableId, index: 1 },
+    createWrapper({
+      canvasId: 'foo',
+      layers: [
+        new Resource({ id: 'a' }, {}),
+        new Resource({ id: 'b' }, {}),
+      ],
+      updateLayers,
     });
+
+    const buttons = screen.getAllByRole('button');
+    const layer = buttons.find(b => b.getAttribute('data-rfd-drag-handle-draggable-id') === 'b');
+
+    layer.focus();
+
+    // TODO: user-event doesn't believe in sending keycode values
+    // (https://github.com/testing-library/user-event/issues/842)
+    // but beautiful-dnd requires them. So this doesn't work:
+    // await user.keyboard('{Space}');
+    // await user.keyboard('{ArrowUp}');
+
+    fireEvent.keyDown(layer, { code: 'Space', keyCode: 32 });
+    fireEvent.keyDown(layer, { code: 'ArrowUp', keyCode: 38 });
+    fireEvent.keyDown(layer, { code: 'Space', keyCode: 32 });
 
     expect(updateLayers).toHaveBeenCalledWith('abc', 'foo', {
       a: { index: 1 },
