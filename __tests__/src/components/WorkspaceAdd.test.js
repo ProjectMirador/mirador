@@ -1,5 +1,4 @@
 import { screen, fireEvent, waitFor } from '@testing-library/react';
-import { shallow } from 'enzyme';
 import userEvent from '@testing-library/user-event';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -86,23 +85,20 @@ describe('WorkspaceAdd', () => {
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
-  it('scrolls to the top after an item is added', () => {
-    const ref = { current: { scrollTo: jest.fn() } };
-    const wrapper = shallow(
-      <WorkspaceAdd
-        setWorkspaceAddVisibility={() => { }}
-        catalog={[
-          { manifestId: 'bar' },
-          { manifestId: 'foo' },
-        ]}
-        classes={{}}
-        t={str => str}
-      />,
-    );
-    wrapper.instance().ref = ref;
-    wrapper.instance().onSubmit();
+  it('scrolls to the top after an item is added', async () => {
+    const user = userEvent.setup();
+    const { container } = createWrapper();
 
-    expect(ref.current.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', left: 0, top: 0 });
+    const scrollTo = jest.fn();
+
+    jest.spyOn(container.querySelector('.mirador-workspace-add'), 'scrollTo').mockImplementation(scrollTo); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+
+    await user.click(screen.getByRole('button', { name: 'addResource' }));
+
+    await user.type(screen.getByRole('textbox'), 'abc');
+    await user.click(screen.getByRole('button', { name: 'fetchManifest' }));
+
+    expect(scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', left: 0, top: 0 });
   });
 
   it('hides the form on cancel action', async () => {
