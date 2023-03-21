@@ -62,7 +62,7 @@ export class ScrollTo extends Component {
    * The container provided in the containersRef dome structure in which scrolling
    * should happen.
   */
-  scrollabelContainer() {
+  scrollableContainer() {
     const { containerRef } = this.props;
 
     if (!containerRef || !containerRef.current || !containerRef.current.domEl) return null;
@@ -93,22 +93,24 @@ export class ScrollTo extends Component {
     if (!scrollTo) return;
     if (!this.elementToScrollTo()) return;
     if (this.elementIsVisible()) return;
-    if (!this.scrollabelContainer()) return;
+    if (!this.scrollableContainer()) return;
     const scrollBy = this.elementToScrollTo().offsetTop
       - (this.containerBoundingRect().height / 2) + offsetTop;
-    this.scrollabelContainer().scrollTo(0, scrollBy);
+    this.scrollableContainer().scrollTo(0, scrollBy);
   }
 
   /**
    * Returns the rendered component
   */
   render() {
-    const { children, scrollTo } = this.props;
+    const {
+      children, containerRef, offsetTop, scrollTo, ...otherProps
+    } = this.props;
 
     if (!scrollTo) return children;
 
     return (
-      <div ref={this.scrollToRef}>
+      <div ref={this.scrollToRef} {...otherProps}>
         {children}
       </div>
     );
