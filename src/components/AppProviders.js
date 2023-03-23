@@ -75,15 +75,8 @@ export class AppProviders extends Component {
     super(props);
 
     this.i18n = createI18nInstance();
-  }
-
-  /**
-   * Set i18n language on component mount
-   */
-  componentDidMount() {
-    const { language } = this.props;
-
-    this.i18n.changeLanguage(language);
+    // Set i18n language
+    this.i18n.changeLanguage(props.language);
   }
 
   /**
@@ -91,7 +84,6 @@ export class AppProviders extends Component {
    */
   componentDidUpdate(prevProps) {
     const { language } = this.props;
-
     if (prevProps.language !== language) {
       this.i18n.changeLanguage(language);
     }
