@@ -1,13 +1,13 @@
-import { shallow } from 'enzyme';
-import Button from '@material-ui/core/Button';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { renderWithProviders } from '../../utils/store';
 import { SearchResults } from '../../../src/components/SearchResults';
-import { ScrollTo } from '../../../src/components/ScrollTo';
 
 /**
  * Helper function to create a shallow wrapper around SearchResults
  */
 function createWrapper(props) {
-  return shallow(
+  return renderWithProviders(
     <SearchResults
       companionWindowId="cwid"
       windowId="window"
@@ -23,95 +23,123 @@ function createWrapper(props) {
       ]}
       {...props}
     />,
+    {
+      preloadedState: {
+        companionWindows: {
+          cwid: {},
+        },
+        searches: {
+          window: {
+            cwid: {
+              data: {
+                'http://example.com/contentsearch': {
+                  id: 'http://example.com/contentsearch',
+                  isFetching: false,
+                  json: {
+                    resources: [
+                      {
+                        '@id': 'foo',
+                        '@type': 'oa:Annotation',
+                        motivation: 'sc:painting',
+                      },
+                      {
+                        '@id': 'x',
+                        label: 'The Anno Label',
+                      },
+                      {
+                        '@id': 'y',
+                        label: 'Annother Anno Label',
+                      },
+                    ],
+                  },
+                },
+              },
+              query: '',
+              selectedContentSearchAnnotation: null,
+              selectedContentSearchAnnotationIds: [],
+            },
+          },
+        },
+        windows: {
+          window: {},
+        },
+      },
+    },
   );
 }
 
 describe('SearchResults', () => {
   it('renders a SearchHit for each hit', () => {
-    const selectContentSearchAnnotation = jest.fn();
-    const wrapper = createWrapper({ selectContentSearchAnnotation });
-    const searchHits = wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))');
-    expect(searchHits.length).toEqual(1);
-    expect(searchHits.first().props().index).toEqual(0);
+    createWrapper({});
+
+    expect(screen.getByRole('button', { name: /Light up the moose/ })).toBeInTheDocument();
   });
 
-  it('can focus on a single item', () => {
-    const wrapper = createWrapper({});
-    const searchHits = wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))');
+  it('can focus on a single item', async () => {
+    const user = userEvent.setup();
+    createWrapper({});
 
-    searchHits.first().props().showDetails();
-    expect(wrapper.state().focused).toEqual(true);
-  });
+    await user.click(screen.getByRole('button', { name: 'more' }));
+    expect(screen.getByRole('listitem')).toHaveTextContent(/start the chainsaw/);
 
-  it('can return to the full list view', () => {
-    const wrapper = createWrapper({});
-    wrapper.setState({ focused: true });
-    expect(wrapper.find(ScrollTo).prop('scrollTo')).toEqual(true);
-    expect(wrapper.find(Button).text()).toEqual('backToResults');
-    wrapper.find(Button).simulate('click');
-    expect(wrapper.state().focused).toEqual(false);
+    expect(screen.queryByRole('button', { name: 'more' })).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'backToResults' }));
+    expect(screen.getByRole('button', { name: 'more' })).toBeInTheDocument();
   });
 
   describe('annotation-only search results', () => {
     it('renders a SearchHit for each annotation', () => {
-      const wrapper = createWrapper({
+      createWrapper({
         searchAnnotations: [{ id: 'x' }, { id: 'y' }],
         searchHits: [],
       });
 
-      const searchHits = wrapper.find('Connect(WithStyles(WithPlugins(SearchHit)))');
-      expect(searchHits.length).toEqual(2);
-      expect(searchHits.get(0).props.index).toEqual(0);
-      expect(searchHits.get(0).props.annotationId).toEqual('x');
-
-      expect(searchHits.get(1).props.index).toEqual(1);
-      expect(searchHits.get(1).props.annotationId).toEqual('y');
+      expect(screen.getByRole('heading', { level: 6, name: 'The Anno Label' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 6, name: 'Annother Anno Label' })).toBeInTheDocument();
     });
   });
 
   describe('no search results', () => {
     it('shows no results', () => {
-      const wrapper = createWrapper({
+      createWrapper({
         isFetching: false,
         query: 'nope',
         searchHits: [],
       });
-      expect(wrapper.find('WithStyles(ForwardRef(Typography))').text()).toEqual('searchNoResults');
+
+      expect(screen.getByText('searchNoResults')).toHaveClass('MuiTypography-body1');
     });
-    it('with hits', () => {
-      const wrapper = createWrapper({
-        isFetching: false,
-        query: 'nope',
-      });
-      expect(wrapper.find('WithStyles(ForwardRef(Typography))').length).toEqual(0);
-    });
+
     it('while fetching', () => {
-      const wrapper = createWrapper({
+      createWrapper({
         isFetching: true,
         query: 'nope',
+        searchHits: [],
       });
-      expect(wrapper.find('WithStyles(ForwardRef(Typography))').length).toEqual(0);
+
+      expect(screen.queryByText('searchNoResults')).not.toBeInTheDocument();
     });
+
     it('without a query', () => {
-      const wrapper = createWrapper({
+      createWrapper({
         isFetching: false,
         query: '',
       });
-      expect(wrapper.find('WithStyles(ForwardRef(Typography))').length).toEqual(0);
+      expect(screen.queryByText('searchNoResults')).not.toBeInTheDocument();
     });
   });
 
   describe('multi-page search results', () => {
-    it('shows a button to request the next page', () => {
+    it('shows a button to request the next page', async () => {
+      const user = userEvent.setup();
       const fetchSearch = jest.fn();
-      const wrapper = createWrapper({
+      createWrapper({
         fetchSearch,
         nextSearch: 'search?page=2',
       });
 
-      expect(wrapper.find(Button).length).toEqual(1);
-      wrapper.find(Button).simulate('click');
-
+      await user.click(screen.getByRole('button', { name: /moreResults/ }));
       expect(fetchSearch).toHaveBeenCalledWith('window', 'cwid', 'search?page=2', 'query');
     });
   });
