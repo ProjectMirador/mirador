@@ -1,20 +1,18 @@
-import { shallow } from 'enzyme';
-import Button from '@material-ui/core/Button';
-import Collapse from '@material-ui/core/Collapse';
-import DialogActions from '@material-ui/core/DialogActions';
-import Typography from '@material-ui/core/Typography';
-import SanitizedHtml from '../../../src/containers/SanitizedHtml';
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { exact } from 'prop-types';
+import { config } from 'react-transition-group'; // eslint-disable-line import/no-extraneous-dependencies
 import { WindowAuthenticationBar } from '../../../src/components/WindowAuthenticationBar';
 
 /**
  * Helper function to create a shallow wrapper around AuthenticationLogout
  */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <WindowAuthenticationBar
       classes={{}}
       hasLogoutService
-      confirmButton="Click here"
+      confirmButton="Login"
       label="Log in to see more"
       onConfirm={() => {}}
       status="ok"
@@ -25,58 +23,68 @@ function createWrapper(props) {
   );
 }
 
+/* eslint-disable testing-library/no-node-access */
 describe('AuthenticationControl', () => {
+  let user;
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   it('renders nothing if the user is logged in and there is no logout service', () => {
-    const wrapper = createWrapper({ hasLogoutService: false });
-    expect(wrapper.isEmptyRender()).toBe(true);
+    createWrapper({ hasLogoutService: false });
+    // no logout service renders a single empty div
+    expect(document.querySelectorAll('div')).toHaveLength(1);
   });
 
   it('renders a non-collapsing version if there is no description', () => {
-    const wrapper = createWrapper({ description: undefined, header: undefined });
-    expect(wrapper.find(SanitizedHtml).at(0).props().htmlString).toEqual('Log in to see more');
-    expect(wrapper.find(Button).children().text()).toEqual('Click here');
+    createWrapper({ description: undefined, header: undefined });
+    expect(screen.getByText('Log in to see more', { selector: 'span' })).toBeInTheDocument();
+    expect(screen.getByText('Login', { selector: 'span' })).toBeInTheDocument();
   });
 
-  it('renders a collapsable version if there is a description', () => {
+  it('renders a collapsable version if there is a description', async () => {
+    createWrapper({ description: 'long description', header: 'Login to Example Institution' });
+    const continueBtn = document.querySelectorAll('.MuiButtonBase-root')[0];
+    const cancelBtn = screen.getByText('cancel', { selector: 'span' }).closest('button');
+    const loginBtn = screen.getByText('Login', { selector: 'span' });
+    const collapseEl = document.querySelector('.MuiCollapse-hidden');
+
+    // disable transition animations for easier testing of the Mui Collapse open/close state
+    config.disabled = true;
+    // initial collapsed state: Presence of continue button text. Hidden cancelBtn, loginBtn, and description
+    expect(screen.getByText('continue')).toBeInTheDocument();
+    expect(cancelBtn).not.toBeVisible();
+    expect(loginBtn).not.toBeVisible();
+    expect(within(collapseEl).getByText('long description')).not.toBeVisible();
+    // click to expand
+    await user.click(continueBtn);
+    // expanded state: Removal of continue button text from DOM. Visible cancelBtn, loginBtn, and description
+    expect(screen.queryByText('continue')).not.toBeInTheDocument();
+    expect(cancelBtn).toBeVisible();
+    expect(loginBtn).toBeVisible();
+    expect(within(collapseEl).getByText('long description')).toBeVisible();
+    expect(collapseEl).toHaveClass('MuiCollapse-entered');
+
+    // click the cancel button to collapse
+    await user.click(cancelBtn);
+    // collapsed state: Presence of continue button text. Hidden cancelBtn, loginBtn, and description
+    expect(screen.getByText('continue')).toBeInTheDocument();
+    expect(cancelBtn).not.toBeVisible();
+    expect(loginBtn).not.toBeVisible();
+    expect(within(collapseEl).getByText('long description')).not.toBeVisible();
+    // re-enable transition animation
+    config.disabled = false;
+  });
+
+  it('triggers an action when the confirm button is clicked', async () => {
     const onConfirm = jest.fn();
-    const wrapper = createWrapper({ description: 'long description', header: 'header', onConfirm });
-    expect(wrapper.find(SanitizedHtml).at(0).props().htmlString).toEqual('Log in to see more');
-    expect(wrapper.find(Button).at(0).find('span').text()).toEqual('continue');
-    // is expandable
-    expect(wrapper.find(Collapse).prop('in')).toEqual(false);
-    wrapper.find(Button).at(0).simulate('click');
-    expect(wrapper.find(Collapse).prop('in')).toEqual(true);
-
-    // has more information
-    expect(wrapper.find(Collapse).find(SanitizedHtml).at(0).props().htmlString).toEqual('header');
-    expect(wrapper.find(Collapse).find(SanitizedHtml).at(1).props().htmlString).toEqual('long description');
-
-    // is recollapsable
-    wrapper.find(DialogActions).find(Button).at(0).simulate('click');
-    expect(wrapper.find(Collapse).prop('in')).toEqual(false);
-    wrapper.find(Button).at(0).simulate('click');
-
-    // starts the auth process
-    wrapper.find(DialogActions).find(Button).at(1).simulate('click');
+    createWrapper({ onConfirm });
+    await user.click(screen.getByText('Login', { selector: 'span' }).closest('button'));
     expect(onConfirm).toHaveBeenCalled();
   });
 
-  it('triggers an action when the confirm button is clicked', () => {
-    const onConfirm = jest.fn();
-    const wrapper = createWrapper({
-      onConfirm,
-    });
-
-    wrapper.find(Button).simulate('click');
-    expect(onConfirm).toHaveBeenCalled();
-  });
-
-  it('allows plugins to opt out of HTML sanitization (say, for absolutely trusted sources)', () => {
-    const description = <em>long description</em>;
-    const wrapper = createWrapper({ description, header: 'header', ruleSet: false });
-    expect(wrapper.find(SanitizedHtml).length).toEqual(0);
-    expect(wrapper.find(Typography).at(0).text()).toEqual('Log in to see more');
-    expect(wrapper.find(Typography).at(2).text()).toEqual('header: long description');
-    expect(wrapper.find(Typography).at(2).find('em').text()).toEqual('long description');
+  it('allows plugins to opt out of HTML sanitization (say, for absolutely trusted sources)', async () => {
+    const description = <em>long html description</em>;
+    createWrapper({ description, header: 'header', ruleSet: false });
+    await screen.findByText('long html description', { selector: 'em' });
   });
 });
