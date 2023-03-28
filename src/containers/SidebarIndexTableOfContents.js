@@ -9,6 +9,7 @@ import {
   getNodeIdToScrollTo,
 } from '../state/selectors';
 import * as actions from '../state/actions';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -32,6 +33,7 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('SidebarIndexTableOfContents'),
 );

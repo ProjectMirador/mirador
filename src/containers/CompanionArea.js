@@ -6,6 +6,7 @@ import {
 } from '../state/selectors';
 import * as actions from '../state/actions';
 import { CompanionArea } from '../components/CompanionArea';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** */
 const mapStateToProps = (state, { windowId, position }) => ({
@@ -20,6 +21,7 @@ const mapDispatchToProps = ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CompanionArea'),
 );

@@ -18,7 +18,6 @@ function SearchHitsAndAnnotations({
   containerRef,
   searchAnnotations,
   searchHits,
-  windowId,
   focused,
   toggleFocus,
 }) {
@@ -33,7 +32,6 @@ function SearchHitsAndAnnotations({
         focused={focused}
         index={index}
         total={searchAnnotations.length}
-        windowId={windowId}
         showDetails={toggleFocus}
       />
     ));
@@ -49,7 +47,6 @@ function SearchHitsAndAnnotations({
       hit={hit}
       index={index}
       total={searchHits.length}
-      windowId={windowId}
       showDetails={toggleFocus}
     />
   ));
@@ -105,7 +102,6 @@ export function SearchResults({
           containerRef={containerRef}
           searchAnnotations={searchAnnotations}
           searchHits={searchHits}
-          windowId={windowId}
           focused={focused}
           toggleFocus={toggleFocus}
         />

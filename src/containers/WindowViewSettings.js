@@ -4,6 +4,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getAllowedWindowViewTypes, getWindowViewType } from '../state/selectors';
 import { WindowViewSettings } from '../components/WindowViewSettings';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -25,6 +26,7 @@ const mapStateToProps = (state, { windowId }) => (
 );
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
   withPlugins('WindowViewSettings'),
 );

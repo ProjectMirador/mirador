@@ -13,7 +13,6 @@ import ns from '../config/css-ns';
  * WindowSideBarInfoPanel
  */
 export function WindowSideBarInfoPanel({
-  windowId,
   id,
   canvasIds = [],
   collectionPath = [],
@@ -27,7 +26,6 @@ export function WindowSideBarInfoPanel({
     <CompanionWindow
       title={t('aboutThisItem')}
       paperClassName={ns('window-sidebar-info-panel')}
-      windowId={windowId}
       id={id}
       titleControls={(
         showLocalePicker
@@ -50,23 +48,22 @@ export function WindowSideBarInfoPanel({
               canvasId={canvasId}
               index={index}
               totalSize={canvasIds.length}
-              windowId={windowId}
             />
           </CompanionWindowSection>
         ))
       }
       { collectionPath.length > 0 && (
         <CompanionWindowSection>
-          <CollectionInfo id={id} windowId={windowId} />
+          <CollectionInfo id={id} />
         </CompanionWindowSection>
       )}
 
       <CompanionWindowSection>
-        <ManifestInfo id={id} windowId={windowId} />
+        <ManifestInfo id={id} />
       </CompanionWindowSection>
 
       <CompanionWindowSection>
-        <ManifestRelatedLinks id={id} windowId={windowId} />
+        <ManifestRelatedLinks id={id} />
       </CompanionWindowSection>
     </CompanionWindow>
   );
@@ -80,5 +77,4 @@ WindowSideBarInfoPanel.propTypes = {
   locale: PropTypes.string,
   setLocale: PropTypes.func,
   showLocalePicker: PropTypes.bool,
-  windowId: PropTypes.string.isRequired,
 };

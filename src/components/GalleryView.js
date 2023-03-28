@@ -17,7 +17,7 @@ const Root = styled(Paper, { name: 'GalleryView', slot: 'root' })(({ theme }) =>
 /**
  * Renders a GalleryView overview of the manifest.
  */
-export function GalleryView({ canvases, viewingDirection = '', windowId }) {
+export function GalleryView({ canvases, viewingDirection = '' }) {
   const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
   return (
     <Root
@@ -26,13 +26,11 @@ export function GalleryView({ canvases, viewingDirection = '', windowId }) {
       dir={htmlDir}
       square
       elevation={0}
-      id={`${windowId}-gallery`}
     >
       {
         canvases.map(canvas => (
           <GalleryViewThumbnail
             key={canvas.id}
-            windowId={windowId}
             canvas={canvas}
           />
         ))
@@ -44,5 +42,4 @@ export function GalleryView({ canvases, viewingDirection = '', windowId }) {
 GalleryView.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   viewingDirection: PropTypes.string,
-  windowId: PropTypes.string.isRequired,
 };

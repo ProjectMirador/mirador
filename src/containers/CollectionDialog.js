@@ -6,6 +6,7 @@ import {
   getManifest, getManifestoInstance, getSequenceBehaviors, getWindow,
 } from '../state/selectors';
 import { CollectionDialog } from '../components/CollectionDialog';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -46,6 +47,7 @@ const mapStateToProps = (state, { windowId }) => {
 };
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CollectionDialog'),
 );

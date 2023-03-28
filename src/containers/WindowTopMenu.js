@@ -4,6 +4,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { WindowTopMenu } from '../components/WindowTopMenu';
 import { getConfig } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -24,6 +25,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowTopMenu'),
 );

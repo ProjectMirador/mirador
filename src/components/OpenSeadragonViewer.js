@@ -135,7 +135,7 @@ export function OpenSeadragonViewer({
         );
       })}
       { drawAnnotations
-          && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
+          && <AnnotationsOverlay viewer={viewer} /> }
       { enhancedChildren }
       <PluginHook viewer={viewer} {...pluginProps} />
     </OpenSeadragonComponent>

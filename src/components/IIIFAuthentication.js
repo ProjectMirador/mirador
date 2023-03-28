@@ -26,7 +26,6 @@ export function IIIFAuthentication({
     authServiceId,
     hasLogoutService: !!logoutServiceId,
     status,
-    windowId,
   });
 
   /** handle the IIIF logout workflow */

@@ -12,7 +12,7 @@ import ns from '../config/css-ns';
  * WindowSideBarAnnotationsPanel ~
 */
 export function WindowSideBarAnnotationsPanel({
-  annotationCount, canvasIds = [], windowId, id,
+  annotationCount, canvasIds = [], id,
 }) {
   const { t } = useTranslation();
   const containerRef = createRef();
@@ -20,10 +20,9 @@ export function WindowSideBarAnnotationsPanel({
     <CompanionWindow
       title={t('annotations')}
       paperClassName={ns('window-sidebar-annotation-panel')}
-      windowId={windowId}
       id={id}
       ref={containerRef}
-      titleControls={<AnnotationSettings windowId={windowId} />}
+      titleControls={<AnnotationSettings />}
     >
       <CompanionWindowSection>
         <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
@@ -36,7 +35,6 @@ export function WindowSideBarAnnotationsPanel({
           key={canvasId}
           index={index}
           totalSize={canvasIds.length}
-          windowId={windowId}
         />
       ))}
     </CompanionWindow>
@@ -47,5 +45,4 @@ WindowSideBarAnnotationsPanel.propTypes = {
   annotationCount: PropTypes.number.isRequired,
   canvasIds: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
-  windowId: PropTypes.string.isRequired,
 };

@@ -12,7 +12,7 @@ import ns from '../config/css-ns';
  */
 export function ThumbnailNavigation({
   canvasGroupings, canvasIndex, hasNextCanvas = false, hasPreviousCanvas = false, position,
-  setNextCanvas = () => {}, setPreviousCanvas = () => {}, thumbnailNavigation, view = undefined, viewingDirection = '', windowId,
+  setNextCanvas = () => {}, setPreviousCanvas = () => {}, thumbnailNavigation, view = undefined, viewingDirection = '',
 }) {
   const { t } = useTranslation();
   const scrollbarSize = 15;
@@ -145,7 +145,6 @@ export function ThumbnailNavigation({
     canvasGroupings,
     height: thumbnailNavigation.height - spacing - scrollbarSize,
     position,
-    windowId,
   };
   return (
     <Paper
@@ -202,5 +201,4 @@ ThumbnailNavigation.propTypes = {
   thumbnailNavigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
   viewingDirection: PropTypes.string,
-  windowId: PropTypes.string.isRequired,
 };

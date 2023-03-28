@@ -14,6 +14,7 @@ import {
   getWindowConfig,
 } from '../state/selectors';
 import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -64,6 +65,7 @@ const mapStateToProps = (state, { windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowSideBarButtons'),
 );

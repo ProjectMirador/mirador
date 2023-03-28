@@ -36,7 +36,7 @@ const StyledToolbar = styled(Toolbar, { name: 'WindowTopBar', slot: 'toolbar' })
  * WindowTopBar
  */
 export function WindowTopBar({
-  removeWindow, windowId, toggleWindowSideBar,
+  removeWindow, toggleWindowSideBar,
   maximizeWindow = () => {}, maximized = false, minimizeWindow = () => {}, allowClose = true, allowMaximize = true,
   focusWindow = () => {}, allowFullscreen = false, allowTopMenuButton = true, allowWindowSideBar = true,
   component = 'nav',
@@ -62,14 +62,12 @@ export function WindowTopBar({
             <MenuIcon />
           </MiradorMenuButton>
         )}
-        <WindowTopBarTitle
-          windowId={windowId}
-        />
+        <WindowTopBarTitle />
         {allowTopMenuButton && (
-          <WindowTopMenuButton windowId={windowId} className={ns('window-menu-btn')} />
+          <WindowTopMenuButton className={ns('window-menu-btn')} />
         )}
-        <WindowTopBarPluginArea windowId={windowId} />
-        <WindowTopBarPluginMenu windowId={windowId} />
+        <WindowTopBarPluginArea />
+        <WindowTopBarPluginMenu />
         {allowMaximize && (
           <MiradorMenuButton
             aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
@@ -111,5 +109,4 @@ WindowTopBar.propTypes = {
   removeWindow: PropTypes.func.isRequired,
   toggleWindowSideBar: PropTypes.func.isRequired,
   windowDraggable: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
-  windowId: PropTypes.string.isRequired,
 };
