@@ -9,6 +9,7 @@ import {
   getCanvasGroupings, getCanvasIndex, getWindowViewType,
   getSequenceViewingDirection, getConfig,
 } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - used to hook up state to props
@@ -39,6 +40,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ThumbnailNavigation'),
 );

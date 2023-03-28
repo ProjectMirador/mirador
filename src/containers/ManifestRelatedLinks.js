@@ -9,6 +9,7 @@ import {
   getManifestUrl,
 } from '../state/selectors';
 import { ManifestRelatedLinks } from '../components/ManifestRelatedLinks';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -24,6 +25,7 @@ const mapStateToProps = (state, { id, windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps),
   withPlugins('ManifestRelatedLinks'),
 );

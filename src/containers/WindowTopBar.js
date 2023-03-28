@@ -4,6 +4,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getWindowConfig, isFocused } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => {
@@ -34,6 +35,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowTopBar'),
 );

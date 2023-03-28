@@ -26,41 +26,31 @@ const Root = styled('div', { name: 'PrimaryWindow', slot: 'root' })(() => ({
 /**  */
 const TypeSpecificViewer = ({
   audioResources = [], isCollection = false,
-  isFetching = false, videoResources = [], view = undefined, windowId,
+  isFetching = false, videoResources = [], view = undefined,
 }) => {
   if (isCollection) {
     return (
-      <SelectCollection
-        windowId={windowId}
-      />
+      <SelectCollection />
     );
   }
   if (isFetching === false) {
     if (view === 'gallery') {
       return (
-        <GalleryView
-          windowId={windowId}
-        />
+        <GalleryView />
       );
     }
     if (videoResources.length > 0) {
       return (
-        <VideoViewer
-          windowId={windowId}
-        />
+        <VideoViewer />
       );
     }
     if (audioResources.length > 0) {
       return (
-        <AudioViewer
-          windowId={windowId}
-        />
+        <AudioViewer />
       );
     }
     return (
-      <WindowViewer
-        windowId={windowId}
-      />
+      <WindowViewer />
     );
   }
   return null;
@@ -72,7 +62,6 @@ TypeSpecificViewer.propTypes = {
   isFetching: PropTypes.bool,
   videoResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
-  windowId: PropTypes.string.isRequired,
 };
 
 /**
@@ -81,7 +70,7 @@ TypeSpecificViewer.propTypes = {
  */
 export function PrimaryWindow({
   audioResources = undefined, isCollection = false, isFetching = false, videoResources = undefined,
-  view = undefined, windowId, isCollectionDialogVisible = false, children = null, className = undefined,
+  view = undefined, isCollectionDialogVisible = false, children = null, className = undefined,
 }) {
   const viewerProps = {
     audioResources,
@@ -89,14 +78,13 @@ export function PrimaryWindow({
     isFetching,
     videoResources,
     view,
-    windowId,
   };
 
   return (
     <Root data-testid="test-window" className={classNames(ns('primary-window'), className)}>
-      <WindowSideBar windowId={windowId} />
-      <CompanionArea windowId={windowId} position="left" />
-      { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
+      <WindowSideBar />
+      <CompanionArea position="left" />
+      { isCollectionDialogVisible && <CollectionDialog /> }
       <Suspense fallback={<div />}>
         {children || <TypeSpecificViewer {...viewerProps} />}
       </Suspense>
@@ -113,5 +101,4 @@ PrimaryWindow.propTypes = {
   isFetching: PropTypes.bool,
   videoResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
-  windowId: PropTypes.string.isRequired,
 };

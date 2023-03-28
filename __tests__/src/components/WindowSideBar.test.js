@@ -5,7 +5,6 @@ import { WindowSideBar } from '../../../src/components/WindowSideBar';
 function createWrapper({ ...props }) {
   return render(
     <WindowSideBar
-      windowId="xyz"
       {...props}
     />,
     {
@@ -17,6 +16,7 @@ function createWrapper({ ...props }) {
           },
         },
       },
+      windowId: 'xyz',
     },
   );
 }

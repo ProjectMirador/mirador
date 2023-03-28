@@ -11,6 +11,7 @@ import {
   getWindow,
 } from '../state/selectors';
 import { WindowSideBarInfoPanel } from '../components/WindowSideBarInfoPanel';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -32,6 +33,7 @@ const mapDispatchToProps = (dispatch, { windowId, id }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowSideBarInfoPanel'),
 );

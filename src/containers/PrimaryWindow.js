@@ -5,6 +5,7 @@ import {
   getManifestoInstance, getVisibleCanvasAudioResources, getVisibleCanvasVideoResources, getWindow,
 } from '../state/selectors';
 import { PrimaryWindow } from '../components/PrimaryWindow';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** */
 const mapStateToProps = (state, { windowId }) => {
@@ -18,6 +19,7 @@ const mapStateToProps = (state, { windowId }) => {
 };
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, null),
   withPlugins('PrimaryWindow'),
 );

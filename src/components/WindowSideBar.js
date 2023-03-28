@@ -19,7 +19,7 @@ const Nav = styled('nav', { name: 'WindowSideBar', slot: 'nav' })({
  * WindowSideBar
  */
 export function WindowSideBar({
-  classes = {}, direction, windowId, sideBarOpen = false,
+  classes = {}, direction, sideBarOpen = false,
 }) {
   const { t } = useTranslation();
   return (
@@ -35,7 +35,7 @@ export function WindowSideBar({
       SlideProps={{ direction: direction === 'rtl' ? 'left' : 'right', mountOnEnter: true, unmountOnExit: true }}
       open={sideBarOpen}
     >
-      <WindowSideBarButtons windowId={windowId} />
+      <WindowSideBarButtons />
     </Root>
   );
 }
@@ -44,5 +44,4 @@ WindowSideBar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   direction: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,
-  windowId: PropTypes.string.isRequired,
 };

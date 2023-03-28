@@ -4,6 +4,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getThumbnailNavigationPosition, getThemeDirection } from '../state/selectors';
 import { WindowThumbnailSettings } from '../components/WindowThumbnailSettings';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -25,6 +26,7 @@ const mapStateToProps = (state, { windowId }) => (
 );
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
   withPlugins('WindowThumbnailSettings'),
   // further HOC go here

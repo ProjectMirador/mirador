@@ -3,6 +3,7 @@ import { compose } from 'redux';
 import { withPlugins } from '../extend/withPlugins';
 import { VideoViewer } from '../components/VideoViewer';
 import { getConfig, getVisibleCanvasCaptions, getVisibleCanvasVideoResources } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** */
 const mapStateToProps = (state, { windowId }) => (
@@ -14,6 +15,7 @@ const mapStateToProps = (state, { windowId }) => (
 );
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, null),
   withPlugins('VideoViewer'),
 );

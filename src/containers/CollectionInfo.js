@@ -7,6 +7,7 @@ import {
 } from '../state/selectors';
 import * as actions from '../state/actions';
 import { CollectionInfo } from '../components/CollectionInfo';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -28,6 +29,7 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CollectionInfo'),
 );

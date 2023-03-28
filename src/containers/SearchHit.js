@@ -11,6 +11,7 @@ import {
   getSelectedContentSearchAnnotationIds,
   getSelectedAnnotationId,
 } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - used to hook up connect to state
@@ -69,6 +70,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('SearchHit'),
 );
