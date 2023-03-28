@@ -201,10 +201,6 @@ export class OpenSeadragonViewer extends Component {
     if (!(type === 'Image' || type === 'dctypes:Image' || format.startsWith('image/'))) return Promise.resolve();
 
     return new Promise((resolve, reject) => {
-      if (!viewer) {
-        reject();
-      }
-
       resolve(viewer.addSimpleImage({
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
@@ -224,10 +220,6 @@ export class OpenSeadragonViewer extends Component {
     const { canvasWorld } = this.props;
     const { viewer } = this.state;
     return new Promise((resolve, reject) => {
-      if (!viewer) {
-        reject();
-      }
-
       // OSD mutates this object, so we give it a shallow copy
       const tileSource = { ...infoResponse.json };
       const contentResource = canvasWorld.contentResource(infoResponse.id);
@@ -251,9 +243,6 @@ export class OpenSeadragonViewer extends Component {
   refreshTileProperties() {
     const { canvasWorld } = this.props;
     const { viewer } = this.state;
-
-    if (!viewer) return;
-
     const { world } = viewer;
 
     const items = [];
