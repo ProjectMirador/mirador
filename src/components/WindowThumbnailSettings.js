@@ -39,7 +39,7 @@ export class WindowThumbnailSettings extends Component {
 
     return (
       <>
-        <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('thumbnails')}</ListSubheader>
+        <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('thumbnails')}</ListSubheader>
 
         <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('off'); handleClose(); }}>
           <FormControlLabel

@@ -65,20 +65,13 @@ export class SidebarIndexTableOfContents extends Component {
   }
 
   /** */
-  handleKeyPressed(event, nodeId) {
+  handleNodeSelect(event, nodeId) {
     const { toggleNode } = this.props;
-
-    if (event.key === 'Enter') {
-      this.selectTreeItem(nodeId);
-    }
 
     if (event.key === ' ' || event.key === 'Spacebar') {
       toggleNode(nodeId);
     }
-  }
 
-  /** */
-  handleNodeSelect(_event, nodeId) {
     this.selectTreeItem(nodeId);
   }
 
@@ -134,7 +127,6 @@ export class SidebarIndexTableOfContents extends Component {
             root: classes.treeItemRoot,
             selected: classes.selected,
           }}
-          onKeyDown={e => this.handleKeyPressed(e, node.id)}
           label={(
             <div
               className={clsx({

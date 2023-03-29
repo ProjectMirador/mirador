@@ -104,7 +104,7 @@ export class ScrollTo extends Component {
   */
   render() {
     const {
-      children, containerRef, offsetTop, scrollTo, ...otherProps
+      children, containerRef, offsetTop, scrollTo, nodeId, ...otherProps
     } = this.props;
 
     if (!scrollTo) return children;

@@ -68,7 +68,7 @@ export class WindowViewSettings extends Component {
     if (viewTypes.length === 0) return null;
     return (
       <>
-        <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('view')}</ListSubheader>
+        <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('view')}</ListSubheader>
         { viewTypes.map(value => menuItem({ Icon: iconMap[value], value })) }
       </>
     );

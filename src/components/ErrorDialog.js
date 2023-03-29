@@ -29,7 +29,7 @@ export class ErrorDialog extends Component {
         open={hasError}
       >
         <DialogTitle id="error-dialog-title">
-          <Typography variant="h2">{t('errorDialogTitle')}</Typography>
+          {t('errorDialogTitle')}
         </DialogTitle>
         <DialogContent>
           <DialogContentText variant="body2" noWrap color="inherit">

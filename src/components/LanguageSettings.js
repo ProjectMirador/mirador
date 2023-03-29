@@ -23,7 +23,6 @@ export class LanguageSettings extends Component {
         {
           languages.map(language => (
             <MenuItem
-              button={!language.current}
               key={language.locale}
               onClick={() => { handleClick(language.locale); }}
             >

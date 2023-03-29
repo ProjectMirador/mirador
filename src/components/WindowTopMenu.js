@@ -11,7 +11,7 @@ function PluginHookWithHeader(props) {
   const { PluginComponents, t } = props; // eslint-disable-line react/prop-types
   return PluginComponents ? (
     <>
-      <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('windowPluginButtons')}</ListSubheader>
+      <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('windowPluginButtons')}</ListSubheader>
       <PluginHook {...props} />
     </>
   ) : null;
