@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { visuallyHidden } from '@mui/utils';
 import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
 import WorkspaceElastic from '../containers/WorkspaceElastic';
@@ -121,7 +122,7 @@ export class Workspace extends Component {
             )
           }
         >
-          <Typography variant="srOnly" component="h1">{t('miradorViewer')}</Typography>
+          <Typography style={visuallyHidden} component="h1">{t('miradorViewer')}</Typography>
           {this.workspaceByType()}
         </div>
       </IIIFDropTarget>

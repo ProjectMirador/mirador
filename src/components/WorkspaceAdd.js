@@ -11,6 +11,7 @@ import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { visuallyHidden } from '@mui/utils';
 import ns from '../config/css-ns';
 import ManifestForm from '../containers/ManifestForm';
 import ManifestListItem from '../containers/ManifestListItem';
@@ -115,7 +116,7 @@ export class WorkspaceAdd extends Component {
             </Grid>
           ) : (
             <Paper className={classes.list}>
-              <Typography variant="srOnly" component="h1">{t('miradorResources')}</Typography>
+              <Typography style={visuallyHidden} component="h1">{t('miradorResources')}</Typography>
               <PluginHook {...this.props} />
               <List disablePadding>
                 {manifestList}

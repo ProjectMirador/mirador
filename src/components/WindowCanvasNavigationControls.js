@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import { visuallyHidden } from '@mui/utils';
 import ZoomControls from '../containers/ZoomControls';
 import ViewerInfo from '../containers/ViewerInfo';
 import ViewerNavigation from '../containers/ViewerNavigation';
@@ -28,7 +29,7 @@ export class WindowCanvasNavigationControls extends Component {
       classes, visible, windowId, zoomToWorld,
     } = this.props;
 
-    if (!visible) return (<Typography variant="srOnly" component="div"><ViewerInfo windowId={windowId} /></Typography>);
+    if (!visible) return (<Typography style={visuallyHidden} component="div"><ViewerInfo windowId={windowId} /></Typography>);
 
     return (
       <Paper
