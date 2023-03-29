@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import WindowTopMenu from '../containers/WindowTopMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import WindowOptionsIcon from './icons/WindowOptionsIcon';
@@ -45,7 +46,9 @@ export class WindowTopMenuButton extends Component {
    * @return
    */
   render() {
-    const { classes, t, windowId } = this.props;
+    const {
+      classes, className, t, windowId,
+    } = this.props;
     const { open, anchorEl } = this.state;
     const menuId = `window-menu_${windowId}`;
     return (
@@ -54,7 +57,7 @@ export class WindowTopMenuButton extends Component {
           aria-haspopup="true"
           aria-label={t('windowMenu')}
           aria-owns={open ? menuId : undefined}
-          className={open ? classes.ctrlBtnSelected : null}
+          className={classNames(className, open ? classes.ctrlBtnSelected : null)}
           onClick={this.handleMenuClick}
         >
           <WindowOptionsIcon />
@@ -73,10 +76,12 @@ export class WindowTopMenuButton extends Component {
 
 WindowTopMenuButton.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  className: PropTypes.string,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };
 
 WindowTopMenuButton.defaultProps = {
+  className: '',
   t: key => key,
 };

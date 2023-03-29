@@ -49,6 +49,7 @@ class WorkspaceElasticWindow extends Component {
           });
         }}
         dragHandleClassName={ns('window-top-bar')}
+        cancel={`.${ns('window-menu-btn')}`}
         className={
           focused ? classes.focused : null
         }
