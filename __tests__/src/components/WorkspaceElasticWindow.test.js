@@ -96,29 +96,13 @@ describe('WorkspaceElasticWindow', () => {
       const el = container.querySelector('[style="position: absolute; user-select: none; width: 20px; height: 20px; right: -10px; bottom: -10px; cursor: se-resize;"]');
 
       const oldCoords = {
-        clientX: 0,
-        clientY: 0,
-        layerX: 0,
-        layerY: 0,
-        movementX: 0,
-        movementY: 0,
-        offsetX: 0,
-        offsetY: 0,
         x: 0,
         y: 0,
       };
 
       const coords = {
-        clientX: 400,
-        clientY: 200,
-        layerX: 100,
-        layerY: 100,
-        movementX: 200,
-        movementY: 200,
-        offsetX: 300,
-        offsetY: 300,
         x: 400,
-        y: 400,
+        y: 200,
       };
 
       await user.pointer([
