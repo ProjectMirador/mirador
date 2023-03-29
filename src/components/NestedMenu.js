@@ -1,10 +1,10 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import ExpandLess from '@material-ui/icons/ExpandLessSharp';
-import ExpandMore from '@material-ui/icons/ExpandMoreSharp';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import ExpandLess from '@mui/icons-material/ExpandLessSharp';
+import ExpandMore from '@mui/icons-material/ExpandMoreSharp';
 
 /**
  * NestedMenu ~ A presentation component to render a menu item and have

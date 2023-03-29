@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import Paper from '@material-ui/core/Paper';
+import Paper from '@mui/material/Paper';
 import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';

@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import NavigationIcon from '@material-ui/icons/PlayCircleOutlineSharp';
+import NavigationIcon from '@mui/icons-material/PlayCircleOutlineSharp';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import MiradorMenuButton from '../containers/MiradorMenuButton';

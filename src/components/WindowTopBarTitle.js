@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import Skeleton from '@material-ui/lab/Skeleton';
-import ErrorIcon from '@material-ui/icons/ErrorOutlineSharp';
+import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
+import ErrorIcon from '@mui/icons-material/ErrorOutlineSharp';
 
 /** */
 function TitleTypography({ children, ...props }) {

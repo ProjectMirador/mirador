@@ -1,11 +1,11 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import Collapse from '@material-ui/core/Collapse';
-import DialogActions from '@material-ui/core/DialogActions';
-import Typography from '@material-ui/core/Typography';
-import LockIcon from '@material-ui/icons/LockSharp';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Collapse from '@mui/material/Collapse';
+import DialogActions from '@mui/material/DialogActions';
+import Typography from '@mui/material/Typography';
+import LockIcon from '@mui/icons-material/LockSharp';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { PluginHook } from './PluginHook';
 

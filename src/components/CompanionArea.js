@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Slide from '@material-ui/core/Slide';
-import ArrowLeftIcon from '@material-ui/icons/ArrowLeftSharp';
-import ArrowRightIcon from '@material-ui/icons/ArrowRightSharp';
+import Slide from '@mui/material/Slide';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeftSharp';
+import ArrowRightIcon from '@mui/icons-material/ArrowRightSharp';
 import CompanionWindowFactory from '../containers/CompanionWindowFactory';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';

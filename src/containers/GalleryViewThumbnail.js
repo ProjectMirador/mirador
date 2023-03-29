@@ -1,7 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import flatten from 'lodash/flatten';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 import * as actions from '../state/actions';
 import { GalleryViewThumbnail } from '../components/GalleryViewThumbnail';
 import {
@@ -49,7 +49,7 @@ const styles = theme => ({
     border: '2px solid transparent',
     cursor: 'pointer',
     display: 'inline-block',
-    margin: `${theme.spacing(1)}px ${theme.spacing(0.5)}px`,
+    margin: `${theme.spacing(1)} ${theme.spacing(0.5)}`,
     maxHeight: props => props.config.height + 45,
     minWidth: '60px',
     overflow: 'hidden',

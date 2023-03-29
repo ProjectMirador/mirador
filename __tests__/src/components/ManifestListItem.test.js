@@ -34,7 +34,7 @@ describe('ManifestListItem', () => {
     const { container } = createWrapper({ ready: false });
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
-    expect(container.querySelectorAll('.MuiSkeleton-rect').length).toBeGreaterThan(0); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelectorAll('.MuiSkeleton-rectangular').length).toBeGreaterThan(0); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
   it('renders an error message if fetching the manifest failed', () => {
     createWrapper({ error: 'This is an error message' });

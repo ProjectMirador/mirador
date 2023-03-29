@@ -10,9 +10,9 @@ import {
   MenuList,
   MenuItem,
   Typography,
-} from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBackSharp';
-import Skeleton from '@material-ui/lab/Skeleton';
+} from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBackSharp';
+import Skeleton from '@mui/material/Skeleton';
 import asArray from '../lib/asArray';
 import { LabelValueMetadata } from './LabelValueMetadata';
 import CollapsibleSection from '../containers/CollapsibleSection';
@@ -118,7 +118,7 @@ export class CollectionDialog extends Component {
         container={this.dialogContainer()}
         BackdropProps={this.backdropProps()}
       >
-        <DialogTitle id="select-collection" disableTypography>
+        <DialogTitle id="select-collection">
           <Skeleton className={classes.placeholder} variant="text" />
         </DialogTitle>
         <ScrollIndicatedDialogContent>
@@ -179,7 +179,7 @@ export class CollectionDialog extends Component {
         BackdropProps={this.backdropProps()}
         open
       >
-        <DialogTitle id="select-collection" disableTypography>
+        <DialogTitle id="select-collection">
           <Typography component="div" variant="overline">
             { t(isMultipart ? 'multipartCollection' : 'collection') }
           </Typography>

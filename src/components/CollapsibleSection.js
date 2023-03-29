@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDownSharp';
-import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUpSharp';
+import Typography from '@mui/material/Typography';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDownSharp';
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUpSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**

@@ -8,8 +8,8 @@ import {
   MenuItem,
   Typography,
   DialogContent,
-} from '@material-ui/core';
-import PaletteIcon from '@material-ui/icons/PaletteSharp';
+} from '@mui/material';
+import PaletteIcon from '@mui/icons-material/PaletteSharp';
 import PropTypes from 'prop-types';
 
 /**
@@ -48,7 +48,7 @@ export class ChangeThemeDialog extends Component {
         onClose={handleClose}
         open={open}
       >
-        <DialogTitle disableTypography>
+        <DialogTitle>
           <Typography variant="h2">
             {t('changeTheme')}
           </Typography>

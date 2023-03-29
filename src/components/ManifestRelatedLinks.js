@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 import classNames from 'classnames';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ns from '../config/css-ns';

@@ -12,7 +12,7 @@ export default {
   themes: {
     dark: {
       palette: {
-        type: 'dark',
+        mode: 'dark',
         primary: {
           main: '#4db6ac',
         },
@@ -28,13 +28,13 @@ export default {
     },
     light: {
       palette: {
-        type: 'light',
+        mode: 'light',
       }
     }
   },
   theme: { // Sets up a MaterialUI theme. See https://material-ui.com/customization/default-theme/
     palette: {
-      type: 'light',
+      mode: 'light',
       primary: {
         main: '#1967d2', // Controls the color of the Add button and current window indicator
       },

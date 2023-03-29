@@ -2,9 +2,10 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
-import {
-  ThemeProvider, StylesProvider, createTheme, jssPreset, createGenerateClassName,
-} from '@material-ui/core/styles';
+import { ThemeProvider, StyledEngineProvider, createTheme, adaptV4Theme } from '@mui/material/styles';
+import StylesProvider from '@mui/styles/StylesProvider';
+import jssPreset from '@mui/styles/jssPreset';
+import createGenerateClassName from '@mui/styles/createGenerateClassName';
 import { DndContext, DndProvider } from 'react-dnd';
 import { MultiBackend } from 'react-dnd-multi-backend';
 import { HTML5toTouch } from 'rdndmb-html5-to-touch';
@@ -106,18 +107,20 @@ export class AppProviders extends Component {
     return (
       <FullScreenShim>
         <I18nextProvider i18n={this.i18n}>
-          <ThemeProvider
-            theme={createTheme(theme)}
-          >
-            <StylesProvider
-              jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
-              generateClassName={generateClassName}
+          <StyledEngineProvider injectFirst>
+            <ThemeProvider
+              theme={createTheme(adaptV4Theme(theme))}
             >
-              <MaybeDndProvider dndManager={dndManager}>
-                {children}
-              </MaybeDndProvider>
-            </StylesProvider>
-          </ThemeProvider>
+              <StylesProvider
+                jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
+                generateClassName={generateClassName}
+              >
+                <MaybeDndProvider dndManager={dndManager}>
+                  {children}
+                </MaybeDndProvider>
+              </StylesProvider>
+            </ThemeProvider>
+          </StyledEngineProvider>
         </I18nextProvider>
       </FullScreenShim>
     );

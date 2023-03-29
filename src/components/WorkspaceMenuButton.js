@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import SettingsIcon from '@material-ui/icons/SettingsSharp';
+import SettingsIcon from '@mui/icons-material/SettingsSharp';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import WorkspaceMenu from '../containers/WorkspaceMenu';

@@ -1,7 +1,8 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { withStyles, lighten, darken } from '@material-ui/core/styles';
+import { lighten, darken } from '@mui/material/styles';
+import withStyles from '@mui/styles/withStyles';
 import { withPlugins } from '../extend/withPlugins';
 import { WorkspaceArea } from '../components/WorkspaceArea';
 import { getConfig, getWindowIds, getWorkspace } from '../state/selectors';
@@ -26,7 +27,7 @@ const mapStateToProps = state => (
  * @returns {{background: {background: string}}}
  */
 const styles = (theme) => {
-  const getBackgroundColor = theme.palette.type === 'light' ? darken : lighten;
+  const getBackgroundColor = theme.palette.mode === 'light' ? darken : lighten;
 
   return {
     viewer: {

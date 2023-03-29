@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import Badge from '@material-ui/core/Badge';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
 /**
  * MiradorMenuButton ~ Wrap the given icon prop in an IconButton and a Tooltip.
@@ -21,7 +21,7 @@ export function MiradorMenuButton(props) {
   } = props;
 
   const button = (
-    <IconButton {...iconButtonProps}>
+    <IconButton {...iconButtonProps} size="large">
       {badge
         ? <Badge overlap="rectangular" {...BadgeProps}>{children}</Badge>
         : children}

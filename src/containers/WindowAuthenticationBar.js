@@ -1,7 +1,7 @@
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
-import { alpha } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@mui/material/styles';
+import withStyles from '@mui/styles/withStyles';
 import { withPlugins } from '../extend/withPlugins';
 import { WindowAuthenticationBar } from '../components/WindowAuthenticationBar';
 

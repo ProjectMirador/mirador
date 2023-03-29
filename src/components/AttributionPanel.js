@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import Skeleton from '@material-ui/lab/Skeleton';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import Skeleton from '@mui/material/Skeleton';
 import { Img } from 'react-image';
 import CompanionWindow from '../containers/CompanionWindow';
 import { LabelValueMetadata } from './LabelValueMetadata';
@@ -63,7 +63,7 @@ export class AttributionPanel extends Component {
               role="presentation"
               className={classes.logo}
               unloader={
-                <Skeleton className={classes.placeholder} variant="rect" height={60} width={60} />
+                <Skeleton className={classes.placeholder} variant="rectangular" height={60} width={60} />
               }
             />
           </div>

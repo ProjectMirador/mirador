@@ -1,9 +1,9 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import MenuIcon from '@material-ui/icons/MenuSharp';
-import CloseIcon from '@material-ui/icons/CloseSharp';
-import Toolbar from '@material-ui/core/Toolbar';
-import AppBar from '@material-ui/core/AppBar';
+import MenuIcon from '@mui/icons-material/MenuSharp';
+import CloseIcon from '@mui/icons-material/CloseSharp';
+import Toolbar from '@mui/material/Toolbar';
+import AppBar from '@mui/material/AppBar';
 import classNames from 'classnames';
 import WindowTopMenuButton from '../containers/WindowTopMenuButton';
 import WindowTopBarPluginArea from '../containers/WindowTopBarPluginArea';

@@ -1,8 +1,8 @@
 import { Component } from 'react';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import CheckIcon from '@material-ui/icons/CheckSharp';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import CheckIcon from '@mui/icons-material/CheckSharp';
 import PropTypes from 'prop-types';
 
 /**

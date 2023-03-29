@@ -1,14 +1,14 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Badge from '@material-ui/core/Badge';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/InfoSharp';
-import AnnotationIcon from '@material-ui/icons/CommentSharp';
-import AttributionIcon from '@material-ui/icons/CopyrightSharp';
-import LayersIcon from '@material-ui/icons/LayersSharp';
-import SearchIcon from '@material-ui/icons/SearchSharp';
+import Badge from '@mui/material/Badge';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/InfoSharp';
+import AnnotationIcon from '@mui/icons-material/CommentSharp';
+import AttributionIcon from '@mui/icons-material/CopyrightSharp';
+import LayersIcon from '@mui/icons-material/LayersSharp';
+import SearchIcon from '@mui/icons-material/SearchSharp';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
 
 /** */

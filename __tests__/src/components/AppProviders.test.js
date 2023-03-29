@@ -1,4 +1,4 @@
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { render, screen } from 'test-utils';
 import { useTranslation } from 'react-i18next';
 import { useDrop } from 'react-dnd';

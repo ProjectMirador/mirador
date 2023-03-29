@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import Menu from '@material-ui/core//Menu';
-import ListSubheader from '@material-ui/core/ListSubheader';
+import Menu from '@mui/material//Menu';
+import ListSubheader from '@mui/material/ListSubheader';
 import PropTypes from 'prop-types';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
 import WindowViewSettings from '../containers/WindowViewSettings';

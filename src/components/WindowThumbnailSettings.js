@@ -1,8 +1,8 @@
 import { Component } from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import MenuItem from '@material-ui/core/MenuItem';
-import ThumbnailsOffIcon from '@material-ui/icons/CropDinSharp';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import ListSubheader from '@mui/material/ListSubheader';
+import MenuItem from '@mui/material/MenuItem';
+import ThumbnailsOffIcon from '@mui/icons-material/CropDinSharp';
 import PropTypes from 'prop-types';
 import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
 import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';

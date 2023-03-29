@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import AddCircleIcon from '@material-ui/icons/AddCircleOutlineSharp';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircleOutlineSharp';
+import AddCircleIcon from '@mui/icons-material/AddCircleOutlineSharp';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircleOutlineSharp';
 import PropTypes from 'prop-types';
 import RestoreZoomIcon from './icons/RestoreZoomIcon';
 import MiradorMenuButton from '../containers/MiradorMenuButton';

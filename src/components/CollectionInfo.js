@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import ViewListIcon from '@material-ui/icons/ViewListSharp';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import ViewListIcon from '@mui/icons-material/ViewListSharp';
 import CollapsibleSection from '../containers/CollapsibleSection';
 
 /**

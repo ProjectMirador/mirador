@@ -1,13 +1,13 @@
 import { Component } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
 import {
   DialogActions,
   TextField,
   Typography,
-} from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+} from '@mui/material';
+import Button from '@mui/material/Button';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 
 /**
@@ -73,7 +73,7 @@ export class WorkspaceImport extends Component {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle id="workspace-import-title" disableTypography>
+        <DialogTitle id="workspace-import-title">
           <Typography variant="h2">{t('importWorkspace')}</Typography>
         </DialogTitle>
         <ScrollIndicatedDialogContent>

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import deburr from 'lodash/deburr';
 import debounce from 'lodash/debounce';
 import isObject from 'lodash/isObject';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import TextField from '@material-ui/core/TextField';
-import SearchIcon from '@material-ui/icons/SearchSharp';
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
+import SearchIcon from '@mui/icons-material/SearchSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import SearchPanelNavigation from '../containers/SearchPanelNavigation';
 
@@ -122,46 +122,44 @@ export class SearchPanelControls extends Component {
 
     const { search, suggestions } = this.state;
     const id = `search-${companionWindowId}`;
-    return (
-      <>
-        <form aria-label={t('searchTitle')} onSubmit={this.submitSearch} className={classes.form}>
-          <Autocomplete
-            id={id}
-            inputValue={search}
-            options={suggestions}
-            getOptionLabel={getMatch}
-            getOptionSelected={(option, value) => (
-              deburr(getMatch(option).trim()).toLowerCase()
-                === deburr(getMatch(value).trim()).toLowerCase()
-            )}
-            noOptionsText=""
-            onChange={this.selectItem}
-            onInputChange={this.handleChange}
-            freeSolo
-            renderInput={params => (
-              <TextField
-                {...params}
-                label={t('searchInputLabel')}
-                InputProps={{
-                  ...params.InputProps,
-                  endAdornment: (
-                    <div className={classes.endAdornment}>
-                      <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
-                        <SearchIcon />
-                      </MiradorMenuButton>
-                      {Boolean(searchIsFetching) && (
-                        <CircularProgress className={classes.searchProgress} size={50} />
-                      )}
-                    </div>
-                  ),
-                }}
-              />
-            )}
-          />
-        </form>
-        <SearchPanelNavigation windowId={windowId} companionWindowId={companionWindowId} />
-      </>
-    );
+    return <>
+      <form aria-label={t('searchTitle')} onSubmit={this.submitSearch} className={classes.form}>
+        <Autocomplete
+          id={id}
+          inputValue={search}
+          options={suggestions}
+          getOptionLabel={getMatch}
+          isOptionEqualToValue={(option, value) => (
+            deburr(getMatch(option).trim()).toLowerCase()
+              === deburr(getMatch(value).trim()).toLowerCase()
+          )}
+          noOptionsText=""
+          onChange={this.selectItem}
+          onInputChange={this.handleChange}
+          freeSolo
+          renderInput={params => (
+            <TextField
+              {...params}
+              label={t('searchInputLabel')}
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <div className={classes.endAdornment}>
+                    <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
+                      <SearchIcon />
+                    </MiradorMenuButton>
+                    {Boolean(searchIsFetching) && (
+                      <CircularProgress className={classes.searchProgress} size={50} />
+                    )}
+                  </div>
+                ),
+              }}
+            />
+          )}
+        />
+      </form>
+      <SearchPanelNavigation windowId={windowId} companionWindowId={companionWindowId} />
+    </>;
   }
 }
 

@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import MiradorIcon from './icons/MiradorIcon';
 
 /**
@@ -25,7 +25,7 @@ export class Branding extends Component {
             href="https://projectmirador.org"
             target="_blank"
             rel="noopener"
-          >
+            size="large">
             <MiradorIcon aria-label={t('aboutMirador')} titleAccess={t('aboutMirador')} fontSize="large" />
           </IconButton>
         </Typography>

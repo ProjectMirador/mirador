@@ -1,9 +1,9 @@
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
-import Avatar from '@material-ui/core/Avatar';
-import Chip from '@material-ui/core/Chip';
-import AnnotationIcon from '@material-ui/icons/CommentSharp';
-import SearchIcon from '@material-ui/icons/SearchSharp';
+import Avatar from '@mui/material/Avatar';
+import Chip from '@mui/material/Chip';
+import AnnotationIcon from '@mui/icons-material/CommentSharp';
+import SearchIcon from '@mui/icons-material/SearchSharp';
 import classNames from 'classnames';
 import { InView } from 'react-intersection-observer';
 import MiradorCanvas from '../lib/MiradorCanvas';
@@ -139,7 +139,7 @@ export class GalleryViewThumbnail extends Component {
               { searchAnnotationsCount > 0 && (
                 <Chip
                   avatar={(
-                    <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
+                    <Avatar className={classes.avatar} classes={{ circular: classes.avatarIcon }}>
                       <SearchIcon fontSize="small" />
                     </Avatar>
                   )}
@@ -151,7 +151,7 @@ export class GalleryViewThumbnail extends Component {
               { (annotationsCount || 0) > 0 && (
                 <Chip
                   avatar={(
-                    <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
+                    <Avatar className={classes.avatar} classes={{ circular: classes.avatarIcon }}>
                       <AnnotationIcon className={classes.annotationIcon} />
                     </Avatar>
                   )}

@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import BookmarksIcon from '@material-ui/icons/BookmarksSharp';
+import BookmarksIcon from '@mui/icons-material/BookmarksSharp';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import WindowList from '../containers/WindowList';

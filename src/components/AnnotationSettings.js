@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import VisibilityIcon from '@material-ui/icons/VisibilitySharp';
-import VisibilityOffIcon from '@material-ui/icons/VisibilityOffSharp';
+import VisibilityIcon from '@mui/icons-material/VisibilitySharp';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOffSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**

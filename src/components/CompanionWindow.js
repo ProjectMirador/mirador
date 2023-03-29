@@ -1,11 +1,11 @@
 import { Children, cloneElement, Component } from 'react';
 import PropTypes from 'prop-types';
-import CloseIcon from '@material-ui/icons/CloseSharp';
-import OpenInNewIcon from '@material-ui/icons/OpenInNewSharp';
-import MoveIcon from '@material-ui/icons/DragIndicatorSharp';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Toolbar from '@material-ui/core/Toolbar';
+import CloseIcon from '@mui/icons-material/CloseSharp';
+import OpenInNewIcon from '@mui/icons-material/OpenInNewSharp';
+import MoveIcon from '@mui/icons-material/DragIndicatorSharp';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
 import { Rnd } from 'react-rnd';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';

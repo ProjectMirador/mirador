@@ -1,6 +1,6 @@
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 import { LocalePicker } from '../components/LocalePicker';
 
 /**

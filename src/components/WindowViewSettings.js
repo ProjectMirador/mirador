@@ -1,9 +1,9 @@
 import { Component } from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import SingleIcon from '@material-ui/icons/CropOriginalSharp';
-import ScrollViewIcon from '@material-ui/icons/ViewColumn';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import MenuItem from '@mui/material/MenuItem';
+import ListSubheader from '@mui/material/ListSubheader';
+import SingleIcon from '@mui/icons-material/CropOriginalSharp';
+import ScrollViewIcon from '@mui/icons-material/ViewColumn';
 import PropTypes from 'prop-types';
 import BookViewIcon from './icons/BookViewIcon';
 import GalleryViewIcon from './icons/GalleryViewIcon';

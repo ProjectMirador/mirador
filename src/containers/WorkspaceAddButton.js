@@ -1,12 +1,14 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core';
-import withWidth from '@material-ui/core/withWidth';
+import withStyles from '@mui/styles/withStyles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getWindowIds, getWorkspace } from '../state/selectors';
 import { WorkspaceAddButton } from '../components/WorkspaceAddButton';
+
+// FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 /**
  * mapStateToProps - to hook up connect

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import DialogContent from '@material-ui/core/DialogContent';
+import DialogContent from '@mui/material/DialogContent';
 
 /**
  * ScrollIndicatedDialogContent ~ Inject a style into the DialogContent component

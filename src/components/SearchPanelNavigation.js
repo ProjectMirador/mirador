@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeftSharp';
-import ChevronRightIcon from '@material-ui/icons/ChevronRightSharp';
-import Typography from '@material-ui/core/Typography';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeftSharp';
+import ChevronRightIcon from '@mui/icons-material/ChevronRightSharp';
+import Typography from '@mui/material/Typography';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**

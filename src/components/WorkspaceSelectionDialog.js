@@ -1,13 +1,13 @@
 import { Component } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
 import {
   Card,
   CardContent,
   MenuList,
   MenuItem,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 import PropTypes from 'prop-types';
 import WorkspaceTypeElasticIcon from './icons/WorkspaceTypeElasticIcon';
 import WorkspaceTypeMosaicIcon from './icons/WorkspaceTypeMosaicIcon';
@@ -52,7 +52,7 @@ export class WorkspaceSelectionDialog extends Component {
         onClose={handleClose}
         open={open}
       >
-        <DialogTitle id="workspace-selection-dialog-title" disableTypography>
+        <DialogTitle id="workspace-selection-dialog-title">
           <Typography variant="h2">{t('workspaceSelectionTitle')}</Typography>
         </DialogTitle>
         <ScrollIndicatedDialogContent>

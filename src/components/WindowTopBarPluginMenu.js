@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import MoreVertIcon from '@material-ui/icons/MoreVertSharp';
-import Menu from '@material-ui/core/Menu';
+import MoreVertIcon from '@mui/icons-material/MoreVertSharp';
+import Menu from '@mui/material/Menu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { PluginHook } from './PluginHook';
 

@@ -1,9 +1,9 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import BackIcon from '@material-ui/icons/ArrowBackSharp';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
+import BackIcon from '@mui/icons-material/ArrowBackSharp';
 import { announce } from '@react-aria/live-announcer';
 import SearchHit from '../containers/SearchHit';
 import { ScrollTo } from './ScrollTo';

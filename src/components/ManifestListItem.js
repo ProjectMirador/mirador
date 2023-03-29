@@ -1,10 +1,10 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import ListItem from '@material-ui/core/ListItem';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Skeleton from '@material-ui/lab/Skeleton';
+import ListItem from '@mui/material/ListItem';
+import ButtonBase from '@mui/material/ButtonBase';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
 import { Img } from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
 import ns from '../config/css-ns';
@@ -68,7 +68,7 @@ export class ManifestListItem extends Component {
     const placeholder = (
       <Grid container className={ns('manifest-list-item')} spacing={2}>
         <Grid item xs={3} sm={2}>
-          <Skeleton className={classes.placeholder} variant="rect" height={80} width={120} />
+          <Skeleton className={classes.placeholder} variant="rectangular" height={80} width={120} />
         </Grid>
         <Grid item xs={9} sm={6}>
           <Skeleton className={classes.placeholder} variant="text" />
@@ -78,7 +78,7 @@ export class ManifestListItem extends Component {
           <Skeleton className={classes.placeholder} variant="text" />
         </Grid>
         <Grid item xs={4} sm={2}>
-          <Skeleton className={classes.placeholder} variant="rect" height={60} width={60} />
+          <Skeleton className={classes.placeholder} variant="rectangular" height={60} width={60} />
         </Grid>
       </Grid>
     );
@@ -113,7 +113,7 @@ export class ManifestListItem extends Component {
                           height="80"
                           unloader={(
                             <Skeleton
-                              variant="rect"
+                              variant="rectangular"
                               animation={false}
                               className={classes.placeholder}
                               height={80}
@@ -122,7 +122,7 @@ export class ManifestListItem extends Component {
                           )}
                         />
                       )
-                      : <Skeleton className={classes.placeholder} variant="rect" height={80} width={120} />}
+                      : <Skeleton className={classes.placeholder} variant="rectangular" height={80} width={120} />}
                   </Grid>
                   <Grid item xs={8} sm={9} component="span">
                     { isCollection && (
@@ -152,7 +152,7 @@ export class ManifestListItem extends Component {
                   className={classes.logo}
                   unloader={(
                     <Skeleton
-                      variant="rect"
+                      variant="rectangular"
                       animation={false}
                       className={classes.placeholder}
                       height={60}
