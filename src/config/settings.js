@@ -220,6 +220,7 @@ export default {
     ar: 'العربية',
     de: 'Deutsch',
     en: 'English',
+    fa: 'فارسی',
     fr: 'Français',
     ja: '日本語',
     kr: '한국어',
