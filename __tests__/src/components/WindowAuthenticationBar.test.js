@@ -1,6 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { exact } from 'prop-types';
 import { config } from 'react-transition-group'; // eslint-disable-line import/no-extraneous-dependencies
 import { WindowAuthenticationBar } from '../../../src/components/WindowAuthenticationBar';
 
