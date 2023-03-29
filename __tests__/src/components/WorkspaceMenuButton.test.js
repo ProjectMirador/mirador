@@ -1,13 +1,13 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
-import { renderWithProviders } from '../../utils/store';
+
 import { WorkspaceMenuButton } from '../../../src/components/WorkspaceMenuButton';
 
 describe('WorkspaceMenuButton', () => {
   let user;
   beforeEach(() => {
     user = userEvent.setup();
-    renderWithProviders(
+    render(
       <WorkspaceMenuButton classes={{ ctrlBtnSelected: 'ctrlBtnSelected' }} />,
     );
   });

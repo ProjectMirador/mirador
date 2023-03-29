@@ -1,11 +1,11 @@
 import i18next from 'i18next';
-import { screen } from '@testing-library/react';
-import { renderWithProviders } from '../../utils/store';
+import { render, screen } from 'test-utils';
+
 import { ErrorContent } from '../../../src/components/ErrorContent';
 
 describe('ErrorContent', () => {
   it('should render everything when showJsError is true', async () => {
-    renderWithProviders(
+    render(
       <ErrorContent
         error={new Error('Invalid JSON')}
         windowId="xyz"
@@ -35,7 +35,7 @@ describe('ErrorContent', () => {
     expect(document.querySelector('pre')).toHaveTextContent('Invalid JSON'); // eslint-disable-line testing-library/no-node-access
   });
   it('does not render the alert when showJsError is false ', async () => {
-    renderWithProviders(
+    render(
       <ErrorContent
         error={new Error('Invalid JSON')}
         windowId="xyz"

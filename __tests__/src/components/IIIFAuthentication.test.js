@@ -1,4 +1,4 @@
-import { screen, render, waitFor } from '@testing-library/react';
+import { screen, render, waitFor } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { IIIFAuthentication } from '../../../src/components/IIIFAuthentication';
 

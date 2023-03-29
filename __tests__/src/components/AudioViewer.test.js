@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import { AudioViewer } from '../../../src/components/AudioViewer';
 
 /** create wrapper */

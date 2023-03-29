@@ -1,10 +1,10 @@
-import { screen } from '@testing-library/react';
-import { renderWithProviders } from '../../utils/store';
+import { render, screen } from 'test-utils';
+
 import { CompanionWindowFactory } from '../../../src/components/CompanionWindowFactory';
 
 /** create wrapper */
 function createWrapper({ content = 'closed', ...props }) {
-  return renderWithProviders(
+  return render(
     <CompanionWindowFactory
       windowId="x"
       id="123"

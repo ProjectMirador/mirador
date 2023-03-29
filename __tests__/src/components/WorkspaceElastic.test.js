@@ -1,11 +1,11 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
-import { renderWithProviders } from '../../utils/store';
+
 import WorkspaceElastic from '../../../src/components/WorkspaceElastic';
 
 /** create wrapper */
 function createWrapper({ elasticLayout = {}, ...props }) {
-  return renderWithProviders(
+  return render(
     <WorkspaceElastic
       classes={{}}
       elasticLayout={elasticLayout}

@@ -1,10 +1,9 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import { WindowViewer } from '../../../src/components/WindowViewer';
-import { renderWithProviders } from '../../utils/store';
 
 /** create wrapper */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <WindowViewer
       {...props}
     />,

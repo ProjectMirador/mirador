@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
 
 /* eslint-disable testing-library/no-node-access */

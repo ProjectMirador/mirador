@@ -1,7 +1,7 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
-import { renderWithProviders } from '../../utils/store';
+
 import { SidebarIndexList } from '../../../src/components/SidebarIndexList';
 import manifestJson from '../../fixtures/version-2/019.json';
 
@@ -11,7 +11,7 @@ import manifestJson from '../../fixtures/version-2/019.json';
 function createWrapper(props) {
   const canvases = Utils.parseManifest(manifestJson).getSequences()[0].getCanvases();
 
-  return renderWithProviders(
+  return render(
     <SidebarIndexList
       id="asdf"
       canvases={canvases}

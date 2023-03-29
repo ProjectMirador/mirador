@@ -1,10 +1,10 @@
-import { screen } from '@testing-library/react';
-import { renderWithProviders } from '../../utils/store';
+import { render, screen } from 'test-utils';
+
 import { WorkspaceControlPanelButtons } from '../../../src/components/WorkspaceControlPanelButtons';
 
 describe('WorkspaceControlPanelButtons', () => {
   beforeEach(() => {
-    renderWithProviders(<WorkspaceControlPanelButtons />);
+    render(<WorkspaceControlPanelButtons />);
   });
 
   it('render all needed elements', () => {

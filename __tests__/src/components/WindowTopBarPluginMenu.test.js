@@ -1,7 +1,7 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
-import { renderWithProviders } from '../../utils/store';
+
 import { WindowTopBarPluginMenu } from '../../../src/components/WindowTopBarPluginMenu';
 
 /** create wrapper */
@@ -28,7 +28,7 @@ class mockComponentA extends React.Component {
 describe('WindowTopBarPluginMenu', () => {
   describe('when there are no plugins present', () => {
     it('renders nothing (and no Button/Menu/PluginHook)', () => {
-      renderWithProviders(<Subject />);
+      render(<Subject />);
       expect(screen.queryByTestId('testA')).not.toBeInTheDocument();
       expect(screen.queryByRole('button', { name: 'windowPluginMenu' })).not.toBeInTheDocument();
     });
@@ -38,7 +38,7 @@ describe('WindowTopBarPluginMenu', () => {
     let user;
     beforeEach(() => {
       user = userEvent.setup();
-      renderWithProviders(<Subject PluginComponents={[mockComponentA]} />);
+      render(<Subject PluginComponents={[mockComponentA]} />);
     });
 
     it('renders the Button', async () => {

@@ -1,7 +1,9 @@
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render, screen, fireEvent, waitFor,
+} from 'test-utils';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { renderWithProviders } from '../../utils/store';
+
 import { Workspace } from '../../../src/components/Workspace';
 
 /**
@@ -9,7 +11,7 @@ import { Workspace } from '../../../src/components/Workspace';
  * component with all required props set
 */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <DndProvider backend={HTML5Backend}>
       <Workspace
         classes={{}}

@@ -1,11 +1,11 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
-import { renderWithProviders } from '../../utils/store';
+
 import { CompanionArea } from '../../../src/components/CompanionArea';
 
 /** */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <CompanionArea
       classes={{ horizontal: 'horizontal' }}
       direction="ltr"

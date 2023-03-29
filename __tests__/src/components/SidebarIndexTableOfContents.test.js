@@ -1,7 +1,7 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
-import { renderWithProviders } from '../../utils/store';
+
 import { SidebarIndexTableOfContents } from '../../../src/components/SidebarIndexTableOfContents';
 import ConnectedSidebarIndexTableOfContents from '../../../src/containers/SidebarIndexTableOfContents';
 import manifestVersion2 from '../../fixtures/version-2/structures.json';
@@ -33,7 +33,7 @@ function createWrapper(props) {
  * write a reasonable test for it)
  */
 function createInteractiveWrapper({ manifest = manifestVersion3, ...props }) {
-  return renderWithProviders(
+  return render(
     <ConnectedSidebarIndexTableOfContents
       id="something"
       windowId="a"

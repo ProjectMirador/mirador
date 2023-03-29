@@ -1,5 +1,5 @@
 import { cloneElement } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from 'test-utils';
 import PropTypes from 'prop-types';
 import userEvent from '@testing-library/user-event';
 import OpenSeadragon from 'openseadragon';

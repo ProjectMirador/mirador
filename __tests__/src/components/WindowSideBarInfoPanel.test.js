@@ -1,10 +1,10 @@
-import { screen } from '@testing-library/react';
-import { renderWithProviders } from '../../utils/store';
+import { render, screen } from 'test-utils';
+
 import { WindowSideBarInfoPanel } from '../../../src/components/WindowSideBarInfoPanel';
 
 /** create wrapper */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <WindowSideBarInfoPanel
       id="asdf"
       windowId="zxcv"

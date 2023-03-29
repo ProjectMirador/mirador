@@ -1,5 +1,5 @@
 import { cloneElement } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import OpenSeadragon from 'openseadragon';
 import { Utils } from 'manifesto.js';
 import { AnnotationsOverlay } from '../../../src/components/AnnotationsOverlay';

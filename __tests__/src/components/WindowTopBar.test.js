@@ -1,7 +1,7 @@
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, render } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { WindowTopBar } from '../../../src/components/WindowTopBar';
-import { renderWithProviders } from '../../utils/store';
+
 import FullscreenContext from '../../../src/contexts/FullScreenContext';
 
 /** create wrapper */
@@ -30,7 +30,7 @@ describe('WindowTopBar', () => {
   });
 
   it('renders all default components', () => {
-    renderWithProviders(<Subject />);
+    render(<Subject />);
     expect(screen.getByRole('navigation', { name: 'windowNavigation' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'toggleWindowSideBar' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'windowMenu' })).toBeInTheDocument();
@@ -40,7 +40,7 @@ describe('WindowTopBar', () => {
   });
 
   it('uses allow flags to override defaults', () => {
-    renderWithProviders(<Subject
+    render(<Subject
       allowWindowSideBar={false}
       allowClose={false}
       allowMaximize={false}
@@ -56,7 +56,7 @@ describe('WindowTopBar', () => {
 
   it('triggers window focus when clicked', () => {
     const focusWindow = jest.fn();
-    renderWithProviders(<Subject focusWindow={focusWindow} />);
+    render(<Subject focusWindow={focusWindow} />);
     const toolbar = screen.getByRole('navigation', { name: 'windowNavigation' }).firstChild; // eslint-disable-line testing-library/no-node-access
     expect(toolbar).toBeInTheDocument();
     // we specifically need mouseDown not click for MUI Toolbar here
@@ -66,7 +66,7 @@ describe('WindowTopBar', () => {
 
   it('passes correct callback to toggleWindowSideBar button', async () => {
     const toggleWindowSideBar = jest.fn();
-    renderWithProviders(
+    render(
       <Subject allowWindowSideBar toggleWindowSideBar={toggleWindowSideBar} />,
       { preloadedState: { windows: { xyz: { sideBarOpen: false } } } },
     );
@@ -78,7 +78,7 @@ describe('WindowTopBar', () => {
 
   it('passes correct callback to closeWindow button', async () => {
     const removeWindow = jest.fn();
-    renderWithProviders(<Subject allowClose removeWindow={removeWindow} />);
+    render(<Subject allowClose removeWindow={removeWindow} />);
     const button = screen.getByRole('button', { name: 'closeWindow' });
     expect(button).toBeInTheDocument();
     await user.click(button);
@@ -87,7 +87,7 @@ describe('WindowTopBar', () => {
 
   it('passes correct callback to maximizeWindow button', async () => {
     const maximizeWindow = jest.fn();
-    renderWithProviders(<Subject allowMaximize maximizeWindow={maximizeWindow} />);
+    render(<Subject allowMaximize maximizeWindow={maximizeWindow} />);
     const button = screen.getByRole('button', { name: 'maximizeWindow' });
     expect(button).toBeInTheDocument();
     await user.click(button);
@@ -95,13 +95,13 @@ describe('WindowTopBar', () => {
   });
 
   it('close button is configurable', () => {
-    renderWithProviders(<Subject allowClose={false} />);
+    render(<Subject allowClose={false} />);
     const button = screen.queryByRole('button', { name: 'closeWindow' });
     expect(button).not.toBeInTheDocument();
   });
 
   it('maximize button is configurable', () => {
-    renderWithProviders(<Subject allowMaximize={false} />);
+    render(<Subject allowMaximize={false} />);
     const button = screen.queryByRole('button', { name: 'maximizeWindow' });
     expect(button).not.toBeInTheDocument();
   });

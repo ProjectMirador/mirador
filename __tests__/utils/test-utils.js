@@ -10,7 +10,7 @@ const rootReducer = createRootReducer();
 /**
  * Hook up our rendered object to redux
  */
-export function renderWithProviders(
+function renderWithProviders(
   ui,
   {
     preloadedState = {},
@@ -37,3 +37,6 @@ export function renderWithProviders(
     rerender: (newUi, options) => render(newUi, { container: rendered.container, wrapper: Wrapper, ...options }),
   };
 }
+
+export * from '@testing-library/react';
+export { renderWithProviders as render };

@@ -1,14 +1,14 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import i18next from 'i18next';
-import { renderWithProviders } from '../../utils/store';
+
 import { SearchPanel } from '../../../src/components/SearchPanel';
 
 /**
  * Helper function to create a shallow wrapper around SearchPanel
  */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <SearchPanel
       id="xyz"
       fetchSearch={() => {}}

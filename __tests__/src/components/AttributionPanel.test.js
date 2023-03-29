@@ -1,15 +1,15 @@
 /**
  * @jest-environment-options { "resources": "usable" }
  */
-import { screen, waitFor } from '@testing-library/react';
-import { renderWithProviders } from '../../utils/store';
+import { render, screen, waitFor } from 'test-utils';
+
 import { AttributionPanel } from '../../../src/components/AttributionPanel';
 
 /**
  * Helper function to create a shallow wrapper around AttributionPanel
  */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <AttributionPanel
       id="xyz"
       t={str => str}
