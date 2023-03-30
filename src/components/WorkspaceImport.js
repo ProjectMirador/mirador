@@ -83,7 +83,7 @@ export class WorkspaceImport extends Component {
             id="workspace-import-input"
             multiline
             onChange={this.handleChange}
-            rows="15"
+            minRows={15}
             variant="filled"
             inputProps={{ autoFocus: 'autofocus', className: classes.textInput }}
             helperText={t('importWorkspaceHint')}
