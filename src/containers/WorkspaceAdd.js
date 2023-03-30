@@ -42,10 +42,15 @@ const styles = theme => ({
     right: theme.spacing(2),
   },
   form: {
-    ...theme.mixins.gutters(),
     left: '0',
     marginTop: 48,
     paddingBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+    },
     paddingTop: theme.spacing(2),
     right: '0',
   },
