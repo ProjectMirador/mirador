@@ -5,7 +5,7 @@ import { PluginHook } from '../../../src/components/PluginHook';
 import PluginContext from '../../../src/extend/PluginContext';
 
 /** Mock target component */
-const Target = ({ PluginComponents, ...props }) => (
+const Target = ({ PluginComponents, TargetComponent, ...props }) => (
   <div data-testid="target" {...props}>
     Hello
     <PluginHook PluginComponents={PluginComponents} {...props} />
@@ -14,6 +14,7 @@ const Target = ({ PluginComponents, ...props }) => (
 
 Target.propTypes = {
   PluginComponents: PropTypes.arrayOf(PropTypes.element).isRequired,
+  TargetComponent: PropTypes.elementType.isRequired,
 };
 
 /** create wrapper  */
