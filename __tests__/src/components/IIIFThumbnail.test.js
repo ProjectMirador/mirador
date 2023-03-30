@@ -1,4 +1,4 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act } from 'test-utils';
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
 import { IIIFThumbnail } from '../../../src/components/IIIFThumbnail';
 

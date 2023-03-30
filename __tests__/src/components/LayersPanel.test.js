@@ -1,12 +1,12 @@
-import { screen } from '@testing-library/react';
-import { renderWithProviders } from '../../utils/store';
+import { render, screen } from 'test-utils';
+
 import { LayersPanel } from '../../../src/components/LayersPanel';
 
 /**
  * Helper function to create a shallow wrapper around AttributionPanel
  */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <LayersPanel
       id="xyz"
       t={str => str}

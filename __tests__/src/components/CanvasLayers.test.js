@@ -1,12 +1,12 @@
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, render } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { Resource } from 'manifesto.js';
-import { renderWithProviders } from '../../utils/store';
+
 import { CanvasLayers } from '../../../src/components/CanvasLayers';
 
 /** Utility function to wrap CanvasAnnotations */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <CanvasLayers
       canvasId="foo"
       classes={{}}

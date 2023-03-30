@@ -1,7 +1,6 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { WindowTopMenuButton } from '../../../src/components/WindowTopMenuButton';
-import { renderWithProviders } from '../../utils/store';
 
 /** create wrapper */
 function Subject({ ...props }) {
@@ -23,12 +22,12 @@ describe('WindowTopMenuButton', () => {
   });
 
   it('renders the button element', () => {
-    renderWithProviders(<Subject />);
+    render(<Subject />);
     expect(screen.getByLabelText('windowMenu')).toBeInTheDocument();
   });
 
   it('toggles open/close of <WindowTopMenu/> when clicked', async () => {
-    renderWithProviders(<Subject />);
+    render(<Subject />);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
     await user.click(screen.getByLabelText('windowMenu'));
@@ -40,7 +39,7 @@ describe('WindowTopMenuButton', () => {
   });
 
   it('the button has a class indicating that it is "selected" once it is clicked', async () => {
-    renderWithProviders(<Subject />);
+    render(<Subject />);
     await user.click(screen.getByLabelText('windowMenu'));
     expect(screen.getByLabelText('windowMenu')).toHaveClass('ctrlBtnSelected'); // eslint-disable-line testing-library/no-node-access
   });

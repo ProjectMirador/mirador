@@ -1,13 +1,13 @@
-import { screen, within } from '@testing-library/react';
+import { render, screen, within } from 'test-utils';
 import userEvent from '@testing-library/user-event';
-import { renderWithProviders } from '../../utils/store';
+
 import { WindowListButton } from '../../../src/components/WindowListButton';
 
 /**
  * Helper function to create a shallow wrapper around WindowListButton
  */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <WindowListButton
       t={str => str}
       windowCount={3}

@@ -1,14 +1,14 @@
-import { fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
-import { renderWithProviders } from '../../utils/store';
+
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryViewThumbnail } from '../../../src/components/GalleryViewThumbnail';
 
 /** create wrapper */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <GalleryViewThumbnail
       canvas={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()[0]}
       classes={{ selected: 'selected' }}

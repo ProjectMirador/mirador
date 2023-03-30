@@ -1,12 +1,12 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import { Utils } from 'manifesto.js';
-import { renderWithProviders } from '../../utils/store';
+
 import fixture from '../../fixtures/version-2/019.json';
 import { SidebarIndexThumbnail } from '../../../src/components/SidebarIndexThumbnail';
 
 /** */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <SidebarIndexThumbnail
       canvas={Utils.parseManifest(fixture).getSequences()[0].getCanvases()[1]}
       label="yolo"

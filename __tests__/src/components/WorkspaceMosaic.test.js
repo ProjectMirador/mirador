@@ -1,12 +1,12 @@
-import { screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from 'test-utils';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { renderWithProviders } from '../../utils/store';
+
 import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
 
 /** create wrapper */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <WorkspaceMosaic
       classes={{}}
       windowIds={[]}
@@ -118,7 +118,7 @@ describe('WorkspaceMosaic', () => {
     it('calls the provided prop to update layout', async () => {
       const updateWorkspaceMosaicLayout = jest.fn();
 
-      const { container } = renderWithProviders(
+      const { container } = render(
         <DndProvider backend={HTML5Backend}>
           <WorkspaceMosaic
             classes={{}}

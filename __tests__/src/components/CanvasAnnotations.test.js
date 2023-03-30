@@ -1,13 +1,13 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import i18next from 'i18next';
-import { renderWithProviders } from '../../utils/store';
+
 import { CanvasAnnotations } from '../../../src/components/CanvasAnnotations';
 import { ScrollTo } from '../../../src/components/ScrollTo';
 
 /** Utility function to wrap CanvasAnnotations */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <CanvasAnnotations
       classes={{}}
       deselectAnnotation={() => {}}

@@ -1,6 +1,5 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import { WindowCanvasNavigationControls } from '../../../src/components/WindowCanvasNavigationControls';
-import { renderWithProviders } from '../../utils/store';
 
 /**
  * create a simple wrapper for rendering our component
@@ -20,7 +19,7 @@ function Subject({ ...props }) {
 
 describe('WindowCanvasNavigationControls', () => {
   it('renders properly', async () => {
-    const { container } = renderWithProviders(<Subject />);
+    const { container } = render(<Subject />);
     expect(screen.getByLabelText('previousCanvas', { selector: 'button' })).toBeInTheDocument();
     expect(screen.getByLabelText('nextCanvas', { selector: 'button' })).toBeInTheDocument();
     expect(screen.getByText('pagination')).toBeInTheDocument();
@@ -28,17 +27,17 @@ describe('WindowCanvasNavigationControls', () => {
   });
 
   it('renders only a screen-reader accessibile version when visible=false', () => {
-    const { container } = renderWithProviders(<Subject visible={false} />);
+    const { container } = render(<Subject visible={false} />);
     expect(container.firstChild.classList[1]).toMatch(/srOnly/); // eslint-disable-line testing-library/no-node-access
   });
 
   it('stacks the nav controls on small width screens', () => {
-    const { container } = renderWithProviders(<Subject size={{ width: 252 }} />);
+    const { container } = render(<Subject size={{ width: 252 }} />);
     expect(container.firstChild).toHaveClass('mirador-canvas-nav-stacked'); // eslint-disable-line testing-library/no-node-access
   });
 
   it('shows the zoom control component when specified', () => {
-    renderWithProviders(
+    render(
       <Subject />,
       { preloadedState: { workspace: { showZoomControls: true } } },
     );

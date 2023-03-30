@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
-import { renderWithProviders } from '../../utils/store';
+
 import { CollectionDialog } from '../../../src/components/CollectionDialog';
 import collection from '../../fixtures/version-2/collection.json';
 
@@ -11,7 +11,7 @@ function createWrapper(props) {
 
   render(<div id="window" />);
 
-  return renderWithProviders(
+  return render(
     <CollectionDialog
       addWindow={() => {}}
       classes={{}}

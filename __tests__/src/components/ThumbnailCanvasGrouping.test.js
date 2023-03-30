@@ -1,14 +1,14 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
-import { renderWithProviders } from '../../utils/store';
+
 import { ThumbnailCanvasGrouping } from '../../../src/components/ThumbnailCanvasGrouping';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';
 import manifestJson from '../../fixtures/version-2/019.json';
 
 /** create wrapper */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <ThumbnailCanvasGrouping
       index={1}
       currentCanvasId="https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1"

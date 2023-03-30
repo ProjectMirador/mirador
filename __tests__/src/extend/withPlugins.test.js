@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within } from 'test-utils';
 import { withPlugins } from '../../../src/extend/withPlugins';
 import { PluginHook } from '../../../src/components/PluginHook';
 import PluginContext from '../../../src/extend/PluginContext';

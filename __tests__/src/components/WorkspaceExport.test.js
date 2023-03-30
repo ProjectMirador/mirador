@@ -1,4 +1,4 @@
-import { screen, render } from '@testing-library/react';
+import { screen, render } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceExport } from '../../../src/components/WorkspaceExport';
 

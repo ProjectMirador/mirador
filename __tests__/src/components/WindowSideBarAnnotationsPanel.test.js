@@ -1,12 +1,12 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import i18next from 'i18next';
-import { renderWithProviders } from '../../utils/store';
+
 import CanvasAnnotations from '../../../src/containers/CanvasAnnotations';
 import { WindowSideBarAnnotationsPanel } from '../../../src/components/WindowSideBarAnnotationsPanel';
 
 /** */
 function createWrapper(props, state) {
-  return renderWithProviders(
+  return render(
     <WindowSideBarAnnotationsPanel
       annotationCount={4}
       classes={{}}

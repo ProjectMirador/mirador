@@ -1,13 +1,13 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
-import { renderWithProviders } from '../../utils/store';
+
 import { SearchPanelControls } from '../../../src/components/SearchPanelControls';
 
 /**
  * Helper function to create a shallow wrapper around AttributionPanel
  */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <SearchPanelControls
       companionWindowId="cw"
       windowId="window"

@@ -1,11 +1,11 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
-import { renderWithProviders } from '../../utils/store';
+
 import { ManifestListItem } from '../../../src/components/ManifestListItem';
 
 /** */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <ManifestListItem
       manifestId="http://example.com"
       title="xyz"

@@ -1,7 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceOptionsMenu } from '../../../src/components/WorkspaceOptionsMenu';
-import { renderWithProviders } from '../../utils/store';
 
 /** create wrapper */
 function Subject({ ...props }) {
@@ -33,7 +32,7 @@ describe('WorkspaceOptionsMenu', () => {
   });
 
   it('renders all needed elements when open', () => {
-    renderWithProviders(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
 
     expect(screen.getByRole('menu')).toBeInTheDocument();
 
@@ -44,12 +43,12 @@ describe('WorkspaceOptionsMenu', () => {
   });
 
   it('does not display unless open', () => {
-    renderWithProviders(<Subject open={false} />);
+    render(<Subject open={false} />);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
   it('renders the export dialog when export option is clicked', async () => {
-    renderWithProviders(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
     expect(document.querySelector('#workspace-export')).not.toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
 
     await user.click(screen.getAllByRole('menuitem')[0]);
@@ -57,7 +56,7 @@ describe('WorkspaceOptionsMenu', () => {
   });
 
   it('renders the import dialog when imporrt option is clicked', async () => {
-    renderWithProviders(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
     expect(document.querySelector('#workspace-import')).not.toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
 
     await user.click(screen.getAllByRole('menuitem')[1]);
@@ -66,7 +65,7 @@ describe('WorkspaceOptionsMenu', () => {
 
   it('fires the correct callbacks on menu close', async () => {
     const handleClose = jest.fn();
-    renderWithProviders(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} handleClose={handleClose} open />);
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} handleClose={handleClose} open />);
 
     // click a menu item should close the menu
     const menuItems = screen.getAllByRole('menuitem');

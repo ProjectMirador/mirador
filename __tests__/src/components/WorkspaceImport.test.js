@@ -1,4 +1,4 @@
-import { screen, render } from '@testing-library/react';
+import { screen, render } from 'test-utils';
 import { WorkspaceImport } from '../../../src/components/WorkspaceImport';
 
 describe('WorkspaceImport', () => {

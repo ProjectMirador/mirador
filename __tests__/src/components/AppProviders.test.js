@@ -1,10 +1,9 @@
 import Button from '@material-ui/core/Button';
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import { useTranslation } from 'react-i18next';
 import { useDrop } from 'react-dnd';
 import { AppProviders } from '../../../src/components/AppProviders';
 import settings from '../../../src/config/settings';
-import { renderWithProviders } from '../../utils/store';
 
 jest.unmock('react-i18next');
 
@@ -35,7 +34,7 @@ function MockDnDComponent() {
 
 /** */
 function createWrapper(props = {}) {
-  return renderWithProviders(
+  return render(
     <AppProviders
       isFullscreenEnabled={false}
       theme={settings.theme}

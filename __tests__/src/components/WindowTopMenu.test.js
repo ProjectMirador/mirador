@@ -1,7 +1,6 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { WindowTopMenu } from '../../../src/components/WindowTopMenu';
-import { renderWithProviders } from '../../utils/store';
 
 /** create wrapper */
 function Subject({ ...props }) {
@@ -28,7 +27,7 @@ function createAnchor() {
 describe('WindowTopMenu', () => {
   it('renders all needed elements when open', () => {
     createAnchor();
-    renderWithProviders(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
 
     expect(screen.getByRole('menu')).toBeInTheDocument();
 
@@ -48,7 +47,7 @@ describe('WindowTopMenu', () => {
 
   it('does not display unless open', () => {
     createAnchor();
-    renderWithProviders(<Subject open={false} />);
+    render(<Subject open={false} />);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
@@ -59,7 +58,7 @@ describe('WindowTopMenu', () => {
     const toggleDraggingEnabled = jest.fn();
     const anchorEl = screen.getByTestId('menu-trigger-button');
 
-    renderWithProviders(<Subject
+    render(<Subject
       anchorEl={anchorEl}
       handleClose={handleClose}
       open

@@ -1,12 +1,12 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import { Utils } from 'manifesto.js';
-import { renderWithProviders } from '../../utils/store';
+
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryView } from '../../../src/components/GalleryView';
 
 /** create wrapper */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <GalleryView
       canvases={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()}
       windowId="1234"

@@ -1,13 +1,13 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
-import { renderWithProviders } from '../../utils/store';
+
 import { SearchResults } from '../../../src/components/SearchResults';
 
 /**
  * Helper function to create a shallow wrapper around SearchResults
  */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <SearchResults
       companionWindowId="cwid"
       windowId="window"

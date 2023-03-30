@@ -1,7 +1,6 @@
-import { screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceOptionsButton } from '../../../src/components/WorkspaceOptionsButton';
-import { renderWithProviders } from '../../utils/store';
 
 /** create wrapper */
 function Subject({ ...props }) {
@@ -25,12 +24,12 @@ describe('WorkspaceOptionsButton', () => {
   });
 
   it('renders the button', () => {
-    renderWithProviders(<Subject />);
+    render(<Subject />);
     expect(screen.getByLabelText('workspaceOptions')).toBeInTheDocument();
   });
 
   it('toggles open/close of <WorkspaceOptionsMenu /> when clicked', async () => {
-    renderWithProviders(<Subject />);
+    render(<Subject />);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
     await user.click(screen.getByLabelText('workspaceOptions'));

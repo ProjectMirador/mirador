@@ -1,10 +1,10 @@
-import { screen } from '@testing-library/react';
-import { renderWithProviders } from '../../utils/store';
+import { render, screen } from 'test-utils';
+
 import { App } from '../../../src/components/App';
 
 /** */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <App
       {...props}
     />,

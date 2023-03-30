@@ -1,6 +1,6 @@
 import {
   render, screen, waitFor,
-} from '@testing-library/react';
+} from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceSelectionDialog } from '../../../src/components/WorkspaceSelectionDialog';
 

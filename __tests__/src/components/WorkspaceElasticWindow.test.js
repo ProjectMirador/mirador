@@ -1,12 +1,13 @@
 import userEvent from '@testing-library/user-event';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { renderWithProviders } from '../../utils/store';
+import { render } from 'test-utils';
+
 import WorkspaceElasticWindow from '../../../src/components/WorkspaceElasticWindow';
 
 /** create wrapper */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <DndProvider backend={HTML5Backend}>
       <WorkspaceElasticWindow
         layout={{}}

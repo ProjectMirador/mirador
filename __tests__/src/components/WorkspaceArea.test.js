@@ -1,12 +1,12 @@
-import { screen, within } from '@testing-library/react';
+import { render, screen, within } from 'test-utils';
 import { DndProvider } from 'react-dnd';
 import { TestBackend } from 'react-dnd-test-backend';
-import { renderWithProviders } from '../../utils/store';
+
 import { WorkspaceArea } from '../../../src/components/WorkspaceArea';
 
 /** */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <DndProvider backend={TestBackend}>
       <WorkspaceArea
         isWorkspaceControlPanelVisible

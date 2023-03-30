@@ -1,15 +1,17 @@
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render, screen, fireEvent, waitFor,
+} from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { renderWithProviders } from '../../utils/store';
+
 import { WorkspaceAdd } from '../../../src/components/WorkspaceAdd';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
 
 /** create wrapper */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <DndProvider backend={HTML5Backend}>
       <WorkspaceAdd
         setWorkspaceAddVisibility={() => {}}

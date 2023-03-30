@@ -9,6 +9,9 @@
   },
   "plugins": ["jest", "jest-dom", "react", "react-hooks", "testing-library"],
   "rules": {
+    "import/no-unresolved": [
+      2, { "ignore": ["test-utils"] }
+    ],
     "import/prefer-default-export": "off",
     "no-console": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],

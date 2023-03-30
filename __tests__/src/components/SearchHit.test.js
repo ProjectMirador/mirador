@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import PropTypes from 'prop-types';
 import { SearchHit } from '../../../src/components/SearchHit';

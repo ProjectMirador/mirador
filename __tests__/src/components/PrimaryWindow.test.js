@@ -1,10 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from 'test-utils';
 import { PrimaryWindow } from '../../../src/components/PrimaryWindow';
-import { renderWithProviders } from '../../utils/store';
 
 /** create wrapper */
 function createWrapper(props) {
-  return renderWithProviders(
+  return render(
     <PrimaryWindow
       classes={{}}
       windowId="xyz"
@@ -36,7 +35,7 @@ describe('PrimaryWindow', () => {
   });
   it('should render <CollectionDialog> and <SelectCollection> if manifest is collection and isCollectionDialogVisible', async () => {
     render(<div id="xyz" />);
-    renderWithProviders(
+    render(
       <PrimaryWindow
         classes={{}}
         isCollection
