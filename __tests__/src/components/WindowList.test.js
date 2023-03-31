@@ -11,8 +11,13 @@ describe('WindowList', () => {
     focusWindow = jest.fn();
     titles = {};
 
+    render(<div data-testid="container" />);
+  });
+
+  it('renders without an error', () => {
     render(
       <WindowList
+        anchorEl={screen.getByTestId('container')}
         open
         titles={titles}
         windowIds={[]}
@@ -20,9 +25,7 @@ describe('WindowList', () => {
         focusWindow={focusWindow}
       />,
     );
-  });
 
-  it('renders without an error', () => {
     expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
@@ -30,6 +33,7 @@ describe('WindowList', () => {
     beforeEach(() => {
       render(
         <WindowList
+          anchorEl={screen.getByTestId('container')}
           open
           titles={titles}
           windowIds={['xyz']}
@@ -55,6 +59,7 @@ describe('WindowList', () => {
 
       render(
         <WindowList
+          anchorEl={screen.getByTestId('container')}
           open
           titles={titles}
           windowIds={['xyz']}
@@ -75,6 +80,7 @@ describe('WindowList', () => {
 
       render(
         <WindowList
+          anchorEl={screen.getByTestId('container')}
           open
           titles={titles}
           windowIds={['abc', 'xyz']}
