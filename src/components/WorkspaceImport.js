@@ -68,7 +68,6 @@ export class WorkspaceImport extends Component {
       <Dialog
         aria-labelledby="workspace-import-title"
         id="workspace-import"
-        onEscapeKeyDown={handleClose}
         onClose={handleClose}
         open={open}
         fullWidth
