@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { act, render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
 import { MiradorMenuButton } from '../../../src/components/MiradorMenuButton';
 
@@ -37,7 +37,9 @@ describe('MiradorMenuButton', () => {
     const user = userEvent.setup();
     createWrapper({ TooltipProps: { placement: 'left-start' } });
 
-    await user.hover(screen.getByRole('button'));
+    await act(async () => {
+      await user.hover(screen.getByRole('button'));
+    });
     expect(await screen.findByRole('tooltip')).toHaveTextContent('The Label');
 
     expect(screen.getByText('The Label')).toHaveClass('MuiTooltip-tooltipPlacementLeft');
