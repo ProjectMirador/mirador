@@ -15,6 +15,7 @@ function createWrapper(props) {
       classes={{}}
       style={{
         height: 90,
+        top: 0,
         width: 100,
       }}
       {...props}
