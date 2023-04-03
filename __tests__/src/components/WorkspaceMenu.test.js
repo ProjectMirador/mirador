@@ -4,8 +4,11 @@ import { WorkspaceMenu } from '../../../src/components/WorkspaceMenu';
 
 /** */
 function createShallow(props) {
+  render(<div data-testid="container" />);
+
   return render(
     <WorkspaceMenu
+      anchorEl={screen.getByTestId('container')}
       open
       showThemePicker
       {...props}
