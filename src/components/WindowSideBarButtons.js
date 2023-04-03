@@ -118,7 +118,7 @@ export class WindowSideBarButtons extends Component {
             classes={{ root: classes.tab, selected: classes.tabSelected }}
             t={t}
             icon={(
-              <Badge classes={{ badge: classes.badge }} invisible={!hasAnnotations} variant="dot">
+              <Badge overlap="rectangular" classes={{ badge: classes.badge }} invisible={!hasAnnotations} variant="dot">
                 <AnnotationIcon />
               </Badge>
             )}
@@ -131,7 +131,7 @@ export class WindowSideBarButtons extends Component {
             classes={{ root: classes.tab, selected: classes.tabSelected }}
             t={t}
             icon={(
-              <Badge classes={{ badge: classes.badge }} invisible={!hasSearchResults} variant="dot">
+              <Badge overlap="rectangular" classes={{ badge: classes.badge }} invisible={!hasSearchResults} variant="dot">
                 <SearchIcon />
               </Badge>
             )}
@@ -144,7 +144,7 @@ export class WindowSideBarButtons extends Component {
             classes={{ root: classes.tab, selected: classes.tabSelected }}
             t={t}
             icon={(
-              <Badge classes={{ badge: classes.badge }} invisible={!hasCurrentLayers} variant="dot">
+              <Badge overlap="rectangular" classes={{ badge: classes.badge }} invisible={!hasCurrentLayers} variant="dot">
                 <LayersIcon />
               </Badge>
             )}
