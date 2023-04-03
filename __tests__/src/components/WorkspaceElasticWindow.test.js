@@ -45,12 +45,20 @@ describe('WorkspaceElasticWindow', () => {
     expect(el).toHaveClass('react-draggable');
     expect(el).toHaveStyle({ height: '200px', transform: 'translate(5040px,5040px)', width: '200px' });
   });
-  describe('focused window', () => {
-    it('adds a class to the focused window', () => {
+  describe('focuses the window', () => {
+    it('adds class to focused window', () => {
       const { container } = createWrapper({ classes: { focused: 'focused-window' }, focused: true, layout });
       const el = container.firstChild;
 
       expect(el).toHaveClass('focused-window');
+    });
+    it('calls focusWindow when clicked', async () => {
+      const user = userEvent.setup();
+      const mockFocusWindow = jest.fn();
+      const { container } = createWrapper({ focusWindow: mockFocusWindow, layout });
+      const el = container.querySelector('.mirador-window-top-bar');
+      await user.click(el);
+      expect(mockFocusWindow).toHaveBeenCalled();
     });
   });
   describe('window behaviour', () => {
