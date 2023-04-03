@@ -41,6 +41,20 @@ function deepFind(treeNode, id) {
   return result;
 }
 
+/** Wrap <ScrollTo> to remove the nodeId prop required for MUI's TreeView */
+const ScrollToForTreeItem = ({ children, nodeId, ...props }) => (
+  <ScrollTo
+    {...props}
+  >
+    { children }
+  </ScrollTo>
+);
+
+ScrollToForTreeItem.propTypes = {
+  children: PropTypes.node.isRequired,
+  nodeId: PropTypes.string.isRequired,
+};
+
 /** */
 export class SidebarIndexTableOfContents extends Component {
   /** */
@@ -104,7 +118,7 @@ export class SidebarIndexTableOfContents extends Component {
 
     /** Render the tree structure recursively */
     const renderTree = (node) => (
-      <ScrollTo
+      <ScrollToForTreeItem
         containerRef={containerRef}
         key={node.id}
         nodeId={node.id}
@@ -133,7 +147,7 @@ export class SidebarIndexTableOfContents extends Component {
         >
           {Array.isArray(node.nodes) ? node.nodes.map((n) => renderTree(n)) : null}
         </TreeItem>
-      </ScrollTo>
+      </ScrollToForTreeItem>
     );
 
     return (
