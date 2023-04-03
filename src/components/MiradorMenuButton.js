@@ -23,7 +23,7 @@ export function MiradorMenuButton(props) {
   const button = (
     <IconButton {...iconButtonProps}>
       {badge
-        ? <Badge {...BadgeProps}>{children}</Badge>
+        ? <Badge overlap="rectangular" {...BadgeProps}>{children}</Badge>
         : children}
     </IconButton>
   );
