@@ -17,6 +17,7 @@ class WorkspaceElasticWindow extends Component {
       classes,
       companionWindowDimensions,
       focused,
+      focusWindow,
       layout,
       workspace,
       updateElasticWindowLayout,
@@ -40,6 +41,7 @@ class WorkspaceElasticWindow extends Component {
             { x: d.x - offsetX, y: d.y - offsetY },
           );
         }}
+        onDragStart={focusWindow}
         onResize={(e, direction, ref, delta, position) => {
           updateElasticWindowLayout(layout.windowId, {
             height: Number.parseInt(ref.style.height, 10) - companionWindowDimensions.height,
@@ -69,6 +71,7 @@ WorkspaceElasticWindow.propTypes = {
     width: PropTypes.number,
   }),
   focused: PropTypes.bool,
+  focusWindow: PropTypes.func,
   layout: PropTypes.shape({
     height: PropTypes.number,
     id: PropTypes.string,
@@ -85,6 +88,7 @@ WorkspaceElasticWindow.defaultProps = {
   classes: {},
   companionWindowDimensions: { height: 0, width: 0 },
   focused: false,
+  focusWindow: () => {},
 };
 
 export default WorkspaceElasticWindow;

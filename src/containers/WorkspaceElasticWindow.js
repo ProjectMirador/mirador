@@ -28,6 +28,7 @@ const mapStateToProps = (state, { windowId }) => (
  * @private
  */
 const mapDispatchToProps = (dispatch, props) => ({
+  focusWindow: () => dispatch(actions.focusWindow(props.windowId)),
   updateElasticWindowLayout: (windowId, position) => {
     dispatch(
       actions.updateElasticWindowLayout(windowId, position),
