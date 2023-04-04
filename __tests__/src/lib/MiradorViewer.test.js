@@ -3,6 +3,9 @@ import MiradorViewer from '../../../src/lib/MiradorViewer';
 
 jest.unmock('react-i18next');
 
+/** */
+const DummyPlugin = () => <div data-testid="plugin">Plugin</div>;
+
 describe('MiradorViewer', () => {
   let container;
   beforeEach(() => {
@@ -47,6 +50,7 @@ describe('MiradorViewer', () => {
         },
         {
           plugins: [{
+            component: DummyPlugin,
             config: {
               foo: 'bar',
             },
@@ -80,6 +84,7 @@ describe('MiradorViewer', () => {
         {
           plugins: [
             {
+              component: DummyPlugin,
               config: {
                 translations: {
                   en: {
@@ -91,6 +96,7 @@ describe('MiradorViewer', () => {
               target: 'WindowTopBarPluginArea',
             },
             {
+              component: DummyPlugin,
               config: {
                 translations: {
                   en: {
@@ -117,10 +123,8 @@ describe('MiradorViewer', () => {
   describe('render', () => {
     it('passes props through to the App component', async () => {
       const instance = new MiradorViewer({});
-      /** */
-      const PluginComponent = () => <div data-testid="plugin">Plugin</div>;
       const plugins = [{
-        component: PluginComponent,
+        component: DummyPlugin,
         mode: 'wrap',
         target: 'WorkspaceArea',
       }];
