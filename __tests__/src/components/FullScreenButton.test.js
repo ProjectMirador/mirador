@@ -1,75 +1,65 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
-import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
-import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
+import { render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
+import FullScreenContext from '../../../src/contexts/FullScreenContext';
 import { FullScreenButton } from '../../../src/components/FullScreenButton';
 
 /** */
-function createWrapper(props) {
-  return shallow(
-    <FullScreenButton
-      classes={{}}
-      className="xyz"
-      setWorkspaceFullscreen={() => {}}
-      isFullscreenEnabled={false}
-      {...props}
-    />,
+function createWrapper(props, contextProps = { active: false }) {
+  return render(
+    <FullScreenContext.Provider value={{ enter: () => { }, exit: () => { }, ...contextProps }}>
+      <FullScreenButton
+        classes={{}}
+        className="xyz"
+        {...props}
+      />
+    </FullScreenContext.Provider>,
   );
 }
 
 describe('FullScreenButton', () => {
-  let wrapper;
-  let menuButton;
-
   it('renders without an error', () => {
-    wrapper = createWrapper();
+    createWrapper();
 
-    expect(wrapper.find(MiradorMenuButton).length).toBe(1);
-    expect(wrapper.find(MiradorMenuButton).prop('className')).toBe('xyz');
+    expect(screen.getByRole('button')).toHaveClass('xyz');
   });
 
   describe('when not in fullscreen', () => {
-    let setWorkspaceFullscreen;
-    beforeAll(() => {
-      setWorkspaceFullscreen = jest.fn();
-      wrapper = createWrapper({ setWorkspaceFullscreen });
-      menuButton = wrapper.find(MiradorMenuButton);
-    });
-
-    it('has the FullscreenIcon', () => {
-      expect(menuButton.children(FullscreenIcon).length).toBe(1);
+    let enter;
+    let user;
+    beforeEach(() => {
+      enter = jest.fn();
+      user = userEvent.setup();
+      createWrapper({}, { enter });
     });
 
     it('has the proper aria-label i18n key', () => {
-      expect(menuButton.props()['aria-label']).toEqual('workspaceFullScreen');
+      expect(screen.getByRole('button')).toHaveAccessibleName('workspaceFullScreen');
     });
 
-    it('triggers the setWorkspaceFullscreen prop with the appropriate boolean', () => {
-      menuButton.props().onClick(); // Trigger the onClick prop
-      expect(setWorkspaceFullscreen).toHaveBeenCalledWith(true);
+    it('triggers the handle enter with the appropriate boolean', async () => {
+      await user.click(screen.getByRole('button'));
+
+      expect(enter).toHaveBeenCalled();
     });
   });
 
   describe('when in fullscreen', () => {
-    let setWorkspaceFullscreen;
-    beforeAll(() => {
-      setWorkspaceFullscreen = jest.fn();
-      wrapper = createWrapper({ isFullscreenEnabled: true, setWorkspaceFullscreen });
-      menuButton = wrapper.find(MiradorMenuButton);
-    });
-
-    it('has the FullscreenExitIcon', () => {
-      expect(menuButton.children(FullscreenExitIcon).length).toBe(1);
+    let exit;
+    let user;
+    beforeEach(() => {
+      exit = jest.fn();
+      user = userEvent.setup();
+      createWrapper({}, { active: true, exit });
     });
 
     it('has the proper aria-label', () => {
-      expect(menuButton.props()['aria-label']).toEqual('exitFullScreen');
+      expect(screen.getByRole('button')).toHaveAccessibleName('exitFullScreen');
     });
 
-    it('triggers the setWorkspaceFullscreen prop with the appropriate boolean', () => {
-      menuButton.props().onClick(); // Trigger the onClick prop
-      expect(setWorkspaceFullscreen).toHaveBeenCalledWith(false);
+    it('triggers the handle exit with the appropriate boolean', async () => {
+      await user.click(screen.getByRole('button'));
+
+      expect(exit).toHaveBeenCalled();
     });
   });
 });

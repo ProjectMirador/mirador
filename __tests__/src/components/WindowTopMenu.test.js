@@ -1,64 +1,74 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Menu from '@material-ui/core/Menu';
-import WindowThumbnailSettings from '../../../src/containers/WindowThumbnailSettings';
-import WindowViewSettings from '../../../src/containers/WindowViewSettings';
+import { render, screen, within } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { WindowTopMenu } from '../../../src/components/WindowTopMenu';
 
 /** create wrapper */
-function createWrapper(props) {
-  return shallow(
-    <WindowTopMenu
-      containerId="mirador"
-      windowId="xyz"
-      handleClose={() => {}}
-      anchorEl={null}
-      toggleDraggingEnabled={() => {}}
-      {...props}
-    />,
+function Subject({ ...props }) {
+  return (
+    <div>
+      <WindowTopMenu
+        windowId="xyz"
+        handleClose={() => {}}
+        toggleDraggingEnabled={() => {}}
+        {...props}
+      />
+      ,
+    </div>
+  );
+}
+
+/** create anchor element */
+function createAnchor() {
+  return render(
+    <button type="button" data-testid="menu-trigger-button">Button</button>,
   );
 }
 
 describe('WindowTopMenu', () => {
-  it('renders all needed elements', () => {
-    const wrapper = createWrapper();
+  it('renders all needed elements when open', () => {
+    createAnchor();
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
 
-    expect(wrapper.find(Menu).length).toBe(1);
-    expect(wrapper.find(WindowThumbnailSettings).length).toBe(1);
-    expect(wrapper.find(WindowViewSettings).length).toBe(1);
-    expect(wrapper.find('PluginHookWithHeader').length).toBe(1);
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+
+    const menuSections = within(screen.getByRole('menu')).getAllByRole('presentation');
+    expect(menuSections).toHaveLength(2);
+    expect(menuSections[0]).toHaveTextContent('view');
+    expect(menuSections[1]).toHaveTextContent('thumbnail');
+
+    const menuItems = screen.getAllByRole('menuitem');
+    expect(menuItems).toHaveLength(5);
+    expect(menuItems[0]).toHaveTextContent('single');
+    expect(menuItems[1]).toHaveTextContent('gallery');
+    expect(menuItems[2]).toHaveTextContent('off');
+    expect(menuItems[3]).toHaveTextContent('bottom');
+    expect(menuItems[4]).toHaveTextContent('right');
   });
 
-  it('passes windowId to <WindowThumbnailSettings/>', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find(WindowThumbnailSettings)
-      .first().props().windowId).toBe('xyz');
+  it('does not display unless open', () => {
+    createAnchor();
+    render(<Subject open={false} />);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
-  it('passses correct props to <Menu/> when no achor element given', () => {
+  it('fires the correct callbacks on menu close', async () => {
+    const user = userEvent.setup();
+    createAnchor();
     const handleClose = jest.fn();
     const toggleDraggingEnabled = jest.fn();
-    const wrapper = createWrapper({ handleClose, toggleDraggingEnabled });
-    expect(wrapper.find(Menu).first().props().anchorEl).toBe(null);
-    expect(wrapper.find(Menu).first().props().open).toBe(false);
-    expect(wrapper.find(Menu).first().props().onClose).toBe(handleClose);
-    expect(wrapper.find(Menu).first().props().TransitionProps.onEntering)
-      .toBe(toggleDraggingEnabled);
-    expect(wrapper.find(Menu).first().props().TransitionProps.onExit)
-      .toBe(toggleDraggingEnabled);
-  });
+    const anchorEl = screen.getByTestId('menu-trigger-button');
 
-  it('passses correct props to <Menu/> when achor element given', () => {
-    const handleClose = jest.fn();
-    const toggleDraggingEnabled = jest.fn();
-    const anchorEl = {};
-    const wrapper = createWrapper({ anchorEl, handleClose, toggleDraggingEnabled });
-    expect(wrapper.find(Menu).first().props().anchorEl).toBe(anchorEl);
-    expect(wrapper.find(Menu).first().props().open).toBe(true);
-    expect(wrapper.find(Menu).first().props().onClose).toBe(handleClose);
-    expect(wrapper.find(Menu).first().props().TransitionProps.onEntering)
-      .toBe(toggleDraggingEnabled);
-    expect(wrapper.find(Menu).first().props().TransitionProps.onExit)
-      .toBe(toggleDraggingEnabled);
+    render(<Subject
+      anchorEl={anchorEl}
+      handleClose={handleClose}
+      open
+      toggleDraggingEnabled={toggleDraggingEnabled}
+    />);
+
+    // click a menu item should close the menu
+    const menuItems = screen.getAllByRole('menuitem');
+    await user.click(menuItems[0]);
+    expect(handleClose).toHaveBeenCalledTimes(1);
+    expect(toggleDraggingEnabled).toHaveBeenCalledTimes(1);
   });
 });

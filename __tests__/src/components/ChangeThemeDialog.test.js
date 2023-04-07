@@ -1,18 +1,16 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Dialog from '@material-ui/core/Dialog';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
+import { render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { ChangeThemeDialog } from '../../../src/components/ChangeThemeDialog';
 
 /**
  * Helper function to create a shallow wrapper around ErrorDialog
  */
 function createWrapper(props) {
-  return shallow(
+  render(
     <ChangeThemeDialog
       classes={{ darkColor: '#000000', lightColor: '#ffffff' }}
       handleClose={() => {}}
+      open
       setSelectedTheme={() => {}}
       t={t => (t)}
       selectedTheme="light"
@@ -23,45 +21,45 @@ function createWrapper(props) {
 }
 
 describe('ChangeThemeDialog', () => {
-  let wrapper;
+  it('renders nothing when the dialog is not open', () => {
+    createWrapper({ open: false });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
 
   it('renders propertly', () => {
-    wrapper = createWrapper();
-
-    expect(wrapper.find(Dialog).length).toBe(1);
+    createWrapper();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
   it('shows up theme selection properly', () => {
-    wrapper = createWrapper();
+    createWrapper();
 
-    expect(wrapper.find(ListItemText).length).toBe(2);
-    expect(wrapper.find(ListItemText).first().render().text()).toBe('light');
-    expect(wrapper.find(ListItemText).last().render().text()).toBe('dark');
+    const menuItems = screen.queryAllByRole('menuitem');
+
+    expect(menuItems.length).toBe(2);
+    expect(menuItems[0]).toHaveTextContent('light');
+    expect(menuItems[1]).toHaveTextContent('dark');
   });
 
-  it('shows up theme selection properly', () => {
+  it('shows up theme selection properly', async () => {
+    const user = userEvent.setup();
     const setSelectedTheme = jest.fn();
 
-    wrapper = createWrapper({ setSelectedTheme });
-    wrapper.find(MenuItem).first().simulate('click');
+    createWrapper({ setSelectedTheme });
+    const menuItem = screen.getByRole('menuitem', { name: 'light' });
+    expect(menuItem).toBeInTheDocument();
+
+    await user.click(menuItem);
 
     expect(setSelectedTheme).toHaveBeenCalledWith('light');
   });
 
   describe('inital focus', () => {
-    const mockMenuItemFocus = jest.fn();
-    const mockMenu = {
-      querySelectorAll: (selector) => {
-        expect(selector).toEqual('li[value="light"]');
-        return [{ focus: mockMenuItemFocus }];
-      },
-    };
+    it('focuses the selected item', () => {
+      createWrapper({ selectedTheme: 'light' });
 
-    it('sets an onEntered prop on the Dialog that focuses the selected item', () => {
-      wrapper = createWrapper();
-
-      wrapper.find(Dialog).props().onEntered(mockMenu);
-      expect(mockMenuItemFocus).toHaveBeenCalled();
+      const menuItem = screen.getByRole('menuitem', { name: 'light' });
+      expect(menuItem).toHaveFocus();
     });
   });
 });

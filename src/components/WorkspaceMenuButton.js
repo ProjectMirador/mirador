@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import SettingsIcon from '@material-ui/icons/SettingsSharp';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -15,6 +15,7 @@ export class WorkspaceMenuButton extends Component {
     super(props);
     this.state = {
       anchorEl: null,
+      open: false,
     };
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.handleMenuClose = this.handleMenuClose.bind(this);
@@ -26,6 +27,7 @@ export class WorkspaceMenuButton extends Component {
   handleMenuClick(event) {
     this.setState({
       anchorEl: event.currentTarget,
+      open: true,
     });
   }
 
@@ -35,6 +37,7 @@ export class WorkspaceMenuButton extends Component {
   handleMenuClose() {
     this.setState({
       anchorEl: null,
+      open: false,
     });
   }
 
@@ -44,15 +47,15 @@ export class WorkspaceMenuButton extends Component {
    */
   render() {
     const { classes, t } = this.props;
-    const { anchorEl } = this.state;
+    const { anchorEl, open } = this.state;
 
     return (
       <>
         <MiradorMenuButton
           aria-haspopup="true"
           aria-label={t('workspaceMenu')}
-          aria-owns={anchorEl ? 'workspace-menu' : undefined}
-          className={classNames(classes.ctrlBtn, (anchorEl ? classes.ctrlBtnSelected : null))}
+          aria-owns={open ? 'workspace-menu' : undefined}
+          className={classNames(classes.ctrlBtn, (open ? classes.ctrlBtnSelected : null))}
           id="menuBtn"
           onClick={this.handleMenuClick}
         >
@@ -60,7 +63,9 @@ export class WorkspaceMenuButton extends Component {
         </MiradorMenuButton>
         <WorkspaceMenu
           anchorEl={anchorEl}
+          id="workspace-menu"
           handleClose={this.handleMenuClose}
+          open={open}
         />
       </>
     );

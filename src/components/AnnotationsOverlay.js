@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { createRef, Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
@@ -50,7 +50,7 @@ export class AnnotationsOverlay extends Component {
   constructor(props) {
     super(props);
 
-    this.ref = React.createRef();
+    this.ref = createRef();
     this.osdCanvasOverlay = null;
     // An initial value for the updateCanvas method
     this.updateCanvas = () => {};
@@ -126,6 +126,7 @@ export class AnnotationsOverlay extends Component {
   componentWillUnmount() {
     const { viewer } = this.props;
 
+    this.onCanvasMouseMove.cancel();
     viewer.removeHandler('canvas-click', this.onCanvasClick);
     viewer.removeHandler('canvas-exit', this.onCanvasExit);
     viewer.removeHandler('update-viewport', this.onUpdateViewport);

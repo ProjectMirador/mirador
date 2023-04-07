@@ -1,95 +1,86 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import IntersectionObserver from '@researchgate/react-intersection-observer';
-import Typography from '@material-ui/core/Typography';
+import { render, screen, act } from 'test-utils';
+import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
 import { IIIFThumbnail } from '../../../src/components/IIIFThumbnail';
 
 /**
  * Helper function to create a shallow wrapper around IIIFThumbnail
  */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <IIIFThumbnail
       {...props}
     />,
   );
 }
 
+/* eslint-disable testing-library/no-node-access, testing-library/no-container */
 describe('IIIFThumbnail', () => {
-  let wrapper;
   const url = 'http://example.com/iiif/image';
   const thumbnail = { height: 120, url, width: 100 };
-  beforeEach(() => {
-    wrapper = createWrapper({ thumbnail });
-  });
-
   it('renders properly', () => {
-    expect(wrapper.matchesElement(
-      <div>
-        <IntersectionObserver onChange={wrapper.instance().handleIntersection}>
-          <img alt="" />
-        </IntersectionObserver>
-      </div>,
-    )).toBe(true);
+    const { container } = createWrapper({ thumbnail });
+    const img = container.querySelector('img');
+    expect(img).toBeInTheDocument();
+    expect(img).not.toHaveAccessibleName();
+    expect(img).toHaveAttribute('src', expect.stringContaining('data:image'));
   });
 
   it('renders a placeholder if there is no image', () => {
-    wrapper = createWrapper({});
-    expect(wrapper.matchesElement(
-      <div>
-        <IntersectionObserver onChange={wrapper.instance().handleIntersection}>
-          <img alt="" />
-        </IntersectionObserver>
-      </div>,
-    )).toBe(true);
-    expect(wrapper.find('img').props().src).toMatch(/data:image\/png;base64/);
+    const { container } = createWrapper({ thumbnail });
+    const img = container.querySelector('img');
+    expect(img).toHaveAttribute('src', expect.stringContaining('data:image'));
   });
 
-  it('defaults using the placeholder image', () => {
-    expect(wrapper.find('img').props().src).toMatch(/data:image\/png;base64/);
-  });
+  it('when handleIntersection is called, loads the image', async () => {
+    const { container } = createWrapper({ thumbnail });
+    const img = container.querySelector('img');
 
-  it('when handleIntersection is called, loads the image', () => {
-    wrapper.instance().handleIntersection({ isIntersecting: true });
-    expect(wrapper.find('img').props().src).toEqual(url);
+    act(() => {
+      mockAllIsIntersecting(true);
+    });
+
+    expect(img).toHaveAttribute('src', url);
   });
 
   it('can be constrained by maxHeight', () => {
-    wrapper = createWrapper({ maxHeight: 100, thumbnail });
+    const { container } = createWrapper({ maxHeight: 100, thumbnail });
+    const img = container.querySelector('img');
 
-    expect(wrapper.find('img').props().style).toMatchObject({ height: 100, width: 'auto' });
+    expect(img).toHaveStyle({ height: '100px', width: 'auto' });
   });
 
   it('can be constrained by maxWidth', () => {
-    wrapper = createWrapper({ maxWidth: 80, thumbnail });
+    const { container } = createWrapper({ maxWidth: 80, thumbnail });
+    const img = container.querySelector('img');
 
-    expect(wrapper.find('img').props().style).toMatchObject({ height: 'auto', width: 80 });
+    expect(img).toHaveStyle({ height: 'auto', width: '80px' });
   });
 
   it('can be constrained by maxWidth and maxHeight', () => {
-    wrapper = createWrapper({ maxHeight: 90, maxWidth: 50, thumbnail });
+    const { container } = createWrapper({ maxHeight: 90, maxWidth: 50, thumbnail });
+    const img = container.querySelector('img');
 
-    expect(wrapper.find('img').props().style).toMatchObject({ height: 60, width: 50 });
+    expect(img).toHaveStyle({ height: '60px', width: '50px' });
   });
 
   it('constrains what it can when the image dimensions are unknown', () => {
-    wrapper = createWrapper({ maxHeight: 90, thumbnail: { height: 120, url } });
-    expect(wrapper.find('img').props().style).toMatchObject({ height: 90, width: 'auto' });
+    const { container } = createWrapper({ maxHeight: 90, thumbnail: { height: 120, url } });
+    const img = container.querySelector('img');
+
+    expect(img).toHaveStyle({ height: '90px', width: 'auto' });
   });
 
   it('renders a provided label', () => {
-    wrapper = createWrapper({
+    createWrapper({
       classes: { label: 'label' }, label: 'Some label', labelled: true, thumbnail,
     });
-    expect(
-      wrapper.find('div.label').at(0).matchesElement(
-        <div className="label"><Typography>Some label</Typography></div>,
-      ),
-    ).toBe(true);
+
+    expect(screen.getByText('Some label')).toBeInTheDocument();
   });
 
   it('renders children', () => {
-    wrapper = createWrapper({ children: <span id="hi" />, thumbnail });
-    expect(wrapper.find('span').length).toEqual(1);
+    createWrapper({ children: <span data-testid="hi" />, thumbnail });
+
+    expect(screen.getByTestId('hi')).toBeInTheDocument();
   });
 });

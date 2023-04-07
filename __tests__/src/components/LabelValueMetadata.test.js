@@ -1,9 +1,7 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Typography from '@material-ui/core/Typography';
+import { render, screen } from 'test-utils';
 import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
-import SanitizedHtml from '../../../src/containers/SanitizedHtml';
 
+/* eslint-disable testing-library/no-node-access */
 describe('LabelValueMetadata', () => {
   let wrapper;
   let labelValuePair;
@@ -20,46 +18,38 @@ describe('LabelValueMetadata', () => {
           values: ['Value 2'],
         },
       ];
-      wrapper = shallow(
+      wrapper = render(
         <LabelValueMetadata labelValuePairs={labelValuePair} />,
       );
     });
 
     it('renders a dt/dd for each label/value pair', () => {
-      expect(wrapper.find('dl').length).toEqual(1);
-      expect(wrapper.find(Typography).find('[component="dt"]').length).toEqual(2);
-      expect(wrapper.find(Typography).find('[component="dd"]').length).toEqual(2);
+      expect(wrapper.container.querySelector('dl')).toBeInTheDocument();
+      expect(wrapper.container.querySelectorAll('dt').length).toEqual(2);
+      expect(wrapper.container.querySelectorAll('dd').length).toEqual(2);
     });
 
     it('renders correct labels in dt', () => {
-      expect(wrapper.find(Typography).find('[component="dt"]').first().children()
-        .text()).toEqual('Label 1');
-      expect(wrapper.find(Typography).find('[component="dt"]').last().children()
-        .text()).toEqual('Label 2');
+      expect(screen.getByText('Label 1')).toBeInTheDocument();
+      expect(screen.getByText('Label 2')).toBeInTheDocument();
     });
 
-    it('renders SanitizedHtml component in dt for each value', () => {
-      expect(wrapper.find(Typography).find('[component="dd"]').first().find(SanitizedHtml).length).toBe(1);
-      expect(wrapper.find(Typography).find('[component="dd"]').last().find(SanitizedHtml).length).toBe(1);
-    });
-
-    it('passes value string to SanitizedHtml', () => {
-      expect(wrapper.find(SanitizedHtml).first().props().htmlString).toBe('Value 1');
-      expect(wrapper.find(SanitizedHtml).last().props().htmlString).toBe('Value 2');
+    it('renders SanitizedHtml component in dd for each value', () => {
+      expect(screen.getByText('Value 1')).toBeInTheDocument();
+      expect(screen.getByText('Value 2')).toBeInTheDocument();
     });
   });
 
   describe('when the labelValuePair has no content', () => {
     beforeEach(() => {
       labelValuePair = [];
-      wrapper = shallow(
+      wrapper = render(
         <LabelValueMetadata labelValuePairs={labelValuePair} />,
       );
     });
 
     it('renders an empty fragment instead of an empty dl', () => {
-      expect(wrapper.find('dl').length).toEqual(0);
-      expect(wrapper.isEmptyRender()).toBe(true);
+      expect(wrapper.container).toBeEmptyDOMElement();
     });
   });
 
@@ -74,16 +64,14 @@ describe('LabelValueMetadata', () => {
           values: ['Value 2'],
         },
       ];
-      wrapper = shallow(
+      wrapper = render(
         <LabelValueMetadata labelValuePairs={labelValuePair} defaultLabel="Default label" />,
       );
     });
 
     it('renders correct labels in dt', () => {
-      expect(wrapper.find(Typography).find('[component="dt"]').first().children()
-        .text()).toEqual('Default label');
-      expect(wrapper.find(Typography).find('[component="dt"]').last().children()
-        .text()).toEqual('Label 2');
+      expect(screen.getByText('Default label')).toBeInTheDocument();
+      expect(screen.getByText('Label 2')).toBeInTheDocument();
     });
   });
 });

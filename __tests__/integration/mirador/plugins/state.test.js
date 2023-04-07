@@ -9,7 +9,7 @@ describe('how plugins relate to state', () => {
 
   it('plugin can read from state', async () => {
     const text = 'Plugin:https://iiif.harvardartmuseums.org/manifests/object/299843';
-    await expect(page).toMatch(text);
+    await expect(page).toMatchTextContent(text);
   });
 
   it('plugin reducers should be included to state', async () => {

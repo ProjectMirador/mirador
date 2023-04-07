@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import SanitizedHtml from '../containers/SanitizedHtml';
@@ -42,7 +42,7 @@ LabelValueMetadata.propTypes = {
   defaultLabel: PropTypes.string,
   labelValuePairs: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
-    value: PropTypes.string,
+    values: PropTypes.arrayOf(PropTypes.string),
   })).isRequired,
 };
 

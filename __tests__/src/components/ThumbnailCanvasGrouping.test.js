@@ -1,20 +1,21 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import { render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
+
 import { ThumbnailCanvasGrouping } from '../../../src/components/ThumbnailCanvasGrouping';
-import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 import CanvasGroupings from '../../../src/lib/CanvasGroupings';
 import manifestJson from '../../fixtures/version-2/019.json';
 
 /** create wrapper */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <ThumbnailCanvasGrouping
       index={1}
       currentCanvasId="https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1"
       classes={{}}
       style={{
         height: 90,
+        top: 0,
         width: 100,
       }}
       {...props}
@@ -24,7 +25,6 @@ function createWrapper(props) {
 
 describe('ThumbnailCanvasGrouping', () => {
   let wrapper;
-  let rightWrapper;
   let setCanvas;
   const data = {
     canvasGroupings: new CanvasGroupings(Utils.parseManifest(manifestJson)
@@ -37,32 +37,35 @@ describe('ThumbnailCanvasGrouping', () => {
     wrapper = createWrapper({ data, setCanvas });
   });
   it('renders', () => {
-    expect(wrapper.find('.mirador-thumbnail-nav-container').length).toEqual(1);
+    expect(screen.getByRole('gridcell')).toBeInTheDocument();
   });
   it('sets a mirador-current-canvas-grouping class on current canvas', () => {
-    expect(wrapper.find('.mirador-thumbnail-nav-canvas-1.mirador-current-canvas-grouping').length).toEqual(1);
+    expect(screen.getByRole('button')).toHaveClass('mirador-current-canvas-grouping');
   });
   it('renders a CaptionedIIIFThumbnail', () => {
-    expect(wrapper.find(IIIFThumbnail).length).toEqual(1);
+    expect(screen.getByText('Image 1')).toBeInTheDocument();
   });
-  it('when clicked, updates the current canvas', () => {
+  it('when clicked, updates the current canvas', async () => {
+    wrapper.unmount();
+    const user = userEvent.setup();
     wrapper = createWrapper({ data, index: 0, setCanvas });
-    wrapper.find('.mirador-thumbnail-nav-canvas-0').simulate('click', { currentTarget: { dataset: { canvasId: 'info:0' } } });
-    expect(setCanvas).toHaveBeenCalledWith('info:0');
+
+    await user.click(wrapper.container.querySelector('.mirador-thumbnail-nav-canvas-0')); // eslint-disable-line testing-library/no-node-access
+
+    expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
   });
   describe('attributes based off far-bottom position', () => {
     it('in button div', () => {
-      expect(wrapper.find('.mirador-thumbnail-nav-canvas').first().props().style).toEqual(
-        expect.objectContaining({
-          height: '123px',
-          width: 'auto',
-        }),
-      );
+      expect(screen.getByRole('button', { name: 'Image 1' })).toHaveStyle({
+        height: '123px',
+        width: 'auto',
+      });
     });
   });
   describe('attributes based off far-right position', () => {
     beforeEach(() => {
-      rightWrapper = createWrapper({
+      wrapper.unmount();
+      createWrapper({
         data: {
           ...data,
           position: 'far-right',
@@ -71,12 +74,10 @@ describe('ThumbnailCanvasGrouping', () => {
       });
     });
     it('in button div', () => {
-      expect(rightWrapper.find('.mirador-thumbnail-nav-canvas').first().props().style).toEqual(
-        expect.objectContaining({
-          height: 'auto',
-          width: '100px',
-        }),
-      );
+      expect(screen.getByRole('button', { name: 'Image 1' })).toHaveStyle({
+        height: 'auto',
+        width: '100px',
+      });
     });
   });
 });

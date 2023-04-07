@@ -1,14 +1,12 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import { render, screen } from 'test-utils';
 import { Utils } from 'manifesto.js';
-import Paper from '@material-ui/core/Paper';
+
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryView } from '../../../src/components/GalleryView';
-import GalleryViewThumbnail from '../../../src/containers/GalleryViewThumbnail';
 
 /** create wrapper */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <GalleryView
       canvases={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()}
       windowId="1234"
@@ -20,28 +18,26 @@ function createWrapper(props) {
 
 describe('GalleryView', () => {
   let setCanvas;
-  let wrapper;
   beforeEach(() => {
     setCanvas = jest.fn();
-    wrapper = createWrapper({ setCanvas });
   });
   it('renders the component', () => {
-    expect(wrapper.find(Paper).length).toBe(1);
-    expect(wrapper.find(Paper).prop('component')).toEqual('section');
+    const { container } = createWrapper({ setCanvas });
+    expect(container.querySelector('section')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
   it('renders gallery items for all canvases', () => {
-    expect(wrapper.find(GalleryViewThumbnail).length).toBe(3);
+    createWrapper({ setCanvas });
+    const buttons = screen.queryAllByRole('button');
+    expect(buttons.length).toBe(3);
   });
 
   describe('when viewingDirection="right-to-left"', () => {
-    beforeEach(() => {
-      wrapper = createWrapper({
+    it('sets up Paper to be rtl', () => {
+      createWrapper({
         viewingDirection: 'right-to-left',
       });
-    });
-
-    it('sets up Paper to be rtl', () => {
-      expect(wrapper.find('WithStyles(ForwardRef(Paper))').props().dir).toEqual('rtl');
+      const buttons = screen.queryAllByRole('button');
+      expect(buttons[0].closest('section')).toHaveAttribute('dir', 'rtl'); // eslint-disable-line testing-library/no-node-access
     });
   });
 });

@@ -30,10 +30,10 @@ function unsortedKeys(arr) {
  * (values will be sorted and downcased for comparison)
  */
 function missingKeys(arr1, arr2) {
-  const sortedDonwcasedLeftHandArray = lowerCaseSortedArray(arr1);
-  const sortedDonwcasedRightHandArray = lowerCaseSortedArray(arr2);
+  const sortedDowncasedLeftHandArray = lowerCaseSortedArray(arr1);
+  const sortedDowncasedRightHandArray = lowerCaseSortedArray(arr2);
 
-  return sortedDonwcasedLeftHandArray.filter((v, i) => v !== sortedDonwcasedRightHandArray[i]);
+  return sortedDowncasedLeftHandArray.filter((v, i) => !sortedDowncasedRightHandArray.includes(v));
 }
 
 files.forEach((fileName) => {

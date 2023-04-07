@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import createCachedSelector from 're-reselect';
-import { PropertyValue, Utils } from 'manifesto.js';
+import { PropertyValue, Utils, Resource } from 'manifesto.js';
 import getThumbnail from '../../lib/ThumbnailFactory';
 import asArray from '../../lib/asArray';
 import { getCompanionWindow } from './companionWindows';
@@ -78,17 +78,12 @@ function getProperty(property) {
   );
 }
 
-/**
- * Get the logo for a manifest
- * @param {object} state
- * @param {object} props
- * @param {string} props.manifestId
- * @param {string} props.windowId
- * @return {String|null}
- */
-export const getManifestLogo = createSelector(
-  [getManifestoInstance],
-  manifest => manifest && manifest.getLogo(),
+/** */
+export const getManifestProvider = createSelector(
+  [
+    getProperty('provider'),
+  ],
+  (provider) => provider,
 );
 
 /**
@@ -99,7 +94,7 @@ export const getManifestLogo = createSelector(
 * @param {string} props.windowId
 * @return {String|null}
 */
-export const getManifestProvider = createSelector(
+export const getManifestProviderName = createSelector(
   [
     getProperty('provider'),
     getManifestLocale,
@@ -107,6 +102,32 @@ export const getManifestProvider = createSelector(
   (provider, locale) => provider
     && provider[0].label
     && PropertyValue.parse(provider[0].label, locale).getValue(),
+);
+
+/**
+ * Return the IIIF v3 provider logo
+ * @param {object} state
+ * @param {object} props
+ * @return {String|null}
+ */
+export const getProviderLogo = createSelector(
+  [getManifestProvider],
+  (provider) => {
+    const logo = provider && provider[0] && provider[0].logo && provider[0].logo[0];
+    if (!logo) return null;
+    return getThumbnail(new Resource(logo))?.url;
+  },
+);
+
+/**
+ * Get the logo for a manifest
+ * @param {object} state
+ * @param {object} props
+ * @return {String|null}
+ */
+export const getManifestLogo = createSelector(
+  [getManifestoInstance, getProviderLogo],
+  (manifest, v3logo) => v3logo || (manifest && manifest.getLogo()),
 );
 
 /**
@@ -293,17 +314,34 @@ export const getManifestTitle = createSelector(
 );
 
 /**
-* Return manifest description
+* Return manifest description (IIIF v2) -- distinct from any description field nested under metadata
 * @param {object} state
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
-* @return {String}
+* @return {String|null}
 */
 export const getManifestDescription = createSelector(
   [getManifestoInstance],
   manifest => manifest
     && manifest.getDescription().getValue(),
+);
+
+/**
+* Return manifest summary (IIIF v3)
+* @param {object} state
+* @param {object} props
+* @param {string} props.manifestId
+* @param {string} props.windowId
+* @return {String|null}
+*/
+export const getManifestSummary = createSelector(
+  [
+    getProperty('summary'),
+    getManifestLocale,
+  ],
+  (summary, locale) => summary
+    && PropertyValue.parse(summary, locale).getValue(),
 );
 
 /**

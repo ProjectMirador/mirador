@@ -1,24 +1,13 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import PropTypes from 'prop-types';
-import ns from '../config/css-ns';
 
 /**
  */
 export class WindowList extends Component {
-  /**
-   * Given the menuElement passed in by the onEntering callback,
-   * find the 2nd ListItem element (avoiding the header) and focus it
-  */
-  static focus2ndListIitem(menuElement) {
-    if (!menuElement.querySelectorAll('li') || menuElement.querySelectorAll('li').length < 2) return;
-
-    menuElement.querySelectorAll('li')[1].focus(); // The 2nd LI
-  }
-
   /**
    * Get the title for a window from its manifest title
    * @private
@@ -35,7 +24,8 @@ export class WindowList extends Component {
    */
   render() {
     const {
-      containerId, handleClose, anchorEl, windowIds, focusWindow, t,
+      container, handleClose, windowIds, focusWindow, focusedWindowId, t,
+      ...menuProps
     } = this.props;
 
     return (
@@ -49,14 +39,9 @@ export class WindowList extends Component {
           vertical: 'top',
         }}
         id="window-list-menu"
-        container={document.querySelector(`#${containerId} .${ns('viewer')}`)}
-        disableAutoFocusItem
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
+        container={container?.current}
         onClose={handleClose}
-        TransitionProps={{
-          onEntering: WindowList.focus2ndListIitem,
-        }}
+        {...menuProps}
       >
         <ListSubheader role="presentation" selected={false} disabled tabIndex="-1">
           {t('openWindows')}
@@ -65,6 +50,7 @@ export class WindowList extends Component {
           windowIds.map((windowId, i) => (
             <MenuItem
               key={windowId}
+              selected={windowId === focusedWindowId}
               onClick={(e) => { focusWindow(windowId, true); handleClose(e); }}
             >
               <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
@@ -81,8 +67,8 @@ export class WindowList extends Component {
 }
 
 WindowList.propTypes = {
-  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  containerId: PropTypes.string.isRequired,
+  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  focusedWindowId: PropTypes.string,
   focusWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
   t: PropTypes.func,
@@ -91,7 +77,8 @@ WindowList.propTypes = {
 };
 
 WindowList.defaultProps = {
-  anchorEl: null,
+  container: null,
+  focusedWindowId: null,
   t: key => key,
   titles: {},
 };

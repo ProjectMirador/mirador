@@ -1,45 +1,18 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MiradorIcon from '../../../src/components/icons/MiradorIcon';
+import { render, screen, within } from 'test-utils';
 import { Branding } from '../../../src/components/Branding';
 
 describe('Branding', () => {
-  let wrapper;
-
   it('renders', () => {
-    wrapper = shallow(<Branding />);
+    render(<Branding />);
 
-    expect(
-      wrapper.matchesElement(
-        <div>
-          <Typography>
-            <IconButton>
-              <MiradorIcon />
-            </IconButton>
-          </Typography>
-        </div>,
-      ),
-    ).toBe(true);
+    expect(screen.getByRole('link')).toHaveAttribute('href', 'https://projectmirador.org');
+    expect(within(screen.getByRole('link')).getByRole('img')).toBeInTheDocument();
   });
 
   it('renders additional items for the wide variant', () => {
-    wrapper = shallow(<Branding variant="wide" />);
+    render(<Branding variant="wide" />);
 
-    expect(
-      wrapper.matchesElement(
-        <div>
-          <div>
-            <Typography>mirador</Typography>
-          </div>
-          <Typography>
-            <IconButton>
-              <MiradorIcon />
-            </IconButton>
-          </Typography>
-        </div>,
-      ),
-    ).toBe(true);
+    expect(screen.getByText('mirador')).toBeInTheDocument();
+    expect(screen.getByRole('link')).toBeInTheDocument();
   });
 });

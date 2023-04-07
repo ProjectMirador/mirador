@@ -1,15 +1,12 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContentText from '@material-ui/core/DialogContentText';
+import { render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { ErrorDialog } from '../../../src/components/ErrorDialog';
 
 /**
  * Helper function to create a shallow wrapper around ErrorDialog
  */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <ErrorDialog
       t={key => key}
       {...props}
@@ -18,29 +15,31 @@ function createWrapper(props) {
 }
 
 describe('ErrorDialog', () => {
-  let wrapper;
-
   it('renders properly', () => {
     const error = { id: 'testid123', message: '' };
 
-    wrapper = createWrapper({ error });
-    expect(wrapper.find(Dialog).length).toBe(1);
+    createWrapper({ error });
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByRole('heading')).toHaveTextContent('errorDialogTitle');
   });
 
   it('shows up error message correctly', () => {
     const errorMessage = 'error testMessage 123';
     const error = { id: 'testid123', message: errorMessage };
 
-    wrapper = createWrapper({ error });
-    expect(wrapper.find(DialogContentText).find('[variant="body2"]').render().text()).toBe(errorMessage);
+    createWrapper({ error });
+    expect(screen.getByRole('dialog')).toHaveTextContent(errorMessage);
   });
 
-  it('triggers the handleClick prop when clicking the ok button', () => {
+  it('triggers the handleClick prop when clicking the ok button', async () => {
     const error = { id: 'testid123', message: '' };
     const mockHandleClick = jest.fn();
+    const user = userEvent.setup();
 
-    wrapper = createWrapper({ error, removeError: mockHandleClick });
-    wrapper.find(Button).simulate('click');
+    createWrapper({ error, removeError: mockHandleClick });
+
+    await user.click(screen.getByRole('button', { name: 'errorDialogConfirm' }));
     expect(mockHandleClick).toHaveBeenCalledTimes(1);
   });
 });

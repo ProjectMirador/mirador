@@ -4,7 +4,8 @@ import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { WindowTopMenu } from '../components/WindowTopMenu';
-import { getConfig, getContainerId } from '../state/selectors';
+import { getConfig } from '../state/selectors';
+import { withWorkspaceContext } from '../contexts/WorkspaceContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -12,7 +13,6 @@ import { getConfig, getContainerId } from '../state/selectors';
  * @private
  */
 const mapStateToProps = state => ({
-  containerId: getContainerId(state),
   showThumbnailNavigationSettings: getConfig(state).thumbnailNavigation.displaySettings,
 });
 
@@ -27,6 +27,7 @@ const mapDispatchToProps = dispatch => ({
 
 const enhance = compose(
   withTranslation(),
+  withWorkspaceContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowTopMenu'),
 );

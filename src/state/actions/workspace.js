@@ -10,16 +10,6 @@ export function updateWorkspace(config) {
 }
 
 /**
- * setWorkspaceFullscreen - action creator
- *
- * @param  {Boolean} isFullscreenEnabled
- * @memberof ActionCreators
- */
-export function setWorkspaceFullscreen(isFullscreenEnabled) {
-  return { isFullscreenEnabled, type: ActionTypes.SET_WORKSPACE_FULLSCREEN };
-}
-
-/**
  * toggleZoomControls - action creator
  * @param {Boolean} showZoomControls
  * @memberof ActionCreators

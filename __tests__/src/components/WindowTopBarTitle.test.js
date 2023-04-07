@@ -1,12 +1,10 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Skeleton from '@material-ui/lab/Skeleton';
+import { render, screen } from 'test-utils';
 
 import { WindowTopBarTitle } from '../../../src/components/WindowTopBarTitle';
 
 /** create wrapper */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <WindowTopBarTitle
       manifestTitle="awesome manifest"
       windowId="xyz"
@@ -17,28 +15,23 @@ function createWrapper(props) {
 }
 
 describe('WindowTopBarTitle', () => {
-  it('renders all needed elements', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find('TitleTypography').length).toBe(1);
-  });
-
-  it('passes correct props to <Typography/>', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find('TitleTypography').first().render().text()).toBe('awesome manifest');
+  it('renders all needed elements with correct props', () => {
+    createWrapper();
+    expect(screen.getByRole('heading')).toHaveTextContent('awesome manifest');
   });
 
   it('renders a Skeleton when loading', () => {
-    const wrapper = createWrapper({ isFetching: true });
-    expect(wrapper.find('TitleTypography').dive().find(Skeleton).length).toBe(1);
+    createWrapper({ isFetching: true });
+    expect(screen.getByRole('heading')).not.toHaveTextContent('awesome manifest');
   });
 
   it('renders an error', () => {
-    const wrapper = createWrapper({ error: 'some error message' });
-    expect(wrapper.find('TitleTypography').render().text()).toBe('some error message');
+    createWrapper({ error: 'some error message' });
+    expect(screen.getByRole('heading')).toHaveTextContent('some error message');
   });
 
   it('title is configurable', () => {
-    expect(createWrapper({ hideWindowTitle: true }).find('TitleTypography').length).toEqual(0);
-    expect(createWrapper({ hideWindowTitle: true }).find('div').length).toEqual(1);
+    createWrapper({ hideWindowTitle: true });
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
   });
 });

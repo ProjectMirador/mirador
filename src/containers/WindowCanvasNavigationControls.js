@@ -18,6 +18,7 @@ const mapStateToProps = (state, { windowId }) => ({
  */
 const styles = theme => ({
   canvasNav: {
+    cursor: 'default',
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',

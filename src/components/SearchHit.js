@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import Button from '@material-ui/core/Button';
@@ -55,17 +55,20 @@ export class SearchHit extends Component {
     const {
       annotation, annotationLabel, announcer, canvasLabel, hit, index, t, total,
     } = this.props;
-    if (!hit) return;
+    if (!hit || !announcer) return;
     const truncatedHit = new TruncatedHit(hit, annotation);
 
-    announcer([
-      t('pagination', { current: index + 1, total }),
-      canvasLabel,
-      annotationLabel,
-      truncatedHit.before,
-      truncatedHit.match,
-      truncatedHit.after,
-    ].join(' '));
+    announcer(
+      [
+        t('pagination', { current: index + 1, total }),
+        canvasLabel,
+        annotationLabel,
+        truncatedHit.before,
+        truncatedHit.match,
+        truncatedHit.after,
+      ].join(' '),
+      'polite',
+    );
   }
 
   /** */
@@ -90,7 +93,7 @@ export class SearchHit extends Component {
     if (focused && !selected) return null;
 
     const truncatedHit = focused ? hit : hit && new TruncatedHit(hit, annotation);
-    const truncated = hit && truncatedHit.before !== hit.before && truncatedHit.after !== hit.after;
+    const truncated = hit && (truncatedHit.before !== hit.before || truncatedHit.after !== hit.after);
     const canvasLabelHtmlId = `${companionWindowId}-${index}`;
 
     return (
@@ -157,7 +160,7 @@ SearchHit.propTypes = {
   }),
   annotationId: PropTypes.string,
   annotationLabel: PropTypes.string,
-  announcer: PropTypes.func.isRequired,
+  announcer: PropTypes.func,
   canvasLabel: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string,
@@ -186,6 +189,7 @@ SearchHit.defaultProps = {
   annotation: undefined,
   annotationId: undefined,
   annotationLabel: undefined,
+  announcer: undefined,
   canvasLabel: undefined,
   classes: {},
   companionWindowId: undefined,

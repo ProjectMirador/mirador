@@ -1,11 +1,10 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import MinimalWindow from '../../../src/containers/MinimalWindow';
+import { render, screen } from 'test-utils';
+
 import { MosaicRenderPreview } from '../../../src/components/MosaicRenderPreview';
 
 describe('MosaicRenderPreview', () => {
   it('it renders the given title prop passed through the t prop function', () => {
-    const wrapper = shallow(
+    render(
       <MosaicRenderPreview
         t={(k, args) => `${k} ${args.title}`}
         title="The Title Prop"
@@ -13,10 +12,6 @@ describe('MosaicRenderPreview', () => {
       />,
     );
 
-    expect(wrapper.find(MinimalWindow).length).toBe(1);
-    expect(
-      wrapper.find(MinimalWindow).prop('label'),
-    ).toEqual('previewWindowTitle The Title Prop');
-    expect(wrapper.find(MinimalWindow).prop('ariaLabel')).toEqual(false);
+    expect(screen.getByRole('heading')).toHaveTextContent('previewWindowTitle The Title Prop');
   });
 });

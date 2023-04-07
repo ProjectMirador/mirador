@@ -1,14 +1,12 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { ManifestListItemError } from '../../../src/components/ManifestListItemError';
 
 /**
  * Helper function to wrap creating a ManifestListItemError component
 */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <ManifestListItemError
       classes={{}}
       manifestId="http://example.com"
@@ -21,36 +19,32 @@ function createWrapper(props) {
 }
 
 describe('ManifestListItemError', () => {
-  let wrapper;
   let mockFn;
 
   it('renders the failed manifest url and error key', () => {
-    wrapper = createWrapper();
+    createWrapper();
 
-    expect(
-      wrapper.find(Typography).children().first().text(),
-    ).toEqual('manifestError'); // the i18n key
-
-    expect(
-      wrapper.find(Typography).children().last().text(),
-    ).toEqual('http://example.com');
+    expect(screen.getByText('manifestError')).toBeInTheDocument();
+    expect(screen.getByText('http://example.com')).toBeInTheDocument();
   });
 
-  it('has a dismiss button that fires the onDismissClick prop', () => {
+  it('has a dismiss button that fires the onDismissClick prop', async () => {
+    const user = userEvent.setup();
     mockFn = jest.fn();
-    wrapper = createWrapper({ onDismissClick: mockFn });
+    createWrapper({ onDismissClick: mockFn });
 
-    wrapper.find(Button).first().simulate('click');
-    expect(mockFn).toHaveBeenCalledTimes(1);
+    await user.click(screen.getByRole('button', { name: 'dismiss' }));
+
     expect(mockFn).toHaveBeenCalledWith('http://example.com');
   });
 
-  it('has a try again button that fires the onTryAgainClick prop', () => {
+  it('has a try again button that fires the onTryAgainClick prop', async () => {
+    const user = userEvent.setup();
     mockFn = jest.fn();
-    wrapper = createWrapper({ onTryAgainClick: mockFn });
+    createWrapper({ onTryAgainClick: mockFn });
 
-    wrapper.find(Button).last().simulate('click');
-    expect(mockFn).toHaveBeenCalledTimes(1);
+    await user.click(screen.getByRole('button', { name: 'tryAgain' }));
+
     expect(mockFn).toHaveBeenCalledWith('http://example.com');
   });
 });

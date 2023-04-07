@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import AnnotationIcon from '@material-ui/icons/CommentSharp';
 import SearchIcon from '@material-ui/icons/SearchSharp';
 import classNames from 'classnames';
-import 'intersection-observer'; // polyfill needed for Safari
-import IntersectionObserver from '@researchgate/react-intersection-observer';
+import { InView } from 'react-intersection-observer';
 import MiradorCanvas from '../lib/MiradorCanvas';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 
@@ -19,7 +18,7 @@ export class GalleryViewThumbnail extends Component {
   constructor(props) {
     super(props);
 
-    this.myRef = React.createRef();
+    this.myRef = createRef();
     this.state = { requestedAnnotations: false };
 
     this.handleSelect = this.handleSelect.bind(this);
@@ -79,7 +78,7 @@ export class GalleryViewThumbnail extends Component {
   }
 
   /** */
-  handleIntersection({ isIntersecting }) {
+  handleIntersection(_inView, { isIntersecting }) {
     const {
       annotationsCount,
       requestCanvasAnnotations,
@@ -109,7 +108,7 @@ export class GalleryViewThumbnail extends Component {
     const miradorCanvas = new MiradorCanvas(canvas);
 
     return (
-      <IntersectionObserver onChange={this.handleIntersection}>
+      <InView onChange={this.handleIntersection}>
         <div
           key={canvas.index}
           className={
@@ -168,7 +167,7 @@ export class GalleryViewThumbnail extends Component {
             </div>
           </IIIFThumbnail>
         </div>
-      </IntersectionObserver>
+      </InView>
     );
   }
 }

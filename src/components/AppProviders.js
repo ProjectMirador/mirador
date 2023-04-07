@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Fullscreen from 'react-full-screen';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
-import { LiveAnnouncer } from 'react-aria-live';
 import {
   ThemeProvider, StylesProvider, createTheme, jssPreset, createGenerateClassName,
 } from '@material-ui/core/styles';
 import { DndContext, DndProvider } from 'react-dnd';
-import MultiBackend from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/dist/cjs/HTML5toTouch';
+import { MultiBackend } from 'react-dnd-multi-backend';
+import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 import { create } from 'jss';
 import rtl from 'jss-rtl';
 import createI18nInstance from '../i18n';
+import FullScreenContext from '../contexts/FullScreenContext';
 
 /**
  * Allow applications to opt-out of (or provide their own) drag and drop context
@@ -47,6 +47,25 @@ MaybeDndProvider.propTypes = {
 };
 
 /**
+ * Shim to inject the full screen handle into a context
+ */
+const FullScreenShim = ({ children }) => {
+  const handle = useFullScreenHandle();
+
+  return (
+    <FullScreen handle={handle}>
+      <FullScreenContext.Provider value={handle}>
+        {children}
+      </FullScreenContext.Provider>
+    </FullScreen>
+  );
+};
+
+FullScreenShim.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+/**
  * This component adds viewer-specific providers.
  * @prop {Object} manifests
  */
@@ -56,15 +75,8 @@ export class AppProviders extends Component {
     super(props);
 
     this.i18n = createI18nInstance();
-  }
-
-  /**
-   * Set i18n language on component mount
-   */
-  componentDidMount() {
-    const { language } = this.props;
-
-    this.i18n.changeLanguage(language);
+    // Set i18n language
+    this.i18n.changeLanguage(props.language);
   }
 
   /**
@@ -72,7 +84,6 @@ export class AppProviders extends Component {
    */
   componentDidUpdate(prevProps) {
     const { language } = this.props;
-
     if (prevProps.language !== language) {
       this.i18n.changeLanguage(language);
     }
@@ -81,8 +92,8 @@ export class AppProviders extends Component {
   /** */
   render() {
     const {
-      children, createGenerateClassNameOptions, isFullscreenEnabled,
-      setWorkspaceFullscreen, theme, translations,
+      children, createGenerateClassNameOptions,
+      theme, translations,
       dndManager,
     } = this.props;
 
@@ -93,27 +104,22 @@ export class AppProviders extends Component {
     });
 
     return (
-      <Fullscreen
-        enabled={isFullscreenEnabled}
-        onChange={setWorkspaceFullscreen}
-      >
+      <FullScreenShim>
         <I18nextProvider i18n={this.i18n}>
-          <LiveAnnouncer>
-            <ThemeProvider
-              theme={createTheme(theme)}
+          <ThemeProvider
+            theme={createTheme(theme)}
+          >
+            <StylesProvider
+              jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
+              generateClassName={generateClassName}
             >
-              <StylesProvider
-                jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
-                generateClassName={generateClassName}
-              >
-                <MaybeDndProvider dndManager={dndManager}>
-                  {children}
-                </MaybeDndProvider>
-              </StylesProvider>
-            </ThemeProvider>
-          </LiveAnnouncer>
+              <MaybeDndProvider dndManager={dndManager}>
+                {children}
+              </MaybeDndProvider>
+            </StylesProvider>
+          </ThemeProvider>
         </I18nextProvider>
-      </Fullscreen>
+      </FullScreenShim>
     );
   }
 }
@@ -122,9 +128,7 @@ AppProviders.propTypes = {
   children: PropTypes.node,
   createGenerateClassNameOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   dndManager: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  isFullscreenEnabled: PropTypes.bool,
   language: PropTypes.string.isRequired,
-  setWorkspaceFullscreen: PropTypes.func.isRequired,
   theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   translations: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
@@ -133,5 +137,4 @@ AppProviders.defaultProps = {
   children: null,
   createGenerateClassNameOptions: {},
   dndManager: undefined,
-  isFullscreenEnabled: false,
 };

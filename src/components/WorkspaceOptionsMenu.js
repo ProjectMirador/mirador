@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImportIcon from '@material-ui/icons/Input';
 import SaveAltIcon from '@material-ui/icons/SaveAltSharp';
@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import WorkspaceExport from '../containers/WorkspaceExport';
 import WorkspaceImport from '../containers/WorkspaceImport';
 import { PluginHook } from './PluginHook';
-import ns from '../config/css-ns';
 
 /**
  * WorkspaceOptionsMenu ~ the menu for workspace options such as import/export
@@ -55,16 +54,15 @@ export class WorkspaceOptionsMenu extends Component {
   */
   render() {
     const {
-      anchorEl, containerId, handleClose, t,
+      anchorEl, container, handleClose, t, open,
     } = this.props;
     const { exportWorkspace, importWorkspace } = this.state;
-    const container = document.querySelector(`#${containerId} .${ns('viewer')}`);
 
     return (
       <>
         <Menu
           id="workspace-options-menu"
-          container={container}
+          container={container?.current}
           anchorEl={anchorEl}
           anchorOrigin={{
             horizontal: 'right',
@@ -74,7 +72,7 @@ export class WorkspaceOptionsMenu extends Component {
             horizontal: 'left',
             vertical: 'top',
           }}
-          open={Boolean(anchorEl)}
+          open={open}
           onClose={handleClose}
         >
           <MenuItem
@@ -103,14 +101,14 @@ export class WorkspaceOptionsMenu extends Component {
         {Boolean(exportWorkspace.open) && (
           <WorkspaceExport
             open={Boolean(exportWorkspace.open)}
-            container={container}
+            container={container?.current}
             handleClose={this.handleMenuItemClose('exportWorkspace')}
           />
         )}
         {Boolean(importWorkspace.open) && (
           <WorkspaceImport
             open={Boolean(importWorkspace.open)}
-            container={container}
+            container={container?.current}
             handleClose={this.handleMenuItemClose('importWorkspace')}
           />
         )}
@@ -121,11 +119,14 @@ export class WorkspaceOptionsMenu extends Component {
 
 WorkspaceOptionsMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  containerId: PropTypes.string.isRequired,
+  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
+  open: PropTypes.bool,
   t: PropTypes.func.isRequired,
 };
 
 WorkspaceOptionsMenu.defaultProps = {
   anchorEl: null,
+  container: null,
+  open: false,
 };

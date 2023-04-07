@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import DOMPurify from 'dompurify';
 import ns from '../config/css-ns';
@@ -10,7 +10,9 @@ export class SanitizedHtml extends Component {
   /**
   */
   render() {
-    const { classes, htmlString, ruleSet } = this.props;
+    const {
+      classes, htmlString, ruleSet, ...props
+    } = this.props;
 
     // Add a hook to make all links open a new window
     DOMPurify.addHook('afterSanitizeAttributes', (node) => {
@@ -28,6 +30,7 @@ export class SanitizedHtml extends Component {
         dangerouslySetInnerHTML={{ // eslint-disable-line react/no-danger
           __html: DOMPurify.sanitize(htmlString, htmlRules[ruleSet]),
         }}
+        {...props}
       />
     );
   }

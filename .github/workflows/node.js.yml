@@ -14,15 +14,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 17.x]
+        node-version: [16.x, 18.x, 19.x]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install -g codecov
     - run: npm install
     - run: npm test
-    - run: codecov
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3

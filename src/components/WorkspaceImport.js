@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import PropTypes from 'prop-types';
@@ -68,7 +68,6 @@ export class WorkspaceImport extends Component {
       <Dialog
         aria-labelledby="workspace-import-title"
         id="workspace-import"
-        onEscapeKeyDown={handleClose}
         onClose={handleClose}
         open={open}
         fullWidth
@@ -83,7 +82,7 @@ export class WorkspaceImport extends Component {
             id="workspace-import-input"
             multiline
             onChange={this.handleChange}
-            rows="15"
+            minRows={15}
             variant="filled"
             inputProps={{ autoFocus: 'autofocus', className: classes.textInput }}
             helperText={t('importWorkspaceHint')}

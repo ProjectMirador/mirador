@@ -15,7 +15,8 @@ import {
   getManifestLogo,
   getManifestDescription,
   getManifestHomepage,
-  getManifestProvider,
+  getProviderLogo,
+  getManifestProviderName,
   getManifestTitle,
   getManifestThumbnail,
   getManifestMetadata,
@@ -23,6 +24,7 @@ import {
   getManifestRelatedContent,
   getManifestRenderings,
   getManifestSeeAlso,
+  getManifestSummary,
   getManifestUrl,
   getMetadataLocales,
   getRequiredStatement,
@@ -145,15 +147,43 @@ describe('getManifestDescription', () => {
   });
 });
 
-describe('getManifestProvider', () => {
+describe('getManifestSummary', () => {
+  it('should return manifest summary', () => {
+    const state = { manifests: { x: { json: manifestFixturev3001 } } };
+    const received = getManifestSummary(state, { manifestId: 'x' });
+    expect(received).toBe('[Handbill of Mr. Becket, [1787] ]');
+  });
+
+  it('should return undefined if manifest undefined', () => {
+    const received = getManifestSummary({ manifests: {} }, { manifestId: 'x' });
+    expect(received).toBeUndefined();
+  });
+});
+
+describe('getProviderLogo', () => {
+  it('should return manifest provider logo', () => {
+    const state = { manifests: { x: { json: manifestFixtureWithAProvider } } };
+    const received = getProviderLogo(state, { manifestId: 'x' });
+    expect(received).toBe('https://example.org/images/logo.png');
+  });
+
+  it('should return null if no logo', () => {
+    // use the fixture but overwrite the 'provider' property to be empty/not include logo
+    const state = { manifests: { x: { json: { ...manifestFixtureWithAProvider, provider: [] } } } };
+    const received = getProviderLogo(state, { manifestId: 'x' });
+    expect(received).toBeNull();
+  });
+});
+
+describe('getManifestProviderName', () => {
   it('should return manifest provider label', () => {
     const state = { manifests: { x: { json: manifestFixtureWithAProvider } } };
-    const received = getManifestProvider(state, { manifestId: 'x' });
+    const received = getManifestProviderName(state, { manifestId: 'x' });
     expect(received).toBe('Example Organization');
   });
 
   it('should return undefined if manifest undefined', () => {
-    const received = getManifestProvider({ manifests: {} }, { manifestId: 'x' });
+    const received = getManifestProviderName({ manifests: {} }, { manifestId: 'x' });
     expect(received).toBeUndefined();
   });
 });

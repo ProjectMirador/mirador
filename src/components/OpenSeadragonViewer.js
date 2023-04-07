@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import {
+  createRef, Children, cloneElement, Component,
+} from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
@@ -21,9 +23,9 @@ export class OpenSeadragonViewer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { viewer: undefined };
-    this.ref = React.createRef();
-    this.apiRef = React.createRef();
+    this.state = { grabbing: false, viewer: undefined };
+    this.ref = createRef();
+    this.apiRef = createRef();
     OSDReferences.set(props.windowId, this.apiRef);
     this.onCanvasMouseMove = debounce(this.onCanvasMouseMove.bind(this), 10);
     this.onViewportChange = this.onViewportChange.bind(this);
@@ -55,6 +57,14 @@ export class OpenSeadragonViewer extends Component {
     this.apiRef.current = viewer;
 
     this.setState({ viewer });
+
+    viewer.addHandler('canvas-drag', () => {
+      this.setState({ grabbing: true });
+    });
+
+    viewer.addHandler('canvas-drag-end', () => {
+      this.setState({ grabbing: false });
+    });
 
     // Set a flag when OSD starts animating (so that viewer updates are not used)
     viewer.addHandler('animation-start', () => {
@@ -137,6 +147,7 @@ export class OpenSeadragonViewer extends Component {
       viewer.innerTracker.moveHandler = null;
     }
     viewer.removeAllHandlers();
+    this.onCanvasMouseMove.cancel();
     this.apiRef.current = undefined;
   }
 
@@ -190,10 +201,6 @@ export class OpenSeadragonViewer extends Component {
     if (!(type === 'Image' || type === 'dctypes:Image' || format.startsWith('image/'))) return Promise.resolve();
 
     return new Promise((resolve, reject) => {
-      if (!viewer) {
-        reject();
-      }
-
       resolve(viewer.addSimpleImage({
         error: event => reject(event),
         fitBounds: new OpenSeadragon.Rect(
@@ -213,10 +220,6 @@ export class OpenSeadragonViewer extends Component {
     const { canvasWorld } = this.props;
     const { viewer } = this.state;
     return new Promise((resolve, reject) => {
-      if (!viewer) {
-        reject();
-      }
-
       // OSD mutates this object, so we give it a shallow copy
       const tileSource = { ...infoResponse.json };
       const contentResource = canvasWorld.contentResource(infoResponse.id);
@@ -240,9 +243,6 @@ export class OpenSeadragonViewer extends Component {
   refreshTileProperties() {
     const { canvasWorld } = this.props;
     const { viewer } = this.state;
-
-    if (!viewer) return;
-
     const { world } = viewer;
 
     const items = [];
@@ -343,10 +343,10 @@ export class OpenSeadragonViewer extends Component {
       children, classes, label, t, windowId,
       drawAnnotations,
     } = this.props;
-    const { viewer } = this.state;
+    const { viewer, grabbing } = this.state;
 
-    const enhancedChildren = React.Children.map(children, child => (
-      React.cloneElement(
+    const enhancedChildren = Children.map(children, child => (
+      cloneElement(
         child,
         {
           zoomToWorld: this.zoomToWorld,
@@ -357,6 +357,7 @@ export class OpenSeadragonViewer extends Component {
     return (
       <section
         className={classNames(ns('osd-container'), classes.osdContainer)}
+        style={{ cursor: grabbing ? 'grabbing' : undefined }}
         id={`${windowId}-osd`}
         ref={this.ref}
         aria-label={t('item', { label })}

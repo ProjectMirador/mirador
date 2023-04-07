@@ -1,41 +1,44 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
-import WindowList from '../../../src/containers/WindowList';
+import { render, screen, within } from 'test-utils';
+import userEvent from '@testing-library/user-event';
+
 import { WindowListButton } from '../../../src/components/WindowListButton';
 
 /**
  * Helper function to create a shallow wrapper around WindowListButton
  */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <WindowListButton
       t={str => str}
       windowCount={3}
       {...props}
     />,
+    { preloadedState: { workspace: { windowIds: ['abc123'] } } },
   );
 }
 
 describe('WindowListButton', () => {
-  let wrapper;
+  it('shows the window count as a badge on the button', () => {
+    createWrapper();
 
-  it('passes the windowCount as BadgeProps to MiradorMenuButton', () => {
-    wrapper = createWrapper();
-
-    expect(wrapper.find(MiradorMenuButton).props().BadgeProps.badgeContent).toEqual(3);
+    expect(within(screen.getByRole('button')).getByText('3', { container: '.MuiBadge-badge' })).toBeInTheDocument();
   });
 
   it('disabled the MiradorMenuButton if the disabled prop is true', () => {
-    wrapper = createWrapper({ disabled: true });
+    createWrapper({ disabled: true });
 
-    expect(wrapper.find(MiradorMenuButton).props().disabled).toBe(true);
+    expect(screen.getByRole('button')).toBeDisabled();
   });
 
-  it('toggles the WindowList comonent when clicking on the MiradorMenuButton', () => {
-    wrapper = createWrapper();
-    expect(wrapper.find(WindowList).length).toBe(0);
-    wrapper.find(MiradorMenuButton).simulate('click', { currentTarget: 'blah' });
-    expect(wrapper.find(WindowList).length).toBe(1);
+  it('toggles the WindowList comonent when clicking on the MiradorMenuButton', async () => {
+    const user = userEvent.setup();
+    createWrapper();
+    await user.click(screen.getByRole('button'));
+
+    expect(screen.getByText('openWindows', { container: '.MuiListSubheader-root' })).toBeInTheDocument();
+
+    await user.click(screen.getByRole('menuitem', { name: 'untitled' }));
+
+    expect(screen.queryByText('openWindows', { container: '.MuiListSubheader-root' })).not.toBeInTheDocument();
   });
 });

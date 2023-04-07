@@ -1,45 +1,51 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import Button from '@material-ui/core/Button';
-import MenuItem from '@material-ui/core/MenuItem';
-import Skeleton from '@material-ui/lab/Skeleton';
+import { render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
+
 import { CollectionDialog } from '../../../src/components/CollectionDialog';
 import collection from '../../fixtures/version-2/collection.json';
 
 /** */
 function createWrapper(props) {
   const manifest = Utils.parseManifest(props.manifest ? props.manifest : collection);
-  CollectionDialog.prototype.dialogContainer = () => true;
-  return shallow(
+
+  render(<div id="window" />);
+
+  return render(
     <CollectionDialog
       addWindow={() => {}}
       classes={{}}
       ready
       manifest={manifest}
       t={(key) => key}
+      windowId="window"
       {...props}
     />,
+    { preloadedState: { windows: { window: { id: 'window' } } } },
   );
 }
 
 describe('CollectionDialog', () => {
   it('renders a dialog with collection menu items', () => {
-    const wrapper = createWrapper({});
-    expect(wrapper.find(Dialog).length).toEqual(1);
-    expect(wrapper.find(MenuItem).length).toEqual(55);
-    expect(wrapper.find(MenuItem).first().text()).toEqual('Test 1 Manifest: Minimum Required Fields');
+    createWrapper({});
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getAllByRole('menuitem')).toHaveLength(55);
+    expect(screen.getByRole('menuitem', { name: 'Test 1 Manifest: Minimum Required Fields' })).toBeInTheDocument();
   });
   it('when not ready returns placeholder skeleton', () => {
-    const wrapper = createWrapper({ ready: false });
-    expect(wrapper.find(Skeleton).length).toEqual(3);
+    createWrapper({ ready: false });
+
+    expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
+
+    expect(screen.getByRole('dialog').querySelectorAll('.MuiSkeleton-root')).toHaveLength(3); // eslint-disable-line testing-library/no-node-access
   });
-  it('clicking the hide button fires hideCollectionDialog', () => {
+  it('clicking the hide button fires hideCollectionDialog', async () => {
+    const user = userEvent.setup();
     const hideCollectionDialog = jest.fn();
-    const wrapper = createWrapper({ hideCollectionDialog });
-    expect(wrapper.find(DialogActions).find(Button).first().simulate('click'));
+    createWrapper({ hideCollectionDialog });
+
+    await user.click(screen.getByRole('button', { name: 'close' }));
     expect(hideCollectionDialog).toHaveBeenCalled();
   });
 });

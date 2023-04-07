@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -31,7 +31,7 @@ export class ErrorDialog extends Component {
         <DialogTitle id="error-dialog-title" disableTypography>
           <Typography variant="h2">{t('errorDialogTitle')}</Typography>
         </DialogTitle>
-        <DialogContent disableTypography>
+        <DialogContent>
           <DialogContentText variant="body2" noWrap color="inherit">
             {`${error.message}`}
           </DialogContentText>

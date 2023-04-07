@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import AppBar from '@material-ui/core/AppBar';
@@ -39,11 +39,12 @@ export class WorkspaceControlPanel extends Component {
 }
 
 WorkspaceControlPanel.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string),
   t: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['default', 'wide']),
 };
 
 WorkspaceControlPanel.defaultProps = {
+  classes: {},
   variant: 'default',
 };

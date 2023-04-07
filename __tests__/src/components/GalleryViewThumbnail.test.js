@@ -1,15 +1,14 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import { render, fireEvent, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
-import Chip from '@material-ui/core/Chip';
-import IntersectionObserver from '@researchgate/react-intersection-observer';
+import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
+
 import manifestJson from '../../fixtures/version-2/019.json';
 import { GalleryViewThumbnail } from '../../../src/components/GalleryViewThumbnail';
-import IIIFThumbnail from '../../../src/containers/IIIFThumbnail';
 
 /** create wrapper */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <GalleryViewThumbnail
       canvas={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()[0]}
       classes={{ selected: 'selected' }}
@@ -21,113 +20,130 @@ function createWrapper(props) {
 }
 
 describe('GalleryView', () => {
-  let wrapper;
-  it('sets a mirador-current-canvas-grouping class if the canvas is selected', () => {
-    wrapper = createWrapper({ selected: true });
-    expect(wrapper.find('div[role="button"]').at(0).prop('className')).toEqual('selected');
-
-    wrapper = createWrapper({ selected: false });
-    expect(wrapper.find('div[role="button"]').at(0).prop('className')).not.toEqual('selected');
+  beforeEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+  });
+  it('sets a mirador-current-canvas-grouping class when the canvas is selected', () => {
+    createWrapper({ selected: true });
+    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toHaveClass('selected');
+  });
+  it('does not set a mirador-current-canvas-grouping class when the canvas is not selected', () => {
+    createWrapper({ selected: false });
+    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button')).not.toHaveClass('selected');
+  });
+  it('sets a mirador-current-canvas-grouping class when the canvas is selected', () => {
+    createWrapper({ selected: true });
+    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toHaveClass('selected');
+  });
+  it('does not set a mirador-current-canvas-grouping class when the canvas is not selected', () => {
+    createWrapper({ selected: false });
+    expect(screen.getByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button')).not.toHaveClass('selected');
   });
   it('renders the thumbnail', () => {
-    wrapper = createWrapper({ config: { height: 55 } });
-    expect(wrapper.find(IIIFThumbnail).length).toBe(1);
-    expect(wrapper.find(IIIFThumbnail).prop('maxHeight')).toBe(55);
+    createWrapper({ config: { height: 55 } });
+    expect(screen.getByRole('presentation')).toBeInTheDocument();
+    expect(screen.getByRole('presentation')).toHaveStyle('height: 55px');
   });
-  it('sets the selected canvas on click', () => {
+  it('sets the selected canvas on click', async () => {
     const setCanvas = jest.fn();
-    wrapper = createWrapper({ setCanvas });
-    wrapper.find('div[role="button"]').first().simulate('click');
+    createWrapper({ setCanvas });
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('button'));
     expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
   });
 
-  it('sets the window mode if the selected canvas is clicked', () => {
+  it('sets the window mode if the selected canvas is clicked', async () => {
     const focusOnCanvas = jest.fn();
-    wrapper = createWrapper({ focusOnCanvas, selected: true });
-    wrapper.find('div[role="button"]').first().simulate('click');
+    createWrapper({ focusOnCanvas, selected: true });
+    const user = userEvent.setup();
+    await user.click(screen.getByRole('button'));
     expect(focusOnCanvas).toHaveBeenCalled();
   });
 
   it('sets the window mode if the user hits enter while on a canvas', () => {
     const focusOnCanvas = jest.fn();
-    wrapper = createWrapper({ focusOnCanvas, selected: true });
-    wrapper.find('div[role="button"]').first().simulate('keyUp', { key: 'Enter' });
+    createWrapper({ focusOnCanvas, selected: true });
+    const button = screen.getByRole('button');
+    button.focus();
+    fireEvent.keyUp(button, { code: 'Enter', key: 'Enter' });
     expect(focusOnCanvas).toHaveBeenCalled();
   });
 
   it('sets the window mode if the user hits space while on a canvas', () => {
     const focusOnCanvas = jest.fn();
-    wrapper = createWrapper({ focusOnCanvas, selected: true });
-    wrapper.find('div[role="button"]').first().simulate('keyUp', { key: ' ' });
+    createWrapper({ focusOnCanvas, selected: true });
+    const button = screen.getByRole('button');
+    button.focus();
+    fireEvent.keyUp(button, { code: ' ', key: ' ' });
     expect(focusOnCanvas).toHaveBeenCalled();
   });
 
   it('sets the canvas if the user hits a key (non-space or non-enter) while on a canvas', () => {
     const setCanvas = jest.fn();
-    wrapper = createWrapper({ selected: true, setCanvas });
-    wrapper.find('div[role="button"]').first().simulate('keyUp', { key: 'd' });
+    createWrapper({ selected: true, setCanvas });
+    const button = screen.getByRole('button');
+    button.focus();
+    fireEvent.keyUp(button, { code: 'd', key: 'd' });
     expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
   });
 
   describe('on-demand annotation fetching', () => {
-    it('fetches annotations', () => {
-      const requestCanvasAnnotations = jest.fn();
-      const canvas = {
-        getHeight: () => 50,
-        getWidth: () => 50,
-      };
-      wrapper = createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
+    const canvas = {
+      getHeight: () => 50,
+      getServices: jest.fn(),
+      getThumbnail: jest.fn(),
+      getType: jest.fn(),
+      getWidth: () => 50,
+      isCanvas: jest.fn(),
+      isCollection: jest.fn(),
+      isManifest: jest.fn(),
+    };
+    let requestCanvasAnnotations;
 
-      wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: true });
-      expect(requestCanvasAnnotations).toHaveBeenCalled();
+    beforeEach(() => { requestCanvasAnnotations = jest.fn(); });
+    it('triggers requestCanvasAnnotations when there is an intersection and no annotions ', () => {
+      createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
+      mockAllIsIntersecting(true);
+      expect(requestCanvasAnnotations).toHaveBeenCalledTimes(1);
     });
-    it('does nothing if there is no intersection', () => {
-      const requestCanvasAnnotations = jest.fn();
-      const canvas = {
-        getHeight: () => 50,
-        getWidth: () => 50,
-      };
-      wrapper = createWrapper({ canvas, requestCanvasAnnotations });
-
-      wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: false });
+    it('does nothing if there is an intersection and existing annotations', () => {
+      createWrapper({ annotationsCount: 1, canvas, requestCanvasAnnotations });
+      mockAllIsIntersecting(true);
       expect(requestCanvasAnnotations).not.toHaveBeenCalled();
     });
-    it('does nothing if there are already some annotations', () => {
-      const requestCanvasAnnotations = jest.fn();
-      const canvas = {
-        getHeight: () => 50,
-        getWidth: () => 50,
-      };
-      wrapper = createWrapper({ annotationsCount: 5, canvas, requestCanvasAnnotations });
-
-      wrapper.find(IntersectionObserver).simulate('change', { isIntersecting: true });
+    it('does nothing if there is no intersection', () => {
+      createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
       expect(requestCanvasAnnotations).not.toHaveBeenCalled();
     });
   });
 
   describe('annotation count chip', () => {
     it('hides the chip if there are no annotations', () => {
-      wrapper = createWrapper({ annotationsCount: 0 });
-      expect(wrapper.find(Chip).length).toEqual(0);
+      const { container } = createWrapper({ annotationsCount: 0 });
+      expect(container.querySelector('.MuiChip-root')).not.toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
     });
 
     it('shows the number of search annotations on a canvas', () => {
-      wrapper = createWrapper({ annotationsCount: 50 });
-      expect(wrapper.find(Chip).length).toEqual(1);
-      expect(wrapper.find(Chip).prop('label')).toEqual(50);
+      const { container } = createWrapper({ annotationsCount: 50 });
+      expect(container.querySelector('.MuiChip-root')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+      expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
     });
   });
 
   describe('search annotation count chip', () => {
     it('hides the chip if there are no annotations', () => {
-      wrapper = createWrapper({ searchAnnotationsCount: 0 });
-      expect(wrapper.find(Chip).length).toEqual(0);
+      const { container } = createWrapper({ searchAnnotationsCount: 0 });
+      expect(container.querySelector('.MuiChip-root')).not.toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
     });
 
     it('shows the number of search annotations on a canvas', () => {
-      wrapper = createWrapper({ searchAnnotationsCount: 50 });
-      expect(wrapper.find(Chip).length).toEqual(1);
-      expect(wrapper.find(Chip).prop('label')).toEqual(50);
+      const { container } = createWrapper({ searchAnnotationsCount: 50 });
+      expect(container.querySelector('.MuiChip-root')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+      expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
     });
   });
 });

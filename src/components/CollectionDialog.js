@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -102,8 +102,8 @@ export class CollectionDialog extends Component {
 
   /** */
   dialogContainer() {
-    const { containerId, windowId } = this.props;
-    return document.querySelector(`#${containerId} #${windowId}`);
+    const { container, windowId } = this.props;
+    return (container?.current || document.body).querySelector(`#${windowId}`);
   }
 
   /** */
@@ -276,7 +276,7 @@ CollectionDialog.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   collectionPath: PropTypes.arrayOf(PropTypes.string),
-  containerId: PropTypes.string,
+  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   error: PropTypes.string,
   hideCollectionDialog: PropTypes.func.isRequired,
   isMultipart: PropTypes.bool,
@@ -293,7 +293,7 @@ CollectionDialog.propTypes = {
 CollectionDialog.defaultProps = {
   collection: null,
   collectionPath: [],
-  containerId: null,
+  container: null,
   error: null,
   isMultipart: false,
   ready: false,

@@ -1,107 +1,88 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import WindowSideBarInfoPanel from '../../../src/containers/WindowSideBarInfoPanel';
-import WindowSideBarCanvasPanel from '../../../src/containers/WindowSideBarCanvasPanel';
-import WindowSideBarAnnotationsPanel from '../../../src/containers/WindowSideBarAnnotationsPanel';
-import ThumbnailNavigation from '../../../src/containers/ThumbnailNavigation';
-import AttributionPanel from '../../../src/containers/AttributionPanel';
-import SearchPanel from '../../../src/containers/SearchPanel';
-import LayersPanel from '../../../src/containers/LayersPanel';
-import CustomPanel from '../../../src/containers/CustomPanel';
+import { render, screen } from 'test-utils';
+
 import { CompanionWindowFactory } from '../../../src/components/CompanionWindowFactory';
 
 /** create wrapper */
-function createWrapper(props) {
-  return shallow(
+function createWrapper({ content = 'closed', ...props }) {
+  return render(
     <CompanionWindowFactory
       windowId="x"
       id="123"
-      content="closed"
+      content={content}
       {...props}
     />,
+    { preloadedState: { companionWindows: { 123: { content }, thumb: {} }, windows: { x: { thumbnailNavigationId: 'thumb' } } } },
   );
 }
 
 describe('CompanionWindowFactory', () => {
-  let wrapper;
-
   describe('for an info window', () => {
     it('renders the appropriate arg component', () => {
-      wrapper = createWrapper({
+      createWrapper({
         content: 'info',
       });
 
-      expect(wrapper.find(WindowSideBarInfoPanel).length).toBe(1);
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('aboutThisItem');
     });
   });
 
   describe('for a canvas navigation window', () => {
     it('renders the appropriate arg component', () => {
-      wrapper = createWrapper({
+      createWrapper({
         content: 'canvas',
       });
 
-      expect(wrapper.find(WindowSideBarCanvasPanel).length).toBe(1);
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('canvasIndex');
     });
   });
 
   describe('for an annotation window', () => {
     it('renders the appropriate arg component', () => {
-      wrapper = createWrapper({
+      createWrapper({
         content: 'annotations',
       });
 
-      expect(wrapper.find(WindowSideBarAnnotationsPanel).length).toBe(1);
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('annotations');
     });
   });
 
   describe('for an attribution window', () => {
     it('renders the appropriate arg component', () => {
-      wrapper = createWrapper({
+      createWrapper({
         content: 'attribution',
       });
 
-      expect(wrapper.find(AttributionPanel).length).toBe(1);
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('attributionTitle');
     });
   });
 
   describe('for the thumbnail nav window', () => {
     it('renders the appropriate arg component', () => {
-      wrapper = createWrapper({
+      createWrapper({
         content: 'thumbnailNavigation',
       });
 
-      expect(wrapper.find(ThumbnailNavigation).length).toBe(1);
+      expect(screen.getByRole('grid')).toHaveAccessibleName('thumbnailNavigation');
     });
   });
 
   describe('for the search window', () => {
     it('renders the appropriate arg component', () => {
-      wrapper = createWrapper({
+      createWrapper({
         content: 'search',
       });
 
-      expect(wrapper.find(SearchPanel).length).toBe(1);
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('searchTitle');
     });
   });
 
   describe('for the layers window', () => {
     it('renders the appropriate arg component', () => {
-      wrapper = createWrapper({
+      createWrapper({
         content: 'layers',
       });
 
-      expect(wrapper.find(LayersPanel).length).toBe(1);
-    });
-  });
-
-  describe('for a custom panel', () => {
-    it('renders the appropriate arg component', () => {
-      wrapper = createWrapper({
-        content: 'custom',
-      });
-
-      expect(wrapper.find(CustomPanel).length).toBe(1);
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('layers');
     });
   });
 });

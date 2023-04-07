@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import Chip from '@material-ui/core/Chip';
@@ -72,29 +72,29 @@ export class CanvasAnnotations extends Component {
         <MenuList autoFocusItem variant="selectedMenu">
           {
             annotations.map(annotation => (
-              <ScrollTo
-                containerRef={containerRef}
-                key={`${annotation.id}-scroll`}
-                offsetTop={96} // offset for the height of the form above
-                scrollTo={selectedAnnotationId === annotation.id}
+              <MenuItem
+                button
+                component={listContainerComponent}
+                className={clsx(
+                  classes.annotationListItem,
+                  {
+                    [classes.hovered]: hoveredAnnotationIds.includes(annotation.id),
+                  },
+                )}
+                key={annotation.id}
+                annotationid={annotation.id}
+                selected={selectedAnnotationId === annotation.id}
+                onClick={e => this.handleClick(e, annotation)}
+                onFocus={() => this.handleAnnotationHover(annotation)}
+                onBlur={this.handleAnnotationBlur}
+                onMouseEnter={() => this.handleAnnotationHover(annotation)}
+                onMouseLeave={this.handleAnnotationBlur}
               >
-                <MenuItem
-                  button
-                  component={listContainerComponent}
-                  className={clsx(
-                    classes.annotationListItem,
-                    {
-                      [classes.hovered]: hoveredAnnotationIds.includes(annotation.id),
-                    },
-                  )}
-                  key={annotation.id}
-                  annotationid={annotation.id}
-                  selected={selectedAnnotationId === annotation.id}
-                  onClick={e => this.handleClick(e, annotation)}
-                  onFocus={() => this.handleAnnotationHover(annotation)}
-                  onBlur={this.handleAnnotationBlur}
-                  onMouseEnter={() => this.handleAnnotationHover(annotation)}
-                  onMouseLeave={this.handleAnnotationBlur}
+                <ScrollTo
+                  containerRef={containerRef}
+                  key={`${annotation.id}-scroll`}
+                  offsetTop={96} // offset for the height of the form above
+                  scrollTo={selectedAnnotationId === annotation.id}
                 >
                   <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
                     <SanitizedHtml
@@ -109,8 +109,8 @@ export class CanvasAnnotations extends Component {
                       }
                     </div>
                   </ListItemText>
-                </MenuItem>
-              </ScrollTo>
+                </ScrollTo>
+              </MenuItem>
             ))
           }
         </MenuList>

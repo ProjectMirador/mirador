@@ -1,36 +1,36 @@
-import ReactDOM from 'react-dom';
-import { shallow } from 'enzyme';
+import { render, screen } from 'test-utils';
 import MiradorViewer from '../../../src/lib/MiradorViewer';
 
 jest.unmock('react-i18next');
-jest.mock('react-dom');
-jest.mock('isomorphic-unfetch', () => jest.fn(() => Promise.resolve({ json: () => ({}) })));
+
+/** */
+const DummyPlugin = () => <div data-testid="plugin">Plugin</div>;
 
 describe('MiradorViewer', () => {
   let container;
-  let instance;
-  beforeAll(() => {
+  beforeEach(() => {
     container = document.createElement('div');
     container.id = 'mirador';
+    container.dataset.testid = 'container';
     document.body.appendChild(container);
-    ReactDOM.render = jest.fn();
-    ReactDOM.unmountComponentAtNode = jest.fn();
-    instance = new MiradorViewer({ id: 'mirador' });
   });
-  afterAll(() => {
+  afterEach(() => {
     document.body.removeChild(container);
   });
   describe('constructor', () => {
     it('returns viewer store', () => {
+      const instance = new MiradorViewer({ id: 'mirador' });
       expect(instance.store.dispatch).toBeDefined();
     });
     it('renders via ReactDOM', () => {
-      expect(ReactDOM.render).toHaveBeenCalled();
+      const instance = new MiradorViewer({ id: 'mirador' }); // eslint-disable-line no-unused-vars
+
+      expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
     });
   });
   describe('processConfig', () => {
     it('transforms config values to actions to dispatch to store', () => {
-      instance = new MiradorViewer(
+      const instance = new MiradorViewer(
         {
           catalog: [
             { manifestId: 'http://media.nga.gov/public/manifests/nga_highlights.json', provider: 'National Gallery of Art' },
@@ -50,6 +50,7 @@ describe('MiradorViewer', () => {
         },
         {
           plugins: [{
+            component: DummyPlugin,
             config: {
               foo: 'bar',
             },
@@ -76,13 +77,14 @@ describe('MiradorViewer', () => {
       expect(config.foo).toBe('bar');
     });
     it('merges translation configs from multiple plugins', () => {
-      instance = new MiradorViewer(
+      const instance = new MiradorViewer(
         {
           id: 'mirador',
         },
         {
           plugins: [
             {
+              component: DummyPlugin,
               config: {
                 translations: {
                   en: {
@@ -94,6 +96,7 @@ describe('MiradorViewer', () => {
               target: 'WindowTopBarPluginArea',
             },
             {
+              component: DummyPlugin,
               config: {
                 translations: {
                   en: {
@@ -118,17 +121,26 @@ describe('MiradorViewer', () => {
   });
 
   describe('render', () => {
-    it('passes props through to the App component', () => {
-      const rendered = shallow(instance.render({ some: 'prop' }));
-      expect(rendered.find('App').length).toBe(1);
-      expect(rendered.find('App').prop('some')).toBe('prop');
+    it('passes props through to the App component', async () => {
+      const instance = new MiradorViewer({});
+      const plugins = [{
+        component: DummyPlugin,
+        mode: 'wrap',
+        target: 'WorkspaceArea',
+      }];
+
+      render(instance.render({ plugins }));
+
+      expect(await screen.findByTestId('plugin')).toBeInTheDocument();
     });
   });
 
   describe('unmount', () => {
     it('unmounts via ReactDOM', () => {
+      const instance = new MiradorViewer({ id: 'mirador' });
+      expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
       instance.unmount();
-      expect(ReactDOM.unmountComponentAtNode).toHaveBeenCalled();
+      expect(screen.getByTestId('container')).toBeEmptyDOMElement();
     });
   });
 });

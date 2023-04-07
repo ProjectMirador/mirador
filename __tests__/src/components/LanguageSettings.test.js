@@ -1,15 +1,12 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import CheckIcon from '@material-ui/icons/CheckSharp';
+import { render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { LanguageSettings } from '../../../src/components/LanguageSettings';
 
 /**
  * Helper function to create a shallow wrapper around LanguageSettings
  */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <LanguageSettings
       handleClick={() => {}}
       languages={{}}
@@ -19,7 +16,6 @@ function createWrapper(props) {
 }
 
 describe('LanguageSettings', () => {
-  let wrapper;
   const languages = [
     {
       current: true,
@@ -34,62 +30,40 @@ describe('LanguageSettings', () => {
   ];
 
   it('renders a list with a list item for each language passed in props', () => {
-    wrapper = createWrapper({ languages });
+    createWrapper({ languages });
 
-    expect(wrapper.find(MenuItem).length).toBe(2);
+    expect(screen.getAllByRole('menuitem')).toHaveLength(2);
   });
 
   it('non-active list items are buttons (and active are not)', () => {
-    wrapper = createWrapper({ languages });
+    createWrapper({ languages });
 
-    expect(
-      wrapper
-        .find(MenuItem)
-        .first() // The German / active button
-        .prop('button'),
-    ).toBe(false);
-
-    expect(
-      wrapper
-        .find(MenuItem)
-        .last() // The English / non-active button
-        .prop('button'),
-    ).toBe(true);
+    expect(screen.getByRole('menuitem', { name: 'Deutsch' })).not.toHaveClass('MuiButtonBase-root');
+    expect(screen.getByRole('menuitem', { name: 'English' })).toHaveClass('MuiButtonBase-root');
   });
 
   it('renders the check icon when the active prop returns true', () => {
-    wrapper = createWrapper({ languages });
+    createWrapper({ languages });
 
-    expect(
-      wrapper
-        .find(MenuItem)
-        .first()
-        .find(CheckIcon)
-        .length,
-    ).toBe(1);
+    expect(screen.getByRole('menuitem', { name: 'Deutsch' }).querySelector('svg')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
+    expect(screen.getByRole('menuitem', { name: 'English' }).querySelector('svg')).not.toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/prefer-presence-queries
   });
 
   it('renders the language value in an Typography element wrapped in a ListItemText', () => {
-    wrapper = createWrapper({ languages });
+    createWrapper({ languages });
 
-    const firstListText = wrapper
-      .find(MenuItem)
-      .first()
-      .find(ListItemText)
-      .children()
-      .text();
-
-    expect(firstListText).toEqual('Deutsch');
+    expect(screen.getByText('Deutsch')).toHaveClass('MuiTypography-body1');
   });
 
-  it('triggers the handleClick prop when clicking a list item', () => {
+  it('triggers the handleClick prop when clicking a list item', async () => {
+    const user = userEvent.setup();
     const mockHandleClick = jest.fn();
-    wrapper = createWrapper({
+    createWrapper({
       handleClick: mockHandleClick,
       languages,
     });
 
-    wrapper.find(MenuItem).last().simulate('click');
+    await user.click(screen.getByRole('menuitem', { name: 'English' }));
 
     expect(mockHandleClick).toHaveBeenCalledTimes(1);
     expect(mockHandleClick).toHaveBeenCalledWith('en');

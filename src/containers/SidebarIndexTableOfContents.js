@@ -29,6 +29,7 @@ const mapStateToProps = (state, { id, windowId }) => ({
  * @private
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
+  expandNodes: nodeIds => dispatch(actions.expandNodes(windowId, id, nodeIds)),
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
   toggleNode: nodeId => dispatch(actions.toggleNode(windowId, id, nodeId)),
 });
@@ -65,7 +66,7 @@ const styles = theme => ({
     },
   },
   visibleNode: {
-    backgroundColor: alpha(theme.palette.highlights.primary, 0.35),
+    backgroundColor: alpha(theme.palette.highlights?.primary || theme.palette.action.selected, 0.35),
     display: 'inline',
   },
 });

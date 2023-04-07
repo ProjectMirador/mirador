@@ -1,5 +1,5 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import { cloneElement } from 'react';
+import { render, screen } from 'test-utils';
 import OpenSeadragon from 'openseadragon';
 import { Utils } from 'manifesto.js';
 import { AnnotationsOverlay } from '../../../src/components/AnnotationsOverlay';
@@ -10,34 +10,33 @@ import fixture from '../../fixtures/version-2/019.json';
 
 const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
 
-jest.mock('react-dom');
-jest.mock('openseadragon');
 jest.mock('../../../src/lib/OpenSeadragonCanvasOverlay');
 
+/** */
+const createWrapper = (props) => {
+  render(<canvas data-testid="viewer" />);
+  const viewer = new OpenSeadragon({ element: screen.getByTestId('viewer') });
+  const component = (
+    <AnnotationsOverlay
+      annotations={[]}
+      viewer={viewer}
+      classes={{}}
+      searchAnnotations={[]}
+      windowId="base"
+      config={{}}
+      updateViewport={jest.fn()}
+      t={k => k}
+      canvasWorld={new CanvasWorld(canvases)}
+      {...props}
+    />
+  );
+
+  return { component, viewer, ...render(component) };
+};
+
 describe('AnnotationsOverlay', () => {
-  let wrapper;
-  let viewer;
-  let updateViewport;
   beforeEach(() => {
-    OpenSeadragon.mockClear();
     OpenSeadragonCanvasOverlay.mockClear();
-
-    updateViewport = jest.fn();
-    viewer = { addHandler: () => {}, forceRedraw: () => {} };
-
-    wrapper = shallow(
-      <AnnotationsOverlay
-        annotations={[]}
-        viewer={viewer}
-        classes={{}}
-        searchAnnotations={[]}
-        windowId="base"
-        config={{}}
-        updateViewport={updateViewport}
-        t={k => k}
-        canvasWorld={new CanvasWorld(canvases)}
-      />,
-    );
   });
 
   describe('annotationsMatch', () => {
@@ -84,103 +83,94 @@ describe('AnnotationsOverlay', () => {
 
   describe('componentDidUpdate', () => {
     it('sets up a OpenSeadragonCanvasOverlay', () => {
-      wrapper.instance().componentDidUpdate({});
+      const { component, rerender } = createWrapper();
+
+      rerender(cloneElement(component, { classes: { whatever: 'value' } }));
       expect(OpenSeadragonCanvasOverlay).toHaveBeenCalledTimes(1);
     });
 
     it('sets up a listener on update-viewport', () => {
-      wrapper.instance().osdCanvasOverlay = null;
-      const addHandler = jest.fn();
-      viewer.addHandler = addHandler;
-      wrapper.instance().componentDidUpdate({});
-      expect(addHandler).toHaveBeenCalledWith('update-viewport', expect.anything());
+      const { component, rerender, viewer } = createWrapper({ viewer: null });
+      const mockAddHandler = jest.spyOn(viewer, 'addHandler');
+
+      rerender(cloneElement(component, { viewer }));
+      expect(mockAddHandler).toHaveBeenCalledWith('update-viewport', expect.anything());
     });
 
     it('sets up canvasUpdate to add annotations to the canvas and forces a redraw', () => {
       const clear = jest.fn();
       const resize = jest.fn();
       const canvasUpdate = jest.fn();
-      const forceRedraw = jest.fn();
 
-      wrapper.instance().osdCanvasOverlay = {
+      OpenSeadragonCanvasOverlay.mockImplementation(() => ({
         canvasUpdate,
         clear,
         resize,
-      };
+      }));
 
-      viewer.forceRedraw = forceRedraw;
+      const { component, rerender, viewer } = createWrapper({ viewer: null });
 
-      wrapper.setProps(
+      const forceRedraw = jest.spyOn(viewer, 'forceRedraw');
+
+      rerender(cloneElement(
+        component,
         {
           annotations: [
             new AnnotationList(
               { '@id': 'foo', resources: [{ foo: 'bar' }] },
             ),
           ],
+          viewer,
         },
-      );
-      wrapper.setProps(
-        {
-          annotations: [
-            new AnnotationList(
-              { '@id': 'foo', resources: [{ foo: 'bar' }] },
-            ),
-          ],
-        },
-      );
-      wrapper.setProps(
-        {
-          annotations: [
-            new AnnotationList(
-              { '@id': 'bar', resources: [{ foo: 'bar' }] },
-            ),
-          ],
-        },
-      );
-      wrapper.instance().updateCanvas();
-      expect(clear).toHaveBeenCalledTimes(1);
-      expect(resize).toHaveBeenCalledTimes(1);
-      expect(canvasUpdate).toHaveBeenCalledTimes(1);
+      ));
+
+      // OSD ordinarily would fire this event:
+      viewer.raiseEvent('update-viewport');
+
+      expect(clear).toHaveBeenCalled();
+      expect(resize).toHaveBeenCalled();
+      expect(canvasUpdate).toHaveBeenCalled();
       expect(forceRedraw).toHaveBeenCalled();
-    });
-  });
-
-  describe('onUpdateViewport', () => {
-    it('fires updateCanvas', () => {
-      const updateCanvas = jest.fn();
-      wrapper.instance().updateCanvas = updateCanvas;
-      wrapper.instance().onUpdateViewport();
-      expect(updateCanvas).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('annotationsToContext', () => {
     it('converts the annotations to canvas and checks that the canvas is displayed', () => {
       const strokeRect = jest.fn();
-      wrapper.instance().osdCanvasOverlay = {
-        context2d: {
-          restore: () => {},
-          save: () => {},
-          strokeRect,
-        },
-      };
-      viewer.viewport = {
-        getMaxZoom: () => (1),
-        getZoom: () => (0.05),
+      const context2d = {
+        restore: () => { },
+        save: () => { },
+        strokeRect,
       };
 
-      const annotations = [
-        new AnnotationList(
-          { '@id': 'foo', resources: [{ on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=10,10,100,200' }] },
-        ),
-      ];
+      OpenSeadragonCanvasOverlay.mockImplementation(() => ({
+        canvasUpdate: (f) => f(),
+        clear: jest.fn(),
+        context2d,
+        resize: jest.fn(),
+      }));
 
       const palette = {
         default: { strokeStyle: 'yellow' },
       };
+      const { component, rerender, viewer } = createWrapper({ palette: { annotations: palette }, viewer: null });
 
-      wrapper.instance().annotationsToContext(annotations, palette);
-      const context = wrapper.instance().osdCanvasOverlay.context2d;
+      jest.spyOn(viewer.viewport, 'getMaxZoom').mockImplementation(() => (1));
+      jest.spyOn(viewer.viewport, 'getZoom').mockImplementation(() => (0.05));
+
+      rerender(cloneElement(component, {
+        annotations: [
+          new AnnotationList(
+            { '@id': 'foo', resources: [{ on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=10,10,100,200' }] },
+          ),
+        ],
+        viewer,
+      }));
+
+      // OSD ordinarily would fire this event:
+      viewer.raiseEvent('update-viewport');
+
+      const context = context2d;
       expect(context.strokeStyle).toEqual('yellow');
       expect(context.lineWidth).toEqual(20);
       expect(strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
@@ -191,28 +181,26 @@ describe('AnnotationsOverlay', () => {
     it('triggers a selectAnnotation for the clicked-on annotation', () => {
       const selectAnnotation = jest.fn();
 
-      wrapper.setProps(
-        {
-          annotations: [
-            new AnnotationList(
-              {
-                '@id': 'foo',
-                resources: [{
-                  '@id': 'http://example.org/identifier/annotation/anno-line',
-                  '@type': 'oa:Annotation',
-                  motivation: 'sc:painting',
-                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
-                }],
-              },
-            ),
-          ],
-          selectAnnotation,
-        },
-      );
+      const { viewer } = createWrapper({
+        annotations: [
+          new AnnotationList(
+            {
+              '@id': 'foo',
+              resources: [{
+                '@id': 'http://example.org/identifier/annotation/anno-line',
+                '@type': 'oa:Annotation',
+                motivation: 'sc:painting',
+                on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
+              }],
+            },
+          ),
+        ],
+        selectAnnotation,
+      });
 
-      wrapper.instance().onCanvasClick({
-        eventSource: { viewport: { pointFromPixel: point => ({ x: 101, y: 101 }) } },
-        position: { x: 0, y: 0 },
+      viewer.raiseEvent('canvas-click', {
+        eventSource: { viewport: viewer.viewport },
+        position: new OpenSeadragon.Point(101, 101),
       });
 
       expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
@@ -221,29 +209,27 @@ describe('AnnotationsOverlay', () => {
     it('triggers a deselectAnnotation for an already-selected annotation', () => {
       const deselectAnnotation = jest.fn();
 
-      wrapper.setProps(
-        {
-          annotations: [
-            new AnnotationList(
-              {
-                '@id': 'foo',
-                resources: [{
-                  '@id': 'http://example.org/identifier/annotation/anno-line',
-                  '@type': 'oa:Annotation',
-                  motivation: 'sc:painting',
-                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
-                }],
-              },
-            ),
-          ],
-          deselectAnnotation,
-          selectedAnnotationId: 'http://example.org/identifier/annotation/anno-line',
-        },
-      );
+      const { viewer } = createWrapper({
+        annotations: [
+          new AnnotationList(
+            {
+              '@id': 'foo',
+              resources: [{
+                '@id': 'http://example.org/identifier/annotation/anno-line',
+                '@type': 'oa:Annotation',
+                motivation: 'sc:painting',
+                on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
+              }],
+            },
+          ),
+        ],
+        deselectAnnotation,
+        selectedAnnotationId: 'http://example.org/identifier/annotation/anno-line',
+      });
 
-      wrapper.instance().onCanvasClick({
-        eventSource: { viewport: { pointFromPixel: point => ({ x: 101, y: 101 }) } },
-        position: { x: 0, y: 0 },
+      viewer.raiseEvent('canvas-click', {
+        eventSource: { viewport: viewer.viewport },
+        position: new OpenSeadragon.Point(101, 101),
       });
 
       expect(deselectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
@@ -252,38 +238,36 @@ describe('AnnotationsOverlay', () => {
     it('selects the closest annotation', () => {
       const selectAnnotation = jest.fn();
 
-      wrapper.setProps(
-        {
-          annotations: [
-            new AnnotationList(
-              {
-                '@id': 'foo',
-                resources: [{
-                  '@id': 'http://example.org/identifier/annotation/anno-line',
-                  '@type': 'oa:Annotation',
-                  motivation: 'sc:painting',
-                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
-                }, {
-                  '@id': 'http://example.org/identifier/annotation/larger-box',
-                  '@type': 'oa:Annotation',
-                  motivation: 'sc:painting',
-                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,250,250',
-                }, {
-                  '@id': 'http://example.org/identifier/annotation/on-another-canvas',
-                  '@type': 'oa:Annotation',
-                  motivation: 'sc:painting',
-                  on: 'http://iiif.io/some-other-canvas#xywh=101,101,3,3',
-                }],
-              },
-            ),
-          ],
-          selectAnnotation,
-        },
-      );
+      const { viewer } = createWrapper({
+        annotations: [
+          new AnnotationList(
+            {
+              '@id': 'foo',
+              resources: [{
+                '@id': 'http://example.org/identifier/annotation/anno-line',
+                '@type': 'oa:Annotation',
+                motivation: 'sc:painting',
+                on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
+              }, {
+                '@id': 'http://example.org/identifier/annotation/larger-box',
+                '@type': 'oa:Annotation',
+                motivation: 'sc:painting',
+                on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,250,250',
+              }, {
+                '@id': 'http://example.org/identifier/annotation/on-another-canvas',
+                '@type': 'oa:Annotation',
+                motivation: 'sc:painting',
+                on: 'http://iiif.io/some-other-canvas#xywh=101,101,3,3',
+              }],
+            },
+          ),
+        ],
+        selectAnnotation,
+      });
 
-      wrapper.instance().onCanvasClick({
-        eventSource: { viewport: { pointFromPixel: point => ({ x: 101, y: 101 }) } },
-        position: { x: 0, y: 0 },
+      viewer.raiseEvent('canvas-click', {
+        eventSource: { viewport: viewer.viewport },
+        position: new OpenSeadragon.Point(101, 101),
       });
 
       expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
@@ -292,47 +276,44 @@ describe('AnnotationsOverlay', () => {
 
   describe('onCanvasMouseMove', () => {
     it('triggers the hover event for every annotation at that point', () => {
+      jest.useFakeTimers();
       const hoverAnnotation = jest.fn();
-      const forceRedraw = jest.fn();
 
-      viewer.forceRedraw = forceRedraw;
-      viewer.viewport = { pointFromPixel: point => ({ x: 101, y: 101 }) };
-
-      wrapper.setProps(
-        {
-          annotations: [
-            new AnnotationList(
-              {
+      const { viewer } = createWrapper({
+        annotations: [
+          new AnnotationList(
+            {
+              '@id': 'foo',
+              resources: [{
                 '@id': 'foo',
-                resources: [{
-                  '@id': 'foo',
-                  '@type': 'oa:Annotation',
-                  motivation: 'sc:painting',
-                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
-                }, {
-                  '@id': 'bar',
-                  '@type': 'oa:Annotation',
-                  motivation: 'sc:painting',
-                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,250,250',
-                }, {
-                  '@id': 'irrelevant-box',
-                  '@type': 'oa:Annotation',
-                  motivation: 'sc:painting',
-                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,50,50',
-                }],
-              },
-            ),
-          ],
-          hoverAnnotation,
-        },
-      );
-
-      wrapper.instance().onCanvasMouseMove({
-        position: { x: 0, y: 0 },
+                '@type': 'oa:Annotation',
+                motivation: 'sc:painting',
+                on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
+              }, {
+                '@id': 'bar',
+                '@type': 'oa:Annotation',
+                motivation: 'sc:painting',
+                on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,250,250',
+              }, {
+                '@id': 'irrelevant-box',
+                '@type': 'oa:Annotation',
+                motivation: 'sc:painting',
+                on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,50,50',
+              }],
+            },
+          ),
+        ],
+        hoverAnnotation,
       });
-      wrapper.instance().onCanvasMouseMove.flush();
 
+      viewer.raiseEvent('mouse-move', {
+        position: new OpenSeadragon.Point(101, 101),
+      });
+
+      jest.advanceTimersByTime(20);
       expect(hoverAnnotation).toHaveBeenCalledWith('base', ['foo', 'bar']);
+
+      jest.useRealTimers();
     });
   });
 });

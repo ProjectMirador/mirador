@@ -1,12 +1,10 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import NavigationIcon from '@material-ui/icons/PlayCircleOutlineSharp';
-import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
+import { render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
 
 /** create wrapper */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <ViewerNavigation
       classes={{}}
       canvases={[1, 2]}
@@ -17,125 +15,140 @@ function createWrapper(props) {
 }
 
 describe('ViewerNavigation', () => {
-  let wrapper;
   let setNextCanvas;
   let setPreviousCanvas;
   beforeEach(() => {
     setNextCanvas = jest.fn();
     setPreviousCanvas = jest.fn();
-    wrapper = createWrapper({
+  });
+  it('renders the component', () => {
+    createWrapper({
       hasNextCanvas: true,
       hasPreviousCanvas: false,
       setNextCanvas,
       setPreviousCanvas,
     });
-  });
-  it('renders the component', () => {
-    expect(wrapper.find('.mirador-osd-navigation').length).toBe(1);
+    const buttons = screen.queryAllByRole('button');
+    expect(buttons[0].closest('div')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
   });
   describe('when next canvases are present', () => {
     it('nextCanvas button is not disabled', () => {
-      expect(wrapper.find('.mirador-next-canvas-button').prop('aria-label')).toBe('nextCanvas');
-      expect(wrapper.find('.mirador-next-canvas-button').prop('disabled')).toBe(false);
+      createWrapper({
+        hasNextCanvas: true,
+        hasPreviousCanvas: false,
+        setNextCanvas,
+        setPreviousCanvas,
+      });
+      expect(screen.getByRole('button', { name: 'nextCanvas' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'nextCanvas' })).toBeEnabled();
     });
-    it('setNextCanvas function is called after click', () => {
-      wrapper.find('.mirador-next-canvas-button').simulate('click');
+    it('setNextCanvas function is called after click', async () => {
+      createWrapper({
+        hasNextCanvas: true,
+        hasPreviousCanvas: false,
+        setNextCanvas,
+        setPreviousCanvas,
+      });
+      const user = userEvent.setup();
+      await user.click(screen.getByRole('button', { name: 'nextCanvas' }));
       expect(setNextCanvas).toHaveBeenCalled();
     });
   });
   describe('when next canvases are not present', () => {
-    it('nextCanvas button is disabled', () => {
-      const endWrapper = createWrapper();
-      expect(endWrapper.find('.mirador-next-canvas-button').prop('disabled')).toBe(true);
-      endWrapper.find('.mirador-next-canvas-button').simulate('click');
-      expect(setNextCanvas).not.toHaveBeenCalled();
-    });
-  });
-  describe('when previous canvases are present', () => {
-    beforeEach(() => {
-      wrapper = createWrapper({
+    it('nextCanvas button is disabled', async () => {
+      createWrapper({
         hasNextCanvas: false,
         hasPreviousCanvas: true,
         setNextCanvas,
         setPreviousCanvas,
       });
+      expect(screen.getByRole('button', { name: 'nextCanvas' })).toBeDisabled();
     });
+  });
+  describe('when previous canvases are present', () => {
     it('previousCanvas button is not disabled', () => {
-      expect(wrapper.find('.mirador-previous-canvas-button').prop('aria-label')).toBe('previousCanvas');
-      expect(wrapper.find('.mirador-previous-canvas-button').prop('disabled')).toBe(false);
+      createWrapper({
+        hasNextCanvas: false,
+        hasPreviousCanvas: true,
+        setNextCanvas,
+        setPreviousCanvas,
+      });
+      expect(screen.getByRole('button', { name: 'previousCanvas' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'previousCanvas' })).toBeEnabled();
     });
-    it('setPreviousCanvas function is called after click', () => {
-      wrapper.find('.mirador-previous-canvas-button').simulate('click');
+    it('setPreviousCanvas function is called after click', async () => {
+      createWrapper({
+        hasNextCanvas: false,
+        hasPreviousCanvas: true,
+        setNextCanvas,
+        setPreviousCanvas,
+      });
+      const user = userEvent.setup();
+      await user.click(screen.getByRole('button', { name: 'previousCanvas' }));
       expect(setPreviousCanvas).toHaveBeenCalled();
     });
   });
   describe('when previous canvases are not present', () => {
     it('disabled on previousCanvas button', () => {
-      expect(wrapper.find('.mirador-previous-canvas-button').prop('disabled')).toBe(true);
-    });
-    it('setCanvas function is not called after click, as its disabled', () => {
-      wrapper.find('.mirador-previous-canvas-button').simulate('click');
-      expect(setPreviousCanvas).not.toHaveBeenCalled();
+      createWrapper({
+        hasNextCanvas: true,
+        hasPreviousCanvas: false,
+        setNextCanvas,
+        setPreviousCanvas,
+      });
+      expect(screen.getByRole('button', { name: 'previousCanvas' })).toBeDisabled();
     });
   });
   describe('when viewingDirection is right-to-left', () => {
-    beforeEach(() => {
-      wrapper = createWrapper({
+    it('changes the arrow styles', () => {
+      createWrapper({
         hasNextCanvas: true,
         hasPreviousCanvas: true,
         setNextCanvas,
         setPreviousCanvas,
         viewingDirection: 'right-to-left',
       });
-    });
-
-    it('changes the arrow styles', () => {
-      const previous = wrapper.find(MiradorMenuButton).first().children(NavigationIcon).props();
-      const next = wrapper.find(MiradorMenuButton).last().children(NavigationIcon).props();
-      expect(previous.style).toEqual({});
-      expect(next.style).toEqual({ transform: 'rotate(180deg)' });
+      expect(screen.getByRole('button', { name: 'previousCanvas' }).querySelector('svg')).not.toHaveStyle('transform: rotate(180deg);'); // eslint-disable-line testing-library/no-node-access
+      expect(screen.getByRole('button', { name: 'nextCanvas' }).querySelector('svg')).toHaveStyle('transform: rotate(180deg);'); // eslint-disable-line testing-library/no-node-access
     });
 
     it('sets the dir="rtl"', () => {
-      expect(wrapper.find('div').props().dir).toBe('rtl');
+      createWrapper({
+        hasNextCanvas: true,
+        hasPreviousCanvas: true,
+        setNextCanvas,
+        setPreviousCanvas,
+        viewingDirection: 'right-to-left',
+      });
+      const buttons = screen.queryAllByRole('button');
+      expect(buttons[0].closest('div')).toHaveAttribute('dir', 'rtl'); // eslint-disable-line testing-library/no-node-access
     });
   });
 
   describe('when viewingDirection is top-to-bottom', () => {
-    beforeEach(() => {
-      wrapper = createWrapper({
+    it('changes the arrow styles', () => {
+      createWrapper({
         hasNextCanvas: true,
         hasPreviousCanvas: true,
         setNextCanvas,
         setPreviousCanvas,
         viewingDirection: 'top-to-bottom',
       });
-    });
-
-    it('changes the arrow styles', () => {
-      const previous = wrapper.find(MiradorMenuButton).first().children(NavigationIcon).props();
-      const next = wrapper.find(MiradorMenuButton).last().children(NavigationIcon).props();
-      expect(previous.style).toEqual({ transform: 'rotate(270deg)' });
-      expect(next.style).toEqual({ transform: 'rotate(90deg)' });
+      expect(screen.getByRole('button', { name: 'previousCanvas' }).querySelector('svg')).toHaveStyle('transform: rotate(270deg);'); // eslint-disable-line testing-library/no-node-access
+      expect(screen.getByRole('button', { name: 'nextCanvas' }).querySelector('svg')).toHaveStyle('transform: rotate(90deg);'); // eslint-disable-line testing-library/no-node-access
     });
   });
-
   describe('when viewingDirection is bottom-to-top', () => {
-    beforeEach(() => {
-      wrapper = createWrapper({
+    it('changes the arrow styles', () => {
+      createWrapper({
         hasNextCanvas: true,
         hasPreviousCanvas: true,
         setNextCanvas,
         setPreviousCanvas,
         viewingDirection: 'bottom-to-top',
       });
-    });
-
-    it('changes the arrow styles', () => {
-      const previous = wrapper.find(MiradorMenuButton).first().children(NavigationIcon).props();
-      const next = wrapper.find(MiradorMenuButton).last().children(NavigationIcon).props();
-      expect(previous.style).toEqual({ transform: 'rotate(90deg)' });
-      expect(next.style).toEqual({ transform: 'rotate(270deg)' });
+      expect(screen.getByRole('button', { name: 'previousCanvas' }).querySelector('svg')).toHaveStyle('transform: rotate(90deg);'); // eslint-disable-line testing-library/no-node-access
+      expect(screen.getByRole('button', { name: 'nextCanvas' }).querySelector('svg')).toHaveStyle('transform: rotate(270deg);'); // eslint-disable-line testing-library/no-node-access
     });
   });
 });

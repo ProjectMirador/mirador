@@ -1,11 +1,10 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Dialog from '@material-ui/core/Dialog';
-import MenuItem from '@material-ui/core/MenuItem';
+import {
+  render, screen, waitFor,
+} from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { WorkspaceSelectionDialog } from '../../../src/components/WorkspaceSelectionDialog';
 
-describe('WorkspaceSettings', () => {
-  let wrapper;
+describe('WorkspaceSelectionDialog', () => {
   let handleClose;
   let updateWorkspace;
 
@@ -17,9 +16,9 @@ describe('WorkspaceSettings', () => {
     handleClose = jest.fn();
     updateWorkspace = jest.fn();
 
-    return shallow(
+    return render(
       <WorkspaceSelectionDialog
-        classes={{ list: {} }}
+        classes={{ list: 'list' }}
         open
         handleClose={handleClose}
         updateWorkspace={updateWorkspace}
@@ -30,34 +29,31 @@ describe('WorkspaceSettings', () => {
   }
 
   it('renders without an error', () => {
-    wrapper = createWrapper();
-    expect(wrapper.matchesElement(WorkspaceSelectionDialog));
+    createWrapper();
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: /elastic/ })).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: /mosaic/ })).toBeInTheDocument();
   });
 
-  it('sends the updateConfig and handleClose props on workspace selection', () => {
-    wrapper = createWrapper();
+  it('sends the updateConfig and handleClose props on workspace selection', async () => {
+    const user = userEvent.setup();
+    createWrapper();
 
-    wrapper.find(MenuItem).at(0).simulate('click');
-    expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'elastic' });
-    wrapper.find(MenuItem).at(1).simulate('click');
-    expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'mosaic' });
-    expect(handleClose).toHaveBeenCalledTimes(2);
+    user.click(screen.getByRole('menuitem', { name: /elastic/ }));
+    await waitFor(() => expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'elastic' }));
+
+    user.click(screen.getByRole('menuitem', { name: /mosaic/ }));
+    await waitFor(() => expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'mosaic' }));
+    await waitFor(() => expect(handleClose).toHaveBeenCalledTimes(2));
   });
 
   describe('inital focus', () => {
-    const mockMenuItemFocus = jest.fn();
-    const mockMenu = {
-      querySelectorAll: (selector) => {
-        expect(selector).toEqual('li[value="elastic"]');
-        return [{ focus: mockMenuItemFocus }];
-      },
-    };
-
     it('sets an onEntered prop on the Dialog that focuses the selected item', () => {
-      wrapper = createWrapper();
+      createWrapper();
 
-      wrapper.find(Dialog).props().onEntered(mockMenu);
-      expect(mockMenuItemFocus).toHaveBeenCalled();
+      const menuItem = screen.getByRole('menuitem', { name: /elastic/ });
+      expect(menuItem).toHaveFocus();
     });
   });
 });

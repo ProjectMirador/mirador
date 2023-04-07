@@ -1,45 +1,42 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import MiradorMenuButton from '../../../src/containers/MiradorMenuButton';
-import WorkspaceOptionsMenu from '../../../src/containers/WorkspaceOptionsMenu';
+import { render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { WorkspaceOptionsButton } from '../../../src/components/WorkspaceOptionsButton';
 
-/** Utility helper to create a shallow wrapper around WorkspaceOptionsButton */
-function createShallow(props) {
-  return shallow(
-    <WorkspaceOptionsButton
-      classes={{}}
-      t={k => k}
-      {...props}
-    />,
+/** create wrapper */
+function Subject({ ...props }) {
+  return (
+    <div>
+      <WorkspaceOptionsButton
+        classes={{}}
+        t={k => k}
+        {...props}
+      />
+      ,
+      ,
+    </div>
   );
 }
 
 describe('WorkspaceOptionsButton', () => {
-  let wrapper;
-
-  it('renders a button and the menu', () => {
-    wrapper = createShallow();
-
-    expect(wrapper.find(MiradorMenuButton).length).toEqual(1);
-    expect(wrapper.find(WorkspaceOptionsMenu).length).toEqual(1);
+  let user;
+  beforeEach(() => {
+    user = userEvent.setup();
   });
 
-  it('sets the anchorEl state (and passes that to the menu) on button click', () => {
-    wrapper = createShallow();
-
-    expect(wrapper.state().anchorEl).toBeNull();
-    wrapper.find(MiradorMenuButton).simulate('click', { currentTarget: { id: 'blah' } });
-    expect(wrapper.state().anchorEl).toEqual({ id: 'blah' });
+  it('renders the button', () => {
+    render(<Subject />);
+    expect(screen.getByLabelText('workspaceOptions')).toBeInTheDocument();
   });
 
-  it('sends a handleClose prop to the WorkspaceOptionsMenu that clears the anchorEl', () => {
-    wrapper = createShallow();
+  it('toggles open/close of <WorkspaceOptionsMenu /> when clicked', async () => {
+    render(<Subject />);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
-    wrapper.setState({ anchorEl: { id: 'blah' } });
-    expect(wrapper.state().anchorEl).toEqual({ id: 'blah' });
+    await user.click(screen.getByLabelText('workspaceOptions'));
+    expect(screen.getByRole('menu')).toBeInTheDocument();
 
-    wrapper.find(WorkspaceOptionsMenu).props().handleClose();
-    expect(wrapper.state().anchorEl).toBeNull();
+    // click something else to close the menu (the windowMenu button is hidden at this point)
+    await user.click(screen.getAllByRole('menuitem')[0]);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 });

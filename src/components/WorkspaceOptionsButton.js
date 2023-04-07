@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import MoreHorizontalIcon from '@material-ui/icons/MoreHorizSharp';
@@ -14,7 +14,10 @@ export class WorkspaceOptionsButton extends Component {
    */
   constructor(props) {
     super(props);
-    this.state = { anchorEl: null };
+    this.state = {
+      anchorEl: null,
+      open: false,
+    };
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.handleMenuClose = this.handleMenuClose.bind(this);
   }
@@ -25,6 +28,7 @@ export class WorkspaceOptionsButton extends Component {
   handleMenuClick(event) {
     this.setState({
       anchorEl: event.currentTarget,
+      open: true,
     });
   }
 
@@ -34,6 +38,7 @@ export class WorkspaceOptionsButton extends Component {
   handleMenuClose() {
     this.setState({
       anchorEl: null,
+      open: false,
     });
   }
 
@@ -42,14 +47,14 @@ export class WorkspaceOptionsButton extends Component {
   */
   render() {
     const { classes, t } = this.props;
-    const { anchorEl } = this.state;
+    const { anchorEl, open } = this.state;
 
     return (
       <>
         <MiradorMenuButton
           aria-label={t('workspaceOptions')}
           className={
-            classNames(classes.ctrlBtn, (anchorEl ? classes.ctrlBtnSelected : null))
+            classNames(classes.ctrlBtn, (open ? classes.ctrlBtnSelected : null))
           }
           onClick={this.handleMenuClick}
         >
@@ -59,6 +64,7 @@ export class WorkspaceOptionsButton extends Component {
         <WorkspaceOptionsMenu
           anchorEl={anchorEl}
           handleClose={this.handleMenuClose}
+          open={open}
         />
       </>
     );

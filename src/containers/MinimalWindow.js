@@ -37,7 +37,7 @@ const styles = theme => ({
     paddingLeft: theme.spacing(0.5),
   },
   window: {
-    backgroundColor: theme.palette.shades.dark,
+    backgroundColor: theme.palette.shades?.dark,
     borderRadius: 0,
     display: 'flex',
     flexDirection: 'column',
@@ -47,7 +47,7 @@ const styles = theme => ({
     width: '100%',
   },
   windowTopBarStyle: {
-    backgroundColor: theme.palette.shades.main,
+    backgroundColor: theme.palette.shades?.main,
     borderTop: '2px solid transparent',
     minHeight: 32,
     paddingLeft: theme.spacing(0.5),

@@ -1,5 +1,4 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import { render } from 'test-utils';
 import { NewWindow } from '../../../src/components/NewWindow';
 
 jest.useFakeTimers();
@@ -8,7 +7,7 @@ jest.useFakeTimers();
  * Helper function to create a shallow wrapper around ErrorDialog
  */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <NewWindow
       url="http://example.com/"
       onClose={() => {}}
@@ -19,7 +18,7 @@ function createWrapper(props) {
 
 describe('NewWindow', () => {
   it('renders properly and runs callbacks when the window closes', () => {
-    const mockWindow = {};
+    const mockWindow = { close: jest.fn() };
     const open = jest.fn(() => mockWindow);
     const onClose = jest.fn();
 

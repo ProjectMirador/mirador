@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Rnd } from 'react-rnd';
 import Window from '../containers/Window';
@@ -9,7 +9,7 @@ import ns from '../config/css-ns';
  * @memberof Workspace
  * @private
  */
-class WorkspaceElasticWindow extends React.Component {
+class WorkspaceElasticWindow extends Component {
   /**
    */
   render() {
@@ -17,6 +17,7 @@ class WorkspaceElasticWindow extends React.Component {
       classes,
       companionWindowDimensions,
       focused,
+      focusWindow,
       layout,
       workspace,
       updateElasticWindowLayout,
@@ -40,6 +41,7 @@ class WorkspaceElasticWindow extends React.Component {
             { x: d.x - offsetX, y: d.y - offsetY },
           );
         }}
+        onDragStart={focusWindow}
         onResize={(e, direction, ref, delta, position) => {
           updateElasticWindowLayout(layout.windowId, {
             height: Number.parseInt(ref.style.height, 10) - companionWindowDimensions.height,
@@ -49,6 +51,7 @@ class WorkspaceElasticWindow extends React.Component {
           });
         }}
         dragHandleClassName={ns('window-top-bar')}
+        cancel={`.${ns('window-menu-btn')}`}
         className={
           focused ? classes.focused : null
         }
@@ -68,6 +71,7 @@ WorkspaceElasticWindow.propTypes = {
     width: PropTypes.number,
   }),
   focused: PropTypes.bool,
+  focusWindow: PropTypes.func,
   layout: PropTypes.shape({
     height: PropTypes.number,
     id: PropTypes.string,
@@ -84,6 +88,7 @@ WorkspaceElasticWindow.defaultProps = {
   classes: {},
   companionWindowDimensions: { height: 0, width: 0 },
   focused: false,
+  focusWindow: () => {},
 };
 
 export default WorkspaceElasticWindow;

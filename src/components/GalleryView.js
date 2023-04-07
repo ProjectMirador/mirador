@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import GalleryViewThumbnail from '../containers/GalleryViewThumbnail';
@@ -18,6 +18,7 @@ export class GalleryView extends Component {
     return (
       <Paper
         component="section"
+        aria-label="gallery section"
         dir={htmlDir}
         square
         elevation={0}

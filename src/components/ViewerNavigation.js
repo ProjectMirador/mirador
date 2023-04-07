@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import NavigationIcon from '@material-ui/icons/PlayCircleOutlineSharp';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';

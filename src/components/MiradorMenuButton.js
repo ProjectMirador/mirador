@@ -1,9 +1,7 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import Badge from '@material-ui/core/Badge';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import ns from '../config/css-ns';
 
 /**
  * MiradorMenuButton ~ Wrap the given icon prop in an IconButton and a Tooltip.
@@ -15,7 +13,7 @@ export function MiradorMenuButton(props) {
   const {
     badge,
     children,
-    containerId,
+    container,
     dispatch,
     BadgeProps,
     TooltipProps,
@@ -25,7 +23,7 @@ export function MiradorMenuButton(props) {
   const button = (
     <IconButton {...iconButtonProps}>
       {badge
-        ? <Badge {...BadgeProps}>{children}</Badge>
+        ? <Badge overlap="rectangular" {...BadgeProps}>{children}</Badge>
         : children}
     </IconButton>
   );
@@ -35,7 +33,7 @@ export function MiradorMenuButton(props) {
   return (
     <Tooltip
       PopperProps={{
-        container: document.querySelector(`#${containerId} .${ns('viewer')}`),
+        container: container?.current,
       }}
       title={ariaLabel}
       {...TooltipProps}
@@ -50,7 +48,7 @@ MiradorMenuButton.propTypes = {
   badge: PropTypes.bool,
   BadgeProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   children: PropTypes.element.isRequired,
-  containerId: PropTypes.string.isRequired,
+  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   dispatch: PropTypes.func,
   TooltipProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
@@ -58,6 +56,7 @@ MiradorMenuButton.propTypes = {
 MiradorMenuButton.defaultProps = {
   badge: false,
   BadgeProps: {},
+  container: null,
   dispatch: () => {},
   TooltipProps: {},
 };

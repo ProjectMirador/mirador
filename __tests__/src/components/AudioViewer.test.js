@@ -1,41 +1,43 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import { render, screen } from 'test-utils';
 import { AudioViewer } from '../../../src/components/AudioViewer';
 
 /** create wrapper */
 function createWrapper(props, suspenseFallback) {
-  return shallow(
+  return render(
     <AudioViewer
       classes={{}}
-      audioOptions={{ crossOrigin: 'anonymous' }}
+      audioOptions={{ crossOrigin: 'anonymous', 'data-testid': 'audio' }}
       {...props}
     />,
   );
 }
 
+/* eslint-disable testing-library/no-node-access */
 describe('AudioViewer', () => {
-  let wrapper;
   describe('render', () => {
     it('audioResources', () => {
-      wrapper = createWrapper({
+      createWrapper({
         audioResources: [
           { getFormat: () => 'video/mp4', id: 1 },
           { getFormat: () => 'video/mp4', id: 2 },
         ],
       }, true);
-      expect(wrapper.contains(<source src={1} type="video/mp4" />)).toBe(true);
-      expect(wrapper.contains(<source src={2} type="video/mp4" />)).toBe(true);
+      const audio = screen.getByTestId('audio');
+
+      expect(audio.querySelector('source:nth-of-type(1)')).toHaveAttribute('src', '1');
+      expect(audio.querySelector('source:nth-of-type(2)')).toHaveAttribute('src', '2');
     });
     it('passes through configurable options', () => {
-      wrapper = createWrapper({
+      createWrapper({
         audioResources: [
           { getFormat: () => 'audio/mp3', id: 1 },
         ],
       }, true);
-      expect(wrapper.exists('audio[crossOrigin="anonymous"]')).toBe(true); // eslint-disable-line jsx-a11y/media-has-caption
+
+      expect(screen.getByTestId('audio')).toHaveAttribute('crossOrigin', 'anonymous');
     });
     it('captions', () => {
-      wrapper = createWrapper({
+      createWrapper({
         audioResources: [
           { getFormat: () => 'video/mp4', id: 1 },
         ],
@@ -44,8 +46,12 @@ describe('AudioViewer', () => {
           { getDefaultLabel: () => 'French', getProperty: () => 'fr', id: 2 },
         ],
       }, true);
-      expect(wrapper.contains(<track src={1} label="English" srcLang="en" />)).toBe(true);
-      expect(wrapper.contains(<track src={2} label="French" srcLang="fr" />)).toBe(true);
+      const audio = screen.getByTestId('audio');
+
+      expect(audio.querySelector('track:nth-of-type(1)')).toHaveAttribute('srcLang', 'en');
+      expect(audio.querySelector('track:nth-of-type(1)')).toHaveAttribute('label', 'English');
+      expect(audio.querySelector('track:nth-of-type(2)')).toHaveAttribute('srcLang', 'fr');
+      expect(audio.querySelector('track:nth-of-type(2)')).toHaveAttribute('label', 'French');
     });
   });
 });

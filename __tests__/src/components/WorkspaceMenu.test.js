@@ -1,14 +1,15 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import { render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { WorkspaceMenu } from '../../../src/components/WorkspaceMenu';
 
 /** */
 function createShallow(props) {
-  return shallow(
+  render(<div data-testid="container" />);
+
+  return render(
     <WorkspaceMenu
-      containerId="mirador"
+      anchorEl={screen.getByTestId('container')}
+      open
       showThemePicker
       {...props}
     />,
@@ -16,7 +17,6 @@ function createShallow(props) {
 }
 
 describe('WorkspaceMenu', () => {
-  let wrapper;
   let handleClose;
   const showZoomControls = false;
   let toggleZoomControls;
@@ -24,31 +24,37 @@ describe('WorkspaceMenu', () => {
   beforeEach(() => {
     handleClose = jest.fn();
     toggleZoomControls = jest.fn();
-    wrapper = createShallow({ handleClose, showZoomControls, toggleZoomControls });
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find(Menu).length).toBe(1);
+    createShallow({ handleClose, showZoomControls, toggleZoomControls });
+    expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
-  it('closes the current menu when opening a submenu', () => {
-    wrapper.find(MenuItem).first().simulate('click', {});
+  it('closes the current menu when opening a submenu', async () => {
+    const user = userEvent.setup();
+    createShallow({ handleClose, showZoomControls, toggleZoomControls });
+
+    await user.click(screen.getByRole('menuitem', { name: 'showZoomControls' }));
     expect(handleClose).toBeCalled();
   });
 
   it('disables zoom controls if the workspaceAdd UI is visible', () => {
-    expect(wrapper.find(MenuItem).at(0).props().disabled).toBe(false);
-
-    wrapper = createShallow({
+    createShallow({
       handleClose, isWorkspaceAddVisible: true, showZoomControls, toggleZoomControls,
     });
 
-    expect(wrapper.find(MenuItem).at(0).props().disabled).toBe(true);
+    expect(screen.getByRole('menuitem', { name: 'showZoomControls' })).toHaveAttribute('aria-disabled', 'true');
   });
 
   describe('handleZoomToggleClick', () => {
-    it('resets the anchor state', () => {
-      wrapper.instance().handleZoomToggleClick();
+    it('resets the anchor state', async () => {
+      const user = userEvent.setup();
+
+      createShallow({ handleClose, showZoomControls, toggleZoomControls });
+
+      await user.click(screen.getByRole('menuitem', { name: 'showZoomControls' }));
+
       expect(toggleZoomControls).toBeCalledWith(true);
     });
   });

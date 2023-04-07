@@ -1,77 +1,55 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
-import { Img } from 'react-image';
+/**
+ * @jest-environment-options { "resources": "usable" }
+ */
+import { render, screen, waitFor } from 'test-utils';
+
 import { AttributionPanel } from '../../../src/components/AttributionPanel';
-import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
 
 /**
  * Helper function to create a shallow wrapper around AttributionPanel
  */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <AttributionPanel
       id="xyz"
       t={str => str}
       windowId="window"
       {...props}
     />,
+    { preloadedState: { companionWindows: { xyz: { content: 'attribution' } } } },
   );
 }
 
 describe('AttributionPanel', () => {
   it('renders the required statement', () => {
     const requiredStatement = [
-      { label: 'x', value: 'y' },
+      { label: 'required statement', values: ['must be shown'] },
     ];
-    const wrapper = createWrapper({ requiredStatement });
-    expect(wrapper.find(LabelValueMetadata).length).toBe(1);
+    createWrapper({ requiredStatement });
+
+    expect(screen.getByText('required statement')).toBeInTheDocument();
+    expect(screen.getByText('must be shown')).toBeInTheDocument();
   });
 
   it('renders the rights statement', () => {
-    const wrapper = createWrapper({ rights: ['http://example.com', 'http://stanford.edu'] });
-    expect(
-      wrapper.find(Typography).at(0).matchesElement(
-        <Typography>rights</Typography>,
-      ),
-    ).toBe(true);
-    expect(
-      wrapper.find(Typography).at(1).matchesElement(
-        <Typography>
-          <Link href="http://example.com">http://example.com</Link>
-        </Typography>,
-      ),
-    ).toBe(true);
-    expect(
-      wrapper.find(Typography).at(2).matchesElement(
-        <Typography>
-          <Link href="http://stanford.edu">http://stanford.edu</Link>
-        </Typography>,
-      ),
-    ).toBe(true);
+    createWrapper({ rights: ['http://example.com', 'http://stanford.edu'] });
+
+    expect(screen.getByText('rights')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'http://example.com' })).toHaveAttribute('href', 'http://example.com');
+    expect(screen.getByRole('link', { name: 'http://stanford.edu' })).toHaveAttribute('href', 'http://stanford.edu');
   });
 
-  it('renders the rights statement', () => {
-    const wrapper = createWrapper({ rights: [] });
-    expect(
-      wrapper.find(Typography).length,
-    ).toBe(0);
+  it('does not render the rights statement if it is empty', () => {
+    createWrapper({ rights: [] });
+    expect(screen.queryByText('rights')).not.toBeInTheDocument();
   });
 
-  it('renders the manifest logo', () => {
-    const manifestLogo = 'http://example.com';
-    const wrapper = createWrapper({ manifestLogo });
-    expect(wrapper.find(Img).length).toBe(1);
-    expect(wrapper.find(Img).props().src).toEqual([manifestLogo]);
-  });
+  it('renders the manifest logo', async () => {
+    const manifestLogo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
 
-  describe('when metadata is not present', () => {
-    it('does not render empty elements elements', () => {
-      const wrapper = createWrapper({});
-      expect(wrapper.find(LabelValueMetadata).length).toBe(0);
-      expect(wrapper.find(Typography).length).toBe(0);
-      expect(wrapper.find(Img).length).toBe(0);
-    });
+    const { container } = createWrapper({ manifestLogo });
+    await waitFor(() => { expect(container.querySelector('img')).toBeInTheDocument(); }); // eslint-disable-line testing-library/no-container, testing-library/no-node-access
+
+    expect(container.querySelector('img')).toHaveAttribute('src', manifestLogo); // eslint-disable-line testing-library/no-container, testing-library/no-node-access
   });
 });

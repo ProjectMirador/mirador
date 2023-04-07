@@ -1,7 +1,8 @@
-import React from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { DndContext } from 'react-dnd';
 import {
-  MosaicWithoutDragDropContext, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
+  Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
 } from 'react-mosaic-component';
 import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
@@ -15,7 +16,7 @@ import MosaicLayout from '../lib/MosaicLayout';
  * @memberof Workspace
  * @private
  */
-export class WorkspaceMosaic extends React.Component {
+export class WorkspaceMosaic extends Component {
   /**
    */
   constructor(props) {
@@ -144,13 +145,18 @@ export class WorkspaceMosaic extends React.Component {
   render() {
     const { layout, classes } = this.props;
     return (
-      <MosaicWithoutDragDropContext
-        renderTile={this.tileRenderer}
-        initialValue={layout || this.determineWorkspaceLayout()}
-        onChange={this.mosaicChange}
-        className={classNames('mirador-mosaic', classes.root)}
-        zeroStateView={this.zeroStateView}
-      />
+      <DndContext.Consumer>
+        {(ctx) => (
+          <Mosaic
+            dragAndDropManager={ctx.dragDropManager}
+            renderTile={this.tileRenderer}
+            initialValue={layout || this.determineWorkspaceLayout()}
+            onChange={this.mosaicChange}
+            className={classNames('mirador-mosaic', classes.root)}
+            zeroStateView={this.zeroStateView}
+          />
+        )}
+      </DndContext.Consumer>
     );
   }
 }

@@ -1,6 +1,6 @@
 import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
-import { Canvas } from 'manifesto.js';
+import { Canvas, AnnotationPage, Annotation } from 'manifesto.js';
 /**
  * MiradorCanvas - adds additional, testable logic around Manifesto's Canvas
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
@@ -86,7 +86,6 @@ export default class MiradorCanvas {
     const resources = flattenDeep([
       this.canvas.getContent().map(i => i.getBody()),
     ]);
-
     return flatten(resources.filter((resource) => resource.getProperty('type') === 'Video'));
   }
 
@@ -100,10 +99,23 @@ export default class MiradorCanvas {
   }
 
   /** */
-  get vttContent() {
+  get v2VttContent() {
     const resources = flattenDeep([
       this.canvas.getContent().map(i => i.getBody()),
     ]);
+
+    return flatten(resources.filter((resource) => resource.getProperty('format') === 'text/vtt'));
+  }
+
+  /** IIIF v3 captions are stored as 'supplementing' Annotations rather than in the resource content itself */
+  get v3VttContent() {
+    const resources = flattenDeep(this.canvasAnnotationPages.map(annoPage => {
+      const manifestoAnnoPage = new AnnotationPage(annoPage, this.canvas.options);
+      return manifestoAnnoPage.getItems().map(item => {
+        const manifestoAnnotation = new Annotation(item, this.canvas.options);
+        return manifestoAnnotation.getBody();
+      });
+    }));
 
     return flatten(resources.filter((resource) => resource.getProperty('format') === 'text/vtt'));
   }

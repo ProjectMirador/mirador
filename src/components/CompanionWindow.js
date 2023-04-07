@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Children, cloneElement, Component } from 'react';
 import PropTypes from 'prop-types';
 import CloseIcon from '@material-ui/icons/CloseSharp';
 import OpenInNewIcon from '@material-ui/icons/OpenInNewSharp';
@@ -74,9 +74,9 @@ export class CompanionWindow extends Component {
 
     const isBottom = (position === 'bottom' || position === 'far-bottom');
 
-    const childrenWithAdditionalProps = React.Children.map(children, (child) => {
+    const childrenWithAdditionalProps = Children.map(children, (child) => {
       if (!child) return null;
-      return React.cloneElement(
+      return cloneElement(
         child,
         {
           parentactions: {

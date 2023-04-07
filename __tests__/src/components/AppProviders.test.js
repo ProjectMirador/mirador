@@ -1,88 +1,86 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { ThemeProvider, StylesProvider } from '@material-ui/core/styles';
-import Fullscreen from 'react-full-screen';
-import { DndContext, DndProvider } from 'react-dnd';
+import Button from '@material-ui/core/Button';
+import { render, screen } from 'test-utils';
+import { useTranslation } from 'react-i18next';
+import { useDrop } from 'react-dnd';
 import { AppProviders } from '../../../src/components/AppProviders';
 import settings from '../../../src/config/settings';
 
 jest.unmock('react-i18next');
 
 /** */
-function createWrapper(props) {
-  return shallow(
+function MockTranslationComponent() {
+  const { t } = useTranslation();
+  return <div data-testid="test-translation">{t('aboutMirador')}</div>;
+}
+
+/** */
+function MockDnDComponent() {
+  try {
+    const drop = useDrop(() => ({
+      accept: 'box',
+      drop: () => ({ name: 'Mirador Test' }),
+    }))[1]; // the drop ref is the 2nd arg of returned array
+    return (
+      <div ref={drop} data-testid="test-dnd">
+        Test DnD
+      </div>
+    );
+  } catch (e) {
+    // do nothing
+  }
+  // We have to return something to render; can't throw an error in catch
+  return <div data-testid="failed-dnd" />;
+}
+
+/** */
+function createWrapper(props = {}) {
+  return render(
     <AppProviders
-      language="en"
       isFullscreenEnabled={false}
-      setWorkspaceFullscreen={() => {}}
       theme={settings.theme}
-      translations={{}}
-      t={k => k}
+      translations={{
+        de: { aboutMirador: 'Über Mirador' },
+        en: { aboutMirador: 'About Project Mirador' },
+      }}
       {...props}
-    />,
+    >
+      <Button color="primary" data-testid="test-button">Test</Button>
+      <MockTranslationComponent />
+      <MockDnDComponent />
+    </AppProviders>,
+    {
+      preloadedState: {
+        config: {
+          availableLanguages: { de: 'Deutsch', en: 'English' },
+          themes: { a: {} },
+        },
+      },
+    },
   );
 }
 
 describe('AppProviders', () => {
-  it('should render all needed elements ', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find(ThemeProvider).length).toBe(1);
-    expect(wrapper.find(StylesProvider).length).toBe(1);
-    expect(wrapper.find(Fullscreen).length).toBe(1);
+  it('sets up the configured theme', () => {
+    createWrapper();
+    // #1967d2 is the set as the primary text color in our settings.theme
+    expect(screen.getByTestId('test-button')).toHaveStyle('color: #1967d2');
   });
-
-  it('sets up a theme based on the config passed in merged w/ MaterialUI', () => {
-    const wrapper = createWrapper();
-    const { theme } = wrapper.find(ThemeProvider).props();
-    expect(theme.palette.type).toEqual('light');
-    expect(theme.typography.useNextVariants).toBe(true);
-    expect(Object.keys(theme).length).toBeGreaterThan(10);
+  it('provides a drag and drop context', async () => {
+    createWrapper();
+    // AppProvider provides a default dndManager if it is undefined in props
+    // This component will not render without a drag drop context
+    expect(screen.getByTestId('test-dnd')).toBeInTheDocument();
   });
-
-  it('sets up translations based on the config passed in', () => {
-    const wrapper = createWrapper({ translations: { en: { off: 'on' } } });
-    expect(wrapper.instance().i18n.t('off')).toEqual('on');
-  });
-
-  it('should pass setWorkspaceFullscreen to Fullscreen.onChange', () => {
-    const mockFn = jest.fn();
-    const wrapper = createWrapper({ setWorkspaceFullscreen: mockFn });
-    expect(wrapper.find(Fullscreen).first().prop('onChange'))
-      .toBe(mockFn);
-  });
-
-  it('should pass isFullscreenEnabled to Fullscreen.enabled', () => {
-    let wrapper = createWrapper({ isFullscreenEnabled: false });
-    expect(wrapper.find(Fullscreen).first().prop('enabled'))
-      .toEqual(false);
-
-    wrapper = createWrapper({ isFullscreenEnabled: true });
-    expect(wrapper.find(Fullscreen).first().prop('enabled'))
-      .toEqual(true);
-  });
-
-  describe('componentDidUpdate()', () => {
-    it('changes the i18n language if the language prop has been updated', () => {
-      const wrapper = createWrapper();
-
-      expect(wrapper.instance().i18n.language).toEqual('en');
-      wrapper.setProps({ language: 'de' });
-      expect(wrapper.instance().i18n.language).toEqual('de');
-    });
-  });
-
-  it('provides a drag and drop context', () => {
-    const wrapper = createWrapper();
-    expect(wrapper.find('MaybeDndProvider').dive().find(DndProvider).length).toBe(1);
-  });
-
   it('allows apps to opt-out of the drag and drop provider', () => {
-    const wrapper = createWrapper({ dndManager: false });
-    expect(wrapper.find('MaybeDndProvider').dive().find(DndProvider).length).toBe(0);
+    createWrapper({ dndManager: false });
+    expect(screen.getByTestId('failed-dnd')).toBeInTheDocument();
   });
-
-  it('allows apps to provide an existing drag and drop context', () => {
-    const wrapper = createWrapper({ dndManager: 'whatever' });
-    expect(wrapper.find('MaybeDndProvider').dive().find(DndContext.Provider).prop('value')).toBe('whatever');
+  it('displays the default language if none set', () => {
+    createWrapper();
+    expect(screen.getByTestId('test-translation')).toHaveTextContent('About Project Mirador');
+  });
+  it('displays the specified language translations', async () => {
+    createWrapper({ language: 'de' });
+    expect(await screen.findByTestId('test-translation')).toHaveTextContent('Über Mirador');
   });
 });

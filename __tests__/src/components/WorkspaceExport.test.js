@@ -1,17 +1,14 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { screen, render } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { WorkspaceExport } from '../../../src/components/WorkspaceExport';
 
 describe('WorkspaceExport', () => {
-  let wrapper;
+  let user;
   let handleClose = jest.fn();
   let mockState;
 
   beforeEach(() => {
+    user = userEvent.setup();
     handleClose = jest.fn();
     mockState = {
       companionWindows: {},
@@ -22,7 +19,7 @@ describe('WorkspaceExport', () => {
       workspace: {},
     };
 
-    wrapper = shallow(
+    render(
       <WorkspaceExport
         open
         handleClose={handleClose}
@@ -32,38 +29,34 @@ describe('WorkspaceExport', () => {
   });
 
   it('renders without an error', () => {
-    expect(wrapper.find(Dialog).length).toBe(1);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
   it('renders sizing props', () => {
-    expect(wrapper.find(Dialog).props()).toEqual(expect.objectContaining({
-      fullWidth: true,
-      maxWidth: 'sm',
-    }));
+    expect(screen.getByRole('dialog')).toHaveClass('MuiDialog-paperWidthSm');
   });
 
-  it('is closable by clicking the cancel button', () => {
-    expect(wrapper.find(Dialog).find(Button).at(0).text()).toMatch('cancel');
-    wrapper.find(Dialog).find(Button).at(0).simulate('click');
+  it('is closable by clicking the cancel button', async () => {
+    await user.click(screen.getByRole('button', { name: 'cancel' }));
     expect(handleClose).toHaveBeenCalled();
   });
 
-  it('reveals a snackbar on copy', () => {
-    expect(wrapper.find(Dialog).find(Button).at(1).text()).toMatch('copy');
-    wrapper.find(Dialog).find(CopyToClipboard).simulate('copy');
-    expect(wrapper.find(Snackbar).length).toBe(1);
-    shallow(wrapper.find(Snackbar).props().action).simulate('click');
+  it('reveals a snackbar on copy', async () => {
+    // jsdom doesn't support the clipboard API or prompt (used as a fallback)
+    // so we mock the prompt at least to avoid a warning in the test output
+    jest.spyOn(window, 'prompt').mockImplementation(() => true);
+
+    await user.click(screen.getByRole('button', { name: 'copy' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('exportCopied');
+
+    await user.click(screen.getByRole('button', { name: 'dismiss' }));
     expect(handleClose).toHaveBeenCalled();
   });
 
-  it('renders an exportable version of state', () => {
-    expect(wrapper.find('pre').length).toBe(1);
-    expect(wrapper.find('pre').text()).toMatch('"companionWindows":');
-    expect(wrapper.find('pre').text()).toMatch('"config":');
-    expect(wrapper.find('pre').text()).toMatch('"elasticLayout":');
-    expect(wrapper.find('pre').text()).toMatch('"viewers":');
-    expect(wrapper.find('pre').text()).toMatch('"windows":');
-    expect(wrapper.find('pre').text()).toMatch('"workspace":');
-    expect(wrapper.find('pre').text()).not.toMatch('"manifests":');
+  it('renders an exportable version of state', async () => {
+    await user.click(screen.getByRole('button', { name: 'viewWorkspaceConfiguration' }));
+    expect(screen.getByRole('region').querySelector('pre')).toHaveTextContent( // eslint-disable-line testing-library/no-node-access
+      '{ "companionWindows": {}, "config": {}, "elasticLayout": {}, "viewers": {}, "windows": {}, "workspace": {} }',
+    );
   });
 });

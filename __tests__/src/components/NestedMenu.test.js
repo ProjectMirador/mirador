@@ -1,17 +1,12 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ExpandLessIcon from '@material-ui/icons/ExpandLessSharp';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMoreSharp';
-import MenuItem from '@material-ui/core/MenuItem';
+import { render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
 import { NestedMenu } from '../../../src/components/NestedMenu';
 
 /**
  * Helper function to wrap creating a NestedMenu component
 */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <NestedMenu
       icon="GivenIcon"
       label="GivenLabel"
@@ -23,62 +18,40 @@ function createWrapper(props) {
 }
 
 describe('NestedMenu', () => {
-  let wrapper;
-
   it('renders the given icon wrapped in a MUI ListItemIcon', () => {
-    wrapper = createWrapper();
+    createWrapper();
 
-    expect(wrapper.find(ListItemIcon).children().text()).toEqual('GivenIcon');
+    expect(screen.getByText('GivenIcon')).toHaveClass('MuiListItemIcon-root');
   });
 
   it('does not render a ListItemIcon if no icon prop is passed', () => {
-    wrapper = createWrapper({ icon: null });
+    createWrapper({ icon: null });
 
-    expect(wrapper.find(ListItemIcon).length).toBe(0);
+    expect(screen.queryByText('GivenIcon')).not.toBeInTheDocument();
   });
 
   it('renders the given label wrapped in a MUI Typography', () => {
-    wrapper = createWrapper();
+    createWrapper();
 
-    expect(wrapper.find(ListItemText).children().text()).toEqual('GivenLabel');
+    expect(screen.getByText('GivenLabel')).toHaveClass('MuiTypography-body1');
   });
 
-  it('toggles the local nestedMenuIsOpen state when clicking the MenuItem', () => {
-    wrapper = createWrapper();
+  it('toggles the local open state when clicking the MenuItem', async () => {
+    const user = userEvent.setup();
+    createWrapper();
 
-    expect(wrapper.state().nestedMenuIsOpen).toBe(false);
-    wrapper.find(MenuItem).simulate('click');
-    expect(wrapper.state().nestedMenuIsOpen).toBe(true);
-    wrapper.find(MenuItem).simulate('click');
-    expect(wrapper.state().nestedMenuIsOpen).toBe(false);
+    expect(screen.queryByText('GivenChildren')).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('menuitem'));
+    expect(screen.getByText('GivenChildren')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('menuitem'));
+    expect(screen.queryByText('GivenChildren')).not.toBeInTheDocument();
   });
 
   it('spreads options to the MenuItem', () => {
-    wrapper = createWrapper({ divider: true });
+    createWrapper({ 'data-testid': 'subject' });
 
-    expect(wrapper.find(MenuItem).props().divider).toBe(true);
-  });
-
-  it('renders the appropriate expand/collapse icon based on the menu open state', () => {
-    wrapper = createWrapper();
-
-    expect(wrapper.state().nestedMenuIsOpen).toBe(false);
-    expect(wrapper.find(ExpandMoreIcon).length).toBe(1);
-    expect(wrapper.find(ExpandLessIcon).length).toBe(0);
-    wrapper.setState({ nestedMenuIsOpen: true });
-    expect(wrapper.find(ExpandMoreIcon).length).toBe(0);
-    expect(wrapper.find(ExpandLessIcon).length).toBe(1);
-  });
-
-  it("renders the component's children based on the nestedMenuIsOpen state", () => {
-    wrapper = createWrapper();
-
-    expect(wrapper.state().nestedMenuIsOpen).toBe(false);
-    expect(wrapper.children().length).toBe(1);
-    expect(wrapper.children().text()).not.toMatch(/GivenChildren/);
-
-    wrapper.setState({ nestedMenuIsOpen: true });
-    expect(wrapper.children().length).toBe(2);
-    expect(wrapper.children().last().text()).toEqual('GivenChildren');
+    expect(screen.getByTestId('subject')).toBeInTheDocument();
   });
 });

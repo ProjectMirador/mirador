@@ -4,6 +4,7 @@ import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getManifestDescription,
+  getManifestSummary,
   getManifestTitle,
   getManifestMetadata,
 } from '../state/selectors';
@@ -20,6 +21,9 @@ const mapStateToProps = (state, { id, manifestId, windowId }) => ({
   }),
   manifestLabel: getManifestTitle(state, { companionWindowId: id, manifestId, windowId }),
   manifestMetadata: getManifestMetadata(state, { companionWindowId: id, manifestId, windowId }),
+  manifestSummary: getManifestSummary(state, {
+    companionWindowId: id, manifestId, windowId,
+  }),
 });
 
 const enhance = compose(

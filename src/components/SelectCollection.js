@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -38,6 +38,7 @@ export class SelectCollection extends Component {
             </em>
           </Typography>
           <Button
+            aria-label="show collection"
             color="primary"
             variant="contained"
             onClick={this.openCollectionDialog}

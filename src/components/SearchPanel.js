@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -13,7 +13,7 @@ export class SearchPanel extends Component {
   constructor(props) {
     super(props);
 
-    this.containerRef = React.createRef();
+    this.containerRef = createRef();
   }
 
   /** */
@@ -39,12 +39,14 @@ export class SearchPanel extends Component {
             {
               query && query !== '' && (
                 <Chip
+                  role="button"
                   className={classes.clearChip}
                   color="secondary"
                   label={t('clearSearch')}
                   onClick={removeSearch}
                   onDelete={removeSearch}
                   size="small"
+                  tabIndex={0}
                   variant="outlined"
                 />
               )

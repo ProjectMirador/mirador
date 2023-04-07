@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import deburr from 'lodash/deburr';
 import debounce from 'lodash/debounce';
@@ -43,6 +43,13 @@ export class SearchPanelControls extends Component {
     }
   }
 
+  /**
+   * Cancel the debounce function when the component unmounts
+   */
+  componentWillUnmount() {
+    this.fetchAutocomplete.cancel();
+  }
+
   /** */
   handleChange(event, value, reason) {
     // For some reason the value gets reset to an empty value from the
@@ -79,7 +86,7 @@ export class SearchPanelControls extends Component {
     if (!autocompleteService) return;
     if (!value) return;
 
-    fetch(`${autocompleteService.id}?q=${value}`)
+    fetch(`${autocompleteService.id}?${new URLSearchParams({ q: value })}`)
       .then(response => response.json())
       .then(this.receiveAutocomplete);
   }
@@ -97,7 +104,7 @@ export class SearchPanelControls extends Component {
     const { search } = this.state;
     event && event.preventDefault();
     if (!search) return;
-    fetchSearch(windowId, companionWindowId, `${searchService.id}?q=${search}`, search);
+    fetchSearch(windowId, companionWindowId, `${searchService.id}?${new URLSearchParams({ q: search })}`, search);
   }
 
   /** */
@@ -117,7 +124,7 @@ export class SearchPanelControls extends Component {
     const id = `search-${companionWindowId}`;
     return (
       <>
-        <form onSubmit={this.submitSearch} className={classes.form}>
+        <form aria-label={t('searchTitle')} onSubmit={this.submitSearch} className={classes.form}>
           <Autocomplete
             id={id}
             inputValue={search}

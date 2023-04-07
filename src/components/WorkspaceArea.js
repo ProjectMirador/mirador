@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import ErrorDialog from '../containers/ErrorDialog';
@@ -19,6 +19,7 @@ export class WorkspaceArea extends Component {
    */
   render() {
     const {
+      areaRef,
       classes,
       controlPanelVariant,
       isWorkspaceAddVisible,
@@ -37,6 +38,7 @@ export class WorkspaceArea extends Component {
           className={classNames(classes.viewer, ns('viewer'))}
           lang={lang}
           aria-label={t('workspace')}
+          {...(areaRef ? { ref: areaRef } : {})}
         >
           {
             isWorkspaceAddVisible
@@ -52,6 +54,7 @@ export class WorkspaceArea extends Component {
 }
 
 WorkspaceArea.propTypes = {
+  areaRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   controlPanelVariant: PropTypes.string,
   isWorkspaceAddVisible: PropTypes.bool,
@@ -61,6 +64,7 @@ WorkspaceArea.propTypes = {
 };
 
 WorkspaceArea.defaultProps = {
+  areaRef: null,
   controlPanelVariant: undefined,
   isWorkspaceAddVisible: false,
   lang: undefined,

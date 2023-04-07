@@ -1,17 +1,16 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { Rnd } from 'react-rnd';
-import ResizeObserver from 'react-resize-observer';
+import { fireEvent, render, screen } from 'test-utils';
+import userEvent from '@testing-library/user-event';
+
 import WorkspaceElastic from '../../../src/components/WorkspaceElastic';
-import WorkspaceElasticWindow from '../../../src/containers/WorkspaceElasticWindow';
 
 /** create wrapper */
-function createWrapper(props) {
-  return shallow(
+function createWrapper({ elasticLayout = {}, ...props }) {
+  return render(
     <WorkspaceElastic
       classes={{}}
-      elasticLayout={{}}
+      elasticLayout={elasticLayout}
       workspace={{
+        draggingEnabled: true,
         focusedWindowId: '2',
         height: 5000,
         viewportPosition: {
@@ -25,9 +24,18 @@ function createWrapper(props) {
       updateElasticWindowLayout={() => {}}
       {...props}
     />,
+    {
+      preloadedState: {
+        companionWindows: {},
+        elasticLayout,
+        windows: { 1: { companionWindowIds: [] }, 2: { companionWindowIds: [] } },
+        workspace: { draggingEnabled: true },
+      },
+    },
   );
 }
 
+/* eslint-disable testing-library/no-node-access, testing-library/no-container */
 describe('WorkspaceElastic', () => {
   const elasticLayout = {
     1: {
@@ -45,52 +53,62 @@ describe('WorkspaceElastic', () => {
       y: 25,
     },
   };
-  let wrapper;
-  beforeEach(() => {
-    wrapper = createWrapper({ elasticLayout });
-  });
+
   it('should render properly with an initialValue', () => {
-    expect(wrapper.find(WorkspaceElasticWindow).length).toBe(2);
+    createWrapper({ elasticLayout });
+    expect(screen.getAllByLabelText('window')).toHaveLength(2);
   });
   describe('workspace behaviour', () => {
-    it('when workspace itself is dragged', () => {
+    it('when workspace itself is dragged', async () => {
+      const user = userEvent.setup();
       const mockDragStop = jest.fn();
-      wrapper = createWrapper({
+      const { container } = createWrapper({
         elasticLayout,
         setWorkspaceViewportPosition: mockDragStop,
       });
-      wrapper
-        .find(Rnd)
-        .at(0)
-        .props()
-        .onDragStop('myevent', {
-          x: 200,
-          y: 200,
-        });
+
+      container.getBoundingClientRect = () => ({
+        left: -2500,
+        offsetHeight: 5000,
+        offsetWidth: 5000,
+        top: -2500,
+      });
+      const el = container.querySelector('.mirador-workspace.react-draggable');
+
+      const coords = {
+        clientX: 400,
+        clientY: 300,
+      };
+
+      await user.pointer([
+        { coords: { clientX: 0, clientY: 0 }, keys: '[MouseLeft>]', target: el },
+        { coords },
+        { coords, keys: '[/MouseLeft]', target: el },
+      ]);
+
       expect(mockDragStop).toHaveBeenCalledWith({
-        x: -2700,
-        y: -2700,
+        x: -1 * (400 - 20),
+        y: -1 * (300 - 20),
       });
     });
 
     it('when workspace itself is resized', () => {
       const mockResize = jest.fn();
-      wrapper = createWrapper({
+      const { container } = createWrapper({
         elasticLayout,
         setWorkspaceViewportDimensions: mockResize,
       });
 
-      wrapper
-        .find(ResizeObserver)
-        .at(0)
-        .props()
-        .onResize({
-          height: 500,
-          width: 500,
-        });
+      container.firstChild.getBoundingClientRect = () => ({
+        height: 500,
+        width: 800,
+      });
+
+      fireEvent(window, new Event('resize'));
+
       expect(mockResize).toHaveBeenCalledWith({
         height: 500,
-        width: 500,
+        width: 800,
       });
     });
   });

@@ -1,12 +1,12 @@
-import React from 'react';
-import { shallow } from 'enzyme';
-import { MosaicWithoutDragDropContext } from 'react-mosaic-component';
-import MosaicRenderPreview from '../../../src/containers/MosaicRenderPreview';
+import { render, screen, fireEvent } from 'test-utils';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
 import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
 
 /** create wrapper */
 function createWrapper(props) {
-  return shallow(
+  return render(
     <WorkspaceMosaic
       classes={{}}
       windowIds={[]}
@@ -14,21 +14,35 @@ function createWrapper(props) {
       updateWorkspaceMosaicLayout={() => {}}
       {...props}
     />,
+    {
+      preloadedState: {
+        windows: {
+          1: { companionWindowIds: [] },
+          2: { companionWindowIds: [] },
+          3: { companionWindowIds: [] },
+        },
+      },
+    },
   );
 }
 
+/* eslint-disable testing-library/no-node-access */
 describe('WorkspaceMosaic', () => {
   const windowIds = ['1', '2'];
   let wrapper;
-  beforeEach(() => {
-    wrapper = createWrapper({ windowIds });
-  });
   it('should render properly with an initialValue', () => {
-    expect(wrapper.find(MosaicWithoutDragDropContext).length).toEqual(1);
-    expect(wrapper.find(MosaicWithoutDragDropContext).prop('initialValue')).toEqual({
-      direction: 'row', first: '1', second: '2',
+    wrapper = createWrapper({ windowIds });
+    const tiles = wrapper.container.querySelectorAll('.mosaic-tile');
+
+    expect(tiles).toHaveLength(2);
+    expect(tiles[0]).toHaveStyle({
+      bottom: '0%', left: '0%', right: '50%', top: '0%',
+    });
+    expect(tiles[1]).toHaveStyle({
+      bottom: '0%', left: '50%', right: '0%', top: '0%',
     });
   });
+
   describe('componentDidUpdate', () => {
     it('updates the workspace layout when windows change', () => {
       const updateWorkspaceMosaicLayout = jest.fn();
@@ -37,20 +51,28 @@ describe('WorkspaceMosaic', () => {
         windowIds,
       });
 
-      wrapper.setProps({ windowIds: [...windowIds, '3'] });
+      wrapper.rerender(
+        <WorkspaceMosaic classes={{}} windowIds={['1', '2', '3']} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
+      );
 
       expect(updateWorkspaceMosaicLayout).toHaveBeenCalled();
     });
     it('updates the workspace layout when windows are removed', () => {
       const updateWorkspaceMosaicLayout = jest.fn();
-      wrapper = createWrapper({
-        layout: { first: 1, second: 2 },
+      const props = {
+        classes: {},
+        layout: { direction: 'row', first: '1', second: '2' },
         updateWorkspaceMosaicLayout,
         windowIds,
-      });
-      wrapper.instance().windowPaths = { 2: ['second'] };
-      wrapper.setProps({ windowIds: [1] });
-      expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith(1);
+        workspaceId: 'foo',
+      };
+      wrapper = createWrapper(props);
+
+      wrapper.rerender(
+        <WorkspaceMosaic {...props} windowIds={['1']} />,
+      );
+
+      expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith('1');
     });
     it('when no windows remain', () => {
       const updateWorkspaceMosaicLayout = jest.fn();
@@ -58,7 +80,10 @@ describe('WorkspaceMosaic', () => {
         updateWorkspaceMosaicLayout,
         windowIds,
       });
-      wrapper.setProps({ windowIds: [] });
+
+      wrapper.rerender(
+        <WorkspaceMosaic classes={{}} windowIds={[]} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
+      );
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith(null);
     });
     it('when the new and old layouts are the same', () => {
@@ -68,66 +93,63 @@ describe('WorkspaceMosaic', () => {
         updateWorkspaceMosaicLayout,
         windowIds,
       });
-      wrapper.setProps({ layout: { first: 1, second: 2 }, windowIds });
+
+      wrapper.rerender(
+        <WorkspaceMosaic classes={{}} windowIds={windowIds} layout={{ first: 1, second: 2 }} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
+      );
+
       expect(updateWorkspaceMosaicLayout).toHaveBeenCalledTimes(1);
     });
   });
-  describe('bookkeepPath', () => {
-    it('as windows are rendered keeps a reference to their path in binary tree', () => {
-      wrapper.instance().tileRenderer('1', 'foo');
-      expect(wrapper.instance().windowPaths).toEqual({ 1: 'foo' });
-    });
-  });
-  describe('determineWorkspaceLayout', () => {
-    it('when window ids do not match workspace layout', () => {
-      wrapper = createWrapper({ layout: {}, windowIds });
-      expect(wrapper.instance().determineWorkspaceLayout()).toMatchObject({
-        direction: 'row', first: '1', second: '2',
-      });
-    });
-    it('by default use workspace.layout', () => {
-      wrapper = createWrapper({ layout: {}, windowIds: ['foo'] });
-      expect(wrapper.instance().determineWorkspaceLayout()).toEqual('foo');
-    });
-    it('generates a new layout if windows do not match current layout', () => {
-      wrapper = createWrapper({ layout: { first: 'foo', second: 'bark' }, windowIds: ['foo'] });
-      expect(wrapper.instance().determineWorkspaceLayout()).toEqual('foo');
-    });
-    it('when window ids match workspace layout', () => {
-      wrapper = createWrapper({ layout: {}, windowIds: ['foo'] });
-      expect(wrapper.instance().determineWorkspaceLayout()).toBe('foo');
-    });
-  });
-  describe('tileRenderer', () => {
+  describe('tile rendering', () => {
     it('when window is available', () => {
-      const renderedTile = wrapper.instance().tileRenderer('1', 'foo');
-      expect(renderedTile).not.toBeNull();
-      expect(shallow(renderedTile).find('DropTarget(DragSource(InternalMosaicWindow))').length).toEqual(1);
-      expect(shallow(renderedTile).props()).toEqual(expect.objectContaining({
-        additionalControls: [],
-        path: 'foo',
-        toolbarControls: [],
-      }));
+      wrapper = createWrapper({ windowIds });
 
-      expect(shallow(shallow(renderedTile).props().renderPreview({ windowId: 1 })).matchesElement(
-        <div className="mosaic-preview" aria-hidden>
-          <MosaicRenderPreview windowId={1} />
-        </div>,
-      )).toBe(true);
-    });
-    it('when window is not available', () => {
-      expect(wrapper.instance().tileRenderer('bar')).toBeNull();
+      expect(screen.getAllByLabelText('window', { container: 'section' })[0]).toHaveAttribute('id', '1');
+      expect(screen.getAllByLabelText('window', { container: 'section' })[1]).toHaveAttribute('id', '2');
+
+      expect(wrapper.container.querySelector('.mosaic-window-title')).toBeEmptyDOMElement();
+      expect(wrapper.container.querySelector('.mosaic-window-controls')).toBeEmptyDOMElement();
+      expect(wrapper.container.querySelectorAll('.mosaic-preview')).toHaveLength(2);
+      expect(wrapper.container.querySelector('.mosaic-preview')).toHaveAttribute('aria-hidden', 'true');
     });
   });
   describe('mosaicChange', () => {
-    it('calls the provided prop to update layout', () => {
+    it('calls the provided prop to update layout', async () => {
       const updateWorkspaceMosaicLayout = jest.fn();
-      wrapper = createWrapper({
-        updateWorkspaceMosaicLayout,
-        windowIds,
-      });
 
-      wrapper.instance().mosaicChange();
+      const { container } = render(
+        <DndProvider backend={HTML5Backend}>
+          <WorkspaceMosaic
+            classes={{}}
+            windowIds={['1', '2']}
+            workspaceId="foo"
+            updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout}
+          />
+        </DndProvider>,
+        {
+          preloadedState: {
+            windows: {
+              1: { companionWindowIds: [], maximized: false },
+              2: { companionWindowIds: [], maximized: false },
+            },
+            workspace: {
+              type: 'mosaic',
+              windowIds: ['1', '2'],
+            },
+          },
+        },
+      );
+
+      const dragTarget = screen.getAllByLabelText('windowNavigation')[0];
+      const dropTarget = container.querySelector('.mirador-mosaic > .drop-target-container > .drop-target.top'); // eslint-disable-line testing-library/no-container
+
+      fireEvent.dragStart(dragTarget);
+      fireEvent.drag(dragTarget);
+      fireEvent.dragEnter(dropTarget);
+      fireEvent.dragOver(dropTarget);
+      fireEvent.drop(dropTarget);
+
       expect(updateWorkspaceMosaicLayout).toBeCalled();
     });
   });

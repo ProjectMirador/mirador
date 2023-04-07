@@ -6,7 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import {
   getManifest,
   getManifestTitle, getManifestThumbnail, getCanvases,
-  getManifestLogo, getManifestProvider, getWindowManifests,
+  getManifestLogo, getManifestProviderName, getWindowManifests,
   getManifestoInstance, getSequenceBehaviors,
 } from '../state/selectors';
 import * as actions from '../state/actions';
@@ -32,7 +32,7 @@ const mapStateToProps = (state, { manifestId, provider }) => {
       && getSequenceBehaviors(state, { manifestId }).includes('multi-part'),
     manifestLogo: getManifestLogo(state, { manifestId }),
     provider: provider
-      || getManifestProvider(state, { manifestId }),
+      || getManifestProviderName(state, { manifestId }),
     ready: !!manifest.json,
     size,
     thumbnail: getManifestThumbnail(state, { manifestId }),
@@ -73,7 +73,6 @@ const styles = theme => ({
     backgroundColor: theme.palette.grey[300],
   },
   root: {
-    ...theme.mixins.gutters(),
     '&$active': {
       borderLeft: `4px solid ${theme.palette.primary.main}`,
     },
@@ -85,6 +84,12 @@ const styles = theme => ({
       borderLeft: `4px solid ${theme.palette.action.hover}`,
     },
     borderLeft: '4px solid transparent',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+    },
   },
   thumbnail: {
     maxWidth: '100%',

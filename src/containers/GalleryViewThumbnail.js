@@ -61,7 +61,7 @@ const styles = theme => ({
   searchChip: {
     ...theme.typography.caption,
     '&$selected $avatar': {
-      backgroundColor: theme.palette.highlights.primary,
+      backgroundColor: theme.palette.highlights?.primary,
     },
     marginTop: 2,
   },

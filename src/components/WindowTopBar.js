@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import MenuIcon from '@material-ui/icons/MenuSharp';
 import CloseIcon from '@material-ui/icons/CloseSharp';
@@ -48,6 +48,7 @@ export class WindowTopBar extends Component {
               <MiradorMenuButton
                 aria-label={t('toggleWindowSideBar')}
                 onClick={toggleWindowSideBar}
+                className={ns('window-menu-btn')}
               >
                 <MenuIcon />
               </MiradorMenuButton>
@@ -56,26 +57,26 @@ export class WindowTopBar extends Component {
               windowId={windowId}
             />
             {allowTopMenuButton && (
-              <WindowTopMenuButton className={ns('window-menu-btn')} windowId={windowId} />
+              <WindowTopMenuButton windowId={windowId} className={ns('window-menu-btn')} />
             )}
             <WindowTopBarPluginArea windowId={windowId} />
             <WindowTopBarPluginMenu windowId={windowId} />
             {allowMaximize && (
               <MiradorMenuButton
                 aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
-                className={ns('window-maximize')}
+                className={classNames(ns('window-maximize'), ns('window-menu-btn'))}
                 onClick={(maximized ? minimizeWindow : maximizeWindow)}
               >
                 {(maximized ? <WindowMinIcon /> : <WindowMaxIcon />)}
               </MiradorMenuButton>
             )}
             {allowFullscreen && (
-              <FullScreenButton />
+              <FullScreenButton className={ns('window-menu-btn')} />
             )}
             {allowClose && (
               <MiradorMenuButton
                 aria-label={t('closeWindow')}
-                className={ns('window-close')}
+                className={classNames(ns('window-close'), ns('window-menu-btn'))}
                 onClick={removeWindow}
               >
                 <CloseIcon />

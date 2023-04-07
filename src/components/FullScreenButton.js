@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
 import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
 import PropTypes from 'prop-types';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import FullScreenContext from '../contexts/FullScreenContext';
+
 /**
  */
 export class FullScreenButton extends Component {
@@ -12,29 +14,30 @@ export class FullScreenButton extends Component {
    */
   render() {
     const {
-      className, isFullscreenEnabled, setWorkspaceFullscreen, t,
+      className, t,
     } = this.props;
     return (
-      <MiradorMenuButton
-        className={className}
-        aria-label={isFullscreenEnabled ? t('exitFullScreen') : t('workspaceFullScreen')}
-        onClick={() => setWorkspaceFullscreen(!isFullscreenEnabled)}
-      >
-        {isFullscreenEnabled ? <FullscreenExitIcon /> : <FullscreenIcon />}
-      </MiradorMenuButton>
+      <FullScreenContext.Consumer>
+        { handle => (handle && (
+          <MiradorMenuButton
+            className={className}
+            aria-label={handle.active ? t('exitFullScreen') : t('workspaceFullScreen')}
+            onClick={handle.active ? handle.exit : handle.enter}
+          >
+            {handle.active ? <FullscreenExitIcon /> : <FullscreenIcon />}
+          </MiradorMenuButton>
+        ))}
+      </FullScreenContext.Consumer>
     );
   }
 }
 
 FullScreenButton.propTypes = {
   className: PropTypes.string,
-  isFullscreenEnabled: PropTypes.bool,
-  setWorkspaceFullscreen: PropTypes.func.isRequired,
   t: PropTypes.func,
 };
 
 FullScreenButton.defaultProps = {
   className: undefined,
-  isFullscreenEnabled: false,
   t: key => key,
 };

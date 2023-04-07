@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {
@@ -16,18 +16,6 @@ import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogCon
 /**
  */
 export class WorkspaceSelectionDialog extends Component {
-  /**
-   * Set the initial focus when the dialog enters
-   * Find the selected item by using the current workspace type
-   * in a selector on the value attribute (which we need to set)
-  */
-  static setInitialFocus(dialogElement, workspaceType) {
-    const selectedListItem = dialogElement.querySelectorAll(`li[value="${workspaceType}"]`);
-    if (!selectedListItem || selectedListItem.length === 0) return;
-
-    selectedListItem[0].focus();
-  }
-
   /**
    * constructor
    */
@@ -62,8 +50,6 @@ export class WorkspaceSelectionDialog extends Component {
         container={container}
         id="workspace-selection-dialog"
         onClose={handleClose}
-        onEntered={dialog => WorkspaceSelectionDialog.setInitialFocus(dialog, workspaceType)}
-        onEscapeKeyDown={handleClose}
         open={open}
       >
         <DialogTitle id="workspace-selection-dialog-title" disableTypography>
@@ -74,6 +60,7 @@ export class WorkspaceSelectionDialog extends Component {
           <MenuList
             classes={{ root: classes.list }}
             selected={workspaceType}
+            autoFocusItem
           >
             <MenuItem
               className={classes.menuItem}
