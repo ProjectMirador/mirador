@@ -167,51 +167,59 @@ export default {
       },
       useNextVariants: true // set so that console deprecation warning is removed
     },
-    overrides: {
+    components: {
+      MuiButtonBase: {
+        defaultProps: {
+          disableTouchRipple: true,
+        },
+      },
+      MuiLink: {
+        defaultProps: {
+          underline: 'always'
+        },
+      },
       MuiListSubheader: {
-        root: {
-          '&[role="presentation"]:focus': {
-            outline: 0,
+        styleOverrides: {
+          root: {
+            '&[role="presentation"]:focus': {
+              outline: 0,
+            },
           },
         },
       },
       MuiTooltip: { // Overridden from https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Tooltip/Tooltip.js#L40-L70
-        tooltipPlacementLeft: {
-          ['@media (min-width:600px)']: {
-            margin: 0,
+        styleOverrides: {
+          tooltipPlacementLeft: {
+            ['@media (min-width:600px)']: {
+              margin: 0,
+            },
           },
-        },
-        tooltipPlacementRight: {
-          ['@media (min-width:600px)']: {
-            margin: 0,
+          tooltipPlacementRight: {
+            ['@media (min-width:600px)']: {
+              margin: 0,
+            },
           },
-        },
-        tooltipPlacementTop: {
-          ['@media (min-width:600px)']: {
-            margin: 0,
+          tooltipPlacementTop: {
+            ['@media (min-width:600px)']: {
+              margin: 0,
+            },
           },
-        },
-        tooltipPlacementBottom: {
-          ['@media (min-width:600px)']: {
-            margin: 0,
+          tooltipPlacementBottom: {
+            ['@media (min-width:600px)']: {
+              margin: 0,
+            },
           },
         },
       },
       MuiTouchRipple: {
-        childPulsate: {
-          animation: 'none',
+        styleOverrides: {
+          childPulsate: {
+            animation: 'none',
+          },
+          rippleVisible: {
+            animation: 'none',
+          },
         },
-        rippleVisible: {
-          animation: 'none',
-        },
-      },
-    },
-    props: {
-      MuiButtonBase: {
-        disableTouchRipple: true,
-      },
-      MuiLink: {
-        underline: 'always'
       },
     },
   },
