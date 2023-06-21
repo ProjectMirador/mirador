@@ -71,8 +71,10 @@ export class WorkspaceMenu extends Component {
       t,
       showZoomControls,
       toggleZoomControls,
-      ...menuProps
+      ...rest
     } = this.props;
+    const menuProps = { ...rest };
+    delete menuProps.tReady;
 
     const {
       changeTheme,
