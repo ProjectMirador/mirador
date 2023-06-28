@@ -122,44 +122,46 @@ export class SearchPanelControls extends Component {
 
     const { search, suggestions } = this.state;
     const id = `search-${companionWindowId}`;
-    return <>
-      <form aria-label={t('searchTitle')} onSubmit={this.submitSearch} className={classes.form}>
-        <Autocomplete
-          id={id}
-          inputValue={search}
-          options={suggestions}
-          getOptionLabel={getMatch}
-          isOptionEqualToValue={(option, value) => (
-            deburr(getMatch(option).trim()).toLowerCase()
+    return (
+      <>
+        <form aria-label={t('searchTitle')} onSubmit={this.submitSearch} className={classes.form}>
+          <Autocomplete
+            id={id}
+            inputValue={search}
+            options={suggestions}
+            getOptionLabel={getMatch}
+            isOptionEqualToValue={(option, value) => (
+              deburr(getMatch(option).trim()).toLowerCase()
               === deburr(getMatch(value).trim()).toLowerCase()
-          )}
-          noOptionsText=""
-          onChange={this.selectItem}
-          onInputChange={this.handleChange}
-          freeSolo
-          renderInput={params => (
-            <TextField
-              {...params}
-              label={t('searchInputLabel')}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <div className={classes.endAdornment}>
-                    <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
-                      <SearchIcon />
-                    </MiradorMenuButton>
-                    {Boolean(searchIsFetching) && (
+            )}
+            noOptionsText=""
+            onChange={this.selectItem}
+            onInputChange={this.handleChange}
+            freeSolo
+            renderInput={params => (
+              <TextField
+                {...params}
+                label={t('searchInputLabel')}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <div className={classes.endAdornment}>
+                      <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
+                        <SearchIcon />
+                      </MiradorMenuButton>
+                      {Boolean(searchIsFetching) && (
                       <CircularProgress className={classes.searchProgress} size={50} />
-                    )}
-                  </div>
-                ),
-              }}
-            />
-          )}
-        />
-      </form>
-      <SearchPanelNavigation windowId={windowId} companionWindowId={companionWindowId} />
-    </>;
+                      )}
+                    </div>
+                  ),
+                }}
+              />
+            )}
+          />
+        </form>
+        <SearchPanelNavigation windowId={windowId} companionWindowId={companionWindowId} />
+      </>
+    );
   }
 }
 

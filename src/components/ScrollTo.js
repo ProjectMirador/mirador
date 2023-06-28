@@ -123,6 +123,7 @@ ScrollTo.propTypes = {
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   ]).isRequired,
+  nodeId: PropTypes.string.isRequired,
   offsetTop: PropTypes.number,
   scrollTo: PropTypes.bool.isRequired,
 };

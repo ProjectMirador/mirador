@@ -2,7 +2,9 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
-import { ThemeProvider, StyledEngineProvider, createTheme, adaptV4Theme } from '@mui/material/styles';
+import {
+  ThemeProvider, StyledEngineProvider, createTheme, adaptV4Theme,
+} from '@mui/material/styles';
 import StylesProvider from '@mui/styles/StylesProvider';
 import jssPreset from '@mui/styles/jssPreset';
 import createGenerateClassName from '@mui/styles/createGenerateClassName';

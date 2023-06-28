@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
-import { DialogActions, DialogContentText, Typography } from '@mui/material';
+import { DialogActions, DialogContentText } from '@mui/material';
 import Button from '@mui/material/Button';
 import { isUndefined } from 'lodash';
 

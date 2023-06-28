@@ -8,6 +8,11 @@ import { getWindowIds, getWorkspace } from '../state/selectors';
 import { WorkspaceAddButton } from '../components/WorkspaceAddButton';
 
 // FIXME checkout https://mui.com/components/use-media-query/#migrating-from-withwidth
+/**
+ * withWidth
+ * @memberof WorkspaceControlPanel
+ * @private
+ */
 const withWidth = () => (WrappedComponent) => (props) => <WrappedComponent {...props} width="xs" />;
 
 /**
