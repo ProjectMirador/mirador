@@ -210,8 +210,8 @@
       "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10022508f/manifest.json": {
         "provider": "Bibliothèque nationale de France"
       },
-      "https://manifests.britishart.yale.edu/Osbornfa1": {
-        "provider": "Beinecke Rare Book and Manuscript Library, Yale University"
+      "https://dvp.prtd.app/hamilton/manifest.json": {
+        "provider": "Library of Congress"
       },
       "https://iiif.biblissima.fr/chateauroux/B360446201_MS0005/manifest.json": {
         "provider": "Biblissima"
