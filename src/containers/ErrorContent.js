@@ -30,9 +30,6 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
  */
 const styles = theme => ({
   alert: {
-    '& $icon': {
-      color: theme.palette.error.main,
-    },
     backgroundColor: theme.palette.error.main,
     color: '#fff',
     fontWeight: theme.typography.fontWeightMedium,
