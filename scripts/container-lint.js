@@ -1,5 +1,5 @@
-const chalk = require('chalk'); // eslint-disable-line import/no-extraneous-dependencies
 const fs = require('fs');
+const chalk = require('chalk'); // eslint-disable-line import/no-extraneous-dependencies
 const glob = require('glob'); // eslint-disable-line import/no-extraneous-dependencies
 
 const { error } = console;
