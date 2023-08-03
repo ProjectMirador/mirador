@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
 import {
-  ThemeProvider, StyledEngineProvider, createTheme, adaptV4Theme,
+  ThemeProvider, StyledEngineProvider, createTheme,
 } from '@mui/material/styles';
 import StylesProvider from '@mui/styles/StylesProvider';
 import jssPreset from '@mui/styles/jssPreset';
@@ -111,7 +111,7 @@ export class AppProviders extends Component {
         <I18nextProvider i18n={this.i18n}>
           <StyledEngineProvider injectFirst>
             <ThemeProvider
-              theme={createTheme(adaptV4Theme(theme))}
+              theme={createTheme((theme))}
             >
               <StylesProvider
                 jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
