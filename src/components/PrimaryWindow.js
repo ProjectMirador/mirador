@@ -77,7 +77,7 @@ export class PrimaryWindow extends Component {
       isCollectionDialogVisible, windowId, classes, children,
     } = this.props;
     return (
-      <div className={classNames(ns('primary-window'), classes.primaryWindow)}>
+      <div data-testid="test-window" className={classNames(ns('primary-window'), classes.primaryWindow)}>
         <WindowSideBar windowId={windowId} />
         <CompanionArea windowId={windowId} position="left" />
         { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
