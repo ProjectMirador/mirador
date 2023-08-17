@@ -322,9 +322,9 @@ export const getManifestTitle = createSelector(
 * @return {String|null}
 */
 export const getManifestDescription = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
-    && manifest.getDescription().getValue(),
+  [getLocale, getManifestoInstance],
+  (locale, manifest) => manifest
+    && manifest.getDescription().getValue(locale),
 );
 
 /**
@@ -341,7 +341,7 @@ export const getManifestSummary = createSelector(
     getManifestLocale,
   ],
   (summary, locale) => summary
-    && PropertyValue.parse(summary, locale).getValue(),
+    && PropertyValue.parse(summary, locale).getValue(locale),
 );
 
 /**
