@@ -1,11 +1,19 @@
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import AnnotationSettings from '../containers/AnnotationSettings';
 import CanvasAnnotations from '../containers/CanvasAnnotations';
 import CompanionWindow from '../containers/CompanionWindow';
 import ns from '../config/css-ns';
 
+const Section = styled('div')(({ theme }) => ({
+  borderBottom: `.5px solid ${theme.palette.section_divider}`,
+  paddingBottom: theme.spacing(1),
+  paddingLeft: theme.spacing(2),
+  paddingRight: theme.spacing(1),
+  paddingTop: theme.spacing(2),
+}));
 /**
  * WindowSideBarAnnotationsPanel ~
 */
@@ -22,7 +30,7 @@ export class WindowSideBarAnnotationsPanel extends Component {
   */
   render() {
     const {
-      annotationCount, classes, canvasIds, t, windowId, id,
+      annotationCount, canvasIds, t, windowId, id,
     } = this.props;
     return (
       <CompanionWindow
@@ -34,9 +42,9 @@ export class WindowSideBarAnnotationsPanel extends Component {
         otherRef={this.containerRef}
         titleControls={<AnnotationSettings windowId={windowId} />}
       >
-        <div className={classes.section}>
+        <Section>
           <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
-        </div>
+        </Section>
 
         {canvasIds.map((canvasId, index) => (
           <CanvasAnnotations
@@ -56,7 +64,6 @@ export class WindowSideBarAnnotationsPanel extends Component {
 WindowSideBarAnnotationsPanel.propTypes = {
   annotationCount: PropTypes.number.isRequired,
   canvasIds: PropTypes.arrayOf(PropTypes.string),
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   id: PropTypes.string.isRequired,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,

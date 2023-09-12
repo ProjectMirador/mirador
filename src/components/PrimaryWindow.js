@@ -1,6 +1,6 @@
 import { Component, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import { styled } from '@mui/material/styles';
 import WindowSideBar from '../containers/WindowSideBar';
 import CompanionArea from '../containers/CompanionArea';
 import CollectionDialog from '../containers/CollectionDialog';
@@ -15,6 +15,12 @@ const VideoViewer = lazy(() => import('../containers/VideoViewer'));
 GalleryView.displayName = 'GalleryView';
 SelectCollection.displayName = 'SelectCollection';
 WindowViewer.displayName = 'WindowViewer';
+
+const PrimaryWindowContainer = styled('div')(() => ({
+  display: 'flex',
+  flex: 1,
+  position: 'relative',
+}));
 
 /**
  * PrimaryWindow - component that renders the primary content of a Mirador
@@ -74,17 +80,17 @@ export class PrimaryWindow extends Component {
    */
   render() {
     const {
-      isCollectionDialogVisible, windowId, classes, children,
+      isCollectionDialogVisible, windowId, children,
     } = this.props;
     return (
-      <div data-testid="test-window" className={classNames(ns('primary-window'), classes.primaryWindow)}>
+      <PrimaryWindowContainer data-testid="test-window" className={ns('primary-window')}>
         <WindowSideBar windowId={windowId} />
         <CompanionArea windowId={windowId} position="left" />
         { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
         <Suspense fallback={<div />}>
           {children || this.renderViewer()}
         </Suspense>
-      </div>
+      </PrimaryWindowContainer>
     );
   }
 }
@@ -92,7 +98,6 @@ export class PrimaryWindow extends Component {
 PrimaryWindow.propTypes = {
   audioResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   children: PropTypes.node,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isCollection: PropTypes.bool,
   isCollectionDialogVisible: PropTypes.bool,
   isFetching: PropTypes.bool,

@@ -1,9 +1,16 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDownSharp';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUpSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+
+const Container = styled('div')(({ theme }) => ({
+  cursor: 'pointer', // This style will be applied to Typography
+  display: 'flex',
+  justifyContent: 'space-between',
+}));
 
 /**
  * CollapsableSection ~
@@ -29,15 +36,15 @@ export class CollapsibleSection extends Component {
   */
   render() {
     const {
-      children, classes, id, label, t,
+      children, id, label, t,
     } = this.props;
     const { open } = this.state;
 
     return (
       <>
-        <div className={classes.container}>
+        <Container sx={{ padding: 0 }}>
           <Typography
-            className={classes.heading}
+            sx={{ cursor: 'pointer' }}
             id={id}
             onClick={this.toggleSection}
             variant="overline"
@@ -46,19 +53,14 @@ export class CollapsibleSection extends Component {
             {label}
           </Typography>
           <MiradorMenuButton
-            aria-label={
-              t(
-                open ? 'collapseSection' : 'expandSection',
-                { section: label },
-              )
-            }
+            aria-label={t(open ? 'collapseSection' : 'expandSection', { section: label })}
             aria-expanded={open}
-            className={classes.button}
+            sx={{ padding: 0 }}
             onClick={this.toggleSection}
           >
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </MiradorMenuButton>
-        </div>
+        </Container>
         {open && children}
       </>
     );
@@ -67,7 +69,7 @@ export class CollapsibleSection extends Component {
 
 CollapsibleSection.propTypes = {
   children: PropTypes.node.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,

@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import flatten from 'lodash/flatten';
-import withStyles from '@mui/styles/withStyles';
 import * as actions from '../state/actions';
 import { GalleryViewThumbnail } from '../components/GalleryViewThumbnail';
 import {
@@ -11,62 +10,6 @@ import {
   getPresentAnnotationsOnSelectedCanvases,
   getCompanionWindowsForContent,
 } from '../state/selectors';
-
-/**
- * Styles to be passed to the withStyles HOC
- */
-const styles = theme => ({
-  annotationIcon: {
-    height: '1rem',
-    width: '1rem',
-  },
-  annotationsChip: {
-    ...theme.typography.caption,
-  },
-  avatar: {
-    backgroundColor: 'transparent',
-  },
-  chips: {
-    opacity: 0.875,
-    position: 'absolute',
-    right: 0,
-    textAlign: 'right',
-    top: 0,
-  },
-  galleryViewItem: {
-    '&$hasAnnotations': {
-      border: `2px solid ${theme.palette.action.selected}`,
-    },
-    '&$selected,&$selected$hasAnnotations': {
-      border: `2px solid ${theme.palette.primary.main}`,
-    },
-    '&:focus': {
-      outline: 'none',
-    },
-    '&:hover': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    border: '2px solid transparent',
-    cursor: 'pointer',
-    display: 'inline-block',
-    margin: `${theme.spacing(1)} ${theme.spacing(0.5)}`,
-    maxHeight: props => props.config.height + 45,
-    minWidth: '60px',
-    overflow: 'hidden',
-    padding: theme.spacing(0.5),
-    position: 'relative',
-    width: 'min-content',
-  },
-  hasAnnotations: {},
-  searchChip: {
-    ...theme.typography.caption,
-    '&$selected $avatar': {
-      backgroundColor: theme.palette.highlights?.primary,
-    },
-    marginTop: 2,
-  },
-  selected: {},
-});
 
 /** */
 const mapStateToProps = (state, { canvas, windowId }) => {
@@ -115,7 +58,6 @@ const mapDispatchToProps = (dispatch, { canvas, id, windowId }) => ({
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withStyles(styles),
   // further HOC go here
 );
 

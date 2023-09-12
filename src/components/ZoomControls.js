@@ -1,9 +1,24 @@
 import { Component } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircleOutlineSharp';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircleOutlineSharp';
+import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
 import RestoreZoomIcon from './icons/RestoreZoomIcon';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+
+const ZoomControlsWrapper = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
+}));
+
+const dividerStyle = {
+  borderRight: '1px solid #808080',
+  display: 'inline-block',
+  height: '24px',
+  margin: '12px 6px',
+};
 
 /**
  */
@@ -46,7 +61,7 @@ export class ZoomControls extends Component {
    */
   render() {
     const {
-      displayDivider, showZoomControls, classes, t, zoomToWorld,
+      displayDivider, showZoomControls, t, zoomToWorld,
     } = this.props;
 
     if (!showZoomControls) {
@@ -56,7 +71,7 @@ export class ZoomControls extends Component {
       );
     }
     return (
-      <div className={classes.zoom_controls}>
+      <ZoomControlsWrapper>
         <MiradorMenuButton aria-label={t('zoomIn')} onClick={this.handleZoomInClick}>
           <AddCircleIcon />
         </MiradorMenuButton>
@@ -66,14 +81,13 @@ export class ZoomControls extends Component {
         <MiradorMenuButton aria-label={t('zoomReset')} onClick={() => zoomToWorld(false)}>
           <RestoreZoomIcon />
         </MiradorMenuButton>
-        {displayDivider && <span className={classes.divider} />}
-      </div>
+        {displayDivider && <Box component="span" sx={dividerStyle} />}
+      </ZoomControlsWrapper>
     );
   }
 }
 
 ZoomControls.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   displayDivider: PropTypes.bool,
   showZoomControls: PropTypes.bool,
   t: PropTypes.func,

@@ -54,7 +54,7 @@ export class WorkspaceExport extends Component {
    */
   render() {
     const {
-      children, classes, container, open, t,
+      children, container, open, t,
     } = this.props;
     const { copied } = this.state;
 
@@ -95,7 +95,7 @@ export class WorkspaceExport extends Component {
         <DialogContent>
           <Accordion elevation={0}>
             <AccordionSummary
-              classes={{ root: classes.accordionTitle }}
+              sx={{ padding: 0 }}
               expandIcon={<ExpandMoreIcon />}
             >
               <Typography variant="h4">{t('viewWorkspaceConfiguration')}</Typography>
@@ -125,7 +125,6 @@ export class WorkspaceExport extends Component {
 
 WorkspaceExport.propTypes = {
   children: PropTypes.node,
-  classes: PropTypes.objectOf(PropTypes.string),
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   exportableState: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
@@ -135,7 +134,6 @@ WorkspaceExport.propTypes = {
 
 WorkspaceExport.defaultProps = {
   children: null,
-  classes: {},
   container: null,
   open: false,
   t: key => key,

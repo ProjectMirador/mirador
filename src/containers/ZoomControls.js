@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import withStyles from '@mui/styles/withStyles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getShowZoomControlsConfig, getViewer } from '../state/selectors';
@@ -26,33 +25,8 @@ const mapStateToProps = (state, { windowId }) => (
  */
 const mapDispatchToProps = { updateViewport: actions.updateViewport };
 
-/**
- *
- * @param theme
- * @returns {{zoom_controls: {position: string, right: number},
- * ListItem: {paddingBottom: number, paddingTop: number}}}
- */
-const styles = theme => ({
-  divider: {
-    borderRight: '1px solid #808080',
-    display: 'inline-block',
-    height: '24px',
-    margin: '12px 6px',
-  },
-  ListItem: {
-    paddingBottom: 0,
-    paddingTop: 0,
-  },
-  zoom_controls: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-});
-
 const enhance = compose(
   withTranslation(),
-  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ZoomControls'),
 );

@@ -11,6 +11,28 @@ import {
 } from '@mui/material';
 import PaletteIcon from '@mui/icons-material/PaletteSharp';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+
+const StyledDialog = styled(Dialog)(({ theme }) => ({
+  '& .dark': {
+    color: '#000000',
+  },
+  '& .dialogContent': {
+    padding: 0,
+  },
+  '& .light': {
+    color: '#BDBDBD',
+  },
+  '& .listitem': {
+    '&:focus': {
+      backgroundColor: theme.palette.action.focus,
+    },
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    cursor: 'pointer',
+  },
+}));
 
 /**
  * a simple dialog providing the possibility to switch the theme
@@ -36,7 +58,6 @@ export class ChangeThemeDialog extends Component {
   /** */
   render() {
     const {
-      classes,
       handleClose,
       open,
       selectedTheme,
@@ -44,42 +65,34 @@ export class ChangeThemeDialog extends Component {
       themeIds,
     } = this.props;
     return (
-      <Dialog
-        onClose={handleClose}
-        open={open}
-      >
+      <StyledDialog onClose={handleClose} open={open}>
         <DialogTitle>
-          <Typography variant="h2">
-            {t('changeTheme')}
-          </Typography>
+          <Typography variant="h2">{t('changeTheme')}</Typography>
         </DialogTitle>
-        <DialogContent className={classes.dialogContent}>
+        <DialogContent className="dialogContent">
           <MenuList autoFocusItem>
-            {
-              themeIds.map(value => (
-                <MenuItem
-                  key={value}
-                  className={classes.listitem}
-                  onClick={() => { this.handleThemeChange(value); }}
-                  selected={value === selectedTheme}
-                  value={value}
-                >
-                  <ListItemIcon>
-                    <PaletteIcon className={classes[value]} />
-                  </ListItemIcon>
-                  <ListItemText>{t(value)}</ListItemText>
-                </MenuItem>
-              ))
-            }
+            {themeIds.map((value) => (
+              <MenuItem
+                key={value}
+                className="listitem"
+                onClick={() => this.handleThemeChange(value)}
+                selected={value === selectedTheme}
+                value={value}
+              >
+                <ListItemIcon>
+                  <PaletteIcon sx={{ color: value === 'dark' ? '#000000' : '#BDBDBD' }} />
+                </ListItemIcon>
+                <ListItemText>{t(value)}</ListItemText>
+              </MenuItem>
+            ))}
           </MenuList>
         </DialogContent>
-      </Dialog>
+      </StyledDialog>
     );
   }
 }
 
 ChangeThemeDialog.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
   selectedTheme: PropTypes.string.isRequired,

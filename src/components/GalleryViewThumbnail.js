@@ -1,13 +1,72 @@
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import AnnotationIcon from '@mui/icons-material/CommentSharp';
 import SearchIcon from '@mui/icons-material/SearchSharp';
-import classNames from 'classnames';
 import { InView } from 'react-intersection-observer';
 import MiradorCanvas from '../lib/MiradorCanvas';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
+
+const GalleryViewItem = styled('div')(({
+  theme, selected, hasAnnotations, config,
+}) => ({
+  '&:focus': {
+    outline: 'none',
+  },
+  '&:has(annotations)': {
+    border: `2px solid ${theme.palette.action.selected}`,
+  },
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  '&:selected, &:selected:has(annotations)': {
+    border: `2px solid ${theme.palette.primary.main}`,
+  },
+  border: '2px solid transparent',
+  cursor: 'pointer',
+  display: 'inline-block',
+  margin: `${theme.spacing(1)}px ${theme.spacing(0.5)}px`,
+  maxHeight: config.height + 45,
+  minWidth: '60px',
+  overflow: 'hidden',
+  padding: theme.spacing(0.5),
+  position: 'relative',
+  width: 'min-content',
+
+  ...(selected && {
+    border: `2px solid ${theme.palette.primary.main}`,
+  }),
+
+  ...(hasAnnotations && {
+    border: `2px solid ${theme.palette.action.selected}`,
+  }),
+}));
+
+const SearchChip = styled(Chip)(({ theme }) => ({
+  ...theme.typography.caption,
+  '&.Mui-selected .MuiAvatar-circle': {
+    backgroundColor: theme.palette.highlights?.primary,
+  },
+  marginTop: 2,
+}));
+
+const AnnotationsChip = styled(Chip)(({ theme }) => ({
+  ...theme.typography.caption,
+}));
+
+const AvatarIcon = styled(Avatar)(() => ({
+  backgroundColor: 'transparent',
+}));
+
+const ChipsContainer = styled('div')(() => ({
+  opacity: 0.875,
+  position: 'absolute',
+  right: 0,
+  textAlign: 'right',
+  top: 0,
+}));
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -102,22 +161,23 @@ export class GalleryViewThumbnail extends Component {
   render() {
     const {
       annotationsCount, searchAnnotationsCount,
-      canvas, classes, config, selected,
+      canvas, config, selected,
     } = this.props;
 
     const miradorCanvas = new MiradorCanvas(canvas);
 
     return (
       <InView onChange={this.handleIntersection}>
-        <div
+        <GalleryViewItem
           key={canvas.index}
-          className={
-            classNames(
-              classes.galleryViewItem,
-              selected ? classes.selected : '',
-              searchAnnotationsCount > 0 ? classes.hasAnnotations : '',
-            )
-          }
+          sx={{
+            ...(selected && {
+              border: `2px solid ${theme => theme.palette.primary.main}`,
+            }),
+            ...(searchAnnotationsCount > 0 && {
+              border: `2px solid ${theme => theme.palette.action.selected}`,
+            }),
+          }}
           onClick={this.handleSelect}
           onKeyUp={this.handleKey}
           ref={this.myRef}
@@ -130,43 +190,52 @@ export class GalleryViewThumbnail extends Component {
             variant="outside"
             maxWidth={config.width}
             maxHeight={config.height}
-            style={{
+            sx={{
               margin: '0 auto',
-              maxWidth: `${Math.ceil(config.height * miradorCanvas.aspectRatio)}px`,
+              maxWidth: `${() => Math.ceil(config.height * miradorCanvas.aspectRatio)}px`,
             }}
           >
-            <div className={classes.chips}>
-              { searchAnnotationsCount > 0 && (
-                <Chip
+            <ChipsContainer>
+              {searchAnnotationsCount > 0 && (
+                <SearchChip
                   avatar={(
-                    <Avatar className={classes.avatar} classes={{ circular: classes.avatarIcon }}>
+                    <AvatarIcon>
                       <SearchIcon fontSize="small" />
-                    </Avatar>
+                    </AvatarIcon>
                   )}
                   label={searchAnnotationsCount}
-                  className={classNames(classes.searchChip)}
+                  sx={{
+                    '&.Mui-selected .MuiAvatar-circle': {
+                      backgroundColor: theme => theme.palette.highlights?.primary,
+                    },
+                  }}
                   size="small"
                 />
               )}
-              { (annotationsCount || 0) > 0 && (
-                <Chip
+              {annotationsCount > 0 && (
+                <AnnotationsChip
                   avatar={(
-                    <Avatar className={classes.avatar} classes={{ circular: classes.avatarIcon }}>
-                      <AnnotationIcon className={classes.annotationIcon} />
-                    </Avatar>
+                    <AvatarIcon>
+                      <AnnotationIcon
+                        sx={{
+                          height: '1rem',
+                          width: '1rem',
+                        }}
+                      />
+                    </AvatarIcon>
                   )}
                   label={annotationsCount}
-                  className={
-                    classNames(
-                      classes.annotationsChip,
-                    )
-                  }
+                  sx={{
+                    '&.Mui-selected .MuiAvatar-circle': {
+                      backgroundColor: theme => theme.palette.highlights?.primary,
+                    },
+                  }}
                   size="small"
                 />
               )}
-            </div>
+            </ChipsContainer>
           </IIIFThumbnail>
-        </div>
+        </GalleryViewItem>
       </InView>
     );
   }
@@ -175,7 +244,6 @@ export class GalleryViewThumbnail extends Component {
 GalleryViewThumbnail.propTypes = {
   annotationsCount: PropTypes.number,
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   config: PropTypes.shape({
     height: PropTypes.number,
     width: PropTypes.number,

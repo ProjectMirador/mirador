@@ -1,7 +1,6 @@
 const fs = require('fs');
 const glob = require('glob'); // eslint-disable-line import/no-extraneous-dependencies
 const chalk = require('chalk'); // eslint-disable-line import/no-extraneous-dependencies
-const glob = require('glob'); // eslint-disable-line import/no-extraneous-dependencies
 
 const { error } = console;
 const globOpts = { cwd: 'src/containers' };

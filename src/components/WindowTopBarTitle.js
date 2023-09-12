@@ -1,9 +1,21 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 import ErrorIcon from '@mui/icons-material/ErrorOutlineSharp';
 
+const TitleTypographyStyle = styled(TitleTypography)(({ theme }) => ({
+  ...theme.typography.h6,
+  flexGrow: 1,
+  paddingLeft: theme.spacing(0.5),
+}));
+
+const TitleStyle = styled('div')(({ theme }) => ({
+  ...theme.typography.h6,
+  flexGrow: 1,
+  paddingLeft: theme.spacing(0.5),
+}));
 /** */
 function TitleTypography({ children, ...props }) {
   return (
@@ -27,32 +39,32 @@ export class WindowTopBarTitle extends Component {
    */
   render() {
     const {
-      classes, error, hideWindowTitle, isFetching, manifestTitle,
+      error, hideWindowTitle, isFetching, manifestTitle,
     } = this.props;
 
     let title = null;
     if (isFetching) {
       title = (
-        <TitleTypography className={classes.title}>
+        <TitleTypographyStyle>
           <Skeleton variant="text" />
-        </TitleTypography>
+        </TitleTypographyStyle>
       );
     } else if (error) {
       title = (
         <>
           <ErrorIcon color="error" />
-          <TitleTypography color="textSecondary" className={classes.title}>
+          <TitleTypographyStyle color="textSecondary">
             {error}
-          </TitleTypography>
+          </TitleTypographyStyle>
         </>
       );
     } else if (hideWindowTitle) {
-      title = (<div className={classes.title} />);
+      title = (<TitleStyle />);
     } else {
       title = (
-        <TitleTypography className={classes.title}>
+        <TitleTypographyStyle>
           {manifestTitle}
-        </TitleTypography>
+        </TitleTypographyStyle>
       );
     }
     return title;
@@ -60,7 +72,6 @@ export class WindowTopBarTitle extends Component {
 }
 
 WindowTopBarTitle.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   error: PropTypes.string,
   hideWindowTitle: PropTypes.bool,
   isFetching: PropTypes.bool,

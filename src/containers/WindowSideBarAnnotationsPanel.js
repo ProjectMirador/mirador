@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import withStyles from '@mui/styles/withStyles';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getVisibleCanvasIds,
@@ -22,20 +21,8 @@ const mapStateToProps = (state, { windowId }) => ({
   canvasIds: getVisibleCanvasIds(state, { windowId }),
 });
 
-/** */
-const styles = theme => ({
-  section: {
-    borderBottom: `.5px solid ${theme.palette.section_divider}`,
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    paddingTop: theme.spacing(2),
-  },
-});
-
 const enhance = compose(
   withTranslation(),
-  withStyles(styles),
   connect(mapStateToProps, null),
   withPlugins('WindowSideBarAnnotationsPanel'),
   // further HOC

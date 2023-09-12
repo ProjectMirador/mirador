@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import CompanionWindow from '../containers/CompanionWindow';
 import CanvasInfo from '../containers/CanvasInfo';
 import LocalePicker from '../containers/LocalePicker';
@@ -8,6 +9,13 @@ import CollectionInfo from '../containers/CollectionInfo';
 import ManifestRelatedLinks from '../containers/ManifestRelatedLinks';
 import ns from '../config/css-ns';
 
+const Section = styled('div')(({ theme }) => ({
+  borderBottom: `.5px solid ${theme.palette.section_divider}`,
+  paddingBottom: theme.spacing(1),
+  paddingLeft: theme.spacing(2),
+  paddingRight: theme.spacing(1),
+  paddingTop: theme.spacing(2),
+}));
 /**
  * WindowSideBarInfoPanel
  */
@@ -21,7 +29,6 @@ export class WindowSideBarInfoPanel extends Component {
       windowId,
       id,
       canvasIds,
-      classes,
       collectionPath,
       t,
       locale,
@@ -49,7 +56,7 @@ export class WindowSideBarInfoPanel extends Component {
       >
         {
           canvasIds.map((canvasId, index) => (
-            <div key={canvasId} className={classes.section}>
+            <Section key={canvasId}>
               <CanvasInfo
                 id={id}
                 canvasId={canvasId}
@@ -57,22 +64,22 @@ export class WindowSideBarInfoPanel extends Component {
                 totalSize={canvasIds.length}
                 windowId={windowId}
               />
-            </div>
+            </Section>
           ))
         }
         { collectionPath.length > 0 && (
-          <div className={classes.section}>
+          <Section>
             <CollectionInfo id={id} windowId={windowId} />
-          </div>
+          </Section>
         )}
 
-        <div className={classes.section}>
+        <Section>
           <ManifestInfo id={id} windowId={windowId} />
-        </div>
+        </Section>
 
-        <div className={classes.section}>
+        <Section>
           <ManifestRelatedLinks id={id} windowId={windowId} />
-        </div>
+        </Section>
       </CompanionWindow>
     );
   }
@@ -81,7 +88,6 @@ export class WindowSideBarInfoPanel extends Component {
 WindowSideBarInfoPanel.propTypes = {
   availableLocales: PropTypes.arrayOf(PropTypes.string),
   canvasIds: PropTypes.arrayOf(PropTypes.string),
-  classes: PropTypes.objectOf(PropTypes.string),
   collectionPath: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   locale: PropTypes.string,
@@ -94,7 +100,6 @@ WindowSideBarInfoPanel.propTypes = {
 WindowSideBarInfoPanel.defaultProps = {
   availableLocales: [],
   canvasIds: [],
-  classes: {},
   collectionPath: [],
   locale: '',
   setLocale: undefined,

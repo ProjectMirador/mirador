@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import withStyles from '@mui/styles/withStyles';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getManifestoInstance, getVisibleCanvasAudioResources, getVisibleCanvasVideoResources, getWindow,
@@ -18,16 +17,7 @@ const mapStateToProps = (state, { windowId }) => {
   };
 };
 
-const styles = {
-  primaryWindow: {
-    display: 'flex',
-    flex: 1,
-    position: 'relative',
-  },
-};
-
 const enhance = compose(
-  withStyles(styles),
   connect(mapStateToProps, null),
   withPlugins('PrimaryWindow'),
 );
