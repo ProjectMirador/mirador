@@ -1,9 +1,19 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import { styled } from '@mui/material/styles';
 import MoreHorizontalIcon from '@mui/icons-material/MoreHorizSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import WorkspaceOptionsMenu from '../containers/WorkspaceOptionsMenu';
+
+const StyledMiradorMenuButton = styled(MiradorMenuButton)(({ open, theme }) => {
+  const css = {
+    margin: theme.spacing(1),
+  };
+  if (open) {
+    css.backgroundColor = theme.palette.action.selected;
+  }
+  return css;
+});
 
 /**
  * WorkspaceOptionsButton ~
@@ -46,20 +56,18 @@ export class WorkspaceOptionsButton extends Component {
    * Returns the rendered component
   */
   render() {
-    const { classes, t } = this.props;
+    const { t } = this.props;
     const { anchorEl, open } = this.state;
 
     return (
       <>
-        <MiradorMenuButton
+        <StyledMiradorMenuButton
           aria-label={t('workspaceOptions')}
-          className={
-            classNames(classes.ctrlBtn, (open ? classes.ctrlBtnSelected : null))
-          }
+          open={open}
           onClick={this.handleMenuClick}
         >
           <MoreHorizontalIcon />
-        </MiradorMenuButton>
+        </StyledMiradorMenuButton>
 
         <WorkspaceOptionsMenu
           anchorEl={anchorEl}
@@ -72,6 +80,5 @@ export class WorkspaceOptionsButton extends Component {
 }
 
 WorkspaceOptionsButton.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   t: PropTypes.func.isRequired,
 };
