@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Slide from '@mui/material/Slide';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeftSharp';
 import ArrowRightIcon from '@mui/icons-material/ArrowRightSharp';
@@ -7,17 +8,37 @@ import CompanionWindowFactory from '../containers/CompanionWindowFactory';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
+const StyledRoot = styled('div')(({ theme }) => ({
+  display: 'flex',
+  minHeight: 0,
+  position: 'relative',
+  zIndex: theme.zIndex.appBar - 2,
+}));
+
+const StyledWrapper = styled('div')(({ }) => ({
+}));
+
+const StyledToggle = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  border: `1px solid ${theme.palette.mode === 'dark' ? theme.palette.divider : theme.palette.shades?.dark}`,
+  borderRadius: 0,
+  height: '48px',
+  left: '100%',
+  marginTop: '1rem',
+  padding: 2,
+  position: 'absolute',
+  width: '23px',
+  zIndex: theme.zIndex.drawer,
+}));
+
+const StyledToggleButton = styled(MiradorMenuButton)({
+  marginBottom: 12,
+  marginTop: 12,
+  padding: 0,
+});
+
 /** */
 export class CompanionArea extends Component {
-  /** */
-  areaLayoutClass() {
-    const {
-      classes, position,
-    } = this.props;
-
-    return (position === 'bottom' || position === 'far-bottom') ? classes.horizontal : null;
-  }
-
   /** */
   collapseIcon() {
     const { companionAreaOpen, direction } = this.props;
@@ -51,45 +72,54 @@ export class CompanionArea extends Component {
   /** */
   render() {
     const {
-      classes, companionWindowIds, companionAreaOpen, setCompanionAreaOpen,
+      companionWindowIds, companionAreaOpen, setCompanionAreaOpen,
       position, sideBarOpen, t, windowId,
     } = this.props;
 
     return (
-      <div className={[classes.root, this.areaLayoutClass(), ns(`companion-area-${position}`)].join(' ')}>
+      <StyledRoot
+        sx={{
+          ...((position === 'bottom' || position === 'far-bottom') && {
+            flexDirection: 'column',
+            width: '100%',
+          }),
+        }}
+        className={`companion-area-${position}`}
+      >
         <Slide in={companionAreaOpen} direction={this.slideDirection()}>
-          <div className={[ns('companion-windows'), companionWindowIds.length > 0 && classes[position], this.areaLayoutClass()].join(' ')} style={{ display: companionAreaOpen ? 'flex' : 'none' }}>
-            {
-              companionWindowIds.map(id => (
-                <CompanionWindowFactory id={id} key={id} windowId={windowId} />
-              ))
-            }
-          </div>
+          <StyledWrapper
+            className={`${ns('companion-windows')} ${companionWindowIds.length > 0 && classes[position]}`}
+            style={{ display: companionAreaOpen ? 'flex' : 'none' }}
+            sx={{
+              ...((position === 'bottom' || position === 'far-bottom') && {
+                flexDirection: 'column',
+                width: '100%',
+              }),
+            }}
+          >
+            {companionWindowIds.map((id) => (
+              <CompanionWindowFactory id={id} key={id} windowId={windowId} />
+            ))}
+          </StyledWrapper>
         </Slide>
-        {
-          setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindowIds.length > 0
-          && (
-            <div className={classes.toggle}>
-              <MiradorMenuButton
-                aria-expanded={companionAreaOpen}
-                aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
-                className={classes.toggleButton}
-                key={companionAreaOpen ? 'collapse' : 'expand'}
-                onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
-                TooltipProps={{ placement: 'right' }}
-              >
-                {this.collapseIcon()}
-              </MiradorMenuButton>
-            </div>
-          )
-        }
-      </div>
+        {setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindowIds.length > 0 && (
+        <StyledToggle>
+          <StyledToggleButton
+            aria-expanded={companionAreaOpen}
+            aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
+            onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
+            TooltipProps={{ placement: 'right' }}
+          >
+            {this.collapseIcon()}
+          </StyledToggleButton>
+        </StyledToggle>
+        )}
+      </StyledRoot>
     );
   }
 }
 
 CompanionArea.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   companionAreaOpen: PropTypes.bool.isRequired,
   companionWindowIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   direction: PropTypes.string.isRequired,
@@ -101,7 +131,6 @@ CompanionArea.propTypes = {
 };
 
 CompanionArea.defaultProps = {
-  classes: {},
   setCompanionAreaOpen: () => {},
   sideBarOpen: false,
 };

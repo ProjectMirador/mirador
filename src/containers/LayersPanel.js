@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import withStyles from '@mui/styles/withStyles';
 import { withPlugins } from '../extend/withPlugins';
 import { LayersPanel } from '../components/LayersPanel';
 import {
@@ -15,17 +14,8 @@ const mapStateToProps = (state, { id, windowId }) => ({
   canvasIds: getVisibleCanvasIds(state, { windowId }),
 });
 
-/**
- *
- * @param theme
- * @returns {label: {paddingLeft: number}}}
- */
-const styles = theme => ({
-});
-
 const enhance = compose(
   withTranslation(),
-  withStyles(styles),
   connect(mapStateToProps),
   withPlugins('LayersPanel'),
 );

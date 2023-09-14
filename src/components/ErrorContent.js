@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -8,12 +9,25 @@ import Alert from '@mui/material/Alert';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { PluginHook } from './PluginHook';
 
+const StyledAccordion = styled(Accordion)(({ theme }) => ({
+  backgroundColor: theme.palette.error.main,
+  color: '#fff',
+  fontWeight: theme.typography.fontWeightMedium,
+}));
+
+const StyledAccordionDetails = styled(AccordionDetails)({
+  '& pre': {
+    height: '100px',
+    overflowY: 'scroll',
+  },
+  flexDirection: 'column',
+}));
+
 /** */
 export class ErrorContent extends Component {
   /** */
   render() {
     const {
-      classes,
       error,
       metadata,
       showJsError,
@@ -28,29 +42,24 @@ export class ErrorContent extends Component {
           {t('errorDialogTitle')}
         </Alert>
 
-        {showJsError && (
-          <Accordion square className={classes.alert}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-            >
-              <Typography>{t('jsError', { message: error.message, name: error.name })}</Typography>
-            </AccordionSummary>
-            <AccordionDetails className={classes.details}>
-              <pre>{ t('jsStack', { stack: error.stack }) }</pre>
-              { metadata && (
-                <pre>{JSON.stringify(metadata, null, 2)}</pre>
-              )}
-            </AccordionDetails>
-          </Accordion>
-        )}
-        <PluginHook {...this.props} />
-      </>
+      {showJsError && (
+        <StyledAccordion square>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>{t('jsError', { message: error.message, name: error.name })}</Typography>
+          </AccordionSummary>
+          <StyledAccordionDetails>
+            <pre>{t('jsStack', { stack: error.stack })}</pre>
+            {metadata && <pre>{JSON.stringify(metadata, null, 2)}</pre>}
+          </StyledAccordionDetails>
+        </StyledAccordion>
+      )}
+      <PluginHook {...this.props} />
+    </>
     );
   }
 }
 
 ErrorContent.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   error: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   metadata: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   showJsError: PropTypes.bool,

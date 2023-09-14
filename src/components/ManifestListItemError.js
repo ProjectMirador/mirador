@@ -15,7 +15,7 @@ export class ManifestListItemError extends Component {
   */
   render() {
     const {
-      classes, manifestId, onDismissClick, onTryAgainClick, t,
+      manifestId, onDismissClick, onTryAgainClick, t,
     } = this.props;
 
     return (
@@ -24,12 +24,17 @@ export class ManifestListItemError extends Component {
           <Grid container item xs={12} sm={6}>
             <Grid item xs={4} sm={3}>
               <Grid container justifyContent="center">
-                <ErrorIcon className={classes.errorIcon} />
+                <ErrorIcon sx={{
+                  color: 'error.main',
+                  height: '2rem',
+                  width: '2rem',
+                }}
+                />
               </Grid>
             </Grid>
             <Grid item xs={8} sm={9}>
               <Typography>{t('manifestError')}</Typography>
-              <Typography className={classes.manifestIdText}>{manifestId}</Typography>
+              <Typography sx={{ wordBreak: 'break-all' }}>{manifestId}</Typography>
             </Grid>
           </Grid>
         </Grid>
@@ -52,7 +57,6 @@ export class ManifestListItemError extends Component {
 }
 
 ManifestListItemError.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   manifestId: PropTypes.string.isRequired,
   onDismissClick: PropTypes.func.isRequired,
   onTryAgainClick: PropTypes.func.isRequired,

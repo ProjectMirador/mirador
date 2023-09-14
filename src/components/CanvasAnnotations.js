@@ -9,6 +9,18 @@ import Typography from '@mui/material/Typography';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
 
+const annotationListItem = {
+  '&$hovered': {
+    backgroundColor: (theme) => theme.palette.action.hover,
+  },
+  '&:hover,&:focus': {
+    backgroundColor: (theme) => theme.palette.action.hover,
+  },
+  borderBottom: (theme) => `0.5px solid ${theme.palette.divider}`,
+  cursor: 'pointer',
+  whiteSpace: 'normal',
+};
+
 /**
  * CanvasAnnotations ~
 */
@@ -58,7 +70,7 @@ export class CanvasAnnotations extends Component {
   */
   render() {
     const {
-      annotations, classes, index, label, selectedAnnotationId, t, totalSize,
+      annotations, index, label, selectedAnnotationId, t, totalSize,
       listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
       containerRef,
     } = this.props;
@@ -66,53 +78,46 @@ export class CanvasAnnotations extends Component {
 
     return (
       <>
-        <Typography className={classes.sectionHeading} variant="overline">
+        <Typography sx={{ paddingLeft: 2, paddingRight: 1, paddingTop: 2 }} variant="overline">
           {t('annotationCanvasLabel', { context: `${index + 1}/${totalSize}`, label })}
         </Typography>
         <MenuList autoFocusItem variant="selectedMenu">
-          {
-            annotations.map(annotation => (
-              <MenuItem
-                button
-                component={listContainerComponent}
-                className={clsx(
-                  classes.annotationListItem,
-                  {
-                    [classes.hovered]: hoveredAnnotationIds.includes(annotation.id),
-                  },
-                )}
-                key={annotation.id}
-                annotationid={annotation.id}
-                selected={selectedAnnotationId === annotation.id}
-                onClick={e => this.handleClick(e, annotation)}
-                onFocus={() => this.handleAnnotationHover(annotation)}
-                onBlur={this.handleAnnotationBlur}
-                onMouseEnter={() => this.handleAnnotationHover(annotation)}
-                onMouseLeave={this.handleAnnotationBlur}
+          {annotations.map((annotation) => (
+            <MenuItem
+              button
+              component={listContainerComponent}
+              className={clsx(
+                {
+                  [hoveredAnnotationIds.includes(annotation.id) ? 'hovered' : '']: true,
+                },
+                annotationListItem,
+              )}
+              key={annotation.id}
+              annotationid={annotation.id}
+              selected={selectedAnnotationId === annotation.id}
+              onClick={(e) => this.handleClick(e, annotation)}
+              onFocus={() => this.handleAnnotationHover(annotation)}
+              onBlur={this.handleAnnotationBlur}
+              onMouseEnter={() => this.handleAnnotationHover(annotation)}
+              onMouseLeave={this.handleAnnotationBlur}
+            >
+              <ScrollTo
+                containerRef={containerRef}
+                key={`${annotation.id}-scroll`}
+                offsetTop={96} // offset for the height of the form above
+                scrollTo={selectedAnnotationId === annotation.id}
               >
-                <ScrollTo
-                  containerRef={containerRef}
-                  key={`${annotation.id}-scroll`}
-                  offsetTop={96} // offset for the height of the form above
-                  scrollTo={selectedAnnotationId === annotation.id}
-                >
-                  <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
-                    <SanitizedHtml
-                      ruleSet={htmlSanitizationRuleSet}
-                      htmlString={annotation.content}
-                    />
-                    <div>
-                      {
-                        annotation.tags.map(tag => (
-                          <Chip size="small" variant="outlined" label={tag} id={tag} className={classes.chip} key={tag.toString()} />
-                        ))
-                      }
-                    </div>
-                  </ListItemText>
-                </ScrollTo>
-              </MenuItem>
-            ))
-          }
+                <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
+                  <SanitizedHtml ruleSet={htmlSanitizationRuleSet} htmlString={annotation.content} />
+                  <div>
+                    {annotation.tags.map((tag) => (
+                      <Chip size="small" variant="outlined" label={tag} id={tag} key={tag.toString()} />
+                    ))}
+                  </div>
+                </ListItemText>
+              </ScrollTo>
+            </MenuItem>
+          ))}
         </MenuList>
       </>
     );
@@ -126,7 +131,6 @@ CanvasAnnotations.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   ),
-  classes: PropTypes.objectOf(PropTypes.string),
   containerRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
@@ -146,7 +150,6 @@ CanvasAnnotations.propTypes = {
 };
 CanvasAnnotations.defaultProps = {
   annotations: [],
-  classes: {},
   containerRef: undefined,
   hoveredAnnotationIds: [],
   htmlSanitizationRuleSet: 'iiif',

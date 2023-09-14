@@ -1,8 +1,22 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+
+/**
+   */
+const inputStyle = (theme) => ({
+  ...theme.typography.body1,
+});
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  textAlign: 'right',
+  [theme.breakpoints.up('sm')]: {
+    textAlign: 'inherit',
+  },
+}));
 
 /**
  * Provides a form for user input of a manifest url
@@ -68,7 +82,6 @@ export class ManifestForm extends Component {
     const { formValue } = this.state;
     const {
       addResourcesOpen,
-      classes,
       onCancel,
       t,
     } = this.props;
@@ -92,11 +105,11 @@ export class ManifestForm extends Component {
                 shrink: true,
               }}
               InputProps={{
-                className: classes.input,
+                style: inputStyle,
               }}
             />
           </Grid>
-          <Grid item xs={12} sm={4} md={3} className={classes.buttons}>
+          <StyledGrid item xs={12} sm={4} md={3}>
             { onCancel && (
               <Button onClick={this.handleCancel}>
                 {t('cancel')}
@@ -105,7 +118,7 @@ export class ManifestForm extends Component {
             <Button id="fetchBtn" type="submit" variant="contained" color="primary">
               {t('fetchManifest')}
             </Button>
-          </Grid>
+          </StyledGrid>
         </Grid>
       </form>
     );
@@ -115,14 +128,12 @@ export class ManifestForm extends Component {
 ManifestForm.propTypes = {
   addResource: PropTypes.func.isRequired,
   addResourcesOpen: PropTypes.bool.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string),
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
   t: PropTypes.func,
 };
 
 ManifestForm.defaultProps = {
-  classes: {},
   onCancel: null,
   onSubmit: () => {},
   t: key => key,

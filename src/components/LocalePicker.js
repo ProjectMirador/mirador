@@ -16,7 +16,6 @@ export class LocalePicker extends Component {
   render() {
     const {
       availableLocales,
-      classes,
       locale,
       setLocale,
     } = this.props;
@@ -36,8 +35,14 @@ export class LocalePicker extends Component {
           value={locale}
           onChange={(e) => { setLocale(e.target.value); }}
           name="locale"
-          classes={{ select: classes.select }}
-          className={classes.selectEmpty}
+          sx={{
+            '& .MuiSelect-select': {
+              '&:focus': {
+                backgroundColor: 'background.paper',
+              },
+            },
+            backgroundColor: 'background.paper',
+          }}
         >
           {
             availableLocales.map(l => (
@@ -52,14 +57,12 @@ export class LocalePicker extends Component {
 
 LocalePicker.propTypes = {
   availableLocales: PropTypes.arrayOf(PropTypes.string),
-  classes: PropTypes.objectOf(PropTypes.string),
   locale: PropTypes.string,
   setLocale: PropTypes.func,
 };
 
 LocalePicker.defaultProps = {
   availableLocales: [],
-  classes: {},
   locale: '',
   setLocale: undefined,
 };

@@ -12,7 +12,7 @@ export class GalleryView extends Component {
    */
   render() {
     const {
-      canvases, classes, viewingDirection, windowId,
+      canvases, viewingDirection, windowId,
     } = this.props;
     const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
     return (
@@ -22,7 +22,16 @@ export class GalleryView extends Component {
         dir={htmlDir}
         square
         elevation={0}
-        className={classes.galleryContainer}
+        sx={{
+          alignItems: 'flex-start',
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          overflowX: 'hidden',
+          overflowY: 'scroll',
+          padding: '50px 0 50px 20px',
+          width: '100%',
+        }}
         id={`${windowId}-gallery`}
       >
         {
@@ -41,12 +50,10 @@ export class GalleryView extends Component {
 
 GalleryView.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.objectOf(PropTypes.string),
   viewingDirection: PropTypes.string,
   windowId: PropTypes.string.isRequired,
 };
 
 GalleryView.defaultProps = {
-  classes: {},
   viewingDirection: '',
 };

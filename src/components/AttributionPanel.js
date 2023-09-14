@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Skeleton from '@mui/material/Skeleton';
@@ -8,6 +9,25 @@ import CompanionWindow from '../containers/CompanionWindow';
 import { LabelValueMetadata } from './LabelValueMetadata';
 import ns from '../config/css-ns';
 import { PluginHook } from './PluginHook';
+
+/**
+ *
+ * @param theme
+ * @returns {label: {paddingLeft: number}}}
+ */
+const Logo = styled(Img)(() => ({
+  maxWidth: '100%',
+}));
+const Placeholder = styled(Skeleton)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[300],
+}));
+const Section = styled('div')(({ theme }) => ({
+  borderBottom: `.5px solid ${theme.palette.section_divider}`,
+  paddingBottom: theme.spacing(1),
+  paddingLeft: theme.spacing(2),
+  paddingRight: theme.spacing(1),
+  paddingTop: theme.spacing(2),
+}));
 
 /**
  * WindowSideBarInfoPanel
@@ -24,7 +44,6 @@ export class AttributionPanel extends Component {
       rights,
       windowId,
       id,
-      classes,
       t,
     } = this.props;
 
@@ -35,7 +54,7 @@ export class AttributionPanel extends Component {
         windowId={windowId}
         id={id}
       >
-        <div className={classes.section}>
+        <Section>
           { requiredStatement && (
             <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
           )}
@@ -53,20 +72,19 @@ export class AttributionPanel extends Component {
               </dl>
             )
           }
-        </div>
+        </Section>
 
         { manifestLogo && (
-          <div className={classes.section}>
-            <Img
+          <Section>
+            <Logo
               src={[manifestLogo]}
               alt=""
               role="presentation"
-              className={classes.logo}
               unloader={
-                <Skeleton className={classes.placeholder} variant="rectangular" height={60} width={60} />
+                <Placeholder variant="rectangular" height={60} width={60} />
               }
             />
-          </div>
+          </Section>
         )}
 
         <PluginHook {...this.props} />
@@ -76,7 +94,6 @@ export class AttributionPanel extends Component {
 }
 
 AttributionPanel.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   manifestLogo: PropTypes.string,
   requiredStatement: PropTypes.arrayOf(PropTypes.shape({
@@ -89,7 +106,6 @@ AttributionPanel.propTypes = {
 };
 
 AttributionPanel.defaultProps = {
-  classes: {},
   manifestLogo: null,
   requiredStatement: null,
   rights: null,
