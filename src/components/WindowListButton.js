@@ -1,9 +1,14 @@
 import { Component } from 'react';
 import BookmarksIcon from '@mui/icons-material/BookmarksSharp';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import { styled } from '@mui/material/styles';
 import WindowList from '../containers/WindowList';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+
+const StyledButton = styled(MiradorMenuButton)(({ theme }) => ({
+  margin: theme.spacing(1),
+  paddingLeft: 12,
+}));
 
 /**
  * WindowListButton ~
@@ -33,34 +38,36 @@ export class WindowListButton extends Component {
   */
   render() {
     const {
-      classes, disabled, t, windowCount,
+      disabled, t, windowCount,
     } = this.props;
     const { windowListAnchor } = this.state;
 
     return (
       <>
-        <MiradorMenuButton
+        <StyledButton
           aria-haspopup="true"
           aria-label={t('listAllOpenWindows')}
           aria-owns={windowListAnchor ? 'window-list' : null}
-          className={
-            classNames(classes.ctrlBtn, (windowListAnchor ? classes.ctrlBtnSelected : null))
-          }
+          sx={{
+            ...(windowListAnchor && {
+              backgroundColor: 'action.selected',
+            }),
+          }}
           disabled={disabled}
           badge
-          BadgeProps={{ badgeContent: windowCount, classes: { badge: classes.badge } }}
-          onClick={e => this.handleOpen(e)}
+          badgeContent={{badgeContent: windowCount }}
+          onClick={(e) => this.handleOpen(e)}
         >
           <BookmarksIcon />
-        </MiradorMenuButton>
+        </StyledButton>
 
         {Boolean(windowListAnchor) && (
-          <WindowList
-            anchorEl={windowListAnchor}
-            id="window-list"
-            open={Boolean(windowListAnchor)}
-            handleClose={this.handleClose}
-          />
+        <WindowList
+          anchorEl={windowListAnchor}
+          id="window-list"
+          open={Boolean(windowListAnchor)}
+          handleClose={this.handleClose}
+        />
         )}
       </>
     );
@@ -68,12 +75,10 @@ export class WindowListButton extends Component {
 }
 
 WindowListButton.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   disabled: PropTypes.bool,
   t: PropTypes.func.isRequired,
   windowCount: PropTypes.number.isRequired,
 };
 WindowListButton.defaultProps = {
-  classes: {},
   disabled: false,
 };

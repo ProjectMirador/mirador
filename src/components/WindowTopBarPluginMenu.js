@@ -1,10 +1,14 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import MoreVertIcon from '@mui/icons-material/MoreVertSharp';
 import Menu from '@mui/material/Menu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { PluginHook } from './PluginHook';
 
+const StyledButton = styled(MiradorMenuButton)(({ theme }) => ({
+  margin: theme.spacing(1),
+}));
 /**
  *
  */
@@ -47,7 +51,7 @@ export class WindowTopBarPluginMenu extends Component {
    */
   render() {
     const {
-      classes, container, PluginComponents, t, windowId, menuIcon,
+      container, PluginComponents, t, windowId, menuIcon,
     } = this.props;
     const { anchorEl, open } = this.state;
     const windowPluginMenuId = `window-plugin-menu_${windowId}`;
@@ -55,15 +59,19 @@ export class WindowTopBarPluginMenu extends Component {
 
     return (
       <>
-        <MiradorMenuButton
+        <StyledButton
           aria-haspopup="true"
           aria-label={t('windowPluginMenu')}
           aria-owns={open ? windowPluginMenuId : undefined}
-          className={open ? classes.ctrlBtnSelected : null}
+          sx={{
+            ...(open && {
+              backgroundColor: 'action.selected',
+            }),
+          }}
           onClick={this.handleMenuClick}
         >
           {menuIcon}
-        </MiradorMenuButton>
+        </StyledButton>
 
         <Menu
           id={windowPluginMenuId}
@@ -90,9 +98,6 @@ export class WindowTopBarPluginMenu extends Component {
 
 WindowTopBarPluginMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.shape({
-    ctrlBtnSelected: PropTypes.string,
-  }),
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   menuIcon: PropTypes.element,
   open: PropTypes.bool,
@@ -105,7 +110,6 @@ WindowTopBarPluginMenu.propTypes = {
 
 WindowTopBarPluginMenu.defaultProps = {
   anchorEl: null,
-  classes: {},
   container: null,
   menuIcon: <MoreVertIcon />,
   open: false,
