@@ -10,7 +10,7 @@ import MiradorCanvas from '../lib/MiradorCanvas';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 
 const GalleryViewItem = styled('div')(({
-  theme, selected, hasAnnotations, config,
+  theme, selected, hasAnnotations,
 }) => ({
   '&:focus': {
     outline: 'none',
@@ -28,7 +28,6 @@ const GalleryViewItem = styled('div')(({
   cursor: 'pointer',
   display: 'inline-block',
   margin: `${theme.spacing(1)}px ${theme.spacing(0.5)}px`,
-  maxHeight: config.height + 45,
   minWidth: '60px',
   overflow: 'hidden',
   padding: theme.spacing(0.5),
@@ -171,6 +170,7 @@ export class GalleryViewThumbnail extends Component {
         <GalleryViewItem
           key={canvas.index}
           sx={{
+            maxHeight: config.height + 45,
             ...(selected && {
               border: `2px solid ${theme => theme.palette.primary.main}`,
             }),
