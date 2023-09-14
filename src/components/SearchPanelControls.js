@@ -17,7 +17,7 @@ const StyledForm = styled('form')(({ theme }) => ({
   width: '100%',
 }));
 
-const StyledEndAdornment = styled('div')(({ }) => ({
+const StyledEndAdornment = styled('div')(() => ({
   position: 'absolute',
   right: 0,
 }));

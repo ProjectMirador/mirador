@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 */
 export function ScrollIndicatedDialogContent(props) {
   const { className, ...otherProps } = props;
-  
+
   return (
     <DialogContent
       sx={{

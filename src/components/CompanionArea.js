@@ -15,7 +15,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
   zIndex: theme.zIndex.appBar - 2,
 }));
 
-const StyledWrapper = styled('div')(({ }) => ({
+const StyledWrapper = styled('div')(() => ({
 }));
 
 const StyledToggle = styled('div')(({ theme }) => ({
@@ -88,7 +88,7 @@ export class CompanionArea extends Component {
       >
         <Slide in={companionAreaOpen} direction={this.slideDirection()}>
           <StyledWrapper
-            className={`${ns('companion-windows')} ${companionWindowIds.length > 0 && classes[position]}`}
+            className={`${ns('companion-windows')} ${companionWindowIds.length > 0}`}
             style={{ display: companionAreaOpen ? 'flex' : 'none' }}
             sx={{
               ...((position === 'bottom' || position === 'far-bottom') && {

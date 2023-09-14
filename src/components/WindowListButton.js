@@ -55,7 +55,7 @@ export class WindowListButton extends Component {
           }}
           disabled={disabled}
           badge
-          badgeContent={{badgeContent: windowCount }}
+          badgeContent={{ badgeContent: windowCount }}
           onClick={(e) => this.handleOpen(e)}
         >
           <BookmarksIcon />

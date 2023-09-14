@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/CloseSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
-const StyledMiradorMenuButton = styled(MiradorMenuButton)(({}) => ({
+const StyledMiradorMenuButton = styled(MiradorMenuButton)(() => ({
   marginLeft: 'auto',
 }));
 /** */
