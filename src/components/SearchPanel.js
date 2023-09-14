@@ -19,7 +19,6 @@ export class SearchPanel extends Component {
   /** */
   render() {
     const {
-      classes,
       fetchSearch,
       windowId,
       id,
@@ -40,7 +39,7 @@ export class SearchPanel extends Component {
               query && query !== '' && (
                 <Chip
                   role="button"
-                  className={classes.clearChip}
+                  sx={{ marginLeft: 1 }}
                   color="secondary"
                   label={t('clearSearch')}
                   onClick={removeSearch}
@@ -66,7 +65,19 @@ export class SearchPanel extends Component {
         {
           fetchSearch && suggestedSearches && query === '' && suggestedSearches.map(search => (
             <Typography component="p" key={search} variant="body1">
-              <Button className={classes.inlineButton} color="secondary" onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}>
+              <Button
+                sx={{
+                  '& span': {
+                    lineHeight: '1.5em',
+                  },
+                  margin: 2,
+                  padding: 0,
+                  textAlign: 'inherit',
+                  textTransform: 'none',
+                }}
+                color="secondary"
+                onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}
+              >
                 {t('suggestSearch', { query: search })}
               </Button>
             </Typography>
@@ -78,10 +89,6 @@ export class SearchPanel extends Component {
 }
 
 SearchPanel.propTypes = {
-  classes: PropTypes.shape({
-    clearChip: PropTypes.string,
-    inlineButton: PropTypes.string,
-  }),
   fetchSearch: PropTypes.func,
   id: PropTypes.string.isRequired,
   query: PropTypes.string,
@@ -95,7 +102,6 @@ SearchPanel.propTypes = {
 };
 
 SearchPanel.defaultProps = {
-  classes: {},
   fetchSearch: undefined,
   query: '',
   suggestedSearches: [],

@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import withStyles from '@mui/styles/withStyles';
 import * as actions from '../state/actions';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchPanel } from '../components/SearchPanel';
@@ -22,27 +21,8 @@ const mapDispatchToProps = (dispatch, props) => ({
   removeSearch: () => dispatch(actions.removeSearch(props.windowId, props.id)),
 });
 
-/**
-* Styles for withStyles HOC
-*/
-const styles = theme => ({
-  clearChip: {
-    marginLeft: theme.spacing(1),
-  },
-  inlineButton: {
-    '& span': {
-      lineHeight: '1.5em',
-    },
-    margin: theme.spacing(2),
-    padding: 0,
-    textAlign: 'inherit',
-    textTransform: 'none',
-  },
-});
-
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withStyles(styles),
   withTranslation(),
   withPlugins('SearchPanel'),
 );

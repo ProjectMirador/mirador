@@ -42,7 +42,7 @@ export class SearchPanelNavigation extends Component {
   */
   render() {
     const {
-      numTotal, searchHits, selectedContentSearchAnnotation, classes, t, direction,
+      numTotal, searchHits, selectedContentSearchAnnotation, t, direction,
     } = this.props;
 
     const iconStyle = direction === 'rtl' ? { transform: 'rotate(180deg)' } : {};
@@ -57,7 +57,7 @@ export class SearchPanelNavigation extends Component {
     if (searchHits.length === 0) return null;
 
     return (
-      <Typography variant="body2" align="center" classes={classes}>
+      <Typography variant="body2" align="center">
         <MiradorMenuButton
           aria-label={t('searchPreviousResult')}
           disabled={!this.hasPreviousResult(currentHitIndex)}
@@ -80,7 +80,6 @@ export class SearchPanelNavigation extends Component {
   }
 }
 SearchPanelNavigation.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   direction: PropTypes.string.isRequired,
   numTotal: PropTypes.number,
   searchHits: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
@@ -93,7 +92,6 @@ SearchPanelNavigation.propTypes = {
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
 SearchPanelNavigation.defaultProps = {
-  classes: {},
   numTotal: undefined,
   searchHits: [],
   t: key => key,

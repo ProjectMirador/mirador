@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
@@ -80,7 +81,6 @@ export class SearchResults extends Component {
   /** */
   render() {
     const {
-      classes,
       companionWindowId,
       containerRef,
       isFetching,
@@ -106,14 +106,18 @@ export class SearchResults extends Component {
       <>
         { focused && (
           <ScrollTo containerRef={containerRef} offsetTop={96} scrollTo>
-            <Button onClick={this.toggleFocus} className={classes.navigation} size="small">
+            <Button onClick={this.toggleFocus} sx={{ textTransform: 'none' }} size="small">
               <BackIcon />
               {t('backToResults')}
             </Button>
           </ScrollTo>
         )}
         {noResultsState && (
-          <Typography className={classes.noResults}>
+          <Typography sx={{
+            padding: 2,
+            typography: 'h6',
+          }}
+          >
             {t('searchNoResults')}
           </Typography>
         )}
@@ -122,7 +126,7 @@ export class SearchResults extends Component {
         </List>
         { nextSearch && (
           <Button
-            className={classes.moreButton}
+            sx={{ width: '100%' }}
             color="secondary"
             onClick={() => fetchSearch(windowId, companionWindowId, nextSearch, query)}
           >
@@ -137,7 +141,6 @@ export class SearchResults extends Component {
 }
 
 SearchResults.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string.isRequired,
   containerRef: PropTypes.oneOfType([
     PropTypes.func,
@@ -155,7 +158,6 @@ SearchResults.propTypes = {
 };
 
 SearchResults.defaultProps = {
-  classes: {},
   containerRef: undefined,
   isFetching: false,
   nextSearch: undefined,

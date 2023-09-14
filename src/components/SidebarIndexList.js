@@ -23,7 +23,6 @@ export class SidebarIndexList extends Component {
   render() {
     const {
       canvases,
-      classes,
       containerRef,
       selectedCanvasIds,
       setCanvas,
@@ -51,7 +50,11 @@ export class SidebarIndexList extends Component {
             return (
               <MenuItem
                 key={canvas.id}
-                className={classes.listItem}
+                sx={{
+                  borderBottom: '0.5px',
+                  borderBottomColor: 'divider',
+                  paddingRight: 1,
+                }}
                 alignItems="flex-start"
                 onClick={onClick}
                 button
@@ -77,7 +80,6 @@ export class SidebarIndexList extends Component {
 
 SidebarIndexList.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   containerRef: PropTypes.oneOf([PropTypes.func, PropTypes.object]).isRequired,
   selectedCanvasIds: PropTypes.arrayOf(PropTypes.string),
   setCanvas: PropTypes.func.isRequired,

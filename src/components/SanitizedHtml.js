@@ -1,9 +1,16 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import DOMPurify from 'dompurify';
 import ns from '../config/css-ns';
 import htmlRules from '../lib/htmlRules';
 
+const StyledSpan = styled('span')(({ theme }) => ({
+  '& a': {
+    color: theme.palette.primary.main,
+    textDecoration: 'underline',
+  },
+}));
 /**
 */
 export class SanitizedHtml extends Component {
@@ -11,7 +18,7 @@ export class SanitizedHtml extends Component {
   */
   render() {
     const {
-      classes, htmlString, ruleSet, ...props
+      htmlString, ruleSet, ...props
     } = this.props;
 
     // Add a hook to make all links open a new window
@@ -25,8 +32,8 @@ export class SanitizedHtml extends Component {
     });
 
     return (
-      <span
-        className={[classes.root, ns('third-party-html')].join(' ')}
+      <StyledSpan
+        className={[ns('third-party-html')].join(' ')}
         dangerouslySetInnerHTML={{ // eslint-disable-line react/no-danger
           __html: DOMPurify.sanitize(htmlString, htmlRules[ruleSet]),
         }}
@@ -37,11 +44,6 @@ export class SanitizedHtml extends Component {
 }
 
 SanitizedHtml.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   htmlString: PropTypes.string.isRequired,
   ruleSet: PropTypes.string.isRequired,
-};
-
-SanitizedHtml.defaultProps = {
-  classes: {},
 };

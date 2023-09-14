@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import withStyles from '@mui/styles/withStyles';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchPanelControls } from '../components/SearchPanelControls';
 import * as actions from '../state/actions';
@@ -33,26 +32,8 @@ const mapDispatchToProps = {
   fetchSearch: actions.fetchSearch,
 };
 
-/** */
-const styles = theme => ({
-  endAdornment: {
-    position: 'absolute',
-    right: 0,
-  },
-  form: {
-    paddingBottom: theme.spacing(1),
-    paddingRight: theme.spacing(1.5),
-    width: '100%',
-  },
-  searchProgress: {
-    position: 'absolute',
-    right: 0,
-  },
-});
-
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withStyles(styles),
   withTranslation(),
   withPlugins('SearchPanelControls'),
 );
