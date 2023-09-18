@@ -5,15 +5,9 @@ import MoreHorizontalIcon from '@mui/icons-material/MoreHorizSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import WorkspaceOptionsMenu from '../containers/WorkspaceOptionsMenu';
 
-const StyledMiradorMenuButton = styled(MiradorMenuButton)(({ open, theme }) => {
-  const css = {
-    margin: theme.spacing(1),
-  };
-  if (open) {
-    css.backgroundColor = theme.palette.action.selected;
-  }
-  return css;
-});
+const StyledButton = styled(MiradorMenuButton)(({ theme }) => ({
+  margin: theme.spacing(1),
+}));
 
 /**
  * WorkspaceOptionsButton ~
@@ -61,14 +55,17 @@ export class WorkspaceOptionsButton extends Component {
 
     return (
       <>
-        <StyledMiradorMenuButton
+        <StyledButton
           aria-label={t('workspaceOptions')}
-          open={open}
           onClick={this.handleMenuClick}
+          sx={{
+            ...(open && {
+              backgroundColor: 'action.selected',
+            }),
+          }}
         >
           <MoreHorizontalIcon />
-        </StyledMiradorMenuButton>
-
+        </StyledButton>
         <WorkspaceOptionsMenu
           anchorEl={anchorEl}
           handleClose={this.handleMenuClose}
