@@ -1,7 +1,7 @@
 import { Component } from 'react';
+import { styled } from '@mui/material/styles';
 import SettingsIcon from '@mui/icons-material/SettingsSharp';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import WorkspaceMenu from '../containers/WorkspaceMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 

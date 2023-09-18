@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,6 +8,29 @@ import WorkspaceAddButton from '../containers/WorkspaceAddButton';
 import WorkspaceControlPanelButtons from '../containers/WorkspaceControlPanelButtons';
 import Branding from '../containers/Branding';
 import ns from '../config/css-ns';
+
+const WorkspaceButtons = styled('div')(({ theme }) => ({
+  [theme.breakpoints.up('sm')]: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+}));
+
+const StyledBranding = styled(Branding)(({ theme }) => ({
+  display: 'flex',
+  position: 'absolute',
+  [theme.breakpoints.up('xs')]: {
+    display: 'none',
+  },
+  [theme.breakpoints.up('sm')]: {
+    bottom: 0,
+    display: 'block',
+    float: 'none',
+    right: 'auto',
+    width: '100%',
+  },
+  right: 0,
+}));
 
 /**
  * Provides the panel responsible for controlling the entire workspace
@@ -17,34 +41,53 @@ export class WorkspaceControlPanel extends Component {
    * @return {String} - HTML markup for the component
    */
   render() {
-    const { classes, t, variant } = this.props;
+    const { t, variant } = this.props;
     return (
       <AppBar
-        className={classNames(classes.root, ns('workspace-control-panel'), variant === 'wide' ? classes.wide : null)}
+        sx={(theme) => ({
+          height: 64,
+          [theme.breakpoints.up('sm')]: {
+            height: '100%',
+            left: 0,
+            right: 'auto',
+            width: 64,
+          },
+          width: variant === 'wide' ? 'auto' : null,
+        })}
+        className={classNames(ns('workspace-control-panel'))}
         color="default"
         position="absolute"
         component="nav"
         aria-label={t('workspaceNavigation')}
       >
-        <Toolbar disableGutters className={classes.toolbar}>
+        <Toolbar
+          disableGutters
+          sx={(theme) => ({
+            display: 'flex',
+            justifyContent: 'space-between',
+            [theme.breakpoints.up('sm')]: {
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              minHeight: 0,
+            },
+          })}
+        >
           <WorkspaceAddButton />
-          <div className={classes.workspaceButtons}>
+          <WorkspaceButtons>
             <WorkspaceControlPanelButtons />
-          </div>
+          </WorkspaceButtons>
         </Toolbar>
-        <Branding className={classes.branding} t={t} variant={variant} />
+        <StyledBranding t={t} variant={variant} />
       </AppBar>
     );
   }
 }
 
 WorkspaceControlPanel.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   t: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['default', 'wide']),
 };
 
 WorkspaceControlPanel.defaultProps = {
-  classes: {},
   variant: 'default',
 };

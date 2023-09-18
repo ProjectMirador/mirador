@@ -1,8 +1,13 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import { Rnd } from 'react-rnd';
 import Window from '../containers/Window';
 import ns from '../config/css-ns';
+
+const StyledRnd = styled(Rnd)(({ focused, theme }) => ({
+  zIndex: focused ? theme.zIndex.modal - 1 : 'auto',
+}));
 
 /**
  * Represents a work area that contains any number of windows
@@ -14,7 +19,6 @@ class WorkspaceElasticWindow extends Component {
    */
   render() {
     const {
-      classes,
       companionWindowDimensions,
       focused,
       focusWindow,
@@ -27,7 +31,8 @@ class WorkspaceElasticWindow extends Component {
     const offsetY = workspace.height / 2;
 
     return (
-      <Rnd
+      <StyledRnd
+        focused={focused}
         key={`${layout.windowId}-${workspace.id}`}
         size={{
           height: layout.height + companionWindowDimensions.height,
@@ -52,20 +57,16 @@ class WorkspaceElasticWindow extends Component {
         }}
         dragHandleClassName={ns('window-top-bar')}
         cancel={`.${ns('window-menu-btn')}`}
-        className={
-          focused ? classes.focused : null
-        }
       >
         <Window
           windowId={layout.windowId}
         />
-      </Rnd>
+      </StyledRnd>
     );
   }
 }
 
 WorkspaceElasticWindow.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   companionWindowDimensions: PropTypes.shape({
     height: PropTypes.number,
     width: PropTypes.number,
@@ -85,7 +86,6 @@ WorkspaceElasticWindow.propTypes = {
 };
 
 WorkspaceElasticWindow.defaultProps = {
-  classes: {},
   companionWindowDimensions: { height: 0, width: 0 },
   focused: false,
   focusWindow: () => {},

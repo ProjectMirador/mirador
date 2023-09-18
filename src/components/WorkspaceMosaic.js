@@ -1,5 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import GlobalStyles from '@mui/material/GlobalStyles';
 import { DndContext } from 'react-dnd';
 import {
   Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
@@ -10,6 +12,22 @@ import classNames from 'classnames';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';
 import Window from '../containers/Window';
 import MosaicLayout from '../lib/MosaicLayout';
+import globalReactMosaicStyles from '../styles/react-mosaic-component';
+
+const StyledMosaic = styled(Mosaic)({
+  '& .mosaic-preview': {
+    boxShadow: 'none',
+  },
+  '& .mosaic-tile': {
+    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .2), 0 2px 1px -1px rgba(0, 0, 0, .2)',
+  },
+  '& .mosaic-window': {
+    boxShadow: 'none',
+  },
+  '& .mosaic-window-toolbar': {
+    display: 'none !important',
+  },
+});
 
 /**
  * Represents a work area that contains any number of windows
@@ -143,18 +161,21 @@ export class WorkspaceMosaic extends Component {
   /**
    */
   render() {
-    const { layout, classes } = this.props;
+    const { layout } = this.props;
     return (
       <DndContext.Consumer>
         {(ctx) => (
-          <Mosaic
-            dragAndDropManager={ctx.dragDropManager}
-            renderTile={this.tileRenderer}
-            initialValue={layout || this.determineWorkspaceLayout()}
-            onChange={this.mosaicChange}
-            className={classNames('mirador-mosaic', classes.root)}
-            zeroStateView={this.zeroStateView}
-          />
+          <>
+            <GlobalStyles styles={{ ...globalReactMosaicStyles }} />
+            <StyledMosaic
+              dragAndDropManager={ctx.dragDropManager}
+              renderTile={this.tileRenderer}
+              initialValue={layout || this.determineWorkspaceLayout()}
+              onChange={this.mosaicChange}
+              className={classNames('mirador-mosaic')}
+              zeroStateView={this.zeroStateView}
+            />
+          </>
         )}
       </DndContext.Consumer>
     );
@@ -162,7 +183,6 @@ export class WorkspaceMosaic extends Component {
 }
 
 WorkspaceMosaic.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   layout: PropTypes.oneOfType(
     [PropTypes.object, PropTypes.string],
   ), // eslint-disable-line react/forbid-prop-types

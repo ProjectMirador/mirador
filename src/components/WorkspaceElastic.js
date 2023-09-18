@@ -1,10 +1,22 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import { Rnd } from 'react-rnd';
 import ResizeObserver from 'react-resize-observer';
-import classNames from 'classnames';
 import WorkspaceElasticWindow from '../containers/WorkspaceElasticWindow';
 import ns from '../config/css-ns';
+
+const StyledRnd = styled(Rnd)({
+  boxSizing: 'border-box',
+  margin: 0,
+  position: 'absolute',
+  transitionDuration: '.7s',
+  // order matters
+  // eslint-disable-next-line sort-keys
+  '& .react-draggable-dragging': {
+    transitionDuration: 'unset',
+  },
+});
 
 /**
  * Represents a work area that contains any number of windows
@@ -16,7 +28,6 @@ class WorkspaceElastic extends Component {
    */
   render() {
     const {
-      classes,
       workspace,
       elasticLayout,
       setWorkspaceViewportDimensions,
@@ -34,7 +45,7 @@ class WorkspaceElastic extends Component {
           onResize={(rect) => { setWorkspaceViewportDimensions(rect); }}
         />
 
-        <Rnd
+        <StyledRnd
           size={{
             height: workspace.height,
             width: workspace.width,
@@ -56,7 +67,7 @@ class WorkspaceElastic extends Component {
             setWorkspaceViewportPosition({ x: -1 * d.x - offsetX, y: -1 * d.y - offsetY });
           }}
           cancel={`.${ns('window')}`}
-          className={classNames(classes.workspace, ns('workspace'))}
+          className={ns('workspace')}
           disableDragging={!workspace.draggingEnabled}
         >
           {
@@ -67,14 +78,13 @@ class WorkspaceElastic extends Component {
               />
             ))
           }
-        </Rnd>
+        </StyledRnd>
       </div>
     );
   }
 }
 
 WorkspaceElastic.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   elasticLayout: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   setWorkspaceViewportDimensions: PropTypes.func.isRequired,
   setWorkspaceViewportPosition: PropTypes.func.isRequired,

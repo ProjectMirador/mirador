@@ -84,12 +84,16 @@ export class WorkspaceImport extends Component {
             onChange={this.handleChange}
             minRows={15}
             variant="filled"
-            inputProps={{ autoFocus: 'autofocus', className: classes.textInput }}
+            sx={{
+              '.MuiInput-input': { fontFamily: 'monospace' },
+              width: '100%',
+            }}
+            inputProps={{ autoFocus: 'autofocus' }}
             helperText={t('importWorkspaceHint')}
           />
         </ScrollIndicatedDialogContent>
         <DialogActions>
-          <Button className={classes.cancelBtn} onClick={handleClose}>
+          <Button sx={{ color: 'theme.palette.text.primary' }} onClick={handleClose}>
             {t('cancel')}
           </Button>
           <Button color="primary" onClick={this.handleImportConfig} variant="contained">

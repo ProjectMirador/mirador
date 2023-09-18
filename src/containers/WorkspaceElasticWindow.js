@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import withStyles from '@mui/styles/withStyles';
 import * as actions from '../state/actions';
 import WorkspaceElasticWindow from '../components/WorkspaceElasticWindow';
 import {
@@ -36,17 +35,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   },
 });
 
-/**
- * @param theme
- */
-const styles = theme => ({
-  focused: {
-    zIndex: theme.zIndex.modal - 1,
-  },
-});
-
 const enhance = compose(
-  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
   // further HOC go here
 );

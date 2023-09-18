@@ -1,10 +1,15 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import FullScreenButton from '../containers/FullScreenButton';
 import WorkspaceMenuButton from '../containers/WorkspaceMenuButton';
 import WorkspaceOptionsButton from '../containers/WorkspaceOptionsButton';
 import WindowListButton from '../containers/WindowListButton';
 import { PluginHook } from './PluginHook';
+
+const StyledFullScreenButton = styled(FullScreenButton)(({ theme }) => ({
+  margin: theme.spacing(1),
+}));
 
 /**
  *
@@ -16,13 +21,12 @@ export class WorkspaceControlPanelButtons extends Component {
    * @return {type}  description
    */
   render() {
-    const { classes } = this.props;
     return (
       <>
         <WindowListButton />
         <WorkspaceMenuButton />
         <WorkspaceOptionsButton />
-        <FullScreenButton className={classes.ctrlBtn} />
+        <StyledFullScreenButton />
         <PluginHook {...this.props} />
       </>
     );
@@ -30,9 +34,7 @@ export class WorkspaceControlPanelButtons extends Component {
 }
 
 WorkspaceControlPanelButtons.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
 };
 
 WorkspaceControlPanelButtons.defaultProps = {
-  classes: {},
 };
