@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
-import withStyles from '@mui/styles/withStyles';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { withPlugins } from '../extend/withPlugins';
@@ -57,30 +56,8 @@ const mapStateToProps = (state, { width }) => {
  */
 const mapDispatchToProps = { setWorkspaceAddVisibility: actions.setWorkspaceAddVisibility };
 
-/**
- *
- * @param theme
- * @returns {{ctrlBtn: {margin: (number|string)}}}
- */
-const styles = theme => ({
-  fab: {
-    margin: theme.spacing(1),
-  },
-  fabPrimary: {
-    '&:focus': {
-      backgroundColor: theme.palette.primary.dark,
-    },
-  },
-  fabSecondary: {
-    '&:focus': {
-      backgroundColor: theme.palette.secondary.dark,
-    },
-  },
-});
-
 const enhance = compose(
   withTranslation(),
-  withStyles(styles),
   withWidth({ initialWidth: 'xs' }),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WorkspaceAddButton'),

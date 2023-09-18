@@ -1,12 +1,26 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import { styled, lighten, darken } from '@mui/material/styles';
 import ErrorDialog from '../containers/ErrorDialog';
 import WorkspaceControlPanel from '../containers/WorkspaceControlPanel';
 import Workspace from '../containers/Workspace';
 import WorkspaceAdd from '../containers/WorkspaceAdd';
 import BackgroundPluginArea from '../containers/BackgroundPluginArea';
 import ns from '../config/css-ns';
+
+const StyledMain = styled('main')(({ theme }) => {
+  const getBackgroundColor = theme.palette.mode === 'light' ? darken : lighten;
+
+  return {
+    background: getBackgroundColor(theme.palette.shades.light, 0.1),
+    bottom: 0,
+    left: 0,
+    overflow: 'hidden',
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  };
+});
 
 /**
  * This is the top level Mirador component.
@@ -20,7 +34,6 @@ export class WorkspaceArea extends Component {
   render() {
     const {
       areaRef,
-      classes,
       controlPanelVariant,
       isWorkspaceAddVisible,
       isWorkspaceControlPanelVisible,
@@ -34,8 +47,8 @@ export class WorkspaceArea extends Component {
           isWorkspaceControlPanelVisible
             && <WorkspaceControlPanel variant={controlPanelVariant} />
         }
-        <main
-          className={classNames(classes.viewer, ns('viewer'))}
+        <StyledMain
+          className={ns('viewer')}
           lang={lang}
           aria-label={t('workspace')}
           {...(areaRef ? { ref: areaRef } : {})}
@@ -47,7 +60,7 @@ export class WorkspaceArea extends Component {
           }
           <ErrorDialog />
           <BackgroundPluginArea />
-        </main>
+        </StyledMain>
       </>
     );
   }
@@ -55,7 +68,6 @@ export class WorkspaceArea extends Component {
 
 WorkspaceArea.propTypes = {
   areaRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   controlPanelVariant: PropTypes.string,
   isWorkspaceAddVisible: PropTypes.bool,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,

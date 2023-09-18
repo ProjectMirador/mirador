@@ -14,7 +14,7 @@ export class WorkspaceAddButton extends Component {
    */
   render() {
     const {
-      classes, t, setWorkspaceAddVisibility, isWorkspaceAddVisible, useExtendedFab,
+      t, setWorkspaceAddVisibility, isWorkspaceAddVisible, useExtendedFab,
     } = this.props;
     return (
       <Tooltip title={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}>
@@ -28,8 +28,19 @@ export class WorkspaceAddButton extends Component {
               ? t('closeAddResourceMenu')
               : ((useExtendedFab && t('startHere')) || t('addResource'))
           }
-          className={classes.fab}
-          classes={{ primary: classes.fabPrimary, secondary: classes.fabSecondary }}
+          sx={{
+            '.MuiFab-primary': {
+              '&:focus': {
+                backgroundColor: 'primary.dark',
+              },
+            },
+            '.MuiFab-secondary': {
+              '&:focus': {
+                backgroundColor: 'secondary.dark',
+              },
+            },
+            margin: 1,
+          }}
           variant={useExtendedFab ? 'extended' : 'circular'}
           onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
         >
@@ -46,7 +57,6 @@ export class WorkspaceAddButton extends Component {
 }
 
 WorkspaceAddButton.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isWorkspaceAddVisible: PropTypes.bool,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   t: PropTypes.func,
