@@ -29,7 +29,7 @@ export class ViewerInfo extends Component {
     } = this.props;
 
     return (
-      <StyledOsdInfo className={classNames(ns('osd-info'),)}>
+      <StyledOsdInfo className={classNames(ns('osd-info'))}>
         <Typography display="inline" variant="caption" className={ns('canvas-count')}>
           { t('pagination', { current: canvasIndex + 1, total: canvasCount }) }
         </Typography>

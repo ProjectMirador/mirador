@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import FullScreenButton from '../containers/FullScreenButton';
 import WorkspaceMenuButton from '../containers/WorkspaceMenuButton';
@@ -33,8 +32,3 @@ export class WorkspaceControlPanelButtons extends Component {
   }
 }
 
-WorkspaceControlPanelButtons.propTypes = {
-};
-
-WorkspaceControlPanelButtons.defaultProps = {
-};

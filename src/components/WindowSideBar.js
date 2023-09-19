@@ -12,7 +12,9 @@ export class WindowSideBar extends Component {
    * @return
    */
   render() {
-    const { direction, t, windowId, sideBarOpen } = this.props;
+    const {
+      direction, t, windowId, sideBarOpen,
+    } = this.props;
 
     return (
       <Drawer

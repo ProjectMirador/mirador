@@ -51,7 +51,7 @@ export class WindowViewSettings extends Component {
     const menuItem = ({ value, Icon }) => (
       <MenuItem
         key={value}
-        sx={{ display: 'inline-block', }}
+        sx={{ display: 'inline-block' }}
         autoFocus={windowViewType === value}
         onClick={() => { this.handleChange(value); handleClose(); }}
       >
@@ -62,7 +62,7 @@ export class WindowViewSettings extends Component {
               borderBottom: '2px solid',
               borderBottomColor: windowViewType === value ? 'secondary.main' : 'transparent',
               color: 'secondary.main',
-            }
+            },
           }}
           control={<Icon color={windowViewType === value ? 'secondary' : undefined} />}
           label={t(value)}

@@ -22,8 +22,6 @@ const StyledLogo = styled(Img)(({ theme }) => ({
   paddingRight: 8,
 }));
 
-
-
 /**
  * Represents an item in a list of currently-loaded or loading manifests
  * @param {object} props
@@ -72,7 +70,6 @@ export class ManifestListItem extends Component {
       thumbnail,
       manifestLogo,
       size,
-      classes,
       provider,
       t,
       error,
@@ -103,17 +100,12 @@ export class ManifestListItem extends Component {
         <ListItem
           divider
           sx={theme => ({
-            '&$active': {
-              borderLeft: `4px solid ${theme.palette.primary.main}`,
-            },
             '&:hover,&:focus-within': {
-              '&$active': {
-                borderLeft: `4px solid ${theme.palette.primary.main}`,
-              },
               backgroundColor: theme.palette.action.hover,
-              borderLeft: `4px solid ${theme.palette.action.hover}`,
+              borderLeftColor: active ? theme.palette.action.hover : theme.palette.primary.main,
             },
-            borderLeft: '4px solid transparent',
+            borderLeft: '4px solid',
+            borderLeftColor: active ? 'transparent' : theme.palette.primary.main,
             paddingLeft: theme.spacing(2),
             paddingRight: theme.spacing(2),
             [theme.breakpoints.up('sm')]: {
@@ -132,17 +124,12 @@ export class ManifestListItem extends Component {
       <ListItem
         divider
         sx={theme => ({
-          '&$active': {
-            borderLeft: `4px solid ${theme.palette.primary.main}`,
-          },
           '&:hover,&:focus-within': {
-            '&$active': {
-              borderLeft: `4px solid ${theme.palette.primary.main}`,
-            },
             backgroundColor: theme.palette.action.hover,
-            borderLeft: `4px solid ${theme.palette.action.hover}`,
+            borderLeftColor: active ? theme.palette.action.hover : theme.palette.primary.main,
           },
-          borderLeft: '4px solid transparent',
+          borderLeft: '4px solid',
+          borderLeftColor: active ? 'transparent' : theme.palette.primary.main,
           paddingLeft: theme.spacing(2),
           paddingRight: theme.spacing(2),
           [theme.breakpoints.up('sm')]: {

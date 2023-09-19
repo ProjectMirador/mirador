@@ -33,7 +33,6 @@ const StyledCollectionFilter = styled('div')(() => ({
   paddingTop: 0,
 }));
 
-
 /**
  * a dialog providing the possibility to select the collection
  */
@@ -153,7 +152,6 @@ export class CollectionDialog extends Component {
   /** */
   render() {
     const {
-      classes,
       collection,
       error,
       isMultipart,
