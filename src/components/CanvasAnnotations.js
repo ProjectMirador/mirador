@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import Chip from '@mui/material/Chip';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,18 +7,6 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
-
-const annotationListItem = {
-  '&$hovered': {
-    backgroundColor: (theme) => theme.palette.action.hover,
-  },
-  '&:hover,&:focus': {
-    backgroundColor: (theme) => theme.palette.action.hover,
-  },
-  borderBottom: (theme) => `0.5px solid ${theme.palette.divider}`,
-  cursor: 'pointer',
-  whiteSpace: 'normal',
-};
 
 /**
  * CanvasAnnotations ~
@@ -86,12 +73,16 @@ export class CanvasAnnotations extends Component {
             <MenuItem
               button
               component={listContainerComponent}
-              className={clsx(
-                {
-                  [hoveredAnnotationIds.includes(annotation.id) ? 'hovered' : '']: true,
+              sx={{
+                '&:hover,&:focus': {
+                  backgroundColor: 'action.hover',
                 },
-                annotationListItem,
-              )}
+                backgroundColor: hoveredAnnotationIds.includes(annotation.id) ? 'action.hover' : '',
+                borderBottom: '0.5px solid',
+                borderBottomColor: 'divider',
+                cursor: 'pointer',
+                whiteSpace: 'normal',
+              }}
               key={annotation.id}
               annotationid={annotation.id}
               selected={selectedAnnotationId === annotation.id}

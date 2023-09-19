@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import cn from 'classnames';
 import Paper from '@mui/material/Paper';
 import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
@@ -11,6 +12,41 @@ import MinimalWindow from '../containers/MinimalWindow';
 import ErrorContent from '../containers/ErrorContent';
 import IIIFAuthentication from '../containers/IIIFAuthentication';
 import { PluginHook } from './PluginHook';
+
+const StyledMiddle = styled('div')(() => ({
+  display: 'flex',
+  flex: '1',
+  flexDirection: 'row',
+  minHeight: 0,
+}));
+
+const StyledMiddleLeft = styled('div')(() => ({
+  display: 'flex',
+  flex: '1',
+  flexDirection: 'column',
+  minHeight: 0,
+}));
+
+const StyledPrimaryWindow = styled('div')(() => ({
+  display: 'flex',
+  flex: '1',
+  height: '300px',
+  minHeight: 0,
+  position: 'relative',
+}));
+
+const StyledCompanionAreaBottom = styled('div')(() => ({
+  display: 'flex',
+  flex: '0',
+  flexBasis: 'auto',
+  minHeight: 0,
+}));
+
+const StyledCompanionAreaRight = styled('div')(() => ({
+  display: 'flex',
+  flex: '0 1 auto',
+  minHeight: 0,
+}));
 
 /**
  * Represents a Window in the mirador workspace
@@ -62,7 +98,7 @@ export class Window extends Component {
   render() {
     const {
       focusWindow, label, isFetching, maximized, sideBarOpen,
-      view, windowId, classes, t,
+      view, windowId, t,
       manifestError,
     } = this.props;
 
@@ -82,36 +118,44 @@ export class Window extends Component {
         component="section"
         elevation={1}
         id={windowId}
-        className={
-          cn(
-            classes.window,
-            ns('window'),
-            maximized ? classes.maximized : null,
-          )
-}
+        sx={{
+          backgroundColor: 'shades?.dark',
+          borderRadius: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          left: maximized && 0,
+          minHeight: 0,
+          overflow: 'hidden',
+          position: maximized && 'absolute',
+          top: maximized && 0,
+          width: '100%',
+          zIndex: maximized && 'modal' - 1,
+        }}
+        className={cn(ns('window'))}
         aria-label={t('window', { label })}
       >
         {this.wrappedTopBar()}
         { manifestError && <ErrorContent error={{ stack: manifestError }} windowId={windowId} /> }
-        <div className={classes.middle}>
-          <div className={classes.middleLeft}>
-            <div className={classes.primaryWindow}>
+        <StyledMiddle>
+          <StyledMiddleLeft>
+            <StyledPrimaryWindow>
               <PrimaryWindow
                 view={view}
                 windowId={windowId}
                 isFetching={isFetching}
                 sideBarOpen={sideBarOpen}
               />
-            </div>
-            <div className={classes.companionAreaBottom}>
+            </StyledPrimaryWindow>
+            <StyledCompanionAreaBottom>
               <CompanionArea windowId={windowId} position="bottom" />
-            </div>
-          </div>
-          <div className={classes.companionAreaRight}>
+            </StyledCompanionAreaBottom>
+          </StyledMiddleLeft>
+          <StyledCompanionAreaRight>
             <CompanionArea windowId={windowId} position="right" />
             <CompanionArea windowId={windowId} position="far-right" />
-          </div>
-        </div>
+          </StyledCompanionAreaRight>
+        </StyledMiddle>
         <CompanionArea windowId={windowId} position="far-bottom" />
         <PluginHook {...this.props} />
       </Paper>
@@ -122,7 +166,6 @@ export class Window extends Component {
 Window.contextType = MosaicWindowContext;
 
 Window.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   focusWindow: PropTypes.func,
   isFetching: PropTypes.bool,
   label: PropTypes.string,
@@ -137,7 +180,6 @@ Window.propTypes = {
 };
 
 Window.defaultProps = {
-  classes: {},
   focusWindow: () => {},
   isFetching: false,
   label: null,

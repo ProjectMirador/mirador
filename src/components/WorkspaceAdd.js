@@ -1,5 +1,6 @@
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import AddIcon from '@mui/icons-material/AddSharp';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMoreSharp';
@@ -19,6 +20,24 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { IIIFDropTarget } from './IIIFDropTarget';
 import { PluginHook } from './PluginHook';
 
+const StyledWorkspaceAdd = styled('div')(() => ({
+  boxSizing: 'border-box',
+  height: '100%',
+  overflowX: 'hidden',
+  overflowY: 'auto',
+  paddingTop: 68,
+  // injection order matters
+  // eslint-disable-next-line sort-keys
+  '@media (min-width: 600px)': {
+    paddingLeft: 68,
+    paddingTop: 0,
+  },
+}));
+
+const StyledMiradorMenuButton = styled(MiradorMenuButton)(() => ({
+  marginLeft: -12,
+  marginRight: 20,
+}));
 /**
  * An area for managing manifests and adding them to workspace
  * @memberof Workspace
@@ -76,7 +95,7 @@ export class WorkspaceAdd extends Component {
    */
   render() {
     const {
-      catalog, setWorkspaceAddVisibility, t, classes,
+      catalog, setWorkspaceAddVisibility, t,
     } = this.props;
     const { addResourcesOpen } = this.state;
 
@@ -92,7 +111,7 @@ export class WorkspaceAdd extends Component {
 
     return (
       <IIIFDropTarget onDrop={this.handleDrop}>
-        <div ref={this.ref} className={classNames(ns('workspace-add'), classes.workspaceAdd)}>
+        <StyledWorkspaceAdd ref={this.ref} className={classNames(ns('workspace-add'))}>
           {catalog.length < 1 ? (
             <Grid
               alignItems="center"
@@ -115,7 +134,7 @@ export class WorkspaceAdd extends Component {
               </Grid>
             </Grid>
           ) : (
-            <Paper className={classes.list}>
+            <Paper sx={{ margin: '16px' }}>
               <Typography style={visuallyHidden} component="h1">{t('miradorResources')}</Typography>
               <PluginHook {...this.props} />
               <List disablePadding>
@@ -126,7 +145,12 @@ export class WorkspaceAdd extends Component {
           <Fab
             variant="extended"
             disabled={addResourcesOpen}
-            className={classNames(classes.fab, ns('add-resource-button'))}
+            sx={{
+              bottom: 2,
+              position: 'absolute',
+              right: 2,
+            }}
+            className={classNames(ns('add-resource-button'))}
             color="primary"
             onClick={() => (this.setAddResourcesVisibility(true))}
           >
@@ -135,10 +159,16 @@ export class WorkspaceAdd extends Component {
           </Fab>
 
           <Drawer
-            className={classNames({
-              [classes.displayNone]: !addResourcesOpen,
+            sx={theme => ({
+              '&.MuiDrawer-paper': {
+                borderTop: '0',
+                left: '0',
+                [theme.breakpoints.up('sm')]: {
+                  left: '65px',
+                },
+              },
+              display: !addResourcesOpen && 'none',
             })}
-            classes={{ paper: classes.paper }}
             variant="persistent"
             anchor="bottom"
             open={addResourcesOpen}
@@ -149,18 +179,29 @@ export class WorkspaceAdd extends Component {
             }}
           >
             <Paper
-              className={classes.form}
+              sx={theme => ({
+                left: '0',
+                marginTop: 48,
+                paddingBottom: theme.spacing(2),
+                paddingLeft: theme.spacing(2),
+                paddingRight: theme.spacing(2),
+                [theme.breakpoints.up('sm')]: {
+                  paddingLeft: theme.spacing(3),
+                  paddingRight: theme.spacing(3),
+                },
+                paddingTop: theme.spacing(2),
+                right: '0',
+              })}
             >
               <AppBar position="absolute" color="primary" onClick={() => (this.setAddResourcesVisibility(false))}>
                 <Toolbar variant="dense">
-                  <MiradorMenuButton
+                  <StyledMiradorMenuButton
                     aria-label={t('closeAddResourceForm')}
-                    className={classes.menuButton}
                     color="inherit"
                   >
                     <ExpandMoreIcon />
-                  </MiradorMenuButton>
-                  <Typography variant="h2" noWrap color="inherit" className={classes.typographyBody}>
+                  </StyledMiradorMenuButton>
+                  <Typography variant="h2" noWrap color="inherit" sx={{ flexGrow: 1 }}>
                     {t('addResource')}
                   </Typography>
                 </Toolbar>
@@ -172,7 +213,7 @@ export class WorkspaceAdd extends Component {
               />
             </Paper>
           </Drawer>
-        </div>
+        </StyledWorkspaceAdd>
       </IIIFDropTarget>
     );
   }
@@ -184,7 +225,6 @@ WorkspaceAdd.propTypes = {
     manifestId: PropTypes.string.isRequired,
     provider: PropTypes.string,
   })),
-  classes: PropTypes.objectOf(PropTypes.string),
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   t: PropTypes.func,
 };
@@ -192,6 +232,5 @@ WorkspaceAdd.propTypes = {
 WorkspaceAdd.defaultProps = {
   addResource: () => {},
   catalog: [],
-  classes: {},
   t: key => key,
 };
