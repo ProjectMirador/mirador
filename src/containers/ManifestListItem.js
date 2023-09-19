@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import withStyles from '@mui/styles/withStyles';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getManifest,
@@ -50,56 +49,8 @@ const mapDispatchToProps = {
   fetchManifest: actions.fetchManifest,
 };
 
-/**
- *
- * @param theme
- * @returns {{root: {}, label: {textAlign: string, textTransform: string}}}
- */
-const styles = theme => ({
-  active: {},
-  buttonGrid: {
-  },
-  label: {
-    textAlign: 'left',
-    textTransform: 'initial',
-  },
-  logo: {
-    height: '2.5rem',
-    maxWidth: '100%',
-    objectFit: 'contain',
-    paddingRight: 8,
-  },
-  placeholder: {
-    backgroundColor: theme.palette.grey[300],
-  },
-  root: {
-    '&$active': {
-      borderLeft: `4px solid ${theme.palette.primary.main}`,
-    },
-    '&:hover,&:focus-within': {
-      '&$active': {
-        borderLeft: `4px solid ${theme.palette.primary.main}`,
-      },
-      backgroundColor: theme.palette.action.hover,
-      borderLeft: `4px solid ${theme.palette.action.hover}`,
-    },
-    borderLeft: '4px solid transparent',
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(3),
-    },
-  },
-  thumbnail: {
-    maxWidth: '100%',
-    objectFit: 'contain',
-  },
-});
-
 const enhance = compose(
   withTranslation(),
-  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ManifestListItem'),
 );

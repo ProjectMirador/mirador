@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import withStyles from '@mui/styles/withStyles';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
@@ -48,44 +47,8 @@ const mapStateToProps = (state, { windowId }) => {
   };
 };
 
-/** */
-const styles = theme => ({
-  collectionFilter: {
-    padding: '16px',
-    paddingTop: 0,
-  },
-  collectionItem: {
-    whiteSpace: 'normal',
-  },
-  collectionMetadata: {
-    padding: '16px',
-  },
-  dark: {
-    color: '#000000',
-  },
-  dialog: {
-    position: 'absolute !important',
-  },
-  dialogContent: {
-    padding: theme.spacing(1),
-  },
-  light: {
-    color: theme.palette.grey[400],
-  },
-  listitem: {
-    '&:focus': {
-      backgroundColor: theme.palette.action.focus,
-    },
-    '&:hover': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    cursor: 'pointer',
-  },
-});
-
 const enhance = compose(
   withTranslation(),
-  withStyles(styles),
   withWorkspaceContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CollectionDialog'),

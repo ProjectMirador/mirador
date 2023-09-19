@@ -34,17 +34,23 @@ export class WindowThumbnailSettings extends Component {
    */
   render() {
     const {
-      classes, handleClose, t, thumbnailNavigationPosition, direction,
+      handleClose, t, thumbnailNavigationPosition, direction,
     } = this.props;
 
     return (
       <>
         <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('thumbnails')}</ListSubheader>
 
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('off'); handleClose(); }}>
+        <MenuItem sx={{ display: 'inline-block' }} onClick={() => { this.handleChange('off'); handleClose(); }}>
           <FormControlLabel
             value="off"
-            classes={{ label: thumbnailNavigationPosition === 'off' ? classes.selectedLabel : classes.label }}
+            sx={{
+              '&.MuiFormControlLabel-label': {
+                borderBottom: '2px solid',
+                borderBottomColor: thumbnailNavigationPosition === 'off' ? 'secondary.main' : 'transparent',
+                color: thumbnailNavigationPosition === 'off' ? 'secondary.main' : undefined,
+              },
+            }}
             control={
               <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} />
             }
@@ -52,10 +58,16 @@ export class WindowThumbnailSettings extends Component {
             labelPlacement="bottom"
           />
         </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('far-bottom'); handleClose(); }}>
+        <MenuItem sx={{ display: 'inline-block' }} onClick={() => { this.handleChange('far-bottom'); handleClose(); }}>
           <FormControlLabel
             value="far-bottom"
-            classes={{ label: thumbnailNavigationPosition === 'far-bottom' ? classes.selectedLabel : classes.label }}
+            sx={{
+              '&.MuiFormControlLabel-label': {
+                borderBottom: '2px solid',
+                borderBottomColor: thumbnailNavigationPosition === 'off' ? 'secondary.main' : 'transparent',
+                color: thumbnailNavigationPosition === 'off' ? 'secondary.main' : undefined,
+              },
+            }}
             control={
               <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} />
             }
@@ -63,10 +75,16 @@ export class WindowThumbnailSettings extends Component {
             labelPlacement="bottom"
           />
         </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('far-right'); handleClose(); }}>
+        <MenuItem sx={{ display: 'inline-block' }} onClick={() => { this.handleChange('far-right'); handleClose(); }}>
           <FormControlLabel
             value="far-right"
-            classes={{ label: thumbnailNavigationPosition === 'far-right' ? classes.selectedLabel : classes.label }}
+            sx={{
+              '&.MuiFormControlLabel-label': {
+                borderBottom: '2px solid',
+                borderBottomColor: thumbnailNavigationPosition === 'off' ? 'secondary.main' : 'transparent',
+                color: thumbnailNavigationPosition === 'off' ? 'secondary.main' : undefined,
+              },
+            }}
             control={(
               <ThumbnailNavigationRightIcon
                 color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined}
@@ -83,7 +101,6 @@ export class WindowThumbnailSettings extends Component {
 }
 
 WindowThumbnailSettings.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   direction: PropTypes.string.isRequired,
   handleClose: PropTypes.func,
   setWindowThumbnailPosition: PropTypes.func.isRequired,

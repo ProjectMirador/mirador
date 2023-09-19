@@ -21,6 +21,12 @@ function Item({
       alignItems="flex-start"
       button
       component="li"
+      sx={{
+        borderBottom: '0.5px solid',
+        borderBottomColor: 'divider',
+        paddingRight: 1,
+        whiteSpace: 'normal',
+      }}
       {...otherProps}
     >
       { variant === 'thumbnail' && (
@@ -74,7 +80,6 @@ export class WindowSideBarCollectionPanel extends Component {
   render() {
     const {
       canvasNavigation,
-      classes,
       collectionPath,
       collection,
       id,
@@ -114,7 +119,7 @@ export class WindowSideBarCollectionPanel extends Component {
             )}
             <Typography variant="h6">
               { collection && WindowSideBarCollectionPanel.getUseableLabel(collection)}
-              { isFetching && <Skeleton className={classes.placeholder} variant="text" />}
+              { isFetching && <Skeleton variant="text" />}
             </Typography>
           </>
         )}
@@ -123,9 +128,9 @@ export class WindowSideBarCollectionPanel extends Component {
           { isFetching && (
             <MenuItem>
               <ListItemText>
-                <Skeleton className={classes.placeholder} variant="text" />
-                <Skeleton className={classes.placeholder} variant="text" />
-                <Skeleton className={classes.placeholder} variant="text" />
+                <Skeleton variant="text" />
+                <Skeleton variant="text" />
+                <Skeleton variant="text" />
               </ListItemText>
             </MenuItem>
           )}
@@ -144,7 +149,6 @@ export class WindowSideBarCollectionPanel extends Component {
                   canvasNavigation={canvasNavigation}
                   manifest={manifest}
                   variant={variant}
-                  className={classes.menuItem}
                   selected={manifestId === manifest.id}
                 />
               );
@@ -167,7 +171,6 @@ export class WindowSideBarCollectionPanel extends Component {
                   canvasNavigation={canvasNavigation}
                   manifest={manifest}
                   variant={variant}
-                  className={classes.menuItem}
                   selected={manifestId === manifest.id}
                 />
               );
@@ -184,7 +187,6 @@ WindowSideBarCollectionPanel.propTypes = {
     height: PropTypes.number,
     width: PropTypes.number,
   }).isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   collectionPath: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,

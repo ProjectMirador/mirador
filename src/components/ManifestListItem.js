@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import ListItem from '@mui/material/ListItem';
 import ButtonBase from '@mui/material/ButtonBase';
 import Grid from '@mui/material/Grid';
@@ -8,6 +9,20 @@ import Skeleton from '@mui/material/Skeleton';
 import { Img } from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
 import ns from '../config/css-ns';
+
+const StyledThumbnail = styled(Img)(({ theme }) => ({
+  maxWidth: '100%',
+  objectFit: 'contain',
+}));
+
+const StyledLogo = styled(Img)(({ theme }) => ({
+  height: '2.5rem',
+  maxWidth: '100%',
+  objectFit: 'contain',
+  paddingRight: 8,
+}));
+
+
 
 /**
  * Represents an item in a list of currently-loaded or loading manifests
@@ -68,46 +83,98 @@ export class ManifestListItem extends Component {
     const placeholder = (
       <Grid container className={ns('manifest-list-item')} spacing={2}>
         <Grid item xs={3} sm={2}>
-          <Skeleton className={classes.placeholder} variant="rectangular" height={80} width={120} />
+          <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />
         </Grid>
         <Grid item xs={9} sm={6}>
-          <Skeleton className={classes.placeholder} variant="text" />
+          <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
         </Grid>
         <Grid item xs={8} sm={2}>
-          <Skeleton className={classes.placeholder} variant="text" />
-          <Skeleton className={classes.placeholder} variant="text" />
+          <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
+          <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
         </Grid>
         <Grid item xs={4} sm={2}>
-          <Skeleton className={classes.placeholder} variant="rectangular" height={60} width={60} />
+          <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={60} width={60} />
         </Grid>
       </Grid>
     );
 
     if (error) {
       return (
-        <ListItem divider className={classes.root} data-manifestid={manifestId}>
+        <ListItem
+          divider
+          sx={theme => ({
+            '&$active': {
+              borderLeft: `4px solid ${theme.palette.primary.main}`,
+            },
+            '&:hover,&:focus-within': {
+              '&$active': {
+                borderLeft: `4px solid ${theme.palette.primary.main}`,
+              },
+              backgroundColor: theme.palette.action.hover,
+              borderLeft: `4px solid ${theme.palette.action.hover}`,
+            },
+            borderLeft: '4px solid transparent',
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+            [theme.breakpoints.up('sm')]: {
+              paddingLeft: theme.spacing(3),
+              paddingRight: theme.spacing(3),
+            },
+          })}
+          data-manifestid={manifestId}
+        >
           <ManifestListItemError manifestId={manifestId} />
         </ListItem>
       );
     }
 
     return (
-      <ListItem divider className={[classes.root, active ? classes.active : ''].join(' ')} data-manifestid={manifestId}>
+      <ListItem
+        divider
+        sx={theme => ({
+          '&$active': {
+            borderLeft: `4px solid ${theme.palette.primary.main}`,
+          },
+          '&:hover,&:focus-within': {
+            '&$active': {
+              borderLeft: `4px solid ${theme.palette.primary.main}`,
+            },
+            backgroundColor: theme.palette.action.hover,
+            borderLeft: `4px solid ${theme.palette.action.hover}`,
+          },
+          borderLeft: '4px solid transparent',
+          paddingLeft: theme.spacing(2),
+          paddingRight: theme.spacing(2),
+          [theme.breakpoints.up('sm')]: {
+            paddingLeft: theme.spacing(3),
+            paddingRight: theme.spacing(3),
+          },
+        })}
+        data-manifestid={manifestId}
+      >
         {ready ? (
           <Grid container className={ns('manifest-list-item')} spacing={2}>
-            <Grid item xs={12} sm={6} className={classes.buttonGrid}>
+            <Grid item xs={12} sm={6}>
               <ButtonBase
                 ref={buttonRef}
                 className={ns('manifest-list-item-title')}
                 style={{ width: '100%' }}
                 onClick={this.handleOpenButtonClick}
               >
-                <Grid container spacing={2} className={classes.label} component="span">
+                <Grid
+                  container
+                  spacing={2}
+                  sx={{
+                    textAlign: 'left',
+                    textTransform: 'initial',
+                  }}
+                  component="span"
+                >
                   <Grid item xs={4} sm={3} component="span">
                     { thumbnail
                       ? (
-                        <Img
-                          className={[classes.thumbnail, ns('manifest-list-item-thumb')].join(' ')}
+                        <StyledThumbnail
+                          className={[ns('manifest-list-item-thumb')]}
                           src={[thumbnail]}
                           alt=""
                           height="80"
@@ -115,14 +182,14 @@ export class ManifestListItem extends Component {
                             <Skeleton
                               variant="rectangular"
                               animation={false}
-                              className={classes.placeholder}
+                              sx={{ bgcolor: 'grey[300]' }}
                               height={80}
                               width={120}
                             />
                           )}
                         />
                       )
-                      : <Skeleton className={classes.placeholder} variant="rectangular" height={80} width={120} />}
+                      : <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />}
                   </Grid>
                   <Grid item xs={8} sm={9} component="span">
                     { isCollection && (
@@ -145,16 +212,15 @@ export class ManifestListItem extends Component {
             <Grid item xs={4} sm={2}>
               { manifestLogo
                 && (
-                <Img
+                <StyledLogo
                   src={[manifestLogo]}
                   alt=""
                   role="presentation"
-                  className={classes.logo}
                   unloader={(
                     <Skeleton
                       variant="rectangular"
                       animation={false}
-                      className={classes.placeholder}
+                      sx={{ bgcolor: 'grey[300]' }}
                       height={60}
                       width={60}
                     />
@@ -175,7 +241,6 @@ ManifestListItem.propTypes = {
   active: PropTypes.bool,
   addWindow: PropTypes.func.isRequired,
   buttonRef: PropTypes.elementType,
-  classes: PropTypes.objectOf(PropTypes.string),
   error: PropTypes.string,
   fetchManifest: PropTypes.func.isRequired,
   handleClose: PropTypes.func,
@@ -195,7 +260,6 @@ ManifestListItem.propTypes = {
 ManifestListItem.defaultProps = {
   active: false,
   buttonRef: undefined,
-  classes: {},
   error: null,
   handleClose: () => {},
   isCollection: false,

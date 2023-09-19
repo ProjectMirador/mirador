@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { alpha } from '@mui/material/styles';
 import classNames from 'classnames';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
@@ -25,22 +26,30 @@ export class WindowCanvasNavigationControls extends Component {
 
   /** */
   render() {
-    const {
-      classes, visible, windowId, zoomToWorld,
-    } = this.props;
+    const { visible, windowId, zoomToWorld } = this.props;
 
     if (!visible) return (<Typography style={visuallyHidden} component="div"><ViewerInfo windowId={windowId} /></Typography>);
 
     return (
       <Paper
         square
+        sx={{
+          backgroundColor: alpha('background.paper', 0.5),
+          bottom: 0,
+          cursor: 'default',
+          display: 'flex',
+          flexDirection: this.canvasNavControlsAreStacked() ? 'column' : 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          position: 'absolute',
+          textAlign: 'center',
+          width: '100%',
+          zIndex: 50,
+        }}
         className={
           classNames(
-            classes.controls,
             ns('canvas-nav'),
-            classes.canvasNav,
             this.canvasNavControlsAreStacked() ? ns('canvas-nav-stacked') : null,
-            this.canvasNavControlsAreStacked() ? classes.canvasNavStacked : null,
           )
 }
         elevation={0}
@@ -60,7 +69,6 @@ export class WindowCanvasNavigationControls extends Component {
 }
 
 WindowCanvasNavigationControls.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   size: PropTypes.shape({ width: PropTypes.number }).isRequired,
   visible: PropTypes.bool,
   windowId: PropTypes.string.isRequired,
@@ -68,6 +76,5 @@ WindowCanvasNavigationControls.propTypes = {
 };
 
 WindowCanvasNavigationControls.defaultProps = {
-  classes: {},
   visible: true,
 };

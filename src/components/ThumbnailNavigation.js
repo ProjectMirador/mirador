@@ -176,7 +176,6 @@ export class ThumbnailNavigation extends Component {
     const {
       t,
       canvasGroupings,
-      classes,
       position,
       thumbnailNavigation,
       viewingDirection,
@@ -196,8 +195,13 @@ export class ThumbnailNavigation extends Component {
       <Paper
         className={classNames(
           ns('thumb-navigation'),
-          classes.thumbNavigation,
         )}
+        sx={{
+          '&:focus': {
+            boxShadow: 0,
+            outline: 0,
+          },
+        }}
         aria-label={t('thumbnailNavigation')}
         square
         elevation={0}
@@ -235,7 +239,6 @@ export class ThumbnailNavigation extends Component {
 ThumbnailNavigation.propTypes = {
   canvasGroupings: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   canvasIndex: PropTypes.number.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   hasNextCanvas: PropTypes.bool,
   hasPreviousCanvas: PropTypes.bool,
   position: PropTypes.string.isRequired,

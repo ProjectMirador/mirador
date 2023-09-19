@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -9,6 +10,16 @@ import WorkspaceMosaic from '../containers/WorkspaceMosaic';
 import WorkspaceElastic from '../containers/WorkspaceElastic';
 import ns from '../config/css-ns';
 import { IIIFDropTarget } from './IIIFDropTarget';
+
+const StyledWorkspaceViewport = styled('div')(() => ({
+  bottom: 0,
+  left: 0,
+  margin: 0,
+  overflow: 'hidden',
+  position: 'absolute',
+  right: 0,
+  top: 0,
+}));
 
 /**
  * Represents a work area that contains any number of windows
@@ -108,23 +119,28 @@ export class Workspace extends Component {
    * render
    */
   render() {
-    const { classes, isWorkspaceControlPanelVisible, t } = this.props;
+    const { isWorkspaceControlPanelVisible, t } = this.props;
 
     return (
       <IIIFDropTarget onDrop={this.handleDrop}>
-        <div
+        <StyledWorkspaceViewport
+          sx={{
+            '@media (min-width: 600px)': {
+              paddingLeft: isWorkspaceControlPanelVisible && 68,
+              paddingTop: isWorkspaceControlPanelVisible && 0,
+            },
+            paddingTop: isWorkspaceControlPanelVisible && 74,
+          }}
           className={
             classNames(
               ns('workspace-viewport'),
               (isWorkspaceControlPanelVisible && ns('workspace-with-control-panel')),
-              (isWorkspaceControlPanelVisible && classes.workspaceWithControlPanel),
-              classes.workspaceViewport,
             )
           }
         >
           <Typography style={visuallyHidden} component="h1">{t('miradorViewer')}</Typography>
           {this.workspaceByType()}
-        </div>
+        </StyledWorkspaceViewport>
       </IIIFDropTarget>
     );
   }
@@ -133,7 +149,6 @@ export class Workspace extends Component {
 Workspace.propTypes = {
   addWindow: PropTypes.func,
   allowNewWindows: PropTypes.bool,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   maximizedWindowIds: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func.isRequired,

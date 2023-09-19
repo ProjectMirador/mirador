@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import Drawer from '@mui/material/Drawer';
 import WindowSideBarButtons from '../containers/WindowSideBarButtons';
 
@@ -13,20 +12,29 @@ export class WindowSideBar extends Component {
    * @return
    */
   render() {
-    const {
-      classes, direction, t, windowId, sideBarOpen,
-    } = this.props;
+    const { direction, t, windowId, sideBarOpen } = this.props;
 
     return (
       <Drawer
         variant="persistent"
-        className={classNames(classes.drawer)}
-        classes={{ paper: classNames(classes.paper) }}
+        sx={{
+          flexShrink: 0,
+          height: '100%',
+          order: -1000,
+          zIndex: 'appBar' - 1,
+        }}
         anchor={direction === 'rtl' ? 'right' : 'left'}
         PaperProps={{
           'aria-label': t('sidebarPanelsNavigation'),
           component: 'nav',
-          style: { height: '100%', position: 'relative' },
+          sx: {
+            borderInlineEnd: '1px solid',
+            borderInlineEndColor: 'divider',
+            height: '100%',
+            overflowX: 'hidden',
+            position: 'relative',
+            width: 48,
+          },
         }}
         SlideProps={{ direction: direction === 'rtl' ? 'left' : 'right', mountOnEnter: true, unmountOnExit: true }}
         open={sideBarOpen}
@@ -38,7 +46,6 @@ export class WindowSideBar extends Component {
 }
 
 WindowSideBar.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   direction: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,
   t: PropTypes.func.isRequired,

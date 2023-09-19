@@ -13,11 +13,26 @@ import {
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackSharp';
 import Skeleton from '@mui/material/Skeleton';
+import { styled } from '@mui/material/styles';
 import asArray from '../lib/asArray';
 import { LabelValueMetadata } from './LabelValueMetadata';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 import ManifestInfo from '../containers/ManifestInfo';
+
+const StyledScrollIndicatedDialogContent = styled(ScrollIndicatedDialogContent)(({ theme }) => ({
+  padding: theme.spacing(1),
+}));
+
+const StyledCollectionMetadata = styled('div')(() => ({
+  padding: '16px',
+}));
+
+const StyledCollectionFilter = styled('div')(() => ({
+  padding: '16px',
+  paddingTop: 0,
+}));
+
 
 /**
  * a dialog providing the possibility to select the collection
@@ -108,31 +123,31 @@ export class CollectionDialog extends Component {
 
   /** */
   placeholder() {
-    const { classes } = this.props;
-
     return (
       <Dialog
-        className={classes.dialog}
+        sx={{
+          position: 'absolute !important',
+        }}
         onClose={this.hideDialog}
         open
         container={this.dialogContainer()}
-        BackdropProps={this.backdropProps()}
+        slotProps={{
+          backdrop: {
+            sx: {
+              position: 'absolute !important',
+            },
+          },
+        }}
       >
         <DialogTitle id="select-collection">
-          <Skeleton className={classes.placeholder} variant="text" />
+          <Skeleton variant="text" />
         </DialogTitle>
         <ScrollIndicatedDialogContent>
-          <Skeleton className={classes.placeholder} variant="text" />
-          <Skeleton className={classes.placeholder} variant="text" />
+          <Skeleton variant="text" />
+          <Skeleton variant="text" />
         </ScrollIndicatedDialogContent>
       </Dialog>
     );
-  }
-
-  /** */
-  backdropProps() {
-    const { classes } = this.props;
-    return { classes: { root: classes.dialog } };
   }
 
   /** */
@@ -173,10 +188,16 @@ export class CollectionDialog extends Component {
 
     return (
       <Dialog
-        className={classes.dialog}
+        sx={{ position: 'absolute !important' }}
         onClose={this.hideDialog}
         container={this.dialogContainer()}
-        BackdropProps={this.backdropProps()}
+        slotProps={{
+          backdrop: {
+            sx: {
+              position: 'absolute !important',
+            },
+          },
+        }}
         open
       >
         <DialogTitle id="select-collection">
@@ -187,7 +208,7 @@ export class CollectionDialog extends Component {
             {CollectionDialog.getUseableLabel(manifest)}
           </Typography>
         </DialogTitle>
-        <ScrollIndicatedDialogContent className={classes.dialogContent}>
+        <StyledScrollIndicatedDialogContent>
           { collection && (
             <Button
               startIcon={<ArrowBackIcon />}
@@ -197,7 +218,7 @@ export class CollectionDialog extends Component {
             </Button>
           )}
 
-          <div className={classes.collectionMetadata}>
+          <StyledCollectionMetadata>
             <ManifestInfo manifestId={manifest.id} />
             <CollapsibleSection
               id="select-collection-rights"
@@ -221,15 +242,15 @@ export class CollectionDialog extends Component {
                 )
               }
             </CollapsibleSection>
-          </div>
-          <div className={classes.collectionFilter}>
+          </StyledCollectionMetadata>
+          <StyledCollectionFilter>
             {manifest.getTotalCollections() > 0 && (
               <Chip clickable color={currentFilter === 'collections' ? 'primary' : 'default'} onClick={() => this.setFilter('collections')} label={t('totalCollections', { count: manifest.getTotalCollections() })} />
             )}
             {manifest.getTotalManifests() > 0 && (
               <Chip clickable color={currentFilter === 'manifests' ? 'primary' : 'default'} onClick={() => this.setFilter('manifests')} label={t('totalManifests', { count: manifest.getTotalManifests() })} />
             )}
-          </div>
+          </StyledCollectionFilter>
           { currentFilter === 'collections' && (
             <MenuList>
               {
@@ -237,7 +258,7 @@ export class CollectionDialog extends Component {
                   <MenuItem
                     key={c.id}
                     onClick={() => { this.selectCollection(c); }}
-                    className={classes.collectionItem}
+                    sx={{ whiteSpace: 'normal' }}
                   >
                     {CollectionDialog.getUseableLabel(c)}
                   </MenuItem>
@@ -252,7 +273,7 @@ export class CollectionDialog extends Component {
                   <MenuItem
                     key={m.id}
                     onClick={() => { this.selectManifest(m); }}
-                    className={classes.collectionItem}
+                    sx={{ whiteSpace: 'normal' }}
                   >
                     {CollectionDialog.getUseableLabel(m)}
                   </MenuItem>
@@ -260,7 +281,7 @@ export class CollectionDialog extends Component {
               }
             </MenuList>
           )}
-        </ScrollIndicatedDialogContent>
+        </StyledScrollIndicatedDialogContent>
         <DialogActions>
           <Button onClick={this.hideDialog}>
             {t('close')}
@@ -273,7 +294,6 @@ export class CollectionDialog extends Component {
 
 CollectionDialog.propTypes = {
   addWindow: PropTypes.func.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   collectionPath: PropTypes.arrayOf(PropTypes.string),
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),

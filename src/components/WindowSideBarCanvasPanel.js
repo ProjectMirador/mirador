@@ -1,5 +1,6 @@
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Tooltip from '@mui/material/Tooltip';
@@ -16,6 +17,10 @@ import CompanionWindow from '../containers/CompanionWindow';
 import SidebarIndexList from '../containers/SidebarIndexList';
 import SidebarIndexTableOfContents from '../containers/SidebarIndexTableOfContents';
 
+const StyledBreak = styled('div')(() => ({
+  flexBasis: '100%',
+  height: 0,
+}));
 /**
  * a panel showing the canvases for a given manifest
  */
@@ -57,7 +62,6 @@ export class WindowSideBarCanvasPanel extends Component {
    */
   render() {
     const {
-      classes,
       collection,
       id,
       showMultipart,
@@ -113,8 +117,14 @@ export class WindowSideBarCanvasPanel extends Component {
                     value={sequenceId}
                     onChange={this.handleSequenceChange}
                     name="sequenceId"
-                    classes={{ select: classes.select }}
-                    className={classes.selectEmpty}
+                    sx={{
+                      '&.MuiSelect-select': {
+                        '&:focus': {
+                          backgroundColor: 'background.paper',
+                        },
+                      },
+                      backgroundColor: 'background.paper',
+                    }}
                     data-testid="sequence-select"
                   >
                     { sequences.map((s, i) => <MenuItem value={s.id} key={s.id}><Typography variant="body2">{ WindowSideBarCanvasPanel.getUseableLabel(s, i) }</Typography></MenuItem>) }
@@ -122,7 +132,7 @@ export class WindowSideBarCanvasPanel extends Component {
                 </FormControl>
               )
             }
-            <div className={classes.break} />
+            <StyledBreak />
             <Tabs
               value={variant}
               onChange={this.handleVariantChange}
@@ -131,10 +141,10 @@ export class WindowSideBarCanvasPanel extends Component {
               textColor="primary"
             >
               {showToc && (
-                <Tooltip title={t('tableOfContentsList')} value="tableOfContents"><Tab className={classes.variantTab} value="tableOfContents" aria-label={t('tableOfContentsList')} aria-controls={`tab-panel-${id}`} icon={<TocIcon style={{ transform: 'scale(-1, 1)' }} />} /></Tooltip>
+                <Tooltip title={t('tableOfContentsList')} value="tableOfContents"><Tab sx={{ minWidth: 'auto' }} value="tableOfContents" aria-label={t('tableOfContentsList')} aria-controls={`tab-panel-${id}`} icon={<TocIcon style={{ transform: 'scale(-1, 1)' }} />} /></Tooltip>
               )}
-              <Tooltip title={t('itemList')} value="item"><Tab className={classes.variantTab} value="item" aria-label={t('itemList')} aria-controls={`tab-panel-${id}`} icon={<ItemListIcon />} /></Tooltip>
-              <Tooltip title={t('thumbnailList')} value="thumbnail"><Tab className={classes.variantTab} value="thumbnail" aria-label={t('thumbnailList')} aria-controls={`tab-panel-${id}`} icon={<ThumbnailListIcon />} /></Tooltip>
+              <Tooltip title={t('itemList')} value="item"><Tab sx={{ minWidth: 'auto' }} value="item" aria-label={t('itemList')} aria-controls={`tab-panel-${id}`} icon={<ItemListIcon />} /></Tooltip>
+              <Tooltip title={t('thumbnailList')} value="thumbnail"><Tab sx={{ minWidth: 'auto' }} value="thumbnail" aria-label={t('thumbnailList')} aria-controls={`tab-panel-${id}`} icon={<ThumbnailListIcon />} /></Tooltip>
             </Tabs>
           </>
         )}
@@ -146,7 +156,7 @@ export class WindowSideBarCanvasPanel extends Component {
               onClick={showMultipart}
               endIcon={<ArrowForwardIcon />}
             >
-              <Typography className={classes.collectionNavigationButton}>
+              <Typography sx={{ textTransform: 'none' }}>
                 {WindowSideBarCanvasPanel.getUseableLabel(collection)}
               </Typography>
             </Button>
@@ -159,7 +169,6 @@ export class WindowSideBarCanvasPanel extends Component {
 }
 
 WindowSideBarCanvasPanel.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
   sequenceId: PropTypes.string,

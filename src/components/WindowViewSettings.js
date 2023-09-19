@@ -36,7 +36,7 @@ export class WindowViewSettings extends Component {
    */
   render() {
     const {
-      classes, handleClose, t, windowViewType, viewTypes,
+      handleClose, t, windowViewType, viewTypes,
     } = this.props;
 
     const iconMap = {
@@ -51,13 +51,19 @@ export class WindowViewSettings extends Component {
     const menuItem = ({ value, Icon }) => (
       <MenuItem
         key={value}
-        className={classes.MenuItem}
+        sx={{ display: 'inline-block', }}
         autoFocus={windowViewType === value}
         onClick={() => { this.handleChange(value); handleClose(); }}
       >
         <FormControlLabel
           value={value}
-          classes={{ label: windowViewType === value ? classes.selectedLabel : classes.label }}
+          sx={{
+            '&.MuiFormControlLabel-label': {
+              borderBottom: '2px solid',
+              borderBottomColor: windowViewType === value ? 'secondary.main' : 'transparent',
+              color: 'secondary.main',
+            }
+          }}
           control={<Icon color={windowViewType === value ? 'secondary' : undefined} />}
           label={t(value)}
           labelPlacement="bottom"
@@ -76,7 +82,6 @@ export class WindowViewSettings extends Component {
 }
 
 WindowViewSettings.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   handleClose: PropTypes.func,
   setWindowViewType: PropTypes.func.isRequired,
   t: PropTypes.func,

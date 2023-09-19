@@ -25,7 +25,7 @@ export class WindowTopBar extends Component {
    */
   render() {
     const {
-      removeWindow, windowId, classes, toggleWindowSideBar, t, windowDraggable,
+      removeWindow, windowId, toggleWindowSideBar, t, windowDraggable,
       maximizeWindow, maximized, minimizeWindow, focused, allowClose, allowMaximize,
       focusWindow, allowFullscreen, allowTopMenuButton, allowWindowSideBar,
     } = this.props;
@@ -36,12 +36,16 @@ export class WindowTopBar extends Component {
           <Toolbar
             disableGutters
             onMouseDown={focusWindow}
-            className={classNames(
-              classes.windowTopBarStyle,
-              windowDraggable ? classes.windowTopBarStyleDraggable : null,
-              focused ? classes.focused : null,
-              ns('window-top-bar'),
-            )}
+            sx={{
+              backgroundColor: 'shades?.main',
+              borderTop: '2px solid ',
+              borderTopColor: focused ? 'primary.main' : 'transparent',
+              cursor: windowDraggable ? 'move' : null,
+              minHeight: 32,
+              paddingLeft: 0.5,
+              paddingRight: 0.5,
+            }}
+            className={classNames(ns('window-top-bar'))}
             variant="dense"
           >
             {allowWindowSideBar && (
@@ -95,7 +99,6 @@ WindowTopBar.propTypes = {
   allowMaximize: PropTypes.bool,
   allowTopMenuButton: PropTypes.bool,
   allowWindowSideBar: PropTypes.bool,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   focused: PropTypes.bool,
   focusWindow: PropTypes.func,
   maximized: PropTypes.bool,
