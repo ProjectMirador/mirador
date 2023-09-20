@@ -74,7 +74,9 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             },
             height: (position === 'far-right') ? 'auto' : `${height - SPACING}px`,
             outline: currentGroupings.map(canvas => canvas.id).includes(currentCanvasId) ? `2px solid ${theme.palette.primary.main}` : 0,
-            outlineOffset: currentGroupings.map(canvas => canvas.id).includes(currentCanvasId) && '3px',
+            ...(currentGroupings.map(canvas => canvas.id).includes(currentCanvasId) && {
+              outlineOffset: '3px',
+            }),
             width: (position === 'far-bottom') ? 'auto' : `${style.width}px`,
           })}
           className={classNames(

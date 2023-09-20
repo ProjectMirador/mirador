@@ -104,9 +104,13 @@ export class SearchHit extends Component {
           sx={{
             '&.Mui-focused': {
               '&:hover': {
-                backgroundColor: windowSelected && 'inherit',
+                ...(windowSelected && {
+                  backgroundColor: 'inherit',
+                }),
               },
-              backgroundColor: windowSelected && 'inherit',
+              ...(windowSelected && {
+                backgroundColor: 'inherit',
+              }),
             },
             borderBottom: '0.5px solid',
             borderBottomColor: 'divider',

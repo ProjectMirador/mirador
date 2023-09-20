@@ -7,13 +7,11 @@ import Typography from '@mui/material/Typography';
 import { useInView } from 'react-intersection-observer';
 import getThumbnail from '../lib/ThumbnailFactory';
 
-const StyledRoot = styled('div')(() => ({
+const StyledRoot = styled('div')({
+});
 
-}));
-
-const StyledLabel = styled('div')(() => ({
-
-}));
+const StyledLabel = styled('div')({
+});
 
 /**
  * A lazy-loaded image that uses IntersectionObserver to determine when to
@@ -170,9 +168,11 @@ export class IIIFThumbnail extends Component {
     return (
       <StyledRoot
         sx={{
-          display: variant === 'inside' && 'inline-block',
-          height: variant === 'inside' && 'inherit',
-          position: variant === 'inside' && 'relative',
+          ...(variant === 'inside' && {
+            display: 'inline-block',
+            height: 'inherit',
+            position: 'relative',
+          }),
         }}
       >
         <StyledLazyLoadedImage
@@ -184,36 +184,45 @@ export class IIIFThumbnail extends Component {
           thumbnailsConfig={thumbnailsConfig}
           style={style}
           sx={{
-            borderBottom: imageStyle && '1px solid',
-            borderBottomColor: imageStyle && 'divider',
+            ...(imageStyle && {
+              borderBottom: '1px solid',
+              borderBottomColor: 'divider',
+            }),
           }}
         />
 
         { labelled && (
           <StyledLabel
             sx={{
-              background: variant === 'inside' && 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-              bottom: variant === 'inside' && '5px',
-              boxSizing: variant === 'inside' && 'border-box',
-              left: variant === 'inside' && '0px',
               overflow: 'hidden',
-              padding: variant === 'inside' && '4px',
-              position: variant === 'inside' && 'absolute',
               textOverflow: 'ellipsis',
-              width: variant === 'inside' && '100%',
+              ...(variant === 'inside' && {
+                background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+                bottom: '5px',
+                boxSizing: 'border-box',
+                left: '0px',
+                padding: '4px',
+                position: 'absolute',
+                width: '100%',
+              }),
             }}
           >
             <Typography
               variant="caption"
               sx={{
-                boxOrient: variant === 'outside' && 'vertical',
-                color: variant === 'inside' && '#ffffff',
-                display: variant === 'outside' && '-webkit-box',
-                lineClamp: variant === 'inside' ? '1' : '2',
                 lineHeight: '1.5em',
-                maxHeight: variant === 'outside' && '3em',
-                whiteSpace: variant === 'inside' && 'nowrap',
                 wordBreak: 'break-word',
+                ...(variant === 'inside' && {
+                  color: '#ffffff',
+                  WebkitLineClamp: 1,
+                  whiteSpace: 'nowrap',
+                }),
+                ...(variant === 'outside' && {
+                  display: '-webkit-box',
+                  maxHeight: '3em',
+                  MozBoxOrient: 'vertical',
+                  WebkitLineClamp: 2,
+                }),
               }}
             >
               {this.label()}

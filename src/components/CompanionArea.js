@@ -15,8 +15,8 @@ const StyledRoot = styled('div')(({ theme }) => ({
   zIndex: theme.zIndex.appBar - 2,
 }));
 
-const StyledWrapper = styled('div')(() => ({
-}));
+const StyledWrapper = styled('div')({
+});
 
 const StyledToggle = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,

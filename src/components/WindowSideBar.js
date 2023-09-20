@@ -19,12 +19,12 @@ export class WindowSideBar extends Component {
     return (
       <Drawer
         variant="persistent"
-        sx={{
+        sx={theme => ({
           flexShrink: 0,
           height: '100%',
           order: -1000,
-          zIndex: 'appBar' - 1,
-        }}
+          zIndex: theme.zIndex.appBar - 1,
+        })}
         anchor={direction === 'rtl' ? 'right' : 'left'}
         PaperProps={{
           'aria-label': t('sidebarPanelsNavigation'),

@@ -11,30 +11,28 @@ import { Rnd } from 'react-rnd';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
-const StyledRnd = styled(Rnd)(() => ({
-  display: 'flex',
+const StyledRnd = styled(Rnd)({
   flexDirection: 'column',
   minHeight: 0,
-  position: 'relative',
-}));
+});
 
-const StyledPositionButton = styled(MiradorMenuButton)(() => ({
+const StyledPositionButton = styled(MiradorMenuButton)({
   marginLeft: -16,
   order: -100,
   width: 24,
-}));
+});
 
-const StyledCloseButton = styled(MiradorMenuButton)(() => ({
+const StyledCloseButton = styled(MiradorMenuButton)({
   order: 4,
-}));
+});
 
-const StyledTitleControls = styled('div')(() => ({
+const StyledTitleControls = styled('div')({
   alignItems: 'center',
   display: 'flex',
   flexFlow: 'row wrap',
   minHeight: 48,
   order: 3,
-}));
+});
 
 /**
  * CompanionWindow
@@ -115,17 +113,23 @@ export class CompanionWindow extends Component {
     return (
       <Paper
         sx={{
-          borderLeft: position === 'right' && '0.5px solid',
-          borderLeftColor: position === 'right' && 'divider',
-          borderRight: position === 'left' && '0.5px solid',
-          borderRightColor: position === 'left' && 'divider',
-          borderTop: position === 'bottom' && '0.5px solid',
-          borderTopColor: position === 'bottom' && 'divider',
           boxShadow: 'none',
           boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'column',
           minHeight: 0,
+          ...(position === 'right' && {
+            borderLeft: '0.5px solid',
+            borderLeftColor: 'divider',
+          }),
+          ...(position === 'left' && {
+            borderRight: '0.5px solid',
+            borderRightColor: 'divider',
+          }),
+          ...(position === 'bottom' && {
+            borderTop: '0.5px solid',
+            borderTopColor: 'divider',
+          }),
         }}
         style={{
           display: isDisplayed ? null : 'none',
@@ -137,6 +141,7 @@ export class CompanionWindow extends Component {
         aria-label={ariaLabel || title}
       >
         <StyledRnd
+          style={{ display: 'flex', position: 'relative' }}
           default={{
             height: isBottom ? defaultSidebarPanelHeight : '100%',
             width: isBottom ? 'auto' : defaultSidebarPanelWidth,
@@ -150,7 +155,7 @@ export class CompanionWindow extends Component {
           <Toolbar
             sx={{
               alignItems: 'flex-start',
-              background: 'shades?.light',
+              bgcolor: 'shades.light',
               flexWrap: 'wrap',
               justifyContent: 'space-between',
               minHeight: 'max-content',
@@ -195,7 +200,9 @@ export class CompanionWindow extends Component {
                     }
                     <StyledCloseButton
                       sx={{
-                        order: size.width < 370 && 'unset',
+                        ...(size.width < 370 && {
+                          order: 'unset',
+                        }),
                       }}
                       aria-label={t('closeCompanionWindow')}
                       onClick={onCloseClick}
@@ -209,7 +216,9 @@ export class CompanionWindow extends Component {
               titleControls && (
                 <StyledTitleControls
                   sx={{
-                    flexGrow: !isBottom && 1,
+                    ...(!isBottom && {
+                      flexGrow: 1,
+                    }),
                     order: isBottom || size.width < 370 ? 'unset' : 1000,
                   }}
                   className={ns('companion-window-title-controls')}

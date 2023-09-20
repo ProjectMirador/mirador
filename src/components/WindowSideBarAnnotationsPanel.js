@@ -7,14 +7,9 @@ import CanvasAnnotations from '../containers/CanvasAnnotations';
 import CompanionWindow from '../containers/CompanionWindow';
 import ns from '../config/css-ns';
 
-const Section = styled('div')(() => ({
+const StyledSection = styled('div')({
   borderBottom: '.5px solid',
-  borderBottomColor: 'section_divider',
-  paddingBottom: 1,
-  paddingLeft: 2,
-  paddingRight: 1,
-  paddingTop: 2,
-}));
+});
 /**
  * WindowSideBarAnnotationsPanel ~
 */
@@ -43,9 +38,16 @@ export class WindowSideBarAnnotationsPanel extends Component {
         otherRef={this.containerRef}
         titleControls={<AnnotationSettings windowId={windowId} />}
       >
-        <Section>
+        <StyledSection sx={{
+          borderBottomColor: 'section_divider',
+          paddingBottom: 1,
+          paddingLeft: 2,
+          paddingRight: 1,
+          paddingTop: 2,
+        }}
+        >
           <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
-        </Section>
+        </StyledSection>
 
         {canvasIds.map((canvasId, index) => (
           <CanvasAnnotations

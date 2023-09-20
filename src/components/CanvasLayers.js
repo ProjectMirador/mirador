@@ -228,13 +228,15 @@ export class CanvasLayers extends Component {
             component="li"
             sx={{
               alignItems: 'stretch',
-              backgroundColor: snapshot.isDragging && 'action.hover',
               borderBottom: '0.5px solid',
               borderBottomColor: 'divider',
               cursor: 'pointer',
               paddingBottom: 2,
               paddingRight: 2,
               paddingTop: 2,
+              ...(snapshot.isDragging && {
+                backgroundColor: 'action.hover',
+              }),
             }}
             disableGutters
             key={resource.id}

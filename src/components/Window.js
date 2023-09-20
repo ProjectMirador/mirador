@@ -118,20 +118,22 @@ export class Window extends Component {
         component="section"
         elevation={1}
         id={windowId}
-        sx={{
-          backgroundColor: 'shades?.dark',
+        sx={theme => ({
+          bgcolor: 'shades?.dark',
           borderRadius: 0,
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          left: maximized && 0,
           minHeight: 0,
           overflow: 'hidden',
-          position: maximized && 'absolute',
-          top: maximized && 0,
           width: '100%',
-          zIndex: maximized && 'modal' - 1,
-        }}
+          ...(maximized && {
+            left: 0,
+            position: 'absolute',
+            top: 0,
+            zIndex: theme.zIndex.modal - 1,
+          }),
+        })}
         className={cn(ns('window'))}
         aria-label={t('window', { label })}
       >

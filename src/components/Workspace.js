@@ -126,10 +126,14 @@ export class Workspace extends Component {
         <StyledWorkspaceViewport
           sx={{
             '@media (min-width: 600px)': {
-              paddingLeft: isWorkspaceControlPanelVisible && 8.5,
-              paddingTop: isWorkspaceControlPanelVisible && 0,
+              ...(isWorkspaceControlPanelVisible && {
+                paddingLeft: 8.5,
+                paddingTop: 0,
+              }),
             },
-            paddingTop: isWorkspaceControlPanelVisible && 9.25,
+            ...(isWorkspaceControlPanelVisible && {
+              paddingTop: 9.25,
+            }),
           }}
           className={
             classNames(

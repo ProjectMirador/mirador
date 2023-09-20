@@ -167,7 +167,9 @@ export class WorkspaceAdd extends Component {
                   left: '65px',
                 },
               },
-              display: !addResourcesOpen && 'none',
+              ...(!addResourcesOpen && {
+                display: 'none',
+              }),
             })}
             variant="persistent"
             anchor="bottom"

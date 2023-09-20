@@ -9,55 +9,8 @@ import { InView } from 'react-intersection-observer';
 import MiradorCanvas from '../lib/MiradorCanvas';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 
-const GalleryViewItem = styled('div')(({
-  theme, selected, hasAnnotations,
-}) => ({
-  '&:focus': {
-    outline: 'none',
-  },
-  '&:has(annotations)': {
-    border: `2px solid ${theme.palette.action.selected}`,
-  },
-  '&:hover': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  '&:selected, &:selected:has(annotations)': {
-    border: `2px solid ${theme.palette.primary.main}`,
-  },
-  border: '2px solid transparent',
-  cursor: 'pointer',
-  display: 'inline-block',
-  margin: `${theme.spacing(1)}px ${theme.spacing(0.5)}px`,
-  minWidth: '60px',
-  overflow: 'hidden',
-  padding: theme.spacing(0.5),
-  position: 'relative',
-  width: 'min-content',
-
-  ...(selected && {
-    border: `2px solid ${theme.palette.primary.main}`,
-  }),
-
-  ...(hasAnnotations && {
-    border: `2px solid ${theme.palette.action.selected}`,
-  }),
-}));
-
-const SearchChip = styled(Chip)(({ theme }) => ({
-  ...theme.typography.caption,
-  '&.Mui-selected .MuiAvatar-circle': {
-    backgroundColor: theme.palette.highlights?.primary,
-  },
-  marginTop: 2,
-}));
-
-const AnnotationsChip = styled(Chip)(({ theme }) => ({
-  ...theme.typography.caption,
-}));
-
-const AvatarIcon = styled(Avatar)(() => ({
-  backgroundColor: 'transparent',
-}));
+const StyledGalleryViewItem = styled('div')({
+});
 
 const ChipsContainer = styled('div')(() => ({
   opacity: 0.875,
@@ -167,16 +120,26 @@ export class GalleryViewThumbnail extends Component {
 
     return (
       <InView onChange={this.handleIntersection}>
-        <GalleryViewItem
+        <StyledGalleryViewItem
           key={canvas.index}
           sx={{
+            '&:focus': {
+              outline: 'none',
+            },
+            '&:hover': {
+              bgcolor: 'action.hover',
+            },
+            border: '2px solid',
+            borderColor: selected || searchAnnotationsCount > 0 ? 'primary.main' : 'transparent',
+            cursor: 'pointer',
+            display: 'inline-block',
+            margin: 1,
             maxHeight: config.height + 45,
-            ...(selected && {
-              border: `2px solid ${theme => theme.palette.primary.main}`,
-            }),
-            ...(searchAnnotationsCount > 0 && {
-              border: `2px solid ${theme => theme.palette.action.selected}`,
-            }),
+            minWidth: '60px',
+            overflow: 'hidden',
+            padding: 0.5,
+            position: 'relative',
+            width: 'min-content',
           }}
           onClick={this.handleSelect}
           onKeyUp={this.handleKey}
@@ -197,45 +160,54 @@ export class GalleryViewThumbnail extends Component {
           >
             <ChipsContainer>
               {searchAnnotationsCount > 0 && (
-                <SearchChip
+                <Chip
                   avatar={(
-                    <AvatarIcon>
+                    <Avatar sx={{
+                      backgroundColor: 'transparent',
+                    }}
+                    >
                       <SearchIcon fontSize="small" />
-                    </AvatarIcon>
+                    </Avatar>
                   )}
                   label={searchAnnotationsCount}
                   sx={{
                     '&.Mui-selected .MuiAvatar-circle': {
-                      backgroundColor: theme => theme.palette.highlights?.primary,
+                      bgcolor: 'highlights.primary',
                     },
+                    marginTop: 2,
+                    typography: 'caption',
                   }}
                   size="small"
                 />
               )}
               {annotationsCount > 0 && (
-                <AnnotationsChip
+                <Chip
                   avatar={(
-                    <AvatarIcon>
+                    <Avatar sx={{
+                      backgroundColor: 'transparent',
+                    }}
+                    >
                       <AnnotationIcon
                         sx={{
                           height: '1rem',
                           width: '1rem',
                         }}
                       />
-                    </AvatarIcon>
+                    </Avatar>
                   )}
                   label={annotationsCount}
                   sx={{
                     '&.Mui-selected .MuiAvatar-circle': {
-                      backgroundColor: theme => theme.palette.highlights?.primary,
+                      bgcolor: 'highlights.primary',
                     },
+                    typography: 'caption',
                   }}
                   size="small"
                 />
               )}
             </ChipsContainer>
           </IIIFThumbnail>
-        </GalleryViewItem>
+        </StyledGalleryViewItem>
       </InView>
     );
   }

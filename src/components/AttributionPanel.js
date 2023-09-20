@@ -18,14 +18,9 @@ const StyledPlaceholder = styled(Skeleton)(({ theme }) => ({
   backgroundColor: theme.palette.grey[300],
 }));
 
-const StyledSection = styled('div')(() => ({
+const StyledSection = styled('div')({
   borderBottom: '.5px solid',
-  borderBottomColor: 'section_divider',
-  paddingBottom: 1,
-  paddingLeft: 2,
-  paddingRight: 1,
-  paddingTop: 2,
-}));
+});
 
 /**
  * WindowSideBarInfoPanel
@@ -73,7 +68,14 @@ export class AttributionPanel extends Component {
         </StyledSection>
 
         { manifestLogo && (
-          <StyledSection>
+          <StyledSection sx={{
+            borderBottomColor: 'section_divider',
+            paddingBottom: 1,
+            paddingLeft: 2,
+            paddingRight: 1,
+            paddingTop: 2,
+          }}
+          >
             <StyledLogo
               src={[manifestLogo]}
               alt=""

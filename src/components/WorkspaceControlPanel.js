@@ -50,7 +50,7 @@ export class WorkspaceControlPanel extends Component {
             height: '100%',
             left: 0,
             right: 'auto',
-            width: 64,
+            width: variant === 'wide' ? 'auto' : 64,
           },
           width: variant === 'wide' ? 'auto' : null,
         })}
