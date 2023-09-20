@@ -110,7 +110,7 @@ export class SearchHit extends Component {
             },
             borderBottom: '0.5px solid',
             borderBottomColor: 'divider',
-            paddingRight: 8,
+            paddingRight: 1,
 
           }}
           button={!selected}

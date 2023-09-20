@@ -32,8 +32,8 @@ const StyledToggle = styled('div')(({ theme }) => ({
 }));
 
 const StyledToggleButton = styled(MiradorMenuButton)({
-  marginBottom: 12,
-  marginTop: 12,
+  marginBottom: 1.5,
+  marginTop: 1.5,
   padding: 0,
 });
 

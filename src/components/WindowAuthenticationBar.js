@@ -126,16 +126,16 @@ export class WindowAuthenticationBar extends Component {
       >
         <Button
           fullWidth
-          sx={theme => ({
+          sx={{
             '&:hover': {
-              backgroundColor: theme.palette.secondary.main,
+              backgroundColor: 'secondary.main',
             },
             alignItems: 'center',
             display: 'flex',
             justifyContent: 'inherit',
-            padding: theme.spacing(1),
+            padding: 1,
             textTransform: 'none',
-          })}
+          }}
           onClick={() => this.setOpen(true)}
           component="div"
           color="inherit"

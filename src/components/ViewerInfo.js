@@ -8,7 +8,7 @@ import ns from '../config/css-ns';
 const StyledOsdInfo = styled('div')(() => ({
   order: 2,
   overflow: 'hidden',
-  paddingBottom: 3,
+  paddingBottom: 0.5,
   textOverflow: 'ellipsis',
   unicodeBidi: 'plaintext',
   whiteSpace: 'nowrap',

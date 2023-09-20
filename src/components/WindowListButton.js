@@ -7,7 +7,7 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 const StyledButton = styled(MiradorMenuButton)(({ theme }) => ({
   margin: theme.spacing(1),
-  paddingLeft: 12,
+  paddingLeft: 1.5,
 }));
 
 /**
@@ -55,7 +55,7 @@ export class WindowListButton extends Component {
           }}
           disabled={disabled}
           badge
-          badgeContent={{ badgeContent: windowCount }}
+          BadgeProps={{ badgeContent: windowCount }}
           onClick={(e) => this.handleOpen(e)}
         >
           <BookmarksIcon />

@@ -11,24 +11,24 @@ import { Rnd } from 'react-rnd';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
-const StyledRnd = styled(Rnd)(({ theme }) => ({
+const StyledRnd = styled(Rnd)(() => ({
   display: 'flex',
   flexDirection: 'column',
   minHeight: 0,
   position: 'relative',
 }));
 
-const StyledPositionButton = styled(MiradorMenuButton)(({ theme }) => ({
+const StyledPositionButton = styled(MiradorMenuButton)(() => ({
   marginLeft: -16,
   order: -100,
   width: 24,
 }));
 
-const StyledCloseButton = styled(MiradorMenuButton)(({ theme }) => ({
+const StyledCloseButton = styled(MiradorMenuButton)(() => ({
   order: 4,
 }));
 
-const StyledTitleControls = styled('div')(({ theme }) => ({
+const StyledTitleControls = styled('div')(() => ({
   alignItems: 'center',
   display: 'flex',
   flexFlow: 'row wrap',
@@ -123,9 +123,12 @@ export class CompanionWindow extends Component {
           borderTopColor: position === 'bottom' && 'divider',
           boxShadow: 'none',
           boxSizing: 'border-box',
-          display: isDisplayed ? null : 'flex',
+          display: 'flex',
           flexDirection: 'column',
           minHeight: 0,
+        }}
+        style={{
+          display: isDisplayed ? null : 'none',
           order: position === 'left' ? -1 : null,
         }}
         className={[ns(`companion-window-${position}`), paperClassName].join(' ')}

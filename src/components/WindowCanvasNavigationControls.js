@@ -33,8 +33,8 @@ export class WindowCanvasNavigationControls extends Component {
     return (
       <Paper
         square
-        sx={{
-          backgroundColor: alpha('background.paper', 0.5),
+        sx={theme => ({
+          backgroundColor: alpha(theme.palette.background.paper, 0.5),
           bottom: 0,
           cursor: 'default',
           display: 'flex',
@@ -45,7 +45,7 @@ export class WindowCanvasNavigationControls extends Component {
           textAlign: 'center',
           width: '100%',
           zIndex: 50,
-        }}
+        })}
         className={
           classNames(
             ns('canvas-nav'),

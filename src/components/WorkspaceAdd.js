@@ -134,7 +134,7 @@ export class WorkspaceAdd extends Component {
               </Grid>
             </Grid>
           ) : (
-            <Paper sx={{ margin: '16px' }}>
+            <Paper sx={{ margin: 2 }}>
               <Typography style={visuallyHidden} component="h1">{t('miradorResources')}</Typography>
               <PluginHook {...this.props} />
               <List disablePadding>

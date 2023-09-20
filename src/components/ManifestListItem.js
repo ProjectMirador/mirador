@@ -19,7 +19,7 @@ const StyledLogo = styled(Img)(({ theme }) => ({
   height: '2.5rem',
   maxWidth: '100%',
   objectFit: 'contain',
-  paddingRight: 8,
+  paddingRight: 1,
 }));
 
 /**

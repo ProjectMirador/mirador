@@ -23,7 +23,19 @@ export function MiradorMenuButton(props) {
   const button = (
     <IconButton {...iconButtonProps} size="large">
       {badge
-        ? <Badge overlap="rectangular" {...BadgeProps}>{children}</Badge>
+        ? (
+          <Badge
+            sx={{
+              '.MuiBadge-badge': {
+                paddingLeft: 1.5,
+              },
+            }}
+            overlap="rectangular"
+            {...BadgeProps}
+          >
+            {children}
+          </Badge>
+        )
         : children}
     </IconButton>
   );

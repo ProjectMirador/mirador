@@ -6,7 +6,7 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDownSharp';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUpSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
-const Container = styled('div')(({ theme }) => ({
+const Container = styled('div')(() => ({
   cursor: 'pointer', // This style will be applied to Typography
   display: 'flex',
   justifyContent: 'space-between',

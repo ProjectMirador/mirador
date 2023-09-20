@@ -20,16 +20,16 @@ import CollapsibleSection from '../containers/CollapsibleSection';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 import ManifestInfo from '../containers/ManifestInfo';
 
-const StyledScrollIndicatedDialogContent = styled(ScrollIndicatedDialogContent)(({ theme }) => ({
-  padding: theme.spacing(1),
+const StyledScrollIndicatedDialogContent = styled(ScrollIndicatedDialogContent)(() => ({
+  padding: 1,
 }));
 
 const StyledCollectionMetadata = styled('div')(() => ({
-  padding: '16px',
+  padding: 2,
 }));
 
 const StyledCollectionFilter = styled('div')(() => ({
-  padding: '16px',
+  padding: 2,
   paddingTop: 0,
 }));
 

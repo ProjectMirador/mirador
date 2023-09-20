@@ -7,12 +7,13 @@ import CanvasAnnotations from '../containers/CanvasAnnotations';
 import CompanionWindow from '../containers/CompanionWindow';
 import ns from '../config/css-ns';
 
-const Section = styled('div')(({ theme }) => ({
-  borderBottom: `.5px solid ${theme.palette.section_divider}`,
-  paddingBottom: theme.spacing(1),
-  paddingLeft: theme.spacing(2),
-  paddingRight: theme.spacing(1),
-  paddingTop: theme.spacing(2),
+const Section = styled('div')(() => ({
+  borderBottom: '.5px solid',
+  borderBottomColor: 'section_divider',
+  paddingBottom: 1,
+  paddingLeft: 2,
+  paddingRight: 1,
+  paddingTop: 2,
 }));
 /**
  * WindowSideBarAnnotationsPanel ~

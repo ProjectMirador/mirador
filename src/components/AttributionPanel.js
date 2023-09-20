@@ -10,23 +10,21 @@ import { LabelValueMetadata } from './LabelValueMetadata';
 import ns from '../config/css-ns';
 import { PluginHook } from './PluginHook';
 
-/**
- *
- * @param theme
- * @returns {label: {paddingLeft: number}}}
- */
-const Logo = styled(Img)(() => ({
+const StyledLogo = styled(Img)(() => ({
   maxWidth: '100%',
 }));
-const Placeholder = styled(Skeleton)(({ theme }) => ({
+
+const StyledPlaceholder = styled(Skeleton)(({ theme }) => ({
   backgroundColor: theme.palette.grey[300],
 }));
-const Section = styled('div')(({ theme }) => ({
-  borderBottom: `.5px solid ${theme.palette.section_divider}`,
-  paddingBottom: theme.spacing(1),
-  paddingLeft: theme.spacing(2),
-  paddingRight: theme.spacing(1),
-  paddingTop: theme.spacing(2),
+
+const StyledSection = styled('div')(() => ({
+  borderBottom: '.5px solid',
+  borderBottomColor: 'section_divider',
+  paddingBottom: 1,
+  paddingLeft: 2,
+  paddingRight: 1,
+  paddingTop: 2,
 }));
 
 /**
@@ -54,7 +52,7 @@ export class AttributionPanel extends Component {
         windowId={windowId}
         id={id}
       >
-        <Section>
+        <StyledSection>
           { requiredStatement && (
             <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
           )}
@@ -72,19 +70,19 @@ export class AttributionPanel extends Component {
               </dl>
             )
           }
-        </Section>
+        </StyledSection>
 
         { manifestLogo && (
-          <Section>
-            <Logo
+          <StyledSection>
+            <StyledLogo
               src={[manifestLogo]}
               alt=""
               role="presentation"
               unloader={
-                <Placeholder variant="rectangular" height={60} width={60} />
+                <StyledPlaceholder variant="rectangular" height={60} width={60} />
               }
             />
-          </Section>
+          </StyledSection>
         )}
 
         <PluginHook {...this.props} />

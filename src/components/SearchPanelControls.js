@@ -11,9 +11,9 @@ import SearchIcon from '@mui/icons-material/SearchSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import SearchPanelNavigation from '../containers/SearchPanelNavigation';
 
-const StyledForm = styled('form')(({ theme }) => ({
-  paddingBottom: theme.spacing(1),
-  paddingRight: theme.spacing(1.5),
+const StyledForm = styled('form')(() => ({
+  paddingBottom: 1,
+  paddingRight: 1.5,
   width: '100%',
 }));
 
