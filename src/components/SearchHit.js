@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import Button from '@mui/material/Button';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -78,7 +77,6 @@ export class SearchHit extends Component {
       annotation,
       annotationLabel,
       canvasLabel,
-      classes,
       companionWindowId,
       containerRef,
       hit,
@@ -103,23 +101,37 @@ export class SearchHit extends Component {
         scrollTo={windowSelected && !focused}
       >
         <ListItem
-          className={clsx(
-            classes.listItem,
-            {
-              [classes.adjacent]: adjacent,
-              [classes.selected]: selected,
-              [classes.focused]: focused,
-              [classes.windowSelected]: windowSelected,
+          sx={{
+            '&.Mui-focused': {
+              '&:hover': {
+                backgroundColor: windowSelected && 'inherit',
+              },
+              backgroundColor: windowSelected && 'inherit',
             },
-          )}
+            borderBottom: '0.5px solid',
+            borderBottomColor: 'divider',
+            paddingRight: 8,
+
+          }}
           button={!selected}
           component="li"
           onClick={this.handleClick}
           selected={selected}
         >
           <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-            <Typography variant="subtitle2" className={classes.subtitle}>
-              <Chip component="span" label={index + 1} className={classes.hitCounter} />
+            <Typography variant="subtitle2" sx={{ marginBottom: 1.5 }}>
+              <Chip
+                component="span"
+                label={index + 1}
+                sx={{
+                  // eslint-disable-next-line no-nested-ternary
+                  backgroundColor: windowSelected ? 'highlights?.primary' : adjacent ? 'highlights?.secondary' : 'hitCounter?.default',
+                  height: 30,
+                  marginRight: 1,
+                  typography: 'subtitle2',
+                  verticalAlign: 'inherit',
+                }}
+              />
               <span id={canvasLabelHtmlId}>
                 {canvasLabel}
               </span>
@@ -138,7 +150,20 @@ export class SearchHit extends Component {
                 <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
                 {' '}
                 { truncated && !focused && (
-                  <Button className={classes.inlineButton} onClick={showDetails} color="secondary" size="small" aria-describedby={canvasLabelHtmlId}>
+                  <Button
+                    sx={{
+                      '& span': {
+                        lineHeight: '1.5em',
+                      },
+                      margin: 0,
+                      padding: 0,
+                      textTransform: 'none',
+                    }}
+                    onClick={showDetails}
+                    color="secondary"
+                    size="small"
+                    aria-describedby={canvasLabelHtmlId}
+                  >
                     {t('more')}
                   </Button>
                 )}
@@ -162,7 +187,6 @@ SearchHit.propTypes = {
   annotationLabel: PropTypes.string,
   announcer: PropTypes.func,
   canvasLabel: PropTypes.string,
-  classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string,
   containerRef: PropTypes.oneOfType([
     PropTypes.func,
@@ -191,7 +215,6 @@ SearchHit.defaultProps = {
   annotationLabel: undefined,
   announcer: undefined,
   canvasLabel: undefined,
-  classes: {},
   companionWindowId: undefined,
   containerRef: undefined,
   focused: false,

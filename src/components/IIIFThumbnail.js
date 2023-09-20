@@ -2,10 +2,18 @@ import {
   Component, useMemo, useEffect, useState,
 } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { useInView } from 'react-intersection-observer';
-import classNames from 'classnames';
 import getThumbnail from '../lib/ThumbnailFactory';
+
+const StyledRoot = styled('div')(() => ({
+
+}));
+
+const StyledLabel = styled('div')(() => ({
+
+}));
 
 /**
  * A lazy-loaded image that uses IntersectionObserver to determine when to
@@ -98,6 +106,10 @@ const LazyLoadedImage = ({
   );
 };
 
+const StyledLazyLoadedImage = styled(LazyLoadedImage)(() => ({
+
+}));
+
 LazyLoadedImage.propTypes = {
   maxHeight: PropTypes.number.isRequired,
   maxWidth: PropTypes.number.isRequired,
@@ -143,9 +155,9 @@ export class IIIFThumbnail extends Component {
   render() {
     const {
       children,
-      classes,
       imagePlaceholder,
       labelled,
+      imageStyle,
       maxHeight,
       maxWidth,
       resource,
@@ -156,8 +168,14 @@ export class IIIFThumbnail extends Component {
     } = this.props;
 
     return (
-      <div className={classNames(classes.root, { [classes[`${variant}Root`]]: variant })}>
-        <LazyLoadedImage
+      <StyledRoot
+        sx={{
+          display: variant === 'inside' && 'inline-block',
+          height: variant === 'inside' && 'inherit',
+          position: variant === 'inside' && 'relative',
+        }}
+      >
+        <StyledLazyLoadedImage
           placeholder={imagePlaceholder}
           thumbnail={thumbnail}
           resource={resource}
@@ -165,26 +183,53 @@ export class IIIFThumbnail extends Component {
           maxWidth={maxWidth}
           thumbnailsConfig={thumbnailsConfig}
           style={style}
-          className={classes.image}
+          sx={{
+            borderBottom: imageStyle && '1px solid',
+            borderBottomColor: imageStyle && 'divider',
+          }}
         />
 
         { labelled && (
-          <div className={classNames(classes.label, { [classes[`${variant}Label`]]: variant })}>
-            <Typography variant="caption" classes={{ root: classNames(classes.caption, { [classes[`${variant}Caption`]]: variant }) }}>
+          <StyledLabel
+            sx={{
+              background: variant === 'inside' && 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+              bottom: variant === 'inside' && '5px',
+              boxSizing: variant === 'inside' && 'border-box',
+              left: variant === 'inside' && '0px',
+              overflow: 'hidden',
+              padding: variant === 'inside' && '4px',
+              position: variant === 'inside' && 'absolute',
+              textOverflow: 'ellipsis',
+              width: variant === 'inside' && '100%',
+            }}
+          >
+            <Typography
+              variant="caption"
+              sx={{
+                boxOrient: variant === 'outside' && 'vertical',
+                color: variant === 'inside' && '#ffffff',
+                display: variant === 'outside' && '-webkit-box',
+                lineClamp: variant === 'inside' ? '1' : '2',
+                lineHeight: '1.5em',
+                maxHeight: variant === 'outside' && '3em',
+                whiteSpace: variant === 'inside' && 'nowrap',
+                wordBreak: 'break-word',
+              }}
+            >
               {this.label()}
             </Typography>
-          </div>
+          </StyledLabel>
         )}
         {children}
-      </div>
+      </StyledRoot>
     );
   }
 }
 
 IIIFThumbnail.propTypes = {
   children: PropTypes.node,
-  classes: PropTypes.objectOf(PropTypes.string),
   imagePlaceholder: PropTypes.string,
+  imageStyle: PropTypes.bool,
   label: PropTypes.string,
   labelled: PropTypes.bool,
   maxHeight: PropTypes.number,
@@ -202,9 +247,9 @@ IIIFThumbnail.propTypes = {
 
 IIIFThumbnail.defaultProps = {
   children: null,
-  classes: {},
   // Transparent "gray"
   imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==',
+  imageStyle: false,
   label: undefined,
   labelled: false,
   maxHeight: null,

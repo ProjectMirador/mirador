@@ -31,4 +31,3 @@ export class WorkspaceControlPanelButtons extends Component {
     );
   }
 }
-

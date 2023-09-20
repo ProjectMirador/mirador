@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import { styled } from '@mui/material/styles';
 import { v4 as uuid } from 'uuid';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -17,6 +17,19 @@ import Typography from '@mui/material/Typography';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
+
+const StyledDragHandle = styled('div')(({ theme }) => ({
+  alignItems: 'center',
+  borderRight: `0.5px solid ${theme.palette.divider}`,
+  display: 'flex',
+  flex: 1,
+  flexDirection: 'row',
+  marginBottom: -1 * theme.spacing(2) + 0.5,
+  marginRight: theme.spacing(1),
+  marginTop: -1 * theme.spacing(2),
+  maxWidth: theme.spacing(3),
+  width: theme.spacing(3),
+}));
 
 /** */
 const reorder = (list, startIndex, endIndex) => {
@@ -116,7 +129,6 @@ export class CanvasLayers extends Component {
   /** @private */
   renderLayer(resource, index) {
     const {
-      classes,
       layerMetadata,
       t,
     } = this.props;
@@ -136,10 +148,12 @@ export class CanvasLayers extends Component {
             maxHeight={height}
             maxWidth={width}
             resource={resource}
-            classes={{ image: classes.image, root: classes.thumbnail }}
+            imageStyle
           />
           <Typography
-            className={classes.label}
+            sx={{
+              paddingLeft: 1,
+            }}
             component="div"
             variant="body1"
           >
@@ -158,10 +172,21 @@ export class CanvasLayers extends Component {
         </div>
         <div style={{ alignItems: 'center', display: 'flex' }}>
           <Tooltip title={t('layer_opacity')}>
-            <OpacityIcon className={classes.opacityIcon} color={layer.visibility ? 'inherit' : 'disabled'} fontSize="small" />
+            <OpacityIcon sx={{ marginRight: 0.5 }} color={layer.visibility ? 'inherit' : 'disabled'} fontSize="small" />
           </Tooltip>
           <Input
-            classes={{ input: classes.opacityInput }}
+            sx={{
+              'MuiInput-input': {
+                '&::-webkit-outer-spin-button,&::-webkit-inner-spin-button': {
+                  '-webkit-appearance': 'none',
+                  margin: 0,
+                },
+                '-moz-appearance': 'textfield',
+                textAlign: 'right',
+                typography: 'caption',
+                width: '3ch',
+              },
+            }}
             disabled={!layer.visibility}
             value={Math.round(layer.opacity * 100)}
             type="number"
@@ -174,7 +199,11 @@ export class CanvasLayers extends Component {
             }}
           />
           <Slider
-            className={classes.slider}
+            sx={{
+              marginLeft: 2,
+              marginRight: 2,
+              maxWidth: 150,
+            }}
             disabled={!layer.visibility}
             value={layer.opacity * 100}
             onChange={(e, value) => this.handleOpacityChange(resource.id, value)}
@@ -187,7 +216,6 @@ export class CanvasLayers extends Component {
   /** @private */
   renderDraggableLayer(resource, index) {
     const {
-      classes,
       t,
     } = this.props;
 
@@ -198,20 +226,32 @@ export class CanvasLayers extends Component {
             ref={provided.innerRef}
             {...provided.draggableProps}
             component="li"
-            className={clsx(
-              classes.listItem,
-              {
-                [classes.dragging]: snapshot.isDragging,
-              },
-            )}
+            sx={{
+              alignItems: 'stretch',
+              backgroundColor: snapshot.isDragging && 'action.hover',
+              borderBottom: '0.5px solid',
+              borderBottomColor: 'divider',
+              cursor: 'pointer',
+              paddingBottom: 2,
+              paddingRight: 2,
+              paddingTop: 2,
+            }}
             disableGutters
             key={resource.id}
           >
-            <div {...provided.dragHandleProps} className={classes.dragHandle}>
+            <StyledDragHandle
+              {...provided.dragHandleProps}
+              sx={{
+                '&:hover': {
+                  backgroundColor: snapshot.isDragging ? 'action.selected' : 'action.hover',
+                },
+                backgroundColor: snapshot.isDragging ? 'action.selected' : 'shades?.light',
+              }}
+            >
               <Tooltip title={t('layer_move')}>
                 <DragHandleIcon />
               </Tooltip>
-            </div>
+            </StyledDragHandle>
             {this.renderLayer(resource, index)}
           </ListItem>
         )}
@@ -222,7 +262,6 @@ export class CanvasLayers extends Component {
   /** */
   render() {
     const {
-      classes,
       index,
       label,
       layers,
@@ -233,7 +272,14 @@ export class CanvasLayers extends Component {
     return (
       <>
         { totalSize > 1 && (
-          <Typography className={classes.sectionHeading} variant="overline">
+          <Typography
+            sx={{
+              paddingLeft: 1,
+              paddingRight: 1,
+              paddingTop: 2,
+            }}
+            variant="overline"
+          >
             {t('annotationCanvasLabel', { context: `${index + 1}/${totalSize}`, label })}
           </Typography>
         )}
@@ -241,7 +287,9 @@ export class CanvasLayers extends Component {
           <Droppable droppableId={this.droppableId}>
             {(provided, snapshot) => (
               <List
-                className={classes.list}
+                sx={{
+                  paddingTop: 0,
+                }}
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
@@ -262,7 +310,6 @@ export class CanvasLayers extends Component {
 
 CanvasLayers.propTypes = {
   canvasId: PropTypes.string.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string),
   index: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
   layerMetadata: PropTypes.objectOf(PropTypes.shape({
@@ -277,6 +324,5 @@ CanvasLayers.propTypes = {
 };
 
 CanvasLayers.defaultProps = {
-  classes: {},
   layerMetadata: undefined,
 };
