@@ -21,7 +21,7 @@ function TabButton({ t, value, ...tabProps }) {
         sx={{
           '&.Mui-selected': {
             borderRight: '2px solid',
-            borderRightColor: 'primary?.main',
+            borderRightColor: 'primary.main',
           },
           '&.MuiTab-root': {
             '&:active': {
@@ -149,7 +149,7 @@ export class WindowSideBarButtons extends Component {
             onKeyUp={this.handleKeyUp}
             t={t}
             icon={(
-              <Badge overlap="rectangular" sx={{ backgroundColor: 'notification.main' }} invisible={!hasAnnotations} variant="dot">
+              <Badge overlap="rectangular" sx={{ '.MuiBadge-badge': { backgroundColor: 'notification.main' } }} invisible={!hasAnnotations} variant="dot">
                 <AnnotationIcon />
               </Badge>
             )}
@@ -161,7 +161,7 @@ export class WindowSideBarButtons extends Component {
             onKeyUp={this.handleKeyUp}
             t={t}
             icon={(
-              <Badge overlap="rectangular" sx={{ backgroundColor: 'notification.main' }} invisible={!hasSearchResults} variant="dot">
+              <Badge overlap="rectangular" sx={{ '.MuiBadge-badge': { backgroundColor: 'notification.main' } }} invisible={!hasSearchResults} variant="dot">
                 <SearchIcon />
               </Badge>
             )}
@@ -173,7 +173,7 @@ export class WindowSideBarButtons extends Component {
             onKeyUp={this.handleKeyUp}
             t={t}
             icon={(
-              <Badge overlap="rectangular" sx={{ backgroundColor: 'notification.main' }} invisible={!hasCurrentLayers} variant="dot">
+              <Badge overlap="rectangular" sx={{ '.MuiBadge-badge': { backgroundColor: 'notification.main' } }} invisible={!hasCurrentLayers} variant="dot">
                 <LayersIcon />
               </Badge>
             )}

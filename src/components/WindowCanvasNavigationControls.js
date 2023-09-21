@@ -33,7 +33,7 @@ export class WindowCanvasNavigationControls extends Component {
     return (
       <Paper
         square
-        sx={theme => ({
+        sx={(theme) => ({
           backgroundColor: alpha(theme.palette.background.paper, 0.5),
           bottom: 0,
           cursor: 'default',

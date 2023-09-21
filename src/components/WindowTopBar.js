@@ -31,7 +31,7 @@ export class WindowTopBar extends Component {
     } = this.props;
 
     return (
-      <AppBar position="relative" color="default">
+      <AppBar position="relative" color="default" enableColorOnDark>
         <nav aria-label={t('windowNavigation')}>
           <Toolbar
             disableGutters

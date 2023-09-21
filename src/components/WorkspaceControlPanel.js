@@ -58,6 +58,7 @@ export class WorkspaceControlPanel extends Component {
         })}
         className={classNames(ns('workspace-control-panel'))}
         color="default"
+        enableColorOnDark
         position="absolute"
         component="nav"
         aria-label={t('workspaceNavigation')}

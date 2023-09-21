@@ -21,7 +21,13 @@ export function MiradorMenuButton(props) {
   } = props;
 
   const button = (
-    <IconButton {...iconButtonProps} size="large">
+    <IconButton
+      {...iconButtonProps}
+      sx={{
+        fill: 'currentcolor',
+      }}
+      size="large"
+    >
       {badge
         ? (
           <Badge

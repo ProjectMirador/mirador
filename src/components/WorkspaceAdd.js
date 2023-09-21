@@ -195,7 +195,7 @@ export class WorkspaceAdd extends Component {
                 right: '0',
               })}
             >
-              <AppBar position="absolute" color="primary" onClick={() => (this.setAddResourcesVisibility(false))}>
+              <AppBar position="absolute" color="primary" enableColorOnDark onClick={() => (this.setAddResourcesVisibility(false))}>
                 <Toolbar variant="dense">
                   <StyledMiradorMenuButton
                     aria-label={t('closeAddResourceForm')}

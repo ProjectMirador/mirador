@@ -49,7 +49,7 @@ export class MinimalWindow extends Component {
         }}
         aria-label={label && ariaLabel ? t('window', { label }) : null}
       >
-        <AppBar position="relative" color="default">
+        <AppBar position="relative" color="default" enableColorOnDark>
           <Toolbar
             disableGutters
             className={cn(ns('window-top-bar'))}
