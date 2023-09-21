@@ -25,13 +25,13 @@ function TabButton({ t, value, ...tabProps }) {
           },
           '&.MuiTab-root': {
             '&:active': {
-              backgroundColor: 'action?.active',
+              backgroundColor: 'action.active',
             },
             '&:focus': {
               '@media (hover: none)': {
                 backgroundColor: 'transparent',
               },
-              backgroundColor: 'action?.hover',
+              backgroundColor: 'action.hover',
               textDecoration: 'none',
               // Reset on touch devices, it doesn't add specificity
             },
@@ -39,7 +39,7 @@ function TabButton({ t, value, ...tabProps }) {
               '@media (hover: none)': {
                 backgroundColor: 'transparent',
               },
-              backgroundColor: 'action?.hover',
+              backgroundColor: 'action.hover',
               textDecoration: 'none',
               // Reset on touch devices, it doesn't add specificity
             },
@@ -149,7 +149,7 @@ export class WindowSideBarButtons extends Component {
             onKeyUp={this.handleKeyUp}
             t={t}
             icon={(
-              <Badge overlap="rectangular" sx={{ backgroundColor: 'notification?.main' }} invisible={!hasAnnotations} variant="dot">
+              <Badge overlap="rectangular" sx={{ backgroundColor: 'notification.main' }} invisible={!hasAnnotations} variant="dot">
                 <AnnotationIcon />
               </Badge>
             )}
@@ -161,7 +161,7 @@ export class WindowSideBarButtons extends Component {
             onKeyUp={this.handleKeyUp}
             t={t}
             icon={(
-              <Badge overlap="rectangular" sx={{ backgroundColor: 'notification?.main' }} invisible={!hasSearchResults} variant="dot">
+              <Badge overlap="rectangular" sx={{ backgroundColor: 'notification.main' }} invisible={!hasSearchResults} variant="dot">
                 <SearchIcon />
               </Badge>
             )}
@@ -173,7 +173,7 @@ export class WindowSideBarButtons extends Component {
             onKeyUp={this.handleKeyUp}
             t={t}
             icon={(
-              <Badge overlap="rectangular" sx={{ backgroundColor: 'notification?.main' }} invisible={!hasCurrentLayers} variant="dot">
+              <Badge overlap="rectangular" sx={{ backgroundColor: 'notification.main' }} invisible={!hasCurrentLayers} variant="dot">
                 <LayersIcon />
               </Badge>
             )}

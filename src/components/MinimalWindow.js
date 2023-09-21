@@ -38,7 +38,7 @@ export class MinimalWindow extends Component {
           cn(ns('placeholder-window'))
         }
         sx={{
-          backgroundColor: 'shades?.dark',
+          backgroundColor: 'shades.dark',
           borderRadius: 0,
           display: 'flex',
           flexDirection: 'column',
@@ -54,7 +54,7 @@ export class MinimalWindow extends Component {
             disableGutters
             className={cn(ns('window-top-bar'))}
             sx={{
-              backgroundColor: 'shades?.main',
+              backgroundColor: 'shades.main',
               borderTop: '2px solid transparent',
               minHeight: 32,
               paddingLeft: 0.5,

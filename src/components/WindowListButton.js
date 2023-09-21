@@ -5,10 +5,8 @@ import { styled } from '@mui/material/styles';
 import WindowList from '../containers/WindowList';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
-const StyledButton = styled(MiradorMenuButton)(({ theme }) => ({
-  margin: theme.spacing(1),
-  paddingLeft: 1.5,
-}));
+const StyledMiradorMenuButton = styled(MiradorMenuButton)({
+});
 
 /**
  * WindowListButton ~
@@ -44,11 +42,12 @@ export class WindowListButton extends Component {
 
     return (
       <>
-        <StyledButton
+        <StyledMiradorMenuButton
           aria-haspopup="true"
           aria-label={t('listAllOpenWindows')}
           aria-owns={windowListAnchor ? 'window-list' : null}
           sx={{
+            margin: 1,
             ...(windowListAnchor && {
               backgroundColor: 'action.selected',
             }),
@@ -59,7 +58,7 @@ export class WindowListButton extends Component {
           onClick={(e) => this.handleOpen(e)}
         >
           <BookmarksIcon />
-        </StyledButton>
+        </StyledMiradorMenuButton>
 
         {Boolean(windowListAnchor) && (
         <WindowList

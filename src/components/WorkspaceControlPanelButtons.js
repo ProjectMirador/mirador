@@ -6,9 +6,8 @@ import WorkspaceOptionsButton from '../containers/WorkspaceOptionsButton';
 import WindowListButton from '../containers/WindowListButton';
 import { PluginHook } from './PluginHook';
 
-const StyledFullScreenButton = styled(FullScreenButton)(({ theme }) => ({
-  margin: theme.spacing(1),
-}));
+const StyledFullScreenButton = styled(FullScreenButton)({
+});
 
 /**
  *
@@ -25,7 +24,7 @@ export class WorkspaceControlPanelButtons extends Component {
         <WindowListButton />
         <WorkspaceMenuButton />
         <WorkspaceOptionsButton />
-        <StyledFullScreenButton />
+        <StyledFullScreenButton sx={{ margin: 1 }} />
         <PluginHook {...this.props} />
       </>
     );

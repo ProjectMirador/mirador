@@ -247,7 +247,7 @@ export class CanvasLayers extends Component {
                 '&:hover': {
                   backgroundColor: snapshot.isDragging ? 'action.selected' : 'action.hover',
                 },
-                backgroundColor: snapshot.isDragging ? 'action.selected' : 'shades?.light',
+                backgroundColor: snapshot.isDragging ? 'action.selected' : 'shades.light',
               }}
             >
               <Tooltip title={t('layer_move')}>

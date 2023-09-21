@@ -129,7 +129,7 @@ export class SearchHit extends Component {
                 label={index + 1}
                 sx={{
                   // eslint-disable-next-line no-nested-ternary
-                  backgroundColor: windowSelected ? 'highlights?.primary' : adjacent ? 'highlights?.secondary' : 'hitCounter?.default',
+                  backgroundColor: windowSelected ? 'highlights.primary' : adjacent ? 'highlights.secondary' : 'hitCounter.default',
                   height: 30,
                   marginRight: 1,
                   typography: 'subtitle2',

@@ -5,9 +5,8 @@ import PropTypes from 'prop-types';
 import WorkspaceMenu from '../containers/WorkspaceMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
-const StyledButton = styled(MiradorMenuButton)(({ theme }) => ({
-  margin: theme.spacing(1),
-}));
+const StyledMiradorMenuButton = styled(MiradorMenuButton)({
+});
 /**
  */
 export class WorkspaceMenuButton extends Component {
@@ -54,11 +53,12 @@ export class WorkspaceMenuButton extends Component {
 
     return (
       <>
-        <StyledButton
+        <StyledMiradorMenuButton
           aria-haspopup="true"
           aria-label={t('workspaceMenu')}
           aria-owns={open ? 'workspace-menu' : undefined}
           sx={{
+            margin: 1,
             ...(open && {
               backgroundColor: 'action.selected',
             }),
@@ -67,7 +67,7 @@ export class WorkspaceMenuButton extends Component {
           onClick={this.handleMenuClick}
         >
           <SettingsIcon />
-        </StyledButton>
+        </StyledMiradorMenuButton>
         <WorkspaceMenu
           anchorEl={anchorEl}
           id="workspace-menu"

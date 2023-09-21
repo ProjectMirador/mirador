@@ -7,11 +7,11 @@ import Box from '@mui/material/Box';
 import RestoreZoomIcon from './icons/RestoreZoomIcon';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
-const ZoomControlsWrapper = styled('div')(({ theme }) => ({
+const ZoomControlsWrapper = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
-}));
+});
 
 const dividerStyle = {
   borderRight: '1px solid #808080',

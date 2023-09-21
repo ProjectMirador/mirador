@@ -6,9 +6,8 @@ import Menu from '@mui/material/Menu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { PluginHook } from './PluginHook';
 
-const StyledButton = styled(MiradorMenuButton)(({ theme }) => ({
-  margin: theme.spacing(1),
-}));
+const StyledMiradorMenuButton = styled(MiradorMenuButton)({
+});
 /**
  *
  */
@@ -59,11 +58,12 @@ export class WindowTopBarPluginMenu extends Component {
 
     return (
       <>
-        <StyledButton
+        <StyledMiradorMenuButton
           aria-haspopup="true"
           aria-label={t('windowPluginMenu')}
           aria-owns={open ? windowPluginMenuId : undefined}
           sx={{
+            margin: 1,
             ...(open && {
               backgroundColor: 'action.selected',
             }),
@@ -71,7 +71,7 @@ export class WindowTopBarPluginMenu extends Component {
           onClick={this.handleMenuClick}
         >
           {menuIcon}
-        </StyledButton>
+        </StyledMiradorMenuButton>
 
         <Menu
           id={windowPluginMenuId}

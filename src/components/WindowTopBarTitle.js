@@ -5,13 +5,13 @@ import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 import ErrorIcon from '@mui/icons-material/ErrorOutlineSharp';
 
-const TitleTypographyStyle = styled(TitleTypography)(({ theme }) => ({
+const StyledTitleTypography = styled(TitleTypography)(({ theme }) => ({
   ...theme.typography.h6,
   flexGrow: 1,
   paddingLeft: theme.spacing(0.5),
 }));
 
-const TitleStyle = styled('div')(({ theme }) => ({
+const StyledTitle = styled('div')(({ theme }) => ({
   ...theme.typography.h6,
   flexGrow: 1,
   paddingLeft: theme.spacing(0.5),
@@ -45,26 +45,26 @@ export class WindowTopBarTitle extends Component {
     let title = null;
     if (isFetching) {
       title = (
-        <TitleTypographyStyle>
+        <StyledTitleTypography>
           <Skeleton variant="text" />
-        </TitleTypographyStyle>
+        </StyledTitleTypography>
       );
     } else if (error) {
       title = (
         <>
           <ErrorIcon color="error" />
-          <TitleTypographyStyle color="textSecondary">
+          <StyledTitleTypography color="textSecondary">
             {error}
-          </TitleTypographyStyle>
+          </StyledTitleTypography>
         </>
       );
     } else if (hideWindowTitle) {
-      title = (<TitleStyle />);
+      title = (<StyledTitle />);
     } else {
       title = (
-        <TitleTypographyStyle>
+        <StyledTitleTypography>
           {manifestTitle}
-        </TitleTypographyStyle>
+        </StyledTitleTypography>
       );
     }
     return title;

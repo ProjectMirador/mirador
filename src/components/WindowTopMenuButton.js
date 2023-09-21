@@ -5,9 +5,8 @@ import WindowTopMenu from '../containers/WindowTopMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import WindowOptionsIcon from './icons/WindowOptionsIcon';
 
-const StyledButton = styled(MiradorMenuButton)(({ theme }) => ({
-  margin: theme.spacing(1),
-}));
+const StyledMiradorMenuButton = styled(MiradorMenuButton)({
+});
 /**
  */
 export class WindowTopMenuButton extends Component {
@@ -56,11 +55,12 @@ export class WindowTopMenuButton extends Component {
     const menuId = `window-menu_${windowId}`;
     return (
       <>
-        <StyledButton
+        <StyledMiradorMenuButton
           aria-haspopup="true"
           aria-label={t('windowMenu')}
           aria-owns={open ? menuId : undefined}
           sx={{
+            margin: 1,
             ...(open && {
               backgroundColor: 'action.selected',
             }),
@@ -68,7 +68,7 @@ export class WindowTopMenuButton extends Component {
           onClick={this.handleMenuClick}
         >
           <WindowOptionsIcon />
-        </StyledButton>
+        </StyledMiradorMenuButton>
         <WindowTopMenu
           windowId={windowId}
           anchorEl={anchorEl}

@@ -52,7 +52,9 @@ export class WorkspaceControlPanel extends Component {
             right: 'auto',
             width: variant === 'wide' ? 'auto' : 64,
           },
-          width: variant === 'wide' ? 'auto' : null,
+          ...(variant === 'wide' && {
+            width: 'auto',
+          }),
         })}
         className={classNames(ns('workspace-control-panel'))}
         color="default"

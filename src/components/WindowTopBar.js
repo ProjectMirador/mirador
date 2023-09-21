@@ -37,13 +37,15 @@ export class WindowTopBar extends Component {
             disableGutters
             onMouseDown={focusWindow}
             sx={{
-              backgroundColor: 'shades?.main',
+              backgroundColor: 'shades.main',
               borderTop: '2px solid ',
               borderTopColor: focused ? 'primary.main' : 'transparent',
-              cursor: windowDraggable ? 'move' : null,
               minHeight: 32,
               paddingLeft: 0.5,
               paddingRight: 0.5,
+              ...(windowDraggable && {
+                cursor: 'move',
+              }),
             }}
             className={classNames(ns('window-top-bar'))}
             variant="dense"
