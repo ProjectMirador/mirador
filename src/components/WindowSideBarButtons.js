@@ -46,6 +46,7 @@ function TabButton({ t, value, ...tabProps }) {
             borderRight: '2px solid transparent',
             minWidth: 'auto',
           },
+          fill: 'currentcolor',
         }}
         aria-label={
           t('openCompanionWindow', { context: value })

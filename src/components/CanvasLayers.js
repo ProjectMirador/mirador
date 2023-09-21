@@ -178,10 +178,10 @@ export class CanvasLayers extends Component {
             sx={{
               'MuiInput-input': {
                 '&::-webkit-outer-spin-button,&::-webkit-inner-spin-button': {
-                  '-webkit-appearance': 'none',
                   margin: 0,
+                  WebkitAppearance: 'none',
                 },
-                '-moz-appearance': 'textfield',
+                MozAppearance: 'textfield',
                 textAlign: 'right',
                 typography: 'caption',
                 width: '3ch',

@@ -5,12 +5,8 @@ import DOMPurify from 'dompurify';
 import ns from '../config/css-ns';
 import htmlRules from '../lib/htmlRules';
 
-const StyledSpan = styled('span')(({ theme }) => ({
-  '& a': {
-    color: theme.palette.primary.main,
-    textDecoration: 'underline',
-  },
-}));
+const StyledSpan = styled('span')({
+});
 /**
 */
 export class SanitizedHtml extends Component {
@@ -33,6 +29,12 @@ export class SanitizedHtml extends Component {
 
     return (
       <StyledSpan
+        sx={{
+          '& a': {
+            color: 'primary.main',
+            textDecoration: 'underline',
+          },
+        }}
         className={[ns('third-party-html')].join(' ')}
         dangerouslySetInnerHTML={{ // eslint-disable-line react/no-danger
           __html: DOMPurify.sanitize(htmlString, htmlRules[ruleSet]),

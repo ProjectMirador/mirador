@@ -13,11 +13,11 @@ import CanvasWorld from '../lib/CanvasWorld';
 import { PluginHook } from './PluginHook';
 import { OSDReferences } from '../plugins/OSDReferences';
 
-const StyledSection = styled('section')(({ theme }) => ({
+const StyledSection = styled('section')({
   cursor: 'grab',
   flex: 1,
   position: 'relative',
-}));
+});
 /**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
  * and rendering OSD.

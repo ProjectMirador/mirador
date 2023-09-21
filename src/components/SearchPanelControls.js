@@ -11,16 +11,11 @@ import SearchIcon from '@mui/icons-material/SearchSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import SearchPanelNavigation from '../containers/SearchPanelNavigation';
 
-const StyledForm = styled('form')(() => ({
-  paddingBottom: 1,
-  paddingRight: 1.5,
-  width: '100%',
-}));
+const StyledForm = styled('form')({
+});
 
-const StyledEndAdornment = styled('div')(() => ({
-  position: 'absolute',
-  right: 0,
-}));
+const StyledEndAdornment = styled('div')({
+});
 /** Sometimes an autocomplete match can be a simple string, other times an object
     with a `match` property, this function abstracts that away */
 const getMatch = (option) => (isObject(option) ? option.match : option);
@@ -135,7 +130,15 @@ export class SearchPanelControls extends Component {
     const id = `search-${companionWindowId}`;
     return (
       <>
-        <StyledForm aria-label={t('searchTitle')} onSubmit={this.submitSearch}>
+        <StyledForm
+          sx={{
+            paddingBottom: 1,
+            paddingRight: 1.5,
+            width: '100%',
+          }}
+          aria-label={t('searchTitle')}
+          onSubmit={this.submitSearch}
+        >
           <Autocomplete
             id={id}
             inputValue={search}
@@ -153,10 +156,15 @@ export class SearchPanelControls extends Component {
               <TextField
                 {...params}
                 label={t('searchInputLabel')}
+                variant="standard"
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (
-                    <StyledEndAdornment>
+                    <StyledEndAdornment sx={{
+                      position: 'absolute',
+                      right: 0,
+                    }}
+                    >
                       <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
                         <SearchIcon />
                       </MiradorMenuButton>
