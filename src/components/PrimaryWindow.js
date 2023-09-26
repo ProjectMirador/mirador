@@ -16,7 +16,7 @@ GalleryView.displayName = 'GalleryView';
 SelectCollection.displayName = 'SelectCollection';
 WindowViewer.displayName = 'WindowViewer';
 
-const PrimaryWindowContainer = styled('div')(() => ({
+const StyledPrimaryWindowContainer = styled('div')(() => ({
   display: 'flex',
   flex: 1,
   position: 'relative',
@@ -83,14 +83,14 @@ export class PrimaryWindow extends Component {
       isCollectionDialogVisible, windowId, children,
     } = this.props;
     return (
-      <PrimaryWindowContainer data-testid="test-window" className={ns('primary-window')}>
+      <StyledPrimaryWindowContainer data-testid="test-window" className={ns('primary-window')}>
         <WindowSideBar windowId={windowId} />
         <CompanionArea windowId={windowId} position="left" />
         { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
         <Suspense fallback={<div />}>
           {children || this.renderViewer()}
         </Suspense>
-      </PrimaryWindowContainer>
+      </StyledPrimaryWindowContainer>
     );
   }
 }

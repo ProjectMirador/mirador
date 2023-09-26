@@ -12,7 +12,7 @@ import IIIFThumbnail from '../containers/IIIFThumbnail';
 const StyledGalleryViewItem = styled('div')({
 });
 
-const ChipsContainer = styled('div')(() => ({
+const StyledChipsContainer = styled('div')(() => ({
   opacity: 0.875,
   position: 'absolute',
   right: 0,
@@ -158,7 +158,7 @@ export class GalleryViewThumbnail extends Component {
               maxWidth: `${() => Math.ceil(config.height * miradorCanvas.aspectRatio)}px`,
             }}
           >
-            <ChipsContainer>
+            <StyledChipsContainer>
               {searchAnnotationsCount > 0 && (
                 <Chip
                   avatar={(
@@ -205,7 +205,7 @@ export class GalleryViewThumbnail extends Component {
                   size="small"
                 />
               )}
-            </ChipsContainer>
+            </StyledChipsContainer>
           </IIIFThumbnail>
         </StyledGalleryViewItem>
       </InView>

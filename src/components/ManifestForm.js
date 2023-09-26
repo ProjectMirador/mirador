@@ -1,22 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-
-/**
-   */
-const inputStyle = (theme) => ({
-  ...theme.typography.body1,
-});
-
-const StyledGrid = styled(Grid)(({ theme }) => ({
-  textAlign: 'right',
-  [theme.breakpoints.up('sm')]: {
-    textAlign: 'inherit',
-  },
-}));
 
 /**
  * Provides a form for user input of a manifest url
@@ -105,11 +91,19 @@ export class ManifestForm extends Component {
                 shrink: true,
               }}
               InputProps={{
-                style: inputStyle,
+                style: { typography: 'body1' },
               }}
             />
           </Grid>
-          <StyledGrid item xs={12} sm={4} md={3}>
+          <Grid
+            item
+            xs={12}
+            sm={4}
+            md={3}
+            sx={{
+              textAlign: { sm: 'inherit', xs: 'right' },
+            }}
+          >
             { onCancel && (
               <Button onClick={this.handleCancel}>
                 {t('cancel')}
@@ -118,7 +112,7 @@ export class ManifestForm extends Component {
             <Button id="fetchBtn" type="submit" variant="contained" color="primary">
               {t('fetchManifest')}
             </Button>
-          </StyledGrid>
+          </Grid>
         </Grid>
       </form>
     );

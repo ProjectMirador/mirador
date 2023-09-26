@@ -2,13 +2,13 @@ import { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 
-const Container = styled('div')(() => ({
+const StyledContainer = styled('div')(() => ({
   alignItems: 'center',
   display: 'flex',
   width: '100%',
 }));
 
-const Video = styled('video')(() => ({
+const StyledVideo = styled('video')(() => ({
   maxHeight: '100%',
   width: '100%',
 }));
@@ -22,8 +22,8 @@ export class VideoViewer extends Component {
       captions, videoOptions, videoResources,
     } = this.props;
     return (
-      <Container>
-        <Video {...videoOptions}>
+      <StyledContainer>
+        <StyledVideo {...videoOptions}>
           {videoResources.map(video => (
             <Fragment key={video.id}>
               <source src={video.id} type={video.getFormat()} />
@@ -34,8 +34,8 @@ export class VideoViewer extends Component {
               <track src={caption.id} label={caption.getDefaultLabel()} srcLang={caption.getProperty('language')} />
             </Fragment>
           ))}
-        </Video>
-      </Container>
+        </StyledVideo>
+      </StyledContainer>
     );
   }
   /* eslint-enable jsx-a11y/media-has-caption */

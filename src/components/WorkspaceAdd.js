@@ -160,7 +160,7 @@ export class WorkspaceAdd extends Component {
 
           <Drawer
             sx={theme => ({
-              '&.MuiDrawer-paper': {
+              '.MuiDrawer-paper': {
                 borderTop: '0',
                 left: '0',
                 [theme.breakpoints.up('sm')]: {
@@ -181,19 +181,15 @@ export class WorkspaceAdd extends Component {
             }}
           >
             <Paper
-              sx={theme => ({
+              sx={{
                 left: '0',
-                marginTop: 48,
-                paddingBottom: theme.spacing(2),
-                paddingLeft: theme.spacing(2),
-                paddingRight: theme.spacing(2),
-                [theme.breakpoints.up('sm')]: {
-                  paddingLeft: theme.spacing(3),
-                  paddingRight: theme.spacing(3),
-                },
-                paddingTop: theme.spacing(2),
+                marginTop: 6,
+                paddingBottom: 2,
+                paddingLeft: { sm: 3, xs: 2 },
+                paddingRight: { sm: 3, xs: 2 },
+                paddingTop: 2,
                 right: '0',
-              })}
+              }}
             >
               <AppBar position="absolute" color="primary" enableColorOnDark onClick={() => (this.setAddResourcesVisibility(false))}>
                 <Toolbar variant="dense">

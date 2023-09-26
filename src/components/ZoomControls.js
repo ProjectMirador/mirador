@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import RestoreZoomIcon from './icons/RestoreZoomIcon';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
-const ZoomControlsWrapper = styled('div')({
+const StyledZoomControlsWrapper = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
@@ -71,7 +71,7 @@ export class ZoomControls extends Component {
       );
     }
     return (
-      <ZoomControlsWrapper>
+      <StyledZoomControlsWrapper>
         <MiradorMenuButton aria-label={t('zoomIn')} onClick={this.handleZoomInClick}>
           <AddCircleIcon />
         </MiradorMenuButton>
@@ -82,7 +82,7 @@ export class ZoomControls extends Component {
           <RestoreZoomIcon />
         </MiradorMenuButton>
         {displayDivider && <Box component="span" sx={dividerStyle} />}
-      </ZoomControlsWrapper>
+      </StyledZoomControlsWrapper>
     );
   }
 }

@@ -9,7 +9,7 @@ import WorkspaceControlPanelButtons from '../containers/WorkspaceControlPanelBut
 import Branding from '../containers/Branding';
 import ns from '../config/css-ns';
 
-const WorkspaceButtons = styled('div')(({ theme }) => ({
+const StyledWorkspaceButtons = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('sm')]: {
     display: 'flex',
     flexDirection: 'column',
@@ -76,9 +76,9 @@ export class WorkspaceControlPanel extends Component {
           })}
         >
           <WorkspaceAddButton />
-          <WorkspaceButtons>
+          <StyledWorkspaceButtons>
             <WorkspaceControlPanelButtons />
-          </WorkspaceButtons>
+          </StyledWorkspaceButtons>
         </Toolbar>
         <StyledBranding t={t} variant={variant} />
       </AppBar>

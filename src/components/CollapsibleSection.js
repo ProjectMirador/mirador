@@ -6,7 +6,7 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDownSharp';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUpSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
-const Container = styled('div')(() => ({
+const StyledContainer = styled('div')(() => ({
   cursor: 'pointer', // This style will be applied to Typography
   display: 'flex',
   justifyContent: 'space-between',
@@ -42,7 +42,7 @@ export class CollapsibleSection extends Component {
 
     return (
       <>
-        <Container sx={{ padding: 0 }}>
+        <StyledContainer sx={{ padding: 0 }}>
           <Typography
             sx={{ cursor: 'pointer' }}
             id={id}
@@ -60,7 +60,7 @@ export class CollapsibleSection extends Component {
           >
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </MiradorMenuButton>
-        </Container>
+        </StyledContainer>
         {open && children}
       </>
     );

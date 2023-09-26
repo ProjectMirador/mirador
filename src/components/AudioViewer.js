@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 
-const Container = styled('div')({
+const StyledContainer = styled('div')({
   alignItems: 'center',
   display: 'flex',
   width: '100%',
@@ -21,7 +21,7 @@ export function AudioViewer(props) {
   } = props;
 
   return (
-    <Container>
+    <StyledContainer>
       <StyledAudio {...audioOptions}>
         {audioResources.map((audio) => (
           <Fragment key={audio.id}>
@@ -34,7 +34,7 @@ export function AudioViewer(props) {
           </Fragment>
         ))}
       </StyledAudio>
-    </Container>
+    </StyledContainer>
   );
 }
 /* eslint-enable jsx-a11y/media-has-caption */
