@@ -10,6 +10,12 @@ import { miradorSlice } from './utils';
 /** Get searches from state */
 const getSearches = (state) => miradorSlice(state).searches;
 
+/**
+ * Returns the search result for a specific window.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {object}
+ */
 export const getSearchForWindow = createSelector(
   [
     (state, { windowId }) => windowId,
@@ -22,6 +28,12 @@ export const getSearchForWindow = createSelector(
   },
 );
 
+/**
+ * Returns the search result for a specific companion window.
+ * @param {object} state
+ * @param {string} companionWindowId
+ * @returns {object|undefined}
+ */
 const getSearchForCompanionWindow = createSelector(
   [
     getSearchForWindow,
@@ -33,6 +45,11 @@ const getSearchForCompanionWindow = createSelector(
   },
 );
 
+/**
+ * Returns an array of search responses for a specific companion window.
+ * @param {object} state
+ * @returns {Array}
+ */
 const getSearchResponsesForCompanionWindow = createSelector(
   [
     getSearchForCompanionWindow,
@@ -43,6 +60,12 @@ const getSearchResponsesForCompanionWindow = createSelector(
   },
 );
 
+/**
+ * Returns the search query for a specific companion window.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {string|undefined}
+ */
 export const getSearchQuery = createSelector(
   [
     getSearchForCompanionWindow,
@@ -50,6 +73,11 @@ export const getSearchQuery = createSelector(
   results => results && results.query,
 );
 
+/**
+ * Returns if search response for a companion window is fetching.
+ * @param {object} state
+ * @returns {boolean}
+ */
 export const getSearchIsFetching = createSelector(
   [
     getSearchResponsesForCompanionWindow,
@@ -57,6 +85,12 @@ export const getSearchIsFetching = createSelector(
   results => results.some(result => result.isFetching),
 );
 
+/**
+ * Returns the total number of search results for a companion window.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {number|undefined}
+ */
 export const getSearchNumTotal = createSelector(
   [
     getSearchForCompanionWindow,
@@ -73,6 +107,12 @@ export const getSearchNumTotal = createSelector(
   },
 );
 
+/**
+ * Returns the Id of the next search.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {number|undefined}
+ */
 export const getNextSearchId = createSelector(
   [
     getSearchForCompanionWindow,
@@ -104,6 +144,12 @@ const getSearchHitsForCompanionWindow = createSelector(
   })),
 );
 
+/**
+ * Returns sorted search hits based on canvas order.
+ * @param {object} state
+ * @param {string} manifestId
+ * @returns {Array}
+ */
 export const getSortedSearchHitsForCompanionWindow = createSelector(
   [
     getSearchHitsForCompanionWindow,

@@ -5,6 +5,9 @@ import {
 } from './manifests';
 import { getWindow } from './getters';
 
+/**
+ * @param {string} companionWindowId
+ */
 export const getSequences = createSelector(
   [getManifestoInstance],
   (manifest) => {
@@ -29,6 +32,9 @@ export const getSequences = createSelector(
   },
 );
 
+/**
+ * @param {string} companionWindowId
+ */
 export const getSequence = createSelector(
   [
     getSequences,
@@ -83,7 +89,10 @@ export const getSequenceViewingHint = createSelector(
   },
 );
 
-/** */
+/**
+ * @param {object} state
+ * @param {string} windowId
+ */
 export const getSequenceViewingDirection = createSelector(
   [getWindow, getSequence, getManifestoInstance],
   (window, sequence, manifest) => {
@@ -122,7 +131,11 @@ export const getSequenceBehaviors = createSelector(
   },
 );
 
-/** */
+/**
+ * @param {object} state
+ * @param {string} companionWindowId
+ *
+*/
 export const getSequenceTreeStructure = createSelector(
   [getSequence, getManifestoInstance],
   (sequence, manifest) => {

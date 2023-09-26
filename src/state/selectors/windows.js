@@ -7,7 +7,12 @@ import { getWindows, getWindow, getWindowIds } from './getters';
 import { getWorkspaceType } from './workspace';
 import { getSequenceViewingHint, getSequenceBehaviors } from './sequences';
 
-/** */
+/**
+ * Returns the window configuration
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {object}
+ */
 export const getWindowConfig = createSelector(
   [getConfig, getWindow],
   ({ window: defaultConfig }, windowConfig = {}) => ({ ...defaultConfig, ...windowConfig }),
@@ -28,7 +33,11 @@ export function getWindowTitles(state) {
   return result;
 }
 
-/** */
+/**
+ * Returns an array containing the maximized windowIds
+ * @param {object} state
+ * @returns {Array}
+*/
 export const getMaximizedWindowsIds = createSelector(
   [getWindows],
   windows => Object.values(windows)
@@ -62,7 +71,12 @@ export const getWindowViewType = createSelector(
   },
 );
 
-/** */
+/**
+ * Returns the window view type for a given window
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {string} 'single' | 'book' | 'scroll' | 'gallery'
+ */
 export const getAllowedWindowViewTypes = createSelector(
   [
     getSequenceViewingHint,
