@@ -8,7 +8,7 @@ import { getWorkspaceType } from './workspace';
 import { getSequenceViewingHint, getSequenceBehaviors } from './sequences';
 
 /**
- * Returns the window configuration
+ * Returns the window configuration based.
  * @param {object} state
  * @param {string} windowId
  * @returns {object}
@@ -19,9 +19,9 @@ export const getWindowConfig = createSelector(
 );
 
 /**
- * Return the manifest titles for all open windows
+ * Returns the manifest titles for all open windows.
  * @param {object} state
- * @return {object}
+ * @returns {object}
  */
 export function getWindowTitles(state) {
   const result = {};
@@ -34,10 +34,10 @@ export function getWindowTitles(state) {
 }
 
 /**
- * Returns an array containing the maximized windowIds
+ * Returns an array containing the maximized windowIds.
  * @param {object} state
- * @returns {Array}
-*/
+ * @return {Array}
+ */
 export const getMaximizedWindowsIds = createSelector(
   [getWindows],
   windows => Object.values(windows)
@@ -45,13 +45,14 @@ export const getMaximizedWindowsIds = createSelector(
     .map(window => window.id),
 );
 
-/** Return type of view in a certain window.
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @param {String}
-*/
+/**
+ * Returns type of view in a certain window.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @param {string}
+ */
 export const getWindowViewType = createSelector(
   [
     getWindow,
@@ -72,7 +73,7 @@ export const getWindowViewType = createSelector(
 );
 
 /**
- * Returns the window view type for a given window
+ * Returns the window view type for a given window.
  * @param {object} state
  * @param {string} windowId
  * @returns {string} 'single' | 'book' | 'scroll' | 'gallery'
@@ -97,10 +98,10 @@ export const getAllowedWindowViewTypes = createSelector(
 );
 
 /**
- * Returns the draggability of a window
+ * Return the draggability of a window.
  * @param {object} state
  * @param {object} props
- * @return {Boolean}
+ * @returns {boolean}
  */
 export const getWindowDraggability = createSelector(
   [

@@ -5,11 +5,12 @@ import { getVisibleCanvases } from './canvases';
 import { getLayersForVisibleCanvases } from './layers';
 import { getSequenceViewingDirection } from './sequences';
 
-/** Instantiate a manifesto instance
+/**
+ *  Instantiate a manifesto instance.
  * @param {object} state
  * @param {string} windowId
- * @returns {object}
-*/
+ * @return {object}
+ */
 export const getCurrentCanvasWorld = createSelector(
   getVisibleCanvases,
   getLayersForVisibleCanvases,

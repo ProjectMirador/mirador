@@ -66,7 +66,13 @@ const getVisibleLeafAndBranchNodeIds = createSelector(
   },
 );
 
-/** */
+/**
+ * Returns visible node ids.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @returns {Array}
+ */
 export const getVisibleNodeIds = createSelector(
   [
     getVisibleLeafAndBranchNodeIds,
@@ -94,7 +100,14 @@ const getCanvasContainingNodeIds = createSelector(
   ),
 );
 
-/** */
+/**
+ * Returns ids of manually exanded nodes.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.companionWindowId
+ * @param expanded
+ * @returns {Array}
+ */
 export function getManuallyExpandedNodeIds(state, { companionWindowId }, expanded) {
   const companionWindow = getCompanionWindow(state, { companionWindowId });
   return companionWindow.tocNodes ? Object.keys(companionWindow.tocNodes).reduce(
@@ -105,7 +118,14 @@ export function getManuallyExpandedNodeIds(state, { companionWindowId }, expande
   ) : [];
 }
 
-/** */
+/**
+ * Returns ids of exanded nodes.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.companionWindowId
+ * @param {string} props.windowId
+ * @returns {Array}
+ */
 export function getExpandedNodeIds(state, { companionWindowId, windowId }) {
   const visibleBranchNodeIds = getVisibleBranchNodeIds(state, { companionWindowId, windowId });
   const manuallyExpandedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId }, true);
@@ -113,7 +133,15 @@ export function getExpandedNodeIds(state, { companionWindowId, windowId }) {
   return without(union(manuallyExpandedNodeIds, visibleBranchNodeIds), ...manuallyClosedNodeIds);
 }
 
-/** */
+/**
+ * Returns id of node to scroll to.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.companionWindowId
+ * @param {string} props.windowId
+ * @param {string} props.manifestid
+ * @returns {string}
+ */
 export function getNodeIdToScrollTo(state, { ...args }) {
   const canvasContainingNodeIds = getCanvasContainingNodeIds(state, { ...args });
   const collapsedNodeIds = getManuallyExpandedNodeIds(state, args, false);
@@ -129,7 +157,10 @@ export function getNodeIdToScrollTo(state, { ...args }) {
 }
 
 /**
- * Returns the default sidebar variant depending on whether or not ranges exist
+ * Returns the default sidebar variant depending on whether or not ranges exist.
+ * @param {object} state
+ * @param {string}
+ * @returns {string}
  */
 export const getDefaultSidebarVariant = createSelector(
   [

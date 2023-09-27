@@ -2,7 +2,7 @@ import settings from '../../config/settings';
 
 /**
  * Returns a slice of the mirador redux state based on settings.
- * Otherwise the entire Redux state is returned
+ * Otherwise the entire Redux state is returned.
  * @param {object} state
  * @returns {object}
  */
