@@ -9,6 +9,8 @@ import fragmentFixtureV3 from '../../fixtures/version-3/hamilton.json';
 import audioFixture from '../../fixtures/version-3/0002-mvm-audio.json';
 import videoFixture from '../../fixtures/version-3/0015-start.json';
 import videoWithAnnoCaptions from '../../fixtures/version-3/video_with_annotation_captions.json';
+import auth2WithImage from '../../fixtures/version-3/auth2-kiosk.json';
+import auth2WithVideo from '../../fixtures/version-3/auth2-active.json';
 
 describe('MiradorCanvas', () => {
   let instance;
@@ -131,6 +133,28 @@ describe('MiradorCanvas', () => {
         Utils.parseManifest(videoWithAnnoCaptions).getSequences()[0].getCanvases()[0],
       );
       expect(instance.v3VttContent.length).toEqual(1);
+    });
+  });
+  describe('iiifImageResources', () => {
+    it('returns image resources', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(auth2WithImage).getSequences()[0].getCanvases()[0],
+      );
+      expect(instance.iiifImageResources.length).toEqual(1);
+    });
+    it('returns only image resources', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(auth2WithVideo).getSequences()[0].getCanvases()[0],
+      );
+      expect(instance.iiifImageResources.length).toEqual(0);
+    });
+  });
+  describe('imageServiceIds', () => {
+    it('returns image service IDs', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(auth2WithImage).getSequences()[0].getCanvases()[0],
+      );
+      expect(instance.imageServiceIds[0]).toEqual('https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen');
     });
   });
 });

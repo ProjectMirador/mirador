@@ -1,6 +1,9 @@
 import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
 import { Canvas, AnnotationPage, Annotation } from 'manifesto.js';
+import { audioResourcesFrom, iiifImageResourcesFrom, videoResourcesFrom } from './typeFilters';
+import canvasTypes from './canvasTypes';
+
 /**
  * MiradorCanvas - adds additional, testable logic around Manifesto's Canvas
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
@@ -64,7 +67,7 @@ export default class MiradorCanvas {
     return this.imageResources[0];
   }
 
-  /** */
+  /** Despite name, this method returns paintable resources, not just images */
   get imageResources() {
     const resources = flattenDeep([
       this.canvas.getImages().map(i => i.getResource()),
@@ -83,19 +86,12 @@ export default class MiradorCanvas {
 
   /** */
   get videoResources() {
-    const resources = flattenDeep([
-      this.canvas.getContent().map(i => i.getBody()),
-    ]);
-    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Video'));
+    return videoResourcesFrom(this.imageResources);
   }
 
   /** */
   get audioResources() {
-    const resources = flattenDeep([
-      this.canvas.getContent().map(i => i.getBody()),
-    ]);
-
-    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Sound'));
+    return audioResourcesFrom(this.imageResources);
   }
 
   /** */
@@ -158,13 +154,14 @@ export default class MiradorCanvas {
 
   /** */
   get iiifImageResources() {
-    return this.imageResources
-      .filter(r => r && r.getServices()[0] && r.getServices()[0].id);
+    return iiifImageResourcesFrom(this.imageResources);
   }
 
   /** */
   get imageServiceIds() {
-    return this.iiifImageResources.map(r => r.getServices()[0].id);
+    /** filter services by profile for IIIF images services */
+    const imageServiceFilter = s => canvasTypes.imageServiceProfiles.includes(s.getProfile());
+    return this.iiifImageResources.map(r => r.getServices().filter(imageServiceFilter)[0].id);
   }
 
   /**
