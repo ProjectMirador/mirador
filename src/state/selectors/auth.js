@@ -1,7 +1,10 @@
 import { createSelector } from 'reselect';
 import flatten from 'lodash/flatten';
-import { Utils } from 'manifesto.js';
-import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
+import {
+  audioResourcesFrom, filterByTypes, textResourcesFrom, videoResourcesFrom,
+} from '../../lib/typeFilters';
+import MiradorCanvas from '../../lib/MiradorCanvas';
+import { miradorSlice } from './utils';
 import { getConfig } from './config';
 import { getVisibleCanvases, selectInfoResponses } from './canvases';
 import { getMiradorCanvasWrapper } from './wrappers';
@@ -67,15 +70,29 @@ export const selectCurrentAuthServices = createSelector(
       );
     }
 
-    if (!currentAuthResources) return EMPTY_ARRAY;
-    if (currentAuthResources.length === 0) return EMPTY_ARRAY;
+    if (currentAuthResources.length === 0 && canvases) {
+      currentAuthResources = flatten(canvases.map(c => {
+        const miradorCanvas = new MiradorCanvas(c);
+        const canvasResources = miradorCanvas.imageResources;
+        return videoResourcesFrom(canvasResources)
+          .concat(audioResourcesFrom(canvasResources))
+          .concat(textResourcesFrom(canvasResources));
+      }));
+    }
+
+    if (!currentAuthResources) return [];
+    if (currentAuthResources.length === 0) return [];
 
     const currentAuthServices = currentAuthResources.map((resource) => {
       let lastAttemptedService;
-      const services = Utils.getServices(resource);
+      const resourceServices = Utils.getServices(resource);
+      const probeServices = filterByTypes(resourceServices, 'AuthProbeService2');
+      const probeServiceServices = flatten(probeServices.map(p => Utils.getServices(p)));
 
       for (const authProfile of serviceProfiles) {
-        const profiledAuthServices = services.filter((p) => authProfile.profile === p.getProfile());
+        const profiledAuthServices = resourceServices.concat(probeServiceServices).filter(
+          p => authProfile.profile === p.getProfile(),
+        );
 
         for (const service of profiledAuthServices) {
           lastAttemptedService = service;
