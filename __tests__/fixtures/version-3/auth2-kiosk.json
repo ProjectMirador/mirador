@@ -1,0 +1,69 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://iiif.io/api/cookbook/recipe/0005-image-service/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "A kiosk-authorized image"
+    ]
+  },
+  "items": [
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0005-image-service/canvas/p1",
+      "type": "Canvas",
+      "label": {
+        "en": [
+          "Canvas with a single IIIF image"
+        ]
+      },
+      "height": 3024,
+      "width": 4032,
+      "items": [        
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0005-image-service/page/p1/1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.io/api/cookbook/recipe/0005-image-service/annotation/p0001-image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen/full/max/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "height": 3024,
+                "width": 4032,
+                "service": [
+                  {
+                    "id": "https://auth.example.org/probe/918ecd18c2592080851777620de9bcb5-gottingen",
+                    "type": "AuthProbeService2",
+                    "service" : [
+                      {
+                        "id": "https://auth.example.org/kiosk",
+                        "type": "AuthAccessService2",
+                        "profile": "kiosk",
+                        "label": { "en": [ "Kiosk Login" ] },
+                        "service" : [
+                          {
+                            "id": "https://auth.example.org/token/918ecd18c2592080851777620de9bcb5-gottingen",
+                            "type": "AuthAccessTokenService2"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "id": "https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen",
+                    "profile": "level1",
+                    "type": "ImageService3"
+                  }
+                ]
+              },
+              "target": "https://iiif.io/api/cookbook/recipe/0005-image-service/canvas/p1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

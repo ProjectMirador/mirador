@@ -2,6 +2,8 @@ import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
 import { Canvas, AnnotationPage, Annotation } from 'manifesto.js';
 import { getIiifResourceImageService } from './iiif';
+import { audioResourcesFrom, iiifImageResourcesFrom, videoResourcesFrom } from './typeFilters';
+import canvasTypes from './canvasTypes';
 
 /**
  * MiradorCanvas - adds additional, testable logic around Manifesto's Canvas
@@ -65,7 +67,7 @@ export default class MiradorCanvas {
     return this.imageResources[0];
   }
 
-  /** */
+  /** Despite name, this method returns paintable resources, not just images */
   get imageResources() {
     // TODO Clean up the following hack as soon as manifesto.js provides any information if an annotation body is a Choice option, and if so, whether it is the preferred one.
     const resources = flattenDeep([
@@ -124,15 +126,12 @@ export default class MiradorCanvas {
 
   /** */
   get videoResources() {
-    const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
-    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Video'));
+    return videoResourcesFrom(this.imageResources);
   }
 
   /** */
   get audioResources() {
-    const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
-
-    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Sound'));
+    return audioResourcesFrom(this.imageResources);
   }
 
   /** */
@@ -195,7 +194,9 @@ export default class MiradorCanvas {
 
   /** */
   get imageServiceIds() {
-    return this.iiifImageResources.map((r) => r && getIiifResourceImageService(r)?.id);
+    /** filter services by profile for IIIF images services */
+    const imageServiceFilter = s => canvasTypes.imageServiceProfiles.includes(s.getProfile());
+    return this.iiifImageResources.map(r => r.getServices().filter(imageServiceFilter)[0].id);
   }
 
   /**
