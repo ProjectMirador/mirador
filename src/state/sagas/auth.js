@@ -2,7 +2,14 @@ import { all, call, put, select, takeEvery, delay } from 'redux-saga/effects';
 import { Utils } from 'manifesto.js';
 import flatten from 'lodash/flatten';
 import ActionTypes from '../actions/action-types';
-import { addAuthenticationRequest, resolveAuthenticationRequest, requestAccessToken, resetAuthenticationState } from '../actions';
+import MiradorCanvas from '../../lib/MiradorCanvas';
+import { getTokenService } from '../../lib/getServices';
+import {
+  addAuthenticationRequest,
+  resolveAuthenticationRequest,
+  requestAccessToken,
+  resetAuthenticationState,
+} from '../actions';
 import {
   selectInfoResponses,
   getVisibleCanvases,
@@ -41,9 +48,8 @@ export function* refetchInfoResponses({ serviceId }) {
   /** */
   const haveThisTokenService = (infoResponse) => {
     const services = Utils.getServices(infoResponse);
-    return services.some((e) => {
-      const infoTokenService =
-        Utils.getService(e, 'http://iiif.io/api/auth/1/token') || Utils.getService(e, 'http://iiif.io/api/auth/0/token');
+    return services.some(e => {
+      const infoTokenService = getTokenService(e);
       return infoTokenService && infoTokenService.id === serviceId;
     });
   };
@@ -78,9 +84,7 @@ export function* doAuthWorkflow({ infoJson, windowId }) {
     // start the auth
     yield put(addAuthenticationRequest(windowId, authService.id, authService.getProfile()));
   } else if (profileConfig.external) {
-    const tokenService =
-      Utils.getService(authService, 'http://iiif.io/api/auth/1/token') ||
-      Utils.getService(authService, 'http://iiif.io/api/auth/0/token');
+    const tokenService = getTokenService(authService);
 
     if (!tokenService) return;
     // resolve the auth
@@ -95,10 +99,8 @@ export function* rerequestOnAccessTokenFailure({ infoJson, windowId, tokenServic
   if (!tokenServiceId) return;
 
   // make sure we have an auth service to try
-  const authService = Utils.getServices(infoJson).find((service) => {
-    const tokenService =
-      Utils.getService(service, 'http://iiif.io/api/auth/1/token') ||
-      Utils.getService(service, 'http://iiif.io/api/auth/0/token');
+  const authService = Utils.getServices(infoJson).find(service => {
+    const tokenService = getTokenService(service);
 
     return tokenService && tokenService.id === tokenServiceId;
   });

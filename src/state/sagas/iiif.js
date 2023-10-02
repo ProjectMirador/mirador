@@ -13,7 +13,13 @@ import {
   receiveAnnotation,
   receiveAnnotationFailure,
 } from '../actions';
-import { getManifests, getRequestsConfig, getAccessTokens, selectInfoResponse } from '../selectors';
+import { getTokenService } from '../../lib/getServices';
+import {
+  getManifests,
+  getRequestsConfig,
+  getAccessTokens,
+  selectInfoResponse,
+} from '../selectors';
 
 /** */
 function fetchWrapper(url, options, { success, degraded, failure }) {
@@ -143,9 +149,7 @@ function* getAccessTokenService(resource) {
 
   for (let i = 0; i < services.length; i += 1) {
     const authService = services[i];
-    const accessTokenService =
-      Utils.getService(authService, 'http://iiif.io/api/auth/1/token') ||
-      Utils.getService(authService, 'http://iiif.io/api/auth/0/token');
+    const accessTokenService = getTokenService(authService);
     const token = accessTokenService && accessTokens[accessTokenService.id];
     if (token && token.json) return token;
   }
