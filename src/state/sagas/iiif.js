@@ -10,6 +10,7 @@ import {
   receiveSearch, receiveSearchFailure,
   receiveAnnotation, receiveAnnotationFailure,
 } from '../actions';
+import { getTokenService } from '../../lib/getServices';
 import {
   getManifests,
   getRequestsConfig,
@@ -128,8 +129,7 @@ function* getAccessTokenService(resource) {
 
   for (let i = 0; i < services.length; i += 1) {
     const authService = services[i];
-    const accessTokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token')
-      || Utils.getService(authService, 'http://iiif.io/api/auth/0/token');
+    const accessTokenService = getTokenService(authService);
     const token = accessTokenService && accessTokens[accessTokenService.id];
     if (token && token.json) return token;
   }

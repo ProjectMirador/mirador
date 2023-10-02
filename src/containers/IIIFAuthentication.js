@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withTranslation } from 'react-i18next';
-import { Utils } from 'manifesto.js';
 import { withPlugins } from '../extend/withPlugins';
+import { getLogoutService, getTokenService } from '../lib/getServices';
 import * as actions from '../state/actions';
 import {
   getAuth,
@@ -23,14 +23,8 @@ const mapStateToProps = (state, { windowId }) => {
   // TODO: get the most actionable auth service...
   const service = services[0];
 
-  const accessTokenService = service && (
-    Utils.getService(service, 'http://iiif.io/api/auth/1/token')
-    || Utils.getService(service, 'http://iiif.io/api/auth/0/token')
-  );
-  const logoutService = service && (
-    Utils.getService(service, 'http://iiif.io/api/auth/1/logout')
-    || Utils.getService(service, 'http://iiif.io/api/auth/0/logout')
-  );
+  const accessTokenService = getTokenService(service);
+  const logoutService = getLogoutService(service);
 
   const authStatuses = getAuth(state);
   const authStatus = service && authStatuses[service.id];
