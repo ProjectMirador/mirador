@@ -1,6 +1,9 @@
 import { createSelector } from 'reselect';
 import { Utils } from 'manifesto.js';
 import flatten from 'lodash/flatten';
+import {
+  audioResourcesFrom, filterByTypes, textResourcesFrom, videoResourcesFrom,
+} from '../../lib/typeFilters';
 import MiradorCanvas from '../../lib/MiradorCanvas';
 import { miradorSlice } from './utils';
 import { getConfig } from './config';
@@ -48,15 +51,27 @@ export const selectCurrentAuthServices = createSelector(
       }));
     }
 
+    if (currentAuthResources.length === 0 && canvases) {
+      currentAuthResources = flatten(canvases.map(c => {
+        const miradorCanvas = new MiradorCanvas(c);
+        const canvasResources = miradorCanvas.imageResources;
+        return videoResourcesFrom(canvasResources)
+          .concat(audioResourcesFrom(canvasResources))
+          .concat(textResourcesFrom(canvasResources));
+      }));
+    }
+
     if (!currentAuthResources) return [];
     if (currentAuthResources.length === 0) return [];
 
     const currentAuthServices = currentAuthResources.map(resource => {
       let lastAttemptedService;
-      const services = Utils.getServices(resource);
+      const resourceServices = Utils.getServices(resource);
+      const probeServices = filterByTypes(resourceServices, 'AuthProbeService2');
+      const probeServiceServices = flatten(probeServices.map(p => Utils.getServices(p)));
 
       for (const authProfile of serviceProfiles) {
-        const profiledAuthServices = services.filter(
+        const profiledAuthServices = resourceServices.concat(probeServiceServices).filter(
           p => authProfile.profile === p.getProfile(),
         );
 
