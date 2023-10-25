@@ -13,12 +13,17 @@ export function anyAuthServices(resource) {
 
 /**
  */
+export function anyProbeServices(resource) {
+  return resource
+  && Utils.getServices(resource).filter(s => (s.getProfile() === 'http://iiif.io/api/auth/1/probe')
+    || (s.getProperty('type') === 'AuthProbeService2'));
+}
+
+/**
+ */
 export function getProbeService(resource) {
   return resource
-  && (
-    Utils.getService(resource, 'http://iiif.io/api/auth/1/probe')
-    || filterByTypes(Utils.getServices(resource), 'AuthProbeService2')[0]
-  );
+  && anyProbeServices(resource)[0];
 }
 
 /**
