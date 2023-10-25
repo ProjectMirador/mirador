@@ -5,7 +5,7 @@ import { Utils } from 'manifesto.js';
 import flatten from 'lodash/flatten';
 import ActionTypes from '../actions/action-types';
 import MiradorCanvas from '../../lib/MiradorCanvas';
-import { getTokenService } from '../../lib/getServices';
+import { getTokenService, getProbeService } from '../../lib/getServices';
 import {
   addAuthenticationRequest,
   resolveAuthenticationRequest,
@@ -14,13 +14,14 @@ import {
 } from '../actions';
 import {
   selectInfoResponses,
+  selectProbeResponses,
   getVisibleCanvases,
   getWindows,
   getConfig,
   getAuth,
   getAccessTokens,
 } from '../selectors';
-import { fetchInfoResponse } from './iiif';
+import { fetchInfoResponse, fetchProbeResponse } from './iiif';
 
 /** */
 export function* refetchInfoResponsesOnLogout({ tokenServiceId }) {
@@ -67,6 +68,54 @@ export function* refetchInfoResponses({ serviceId }) {
       return call(fetchInfoResponse, { infoId });
     }
     return put({ infoId, type: ActionTypes.REMOVE_INFO_RESPONSE });
+  }));
+}
+
+/** */
+export function* refetchProbeResponsesOnLogout({ tokenServiceId }) {
+  // delay logout actions to give the cookie service a chance to invalidate our cookies
+  // before we reinitialize openseadragon and rerequest images.
+
+  yield delay(2000);
+  yield call(refetchProbeResponses, { serviceId: tokenServiceId });
+}
+
+/**
+ * Figure out what probe responses could have used the access token service and:
+ *   - refetch, if they are currently visible
+ *   - throw them out (and lazy re-fetch) otherwise
+ */
+export function* refetchProbeResponses({ serviceId }) {
+  const windows = yield select(getWindows);
+
+  const canvases = yield all(
+    Object.keys(windows).map(windowId => select(getVisibleCanvases, { windowId })),
+  );
+
+  const visibleProbeServiceIds = flatten(flatten(canvases).map((canvas) => {
+    const miradorCanvas = new MiradorCanvas(canvas);
+    return miradorCanvas.imageResources.filter((r) => getProbeService(r)).map((r) => getProbeService(r));
+  }));
+
+  const probeResponses = yield select(selectProbeResponses);
+  /** */
+  const haveThisTokenService = probeResponse => {
+    const services = Utils.getServices(probeResponse);
+    return services.some(e => {
+      const probeTokenService = getTokenService(e);
+      return probeTokenService && probeTokenService.id === serviceId;
+    });
+  };
+
+  const obsoleteProbeResponses = Object.values(probeResponses).filter(
+    i => i.json && haveThisTokenService(i.json),
+  );
+
+  yield all(obsoleteProbeResponses.map(({ id: probeId }) => {
+    if (visibleProbeServiceIds.includes(probeId)) {
+      return call(fetchProbeResponse, { probeId });
+    }
+    return put({ probeId, type: ActionTypes.REMOVE_PROBE_RESPONSE });
   }));
 }
 
@@ -152,9 +201,13 @@ export function* invalidateInvalidAuth({ serviceId }) {
 export default function* authSaga() {
   yield all([
     takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, rerequestOnAccessTokenFailure),
+    takeEvery(ActionTypes.RECEIVE_DEGRADED_PROBE_RESPONSE, rerequestOnAccessTokenFailure),
     takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN_FAILURE, invalidateInvalidAuth),
     takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, doAuthWorkflow),
+    takeEvery(ActionTypes.RECEIVE_DEGRADED_PROBE_RESPONSE, doAuthWorkflow),
     takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchInfoResponses),
+    takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchProbeResponses),
     takeEvery(ActionTypes.RESET_AUTHENTICATION_STATE, refetchInfoResponsesOnLogout),
+    takeEvery(ActionTypes.RESET_AUTHENTICATION_STATE, refetchProbeResponsesOnLogout),
   ]);
 }
