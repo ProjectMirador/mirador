@@ -1,14 +1,13 @@
 import { createSelector } from 'reselect';
 import flatten from 'lodash/flatten';
+import { anyProbeServices } from '../../lib/getServices';
 import {
-  audioResourcesFrom, filterByTypes, textResourcesFrom, videoResourcesFrom,
+  audioResourcesFrom, iiifImageResourcesFrom, textResourcesFrom, videoResourcesFrom,
 } from '../../lib/typeFilters';
 import MiradorCanvas from '../../lib/MiradorCanvas';
 import { miradorSlice } from './utils';
 import { getConfig } from './config';
-import { getVisibleCanvases, selectInfoResponses } from './canvases';
-import { getMiradorCanvasWrapper } from './wrappers';
-import { getIiifResourceImageService } from '../../lib/iiif';
+import { getVisibleCanvases, selectInfoResponses, selectProbeResponses } from './canvases';
 
 /**
  * Returns the authentification profile from the configuration
@@ -41,40 +40,30 @@ export const selectCurrentAuthServices = createSelector(
   [
     getVisibleCanvases,
     selectInfoResponses,
+    selectProbeResponses,
     getAuthProfiles,
     getAuth,
     getMiradorCanvasWrapper,
     (state, { iiifResources }) => iiifResources,
   ],
-  // eslint-disable-next-line max-params
-  (canvases, infoResponses = {}, serviceProfiles, auth, getMiradorCanvas, iiifResources) => {
+  (canvases, infoResponses = {}, probeResponses = {}, serviceProfiles, auth, iiifResources) => {
     let currentAuthResources = iiifResources;
 
     if (!currentAuthResources && canvases) {
-      currentAuthResources = flatten(
-        canvases.map((c) => {
-          const miradorCanvas = getMiradorCanvas(c);
-          const images = miradorCanvas.iiifImageResources;
-
-          return images.map((i) => {
-            const iiifImageService = getIiifResourceImageService(i);
+      currentAuthResources = flatten(canvases.map(c => {
+        const miradorCanvas = new MiradorCanvas(c);
+        const canvasResources = miradorCanvas.imageResources;
+        const authResources = iiifImageResourcesFrom(canvasResources).map(i => {
+          const iiifImageService = i.getServices()[0];
 
             const infoResponse = infoResponses[iiifImageService.id];
             if (infoResponse && infoResponse.json) {
               return { ...infoResponse.json, options: {} };
             }
 
-            return iiifImageService;
-          });
-        }),
-      );
-    }
-
-    if (currentAuthResources.length === 0 && canvases) {
-      currentAuthResources = flatten(canvases.map(c => {
-        const miradorCanvas = new MiradorCanvas(c);
-        const canvasResources = miradorCanvas.imageResources;
-        return videoResourcesFrom(canvasResources)
+          return iiifImageService;
+        });
+        return authResources.concat(videoResourcesFrom(canvasResources))
           .concat(audioResourcesFrom(canvasResources))
           .concat(textResourcesFrom(canvasResources));
       }));
@@ -86,7 +75,7 @@ export const selectCurrentAuthServices = createSelector(
     const currentAuthServices = currentAuthResources.map((resource) => {
       let lastAttemptedService;
       const resourceServices = Utils.getServices(resource);
-      const probeServices = filterByTypes(resourceServices, 'AuthProbeService2');
+      const probeServices = anyProbeServices(resource);
       const probeServiceServices = flatten(probeServices.map(p => Utils.getServices(p)));
 
       for (const authProfile of serviceProfiles) {
@@ -106,15 +95,11 @@ export const selectCurrentAuthServices = createSelector(
       return lastAttemptedService;
     });
 
-    return Object.values(
-      currentAuthServices.reduce((h, service) => {
-        if (service && !h[service.id]) {
-          // eslint-disable-next-line no-param-reassign
-          h[service.id] = service;
-        }
-
-        return h;
-      }, {}),
-    );
+    return Object.values(currentAuthServices.reduce((h, service) => {
+      if (service && !h[service.id]) {
+        h[service.id] = service; // eslint-disable-line no-param-reassign
+      }
+      return h;
+    }, {}));
   },
 );

@@ -1,24 +1,23 @@
-import { all, call, put, select, takeEvery } from 'redux-saga/effects';
-import { Utils } from 'manifesto.js';
+import {
+  all, call, put, select, takeEvery,
+} from 'redux-saga/effects';
 import normalizeUrl from 'normalize-url';
 import ActionTypes from '../actions/action-types';
 import {
-  receiveManifest,
-  receiveManifestFailure,
-  receiveInfoResponse,
-  receiveInfoResponseFailure,
-  receiveDegradedInfoResponse,
-  receiveSearch,
-  receiveSearchFailure,
-  receiveAnnotation,
-  receiveAnnotationFailure,
+  receiveManifest, receiveManifestFailure, receiveInfoResponse,
+  receiveInfoResponseFailure, receiveDegradedInfoResponse,
+  receiveSearch, receiveSearchFailure,
+  receiveAnnotation, receiveAnnotationFailure,
+  receiveProbeResponse, receiveProbeResponseFailure,
+  receiveDegradedProbeResponse,
 } from '../actions';
-import { getTokenService } from '../../lib/getServices';
+import { anyAuthServices, getTokenService } from '../../lib/getServices';
 import {
   getManifests,
   getRequestsConfig,
   getAccessTokens,
   selectInfoResponse,
+  selectProbeResponse,
 } from '../selectors';
 
 /** */
@@ -93,12 +92,13 @@ function* fetchIiifResourceWithAuth(url, iiifResource, options, { degraded, fail
 
   const id = json['@id'] || json.id;
   if (response.ok) {
-    if (
-      normalizeUrl(id, { stripAuthentication: false }) ===
-      normalizeUrl(url.replace(/info\.json$/, ''), { stripAuthentication: false })
-    ) {
-      yield put(success({ json, response, tokenServiceId }));
-      return;
+    if (id && normalizeUrl(id, { stripAuthentication: false })
+      === normalizeUrl(url.replace(/info\.json$/, ''), { stripAuthentication: false })) {
+      if (!json.substitute) {
+        // substitute indicates the Auth2 equivalent of a degraded response, should fall through
+        yield put(success({ json, response, tokenServiceId }));
+        return;
+      }
     }
   } else if (response.status !== 401) {
     yield put(
@@ -138,10 +138,10 @@ export function* fetchManifest({ manifestId }) {
 
 /** @private */
 function* getAccessTokenService(resource) {
-  const manifestoCompatibleResource = resource && resource.__jsonld ? resource : { ...resource, options: {} };
-  const services = Utils.getServices(manifestoCompatibleResource).filter((s) =>
-    s.getProfile().match(/http:\/\/iiif.io\/api\/auth\//),
-  );
+  const manifestoCompatibleResource = resource && resource.__jsonld
+    ? resource
+    : { ...resource, options: {} };
+  const services = anyAuthServices(manifestoCompatibleResource);
   if (services.length === 0) return undefined;
 
   const accessTokens = yield select(getAccessTokens);
@@ -175,7 +175,33 @@ export function* fetchInfoResponse({ imageResource, infoId, windowId }) {
 }
 
 /** @private */
-export function* fetchSearchResponse({ windowId, companionWindowId, query, searchId }) {
+export function* fetchProbeResponse({ resource, probeId, windowId }) {
+  let iiifResource = resource;
+  if (!iiifResource) {
+    iiifResource = yield select(selectProbeResponse, { probeId });
+  }
+
+  const callbacks = {
+    degraded: ({
+      json, response, tokenServiceId,
+    }) => receiveDegradedProbeResponse(probeId, json, response.ok, tokenServiceId, windowId),
+    failure: ({
+      error, json, response, tokenServiceId,
+    }) => (
+      receiveProbeResponseFailure(probeId, error, tokenServiceId)
+    ),
+    success: ({
+      json, response, tokenServiceId,
+    }) => receiveProbeResponse(probeId, json, response.ok, tokenServiceId),
+  };
+
+  yield call(fetchIiifResourceWithAuth, probeId, iiifResource, {}, callbacks);
+}
+
+/** @private */
+export function* fetchSearchResponse({
+  windowId, companionWindowId, query, searchId,
+}) {
   const callbacks = {
     failure: ({ error, json, response }) => receiveSearchFailure(windowId, companionWindowId, searchId, error),
     success: ({ json, response }) => receiveSearch(windowId, companionWindowId, searchId, json),
@@ -222,6 +248,7 @@ export default function* iiifSaga() {
   yield all([
     takeEvery(ActionTypes.REQUEST_MANIFEST, fetchManifest),
     takeEvery(ActionTypes.REQUEST_INFO_RESPONSE, fetchInfoResponse),
+    takeEvery(ActionTypes.REQUEST_PROBE_RESPONSE, fetchProbeResponse),
     takeEvery(ActionTypes.REQUEST_SEARCH, fetchSearchResponse),
     takeEvery(ActionTypes.REQUEST_ANNOTATION, fetchAnnotation),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),
