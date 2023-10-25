@@ -10,7 +10,7 @@ export function accessTokensReducer(state = {}, action) {
         [action.tokenServiceId]: {
           authId: action.id,
           id: action.tokenServiceId,
-          isFetching: true,
+          isFetching: !Object.hasOwn(action, 'ok'), // do not attempt to refetch resolved actions that were rejected
         },
       };
     case ActionTypes.REQUEST_ACCESS_TOKEN:
@@ -44,7 +44,18 @@ export function accessTokensReducer(state = {}, action) {
       return omit(state, action.tokenServiceId);
     case ActionTypes.RECEIVE_INFO_RESPONSE:
       if (!action.tokenServiceId) return state;
-      if (state[action.tokenServiceId].success) return state;
+      if (state[action.tokenServiceId]?.success) return state;
+
+      return {
+        ...state,
+        [action.tokenServiceId]: {
+          ...state[action.tokenServiceId],
+          success: true,
+        },
+      };
+    case ActionTypes.RECEIVE_PROBE_RESPONSE:
+      if (!action.tokenServiceId) return state;
+      if (state[action.tokenServiceId]?.success) return state;
 
       return {
         ...state,

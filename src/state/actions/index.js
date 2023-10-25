@@ -16,3 +16,4 @@ export * from './elasticLayout';
 export * from './search';
 export * from './layers';
 export * from './catalog';
+export * from './probeResponse';
