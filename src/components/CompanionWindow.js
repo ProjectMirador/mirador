@@ -91,7 +91,7 @@ export class CompanionWindow extends Component {
    */
   render() {
     const {
-      ariaLabel, paperClassName, onCloseClick, updateCompanionWindow, isDisplayed,
+      ariaLabel, classes, paperClassName, onCloseClick, updateCompanionWindow, isDisplayed,
       position, t, title, children, titleControls, size,
       defaultSidebarPanelWidth, defaultSidebarPanelHeight,
     } = this.props;
@@ -135,7 +135,7 @@ export class CompanionWindow extends Component {
           display: isDisplayed ? null : 'none',
           order: position === 'left' ? -1 : null,
         }}
-        className={[ns(`companion-window-${position}`), paperClassName].join(' ')}
+        className={[ns(`companion-window-${position}`), paperClassName, position === 'bottom' ? classes.horizontal : classes.vertical].join(' ')}
         square
         component="aside"
         aria-label={ariaLabel || title}
@@ -161,7 +161,7 @@ export class CompanionWindow extends Component {
               minHeight: 'max-content',
               paddingLeft: 2,
             }}
-            className={ns('companion-window-header')}
+            className={[ns('companion-window-header'), size.width < 370 ? classes.small : null].join(' ')}
             disableGutters
           >
             <Typography
@@ -247,6 +247,7 @@ export class CompanionWindow extends Component {
 CompanionWindow.propTypes = {
   ariaLabel: PropTypes.string,
   children: PropTypes.node,
+  classes: PropTypes.objectOf(PropTypes.string),
   defaultSidebarPanelHeight: PropTypes.number,
   defaultSidebarPanelWidth: PropTypes.number,
   direction: PropTypes.string.isRequired,
@@ -267,6 +268,7 @@ CompanionWindow.propTypes = {
 CompanionWindow.defaultProps = {
   ariaLabel: undefined,
   children: undefined,
+  classes: {},
   defaultSidebarPanelHeight: 201,
   defaultSidebarPanelWidth: 235,
   isDisplayed: false,
