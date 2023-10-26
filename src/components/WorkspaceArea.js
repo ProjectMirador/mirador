@@ -12,7 +12,7 @@ const StyledMain = styled('main')(({ theme }) => {
   const getBackgroundColor = theme.palette.mode === 'light' ? darken : lighten;
 
   return {
-    background: getBackgroundColor(theme.palette.shades.light, 0.1),
+    background: getBackgroundColor(theme.palette.grey.A200, 0.1),
     bottom: 0,
     left: 0,
     overflow: 'hidden',
