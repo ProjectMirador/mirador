@@ -101,6 +101,7 @@ export class SearchHit extends Component {
         scrollTo={windowSelected && !focused}
       >
         <ListItem
+          className={windowSelected ? 'windowSelected' : ''}
           sx={{
             '&.Mui-focused': {
               '&:hover': {
