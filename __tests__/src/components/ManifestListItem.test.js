@@ -23,12 +23,14 @@ describe('ManifestListItem', () => {
     createWrapper({ buttonRef: 'ref' });
 
     expect(screen.getByRole('listitem')).toHaveAttribute('data-manifestid', 'http://example.com');
+    expect(screen.getByRole('listitem')).toHaveClass('MuiListItem-root');
     expect(screen.getByRole('button')).toHaveTextContent('xyz');
   });
   it('adds a class when the item is active', () => {
     createWrapper({ active: true, classes: { active: 'active' } });
 
     expect(screen.getByRole('listitem')).toHaveClass('active');
+    expect(screen.getByRole('listitem')).toHaveClass('Mui-selected');
   });
   it('renders a placeholder element until real data is available', () => {
     const { container } = createWrapper({ ready: false });

@@ -99,6 +99,8 @@ export class ManifestListItem extends Component {
       return (
         <ListItem
           divider
+          selected={active}
+          className={active ? 'active' : ''}
           sx={theme => ({
             '&:hover,&:focus-within': {
               backgroundColor: theme.palette.action.hover,
@@ -123,6 +125,8 @@ export class ManifestListItem extends Component {
     return (
       <ListItem
         divider
+        selected={active}
+        className={active ? 'active' : ''}
         sx={theme => ({
           '&:hover,&:focus-within': {
             backgroundColor: theme.palette.action.hover,
