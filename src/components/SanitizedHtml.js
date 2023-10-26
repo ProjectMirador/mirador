@@ -14,7 +14,7 @@ export class SanitizedHtml extends Component {
   */
   render() {
     const {
-      htmlString, ruleSet, ...props
+      classes, htmlString, ruleSet, ...props
     } = this.props;
 
     // Add a hook to make all links open a new window
@@ -35,7 +35,7 @@ export class SanitizedHtml extends Component {
             textDecoration: 'underline',
           },
         }}
-        className={[ns('third-party-html')].join(' ')}
+        className={[ns('third-party-html'), classes.root].join(' ')}
         dangerouslySetInnerHTML={{ // eslint-disable-line react/no-danger
           __html: DOMPurify.sanitize(htmlString, htmlRules[ruleSet]),
         }}
@@ -46,6 +46,11 @@ export class SanitizedHtml extends Component {
 }
 
 SanitizedHtml.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string),
   htmlString: PropTypes.string.isRequired,
   ruleSet: PropTypes.string.isRequired,
+};
+
+SanitizedHtml.defaultProps = {
+  classes: {},
 };
