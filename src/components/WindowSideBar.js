@@ -13,12 +13,13 @@ export class WindowSideBar extends Component {
    */
   render() {
     const {
-      direction, t, windowId, sideBarOpen,
+      classes, direction, t, windowId, sideBarOpen,
     } = this.props;
 
     return (
       <Drawer
         variant="persistent"
+        className={classes.drawer}
         sx={theme => ({
           flexShrink: 0,
           height: '100%',
@@ -48,6 +49,7 @@ export class WindowSideBar extends Component {
 }
 
 WindowSideBar.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string),
   direction: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,
   t: PropTypes.func.isRequired,
@@ -55,5 +57,6 @@ WindowSideBar.propTypes = {
 };
 
 WindowSideBar.defaultProps = {
+  classes: {},
   sideBarOpen: false,
 };
