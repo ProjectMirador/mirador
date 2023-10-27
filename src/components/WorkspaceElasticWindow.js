@@ -19,6 +19,7 @@ class WorkspaceElasticWindow extends Component {
    */
   render() {
     const {
+      classes,
       companionWindowDimensions,
       focused,
       focusWindow,
@@ -33,6 +34,7 @@ class WorkspaceElasticWindow extends Component {
     return (
       <StyledRnd
         focused={focused}
+        className={focused ? classes.focused : undefined}
         key={`${layout.windowId}-${workspace.id}`}
         size={{
           height: layout.height + companionWindowDimensions.height,
@@ -67,6 +69,7 @@ class WorkspaceElasticWindow extends Component {
 }
 
 WorkspaceElasticWindow.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string),
   companionWindowDimensions: PropTypes.shape({
     height: PropTypes.number,
     width: PropTypes.number,
@@ -86,6 +89,7 @@ WorkspaceElasticWindow.propTypes = {
 };
 
 WorkspaceElasticWindow.defaultProps = {
+  classes: {},
   companionWindowDimensions: { height: 0, width: 0 },
   focused: false,
   focusWindow: () => {},
