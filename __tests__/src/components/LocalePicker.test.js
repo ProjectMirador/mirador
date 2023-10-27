@@ -26,7 +26,7 @@ describe('LocalePicker', () => {
   it('renders a select with the current value', () => {
     createWrapper({ availableLocales: ['en', 'de'], locale: 'en' });
 
-    expect(screen.getByRole('button')).toHaveTextContent('en');
+    expect(screen.getByRole('combobox')).toHaveTextContent('en');
   });
 
   it('renders a select with a list item for each language passed in props', async () => {
@@ -34,7 +34,7 @@ describe('LocalePicker', () => {
 
     createWrapper({ availableLocales: ['en', 'de'], locale: 'en' });
 
-    await user.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('combobox'));
 
     expect(screen.getAllByRole('option')).toHaveLength(2);
     expect(screen.getByRole('option', { name: 'en' })).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('LocalePicker', () => {
       setLocale,
     });
 
-    await user.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('combobox'));
     await user.click(screen.getByRole('option', { name: 'de' }));
 
     expect(setLocale).toHaveBeenCalledTimes(1);

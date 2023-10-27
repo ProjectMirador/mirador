@@ -65,7 +65,7 @@ describe('WindowSideBarCanvasPanel', () => {
     createWrapper({ multipleSequences: true, updateSequence });
 
     expect(screen.getByTestId('sequence-select')).toHaveTextContent('a');
-    await user.click(within(screen.getByTestId('sequence-select')).getByRole('button'));
+    await user.click(within(screen.getByTestId('sequence-select')).getByRole('combobox'));
 
     const listbox = within(screen.getByRole('listbox'));
     expect(listbox.getAllByRole('option')).toHaveLength(2);
