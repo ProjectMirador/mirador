@@ -111,7 +111,6 @@ export class WindowSideBarCanvasPanel extends Component {
                         horizontal: 'left',
                         vertical: 'bottom',
                       },
-                      getContentAnchorEl: null,
                     }}
                     displayEmpty
                     value={sequenceId}

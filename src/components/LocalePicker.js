@@ -29,7 +29,6 @@ export class LocalePicker extends Component {
               horizontal: 'left',
               vertical: 'bottom',
             },
-            getContentAnchorEl: null,
           }}
           displayEmpty
           value={locale}
