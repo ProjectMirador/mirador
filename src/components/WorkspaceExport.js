@@ -88,8 +88,8 @@ export class WorkspaceExport extends Component {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle id="form-dialog-title">
-          <Typography variant="h2">{t('downloadExport')}</Typography>
+        <DialogTitle sx={{ typography: 'h2' }} id="form-dialog-title">
+          {t('downloadExport')}
         </DialogTitle>
 
         <DialogContent>

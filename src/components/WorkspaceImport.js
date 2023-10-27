@@ -73,8 +73,8 @@ export class WorkspaceImport extends Component {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle id="workspace-import-title">
-          <Typography variant="h2">{t('importWorkspace')}</Typography>
+        <DialogTitle  sx={{ typography: 'h2' }} id="workspace-import-title">
+          {t('importWorkspace')}
         </DialogTitle>
         <ScrollIndicatedDialogContent>
           <TextField
