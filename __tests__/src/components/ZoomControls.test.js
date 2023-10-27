@@ -1,16 +1,15 @@
 import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
+import Box from '@mui/material/Box';
 import { ZoomControls } from '../../../src/components/ZoomControls';
 
 /** Utility function to create a shallow rendering */
 function createWrapper(props) {
   return render(
     <ZoomControls
-      classes={{ divider: 'divider', zoom_controls: 'zoom_controls' }}
       windowId="xyz"
       zoomToWorld={() => {}}
       {...props}
-
     />,
   );
 }
@@ -19,6 +18,10 @@ describe('ZoomControls', () => {
   const viewer = { x: 100, y: 100, zoom: 1 };
   const showZoomControls = false;
   let updateViewport;
+  const spyRenderDivider = jest.spyOn(ZoomControls.prototype, 'renderDivider');
+  afterEach(() => {
+    spyRenderDivider.mockClear();
+  });
 
   describe('with showZoomControls=false', () => {
     it('renders nothing unless asked', () => {
@@ -65,15 +68,18 @@ describe('ZoomControls', () => {
   /* eslint-disable testing-library/no-container, testing-library/no-node-access */
   describe('responsive divider', () => {
     it('is present when the displayDivider prop is true (default)', () => {
-      const { container } = createWrapper({ showZoomControls: true, viewer });
-
-      expect(container.querySelector('.divider')).toBeInTheDocument();
+      createWrapper({ showZoomControls: true, viewer });
+      expect(spyRenderDivider).toHaveBeenCalled();
+      // Retrieve the result of the spy function
+      const renderedDivider = spyRenderDivider.mock.results[0].value;
+      expect(renderedDivider.type).toBe(Box);
     });
 
     it('is not present when the displayDivider prop is false', () => {
-      const { container } = createWrapper({ displayDivider: false, showZoomControls: true, viewer });
+      createWrapper({ displayDivider: false, showZoomControls: true, viewer });
 
-      expect(container.querySelector('.divider')).not.toBeInTheDocument();
+      expect(spyRenderDivider).toHaveBeenCalled();
+      expect(spyRenderDivider).toHaveReturnedWith(null);
     });
   });
 });

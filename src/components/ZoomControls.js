@@ -56,12 +56,27 @@ export class ZoomControls extends Component {
   }
 
   /**
+   * Renders a divider element if displayDivider is set to true.
+   *
+   * @returns {Box | null}
+   */
+  renderDivider() {
+    const { displayDivider } = this.props;
+
+    if (displayDivider) {
+      return <Box component="span" sx={dividerStyle} />;
+    }
+
+    return null;
+  }
+
+  /**
    * render
    * @return
    */
   render() {
     const {
-      displayDivider, showZoomControls, t, zoomToWorld,
+      showZoomControls, t, zoomToWorld,
     } = this.props;
 
     if (!showZoomControls) {
@@ -81,7 +96,7 @@ export class ZoomControls extends Component {
         <MiradorMenuButton aria-label={t('zoomReset')} onClick={() => zoomToWorld(false)}>
           <RestoreZoomIcon />
         </MiradorMenuButton>
-        {displayDivider && <Box component="span" sx={dividerStyle} />}
+        {this.renderDivider()}
       </StyledZoomControlsWrapper>
     );
   }
