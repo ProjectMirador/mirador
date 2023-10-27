@@ -38,9 +38,16 @@ describe('WindowTopMenuButton', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
-  it('the button has a class indicating that it is "selected" once it is clicked', async () => {
+  it('the open attribute of the button is null without being clicked', async () => {
+    render(<Subject />);
+    // without a click, the button is not open and therefore doesn't have aria-owns attr
+    expect(screen.getByLabelText('windowMenu')).not.toHaveAttribute("aria-owns"); // eslint-disable-line testing-library/no-node-access
+  });
+
+  it('the open attribute of the button is applied once it is clicked', async () => {
     render(<Subject />);
     await user.click(screen.getByLabelText('windowMenu'));
-    expect(screen.getByLabelText('windowMenu')).toHaveClass('ctrlBtnSelected'); // eslint-disable-line testing-library/no-node-access
+    // when 'open' is true, aria-owns is set to the id of the window
+    expect(screen.getByLabelText('windowMenu')).toHaveAttribute('aria-owns', 'window-menu_xyz'); // eslint-disable-line testing-library/no-node-access
   });
 });
