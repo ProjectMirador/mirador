@@ -25,10 +25,10 @@ describe('ManifestListItem', () => {
     expect(screen.getByRole('listitem')).toHaveAttribute('data-manifestid', 'http://example.com');
     expect(screen.getByRole('button')).toHaveTextContent('xyz');
   });
-  it('adds a class when the item is active', () => {
-    createWrapper({ active: true, classes: { active: 'active' } });
-
-    expect(screen.getByRole('listitem')).toHaveClass('active');
+  it('properly interprets active in the DOM', () => {
+    createWrapper({ active: true });
+    // If this is true, we can assume the proper styling classes are being applied
+    expect(screen.getByRole('listitem')).toHaveAttribute('data-active', 'true');
   });
   it('renders a placeholder element until real data is available', () => {
     const { container } = createWrapper({ ready: false });

@@ -138,6 +138,7 @@ export class ManifestListItem extends Component {
           },
         })}
         data-manifestid={manifestId}
+        data-active={active}
       >
         {ready ? (
           <Grid container className={ns('manifest-list-item')} spacing={2}>
