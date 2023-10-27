@@ -136,9 +136,6 @@ export class SearchHit extends Component {
                   verticalAlign: 'inherit',
                 }}
               />
-              <span id={canvasLabelHtmlId}>
-                {canvasLabel}
-              </span>
             </Typography>
             {annotationLabel && (
               <Typography variant="subtitle2">{annotationLabel}</Typography>

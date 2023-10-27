@@ -158,8 +158,9 @@ export class CompanionWindow extends Component {
               bgcolor: 'shades.light',
               flexWrap: 'wrap',
               justifyContent: 'space-between',
-              minHeight: 'max-content',
+              minHeight: '100%',
               paddingLeft: 2,
+              marginBottom: 10,
             }}
             className={ns('companion-window-header')}
             disableGutters
