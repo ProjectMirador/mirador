@@ -49,7 +49,7 @@ export class WindowTopMenuButton extends Component {
    */
   render() {
     const {
-      t, windowId,
+      classes, t, windowId,
     } = this.props;
     const { open, anchorEl } = this.state;
     const menuId = `window-menu_${windowId}`;
@@ -59,6 +59,7 @@ export class WindowTopMenuButton extends Component {
           aria-haspopup="true"
           aria-label={t('windowMenu')}
           aria-owns={open ? menuId : undefined}
+          className={open ? classes.ctrlBtnSelected : undefined}
           sx={{
             margin: 1,
             ...(open && {
@@ -82,10 +83,12 @@ export class WindowTopMenuButton extends Component {
 }
 
 WindowTopMenuButton.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string),
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };
 
 WindowTopMenuButton.defaultProps = {
+  classes: {},
   t: key => key,
 };
