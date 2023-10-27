@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-import cn from 'classnames';
 import Paper from '@mui/material/Paper';
 import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
 import ns from '../config/css-ns';
@@ -134,7 +133,7 @@ export class Window extends Component {
             zIndex: theme.zIndex.modal - 1,
           }),
         })}
-        className={cn(ns('window'))}
+        className={ns('window')}
         aria-label={t('window', { label })}
       >
         {this.wrappedTopBar()}
