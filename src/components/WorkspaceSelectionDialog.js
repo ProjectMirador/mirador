@@ -57,8 +57,8 @@ export class WorkspaceSelectionDialog extends Component {
         onClose={handleClose}
         open={open}
       >
-        <DialogTitle id="workspace-selection-dialog-title">
-          <Typography variant="h2">{t('workspaceSelectionTitle')}</Typography>
+        <DialogTitle sx={{ typography: 'h2' }} id="workspace-selection-dialog-title">
+          {t('workspaceSelectionTitle')}
         </DialogTitle>
         <ScrollIndicatedDialogContent>
           {children}
