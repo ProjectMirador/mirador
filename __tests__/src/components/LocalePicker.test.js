@@ -37,11 +37,11 @@ describe('LocalePicker', () => {
     // Open the menu
     await user.click(dropdownTitle);
     // The dropddown menu is not nested within the combobox, it is a sibling in the DOM, an MuiMenu
-    const menu = await screen.getByRole('listbox');
+    const menu = screen.getByRole('listbox');
     // Assert that the menu element has 2 children (2 options)
-    expect(menu.children).toHaveLength(2);
+    expect(menu.children).toHaveLength(2); // eslint-disable-line testing-library/no-node-access
     // Verify that the select element has the correct value ('de')
-    const deOption = await screen.getByRole('option', { name: 'de' });
+    const deOption = screen.getByRole('option', { name: 'de' });
     expect(deOption).toHaveAttribute('aria-selected', 'true');
     // Verify en is also an option
     expect(screen.getByRole('option', { name: 'en' })).toBeInTheDocument();

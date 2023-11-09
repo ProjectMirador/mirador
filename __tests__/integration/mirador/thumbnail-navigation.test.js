@@ -6,7 +6,7 @@ describe('Thumbnail navigation', () => {
     await expect(page).toMatchElement('.mirador-window', { polling: 'mutation', timeout: 5000 });
   });
 
-  //TODO: pick a new url; this Harvard one is 404
+  // TODO: pick a new url; this Harvard one is 404
   xit('navigates a manifest using thumbnail navigation', async () => {
     await expect(page).toMatchElement('.mirador-thumb-navigation');
     let windows = await page.evaluate(() => (

@@ -41,7 +41,7 @@ describe('WindowTopMenuButton', () => {
   it('the open attribute of the button is null without being clicked', async () => {
     render(<Subject />);
     // without a click, the button is not open and therefore doesn't have aria-owns attr
-    expect(screen.getByLabelText('windowMenu')).not.toHaveAttribute("aria-owns"); // eslint-disable-line testing-library/no-node-access
+    expect(screen.getByLabelText('windowMenu')).not.toHaveAttribute('aria-owns'); // eslint-disable-line testing-library/no-node-access
   });
 
   it('the open attribute of the button is applied once it is clicked', async () => {
