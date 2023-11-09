@@ -11,7 +11,6 @@ function createWrapper(props) {
       isDisplayed
       direction="ltr"
       windowId="x"
-      classes={{ horizontal: 'horizontal', small: 'small', vertical: 'vertical' }}
       companionWindow={{}}
       position="right"
       {...props}
@@ -96,9 +95,10 @@ describe('CompanionWindow', () => {
         updateCompanionWindow,
       });
 
-      expect(screen.getByRole('complementary')).toHaveClass('vertical');
+      expect(screen.getByRole('complementary')).toHaveClass('mirador-companion-window-right');
 
       await user.click(screen.getByRole('button', { name: 'moveCompanionWindowToBottom' }));
+
       expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'bottom' });
     });
   });
@@ -113,7 +113,7 @@ describe('CompanionWindow', () => {
         updateCompanionWindow,
       });
 
-      expect(screen.getByRole('complementary')).toHaveClass('horizontal');
+      expect(screen.getByRole('complementary')).toHaveClass('mirador-companion-window-bottom ');
 
       await user.click(screen.getByRole('button', { name: 'moveCompanionWindowToRight' }));
 
@@ -125,12 +125,6 @@ describe('CompanionWindow', () => {
     createWrapper({ position: 'bottom', titleControls: <div data-testid="xyz" /> });
 
     expect(screen.getByTestId('xyz')).toBeInTheDocument();
-  });
-
-  it('adds a small class when the component width is small', () => {
-    const { container } = createWrapper({ size: { width: 369 } });
-
-    expect(container.querySelector('.MuiToolbar-root')).toHaveClass('small'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
 
   it('has a resize handler', () => {

@@ -41,6 +41,7 @@
     "@mui/material": "^5.13.5",
     "@mui/styles": "^5.13.2",
     "@mui/utils": "^5.13.1",
+    "@mui/x-tree-view": "^6.17.0",
     "@react-aria/live-announcer": "^3.1.2",
     "classnames": "^2.2.6",
     "clsx": "^1.0.4",

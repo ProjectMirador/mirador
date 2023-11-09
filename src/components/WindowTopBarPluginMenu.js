@@ -85,7 +85,6 @@ export class WindowTopBarPluginMenu extends Component {
             horizontal: 'right',
             vertical: 'top',
           }}
-          getContentAnchorEl={null}
           open={open}
           onClose={() => this.handleMenuClose()}
         >

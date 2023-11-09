@@ -84,7 +84,7 @@ export class CompanionArea extends Component {
             width: '100%',
           }),
         }}
-        className={`companion-area-${position}`}
+        className={ns(`companion-area-${position}`)}
       >
         <Slide in={companionAreaOpen} direction={this.slideDirection()}>
           <StyledWrapper

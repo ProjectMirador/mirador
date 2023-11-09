@@ -6,7 +6,6 @@ describe('SanitizedHtml', () => {
     render(
       <SanitizedHtml
         data-testid="subject"
-        classes={{ root: 'root' }}
         htmlString="<script>doBadThings()</script><b>Don't worry!</b><a>Some link</a>"
         ruleSet="iiif"
       />,
@@ -18,7 +17,6 @@ describe('SanitizedHtml', () => {
   });
 
   it('should pass correct class name to root element', () => {
-    expect(screen.getByTestId('subject')).toHaveClass('root');
     expect(screen.getByTestId('subject')).toHaveClass('mirador-third-party-html');
   });
 

@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import {
   DialogActions,
   TextField,
-  Typography,
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
@@ -73,8 +72,8 @@ export class WorkspaceImport extends Component {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle id="workspace-import-title">
-          <Typography variant="h2">{t('importWorkspace')}</Typography>
+        <DialogTitle sx={{ typography: 'h2' }} id="workspace-import-title">
+          {t('importWorkspace')}
         </DialogTitle>
         <ScrollIndicatedDialogContent>
           <TextField

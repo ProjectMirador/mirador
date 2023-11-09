@@ -47,7 +47,6 @@ export class WindowTopMenu extends Component {
           onExit: toggleDraggingEnabled,
         }}
         orientation="horizontal"
-        getContentAnchorEl={null}
         anchorEl={anchorEl}
         open={open}
       >
