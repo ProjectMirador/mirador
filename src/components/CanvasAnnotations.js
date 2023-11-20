@@ -71,7 +71,6 @@ export class CanvasAnnotations extends Component {
         <MenuList autoFocusItem variant="selectedMenu">
           {annotations.map((annotation) => (
             <MenuItem
-              button
               component={listContainerComponent}
               sx={{
                 '&:hover,&:focus': {

@@ -47,7 +47,7 @@ export class AttributionPanel extends Component {
         windowId={windowId}
         id={id}
       >
-        <StyledSection>
+        <StyledSection sx={{paddingLeft: 2}}>
           { requiredStatement && (
             <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
           )}

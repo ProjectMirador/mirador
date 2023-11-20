@@ -51,13 +51,10 @@ export class SidebarIndexList extends Component {
               <MenuItem
                 key={canvas.id}
                 sx={{
-                  borderBottom: '0.5px',
-                  borderBottomColor: 'divider',
                   paddingRight: 1,
                 }}
-                alignItems="flex-start"
+                divider="true"
                 onClick={onClick}
-                button
                 component="li"
                 selected={selectedCanvasIds.includes(canvas.id)}
               >
