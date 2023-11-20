@@ -1,7 +1,6 @@
 import {
   all, call, put, select, takeEvery,
 } from 'redux-saga/effects';
-import { Utils } from 'manifesto.js';
 import normalizeUrl from 'normalize-url';
 import ActionTypes from '../actions/action-types';
 import {
@@ -9,12 +8,16 @@ import {
   receiveInfoResponseFailure, receiveDegradedInfoResponse,
   receiveSearch, receiveSearchFailure,
   receiveAnnotation, receiveAnnotationFailure,
+  receiveProbeResponse, receiveProbeResponseFailure,
+  receiveDegradedProbeResponse,
 } from '../actions';
+import { anyAuthServices, getTokenService } from '../../lib/getServices';
 import {
   getManifests,
   getRequestsConfig,
   getAccessTokens,
   selectInfoResponse,
+  selectProbeResponse,
 } from '../selectors';
 
 /** */
@@ -79,10 +82,13 @@ function* fetchIiifResourceWithAuth(url, iiifResource, options, { degraded, fail
 
   const id = json['@id'] || json.id;
   if (response.ok) {
-    if (normalizeUrl(id, { stripAuthentication: false })
+    if (id && normalizeUrl(id, { stripAuthentication: false })
       === normalizeUrl(url.replace(/info\.json$/, ''), { stripAuthentication: false })) {
-      yield put(success({ json, response, tokenServiceId }));
-      return;
+      if (!json.substitute) {
+        // substitute indicates the Auth2 equivalent of a degraded response, should fall through
+        yield put(success({ json, response, tokenServiceId }));
+        return;
+      }
     }
   } else if (response.status !== 401) {
     yield put(failure({
@@ -120,7 +126,7 @@ function* getAccessTokenService(resource) {
   const manifestoCompatibleResource = resource && resource.__jsonld
     ? resource
     : { ...resource, options: {} };
-  const services = Utils.getServices(manifestoCompatibleResource).filter(s => s.getProfile().match(/http:\/\/iiif.io\/api\/auth\//));
+  const services = anyAuthServices(manifestoCompatibleResource);
   if (services.length === 0) return undefined;
 
   const accessTokens = yield select(getAccessTokens);
@@ -128,8 +134,7 @@ function* getAccessTokenService(resource) {
 
   for (let i = 0; i < services.length; i += 1) {
     const authService = services[i];
-    const accessTokenService = Utils.getService(authService, 'http://iiif.io/api/auth/1/token')
-      || Utils.getService(authService, 'http://iiif.io/api/auth/0/token');
+    const accessTokenService = getTokenService(authService);
     const token = accessTokenService && accessTokens[accessTokenService.id];
     if (token && token.json) return token;
   }
@@ -159,6 +164,30 @@ export function* fetchInfoResponse({ imageResource, infoId, windowId }) {
   };
 
   yield call(fetchIiifResourceWithAuth, `${infoId.replace(/\/$/, '')}/info.json`, iiifResource, {}, callbacks);
+}
+
+/** @private */
+export function* fetchProbeResponse({ resource, probeId, windowId }) {
+  let iiifResource = resource;
+  if (!iiifResource) {
+    iiifResource = yield select(selectProbeResponse, { probeId });
+  }
+
+  const callbacks = {
+    degraded: ({
+      json, response, tokenServiceId,
+    }) => receiveDegradedProbeResponse(probeId, json, response.ok, tokenServiceId, windowId),
+    failure: ({
+      error, json, response, tokenServiceId,
+    }) => (
+      receiveProbeResponseFailure(probeId, error, tokenServiceId)
+    ),
+    success: ({
+      json, response, tokenServiceId,
+    }) => receiveProbeResponse(probeId, json, response.ok, tokenServiceId),
+  };
+
+  yield call(fetchIiifResourceWithAuth, probeId, iiifResource, {}, callbacks);
 }
 
 /** @private */
@@ -215,6 +244,7 @@ export default function* iiifSaga() {
   yield all([
     takeEvery(ActionTypes.REQUEST_MANIFEST, fetchManifest),
     takeEvery(ActionTypes.REQUEST_INFO_RESPONSE, fetchInfoResponse),
+    takeEvery(ActionTypes.REQUEST_PROBE_RESPONSE, fetchProbeResponse),
     takeEvery(ActionTypes.REQUEST_SEARCH, fetchSearchResponse),
     takeEvery(ActionTypes.REQUEST_ANNOTATION, fetchAnnotation),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),

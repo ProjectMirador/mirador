@@ -9,15 +9,16 @@ export class VideoViewer extends Component {
     const {
       captions, classes, videoOptions, videoResources,
     } = this.props;
+
     return (
       <div className={classes.container}>
         <video className={classes.video} {...videoOptions}>
-          {videoResources.map(video => (
+          {videoResources.filter(video => video.id).map(video => (
             <Fragment key={video.id}>
               <source src={video.id} type={video.getFormat()} />
             </Fragment>
           ))}
-          {captions.map(caption => (
+          {captions.filter(caption => caption.id).map(caption => (
             <Fragment key={caption.id}>
               <track src={caption.id} label={caption.getDefaultLabel()} srcLang={caption.getProperty('language')} />
             </Fragment>

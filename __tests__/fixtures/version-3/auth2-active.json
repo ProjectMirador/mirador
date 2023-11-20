@@ -1,0 +1,65 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://iiif.io/api/cookbook/recipe/0005-image-service/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "An actively authorized video"
+    ]
+  },
+  "items": [
+    {
+      "id": "https://auth.example.org/my-video1",
+      "type": "Canvas",
+      "label": {
+        "en": [
+          "Canvas with a single IIIF video"
+        ]
+      },
+      "height": 3024,
+      "width": 4032,
+      "items": [        
+        {
+          "id": "https://auth.example.org/my-video/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://auth.example.org/my-video/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://auth.example.org/my-video.mp4",
+                "type": "Video",
+                "service": [
+                  {
+                    "id": "https://auth.example.org/probe/my-video",
+                    "type": "AuthProbeService2",
+                    "service" : [
+                      {
+                        "id": "https://auth.example.org/login",
+                        "type": "AuthAccessService2",
+                        "profile": "active",
+                        "label": { "en": [ "Login to Example Institution" ] },
+                        "service" : [
+                          {
+                            "id": "https://auth.example.org/token",
+                            "type": "AuthAccessTokenService2"
+                          },
+                          {
+                            "id": "https://auth.example.org/logout",
+                            "type": "AuthLogoutService2",
+                            "label": { "en": [ "Logout from Example Institution" ] }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

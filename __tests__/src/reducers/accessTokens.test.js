@@ -36,7 +36,7 @@ describe('access tokens response reducer', () => {
       },
     });
   });
-  it('should handle RECEIVE_INFO_RESPONSE_FAILURE', () => {
+  it('should handle RECEIVE_ACCESS_TOKEN_FAILURE', () => {
     expect(accessTokensReducer(
       {
         abc123: {
@@ -71,6 +71,51 @@ describe('access tokens response reducer', () => {
         tokenServiceId: 'foo',
         type: ActionTypes.RESET_AUTHENTICATION_STATE,
       })).toEqual({});
+    });
+  });
+  it('should handle RECEIVE_INFO_RESPONSE', () => {
+    expect(accessTokensReducer(
+      {
+        efg456: {
+          id: 'efg456',
+          isFetching: true,
+        },
+      },
+      {
+        infoId: 'abc123',
+        infoJson: {
+          '@type': 'sc:Manifest',
+          content: 'lots of canvases and metadata and such',
+          id: 'abc123',
+        },
+        tokenServiceId: 'efg456',
+        type: ActionTypes.RECEIVE_INFO_RESPONSE,
+      },
+    )).toMatchObject({
+      efg456: {
+        id: 'efg456',
+        success: true,
+      },
+    });
+  });
+  it('should handle RECEIVE_PROBE_RESPONSE', () => {
+    expect(accessTokensReducer(
+      {
+        efg456: {
+          id: 'efg456',
+          isFetching: true,
+        },
+      },
+      {
+        infoId: 'abc123',
+        tokenServiceId: 'efg456',
+        type: ActionTypes.RECEIVE_PROBE_RESPONSE,
+      },
+    )).toMatchObject({
+      efg456: {
+        id: 'efg456',
+        success: true,
+      },
     });
   });
 });
