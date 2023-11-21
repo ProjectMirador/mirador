@@ -61,10 +61,10 @@ export class ZoomControls extends Component {
    * @returns {Box | null}
    */
   renderDivider() {
-    const { displayDivider } = this.props;
+    const { classes, displayDivider } = this.props;
 
     if (displayDivider) {
-      return <Box component="span" sx={dividerStyle} />;
+      return <Box component="span" sx={dividerStyle} className={classes?.divider} />;
     }
 
     return null;
@@ -103,6 +103,7 @@ export class ZoomControls extends Component {
 }
 
 ZoomControls.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string),
   displayDivider: PropTypes.bool,
   showZoomControls: PropTypes.bool,
   t: PropTypes.func,
@@ -117,6 +118,7 @@ ZoomControls.propTypes = {
 };
 
 ZoomControls.defaultProps = {
+  classes: {},
   displayDivider: true,
   showZoomControls: false,
   t: key => key,

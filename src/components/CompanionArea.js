@@ -40,6 +40,13 @@ const StyledToggleButton = styled(MiradorMenuButton)({
 /** */
 export class CompanionArea extends Component {
   /** */
+  areaLayoutClass() {
+    const { classes, position } = this.props;
+
+    return (position === 'bottom' || position === 'far-bottom') ? classes.horizontal : null;
+  }
+
+  /** */
   collapseIcon() {
     const { companionAreaOpen, direction } = this.props;
     if (direction === 'rtl') {
@@ -75,7 +82,7 @@ export class CompanionArea extends Component {
       companionWindowIds, companionAreaOpen, setCompanionAreaOpen,
       position, sideBarOpen, t, windowId,
     } = this.props;
-
+    const className = [this.areaLayoutClass(), ns(`companion-area-${position}`)].join(' ');
     return (
       <StyledRoot
         sx={{
@@ -84,7 +91,7 @@ export class CompanionArea extends Component {
             width: '100%',
           }),
         }}
-        className={ns(`companion-area-${position}`)}
+        className={className}
       >
         <Slide in={companionAreaOpen} direction={this.slideDirection()}>
           <StyledWrapper
@@ -120,6 +127,7 @@ export class CompanionArea extends Component {
 }
 
 CompanionArea.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string),
   companionAreaOpen: PropTypes.bool.isRequired,
   companionWindowIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   direction: PropTypes.string.isRequired,
@@ -131,6 +139,7 @@ CompanionArea.propTypes = {
 };
 
 CompanionArea.defaultProps = {
+  classes: {},
   setCompanionAreaOpen: () => {},
   sideBarOpen: false,
 };

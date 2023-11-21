@@ -6,7 +6,8 @@ import DialogContent from '@mui/material/DialogContent';
  *                                to indicate there is scrollable content
 */
 export function ScrollIndicatedDialogContent(props) {
-  const { className, ...otherProps } = props;
+  const { classes, className, ...otherProps } = props;
+  const ourClassName = [className, classes.shadowScrollDialog].join(' ');
 
   return (
     <DialogContent
@@ -29,16 +30,20 @@ export function ScrollIndicatedDialogContent(props) {
         backgroundSize: '100% 40px, 100% 40px, 100% 14px, 100% 14px',
         overflowY: 'auto',
       }}
-      className={className}
+      className={ourClassName}
       {...otherProps}
     />
   );
 }
 
 ScrollIndicatedDialogContent.propTypes = {
+  classes: PropTypes.shape({
+    shadowScrollDialog: PropTypes.string,
+  }),
   className: PropTypes.string,
 };
 
 ScrollIndicatedDialogContent.defaultProps = {
+  classes: {},
   className: '',
 };

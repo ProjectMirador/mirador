@@ -122,6 +122,7 @@ export class GalleryViewThumbnail extends Component {
       <InView onChange={this.handleIntersection}>
         <StyledGalleryViewItem
           key={canvas.index}
+          className={selected ? 'selected' : ''}
           sx={{
             '&:focus': {
               outline: 'none',
