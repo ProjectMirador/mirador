@@ -161,6 +161,7 @@ export class CompanionWindow extends Component {
               minHeight: 'max-content',
               paddingLeft: 2,
             }}
+            variant="dense"
             className={[ns('companion-window-header'), size.width < 370 ? classes.small : null].join(' ')}
             disableGutters
           >
