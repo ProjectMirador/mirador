@@ -21,15 +21,15 @@ import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogCon
 import ManifestInfo from '../containers/ManifestInfo';
 
 const StyledScrollIndicatedDialogContent = styled(ScrollIndicatedDialogContent)(() => ({
-  padding: 1,
+  padding: (theme) => theme.spacing(1),
 }));
 
 const StyledCollectionMetadata = styled('div')(() => ({
-  padding: 2,
+  padding: (theme) => theme.spacing(2),
 }));
 
 const StyledCollectionFilter = styled('div')(() => ({
-  padding: 2,
+  padding: (theme) => theme.spacing(2),
   paddingTop: 0,
 }));
 
@@ -202,7 +202,7 @@ export class CollectionDialog extends Component {
           <Typography component="div" variant="overline">
             { t(isMultipart ? 'multipartCollection' : 'collection') }
           </Typography>
-          <Typography variant="h3">
+          <Typography component="div" variant="h3">
             {CollectionDialog.getUseableLabel(manifest)}
           </Typography>
         </DialogTitle>
