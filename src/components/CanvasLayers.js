@@ -24,9 +24,9 @@ const StyledDragHandle = styled('div')(({ theme }) => ({
   display: 'flex',
   flex: 1,
   flexDirection: 'row',
-  marginBottom: -1 * theme.spacing(2) + 0.5,
+  marginBottom: theme.spacing(-2),
   marginRight: theme.spacing(1),
-  marginTop: -1 * theme.spacing(2),
+  marginTop: theme.spacing(-2),
   maxWidth: theme.spacing(3),
   width: theme.spacing(3),
 }));
