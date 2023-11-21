@@ -19,9 +19,12 @@ const StyledWrapper = styled('div')({
 });
 
 const StyledToggle = styled('div')(({ theme }) => ({
+  alignItems: 'center',
   backgroundColor: theme.palette.background.paper,
   border: `1px solid ${theme.palette.mode === 'dark' ? theme.palette.divider : theme.palette.shades?.dark}`,
+  borderInlineStart: 0,
   borderRadius: 0,
+  display: 'inline-flex',
   height: '48px',
   left: '100%',
   marginTop: '1rem',
