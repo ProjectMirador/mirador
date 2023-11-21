@@ -31,13 +31,14 @@ export class WindowSideBar extends Component {
           'aria-label': t('sidebarPanelsNavigation'),
           component: 'nav',
           sx: {
-            borderInlineEnd: '1px solid',
-            borderInlineEndColor: 'divider',
+            borderBlock: 0,
+            borderInlineStart: 0,
             height: '100%',
             overflowX: 'hidden',
             position: 'relative',
             width: 48,
           },
+          variant: 'outlined',
         }}
         SlideProps={{ direction: direction === 'rtl' ? 'left' : 'right', mountOnEnter: true, unmountOnExit: true }}
         open={sideBarOpen}
