@@ -6,13 +6,14 @@ import {
   ThemeProvider, StyledEngineProvider, createTheme,
 } from '@mui/material/styles';
 import StylesProvider from '@mui/styles/StylesProvider';
-import jssPreset from '@mui/styles/jssPreset';
 import createGenerateClassName from '@mui/styles/createGenerateClassName';
 import { DndContext, DndProvider } from 'react-dnd';
 import { MultiBackend } from 'react-dnd-multi-backend';
 import { HTML5toTouch } from 'rdndmb-html5-to-touch';
-import { create } from 'jss';
-import rtl from 'jss-rtl';
+import rtlPlugin from 'stylis-plugin-rtl';
+import { prefixer } from 'stylis';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
 import createI18nInstance from '../i18n';
 import FullScreenContext from '../contexts/FullScreenContext';
 
@@ -102,6 +103,21 @@ export class AppProviders extends Component {
 
     const generateClassName = createGenerateClassName(createGenerateClassNameOptions);
 
+    /**
+     * Create rtl emotion cache
+     */
+    const cacheRtl = createCache({
+      key: 'muirtl',
+      stylisPlugins: [prefixer, rtlPlugin],
+    });
+
+    /**
+     * Create default emotion cache
+     */
+    const cacheDefault = createCache({
+      key: 'mui',
+    });
+
     Object.keys(translations).forEach((lng) => {
       this.i18n.addResourceBundle(lng, 'translation', translations[lng], true, true);
     });
@@ -110,18 +126,15 @@ export class AppProviders extends Component {
       <FullScreenShim>
         <I18nextProvider i18n={this.i18n}>
           <StyledEngineProvider injectFirst>
-            <ThemeProvider
-              theme={createTheme((theme))}
-            >
-              <StylesProvider
-                jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
-                generateClassName={generateClassName}
-              >
-                <MaybeDndProvider dndManager={dndManager}>
-                  {children}
-                </MaybeDndProvider>
-              </StylesProvider>
-            </ThemeProvider>
+            <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
+              <ThemeProvider theme={createTheme((theme))}>
+                <StylesProvider generateClassName={generateClassName}>
+                  <MaybeDndProvider dndManager={dndManager}>
+                    {children}
+                  </MaybeDndProvider>
+                </StylesProvider>
+              </ThemeProvider>
+            </CacheProvider>
           </StyledEngineProvider>
         </I18nextProvider>
       </FullScreenShim>
