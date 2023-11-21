@@ -61,6 +61,7 @@ export default {
       },
       section_divider: 'rgba(0, 0, 0, 0.25)',
       annotations: {
+        chipBackground: '#e0e0e0',
         hidden: { globalAlpha: 0 },
         default: { strokeStyle: '#00BFFF', globalAlpha: 1 },
         hovered: { strokeStyle: '#BF00FF', globalAlpha: 1 },

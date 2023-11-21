@@ -172,9 +172,7 @@ export class GalleryViewThumbnail extends Component {
                   )}
                   label={searchAnnotationsCount}
                   sx={{
-                    '&.Mui-selected .MuiAvatar-circle': {
-                      bgcolor: 'highlights.primary',
-                    },
+                    backgroundColor: 'annotations.chipBackground',
                     marginTop: 2,
                     typography: 'caption',
                   }}
@@ -198,9 +196,7 @@ export class GalleryViewThumbnail extends Component {
                   )}
                   label={annotationsCount}
                   sx={{
-                    '&.Mui-selected .MuiAvatar-circle': {
-                      bgcolor: 'highlights.primary',
-                    },
+                    backgroundColor: 'annotations.chipBackground',
                     typography: 'caption',
                   }}
                   size="small"
