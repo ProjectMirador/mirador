@@ -17,6 +17,7 @@ export function MiradorMenuButton(props) {
     dispatch,
     BadgeProps,
     TooltipProps,
+    sx,
     ...iconButtonProps
   } = props;
 
@@ -25,6 +26,7 @@ export function MiradorMenuButton(props) {
       {...iconButtonProps}
       sx={{
         fill: 'currentcolor',
+        ...sx,
       }}
       size="large"
     >
@@ -68,6 +70,7 @@ MiradorMenuButton.propTypes = {
   children: PropTypes.element.isRequired,
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   dispatch: PropTypes.func,
+  sx: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   TooltipProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
@@ -76,5 +79,6 @@ MiradorMenuButton.defaultProps = {
   BadgeProps: {},
   container: null,
   dispatch: () => {},
+  sx: {},
   TooltipProps: {},
 };
