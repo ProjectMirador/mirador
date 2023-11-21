@@ -124,20 +124,23 @@ export class SidebarIndexTableOfContents extends Component {
         <TreeItem
           nodeId={node.id}
           sx={{
-            '&.MuiTreeItem-content': {
+            '& .MuiTreeItem-content': {
               alignItems: 'flex-start',
               borderLeft: '1px solid transparent',
               padding: '8px 16px 8px 0',
               width: 'auto',
             },
-            '&.MuiTreeItem-group': {
+            '& .MuiTreeItem-group': {
               borderLeft: '1px solid',
-              borderLeftColor: 'grey[300]',
+              borderLeftColor: 'grey.300',
             },
-            '&.MuiTreeItem-label': {
+            '& .MuiTreeItem-iconContainer': {
+              paddingBlockStart: 0.5,
+            },
+            '& .MuiTreeItem-label': {
               paddingLeft: 0,
             },
-            '&.MuiTreeItem-root': {
+            '& .MuiTreeItem-root': {
               '&:focus > .MuiTreeItem-content': {
                 backgroundColor: 'action.selected',
               },
