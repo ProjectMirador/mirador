@@ -7,6 +7,7 @@ import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUpSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 const StyledContainer = styled('div')(() => ({
+  alignItems: 'flex-start',
   cursor: 'pointer', // This style will be applied to Typography
   display: 'flex',
   justifyContent: 'space-between',
@@ -44,7 +45,7 @@ export class CollapsibleSection extends Component {
       <>
         <StyledContainer sx={{ padding: 0 }}>
           <Typography
-            sx={{ cursor: 'pointer' }}
+            sx={{ alignSelf: 'center', cursor: 'pointer' }}
             id={id}
             onClick={this.toggleSection}
             variant="overline"
