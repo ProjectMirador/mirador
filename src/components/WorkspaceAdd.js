@@ -145,11 +145,11 @@ export class WorkspaceAdd extends Component {
           <Fab
             variant="extended"
             disabled={addResourcesOpen}
-            sx={{
-              bottom: 2,
+            sx={(theme) => ({
+              bottom: theme.spacing(2),
               position: 'absolute',
-              right: 2,
-            }}
+              right: theme.spacing(2),
+            })}
             className={classNames(ns('add-resource-button'))}
             color="primary"
             onClick={() => (this.setAddResourcesVisibility(true))}
