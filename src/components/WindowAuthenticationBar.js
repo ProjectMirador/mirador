@@ -16,9 +16,6 @@ const StyledTopBar = styled('div')(({ theme }) => ({
   },
   alignItems: 'center',
   display: 'flex',
-  justifyContent: 'inherit',
-  padding: theme.spacing(1),
-  textTransform: 'none',
 }));
 
 const StyledFauxButton = styled('span')(({ theme }) => ({
@@ -62,16 +59,13 @@ export class WindowAuthenticationBar extends Component {
     const button = (
       <Button
         onClick={this.onSubmit}
-        sx={theme => ({
+        color="secondary"
+        sx={(theme) => ({
           '&:hover': {
             backgroundColor: alpha(theme.palette.secondary.contrastText, 1 - theme.palette.action.hoverOpacity),
           },
           backgroundColor: theme.palette.secondary.contrastText,
-          marginLeft: theme.spacing(5),
-          paddingBottom: 0,
-          paddingTop: 0,
         })}
-        color="secondary"
         {...ConfirmProps}
       >
         {confirmButton || t('login')}
@@ -84,24 +78,12 @@ export class WindowAuthenticationBar extends Component {
           square
           elevation={4}
           color="secondary"
-          sx={{
-            '& .MuiPaper-root': {
-              backgroundColor: 'secondary.main',
-              color: 'secondary.contrastText',
-              cursor: 'pointer',
-            },
-          }}
         >
           <StyledTopBar>
             { icon || (
-            <LockIcon
-              sx={{
-                marginRight: 1.5,
-                verticalAlign: 'text-bottom',
-              }}
-            />
+              <LockIcon sx={{ marginInlineEnd: 1.5 }} />
             ) }
-            <Typography sx={{ lineHeight: 2.25 }} component="h3" variant="body1" color="inherit">
+            <Typography component="h3" variant="body1" color="inherit">
               { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
             </Typography>
             <PluginHook {...this.props} />
@@ -116,38 +98,27 @@ export class WindowAuthenticationBar extends Component {
         square
         elevation={4}
         color="secondary"
-        sx={{
-          '& .MuiPaper-root': {
-            backgroundColor: 'secondary.main',
-            color: 'secondary.contrastText',
-            cursor: 'pointer',
-          },
-        }}
       >
         <Button
           fullWidth
-          sx={{
-            '&:hover': {
-              backgroundColor: 'secondary.main',
-            },
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'inherit',
-            padding: 1,
-            textTransform: 'none',
-          }}
           onClick={() => this.setOpen(true)}
           component="div"
           color="inherit"
+          sx={(theme) => ({
+            '&:hover': {
+              backgroundColor: theme.palette.secondary.main,
+            },
+            backgroundColor: theme.palette.secondary.main,
+            borderRadius: 0,
+            color: theme.palette.secondary.contrastText,
+            justifyContent: 'start',
+            textTransform: 'none',
+          })}
         >
           { icon || (
-          <LockIcon sx={{
-            marginRight: 1.5,
-            verticalAlign: 'text-bottom',
-          }}
-          />
+          <LockIcon sx={{ marginInlineEnd: 1.5 }} />
           ) }
-          <Typography sx={{ lineHeight: 2.25 }} component="h3" variant="body1" color="inherit">
+          <Typography sx={{ paddingBlockEnd: 1, paddingBlockStart: 1 }} component="h3" variant="body1" color="inherit">
             { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
           </Typography>
           <PluginHook {...this.props} />
@@ -160,6 +131,12 @@ export class WindowAuthenticationBar extends Component {
           </StyledFauxButton>
         </Button>
         <Collapse
+          sx={(theme) => ({
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.secondary.contrastText,
+            paddingInlineEnd: theme.spacing(1),
+            paddingInlineStart: theme.spacing(1),
+          })}
           in={open}
           onClose={() => this.setOpen(false)}
         >
