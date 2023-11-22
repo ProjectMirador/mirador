@@ -217,9 +217,8 @@ export class CompanionWindow extends Component {
               titleControls && (
                 <StyledTitleControls
                   sx={{
-                    ...(!isBottom && {
-                      flexGrow: 1,
-                    }),
+                    flexGrow: 1,
+                    justifyContent: isBottom ? 'flex-end' : 'flex-start',
                     order: isBottom || size.width < 370 ? 'unset' : 1000,
                   }}
                   className={ns('companion-window-title-controls')}
