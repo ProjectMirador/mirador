@@ -53,7 +53,7 @@ export class SidebarIndexList extends Component {
                 sx={{
                   paddingRight: 1,
                 }}
-                divider="true"
+                divider
                 onClick={onClick}
                 component="li"
                 selected={selectedCanvasIds.includes(canvas.id)}
