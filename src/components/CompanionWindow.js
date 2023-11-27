@@ -93,7 +93,7 @@ export class CompanionWindow extends Component {
     const {
       ariaLabel, classes, paperClassName, onCloseClick, updateCompanionWindow, isDisplayed,
       position, t, title, children, titleControls, size,
-      defaultSidebarPanelWidth, defaultSidebarPanelHeight,
+      defaultSidebarPanelWidth, defaultSidebarPanelHeight, innerRef,
     } = this.props;
 
     const isBottom = (position === 'bottom' || position === 'far-bottom');
@@ -112,6 +112,7 @@ export class CompanionWindow extends Component {
 
     return (
       <Paper
+        ref={innerRef}
         sx={{
           boxShadow: 'none',
           boxSizing: 'border-box',
@@ -251,6 +252,10 @@ CompanionWindow.propTypes = {
   defaultSidebarPanelHeight: PropTypes.number,
   defaultSidebarPanelWidth: PropTypes.number,
   direction: PropTypes.string.isRequired,
+  innerRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
   isDisplayed: PropTypes.bool,
   onCloseClick: PropTypes.func,
   paperClassName: PropTypes.string,
@@ -271,6 +276,7 @@ CompanionWindow.defaultProps = {
   classes: {},
   defaultSidebarPanelHeight: 201,
   defaultSidebarPanelWidth: 235,
+  innerRef: undefined,
   isDisplayed: false,
   onCloseClick: () => {},
   paperClassName: '',

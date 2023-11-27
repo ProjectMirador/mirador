@@ -35,7 +35,6 @@ export class WindowSideBarAnnotationsPanel extends Component {
         windowId={windowId}
         id={id}
         ref={this.containerRef}
-        otherRef={this.containerRef}
         titleControls={<AnnotationSettings windowId={windowId} />}
       >
         <StyledSection sx={{
