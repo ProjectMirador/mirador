@@ -99,7 +99,6 @@ export class WindowSideBarCanvasPanel extends Component {
         id={id}
         windowId={windowId}
         ref={this.containerRef}
-        otherRef={this.containerRef}
         titleControls={(
           <>
             {

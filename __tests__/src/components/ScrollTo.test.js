@@ -12,7 +12,7 @@ describe('ScrollTo', () => {
     containerRef = createRef();
     render(<div data-testid="container" ref={containerRef} />);
 
-    containerRef.current.domEl = {
+    containerRef.current = {
       getBoundingClientRect: () => containerBoundingRect,
       getElementsByClassName: () => [{ scrollTo }],
     };

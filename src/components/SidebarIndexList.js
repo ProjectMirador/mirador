@@ -52,6 +52,7 @@ export class SidebarIndexList extends Component {
                 key={canvas.id}
                 sx={{
                   paddingRight: 1,
+                  position: 'initial',
                 }}
                 divider
                 onClick={onClick}
