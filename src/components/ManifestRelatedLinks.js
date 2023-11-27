@@ -127,7 +127,6 @@ export class ManifestRelatedLinks extends Component {
 }
 
 ManifestRelatedLinks.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   homepage: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     value: PropTypes.string,
