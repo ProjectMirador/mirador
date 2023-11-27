@@ -1,15 +1,12 @@
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import AnnotationSettings from '../containers/AnnotationSettings';
 import CanvasAnnotations from '../containers/CanvasAnnotations';
 import CompanionWindow from '../containers/CompanionWindow';
+import { CompanionWindowSection } from './CompanionWindowSection';
 import ns from '../config/css-ns';
 
-const StyledSection = styled('div')({
-  borderBottom: '.5px solid',
-});
 /**
  * WindowSideBarAnnotationsPanel ~
 */
@@ -37,16 +34,9 @@ export class WindowSideBarAnnotationsPanel extends Component {
         ref={this.containerRef}
         titleControls={<AnnotationSettings windowId={windowId} />}
       >
-        <StyledSection sx={{
-          borderBottomColor: 'section_divider',
-          paddingBottom: 1,
-          paddingLeft: 2,
-          paddingRight: 1,
-          paddingTop: 2,
-        }}
-        >
+        <CompanionWindowSection>
           <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
-        </StyledSection>
+        </CompanionWindowSection>
 
         {canvasIds.map((canvasId, index) => (
           <CanvasAnnotations
