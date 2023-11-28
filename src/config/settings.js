@@ -176,6 +176,25 @@ export default {
           },
         },
       },
+      MuiAccordion: {
+        variants: [
+          {
+            props: { variant: 'compact' },
+            style: {
+              '& .MuiAccordionSummary-root': {
+                minHeight: 'unset',
+                padding: 0,
+              },
+              '& .MuiAccordionSummary-content': {
+                margin: 0,
+              },
+              '& .MuiAccordionDetails-root': {
+                padding: 0,
+              },
+            },
+          },
+        ],
+      },
       MuiButtonBase: {
         defaultProps: {
           disableTouchRipple: true,

@@ -1,17 +1,10 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDownSharp';
-import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUpSharp';
-import MiradorMenuButton from '../containers/MiradorMenuButton';
-
-const StyledContainer = styled('div')(() => ({
-  alignItems: 'flex-start',
-  cursor: 'pointer', // This style will be applied to Typography
-  display: 'flex',
-  justifyContent: 'space-between',
-}));
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 /**
  * CollapsableSection ~
@@ -22,14 +15,12 @@ export class CollapsibleSection extends Component {
     super(props);
 
     this.state = { open: true };
-    this.toggleSection = this.toggleSection.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  /** */
-  toggleSection() {
-    const { open } = this.state;
-
-    this.setState({ open: !open });
+  /** Control the accordion state so we can provide aria labeling */
+  handleChange(event, isExpanded) {
+    this.setState({ open: isExpanded });
   }
 
   /**
@@ -42,28 +33,16 @@ export class CollapsibleSection extends Component {
     const { open } = this.state;
 
     return (
-      <>
-        <StyledContainer sx={{ padding: 0 }}>
-          <Typography
-            sx={{ alignSelf: 'center', cursor: 'pointer' }}
-            id={id}
-            onClick={this.toggleSection}
-            variant="overline"
-            component="h4"
-          >
+      <Accordion id={id} elevation={0} expanded={open} onChange={this.handleChange} disableGutters square variant="compact">
+        <AccordionSummary id={`${id}-header`} aria-controls={`${id}-content`} aria-label={t(open ? 'collapseSection' : 'expandSection', { section: label })} expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="overline" component="h4">
             {label}
           </Typography>
-          <MiradorMenuButton
-            aria-label={t(open ? 'collapseSection' : 'expandSection', { section: label })}
-            aria-expanded={open}
-            sx={{ padding: 0 }}
-            onClick={this.toggleSection}
-          >
-            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </MiradorMenuButton>
-        </StyledContainer>
-        {open && children}
-      </>
+        </AccordionSummary>
+        <AccordionDetails>
+          {children}
+        </AccordionDetails>
+      </Accordion>
     );
   }
 }
