@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import CompanionWindow from '../containers/CompanionWindow';
+import { CompanionWindowSection } from './CompanionWindowSection';
 import CanvasInfo from '../containers/CanvasInfo';
 import LocalePicker from '../containers/LocalePicker';
 import ManifestInfo from '../containers/ManifestInfo';
@@ -9,9 +9,6 @@ import CollectionInfo from '../containers/CollectionInfo';
 import ManifestRelatedLinks from '../containers/ManifestRelatedLinks';
 import ns from '../config/css-ns';
 
-const StyledSection = styled('div')({
-  borderBottom: '.5px solid',
-});
 /**
  * WindowSideBarInfoPanel
  */
@@ -52,14 +49,7 @@ export class WindowSideBarInfoPanel extends Component {
       >
         {
           canvasIds.map((canvasId, index) => (
-            <StyledSection
-              sx={{
-                borderBottomColor: 'section_divider',
-                paddingBottom: 1,
-                paddingLeft: 2,
-                paddingRight: 1,
-                paddingTop: 2,
-              }}
+            <CompanionWindowSection
               key={canvasId}
             >
               <CanvasInfo
@@ -69,43 +59,22 @@ export class WindowSideBarInfoPanel extends Component {
                 totalSize={canvasIds.length}
                 windowId={windowId}
               />
-            </StyledSection>
+            </CompanionWindowSection>
           ))
         }
         { collectionPath.length > 0 && (
-          <StyledSection sx={{
-            borderBottomColor: 'section_divider',
-            paddingBottom: 1,
-            paddingLeft: 2,
-            paddingRight: 1,
-            paddingTop: 2,
-          }}
-          >
+          <CompanionWindowSection>
             <CollectionInfo id={id} windowId={windowId} />
-          </StyledSection>
+          </CompanionWindowSection>
         )}
 
-        <StyledSection sx={{
-          borderBottomColor: 'section_divider',
-          paddingBottom: 1,
-          paddingLeft: 2,
-          paddingRight: 1,
-          paddingTop: 2,
-        }}
-        >
+        <CompanionWindowSection>
           <ManifestInfo id={id} windowId={windowId} />
-        </StyledSection>
+        </CompanionWindowSection>
 
-        <StyledSection sx={{
-          borderBottomColor: 'section_divider',
-          paddingBottom: 1,
-          paddingLeft: 2,
-          paddingRight: 1,
-          paddingTop: 2,
-        }}
-        >
+        <CompanionWindowSection>
           <ManifestRelatedLinks id={id} windowId={windowId} />
-        </StyledSection>
+        </CompanionWindowSection>
       </CompanionWindow>
     );
   }

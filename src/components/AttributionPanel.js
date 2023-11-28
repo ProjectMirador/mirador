@@ -6,6 +6,7 @@ import Link from '@mui/material/Link';
 import Skeleton from '@mui/material/Skeleton';
 import { Img } from 'react-image';
 import CompanionWindow from '../containers/CompanionWindow';
+import { CompanionWindowSection } from './CompanionWindowSection';
 import { LabelValueMetadata } from './LabelValueMetadata';
 import ns from '../config/css-ns';
 import { PluginHook } from './PluginHook';
@@ -17,10 +18,6 @@ const StyledLogo = styled(Img)(() => ({
 const StyledPlaceholder = styled(Skeleton)(({ theme }) => ({
   backgroundColor: theme.palette.grey[300],
 }));
-
-const StyledSection = styled('div')({
-  borderBottom: '.5px solid',
-});
 
 /**
  * WindowSideBarInfoPanel
@@ -47,7 +44,7 @@ export class AttributionPanel extends Component {
         windowId={windowId}
         id={id}
       >
-        <StyledSection sx={{ paddingLeft: 2 }}>
+        <CompanionWindowSection>
           { requiredStatement && (
             <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
           )}
@@ -65,17 +62,10 @@ export class AttributionPanel extends Component {
               </dl>
             )
           }
-        </StyledSection>
+        </CompanionWindowSection>
 
         { manifestLogo && (
-          <StyledSection sx={{
-            borderBottomColor: 'section_divider',
-            paddingBottom: 1,
-            paddingLeft: 2,
-            paddingRight: 1,
-            paddingTop: 2,
-          }}
-          >
+          <CompanionWindowSection>
             <StyledLogo
               src={[manifestLogo]}
               alt=""
@@ -84,7 +74,7 @@ export class AttributionPanel extends Component {
                 <StyledPlaceholder variant="rectangular" height={60} width={60} />
               }
             />
-          </StyledSection>
+          </CompanionWindowSection>
         )}
 
         <PluginHook {...this.props} />

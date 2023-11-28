@@ -169,6 +169,13 @@ export default {
       useNextVariants: true // set so that console deprecation warning is removed
     },
     components: {
+      CompanionWindowSection: {
+        styleOverrides: {
+          root: {
+            borderBlockEnd: '.5px solid rgba(0, 0, 0, 0.25)'
+          },
+        },
+      },
       MuiButtonBase: {
         defaultProps: {
           disableTouchRipple: true,
