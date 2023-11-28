@@ -256,7 +256,7 @@ export class CollectionDialog extends Component {
                   <MenuItem
                     key={c.id}
                     onClick={() => { this.selectCollection(c); }}
-                    sx={{ whiteSpace: 'normal' }}
+                    variant="multiline"
                   >
                     {CollectionDialog.getUseableLabel(c)}
                   </MenuItem>
@@ -271,7 +271,7 @@ export class CollectionDialog extends Component {
                   <MenuItem
                     key={m.id}
                     onClick={() => { this.selectManifest(m); }}
-                    sx={{ whiteSpace: 'normal' }}
+                    variant="multiline"
                   >
                     {CollectionDialog.getUseableLabel(m)}
                   </MenuItem>
