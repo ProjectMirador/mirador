@@ -21,11 +21,11 @@ function Item({
       alignItems="flex-start"
       button
       component="li"
+      variant="multiline"
       sx={{
         borderBottom: '0.5px solid',
         borderBottomColor: 'divider',
         paddingRight: 1,
-        whiteSpace: 'normal',
       }}
       {...otherProps}
     >

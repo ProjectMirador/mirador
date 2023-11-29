@@ -169,6 +169,14 @@ export default {
       useNextVariants: true // set so that console deprecation warning is removed
     },
     components: {
+      MuiMenuItem: {
+        variants: [
+          {
+            props: { variant: 'multiline' },
+            style: { whiteSpace: 'normal' }
+          },
+        ]
+      },
       CompanionWindowSection: {
         styleOverrides: {
           root: {
