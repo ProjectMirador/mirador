@@ -3,22 +3,26 @@ import {
 } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
 import { useInView } from 'react-intersection-observer';
 import getThumbnail from '../lib/ThumbnailFactory';
 
-const StyledRoot = styled('div')({
-});
+const Root = styled('div', { name: 'IIIFThumbnail', slot: 'root' })({});
 
-const StyledLabel = styled('div')({
-});
+const Label = styled('span', { name: 'IIIFThumbnail', slot: 'label' })(({ theme }) => ({
+  ...theme.typography.caption,
+}));
+
+const Image = styled('img', { name: 'IIIFThumbnail', slot: 'image' })(() => ({
+  height: 'auto',
+  width: 'auto',
+}));
 
 /**
  * A lazy-loaded image that uses IntersectionObserver to determine when to
  * try to load the image (or even calculate that the image url/height/width are)
  */
 const LazyLoadedImage = ({
-  placeholder, style = {}, thumbnail, resource, maxHeight, maxWidth, thumbnailsConfig, ...props
+  border, placeholder, style = {}, thumbnail, resource, maxHeight, maxWidth, thumbnailsConfig, ...props
 }) => {
   const { ref, inView } = useInView();
   const [loaded, setLoaded] = useState(false);
@@ -44,9 +48,14 @@ const LazyLoadedImage = ({
   }, [resource, thumbnail, maxWidth, maxHeight, thumbnailsConfig]);
 
   const imageStyles = useMemo(() => {
-    const styleProps = { height: 'auto', width: 'auto' };
+    const styleProps = {
+      height: undefined,
+      maxHeight: undefined,
+      maxWidth: undefined,
+      width: undefined,
+    };
 
-    if (!image) return { ...style, height: maxHeight || 'auto', width: maxWidth || 'auto' };
+    if (!image) return { ...style, height: maxHeight, width: maxWidth };
 
     const { height: thumbHeight, width: thumbWidth } = image;
     if (thumbHeight && thumbWidth) {
@@ -93,7 +102,8 @@ const LazyLoadedImage = ({
   const { url: src = placeholder } = (loaded && (thumbnail || image)) || {};
 
   return (
-    <img
+    <Image
+      ownerState={{ border }}
       ref={ref}
       alt=""
       role="presentation"
@@ -104,11 +114,8 @@ const LazyLoadedImage = ({
   );
 };
 
-const StyledLazyLoadedImage = styled(LazyLoadedImage)(() => ({
-
-}));
-
 LazyLoadedImage.propTypes = {
+  border: PropTypes.bool,
   maxHeight: PropTypes.number.isRequired,
   maxWidth: PropTypes.number.isRequired,
   placeholder: PropTypes.string.isRequired,
@@ -123,6 +130,7 @@ LazyLoadedImage.propTypes = {
 };
 
 LazyLoadedImage.defaultProps = {
+  border: false,
   style: {},
   thumbnail: null,
   thumbnailsConfig: {},
@@ -152,30 +160,21 @@ export class IIIFThumbnail extends Component {
    */
   render() {
     const {
+      border,
       children,
       imagePlaceholder,
       labelled,
-      imageStyle,
       maxHeight,
       maxWidth,
       resource,
       style,
       thumbnail,
       thumbnailsConfig,
-      variant,
     } = this.props;
 
     return (
-      <StyledRoot
-        sx={{
-          ...(variant === 'inside' && {
-            display: 'inline-block',
-            height: 'inherit',
-            position: 'relative',
-          }),
-        }}
-      >
-        <StyledLazyLoadedImage
+      <Root ownerState={this.props}>
+        <LazyLoadedImage
           placeholder={imagePlaceholder}
           thumbnail={thumbnail}
           resource={resource}
@@ -183,62 +182,24 @@ export class IIIFThumbnail extends Component {
           maxWidth={maxWidth}
           thumbnailsConfig={thumbnailsConfig}
           style={style}
-          sx={{
-            ...(imageStyle && {
-              borderBottom: '1px solid',
-              borderBottomColor: 'divider',
-            }),
-          }}
+          border={border}
         />
 
         { labelled && (
-          <StyledLabel
-            sx={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              ...(variant === 'inside' && {
-                background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-                bottom: '5px',
-                boxSizing: 'border-box',
-                left: '0px',
-                padding: '4px',
-                position: 'absolute',
-                width: '100%',
-              }),
-            }}
-          >
-            <Typography
-              variant="caption"
-              sx={{
-                lineHeight: '1.5em',
-                wordBreak: 'break-word',
-                ...(variant === 'inside' && {
-                  color: '#ffffff',
-                  WebkitLineClamp: 1,
-                  whiteSpace: 'nowrap',
-                }),
-                ...(variant === 'outside' && {
-                  display: '-webkit-box',
-                  maxHeight: '3em',
-                  MozBoxOrient: 'vertical',
-                  WebkitLineClamp: 2,
-                }),
-              }}
-            >
-              {this.label()}
-            </Typography>
-          </StyledLabel>
+          <Label ownerState={this.props}>
+            {this.label()}
+          </Label>
         )}
         {children}
-      </StyledRoot>
+      </Root>
     );
   }
 }
 
 IIIFThumbnail.propTypes = {
+  border: PropTypes.bool,
   children: PropTypes.node,
   imagePlaceholder: PropTypes.string,
-  imageStyle: PropTypes.bool,
   label: PropTypes.string,
   labelled: PropTypes.bool,
   maxHeight: PropTypes.number,
@@ -251,14 +212,14 @@ IIIFThumbnail.propTypes = {
     width: PropTypes.number,
   }),
   thumbnailsConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  variant: PropTypes.oneOf(['inside', 'outside']),
+  variant: PropTypes.oneOf(['inside', 'outside']), // eslint-disable-line react/no-unused-prop-types
 };
 
 IIIFThumbnail.defaultProps = {
+  border: false,
   children: null,
   // Transparent "gray"
   imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==',
-  imageStyle: false,
   label: undefined,
   labelled: false,
   maxHeight: null,

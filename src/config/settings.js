@@ -184,6 +184,48 @@ export default {
           },
         },
       },
+      IIIFThumbnail: {
+        styleOverrides: {
+          root: ({ ownerState }) => ({
+            ...(ownerState?.variant === 'inside' && {
+              display: 'inline-block',
+              height: 'inherit',
+              position: 'relative',
+            }),
+          }),
+          label: ({ ownerState }) => ({
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            lineHeight: '1.5em',
+            wordBreak: 'break-word',
+            ...(ownerState?.variant === 'inside' && {
+              color: '#ffffff',
+              WebkitLineClamp: 1,
+              whiteSpace: 'nowrap',
+            }),
+            ...(ownerState?.variant === 'outside' && {
+              display: '-webkit-box',
+              maxHeight: '3em',
+              MozBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+            }),
+            ...(ownerState?.variant === 'inside' && {
+              background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+              bottom: '5px',
+              boxSizing: 'border-box',
+              left: '0px',
+              padding: '4px',
+              position: 'absolute',
+              width: '100%',
+            }),
+          }),
+          image: ({ ownerState }) => ({
+            ...(ownerState?.border && {
+              border: '1px solid rgba(0, 0, 0, 0.125)',
+            }),
+          })
+        }
+      },
       MuiAccordion: {
         variants: [
           {
