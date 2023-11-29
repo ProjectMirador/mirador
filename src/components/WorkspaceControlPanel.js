@@ -13,6 +13,9 @@ const StyledWorkspaceButtons = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('sm')]: {
     display: 'flex',
     flexDirection: 'column',
+    gap: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(1),
   },
 }));
 

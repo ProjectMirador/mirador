@@ -47,7 +47,6 @@ export class WindowListButton extends Component {
           aria-label={t('listAllOpenWindows')}
           aria-owns={windowListAnchor ? 'window-list' : null}
           sx={{
-            margin: 1,
             ...(windowListAnchor && {
               backgroundColor: 'action.selected',
             }),

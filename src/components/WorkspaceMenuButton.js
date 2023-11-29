@@ -58,7 +58,6 @@ export class WorkspaceMenuButton extends Component {
           aria-label={t('workspaceMenu')}
           aria-owns={open ? 'workspace-menu' : undefined}
           sx={{
-            margin: 1,
             ...(open && {
               backgroundColor: 'action.selected',
             }),
