@@ -13,6 +13,10 @@ const StyledRoot = styled('div')({
 const StyledLabel = styled('div')({
 });
 
+const StyledImage = styled('img')(() => ({
+
+}));
+
 /**
  * A lazy-loaded image that uses IntersectionObserver to determine when to
  * try to load the image (or even calculate that the image url/height/width are)
@@ -93,7 +97,7 @@ const LazyLoadedImage = ({
   const { url: src = placeholder } = (loaded && (thumbnail || image)) || {};
 
   return (
-    <img
+    <StyledImage
       ref={ref}
       alt=""
       role="presentation"
@@ -103,10 +107,6 @@ const LazyLoadedImage = ({
     />
   );
 };
-
-const StyledLazyLoadedImage = styled(LazyLoadedImage)(() => ({
-
-}));
 
 LazyLoadedImage.propTypes = {
   maxHeight: PropTypes.number.isRequired,
@@ -175,7 +175,7 @@ export class IIIFThumbnail extends Component {
           }),
         }}
       >
-        <StyledLazyLoadedImage
+        <LazyLoadedImage
           placeholder={imagePlaceholder}
           thumbnail={thumbnail}
           resource={resource}
