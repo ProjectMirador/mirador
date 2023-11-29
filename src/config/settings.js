@@ -208,6 +208,19 @@ export default {
           disableTouchRipple: true,
         },
       },
+      MuiDialog: {
+        variants: [
+          {
+            props: { variant: 'contained' },
+            style: {
+              position: 'absolute',
+              '& .MuiBackdrop-root': {
+                position: 'absolute'
+              }
+            },
+          }
+        ]
+      },
       MuiLink: {
         defaultProps: {
           underline: 'always'

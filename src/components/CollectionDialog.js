@@ -124,19 +124,10 @@ export class CollectionDialog extends Component {
   placeholder() {
     return (
       <Dialog
-        sx={{
-          position: 'absolute !important',
-        }}
+        variant="contained"
         onClose={this.hideDialog}
         open
         container={this.dialogContainer()}
-        slotProps={{
-          backdrop: {
-            sx: {
-              position: 'absolute !important',
-            },
-          },
-        }}
       >
         <DialogTitle id="select-collection">
           <Skeleton variant="text" />
@@ -186,16 +177,9 @@ export class CollectionDialog extends Component {
 
     return (
       <Dialog
-        sx={{ position: 'absolute !important' }}
+        variant="contained"
         onClose={this.hideDialog}
         container={this.dialogContainer()}
-        slotProps={{
-          backdrop: {
-            sx: {
-              position: 'absolute !important',
-            },
-          },
-        }}
         open
       >
         <DialogTitle id="select-collection">
