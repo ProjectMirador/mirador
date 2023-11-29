@@ -3,7 +3,6 @@ import AddCircleIcon from '@mui/icons-material/AddCircleOutlineSharp';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircleOutlineSharp';
 import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
 import RestoreZoomIcon from './icons/RestoreZoomIcon';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
@@ -12,13 +11,6 @@ const StyledZoomControlsWrapper = styled('div')({
   flexDirection: 'row',
   justifyContent: 'center',
 });
-
-const dividerStyle = {
-  borderRight: '1px solid #808080',
-  display: 'inline-block',
-  height: '24px',
-  margin: '12px 6px',
-};
 
 /**
  */
@@ -56,35 +48,14 @@ export class ZoomControls extends Component {
   }
 
   /**
-   * Renders a divider element if displayDivider is set to true.
-   *
-   * @returns {Box | null}
-   */
-  renderDivider() {
-    const { classes, displayDivider } = this.props;
-
-    if (displayDivider) {
-      return <Box component="span" sx={dividerStyle} className={classes?.divider} />;
-    }
-
-    return null;
-  }
-
-  /**
    * render
    * @return
    */
   render() {
     const {
-      showZoomControls, t, zoomToWorld,
+      t, zoomToWorld,
     } = this.props;
 
-    if (!showZoomControls) {
-      return (
-        <>
-        </>
-      );
-    }
     return (
       <StyledZoomControlsWrapper>
         <MiradorMenuButton aria-label={t('zoomIn')} onClick={this.handleZoomInClick}>
@@ -96,16 +67,12 @@ export class ZoomControls extends Component {
         <MiradorMenuButton aria-label={t('zoomReset')} onClick={() => zoomToWorld(false)}>
           <RestoreZoomIcon />
         </MiradorMenuButton>
-        {this.renderDivider()}
       </StyledZoomControlsWrapper>
     );
   }
 }
 
 ZoomControls.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
-  displayDivider: PropTypes.bool,
-  showZoomControls: PropTypes.bool,
   t: PropTypes.func,
   updateViewport: PropTypes.func,
   viewer: PropTypes.shape({
@@ -118,9 +85,6 @@ ZoomControls.propTypes = {
 };
 
 ZoomControls.defaultProps = {
-  classes: {},
-  displayDivider: true,
-  showZoomControls: false,
   t: key => key,
   updateViewport: () => {},
   viewer: {},

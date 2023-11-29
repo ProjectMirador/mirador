@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import classNames from 'classnames';
 import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
 import ZoomControls from '../containers/ZoomControls';
@@ -26,7 +28,9 @@ export class WindowCanvasNavigationControls extends Component {
 
   /** */
   render() {
-    const { visible, windowId, zoomToWorld } = this.props;
+    const {
+      showZoomControls, visible, windowId, zoomToWorld,
+    } = this.props;
 
     if (!visible) return (<Typography style={visuallyHidden} component="div"><ViewerInfo windowId={windowId} /></Typography>);
 
@@ -34,11 +38,12 @@ export class WindowCanvasNavigationControls extends Component {
       <Paper
         square
         sx={(theme) => ({
+          alignItems: 'center',
           backgroundColor: alpha(theme.palette.background.paper, 0.5),
           bottom: 0,
           cursor: 'default',
           display: 'flex',
-          flexDirection: this.canvasNavControlsAreStacked() ? 'column' : 'row',
+          flexDirection: 'column',
           flexWrap: 'wrap',
           justifyContent: 'center',
           position: 'absolute',
@@ -51,15 +56,17 @@ export class WindowCanvasNavigationControls extends Component {
             ns('canvas-nav'),
             this.canvasNavControlsAreStacked() ? ns('canvas-nav-stacked') : null,
           )
-}
+        }
         elevation={0}
       >
-        <ZoomControls
-          displayDivider={!this.canvasNavControlsAreStacked()}
-          windowId={windowId}
-          zoomToWorld={zoomToWorld}
-        />
-        <ViewerNavigation windowId={windowId} />
+        <Stack
+          direction={this.canvasNavControlsAreStacked() ? 'column' : 'row'}
+          divider={<Divider orientation={this.canvasNavControlsAreStacked() ? 'horizontal' : 'vertical'} variant="middle" flexItem />}
+          spacing={0}
+        >
+          { showZoomControls && <ZoomControls windowId={windowId} zoomToWorld={zoomToWorld} /> }
+          <ViewerNavigation windowId={windowId} />
+        </Stack>
         <ViewerInfo windowId={windowId} />
 
         <PluginHook {...this.props} />
@@ -69,6 +76,7 @@ export class WindowCanvasNavigationControls extends Component {
 }
 
 WindowCanvasNavigationControls.propTypes = {
+  showZoomControls: PropTypes.bool,
   size: PropTypes.shape({ width: PropTypes.number }).isRequired,
   visible: PropTypes.bool,
   windowId: PropTypes.string.isRequired,
@@ -76,5 +84,6 @@ WindowCanvasNavigationControls.propTypes = {
 };
 
 WindowCanvasNavigationControls.defaultProps = {
+  showZoomControls: false,
   visible: true,
 };

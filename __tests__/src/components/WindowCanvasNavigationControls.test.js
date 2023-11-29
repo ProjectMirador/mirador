@@ -37,10 +37,7 @@ describe('WindowCanvasNavigationControls', () => {
   });
 
   it('shows the zoom control component when specified', () => {
-    render(
-      <Subject />,
-      { preloadedState: { workspace: { showZoomControls: true } } },
-    );
+    render(<Subject showZoomControls />);
     expect(screen.getByRole('button', { name: 'zoomIn' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'zoomOut' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'zoomReset' })).toBeInTheDocument();

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getShowZoomControlsConfig, getViewer } from '../state/selectors';
+import { getViewer } from '../state/selectors';
 import { ZoomControls } from '../components/ZoomControls';
 
 /**
@@ -13,7 +13,6 @@ import { ZoomControls } from '../components/ZoomControls';
  */
 const mapStateToProps = (state, { windowId }) => (
   {
-    showZoomControls: getShowZoomControlsConfig(state),
     viewer: getViewer(state, { windowId }),
   }
 );
