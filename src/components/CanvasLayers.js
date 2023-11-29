@@ -148,7 +148,7 @@ export class CanvasLayers extends Component {
             maxHeight={height}
             maxWidth={width}
             resource={resource}
-            imageStyle
+            border
           />
           <Typography
             sx={{
