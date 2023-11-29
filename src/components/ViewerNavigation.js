@@ -1,14 +1,9 @@
 import { Component } from 'react';
 import NavigationIcon from '@mui/icons-material/PlayCircleOutlineSharp';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
-
-const StyledOsdNavigation = styled('div')(() => ({
-  order: 1,
-}));
 
 /**
  */
@@ -45,7 +40,7 @@ export class ViewerNavigation extends Component {
     }
 
     return (
-      <StyledOsdNavigation
+      <div
         className={classNames(ns('osd-navigation'))}
         dir={htmlDir}
       >
@@ -65,7 +60,7 @@ export class ViewerNavigation extends Component {
         >
           <NavigationIcon style={nextIconStyle} />
         </MiradorMenuButton>
-      </StyledOsdNavigation>
+      </div>
     );
   }
 }

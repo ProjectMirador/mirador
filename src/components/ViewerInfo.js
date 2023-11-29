@@ -6,7 +6,6 @@ import classNames from 'classnames';
 import ns from '../config/css-ns';
 
 const StyledOsdInfo = styled('div')(() => ({
-  order: 2,
   overflow: 'hidden',
   paddingBottom: 0.5,
   textOverflow: 'ellipsis',
