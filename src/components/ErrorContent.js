@@ -1,12 +1,28 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { PluginHook } from './PluginHook';
+
+const ErrorStackTrace = styled('pre', { name: 'ErrorContent', slot: 'stacktrace' })({
+  overflowY: 'scroll',
+});
+
+const ErrorMetadata = styled('pre', { name: 'ErrorContent', slot: 'metadata' })({
+  height: '100px',
+  overflowY: 'scroll',
+});
+
+const InlineAccordion = styled(Accordion, { name: 'ErrorContent', slot: 'accordion' })({
+  backgroundColor: 'inherit',
+  color: 'inherit',
+  margin: 0,
+});
 
 /** */
 export class ErrorContent extends Component {
@@ -22,38 +38,23 @@ export class ErrorContent extends Component {
     if (!showJsError) return null;
 
     return (
-      <>
-        <Alert elevation={6} variant="filled" severity="error">
-          {t('errorDialogTitle')}
-        </Alert>
-
+      <Alert elevation={6} variant="filled" severity="error">
+        {t('errorDialogTitle')}
         {showJsError && (
-        <Accordion
-          square
-          sx={{
-            backgroundColor: 'error.main',
-            color: '#fff',
-            fontWeight: 'fontWeightMedium',
-          }}
-        >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>{t('jsError', { message: error.message, name: error.name })}</Typography>
-          </AccordionSummary>
-          <AccordionDetails sx={{
-            '& pre': {
-              height: '100px',
-              overflowY: 'scroll',
-            },
-            flexDirection: 'column',
-          }}
-          >
-            <pre>{t('jsStack', { stack: error.stack })}</pre>
-            {metadata && <pre>{JSON.stringify(metadata, null, 2)}</pre>}
-          </AccordionDetails>
-        </Accordion>
+          <InlineAccordion elevation={2} square>
+            <AccordionSummary sx={{ marginInlineStart: '-1rem' }} expandIcon={<ExpandMoreIcon sx={{ color: '#fff' }} />}>
+              {t('jsError', { message: error.message, name: error.name })}
+            </AccordionSummary>
+            <AccordionDetails>
+              <Stack>
+                <ErrorStackTrace>{t('jsStack', { stack: error.stack })}</ErrorStackTrace>
+                {metadata && <ErrorMetadata>{JSON.stringify(metadata, null, 2)}</ErrorMetadata>}
+              </Stack>
+            </AccordionDetails>
+          </InlineAccordion>
         )}
         <PluginHook {...this.props} />
-      </>
+      </Alert>
     );
   }
 }
