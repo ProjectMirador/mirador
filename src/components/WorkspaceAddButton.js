@@ -29,15 +29,8 @@ export class WorkspaceAddButton extends Component {
               : ((useExtendedFab && t('startHere')) || t('addResource'))
           }
           sx={{
-            '.MuiFab-primary': {
-              '&:focus': {
-                backgroundColor: 'primary.dark',
-              },
-            },
-            '.MuiFab-secondary': {
-              '&:focus': {
-                backgroundColor: 'secondary.dark',
-              },
+            '&:focus': {
+              backgroundColor: 'primary.dark',
             },
             margin: 1,
           }}
