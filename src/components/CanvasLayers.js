@@ -226,10 +226,9 @@ export class CanvasLayers extends Component {
             ref={provided.innerRef}
             {...provided.draggableProps}
             component="li"
+            divider
             sx={{
               alignItems: 'stretch',
-              borderBottom: '0.5px solid',
-              borderBottomColor: 'divider',
               cursor: 'pointer',
               paddingBottom: 2,
               paddingRight: 2,

@@ -20,11 +20,10 @@ function Item({
     <MenuItem
       alignItems="flex-start"
       button
+      divider
       component="li"
       variant="multiline"
       sx={{
-        borderBottom: '0.5px solid',
-        borderBottomColor: 'divider',
         paddingRight: 1,
       }}
       {...otherProps}

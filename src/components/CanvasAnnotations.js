@@ -73,14 +73,12 @@ export class CanvasAnnotations extends Component {
             <MenuItem
               component={listContainerComponent}
               variant="multiline"
+              divider
               sx={{
                 '&:hover,&:focus': {
                   backgroundColor: 'action.hover',
                 },
                 backgroundColor: hoveredAnnotationIds.includes(annotation.id) ? 'action.hover' : '',
-                borderBottom: '0.5px solid',
-                borderBottomColor: 'divider',
-                cursor: 'pointer',
               }}
               key={annotation.id}
               annotationid={annotation.id}
