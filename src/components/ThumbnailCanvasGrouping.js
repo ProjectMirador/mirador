@@ -18,16 +18,6 @@ export class ThumbnailCanvasGrouping extends PureComponent {
     setCanvas(e.currentTarget.dataset.canvasId);
   }
 
-  /**
-   * Determines whether the current index is the rendered canvas, providing
-   * a useful class.
-   */
-  currentCanvasClass(canvasIndices) {
-    const { index } = this.props;
-    if (canvasIndices.includes(index)) return 'current-canvas-grouping';
-    return '';
-  }
-
   /** */
   render() {
     const {
@@ -37,6 +27,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
       canvasGroupings, position, height,
     } = data;
     const currentGroupings = canvasGroupings[index];
+    const current = currentGroupings.map(canvas => canvas.id).includes(currentCanvasId);
     const SPACING = 8;
     return (
       <div
@@ -64,11 +55,10 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             width: (position === 'far-bottom') ? 'auto' : `${style.width}px`,
           }}
           className={classNames(
-            ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${index}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))]),
+            ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${index}`, current ? 'current-canvas-grouping' : '']),
             classes.canvas,
             {
-              [classes.currentCanvas]: currentGroupings
-                .map(canvas => canvas.id).includes(currentCanvasId),
+              [classes.currentCanvas]: current,
             },
           )}
         >

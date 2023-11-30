@@ -31,14 +31,13 @@ export class ThumbnailNavigation extends Component {
    * of the grids
    */
   componentDidUpdate(prevProps) {
-    const { canvasIndex, position, view } = this.props;
+    const { canvasGroupings, currentCanvasId, position, view } = this.props;
     if (prevProps.view !== view && position !== 'off') {
       this.gridRef.current.resetAfterIndex(0);
     }
-    if (prevProps.canvasIndex !== canvasIndex) {
-      let index = canvasIndex;
-      if (view === 'book') index = Math.ceil(index / 2);
-      this.gridRef.current.scrollToItem(index, 'center');
+    if (prevProps.currentCanvasId !== currentCanvasId) {
+      const index = canvasGroupings.findIndex(group => group.map(canvas => canvas.id).includes(currentCanvasId));
+      if (index) this.gridRef.current.scrollToItem(index, 'center');
     }
   }
 
@@ -234,8 +233,8 @@ export class ThumbnailNavigation extends Component {
 
 ThumbnailNavigation.propTypes = {
   canvasGroupings: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-  canvasIndex: PropTypes.number.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  currentCanvasId: PropTypes.string,
   hasNextCanvas: PropTypes.bool,
   hasPreviousCanvas: PropTypes.bool,
   position: PropTypes.string.isRequired,
