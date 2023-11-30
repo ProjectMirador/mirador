@@ -1,13 +1,10 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import MoreVertIcon from '@mui/icons-material/MoreVertSharp';
 import Menu from '@mui/material/Menu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { PluginHook } from './PluginHook';
 
-const StyledMiradorMenuButton = styled(MiradorMenuButton)({
-});
 /**
  *
  */
@@ -58,7 +55,7 @@ export class WindowTopBarPluginMenu extends Component {
 
     return (
       <>
-        <StyledMiradorMenuButton
+        <MiradorMenuButton
           aria-haspopup="true"
           aria-label={t('windowPluginMenu')}
           aria-owns={open ? windowPluginMenuId : undefined}
@@ -71,7 +68,7 @@ export class WindowTopBarPluginMenu extends Component {
           onClick={this.handleMenuClick}
         >
           {menuIcon}
-        </StyledMiradorMenuButton>
+        </MiradorMenuButton>
 
         <Menu
           id={windowPluginMenuId}

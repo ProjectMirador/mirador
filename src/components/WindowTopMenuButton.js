@@ -1,12 +1,9 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import WindowTopMenu from '../containers/WindowTopMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import WindowOptionsIcon from './icons/WindowOptionsIcon';
 
-const StyledMiradorMenuButton = styled(MiradorMenuButton)({
-});
 /**
  */
 export class WindowTopMenuButton extends Component {
@@ -55,7 +52,7 @@ export class WindowTopMenuButton extends Component {
     const menuId = `window-menu_${windowId}`;
     return (
       <>
-        <StyledMiradorMenuButton
+        <MiradorMenuButton
           aria-haspopup="true"
           aria-label={t('windowMenu')}
           aria-owns={open ? menuId : undefined}
@@ -69,7 +66,7 @@ export class WindowTopMenuButton extends Component {
           onClick={this.handleMenuClick}
         >
           <WindowOptionsIcon />
-        </StyledMiradorMenuButton>
+        </MiradorMenuButton>
         <WindowTopMenu
           windowId={windowId}
           anchorEl={anchorEl}
