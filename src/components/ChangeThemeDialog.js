@@ -66,8 +66,8 @@ export class ChangeThemeDialog extends Component {
     } = this.props;
     return (
       <StyledDialog onClose={handleClose} open={open}>
-        <DialogTitle>
-          <Typography variant="h2">{t('changeTheme')}</Typography>
+        <DialogTitle sx={{ typography: 'h2' }}>
+          {t('changeTheme')}
         </DialogTitle>
         <DialogContent className="dialogContent">
           <MenuList autoFocusItem>
