@@ -1,12 +1,8 @@
 import { Component } from 'react';
 import BookmarksIcon from '@mui/icons-material/BookmarksSharp';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import WindowList from '../containers/WindowList';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
-
-const StyledMiradorMenuButton = styled(MiradorMenuButton)({
-});
 
 /**
  * WindowListButton ~
@@ -42,7 +38,7 @@ export class WindowListButton extends Component {
 
     return (
       <>
-        <StyledMiradorMenuButton
+        <MiradorMenuButton
           aria-haspopup="true"
           aria-label={t('listAllOpenWindows')}
           aria-owns={windowListAnchor ? 'window-list' : null}
@@ -57,7 +53,7 @@ export class WindowListButton extends Component {
           onClick={(e) => this.handleOpen(e)}
         >
           <BookmarksIcon />
-        </StyledMiradorMenuButton>
+        </MiradorMenuButton>
 
         {Boolean(windowListAnchor) && (
         <WindowList
