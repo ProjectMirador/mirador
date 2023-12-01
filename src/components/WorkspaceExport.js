@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -14,6 +13,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { WorkspaceDialog } from './WorkspaceDialog';
 
 /**
  */
@@ -79,7 +79,7 @@ export class WorkspaceExport extends Component {
     }
 
     return (
-      <Dialog
+      <WorkspaceDialog
         id="workspace-export"
         container={container}
         open={open}
@@ -88,7 +88,7 @@ export class WorkspaceExport extends Component {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle sx={{ typography: 'h2' }} id="form-dialog-title">
+        <DialogTitle id="form-dialog-title">
           {t('downloadExport')}
         </DialogTitle>
 
@@ -118,7 +118,7 @@ export class WorkspaceExport extends Component {
             <Button variant="contained" color="primary">{t('copy')}</Button>
           </CopyToClipboard>
         </DialogActions>
-      </Dialog>
+      </WorkspaceDialog>
     );
   }
 }

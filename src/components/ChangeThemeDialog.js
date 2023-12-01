@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import {
-  Dialog,
   DialogTitle,
   ListItemIcon,
   ListItemText,
@@ -11,12 +10,7 @@ import {
 import PaletteIcon from '@mui/icons-material/PaletteSharp';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-
-const StyledDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: 0,
-  },
-}));
+import { WorkspaceDialog } from './WorkspaceDialog';
 
 const ThemeIcon = styled(PaletteIcon, { name: 'ThemeIcon', slot: 'icon' })(({ theme }) => ({
   color: '#BDBDBD',
@@ -53,8 +47,8 @@ export class ChangeThemeDialog extends Component {
       themeIds,
     } = this.props;
     return (
-      <StyledDialog onClose={handleClose} open={open}>
-        <DialogTitle sx={{ typography: 'h2' }}>
+      <WorkspaceDialog onClose={handleClose} open={open} variant="menu">
+        <DialogTitle>
           {t('changeTheme')}
         </DialogTitle>
         <DialogContent>
@@ -75,7 +69,7 @@ export class ChangeThemeDialog extends Component {
             ))}
           </MenuList>
         </DialogContent>
-      </StyledDialog>
+      </WorkspaceDialog>
     );
   }
 }
