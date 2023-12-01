@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
 import {
@@ -7,6 +6,7 @@ import {
   TextField,
 } from '@mui/material';
 import Button from '@mui/material/Button';
+import { WorkspaceDialog } from './WorkspaceDialog';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 
 /**
@@ -64,7 +64,7 @@ export class WorkspaceImport extends Component {
     } = this.props;
 
     return (
-      <Dialog
+      <WorkspaceDialog
         aria-labelledby="workspace-import-title"
         id="workspace-import"
         onClose={handleClose}
@@ -72,7 +72,7 @@ export class WorkspaceImport extends Component {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle sx={{ typography: 'h2' }} id="workspace-import-title">
+        <DialogTitle id="workspace-import-title">
           {t('importWorkspace')}
         </DialogTitle>
         <ScrollIndicatedDialogContent>
@@ -99,7 +99,7 @@ export class WorkspaceImport extends Component {
             {t('import')}
           </Button>
         </DialogActions>
-      </Dialog>
+      </WorkspaceDialog>
     );
   }
 }

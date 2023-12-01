@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import {
   Card,
@@ -10,6 +9,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
+import { WorkspaceDialog } from './WorkspaceDialog';
 import WorkspaceTypeElasticIcon from './icons/WorkspaceTypeElasticIcon';
 import WorkspaceTypeMosaicIcon from './icons/WorkspaceTypeMosaicIcon';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
@@ -50,14 +50,14 @@ export class WorkspaceSelectionDialog extends Component {
       container, handleClose, open, children, t, workspaceType,
     } = this.props;
     return (
-      <Dialog
+      <WorkspaceDialog
         aria-labelledby="workspace-selection-dialog-title"
         container={container}
         id="workspace-selection-dialog"
         onClose={handleClose}
         open={open}
       >
-        <DialogTitle sx={{ typography: 'h2' }} id="workspace-selection-dialog-title">
+        <DialogTitle id="workspace-selection-dialog-title">
           {t('workspaceSelectionTitle')}
         </DialogTitle>
         <ScrollIndicatedDialogContent>
@@ -167,7 +167,7 @@ export class WorkspaceSelectionDialog extends Component {
             </MenuItem>
           </MenuList>
         </ScrollIndicatedDialogContent>
-      </Dialog>
+      </WorkspaceDialog>
     );
   }
 }

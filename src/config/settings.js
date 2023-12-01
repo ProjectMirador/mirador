@@ -226,6 +226,13 @@ export default {
           })
         }
       },
+      ThemeIcon: {
+        styleOverrides: {
+          icon: ({ ownerState }) => ({
+            color: (ownerState?.value === 'dark' ? '#000000' : undefined)
+          }),
+        },
+      },
       MuiAccordion: {
         variants: [
           {
