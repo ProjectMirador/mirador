@@ -6,7 +6,6 @@ import {
   ListItemText,
   MenuList,
   MenuItem,
-  Typography,
   DialogContent,
 } from '@mui/material';
 import PaletteIcon from '@mui/icons-material/PaletteSharp';
@@ -14,24 +13,13 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
-  '& .dark': {
-    color: '#000000',
-  },
-  '& .dialogContent': {
+  '& .MuiDialogContent-root': {
     padding: 0,
   },
-  '& .light': {
-    color: '#BDBDBD',
-  },
-  '& .listitem': {
-    '&:focus': {
-      backgroundColor: theme.palette.action.focus,
-    },
-    '&:hover': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    cursor: 'pointer',
-  },
+}));
+
+const ThemeIcon = styled(PaletteIcon, { name: 'ThemeIcon', slot: 'icon' })(({ theme }) => ({
+  color: '#BDBDBD',
 }));
 
 /**
@@ -69,7 +57,7 @@ export class ChangeThemeDialog extends Component {
         <DialogTitle sx={{ typography: 'h2' }}>
           {t('changeTheme')}
         </DialogTitle>
-        <DialogContent className="dialogContent">
+        <DialogContent>
           <MenuList autoFocusItem>
             {themeIds.map((value) => (
               <MenuItem
@@ -80,7 +68,7 @@ export class ChangeThemeDialog extends Component {
                 value={value}
               >
                 <ListItemIcon>
-                  <PaletteIcon sx={{ color: value === 'dark' ? '#000000' : '#BDBDBD' }} />
+                  <ThemeIcon ownerState={{ value }} />
                 </ListItemIcon>
                 <ListItemText>{t(value)}</ListItemText>
               </MenuItem>
