@@ -8,17 +8,26 @@ import CompanionWindowFactory from '../containers/CompanionWindowFactory';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
-const StyledRoot = styled('div')(({ theme }) => ({
+const Root = styled('div', { name: 'CompanionArea', slot: 'root' })(({ position, theme }) => ({
   display: 'flex',
   minHeight: 0,
   position: 'relative',
   zIndex: theme.zIndex.appBar - 2,
+  ...((position === 'bottom' || position === 'far-bottom') && {
+    flexDirection: 'column',
+    width: '100%',
+  }),
 }));
 
-const StyledWrapper = styled('div')({
-});
+const Container = styled('div', { name: 'CompanionArea', slot: 'container' })(({ ownerState }) => ({
+  display: ownerState?.companionAreaOpen ? 'flex' : 'none',
+  ...((ownerState?.position === 'bottom' || ownerState?.position === 'far-bottom') && {
+    flexDirection: 'column',
+    width: '100%',
+  }),
+}));
 
-const StyledToggle = styled('div')(({ theme }) => ({
+const StyledToggle = styled('div', { name: 'CompanionArea', slot: 'toggle' })(({ theme }) => ({
   alignItems: 'center',
   backgroundColor: theme.palette.background.paper,
   border: `1px solid ${theme.palette.mode === 'dark' ? theme.palette.divider : theme.palette.shades?.dark}`,
@@ -28,17 +37,12 @@ const StyledToggle = styled('div')(({ theme }) => ({
   height: '48px',
   left: '100%',
   marginTop: '1rem',
+  overflow: 'hidden',
   padding: 2,
   position: 'absolute',
   width: '23px',
   zIndex: theme.zIndex.drawer,
 }));
-
-const StyledToggleButton = styled(MiradorMenuButton)({
-  marginBottom: 1.5,
-  marginTop: 1.5,
-  padding: 0,
-});
 
 /** */
 export class CompanionArea extends Component {
@@ -87,44 +91,31 @@ export class CompanionArea extends Component {
     } = this.props;
     const className = [this.areaLayoutClass(), ns(`companion-area-${position}`)].join(' ');
     return (
-      <StyledRoot
-        sx={{
-          ...((position === 'bottom' || position === 'far-bottom') && {
-            flexDirection: 'column',
-            width: '100%',
-          }),
-        }}
-        className={className}
-      >
+      <Root className={className}>
         <Slide in={companionAreaOpen} direction={this.slideDirection()}>
-          <StyledWrapper
+          <Container
+            ownerState={this.props}
             className={`${ns('companion-windows')} ${companionWindowIds.length > 0}`}
-            style={{ display: companionAreaOpen ? 'flex' : 'none' }}
-            sx={{
-              ...((position === 'bottom' || position === 'far-bottom') && {
-                flexDirection: 'column',
-                width: '100%',
-              }),
-            }}
           >
             {companionWindowIds.map((id) => (
               <CompanionWindowFactory id={id} key={id} windowId={windowId} />
             ))}
-          </StyledWrapper>
+          </Container>
         </Slide>
         {setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindowIds.length > 0 && (
         <StyledToggle>
-          <StyledToggleButton
+          <MiradorMenuButton
             aria-expanded={companionAreaOpen}
             aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
+            edge="start"
             onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
             TooltipProps={{ placement: 'right' }}
           >
             {this.collapseIcon()}
-          </StyledToggleButton>
+          </MiradorMenuButton>
         </StyledToggle>
         )}
-      </StyledRoot>
+      </Root>
     );
   }
 }
