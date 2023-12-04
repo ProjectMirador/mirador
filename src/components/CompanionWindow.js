@@ -11,28 +11,14 @@ import { Rnd } from 'react-rnd';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
-const StyledRnd = styled(Rnd)({
-  flexDirection: 'column',
-  minHeight: 0,
-});
-
-const StyledPositionButton = styled(MiradorMenuButton)({
-  marginLeft: -16,
-  order: -100,
-  width: 24,
-});
-
-const StyledCloseButton = styled(MiradorMenuButton)({
-  order: 4,
-});
-
-const StyledTitleControls = styled('div')({
-  alignItems: 'center',
-  display: 'flex',
-  flexFlow: 'row wrap',
-  minHeight: 48,
-  order: 3,
-});
+const Root = styled(Paper, { name: 'CompanionWindow', slot: 'root' })({});
+const StyledToolbar = styled(Toolbar, { name: 'CompanionWindow', slot: 'toolbar' })({});
+const StyledTitle = styled(Typography, { name: 'CompanionWindow', slot: 'title' })({});
+const StyledTitleControls = styled('div', { name: 'CompanionWindow', slot: 'controls' })({});
+const Contents = styled(Paper, { name: 'CompanionWindow', slot: 'contents' })({});
+const StyledRnd = styled(Rnd, { name: 'CompanionWindow', slot: 'resize' })({});
+const StyledPositionButton = styled(MiradorMenuButton, { name: 'CompanionWindow', slot: 'positionButton' })({});
+const StyledCloseButton = styled(MiradorMenuButton, { name: 'CompanionWindow', slot: 'closeButton' })({});
 
 /**
  * CompanionWindow
@@ -111,27 +97,9 @@ export class CompanionWindow extends Component {
     });
 
     return (
-      <Paper
+      <Root
+        ownerState={this.props}
         ref={innerRef}
-        sx={{
-          boxShadow: 'none',
-          boxSizing: 'border-box',
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: 0,
-          ...(position === 'right' && {
-            borderLeft: '0.5px solid',
-            borderLeftColor: 'divider',
-          }),
-          ...(position === 'left' && {
-            borderRight: '0.5px solid',
-            borderRightColor: 'divider',
-          }),
-          ...(position === 'bottom' && {
-            borderTop: '0.5px solid',
-            borderTopColor: 'divider',
-          }),
-        }}
         style={{
           display: isDisplayed ? null : 'none',
           order: position === 'left' ? -1 : null,
@@ -142,7 +110,8 @@ export class CompanionWindow extends Component {
         aria-label={ariaLabel || title}
       >
         <StyledRnd
-          style={{ display: 'flex', position: 'relative' }}
+          style={{ display: 'inherit', position: 'inherit' }}
+          ownerState={this.props}
           default={{
             height: isBottom ? defaultSidebarPanelHeight : '100%',
             width: isBottom ? 'auto' : defaultSidebarPanelWidth,
@@ -153,30 +122,12 @@ export class CompanionWindow extends Component {
           minWidth={position === 'left' ? 235 : 100}
         >
 
-          <Toolbar
-            sx={{
-              alignItems: 'flex-start',
-              bgcolor: 'shades.light',
-              flexWrap: 'wrap',
-              justifyContent: 'space-between',
-              minHeight: 'max-content',
-              paddingLeft: 2,
-            }}
+          <StyledToolbar
             variant="dense"
             className={[ns('companion-window-header'), size.width < 370 ? classes.small : null].join(' ')}
             disableGutters
           >
-            <Typography
-              variant="h3"
-              sx={{
-                alignSelf: 'center',
-                flexGrow: 1,
-                typography: 'subtitle1',
-                width: 160,
-              }}
-            >
-              {title}
-            </Typography>
+            <StyledTitle variant="h3">{title}</StyledTitle>
             {
               position === 'left'
                 ? updateCompanionWindow
@@ -217,9 +168,8 @@ export class CompanionWindow extends Component {
             {
               titleControls && (
                 <StyledTitleControls
+                  ownerState={{ position }}
                   sx={{
-                    flexGrow: 1,
-                    justifyContent: isBottom ? 'flex-end' : 'flex-start',
                     order: isBottom || size.width < 370 ? 'unset' : 1000,
                   }}
                   className={ns('companion-window-title-controls')}
@@ -228,19 +178,15 @@ export class CompanionWindow extends Component {
                 </StyledTitleControls>
               )
             }
-          </Toolbar>
-          <Paper
-            sx={{
-              overflowY: 'auto',
-              wordBreak: 'break-word',
-            }}
+          </StyledToolbar>
+          <Contents
             className={ns('scrollto-scrollable')}
             elevation={0}
           >
             {childrenWithAdditionalProps}
-          </Paper>
+          </Contents>
         </StyledRnd>
-      </Paper>
+      </Root>
     );
   }
 }
