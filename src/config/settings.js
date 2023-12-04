@@ -184,6 +184,16 @@ export default {
           },
         },
       },
+      IIIFHtmlContent: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            '& a': {
+              color: theme.palette.primary.main,
+              textDecoration: 'underline',
+            },
+          }),
+        },
+      },
       IIIFThumbnail: {
         styleOverrides: {
           root: ({ ownerState }) => ({
