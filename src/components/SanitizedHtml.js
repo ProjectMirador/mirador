@@ -5,8 +5,8 @@ import DOMPurify from 'dompurify';
 import ns from '../config/css-ns';
 import htmlRules from '../lib/htmlRules';
 
-const StyledSpan = styled('span')({
-});
+const Root = styled('span', { name: 'IIIFHtmlContent', slot: 'root' })({});
+
 /**
 */
 export class SanitizedHtml extends Component {
@@ -28,13 +28,7 @@ export class SanitizedHtml extends Component {
     });
 
     return (
-      <StyledSpan
-        sx={{
-          '& a': {
-            color: 'primary.main',
-            textDecoration: 'underline',
-          },
-        }}
+      <Root
         className={[ns('third-party-html'), classes.root].join(' ')}
         dangerouslySetInnerHTML={{ // eslint-disable-line react/no-danger
           __html: DOMPurify.sanitize(htmlString, htmlRules[ruleSet]),
