@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ListSubheader from '@mui/material/ListSubheader';
 import MenuItem from '@mui/material/MenuItem';
@@ -6,6 +7,19 @@ import ThumbnailsOffIcon from '@mui/icons-material/CropDinSharp';
 import PropTypes from 'prop-types';
 import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
 import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';
+
+const ThumbnailOption = styled(MenuItem, { name: 'WindowThumbnailSettings', slot: 'option' })(({ selected, theme }) => ({
+  '& .MuiFormControlLabel-label': {
+    borderBottom: '2px solid transparent',
+    ...(selected && {
+      borderBottomColor: theme.palette.secondary.main,
+    }),
+  },
+  backgroundColor: 'transparent !important',
+  color: selected ? theme.palette.secondary.main : undefined,
+  display: 'inline-block',
+}));
+
 /**
  *
  */
@@ -41,60 +55,40 @@ export class WindowThumbnailSettings extends Component {
       <>
         <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('thumbnails')}</ListSubheader>
 
-        <MenuItem sx={{ display: 'inline-block' }} onClick={() => { this.handleChange('off'); handleClose(); }}>
+        <ThumbnailOption selected={thumbnailNavigationPosition === 'off'} onClick={() => { this.handleChange('off'); handleClose(); }}>
           <FormControlLabel
             value="off"
-            sx={{
-              '&.MuiFormControlLabel-label': {
-                borderBottom: '2px solid',
-                borderBottomColor: thumbnailNavigationPosition === 'off' ? 'secondary.main' : 'transparent',
-                color: thumbnailNavigationPosition === 'off' ? 'secondary.main' : undefined,
-              },
-            }}
             control={
-              <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} />
+              <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} fill="currentcolor" />
             }
             label={t('off')}
             labelPlacement="bottom"
           />
-        </MenuItem>
-        <MenuItem sx={{ display: 'inline-block' }} onClick={() => { this.handleChange('far-bottom'); handleClose(); }}>
+        </ThumbnailOption>
+        <ThumbnailOption selected={thumbnailNavigationPosition === 'far-bottom'} onClick={() => { this.handleChange('far-bottom'); handleClose(); }}>
           <FormControlLabel
             value="far-bottom"
-            sx={{
-              '&.MuiFormControlLabel-label': {
-                borderBottom: '2px solid',
-                borderBottomColor: thumbnailNavigationPosition === 'off' ? 'secondary.main' : 'transparent',
-                color: thumbnailNavigationPosition === 'off' ? 'secondary.main' : undefined,
-              },
-            }}
             control={
-              <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} />
+              <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} fill="currentcolor" />
             }
             label={t('bottom')}
             labelPlacement="bottom"
           />
-        </MenuItem>
-        <MenuItem sx={{ display: 'inline-block' }} onClick={() => { this.handleChange('far-right'); handleClose(); }}>
+        </ThumbnailOption>
+        <ThumbnailOption selected={thumbnailNavigationPosition === 'far-right'} onClick={() => { this.handleChange('far-right'); handleClose(); }}>
           <FormControlLabel
             value="far-right"
-            sx={{
-              '&.MuiFormControlLabel-label': {
-                borderBottom: '2px solid',
-                borderBottomColor: thumbnailNavigationPosition === 'off' ? 'secondary.main' : 'transparent',
-                color: thumbnailNavigationPosition === 'off' ? 'secondary.main' : undefined,
-              },
-            }}
             control={(
               <ThumbnailNavigationRightIcon
                 color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined}
+                fill="currentcolor"
                 style={direction === 'rtl' ? { transform: 'rotate(180deg)' } : {}}
               />
             )}
             label={t('right')}
             labelPlacement="bottom"
           />
-        </MenuItem>
+        </ThumbnailOption>
       </>
     );
   }
