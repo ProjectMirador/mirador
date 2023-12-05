@@ -11,7 +11,16 @@ import WorkspaceElastic from '../containers/WorkspaceElastic';
 import ns from '../config/css-ns';
 import { IIIFDropTarget } from './IIIFDropTarget';
 
-const StyledWorkspaceViewport = styled('div')(() => ({
+const Root = styled('div', { name: 'Workspace', slot: 'root' })(({ ownerState, theme }) => ({
+  '@media (min-width: 600px)': {
+    ...(ownerState.isWorkspaceControlPanelVisible && {
+      paddingLeft: theme.spacing(8.5),
+      paddingTop: 0,
+    }),
+  },
+  ...(ownerState.isWorkspaceControlPanelVisible && {
+    paddingTop: theme.spacing(9.25),
+  }),
   bottom: 0,
   left: 0,
   margin: 0,
@@ -123,18 +132,8 @@ export class Workspace extends Component {
 
     return (
       <IIIFDropTarget onDrop={this.handleDrop}>
-        <StyledWorkspaceViewport
-          sx={{
-            '@media (min-width: 600px)': {
-              ...(isWorkspaceControlPanelVisible && {
-                paddingLeft: 8.5,
-                paddingTop: 0,
-              }),
-            },
-            ...(isWorkspaceControlPanelVisible && {
-              paddingTop: 9.25,
-            }),
-          }}
+        <Root
+          ownerState={this.props}
           className={
             classNames(
               ns('workspace-viewport'),
@@ -144,7 +143,7 @@ export class Workspace extends Component {
         >
           <Typography style={visuallyHidden} component="h1">{t('miradorViewer')}</Typography>
           {this.workspaceByType()}
-        </StyledWorkspaceViewport>
+        </Root>
       </IIIFDropTarget>
     );
   }
