@@ -9,7 +9,30 @@ import WorkspaceControlPanelButtons from '../containers/WorkspaceControlPanelBut
 import Branding from '../containers/Branding';
 import ns from '../config/css-ns';
 
-const StyledWorkspaceButtons = styled('div')(({ theme }) => ({
+const Root = styled(AppBar, { name: 'WorkspaceControlPanel', slot: 'root' })(({ ownerState, theme }) => ({
+  height: 64,
+  [theme.breakpoints.up('sm')]: {
+    height: '100%',
+    left: 0,
+    right: 'auto',
+    width: ownerState.variant === 'wide' ? 'auto' : 64,
+  },
+  ...(ownerState.variant === 'wide' && {
+    width: 'auto',
+  }),
+}));
+
+const StyledToolbar = styled(Toolbar, { name: 'WorkspaceControlPanel', slot: 'toolbar' })(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  [theme.breakpoints.up('sm')]: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    minHeight: 0,
+  },
+}));
+
+const StyledWorkspaceButtons = styled('div', { name: 'WorkspaceControlPanel', slot: 'buttonArea' })(({ theme }) => ({
   [theme.breakpoints.up('sm')]: {
     display: 'flex',
     flexDirection: 'column',
@@ -19,7 +42,7 @@ const StyledWorkspaceButtons = styled('div')(({ theme }) => ({
   },
 }));
 
-const StyledBranding = styled(Branding)(({ theme }) => ({
+const StyledBranding = styled(Branding, { name: 'WorkspaceControlPanel', slot: 'branding' })(({ theme }) => ({
   display: 'flex',
   position: 'absolute',
   [theme.breakpoints.up('xs')]: {
@@ -46,19 +69,8 @@ export class WorkspaceControlPanel extends Component {
   render() {
     const { t, variant } = this.props;
     return (
-      <AppBar
-        sx={(theme) => ({
-          height: 64,
-          [theme.breakpoints.up('sm')]: {
-            height: '100%',
-            left: 0,
-            right: 'auto',
-            width: variant === 'wide' ? 'auto' : 64,
-          },
-          ...(variant === 'wide' && {
-            width: 'auto',
-          }),
-        })}
+      <Root
+        ownerState={this.props}
         className={classNames(ns('workspace-control-panel'))}
         color="default"
         enableColorOnDark
@@ -66,25 +78,16 @@ export class WorkspaceControlPanel extends Component {
         component="nav"
         aria-label={t('workspaceNavigation')}
       >
-        <Toolbar
+        <StyledToolbar
           disableGutters
-          sx={(theme) => ({
-            display: 'flex',
-            justifyContent: 'space-between',
-            [theme.breakpoints.up('sm')]: {
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              minHeight: 0,
-            },
-          })}
         >
           <WorkspaceAddButton />
           <StyledWorkspaceButtons>
             <WorkspaceControlPanelButtons />
           </StyledWorkspaceButtons>
-        </Toolbar>
+        </StyledToolbar>
         <StyledBranding t={t} variant={variant} />
-      </AppBar>
+      </Root>
     );
   }
 }
