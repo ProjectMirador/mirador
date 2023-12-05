@@ -150,7 +150,7 @@ export class WindowSideBarButtons extends Component {
             onKeyUp={this.handleKeyUp}
             t={t}
             icon={(
-              <Badge overlap="rectangular" sx={{ '.MuiBadge-badge': { backgroundColor: 'notification.main' } }} invisible={!hasAnnotations} variant="dot">
+              <Badge overlap="rectangular" color="notification" invisible={!hasAnnotations} variant="dot">
                 <AnnotationIcon />
               </Badge>
             )}
@@ -162,7 +162,7 @@ export class WindowSideBarButtons extends Component {
             onKeyUp={this.handleKeyUp}
             t={t}
             icon={(
-              <Badge overlap="rectangular" sx={{ '.MuiBadge-badge': { backgroundColor: 'notification.main' } }} invisible={!hasSearchResults} variant="dot">
+              <Badge overlap="rectangular" color="notification" invisible={!hasSearchResults} variant="dot">
                 <SearchIcon />
               </Badge>
             )}
@@ -174,7 +174,7 @@ export class WindowSideBarButtons extends Component {
             onKeyUp={this.handleKeyUp}
             t={t}
             icon={(
-              <Badge overlap="rectangular" sx={{ '.MuiBadge-badge': { backgroundColor: 'notification.main' } }} invisible={!hasCurrentLayers} variant="dot">
+              <Badge overlap="rectangular" color="notification" invisible={!hasCurrentLayers} variant="dot">
                 <LayersIcon />
               </Badge>
             )}
