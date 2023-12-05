@@ -25,6 +25,9 @@ const Container = styled('div', { name: 'CompanionArea', slot: 'container' })(({
     flexDirection: 'column',
     width: '100%',
   }),
+  ...((ownerState?.position === 'left') && {
+    minWidth: '235px',
+  }),
 }));
 
 const StyledToggle = styled('div', { name: 'CompanionArea', slot: 'toggle' })(({ theme }) => ({
