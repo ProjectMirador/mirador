@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -7,6 +8,18 @@ import ScrollViewIcon from '@mui/icons-material/ViewColumn';
 import PropTypes from 'prop-types';
 import BookViewIcon from './icons/BookViewIcon';
 import GalleryViewIcon from './icons/GalleryViewIcon';
+
+const ViewOption = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option' })(({ selected, theme }) => ({
+  '& .MuiFormControlLabel-label': {
+    borderBottom: '2px solid transparent',
+    ...(selected && {
+      borderBottomColor: theme.palette.secondary.main,
+    }),
+  },
+  backgroundColor: 'transparent !important',
+  color: selected ? theme.palette.secondary.main : undefined,
+  display: 'inline-block',
+}));
 
 /**
  *
@@ -49,26 +62,19 @@ export class WindowViewSettings extends Component {
     /** Suspiciously similar to a component, yet if it is invoked through JSX
         none of the click handlers work? */
     const menuItem = ({ value, Icon }) => (
-      <MenuItem
+      <ViewOption
+        selected={windowViewType === value}
         key={value}
-        sx={{ display: 'inline-block' }}
         autoFocus={windowViewType === value}
         onClick={() => { this.handleChange(value); handleClose(); }}
       >
         <FormControlLabel
           value={value}
-          sx={{
-            '&.MuiFormControlLabel-label': {
-              borderBottom: '2px solid',
-              borderBottomColor: windowViewType === value ? 'secondary.main' : 'transparent',
-              color: 'secondary.main',
-            },
-          }}
-          control={<Icon color={windowViewType === value ? 'secondary' : undefined} />}
+          control={<Icon fill="currentcolor" color={windowViewType === value ? 'secondary' : undefined} />}
           label={t(value)}
           labelPlacement="bottom"
         />
-      </MenuItem>
+      </ViewOption>
     );
 
     if (viewTypes.length === 0) return null;
