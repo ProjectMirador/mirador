@@ -34,14 +34,6 @@ export class LocalePicker extends Component {
           value={locale}
           onChange={(e) => { setLocale(e.target.value); }}
           name="locale"
-          sx={{
-            '& .MuiSelect-select': {
-              '&:focus': {
-                backgroundColor: 'background.paper',
-              },
-            },
-            backgroundColor: 'background.paper',
-          }}
         >
           {
             availableLocales.map(l => (
