@@ -177,6 +177,68 @@ export default {
           },
         ]
       },
+      CompanionWindow: {
+        styleOverrides: {
+          closeButton: {
+            order: 4,
+          },
+          contents: {
+            overflowY: 'auto',
+            wordBreak: 'break-word',
+          },
+          controls: ({ ownerState }) => ({
+            alignItems: 'center',
+            display: 'flex',
+            flexFlow: 'row wrap',
+            flexGrow: 1,
+            justifyContent: (ownerState?.position === 'bottom' || ownerState?.position === 'far-bottom') ? 'flex-end' : 'flex-start',
+            minHeight: 48,
+            order: 3
+          }),
+          positionButton: {
+            marginLeft: -16,
+            order: -100,
+            width: 24,
+          },
+          resize: ({ ownerState }) => ({
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 50,
+            minWidth: (ownerState?.position === 'left') ? 235 : 100,
+            position: 'relative',
+          }),
+          root: ({ ownerState }) => ({
+            boxShadow: 'none',
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 0,
+            ...(ownerState?.position === 'right' && {
+              borderLeft: '0.5px solid rgba(0, 0, 0, 0.125)'
+            }),
+            ...(ownerState?.position === 'left' && {
+              borderRight: '0.5px solid rgba(0, 0, 0, 0.125)'
+            }),
+            ...(ownerState?.position === 'bottom' && {
+              borderTop: '0.5px solid rgba(0, 0, 0, 0.125)'
+            }),
+          }),
+          title: ({ theme }) => ({
+            ...theme.typography.subtitle1,
+            alignSelf: 'center',
+            flexGrow: 1,
+            width: 160
+          }),
+          toolbar: ({ theme }) => ({
+            alignItems: 'flex-start',
+            backgroundColor: theme.palette.shades.light,
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            minHeight: 'max-content',
+            paddingInlineStart: '1rem',
+          }),
+        },
+      },
       CompanionWindowSection: {
         styleOverrides: {
           root: {
