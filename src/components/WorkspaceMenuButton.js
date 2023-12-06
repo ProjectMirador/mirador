@@ -54,11 +54,7 @@ export class WorkspaceMenuButton extends Component {
           aria-haspopup="true"
           aria-label={t('workspaceMenu')}
           aria-owns={open ? 'workspace-menu' : undefined}
-          sx={{
-            ...(open && {
-              backgroundColor: 'action.selected',
-            }),
-          }}
+          selected={open}
           id="menuBtn"
           onClick={this.handleMenuClick}
         >

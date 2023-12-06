@@ -42,11 +42,7 @@ export class WindowListButton extends Component {
           aria-haspopup="true"
           aria-label={t('listAllOpenWindows')}
           aria-owns={windowListAnchor ? 'window-list' : null}
-          sx={{
-            ...(windowListAnchor && {
-              backgroundColor: 'action.selected',
-            }),
-          }}
+          selected={Boolean(windowListAnchor)}
           disabled={disabled}
           badge
           BadgeProps={{ badgeContent: windowCount }}

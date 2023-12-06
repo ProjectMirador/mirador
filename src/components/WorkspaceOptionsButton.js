@@ -53,11 +53,7 @@ export class WorkspaceOptionsButton extends Component {
         <MiradorMenuButton
           aria-label={t('workspaceOptions')}
           onClick={this.handleMenuClick}
-          sx={{
-            ...(open && {
-              backgroundColor: 'action.selected',
-            }),
-          }}
+          selected={open}
         >
           <MoreHorizontalIcon />
         </MiradorMenuButton>

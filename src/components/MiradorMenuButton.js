@@ -1,7 +1,15 @@
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+
+const Root = styled(IconButton, { name: 'MiradorMenuButton', slot: 'root' })(({ ownerState, theme }) => ({
+  fill: 'currentcolor',
+  ...(ownerState.selected && {
+    backgroundColor: theme.palette.action.selected,
+  }),
+}));
 
 /**
  * MiradorMenuButton ~ Wrap the given icon prop in an IconButton and a Tooltip.
@@ -22,12 +30,10 @@ export function MiradorMenuButton(props) {
   } = props;
 
   const button = (
-    <IconButton
+    <Root
+      ownerState={props}
       {...iconButtonProps}
-      sx={{
-        fill: 'currentcolor',
-        ...sx,
-      }}
+      sx={sx}
       size="large"
     >
       {badge
@@ -45,7 +51,7 @@ export function MiradorMenuButton(props) {
           </Badge>
         )
         : children}
-    </IconButton>
+    </Root>
   );
 
   if (iconButtonProps.disabled) return button;
@@ -70,6 +76,7 @@ MiradorMenuButton.propTypes = {
   children: PropTypes.element.isRequired,
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   dispatch: PropTypes.func,
+  selected: PropTypes.bool,
   sx: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   TooltipProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
@@ -79,6 +86,7 @@ MiradorMenuButton.defaultProps = {
   BadgeProps: {},
   container: null,
   dispatch: () => {},
+  selected: false,
   sx: {},
   TooltipProps: {},
 };

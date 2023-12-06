@@ -57,12 +57,7 @@ export class WindowTopMenuButton extends Component {
           aria-label={t('windowMenu')}
           aria-owns={open ? menuId : undefined}
           className={open ? classes.ctrlBtnSelected : undefined}
-          sx={{
-            margin: 0.25,
-            ...(open && {
-              backgroundColor: 'action.selected',
-            }),
-          }}
+          selected={open}
           onClick={this.handleMenuClick}
         >
           <WindowOptionsIcon />

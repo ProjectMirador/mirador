@@ -59,11 +59,9 @@ export class WindowTopBarPluginMenu extends Component {
           aria-haspopup="true"
           aria-label={t('windowPluginMenu')}
           aria-owns={open ? windowPluginMenuId : undefined}
+          selected={open}
           sx={{
             margin: 1,
-            ...(open && {
-              backgroundColor: 'action.selected',
-            }),
           }}
           onClick={this.handleMenuClick}
         >
