@@ -130,10 +130,10 @@ export class ManifestListItem extends Component {
         sx={theme => ({
           '&:hover,&:focus-within': {
             backgroundColor: theme.palette.action.hover,
-            borderLeftColor: active ? theme.palette.action.hover : theme.palette.primary.main,
+            borderLeftColor: active ? theme.palette.primary.main : theme.palette.action.hover,
           },
           borderLeft: '4px solid',
-          borderLeftColor: active ? 'transparent' : theme.palette.primary.main,
+          borderLeftColor: active ? theme.palette.primary.main : 'transparent',
           paddingLeft: theme.spacing(2),
           paddingRight: theme.spacing(2),
           [theme.breakpoints.up('sm')]: {
