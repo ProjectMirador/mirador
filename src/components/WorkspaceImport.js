@@ -84,7 +84,7 @@ export class WorkspaceImport extends Component {
             minRows={15}
             variant="filled"
             sx={{
-              '.MuiInput-input': { fontFamily: 'monospace' },
+              '& .MuiInputBase-input': { fontFamily: 'monospace' },
               width: '100%',
             }}
             inputProps={{ autoFocus: 'autofocus' }}
