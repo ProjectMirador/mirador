@@ -92,7 +92,7 @@ export class WorkspaceImport extends Component {
           />
         </ScrollIndicatedDialogContent>
         <DialogActions>
-          <Button sx={{ color: 'theme.palette.text.primary' }} onClick={handleClose}>
+          <Button onClick={handleClose}>
             {t('cancel')}
           </Button>
           <Button color="primary" onClick={this.handleImportConfig} variant="contained">
