@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
@@ -12,6 +12,21 @@ import ViewerInfo from '../containers/ViewerInfo';
 import ViewerNavigation from '../containers/ViewerNavigation';
 import ns from '../config/css-ns';
 import { PluginHook } from './PluginHook';
+
+const Root = styled(Paper, { name: 'WindowCanvasNavigationControls', slot: 'root' })(({ theme }) => ({
+  alignItems: 'center',
+  backgroundColor: alpha(theme.palette.background.paper, 0.5),
+  bottom: 0,
+  cursor: 'default',
+  display: 'flex',
+  flexDirection: 'column',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  position: 'absolute',
+  textAlign: 'center',
+  width: '100%',
+  zIndex: 50,
+}));
 
 /**
  * Represents the viewer controls in the mirador workspace.
@@ -35,22 +50,8 @@ export class WindowCanvasNavigationControls extends Component {
     if (!visible) return (<Typography style={visuallyHidden} component="div"><ViewerInfo windowId={windowId} /></Typography>);
 
     return (
-      <Paper
+      <Root
         square
-        sx={(theme) => ({
-          alignItems: 'center',
-          backgroundColor: alpha(theme.palette.background.paper, 0.5),
-          bottom: 0,
-          cursor: 'default',
-          display: 'flex',
-          flexDirection: 'column',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          position: 'absolute',
-          textAlign: 'center',
-          width: '100%',
-          zIndex: 50,
-        })}
         className={
           classNames(
             ns('canvas-nav'),
@@ -70,7 +71,7 @@ export class WindowCanvasNavigationControls extends Component {
         <ViewerInfo windowId={windowId} />
 
         <PluginHook {...this.props} />
-      </Paper>
+      </Root>
     );
   }
 }

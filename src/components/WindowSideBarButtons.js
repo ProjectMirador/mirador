@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -11,43 +12,53 @@ import LayersIcon from '@mui/icons-material/LayersSharp';
 import SearchIcon from '@mui/icons-material/SearchSharp';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
 
+const Root = styled(Tabs, { name: 'WindowSideBarButtons', slot: 'root' })({
+  '& .MuiTabs-flexContainer': {
+    flexDirection: 'column',
+  },
+  '&.MuiTabs-indicator': {
+    display: 'none',
+  },
+});
+
+const StyledTabButton = styled(Tab, { name: 'WindowSideBarButtons', slot: 'button' })(({ theme }) => ({
+  '&.Mui-selected': {
+    borderRight: '2px solid',
+    borderRightColor: theme.palette.primary.main,
+  },
+  '&.MuiTab-root': {
+    '&:active': {
+      backgroundColor: theme.palette.action.active,
+    },
+    '&:focus': {
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+      backgroundColor: theme.palette.action.hover,
+      textDecoration: 'none',
+      // Reset on touch devices, it doesn't add specificity
+    },
+    '&:hover': {
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+      backgroundColor: theme.palette.action.hover,
+      textDecoration: 'none',
+      // Reset on touch devices, it doesn't add specificity
+    },
+    borderRight: '2px solid transparent',
+    minWidth: 'auto',
+  },
+  fill: 'currentcolor',
+}));
+
 /** */
 function TabButton({ t, value, ...tabProps }) {
   return (
     <Tooltip title={t('openCompanionWindow', { context: value })}>
-      <Tab
+      <StyledTabButton
         {...tabProps}
         value={value}
-        sx={{
-          '&.Mui-selected': {
-            borderRight: '2px solid',
-            borderRightColor: 'primary.main',
-          },
-          '&.MuiTab-root': {
-            '&:active': {
-              backgroundColor: 'action.active',
-            },
-            '&:focus': {
-              '@media (hover: none)': {
-                backgroundColor: 'transparent',
-              },
-              backgroundColor: 'action.hover',
-              textDecoration: 'none',
-              // Reset on touch devices, it doesn't add specificity
-            },
-            '&:hover': {
-              '@media (hover: none)': {
-                backgroundColor: 'transparent',
-              },
-              backgroundColor: 'action.hover',
-              textDecoration: 'none',
-              // Reset on touch devices, it doesn't add specificity
-            },
-            borderRight: '2px solid transparent',
-            minWidth: 'auto',
-          },
-          fill: 'currentcolor',
-        }}
         aria-label={
           t('openCompanionWindow', { context: value })
         }
@@ -102,15 +113,7 @@ export class WindowSideBarButtons extends Component {
     } = this.props;
 
     return (
-      <Tabs
-        sx={{
-          '& .MuiTabs-flexContainer': {
-            flexDirection: 'column',
-          },
-          '&.MuiTabs-indicator': {
-            display: 'none',
-          },
-        }}
+      <Root
         value={sideBarPanel === 'closed' ? false : sideBarPanel}
         onChange={this.handleChange}
         variant="fullWidth"
@@ -190,7 +193,7 @@ export class WindowSideBarButtons extends Component {
               icon={<PluginComponent />}
             />
           ))}
-      </Tabs>
+      </Root>
     );
   }
 }

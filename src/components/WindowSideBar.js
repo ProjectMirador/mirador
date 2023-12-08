@@ -1,7 +1,15 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
 import WindowSideBarButtons from '../containers/WindowSideBarButtons';
+
+const Root = styled(Drawer, { name: 'WindowSideBar', slot: 'root' })(({ theme }) => ({
+  flexShrink: 0,
+  height: '100%',
+  order: -1000,
+  zIndex: theme.zIndex.appBar - 1,
+}));
 
 /**
  * WindowSideBar
@@ -17,15 +25,9 @@ export class WindowSideBar extends Component {
     } = this.props;
 
     return (
-      <Drawer
+      <Root
         variant="persistent"
         className={classes.drawer}
-        sx={theme => ({
-          flexShrink: 0,
-          height: '100%',
-          order: -1000,
-          zIndex: theme.zIndex.appBar - 1,
-        })}
         anchor={direction === 'rtl' ? 'right' : 'left'}
         PaperProps={{
           'aria-label': t('sidebarPanelsNavigation'),
@@ -44,7 +46,7 @@ export class WindowSideBar extends Component {
         open={sideBarOpen}
       >
         <WindowSideBarButtons windowId={windowId} />
-      </Drawer>
+      </Root>
     );
   }
 }
