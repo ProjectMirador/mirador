@@ -1,7 +1,19 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import GalleryViewThumbnail from '../containers/GalleryViewThumbnail';
+
+const Root = styled(Paper, { name: 'GalleryView', slot: 'root' })(({ theme }) => ({
+  alignItems: 'flex-start',
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  overflowX: 'hidden',
+  overflowY: 'scroll',
+  padding: '50px 0 50px 20px',
+  width: '100%',
+}));
 
 /**
  * Renders a GalleryView overview of the manifest.
@@ -16,22 +28,12 @@ export class GalleryView extends Component {
     } = this.props;
     const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
     return (
-      <Paper
+      <Root
         component="section"
         aria-label="gallery section"
         dir={htmlDir}
         square
         elevation={0}
-        sx={{
-          alignItems: 'flex-start',
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          overflowX: 'hidden',
-          overflowY: 'scroll',
-          padding: '50px 0 50px 20px',
-          width: '100%',
-        }}
         id={`${windowId}-gallery`}
       >
         {
@@ -43,7 +45,7 @@ export class GalleryView extends Component {
             />
           ))
         }
-      </Paper>
+      </Root>
     );
   }
 }

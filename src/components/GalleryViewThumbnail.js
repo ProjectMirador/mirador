@@ -1,23 +1,50 @@
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import AnnotationIcon from '@mui/icons-material/CommentSharp';
 import SearchIcon from '@mui/icons-material/SearchSharp';
 import { InView } from 'react-intersection-observer';
-import MiradorCanvas from '../lib/MiradorCanvas';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 
-const StyledGalleryViewItem = styled('div')({
-});
+const Root = styled('div', { name: 'GalleryView', slot: 'thumbnail' })(({ ownerState, theme }) => ({
+  '&:focus': {
+    outline: 'none',
+  },
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  border: '2px solid transparent',
+  ...(ownerState.selected && {
+    borderColor: theme.palette.primary.main,
+  }),
+  ...(!ownerState.selected && ownerState.searchAnnotationsCount > 0 && {
+    borderColor: theme.palette.action.selected,
+  }),
+  cursor: 'pointer',
+  display: 'inline-block',
+  margin: theme.spacing(1, 0.5),
+  maxHeight: ownerState.config.height + 45,
+  minWidth: '60px',
+  overflow: 'hidden',
+  padding: theme.spacing(0.5),
+  position: 'relative',
+  width: 'min-content',
+}));
 
-const StyledChipsContainer = styled('div')(() => ({
-  opacity: 0.875,
+const StyledChipsContainer = styled('div', { name: 'GalleryView', slot: 'chipArea' })(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(0.25),
   position: 'absolute',
   right: 0,
-  textAlign: 'right',
   top: 0,
+}));
+
+const AnnotationChip = styled(Chip, { name: 'GalleryView', slot: 'chip' })(({ theme }) => ({
+  backgroundColor: theme.palette.annotations.chipBackground,
+  opacity: 0.875,
+  textAlign: 'right',
 }));
 
 /**
@@ -116,32 +143,12 @@ export class GalleryViewThumbnail extends Component {
       canvas, config, selected,
     } = this.props;
 
-    const miradorCanvas = new MiradorCanvas(canvas);
-
     return (
       <InView onChange={this.handleIntersection}>
-        <StyledGalleryViewItem
-          key={canvas.index}
+        <Root
+          ownerState={this.props}
+          key={canvas.id || canvas.index}
           className={selected ? 'selected' : ''}
-          sx={{
-            '&:focus': {
-              outline: 'none',
-            },
-            '&:hover': {
-              bgcolor: 'action.hover',
-            },
-            border: '2px solid',
-            borderColor: selected || searchAnnotationsCount > 0 ? 'primary.main' : 'transparent',
-            cursor: 'pointer',
-            display: 'inline-block',
-            margin: 1,
-            maxHeight: config.height + 45,
-            minWidth: '60px',
-            overflow: 'hidden',
-            padding: 0.5,
-            position: 'relative',
-            width: 'min-content',
-          }}
           onClick={this.handleSelect}
           onKeyUp={this.handleKey}
           ref={this.myRef}
@@ -152,59 +159,27 @@ export class GalleryViewThumbnail extends Component {
             resource={canvas}
             labelled
             variant="outside"
-            maxWidth={config.width}
             maxHeight={config.height}
-            sx={{
-              margin: '0 auto',
-              maxWidth: `${() => Math.ceil(config.height * miradorCanvas.aspectRatio)}px`,
-            }}
+            maxWidth={config.width}
           >
             <StyledChipsContainer>
               {searchAnnotationsCount > 0 && (
-                <Chip
-                  avatar={(
-                    <Avatar sx={{
-                      backgroundColor: 'transparent',
-                    }}
-                    >
-                      <SearchIcon fontSize="small" />
-                    </Avatar>
-                  )}
+                <AnnotationChip
+                  icon={<SearchIcon fontSize="small" />}
                   label={searchAnnotationsCount}
-                  sx={{
-                    backgroundColor: 'annotations.chipBackground',
-                    marginTop: 2,
-                    typography: 'caption',
-                  }}
                   size="small"
                 />
               )}
               {annotationsCount > 0 && (
-                <Chip
-                  avatar={(
-                    <Avatar sx={{
-                      backgroundColor: 'transparent',
-                    }}
-                    >
-                      <AnnotationIcon
-                        sx={{
-                          height: '1rem',
-                          width: '1rem',
-                        }}
-                      />
-                    </Avatar>
-                  )}
+                <AnnotationChip
+                  icon={<AnnotationIcon fontSize="small" />}
                   label={annotationsCount}
-                  sx={{
-                    backgroundColor: 'annotations.chipBackground',
-                    typography: 'caption',
-                  }}
                   size="small"
                 />
               )}
             </StyledChipsContainer>
           </IIIFThumbnail>
-        </StyledGalleryViewItem>
+        </Root>
       </InView>
     );
   }

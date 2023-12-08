@@ -45,7 +45,14 @@ export class WindowListButton extends Component {
           selected={Boolean(windowListAnchor)}
           disabled={disabled}
           badge
-          BadgeProps={{ badgeContent: windowCount }}
+          BadgeProps={{
+            badgeContent: windowCount,
+            sx: {
+              '.MuiBadge-badge': {
+                paddingLeft: 1.5,
+              },
+            },
+          }}
           onClick={(e) => this.handleOpen(e)}
         >
           <BookmarksIcon />
