@@ -342,6 +342,13 @@ export default {
           }
         ]
       },
+      MuiFab: {
+        styleOverrides: {
+          root: {
+            transition: 'none',
+          }
+        },
+      },
       MuiLink: {
         defaultProps: {
           underline: 'always'

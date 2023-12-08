@@ -22,16 +22,12 @@ export class WorkspaceAddButton extends Component {
           size="medium"
           color="primary"
           id="addBtn"
-          disableRipple
           aria-label={
             isWorkspaceAddVisible
               ? t('closeAddResourceMenu')
               : ((useExtendedFab && t('startHere')) || t('addResource'))
           }
           sx={{
-            '&:focus': {
-              backgroundColor: 'primary.dark',
-            },
             margin: 1,
           }}
           variant={useExtendedFab ? 'extended' : 'circular'}
