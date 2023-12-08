@@ -39,11 +39,6 @@ export function MiradorMenuButton(props) {
       {badge
         ? (
           <Badge
-            sx={{
-              '.MuiBadge-badge': {
-                paddingLeft: 1.5,
-              },
-            }}
             overlap="rectangular"
             {...BadgeProps}
           >
