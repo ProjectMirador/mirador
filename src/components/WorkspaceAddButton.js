@@ -4,6 +4,11 @@ import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
 import AddIcon from '@mui/icons-material/AddSharp';
 import CloseIcon from '@mui/icons-material/CloseSharp';
+import { styled } from '@mui/material/styles';
+
+const Root = styled(Fab, { name: 'WorkspaceAddButton', slot: 'root' })(({ theme }) => ({
+  marginBottom: theme.spacing(1),
+}));
 
 /**
  */
@@ -18,7 +23,7 @@ export class WorkspaceAddButton extends Component {
     } = this.props;
     return (
       <Tooltip title={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}>
-        <Fab
+        <Root
           size="medium"
           color="primary"
           id="addBtn"
@@ -27,9 +32,6 @@ export class WorkspaceAddButton extends Component {
               ? t('closeAddResourceMenu')
               : ((useExtendedFab && t('startHere')) || t('addResource'))
           }
-          sx={{
-            margin: 1,
-          }}
           variant={useExtendedFab ? 'extended' : 'circular'}
           onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
         >
@@ -39,7 +41,7 @@ export class WorkspaceAddButton extends Component {
               : <AddIcon />
           }
           { useExtendedFab && t('startHere') }
-        </Fab>
+        </Root>
       </Tooltip>
     );
   }
