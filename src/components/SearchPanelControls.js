@@ -7,15 +7,17 @@ import isObject from 'lodash/isObject';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/SearchSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import SearchPanelNavigation from '../containers/SearchPanelNavigation';
 
-const StyledForm = styled('form')({
-});
+const StyledForm = styled('form', { name: 'SearchPanelControls', slot: 'form' })(({ theme }) => ({
+  paddingBottom: theme.spacing(1),
+  paddingRight: theme.spacing(1.5),
+  width: '100%',
+}));
 
-const StyledEndAdornment = styled('div')({
-});
 /** Sometimes an autocomplete match can be a simple string, other times an object
     with a `match` property, this function abstracts that away */
 const getMatch = (option) => (isObject(option) ? option.match : option);
@@ -131,11 +133,6 @@ export class SearchPanelControls extends Component {
     return (
       <>
         <StyledForm
-          sx={{
-            paddingBottom: 1,
-            paddingRight: 1.5,
-            width: '100%',
-          }}
           aria-label={t('searchTitle')}
           onSubmit={this.submitSearch}
         >
@@ -152,6 +149,7 @@ export class SearchPanelControls extends Component {
             onChange={this.selectItem}
             onInputChange={this.handleChange}
             freeSolo
+            disableClearable
             renderInput={params => (
               <TextField
                 {...params}
@@ -160,24 +158,23 @@ export class SearchPanelControls extends Component {
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (
-                    <StyledEndAdornment sx={{
-                      position: 'absolute',
-                      right: 0,
-                    }}
-                    >
+                    <InputAdornment sx={{ position: 'relative' }} position="end">
                       <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
                         <SearchIcon />
                       </MiradorMenuButton>
                       {Boolean(searchIsFetching) && (
                       <CircularProgress
                         sx={{
+                          left: '50%',
+                          marginLeft: '-25px',
+                          marginTop: '-25px',
                           position: 'absolute',
-                          right: 0,
+                          top: '50%',
                         }}
                         size={50}
                       />
                       )}
-                    </StyledEndAdornment>
+                    </InputAdornment>
                   ),
                 }}
               />
