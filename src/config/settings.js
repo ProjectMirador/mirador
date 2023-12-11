@@ -324,6 +324,20 @@ export default {
           },
         ],
       },
+      MuiButton: {
+        styleOverrides: {
+          inlineText: {
+            lineHeight: '1.5em',
+            padding: 0,
+            textAlign: 'inherit',
+            textTransform: 'none',
+
+          },
+          inlineTextSecondary: ({ theme }) => ({
+            color: theme.palette.secondary.main,
+          }),
+        }
+      },
       MuiButtonBase: {
         defaultProps: {
           disableTouchRipple: true,

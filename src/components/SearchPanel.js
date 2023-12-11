@@ -64,17 +64,9 @@ export class SearchPanel extends Component {
         />
         {
           fetchSearch && suggestedSearches && query === '' && suggestedSearches.map(search => (
-            <Typography component="p" key={search} variant="body1">
+            <Typography component="p" key={search} variant="body1" sx={{ margin: 2 }}>
               <Button
-                sx={{
-                  '& span': {
-                    lineHeight: '1.5em',
-                  },
-                  margin: 2,
-                  padding: 0,
-                  textAlign: 'inherit',
-                  textTransform: 'none',
-                }}
+                variant="inlineText"
                 color="secondary"
                 onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}
               >

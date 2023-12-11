@@ -114,7 +114,6 @@ export class SearchHit extends Component {
               }),
             },
             paddingRight: 1,
-
           }}
           divider
           button={!selected}
