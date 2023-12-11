@@ -113,11 +113,10 @@ export class SearchHit extends Component {
                 backgroundColor: 'inherit',
               }),
             },
-            borderBottom: '0.5px solid',
-            borderBottomColor: 'divider',
             paddingRight: 1,
 
           }}
+          divider
           button={!selected}
           component="li"
           onClick={this.handleClick}
