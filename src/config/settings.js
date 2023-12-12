@@ -381,22 +381,22 @@ export default {
         styleOverrides: {
           tooltipPlacementLeft: {
             ['@media (min-width:600px)']: {
-              margin: 0,
+              margin: '0 !important',
             },
           },
           tooltipPlacementRight: {
             ['@media (min-width:600px)']: {
-              margin: 0,
+              margin: '0 !important',
             },
           },
           tooltipPlacementTop: {
             ['@media (min-width:600px)']: {
-              margin: 0,
+              margin: '0 !important',
             },
           },
           tooltipPlacementBottom: {
             ['@media (min-width:600px)']: {
-              margin: 0,
+              margin: '0 !important',
             },
           },
         },
