@@ -60,9 +60,6 @@ export class WindowTopBarPluginMenu extends Component {
           aria-label={t('windowPluginMenu')}
           aria-owns={open ? windowPluginMenuId : undefined}
           selected={open}
-          sx={{
-            margin: 1,
-          }}
           onClick={this.handleMenuClick}
         >
           {menuIcon}
