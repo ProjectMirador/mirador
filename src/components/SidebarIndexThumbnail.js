@@ -21,10 +21,7 @@ export class SidebarIndexThumbnail extends Component {
             maxWidth={width}
           />
         </div>
-        <Typography
-          sx={{ paddingLeft: 1 }}
-          variant="body1"
-        >
+        <Typography>
           {label}
         </Typography>
       </>

@@ -12,7 +12,6 @@ export class SidebarIndexItem extends Component {
 
     return (
       <Typography
-        sx={{ paddingLeft: 1 }}
         variant="body1"
       >
         {label}
