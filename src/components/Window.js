@@ -12,6 +12,23 @@ import ErrorContent from '../containers/ErrorContent';
 import IIIFAuthentication from '../containers/IIIFAuthentication';
 import { PluginHook } from './PluginHook';
 
+const Root = styled(Paper)(({ ownerState, theme }) => ({
+  backgroundColor: theme.palette.shades?.dark,
+  borderRadius: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+  minHeight: 0,
+  overflow: 'hidden',
+  width: '100%',
+  ...(ownerState?.maximized && {
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    zIndex: theme.zIndex.modal - 1,
+  }),
+}));
+
 const StyledMiddle = styled('div')(() => ({
   display: 'flex',
   flex: '1',
@@ -96,7 +113,7 @@ export class Window extends Component {
    */
   render() {
     const {
-      focusWindow, label, isFetching, maximized, sideBarOpen,
+      focusWindow, label, isFetching, sideBarOpen,
       view, windowId, t,
       manifestError,
     } = this.props;
@@ -112,27 +129,12 @@ export class Window extends Component {
     }
 
     return (
-      <Paper
+      <Root
         onFocus={focusWindow}
+        ownerState={this.props}
         component="section"
         elevation={1}
         id={windowId}
-        sx={theme => ({
-          bgcolor: 'shades?.dark',
-          borderRadius: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          minHeight: 0,
-          overflow: 'hidden',
-          width: '100%',
-          ...(maximized && {
-            left: 0,
-            position: 'absolute',
-            top: 0,
-            zIndex: theme.zIndex.modal - 1,
-          }),
-        })}
         className={ns('window')}
         aria-label={t('window', { label })}
       >
@@ -159,7 +161,7 @@ export class Window extends Component {
         </StyledMiddle>
         <CompanionArea windowId={windowId} position="far-bottom" />
         <PluginHook {...this.props} />
-      </Paper>
+      </Root>
     );
   }
 }
