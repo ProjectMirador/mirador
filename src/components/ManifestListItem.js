@@ -10,12 +10,27 @@ import { Img } from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
 import ns from '../config/css-ns';
 
-const StyledThumbnail = styled(Img)(({ theme }) => ({
+const Root = styled(ListItem, { name: 'ManifestListItem', slot: 'root' })(({ ownerState, theme }) => ({
+  '&:hover,&:focus-within': {
+    backgroundColor: theme.palette.action.hover,
+    borderLeftColor: ownerState?.active ? theme.palette.primary.main : theme.palette.action.hover,
+  },
+  borderLeft: '4px solid',
+  borderLeftColor: ownerState?.active ? theme.palette.primary.main : 'transparent',
+  paddingLeft: theme.spacing(2),
+  paddingRight: theme.spacing(2),
+  [theme.breakpoints.up('sm')]: {
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+  },
+}));
+
+const StyledThumbnail = styled(Img, { name: 'ManifestListItem', slot: 'thumbnail' })(({ theme }) => ({
   maxWidth: '100%',
   objectFit: 'contain',
 }));
 
-const StyledLogo = styled(Img)(({ theme }) => ({
+const StyledLogo = styled(Img, { name: 'ManifestListItem', slot: 'logo' })(({ theme }) => ({
   height: '2.5rem',
   maxWidth: '100%',
   objectFit: 'contain',
@@ -97,50 +112,23 @@ export class ManifestListItem extends Component {
 
     if (error) {
       return (
-        <ListItem
+        <Root
+          ownerState={this.props}
           divider
           selected={active}
           className={active ? 'active' : ''}
-          sx={theme => ({
-            '&:hover,&:focus-within': {
-              backgroundColor: theme.palette.action.hover,
-              borderLeftColor: active ? theme.palette.action.hover : theme.palette.primary.main,
-            },
-            borderLeft: '4px solid',
-            borderLeftColor: active ? 'transparent' : theme.palette.primary.main,
-            paddingLeft: theme.spacing(2),
-            paddingRight: theme.spacing(2),
-            [theme.breakpoints.up('sm')]: {
-              paddingLeft: theme.spacing(3),
-              paddingRight: theme.spacing(3),
-            },
-          })}
           data-manifestid={manifestId}
         >
           <ManifestListItemError manifestId={manifestId} />
-        </ListItem>
+        </Root>
       );
     }
 
     return (
-      <ListItem
+      <Root
         divider
         selected={active}
         className={active ? 'active' : ''}
-        sx={theme => ({
-          '&:hover,&:focus-within': {
-            backgroundColor: theme.palette.action.hover,
-            borderLeftColor: active ? theme.palette.primary.main : theme.palette.action.hover,
-          },
-          borderLeft: '4px solid',
-          borderLeftColor: active ? theme.palette.primary.main : 'transparent',
-          paddingLeft: theme.spacing(2),
-          paddingRight: theme.spacing(2),
-          [theme.breakpoints.up('sm')]: {
-            paddingLeft: theme.spacing(3),
-            paddingRight: theme.spacing(3),
-          },
-        })}
         data-manifestid={manifestId}
         data-active={active}
       >
@@ -224,7 +212,7 @@ export class ManifestListItem extends Component {
         ) : (
           placeholder
         )}
-      </ListItem>
+      </Root>
     );
   }
 }

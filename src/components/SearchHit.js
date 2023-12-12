@@ -5,9 +5,44 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
+import { styled } from '@mui/material/styles';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import TruncatedHit from '../lib/TruncatedHit';
 import { ScrollTo } from './ScrollTo';
+
+const Root = styled(ListItem, { name: 'SearchHit', slot: 'root' })(({ ownerState, theme }) => ({
+  '&.Mui-focused': {
+    '&:hover': {
+      ...(ownerState.windowSelected && {
+        backgroundColor: 'inherit',
+      }),
+    },
+    ...(ownerState.windowSelected && {
+      backgroundColor: 'inherit',
+    }),
+  },
+  paddingRight: theme.spacing(1),
+}));
+
+const CanvasLabel = styled('h4', { name: 'SearchHit', slot: 'canvasLabel' })(({ theme }) => ({
+  display: 'inline',
+  marginBottom: theme.spacing(1.5),
+}));
+
+const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerState, theme }) => ({
+  // eslint-disable-next-line no-nested-ternary
+  backgroundColor: theme.palette.hitCounter.default,
+  ...(ownerState.windowSelected && {
+    backgroundColor: theme.palette.highlights.primary,
+  }),
+  ...(ownerState.adjacent && !ownerState.windowSelected && {
+    backgroundColor: theme.palette.highlights.secondary,
+  }),
+  height: 30,
+  marginRight: theme.spacing(1),
+  typography: 'subtitle2',
+  verticalAlign: 'inherit',
+}));
 
 /** */
 export class SearchHit extends Component {
@@ -93,6 +128,25 @@ export class SearchHit extends Component {
     const truncatedHit = focused ? hit : hit && new TruncatedHit(hit, annotation);
     const truncated = hit && (truncatedHit.before !== hit.before || truncatedHit.after !== hit.after);
     const canvasLabelHtmlId = `${companionWindowId}-${index}`;
+    const ownerState = {
+      adjacent, focused, selected, windowSelected,
+    };
+
+    const header = (
+      <>
+        <Counter
+          component="span"
+          ownerState={ownerState}
+          label={index + 1}
+        />
+        <CanvasLabel id={canvasLabelHtmlId}>
+          {canvasLabel}
+          {annotationLabel && (
+            <Typography component="span" sx={{ display: 'block', marginTop: 1 }}>{annotationLabel}</Typography>
+          )}
+        </CanvasLabel>
+      </>
+    );
 
     return (
       <ScrollTo
@@ -100,83 +154,56 @@ export class SearchHit extends Component {
         offsetTop={96} // offset for the height of the form above
         scrollTo={windowSelected && !focused}
       >
-        <ListItem
+        <Root
+          ownerState={ownerState}
           className={windowSelected ? 'windowSelected' : ''}
-          sx={{
-            '&.Mui-focused': {
-              '&:hover': {
-                ...(windowSelected && {
-                  backgroundColor: 'inherit',
-                }),
-              },
-              ...(windowSelected && {
-                backgroundColor: 'inherit',
-              }),
-            },
-            borderBottom: '0.5px solid',
-            borderBottomColor: 'divider',
-            paddingRight: 1,
-
-          }}
+          divider
           button={!selected}
           component="li"
           onClick={this.handleClick}
           selected={selected}
         >
-          <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-            <Typography variant="subtitle2" sx={{ marginBottom: 1.5 }}>
-              <Chip
-                component="span"
-                label={index + 1}
-                sx={{
-                  // eslint-disable-next-line no-nested-ternary
-                  backgroundColor: windowSelected ? 'highlights.primary' : adjacent ? 'highlights.secondary' : 'hitCounter.default',
-                  height: 30,
-                  marginRight: 1,
-                  typography: 'subtitle2',
-                  verticalAlign: 'inherit',
-                }}
-              />
-              <span id={canvasLabelHtmlId}>
-                {canvasLabel}
-              </span>
-            </Typography>
-            {annotationLabel && (
-              <Typography variant="subtitle2">{annotationLabel}</Typography>
-            )}
-            {hit && (
+          <ListItemText
+            primary={header}
+            primaryTypographyProps={{ component: 'div', sx: { marginBottom: 1 }, variant: 'subtitle2' }}
+            secondaryTypographyProps={{ variant: 'body1' }}
+            secondary={(
               <>
-                <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
-                {' '}
-                <strong>
-                  <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
-                </strong>
-                {' '}
-                <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
-                {' '}
-                { truncated && !focused && (
-                  <Button
-                    sx={{
-                      '& span': {
-                        lineHeight: '1.5em',
-                      },
-                      margin: 0,
-                      padding: 0,
-                      textTransform: 'none',
-                    }}
-                    onClick={showDetails}
-                    color="secondary"
-                    size="small"
-                    aria-describedby={canvasLabelHtmlId}
-                  >
-                    {t('more')}
-                  </Button>
+                {hit && (
+                  <>
+                    <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
+                    {' '}
+                    <strong>
+                      <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
+                    </strong>
+                    {' '}
+                    <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
+                    {' '}
+                    {truncated && !focused && (
+                      <Button
+                        sx={{
+                          '& span': {
+                            lineHeight: '1.5em',
+                          },
+                          margin: 0,
+                          padding: 0,
+                          textTransform: 'none',
+                        }}
+                        onClick={showDetails}
+                        color="secondary"
+                        size="small"
+                        aria-describedby={canvasLabelHtmlId}
+                      >
+                        {t('more')}
+                      </Button>
+                    )}
+                  </>
                 )}
+                {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
               </>
             )}
-            {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
-          </ListItemText>
-        </ListItem>
+          />
+        </Root>
       </ScrollTo>
     );
   }

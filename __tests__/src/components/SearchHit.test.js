@@ -67,14 +67,13 @@ describe('SearchHit', () => {
     it('renders the annotationLabel if present', () => {
       render(<Subject annotationLabel="The Anno Label" />);
 
-      expect(screen.getAllByRole('heading', { level: 6 })).toHaveLength(2);
-      expect(screen.getByRole('heading', { level: 6, name: 'The Anno Label' })).toHaveClass('MuiTypography-subtitle2');
+      expect(screen.getByRole('heading', { level: 4, name: 'The Anno Label' })).toBeInTheDocument();
     });
 
     it('does not render the typography if no annotation label is present', () => {
       render(<Subject />);
 
-      expect(screen.getByRole('heading', { level: 6 })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 4 })).toBeInTheDocument();
     });
   });
 
