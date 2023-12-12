@@ -93,14 +93,13 @@ export class WorkspaceExport extends Component {
         </DialogTitle>
 
         <DialogContent>
-          <Accordion elevation={0}>
+          <Accordion elevation={2}>
             <AccordionSummary
-              sx={{ padding: 0 }}
               expandIcon={<ExpandMoreIcon />}
             >
               <Typography variant="h4">{t('viewWorkspaceConfiguration')}</Typography>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails sx={{ overflow: 'scroll' }}>
               {children}
               <pre>
                 {this.exportedState()}
