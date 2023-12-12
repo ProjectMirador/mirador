@@ -70,30 +70,30 @@ export class CanvasAnnotations extends Component {
         </Typography>
         <MenuList autoFocusItem variant="selectedMenu">
           {annotations.map((annotation) => (
-            <MenuItem
-              component={listContainerComponent}
-              variant="multiline"
-              divider
-              sx={{
-                '&:hover,&:focus': {
-                  backgroundColor: 'action.hover',
-                },
-                backgroundColor: hoveredAnnotationIds.includes(annotation.id) ? 'action.hover' : '',
-              }}
-              key={annotation.id}
-              annotationid={annotation.id}
+            <ScrollTo
+              containerRef={containerRef}
+              key={`${annotation.id}-scroll`}
+              offsetTop={96} // offset for the height of the form above
+              scrollTo={selectedAnnotationId === annotation.id}
               selected={selectedAnnotationId === annotation.id}
-              onClick={(e) => this.handleClick(e, annotation)}
-              onFocus={() => this.handleAnnotationHover(annotation)}
-              onBlur={this.handleAnnotationBlur}
-              onMouseEnter={() => this.handleAnnotationHover(annotation)}
-              onMouseLeave={this.handleAnnotationBlur}
             >
-              <ScrollTo
-                containerRef={containerRef}
-                key={`${annotation.id}-scroll`}
-                offsetTop={96} // offset for the height of the form above
-                scrollTo={selectedAnnotationId === annotation.id}
+              <MenuItem
+                component={listContainerComponent}
+                variant="multiline"
+                divider
+                sx={{
+                  '&:hover,&:focus': {
+                    backgroundColor: 'action.hover',
+                  },
+                  backgroundColor: hoveredAnnotationIds.includes(annotation.id) ? 'action.hover' : '',
+                }}
+                key={annotation.id}
+                annotationid={annotation.id}
+                onClick={(e) => this.handleClick(e, annotation)}
+                onFocus={() => this.handleAnnotationHover(annotation)}
+                onBlur={this.handleAnnotationBlur}
+                onMouseEnter={() => this.handleAnnotationHover(annotation)}
+                onMouseLeave={this.handleAnnotationBlur}
               >
                 <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
                   <SanitizedHtml ruleSet={htmlSanitizationRuleSet} htmlString={annotation.content} />
@@ -103,8 +103,8 @@ export class CanvasAnnotations extends Component {
                     ))}
                   </div>
                 </ListItemText>
-              </ScrollTo>
-            </MenuItem>
+              </MenuItem>
+            </ScrollTo>
           ))}
         </MenuList>
       </>

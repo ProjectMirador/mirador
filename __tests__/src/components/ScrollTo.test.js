@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render } from 'test-utils';
 import { createRef } from 'react';
 import { ScrollTo } from '../../../src/components/ScrollTo';
 
@@ -22,12 +22,6 @@ describe('ScrollTo', () => {
   const scrollToElBelowBoundingRect = { bottom: 601, top: 501 };
   const visibleScrollToElBoundingRect = { bottom: 300, top: 200 };
 
-  it('wraps the given children in a div element', () => {
-    render(<ScrollTo data-testid="subject" scrollTo>Child Prop</ScrollTo>);
-
-    expect(screen.getByTestId('subject')).toHaveTextContent('Child Prop');
-  });
-
   describe('when updating the scrollTo prop', () => {
     beforeEach(() => {
       jest.spyOn(ScrollTo.prototype, 'elementToScrollTo').mockImplementation(() => ({ offsetTop: 450 }));
@@ -38,13 +32,13 @@ describe('ScrollTo', () => {
           ...scrollToElAboveBoundingRect,
         }));
 
-        const { rerender } = render(<ScrollTo scrollTo containerRef={containerRef}>Child</ScrollTo>);
+        const { rerender } = render(<ScrollTo scrollTo containerRef={containerRef}><div>Child</div></ScrollTo>);
 
         // It is called once when initially rendered w/ true
         expect(scrollTo).toHaveBeenCalled();
         scrollTo.mockReset();
 
-        rerender(<ScrollTo containerRef={containerRef}>Child</ScrollTo>);
+        rerender(<ScrollTo containerRef={containerRef}><div>Child</div></ScrollTo>);
 
         // But it is not called on the re-render w/ false
         expect(scrollTo).not.toHaveBeenCalled();
@@ -56,9 +50,9 @@ describe('ScrollTo', () => {
         jest.spyOn(ScrollTo.prototype, 'scrollToBoundingRect').mockImplementation(() => ({
           ...scrollToElAboveBoundingRect,
         }));
-        const { rerender } = render(<ScrollTo containerRef={containerRef}>Child</ScrollTo>);
+        const { rerender } = render(<ScrollTo containerRef={containerRef}><div>Child</div></ScrollTo>);
 
-        rerender(<ScrollTo scrollTo containerRef={containerRef}>Child</ScrollTo>);
+        rerender(<ScrollTo scrollTo containerRef={containerRef}><div>Child</div></ScrollTo>);
 
         expect(scrollTo).toHaveBeenCalledWith(0, 230);
       });
@@ -68,9 +62,9 @@ describe('ScrollTo', () => {
           ...scrollToElBelowBoundingRect,
         }));
 
-        const { rerender } = render(<ScrollTo containerRef={containerRef}>Child</ScrollTo>);
+        const { rerender } = render(<ScrollTo containerRef={containerRef}><div>Child</div></ScrollTo>);
 
-        rerender(<ScrollTo scrollTo containerRef={containerRef}>Child</ScrollTo>);
+        rerender(<ScrollTo scrollTo containerRef={containerRef}><div>Child</div></ScrollTo>);
 
         expect(scrollTo).toHaveBeenCalledWith(0, 230);
       });
@@ -80,9 +74,9 @@ describe('ScrollTo', () => {
           ...visibleScrollToElBoundingRect,
         }));
 
-        const { rerender } = render(<ScrollTo containerRef={containerRef}>Child</ScrollTo>);
+        const { rerender } = render(<ScrollTo containerRef={containerRef}><div>Child</div></ScrollTo>);
 
-        rerender(<ScrollTo scrollTo containerRef={containerRef}>Child</ScrollTo>);
+        rerender(<ScrollTo scrollTo containerRef={containerRef}><div>Child</div></ScrollTo>);
 
         expect(scrollTo).not.toHaveBeenCalled();
       });

@@ -1,5 +1,6 @@
-import { createRef, Component } from 'react';
+import { cloneElement, createRef, Component } from 'react';
 import PropTypes from 'prop-types';
+import isEmpty from 'lodash/isEmpty';
 
 /**
  * ScrollTo ~
@@ -107,13 +108,9 @@ export class ScrollTo extends Component {
       children, containerRef, offsetTop, scrollTo, nodeId, ...otherProps
     } = this.props;
 
-    if (!scrollTo) return children;
+    if (!scrollTo && isEmpty(otherProps)) return children;
 
-    return (
-      <div ref={this.scrollToRef} {...otherProps}>
-        {children}
-      </div>
-    );
+    return cloneElement(children, { ref: this.scrollToRef, ...otherProps });
   }
 }
 

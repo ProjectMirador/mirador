@@ -2,10 +2,19 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
+import { styled } from '@mui/material/styles';
 import { ScrollTo } from './ScrollTo';
 import MiradorCanvas from '../lib/MiradorCanvas';
 import SidebarIndexItem from '../containers/SidebarIndexItem';
 import SidebarIndexThumbnail from '../containers/SidebarIndexThumbnail';
+
+const StyledItem = styled(MenuItem, { name: 'SidebarIndexList', slot: 'item' })(({ theme }) => ({
+  alignItems: 'flex-start',
+  paddingLeft: theme.spacing(2),
+  paddingRight: theme.spacing(1),
+  position: 'initial',
+  whiteSpace: 'normal',
+}));
 
 /** */
 export class SidebarIndexList extends Component {
@@ -48,26 +57,22 @@ export class SidebarIndexList extends Component {
             const onClick = () => { setCanvas(windowId, canvas.id); }; // eslint-disable-line require-jsdoc, max-len
 
             return (
-              <MenuItem
-                key={canvas.id}
-                sx={{
-                  paddingRight: 1,
-                  position: 'initial',
-                }}
-                divider
-                onClick={onClick}
-                component="li"
+              <ScrollTo
+                containerRef={containerRef}
+                key={`${canvas.id}-${variant}`}
+                offsetTop={96} // offset for the height of the form above
                 selected={selectedCanvasIds.includes(canvas.id)}
+                scrollTo={selectedCanvasIds.includes(canvas.id)}
               >
-                <ScrollTo
-                  containerRef={containerRef}
-                  key={`${canvas.id}-${variant}`}
-                  offsetTop={96} // offset for the height of the form above
-                  scrollTo={selectedCanvasIds.includes(canvas.id)}
+                <StyledItem
+                  key={canvas.id}
+                  divider
+                  onClick={onClick}
+                  component="li"
                 >
                   <Item label={canvas.label} canvas={canvases[canvasIndex]} />
-                </ScrollTo>
-              </MenuItem>
+                </StyledItem>
+              </ScrollTo>
             );
           })
         }
