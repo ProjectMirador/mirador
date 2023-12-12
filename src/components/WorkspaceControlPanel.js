@@ -47,8 +47,6 @@ const StyledWorkspaceButtons = styled('div', { name: 'WorkspaceControlPanel', sl
 }));
 
 const StyledBranding = styled(Branding, { name: 'WorkspaceControlPanel', slot: 'branding' })(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'center',
   [theme.breakpoints.up('xs')]: {
     display: 'none',
   },

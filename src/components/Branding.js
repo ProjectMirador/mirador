@@ -2,6 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import MiradorIcon from './icons/MiradorIcon';
 
 /**
@@ -13,7 +14,7 @@ export class Branding extends Component {
     const { t, variant, ...ContainerProps } = this.props;
 
     return (
-      <div {...ContainerProps}>
+      <Stack alignItems="center" {...ContainerProps}>
         { variant === 'wide' && (
         <div>
           <Typography align="center" component="p" variant="h3">{t('mirador')}</Typography>
@@ -30,7 +31,7 @@ export class Branding extends Component {
             <MiradorIcon aria-label={t('aboutMirador')} titleAccess={t('aboutMirador')} fontSize="large" />
           </IconButton>
         </Typography>
-      </div>
+      </Stack>
     );
   }
 }
