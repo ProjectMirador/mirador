@@ -62,6 +62,7 @@ export class SidebarIndexList extends Component {
                     paddingLeft: 2,
                     paddingRight: 1,
                     position: 'initial',
+                    whiteSpace: 'normal',
                   }}
                   divider
                   onClick={onClick}
