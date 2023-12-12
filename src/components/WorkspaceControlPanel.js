@@ -10,7 +10,10 @@ import Branding from '../containers/Branding';
 import ns from '../config/css-ns';
 
 const Root = styled(AppBar, { name: 'WorkspaceControlPanel', slot: 'root' })(({ ownerState, theme }) => ({
+  display: 'flex',
   height: 64,
+  padding: theme.spacing(1),
+  paddingBottom: 0,
   [theme.breakpoints.up('sm')]: {
     height: '100%',
     left: 0,
@@ -24,6 +27,7 @@ const Root = styled(AppBar, { name: 'WorkspaceControlPanel', slot: 'root' })(({ 
 
 const StyledToolbar = styled(Toolbar, { name: 'WorkspaceControlPanel', slot: 'toolbar' })(({ theme }) => ({
   display: 'flex',
+  flexGrow: 1,
   justifyContent: 'space-between',
   [theme.breakpoints.up('sm')]: {
     flexDirection: 'column',
@@ -44,18 +48,13 @@ const StyledWorkspaceButtons = styled('div', { name: 'WorkspaceControlPanel', sl
 
 const StyledBranding = styled(Branding, { name: 'WorkspaceControlPanel', slot: 'branding' })(({ theme }) => ({
   display: 'flex',
-  position: 'absolute',
+  justifyContent: 'center',
   [theme.breakpoints.up('xs')]: {
     display: 'none',
   },
   [theme.breakpoints.up('sm')]: {
-    bottom: 0,
-    display: 'block',
-    float: 'none',
-    right: 'auto',
-    width: '100%',
+    display: 'flex',
   },
-  right: 0,
 }));
 
 /**
