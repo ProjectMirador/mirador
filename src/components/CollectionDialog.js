@@ -25,6 +25,9 @@ const StyledScrollIndicatedDialogContent = styled(ScrollIndicatedDialogContent)(
 }));
 
 const StyledCollectionMetadata = styled('div')(() => ({
+  '& .MuiPaper-root': {
+    background: 'transparent',
+  },
   padding: (theme) => theme.spacing(2),
 }));
 
