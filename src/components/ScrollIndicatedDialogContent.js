@@ -1,26 +1,49 @@
 import PropTypes from 'prop-types';
 import DialogContent from '@mui/material/DialogContent';
-import { styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/material/styles';
 
-const Root = styled(DialogContent, { name: 'ScrollIndicatedDialogContent', slot: 'root' })(({ theme }) => ({
-  /* Shadow covers */
-  background: `linear-gradient(${theme.palette.background.paper} 30%, rgba(255, 255, 255, 0)), `
-    + `linear-gradient(rgba(255, 255, 255, 0), ${theme.palette.background.paper} 70%) 0 100%, `
-    // Shaddows
-    + 'radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), '
-    + 'radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%,',
-  /* Shadow covers */
-  background: `linear-gradient(${theme.palette.background.paper} 30%, rgba(255, 255, 255, 0)), ` // eslint-disable-line no-dupe-keys
-    + `linear-gradient(rgba(255, 255, 255, 0), ${theme.palette.background.paper} 70%) 0 100%, `
-    // Shaddows
-    + 'radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), '
-    + 'radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;',
+/**
+ * From https://github.com/mui/material-ui/blob/v5.15.0/packages/mui-material/src/styles/getOverlayAlpha.ts
+ */
+const getOverlayAlpha = (elevation) => {
+  let alphaValue;
+  if (elevation < 1) {
+    alphaValue = 5.11916 * elevation ** 2;
+  } else {
+    alphaValue = 4.5 * Math.log(elevation + 1) + 2;
+  }
+  return (alphaValue / 100).toFixed(2);
+};
 
-  backgroundAttachment: 'local, local, scroll, scroll',
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: '100% 40px, 100% 40px, 100% 14px, 100% 14px',
-  overflowY: 'auto',
-}));
+const Root = styled(DialogContent, { name: 'ScrollIndicatedDialogContent', slot: 'root' })(({ ownerState, theme }) => {
+  // In dark mode, paper has a elevation-dependent background color:
+  // https://github.com/mui/material-ui/blob/v5.15.0/packages/mui-material/src/Paper/Paper.js#L55-L60
+  const bgcolor = theme.palette.mode === 'dark' ? {
+    backgroundImage: `linear-gradient(${alpha(
+      '#fff',
+      getOverlayAlpha(ownerState?.elevation || 24),
+    )}, ${alpha('#fff', getOverlayAlpha(ownerState?.elevation || 24))})`,
+  } : theme.palette.background.paper;
+  return {
+    /* Shadow covers */
+    background: `linear-gradient(${bgcolor} 30%, rgba(255, 255, 255, 0)), `
+      + `linear-gradient(rgba(255, 255, 255, 0), ${bgcolor} 70%) 0 100%, `
+      // Shaddows
+      + 'radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), '
+      + 'radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%,',
+    /* Shadow covers */
+    background: `linear-gradient(${bgcolor} 30%, rgba(255, 255, 255, 0)), ` // eslint-disable-line no-dupe-keys
+      + `linear-gradient(rgba(255, 255, 255, 0), ${bgcolor} 70%) 0 100%, `
+      // Shaddows
+      + 'radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), '
+      + 'radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;',
+
+    backgroundAttachment: 'local, local, scroll, scroll',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '100% 40px, 100% 40px, 100% 14px, 100% 14px',
+    overflowY: 'auto',
+  };
+});
 
 /**
  * ScrollIndicatedDialogContent ~ Inject a style into the DialogContent component
