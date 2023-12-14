@@ -7,8 +7,6 @@ import { getSequenceViewingDirection } from './sequences';
 
 /** Instantiate a manifesto instance */
 export const getCurrentCanvasWorld = createSelector(
-  getVisibleCanvases,
-  getLayersForVisibleCanvases,
-  getSequenceViewingDirection,
+  [getVisibleCanvases, getLayersForVisibleCanvases, getSequenceViewingDirection],
   (canvases, layers, viewingDirection) => new CanvasWorld(canvases, layers, viewingDirection),
 );
