@@ -113,9 +113,9 @@ const getCompanionWindowIdsOfWindow = createSelector(
 export const getCompanionWindowsForPosition = createSelector(
   [
     getCompanionWindowsOfWindow,
-    (state, { position }) => ({ position }),
+    (state, { position }) => (position),
   ],
-  (companionWindows, { position }) => companionWindows[position] || EMPTY_ARRAY,
+  (companionWindows, position) => companionWindows[position] || EMPTY_ARRAY,
 );
 
 /**
@@ -128,9 +128,9 @@ export const getCompanionWindowsForPosition = createSelector(
 export const getCompanionWindowsForContent = createSelector(
   [
     getCompanionWindowsOfWindow,
-    (state, { content }) => ({ content }),
+    (state, { content }) => (content),
   ],
-  (companionWindows, { content }) => (
+  (companionWindows, content) => (
     [].concat(...Object.values(companionWindows)).filter(w => w.content === content)
   ),
 );
@@ -148,9 +148,9 @@ const EMPTY_ARRAY = [];
 export const getCompanionWindowIdsForPosition = createSelector(
   [
     getCompanionWindowIdsOfWindow,
-    (state, { position }) => ({ position }),
+    (state, { position }) => (position),
   ],
-  (companionWindowIds, { position }) => companionWindowIds[position] || EMPTY_ARRAY,
+  (companionWindowIds, position) => companionWindowIds[position] || EMPTY_ARRAY,
 );
 
 /**
