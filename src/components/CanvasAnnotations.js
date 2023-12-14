@@ -95,14 +95,17 @@ export class CanvasAnnotations extends Component {
                 onMouseEnter={() => this.handleAnnotationHover(annotation)}
                 onMouseLeave={this.handleAnnotationBlur}
               >
-                <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
-                  <SanitizedHtml ruleSet={htmlSanitizationRuleSet} htmlString={annotation.content} />
-                  <div>
-                    {annotation.tags.map((tag) => (
-                      <Chip size="small" variant="outlined" label={tag} id={tag} key={tag.toString()} />
-                    ))}
-                  </div>
-                </ListItemText>
+                <ListItemText
+                  primaryTypographyProps={{ variant: 'body2' }}
+                  primary={
+                    <SanitizedHtml ruleSet={htmlSanitizationRuleSet} htmlString={annotation.content} />
+                  }
+                  secondary={
+                    annotation.tags.map((tag) => (
+                      <Chip component="span" size="small" variant="outlined" label={tag} id={tag} key={tag.toString()} />
+                    ))
+                  }
+                />
               </MenuItem>
             </ScrollTo>
           ))}
