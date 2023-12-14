@@ -11,7 +11,6 @@ import { AppProviders } from '../components/AppProviders';
  */
 const mapStateToProps = state => (
   {
-    createGenerateClassNameOptions: getConfig(state).createGenerateClassNameOptions,
     language: getConfig(state).language,
     theme: getTheme(state),
     translations: getConfig(state).translations,

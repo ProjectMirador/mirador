@@ -5,8 +5,6 @@ import { I18nextProvider } from 'react-i18next';
 import {
   ThemeProvider, StyledEngineProvider, createTheme,
 } from '@mui/material/styles';
-import StylesProvider from '@mui/styles/StylesProvider';
-import createGenerateClassName from '@mui/styles/createGenerateClassName';
 import { DndContext, DndProvider } from 'react-dnd';
 import { MultiBackend } from 'react-dnd-multi-backend';
 import { HTML5toTouch } from 'rdndmb-html5-to-touch';
@@ -96,12 +94,10 @@ export class AppProviders extends Component {
   /** */
   render() {
     const {
-      children, createGenerateClassNameOptions,
+      children,
       theme, translations,
       dndManager,
     } = this.props;
-
-    const generateClassName = createGenerateClassName(createGenerateClassNameOptions);
 
     /**
      * Create rtl emotion cache
@@ -128,11 +124,9 @@ export class AppProviders extends Component {
           <StyledEngineProvider injectFirst>
             <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
               <ThemeProvider theme={createTheme((theme))}>
-                <StylesProvider generateClassName={generateClassName}>
-                  <MaybeDndProvider dndManager={dndManager}>
-                    {children}
-                  </MaybeDndProvider>
-                </StylesProvider>
+                <MaybeDndProvider dndManager={dndManager}>
+                  {children}
+                </MaybeDndProvider>
               </ThemeProvider>
             </CacheProvider>
           </StyledEngineProvider>
@@ -144,7 +138,6 @@ export class AppProviders extends Component {
 
 AppProviders.propTypes = {
   children: PropTypes.node,
-  createGenerateClassNameOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   dndManager: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   language: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -153,6 +146,5 @@ AppProviders.propTypes = {
 
 AppProviders.defaultProps = {
   children: null,
-  createGenerateClassNameOptions: {},
   dndManager: undefined,
 };
