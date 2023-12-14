@@ -125,7 +125,7 @@
     "jest-environment-jsdom": "^29.4.3",
     "jest-fetch-mock": "^3.0.0",
     "jest-puppeteer": "^9.0.2",
-    "jsdom": "^21.0.0",
+    "jsdom": "^23.0.0",
     "puppeteer": "^21.0.0",
     "react": "^17.0.0",
     "react-dnd-test-backend": "^16.0.1",
