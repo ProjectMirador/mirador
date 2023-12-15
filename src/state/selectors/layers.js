@@ -23,6 +23,16 @@ export const getCanvasLayers = createSelector(
   },
 );
 
+const EMPTY_ARRAY = Object.freeze([]);
+
+export const getLayersForWindow = createSelector(
+  [
+    state => miradorSlice(state).layers,
+    (state, { windowId }) => windowId,
+  ],
+  (layers, windowId) => (layers ? (layers[windowId] || EMPTY_ARRAY) : EMPTY_ARRAY),
+);
+
 /**
  * Get the layer state for a particular canvas.
  * @param {object} state
@@ -31,11 +41,10 @@ export const getCanvasLayers = createSelector(
  */
 export const getLayers = createSelector(
   [
-    state => miradorSlice(state).layers || {},
-    (state, { windowId }) => windowId,
+    getLayersForWindow,
     (state, { canvasId }) => canvasId,
   ],
-  (layers, windowId, canvasId) => (layers[windowId] || {})[canvasId],
+  (layers, canvasId) => layers[canvasId],
 );
 
 /**
@@ -80,11 +89,11 @@ export const getSortedLayers = createSelector(
 export const getLayersForVisibleCanvases = createSelector(
   [
     getVisibleCanvasIds,
-    (state, { windowId }) => (canvasId => getLayers(state, { canvasId, windowId })),
+    getLayersForWindow,
   ],
-  (canvasIds, getLayersForCanvas) => (
+  (canvasIds, layers) => (
     canvasIds.reduce((acc, canvasId) => {
-      acc[canvasId] = getLayersForCanvas(canvasId);
+      acc[canvasId] = layers[canvasId];
       return acc;
     }, {})
   ),
