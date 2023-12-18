@@ -25,7 +25,7 @@ const Container = styled('div', { name: 'CompanionArea', slot: 'container' })(({
     flexDirection: 'column',
     width: '100%',
   }),
-  ...((ownerState?.position === 'left') && {
+  ...((ownerState?.position === 'left' && (ownerState?.companionWindowIds && ownerState.companionWindowIds.length > 0)) && {
     minWidth: '235px',
   }),
 }));
@@ -98,7 +98,7 @@ export class CompanionArea extends Component {
         <Slide in={companionAreaOpen} direction={this.slideDirection()}>
           <Container
             ownerState={this.props}
-            className={`${ns('companion-windows')} ${companionWindowIds.length > 0}`}
+            className={`${ns('companion-windows')}`}
           >
             {companionWindowIds.map((id) => (
               <CompanionWindowFactory id={id} key={id} windowId={windowId} />
