@@ -26,7 +26,7 @@ const columnMixin = {
   minHeight: 0,
 };
 
-const Root = styled(Paper)(({ ownerState, theme }) => ({
+const Root = styled(Paper, { name: 'Window', slot: 'root' })(({ ownerState, theme }) => ({
   ...columnMixin,
   backgroundColor: theme.palette.shades?.dark,
   borderRadius: 0,
@@ -41,27 +41,27 @@ const Root = styled(Paper)(({ ownerState, theme }) => ({
   }),
 }));
 
-const ContentRow = styled('div')(() => ({
+const ContentRow = styled('div', { name: 'Window', slot: 'row' })(() => ({
   ...rowMixin,
 }));
 
-const ContentColumn = styled('div')(() => ({
+const ContentColumn = styled('div', { name: 'Window', slot: 'column' })(() => ({
   ...columnMixin,
 }));
 
-const StyledPrimaryWindow = styled(PrimaryWindow)(() => ({
+const StyledPrimaryWindow = styled(PrimaryWindow, { name: 'Window', slot: 'primary' })(() => ({
   ...rowMixin,
   height: '300px',
   position: 'relative',
 }));
 
-const StyledCompanionAreaBottom = styled(CompanionArea)(() => ({
+const StyledCompanionAreaBottom = styled(CompanionArea, { name: 'Window', slot: 'bottom' })(() => ({
   ...rowMixin,
   flex: '0',
   flexBasis: 'auto',
 }));
 
-const StyledCompanionAreaRight = styled('div')(() => ({
+const StyledCompanionAreaRight = styled('div', { name: 'Window', slot: 'right' })(() => ({
   ...rowMixin,
   flex: '0 1 auto',
 }));
