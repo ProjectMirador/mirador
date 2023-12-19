@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
@@ -12,13 +12,25 @@ import ErrorContent from '../containers/ErrorContent';
 import IIIFAuthentication from '../containers/IIIFAuthentication';
 import { PluginHook } from './PluginHook';
 
+const rowMixin = {
+  display: 'flex',
+  flex: '1',
+  flexDirection: 'row',
+  minHeight: 0,
+};
+
+const columnMixin = {
+  display: 'flex',
+  flex: '1',
+  flexDirection: 'column',
+  minHeight: 0,
+};
+
 const Root = styled(Paper)(({ ownerState, theme }) => ({
+  ...columnMixin,
   backgroundColor: theme.palette.shades?.dark,
   borderRadius: 0,
-  display: 'flex',
-  flexDirection: 'column',
   height: '100%',
-  minHeight: 0,
   overflow: 'hidden',
   width: '100%',
   ...(ownerState?.maximized && {
@@ -29,40 +41,38 @@ const Root = styled(Paper)(({ ownerState, theme }) => ({
   }),
 }));
 
-const StyledMiddle = styled('div')(() => ({
-  display: 'flex',
-  flex: '1',
-  flexDirection: 'row',
-  minHeight: 0,
+const ContentRow = styled('div')(() => ({
+  ...rowMixin,
 }));
 
-const StyledMiddleLeft = styled('div')(() => ({
-  display: 'flex',
-  flex: '1',
-  flexDirection: 'column',
-  minHeight: 0,
+const ContentColumn = styled('div')(() => ({
+  ...columnMixin,
 }));
 
-const StyledPrimaryWindow = styled('div')(() => ({
-  display: 'flex',
-  flex: '1',
+const StyledPrimaryWindow = styled(PrimaryWindow)(() => ({
+  ...rowMixin,
   height: '300px',
-  minHeight: 0,
   position: 'relative',
 }));
 
-const StyledCompanionAreaBottom = styled('div')(() => ({
-  display: 'flex',
+const StyledCompanionAreaBottom = styled(CompanionArea)(() => ({
+  ...rowMixin,
   flex: '0',
   flexBasis: 'auto',
-  minHeight: 0,
 }));
 
 const StyledCompanionAreaRight = styled('div')(() => ({
-  display: 'flex',
+  ...rowMixin,
   flex: '0 1 auto',
-  minHeight: 0,
 }));
+
+/** Window title bar wrapper for drag controls in the mosaic view */
+const DraggableNavBar = ({ children, ...props }) => {
+  const { mosaicWindowActions } = useContext(MosaicWindowContext);
+  return mosaicWindowActions.connectDragSource(
+    <nav {...props}>{children}</nav>,
+  );
+};
 
 /**
  * Represents a Window in the mirador workspace
@@ -82,39 +92,12 @@ export class Window extends Component {
   }
 
   /**
-   * wrappedTopBar - will conditionally wrap a WindowTopBar for needed
-   * additional functionality based on workspace type
-   */
-  wrappedTopBar() {
-    const {
-      windowId, workspaceType, windowDraggable,
-    } = this.props;
-
-    const topBar = (
-      <div>
-        <WindowTopBar
-          windowId={windowId}
-          windowDraggable={windowDraggable}
-        />
-        <IIIFAuthentication windowId={windowId} />
-      </div>
-    );
-    if (workspaceType === 'mosaic' && windowDraggable) {
-      const { mosaicWindowActions } = this.context;
-      return mosaicWindowActions.connectDragSource(
-        topBar,
-      );
-    }
-    return topBar;
-  }
-
-  /**
    * Renders things
    */
   render() {
     const {
       focusWindow, label, isFetching, sideBarOpen,
-      view, windowId, t,
+      view, windowDraggable, windowId, workspaceType, t,
       manifestError,
     } = this.props;
 
@@ -138,27 +121,28 @@ export class Window extends Component {
         className={ns('window')}
         aria-label={t('window', { label })}
       >
-        {this.wrappedTopBar()}
+        <WindowTopBar
+          component={workspaceType === 'mosaic' && windowDraggable ? DraggableNavBar : undefined}
+          windowId={windowId}
+          windowDraggable={windowDraggable}
+        />
+        <IIIFAuthentication windowId={windowId} />
         { manifestError && <ErrorContent error={{ stack: manifestError }} windowId={windowId} /> }
-        <StyledMiddle>
-          <StyledMiddleLeft>
-            <StyledPrimaryWindow>
-              <PrimaryWindow
-                view={view}
-                windowId={windowId}
-                isFetching={isFetching}
-                sideBarOpen={sideBarOpen}
-              />
-            </StyledPrimaryWindow>
-            <StyledCompanionAreaBottom>
-              <CompanionArea windowId={windowId} position="bottom" />
-            </StyledCompanionAreaBottom>
-          </StyledMiddleLeft>
+        <ContentRow>
+          <ContentColumn>
+            <StyledPrimaryWindow
+              view={view}
+              windowId={windowId}
+              isFetching={isFetching}
+              sideBarOpen={sideBarOpen}
+            />
+            <StyledCompanionAreaBottom windowId={windowId} position="bottom" />
+          </ContentColumn>
           <StyledCompanionAreaRight>
             <CompanionArea windowId={windowId} position="right" />
             <CompanionArea windowId={windowId} position="far-right" />
           </StyledCompanionAreaRight>
-        </StyledMiddle>
+        </ContentRow>
         <CompanionArea windowId={windowId} position="far-bottom" />
         <PluginHook {...this.props} />
       </Root>
