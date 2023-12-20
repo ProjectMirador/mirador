@@ -6,6 +6,12 @@ import ResizeObserver from 'react-resize-observer';
 import WorkspaceElasticWindow from '../containers/WorkspaceElasticWindow';
 import ns from '../config/css-ns';
 
+const Root = styled('div', { name: 'WorkspaceElastic', slot: 'root' })({
+  height: '100%',
+  position: 'relative',
+  width: '100%',
+});
+
 const StyledRnd = styled(Rnd)({
   boxSizing: 'border-box',
   margin: 0,
@@ -39,7 +45,7 @@ class WorkspaceElastic extends Component {
     const offsetY = workspace.height / 2;
 
     return (
-      <div style={{ height: '100%', position: 'relative', width: '100%' }}>
+      <Root>
         <ResizeObserver
           onReflow={() => {}}
           onResize={(rect) => { setWorkspaceViewportDimensions(rect); }}
@@ -79,7 +85,7 @@ class WorkspaceElastic extends Component {
             ))
           }
         </StyledRnd>
-      </div>
+      </Root>
     );
   }
 }
