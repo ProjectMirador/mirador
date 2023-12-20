@@ -17,7 +17,6 @@ import * as actions from '../state/actions';
 const mapStateToProps = state => (
   {
     allowNewWindows: getConfig(state).workspace.allowNewWindows,
-    isWorkspaceControlPanelVisible: getConfig(state).workspaceControlPanel.enabled,
     maximizedWindowIds: getMaximizedWindowsIds(state),
     windowIds: getWindowIds(state),
     workspaceId: getWorkspace(state).id,

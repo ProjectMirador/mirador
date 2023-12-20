@@ -8,19 +8,28 @@ import WorkspaceAdd from '../containers/WorkspaceAdd';
 import BackgroundPluginArea from '../containers/BackgroundPluginArea';
 import ns from '../config/css-ns';
 
-const Root = styled('main', { name: 'WorkspaceArea', slot: 'root' })(({ theme }) => {
+const Root = styled('div', { name: 'WorkspaceArea', slot: 'root' })(({ theme }) => {
   const getBackgroundColor = theme.palette.mode === 'light' ? darken : lighten;
 
   return {
     background: getBackgroundColor(theme.palette.grey.A200, 0.1),
     bottom: 0,
+    display: 'flex',
+    flexDirection: 'column',
     left: 0,
-    overflow: 'hidden',
     position: 'absolute',
     right: 0,
     top: 0,
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'row',
+    },
   };
 });
+
+const ViewerArea = styled('main', { name: 'WorkspaceArea', slot: 'viewer' })(() => ({
+  flexGrow: 1,
+  position: 'relative',
+}));
 
 /**
  * This is the top level Mirador component.
@@ -42,12 +51,12 @@ export class WorkspaceArea extends Component {
     } = this.props;
 
     return (
-      <>
+      <Root ownerState={this.props}>
         {
           isWorkspaceControlPanelVisible
             && <WorkspaceControlPanel variant={controlPanelVariant} />
         }
-        <Root
+        <ViewerArea
           className={ns('viewer')}
           lang={lang}
           aria-label={t('workspace')}
@@ -60,8 +69,8 @@ export class WorkspaceArea extends Component {
           }
           <ErrorDialog />
           <BackgroundPluginArea />
-        </Root>
-      </>
+        </ViewerArea>
+      </Root>
     );
   }
 }

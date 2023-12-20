@@ -14,10 +14,9 @@ const Root = styled(AppBar, { name: 'WorkspaceControlPanel', slot: 'root' })(({ 
   height: 64,
   padding: theme.spacing(1),
   paddingBottom: 0,
+  position: 'relative',
   [theme.breakpoints.up('sm')]: {
-    height: '100%',
-    left: 0,
-    right: 'auto',
+    height: 'auto',
     width: ownerState.variant === 'wide' ? 'auto' : 64,
   },
   ...(ownerState.variant === 'wide' && {
