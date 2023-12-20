@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import { WindowTopBarPluginMenu } from '../components/WindowTopBarPluginMenu';
 import { withWorkspaceContext } from '../contexts/WorkspaceContext';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  *
@@ -19,6 +20,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withWorkspaceContext,
+  withWindowContext,
   withStyles(styles),
   withPlugins('WindowTopBarPluginMenu'),
 );

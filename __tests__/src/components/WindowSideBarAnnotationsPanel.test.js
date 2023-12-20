@@ -12,10 +12,9 @@ function createWrapper(props, state) {
       classes={{}}
       id="xyz"
       t={i18next.t}
-      windowId="abc"
       {...props}
     />,
-    { preloadedState: { companionWindows: { xyz: { content: 'annotations' } }, windows: { abc: {} }, ...state } },
+    { preloadedState: { companionWindows: { xyz: { content: 'annotations' } }, windows: { abc: {} }, ...state }, windowId: 'abc' },
   );
 }
 

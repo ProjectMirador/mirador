@@ -11,6 +11,7 @@ import {
   getViewer,
   getConfig,
 } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
@@ -46,6 +47,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps),
   withPlugins('ErrorContent'),
 );

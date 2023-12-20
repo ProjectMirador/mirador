@@ -6,6 +6,7 @@ import * as actions from '../state/actions';
 import { WindowTopMenu } from '../components/WindowTopMenu';
 import { getConfig } from '../state/selectors';
 import { withWorkspaceContext } from '../contexts/WorkspaceContext';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -28,6 +29,7 @@ const mapDispatchToProps = dispatch => ({
 const enhance = compose(
   withTranslation(),
   withWorkspaceContext,
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowTopMenu'),
 );

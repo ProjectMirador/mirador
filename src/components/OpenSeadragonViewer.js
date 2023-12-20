@@ -364,7 +364,7 @@ export class OpenSeadragonViewer extends Component {
         aria-live="polite"
       >
         { drawAnnotations
-            && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
+            && <AnnotationsOverlay viewer={viewer} /> }
         { enhancedChildren }
         <PluginHook viewer={viewer} {...{ ...this.props, children: null }} />
       </section>

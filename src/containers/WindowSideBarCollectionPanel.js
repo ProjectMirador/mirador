@@ -12,6 +12,7 @@ import {
   getWindow,
 } from '../state/selectors';
 import { WindowSideBarCollectionPanel } from '../components/WindowSideBarCollectionPanel';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -73,6 +74,7 @@ const styles = theme => ({
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowSideBarCollectionPanel'),
 );

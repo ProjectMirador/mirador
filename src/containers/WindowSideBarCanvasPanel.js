@@ -14,6 +14,7 @@ import {
   getSequence,
   getSequences,
 } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -84,6 +85,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowSideBarCanvasPanel'),
 );

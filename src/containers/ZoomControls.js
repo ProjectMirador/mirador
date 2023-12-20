@@ -6,6 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getShowZoomControlsConfig, getViewer } from '../state/selectors';
 import { ZoomControls } from '../components/ZoomControls';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -53,6 +54,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ZoomControls'),
 );

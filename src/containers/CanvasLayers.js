@@ -9,6 +9,7 @@ import {
   getSortedLayers,
 } from '../state/selectors';
 import { CanvasLayers } from '../components/CanvasLayers';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** For connect */
 const mapStateToProps = (state, { canvasId, windowId }) => ({
@@ -101,6 +102,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
 );
 

@@ -9,6 +9,7 @@ import {
   getRights,
 } from '../state/selectors';
 import { AttributionPanel } from '../components/AttributionPanel';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -45,6 +46,7 @@ const styles = theme => ({
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
+  withWindowContext,
   connect(mapStateToProps),
   withPlugins('AttributionPanel'),
 );

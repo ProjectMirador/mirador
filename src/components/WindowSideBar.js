@@ -14,7 +14,7 @@ export class WindowSideBar extends Component {
    */
   render() {
     const {
-      classes, direction, t, windowId, sideBarOpen,
+      classes, direction, t, sideBarOpen,
     } = this.props;
 
     return (
@@ -31,7 +31,7 @@ export class WindowSideBar extends Component {
         SlideProps={{ direction: direction === 'rtl' ? 'left' : 'right', mountOnEnter: true, unmountOnExit: true }}
         open={sideBarOpen}
       >
-        <WindowSideBarButtons windowId={windowId} />
+        <WindowSideBarButtons />
       </Drawer>
     );
   }
@@ -42,7 +42,6 @@ WindowSideBar.propTypes = {
   direction: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,
   t: PropTypes.func.isRequired,
-  windowId: PropTypes.string.isRequired,
 };
 
 WindowSideBar.defaultProps = {

@@ -25,10 +25,10 @@ export class WindowCanvasNavigationControls extends Component {
   /** */
   render() {
     const {
-      classes, visible, windowId, zoomToWorld,
+      classes, visible, zoomToWorld,
     } = this.props;
 
-    if (!visible) return (<Typography variant="srOnly" component="div"><ViewerInfo windowId={windowId} /></Typography>);
+    if (!visible) return (<Typography variant="srOnly" component="div"><ViewerInfo /></Typography>);
 
     return (
       <Paper
@@ -46,11 +46,10 @@ export class WindowCanvasNavigationControls extends Component {
       >
         <ZoomControls
           displayDivider={!this.canvasNavControlsAreStacked()}
-          windowId={windowId}
           zoomToWorld={zoomToWorld}
         />
-        <ViewerNavigation windowId={windowId} />
-        <ViewerInfo windowId={windowId} />
+        <ViewerNavigation />
+        <ViewerInfo />
 
         <PluginHook {...this.props} />
       </Paper>
@@ -62,7 +61,6 @@ WindowCanvasNavigationControls.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   size: PropTypes.shape({ width: PropTypes.number }).isRequired,
   visible: PropTypes.bool,
-  windowId: PropTypes.string.isRequired,
   zoomToWorld: PropTypes.func.isRequired,
 };
 

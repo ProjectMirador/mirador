@@ -4,6 +4,7 @@ import cn from 'classnames';
 import Paper from '@material-ui/core/Paper';
 import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
 import ns from '../config/css-ns';
+import WindowContext from '../contexts/WindowContext';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
 import CompanionArea from '../containers/CompanionArea';
@@ -20,7 +21,16 @@ export class Window extends Component {
   /** */
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { windowContext: { id: props.windowId } };
+  }
+
+  /** Update the controlled window context state if the window changes */
+  componentDidUpdate(prevProps) {
+    const { windowId } = this.props;
+
+    if (windowId !== prevProps.windowId) {
+      this.setState({ windowContext: { id: windowId } });
+    }
   }
 
   /** */
@@ -35,16 +45,13 @@ export class Window extends Component {
    */
   wrappedTopBar() {
     const {
-      windowId, workspaceType, windowDraggable,
+      workspaceType, windowDraggable,
     } = this.props;
 
     const topBar = (
       <div>
-        <WindowTopBar
-          windowId={windowId}
-          windowDraggable={windowDraggable}
-        />
-        <IIIFAuthentication windowId={windowId} />
+        <WindowTopBar windowDraggable={windowDraggable} />
+        <IIIFAuthentication />
       </div>
     );
     if (workspaceType === 'mosaic' && windowDraggable) {
@@ -66,55 +73,58 @@ export class Window extends Component {
       manifestError,
     } = this.props;
 
-    const { error, hasError } = this.state;
+    const { error, hasError, windowContext } = this.state;
 
     if (hasError) {
       return (
-        <MinimalWindow windowId={windowId}>
-          <ErrorContent error={error} windowId={windowId} />
-        </MinimalWindow>
+        <WindowContext.Provider value={windowContext}>
+          <MinimalWindow>
+            <ErrorContent error={error} />
+          </MinimalWindow>
+        </WindowContext.Provider>
       );
     }
 
     return (
-      <Paper
-        onFocus={focusWindow}
-        component="section"
-        elevation={1}
-        id={windowId}
-        className={
-          cn(
-            classes.window,
-            ns('window'),
-            maximized ? classes.maximized : null,
-          )
-}
-        aria-label={t('window', { label })}
-      >
-        {this.wrappedTopBar()}
-        { manifestError && <ErrorContent error={{ stack: manifestError }} windowId={windowId} /> }
-        <div className={classes.middle}>
-          <div className={classes.middleLeft}>
-            <div className={classes.primaryWindow}>
-              <PrimaryWindow
-                view={view}
-                windowId={windowId}
-                isFetching={isFetching}
-                sideBarOpen={sideBarOpen}
-              />
+      <WindowContext.Provider value={windowContext}>
+        <Paper
+          onFocus={focusWindow}
+          component="section"
+          elevation={1}
+          id={windowId}
+          className={
+            cn(
+              classes.window,
+              ns('window'),
+              maximized ? classes.maximized : null,
+            )
+  }
+          aria-label={t('window', { label })}
+        >
+          {this.wrappedTopBar()}
+          { manifestError && <ErrorContent error={{ stack: manifestError }} /> }
+          <div className={classes.middle}>
+            <div className={classes.middleLeft}>
+              <div className={classes.primaryWindow}>
+                <PrimaryWindow
+                  view={view}
+                  isFetching={isFetching}
+                  sideBarOpen={sideBarOpen}
+                />
+              </div>
+              <div className={classes.companionAreaBottom}>
+                <CompanionArea position="bottom" />
+              </div>
             </div>
-            <div className={classes.companionAreaBottom}>
-              <CompanionArea windowId={windowId} position="bottom" />
+            <div className={classes.companionAreaRight}>
+              <CompanionArea position="right" />
+              <CompanionArea position="far-right" />
             </div>
           </div>
-          <div className={classes.companionAreaRight}>
-            <CompanionArea windowId={windowId} position="right" />
-            <CompanionArea windowId={windowId} position="far-right" />
-          </div>
-        </div>
-        <CompanionArea windowId={windowId} position="far-bottom" />
-        <PluginHook {...this.props} />
-      </Paper>
+          <CompanionArea position="far-bottom" />
+          <PluginHook {...this.props} />
+        </Paper>
+      </WindowContext.Provider>
     );
   }
 }

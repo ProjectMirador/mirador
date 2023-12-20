@@ -7,6 +7,7 @@ import { ViewerInfo } from '../components/ViewerInfo';
 import {
   getCanvasLabel, getCanvases, getCanvasIndex, getCurrentCanvas,
 } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -44,6 +45,7 @@ const styles = {
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
+  withWindowContext,
   connect(mapStateToProps, null),
   withPlugins('ViewerInfo'),
 );

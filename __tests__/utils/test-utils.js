@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createRootReducer from '../../src/state/reducers/rootReducer';
+import WindowContext from '../../src/contexts/WindowContext';
 
 const rootReducer = createRootReducer();
 
@@ -16,12 +17,19 @@ function renderWithProviders(
     preloadedState = {},
     // Automatically create a store instance if no store was passed in
     store = createStore(rootReducer, preloadedState, applyMiddleware(thunkMiddleware)),
+    windowId,
     ...renderOptions
   } = {},
 ) {
+  const windowContext = windowId ? { id: windowId } : {};
+
   /** :nodoc: */
   function Wrapper({ children }) {
-    return <Provider store={store}>{children}</Provider>;
+    return (
+      <WindowContext.Provider value={windowContext}>
+        <Provider store={store}>{children}</Provider>
+      </WindowContext.Provider>
+    );
   }
 
   Wrapper.propTypes = {

@@ -90,7 +90,6 @@ SearchPanelNavigation.propTypes = {
   selectAnnotation: PropTypes.func.isRequired,
   selectedContentSearchAnnotation: PropTypes.arrayOf(PropTypes.string).isRequired,
   t: PropTypes.func,
-  windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
 SearchPanelNavigation.defaultProps = {
   classes: {},

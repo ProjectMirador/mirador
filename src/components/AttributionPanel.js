@@ -22,7 +22,6 @@ export class AttributionPanel extends Component {
       manifestLogo,
       requiredStatement,
       rights,
-      windowId,
       id,
       classes,
       t,
@@ -32,7 +31,6 @@ export class AttributionPanel extends Component {
       <CompanionWindow
         title={t('attributionTitle')}
         paperClassName={ns('attribution-panel')}
-        windowId={windowId}
         id={id}
       >
         <div className={classes.section}>
@@ -85,7 +83,6 @@ AttributionPanel.propTypes = {
   })),
   rights: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
 };
 
 AttributionPanel.defaultProps = {

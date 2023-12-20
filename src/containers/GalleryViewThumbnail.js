@@ -11,6 +11,7 @@ import {
   getPresentAnnotationsOnSelectedCanvases,
   getCompanionWindowsForContent,
 } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * Styles to be passed to the withStyles HOC
@@ -114,6 +115,7 @@ const mapDispatchToProps = (dispatch, { canvas, id, windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
   // further HOC go here

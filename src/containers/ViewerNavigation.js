@@ -10,6 +10,7 @@ import {
   getPreviousCanvasGrouping,
 } from '../state/selectors';
 import { ViewerNavigation } from '../components/ViewerNavigation';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** */
 const mapStateToProps = (state, { windowId }) => ({
@@ -37,6 +38,7 @@ const styles = {
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ViewerNavigation'),
   // further HOC go here

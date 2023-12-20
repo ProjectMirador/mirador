@@ -6,6 +6,7 @@ import { alpha } from '@material-ui/core/styles/colorManipulator';
 import { withPlugins } from '../extend/withPlugins';
 import { getWorkspace } from '../state/selectors';
 import { WindowCanvasNavigationControls } from '../components/WindowCanvasNavigationControls';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** */
 const mapStateToProps = (state, { windowId }) => ({
@@ -41,6 +42,7 @@ const enhance = compose(
   connect(mapStateToProps),
   withStyles(styles),
   withSize(),
+  withWindowContext,
   withPlugins('WindowCanvasNavigationControls'),
 );
 

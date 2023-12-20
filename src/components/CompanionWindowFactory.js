@@ -40,7 +40,6 @@ export class CompanionWindowFactory extends Component {
   render() {
     const {
       content,
-      windowId,
       id,
       t,
     } = this.props;
@@ -50,10 +49,9 @@ export class CompanionWindowFactory extends Component {
       return (
         <CompanionWindow
           title={t('error')}
-          windowId={windowId}
           id={id}
         >
-          <ErrorContent error={error} windowId={windowId} companionWindowId={id} />
+          <ErrorContent error={error} companionWindowId={id} />
         </CompanionWindow>
       );
     }
@@ -62,7 +60,7 @@ export class CompanionWindowFactory extends Component {
 
     if (!type) return null;
 
-    return createElement(type, { id, windowId });
+    return createElement(type, { id });
   }
 }
 
@@ -70,7 +68,6 @@ CompanionWindowFactory.propTypes = {
   content: PropTypes.string,
   id: PropTypes.string.isRequired,
   t: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
 };
 
 CompanionWindowFactory.defaultProps = {

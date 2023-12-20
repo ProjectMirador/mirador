@@ -63,7 +63,6 @@ export class WindowTopMenuButton extends Component {
           <WindowOptionsIcon />
         </MiradorMenuButton>
         <WindowTopMenu
-          windowId={windowId}
           anchorEl={anchorEl}
           handleClose={this.handleMenuClose}
           id={menuId}

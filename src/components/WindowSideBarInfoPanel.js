@@ -18,7 +18,6 @@ export class WindowSideBarInfoPanel extends Component {
    */
   render() {
     const {
-      windowId,
       id,
       canvasIds,
       classes,
@@ -34,7 +33,6 @@ export class WindowSideBarInfoPanel extends Component {
       <CompanionWindow
         title={t('aboutThisItem')}
         paperClassName={ns('window-sidebar-info-panel')}
-        windowId={windowId}
         id={id}
         titleControls={(
           showLocalePicker
@@ -55,23 +53,22 @@ export class WindowSideBarInfoPanel extends Component {
                 canvasId={canvasId}
                 index={index}
                 totalSize={canvasIds.length}
-                windowId={windowId}
               />
             </div>
           ))
         }
         { collectionPath.length > 0 && (
           <div className={classes.section}>
-            <CollectionInfo id={id} windowId={windowId} />
+            <CollectionInfo id={id} />
           </div>
         )}
 
         <div className={classes.section}>
-          <ManifestInfo id={id} windowId={windowId} />
+          <ManifestInfo id={id} />
         </div>
 
         <div className={classes.section}>
-          <ManifestRelatedLinks id={id} windowId={windowId} />
+          <ManifestRelatedLinks id={id} />
         </div>
       </CompanionWindow>
     );
@@ -88,7 +85,6 @@ WindowSideBarInfoPanel.propTypes = {
   setLocale: PropTypes.func,
   showLocalePicker: PropTypes.bool,
   t: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
 };
 
 WindowSideBarInfoPanel.defaultProps = {

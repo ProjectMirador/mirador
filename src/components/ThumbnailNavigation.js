@@ -180,7 +180,6 @@ export class ThumbnailNavigation extends Component {
       position,
       thumbnailNavigation,
       viewingDirection,
-      windowId,
     } = this.props;
     if (position === 'off') {
       return null;
@@ -190,7 +189,6 @@ export class ThumbnailNavigation extends Component {
       canvasGroupings,
       height: thumbnailNavigation.height - this.spacing - this.scrollbarSize,
       position,
-      windowId,
     };
     return (
       <Paper
@@ -245,7 +243,6 @@ ThumbnailNavigation.propTypes = {
   thumbnailNavigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
   viewingDirection: PropTypes.string,
-  windowId: PropTypes.string.isRequired,
 };
 
 ThumbnailNavigation.defaultProps = {

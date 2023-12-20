@@ -13,6 +13,7 @@ import {
   getSelectedContentSearchAnnotationIds,
   getSelectedAnnotationId,
 } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - used to hook up connect to state
@@ -122,9 +123,10 @@ const styles = theme => ({
 });
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
   withTranslation(),
+  withWindowContext,
+  connect(mapStateToProps, mapDispatchToProps),
   withPlugins('SearchHit'),
 );
 

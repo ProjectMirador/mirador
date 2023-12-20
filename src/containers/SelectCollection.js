@@ -8,6 +8,7 @@ import {
   getWindow,
 } from '../state/selectors';
 import { SelectCollection } from '../components/SelectCollection';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** */
 const mapStateToProps = (state, { windowId }) => {
@@ -29,6 +30,7 @@ const styles = (theme) => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('SelectCollection'),
 );

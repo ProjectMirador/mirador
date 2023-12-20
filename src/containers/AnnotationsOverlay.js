@@ -14,6 +14,7 @@ import {
   getSelectedAnnotationId,
   getCurrentCanvasWorld,
 } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - used to hook up connect to action creators
@@ -48,6 +49,7 @@ const mapDispatchToProps = {
 
 const enhance = compose(
   withTranslation(),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('AnnotationsOverlay'),
 );

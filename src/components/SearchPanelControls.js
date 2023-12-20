@@ -117,7 +117,7 @@ export class SearchPanelControls extends Component {
   /** */
   render() {
     const {
-      classes, companionWindowId, searchIsFetching, t, windowId,
+      classes, companionWindowId, searchIsFetching, t,
     } = this.props;
 
     const { search, suggestions } = this.state;
@@ -159,7 +159,7 @@ export class SearchPanelControls extends Component {
             )}
           />
         </form>
-        <SearchPanelNavigation windowId={windowId} companionWindowId={companionWindowId} />
+        <SearchPanelNavigation companionWindowId={companionWindowId} />
       </>
     );
   }

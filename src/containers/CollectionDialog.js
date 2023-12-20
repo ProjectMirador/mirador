@@ -9,6 +9,7 @@ import {
 } from '../state/selectors';
 import { CollectionDialog } from '../components/CollectionDialog';
 import { withWorkspaceContext } from '../contexts/WorkspaceContext';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -87,6 +88,7 @@ const enhance = compose(
   withTranslation(),
   withStyles(styles),
   withWorkspaceContext,
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CollectionDialog'),
 );

@@ -1,5 +1,4 @@
 import { Component, lazy, Suspense } from 'react';
-import PropTypes from 'prop-types';
 import WindowCanvasNavigationControls from '../containers/WindowCanvasNavigationControls';
 
 const OSDViewer = lazy(() => import('../containers/OpenSeadragonViewer'));
@@ -25,24 +24,16 @@ export class WindowViewer extends Component {
    * Renders things
    */
   render() {
-    const { windowId } = this.props;
-
     const { hasError } = this.state;
 
     if (hasError) return null;
 
     return (
       <Suspense fallback={<div />}>
-        <OSDViewer
-          windowId={windowId}
-        >
-          <WindowCanvasNavigationControls windowId={windowId} />
+        <OSDViewer>
+          <WindowCanvasNavigationControls />
         </OSDViewer>
       </Suspense>
     );
   }
 }
-
-WindowViewer.propTypes = {
-  windowId: PropTypes.string.isRequired,
-};

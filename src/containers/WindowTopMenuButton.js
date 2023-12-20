@@ -3,6 +3,7 @@ import { withTranslation } from 'react-i18next';
 import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import { WindowTopMenuButton } from '../components/WindowTopMenuButton';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  *
@@ -18,6 +19,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   withPlugins('WindowTopMenuButton'),
 );
 

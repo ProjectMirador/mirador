@@ -22,17 +22,16 @@ export class WindowSideBarAnnotationsPanel extends Component {
   */
   render() {
     const {
-      annotationCount, classes, canvasIds, t, windowId, id,
+      annotationCount, classes, canvasIds, t, id,
     } = this.props;
     return (
       <CompanionWindow
         title={t('annotations')}
         paperClassName={ns('window-sidebar-annotation-panel')}
-        windowId={windowId}
         id={id}
         ref={this.containerRef}
         otherRef={this.containerRef}
-        titleControls={<AnnotationSettings windowId={windowId} />}
+        titleControls={<AnnotationSettings />}
       >
         <div className={classes.section}>
           <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
@@ -45,7 +44,6 @@ export class WindowSideBarAnnotationsPanel extends Component {
             key={canvasId}
             index={index}
             totalSize={canvasIds.length}
-            windowId={windowId}
           />
         ))}
       </CompanionWindow>
@@ -59,7 +57,6 @@ WindowSideBarAnnotationsPanel.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   id: PropTypes.string.isRequired,
   t: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
 };
 
 WindowSideBarAnnotationsPanel.defaultProps = {

@@ -66,7 +66,6 @@ export class WindowSideBarCanvasPanel extends Component {
       t,
       variant,
       showToc,
-      windowId,
     } = this.props;
 
     let listComponent;
@@ -76,7 +75,6 @@ export class WindowSideBarCanvasPanel extends Component {
         <SidebarIndexTableOfContents
           id={id}
           containerRef={this.containerRef}
-          windowId={windowId}
         />
       );
     } else {
@@ -84,7 +82,6 @@ export class WindowSideBarCanvasPanel extends Component {
         <SidebarIndexList
           id={id}
           containerRef={this.containerRef}
-          windowId={windowId}
         />
       );
     }
@@ -93,7 +90,6 @@ export class WindowSideBarCanvasPanel extends Component {
       <CompanionWindow
         title={t('canvasIndex')}
         id={id}
-        windowId={windowId}
         ref={this.containerRef}
         otherRef={this.containerRef}
         titleControls={(
@@ -170,7 +166,6 @@ WindowSideBarCanvasPanel.propTypes = {
   updateSequence: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['item', 'thumbnail', 'tableOfContents']).isRequired,
-  windowId: PropTypes.string.isRequired,
 };
 
 WindowSideBarCanvasPanel.defaultProps = {

@@ -10,6 +10,7 @@ import {
   getVisibleCanvasIds,
 } from '../state/selectors';
 import { SidebarIndexList } from '../components/SidebarIndexList';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -45,6 +46,7 @@ const styles = theme => ({
 const enhance = compose(
   withStyles(styles),
   withTranslation(),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('SidebarIndexList'),
 );

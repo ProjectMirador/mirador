@@ -6,6 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getWindowConfig, isFocused } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => {
@@ -60,6 +61,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowTopBar'),
 );

@@ -29,41 +29,31 @@ export class PrimaryWindow extends Component {
   renderViewer() {
     const {
       audioResources, isCollection,
-      isFetching, videoResources, view, windowId,
+      isFetching, videoResources, view,
     } = this.props;
     if (isCollection) {
       return (
-        <SelectCollection
-          windowId={windowId}
-        />
+        <SelectCollection />
       );
     }
     if (isFetching === false) {
       if (view === 'gallery') {
         return (
-          <GalleryView
-            windowId={windowId}
-          />
+          <GalleryView />
         );
       }
       if (videoResources.length > 0) {
         return (
-          <VideoViewer
-            windowId={windowId}
-          />
+          <VideoViewer />
         );
       }
       if (audioResources.length > 0) {
         return (
-          <AudioViewer
-            windowId={windowId}
-          />
+          <AudioViewer />
         );
       }
       return (
-        <WindowViewer
-          windowId={windowId}
-        />
+        <WindowViewer />
       );
     }
     return null;
@@ -74,13 +64,13 @@ export class PrimaryWindow extends Component {
    */
   render() {
     const {
-      isCollectionDialogVisible, windowId, classes, children,
+      isCollectionDialogVisible, classes, children,
     } = this.props;
     return (
       <div className={classNames(ns('primary-window'), classes.primaryWindow)}>
-        <WindowSideBar windowId={windowId} />
-        <CompanionArea windowId={windowId} position="left" />
-        { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
+        <WindowSideBar />
+        <CompanionArea position="left" />
+        { isCollectionDialogVisible && <CollectionDialog /> }
         <Suspense fallback={<div />}>
           {children || this.renderViewer()}
         </Suspense>
@@ -98,7 +88,6 @@ PrimaryWindow.propTypes = {
   isFetching: PropTypes.bool,
   videoResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
-  windowId: PropTypes.string.isRequired,
 };
 
 PrimaryWindow.defaultProps = {

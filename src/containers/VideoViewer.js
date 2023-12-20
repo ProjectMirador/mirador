@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core';
 import { withPlugins } from '../extend/withPlugins';
 import { VideoViewer } from '../components/VideoViewer';
 import { getConfig, getVisibleCanvasCaptions, getVisibleCanvasVideoResources } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** */
 const mapStateToProps = (state, { windowId }) => (
@@ -31,6 +32,7 @@ const styles = () => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps, null),
   withPlugins('VideoViewer'),
 );

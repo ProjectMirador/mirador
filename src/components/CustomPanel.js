@@ -15,14 +15,12 @@ export class CustomPanel extends Component {
       children,
       t,
       title,
-      windowId,
     } = this.props;
 
     return (
       <CompanionWindow
         title={t(title)}
         id={id}
-        windowId={windowId}
       >
         {children}
       </CompanionWindow>
@@ -35,7 +33,6 @@ CustomPanel.propTypes = {
   id: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  windowId: PropTypes.string.isRequired,
 };
 
 CustomPanel.defaultProps = {

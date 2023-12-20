@@ -8,6 +8,7 @@ import {
   getWindow,
 } from '../state/selectors';
 import { AnnotationSettings } from '../components/AnnotationSettings';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * Mapping redux state to component props using connect
@@ -31,6 +32,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
 
 const enhance = compose(
   withTranslation(),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('AnnotationSettings'),
 );

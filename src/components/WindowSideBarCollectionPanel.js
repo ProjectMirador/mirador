@@ -85,13 +85,11 @@ export class WindowSideBarCollectionPanel extends Component {
       updateWindow,
       t,
       variant,
-      windowId,
     } = this.props;
 
     return (
       <CompanionWindow
         title={t(this.isMultipart() ? 'multipartCollection' : 'collection')}
-        windowId={windowId}
         id={id}
         titleControls={(
           <>
@@ -195,7 +193,6 @@ WindowSideBarCollectionPanel.propTypes = {
   updateCompanionWindow: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
   variant: PropTypes.string,
-  windowId: PropTypes.string.isRequired,
 };
 
 WindowSideBarCollectionPanel.defaultProps = {

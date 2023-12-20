@@ -7,6 +7,7 @@ import { LayersPanel } from '../components/LayersPanel';
 import {
   getVisibleCanvasIds,
 } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -26,6 +27,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps),
   withPlugins('LayersPanel'),
 );

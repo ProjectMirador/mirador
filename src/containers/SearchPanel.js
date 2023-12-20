@@ -6,6 +6,7 @@ import * as actions from '../state/actions';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchPanel } from '../components/SearchPanel';
 import { getManifestSearchService, getSearchQuery, getWindow } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** */
 const mapStateToProps = (state, { id, windowId }) => ({
@@ -41,9 +42,10 @@ const styles = theme => ({
 });
 
 const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
   withStyles(styles),
   withTranslation(),
+  withWindowContext,
+  connect(mapStateToProps, mapDispatchToProps),
   withPlugins('SearchPanel'),
 );
 

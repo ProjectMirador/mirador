@@ -27,7 +27,7 @@ export class WindowTopMenu extends Component {
   render() {
     const {
       container, handleClose, showThumbnailNavigationSettings,
-      toggleDraggingEnabled, windowId, anchorEl, open,
+      toggleDraggingEnabled, anchorEl, open,
     } = this.props;
 
     return (
@@ -51,9 +51,9 @@ export class WindowTopMenu extends Component {
         anchorEl={anchorEl}
         open={open}
       >
-        <WindowViewSettings windowId={windowId} handleClose={handleClose} />
+        <WindowViewSettings handleClose={handleClose} />
         {showThumbnailNavigationSettings
-          && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}
+          && <WindowThumbnailSettings handleClose={handleClose} />}
         <PluginHookWithHeader {...this.props} />
       </Menu>
     );
@@ -67,7 +67,6 @@ WindowTopMenu.propTypes = {
   open: PropTypes.bool,
   showThumbnailNavigationSettings: PropTypes.bool,
   toggleDraggingEnabled: PropTypes.func.isRequired,
-  windowId: PropTypes.string.isRequired,
 };
 
 WindowTopMenu.defaultProps = {

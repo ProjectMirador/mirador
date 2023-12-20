@@ -9,6 +9,7 @@ import {
   getCanvasDescription,
 } from '../state/selectors';
 import { CanvasInfo } from '../components/CanvasInfo';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -25,6 +26,7 @@ const mapStateToProps = (state, { canvasId, id, windowId }) => ({
 
 const enhance = compose(
   withTranslation(),
+  withWindowContext,
   connect(mapStateToProps),
   withPlugins('CanvasInfo'),
 );

@@ -7,7 +7,6 @@ function createWrapper({ ...props }) {
     <WindowSideBar
       classes={{ drawer: 'test-drawer' }}
       t={k => k}
-      windowId="xyz"
       {...props}
     />,
     {
@@ -19,6 +18,7 @@ function createWrapper({ ...props }) {
           },
         },
       },
+      windowId: 'xyz',
     },
   );
 }

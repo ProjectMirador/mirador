@@ -38,7 +38,6 @@ export class SearchResults extends Component {
       containerRef,
       searchAnnotations,
       searchHits,
-      windowId,
     } = this.props;
     const {
       focused,
@@ -55,7 +54,6 @@ export class SearchResults extends Component {
           focused={focused}
           index={index}
           total={searchAnnotations.length}
-          windowId={windowId}
           showDetails={this.toggleFocus}
         />
       ));
@@ -71,7 +69,6 @@ export class SearchResults extends Component {
         hit={hit}
         index={index}
         total={searchHits.length}
-        windowId={windowId}
         showDetails={this.toggleFocus}
       />
     ));

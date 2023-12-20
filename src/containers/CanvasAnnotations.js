@@ -11,6 +11,7 @@ import {
   getConfig,
 } from '../state/selectors';
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * @param {Array} resources
@@ -78,6 +79,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CanvasAnnotations'),
 );

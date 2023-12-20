@@ -21,7 +21,6 @@ export class SearchPanel extends Component {
     const {
       classes,
       fetchSearch,
-      windowId,
       id,
       query,
       removeSearch,
@@ -53,15 +52,13 @@ export class SearchPanel extends Component {
             }
           </>
         )}
-        windowId={windowId}
         id={id}
-        titleControls={<SearchPanelControls companionWindowId={id} windowId={windowId} />}
+        titleControls={<SearchPanelControls companionWindowId={id} />}
         ref={this.containerRef}
       >
         <SearchResults
           containerRef={this.containerRef}
           companionWindowId={id}
-          windowId={windowId}
         />
         {
           fetchSearch && suggestedSearches && query === '' && suggestedSearches.map(search => (
@@ -91,7 +88,6 @@ SearchPanel.propTypes = {
   }).isRequired,
   suggestedSearches: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func,
-  windowId: PropTypes.string.isRequired,
 };
 
 SearchPanel.defaultProps = {

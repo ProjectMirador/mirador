@@ -6,6 +6,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { MinimalWindow } from '../components/MinimalWindow';
 import { getWindowConfig } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => ({
@@ -58,6 +59,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('MinimalWindow'),
 );

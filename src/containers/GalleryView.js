@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { GalleryView } from '../components/GalleryView';
 import { getCanvases, getSequenceViewingDirection } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -35,6 +36,7 @@ const styles = theme => ({
 
 const enhance = compose(
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps),
   withPlugins('GalleryView'),
   // further HOC go here

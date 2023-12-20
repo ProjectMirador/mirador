@@ -15,14 +15,12 @@ export class LayersPanel extends Component {
       canvasIds,
       id,
       t,
-      windowId,
     } = this.props;
 
     return (
       <CompanionWindow
         title={t('layers')}
         id={id}
-        windowId={windowId}
       >
         {canvasIds.map((canvasId, index) => (
           <CanvasLayers
@@ -30,7 +28,6 @@ export class LayersPanel extends Component {
             index={index}
             key={canvasId}
             totalSize={canvasIds.length}
-            windowId={windowId}
           />
         ))}
       </CompanionWindow>
@@ -42,7 +39,6 @@ LayersPanel.propTypes = {
   canvasIds: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   t: PropTypes.func.isRequired,
-  windowId: PropTypes.string.isRequired,
 };
 
 LayersPanel.defaultProps = {

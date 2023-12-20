@@ -6,14 +6,15 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getCurrentCanvas } from '../state/selectors';
 import { ThumbnailCanvasGrouping } from '../components/ThumbnailCanvasGrouping';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
  * @memberof ThumbnailCanvasGrouping
  * @private
  */
-const mapDispatchToProps = (dispatch, { data }) => ({
-  setCanvas: (...args) => dispatch(actions.setCanvas(data.windowId, ...args)),
+const mapDispatchToProps = (dispatch, { windowId }) => ({
+  setCanvas: (...args) => dispatch(actions.setCanvas(windowId, ...args)),
 });
 
 /**
@@ -21,8 +22,8 @@ const mapDispatchToProps = (dispatch, { data }) => ({
  * @memberof ThumbnailCanvasGrouping
  * @private
  */
-const mapStateToProps = (state, { data }) => ({
-  currentCanvasId: (getCurrentCanvas(state, { windowId: data.windowId }) || {}).id,
+const mapStateToProps = (state, { windowId }) => ({
+  currentCanvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
 });
 
 /**
@@ -52,6 +53,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ThumbnailCanvasGrouping'),
 );

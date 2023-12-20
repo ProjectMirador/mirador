@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { alpha } from '@material-ui/core/styles/colorManipulator';
 import { withPlugins } from '../extend/withPlugins';
 import { WindowAuthenticationBar } from '../components/WindowAuthenticationBar';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * @param theme
@@ -57,6 +58,7 @@ const styles = theme => ({
 const enhance = compose(
   withTranslation(),
   withStyles(styles),
+  withWindowContext,
   withPlugins('WindowAuthenticationBar'),
 );
 

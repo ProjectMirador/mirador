@@ -28,14 +28,13 @@ export class IIIFAuthentication extends Component {
   /** */
   defaultAuthBarProps() {
     const {
-      authServiceId, windowId, status, logoutServiceId,
+      authServiceId, status, logoutServiceId,
     } = this.props;
 
     return {
       authServiceId,
       hasLogoutService: !!logoutServiceId,
       status,
-      windowId,
     };
   }
 

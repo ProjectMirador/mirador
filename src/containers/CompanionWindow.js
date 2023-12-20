@@ -8,6 +8,7 @@ import { withRef } from '../extend/withRef';
 import * as actions from '../state/actions';
 import { getCompanionWindow, getThemeDirection, getWindowConfig } from '../state/selectors';
 import { CompanionWindow } from '../components/CompanionWindow';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -135,6 +136,7 @@ const enhance = compose(
   withTranslation(),
   withStyles(styles),
   withSize(),
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CompanionWindow'),
 );
