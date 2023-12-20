@@ -12,7 +12,7 @@ const Root = styled('div', { name: 'WorkspaceArea', slot: 'root' })(({ theme }) 
   const getBackgroundColor = theme.palette.mode === 'light' ? darken : lighten;
 
   return {
-    background: getBackgroundColor(theme.palette.grey.A200, 0.1),
+    background: getBackgroundColor(theme.palette.shades.light, 0.1),
     bottom: 0,
     display: 'flex',
     flexDirection: 'column',
