@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
 import Window from '../containers/Window';
@@ -71,11 +70,7 @@ export class Workspace extends Component {
     const { t } = this.props;
 
     return (
-      <Paper
-        style={{
-          height: '100%',
-        }}
-      >
+      <Root>
         <Grid
           alignItems="center"
           container
@@ -96,7 +91,7 @@ export class Workspace extends Component {
             </Typography>
           </Grid>
         </Grid>
-      </Paper>
+      </Root>
     );
   }
 
