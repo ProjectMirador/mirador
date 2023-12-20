@@ -83,22 +83,6 @@ describe('Workspace', () => {
     });
   });
 
-  describe('when the workspace control panel is displayed', () => {
-    it('has the *-with-control-panel class applied', () => {
-      const { container } = createWrapper();
-
-      expect(container.querySelector('.mirador-workspace-with-control-panel')).toBeInTheDocument();
-    });
-  });
-
-  describe('when the workspace control panel is not displayed', () => {
-    it('does not have the *-with-control-panel class applied', () => {
-      const { container } = createWrapper({ isWorkspaceControlPanelVisible: false });
-
-      expect(container.querySelector('.mirador-workspace-with-control-panel')).not.toBeInTheDocument();
-    });
-  });
-
   describe('drag and drop', () => {
     it('adds a new catalog entry from a manifest', async () => {
       const manifestJson = '{ "data": "123" }';
@@ -106,7 +90,7 @@ describe('Workspace', () => {
       const addWindow = jest.fn();
 
       const { container } = createWrapper({ addWindow });
-      const dropTarget = container.querySelector('.mirador-workspace-with-control-panel');
+      const dropTarget = container.querySelector('.mirador-workspace-viewport');
 
       const file = new File([manifestJson], 'manifest.json', { type: 'application/json' });
       const dataTransfer = {
@@ -129,7 +113,7 @@ describe('Workspace', () => {
 
       const { container } = createWrapper({ addWindow, allowNewWindows: false });
 
-      const dropTarget = container.querySelector('.mirador-workspace-with-control-panel');
+      const dropTarget = container.querySelector('.mirador-workspace-viewport');
 
       const file = new File([manifestJson], 'manifest.json', { type: 'application/json' });
       const dataTransfer = {

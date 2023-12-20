@@ -4,16 +4,17 @@ import { styled } from '@mui/material/styles';
 import Slide from '@mui/material/Slide';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeftSharp';
 import ArrowRightIcon from '@mui/icons-material/ArrowRightSharp';
+import classNames from 'classnames';
 import CompanionWindowFactory from '../containers/CompanionWindowFactory';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
-const Root = styled('div', { name: 'CompanionArea', slot: 'root' })(({ position, theme }) => ({
+const Root = styled('div', { name: 'CompanionArea', slot: 'root' })(({ ownerState, theme }) => ({
   display: 'flex',
   minHeight: 0,
   position: 'relative',
   zIndex: theme.zIndex.appBar - 2,
-  ...((position === 'bottom' || position === 'far-bottom') && {
+  ...((ownerState.position === 'bottom' || ownerState.position === 'far-bottom') && {
     flexDirection: 'column',
     width: '100%',
   }),
@@ -89,12 +90,13 @@ export class CompanionArea extends Component {
   /** */
   render() {
     const {
+      className,
       companionWindowIds, companionAreaOpen, setCompanionAreaOpen,
       position, sideBarOpen, t, windowId,
     } = this.props;
-    const className = [this.areaLayoutClass(), ns(`companion-area-${position}`)].join(' ');
+    const classes = classNames(this.areaLayoutClass(), ns(`companion-area-${position}`), className);
     return (
-      <Root className={className}>
+      <Root ownerState={this.props} className={classes}>
         <Slide in={companionAreaOpen} direction={this.slideDirection()}>
           <Container
             ownerState={this.props}
@@ -125,6 +127,7 @@ export class CompanionArea extends Component {
 
 CompanionArea.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
+  className: PropTypes.string,
   companionAreaOpen: PropTypes.bool.isRequired,
   companionWindowIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   direction: PropTypes.string.isRequired,
@@ -137,6 +140,7 @@ CompanionArea.propTypes = {
 
 CompanionArea.defaultProps = {
   classes: {},
+  className: undefined,
   setCompanionAreaOpen: () => {},
   sideBarOpen: false,
 };

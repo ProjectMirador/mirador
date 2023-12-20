@@ -1,6 +1,7 @@
 import { Component, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
+import classNames from 'classnames';
 import WindowSideBar from '../containers/WindowSideBar';
 import CompanionArea from '../containers/CompanionArea';
 import CollectionDialog from '../containers/CollectionDialog';
@@ -16,7 +17,7 @@ GalleryView.displayName = 'GalleryView';
 SelectCollection.displayName = 'SelectCollection';
 WindowViewer.displayName = 'WindowViewer';
 
-const StyledPrimaryWindowContainer = styled('div')(() => ({
+const Root = styled('div', { name: 'PrimaryWindow', slot: 'root' })(() => ({
   display: 'flex',
   flex: 1,
   position: 'relative',
@@ -80,17 +81,18 @@ export class PrimaryWindow extends Component {
    */
   render() {
     const {
-      isCollectionDialogVisible, windowId, children,
+      isCollectionDialogVisible, windowId, children, className,
     } = this.props;
+
     return (
-      <StyledPrimaryWindowContainer data-testid="test-window" className={ns('primary-window')}>
+      <Root data-testid="test-window" className={classNames(ns('primary-window'), className)}>
         <WindowSideBar windowId={windowId} />
         <CompanionArea windowId={windowId} position="left" />
         { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
         <Suspense fallback={<div />}>
           {children || this.renderViewer()}
         </Suspense>
-      </StyledPrimaryWindowContainer>
+      </Root>
     );
   }
 }
@@ -98,6 +100,7 @@ export class PrimaryWindow extends Component {
 PrimaryWindow.propTypes = {
   audioResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   children: PropTypes.node,
+  className: PropTypes.string,
   isCollection: PropTypes.bool,
   isCollectionDialogVisible: PropTypes.bool,
   isFetching: PropTypes.bool,
@@ -109,6 +112,7 @@ PrimaryWindow.propTypes = {
 PrimaryWindow.defaultProps = {
   audioResources: [],
   children: undefined,
+  className: undefined,
   isCollection: false,
   isCollectionDialogVisible: false,
   isFetching: false,

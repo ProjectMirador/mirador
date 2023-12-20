@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
 import Window from '../containers/Window';
@@ -12,23 +11,10 @@ import WorkspaceElastic from '../containers/WorkspaceElastic';
 import ns from '../config/css-ns';
 import { IIIFDropTarget } from './IIIFDropTarget';
 
-const Root = styled('div', { name: 'Workspace', slot: 'root' })(({ ownerState, theme }) => ({
-  '@media (min-width: 600px)': {
-    ...(ownerState.isWorkspaceControlPanelVisible && {
-      paddingLeft: theme.spacing(8.5),
-      paddingTop: 0,
-    }),
-  },
-  ...(ownerState.isWorkspaceControlPanelVisible && {
-    paddingTop: theme.spacing(9.25),
-  }),
-  bottom: 0,
-  left: 0,
-  margin: 0,
-  overflow: 'hidden',
-  position: 'absolute',
-  right: 0,
-  top: 0,
+const Root = styled('div', { name: 'Workspace', slot: 'root' })(() => ({
+  height: '100%',
+  position: 'relative',
+  width: '100%',
 }));
 
 /**
@@ -84,11 +70,7 @@ export class Workspace extends Component {
     const { t } = this.props;
 
     return (
-      <Paper
-        style={{
-          height: '100%',
-        }}
-      >
+      <Root>
         <Grid
           alignItems="center"
           container
@@ -109,7 +91,7 @@ export class Workspace extends Component {
             </Typography>
           </Grid>
         </Grid>
-      </Paper>
+      </Root>
     );
   }
 
@@ -135,7 +117,7 @@ export class Workspace extends Component {
    * render
    */
   render() {
-    const { isWorkspaceControlPanelVisible, t } = this.props;
+    const { t } = this.props;
 
     return (
       <IIIFDropTarget onDrop={this.handleDrop}>
@@ -144,7 +126,6 @@ export class Workspace extends Component {
           className={
             classNames(
               ns('workspace-viewport'),
-              (isWorkspaceControlPanelVisible && ns('workspace-with-control-panel')),
             )
           }
         >
@@ -159,7 +140,6 @@ export class Workspace extends Component {
 Workspace.propTypes = {
   addWindow: PropTypes.func,
   allowNewWindows: PropTypes.bool,
-  isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   maximizedWindowIds: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func.isRequired,
   windowIds: PropTypes.arrayOf(PropTypes.string),

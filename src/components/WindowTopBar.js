@@ -45,10 +45,11 @@ export class WindowTopBar extends Component {
       removeWindow, windowId, toggleWindowSideBar, t,
       maximizeWindow, maximized, minimizeWindow, allowClose, allowMaximize,
       focusWindow, allowFullscreen, allowTopMenuButton, allowWindowSideBar,
+      component,
     } = this.props;
 
     return (
-      <Root component="nav" aria-label={t('windowNavigation')} position="relative" color="default" enableColorOnDark>
+      <Root component={component} aria-label={t('windowNavigation')} position="relative" color="default" enableColorOnDark>
         <StyledToolbar
           disableGutters
           onMouseDown={focusWindow}
@@ -106,6 +107,7 @@ WindowTopBar.propTypes = {
   allowMaximize: PropTypes.bool,
   allowTopMenuButton: PropTypes.bool,
   allowWindowSideBar: PropTypes.bool,
+  component: PropTypes.elementType,
   focused: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
   focusWindow: PropTypes.func,
   maximized: PropTypes.bool,
@@ -124,6 +126,7 @@ WindowTopBar.defaultProps = {
   allowMaximize: true,
   allowTopMenuButton: true,
   allowWindowSideBar: true,
+  component: 'nav',
   focused: false,
   focusWindow: () => {},
   maximized: false,

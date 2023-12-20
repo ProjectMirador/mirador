@@ -6,10 +6,14 @@ import WindowSideBarButtons from '../containers/WindowSideBarButtons';
 
 const Root = styled(Drawer, { name: 'WindowSideBar', slot: 'root' })(({ theme }) => ({
   flexShrink: 0,
-  height: '100%',
   order: -1000,
   zIndex: theme.zIndex.appBar - 1,
 }));
+
+const Nav = styled('nav', { name: 'WindowSideBar', slot: 'nav' })({
+  position: 'relative !important',
+  width: 48,
+});
 
 /**
  * WindowSideBar
@@ -31,15 +35,7 @@ export class WindowSideBar extends Component {
         anchor={direction === 'rtl' ? 'right' : 'left'}
         PaperProps={{
           'aria-label': t('sidebarPanelsNavigation'),
-          component: 'nav',
-          sx: {
-            borderBlock: 0,
-            borderInlineStart: 0,
-            height: '100%',
-            overflowX: 'hidden',
-            position: 'relative',
-            width: 48,
-          },
+          component: Nav,
           variant: 'outlined',
         }}
         SlideProps={{ direction: direction === 'rtl' ? 'left' : 'right', mountOnEnter: true, unmountOnExit: true }}

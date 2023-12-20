@@ -25,13 +25,6 @@ const StyledWorkspaceAdd = styled('div')(() => ({
   height: '100%',
   overflowX: 'hidden',
   overflowY: 'auto',
-  paddingTop: 68,
-  // injection order matters
-  // eslint-disable-next-line sort-keys
-  '@media (min-width: 600px)': {
-    paddingLeft: 68,
-    paddingTop: 0,
-  },
 }));
 
 const StyledMiradorMenuButton = styled(MiradorMenuButton)(() => ({
