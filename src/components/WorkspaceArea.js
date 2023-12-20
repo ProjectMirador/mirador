@@ -8,7 +8,7 @@ import WorkspaceAdd from '../containers/WorkspaceAdd';
 import BackgroundPluginArea from '../containers/BackgroundPluginArea';
 import ns from '../config/css-ns';
 
-const StyledMain = styled('main')(({ theme }) => {
+const Root = styled('main', { name: 'WorkspaceArea', slot: 'root' })(({ theme }) => {
   const getBackgroundColor = theme.palette.mode === 'light' ? darken : lighten;
 
   return {
@@ -47,7 +47,7 @@ export class WorkspaceArea extends Component {
           isWorkspaceControlPanelVisible
             && <WorkspaceControlPanel variant={controlPanelVariant} />
         }
-        <StyledMain
+        <Root
           className={ns('viewer')}
           lang={lang}
           aria-label={t('workspace')}
@@ -60,7 +60,7 @@ export class WorkspaceArea extends Component {
           }
           <ErrorDialog />
           <BackgroundPluginArea />
-        </StyledMain>
+        </Root>
       </>
     );
   }
