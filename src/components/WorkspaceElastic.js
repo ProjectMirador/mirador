@@ -13,7 +13,7 @@ const StyledRnd = styled(Rnd)({
   transitionDuration: '.7s',
   // order matters
   // eslint-disable-next-line sort-keys
-  '& .react-draggable-dragging': {
+  '&.react-draggable-dragging': {
     transitionDuration: 'unset',
   },
 });
