@@ -42,7 +42,7 @@ export class WorkspaceArea extends Component {
         >
           {
             isWorkspaceAddVisible
-              ? <WorkspaceAdd />
+              ? <WorkspaceAdd isWorkspaceControlPanelVisible={isWorkspaceControlPanelVisible} />
               : <Workspace />
           }
           <ErrorDialog />

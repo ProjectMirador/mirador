@@ -63,10 +63,7 @@ const styles = theme => ({
   },
   paper: {
     borderTop: '0',
-    left: '0',
-    [theme.breakpoints.up('sm')]: {
-      left: '65px',
-    },
+    left: 'unset',
   },
   typographyBody: {
     flexGrow: 1,
@@ -82,8 +79,10 @@ const styles = theme => ({
   // eslint-disable-next-line sort-keys
   '@media (min-width: 600px)': {
     workspaceAdd: {
-      paddingLeft: 68,
       paddingTop: 0,
+    },
+    workspaceAddMargin: {
+      marginLeft: 68,
     },
   },
 });

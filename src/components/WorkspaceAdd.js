@@ -28,12 +28,20 @@ export class WorkspaceAdd extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { addResourcesOpen: false };
     this.ref = createRef();
+    this.state = { addResourcesOpen: false, refWidth: '100%' };
 
     this.onSubmit = this.onSubmit.bind(this);
     this.setAddResourcesVisibility = this.setAddResourcesVisibility.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
+
+    this.updateRefWidth = this.updateRefWidth.bind(this);
+  }
+
+  /** */
+  componentDidMount() {
+    window.addEventListener('resize', this.updateRefWidth);
+    this.updateRefWidth();
   }
 
   /** */
@@ -70,14 +78,22 @@ export class WorkspaceAdd extends Component {
     }
   }
 
+  /** Update ref width */
+  updateRefWidth() {
+    if (this.ref.current) {
+      const refWidth = this.ref.current.offsetWidth;
+      this.setState({ refWidth });
+    }
+  }
+
   /**
    * render
    */
   render() {
     const {
-      catalog, setWorkspaceAddVisibility, t, classes,
+      catalog, setWorkspaceAddVisibility, t, classes, isWorkspaceControlPanelVisible,
     } = this.props;
-    const { addResourcesOpen } = this.state;
+    const { addResourcesOpen, refWidth } = this.state;
 
     const manifestList = catalog.map((resource, index) => (
       <ManifestListItem
@@ -91,7 +107,14 @@ export class WorkspaceAdd extends Component {
 
     return (
       <IIIFDropTarget onDrop={this.handleDrop}>
-        <div ref={this.ref} className={classNames(ns('workspace-add'), classes.workspaceAdd)}>
+        <div
+          ref={this.ref}
+          className={classNames(
+            ns('workspace-add'),
+            classes.workspaceAdd,
+            { [classes.workspaceAddMargin]: isWorkspaceControlPanelVisible },
+          )}
+        >
           {catalog.length < 1 ? (
             <Grid
               alignItems="center"
@@ -146,6 +169,9 @@ export class WorkspaceAdd extends Component {
               hideBackdrop: true,
               style: { position: 'absolute' },
             }}
+            PaperProps={{
+              style: { width: refWidth },
+            }}
           >
             <Paper
               className={classes.form}
@@ -172,6 +198,7 @@ export class WorkspaceAdd extends Component {
             </Paper>
           </Drawer>
         </div>
+
       </IIIFDropTarget>
     );
   }
@@ -184,6 +211,7 @@ WorkspaceAdd.propTypes = {
     provider: PropTypes.string,
   })),
   classes: PropTypes.objectOf(PropTypes.string),
+  isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   t: PropTypes.func,
 };
