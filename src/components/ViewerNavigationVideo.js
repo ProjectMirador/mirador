@@ -1,13 +1,13 @@
-import ClosedCaption from '@material-ui/icons/ClosedCaption';
-import ClosedCaptionOutlined from '@material-ui/icons/ClosedCaptionOutlined';
+import ClosedCaption from '@mui/icons-material/ClosedCaption';
+import ClosedCaptionOutlined from '@mui/icons-material/ClosedCaptionOutlined';
 import { Component } from 'react';
-import PauseRoundedIcon from '@material-ui/icons/PauseRounded';
-import PlayArrowRoundedIcon from '@material-ui/icons/PlayArrowRounded';
+import PauseRoundedIcon from '@mui/icons-material/PauseRounded';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import PropTypes from 'prop-types';
-import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
-import VolumeOffIcon from '@material-ui/icons/VolumeOff';
-import VolumeUpIcon from '@material-ui/icons/VolumeUp';
+import Slider from '@mui/material/Slider';
+import Typography from '@mui/material/Typography';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 

@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { ViewerNavigationVideo } from '../components/ViewerNavigationVideo';
@@ -69,7 +68,6 @@ const styles = {
 };
 
 const enhance = compose(
-  withStyles(styles),
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ViewerNavigationVideo'),

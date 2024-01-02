@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { AnnotationManifestsAccordion } from '../components/AnnotationManifestsAccordion';
 import { getConfig } from '../state/selectors';
@@ -32,7 +31,6 @@ const styles = theme => ({
 
 const enhance = compose(
   withTranslation(),
-  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('AnnotationManifestsAccordion'),
 );

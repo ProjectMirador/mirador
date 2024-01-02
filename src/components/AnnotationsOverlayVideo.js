@@ -6,7 +6,7 @@ import flatten from 'lodash/flatten';
 import sortBy from 'lodash/sortBy';
 import xor from 'lodash/xor';
 import ResizeObserver from 'react-resize-observer';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@mui/material/CircularProgress';
 import CanvasOverlayVideo from '../lib/CanvasOverlayVideo';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';

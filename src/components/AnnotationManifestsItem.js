@@ -1,11 +1,11 @@
 import { Component } from 'react';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import {
   Card, CardActionArea, CardActions, CardContent, CardMedia, Fab,
-} from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
+} from '@mui/material';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 
 /**
  * AnnotationManifestsItem
