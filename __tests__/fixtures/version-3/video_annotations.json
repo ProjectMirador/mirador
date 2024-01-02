@@ -1,0 +1,57 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/manifest.json",
+  "type": "Manifest",
+  "label": { "en": [ "Video Example 3" ] },
+  "items": [
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0003-mvm-video-annot/canvas",
+      "type": "Canvas",
+      "height": 360,
+      "width": 640,
+      "duration": 572.034,
+      "items": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0003-mvm-video-annot/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.io/api/cookbook/recipe/0003-mvm-video-annot/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://fixtures.iiif.io/video/indiana/lunchroom_manners/high/lunchroom_manners_1024kb.mp4",
+                "type": "Video",
+                "height": 360,
+                "width": 480,
+                "duration": 572.034,
+                "format": "video/mp4"
+              },
+              "target": "https://iiif.io/api/cookbook/recipe/0003-mvm-video-annot/canvas"
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/canvas-1/annopage-2",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/canvas-1/annopage-2/anno-1",
+              "type": "Annotation",
+              "motivation": "commenting",
+              "body": {
+                "type": "TextualBody",
+                "language": "de",
+                "format": "text/plain",
+                "value": "Göttinger Marktplatz mit Gänseliesel Brunnen"
+              },
+              "target": "https://iiif.io/api/cookbook/recipe/0003-mvm-video-annot/canvas/page/annotation"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

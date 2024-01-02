@@ -560,7 +560,7 @@ export default {
     crossOrigin: 'anonymous',
   },
   videoOptions: { // Additional props passed to <audio> element
-    controls: true,
+    controls: false,
     crossOrigin: 'anonymous',
   },
   auth: {
