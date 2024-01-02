@@ -3,7 +3,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Typography from '@mui/material/Typography';
-import AccordionDetails from '@mui/material/AccordionDetails'
+import AccordionDetails from '@mui/material/AccordionDetails';
 import PropTypes from 'prop-types';
 import AnnotationManifestsItem from '../containers/AnnotationManifestsItem';
 
@@ -17,7 +17,6 @@ export class AnnotationManifestsAccordion extends Component {
   constructor(props) {
     super(props);
     this.handleOpenAccordion = this.handleOpenAccordion.bind(this);
-
 
     /** Search if the annotation is a manifest. URL must be resolvable for the annotation. So the manifest url is added at the end of the id */
     function searchManifestInID(id) {
@@ -44,7 +43,7 @@ export class AnnotationManifestsAccordion extends Component {
   /** */
   // eslint-disable-next-line class-methods-use-this,require-jsdoc
   handleOpenAccordion(e) {
-    let { annotation } = this.state;
+    const { annotation } = this.state;
     annotation.manifestsOpen = true;
     e.stopPropagation();
     this.state = { annotation };
@@ -73,7 +72,13 @@ export class AnnotationManifestsAccordion extends Component {
           </AccordionSummary>
           {
             annotation.manifestsOpen && (
-            <AccordionDetails className={classes.manifestContainer}>
+            <AccordionDetails sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              flexWrap: 'wrap',
+              gap: '10px',
+            }}
+            >
               {annotation.manifests.map(manifest => (
                 <AnnotationManifestsItem
                   manifestId={manifest.id}
@@ -92,7 +97,6 @@ export class AnnotationManifestsAccordion extends Component {
 }
 
 AnnotationManifestsAccordion.propsTypes = {
-
   annotation: PropTypes.shape(
     {
       content: PropTypes.string,
@@ -107,6 +111,7 @@ AnnotationManifestsAccordion.propsTypes = {
 };
 
 AnnotationManifestsAccordion.defaultProps = {
+  annotation: {},
   classes: {},
   htmlSanitizationRuleSet: 'iiif',
   listContainerComponent: 'li',

@@ -19,16 +19,6 @@ const mapDispatchToProps = {
 
 };
 
-/** For withStyles */
-const styles = theme => ({
-  manifestContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    gap: '10px',
-  },
-});
-
 const enhance = compose(
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),

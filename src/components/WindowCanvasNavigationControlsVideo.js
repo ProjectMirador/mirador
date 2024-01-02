@@ -36,14 +36,25 @@ export class WindowCanvasNavigationControlsVideo extends Component {
         square
         className={
           classNames(
-            classes.controls,
             ns('canvas-nav'),
-            classes.canvasNav,
             this.canvasNavControlsAreStacked() ? ns('canvas-nav-stacked') : null,
             this.canvasNavControlsAreStacked() ? classes.canvasNavStacked : null,
           )
         }
         elevation={0}
+        sx={theme => ({
+          backgroundColor: theme.palette.background.paper,
+          //backgroundColor: fade(theme.palette.background.paper, 0.5),
+          bottom: 0,
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          position: 'absolute',
+          textAlign: 'center',
+          width: '100%',
+          zIndex: 50,
+        })}
       >
 
         <ViewerNavigation windowId={windowId} beforeClick={setPaused} />

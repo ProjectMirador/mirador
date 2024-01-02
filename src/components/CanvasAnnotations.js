@@ -7,11 +7,33 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/SearchSharp';
 import TextField from '@mui/material/TextField';
+import { styled } from '@mui/material/styles';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
 import AnnotationManifestsAccordion from '../containers/AnnotationManifestsAccordion';
 import { filterAnnotation } from '../helper/utils';
 import { MiradorMenuButton } from './MiradorMenuButton';
+
+const StyledAnnotationContainer = styled('div')(({ theme }) => ({
+  background: theme.palette.background.paper,
+  borderBottom: `.5px solid ${theme.palette.section_divider}`,
+  marginBottom: theme.spacing(1),
+  padding: theme.spacing(0, 1, 1, 1),
+  position: 'sticky',
+  top: 0,
+  zIndex: 10,
+}));
+
+const StyledFooterAnnotationContainer = styled('div')(({ theme }) => ({
+  background: theme.palette.background.paper,
+  borderTop: `.5px solid ${theme.palette.section_divider}`,
+  bottom: 0,
+  paddingBottom: theme.spacing(1),
+  paddingLeft: theme.spacing(2),
+  paddingRight: theme.spacing(1),
+  paddingTop: theme.spacing(2),
+  position: 'sticky',
+}));
 
 /**
  * CanvasAnnotations ~
@@ -76,10 +98,12 @@ export class CanvasAnnotations extends Component {
     } = this.props;
     if (annotations.length === 0) return null;
 
+    let annotationsFiltered = annotations;
+
     const { inputSearch } = this.state;
 
     if (inputSearch != undefined && inputSearch !== '') {
-      annotations = filterAnnotation(annotations, inputSearch);
+      annotationsFiltered = filterAnnotation(annotations, inputSearch);
     }
 
     const annotationCount = annotations.length;
@@ -90,16 +114,7 @@ export class CanvasAnnotations extends Component {
           {t('annotationCanvasLabel', { context: `${index + 1}/${totalSize}`, label })}
         </Typography>
 
-        <div sx={theme => ({
-          background: theme.palette.background.paper,
-          borderBottom: `.5px solid ${theme.palette.section_divider}`,
-          marginBottom: theme.spacing(1),
-          padding: theme.spacing(0, 1, 1, 1),
-          position: 'sticky',
-          top: 0,
-          zIndex: 10,
-        })}
-        >
+        <StyledAnnotationContainer>
           <TextField
             label={t('searchPlaceholderAnnotation')}
             onChange={this.handleAnnotationSearch}
@@ -120,10 +135,10 @@ export class CanvasAnnotations extends Component {
               ),
             }}
           />
-        </div>
+        </StyledAnnotationContainer>
         <MenuList autoFocusItem variant="selectedMenu">
           {
-            annotations.map(annotation => (
+            annotationsFiltered.map(annotation => (
               <ScrollTo
                 containerRef={containerRef}
                 key={`${annotation.id}-scroll`}
@@ -181,7 +196,7 @@ export class CanvasAnnotations extends Component {
               </ScrollTo>
             ))
           }
-          {annotations.length == 0
+          {annotationsFiltered.length == 0
             && (
               <MenuItem>
                 <Typography>
@@ -190,19 +205,9 @@ export class CanvasAnnotations extends Component {
               </MenuItem>
             )}
         </MenuList>
-        <div sx={ theme => ({
-          background: theme.palette.background.paper,
-          borderTop: `.5px solid ${theme.palette.section_divider}`,
-          bottom: 0,
-          paddingBottom: theme.spacing(1),
-          paddingLeft: theme.spacing(2),
-          paddingRight: theme.spacing(1),
-          paddingTop: theme.spacing(2),
-          position: 'sticky',
-        })}
-        >
+        <StyledFooterAnnotationContainer>
           <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
-        </div>
+        </StyledFooterAnnotationContainer>
       </>
     );
   }

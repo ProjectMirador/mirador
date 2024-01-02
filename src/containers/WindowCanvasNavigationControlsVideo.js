@@ -21,22 +21,8 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  * @param theme
  */
 const styles = theme => ({
-  canvasNav: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    textAlign: 'center',
-  },
   canvasNavStacked: {
     flexDirection: 'column',
-  },
-  controls: {
-    backgroundColor: fade(theme.palette.background.paper, 0.5),
-    bottom: 0,
-    position: 'absolute',
-    width: '100%',
-    zIndex: 50,
   },
 });
 

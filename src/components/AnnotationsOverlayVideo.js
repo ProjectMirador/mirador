@@ -146,12 +146,9 @@ export class AnnotationsOverlayVideo extends Component {
       }
     }
 
-    const annotationsUpdated = !AnnotationsOverlayVideo.annotationsMatch(
-      annotations, prevProps.annotations,
-    );
-    const searchAnnotationsUpdated = !AnnotationsOverlayVideo.annotationsMatch(
-      searchAnnotations, prevProps.searchAnnotations,
-    );
+    const annotationsUpdated = !AnnotationsOverlayVideo.annotationsMatch(annotations, prevProps.annotations);
+    // eslint-disable-next-line max-len
+    const searchAnnotationsUpdated = !AnnotationsOverlayVideo.annotationsMatch(searchAnnotations, prevProps.searchAnnotations);
 
     const hoveredAnnotationsUpdated = (
       xor(hoveredAnnotationIds, prevProps.hoveredAnnotationIds).length > 0

@@ -2,10 +2,10 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import VisibilityIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffSharp';
-import MiradorMenuButton from '../containers/MiradorMenuButton';
-import { VideosReferences } from '../plugins/VideosReferences';
 import SyncIcon from '@mui/icons-material/Sync';
 import SyncDisabledIcon from '@mui/icons-material/SyncDisabled';
+import MiradorMenuButton from '../containers/MiradorMenuButton';
+import { VideosReferences } from '../plugins/VideosReferences';
 
 /**
  * AnnotationSettings is a component to handle various annotation
