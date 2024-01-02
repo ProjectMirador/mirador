@@ -2,11 +2,10 @@ import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
-
+import { styled } from '@mui/material/styles';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
 import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavigationControlsVideo';
-
 
 const StyledContainer = styled('div')(() => ({
   alignItems: 'center',
@@ -20,12 +19,10 @@ const StyledFlexFill = styled('div')(() => ({
   width: '100%',
 }));
 
-
 const StyledVideo = styled('video')(() => ({
   maxHeight: '100%',
   width: '100%',
 }));
-
 
 /** */
 export class VideoViewer extends Component {

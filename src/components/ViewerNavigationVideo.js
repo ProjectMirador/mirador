@@ -8,8 +8,23 @@ import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import { styled } from '@mui/material/styles';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
+
+const StyledSliderDiv = styled('div')(() => ({
+  alignItems: 'center',
+  display: 'flex',
+  paddingLeft: '10px',
+  paddingRight: '15px',
+  width: '200px',
+}));
+
+const StyledPlayControls = styled('div')(() => ({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
+}));
 
 /** ViewerNavigationVideo - based on ViewerNavigation */
 export class ViewerNavigationVideo extends Component {
@@ -34,7 +49,6 @@ export class ViewerNavigationVideo extends Component {
    */
   render() {
     const {
-      classes,
       currentTime,
       duration,
       hasTextTrack,
@@ -53,13 +67,13 @@ export class ViewerNavigationVideo extends Component {
     if (duration !== undefined) {
       durationLabel = `${durationLabel} / ${new Date(duration * 1000).toISOString().substr(start, len)}`;
       slider = (
-        <div className={classes.sliderDiv}>
+        <StyledSliderDiv>
           <Slider value={currentTime} min={0} max={duration} onChange={this.handleChange} />
-        </div>
+        </StyledSliderDiv>
       );
     }
     return (
-      <div className={classes.play_controls}>
+      <StyledPlayControls>
         <MiradorMenuButton
           aria-label={paused ? 'Play' : 'Pause'}
           className={paused ? ns('next-canvas-button') : ns('next-canvas-button')}
@@ -68,7 +82,11 @@ export class ViewerNavigationVideo extends Component {
           { paused ? <PlayArrowRoundedIcon /> : <PauseRoundedIcon /> }
         </MiradorMenuButton>
         {slider}
-        <span className={classes.timeLabel}>
+        <span style={{
+          alignItems: 'center',
+          display: 'flex',
+        }}
+        >
           <Typography variant="caption">
             {durationLabel}
           </Typography>
@@ -89,14 +107,19 @@ export class ViewerNavigationVideo extends Component {
             { textTrackDisabled ? <ClosedCaptionOutlined /> : <ClosedCaption /> }
           </MiradorMenuButton>
         )}
-        <span className={classes.divider} />
-      </div>
+        <span style={{
+          borderRight: '1px solid #808080',
+          display: 'inline-block',
+          height: '24px',
+          margin: '12px 6px',
+        }}
+        />
+      </StyledPlayControls>
     );
   }
 }
 
 ViewerNavigationVideo.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   currentTime: PropTypes.number,
   duration: PropTypes.number,
   hasTextTrack: PropTypes.bool,

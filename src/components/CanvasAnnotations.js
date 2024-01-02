@@ -70,7 +70,7 @@ export class CanvasAnnotations extends Component {
   */
   render() {
     const {
-      annotations, autoscroll, index, label, selectedAnnotationId, t, totalSize,
+      annotations, autoScroll, index, label, selectedAnnotationId, t, totalSize,
       listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
       containerRef,
     } = this.props;
@@ -90,7 +90,7 @@ export class CanvasAnnotations extends Component {
           {t('annotationCanvasLabel', { context: `${index + 1}/${totalSize}`, label })}
         </Typography>
 
-        <div sx={{
+        <div sx={theme => ({
           background: theme.palette.background.paper,
           borderBottom: `.5px solid ${theme.palette.section_divider}`,
           marginBottom: theme.spacing(1),
@@ -98,7 +98,8 @@ export class CanvasAnnotations extends Component {
           position: 'sticky',
           top: 0,
           zIndex: 10,
-        }}>
+        })}
+        >
           <TextField
             label={t('searchPlaceholderAnnotation')}
             onChange={this.handleAnnotationSearch}
@@ -107,10 +108,11 @@ export class CanvasAnnotations extends Component {
             }}
             InputProps={{
               endAdornment: (
-                <div sx={{
+                <div style={{
                   position: 'absolute',
                   right: 0,
-                }}>
+                }}
+                >
                   <MiradorMenuButton aria-label={t('searchAnnotationTooltip')} type="submit">
                     <SearchIcon />
                   </MiradorMenuButton>
@@ -155,11 +157,18 @@ export class CanvasAnnotations extends Component {
                     <div>
                       {
                         annotation.tags.map(tag => (
-                          <Chip size="small" variant="outlined" label={tag} id={tag} sx={{
-                            backgroundColor: theme.palette.background.paper,
-                            marginRight: theme.spacing(0.5),
-                            marginTop: theme.spacing(1),
-                          }} key={tag.toString()} />
+                          <Chip
+                            size="small"
+                            variant="outlined"
+                            label={tag}
+                            id={tag}
+                            sx={theme => ({
+                              backgroundColor: theme.palette.background.paper,
+                              marginRight: theme.spacing(0.5),
+                              marginTop: theme.spacing(1),
+                            })}
+                            key={tag.toString()}
+                          />
                         ))
                       }
                       <AnnotationManifestsAccordion
@@ -181,7 +190,7 @@ export class CanvasAnnotations extends Component {
               </MenuItem>
             )}
         </MenuList>
-        <div sx={{
+        <div sx={ theme => ({
           background: theme.palette.background.paper,
           borderTop: `.5px solid ${theme.palette.section_divider}`,
           bottom: 0,
@@ -190,7 +199,8 @@ export class CanvasAnnotations extends Component {
           paddingRight: theme.spacing(1),
           paddingTop: theme.spacing(2),
           position: 'sticky',
-        }}>
+        })}
+        >
           <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
         </div>
       </>
@@ -225,6 +235,7 @@ CanvasAnnotations.propTypes = {
 };
 CanvasAnnotations.defaultProps = {
   annotations: [],
+  autoScroll: true,
   containerRef: undefined,
   hoveredAnnotationIds: [],
   htmlSanitizationRuleSet: 'iiif',

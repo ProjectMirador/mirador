@@ -38,35 +38,6 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   ),
 });
 
-const styles = {
-  divider: {
-    borderRight: '1px solid #808080',
-    display: 'inline-block',
-    height: '24px',
-    margin: '12px 6px',
-  },
-  ListItem: {
-    paddingBottom: 0,
-    paddingTop: 0,
-  },
-  play_controls: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  sliderDiv: {
-    alignItems: 'center',
-    display: 'flex',
-    paddingLeft: '10px',
-    paddingRight: '15px',
-    width: '200px',
-  },
-  timeLabel: {
-    alignItems: 'center',
-    display: 'flex',
-  },
-};
-
 const enhance = compose(
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
