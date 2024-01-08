@@ -110,6 +110,10 @@ export class CanvasAnnotations extends Component {
 
     console.log('CanvasAnnotations containerRef : ', containerRef);
 
+    if (!containerRef.current) {
+      return <div>containerRef is null</div>;
+    }
+
     return (
       <>
         <Typography sx={{ paddingLeft: 2, paddingRight: 1, paddingTop: 2 }} variant="overline">
@@ -145,11 +149,10 @@ export class CanvasAnnotations extends Component {
                 containerRef={containerRef}
                 key={`${annotation.id}-scroll`}
                 offsetTop={96} // offset for the height of the form above
-                scrollTo={autoScroll ? (selectedAnnotationId === annotation.id) : false}
+                scrollTo={selectedAnnotationId === annotation.id}
                 selected={selectedAnnotationId === annotation.id}
               >
                 <MenuItem
-                  component={listContainerComponent}
                   variant="multiline"
                   divider
                   sx={{

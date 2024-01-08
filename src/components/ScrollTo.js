@@ -18,8 +18,6 @@ export class ScrollTo extends Component {
     const { scrollTo, containerRef } = this.props;
     if (!scrollTo) return;
 
-    console.log('Did mount Scroll to containerRef : ', containerRef);
-
     this.scrollToElement();
   }
 
@@ -38,7 +36,6 @@ export class ScrollTo extends Component {
   */
   containerBoundingRect() {
     const { containerRef } = this.props;
-    console.log('DcontainerBoundingRect Scroll to containerRef : ', containerRef);
 
     if (!containerRef || !containerRef.current) return {};
 
@@ -68,7 +65,6 @@ export class ScrollTo extends Component {
   */
   scrollableContainer() {
     const { containerRef } = this.props;
-    console.log('scrollableContainer Scroll to containerRef : ', containerRef);
     if (!containerRef || !containerRef.current) return null;
     return containerRef.current.getElementsByClassName('mirador-scrollto-scrollable')[0];
   }
