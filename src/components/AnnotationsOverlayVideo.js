@@ -656,7 +656,7 @@ AnnotationsOverlayVideo.defaultProps = {
 };
 
 AnnotationsOverlayVideo.propTypes = {
-  annotations: PropTypes.arrayOf(PropTypes.object),
+  annotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   canvas: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   currentTime: PropTypes.number,
@@ -668,7 +668,7 @@ AnnotationsOverlayVideo.propTypes = {
   hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   paused: PropTypes.bool,
-  searchAnnotations: PropTypes.arrayOf(PropTypes.object),
+  searchAnnotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   seekToTime: PropTypes.number,
   selectAnnotation: PropTypes.func,
   selectedAnnotationId: PropTypes.string,

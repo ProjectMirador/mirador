@@ -11,6 +11,7 @@ import {
   getWindow,
 } from '../state/selectors';
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
+import { withRef } from '../extend/withRef';
 
 /**
  * @param {Array} resources
@@ -51,8 +52,9 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
+  withRef(),
   withTranslation(),
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
   withPlugins('CanvasAnnotations'),
 );
 

@@ -1,7 +1,7 @@
 module.exports = {
   launch: {
-    headless: process.env.HEADLESS !== 'false' ? 'new' : false,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: process.env.HEADLESS !== 'false' ? 'new' : false,
   },
   server: [{
     command: 'npm run server -- -p 4488',

@@ -44,7 +44,6 @@ export class WindowCanvasNavigationControlsVideo extends Component {
         elevation={0}
         sx={theme => ({
           backgroundColor: theme.palette.background.paper,
-          //backgroundColor: fade(theme.palette.background.paper, 0.5),
           bottom: 0,
           display: 'flex',
           flexDirection: 'row',

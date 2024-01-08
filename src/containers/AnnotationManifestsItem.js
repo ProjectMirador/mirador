@@ -39,23 +39,6 @@ const mapDispatchToProps = {
   fetchManifest: actions.fetchManifest,
 };
 
-/** For withStyles */
-const styles = theme => ({
-  errorMessage: {
-    color: theme.palette.error.main,
-  },
-  logo: {
-    height: '2.5rem',
-    maxWidth: '100%',
-    objectFit: 'contain',
-    paddingRight: 8,
-  },
-  thumbnail: {
-    maxWidth: '100%',
-    objectFit: 'contain',
-  },
-});
-
 const enhance = compose(
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),

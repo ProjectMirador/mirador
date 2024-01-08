@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -27,15 +27,15 @@ export class AnnotationManifestsAccordion extends Component {
       return match ? match[0].split('#').slice(-1) : null;
     }
 
-    const { annotation } = this.props;
+    // eslint-disable-next-line react/prop-types
+    const { annotation } = props;
 
+    // eslint-disable-next-line react/prop-types
     annotation.manifestsOpen = false;
+    // eslint-disable-next-line react/prop-types
     annotation.manifests = searchManifestInID(annotation.id);
-    if (annotation.manifests) {
-      annotation.manifests = annotation.manifests.map(id => ({ id }));
-    } else {
-      annotation.manifests = [];
-    }
+    // eslint-disable-next-line react/prop-types
+    annotation.manifests = annotation.manifests?.map(id => ({ id })) ?? [];
 
     this.state = { annotation };
   }
@@ -52,7 +52,8 @@ export class AnnotationManifestsAccordion extends Component {
   /** */
   render() {
     const {
-      classes, t, i18n,
+      // eslint-disable-next-line react/prop-types
+      t,
     } = this.props;
 
     const { annotation } = this.state;
@@ -68,7 +69,7 @@ export class AnnotationManifestsAccordion extends Component {
             expandIcon={<ExpandMoreIcon />}
             onClick={(e) => this.handleOpenAccordion(e)}
           >
-            <Typography className={classes.heading}>{t('manifestFound')}</Typography>
+            <Typography>{t('manifestFound')}</Typography>
           </AccordionSummary>
           {
             annotation.manifestsOpen && (
@@ -82,7 +83,6 @@ export class AnnotationManifestsAccordion extends Component {
               {annotation.manifests.map(manifest => (
                 <AnnotationManifestsItem
                   manifestId={manifest.id}
-                  language={i18n.language}
                   key={manifest}
                   t={t}
                 />
@@ -97,22 +97,18 @@ export class AnnotationManifestsAccordion extends Component {
 }
 
 AnnotationManifestsAccordion.propsTypes = {
-  annotation: PropTypes.shape(
-    {
-      content: PropTypes.string,
-      id: PropTypes.string,
-      manifests: PropTypes.arrayOf(PropTypes.string),
-      manifestsOpen: PropTypes.boolean,
-    },
-  ),
-  classes: PropTypes.objectOf(PropTypes.string),
-  fetchManifest: PropTypes.func.isRequired,
+  annotation: PropTypes.shape({
+    content: PropTypes.string,
+    id: PropTypes.string,
+    manifests: PropTypes.arrayOf(PropTypes.string),
+    manifestsOpen: PropTypes.bool,
+  }),
+  htmlSanitizationRuleSet: PropTypes.string,
   t: PropTypes.func.isRequired,
 };
 
 AnnotationManifestsAccordion.defaultProps = {
-  annotation: {},
-  classes: {},
+  annotation: undefined,
   htmlSanitizationRuleSet: 'iiif',
-  listContainerComponent: 'li',
+  t: key => key,
 };
