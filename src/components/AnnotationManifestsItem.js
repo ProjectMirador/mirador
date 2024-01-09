@@ -2,7 +2,7 @@ import { Component } from 'react';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import {
-  Card, CardActionArea, CardActions, CardContent, CardMedia, Fab,
+  Card, CardActionArea, CardActions, CardContent, CardMedia,
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
@@ -22,6 +22,7 @@ export class AnnotationManifestsItem extends Component {
   /** */
   componentDidMount() {
     const {
+      // eslint-disable-next-line react/prop-types
       fetchManifest, manifestId, ready, isFetching, error, provider,
     } = this.props;
 
@@ -32,6 +33,7 @@ export class AnnotationManifestsItem extends Component {
 
   /** */
   handleOpenManifestSideToSide(e, manifestId) {
+    // eslint-disable-next-line react/prop-types
     const { addResource, addWindow } = this.props;
     addResource(manifestId);
     addWindow({ manifestId });
@@ -40,12 +42,13 @@ export class AnnotationManifestsItem extends Component {
   /** */
   render() {
     const {
-      classes, t, manifestId, thumbnail, title, description, error, ready
+      // eslint-disable-next-line react/prop-types
+      t, manifestId, thumbnail, title, description, error, ready,
     } = this.props;
 
     if (error) {
       return (
-        <Typography className={classes.errorMessage}>{t('resourceError', { manifestId })}</Typography>
+        <Typography sx={theme => ({ color: theme.palette.error.main })}>{t('resourceError', { manifestId })}</Typography>
       );
     }
 
@@ -58,12 +61,15 @@ export class AnnotationManifestsItem extends Component {
     }
 
     return (
-      <Card className={classes.root}>
+      <Card>
         <CardActionArea>
           {
             thumbnail && (
               <CardMedia
-                className={classes.thumbnail}
+                sx={{
+                  maxWidth: '100%',
+                  objectFit: 'contain',
+                }}
                 component="img"
                 height="140"
                 image={thumbnail}

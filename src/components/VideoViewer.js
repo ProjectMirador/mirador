@@ -179,6 +179,7 @@ export class VideoViewer extends Component {
 
 VideoViewer.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  // eslint-disable-next-line react/forbid-prop-types
   canvas: PropTypes.object,
   captions: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   currentTime: PropTypes.number,
@@ -195,6 +196,7 @@ VideoViewer.propTypes = {
 VideoViewer.defaultProps = {
   annotations: [],
   canvas: {},
+  captions: [],
   currentTime: 0,
   muted: false,
   paused: true,

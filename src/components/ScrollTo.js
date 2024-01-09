@@ -65,7 +65,6 @@ export class ScrollTo extends Component {
   */
   scrollableContainer() {
     const { containerRef } = this.props;
-
     if (!containerRef || !containerRef.current) return null;
     return containerRef.current.getElementsByClassName('mirador-scrollto-scrollable')[0];
   }

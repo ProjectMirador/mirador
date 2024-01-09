@@ -1,5 +1,4 @@
-import { render, screen } from 'test-utils';
-import { shallow } from 'enzyme';
+import { render } from 'test-utils';
 import { Utils } from 'manifesto.js';
 import AnnotationFactory from '../../../src/lib/AnnotationFactory';
 import { VideoViewer } from '../../../src/components/VideoViewer';

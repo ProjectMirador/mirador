@@ -6,7 +6,7 @@ import {
   getVisibleCanvasIds,
   getAnnotationResourcesByMotivation,
 } from '../state/selectors';
-import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnotationsPanel';
+import WindowSideBarAnnotationsPanel from '../components/WindowSideBarAnnotationsPanel';
 
 /**
  * mapStateToProps - to hook up connect
@@ -23,7 +23,7 @@ const mapStateToProps = (state, { windowId }) => ({
 
 const enhance = compose(
   withTranslation(),
-  connect(mapStateToProps, null),
+  connect(mapStateToProps, null, null, { forwardRef: true }),
   withPlugins('WindowSideBarAnnotationsPanel'),
   // further HOC
 );

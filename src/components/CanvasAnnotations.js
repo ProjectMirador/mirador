@@ -102,7 +102,7 @@ export class CanvasAnnotations extends Component {
 
     const { inputSearch } = this.state;
 
-    if (inputSearch != undefined && inputSearch !== '') {
+    if (inputSearch !== undefined && inputSearch !== '') {
       annotationsFiltered = filterAnnotation(annotations, inputSearch);
     }
 
@@ -143,7 +143,8 @@ export class CanvasAnnotations extends Component {
                 containerRef={containerRef}
                 key={`${annotation.id}-scroll`}
                 offsetTop={96} // offset for the height of the form above
-                scrollTo={autoScroll ? (selectedAnnotationId === annotation.id) : false}
+                scrollTo={selectedAnnotationId === annotation.id}
+                selected={selectedAnnotationId === annotation.id}
               >
                 <MenuItem
                   component={listContainerComponent}
@@ -155,6 +156,7 @@ export class CanvasAnnotations extends Component {
                     },
                     backgroundColor: hoveredAnnotationIds.includes(annotation.id) ? 'action.hover' : '',
                   }}
+                  ref={containerRef}
                   key={annotation.id}
                   annotationid={annotation.id}
                   selected={selectedAnnotationId === annotation.id}
@@ -196,7 +198,7 @@ export class CanvasAnnotations extends Component {
               </ScrollTo>
             ))
           }
-          {annotationsFiltered.length == 0
+          {annotationsFiltered.length === 0
             && (
               <MenuItem>
                 <Typography>
@@ -241,7 +243,7 @@ CanvasAnnotations.propTypes = {
 CanvasAnnotations.defaultProps = {
   annotations: [],
   autoScroll: true,
-  containerRef: undefined,
+  containerRef: null,
   hoveredAnnotationIds: [],
   htmlSanitizationRuleSet: 'iiif',
   listContainerComponent: 'li',
