@@ -108,12 +108,6 @@ export class CanvasAnnotations extends Component {
 
     const annotationCount = annotations.length;
 
-    console.log('CanvasAnnotations containerRef : ', containerRef);
-
-    if (!containerRef.current) {
-      return <div>containerRef is null</div>;
-    }
-
     return (
       <>
         <Typography sx={{ paddingLeft: 2, paddingRight: 1, paddingTop: 2 }} variant="overline">

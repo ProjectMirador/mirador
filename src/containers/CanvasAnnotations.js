@@ -51,10 +51,17 @@ const mapDispatchToProps = {
   selectAnnotation: actions.selectAnnotation,
 };
 
+// const enhance = compose(
+//   withRef(),
+//   withTranslation(),
+//   connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
+//   withPlugins('CanvasAnnotations'),
+// );
+
 const enhance = compose(
   withRef(),
   withTranslation(),
-  connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
+  connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CanvasAnnotations'),
 );
 

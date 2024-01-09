@@ -15,7 +15,7 @@ export class ScrollTo extends Component {
 
   /** */
   componentDidMount() {
-    const { scrollTo, containerRef } = this.props;
+    const { scrollTo } = this.props;
     if (!scrollTo) return;
 
     this.scrollToElement();
