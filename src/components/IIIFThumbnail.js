@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { useInView } from 'react-intersection-observer';
 import getThumbnail from '../lib/ThumbnailFactory';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 const Root = styled('div', { name: 'IIIFThumbnail', slot: 'root' })({});
 
@@ -141,19 +142,10 @@ LazyLoadedImage.defaultProps = {
  */
 export class IIIFThumbnail extends Component {
   /** */
-  static getUseableLabel(resource, index) {
-    return (resource
-      && resource.getLabel
-      && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
-      : String(index + 1);
-  }
-
-  /** */
   label() {
     const { label, resource } = this.props;
 
-    return label || IIIFThumbnail.getUseableLabel(resource);
+    return label || <IIIFResourceLabel resource={resource} />;
   }
 
   /**

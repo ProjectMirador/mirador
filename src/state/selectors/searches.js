@@ -211,7 +211,7 @@ export const getResourceAnnotationLabel = createSelector(
       !(resourceAnnotation && resourceAnnotation.resource && resourceAnnotation.resource.label)
     ) return [];
 
-    return PropertyValue.parse(resourceAnnotation.resource.label, locale).getValues();
+    return PropertyValue.parse(resourceAnnotation.resource.label).getValues(locale);
   },
 );
 

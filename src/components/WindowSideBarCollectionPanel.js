@@ -11,6 +11,7 @@ import Skeleton from '@mui/material/Skeleton';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpwardSharp';
 import CompanionWindow from '../containers/CompanionWindow';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 /** */
 function Item({
@@ -37,7 +38,7 @@ function Item({
           />
         </ListItemIcon>
       )}
-      <ListItemText>{WindowSideBarCollectionPanel.getUseableLabel(manifest)}</ListItemText>
+      <ListItemText><IIIFResourceLabel resource={manifest} /></ListItemText>
     </MenuItem>
   );
 }
@@ -53,15 +54,6 @@ Item.propTypes = {
 
 /** */
 export class WindowSideBarCollectionPanel extends Component {
-  /** */
-  static getUseableLabel(resource, index) {
-    return (resource
-      && resource.getLabel
-      && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
-      : resource.id;
-  }
-
   /** */
   isMultipart() {
     const { collection } = this.props;
@@ -111,13 +103,13 @@ export class WindowSideBarCollectionPanel extends Component {
                     <ArrowUpwardIcon />
                   </ListItemIcon>
                   <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-                    {WindowSideBarCollectionPanel.getUseableLabel(parentCollection)}
+                    <IIIFResourceLabel resource={parentCollection} />
                   </ListItemText>
                 </ListItem>
               </List>
             )}
             <Typography variant="h6">
-              { collection && WindowSideBarCollectionPanel.getUseableLabel(collection)}
+              {collection && <IIIFResourceLabel resource={collection} />}
               { isFetching && <Skeleton variant="text" />}
             </Typography>
           </>

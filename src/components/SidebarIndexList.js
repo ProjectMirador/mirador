@@ -4,9 +4,9 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import { ScrollTo } from './ScrollTo';
-import MiradorCanvas from '../lib/MiradorCanvas';
 import SidebarIndexItem from '../containers/SidebarIndexItem';
 import SidebarIndexThumbnail from '../containers/SidebarIndexThumbnail';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 const StyledItem = styled(MenuItem, { name: 'SidebarIndexList', slot: 'item' })(({ theme }) => ({
   alignItems: 'flex-start',
@@ -18,16 +18,6 @@ const StyledItem = styled(MenuItem, { name: 'SidebarIndexList', slot: 'item' })(
 
 /** */
 export class SidebarIndexList extends Component {
-  /** @private */
-  getIdAndLabelOfCanvases() {
-    const { canvases } = this.props;
-
-    return canvases.map((canvas, index) => ({
-      id: canvas.id,
-      label: new MiradorCanvas(canvas).getLabel(),
-    }));
-  }
-
   /** */
   render() {
     const {
@@ -39,7 +29,6 @@ export class SidebarIndexList extends Component {
       windowId,
     } = this.props;
 
-    const canvasesIdAndLabel = this.getIdAndLabelOfCanvases(canvases);
     let Item;
 
     switch (variant) {
@@ -53,7 +42,7 @@ export class SidebarIndexList extends Component {
     return (
       <MenuList variant="selectedMenu">
         {
-          canvasesIdAndLabel.map((canvas, canvasIndex) => {
+          canvases.map(canvas => {
             const onClick = () => { setCanvas(windowId, canvas.id); }; // eslint-disable-line require-jsdoc, max-len
 
             return (
@@ -70,7 +59,7 @@ export class SidebarIndexList extends Component {
                   onClick={onClick}
                   component="li"
                 >
-                  <Item label={canvas.label} canvas={canvases[canvasIndex]} />
+                  <Item label={<IIIFResourceLabel resource={canvas} />} canvas={canvas} />
                 </StyledItem>
               </ScrollTo>
             );

@@ -13,8 +13,10 @@ function createWrapper(props) {
   let sequences;
 
   if (props.multipleSequences) {
-    sequences = [{ id: 'a', label: 'seq1' },
-      { id: 'b', label: 'seq2' }];
+    sequences = [
+      { getLabel: () => ({ getValue: () => undefined }), id: 'a', label: 'seq1' },
+      { getLabel: () => ({ getValue: () => undefined }), id: 'b', label: 'seq2' },
+    ];
   } else {
     sequences = Utils.parseManifest(manifestJson).getSequences();
   }

@@ -21,6 +21,8 @@ export class LocalePicker extends Component {
     } = this.props;
 
     if (!setLocale || availableLocales.length < 2) return null;
+    const selectedLocale = availableLocales.indexOf(locale) >= 0 ? locale : availableLocales[0];
+
     return (
       <FormControl>
         <Select
@@ -31,7 +33,7 @@ export class LocalePicker extends Component {
             },
           }}
           displayEmpty
-          value={locale}
+          value={selectedLocale}
           onChange={(e) => { setLocale(e.target.value); }}
           name="locale"
         >

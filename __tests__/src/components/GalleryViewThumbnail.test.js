@@ -73,6 +73,7 @@ describe('GalleryView', () => {
   describe('on-demand annotation fetching', () => {
     const canvas = {
       getHeight: () => 50,
+      getLabel: () => ({ getValue: () => 'label' }),
       getServices: jest.fn(),
       getThumbnail: jest.fn(),
       getType: jest.fn(),

@@ -27,6 +27,7 @@ export class LayersPanel extends Component {
         {canvasIds.map((canvasId, index) => (
           <CanvasLayers
             canvasId={canvasId}
+            companionWindowId={id}
             index={index}
             key={canvasId}
             totalSize={canvasIds.length}

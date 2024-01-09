@@ -16,6 +16,11 @@ export const getCompanionWindow = createSelector(
   (companionWindows, companionWindowId) => companionWindowId && companionWindows[companionWindowId],
 );
 
+export const getCompanionWindowLocale = createSelector(
+  [getCompanionWindow],
+  companionWindow => companionWindow && companionWindow.locale,
+);
+
 /** Return position of thumbnail navigation in a certain window.
 * @param {object} state
 * @param {String} windowId

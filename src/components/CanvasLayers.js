@@ -17,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 const StyledDragHandle = styled('div')(({ theme }) => ({
   alignItems: 'center',
@@ -42,15 +43,6 @@ const reorder = (list, startIndex, endIndex) => {
 
 /** */
 export class CanvasLayers extends Component {
-  /** */
-  static getUseableLabel(resource, index) {
-    return (resource
-      && resource.getLabel
-      && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
-      : String(index + 1);
-  }
-
   /** */
   constructor(props) {
     super(props);
@@ -157,7 +149,7 @@ export class CanvasLayers extends Component {
             component="div"
             variant="body1"
           >
-            {CanvasLayers.getUseableLabel(resource, index)}
+            <IIIFResourceLabel resource={resource} fallback={index + 1} />
             <div>
               <MiradorMenuButton aria-label={t(layer.visibility ? 'layer_hide' : 'layer_show')} edge="start" size="small" onClick={() => { this.setLayerVisibility(resource.id, !layer.visibility); }}>
                 { layer.visibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }

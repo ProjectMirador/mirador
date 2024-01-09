@@ -1,9 +1,8 @@
 import { createSelector } from 'reselect';
-import createCachedSelector from 're-reselect';
 import { PropertyValue, Utils, Resource } from 'manifesto.js';
 import getThumbnail from '../../lib/ThumbnailFactory';
 import asArray from '../../lib/asArray';
-import { getCompanionWindow } from './companionWindows';
+import { getCompanionWindowLocale } from './companionWindows';
 import { getManifest } from './getters';
 import { getConfig } from './config';
 
@@ -19,13 +18,14 @@ function createManifestoInstance(json, locale) {
 }
 
 /** */
-const getLocale = createSelector(
+export const getLocale = createSelector(
   [
-    getCompanionWindow,
+    getCompanionWindowLocale,
     getConfig,
+    (state, { locale }) => locale,
   ],
-  (companionWindow = {}, config = {}) => (
-    companionWindow.locale || config.language
+  (companionWindowLocale, config = {}, locale) => (
+    locale || companionWindowLocale || config.language || config.fallbackLanguages
   ),
 );
 
@@ -42,32 +42,24 @@ export const getManifestError = createSelector(
 );
 
 /** Instantiate a manifesto instance */
-const getContextualManifestoInstance = createCachedSelector(
+const getContextualManifestoInstance = createSelector(
   getManifest,
-  getLocale,
-  (manifest, locale) => manifest
-    && createManifestoInstance(manifest.json, locale),
-)(
-  (state, { companionWindowId, manifestId, windowId }) => [
-    manifestId,
-    windowId,
-    getLocale(state, { companionWindowId }),
-  ].join(' - '), // Cache key consisting of manifestId, windowId, and locale
+  (manifest) => manifest
+    && createManifestoInstance(manifest.json),
 );
 
 /** Instantiate a manifesto instance */
 export const getManifestoInstance = createSelector(
   getContextualManifestoInstance,
   (state, { json }) => json,
-  getLocale,
-  (manifesto, manifestJson, locale) => (
-    manifestJson && createManifestoInstance(manifestJson, locale)
+  (manifesto, manifestJson) => (
+    manifestJson && createManifestoInstance(manifestJson)
   ) || manifesto,
 );
 
 export const getManifestLocale = createSelector(
-  [getManifestoInstance],
-  manifest => manifest && manifest.options && manifest.options.locale && manifest.options.locale.replace(/-.*$/, ''),
+  [getManifestoInstance, getLocale],
+  (manifest, locale) => locale ?? (manifest && manifest.options && manifest.options.locale && manifest.options.locale.replace(/-.*$/, '')),
 );
 
 /** */
@@ -101,7 +93,7 @@ export const getManifestProviderName = createSelector(
   ],
   (provider, locale) => provider
     && provider[0].label
-    && PropertyValue.parse(provider[0].label, locale).getValue(),
+    && PropertyValue.parse(provider[0].label).getValue(locale),
 );
 
 /**
@@ -146,8 +138,8 @@ export const getManifestHomepage = createSelector(
   (homepages, locale) => homepages
     && asArray(homepages).map(homepage => (
       {
-        label: PropertyValue.parse(homepage.label, locale)
-          .getValue(),
+        label: PropertyValue.parse(homepage.label)
+          .getValue(locale),
         value: homepage.id || homepage['@id'],
       }
     )),
@@ -162,11 +154,11 @@ export const getManifestHomepage = createSelector(
 * @return {String|null}
 */
 export const getManifestRenderings = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
+  [getManifestoInstance, getManifestLocale],
+  (manifest, locale) => manifest
     && manifest.getRenderings().map(rendering => (
       {
-        label: rendering.getLabel().getValue(),
+        label: rendering.getLabel().getValue(locale),
         value: rendering.id,
       }
     )),
@@ -190,8 +182,8 @@ export const getManifestSeeAlso = createSelector(
     && asArray(seeAlso).map(related => (
       {
         format: related.format,
-        label: PropertyValue.parse(related.label, locale)
-          .getValue(),
+        label: PropertyValue.parse(related.label)
+          .getValue(locale),
         value: related.id || related['@id'],
       }
     )),
@@ -232,8 +224,8 @@ export const getManifestRelated = createSelector(
         }
         : {
           format: related.format,
-          label: PropertyValue.parse(related.label, locale)
-            .getValue(),
+          label: PropertyValue.parse(related.label)
+            .getValue(locale),
           value: related.id || related['@id'],
         }
     )),
@@ -248,13 +240,13 @@ export const getManifestRelated = createSelector(
 * @return {String|null}
 */
 export const getRequiredStatement = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
+  [getManifestoInstance, getManifestLocale],
+  (manifest, locale) => manifest
     && asArray(manifest.getRequiredStatement())
       .filter(l => l.getValues().some(v => v))
       .map(labelValuePair => ({
-        label: (labelValuePair.label && labelValuePair.label.getValue()) || null,
-        values: labelValuePair.getValues(),
+        label: (labelValuePair.label && labelValuePair.label.getValue(locale)) || null,
+        values: labelValuePair.getValues(locale),
       })),
 );
 
@@ -274,7 +266,7 @@ export const getRights = createSelector(
   ],
   (rights, license, locale) => {
     const data = rights || license;
-    return asArray(PropertyValue.parse(data, locale).getValues());
+    return asArray(PropertyValue.parse(data).getValues(locale));
   },
 );
 
@@ -308,9 +300,9 @@ export function getManifestThumbnail(state, props) {
 * @return {String}
 */
 export const getManifestTitle = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
-    && manifest.getLabel().getValue(),
+  [getManifestoInstance, getManifestLocale],
+  (manifest, locale) => manifest
+    && manifest.getLabel().getValue(locale),
 );
 
 /**
@@ -322,9 +314,9 @@ export const getManifestTitle = createSelector(
 * @return {String|null}
 */
 export const getManifestDescription = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
-    && manifest.getDescription().getValue(),
+  [getManifestoInstance, getManifestLocale],
+  (manifest, locale) => manifest
+    && manifest.getDescription().getValue(locale),
 );
 
 /**
@@ -341,7 +333,7 @@ export const getManifestSummary = createSelector(
     getManifestLocale,
   ],
   (summary, locale) => summary
-    && PropertyValue.parse(summary, locale).getValue(),
+    && PropertyValue.parse(summary).getValue(locale),
 );
 
 /**
@@ -365,11 +357,11 @@ export const getManifestUrl = createSelector(
 * @param {object} Manifesto IIIF Resource (e.g. canvas, manifest)
 * @return {Array[Object]}
 */
-export function getDestructuredMetadata(iiifResource) {
+export function getDestructuredMetadata(iiifResource, locale = undefined) {
   return (iiifResource
     && iiifResource.getMetadata().map(labelValuePair => ({
-      label: labelValuePair.getLabel(),
-      values: labelValuePair.getValues(),
+      label: labelValuePair.getLabel(locale),
+      values: labelValuePair.getValues(locale),
     }))
   );
 }
@@ -383,8 +375,8 @@ export function getDestructuredMetadata(iiifResource) {
  * @return {Array[Object]}
  */
 export const getManifestMetadata = createSelector(
-  [getManifestoInstance],
-  manifest => manifest && getDestructuredMetadata(manifest),
+  [getManifestoInstance, getManifestLocale],
+  (manifest, locale) => manifest && getDestructuredMetadata(manifest, locale),
 );
 
 /** */
