@@ -15,10 +15,8 @@ function WindowSideBarAnnotationsPanel({
 }) {
   /** */
   const containerRef = useRef();
-  const [display, setDisplay] = useState(false);
 
   useEffect(() => {
-    console.log(`Use effect ${containerRef}`);
     console.log(`Use effect current ${containerRef.current}`);
   });
 
