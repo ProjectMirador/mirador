@@ -19,10 +19,7 @@ function WindowSideBarAnnotationsPanel({
 
   useEffect(() => {
     console.log(`Use effect ${containerRef}`);
-    console.log(`Use effect ${containerRef.current}`);
-    if(containerRef.current) {
-      containerRef.current.focus();
-    }
+    console.log(`Use effect current ${containerRef.current}`);
   });
 
   return (

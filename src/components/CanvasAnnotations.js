@@ -153,6 +153,7 @@ export class CanvasAnnotations extends Component {
                 selected={selectedAnnotationId === annotation.id}
               >
                 <MenuItem
+                  component={listContainerComponent}
                   variant="multiline"
                   divider
                   sx={{
@@ -161,6 +162,7 @@ export class CanvasAnnotations extends Component {
                     },
                     backgroundColor: hoveredAnnotationIds.includes(annotation.id) ? 'action.hover' : '',
                   }}
+                  ref={containerRef}
                   key={annotation.id}
                   annotationid={annotation.id}
                   selected={selectedAnnotationId === annotation.id}
