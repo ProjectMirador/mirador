@@ -43,16 +43,21 @@ export function WindowTopBarMenu(props) {
   if (pluginMap?.WindowTopBarPluginArea?.add?.length > 0
     || pluginMap?.WindowTopBarPluginArea?.wrap?.length > 0) {
     buttons.push(
-      <WindowTopBarPluginArea windowId={windowId} />,
+      <WindowTopBarPluginArea key={`WindowTopBarPluginArea-${windowId}`} windowId={windowId} />,
     );
   }
 
   allowTopMenuButton && buttons.push(
-    <WindowTopMenuButton windowId={windowId} className={ns('window-menu-btn')} />,
+    <WindowTopMenuButton
+      key={`WindowTopMenuButton-${windowId}`}
+      windowId={windowId}
+      className={ns('window-menu-btn')}
+    />,
   );
 
   allowMaximize && buttons.push(
     <MiradorMenuButton
+      key={`allowMaximizeMiradorMenuButton-${windowId}`}
       aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
       className={classNames(ns('window-maximize'), ns('window-menu-btn'))}
       onClick={(maximized ? minimizeWindow : maximizeWindow)}
@@ -61,7 +66,10 @@ export function WindowTopBarMenu(props) {
     </MiradorMenuButton>,
   );
   allowFullscreen && buttons.push(
-    <FullScreenButton className={ns('window-menu-btn')} />,
+    <FullScreenButton
+      key={`FullScreenButton-${windowId}`}
+      className={ns('window-menu-btn')}
+    />,
   );
 
   const visibleButtons = buttons.slice(0, visibleButtonsNum);
@@ -69,16 +77,16 @@ export function WindowTopBarMenu(props) {
   const moreButtonAlwaysShowing = pluginMap?.WindowTopBarPluginMenu?.add?.length > 0
   || pluginMap?.WindowTopBarPluginMenu?.wrap?.length > 0;
   React.useEffect(() => {
-    if (!outerW || !portalRef?.current) {
+    if (outerW === undefined || !portalRef?.current) {
       return;
     }
     const children = Array.from(portalRef.current.childNodes ?? []);
     let accWidth = 0;
     // sum widths of top bar elements until wider than half of the available space
-    let newVisibleButtonsNum = children.reduce((acc, child) => {
+    let newVisibleButtonsNum = children.reduce((acc, child, index) => {
       const width = child?.offsetWidth;
       accWidth += width;
-      if (accWidth < (0.5 * outerW)) {
+      if (accWidth <= (0.5 * outerW)) {
         return acc + 1;
       }
       return acc;
@@ -104,7 +112,7 @@ export function WindowTopBarMenu(props) {
       <ResizeObserver
         onResize={(rect) => {
           // 96 to compensate for the burger menu button on the left and the close window button on the right
-          setOuterW(rect.width - 96);
+          setOuterW(Math.max(rect.width - 96, 0));
         }}
       />
       <WindowTopBarTitle
