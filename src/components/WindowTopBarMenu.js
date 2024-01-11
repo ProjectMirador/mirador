@@ -40,8 +40,8 @@ export function WindowTopBarMenu(props) {
   const portalRef = React.useRef();
 
   const buttons = [];
-  if (pluginMap.WindowTopBarPluginArea?.add?.length > 0
-    || pluginMap.WindowTopBarPluginArea?.wrap?.length > 0) {
+  if (pluginMap?.WindowTopBarPluginArea?.add?.length > 0
+    || pluginMap?.WindowTopBarPluginArea?.wrap?.length > 0) {
     buttons.push(
       <WindowTopBarPluginArea windowId={windowId} />,
     );
@@ -66,8 +66,8 @@ export function WindowTopBarMenu(props) {
 
   const visibleButtons = buttons.slice(0, visibleButtonsNum);
   const moreButtons = buttons.slice(visibleButtonsNum);
-  const moreButtonAlwaysShowing = pluginMap.WindowTopBarPluginMenu?.add?.length > 0
-  || pluginMap.WindowTopBarPluginMenu?.wrap?.length > 0;
+  const moreButtonAlwaysShowing = pluginMap?.WindowTopBarPluginMenu?.add?.length > 0
+  || pluginMap?.WindowTopBarPluginMenu?.wrap?.length > 0;
   React.useEffect(() => {
     if (!outerW || !portalRef?.current) {
       return;
