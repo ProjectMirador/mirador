@@ -25,6 +25,18 @@ const InvisibleIconButtonsWrapper = styled(IconButtonsWrapper)(() => ({
 }));
 
 /**
+ * removeAttributes
+ */
+const removeAttributes = (attributeList = [], node) => {
+  /* remove the named attributes */
+  if (node.removeAttribute) {
+    attributeList.map(attr => node.removeAttribute(attr));
+  }
+  /* call this function for each child node recursively */
+  if (node.childNodes) node.childNodes.forEach(child => removeAttributes(attributeList, child));
+};
+
+/**
  * WindowTopBarMenu
  */
 export function WindowTopBarMenu(props) {
@@ -80,6 +92,7 @@ export function WindowTopBarMenu(props) {
     if (outerW === undefined || !portalRef?.current) {
       return;
     }
+    removeAttributes(['data-testid'], portalRef.current);
     const children = Array.from(portalRef.current.childNodes ?? []);
     let accWidth = 0;
     // sum widths of top bar elements until wider than half of the available space
