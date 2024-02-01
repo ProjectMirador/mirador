@@ -19,6 +19,7 @@ import { LabelValueMetadata } from './LabelValueMetadata';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 import ManifestInfo from '../containers/ManifestInfo';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 const StyledScrollIndicatedDialogContent = styled(ScrollIndicatedDialogContent)(() => ({
   padding: (theme) => theme.spacing(1),
@@ -40,15 +41,6 @@ const StyledCollectionFilter = styled('div')(() => ({
  * a dialog providing the possibility to select the collection
  */
 export class CollectionDialog extends Component {
-  /** */
-  static getUseableLabel(resource, index) {
-    return (resource
-      && resource.getLabel
-      && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
-      : String(index + 1);
-  }
-
   /** */
   constructor(props) {
     super(props);
@@ -190,7 +182,7 @@ export class CollectionDialog extends Component {
             { t(isMultipart ? 'multipartCollection' : 'collection') }
           </Typography>
           <Typography component="div" variant="h3">
-            {CollectionDialog.getUseableLabel(manifest)}
+            <IIIFResourceLabel resource={manifest} />
           </Typography>
         </DialogTitle>
         <StyledScrollIndicatedDialogContent>
@@ -199,7 +191,7 @@ export class CollectionDialog extends Component {
               startIcon={<ArrowBackIcon />}
               onClick={() => this.goToPreviousCollection()}
             >
-              {CollectionDialog.getUseableLabel(collection)}
+              <IIIFResourceLabel resource={collection} />
             </Button>
           )}
 
@@ -245,7 +237,7 @@ export class CollectionDialog extends Component {
                     onClick={() => { this.selectCollection(c); }}
                     variant="multiline"
                   >
-                    {CollectionDialog.getUseableLabel(c)}
+                    <IIIFResourceLabel resource={c} />
                   </MenuItem>
                 ))
               }
@@ -260,7 +252,7 @@ export class CollectionDialog extends Component {
                     onClick={() => { this.selectManifest(m); }}
                     variant="multiline"
                   >
-                    {CollectionDialog.getUseableLabel(m)}
+                    <IIIFResourceLabel resource={m} />
                   </MenuItem>
                 ))
               }

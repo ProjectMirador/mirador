@@ -14,6 +14,7 @@ import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import createI18nInstance from '../i18n';
 import FullScreenContext from '../contexts/FullScreenContext';
+import LocaleContext from '../contexts/LocaleContext';
 
 /**
  * Allow applications to opt-out of (or provide their own) drag and drop context
@@ -76,9 +77,8 @@ export class AppProviders extends Component {
   constructor(props) {
     super(props);
 
-    this.i18n = createI18nInstance();
     // Set i18n language
-    this.i18n.changeLanguage(props.language);
+    this.i18n = createI18nInstance({ lng: props.language });
   }
 
   /**
@@ -95,6 +95,7 @@ export class AppProviders extends Component {
   render() {
     const {
       children,
+      language,
       theme, translations,
       dndManager,
     } = this.props;
@@ -122,13 +123,15 @@ export class AppProviders extends Component {
       <FullScreenShim>
         <I18nextProvider i18n={this.i18n}>
           <StyledEngineProvider injectFirst>
-            <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
-              <ThemeProvider theme={createTheme((theme))}>
-                <MaybeDndProvider dndManager={dndManager}>
-                  {children}
-                </MaybeDndProvider>
-              </ThemeProvider>
-            </CacheProvider>
+            <LocaleContext.Provider value={language}>
+              <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
+                <ThemeProvider theme={createTheme((theme))}>
+                  <MaybeDndProvider dndManager={dndManager}>
+                    {children}
+                  </MaybeDndProvider>
+                </ThemeProvider>
+              </CacheProvider>
+            </LocaleContext.Provider>
           </StyledEngineProvider>
         </I18nextProvider>
       </FullScreenShim>

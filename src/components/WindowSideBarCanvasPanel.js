@@ -16,6 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import CompanionWindow from '../containers/CompanionWindow';
 import SidebarIndexList from '../containers/SidebarIndexList';
 import SidebarIndexTableOfContents from '../containers/SidebarIndexTableOfContents';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 const StyledBreak = styled('div')(() => ({
   flexBasis: '100%',
@@ -32,15 +33,6 @@ export class WindowSideBarCanvasPanel extends Component {
     this.handleVariantChange = this.handleVariantChange.bind(this);
 
     this.containerRef = createRef();
-  }
-
-  /** */
-  static getUseableLabel(resource, index) {
-    return (resource
-      && resource.getLabel
-      && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
-      : resource.id;
   }
 
   /** @private */
@@ -125,7 +117,7 @@ export class WindowSideBarCanvasPanel extends Component {
                     }}
                     data-testid="sequence-select"
                   >
-                    { sequences.map((s, i) => <MenuItem value={s.id} key={s.id}><Typography variant="body2">{ WindowSideBarCanvasPanel.getUseableLabel(s, i) }</Typography></MenuItem>) }
+                    { sequences.map((s, i) => <MenuItem value={s.id} key={s.id}><Typography variant="body2"><IIIFResourceLabel resource={s} /></Typography></MenuItem>) }
                   </Select>
                 </FormControl>
               )
@@ -155,7 +147,7 @@ export class WindowSideBarCanvasPanel extends Component {
               endIcon={<ArrowForwardIcon />}
             >
               <Typography sx={{ textTransform: 'none' }}>
-                {WindowSideBarCanvasPanel.getUseableLabel(collection)}
+                <IIIFResourceLabel resource={collection} />
               </Typography>
             </Button>
           )}
