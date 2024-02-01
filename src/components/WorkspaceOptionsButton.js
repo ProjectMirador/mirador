@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import MoreHorizontalIcon from '@material-ui/icons/MoreHorizSharp';
+import MoreHorizontalIcon from '@mui/icons-material/MoreHorizSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import WorkspaceOptionsMenu from '../containers/WorkspaceOptionsMenu';
 
@@ -46,21 +45,18 @@ export class WorkspaceOptionsButton extends Component {
    * Returns the rendered component
   */
   render() {
-    const { classes, t } = this.props;
+    const { t } = this.props;
     const { anchorEl, open } = this.state;
 
     return (
       <>
         <MiradorMenuButton
           aria-label={t('workspaceOptions')}
-          className={
-            classNames(classes.ctrlBtn, (open ? classes.ctrlBtnSelected : null))
-          }
           onClick={this.handleMenuClick}
+          selected={open}
         >
           <MoreHorizontalIcon />
         </MiradorMenuButton>
-
         <WorkspaceOptionsMenu
           anchorEl={anchorEl}
           handleClose={this.handleMenuClose}
@@ -72,6 +68,5 @@ export class WorkspaceOptionsButton extends Component {
 }
 
 WorkspaceOptionsButton.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   t: PropTypes.func.isRequired,
 };

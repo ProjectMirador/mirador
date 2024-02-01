@@ -30,7 +30,7 @@ describe('CompanionArea', () => {
   it('should add the appropriate classes when the companion area fills the full width', () => {
     const { container } = createWrapper({ position: 'bottom' });
 
-    expect(container.querySelector('.mirador-companion-area-bottom')).toHaveClass('horizontal'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('.mirador-companion-area-bottom')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
 
   it('renders the appropriate <CompanionWindow> components', () => {

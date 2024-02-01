@@ -1,14 +1,22 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import deburr from 'lodash/deburr';
 import debounce from 'lodash/debounce';
 import isObject from 'lodash/isObject';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import TextField from '@material-ui/core/TextField';
-import SearchIcon from '@material-ui/icons/SearchSharp';
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/SearchSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import SearchPanelNavigation from '../containers/SearchPanelNavigation';
+
+const StyledForm = styled('form', { name: 'SearchPanelControls', slot: 'form' })(({ theme }) => ({
+  paddingBottom: theme.spacing(1),
+  paddingRight: theme.spacing(1.5),
+  width: '100%',
+}));
 
 /** Sometimes an autocomplete match can be a simple string, other times an object
     with a `match` property, this function abstracts that away */
@@ -117,48 +125,62 @@ export class SearchPanelControls extends Component {
   /** */
   render() {
     const {
-      classes, companionWindowId, searchIsFetching, t, windowId,
+      companionWindowId, searchIsFetching, t, windowId,
     } = this.props;
 
     const { search, suggestions } = this.state;
     const id = `search-${companionWindowId}`;
     return (
       <>
-        <form aria-label={t('searchTitle')} onSubmit={this.submitSearch} className={classes.form}>
+        <StyledForm
+          aria-label={t('searchTitle')}
+          onSubmit={this.submitSearch}
+        >
           <Autocomplete
             id={id}
             inputValue={search}
             options={suggestions}
             getOptionLabel={getMatch}
-            getOptionSelected={(option, value) => (
+            isOptionEqualToValue={(option, value) => (
               deburr(getMatch(option).trim()).toLowerCase()
-                === deburr(getMatch(value).trim()).toLowerCase()
+              === deburr(getMatch(value).trim()).toLowerCase()
             )}
             noOptionsText=""
             onChange={this.selectItem}
             onInputChange={this.handleChange}
             freeSolo
+            disableClearable
             renderInput={params => (
               <TextField
                 {...params}
                 label={t('searchInputLabel')}
+                variant="standard"
                 InputProps={{
                   ...params.InputProps,
                   endAdornment: (
-                    <div className={classes.endAdornment}>
+                    <InputAdornment sx={{ position: 'relative' }} position="end">
                       <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
                         <SearchIcon />
                       </MiradorMenuButton>
                       {Boolean(searchIsFetching) && (
-                        <CircularProgress className={classes.searchProgress} size={50} />
+                      <CircularProgress
+                        sx={{
+                          left: '50%',
+                          marginLeft: '-25px',
+                          marginTop: '-25px',
+                          position: 'absolute',
+                          top: '50%',
+                        }}
+                        size={50}
+                      />
                       )}
-                    </div>
+                    </InputAdornment>
                   ),
                 }}
               />
             )}
           />
-        </form>
+        </StyledForm>
         <SearchPanelNavigation windowId={windowId} companionWindowId={companionWindowId} />
       </>
     );
@@ -169,7 +191,6 @@ SearchPanelControls.propTypes = {
   autocompleteService: PropTypes.shape({
     id: PropTypes.string,
   }),
-  classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string.isRequired,
   fetchSearch: PropTypes.func.isRequired,
   query: PropTypes.string,
@@ -183,7 +204,6 @@ SearchPanelControls.propTypes = {
 
 SearchPanelControls.defaultProps = {
   autocompleteService: undefined,
-  classes: {},
   query: '',
   t: key => key,
 };

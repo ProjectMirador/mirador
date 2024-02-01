@@ -1,12 +1,19 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+import { styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 import classNames from 'classnames';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ns from '../config/css-ns';
 import { PluginHook } from './PluginHook';
 
+const StyledDl = styled('dl')(({ theme }) => ({
+  '& dd': {
+    marginBottom: '.5em',
+    marginLeft: '0',
+  },
+}));
 /**
  * ManifestRelatedLinks
  */
@@ -17,7 +24,6 @@ export class ManifestRelatedLinks extends Component {
    */
   render() {
     const {
-      classes,
       homepage,
       manifestUrl,
       related,
@@ -40,7 +46,7 @@ export class ManifestRelatedLinks extends Component {
         >
           {t('links')}
         </Typography>
-        <dl className={classNames(ns('label-value-metadata'), classes.labelValueMetadata)}>
+        <StyledDl className={classNames(ns('label-value-metadata'))}>
           { homepage && (
             <>
               <Typography variant="subtitle2" component="dt">{t('iiif_homepage')}</Typography>
@@ -113,7 +119,7 @@ export class ManifestRelatedLinks extends Component {
               </Typography>
             </>
           )}
-        </dl>
+        </StyledDl>
         <PluginHook {...this.props} />
       </CollapsibleSection>
     );
@@ -121,7 +127,6 @@ export class ManifestRelatedLinks extends Component {
 }
 
 ManifestRelatedLinks.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   homepage: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     value: PropTypes.string,

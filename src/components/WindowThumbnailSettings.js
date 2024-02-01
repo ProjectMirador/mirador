@@ -1,11 +1,25 @@
 import { Component } from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import MenuItem from '@material-ui/core/MenuItem';
-import ThumbnailsOffIcon from '@material-ui/icons/CropDinSharp';
+import { styled } from '@mui/material/styles';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import ListSubheader from '@mui/material/ListSubheader';
+import MenuItem from '@mui/material/MenuItem';
+import ThumbnailsOffIcon from '@mui/icons-material/CropDinSharp';
 import PropTypes from 'prop-types';
 import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
 import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';
+
+const ThumbnailOption = styled(MenuItem, { name: 'WindowThumbnailSettings', slot: 'option' })(({ selected, theme }) => ({
+  '& .MuiFormControlLabel-label': {
+    borderBottom: '2px solid transparent',
+    ...(selected && {
+      borderBottomColor: theme.palette.secondary.main,
+    }),
+  },
+  backgroundColor: 'transparent !important',
+  color: selected ? theme.palette.secondary.main : undefined,
+  display: 'inline-block',
+}));
+
 /**
  *
  */
@@ -34,56 +48,53 @@ export class WindowThumbnailSettings extends Component {
    */
   render() {
     const {
-      classes, handleClose, t, thumbnailNavigationPosition, direction,
+      handleClose, t, thumbnailNavigationPosition, direction,
     } = this.props;
 
     return (
       <>
-        <ListSubheader role="presentation" disableSticky tabIndex="-1">{t('thumbnails')}</ListSubheader>
+        <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('thumbnails')}</ListSubheader>
 
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('off'); handleClose(); }}>
+        <ThumbnailOption selected={thumbnailNavigationPosition === 'off'} onClick={() => { this.handleChange('off'); handleClose(); }}>
           <FormControlLabel
             value="off"
-            classes={{ label: thumbnailNavigationPosition === 'off' ? classes.selectedLabel : classes.label }}
             control={
-              <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} />
+              <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} fill="currentcolor" />
             }
             label={t('off')}
             labelPlacement="bottom"
           />
-        </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('far-bottom'); handleClose(); }}>
+        </ThumbnailOption>
+        <ThumbnailOption selected={thumbnailNavigationPosition === 'far-bottom'} onClick={() => { this.handleChange('far-bottom'); handleClose(); }}>
           <FormControlLabel
             value="far-bottom"
-            classes={{ label: thumbnailNavigationPosition === 'far-bottom' ? classes.selectedLabel : classes.label }}
             control={
-              <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} />
+              <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} fill="currentcolor" />
             }
             label={t('bottom')}
             labelPlacement="bottom"
           />
-        </MenuItem>
-        <MenuItem className={classes.MenuItem} onClick={() => { this.handleChange('far-right'); handleClose(); }}>
+        </ThumbnailOption>
+        <ThumbnailOption selected={thumbnailNavigationPosition === 'far-right'} onClick={() => { this.handleChange('far-right'); handleClose(); }}>
           <FormControlLabel
             value="far-right"
-            classes={{ label: thumbnailNavigationPosition === 'far-right' ? classes.selectedLabel : classes.label }}
             control={(
               <ThumbnailNavigationRightIcon
                 color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined}
+                fill="currentcolor"
                 style={direction === 'rtl' ? { transform: 'rotate(180deg)' } : {}}
               />
             )}
             label={t('right')}
             labelPlacement="bottom"
           />
-        </MenuItem>
+        </ThumbnailOption>
       </>
     );
   }
 }
 
 WindowThumbnailSettings.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   direction: PropTypes.string.isRequired,
   handleClose: PropTypes.func,
   setWindowThumbnailPosition: PropTypes.func.isRequired,

@@ -1,8 +1,8 @@
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Typography from '@mui/material/Typography';
 import CompanionWindow from '../containers/CompanionWindow';
 import SearchPanelControls from '../containers/SearchPanelControls';
 import SearchResults from '../containers/SearchResults';
@@ -19,7 +19,6 @@ export class SearchPanel extends Component {
   /** */
   render() {
     const {
-      classes,
       fetchSearch,
       windowId,
       id,
@@ -40,7 +39,7 @@ export class SearchPanel extends Component {
               query && query !== '' && (
                 <Chip
                   role="button"
-                  className={classes.clearChip}
+                  sx={{ marginLeft: 1 }}
                   color="secondary"
                   label={t('clearSearch')}
                   onClick={removeSearch}
@@ -65,8 +64,12 @@ export class SearchPanel extends Component {
         />
         {
           fetchSearch && suggestedSearches && query === '' && suggestedSearches.map(search => (
-            <Typography component="p" key={search} variant="body1">
-              <Button className={classes.inlineButton} color="secondary" onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}>
+            <Typography component="p" key={search} variant="body1" sx={{ margin: 2 }}>
+              <Button
+                variant="inlineText"
+                color="secondary"
+                onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}
+              >
                 {t('suggestSearch', { query: search })}
               </Button>
             </Typography>
@@ -78,10 +81,6 @@ export class SearchPanel extends Component {
 }
 
 SearchPanel.propTypes = {
-  classes: PropTypes.shape({
-    clearChip: PropTypes.string,
-    inlineButton: PropTypes.string,
-  }),
   fetchSearch: PropTypes.func,
   id: PropTypes.string.isRequired,
   query: PropTypes.string,
@@ -95,7 +94,6 @@ SearchPanel.propTypes = {
 };
 
 SearchPanel.defaultProps = {
-  classes: {},
   fetchSearch: undefined,
   query: '',
   suggestedSearches: [],

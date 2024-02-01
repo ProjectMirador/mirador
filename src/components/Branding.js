@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import MiradorIcon from './icons/MiradorIcon';
 
 /**
@@ -13,7 +14,7 @@ export class Branding extends Component {
     const { t, variant, ...ContainerProps } = this.props;
 
     return (
-      <div {...ContainerProps}>
+      <Stack alignItems="center" {...ContainerProps}>
         { variant === 'wide' && (
         <div>
           <Typography align="center" component="p" variant="h3">{t('mirador')}</Typography>
@@ -25,11 +26,12 @@ export class Branding extends Component {
             href="https://projectmirador.org"
             target="_blank"
             rel="noopener"
+            size="large"
           >
             <MiradorIcon aria-label={t('aboutMirador')} titleAccess={t('aboutMirador')} fontSize="large" />
           </IconButton>
         </Typography>
-      </div>
+      </Stack>
     );
   }
 }

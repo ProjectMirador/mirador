@@ -1,14 +1,48 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import Button from '@material-ui/core/Button';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import Chip from '@material-ui/core/Chip';
+import Button from '@mui/material/Button';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
+import { styled } from '@mui/material/styles';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import TruncatedHit from '../lib/TruncatedHit';
 import { ScrollTo } from './ScrollTo';
+
+const Root = styled(ListItem, { name: 'SearchHit', slot: 'root' })(({ ownerState, theme }) => ({
+  '&.Mui-focused': {
+    '&:hover': {
+      ...(ownerState.windowSelected && {
+        backgroundColor: 'inherit',
+      }),
+    },
+    ...(ownerState.windowSelected && {
+      backgroundColor: 'inherit',
+    }),
+  },
+  paddingRight: theme.spacing(1),
+}));
+
+const CanvasLabel = styled('h4', { name: 'SearchHit', slot: 'canvasLabel' })(({ theme }) => ({
+  display: 'inline',
+  marginBottom: theme.spacing(1.5),
+}));
+
+const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerState, theme }) => ({
+  // eslint-disable-next-line no-nested-ternary
+  backgroundColor: theme.palette.hitCounter.default,
+  ...(ownerState.windowSelected && {
+    backgroundColor: theme.palette.highlights.primary,
+  }),
+  ...(ownerState.adjacent && !ownerState.windowSelected && {
+    backgroundColor: theme.palette.highlights.secondary,
+  }),
+  height: 30,
+  marginRight: theme.spacing(1),
+  typography: 'subtitle2',
+  verticalAlign: 'inherit',
+}));
 
 /** */
 export class SearchHit extends Component {
@@ -78,7 +112,6 @@ export class SearchHit extends Component {
       annotation,
       annotationLabel,
       canvasLabel,
-      classes,
       companionWindowId,
       containerRef,
       hit,
@@ -95,6 +128,25 @@ export class SearchHit extends Component {
     const truncatedHit = focused ? hit : hit && new TruncatedHit(hit, annotation);
     const truncated = hit && (truncatedHit.before !== hit.before || truncatedHit.after !== hit.after);
     const canvasLabelHtmlId = `${companionWindowId}-${index}`;
+    const ownerState = {
+      adjacent, focused, selected, windowSelected,
+    };
+
+    const header = (
+      <>
+        <Counter
+          component="span"
+          ownerState={ownerState}
+          label={index + 1}
+        />
+        <CanvasLabel id={canvasLabelHtmlId}>
+          {canvasLabel}
+          {annotationLabel && (
+            <Typography component="span" sx={{ display: 'block', marginTop: 1 }}>{annotationLabel}</Typography>
+          )}
+        </CanvasLabel>
+      </>
+    );
 
     return (
       <ScrollTo
@@ -102,51 +154,56 @@ export class SearchHit extends Component {
         offsetTop={96} // offset for the height of the form above
         scrollTo={windowSelected && !focused}
       >
-        <ListItem
-          className={clsx(
-            classes.listItem,
-            {
-              [classes.adjacent]: adjacent,
-              [classes.selected]: selected,
-              [classes.focused]: focused,
-              [classes.windowSelected]: windowSelected,
-            },
-          )}
+        <Root
+          ownerState={ownerState}
+          className={windowSelected ? 'windowSelected' : ''}
+          divider
           button={!selected}
           component="li"
           onClick={this.handleClick}
           selected={selected}
         >
-          <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-            <Typography variant="subtitle2" className={classes.subtitle}>
-              <Chip component="span" label={index + 1} className={classes.hitCounter} />
-              <span id={canvasLabelHtmlId}>
-                {canvasLabel}
-              </span>
-            </Typography>
-            {annotationLabel && (
-              <Typography variant="subtitle2">{annotationLabel}</Typography>
-            )}
-            {hit && (
+          <ListItemText
+            primary={header}
+            primaryTypographyProps={{ component: 'div', sx: { marginBottom: 1 }, variant: 'subtitle2' }}
+            secondaryTypographyProps={{ variant: 'body1' }}
+            secondary={(
               <>
-                <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
-                {' '}
-                <strong>
-                  <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
-                </strong>
-                {' '}
-                <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
-                {' '}
-                { truncated && !focused && (
-                  <Button className={classes.inlineButton} onClick={showDetails} color="secondary" size="small" aria-describedby={canvasLabelHtmlId}>
-                    {t('more')}
-                  </Button>
+                {hit && (
+                  <>
+                    <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
+                    {' '}
+                    <strong>
+                      <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
+                    </strong>
+                    {' '}
+                    <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
+                    {' '}
+                    {truncated && !focused && (
+                      <Button
+                        sx={{
+                          '& span': {
+                            lineHeight: '1.5em',
+                          },
+                          margin: 0,
+                          padding: 0,
+                          textTransform: 'none',
+                        }}
+                        onClick={showDetails}
+                        color="secondary"
+                        size="small"
+                        aria-describedby={canvasLabelHtmlId}
+                      >
+                        {t('more')}
+                      </Button>
+                    )}
+                  </>
                 )}
+                {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
               </>
             )}
-            {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
-          </ListItemText>
-        </ListItem>
+          />
+        </Root>
       </ScrollTo>
     );
   }
@@ -162,7 +219,6 @@ SearchHit.propTypes = {
   annotationLabel: PropTypes.string,
   announcer: PropTypes.func,
   canvasLabel: PropTypes.string,
-  classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string,
   containerRef: PropTypes.oneOfType([
     PropTypes.func,
@@ -191,7 +247,6 @@ SearchHit.defaultProps = {
   annotationLabel: undefined,
   announcer: undefined,
   canvasLabel: undefined,
-  classes: {},
   companionWindowId: undefined,
   containerRef: undefined,
   focused: false,

@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import WorkspaceElastic from '../components/WorkspaceElastic';
@@ -44,22 +43,7 @@ const mapDispatchToProps = (dispatch, props) => ({
   },
 });
 
-const styles = {
-  workspace: {
-    boxSizing: 'border-box',
-    margin: 0,
-    position: 'absolute',
-    transitionDuration: '.7s',
-    // order matters
-    // eslint-disable-next-line sort-keys
-    '& .react-draggable-dragging': {
-      transitionDuration: 'unset',
-    },
-  },
-};
-
 const enhance = compose(
-  withStyles(styles),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WorkspaceElastic'),
   // further HOC go here

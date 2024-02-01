@@ -33,7 +33,7 @@
       "<rootDir>/__tests__/utils"
     ],
     "preset": "jest-puppeteer",
-    "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"],
+    "setupFilesAfterEnv": ["@testing-library/jest-dom/jest-globals"],
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch)"
     ],
@@ -58,7 +58,7 @@
     "preset": "jest-puppeteer",
     "setupFilesAfterEnv": [
       "<rootDir>/setupJestIntegration.js",
-      "@testing-library/jest-dom/extend-expect"
+      "@testing-library/jest-dom/jest-globals"
     ],
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch)"

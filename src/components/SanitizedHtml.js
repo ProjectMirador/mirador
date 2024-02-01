@@ -1,8 +1,11 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import DOMPurify from 'dompurify';
 import ns from '../config/css-ns';
 import htmlRules from '../lib/htmlRules';
+
+const Root = styled('span', { name: 'IIIFHtmlContent', slot: 'root' })({});
 
 /**
 */
@@ -25,8 +28,8 @@ export class SanitizedHtml extends Component {
     });
 
     return (
-      <span
-        className={[classes.root, ns('third-party-html')].join(' ')}
+      <Root
+        className={[ns('third-party-html'), classes.root].join(' ')}
         dangerouslySetInnerHTML={{ // eslint-disable-line react/no-danger
           __html: DOMPurify.sanitize(htmlString, htmlRules[ruleSet]),
         }}

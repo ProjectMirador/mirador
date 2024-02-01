@@ -1,14 +1,24 @@
 import { Children, cloneElement, Component } from 'react';
 import PropTypes from 'prop-types';
-import CloseIcon from '@material-ui/icons/CloseSharp';
-import OpenInNewIcon from '@material-ui/icons/OpenInNewSharp';
-import MoveIcon from '@material-ui/icons/DragIndicatorSharp';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Toolbar from '@material-ui/core/Toolbar';
+import { styled } from '@mui/material/styles';
+import CloseIcon from '@mui/icons-material/CloseSharp';
+import OpenInNewIcon from '@mui/icons-material/OpenInNewSharp';
+import MoveIcon from '@mui/icons-material/DragIndicatorSharp';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
 import { Rnd } from 'react-rnd';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
+
+const Root = styled(Paper, { name: 'CompanionWindow', slot: 'root' })({});
+const StyledToolbar = styled(Toolbar, { name: 'CompanionWindow', slot: 'toolbar' })({});
+const StyledTitle = styled(Typography, { name: 'CompanionWindow', slot: 'title' })({});
+const StyledTitleControls = styled('div', { name: 'CompanionWindow', slot: 'controls' })({});
+const Contents = styled(Paper, { name: 'CompanionWindow', slot: 'contents' })({});
+const StyledRnd = styled(Rnd, { name: 'CompanionWindow', slot: 'resize' })({});
+const StyledPositionButton = styled(MiradorMenuButton, { name: 'CompanionWindow', slot: 'positionButton' })({});
+const StyledCloseButton = styled(MiradorMenuButton, { name: 'CompanionWindow', slot: 'closeButton' })({});
 
 /**
  * CompanionWindow
@@ -69,7 +79,7 @@ export class CompanionWindow extends Component {
     const {
       ariaLabel, classes, paperClassName, onCloseClick, updateCompanionWindow, isDisplayed,
       position, t, title, children, titleControls, size,
-      defaultSidebarPanelWidth, defaultSidebarPanelHeight,
+      defaultSidebarPanelWidth, defaultSidebarPanelHeight, innerRef,
     } = this.props;
 
     const isBottom = (position === 'bottom' || position === 'far-bottom');
@@ -87,19 +97,21 @@ export class CompanionWindow extends Component {
     });
 
     return (
-      <Paper
-        className={[classes.root, position === 'bottom' ? classes.horizontal : classes.vertical, classes[`companionWindow-${position}`], ns(`companion-window-${position}`), paperClassName].join(' ')}
+      <Root
+        ownerState={this.props}
+        ref={innerRef}
         style={{
           display: isDisplayed ? null : 'none',
           order: position === 'left' ? -1 : null,
         }}
+        className={[ns(`companion-window-${position}`), paperClassName, position === 'bottom' ? classes.horizontal : classes.vertical].join(' ')}
         square
         component="aside"
         aria-label={ariaLabel || title}
       >
-        <Rnd
-          className={[classes.rnd]}
-          style={{ display: 'flex', position: 'relative' }}
+        <StyledRnd
+          style={{ display: 'inherit', position: 'inherit' }}
+          ownerState={this.props}
           default={{
             height: isBottom ? defaultSidebarPanelHeight : '100%',
             width: isBottom ? 'auto' : defaultSidebarPanelWidth,
@@ -110,18 +122,12 @@ export class CompanionWindow extends Component {
           minWidth={position === 'left' ? 235 : 100}
         >
 
-          <Toolbar
-            className={[
-              classes.toolbar,
-              classes.companionWindowHeader,
-              size.width < 370 ? classes.small : null,
-              ns('companion-window-header'),
-            ].join(' ')}
+          <StyledToolbar
+            variant="dense"
+            className={[ns('companion-window-header'), size.width < 370 ? classes.small : null].join(' ')}
             disableGutters
           >
-            <Typography variant="h3" className={classes.windowSideBarTitle}>
-              {title}
-            </Typography>
+            <StyledTitle variant="h3">{title}</StyledTitle>
             {
               position === 'left'
                 ? updateCompanionWindow
@@ -137,49 +143,50 @@ export class CompanionWindow extends Component {
                   <>
                     {
                       updateCompanionWindow && (
-                        <MiradorMenuButton
+                        <StyledPositionButton
                           aria-label={position === 'bottom' ? t('moveCompanionWindowToRight') : t('moveCompanionWindowToBottom')}
-                          className={classes.positionButton}
                           onClick={() => { updateCompanionWindow({ position: position === 'bottom' ? 'right' : 'bottom' }); }}
                         >
                           <MoveIcon />
-                        </MiradorMenuButton>
+                        </StyledPositionButton>
                       )
                     }
-                    <MiradorMenuButton
+                    <StyledCloseButton
+                      sx={{
+                        ...(size.width < 370 && {
+                          order: 'unset',
+                        }),
+                      }}
                       aria-label={t('closeCompanionWindow')}
-                      className={classes.closeButton}
                       onClick={onCloseClick}
                     >
                       <CloseIcon />
-                    </MiradorMenuButton>
+                    </StyledCloseButton>
                   </>
                 )
             }
             {
               titleControls && (
-                <div
-                  className={[
-                    classes.titleControls,
-                    isBottom
-                      ? classes.companionWindowTitleControlsBottom
-                      : classes.companionWindowTitleControls,
-                    ns('companion-window-title-controls'),
-                  ].join(' ')}
+                <StyledTitleControls
+                  ownerState={{ position }}
+                  sx={{
+                    order: isBottom || size.width < 370 ? 'unset' : 1000,
+                  }}
+                  className={ns('companion-window-title-controls')}
                 >
                   {titleControls}
-                </div>
+                </StyledTitleControls>
               )
             }
-          </Toolbar>
-          <Paper
-            className={[classes.content, ns('scrollto-scrollable')].join(' ')}
+          </StyledToolbar>
+          <Contents
+            className={ns('scrollto-scrollable')}
             elevation={0}
           >
             {childrenWithAdditionalProps}
-          </Paper>
-        </Rnd>
-      </Paper>
+          </Contents>
+        </StyledRnd>
+      </Root>
     );
   }
 }
@@ -187,10 +194,14 @@ export class CompanionWindow extends Component {
 CompanionWindow.propTypes = {
   ariaLabel: PropTypes.string,
   children: PropTypes.node,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string),
   defaultSidebarPanelHeight: PropTypes.number,
   defaultSidebarPanelWidth: PropTypes.number,
   direction: PropTypes.string.isRequired,
+  innerRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
   isDisplayed: PropTypes.bool,
   onCloseClick: PropTypes.func,
   paperClassName: PropTypes.string,
@@ -208,8 +219,10 @@ CompanionWindow.propTypes = {
 CompanionWindow.defaultProps = {
   ariaLabel: undefined,
   children: undefined,
+  classes: {},
   defaultSidebarPanelHeight: 201,
   defaultSidebarPanelWidth: 235,
+  innerRef: undefined,
   isDisplayed: false,
   onCloseClick: () => {},
   paperClassName: '',

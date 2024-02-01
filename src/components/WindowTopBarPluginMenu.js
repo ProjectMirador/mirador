@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import MoreVertIcon from '@material-ui/icons/MoreVertSharp';
-import Menu from '@material-ui/core/Menu';
+import MoreVertIcon from '@mui/icons-material/MoreVertSharp';
+import Menu from '@mui/material/Menu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { PluginHook } from './PluginHook';
 
@@ -47,7 +47,7 @@ export class WindowTopBarPluginMenu extends Component {
    */
   render() {
     const {
-      classes, container, PluginComponents, t, windowId, menuIcon,
+      container, PluginComponents, t, windowId, menuIcon,
     } = this.props;
     const { anchorEl, open } = this.state;
     const windowPluginMenuId = `window-plugin-menu_${windowId}`;
@@ -59,7 +59,7 @@ export class WindowTopBarPluginMenu extends Component {
           aria-haspopup="true"
           aria-label={t('windowPluginMenu')}
           aria-owns={open ? windowPluginMenuId : undefined}
-          className={open ? classes.ctrlBtnSelected : null}
+          selected={open}
           onClick={this.handleMenuClick}
         >
           {menuIcon}
@@ -77,7 +77,6 @@ export class WindowTopBarPluginMenu extends Component {
             horizontal: 'right',
             vertical: 'top',
           }}
-          getContentAnchorEl={null}
           open={open}
           onClose={() => this.handleMenuClose()}
         >
@@ -90,9 +89,6 @@ export class WindowTopBarPluginMenu extends Component {
 
 WindowTopBarPluginMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.shape({
-    ctrlBtnSelected: PropTypes.string,
-  }),
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   menuIcon: PropTypes.element,
   open: PropTypes.bool,
@@ -105,7 +101,6 @@ WindowTopBarPluginMenu.propTypes = {
 
 WindowTopBarPluginMenu.defaultProps = {
   anchorEl: null,
-  classes: {},
   container: null,
   menuIcon: <MoreVertIcon />,
   open: false,

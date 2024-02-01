@@ -1,13 +1,12 @@
 import { Component } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
 import {
   DialogActions,
   TextField,
-  Typography,
-} from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+} from '@mui/material';
+import Button from '@mui/material/Button';
+import { WorkspaceDialog } from './WorkspaceDialog';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 
 /**
@@ -65,7 +64,7 @@ export class WorkspaceImport extends Component {
     } = this.props;
 
     return (
-      <Dialog
+      <WorkspaceDialog
         aria-labelledby="workspace-import-title"
         id="workspace-import"
         onClose={handleClose}
@@ -73,8 +72,8 @@ export class WorkspaceImport extends Component {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle id="workspace-import-title" disableTypography>
-          <Typography variant="h2">{t('importWorkspace')}</Typography>
+        <DialogTitle id="workspace-import-title">
+          {t('importWorkspace')}
         </DialogTitle>
         <ScrollIndicatedDialogContent>
           <TextField
@@ -84,19 +83,23 @@ export class WorkspaceImport extends Component {
             onChange={this.handleChange}
             minRows={15}
             variant="filled"
-            inputProps={{ autoFocus: 'autofocus', className: classes.textInput }}
+            sx={{
+              '& .MuiInputBase-input': { fontFamily: 'monospace' },
+              width: '100%',
+            }}
+            inputProps={{ autoFocus: 'autofocus' }}
             helperText={t('importWorkspaceHint')}
           />
         </ScrollIndicatedDialogContent>
         <DialogActions>
-          <Button className={classes.cancelBtn} onClick={handleClose}>
+          <Button onClick={handleClose}>
             {t('cancel')}
           </Button>
           <Button color="primary" onClick={this.handleImportConfig} variant="contained">
             {t('import')}
           </Button>
         </DialogActions>
-      </Dialog>
+      </WorkspaceDialog>
     );
   }
 }

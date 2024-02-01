@@ -35,13 +35,6 @@ describe('LanguageSettings', () => {
     expect(screen.getAllByRole('menuitem')).toHaveLength(2);
   });
 
-  it('non-active list items are buttons (and active are not)', () => {
-    createWrapper({ languages });
-
-    expect(screen.getByRole('menuitem', { name: 'Deutsch' })).not.toHaveClass('MuiButtonBase-root');
-    expect(screen.getByRole('menuitem', { name: 'English' })).toHaveClass('MuiButtonBase-root');
-  });
-
   it('renders the check icon when the active prop returns true', () => {
     createWrapper({ languages });
 

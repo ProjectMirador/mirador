@@ -1,9 +1,9 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import BackIcon from '@material-ui/icons/ArrowBackSharp';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
+import BackIcon from '@mui/icons-material/ArrowBackSharp';
 import { announce } from '@react-aria/live-announcer';
 import SearchHit from '../containers/SearchHit';
 import { ScrollTo } from './ScrollTo';
@@ -80,7 +80,6 @@ export class SearchResults extends Component {
   /** */
   render() {
     const {
-      classes,
       companionWindowId,
       containerRef,
       isFetching,
@@ -106,14 +105,18 @@ export class SearchResults extends Component {
       <>
         { focused && (
           <ScrollTo containerRef={containerRef} offsetTop={96} scrollTo>
-            <Button onClick={this.toggleFocus} className={classes.navigation} size="small">
+            <Button onClick={this.toggleFocus} sx={{ textTransform: 'none' }} size="small">
               <BackIcon />
               {t('backToResults')}
             </Button>
           </ScrollTo>
         )}
         {noResultsState && (
-          <Typography className={classes.noResults}>
+          <Typography sx={{
+            padding: 2,
+            typography: 'h6',
+          }}
+          >
             {t('searchNoResults')}
           </Typography>
         )}
@@ -122,7 +125,7 @@ export class SearchResults extends Component {
         </List>
         { nextSearch && (
           <Button
-            className={classes.moreButton}
+            sx={{ width: '100%' }}
             color="secondary"
             onClick={() => fetchSearch(windowId, companionWindowId, nextSearch, query)}
           >
@@ -137,7 +140,6 @@ export class SearchResults extends Component {
 }
 
 SearchResults.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   companionWindowId: PropTypes.string.isRequired,
   containerRef: PropTypes.oneOfType([
     PropTypes.func,
@@ -155,7 +157,6 @@ SearchResults.propTypes = {
 };
 
 SearchResults.defaultProps = {
-  classes: {},
   containerRef: undefined,
   isFetching: false,
   nextSearch: undefined,

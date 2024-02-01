@@ -24,7 +24,6 @@ const Subject = (props) => (
     announcer={() => {}}
     annotation={{ targetId: 'x' }}
     annotationId="foo"
-    classes={{ windowSelected: 'windowSelected' }}
     hit={{
       after: ', and start the chainsaw',
       annotations: ['foo'],
@@ -46,7 +45,6 @@ describe('SearchHit', () => {
     render(<Subject selectAnnotation={selectAnnotation} />);
 
     expect(screen.getByRole('listitem')).toHaveClass('Mui-selected');
-    expect(screen.getByRole('listitem')).toHaveClass('windowSelected');
     expect(screen.getByRole('listitem')).toHaveTextContent('1Light up the moose , and start the chai more');
 
     await user.click(screen.getByRole('button'));
@@ -69,14 +67,13 @@ describe('SearchHit', () => {
     it('renders the annotationLabel if present', () => {
       render(<Subject annotationLabel="The Anno Label" />);
 
-      expect(screen.getAllByRole('heading', { level: 6 })).toHaveLength(2);
-      expect(screen.getByRole('heading', { level: 6, name: 'The Anno Label' })).toHaveClass('MuiTypography-subtitle2');
+      expect(screen.getByRole('heading', { level: 4, name: 'The Anno Label' })).toBeInTheDocument();
     });
 
     it('does not render the typography if no annotation label is present', () => {
       render(<Subject />);
 
-      expect(screen.getByRole('heading', { level: 6 })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 4 })).toBeInTheDocument();
     });
   });
 

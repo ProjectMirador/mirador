@@ -3,9 +3,12 @@ import { render } from '@testing-library/react';
 import PropTypes from 'prop-types';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import createRootReducer from '../../src/state/reducers/rootReducer';
+import settings from '../../src/config/settings';
 
 const rootReducer = createRootReducer();
+const theme = createTheme(settings.theme);
 
 /**
  * Hook up our rendered object to redux
@@ -21,7 +24,7 @@ function renderWithProviders(
 ) {
   /** :nodoc: */
   function Wrapper({ children }) {
-    return <Provider store={store}>{children}</Provider>;
+    return <ThemeProvider theme={theme}><Provider store={store}>{children}</Provider></ThemeProvider>;
   }
 
   Wrapper.propTypes = {

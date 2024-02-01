@@ -1,9 +1,16 @@
 import { Component } from 'react';
-import AddCircleIcon from '@material-ui/icons/AddCircleOutlineSharp';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircleOutlineSharp';
+import AddCircleIcon from '@mui/icons-material/AddCircleOutlineSharp';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircleOutlineSharp';
+import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import RestoreZoomIcon from './icons/RestoreZoomIcon';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+
+const StyledZoomControlsWrapper = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
+});
 
 /**
  */
@@ -46,17 +53,11 @@ export class ZoomControls extends Component {
    */
   render() {
     const {
-      displayDivider, showZoomControls, classes, t, zoomToWorld,
+      t, zoomToWorld,
     } = this.props;
 
-    if (!showZoomControls) {
-      return (
-        <>
-        </>
-      );
-    }
     return (
-      <div className={classes.zoom_controls}>
+      <StyledZoomControlsWrapper>
         <MiradorMenuButton aria-label={t('zoomIn')} onClick={this.handleZoomInClick}>
           <AddCircleIcon />
         </MiradorMenuButton>
@@ -66,16 +67,12 @@ export class ZoomControls extends Component {
         <MiradorMenuButton aria-label={t('zoomReset')} onClick={() => zoomToWorld(false)}>
           <RestoreZoomIcon />
         </MiradorMenuButton>
-        {displayDivider && <span className={classes.divider} />}
-      </div>
+      </StyledZoomControlsWrapper>
     );
   }
 }
 
 ZoomControls.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  displayDivider: PropTypes.bool,
-  showZoomControls: PropTypes.bool,
   t: PropTypes.func,
   updateViewport: PropTypes.func,
   viewer: PropTypes.shape({
@@ -88,8 +85,6 @@ ZoomControls.propTypes = {
 };
 
 ZoomControls.defaultProps = {
-  displayDivider: true,
-  showZoomControls: false,
   t: key => key,
   updateViewport: () => {},
   viewer: {},

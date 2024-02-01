@@ -1,13 +1,51 @@
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
-import Avatar from '@material-ui/core/Avatar';
-import Chip from '@material-ui/core/Chip';
-import AnnotationIcon from '@material-ui/icons/CommentSharp';
-import SearchIcon from '@material-ui/icons/SearchSharp';
-import classNames from 'classnames';
+import { styled } from '@mui/material/styles';
+import Chip from '@mui/material/Chip';
+import AnnotationIcon from '@mui/icons-material/CommentSharp';
+import SearchIcon from '@mui/icons-material/SearchSharp';
 import { InView } from 'react-intersection-observer';
-import MiradorCanvas from '../lib/MiradorCanvas';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
+
+const Root = styled('div', { name: 'GalleryView', slot: 'thumbnail' })(({ ownerState, theme }) => ({
+  '&:focus': {
+    outline: 'none',
+  },
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  border: '2px solid transparent',
+  ...(ownerState.selected && {
+    borderColor: theme.palette.primary.main,
+  }),
+  ...(!ownerState.selected && ownerState.searchAnnotationsCount > 0 && {
+    borderColor: theme.palette.action.selected,
+  }),
+  cursor: 'pointer',
+  display: 'inline-block',
+  margin: theme.spacing(1, 0.5),
+  maxHeight: ownerState.config.height + 45,
+  minWidth: '60px',
+  overflow: 'hidden',
+  padding: theme.spacing(0.5),
+  position: 'relative',
+  width: 'min-content',
+}));
+
+const StyledChipsContainer = styled('div', { name: 'GalleryView', slot: 'chipArea' })(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(0.25),
+  position: 'absolute',
+  right: 0,
+  top: 0,
+}));
+
+const AnnotationChip = styled(Chip, { name: 'GalleryView', slot: 'chip' })(({ theme }) => ({
+  backgroundColor: theme.palette.annotations.chipBackground,
+  opacity: 0.875,
+  textAlign: 'right',
+}));
 
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
@@ -102,22 +140,15 @@ export class GalleryViewThumbnail extends Component {
   render() {
     const {
       annotationsCount, searchAnnotationsCount,
-      canvas, classes, config, selected,
+      canvas, config, selected,
     } = this.props;
-
-    const miradorCanvas = new MiradorCanvas(canvas);
 
     return (
       <InView onChange={this.handleIntersection}>
-        <div
-          key={canvas.index}
-          className={
-            classNames(
-              classes.galleryViewItem,
-              selected ? classes.selected : '',
-              searchAnnotationsCount > 0 ? classes.hasAnnotations : '',
-            )
-          }
+        <Root
+          ownerState={this.props}
+          key={canvas.id || canvas.index}
+          className={selected ? 'selected' : ''}
           onClick={this.handleSelect}
           onKeyUp={this.handleKey}
           ref={this.myRef}
@@ -128,45 +159,27 @@ export class GalleryViewThumbnail extends Component {
             resource={canvas}
             labelled
             variant="outside"
-            maxWidth={config.width}
             maxHeight={config.height}
-            style={{
-              margin: '0 auto',
-              maxWidth: `${Math.ceil(config.height * miradorCanvas.aspectRatio)}px`,
-            }}
+            maxWidth={config.width}
           >
-            <div className={classes.chips}>
-              { searchAnnotationsCount > 0 && (
-                <Chip
-                  avatar={(
-                    <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
-                      <SearchIcon fontSize="small" />
-                    </Avatar>
-                  )}
+            <StyledChipsContainer>
+              {searchAnnotationsCount > 0 && (
+                <AnnotationChip
+                  icon={<SearchIcon fontSize="small" />}
                   label={searchAnnotationsCount}
-                  className={classNames(classes.searchChip)}
                   size="small"
                 />
               )}
-              { (annotationsCount || 0) > 0 && (
-                <Chip
-                  avatar={(
-                    <Avatar className={classes.avatar} classes={{ circle: classes.avatarIcon }}>
-                      <AnnotationIcon className={classes.annotationIcon} />
-                    </Avatar>
-                  )}
+              {annotationsCount > 0 && (
+                <AnnotationChip
+                  icon={<AnnotationIcon fontSize="small" />}
                   label={annotationsCount}
-                  className={
-                    classNames(
-                      classes.annotationsChip,
-                    )
-                  }
                   size="small"
                 />
               )}
-            </div>
+            </StyledChipsContainer>
           </IIIFThumbnail>
-        </div>
+        </Root>
       </InView>
     );
   }
@@ -175,7 +188,6 @@ export class GalleryViewThumbnail extends Component {
 GalleryViewThumbnail.propTypes = {
   annotationsCount: PropTypes.number,
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   config: PropTypes.shape({
     height: PropTypes.number,
     width: PropTypes.number,

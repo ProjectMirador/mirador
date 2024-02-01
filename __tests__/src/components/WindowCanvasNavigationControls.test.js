@@ -28,7 +28,7 @@ describe('WindowCanvasNavigationControls', () => {
 
   it('renders only a screen-reader accessibile version when visible=false', () => {
     const { container } = render(<Subject visible={false} />);
-    expect(container.firstChild.classList[1]).toMatch(/srOnly/); // eslint-disable-line testing-library/no-node-access
+    expect(container.firstChild).toHaveStyle({ height: '1px', margin: '-1px', width: '1px' }); // eslint-disable-line testing-library/no-node-access
   });
 
   it('stacks the nav controls on small width screens', () => {
@@ -37,10 +37,7 @@ describe('WindowCanvasNavigationControls', () => {
   });
 
   it('shows the zoom control component when specified', () => {
-    render(
-      <Subject />,
-      { preloadedState: { workspace: { showZoomControls: true } } },
-    );
+    render(<Subject showZoomControls />);
     expect(screen.getByRole('button', { name: 'zoomIn' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'zoomOut' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'zoomReset' })).toBeInTheDocument();

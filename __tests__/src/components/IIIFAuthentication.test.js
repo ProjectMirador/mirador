@@ -33,7 +33,7 @@ describe('IIIFAuthentication', () => {
   describe('without an auth service', () => {
     it('renders nothing', () => {
       createWrapper({ authServiceId: null });
-      expect(screen.queryByText('login', { selector: 'span' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'login' })).not.toBeInTheDocument();
       expect(screen.queryByRole('button')).not.toBeInTheDocument();
     });
   });
@@ -41,9 +41,7 @@ describe('IIIFAuthentication', () => {
     it('renders a login bar', async () => {
       const handleAuthInteraction = jest.fn();
       createWrapper({ handleAuthInteraction });
-      const confirmBtn = screen.getByText('login', { selector: 'span' });
-      expect(confirmBtn).toBeInTheDocument();
-      await user.click(confirmBtn);
+      await user.click(screen.getByRole('button', { name: 'login' }));
       expect(handleAuthInteraction).toHaveBeenCalledWith('w', 'http://example.com/auth');
     });
     it('renders nothing for a non-interactive login', () => {
@@ -55,7 +53,8 @@ describe('IIIFAuthentication', () => {
     it('renders with an error message', async () => {
       const handleAuthInteraction = jest.fn();
       createWrapper({ handleAuthInteraction, status: 'failed' });
-      const confirmBtn = await screen.findByText('retry', { selector: 'span' });
+      await user.click(screen.getByRole('button', { name: 'continue' }));
+      const confirmBtn = screen.getByRole('button', { name: /retry/ });
       expect(screen.getByText('Login failed')).toBeInTheDocument();
       expect(screen.getByText('cancel')).toBeInTheDocument();
       expect(screen.getByText('... and this is why.')).toBeInTheDocument();
@@ -71,7 +70,7 @@ describe('IIIFAuthentication', () => {
       window.open = mockWindowOpen;
       const resolveCookieMock = jest.fn();
       createWrapper({ resolveAuthenticationRequest: resolveCookieMock, status: 'cookie' });
-      expect(screen.getByText('login', { selector: 'span' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'login' })).toBeInTheDocument();
       expect(mockWindowOpen).toHaveBeenCalledWith(`http://example.com/auth?origin=${window.origin}`, 'IiifLoginSender', 'centerscreen');
       mockWindow.closed = true;
       jest.runOnlyPendingTimers();
@@ -81,7 +80,7 @@ describe('IIIFAuthentication', () => {
     it('does the IIIF access token behavior', async () => {
       const resolveTokenMock = jest.fn();
       createWrapper({ resolveAccessTokenRequest: resolveTokenMock, status: 'token' });
-      expect(screen.getByText('login', { selector: 'span' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'login' })).toBeInTheDocument();
       window.dispatchEvent(new MessageEvent('message', {
         data: { messageId: 'http://example.com/token' },
       }));
@@ -100,7 +99,7 @@ describe('IIIFAuthentication', () => {
         resetAuthenticationState,
         status: 'ok',
       });
-      const confirmBtn = await screen.findByText('exit', { selector: 'span' });
+      const confirmBtn = await screen.findByRole('button', { name: 'exit' });
       await user.click(confirmBtn);
       await waitFor(() => expect(resetAuthenticationState).toHaveBeenCalledWith({
         authServiceId: 'http://example.com/auth', tokenServiceId: 'http://example.com/token',

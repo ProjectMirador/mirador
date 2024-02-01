@@ -1,9 +1,14 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Fab from '@material-ui/core/Fab';
-import Tooltip from '@material-ui/core/Tooltip';
-import AddIcon from '@material-ui/icons/AddSharp';
-import CloseIcon from '@material-ui/icons/CloseSharp';
+import Fab from '@mui/material/Fab';
+import Tooltip from '@mui/material/Tooltip';
+import AddIcon from '@mui/icons-material/AddSharp';
+import CloseIcon from '@mui/icons-material/CloseSharp';
+import { styled } from '@mui/material/styles';
+
+const Root = styled(Fab, { name: 'WorkspaceAddButton', slot: 'root' })(({ theme }) => ({
+  marginBottom: theme.spacing(1),
+}));
 
 /**
  */
@@ -14,22 +19,19 @@ export class WorkspaceAddButton extends Component {
    */
   render() {
     const {
-      classes, t, setWorkspaceAddVisibility, isWorkspaceAddVisible, useExtendedFab,
+      t, setWorkspaceAddVisibility, isWorkspaceAddVisible, useExtendedFab,
     } = this.props;
     return (
       <Tooltip title={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}>
-        <Fab
+        <Root
           size="medium"
           color="primary"
           id="addBtn"
-          disableRipple
           aria-label={
             isWorkspaceAddVisible
               ? t('closeAddResourceMenu')
               : ((useExtendedFab && t('startHere')) || t('addResource'))
           }
-          className={classes.fab}
-          classes={{ primary: classes.fabPrimary, secondary: classes.fabSecondary }}
           variant={useExtendedFab ? 'extended' : 'circular'}
           onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
         >
@@ -39,14 +41,13 @@ export class WorkspaceAddButton extends Component {
               : <AddIcon />
           }
           { useExtendedFab && t('startHere') }
-        </Fab>
+        </Root>
       </Tooltip>
     );
   }
 }
 
 WorkspaceAddButton.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isWorkspaceAddVisible: PropTypes.bool,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   t: PropTypes.func,

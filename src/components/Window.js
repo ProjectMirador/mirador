@@ -1,7 +1,7 @@
-import { Component } from 'react';
+import { Component, useContext } from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
-import Paper from '@material-ui/core/Paper';
+import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper';
 import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
@@ -11,6 +11,68 @@ import MinimalWindow from '../containers/MinimalWindow';
 import ErrorContent from '../containers/ErrorContent';
 import IIIFAuthentication from '../containers/IIIFAuthentication';
 import { PluginHook } from './PluginHook';
+
+const rowMixin = {
+  display: 'flex',
+  flex: '1',
+  flexDirection: 'row',
+  minHeight: 0,
+};
+
+const columnMixin = {
+  display: 'flex',
+  flex: '1',
+  flexDirection: 'column',
+  minHeight: 0,
+};
+
+const Root = styled(Paper, { name: 'Window', slot: 'root' })(({ ownerState, theme }) => ({
+  ...columnMixin,
+  backgroundColor: theme.palette.shades?.dark,
+  borderRadius: 0,
+  height: '100%',
+  overflow: 'hidden',
+  width: '100%',
+  ...(ownerState?.maximized && {
+    left: 0,
+    position: 'absolute',
+    top: 0,
+    zIndex: theme.zIndex.modal - 1,
+  }),
+}));
+
+const ContentRow = styled('div', { name: 'Window', slot: 'row' })(() => ({
+  ...rowMixin,
+}));
+
+const ContentColumn = styled('div', { name: 'Window', slot: 'column' })(() => ({
+  ...columnMixin,
+}));
+
+const StyledPrimaryWindow = styled(PrimaryWindow, { name: 'Window', slot: 'primary' })(() => ({
+  ...rowMixin,
+  height: '300px',
+  position: 'relative',
+}));
+
+const StyledCompanionAreaBottom = styled(CompanionArea, { name: 'Window', slot: 'bottom' })(() => ({
+  ...rowMixin,
+  flex: '0',
+  flexBasis: 'auto',
+}));
+
+const StyledCompanionAreaRight = styled('div', { name: 'Window', slot: 'right' })(() => ({
+  ...rowMixin,
+  flex: '0 1 auto',
+}));
+
+/** Window title bar wrapper for drag controls in the mosaic view */
+const DraggableNavBar = ({ children, ...props }) => {
+  const { mosaicWindowActions } = useContext(MosaicWindowContext);
+  return mosaicWindowActions.connectDragSource(
+    <nav {...props}>{children}</nav>,
+  );
+};
 
 /**
  * Represents a Window in the mirador workspace
@@ -30,39 +92,12 @@ export class Window extends Component {
   }
 
   /**
-   * wrappedTopBar - will conditionally wrap a WindowTopBar for needed
-   * additional functionality based on workspace type
-   */
-  wrappedTopBar() {
-    const {
-      windowId, workspaceType, windowDraggable,
-    } = this.props;
-
-    const topBar = (
-      <div>
-        <WindowTopBar
-          windowId={windowId}
-          windowDraggable={windowDraggable}
-        />
-        <IIIFAuthentication windowId={windowId} />
-      </div>
-    );
-    if (workspaceType === 'mosaic' && windowDraggable) {
-      const { mosaicWindowActions } = this.context;
-      return mosaicWindowActions.connectDragSource(
-        topBar,
-      );
-    }
-    return topBar;
-  }
-
-  /**
    * Renders things
    */
   render() {
     const {
-      focusWindow, label, isFetching, maximized, sideBarOpen,
-      view, windowId, classes, t,
+      focusWindow, label, isFetching, sideBarOpen,
+      view, windowDraggable, windowId, workspaceType, t,
       manifestError,
     } = this.props;
 
@@ -77,44 +112,40 @@ export class Window extends Component {
     }
 
     return (
-      <Paper
+      <Root
         onFocus={focusWindow}
+        ownerState={this.props}
         component="section"
         elevation={1}
         id={windowId}
-        className={
-          cn(
-            classes.window,
-            ns('window'),
-            maximized ? classes.maximized : null,
-          )
-}
+        className={ns('window')}
         aria-label={t('window', { label })}
       >
-        {this.wrappedTopBar()}
+        <WindowTopBar
+          component={workspaceType === 'mosaic' && windowDraggable ? DraggableNavBar : undefined}
+          windowId={windowId}
+          windowDraggable={windowDraggable}
+        />
+        <IIIFAuthentication windowId={windowId} />
         { manifestError && <ErrorContent error={{ stack: manifestError }} windowId={windowId} /> }
-        <div className={classes.middle}>
-          <div className={classes.middleLeft}>
-            <div className={classes.primaryWindow}>
-              <PrimaryWindow
-                view={view}
-                windowId={windowId}
-                isFetching={isFetching}
-                sideBarOpen={sideBarOpen}
-              />
-            </div>
-            <div className={classes.companionAreaBottom}>
-              <CompanionArea windowId={windowId} position="bottom" />
-            </div>
-          </div>
-          <div className={classes.companionAreaRight}>
+        <ContentRow>
+          <ContentColumn>
+            <StyledPrimaryWindow
+              view={view}
+              windowId={windowId}
+              isFetching={isFetching}
+              sideBarOpen={sideBarOpen}
+            />
+            <StyledCompanionAreaBottom windowId={windowId} position="bottom" />
+          </ContentColumn>
+          <StyledCompanionAreaRight>
             <CompanionArea windowId={windowId} position="right" />
             <CompanionArea windowId={windowId} position="far-right" />
-          </div>
-        </div>
+          </StyledCompanionAreaRight>
+        </ContentRow>
         <CompanionArea windowId={windowId} position="far-bottom" />
         <PluginHook {...this.props} />
-      </Paper>
+      </Root>
     );
   }
 }
@@ -122,7 +153,6 @@ export class Window extends Component {
 Window.contextType = MosaicWindowContext;
 
 Window.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   focusWindow: PropTypes.func,
   isFetching: PropTypes.bool,
   label: PropTypes.string,
@@ -137,7 +167,6 @@ Window.propTypes = {
 };
 
 Window.defaultProps = {
-  classes: {},
   focusWindow: () => {},
   isFetching: false,
   label: null,

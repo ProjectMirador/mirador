@@ -2,6 +2,7 @@ import {
   createRef, Children, cloneElement, Component,
 } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import debounce from 'lodash/debounce';
 import isEqual from 'lodash/isEqual';
 import OpenSeadragon from 'openseadragon';
@@ -12,6 +13,11 @@ import CanvasWorld from '../lib/CanvasWorld';
 import { PluginHook } from './PluginHook';
 import { OSDReferences } from '../plugins/OSDReferences';
 
+const StyledSection = styled('section')({
+  cursor: 'grab',
+  flex: 1,
+  position: 'relative',
+});
 /**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
  * and rendering OSD.
@@ -340,7 +346,7 @@ export class OpenSeadragonViewer extends Component {
    */
   render() {
     const {
-      children, classes, label, t, windowId,
+      children, label, t, windowId,
       drawAnnotations,
     } = this.props;
     const { viewer, grabbing } = this.state;
@@ -355,8 +361,8 @@ export class OpenSeadragonViewer extends Component {
     ));
 
     return (
-      <section
-        className={classNames(ns('osd-container'), classes.osdContainer)}
+      <StyledSection
+        className={classNames(ns('osd-container'))}
         style={{ cursor: grabbing ? 'grabbing' : undefined }}
         id={`${windowId}-osd`}
         ref={this.ref}
@@ -367,7 +373,7 @@ export class OpenSeadragonViewer extends Component {
             && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
         { enhancedChildren }
         <PluginHook viewer={viewer} {...{ ...this.props, children: null }} />
-      </section>
+      </StyledSection>
     );
   }
 }
@@ -385,7 +391,6 @@ OpenSeadragonViewer.defaultProps = {
 OpenSeadragonViewer.propTypes = {
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   children: PropTypes.node,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   drawAnnotations: PropTypes.bool,
   infoResponses: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   label: PropTypes.string,

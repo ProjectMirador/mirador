@@ -34,9 +34,9 @@ describe('CollapsibleSection', () => {
     expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'expandSection');
   });
 
-  it('renders children based on the open state', async () => {
-    expect(screen.getByTestId('child')).toBeInTheDocument();
+  it('displays children based on the open state', async () => {
+    expect(screen.getByTestId('child')).toBeVisible();
     await userEvent.click(screen.getByRole('button'));
-    expect(screen.queryByTestId('child')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('child')).not.toBeVisible();
   });
 });

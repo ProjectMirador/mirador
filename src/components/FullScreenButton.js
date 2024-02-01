@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import FullscreenIcon from '@material-ui/icons/FullscreenSharp';
-import FullscreenExitIcon from '@material-ui/icons/FullscreenExitSharp';
+import FullscreenIcon from '@mui/icons-material/FullscreenSharp';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExitSharp';
 import PropTypes from 'prop-types';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import FullScreenContext from '../contexts/FullScreenContext';

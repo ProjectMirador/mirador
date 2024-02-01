@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import SettingsIcon from '@material-ui/icons/SettingsSharp';
+import SettingsIcon from '@mui/icons-material/SettingsSharp';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import WorkspaceMenu from '../containers/WorkspaceMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
@@ -46,7 +45,7 @@ export class WorkspaceMenuButton extends Component {
    * @return
    */
   render() {
-    const { classes, t } = this.props;
+    const { t } = this.props;
     const { anchorEl, open } = this.state;
 
     return (
@@ -55,7 +54,7 @@ export class WorkspaceMenuButton extends Component {
           aria-haspopup="true"
           aria-label={t('workspaceMenu')}
           aria-owns={open ? 'workspace-menu' : undefined}
-          className={classNames(classes.ctrlBtn, (open ? classes.ctrlBtnSelected : null))}
+          selected={open}
           id="menuBtn"
           onClick={this.handleMenuClick}
         >
@@ -73,7 +72,6 @@ export class WorkspaceMenuButton extends Component {
 }
 
 WorkspaceMenuButton.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   t: PropTypes.func,
 };
 

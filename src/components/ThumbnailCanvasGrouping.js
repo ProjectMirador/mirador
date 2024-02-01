@@ -1,9 +1,17 @@
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 import ns from '../config/css-ns';
 
+const StyledCanvas = styled('div')(({ theme }) => ({
+  boxSizing: 'border-box',
+  color: theme.palette.common.white,
+  cursor: 'pointer',
+  display: 'inline-block',
+  whiteSpace: 'nowrap',
+}));
 /** */
 export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
@@ -31,7 +39,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
   render() {
     const {
-      index, style, data, classes, currentCanvasId,
+      index, style, data, currentCanvasId,
     } = this.props;
     const {
       canvasGroupings, position, height,
@@ -52,24 +60,27 @@ export class ThumbnailCanvasGrouping extends PureComponent {
         role="gridcell"
         aria-colindex={index + 1}
       >
-        <div
+        <StyledCanvas
           role="button"
           data-canvas-id={currentGroupings[0].id}
           data-canvas-index={currentGroupings[0].index}
           onKeyUp={this.setCanvas}
           onClick={this.setCanvas}
           tabIndex={-1}
-          style={{
+          sx={theme => ({
+            '&:hover': {
+              outline: `9px solid ${theme.palette.action.hover}`,
+              outlineOffset: '-2px',
+            },
             height: (position === 'far-right') ? 'auto' : `${height - SPACING}px`,
+            outline: currentGroupings.map(canvas => canvas.id).includes(currentCanvasId) ? `2px solid ${theme.palette.primary.main}` : 0,
+            ...(currentGroupings.map(canvas => canvas.id).includes(currentCanvasId) && {
+              outlineOffset: '3px',
+            }),
             width: (position === 'far-bottom') ? 'auto' : `${style.width}px`,
-          }}
+          })}
           className={classNames(
             ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${index}`, this.currentCanvasClass(currentGroupings.map(canvas => canvas.index))]),
-            classes.canvas,
-            {
-              [classes.currentCanvas]: currentGroupings
-                .map(canvas => canvas.id).includes(currentCanvasId),
-            },
           )}
         >
           {currentGroupings.map((canvas, i) => (
@@ -81,14 +92,13 @@ export class ThumbnailCanvasGrouping extends PureComponent {
               variant="inside"
             />
           ))}
-        </div>
+        </StyledCanvas>
       </div>
     );
   }
 }
 
 ThumbnailCanvasGrouping.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   currentCanvasId: PropTypes.string.isRequired,
   data: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   index: PropTypes.number.isRequired,

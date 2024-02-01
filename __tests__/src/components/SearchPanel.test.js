@@ -54,7 +54,7 @@ describe('SearchPanel', () => {
   it('has the SearchPanelControls component', () => {
     createWrapper();
 
-    expect(screen.getByRole('textbox', { name: 'searchInputLabel' })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: 'searchInputLabel' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'searchSubmitAria' })).toBeInTheDocument();
   });
 

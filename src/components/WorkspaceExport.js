@@ -1,19 +1,19 @@
 import { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import Typography from '@material-ui/core/Typography';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import CloseIcon from '@material-ui/icons/Close';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import Typography from '@mui/material/Typography';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CloseIcon from '@mui/icons-material/Close';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
 import PropTypes from 'prop-types';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { WorkspaceDialog } from './WorkspaceDialog';
 
 /**
  */
@@ -54,7 +54,7 @@ export class WorkspaceExport extends Component {
    */
   render() {
     const {
-      children, classes, container, open, t,
+      children, container, open, t,
     } = this.props;
     const { copied } = this.state;
 
@@ -79,7 +79,7 @@ export class WorkspaceExport extends Component {
     }
 
     return (
-      <Dialog
+      <WorkspaceDialog
         id="workspace-export"
         container={container}
         open={open}
@@ -88,19 +88,18 @@ export class WorkspaceExport extends Component {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle id="form-dialog-title" disableTypography>
-          <Typography variant="h2">{t('downloadExport')}</Typography>
+        <DialogTitle id="form-dialog-title">
+          {t('downloadExport')}
         </DialogTitle>
 
         <DialogContent>
-          <Accordion elevation={0}>
+          <Accordion elevation={2}>
             <AccordionSummary
-              classes={{ root: classes.accordionTitle }}
               expandIcon={<ExpandMoreIcon />}
             >
               <Typography variant="h4">{t('viewWorkspaceConfiguration')}</Typography>
             </AccordionSummary>
-            <AccordionDetails>
+            <AccordionDetails sx={{ overflow: 'scroll' }}>
               {children}
               <pre>
                 {this.exportedState()}
@@ -118,14 +117,13 @@ export class WorkspaceExport extends Component {
             <Button variant="contained" color="primary">{t('copy')}</Button>
           </CopyToClipboard>
         </DialogActions>
-      </Dialog>
+      </WorkspaceDialog>
     );
   }
 }
 
 WorkspaceExport.propTypes = {
   children: PropTypes.node,
-  classes: PropTypes.objectOf(PropTypes.string),
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   exportableState: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
@@ -135,7 +133,6 @@ WorkspaceExport.propTypes = {
 
 WorkspaceExport.defaultProps = {
   children: null,
-  classes: {},
   container: null,
   open: false,
   t: key => key,

@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import CompanionWindow from '../containers/CompanionWindow';
+import { CompanionWindowSection } from './CompanionWindowSection';
 import CanvasInfo from '../containers/CanvasInfo';
 import LocalePicker from '../containers/LocalePicker';
 import ManifestInfo from '../containers/ManifestInfo';
@@ -21,7 +22,6 @@ export class WindowSideBarInfoPanel extends Component {
       windowId,
       id,
       canvasIds,
-      classes,
       collectionPath,
       t,
       locale,
@@ -49,7 +49,9 @@ export class WindowSideBarInfoPanel extends Component {
       >
         {
           canvasIds.map((canvasId, index) => (
-            <div key={canvasId} className={classes.section}>
+            <CompanionWindowSection
+              key={canvasId}
+            >
               <CanvasInfo
                 id={id}
                 canvasId={canvasId}
@@ -57,22 +59,22 @@ export class WindowSideBarInfoPanel extends Component {
                 totalSize={canvasIds.length}
                 windowId={windowId}
               />
-            </div>
+            </CompanionWindowSection>
           ))
         }
         { collectionPath.length > 0 && (
-          <div className={classes.section}>
+          <CompanionWindowSection>
             <CollectionInfo id={id} windowId={windowId} />
-          </div>
+          </CompanionWindowSection>
         )}
 
-        <div className={classes.section}>
+        <CompanionWindowSection>
           <ManifestInfo id={id} windowId={windowId} />
-        </div>
+        </CompanionWindowSection>
 
-        <div className={classes.section}>
+        <CompanionWindowSection>
           <ManifestRelatedLinks id={id} windowId={windowId} />
-        </div>
+        </CompanionWindowSection>
       </CompanionWindow>
     );
   }
@@ -81,7 +83,6 @@ export class WindowSideBarInfoPanel extends Component {
 WindowSideBarInfoPanel.propTypes = {
   availableLocales: PropTypes.arrayOf(PropTypes.string),
   canvasIds: PropTypes.arrayOf(PropTypes.string),
-  classes: PropTypes.objectOf(PropTypes.string),
   collectionPath: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   locale: PropTypes.string,
@@ -94,7 +95,6 @@ WindowSideBarInfoPanel.propTypes = {
 WindowSideBarInfoPanel.defaultProps = {
   availableLocales: [],
   canvasIds: [],
-  classes: {},
   collectionPath: [],
   locale: '',
   setLocale: undefined,

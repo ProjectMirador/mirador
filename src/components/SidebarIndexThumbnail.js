@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import classNames from 'classnames';
+import Typography from '@mui/material/Typography';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 
 /** */
@@ -9,7 +8,7 @@ export class SidebarIndexThumbnail extends Component {
   /** */
   render() {
     const {
-      classes, canvas, height, label, width,
+      canvas, height, label, width,
     } = this.props;
 
     return (
@@ -18,15 +17,11 @@ export class SidebarIndexThumbnail extends Component {
           <IIIFThumbnail
             label={label}
             resource={canvas}
-            className={classNames(classes.clickable)}
             maxHeight={height}
             maxWidth={width}
           />
         </div>
-        <Typography
-          className={classNames(classes.label)}
-          variant="body1"
-        >
+        <Typography>
           {label}
         </Typography>
       </>
@@ -36,7 +31,6 @@ export class SidebarIndexThumbnail extends Component {
 
 SidebarIndexThumbnail.propTypes = {
   canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   height: PropTypes.number,
   label: PropTypes.string.isRequired,
   width: PropTypes.number,

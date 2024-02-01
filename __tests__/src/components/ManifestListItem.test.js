@@ -23,18 +23,23 @@ describe('ManifestListItem', () => {
     createWrapper({ buttonRef: 'ref' });
 
     expect(screen.getByRole('listitem')).toHaveAttribute('data-manifestid', 'http://example.com');
+    expect(screen.getByRole('listitem')).toHaveClass('MuiListItem-root');
     expect(screen.getByRole('button')).toHaveTextContent('xyz');
   });
   it('adds a class when the item is active', () => {
     createWrapper({ active: true, classes: { active: 'active' } });
 
+    // If this is true, we can assume the proper styling classes are being applied
+    expect(screen.getByRole('listitem')).toHaveAttribute('data-active', 'true');
+
     expect(screen.getByRole('listitem')).toHaveClass('active');
+    expect(screen.getByRole('listitem')).toHaveClass('Mui-selected');
   });
   it('renders a placeholder element until real data is available', () => {
     const { container } = createWrapper({ ready: false });
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
-    expect(container.querySelectorAll('.MuiSkeleton-rect').length).toBeGreaterThan(0); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelectorAll('.MuiSkeleton-rectangular').length).toBeGreaterThan(0); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
   it('renders an error message if fetching the manifest failed', () => {
     createWrapper({ error: 'This is an error message' });

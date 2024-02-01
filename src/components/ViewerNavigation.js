@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import NavigationIcon from '@material-ui/icons/PlayCircleOutlineSharp';
+import NavigationIcon from '@mui/icons-material/PlayCircleOutlineSharp';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
@@ -14,7 +14,7 @@ export class ViewerNavigation extends Component {
   render() {
     const {
       hasNextCanvas, hasPreviousCanvas, setNextCanvas, setPreviousCanvas, t,
-      classes, viewingDirection,
+      viewingDirection,
     } = this.props;
 
     let htmlDir = 'ltr';
@@ -41,7 +41,7 @@ export class ViewerNavigation extends Component {
 
     return (
       <div
-        className={classNames(ns('osd-navigation'), classes.osdNavigation)}
+        className={classNames(ns('osd-navigation'))}
         dir={htmlDir}
       >
         <MiradorMenuButton
@@ -66,7 +66,6 @@ export class ViewerNavigation extends Component {
 }
 
 ViewerNavigation.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   hasNextCanvas: PropTypes.bool,
   hasPreviousCanvas: PropTypes.bool,
   setNextCanvas: PropTypes.func,

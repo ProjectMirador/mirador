@@ -1,13 +1,21 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { visuallyHidden } from '@mui/utils';
 import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
 import WorkspaceElastic from '../containers/WorkspaceElastic';
 import ns from '../config/css-ns';
 import { IIIFDropTarget } from './IIIFDropTarget';
+
+const Root = styled('div', { name: 'Workspace', slot: 'root' })(() => ({
+  height: '100%',
+  position: 'relative',
+  width: '100%',
+}));
 
 /**
  * Represents a work area that contains any number of windows
@@ -62,26 +70,28 @@ export class Workspace extends Component {
     const { t } = this.props;
 
     return (
-      <Grid
-        alignItems="center"
-        container
-        style={{
-          height: '100%',
-        }}
-      >
+      <Root>
         <Grid
-          xs={12}
-          item
+          alignItems="center"
+          container
+          style={{
+            height: '100%',
+          }}
         >
-          <Typography
-            variant="h1"
-            component="div"
-            align="center"
+          <Grid
+            xs={12}
+            item
           >
-            {t('welcome')}
-          </Typography>
+            <Typography
+              variant="h1"
+              component="div"
+              align="center"
+            >
+              {t('welcome')}
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
+      </Root>
     );
   }
 
@@ -107,23 +117,21 @@ export class Workspace extends Component {
    * render
    */
   render() {
-    const { classes, isWorkspaceControlPanelVisible, t } = this.props;
+    const { t } = this.props;
 
     return (
       <IIIFDropTarget onDrop={this.handleDrop}>
-        <div
+        <Root
+          ownerState={this.props}
           className={
             classNames(
               ns('workspace-viewport'),
-              (isWorkspaceControlPanelVisible && ns('workspace-with-control-panel')),
-              (isWorkspaceControlPanelVisible && classes.workspaceWithControlPanel),
-              classes.workspaceViewport,
             )
           }
         >
-          <Typography variant="srOnly" component="h1">{t('miradorViewer')}</Typography>
+          <Typography style={visuallyHidden} component="h1">{t('miradorViewer')}</Typography>
           {this.workspaceByType()}
-        </div>
+        </Root>
       </IIIFDropTarget>
     );
   }
@@ -132,8 +140,6 @@ export class Workspace extends Component {
 Workspace.propTypes = {
   addWindow: PropTypes.func,
   allowNewWindows: PropTypes.bool,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   maximizedWindowIds: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func.isRequired,
   windowIds: PropTypes.arrayOf(PropTypes.string),

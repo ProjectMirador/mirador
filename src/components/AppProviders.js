@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
 import {
-  ThemeProvider, StylesProvider, createTheme, jssPreset, createGenerateClassName,
-} from '@material-ui/core/styles';
+  ThemeProvider, StyledEngineProvider, createTheme,
+} from '@mui/material/styles';
 import { DndContext, DndProvider } from 'react-dnd';
 import { MultiBackend } from 'react-dnd-multi-backend';
 import { HTML5toTouch } from 'rdndmb-html5-to-touch';
-import { create } from 'jss';
-import rtl from 'jss-rtl';
+import rtlPlugin from 'stylis-plugin-rtl';
+import { prefixer } from 'stylis';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
 import createI18nInstance from '../i18n';
 import FullScreenContext from '../contexts/FullScreenContext';
 
@@ -92,12 +94,25 @@ export class AppProviders extends Component {
   /** */
   render() {
     const {
-      children, createGenerateClassNameOptions,
+      children,
       theme, translations,
       dndManager,
     } = this.props;
 
-    const generateClassName = createGenerateClassName(createGenerateClassNameOptions);
+    /**
+     * Create rtl emotion cache
+     */
+    const cacheRtl = createCache({
+      key: 'muirtl',
+      stylisPlugins: [prefixer, rtlPlugin],
+    });
+
+    /**
+     * Create default emotion cache
+     */
+    const cacheDefault = createCache({
+      key: 'mui',
+    });
 
     Object.keys(translations).forEach((lng) => {
       this.i18n.addResourceBundle(lng, 'translation', translations[lng], true, true);
@@ -106,18 +121,15 @@ export class AppProviders extends Component {
     return (
       <FullScreenShim>
         <I18nextProvider i18n={this.i18n}>
-          <ThemeProvider
-            theme={createTheme(theme)}
-          >
-            <StylesProvider
-              jss={create({ plugins: [...jssPreset().plugins, rtl()] })}
-              generateClassName={generateClassName}
-            >
-              <MaybeDndProvider dndManager={dndManager}>
-                {children}
-              </MaybeDndProvider>
-            </StylesProvider>
-          </ThemeProvider>
+          <StyledEngineProvider injectFirst>
+            <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
+              <ThemeProvider theme={createTheme((theme))}>
+                <MaybeDndProvider dndManager={dndManager}>
+                  {children}
+                </MaybeDndProvider>
+              </ThemeProvider>
+            </CacheProvider>
+          </StyledEngineProvider>
         </I18nextProvider>
       </FullScreenShim>
     );
@@ -126,7 +138,6 @@ export class AppProviders extends Component {
 
 AppProviders.propTypes = {
   children: PropTypes.node,
-  createGenerateClassNameOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   dndManager: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   language: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -135,6 +146,5 @@ AppProviders.propTypes = {
 
 AppProviders.defaultProps = {
   children: null,
-  createGenerateClassNameOptions: {},
   dndManager: undefined,
 };

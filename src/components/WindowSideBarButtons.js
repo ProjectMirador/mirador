@@ -1,21 +1,62 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Badge from '@material-ui/core/Badge';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Tooltip from '@material-ui/core/Tooltip';
-import InfoIcon from '@material-ui/icons/InfoSharp';
-import AnnotationIcon from '@material-ui/icons/CommentSharp';
-import AttributionIcon from '@material-ui/icons/CopyrightSharp';
-import LayersIcon from '@material-ui/icons/LayersSharp';
-import SearchIcon from '@material-ui/icons/SearchSharp';
+import { styled } from '@mui/material/styles';
+import Badge from '@mui/material/Badge';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Tooltip from '@mui/material/Tooltip';
+import InfoIcon from '@mui/icons-material/InfoSharp';
+import AnnotationIcon from '@mui/icons-material/CommentSharp';
+import AttributionIcon from '@mui/icons-material/CopyrightSharp';
+import LayersIcon from '@mui/icons-material/LayersSharp';
+import SearchIcon from '@mui/icons-material/SearchSharp';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
+
+const Root = styled(Tabs, { name: 'WindowSideBarButtons', slot: 'root' })({
+  '& .MuiTabs-flexContainer': {
+    flexDirection: 'column',
+  },
+  '&.MuiTabs-indicator': {
+    display: 'none',
+  },
+});
+
+const StyledTabButton = styled(Tab, { name: 'WindowSideBarButtons', slot: 'button' })(({ theme }) => ({
+  '&.Mui-selected': {
+    borderRight: '2px solid',
+    borderRightColor: theme.palette.primary.main,
+  },
+  '&.MuiTab-root': {
+    '&:active': {
+      backgroundColor: theme.palette.action.active,
+    },
+    '&:focus': {
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+      backgroundColor: theme.palette.action.hover,
+      textDecoration: 'none',
+      // Reset on touch devices, it doesn't add specificity
+    },
+    '&:hover': {
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+      backgroundColor: theme.palette.action.hover,
+      textDecoration: 'none',
+      // Reset on touch devices, it doesn't add specificity
+    },
+    borderRight: '2px solid transparent',
+    minWidth: 'auto',
+  },
+  fill: 'currentcolor',
+}));
 
 /** */
 function TabButton({ t, value, ...tabProps }) {
   return (
     <Tooltip title={t('openCompanionWindow', { context: value })}>
-      <Tab
+      <StyledTabButton
         {...tabProps}
         value={value}
         aria-label={
@@ -59,7 +100,6 @@ export class WindowSideBarButtons extends Component {
    */
   render() {
     const {
-      classes,
       hasAnnotations,
       hasAnyAnnotations,
       hasAnyLayers,
@@ -73,8 +113,7 @@ export class WindowSideBarButtons extends Component {
     } = this.props;
 
     return (
-      <Tabs
-        classes={{ flexContainer: classes.tabsFlexContainer, indicator: classes.tabsIndicator }}
+      <Root
         value={sideBarPanel === 'closed' ? false : sideBarPanel}
         onChange={this.handleChange}
         variant="fullWidth"
@@ -88,7 +127,6 @@ export class WindowSideBarButtons extends Component {
           <TabButton
             value="info"
             onKeyUp={this.handleKeyUp}
-            classes={{ root: classes.tab, selected: classes.tabSelected }}
             t={t}
             icon={(<InfoIcon />)}
           />
@@ -97,7 +135,6 @@ export class WindowSideBarButtons extends Component {
           <TabButton
             value="attribution"
             onKeyUp={this.handleKeyUp}
-            classes={{ root: classes.tab, selected: classes.tabSelected }}
             t={t}
             icon={(<AttributionIcon />)}
           />
@@ -106,7 +143,6 @@ export class WindowSideBarButtons extends Component {
           <TabButton
             value="canvas"
             onKeyUp={this.handleKeyUp}
-            classes={{ root: classes.tab, selected: classes.tabSelected }}
             t={t}
             icon={(<CanvasIndexIcon />)}
           />
@@ -115,10 +151,9 @@ export class WindowSideBarButtons extends Component {
           <TabButton
             value="annotations"
             onKeyUp={this.handleKeyUp}
-            classes={{ root: classes.tab, selected: classes.tabSelected }}
             t={t}
             icon={(
-              <Badge overlap="rectangular" classes={{ badge: classes.badge }} invisible={!hasAnnotations} variant="dot">
+              <Badge overlap="rectangular" color="notification" invisible={!hasAnnotations} variant="dot">
                 <AnnotationIcon />
               </Badge>
             )}
@@ -128,10 +163,9 @@ export class WindowSideBarButtons extends Component {
           <TabButton
             value="search"
             onKeyUp={this.handleKeyUp}
-            classes={{ root: classes.tab, selected: classes.tabSelected }}
             t={t}
             icon={(
-              <Badge overlap="rectangular" classes={{ badge: classes.badge }} invisible={!hasSearchResults} variant="dot">
+              <Badge overlap="rectangular" color="notification" invisible={!hasSearchResults} variant="dot">
                 <SearchIcon />
               </Badge>
             )}
@@ -141,10 +175,9 @@ export class WindowSideBarButtons extends Component {
           <TabButton
             value="layers"
             onKeyUp={this.handleKeyUp}
-            classes={{ root: classes.tab, selected: classes.tabSelected }}
             t={t}
             icon={(
-              <Badge overlap="rectangular" classes={{ badge: classes.badge }} invisible={!hasCurrentLayers} variant="dot">
+              <Badge overlap="rectangular" color="notification" invisible={!hasCurrentLayers} variant="dot">
                 <LayersIcon />
               </Badge>
             )}
@@ -154,21 +187,19 @@ export class WindowSideBarButtons extends Component {
           && PluginComponents.map(PluginComponent => (
             <TabButton
               onKeyUp={this.handleKeyUp}
-              classes={{ root: classes.tab, selected: classes.tabSelected }}
               t={t}
               key={PluginComponent.value}
               value={PluginComponent.value}
               icon={<PluginComponent />}
             />
           ))}
-      </Tabs>
+      </Root>
     );
   }
 }
 
 WindowSideBarButtons.propTypes = {
   addCompanionWindow: PropTypes.func.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string),
   hasAnnotations: PropTypes.bool,
   hasAnyAnnotations: PropTypes.bool,
   hasAnyLayers: PropTypes.bool,
@@ -182,7 +213,6 @@ WindowSideBarButtons.propTypes = {
 };
 
 WindowSideBarButtons.defaultProps = {
-  classes: {},
   hasAnnotations: false,
   hasAnyAnnotations: false,
   hasAnyLayers: false,

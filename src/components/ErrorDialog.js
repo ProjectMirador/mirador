@@ -1,10 +1,10 @@
 import { Component } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
-import { DialogActions, DialogContentText, Typography } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+import { DialogActions, DialogContentText } from '@mui/material';
+import Button from '@mui/material/Button';
 import { isUndefined } from 'lodash';
 
 /**
@@ -28,8 +28,8 @@ export class ErrorDialog extends Component {
         onClose={() => removeError(error.id)}
         open={hasError}
       >
-        <DialogTitle id="error-dialog-title" disableTypography>
-          <Typography variant="h2">{t('errorDialogTitle')}</Typography>
+        <DialogTitle id="error-dialog-title">
+          {t('errorDialogTitle')}
         </DialogTitle>
         <DialogContent>
           <DialogContentText variant="body2" noWrap color="inherit">

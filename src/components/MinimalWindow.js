@@ -1,15 +1,19 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import MenuIcon from '@material-ui/icons/MenuSharp';
+import { styled } from '@mui/material/styles';
+import MenuIcon from '@mui/icons-material/MenuSharp';
 import cn from 'classnames';
-import Paper from '@material-ui/core/Paper';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import CloseIcon from '@material-ui/icons/CloseSharp';
+import Paper from '@mui/material/Paper';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/CloseSharp';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
+const StyledMiradorMenuButton = styled(MiradorMenuButton)(() => ({
+  marginLeft: 'auto',
+}));
 /** */
 export class MinimalWindow extends Component {
   /** */
@@ -19,7 +23,6 @@ export class MinimalWindow extends Component {
       allowWindowSideBar,
       ariaLabel,
       children,
-      classes,
       label,
       removeWindow,
       t,
@@ -32,17 +35,31 @@ export class MinimalWindow extends Component {
         elevation={1}
         id={windowId}
         className={
-          cn(classes.window, ns('placeholder-window'))
+          cn(ns('placeholder-window'))
         }
+        sx={{
+          backgroundColor: 'shades.dark',
+          borderRadius: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          minHeight: 0,
+          overflow: 'hidden',
+          width: '100%',
+        }}
         aria-label={label && ariaLabel ? t('window', { label }) : null}
       >
-        <AppBar position="relative" color="default">
+        <AppBar position="relative" color="default" enableColorOnDark>
           <Toolbar
             disableGutters
-            className={cn(
-              classes.windowTopBarStyle,
-              ns('window-top-bar'),
-            )}
+            className={cn(ns('window-top-bar'))}
+            sx={{
+              backgroundColor: 'shades.main',
+              borderTop: '2px solid transparent',
+              minHeight: 32,
+              paddingLeft: 0.5,
+              paddingRight: 0.5,
+            }}
             variant="dense"
           >
             {allowWindowSideBar && (
@@ -53,20 +70,29 @@ export class MinimalWindow extends Component {
                 <MenuIcon />
               </MiradorMenuButton>
             )}
-            <Typography variant="h2" noWrap color="inherit" className={classes.title}>
+            <Typography
+              variant="h2"
+              noWrap
+              color="inherit"
+              sx={{
+                flexGrow: 1,
+                paddingLeft: 0.5,
+                typography: 'h6',
+              }}
+            >
               {label}
             </Typography>
             {allowClose && removeWindow && (
-              <MiradorMenuButton
+              <StyledMiradorMenuButton
                 aria-label={t('closeWindow')}
-                className={cn(classes.button, ns('window-close'))}
+                className={cn(ns('window-close'))}
                 onClick={removeWindow}
                 TooltipProps={{
-                  tabIndex: ariaLabel ? '0' : '-1',
+                  tabIndex: ariaLabel ? 0 : -1,
                 }}
               >
                 <CloseIcon />
-              </MiradorMenuButton>
+              </StyledMiradorMenuButton>
             )}
           </Toolbar>
         </AppBar>
@@ -81,7 +107,6 @@ MinimalWindow.propTypes = {
   allowWindowSideBar: PropTypes.bool,
   ariaLabel: PropTypes.bool,
   children: PropTypes.node,
-  classes: PropTypes.objectOf(PropTypes.string),
   label: PropTypes.string,
   removeWindow: PropTypes.func,
   t: PropTypes.func,
@@ -93,7 +118,6 @@ MinimalWindow.defaultProps = {
   allowWindowSideBar: true,
   ariaLabel: true,
   children: null,
-  classes: {},
   label: '',
   removeWindow: () => {},
   t: key => key,

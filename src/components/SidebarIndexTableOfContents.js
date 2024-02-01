@@ -1,12 +1,15 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import TreeView from '@material-ui/lab/TreeView';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import TreeItem from '@material-ui/lab/TreeItem';
-import clsx from 'clsx';
+import { alpha, styled } from '@mui/material/styles';
+import { TreeView } from '@mui/x-tree-view/TreeView';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { TreeItem } from '@mui/x-tree-view/TreeItem';
 import { ScrollTo } from './ScrollTo';
 
+const StyledVisibleNode = styled('div')(() => ({
+
+}));
 /** */
 function getStartCanvasId(node) {
   const jsonld = node.data.__jsonld; // eslint-disable-line no-underscore-dangle
@@ -65,20 +68,13 @@ export class SidebarIndexTableOfContents extends Component {
   }
 
   /** */
-  handleKeyPressed(event, nodeId) {
+  handleNodeSelect(event, nodeId) {
     const { toggleNode } = this.props;
-
-    if (event.key === 'Enter') {
-      this.selectTreeItem(nodeId);
-    }
 
     if (event.key === ' ' || event.key === 'Spacebar') {
       toggleNode(nodeId);
     }
-  }
 
-  /** */
-  handleNodeSelect(_event, nodeId) {
     this.selectTreeItem(nodeId);
   }
 
@@ -109,7 +105,7 @@ export class SidebarIndexTableOfContents extends Component {
   /** */
   render() {
     const {
-      classes, treeStructure, visibleNodeIds, expandedNodeIds, containerRef, nodeIdToScrollTo,
+      treeStructure, visibleNodeIds, expandedNodeIds, containerRef, nodeIdToScrollTo,
     } = this.props;
 
     if (!treeStructure) {
@@ -127,22 +123,45 @@ export class SidebarIndexTableOfContents extends Component {
       >
         <TreeItem
           nodeId={node.id}
-          classes={{
-            content: classes.content,
-            group: classes.group,
-            label: classes.label,
-            root: classes.treeItemRoot,
-            selected: classes.selected,
+          sx={{
+            '& .MuiTreeItem-content': {
+              alignItems: 'flex-start',
+              borderLeft: '1px solid transparent',
+              padding: '8px 16px 8px 0',
+              width: 'auto',
+            },
+            '& .MuiTreeItem-group': {
+              borderLeft: '1px solid',
+              borderLeftColor: 'grey.300',
+            },
+            '& .MuiTreeItem-iconContainer': {
+              paddingBlockStart: 0.5,
+            },
+            '& .MuiTreeItem-label': {
+              paddingLeft: 0,
+            },
+            '& .MuiTreeItem-root': {
+              '&:focus > .MuiTreeItem-content': {
+                backgroundColor: 'action.selected',
+              },
+              '&:hover > .MuiTreeItem-content': {
+                backgroundColor: 'action.hover',
+              },
+              '&:hover > .MuiTreeItem-content .MuiTreeItem-label, &:focus > .MuiTreeItem-content .MuiTreeItem-label, &.MuiTreeItem-selected > .MuiTreeItem-content .MuiTreeItem-label, &.MuiTreeItem-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, &.MuiTreeItem-selected:focus > .MuiTreeItem-content .MuiTreeItem-label': {
+                backgroundColor: 'transparent',
+              },
+            },
           }}
-          onKeyDown={e => this.handleKeyPressed(e, node.id)}
           label={(
-            <div
-              className={clsx({
-                [classes.visibleNode]: visibleNodeIds.indexOf(node.id) !== -1,
+            <StyledVisibleNode
+              sx={theme => ({
+                backgroundColor: visibleNodeIds.indexOf(node.id) !== -1
+                && alpha(theme.palette.highlights?.primary || theme.palette.action.selected, 0.35),
+                display: visibleNodeIds.indexOf(node.id) !== -1 && 'inline',
               })}
             >
               {node.label}
-            </div>
+            </StyledVisibleNode>
         )}
         >
           {Array.isArray(node.nodes) ? node.nodes.map((n) => renderTree(n)) : null}
@@ -152,7 +171,7 @@ export class SidebarIndexTableOfContents extends Component {
 
     return (
       <TreeView
-        className={classes.root}
+        sx={{ flexGrow: 1 }}
         defaultCollapseIcon={<ExpandMoreIcon color="action" />}
         defaultExpandIcon={<ChevronRightIcon color="action" />}
         defaultEndIcon={null}
@@ -167,7 +186,6 @@ export class SidebarIndexTableOfContents extends Component {
 }
 
 SidebarIndexTableOfContents.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   containerRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),

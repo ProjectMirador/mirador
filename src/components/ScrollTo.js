@@ -1,5 +1,6 @@
-import { createRef, Component } from 'react';
+import { cloneElement, createRef, Component } from 'react';
 import PropTypes from 'prop-types';
+import isEmpty from 'lodash/isEmpty';
 
 /**
  * ScrollTo ~
@@ -36,9 +37,9 @@ export class ScrollTo extends Component {
   containerBoundingRect() {
     const { containerRef } = this.props;
 
-    if (!containerRef || !containerRef.current || !containerRef.current.domEl) return {};
+    if (!containerRef || !containerRef.current) return {};
 
-    return containerRef.current.domEl.getBoundingClientRect();
+    return containerRef.current.getBoundingClientRect();
   }
 
   /**
@@ -59,14 +60,14 @@ export class ScrollTo extends Component {
   }
 
   /**
-   * The container provided in the containersRef dome structure in which scrolling
+   * The container provided in the containersRef dom structure in which scrolling
    * should happen.
   */
   scrollableContainer() {
     const { containerRef } = this.props;
 
-    if (!containerRef || !containerRef.current || !containerRef.current.domEl) return null;
-    return containerRef.current.domEl.getElementsByClassName('mirador-scrollto-scrollable')[0];
+    if (!containerRef || !containerRef.current) return null;
+    return containerRef.current.getElementsByClassName('mirador-scrollto-scrollable')[0];
   }
 
   /**
@@ -104,16 +105,12 @@ export class ScrollTo extends Component {
   */
   render() {
     const {
-      children, containerRef, offsetTop, scrollTo, ...otherProps
+      children, containerRef, offsetTop, scrollTo, nodeId, ...otherProps
     } = this.props;
 
-    if (!scrollTo) return children;
+    if (!scrollTo && isEmpty(otherProps)) return children;
 
-    return (
-      <div ref={this.scrollToRef} {...otherProps}>
-        {children}
-      </div>
-    );
+    return cloneElement(children, { ref: this.scrollToRef, ...otherProps });
   }
 }
 
@@ -123,6 +120,7 @@ ScrollTo.propTypes = {
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   ]).isRequired,
+  nodeId: PropTypes.string.isRequired,
   offsetTop: PropTypes.number,
   scrollTo: PropTypes.bool.isRequired,
 };

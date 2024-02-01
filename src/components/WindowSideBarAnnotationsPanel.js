@@ -1,9 +1,10 @@
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import AnnotationSettings from '../containers/AnnotationSettings';
 import CanvasAnnotations from '../containers/CanvasAnnotations';
 import CompanionWindow from '../containers/CompanionWindow';
+import { CompanionWindowSection } from './CompanionWindowSection';
 import ns from '../config/css-ns';
 
 /**
@@ -22,7 +23,7 @@ export class WindowSideBarAnnotationsPanel extends Component {
   */
   render() {
     const {
-      annotationCount, classes, canvasIds, t, windowId, id,
+      annotationCount, canvasIds, t, windowId, id,
     } = this.props;
     return (
       <CompanionWindow
@@ -31,12 +32,11 @@ export class WindowSideBarAnnotationsPanel extends Component {
         windowId={windowId}
         id={id}
         ref={this.containerRef}
-        otherRef={this.containerRef}
         titleControls={<AnnotationSettings windowId={windowId} />}
       >
-        <div className={classes.section}>
+        <CompanionWindowSection>
           <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
-        </div>
+        </CompanionWindowSection>
 
         {canvasIds.map((canvasId, index) => (
           <CanvasAnnotations
@@ -56,7 +56,6 @@ export class WindowSideBarAnnotationsPanel extends Component {
 WindowSideBarAnnotationsPanel.propTypes = {
   annotationCount: PropTypes.number.isRequired,
   canvasIds: PropTypes.arrayOf(PropTypes.string),
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   id: PropTypes.string.isRequired,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,

@@ -1,7 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
@@ -56,22 +55,7 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   updateWindow: (...args) => dispatch(actions.updateWindow(windowId, ...args)),
 });
 
-/**
- * Styles for withStyles HOC
- */
-const styles = theme => ({
-  label: {
-    paddingLeft: theme.spacing(1),
-  },
-  menuItem: {
-    borderBottom: `0.5px solid ${theme.palette.divider}`,
-    paddingRight: theme.spacing(1),
-    whiteSpace: 'normal',
-  },
-});
-
 const enhance = compose(
-  withStyles(styles),
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowSideBarCollectionPanel'),
