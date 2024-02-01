@@ -3,11 +3,22 @@ import groupBy from 'lodash/groupBy';
 import { miradorSlice } from './utils';
 import { getWindow, getWindows } from './getters';
 
-/** */
+/**
+ * Returns companion windows.
+ * @param {object} state
+ * @returns {object}
+ */
 export function getCompanionWindows(state) {
   return miradorSlice(state).companionWindows || {};
 }
 
+/**
+ * Returns the companion window.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.companionWindowId
+ * @returns {object|undefined}
+ */
 export const getCompanionWindow = createSelector(
   [
     getCompanionWindows,
@@ -21,11 +32,13 @@ export const getCompanionWindowLocale = createSelector(
   companionWindow => companionWindow && companionWindow.locale,
 );
 
-/** Return position of thumbnail navigation in a certain window.
-* @param {object} state
-* @param {String} windowId
-* @param {String}
-*/
+/**
+ * Return position of thumbnail navigation in a certain window.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @returns {string|undefined}
+ */
 export const getThumbnailNavigationPosition = createSelector(
   [
     getWindow,
@@ -37,10 +50,10 @@ export const getThumbnailNavigationPosition = createSelector(
 );
 
 /**
-* Return compantion window ids from a window
-* @param {String} windowId
-* @return {Array}
-*/
+ * Return companion window ids from a window.
+ * @param {string} windowId
+ * @returns {Array}
+ */
 const getCompanionWindowIndexByWindowAndPosition = createSelector(
   [getWindows, getCompanionWindows],
   (windows, companionWindows) => (
@@ -56,10 +69,10 @@ const getCompanionWindowIndexByWindowAndPosition = createSelector(
 );
 
 /**
-* Return compantion window ids from a window
-* @param {String} windowId
-* @return {Array}
-*/
+ * Return companion window ids from a window.
+ * @param {string} windowId
+ * @returns {Array}
+ */
 const getCompanionWindowsByWindowAndPosition = createSelector(
   [getWindows, getCompanionWindows],
   (windows, companionWindows) => (
@@ -74,9 +87,10 @@ const getCompanionWindowsByWindowAndPosition = createSelector(
 );
 
 /**
- * Return companion windows of a window
- * @param {String} windowId
- * @return {Array}
+ * Return companion windows of a window.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {Array}
  */
 const getCompanionWindowsOfWindow = createSelector(
   [(state, { windowId }) => windowId, getCompanionWindowsByWindowAndPosition],
@@ -84,9 +98,10 @@ const getCompanionWindowsOfWindow = createSelector(
 );
 
 /**
- * Return companion windows of a window
- * @param {String} windowId
- * @return {Array}
+ * Return companion windows ids of a window.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {Array}
  */
 const getCompanionWindowIdsOfWindow = createSelector(
   [(state, { windowId }) => windowId, getCompanionWindowIndexByWindowAndPosition],
@@ -94,53 +109,60 @@ const getCompanionWindowIdsOfWindow = createSelector(
 );
 
 /**
-* Return the companion window string from state in a given windowId and position
-* @param {object} state
-* @param {String} windowId
-* @param {String} position
-* @return {String}
-*/
+ * Return the companion window string from state in a given windowId and position.
+ * @param {object} state
+ * @param {string} windowId
+ * @param {string} position
+ * @returns {string}
+ */
 export const getCompanionWindowsForPosition = createSelector(
   [
     getCompanionWindowsOfWindow,
-    (state, { position }) => ({ position }),
+    (state, { position }) => (position),
   ],
-  (companionWindows, { position }) => companionWindows[position] || EMPTY_ARRAY,
+  (companionWindows, position) => companionWindows[position] || EMPTY_ARRAY,
 );
 
 /**
-* Return the companion window string from state in a given windowId and content type
-* @param {object} state
-* @param {String} windowId
-* @param {String} position
-* @return {String}
-*/
+ * Return the companion window string from state in a given windowId and content type.
+ * @param {object} state
+ * @param {string} windowId
+ * @param {string} position
+ * @returns {string}
+ */
 export const getCompanionWindowsForContent = createSelector(
   [
     getCompanionWindowsOfWindow,
-    (state, { content }) => ({ content }),
+    (state, { content }) => (content),
   ],
-  (companionWindows, { content }) => (
+  (companionWindows, content) => (
     [].concat(...Object.values(companionWindows)).filter(w => w.content === content)
   ),
 );
 
 const EMPTY_ARRAY = [];
 
-/** */
+/**
+ * Returns companion window ids for position.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @param {string} props.position
+ * @returns {Array}
+ */
 export const getCompanionWindowIdsForPosition = createSelector(
   [
     getCompanionWindowIdsOfWindow,
-    (state, { position }) => ({ position }),
+    (state, { position }) => (position),
   ],
-  (companionWindowIds, { position }) => companionWindowIds[position] || EMPTY_ARRAY,
+  (companionWindowIds, position) => companionWindowIds[position] || EMPTY_ARRAY,
 );
 
 /**
- * Returns the visibility of the companion area
+ * Returns the visibility of the companion area.
  * @param {object} state
- * @param {object} props
- * @return {Boolean}
+ * @param {string} position
+ * @returns {boolean}
  */
 export const getCompanionAreaVisibility = createSelector(
   [
@@ -155,6 +177,12 @@ export const getCompanionAreaVisibility = createSelector(
   },
 );
 
+/**
+ * Returns the dimensions.
+ * @param {object} state
+ * @param {string} companionWindowId
+ * @returns {object} containing height and width
+ */
 export const selectCompanionWindowDimensions = createSelector(
   [getCompanionWindowsOfWindow],
   (companionWindows) => {

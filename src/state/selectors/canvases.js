@@ -8,7 +8,11 @@ import { getSequence } from './sequences';
 import { getWindowViewType } from './windows';
 import { getManifestLocale } from './manifests';
 
-/** */
+/**
+ * Returns the info response.
+ * @param {object} state
+ * @returns {object}
+ */
 export const selectInfoResponses = state => miradorSlice(state).infoResponses;
 
 export const getCanvases = createSelector(
@@ -17,13 +21,12 @@ export const getCanvases = createSelector(
 );
 
 /**
-* Return the canvas selected by an id
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {Object}
-*/
+ * Return the canvas selected by an id
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.canvasId
+ * @returns {object}
+ */
 export const getCanvas = createSelector(
   [
     getSequence,
@@ -36,6 +39,13 @@ export const getCanvas = createSelector(
   },
 );
 
+/**
+ * Returns the current canvas.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @returns {object|undefined}
+ */
 export const getCurrentCanvas = createSelector(
   [
     getSequence,
@@ -50,27 +60,39 @@ export const getCurrentCanvas = createSelector(
   },
 );
 
-/** */
+/**
+ * Returns the visible canvas ids.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @returns {Array}
+ */
 export const getVisibleCanvasIds = createSelector(
   [getWindow],
   window => (window && (window.visibleCanvases || (window.canvasId && [window.canvasId]))) || [],
 );
 
-/** */
+/**
+ * Returns the visible canvses.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @returns {Array}
+ */
 export const getVisibleCanvases = createSelector(
   [getVisibleCanvasIds, getCanvases],
   (canvasIds, canvases) => (canvases || []).filter(c => canvasIds.includes(c.id)),
 );
 
 /**
-* Return the current canvases grouped by how they'll appear in the viewer
-* For book view returns groups of 2, for single returns 1
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {Array}
-*/
+ * Return the current canvases grouped by how they'll appear in the viewer.
+ * For book view returns groups of 2, for single returns 1.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {Array}
+ */
 export const getCanvasGroupings = createSelector(
   [
     getCanvases,
@@ -84,14 +106,15 @@ export const getCanvasGroupings = createSelector(
 );
 
 /**
-* Return the current canvases selected in a window
-* For book view returns 2, for single returns 1
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {Array}
-*/
+ * Return the current canvases selected in a window.
+ * For book view returns 2, for single returns 1.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @param {string} props.canvasId
+ * @returns {Array}
+ */
 export const getCanvasGrouping = createSelector(
   [
     getCanvasGroupings,
@@ -102,14 +125,14 @@ export const getCanvasGrouping = createSelector(
 );
 
 /**
-* Return the next canvas(es) for a window
-* For book view returns 2, for single returns 1
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {Array}
-*/
+ * Return the next canvas(es) for a window.
+ * For book view returns 2, for single returns 1.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {Array}
+ */
 export const getNextCanvasGrouping = createSelector(
   [
     getCanvasGroupings,
@@ -127,14 +150,14 @@ export const getNextCanvasGrouping = createSelector(
 );
 
 /**
-* Return the previous canvas(es) for a window
-* For book view returns 2, for single returns 1
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {Array}
-*/
+ * Return the previous canvas(es) for a window.
+ * For book view returns 2, for single returns 1.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {Array}
+ */
 export const getPreviousCanvasGrouping = createSelector(
   [
     getCanvasGroupings,
@@ -153,10 +176,13 @@ export const getPreviousCanvasGrouping = createSelector(
 );
 
 /**
-* Return canvas label, or alternatively return the given index + 1 to be displayed
-* @param {object} canvas
-* @return {String|Integer}
-*/
+ * Return canvas label, or alternatively return the given index + 1 to be displayed.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.canvasId
+ * @param {string} props.manifestId
+ * @returns {string|number}
+ */
 export const getCanvasLabel = createSelector(
   [getCanvas, getManifestLocale],
   (canvas, locale) => (canvas && (
@@ -167,15 +193,21 @@ export const getCanvasLabel = createSelector(
 );
 
 /**
-* Return canvas description
-* @param {object} canvas
-* @param {String}
-*/
+ * Return canvas description.
+ * @param {object} canvas
+ * @param {string} companionWindowId
+ */
 export const getCanvasDescription = createSelector(
   [getCanvas],
   canvas => canvas && canvas.getProperty('description'),
 );
 
+/**
+ * Return visible non tiled canvas resources.
+ * @param {object}
+ * @param {string} windowId
+ * @returns {Array}
+ */
 export const getVisibleCanvasNonTiledResources = createSelector(
   [
     getVisibleCanvases,
@@ -185,6 +217,12 @@ export const getVisibleCanvasNonTiledResources = createSelector(
     .filter(resource => resource.getServices().length < 1),
 );
 
+/**
+ * Returns visible canvas video resources.
+ * @param {object} state
+ * @param {string} windowId
+ * @return {Array}
+ */
 export const getVisibleCanvasVideoResources = createSelector(
   [
     getVisibleCanvases,
@@ -193,6 +231,12 @@ export const getVisibleCanvasVideoResources = createSelector(
     .map(canvas => new MiradorCanvas(canvas).videoResources)),
 );
 
+/**
+ * Returns visible canvas captions.
+ * @param {object} state
+ * @param {string} windowId
+ * @return {Array}
+ */
 export const getVisibleCanvasCaptions = createSelector(
   [
     getVisibleCanvases,
@@ -205,6 +249,12 @@ export const getVisibleCanvasCaptions = createSelector(
   })),
 );
 
+/**
+ * Returns visible canvas audio resources.
+ * @param {object} state
+ * @param {string} windowId
+ * @return {Array}
+ */
 export const getVisibleCanvasAudioResources = createSelector(
   [
     getVisibleCanvases,
@@ -213,6 +263,15 @@ export const getVisibleCanvasAudioResources = createSelector(
     .map(canvas => new MiradorCanvas(canvas).audioResources)),
 );
 
+/**
+ * Returns info response.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @param {string} props.canvasId
+ * @param {string} props.infoId
+ * @returns {object|undefined}
+ */
 export const selectInfoResponse = createSelector(
   [
     (state, { infoId }) => infoId,
