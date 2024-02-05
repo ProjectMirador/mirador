@@ -21,7 +21,7 @@ export class AnnotationManifestsAccordion extends Component {
     /** Search if the annotation is a manifest. URL must be resolvable for the annotation. So the manifest url is added at the end of the id */
     function searchManifestInID(id) {
       const match = id.match(
-        /((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)/gi,
+        /((http|https|localStorage)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)#((http|https)\:\/\/[a-z0-9\/:%_+.,#?!@&=-]+)/gi,
       );
 
       return match ? match[0].split('#').slice(-1) : null;
