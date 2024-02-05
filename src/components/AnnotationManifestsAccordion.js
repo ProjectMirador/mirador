@@ -37,6 +37,12 @@ export class AnnotationManifestsAccordion extends Component {
     // eslint-disable-next-line react/prop-types
     annotation.manifests = annotation.manifests?.map(id => ({ id })) ?? [];
 
+    if(annotation.manifests.length = 0) {
+      if(annotation.manifestNetwork) {
+        annotation.manifests = annotation.manifestNetwork;
+      }
+    }
+
     this.state = { annotation };
   }
 
