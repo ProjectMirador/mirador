@@ -2,7 +2,7 @@ import { render, screen } from 'test-utils';
 import i18next from 'i18next';
 
 import CanvasAnnotations from '../../../src/containers/CanvasAnnotations';
-import { WindowSideBarAnnotationsPanel } from '../../../src/components/WindowSideBarAnnotationsPanel';
+import WindowSideBarAnnotationsPanel from '../../../src/components/WindowSideBarAnnotationsPanel';
 
 /** */
 function createWrapper(props, state) {

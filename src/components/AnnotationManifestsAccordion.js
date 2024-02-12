@@ -46,7 +46,7 @@ export class AnnotationManifestsAccordion extends Component {
     const { annotation } = this.state;
     annotation.manifestsOpen = true;
     e.stopPropagation();
-    this.state = { annotation };
+    this.setState({ annotation });
   }
 
   /** */
