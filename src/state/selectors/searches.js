@@ -7,9 +7,17 @@ import { getWindow } from './getters';
 import { getManifestLocale } from './manifests';
 import { miradorSlice } from './utils';
 
-/** Get searches from state */
+/**
+ *  Get searches from state.
+ */
 const getSearches = (state) => miradorSlice(state).searches;
 
+/**
+ * Returns the search result for a specific window.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {object}
+ */
 export const getSearchForWindow = createSelector(
   [
     (state, { windowId }) => windowId,
@@ -22,6 +30,12 @@ export const getSearchForWindow = createSelector(
   },
 );
 
+/**
+ * Returns the search result for a specific companion window.
+ * @param {object} state
+ * @param {string} companionWindowId
+ * @returns {object|undefined}
+ */
 const getSearchForCompanionWindow = createSelector(
   [
     getSearchForWindow,
@@ -33,6 +47,11 @@ const getSearchForCompanionWindow = createSelector(
   },
 );
 
+/**
+ * Returns an array of search responses for a specific companion window.
+ * @param {object} state
+ * @returns {Array}
+ */
 const getSearchResponsesForCompanionWindow = createSelector(
   [
     getSearchForCompanionWindow,
@@ -43,6 +62,12 @@ const getSearchResponsesForCompanionWindow = createSelector(
   },
 );
 
+/**
+ * Returns the search query for a specific companion window.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {string|undefined}
+ */
 export const getSearchQuery = createSelector(
   [
     getSearchForCompanionWindow,
@@ -50,6 +75,11 @@ export const getSearchQuery = createSelector(
   results => results && results.query,
 );
 
+/**
+ * Returns if search response for a companion window is fetching.
+ * @param {object} state
+ * @returns {boolean}
+ */
 export const getSearchIsFetching = createSelector(
   [
     getSearchResponsesForCompanionWindow,
@@ -57,6 +87,12 @@ export const getSearchIsFetching = createSelector(
   results => results.some(result => result.isFetching),
 );
 
+/**
+ * Returns the total number of search results for a companion window.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {number|undefined}
+ */
 export const getSearchNumTotal = createSelector(
   [
     getSearchForCompanionWindow,
@@ -76,6 +112,12 @@ export const getSearchNumTotal = createSelector(
   },
 );
 
+/**
+ * Returns the Id of the next search.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {number|undefined}
+ */
 export const getNextSearchId = createSelector(
   [
     getSearchForCompanionWindow,
@@ -107,6 +149,12 @@ const getSearchHitsForCompanionWindow = createSelector(
   })),
 );
 
+/**
+ * Returns sorted search hits based on canvas order.
+ * @param {object} state
+ * @param {string} manifestId
+ * @returns {Array}
+ */
 export const getSortedSearchHitsForCompanionWindow = createSelector(
   [
     getSearchHitsForCompanionWindow,
@@ -152,7 +200,10 @@ export const getSearchAnnotationsForCompanionWindow = createSelector(
   results => results && searchResultsToAnnotation(results),
 );
 
-/** */
+/**
+ * Sorts search annotations based on canvas order.
+ * @returns {Array}
+ */
 export function sortSearchAnnotationsByCanvasOrder(searchAnnotations, canvases) {
   if (!searchAnnotations
       || !searchAnnotations.resources
@@ -165,6 +216,12 @@ export function sortSearchAnnotationsByCanvasOrder(searchAnnotations, canvases) 
   );
 }
 
+/**
+ * Returns sorted search annotations for companion window.
+ * @param {object} state
+ * @param {string} companionWindowId
+ * @returns {Array}
+ */
 export const getSortedSearchAnnotationsForCompanionWindow = createSelector(
   [
     getSearchAnnotationsForCompanionWindow,
@@ -173,6 +230,12 @@ export const getSortedSearchAnnotationsForCompanionWindow = createSelector(
   (searchAnnotations, canvases) => sortSearchAnnotationsByCanvasOrder(searchAnnotations, canvases),
 );
 
+/**
+ * Returns sorted search annotations for window.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {Array}
+ */
 export const getSearchAnnotationsForWindow = createSelector(
   [
     getSearchForWindow,
@@ -185,6 +248,12 @@ export const getSearchAnnotationsForWindow = createSelector(
   },
 );
 
+/**
+ * Returns ids of selected content search annotations.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {Array}
+ */
 export const getSelectedContentSearchAnnotationIds = createSelector(
   [
     getWindow,
@@ -194,6 +263,12 @@ export const getSelectedContentSearchAnnotationIds = createSelector(
     || [],
 );
 
+/**
+ * Returns resource annotations for search hit.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {Array}
+ */
 export const getResourceAnnotationForSearchHit = createSelector(
   [
     getSearchAnnotationsForCompanionWindow,
@@ -204,6 +279,12 @@ export const getResourceAnnotationForSearchHit = createSelector(
   ),
 );
 
+/**
+ * Returns annotation label.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {Array}
+ */
 export const getResourceAnnotationLabel = createSelector(
   [
     getResourceAnnotationForSearchHit,
@@ -229,6 +310,12 @@ const getAnnotationById = createSelector(
   },
 );
 
+/**
+ * Returns annotation label.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {Array}
+ */
 export const getCanvasForAnnotation = createSelector(
   [
     getAnnotationById,

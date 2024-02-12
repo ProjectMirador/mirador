@@ -2,11 +2,11 @@ import { cloneElement } from 'react';
 import { render, screen, waitFor } from 'test-utils';
 import PropTypes from 'prop-types';
 import userEvent from '@testing-library/user-event';
-import OpenSeadragon from 'openseadragon';
 import { Utils } from 'manifesto.js';
 import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
 import CanvasWorld from '../../../src/lib/CanvasWorld';
 import fixture from '../../fixtures/version-2/019.json';
+import { OSDReferences } from '../../../src/plugins/OSDReferences';
 
 const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
 
@@ -56,7 +56,7 @@ function createWrapper(props) {
 
   const rendered = render(component);
 
-  const viewer = OpenSeadragon.getViewer(screen.getByLabelText('item'));
+  const viewer = OSDReferences.get('base').current;
 
   return { ...rendered, component, viewer };
 }

@@ -29,13 +29,25 @@ const getLocale = createSelector(
   ),
 );
 
-/** Convenience selector to get a manifest (or placeholder) */
+/**
+ * Convenience selector to get a manifest (or placeholder).
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @returns {object} {error: null: id: string, isFetching: boolean, json: {...}}
+ */
 export const getManifestStatus = createSelector(
   [getManifest],
   manifest => manifest || { missing: true },
 );
 
-/** Convenience selector to get a manifest loading error */
+/**
+ * Convenience selector to get a manifest loading error
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @returns {string|null}
+ */
 export const getManifestError = createSelector(
   [getManifest],
   manifest => manifest && manifest.error,
@@ -55,7 +67,13 @@ const getContextualManifestoInstance = createCachedSelector(
   ].join(' - '), // Cache key consisting of manifestId, windowId, and locale
 );
 
-/** Instantiate a manifesto instance */
+/**
+ * Instantiate a manifesto instance
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @returns {object}
+ */
 export const getManifestoInstance = createSelector(
   getContextualManifestoInstance,
   (state, { json }) => json,
@@ -78,7 +96,13 @@ function getProperty(property) {
   );
 }
 
-/** */
+/**
+ * Returns the manifest provider.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.companionWindowId
+ * @returns {string}
+ */
 export const getManifestProvider = createSelector(
   [
     getProperty('provider'),
@@ -87,13 +111,13 @@ export const getManifestProvider = createSelector(
 );
 
 /**
-* Return the IIIF v3 provider of a manifest or null
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
-*/
+ * Return the IIIF v3 provider of a manifest or null.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string|null}
+ */
 export const getManifestProviderName = createSelector(
   [
     getProperty('provider'),
@@ -105,10 +129,10 @@ export const getManifestProviderName = createSelector(
 );
 
 /**
- * Return the IIIF v3 provider logo
+ * Return the IIIF v3 provider logo.
  * @param {object} state
  * @param {object} props
- * @return {String|null}
+ * @returns {string|null}
  */
 export const getProviderLogo = createSelector(
   [getManifestProvider],
@@ -120,10 +144,10 @@ export const getProviderLogo = createSelector(
 );
 
 /**
- * Get the logo for a manifest
+ * Get the logo for a manifest.
  * @param {object} state
  * @param {object} props
- * @return {String|null}
+ * @returns {string|null}
  */
 export const getManifestLogo = createSelector(
   [getManifestoInstance, getProviderLogo],
@@ -131,13 +155,13 @@ export const getManifestLogo = createSelector(
 );
 
 /**
-* Return the IIIF v3 homepage of a manifest or null
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
-*/
+ * Return the IIIF v3 homepage of a manifest or null.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string|null}
+ */
 export const getManifestHomepage = createSelector(
   [
     getProperty('homepage'),
@@ -154,13 +178,13 @@ export const getManifestHomepage = createSelector(
 );
 
 /**
-* Return the IIIF v3 renderings of a manifest or null
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
-*/
+ * Return the IIIF v3 renderings of a manifest or null.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string|null}
+ */
 export const getManifestRenderings = createSelector(
   [getManifestoInstance],
   manifest => manifest
@@ -173,14 +197,13 @@ export const getManifestRenderings = createSelector(
 );
 
 /**
-* Return the IIIF v2/v3 seeAlso data from a manifest or null
-*
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
-*/
+ * Return the IIIF v2/v3 seeAlso data from a manifest or null.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string|null}
+ */
 export const getManifestSeeAlso = createSelector(
   [
     getProperty('seeAlso'),
@@ -198,27 +221,26 @@ export const getManifestSeeAlso = createSelector(
 );
 
 /**
-* Return the IIIF v2/v3 seeAlso data from a manifest or null
-*
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
-* @deprecated This does not actually return the content of "related" and
-* might be removed in a future version.
-* @see getManifestSeeAlso
-*/
+ * Return the IIIF v2/v3 seeAlso data from a manifest or null.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string|null}
+ * @deprecated This does not actually return the content of "related" and
+ * might be removed in a future version.
+ * @see getManifestSeeAlso
+ */
 export const getManifestRelatedContent = getManifestSeeAlso;
 
 /**
-* Return the IIIF v2 realated links manifest or null
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
-*/
+ * Return the IIIF v2 realated links manifest or null
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string|null}
+ */
 export const getManifestRelated = createSelector(
   [
     getProperty('related'),
@@ -240,13 +262,13 @@ export const getManifestRelated = createSelector(
 );
 
 /**
-* Return the IIIF requiredStatement (v3) or attribution (v2) data from a manifest or null
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
-*/
+ * Return the IIIF requiredStatement (v3) or attribution (v2) data from a manifest or null
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string|null}
+ */
 export const getRequiredStatement = createSelector(
   [getManifestoInstance],
   manifest => manifest
@@ -259,12 +281,12 @@ export const getRequiredStatement = createSelector(
 );
 
 /**
-* Return the IIIF v2 rights (v3) or license (v2) data from a manifest or null
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
+ * Return the IIIF v2 rights (v3) or license (v2) data from a manifest or null
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string|null}
 */
 export const getRights = createSelector(
   [
@@ -279,13 +301,13 @@ export const getRights = createSelector(
 );
 
 /**
-* Return the supplied thumbnail for a manifest or null
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
-*/
+ * Return the supplied thumbnail for a manifest or null.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string|null}
+ */
 export function getManifestThumbnail(state, props) {
   const manifest = getManifestoInstance(state, props);
   const { thumbnails = {} } = getConfig(state);
@@ -300,13 +322,13 @@ export function getManifestThumbnail(state, props) {
 }
 
 /**
-* Return manifest title
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String}
-*/
+ * Return manifest title.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string}
+ */
 export const getManifestTitle = createSelector(
   [getManifestoInstance],
   manifest => manifest
@@ -314,26 +336,26 @@ export const getManifestTitle = createSelector(
 );
 
 /**
-* Return manifest description (IIIF v2) -- distinct from any description field nested under metadata
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String|null}
-*/
+ * Return manifest description (IIIF v2) -- distinct from any description field nested under metadata.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string|null}
+ */
 export const getManifestDescription = createSelector(
-  [getManifestoInstance],
-  manifest => manifest
-    && manifest.getDescription().getValue(),
+  [getLocale, getManifestoInstance],
+  (locale, manifest) => manifest
+    && manifest.getDescription().getValue(locale),
 );
 
 /**
-* Return manifest summary (IIIF v3)
+* Return manifest summary (IIIF v3).
 * @param {object} state
 * @param {object} props
 * @param {string} props.manifestId
 * @param {string} props.windowId
-* @return {String|null}
+* @return {string|null}
 */
 export const getManifestSummary = createSelector(
   [
@@ -341,30 +363,31 @@ export const getManifestSummary = createSelector(
     getManifestLocale,
   ],
   (summary, locale) => summary
-    && PropertyValue.parse(summary, locale).getValue(),
+    && PropertyValue.parse(summary, locale).getValue(locale),
 );
 
 /**
-* Return manifest title
-* @param {object} state
-* @param {object} props
-* @param {string} props.manifestId
-* @param {string} props.windowId
-* @return {String}
-*/
+ * Return manifest title.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @param {string} props.windowId
+ * @returns {string}
+ */
 export const getManifestUrl = createSelector(
   [getManifestoInstance],
   manifest => manifest && manifest.id,
 );
 
 /**
-* Return metadata in a label / value structure
-* This is a potential seam for pulling the i18n locale from
-* state and plucking out the appropriate language.
-* For now we're just getting the first.
-* @param {object} Manifesto IIIF Resource (e.g. canvas, manifest)
-* @return {Array[Object]}
-*/
+ * Return metadata in a label / value structure
+ * This is a potential seam for pulling the i18n locale from
+ * state and plucking out the appropriate language.
+ * For now we're just getting the first.
+ * @param {object} Manifesto IIIF Resource (e.g. canvas, manifest)
+ * @param iiifResource
+ * @returns {Array[Object]}
+ */
 export function getDestructuredMetadata(iiifResource) {
   return (iiifResource
     && iiifResource.getMetadata().map(labelValuePair => ({
@@ -380,7 +403,7 @@ export function getDestructuredMetadata(iiifResource) {
  * @param {object} props
  * @param {string} props.manifestId
  * @param {string} props.windowId
- * @return {Array[Object]}
+ * @returns {Array[Object]}
  */
 export const getManifestMetadata = createSelector(
   [getManifestoInstance],
@@ -419,7 +442,13 @@ export const getMetadataLocales = createSelector(
   manifest => getLocales(manifest),
 );
 
-/** */
+/**
+ * Returns manifest search service.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @returns {string|null}
+ */
 export const getManifestSearchService = createSelector(
   [getManifestoInstance],
   (manifest) => {
@@ -431,7 +460,13 @@ export const getManifestSearchService = createSelector(
   },
 );
 
-/** */
+/**
+ * Returns manifest autocomplete service.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.manifestId
+ * @returns {string|null}
+ */
 export const getManifestAutocompleteService = createSelector(
   [getManifestSearchService],
   (searchService) => {
