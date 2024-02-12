@@ -8,8 +8,10 @@ import {
   getCanvasLabel,
   getSelectedAnnotationId,
   getConfig,
+  getWindow,
 } from '../state/selectors';
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
+import { withRef } from '../extend/withRef';
 
 /**
  * @param {Array} resources
@@ -29,6 +31,7 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
   annotations: getIdAndContentOfResources(
     getAnnotationResourcesByMotivationForCanvas(state, { canvasId, windowId }),
   ),
+  autoScroll: getWindow(state, { windowId }).autoScrollAnnotationList,
   htmlSanitizationRuleSet: getConfig(state).annotations.htmlSanitizationRuleSet,
   label: getCanvasLabel(state, {
     canvasId,
@@ -48,7 +51,15 @@ const mapDispatchToProps = {
   selectAnnotation: actions.selectAnnotation,
 };
 
+// const enhance = compose(
+//   withRef(),
+//   withTranslation(),
+//   connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
+//   withPlugins('CanvasAnnotations'),
+// );
+
 const enhance = compose(
+  withRef(),
   withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CanvasAnnotations'),

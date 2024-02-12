@@ -28,9 +28,9 @@ export default class AnnotationResource {
     const on = this.on[0];
     switch (typeof on) {
       case 'string':
-        return on.replace(/#?xywh=(.*)$/, '');
+        return on.replace(/#(.*)$/, '');
       case 'object':
-        return on.full.replace(/#?xywh=(.*)$/, '');
+        return on.full.replace(/#(.*)$/, '');
       default:
         return null;
     }
@@ -109,15 +109,47 @@ export default class AnnotationResource {
 
     switch (typeof selector) {
       case 'string':
-        match = selector.match(/xywh=(.*)$/);
+        match = selector.match(/xywh=(.*?)(&|$)/);
         break;
       case 'object':
-        match = selector.value.match(/xywh=(.*)$/);
+        match = selector.value.match(/xywh=(.*?)(&|$)/);
         break;
       default:
         return null;
     }
 
-    return match && match[1].split(',').map(str => parseInt(str, 10));
+    if (match) {
+      const params = match[1].split(',');
+      if (params.length === 4) {
+        return params.map(str => parseInt(str, 10));
+      }
+    }
+    return null;
+  }
+
+  /** */
+  get temporalfragmentSelector() {
+    const { selector } = this;
+
+    let match;
+
+    switch (typeof selector) {
+      case 'string':
+        match = selector.match(/t=(.*?)(&|$)/);
+        break;
+      case 'object':
+        match = selector.value.match(/t=(.*?)(&|$)/);
+        break;
+      default:
+        return null;
+    }
+
+    if (match) {
+      const params = match[1].split(',');
+      if (params.length < 3) {
+        return params.map(str => parseFloat(str));
+      }
+    }
+    return null;
   }
 }

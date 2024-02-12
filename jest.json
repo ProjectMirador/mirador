@@ -51,6 +51,10 @@
     },
     "setupFiles": [
       "<rootDir>/setupJest.js"
+
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/setup-expect-timeout.js"
     ],
     "testMatch": [
       "<rootDir>/**/__tests__/integration/**/*.{js,jsx}"

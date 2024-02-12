@@ -13,8 +13,7 @@ export class ViewerNavigation extends Component {
    */
   render() {
     const {
-      hasNextCanvas, hasPreviousCanvas, setNextCanvas, setPreviousCanvas, t,
-      viewingDirection,
+      hasNextCanvas, hasPreviousCanvas, setNextCanvas, setPreviousCanvas, t, beforeClick, viewingDirection,
     } = this.props;
 
     let htmlDir = 'ltr';
@@ -48,7 +47,7 @@ export class ViewerNavigation extends Component {
           aria-label={t('previousCanvas')}
           className={ns('previous-canvas-button')}
           disabled={!hasPreviousCanvas}
-          onClick={() => { hasPreviousCanvas && setPreviousCanvas(); }}
+          onClick={() => { beforeClick(); hasPreviousCanvas && setPreviousCanvas(); }}
         >
           <NavigationIcon style={previousIconStyle} />
         </MiradorMenuButton>
@@ -56,7 +55,7 @@ export class ViewerNavigation extends Component {
           aria-label={t('nextCanvas')}
           className={ns('next-canvas-button')}
           disabled={!hasNextCanvas}
-          onClick={() => { hasNextCanvas && setNextCanvas(); }}
+          onClick={() => { beforeClick(); hasNextCanvas && setNextCanvas(); }}
         >
           <NavigationIcon style={nextIconStyle} />
         </MiradorMenuButton>
@@ -66,6 +65,7 @@ export class ViewerNavigation extends Component {
 }
 
 ViewerNavigation.propTypes = {
+  beforeClick: PropTypes.func,
   hasNextCanvas: PropTypes.bool,
   hasPreviousCanvas: PropTypes.bool,
   setNextCanvas: PropTypes.func,
@@ -75,6 +75,7 @@ ViewerNavigation.propTypes = {
 };
 
 ViewerNavigation.defaultProps = {
+  beforeClick: () => {},
   hasNextCanvas: false,
   hasPreviousCanvas: false,
   setNextCanvas: () => {},

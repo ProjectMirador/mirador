@@ -1,4 +1,4 @@
-import { createRef, Component } from 'react';
+import { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 import AnnotationSettings from '../containers/AnnotationSettings';
@@ -10,47 +10,43 @@ import ns from '../config/css-ns';
 /**
  * WindowSideBarAnnotationsPanel ~
 */
-export class WindowSideBarAnnotationsPanel extends Component {
+function WindowSideBarAnnotationsPanel({
+  annotationCount, canvasIds, t, windowId, id,
+}) {
   /** */
-  constructor(props) {
-    super(props);
+  const containerRef = useRef();
 
-    this.containerRef = createRef();
-  }
+  useEffect(() => {
+    console.log(`Use effect current ${containerRef.current}`);
+  });
 
-  /**
-   * Returns the rendered component
-  */
-  render() {
-    const {
-      annotationCount, canvasIds, t, windowId, id,
-    } = this.props;
-    return (
-      <CompanionWindow
-        title={t('annotations')}
-        paperClassName={ns('window-sidebar-annotation-panel')}
-        windowId={windowId}
-        id={id}
-        ref={this.containerRef}
-        titleControls={<AnnotationSettings windowId={windowId} />}
-      >
-        <CompanionWindowSection>
-          <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
-        </CompanionWindowSection>
+  return (
+    <CompanionWindow
+      title={t('annotations')}
+      paperClassName={ns('window-sidebar-annotation-panel')}
+      windowId={windowId}
+      className="mirador-annotations-panel"
+      id={id}
+      ref={containerRef}
+      titleControls={<AnnotationSettings windowId={windowId} />}
+    >
+      <CompanionWindowSection>
+        <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
+      </CompanionWindowSection>
 
-        {canvasIds.map((canvasId, index) => (
-          <CanvasAnnotations
-            canvasId={canvasId}
-            containerRef={this.containerRef}
-            key={canvasId}
-            index={index}
-            totalSize={canvasIds.length}
-            windowId={windowId}
-          />
-        ))}
-      </CompanionWindow>
-    );
-  }
+      {canvasIds.map((canvasId, index) => (
+        <CanvasAnnotations
+          canvasId={canvasId}
+          containerRef={containerRef}
+          key={canvasId}
+          index={index}
+          totalSize={canvasIds.length}
+          windowId={windowId}
+
+        />
+      ))}
+    </CompanionWindow>
+  );
 }
 
 WindowSideBarAnnotationsPanel.propTypes = {
@@ -65,3 +61,5 @@ WindowSideBarAnnotationsPanel.defaultProps = {
   canvasIds: [],
   t: key => key,
 };
+
+export default WindowSideBarAnnotationsPanel;
