@@ -1,7 +1,7 @@
 {
-  "name": "mirador",
-  "version": "3.3.0",
-  "description": "An open-source, web-based 'multi-up' viewer that supports zoom-pan-rotate functionality, ability to display/compare simple images, and images with annotations.",
+  "name": "mirador-video",
+  "version": "1.0.0",
+  "description": "Mirador IIIF Viewer with annotation on video support",
   "main": "dist/cjs/src/index.js",
   "module": "dist/es/src/index.js",
   "files": [
@@ -30,10 +30,9 @@
   },
   "license": "Apache-2.0",
   "contributors": [
-    "Drew Winget <scipioaffricanus@gmail.com> (https://aeschylus.net/)",
-    "Jack Reed <phillipjreed@gmail.com> (https://www.jack-reed.com)"
+    "Anthony Geourjon <anthony.geourjon@tetras-libre.fr> (https://www.tetras-libre.fr)"
   ],
-  "repository": "https://github.com/ProjectMirador/mirador",
+  "repository": "https://github.com/SCENE-CE/mirador-video",
   "dependencies": {
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.10.6",

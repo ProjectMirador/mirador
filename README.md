@@ -1,54 +1,32 @@
 ## Mirador with support for displaying annotations on videos
 
 ### Project
-https://dh.l.u-tokyo.ac.jp/activity/iiif/video-annotation
+- https://github.com/SCENE-CE/mirador-video
 
 ### Demo
-- https://dzkimgs.l.u-tokyo.ac.jp/videos/m3/cat_video.html
-- https://dzkimgs.l.u-tokyo.ac.jp/videos/m3/video.html
+- https://preprod-scene.tetras-libre.fr/
 
-### Manifest Sample
-- https://dzkimgs.l.u-tokyo.ac.jp/videos/cat2020/manifest.json
-- https://dzkimgs.l.u-tokyo.ac.jp/videos/iiif_in_japan_2017/manifest.json
-
-### Prebuilt
-https://dzkimgs.l.u-tokyo.ac.jp/videos/m3/mirador.min.js
-
-### License
-This project is dual-licensed under the Apache License 2.0 and the MIT license. See [LICENSE](LICENSE) for details.
-
----
-⚠️ This project is for Mirador 3, the latest version of Mirador. For Mirador 2, please see [ProjectMirador/mirador2](https://github.com/projectmirador/mirador2) or legacy documentation on the [Mirador 2 wiki](https://github.com/ProjectMirador/mirador-2-wiki/wiki). Please note that the community's focus is on Mirador 3, and are unlikely to accept pull requests or provide support for Mirador 2.
-# Mirador
-![Node.js CI](https://github.com/ProjectMirador/mirador/workflows/Node.js%20CI/badge.svg) [![codecov](https://codecov.io/gh/ProjectMirador/mirador/branch/master/graph/badge.svg)](https://codecov.io/gh/ProjectMirador/mirador) 
+We will soon submit a PR to the official Mirador repository to add video support for annotations.
+We already support React 17 and MUI5. We provide also a new plugin to display and edit annotations on videos : 
+https://github.com/SCENE-CE/mirador-annotation-editor
 
 ## For Mirador Users
-You can quickly use and configure Mirador by remixing the [mirador-start](https://mirador-start.glitch.me/) Glitch.
 
-We recommend installing Mirador using a JavaScript package manager like [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/).
+Our fork of Mirador is available as a package on npm.
+To use it change your existing Mirador dependency to `mirador-video` in your `package.json` file.
 
-```sh
-$ npm install mirador 
-
-# or
-
-$ yarn add mirador
+Before
+```json
+"mirador": "^3.0.0"
 ```
 
-If you are interested in integrating Mirador with plugins into your project, we recommend using webpack or parcel to integrate the es version of the packages. Examples are here:
-
-[https://github.com/ProjectMirador/mirador-integration](https://github.com/ProjectMirador/mirador-integration)
-
-If you want to simply embed Mirador in an HTML page without further customization, include the Mirador UMD build:
-
-```
-<script src="https://unpkg.com/mirador@latest/dist/mirador.min.js"></script>
+After
+```json
+"mirador": "npm:mirador-video@^1.0.0"
 ```
 
-More examples of embedding Mirador can be found at [https://github.com/ProjectMirador/mirador/wiki/M3-Embedding-in-Another-Environment#in-an-html-document-with-javascript](https://github.com/ProjectMirador/mirador/wiki/M3-Embedding-in-Another-Environment#in-an-html-document-with-javascript).
+Then run `npm install` to refresh your package.
 
-## Adding translations to Mirador
-For help with adding a translation, see [src/locales/README.md](src/locales/README.md)
 
 ## Running Mirador locally for development
 
@@ -74,59 +52,3 @@ var miradorInstance = Mirador.viewer({
 > miradorInstance
 { actions, store }
 ```
-
-### Example Action
-
-Add a window:
-```javascript
-store.dispatch(actions.addWindow());
-```
-
-To focus a window run:
-
-```javascript
-store.dispatch(actions.focusWindow('window-1'))
-```
-
-### Check current state
-
-```javascript
-store.getState()
-```
-
-## Running the tests
-
-```sh
-$ npm test # For headless CI=true npm test
-```
-
-or to continually watch the source files
-
-```sh
-$ npm run test:watch
-```
-
-## Linting the project
-
-```sh
-$ npm run lint
-```
-
-## Debugging
-
-### Local instance
-
-The following browser extensions are useful for debugging a local development instance of Mirador:
-
- - [React DevTools](https://github.com/facebook/react-devtools)
- - [Redux DevTools](https://github.com/zalmoxisus/redux-devtools-extension)
-
-### Test suite
-
-To debug the test suite, run:
-
-```sh
-$ npm run test:debug
-```
-
-then spin up a [nodejs inspector client](https://nodejs.org/en/docs/guides/debugging-getting-started/#inspector-clients) and set some breakpoints. See [here](https://www.digitalocean.com/community/tutorials/how-to-debug-node-js-with-the-built-in-debugger-and-chrome-devtools#step-3-%E2%80%94-debugging-node-js-with-chrome-devtools) for a guide to debugging with Chrome DevTools.
