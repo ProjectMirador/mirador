@@ -25,8 +25,9 @@ export class WindowList extends Component {
   render() {
     const {
       container, handleClose, windowIds, focusWindow, focusedWindowId, t,
-      ...menuProps
+      ...rest
     } = this.props;
+    const { tReady, ...menuProps } = rest;
 
     return (
       <Menu
