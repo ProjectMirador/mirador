@@ -16,8 +16,6 @@ describe('App', () => {
     createWrapper();
 
     expect(screen.queryByRole('main')).not.toBeInTheDocument();
-    await screen.findByText('welcome');
-
-    expect(screen.getByRole('main')).toBeInTheDocument();
+    expect(await screen.findByRole('main')).toBeInTheDocument();
   });
 });

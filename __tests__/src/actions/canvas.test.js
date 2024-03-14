@@ -1,5 +1,5 @@
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
+import { thunk } from 'redux-thunk';
 
 import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';

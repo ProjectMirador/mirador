@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { act, render, screen } from 'test-utils';
 import MiradorViewer from '../../../src/lib/MiradorViewer';
 
 jest.unmock('react-i18next');
@@ -23,7 +23,7 @@ describe('MiradorViewer', () => {
       expect(instance.store.dispatch).toBeDefined();
     });
     it('renders via ReactDOM', () => {
-      const instance = new MiradorViewer({ id: 'mirador' }); // eslint-disable-line no-unused-vars
+      act(() => { new MiradorViewer({ id: 'mirador' }); }); // eslint-disable-line no-new
 
       expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
     });
@@ -137,9 +137,11 @@ describe('MiradorViewer', () => {
 
   describe('unmount', () => {
     it('unmounts via ReactDOM', () => {
-      const instance = new MiradorViewer({ id: 'mirador' });
+      let instance;
+
+      act(() => { instance = new MiradorViewer({ id: 'mirador' }); });
       expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
-      instance.unmount();
+      act(() => { instance.unmount(); });
       expect(screen.getByTestId('container')).toBeEmptyDOMElement();
     });
   });

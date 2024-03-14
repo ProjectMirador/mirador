@@ -46,7 +46,7 @@
     "react/react-in-jsx-scope": "off",
     "react-hooks/exhaustive-deps": "error",
     "testing-library/render-result-naming-convention": "off",
-    "testing-library/no-render-in-setup": [
+    "testing-library/no-render-in-lifecycle": [
       "error",
       {
         "allowTestingFrameworkSetupHook": "beforeEach"
