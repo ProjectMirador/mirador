@@ -13,6 +13,8 @@ import { AnnotationSettings } from '../components/AnnotationSettings';
  * Mapping redux state to component props using connect
  */
 const mapStateToProps = (state, { windowId }) => ({
+  autoScroll: getWindow(state, { windowId }).autoScrollAnnotationList,
+  autoScrollDisabled: getAnnotationResourcesByMotivation(state, { windowId }).length < 2,
   displayAll: getWindow(state, { windowId }).highlightAllAnnotations,
   displayAllDisabled: getAnnotationResourcesByMotivation(
     state,
@@ -24,6 +26,9 @@ const mapStateToProps = (state, { windowId }) => ({
  * Mapping redux action dispatches to component props using connect
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
+  toggleAnnotationAutoScroll: () => {
+    dispatch(actions.toggleAnnotationAutoScroll(windowId));
+  },
   toggleAnnotationDisplay: () => {
     dispatch(actions.toggleAnnotationDisplay(windowId));
   },

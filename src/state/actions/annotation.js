@@ -108,6 +108,18 @@ export function toggleAnnotationDisplay(windowId) {
 }
 
 /**
+ * toggleAnnotationAutoScroll - action creator
+ *
+ * @param  {String} windowId
+ * @memberof ActionCreators
+ */
+export function toggleAnnotationAutoScroll(windowId) {
+  return {
+    type: ActionTypes.TOGGLE_ANNOTATION_AUTOSCROLL, windowId,
+  };
+}
+
+/**
  * toggleAnnotationDisplay - action creator
  *
  * @param  {String} windowId
