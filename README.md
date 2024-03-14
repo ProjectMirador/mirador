@@ -4,10 +4,10 @@
 - https://github.com/SCENE-CE/mirador-video
 
 ### Demo
-- https://preprod-scene.tetras-libre.fr/
+- https://scene.tetras-libre.fr/
 
 We will soon submit a PR to the official Mirador repository to add video support for annotations.
-We already support React 17 and MUI5. We provide also a new plugin to display and edit annotations on videos : 
+We already support React 18 and MUI5. We provide also a new plugin to display and edit annotations on videos : 
 https://github.com/SCENE-CE/mirador-annotation-editor
 
 ## For Mirador Users
@@ -22,7 +22,7 @@ Before
 
 After
 ```json
-"mirador": "npm:mirador-video@^1.0.0"
+"mirador": "npm:mirador-video@^1.0.2"
 ```
 
 Then run `npm install` to refresh your package.
