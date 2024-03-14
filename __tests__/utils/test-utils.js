@@ -2,7 +2,7 @@ import { Provider } from 'react-redux';
 import { render } from '@testing-library/react';
 import PropTypes from 'prop-types';
 import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import { thunk } from 'redux-thunk';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import createRootReducer from '../../src/state/reducers/rootReducer';
 import settings from '../../src/config/settings';
@@ -18,7 +18,7 @@ function renderWithProviders(
   {
     preloadedState = {},
     // Automatically create a store instance if no store was passed in
-    store = createStore(rootReducer, preloadedState, applyMiddleware(thunkMiddleware)),
+    store = createStore(rootReducer, preloadedState, applyMiddleware(thunk)),
     ...renderOptions
   } = {},
 ) {

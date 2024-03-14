@@ -1,6 +1,7 @@
 describe('Mirador Invalid API Response Handler Test', () => {
   /** */
   async function fetchManifest(uri) {
+    await expect(page).toMatchElement('button');
     await page.evaluate(() => {
       document.querySelector('#addBtn').click();
     });

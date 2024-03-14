@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import createCachedSelector from 're-reselect';
+import { createCachedSelector } from 're-reselect';
 import { PropertyValue, Utils, Resource } from 'manifesto.js';
 import getThumbnail from '../../lib/ThumbnailFactory';
 import asArray from '../../lib/asArray';

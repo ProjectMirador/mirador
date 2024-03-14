@@ -418,6 +418,7 @@ export default {
     ar: 'العربية',
     de: 'Deutsch',
     en: 'English',
+    et: 'Eesti',
     fa: 'فارسی',
     fr: 'Français',
     ja: '日本語',
