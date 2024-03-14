@@ -1,6 +1,6 @@
 {
   "name": "mirador",
-  "version": "3.3.0",
+  "version": "4.0.0-alpha.1",
   "description": "An open-source, web-based 'multi-up' viewer that supports zoom-pan-rotate functionality, ability to display/compare simple images, and images with annotations.",
   "main": "dist/cjs/src/index.js",
   "module": "dist/es/src/index.js",
