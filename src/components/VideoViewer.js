@@ -17,6 +17,8 @@ const StyledContainer = styled('div')(() => ({
 const StyledFlexFill = styled('div')(() => ({
   height: '100%',
   position: 'relative',
+  display: 'flex',
+  justifyContent:'center'
 }));
 
 const StyledVideo = styled('video')(() => ({
