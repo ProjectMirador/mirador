@@ -11,17 +11,19 @@ const StyledContainer = styled('div')(() => ({
   alignItems: 'center',
   display: 'flex',
   width: '100%',
+  border:'solid green',
+  justifyContent:'center'
 }));
 
 const StyledFlexFill = styled('div')(() => ({
   height: '100%',
   position: 'relative',
-  width: '100%',
+  border:'solid yellow'
 }));
 
 const StyledVideo = styled('video')(() => ({
   maxHeight: '100%',
-  width: '100%',
+  border:"solid red"
 }));
 
 /** */
