@@ -501,6 +501,7 @@ export default {
       manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
       canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/page_2',
       thumbnailNavigationPosition: 'far-bottom',
+      maximized: false,
     }
     // ../state/actions/window.js `defaultOptions`
     // ../lib/MiradorViewer.js `windowAction`
