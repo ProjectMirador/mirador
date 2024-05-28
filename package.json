@@ -30,7 +30,9 @@
   },
   "license": "Apache-2.0",
   "contributors": [
-    "Anthony Geourjon <anthony.geourjon@tetras-libre.fr> (https://www.tetras-libre.fr)"
+    "Anthony Geourjon <anthony.geourjon@tetras-libre.fr> (https://www.tetras-libre.fr)",
+    "David Rouquet <david.rouquet@tetras-libre.fr> (https://www.tetras-libre.fr)",
+    "Antoine Roy <antoine.roy@tetras-libre.fr> (https://www.tetras-libre.fr)"
   ],
   "repository": "https://github.com/SCENE-CE/mirador-video",
   "dependencies": {
