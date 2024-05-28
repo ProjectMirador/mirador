@@ -1,6 +1,6 @@
 {
   "name": "mirador-video",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Mirador IIIF Viewer with annotation on video support",
   "main": "dist/cjs/src/index.js",
   "module": "dist/es/src/index.js",
@@ -53,7 +53,7 @@
     "lodash": "^4.17.11",
     "manifesto.js": "^4.2.0",
     "normalize-url": "^4.5.0",
-    "openseadragon": "^2.4.2 || ^3.0.0 || ^4.0.0",
+    "openseadragon": "^2.4.2 || ^3.0.0 || 4.0.x || ^4.1.1",
     "prop-types": "^15.6.2",
     "rdndmb-html5-to-touch": "^8.0.0",
     "re-reselect": "^5.0.0",
