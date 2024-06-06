@@ -109,6 +109,7 @@ export class WorkspaceMenu extends Component {
           </MenuItem>
           <MenuItem
             aria-haspopup="true"
+            aria-expanded={Boolean(workspaceSelection.open)}
             onClick={(e) => { this.handleMenuItemClick('workspaceSelection', e); handleClose(e); }}
             aria-owns={workspaceSelection.anchorEl ? 'workspace-selection' : undefined}
           >

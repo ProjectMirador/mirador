@@ -23,6 +23,7 @@ export class LanguageSettings extends Component {
         {
           languages.map(language => (
             <MenuItem
+              aria-selected={language.current}
               key={language.locale}
               onClick={() => { handleClick(language.locale); }}
             >
