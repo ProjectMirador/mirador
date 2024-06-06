@@ -45,7 +45,12 @@ export class NestedMenu extends Component {
     } = this.props;
     return (
       <>
-        <MenuItem onClick={this.handleMenuClick} divider={nestedMenuIsOpen} {...otherProps}>
+        <MenuItem
+          aria-expanded={nestedMenuIsOpen}
+          onClick={this.handleMenuClick}
+          divider={nestedMenuIsOpen}
+          {...otherProps}
+        >
           {icon && (<ListItemIcon>{icon}</ListItemIcon>)}
           <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
             {label}
