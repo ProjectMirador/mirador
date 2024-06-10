@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
 import {
   ThemeProvider, StyledEngineProvider, createTheme,
@@ -12,6 +11,7 @@ import rtlPlugin from 'stylis-plugin-rtl';
 import { prefixer } from 'stylis';
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
+import { FullScreen, useFullScreenHandle } from '../lib/FullScreenHandle';
 import createI18nInstance from '../i18n';
 import FullScreenContext from '../contexts/FullScreenContext';
 
