@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
 import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';
 
-const ThumbnailOptions = styled(MenuItem, { name: 'WindowThumbnailSettings', slot: 'option' })(({ selected, theme }) => ({
+const ThumbnailOption = styled(MenuItem, { name: 'WindowThumbnailSettings', slot: 'option' })(({ selected, theme }) => ({
   '& .MuiFormControlLabel-label': {
     borderBottom: '2px solid transparent',
     ...(selected && {
@@ -59,7 +59,7 @@ export class WindowThumbnailSettings extends Component {
       <>
         <ListSubheader role="presentation" disableSticky>{t('thumbnails')}</ListSubheader>
         <StyledMenuList role="menubar">
-          <ThumbnailOptions
+          <ThumbnailOption
             aria-selected={thumbnailNavigationPosition === 'off'}
             selected={thumbnailNavigationPosition === 'off'}
             onClick={() => { this.handleChange('off'); handleClose(); }}
