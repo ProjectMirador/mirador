@@ -19,6 +19,7 @@ export class ThumbnailNavigation extends Component {
     this.scrollbarSize = 15;
     this.spacing = 8; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
     this.calculateScaledSize = this.calculateScaledSize.bind(this);
+    this.calculateForItems = this.calculateForItems.bind(this);
     this.itemCount = this.itemCount.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.nextCanvas = this.nextCanvas.bind(this);
@@ -94,6 +95,21 @@ export class ThumbnailNavigation extends Component {
     }
   }
 
+  /**
+ * This function sums up n thumbnails and adds a fixed spacing.
+ *
+ * @param {number} n - The number of thumbnail items
+ * @returns {number} - The total width of n items plus the spacing.
+ */
+  calculateForItems(n) {
+    let total = 0;
+    for (let i = 0; i < n; i += 1) {
+      total += this.calculateScaledSize(i);
+    }
+
+    return total + this.spacing;
+  }
+
   /** */
   calculatingWidth(canvasesLength) {
     const { thumbnailNavigation } = this.props;
@@ -133,6 +149,7 @@ export class ThumbnailNavigation extends Component {
     }
   }
 
+  // {(position === 'far-bottom') ? this.areaHeight(height) : this.calculateForItems(thumbnailNavigation.count)}
   /** */
   areaHeight(height) {
     const { position, thumbnailNavigation } = this.props;
@@ -184,6 +201,7 @@ export class ThumbnailNavigation extends Component {
     if (position === 'off') {
       return null;
     }
+
     const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
     const itemData = {
       canvasGroupings,
@@ -215,20 +233,26 @@ export class ThumbnailNavigation extends Component {
             defaultHeight={100}
             defaultWidth={400}
           >
-            {({ height, width }) => (
-              <List
-                direction={htmlDir}
-                height={this.areaHeight(height)}
-                itemCount={this.itemCount()}
-                itemSize={this.calculateScaledSize}
-                width={width}
-                layout={(position === 'far-bottom') ? 'horizontal' : 'vertical'}
-                itemData={itemData}
-                ref={this.gridRef}
-              >
-                {ThumbnailCanvasGrouping}
-              </List>
-            )}
+            {({ height, width }) => {
+              const calculatedHeight = (position === 'far-bottom') ? this.areaHeight(height) : this.calculateForItems(thumbnailNavigation.count ?? 1);
+              const calculatedWidth = (position === 'far-bottom') ? this.calculateForItems(thumbnailNavigation.count ?? 1) : width;
+              const layout = (position === 'far-bottom') ? 'horizontal' : 'vertical';
+
+              return (
+                <List
+                  direction={htmlDir}
+                  height={thumbnailNavigation.limit ? calculatedHeight : this.areaHeight(height)}
+                  itemCount={this.itemCount()}
+                  itemSize={this.calculateScaledSize}
+                  width={thumbnailNavigation.limit ? calculatedWidth : width}
+                  layout={layout}
+                  itemData={itemData}
+                  ref={this.gridRef}
+                >
+                  {ThumbnailCanvasGrouping}
+                </List>
+              );
+            }}
           </AutoSizer>
         </div>
       </Paper>
