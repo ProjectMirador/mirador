@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 import ListSubheader from '@mui/material/ListSubheader';
 import SingleIcon from '@mui/icons-material/CropOriginalSharp';
 import ScrollViewIcon from '@mui/icons-material/ViewColumn';
@@ -9,7 +10,7 @@ import PropTypes from 'prop-types';
 import BookViewIcon from './icons/BookViewIcon';
 import GalleryViewIcon from './icons/GalleryViewIcon';
 
-const ViewOption = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option' })(({ selected, theme }) => ({
+const ViewOptions = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option' })(({ selected, theme }) => ({
   '& .MuiFormControlLabel-label': {
     borderBottom: '2px solid transparent',
     ...(selected && {
@@ -18,7 +19,11 @@ const ViewOption = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option'
   },
   backgroundColor: 'transparent !important',
   color: selected ? theme.palette.secondary.main : undefined,
-  display: 'inline-block',
+  display: 'inline-flex',
+}));
+
+const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'menuList' })(({ selected, theme }) => ({
+  display: 'inline-flex',
 }));
 
 /**
@@ -62,7 +67,8 @@ export class WindowViewSettings extends Component {
     /** Suspiciously similar to a component, yet if it is invoked through JSX
         none of the click handlers work? */
     const menuItem = ({ value, Icon }) => (
-      <ViewOption
+      <ViewOptions
+        aria-selected={windowViewType === value}
         selected={windowViewType === value}
         key={value}
         autoFocus={windowViewType === value}
@@ -74,14 +80,16 @@ export class WindowViewSettings extends Component {
           label={t(value)}
           labelPlacement="bottom"
         />
-      </ViewOption>
+      </ViewOptions>
     );
 
     if (viewTypes.length === 0) return null;
     return (
       <>
-        <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('view')}</ListSubheader>
-        { viewTypes.map(value => menuItem({ Icon: iconMap[value], value })) }
+        <ListSubheader role="presentation" disableSticky>{t('view')}</ListSubheader>
+        <StyledMenuList role="menubar">
+          { viewTypes.map(value => menuItem({ Icon: iconMap[value], value })) }
+        </StyledMenuList>
       </>
     );
   }

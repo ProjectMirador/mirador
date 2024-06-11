@@ -3,12 +3,13 @@ import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ListSubheader from '@mui/material/ListSubheader';
 import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 import ThumbnailsOffIcon from '@mui/icons-material/CropDinSharp';
 import PropTypes from 'prop-types';
 import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
 import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';
 
-const ThumbnailOption = styled(MenuItem, { name: 'WindowThumbnailSettings', slot: 'option' })(({ selected, theme }) => ({
+const ThumbnailOptions = styled(MenuItem, { name: 'WindowThumbnailSettings', slot: 'option' })(({ selected, theme }) => ({
   '& .MuiFormControlLabel-label': {
     borderBottom: '2px solid transparent',
     ...(selected && {
@@ -17,7 +18,10 @@ const ThumbnailOption = styled(MenuItem, { name: 'WindowThumbnailSettings', slot
   },
   backgroundColor: 'transparent !important',
   color: selected ? theme.palette.secondary.main : undefined,
-  display: 'inline-block',
+}));
+
+const StyledMenuList = styled(MenuList, { name: 'WindowThumbnailSettings', slot: 'option' })(() => ({
+  display: 'inline-flex',
 }));
 
 /**
@@ -53,43 +57,63 @@ export class WindowThumbnailSettings extends Component {
 
     return (
       <>
-        <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('thumbnails')}</ListSubheader>
-
-        <ThumbnailOption selected={thumbnailNavigationPosition === 'off'} onClick={() => { this.handleChange('off'); handleClose(); }}>
-          <FormControlLabel
-            value="off"
-            control={
-              <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} fill="currentcolor" />
-            }
-            label={t('off')}
-            labelPlacement="bottom"
-          />
-        </ThumbnailOption>
-        <ThumbnailOption selected={thumbnailNavigationPosition === 'far-bottom'} onClick={() => { this.handleChange('far-bottom'); handleClose(); }}>
-          <FormControlLabel
-            value="far-bottom"
-            control={
-              <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} fill="currentcolor" />
-            }
-            label={t('bottom')}
-            labelPlacement="bottom"
-          />
-        </ThumbnailOption>
-        <ThumbnailOption selected={thumbnailNavigationPosition === 'far-right'} onClick={() => { this.handleChange('far-right'); handleClose(); }}>
-          <FormControlLabel
-            value="far-right"
-            control={(
-              <ThumbnailNavigationRightIcon
-                color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined}
-                fill="currentcolor"
-                style={direction === 'rtl' ? { transform: 'rotate(180deg)' } : {}}
-              />
-            )}
-            label={t('right')}
-            labelPlacement="bottom"
-          />
-        </ThumbnailOption>
+        <ListSubheader role="presentation" disableSticky>{t('thumbnails')}</ListSubheader>
+        <StyledMenuList role="menubar">
+          <ThumbnailOptions
+            aria-selected={thumbnailNavigationPosition === 'off'}
+            selected={thumbnailNavigationPosition === 'off'}
+            onClick={() => { this.handleChange('off'); handleClose(); }}
+            autoFocus={thumbnailNavigationPosition === 'off'}
+            key="off"
+          >
+            <FormControlLabel
+              value="off"
+              control={
+                <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} fill="currentcolor" />
+              }
+              label={t('off')}
+              labelPlacement="bottom"
+            />
+          </ThumbnailOptions>
+          <ThumbnailOptions
+            aria-selected={thumbnailNavigationPosition === 'far-bottom'}
+            selected={thumbnailNavigationPosition === 'far-bottom'}
+            onClick={() => { this.handleChange('far-bottom'); handleClose(); }}
+            autoFocus={thumbnailNavigationPosition === 'far-bottom'}
+            key="far-bottom"
+          >
+            <FormControlLabel
+              value="far-bottom"
+              control={
+                <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} fill="currentcolor" />
+              }
+              label={t('bottom')}
+              labelPlacement="bottom"
+            />
+          </ThumbnailOptions>
+          <ThumbnailOptions
+            aria-selected={thumbnailNavigationPosition === 'far-right'}
+            selected={thumbnailNavigationPosition === 'far-right'}
+            key="far-right"
+            autoFocus={thumbnailNavigationPosition === 'far-right'}
+            onClick={() => { this.handleChange('far-right'); handleClose(); }}
+          >
+            <FormControlLabel
+              value="far-right"
+              control={(
+                <ThumbnailNavigationRightIcon
+                  color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined}
+                  fill="currentcolor"
+                  style={direction === 'rtl' ? { transform: 'rotate(180deg)' } : {}}
+                />
+              )}
+              label={t('right')}
+              labelPlacement="bottom"
+            />
+          </ThumbnailOptions>
+        </StyledMenuList>
       </>
+
     );
   }
 }
