@@ -10,19 +10,18 @@ import PropTypes from 'prop-types';
 import BookViewIcon from './icons/BookViewIcon';
 import GalleryViewIcon from './icons/GalleryViewIcon';
 
-const ViewOptions = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option' })(({ selected, theme }) => ({
+const ViewOption = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option' })(({ selected, theme }) => ({
   '& .MuiFormControlLabel-label': {
     borderBottom: '2px solid transparent',
     ...(selected && {
       borderBottomColor: theme.palette.secondary.main,
     }),
+    backgroundColor: 'transparent !important',
+    color: selected ? theme.palette.secondary.main : undefined,
   },
-  backgroundColor: 'transparent !important',
-  color: selected ? theme.palette.secondary.main : undefined,
-  display: 'inline-flex',
 }));
 
-const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'menuList' })(({ selected, theme }) => ({
+const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'option' })(() => ({
   display: 'inline-flex',
 }));
 
@@ -67,12 +66,12 @@ export class WindowViewSettings extends Component {
     /** Suspiciously similar to a component, yet if it is invoked through JSX
         none of the click handlers work? */
     const menuItem = ({ value, Icon }) => (
-      <ViewOptions
+      <ViewOption
         aria-selected={windowViewType === value}
-        selected={windowViewType === value}
-        key={value}
         autoFocus={windowViewType === value}
+        key={value}
         onClick={() => { this.handleChange(value); handleClose(); }}
+        selected={windowViewType === value}
       >
         <FormControlLabel
           value={value}
@@ -80,7 +79,7 @@ export class WindowViewSettings extends Component {
           label={t(value)}
           labelPlacement="bottom"
         />
-      </ViewOptions>
+      </ViewOption>
     );
 
     if (viewTypes.length === 0) return null;

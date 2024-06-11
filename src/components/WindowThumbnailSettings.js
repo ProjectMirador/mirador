@@ -15,15 +15,13 @@ const ThumbnailOption = styled(MenuItem, { name: 'WindowThumbnailSettings', slot
     ...(selected && {
       borderBottomColor: theme.palette.secondary.main,
     }),
+    backgroundColor: 'transparent !important',
+    color: selected ? theme.palette.secondary.main : undefined,
   },
-  backgroundColor: 'transparent !important',
-  color: selected ? theme.palette.secondary.main : undefined,
 }));
-
-const StyledMenuList = styled(MenuList, { name: 'WindowThumbnailSettings', slot: 'option' })(() => ({
+const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'option' })(() => ({
   display: 'inline-flex',
 }));
-
 /**
  *
  */
@@ -61,10 +59,10 @@ export class WindowThumbnailSettings extends Component {
         <StyledMenuList role="menubar">
           <ThumbnailOption
             aria-selected={thumbnailNavigationPosition === 'off'}
-            selected={thumbnailNavigationPosition === 'off'}
-            onClick={() => { this.handleChange('off'); handleClose(); }}
             autoFocus={thumbnailNavigationPosition === 'off'}
             key="off"
+            onClick={() => { this.handleChange('off'); handleClose(); }}
+            selected={thumbnailNavigationPosition === 'off'}
           >
             <FormControlLabel
               value="off"
@@ -74,13 +72,13 @@ export class WindowThumbnailSettings extends Component {
               label={t('off')}
               labelPlacement="bottom"
             />
-          </ThumbnailOptions>
-          <ThumbnailOptions
+          </ThumbnailOption>
+          <ThumbnailOption
             aria-selected={thumbnailNavigationPosition === 'far-bottom'}
-            selected={thumbnailNavigationPosition === 'far-bottom'}
-            onClick={() => { this.handleChange('far-bottom'); handleClose(); }}
             autoFocus={thumbnailNavigationPosition === 'far-bottom'}
             key="far-bottom"
+            onClick={() => { this.handleChange('far-bottom'); handleClose(); }}
+            selected={thumbnailNavigationPosition === 'far-bottom'}
           >
             <FormControlLabel
               value="far-bottom"
@@ -90,13 +88,13 @@ export class WindowThumbnailSettings extends Component {
               label={t('bottom')}
               labelPlacement="bottom"
             />
-          </ThumbnailOptions>
-          <ThumbnailOptions
+          </ThumbnailOption>
+          <ThumbnailOption
             aria-selected={thumbnailNavigationPosition === 'far-right'}
-            selected={thumbnailNavigationPosition === 'far-right'}
-            key="far-right"
             autoFocus={thumbnailNavigationPosition === 'far-right'}
+            key="far-right"
             onClick={() => { this.handleChange('far-right'); handleClose(); }}
+            selected={thumbnailNavigationPosition === 'far-right'}
           >
             <FormControlLabel
               value="far-right"
@@ -110,7 +108,7 @@ export class WindowThumbnailSettings extends Component {
               label={t('right')}
               labelPlacement="bottom"
             />
-          </ThumbnailOptions>
+          </ThumbnailOption>
         </StyledMenuList>
       </>
 
