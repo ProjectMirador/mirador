@@ -149,7 +149,6 @@ export class ThumbnailNavigation extends Component {
     }
   }
 
-  // {(position === 'far-bottom') ? this.areaHeight(height) : this.calculateForItems(thumbnailNavigation.count)}
   /** */
   areaHeight(height) {
     const { position, thumbnailNavigation } = this.props;
