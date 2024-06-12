@@ -41,7 +41,7 @@ export class WindowTopMenu extends Component {
           horizontal: 'right',
           vertical: 'top',
         }}
-        onClose={handleClose}
+        onClose={() => handleClose(anchorEl)}
         TransitionProps={{
           onEntering: toggleDraggingEnabled,
           onExit: toggleDraggingEnabled,
@@ -51,9 +51,9 @@ export class WindowTopMenu extends Component {
         open={open}
         role="menu"
       >
-        <WindowViewSettings windowId={windowId} handleClose={handleClose} />
+        <WindowViewSettings windowId={windowId} handleClose={() => handleClose(anchorEl)} />
         {showThumbnailNavigationSettings
-          && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}
+          && <WindowThumbnailSettings windowId={windowId} handleClose={() => handleClose(anchorEl)} />}
         <PluginHookWithHeader {...this.props} />
       </Popover>
     );
