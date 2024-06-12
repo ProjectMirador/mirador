@@ -33,9 +33,9 @@ export class WindowTopMenuButton extends Component {
   /**
    * @private
    */
-  handleMenuClose() {
+  handleMenuClose(anchorEl) {
     this.setState({
-      anchorEl: null,
+      anchorEl,
       open: false,
     });
   }
