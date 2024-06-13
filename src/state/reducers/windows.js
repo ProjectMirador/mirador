@@ -140,6 +140,14 @@ export const windowsReducer = (state = {}, action) => {
           highlightAllAnnotations: !state[action.windowId].highlightAllAnnotations,
         },
       };
+    case ActionTypes.TOGGLE_ANNOTATION_AUTOSCROLL:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          autoScrollAnnotationList: !state[action.windowId].autoScrollAnnotationList,
+        },
+      };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.windows || [];
     case ActionTypes.REQUEST_SEARCH:
@@ -166,6 +174,54 @@ export const windowsReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           collectionDialogOn: false,
+        },
+      };
+    case ActionTypes.SET_CURRENT_TIME:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          currentTime: action.currentTime,
+        },
+      };
+    case ActionTypes.SET_SEEK_TO_TIME:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          seekToTime: action.seekToTime,
+        },
+      };
+    case ActionTypes.SET_VIDEO_PAUSED:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          paused: !!action.paused,
+        },
+      };
+    case ActionTypes.SET_VIDEO_MUTED:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          muted: !!action.muted,
+        },
+      };
+    case ActionTypes.SET_VIDEO_TEXTTRACK_DISABLED:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          textTrackDisabled: !!action.textTrackDisabled,
+        },
+      };
+    case ActionTypes.SET_VIDEO_HAS_TEXTTRACK:
+      return {
+        ...state,
+        [action.windowId]: {
+          ...state[action.windowId],
+          hasTextTrack: !!action.hasTextTrack,
         },
       };
     default:

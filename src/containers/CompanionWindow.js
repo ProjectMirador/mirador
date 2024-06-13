@@ -48,7 +48,7 @@ const enhance = compose(
   withRef(),
   withTranslation(),
   withSize(),
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
   withPlugins('CompanionWindow'),
 );
 
