@@ -2,18 +2,11 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/MenuSharp';
-import CloseIcon from '@mui/icons-material/CloseSharp';
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
 import classNames from 'classnames';
-import WindowTopMenuButton from '../containers/WindowTopMenuButton';
-import WindowTopBarPluginArea from '../containers/WindowTopBarPluginArea';
-import WindowTopBarPluginMenu from '../containers/WindowTopBarPluginMenu';
-import WindowTopBarTitle from '../containers/WindowTopBarTitle';
+import WindowTopBarMenu from '../containers/WindowTopBarMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
-import FullScreenButton from '../containers/FullScreenButton';
-import WindowMaxIcon from './icons/WindowMaxIcon';
-import WindowMinIcon from './icons/WindowMinIcon';
 import ns from '../config/css-ns';
 
 const Root = styled(AppBar, { name: 'WindowTopBar', slot: 'root' })(() => ({
@@ -42,10 +35,7 @@ export class WindowTopBar extends Component {
    */
   render() {
     const {
-      removeWindow, windowId, toggleWindowSideBar, t,
-      maximizeWindow, maximized, minimizeWindow, allowClose, allowMaximize,
-      focusWindow, allowFullscreen, allowTopMenuButton, allowWindowSideBar,
-      component,
+      windowId, toggleWindowSideBar, t, focusWindow, allowWindowSideBar, component,
     } = this.props;
 
     return (
@@ -66,35 +56,10 @@ export class WindowTopBar extends Component {
               <MenuIcon />
             </MiradorMenuButton>
           )}
-          <WindowTopBarTitle
+          <WindowTopBarMenu
             windowId={windowId}
+            {...this.props}
           />
-          {allowTopMenuButton && (
-            <WindowTopMenuButton windowId={windowId} className={ns('window-menu-btn')} />
-          )}
-          <WindowTopBarPluginArea windowId={windowId} />
-          <WindowTopBarPluginMenu windowId={windowId} />
-          {allowMaximize && (
-            <MiradorMenuButton
-              aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
-              className={classNames(ns('window-maximize'), ns('window-menu-btn'))}
-              onClick={(maximized ? minimizeWindow : maximizeWindow)}
-            >
-              {(maximized ? <WindowMinIcon /> : <WindowMaxIcon />)}
-            </MiradorMenuButton>
-          )}
-          {allowFullscreen && (
-            <FullScreenButton className={ns('window-menu-btn')} />
-          )}
-          {allowClose && (
-            <MiradorMenuButton
-              aria-label={t('closeWindow')}
-              className={classNames(ns('window-close'), ns('window-menu-btn'))}
-              onClick={removeWindow}
-            >
-              <CloseIcon />
-            </MiradorMenuButton>
-          )}
         </StyledToolbar>
       </Root>
     );
