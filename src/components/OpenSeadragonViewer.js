@@ -118,7 +118,11 @@ export class OpenSeadragonViewer extends Component {
     ) {
       viewer.close();
       const canvasesChanged = !(isEqual(canvasWorld.canvasIds, prevProps.canvasWorld.canvasIds));
-      this.addAllImageSources((canvasesChanged || !viewerConfig));
+      if (canvasesChanged && viewer.preserveViewport) {
+        this.addAllImageSources(false);
+      } else {
+        this.addAllImageSources((canvasesChanged || !viewerConfig));
+      }
     } else if (!isEqual(canvasWorld.layers, prevProps.canvasWorld.layers)) {
       this.refreshTileProperties();
     } else if (viewerConfig && !this.osdUpdating) {
