@@ -105,5 +105,4 @@ ThumbnailCanvasGrouping.propTypes = {
   setCanvas: PropTypes.func.isRequired,
   showThumbnailLabels: PropTypes.bool.isRequired,
   style: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-
 };
