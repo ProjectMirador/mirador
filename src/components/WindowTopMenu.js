@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import Menu from '@mui/material/Menu';
 import ListSubheader from '@mui/material/ListSubheader';
+import Popover from '@mui/material/Popover';
 import PropTypes from 'prop-types';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
 import WindowViewSettings from '../containers/WindowViewSettings';
@@ -31,7 +31,7 @@ export class WindowTopMenu extends Component {
     } = this.props;
 
     return (
-      <Menu
+      <Popover
         container={container?.current}
         anchorOrigin={{
           horizontal: 'right',
@@ -41,7 +41,7 @@ export class WindowTopMenu extends Component {
           horizontal: 'right',
           vertical: 'top',
         }}
-        onClose={handleClose}
+        onClose={() => handleClose(anchorEl)}
         TransitionProps={{
           onEntering: toggleDraggingEnabled,
           onExit: toggleDraggingEnabled,
@@ -49,12 +49,13 @@ export class WindowTopMenu extends Component {
         orientation="horizontal"
         anchorEl={anchorEl}
         open={open}
+        role="menu"
       >
-        <WindowViewSettings windowId={windowId} handleClose={handleClose} />
+        <WindowViewSettings windowId={windowId} handleClose={() => handleClose(anchorEl)} />
         {showThumbnailNavigationSettings
-          && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}
+          && <WindowThumbnailSettings windowId={windowId} handleClose={() => handleClose(anchorEl)} />}
         <PluginHookWithHeader {...this.props} />
-      </Menu>
+      </Popover>
     );
   }
 }

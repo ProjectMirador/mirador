@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 import ListSubheader from '@mui/material/ListSubheader';
 import SingleIcon from '@mui/icons-material/CropOriginalSharp';
 import ScrollViewIcon from '@mui/icons-material/ViewColumn';
@@ -15,10 +16,13 @@ const ViewOption = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option'
     ...(selected && {
       borderBottomColor: theme.palette.secondary.main,
     }),
+    backgroundColor: 'transparent !important',
+    color: selected ? theme.palette.secondary.main : undefined,
   },
-  backgroundColor: 'transparent !important',
-  color: selected ? theme.palette.secondary.main : undefined,
-  display: 'inline-block',
+}));
+
+const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'option' })(() => ({
+  display: 'inline-flex',
 }));
 
 /**
@@ -63,10 +67,11 @@ export class WindowViewSettings extends Component {
         none of the click handlers work? */
     const menuItem = ({ value, Icon }) => (
       <ViewOption
-        selected={windowViewType === value}
-        key={value}
+        aria-selected={windowViewType === value}
         autoFocus={windowViewType === value}
+        key={value}
         onClick={() => { this.handleChange(value); handleClose(); }}
+        selected={windowViewType === value}
       >
         <FormControlLabel
           value={value}
@@ -80,8 +85,10 @@ export class WindowViewSettings extends Component {
     if (viewTypes.length === 0) return null;
     return (
       <>
-        <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('view')}</ListSubheader>
-        { viewTypes.map(value => menuItem({ Icon: iconMap[value], value })) }
+        <ListSubheader role="presentation" disableSticky>{t('view')}</ListSubheader>
+        <StyledMenuList role="menubar">
+          { viewTypes.map(value => menuItem({ Icon: iconMap[value], value })) }
+        </StyledMenuList>
       </>
     );
   }
