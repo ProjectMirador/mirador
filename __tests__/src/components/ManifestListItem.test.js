@@ -1,6 +1,6 @@
 import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
-
+import { getManifestoInstance } from '../../../src/state/selectors';
 import { ManifestListItem } from '../../../src/components/ManifestListItem';
 
 /** */
@@ -47,6 +47,16 @@ describe('ManifestListItem', () => {
     expect(screen.getByText('manifestError')).toBeInTheDocument();
     expect(screen.getByText('http://example.com')).toBeInTheDocument();
   });
+  it('renders an error message when fetched manifest is empty', () => {
+    const state = { manifests: { x: { json: {} } } };
+    const manifesto = getManifestoInstance(state, { manifestId: 'x' });
+
+    createWrapper({ error: !manifesto });
+
+    expect(screen.getByText('manifestError')).toBeInTheDocument();
+    expect(screen.getByText('http://example.com')).toBeInTheDocument();
+  });
+
   it('updates and adds window when button clicked', async () => {
     const user = userEvent.setup();
     const addWindow = jest.fn();
