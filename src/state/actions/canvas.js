@@ -3,6 +3,7 @@ import {
   getNextCanvasGrouping,
   getPreviousCanvasGrouping,
   getCanvasGrouping,
+  getConfig,
 } from '../selectors';
 
 /**
@@ -15,6 +16,7 @@ import {
 export function setCanvas(windowId, canvasId, newGroup = undefined, options = {}) {
   return ((dispatch, getState) => {
     const state = getState();
+    const { preserveViewport } = getConfig(state).osdConfig;
     let visibleCanvases = newGroup;
 
     if (!visibleCanvases) {
@@ -25,6 +27,7 @@ export function setCanvas(windowId, canvasId, newGroup = undefined, options = {}
     dispatch({
       ...options,
       canvasId,
+      preserveViewport,
       type: ActionTypes.SET_CANVAS,
       visibleCanvases,
       windowId,
