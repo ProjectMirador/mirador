@@ -39,7 +39,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
   render() {
     const {
-      index, style, data, currentCanvasId,
+      index, style, data, currentCanvasId, showThumbnailLabels,
     } = this.props;
     const {
       canvasGroupings, position, height,
@@ -87,7 +87,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             <IIIFThumbnail
               key={canvas.id}
               resource={canvas}
-              labelled
+              labelled={showThumbnailLabels}
               maxHeight={(position === 'far-right') ? style.height - (1.5 * SPACING) : height - (1.5 * SPACING)}
               variant="inside"
             />
@@ -103,5 +103,6 @@ ThumbnailCanvasGrouping.propTypes = {
   data: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   index: PropTypes.number.isRequired,
   setCanvas: PropTypes.func.isRequired,
+  showThumbnailLabels: PropTypes.bool.isRequired,
   style: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };

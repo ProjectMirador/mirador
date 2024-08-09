@@ -18,6 +18,7 @@ function createWrapper(props) {
         top: 0,
         width: 100,
       }}
+      showThumbnailLabels
       {...props}
     />,
   );
