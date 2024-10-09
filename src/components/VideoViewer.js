@@ -22,9 +22,8 @@ const StyledVideo = styled('video')(() => ({
 
 const StyledVideoContent = styled('div')(() => ({
     border: '3px solid red',
-    maxHeight: 'calc(100vh - 120px)',
+    maxHeight: 'calc(100% - 160px)',
     maxWidth: '100%',
-    top: '-60px',
     position: 'relative',
 }));
 
@@ -163,18 +162,19 @@ export class VideoViewer extends Component {
         const videoTargetTemporalfragment = len > 0
             ? videoResources[len - 1].temporalfragment : [];
         return (
-            <StyledContainer>
+            <StyledContainer>{/*blue border*/}
                 {video && (
                     <>
-                        <StyledVideoContent>
-                            <StyledVideo key={video.id} ref={this.videoRef} {...videoOptions}>
+                        <StyledVideoContent> {/*red border*/}
+                            <StyledVideo key={video.id} ref={this.videoRef} {...videoOptions}> {/*pink border*/}
                                 <source src={video.id} type={video.getFormat()}/>
                                 {vttContent.map(vttc => (
                                     <track key={vttc.id} src={vttc.id} srcLang={vttc.language}/>))}
                             </StyledVideo>
                             <AnnotationsOverlayVideo windowId={windowId} videoRef={this.videoRef}
                                                      videoTarget={videoTargetTemporalfragment}
-                                                     key={`${windowId} ${video.id}`} style={{height: '100%'}}/>
+                                                     key={`${windowId} ${video.id}`}
+                                                     style={{height: '100%', border: '3px solid orange'}}/>
                         </StyledVideoContent>
                         <WindowCanvasNavigationControlsVideo windowId={windowId}/>
                     </>
