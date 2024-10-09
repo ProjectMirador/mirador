@@ -71,7 +71,7 @@ module.exports = (env, options) => {
     ...config,
     devServer: {
       hot: true,
-      port: 4444,
+      port: 4445,
       static: [
         './__tests__/integration/mirador',
         './__tests__/fixtures',
