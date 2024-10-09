@@ -15,25 +15,17 @@ const StyledContainer = styled('div')(() => ({
     border: '3px solid blue',
 }));
 
-const StyledFlexFill = styled('div')(() => ({
-    maxHeight: 'calc(100vh - 120px)',
-    top: '-60px',
-    position: 'relative',
-    display: 'flex',
-    justifyContent: 'center',
-    border: '3px solid red',
-    maxWidth: '100%',
-}));
-
 const StyledVideo = styled('video')(() => ({
     maxHeight: '100%',
-    backgroundColor: '3px solid black',
+    backgroundColor: '8px solid pink',
 }));
 
-const StyledDiv = styled('div')(() => ({
-    border: '3px solid yellow',
-    maxHeight: '100%',
+const StyledVideoContent = styled('div')(() => ({
+    border: '3px solid red',
+    maxHeight: 'calc(100vh - 120px)',
     maxWidth: '100%',
+    top: '-60px',
+    position: 'relative',
 }));
 
 
@@ -172,22 +164,18 @@ export class VideoViewer extends Component {
             ? videoResources[len - 1].temporalfragment : [];
         return (
             <StyledContainer>
-
                 {video && (
                     <>
-
-                        <StyledFlexFill>
-                            <StyledDiv>
-                                <StyledVideo key={video.id} ref={this.videoRef} {...videoOptions}>
-                                    <source src={video.id} type={video.getFormat()}/>
-                                    {vttContent.map(vttc => (
-                                        <track key={vttc.id} src={vttc.id} srcLang={vttc.language}/>))}
-                                </StyledVideo>
-                                <AnnotationsOverlayVideo windowId={windowId} videoRef={this.videoRef}
-                                                         videoTarget={videoTargetTemporalfragment}
-                                                         key={`${windowId} ${video.id}`} style={{height: '100%'}}/>
-                            </StyledDiv>
-                        </StyledFlexFill>
+                        <StyledVideoContent>
+                            <StyledVideo key={video.id} ref={this.videoRef} {...videoOptions}>
+                                <source src={video.id} type={video.getFormat()}/>
+                                {vttContent.map(vttc => (
+                                    <track key={vttc.id} src={vttc.id} srcLang={vttc.language}/>))}
+                            </StyledVideo>
+                            <AnnotationsOverlayVideo windowId={windowId} videoRef={this.videoRef}
+                                                     videoTarget={videoTargetTemporalfragment}
+                                                     key={`${windowId} ${video.id}`} style={{height: '100%'}}/>
+                        </StyledVideoContent>
                         <WindowCanvasNavigationControlsVideo windowId={windowId}/>
                     </>
                 )}
