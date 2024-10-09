@@ -9,22 +9,24 @@ import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavig
 
 const StyledContainer = styled('div')(() => ({
     alignItems: 'center',
-    display: 'flex',
     width: '100%',
-    justifyContent: 'center',
-    border: '3px solid blue',
+    border: '6px solid blue',
+    display: 'flex',
 }));
 
 const StyledVideo = styled('video')(() => ({
     maxHeight: '100%',
-    border: '8px solid pink',
+    border: '6px solid pink',
 }));
 
 const StyledVideoContent = styled('div')(() => ({
-    border: '3px solid red',
-    maxHeight: 'calc(100% - 160px)',
+    border: '6px solid red',
     maxWidth: '100%',
+    textAlign: 'center',
+    display: 'block',
+    maxHeight: '100%',
     position: 'relative',
+
 }));
 
 
@@ -174,7 +176,7 @@ export class VideoViewer extends Component {
                             <AnnotationsOverlayVideo windowId={windowId} videoRef={this.videoRef}
                                                      videoTarget={videoTargetTemporalfragment}
                                                      key={`${windowId} ${video.id}`}
-                                                     style={{height: '100%', border: '3px solid orange'}}/>
+                                                     style={{height: '100%', border: '6px solid orange'}}/>
                         </StyledVideoContent>
                         <WindowCanvasNavigationControlsVideo windowId={windowId}/>
                     </>
