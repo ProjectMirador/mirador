@@ -16,12 +16,13 @@ const StyledContainer = styled('div')(() => ({
 }));
 
 const StyledFlexFill = styled('div')(() => ({
-    height: '100%',
-
+    maxHeight: 'calc(100vh - 120px)',
+    top: '-60px',
     position: 'relative',
     display: 'flex',
     justifyContent: 'center',
-    border: '3px solid red'
+    border: '3px solid red',
+    maxWidth: '100%',
 }));
 
 const StyledVideo = styled('video')(() => ({
@@ -31,6 +32,8 @@ const StyledVideo = styled('video')(() => ({
 
 const StyledDiv = styled('div')(() => ({
     border: '3px solid yellow',
+    maxHeight: '100%',
+    maxWidth: '100%',
 }));
 
 
