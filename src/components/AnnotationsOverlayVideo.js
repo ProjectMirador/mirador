@@ -626,9 +626,9 @@ export class AnnotationsOverlayVideo extends Component {
     const circularProgress = (<CircularProgress style={{ left: '50%', position: 'absolute', top: '50%' }} />);
     return (
       <>
-        <canvas ref={this.ref} style={{ left: 0, position: 'absolute', top: 0 }} />
-        <ResizeObserver onResize={this.onCanvasResize} />
-        { showProgress && circularProgress }
+            <canvas ref={this.ref} style={{ left: 0, position: 'absolute', top: 0, border : '3px solid black' }} />
+            <ResizeObserver onResize={this.onCanvasResize} />
+            { showProgress && circularProgress }
       </>
     );
   }

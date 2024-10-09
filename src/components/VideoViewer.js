@@ -16,6 +16,7 @@ const StyledContainer = styled('div')(() => ({
 
 const StyledFlexFill = styled('div')(() => ({
   height: '100%',
+
   position: 'relative',
   display: 'flex',
   justifyContent:'center'
@@ -162,13 +163,13 @@ export class VideoViewer extends Component {
       <StyledContainer>
         <StyledFlexFill>
           { video && (
-            <>
+            <div>
               <StyledVideo key={video.id} ref={this.videoRef} {...videoOptions}>
                 <source src={video.id} type={video.getFormat()} />
                 { vttContent.map(vttc => (<track key={vttc.id} src={vttc.id} srcLang={vttc.language} />)) }
               </StyledVideo>
-              <AnnotationsOverlayVideo windowId={windowId} videoRef={this.videoRef} videoTarget={videoTargetTemporalfragment} key={`${windowId} ${video.id}`} />
-            </>
+              <AnnotationsOverlayVideo windowId={windowId} videoRef={this.videoRef} videoTarget={videoTargetTemporalfragment} key={`${windowId} ${video.id}`} style={{ height : '100%'}} />
+            </div>
           )}
           <WindowCanvasNavigationControlsVideo windowId={windowId} />
         </StyledFlexFill>
