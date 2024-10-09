@@ -17,7 +17,7 @@ const StyledContainer = styled('div')(() => ({
 
 const StyledVideo = styled('video')(() => ({
     maxHeight: '100%',
-    backgroundColor: '8px solid pink',
+    border: '8px solid pink',
 }));
 
 const StyledVideoContent = styled('div')(() => ({
