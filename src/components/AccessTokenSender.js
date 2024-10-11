@@ -24,6 +24,11 @@ export class AccessTokenSender extends Component {
     const { url } = this.props;
     if (!url) return <></>;
 
+    let tokenUrl = new URL(url);
+    let params = new URLSearchParams(tokenUrl.search);
+    params.append('origin', window.origin);
+    params.append('messageId', tokenUrl.origin + tokenUrl.pathname);
+    let tokenUrlString = tokenUrl.origin + tokenUrl.pathname + '?' + params.toString();
     /**
     login, clickthrough/kiosk open @id, wait for close
     external, no-op
@@ -33,7 +38,7 @@ export class AccessTokenSender extends Component {
         attributes={{
           'aria-hidden': true,
           height: 1,
-          src: `${url}?origin=${window.origin}&messageId=${url}`,
+          src: `${tokenUrlString}`,
           style: { visibility: 'hidden' },
           width: 1,
         }}

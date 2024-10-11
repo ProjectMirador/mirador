@@ -91,10 +91,14 @@ export class IIIFAuthentication extends Component {
       accessTokenServiceId, authServiceId, resolveAuthenticationRequest, features,
     } = this.props;
 
+    let authServiceIdUrl = new URL(authServiceId);
+    let params = new URLSearchParams(authServiceIdUrl.search);
+    params.append('origin', window.origin);
+    let authServiceIdUrlString = authServiceIdUrl.origin + authServiceIdUrl.pathname + '?' + params.toString();
     return (
       <>
         {this.renderLogin()}
-        <NewWindow name="IiifLoginSender" url={`${authServiceId}?origin=${window.origin}`} features={features} onClose={() => resolveAuthenticationRequest(authServiceId, accessTokenServiceId)} />
+        <NewWindow name="IiifLoginSender" url={`${authServiceIdUrlString}`} features={features} onClose={() => resolveAuthenticationRequest(authServiceId, accessTokenServiceId)} />
       </>
     );
   }
