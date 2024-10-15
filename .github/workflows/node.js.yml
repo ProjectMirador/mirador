@@ -17,11 +17,15 @@ jobs:
         node-version: [18.x, 20.x]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
+    - uses: browser-actions/setup-chrome@v1
+      id: setup-chrome
+    - run: |
+         echo "CHROME_BIN=${{ steps.setup-chrome.outputs.chrome-path }}" >> $GITHUB_ENV
     - run: npm install
     - run: npm test
     - name: Upload coverage to Codecov

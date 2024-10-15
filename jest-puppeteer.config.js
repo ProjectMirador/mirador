@@ -1,5 +1,8 @@
 module.exports = {
   launch: {
+    // See https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    executablePath: process.env.CHROME_BIN || 'chromium',
     headless: process.env.HEADLESS !== 'false' ? 'new' : false,
   },
   server: [{
