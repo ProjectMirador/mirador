@@ -146,6 +146,7 @@ export class IIIFAuthentication extends Component {
 
     if (!authServiceId) return null;
 
+    console.log('status: '+status);
     if (status === null) return this.renderLogin();
     if (status === 'cookie') return this.renderLoggingInCookie();
     if (status === 'token') return this.renderLoggingInToken();

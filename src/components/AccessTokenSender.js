@@ -16,7 +16,10 @@ export class AccessTokenSender extends Component {
   /** @private */
   onReceiveAccessTokenMessage(e) {
     const { handleAccessTokenMessage, url } = this.props;
-    if (e.data && e.data.messageId && e.data.messageId === url) handleAccessTokenMessage(e.data);
+    console.log('e.data:'+JSON.stringify(e.data));
+    console.log('e.data.messageId:'+encodeURIComponent(e.data.messageId));
+    console.log('URL:'+encodeURIComponent(url));
+    if (e.data && e.data.messageId && encodeURIComponent(e.data.messageId.replace(/&amp;/g,'&')) === encodeURIComponent(url)) handleAccessTokenMessage(e.data);
   }
 
   /** */
@@ -26,8 +29,8 @@ export class AccessTokenSender extends Component {
 
     let tokenUrl = new URL(url);
     let params = new URLSearchParams(tokenUrl.search);
+    params.append('messageId', tokenUrl.origin + tokenUrl.pathname  + '?' + params.toString());
     params.append('origin', window.origin);
-    params.append('messageId', tokenUrl.origin + tokenUrl.pathname);
     let tokenUrlString = tokenUrl.origin + tokenUrl.pathname + '?' + params.toString();
     /**
     login, clickthrough/kiosk open @id, wait for close
