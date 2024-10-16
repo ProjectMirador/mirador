@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getWindowConfig, isFocused } from '../state/selectors';
+import { getWindowConfig, isFocused, getWindow } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';
 
 /** mapStateToProps */
@@ -18,6 +18,7 @@ const mapStateToProps = (state, { windowId }) => {
     allowWindowSideBar: config.allowWindowSideBar,
     focused: isFocused(state, { windowId }),
     maximized: config.maximized,
+    sideBarOpen: (getWindow(state, { windowId }) || {}).sideBarOpen,
   };
 };
 
