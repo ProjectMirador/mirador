@@ -421,6 +421,7 @@ export default {
     et: 'Eesti',
     fa: 'فارسی',
     fr: 'Français',
+    hr: 'Hrvatski',
     ja: '日本語',
     kr: '한국어',
     lt: 'Lietuvių',

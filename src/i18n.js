@@ -8,6 +8,7 @@ import fa from './locales/fa/translation.json';
 import zhCn from './locales/zhCn/translation.json';
 import zhTw from './locales/zhTw/translation.json';
 import fr from './locales/fr/translation.json';
+import hr from './locales/hr/translation.json';
 import ja from './locales/ja/translation.json';
 import kr from './locales/kr/translation.json';
 import nl from './locales/nl/translation.json';
@@ -33,6 +34,7 @@ function createI18nInstance() {
     et,
     fa,
     fr,
+    hr,
     it,
     ja,
     kr,
