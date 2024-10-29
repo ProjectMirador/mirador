@@ -61,7 +61,7 @@
     "react-dnd-multi-backend": "^8.0.0",
     "react-dnd-touch-backend": "^16.0.0",
     "react-full-screen": "^1.1.1",
-    "react-i18next": "^11.7.0 || ^12.0.0 || ^13.0.0",
+    "react-i18next": "^13.0.0 || ^14.0.0 || ^15.0.0",
     "react-image": "^4.0.1",
     "react-intersection-observer": "^9.0.0",
     "react-mosaic-component": "^6.0.0",
