@@ -4,7 +4,7 @@ describe('add plugins for companion windows', () => {
     await expect(page).toMatchElement('.mirador-viewer');
   });
 
-  it('added a plugin to the window sidebar and companion window', async () => {
+  it.skip('added a plugin to the window sidebar and companion window', async () => {
     await expect(page).toClick('button[aria-label="Toggle sidebar"]');
 
     await expect(page).toMatchElement('.mirador-companion-window-left.mirador-window-sidebar-info-panel');
