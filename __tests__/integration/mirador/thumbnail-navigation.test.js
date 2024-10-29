@@ -13,7 +13,6 @@ describe('Thumbnail navigation', () => {
       miradorInstance.store.getState().windows
     ));
     expect(Object.values(windows)[0].canvasId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892'); // test harness in index.html starts at 2
-    await page.waitForTimeout(1000);
     await expect(page).toClick('.mirador-thumbnail-nav-canvas-1 img');
     await expect(page).toMatchElement('.mirador-thumbnail-nav-canvas-1.mirador-current-canvas-grouping', { timeout: 1500 });
     windows = await page.evaluate(() => (
