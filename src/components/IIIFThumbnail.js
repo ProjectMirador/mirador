@@ -1,7 +1,6 @@
 import {
   Component, useMemo, useEffect, useState,
 } from 'react';
-import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { useInView } from 'react-intersection-observer';
 import getThumbnail from '../lib/ThumbnailFactory';
@@ -22,7 +21,7 @@ const Image = styled('img', { name: 'IIIFThumbnail', slot: 'image' })(() => ({
  * try to load the image (or even calculate that the image url/height/width are)
  */
 const LazyLoadedImage = ({
-  border, placeholder, style = {}, thumbnail, resource, maxHeight, maxWidth, thumbnailsConfig, ...props
+  placeholder, style = {}, thumbnail, resource, maxHeight, maxWidth, thumbnailsConfig = {}, border = false, ...props
 }) => {
   const { ref, inView } = useInView();
   const [loaded, setLoaded] = useState(false);
@@ -112,28 +111,6 @@ const LazyLoadedImage = ({
       {...props}
     />
   );
-};
-
-LazyLoadedImage.propTypes = {
-  border: PropTypes.bool,
-  maxHeight: PropTypes.number.isRequired,
-  maxWidth: PropTypes.number.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  thumbnail: PropTypes.shape({
-    height: PropTypes.number,
-    url: PropTypes.string.isRequired,
-    width: PropTypes.number,
-  }),
-  thumbnailsConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-};
-
-LazyLoadedImage.defaultProps = {
-  border: false,
-  style: {},
-  thumbnail: null,
-  thumbnailsConfig: {},
 };
 
 /**
