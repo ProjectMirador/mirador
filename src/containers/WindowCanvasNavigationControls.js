@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withSize } from 'react-sizeme';
+import { withSize } from '../extend/withSize';
 import { withPlugins } from '../extend/withPlugins';
 import { getShowZoomControlsConfig, getWorkspace } from '../state/selectors';
 import { WindowCanvasNavigationControls } from '../components/WindowCanvasNavigationControls';
