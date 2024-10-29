@@ -12,12 +12,10 @@ describe('Window actions', () => {
     await expect(page).toClick('[data-manifestid="http://127.0.0.1:4488/__tests__/fixtures/version-2/sn904cj3429.json"] button');
 
     await expect(page).toMatchElement('.mirador-window');
-    await page.waitForTimeout(1000);
     await expect(page).toClick('.mirador-window-close');
     const numWindows = await page.evaluate(page => (
       document.querySelectorAll('.mirador-window').length
     )); // only default configed windows found
-    await page.waitForTimeout(1000);
     await expect(numWindows).toBe(0);
   });
 });
