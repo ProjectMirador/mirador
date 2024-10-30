@@ -44,6 +44,7 @@
     }],
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
     "react-hooks/exhaustive-deps": "error",
     "testing-library/render-result-naming-convention": "off",
     "testing-library/no-render-in-lifecycle": [
