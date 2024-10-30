@@ -10,13 +10,13 @@ describe('filterValidPlugins', () => {
   it('returns only valid plugins', () => {
     const plugins = [
       {
-        component: props => null,
+        component: () => null,
         mode: 'add',
         name: 'valid plugin 1',
         target: 'Window',
       },
       {
-        component: props => null,
+        component: () => null,
         mode: 'wrap',
         name: 'valid plugin 2',
         target: 'Window',
@@ -31,7 +31,7 @@ describe('filterValidPlugins', () => {
           target: 'missing-mode',
         },
         {
-          component: props => null,
+          component: () => null,
           mode: 'wrap',
           name: 'valid plugin, grouped with an invalid one',
           target: 'WindowTopBar',

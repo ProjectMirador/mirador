@@ -10,7 +10,7 @@ class ResizeObserver {
   }
 
   /** */
-  observe(element) {
+  observe() {
     // Fake a resize event
     setTimeout(() => {
       this.callback([{ contentRect: { height: 300, width: 400 } }]);

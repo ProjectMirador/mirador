@@ -11,7 +11,7 @@ describe('createTargetToPluginMapping', () => {
 
   it('should create a mapping from targets to plugins and modes', () => {
     /** */
-    const component = props => null;
+    const component = () => null;
 
     const plugins = [
       { component, mode: 'wrap', target: 'Window' },
@@ -53,9 +53,9 @@ describe('createTargetToPluginMapping', () => {
 describe('connectPluginsToStore', () => {
   it('returns plugins with components connected to store', () => {
     /** */
-    const ComponentA = props => null;
+    const ComponentA = () => null;
     /** */
-    const ComponentB = props => null;
+    const ComponentB = () => null;
 
     const plugins = [
       {
@@ -74,7 +74,7 @@ describe('connectPluginsToStore', () => {
 
   it('returns plugins unchanged that do not need a connection to the store', () => {
     /** */
-    const ComponentA = props => null;
+    const ComponentA = () => null;
 
     const plugins = [
       {
@@ -90,7 +90,7 @@ describe('connectPluginsToStore', () => {
 describe('addPluginsToCompanionWindowsRegistry', () => {
   it('adds plugin references to the companion window registry', () => {
     /** */
-    const ComponentA = props => null;
+    const ComponentA = () => null;
 
     const plugins = [
       {

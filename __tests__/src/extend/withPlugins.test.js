@@ -54,7 +54,7 @@ describe('PluginHoc: if no plugin exists for the target', () => {
 
 describe('PluginHoc: if wrap plugins exist for target', () => {
   it('renders the first wrap plugin', () => {
-    /** */ const WrapPluginComponentA = props => <div data-testid="plugin">look i am a plugin</div>;
+    /** */ const WrapPluginComponentA = () => <div data-testid="plugin">look i am a plugin</div>;
     const pluginMap = {
       Target: {
         wrap: [
@@ -71,7 +71,7 @@ describe('PluginHoc: if wrap plugins exist for target', () => {
   it('passes the whole wrapped stack to the plugins', () => {
     /** */ const WrapPluginComponentA = ({ children }) => <div data-testid="pluginA">{children}</div>;
     WrapPluginComponentA.propTypes = { children: PropTypes.node.isRequired };
-    /** */ const WrapPluginComponentB = props => <div data-testid="pluginB">look i am a plugin</div>;
+    /** */ const WrapPluginComponentB = () => <div data-testid="pluginB">look i am a plugin</div>;
     const pluginMap = {
       Target: {
         wrap: [
@@ -89,8 +89,8 @@ describe('PluginHoc: if wrap plugins exist for target', () => {
 
 describe('PluginHoc: if add plugins exist but no wrap plugin', () => {
   it('renders the target component and passes all add plugin components as a prop', () => {
-    /** */ const AddPluginComponentA = props => <div data-testid="a">look i am a plugin</div>;
-    /** */ const AddPluginComponentB = props => <div data-testid="b">look i am a plugin</div>;
+    /** */ const AddPluginComponentA = () => <div data-testid="a">look i am a plugin</div>;
+    /** */ const AddPluginComponentB = () => <div data-testid="b">look i am a plugin</div>;
     const plugins = {
       Target: {
         add: [
@@ -110,10 +110,10 @@ describe('PluginHoc: if add plugins exist but no wrap plugin', () => {
 
 describe('PluginHoc: if wrap plugins AND add plugins exist for target', () => {
   it('renders the first wrap plugin, ignores add plugins if props are not passed through', () => {
-    /** */ const WrapPluginComponentA = props => <div data-testid="a">look i am a plugin</div>;
-    /** */ const WrapPluginComponentB = props => <div>look i am a plugin</div>;
-    /** */ const AddPluginComponentA = props => <div>look i am a plugin</div>;
-    /** */ const AddPluginComponentB = props => <div>look i am a plugin</div>;
+    /** */ const WrapPluginComponentA = () => <div data-testid="a">look i am a plugin</div>;
+    /** */ const WrapPluginComponentB = () => <div>look i am a plugin</div>;
+    /** */ const AddPluginComponentA = () => <div>look i am a plugin</div>;
+    /** */ const AddPluginComponentB = () => <div>look i am a plugin</div>;
     const plugins = {
       Target: {
         add: [
@@ -144,9 +144,9 @@ describe('PluginHoc: if wrap plugins AND add plugins exist for target', () => {
       targetProps: PropTypes.shape({}).isRequired,
     };
 
-    /** */ const WrapPluginComponentB = props => <div>look i am a plugin</div>;
-    /** */ const AddPluginComponentC = props => <div data-testid="c">look i am a plugin</div>;
-    /** */ const AddPluginComponentD = props => <div data-testid="d">look i am a plugin</div>;
+    /** */ const WrapPluginComponentB = () => <div>look i am a plugin</div>;
+    /** */ const AddPluginComponentC = () => <div data-testid="c">look i am a plugin</div>;
+    /** */ const AddPluginComponentD = () => <div data-testid="d">look i am a plugin</div>;
     const plugins = {
       Target: {
         add: [

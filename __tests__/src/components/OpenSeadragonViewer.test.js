@@ -217,7 +217,7 @@ describe('OpenSeadragonViewer', () => {
       const canvasWorld = {
         contentResource: i => i,
         layerIndexOfImageResource: i => 1 - i,
-        layerOpacityOfImageResource: i => 0.5,
+        layerOpacityOfImageResource: () => 0.5,
         layers: [{ id: 'a' }, { id: 'b' }],
         worldBounds: () => ([0, 0, 100, 100]),
       };

@@ -9,7 +9,7 @@ const mockStore = configureMockStore(middlewares);
 
 jest.mock('../../../src/state/selectors', () => ({
   getCanvasGrouping: (state, { canvasId }) => [{ id: canvasId }],
-  getConfig: jest.fn((state) => {
+  getConfig: jest.fn(() => {
     const osdConfig = { osdConfig: { preserveViewport: true } };
     return osdConfig;
   }),

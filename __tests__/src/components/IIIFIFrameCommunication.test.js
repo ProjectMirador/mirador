@@ -29,7 +29,7 @@ describe('Register event listener', () => {
     jest.spyOn(window, 'addEventListener').mockImplementation((event, onReceiveMessage) => {
       events[event] = onReceiveMessage;
     });
-    jest.spyOn(window, 'removeEventListener').mockImplementation((event, onReceiveMessage) => {
+    jest.spyOn(window, 'removeEventListener').mockImplementation((event) => {
       events[event] = undefined;
     });
     const props = { handleReceiveMessage: jest.fn() };

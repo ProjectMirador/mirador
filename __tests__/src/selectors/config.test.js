@@ -29,7 +29,7 @@ describe('getExportableState', () => {
     const f = {
       a: 1, b: 2, c: 3, d: 4,
     };
-    const state = { config: { export: { f: { filter: ([k, v]) => (v % 2) === 0 } } }, f };
+    const state = { config: { export: { f: { filter: ([, v]) => (v % 2) === 0 } } }, f };
     expect(getExportableState(state)).toEqual({ f: { b: 2, d: 4 } });
   });
 });

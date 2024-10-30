@@ -2,7 +2,7 @@ import { render, screen } from 'test-utils';
 import { VideoViewer } from '../../../src/components/VideoViewer';
 
 /** create wrapper */
-function createWrapper(props, suspenseFallback) {
+function createWrapper(props) {
   return render(
     <VideoViewer
       classes={{}}
@@ -20,7 +20,7 @@ describe('VideoViewer', () => {
           { getFormat: () => 'video/mp4', id: 1 },
           { getFormat: () => 'video/mp4', id: 2 },
         ],
-      }, true);
+      });
       const video = screen.getByTestId('video');
       expect(video.querySelector('source:nth-of-type(1)')).toHaveAttribute('type', 'video/mp4'); // eslint-disable-line testing-library/no-node-access
       expect(video.querySelector('source:nth-of-type(2)')).toHaveAttribute('type', 'video/mp4'); // eslint-disable-line testing-library/no-node-access
@@ -30,7 +30,7 @@ describe('VideoViewer', () => {
         videoResources: [
           { getFormat: () => 'video/mp4', id: 1 },
         ],
-      }, true);
+      });
       expect(screen.getByTestId('video')).toHaveAttribute('crossOrigin', 'anonymous');
     });
     it('captions', () => {
@@ -42,7 +42,7 @@ describe('VideoViewer', () => {
         videoResources: [
           { getFormat: () => 'video/mp4', id: 1 },
         ],
-      }, true);
+      });
       const video = screen.getByTestId('video');
       expect(video.querySelector('track:nth-of-type(1)')).toHaveAttribute('srcLang', 'en'); // eslint-disable-line testing-library/no-node-access
       expect(video.querySelector('track:nth-of-type(1)')).toHaveAttribute('label', 'English'); // eslint-disable-line testing-library/no-node-access

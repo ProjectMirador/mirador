@@ -3,7 +3,7 @@ import ActionTypes from '../../../src/state/actions/action-types';
 
 jest.mock('../../../src/state/selectors', () => ({
   ...jest.requireActual('../../../src/state/selectors'),
-  getVisibleNodeIds: (state, args) => ['openVisible', 'closedVisible', 'visible'],
+  getVisibleNodeIds: () => ['openVisible', 'closedVisible', 'visible'],
 }));
 
 describe('companionWindow actions', () => {

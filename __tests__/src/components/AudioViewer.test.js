@@ -2,7 +2,7 @@ import { render, screen } from 'test-utils';
 import { AudioViewer } from '../../../src/components/AudioViewer';
 
 /** create wrapper */
-function createWrapper(props, suspenseFallback) {
+function createWrapper(props) {
   return render(
     <AudioViewer
       classes={{}}
@@ -21,7 +21,7 @@ describe('AudioViewer', () => {
           { getFormat: () => 'video/mp4', id: 1 },
           { getFormat: () => 'video/mp4', id: 2 },
         ],
-      }, true);
+      });
       const audio = screen.getByTestId('audio');
 
       expect(audio.querySelector('source:nth-of-type(1)')).toHaveAttribute('src', '1');
@@ -32,7 +32,7 @@ describe('AudioViewer', () => {
         audioResources: [
           { getFormat: () => 'audio/mp3', id: 1 },
         ],
-      }, true);
+      });
 
       expect(screen.getByTestId('audio')).toHaveAttribute('crossOrigin', 'anonymous');
     });
@@ -45,7 +45,7 @@ describe('AudioViewer', () => {
           { getDefaultLabel: () => 'English', getProperty: () => 'en', id: 1 },
           { getDefaultLabel: () => 'French', getProperty: () => 'fr', id: 2 },
         ],
-      }, true);
+      });
       const audio = screen.getByTestId('audio');
 
       expect(audio.querySelector('track:nth-of-type(1)')).toHaveAttribute('srcLang', 'en');
