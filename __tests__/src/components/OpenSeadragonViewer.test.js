@@ -172,9 +172,9 @@ describe('OpenSeadragonViewer', () => {
     });
 
     it('calls addNonTileSource for every nonTiledImage and then zoomsToWorld', async () => {
-      const { component, rerender, viewer } = createWrapper({ nonTiledImages: [] });
+      const { component, rerender, viewer } = createWrapper({ infoResponses: [], nonTiledImages: [] });
 
-      const mockAddNonTiledImage = jest.spyOn(viewer, 'addSimpleImage');
+      const mockAddNonTiledImage = jest.spyOn(viewer, 'addSimpleImage').mockImplementation(() => true);
       const mockFitBounds = jest.spyOn(viewer.viewport, 'fitBounds');
 
       rerender(cloneElement(component, {
