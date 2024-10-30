@@ -54,7 +54,7 @@ export class SidebarIndexList extends Component {
       <MenuList variant="selectedMenu">
         {
           canvasesIdAndLabel.map((canvas, canvasIndex) => {
-            const onClick = () => { setCanvas(windowId, canvas.id); }; // eslint-disable-line require-jsdoc, max-len
+            const onClick = () => { setCanvas(windowId, canvas.id); }; // eslint-disable-line jsdoc/require-jsdoc, max-len
 
             return (
               <ScrollTo

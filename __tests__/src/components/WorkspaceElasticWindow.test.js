@@ -90,6 +90,7 @@ describe('WorkspaceElasticWindow', () => {
         updateElasticWindowLayout: mockOnResize,
       });
 
+      /** */
       container.getBoundingClientRect = () => ({
         left: -2500,
         offsetHeight: 5000,

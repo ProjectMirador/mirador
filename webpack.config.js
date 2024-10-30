@@ -49,6 +49,7 @@ const baseConfig = mode => ({
   },
 });
 
+/** */
 module.exports = (env, options) => {
   const isProduction = options.mode === 'production';
   const config = baseConfig(options.mode);

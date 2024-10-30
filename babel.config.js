@@ -8,7 +8,7 @@ const moduleFormatMap = {
   es: false,
 };
 
-// eslint-disable-next-line func-names
+// eslint-disable-next-line jsdoc/require-jsdoc
 module.exports = function (api) {
   const isDevelopmentEnv = api.env('development');
   const isProductionEnv = api.env('production');

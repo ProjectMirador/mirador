@@ -67,6 +67,7 @@ describe('WorkspaceElastic', () => {
         setWorkspaceViewportPosition: mockDragStop,
       });
 
+      /** */
       container.getBoundingClientRect = () => ({
         left: -2500,
         offsetHeight: 5000,

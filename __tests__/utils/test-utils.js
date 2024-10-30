@@ -41,5 +41,5 @@ function renderWithProviders(
   };
 }
 
-export * from '@testing-library/react';
-export { renderWithProviders as render };
+export * from '@testing-library/react'; // eslint-disable-line import/export
+export { renderWithProviders as render }; // eslint-disable-line import/export

@@ -64,7 +64,7 @@ export class GalleryViewThumbnail extends Component {
     this.handleIntersection = this.handleIntersection.bind(this);
   }
 
-  // eslint-disable-next-line require-jsdoc
+  // eslint-disable-next-line jsdoc/require-jsdoc
   componentDidMount() {
     const { selected } = this.props;
     if (selected) {
