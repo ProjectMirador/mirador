@@ -1,8 +1,18 @@
 {
   "env": {
-    "jest/globals": true
+    "jest/globals": true,
   },
-  "extends": ["airbnb","react-app", "plugin:jest-dom/recommended", "plugin:testing-library/react"],
+  "parser": '@babel/eslint-parser',
+  "parserOptions": {
+    sourceType: 'module',
+  },
+  "extends": [
+    "airbnb",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jest-dom/recommended",
+    "plugin:testing-library/react"
+  ],
   "globals": {
     "page": true,
     "document": true
@@ -14,6 +24,32 @@
     ],
     "import/prefer-default-export": "off",
     "no-console": "off",
+    "no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }],
+    'no-unused-vars': 'off',
+    'no-undef': 'off',
+    'no-restricted-syntax': ['warn', 'WithStatement'],
+    'no-restricted-globals': ['error'],
+    eqeqeq: ['warn', 'smart'],
+    'no-use-before-define': [
+      'warn',
+      {
+        functions: false,
+        classes: false,
+        variables: false,
+      },
+    ],
+    'no-mixed-operators': [
+      'warn',
+      {
+        groups: [
+          ['&', '|', '^', '~', '<<', '>>', '>>>'],
+          ['==', '!=', '===', '!==', '>', '>=', '<', '<='],
+          ['&&', '||'],
+          ['in', 'instanceof'],
+        ],
+        allowSamePrecedence: false,
+      },
+    ],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "require-jsdoc": ["error", {
       "require": {
