@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import { createInstance } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import ar from './locales/ar/translation.json';
 import de from './locales/de/translation.json';
@@ -50,7 +50,7 @@ function createI18nInstance() {
     'zh-TW': zhTw,
   };
 
-  const instance = i18n.createInstance();
+  const instance = createInstance();
   instance.use(initReactI18next).init({
     fallbackLng: 'en',
     interpolation: {
