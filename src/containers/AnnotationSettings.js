@@ -7,7 +7,7 @@ import {
   getAnnotationResourcesByMotivation,
   getWindow,
 } from '../state/selectors';
-import { AnnotationSettings } from '../components/AnnotationSettings';
+import AnnotationSettings from '../components/AnnotationSettings';
 
 /**
  * Mapping redux state to component props using connect

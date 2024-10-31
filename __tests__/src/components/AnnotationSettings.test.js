@@ -1,6 +1,6 @@
 import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
-import { AnnotationSettings } from '../../../src/components/AnnotationSettings';
+import AnnotationSettings from '../../../src/components/AnnotationSettings';
 
 /** */
 function createWrapper(props) {

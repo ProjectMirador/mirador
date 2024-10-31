@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { AccessTokenSender } from './AccessTokenSender';
+import AccessTokenSender from './AccessTokenSender';
 import { NewWindow } from './NewWindow';
 import WindowAuthenticationBar from '../containers/WindowAuthenticationBar';
 

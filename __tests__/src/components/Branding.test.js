@@ -1,5 +1,5 @@
 import { render, screen, within } from 'test-utils';
-import { Branding } from '../../../src/components/Branding';
+import Branding from '../../../src/components/Branding';
 
 describe('Branding', () => {
   it('renders', () => {

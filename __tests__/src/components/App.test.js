@@ -1,6 +1,6 @@
 import { render, screen } from 'test-utils';
 
-import { App } from '../../../src/components/App';
+import App from '../../../src/components/App';
 
 /** */
 function createWrapper(props) {
