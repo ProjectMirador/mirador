@@ -44,10 +44,12 @@ jest.mock('react-i18next', () => ({
     type: '3rdParty',
   },
   // this mock makes sure any components using the translate HoC receive the t function as a prop
-  withTranslation: () => (Component) => {
-    Component.defaultProps = { // eslint-disable-line no-param-reassign
-      ...Component.defaultProps, t: k => k,
-    };
-    return Component;
+  withTranslation: () => (WrappedComponent) => {
+    /**
+     *
+     */
+    const I18nAwareComponent = ({ t = (k => k), ...props }) => <WrappedComponent t={t} {...props} />; // eslint-disable-line react/prop-types
+
+    return I18nAwareComponent;
   },
 }));
