@@ -23,17 +23,18 @@ const StyledCloseButton = styled(MiradorMenuButton, { name: 'CompanionWindow', s
 /**
  * CompanionWindow
  */
-export function CompanionWindow(props) {
-  /** */
-  const openInNewStyle = () => {
-    const { direction } = props;
-    if (direction === 'rtl') return { transform: 'scale(-1, 1)' };
-    return {};
-  };
+export function CompanionWindow(props) { // eslint-disable-line react/require-default-props
+  const {
+    ariaLabel = undefined, classes = {}, direction, paperClassName = '', onCloseClick = () => {}, updateCompanionWindow = undefined, isDisplayed = false,
+    position = null, t = key => key, title = null, children = undefined, titleControls = null, size = {},
+    defaultSidebarPanelWidth = 235, defaultSidebarPanelHeight = 201, innerRef = undefined,
+  } = props;
 
   /** */
-  const resizeHandles = () => {
-    const { direction, position } = props;
+  const openInNewStyle = direction === 'rtl' ? { transform: 'scale(-1, 1)' } : {};
+
+  /** */
+  const resizeHandles = (() => {
     const positions = {
       ltr: {
         default: 'left',
@@ -69,12 +70,7 @@ export function CompanionWindow(props) {
     }
 
     return base;
-  };
-  const {
-    ariaLabel, classes, paperClassName, onCloseClick, updateCompanionWindow, isDisplayed,
-    position, t, title, children, titleControls, size,
-    defaultSidebarPanelWidth, defaultSidebarPanelHeight, innerRef,
-  } = props;
+  })();
 
   const isBottom = (position === 'bottom' || position === 'far-bottom');
 
@@ -111,7 +107,7 @@ export function CompanionWindow(props) {
           width: isBottom ? 'auto' : defaultSidebarPanelWidth,
         }}
         disableDragging
-        enableResizing={resizeHandles()}
+        enableResizing={resizeHandles}
         minHeight={50}
         minWidth={position === 'left' ? 235 : 100}
       >
@@ -130,7 +126,7 @@ export function CompanionWindow(props) {
                   aria-label={t('openInCompanionWindow')}
                   onClick={() => { updateCompanionWindow({ position: 'right' }); }}
                 >
-                  <OpenInNewIcon style={openInNewStyle()} />
+                  <OpenInNewIcon style={openInNewStyle} />
                 </MiradorMenuButton>
               )
               : (
@@ -207,22 +203,4 @@ CompanionWindow.propTypes = {
   ]),
   titleControls: PropTypes.node,
   updateCompanionWindow: PropTypes.func,
-};
-
-CompanionWindow.defaultProps = {
-  ariaLabel: undefined,
-  children: undefined,
-  classes: {},
-  defaultSidebarPanelHeight: 201,
-  defaultSidebarPanelWidth: 235,
-  innerRef: undefined,
-  isDisplayed: false,
-  onCloseClick: () => { },
-  paperClassName: '',
-  position: null,
-  size: {},
-  t: key => key,
-  title: null,
-  titleControls: null,
-  updateCompanionWindow: undefined,
 };

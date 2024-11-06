@@ -22,7 +22,8 @@ const Image = styled('img', { name: 'IIIFThumbnail', slot: 'image' })(() => ({
  * try to load the image (or even calculate that the image url/height/width are)
  */
 const LazyLoadedImage = ({
-  border, placeholder, style = {}, thumbnail, resource, maxHeight, maxWidth, thumbnailsConfig, ...props
+  border = false, placeholder, style = {}, thumbnail = null,
+  resource, maxHeight, maxWidth, thumbnailsConfig = {}, ...props
 }) => {
   const { ref, inView } = useInView();
   const [loaded, setLoaded] = useState(false);
@@ -127,13 +128,6 @@ LazyLoadedImage.propTypes = {
     width: PropTypes.number,
   }),
   thumbnailsConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-};
-
-LazyLoadedImage.defaultProps = {
-  border: false,
-  style: {},
-  thumbnail: null,
-  thumbnailsConfig: {},
 };
 
 /**

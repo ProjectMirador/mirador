@@ -16,23 +16,22 @@ const Root = styled(IconButton, { name: 'MiradorMenuButton', slot: 'root' })(({ 
  * This shares the passed in aria-label w/ the Tooltip (as title) and the IconButton
  * All props besides icon are spread to the IconButton component
 */
-export function MiradorMenuButton(props) {
-  const { 'aria-label': ariaLabel } = props;
-  const {
-    badge,
-    children,
-    container,
-    dispatch,
-    selected,
-    BadgeProps,
-    TooltipProps,
-    sx,
-    ...iconButtonProps
-  } = props;
-
+export function MiradorMenuButton({
+  'aria-label': ariaLabel,
+  badge = false,
+  children,
+  container = null,
+  dispatch = () => {},
+  selected = false,
+  BadgeProps = {},
+  TooltipProps = {},
+  sx = {},
+  ...iconButtonProps
+}) {
   const button = (
     <Root
       selected={selected}
+      aria-label={ariaLabel}
       {...iconButtonProps}
       sx={sx}
       size="large"
@@ -75,14 +74,4 @@ MiradorMenuButton.propTypes = {
   selected: PropTypes.bool,
   sx: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   TooltipProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-};
-
-MiradorMenuButton.defaultProps = {
-  badge: false,
-  BadgeProps: {},
-  container: null,
-  dispatch: () => {},
-  selected: false,
-  sx: {},
-  TooltipProps: {},
 };
