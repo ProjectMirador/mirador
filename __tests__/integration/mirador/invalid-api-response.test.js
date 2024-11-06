@@ -9,7 +9,6 @@ describe('Mirador Invalid API Response Handler Test', () => {
     await page.evaluate(() => {
       document.querySelector('.mirador-add-resource-button').click();
     });
-    await page.waitForTimeout(50);
     await expect(page).toFill('#manifestURL', uri);
 
     await expect(page).toClick('#fetchBtn');

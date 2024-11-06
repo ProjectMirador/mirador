@@ -1,4 +1,4 @@
-import { Children, cloneElement, Component } from 'react';
+import { Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/CloseSharp';
@@ -23,17 +23,17 @@ const StyledCloseButton = styled(MiradorMenuButton, { name: 'CompanionWindow', s
 /**
  * CompanionWindow
  */
-export class CompanionWindow extends Component {
+export function CompanionWindow(props) {
   /** */
-  openInNewStyle() {
-    const { direction } = this.props;
+  const openInNewStyle = () => {
+    const { direction } = props;
     if (direction === 'rtl') return { transform: 'scale(-1, 1)' };
     return {};
-  }
+  };
 
   /** */
-  resizeHandles() {
-    const { direction, position } = this.props;
+  const resizeHandles = () => {
+    const { direction, position } = props;
     const positions = {
       ltr: {
         default: 'left',
@@ -69,126 +69,119 @@ export class CompanionWindow extends Component {
     }
 
     return base;
-  }
+  };
+  const {
+    ariaLabel, classes, paperClassName, onCloseClick, updateCompanionWindow, isDisplayed,
+    position, t, title, children, titleControls, size,
+    defaultSidebarPanelWidth, defaultSidebarPanelHeight, innerRef,
+  } = props;
 
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      ariaLabel, classes, paperClassName, onCloseClick, updateCompanionWindow, isDisplayed,
-      position, t, title, children, titleControls, size,
-      defaultSidebarPanelWidth, defaultSidebarPanelHeight, innerRef,
-    } = this.props;
+  const isBottom = (position === 'bottom' || position === 'far-bottom');
 
-    const isBottom = (position === 'bottom' || position === 'far-bottom');
-
-    const childrenWithAdditionalProps = Children.map(children, (child) => {
-      if (!child) return null;
-      return cloneElement(
-        child,
-        {
-          parentactions: {
-            closeCompanionWindow: onCloseClick,
-          },
+  const childrenWithAdditionalProps = Children.map(children, (child) => {
+    if (!child) return null;
+    return cloneElement(
+      child,
+      {
+        parentactions: {
+          closeCompanionWindow: onCloseClick,
         },
-      );
-    });
-
-    return (
-      <Root
-        ownerState={this.props}
-        ref={innerRef}
-        style={{
-          display: isDisplayed ? null : 'none',
-          order: position === 'left' ? -1 : null,
-        }}
-        className={[ns(`companion-window-${position}`), paperClassName, position === 'bottom' ? classes.horizontal : classes.vertical].join(' ')}
-        square
-        component="aside"
-        aria-label={ariaLabel || title}
-      >
-        <StyledRnd
-          style={{ display: 'inherit', position: 'inherit' }}
-          ownerState={this.props}
-          default={{
-            height: isBottom ? defaultSidebarPanelHeight : '100%',
-            width: isBottom ? 'auto' : defaultSidebarPanelWidth,
-          }}
-          disableDragging
-          enableResizing={this.resizeHandles()}
-          minHeight={50}
-          minWidth={position === 'left' ? 235 : 100}
-        >
-
-          <StyledToolbar
-            variant="dense"
-            className={[ns('companion-window-header'), size.width < 370 ? classes.small : null].join(' ')}
-            disableGutters
-          >
-            <StyledTitle variant="h3">{title}</StyledTitle>
-            {
-              position === 'left'
-                ? updateCompanionWindow
-                  && (
-                    <MiradorMenuButton
-                      aria-label={t('openInCompanionWindow')}
-                      onClick={() => { updateCompanionWindow({ position: 'right' }); }}
-                    >
-                      <OpenInNewIcon style={this.openInNewStyle()} />
-                    </MiradorMenuButton>
-                  )
-                : (
-                  <>
-                    {
-                      updateCompanionWindow && (
-                        <StyledPositionButton
-                          aria-label={position === 'bottom' ? t('moveCompanionWindowToRight') : t('moveCompanionWindowToBottom')}
-                          onClick={() => { updateCompanionWindow({ position: position === 'bottom' ? 'right' : 'bottom' }); }}
-                        >
-                          <MoveIcon />
-                        </StyledPositionButton>
-                      )
-                    }
-                    <StyledCloseButton
-                      sx={{
-                        ...(size.width < 370 && {
-                          order: 'unset',
-                        }),
-                      }}
-                      aria-label={t('closeCompanionWindow')}
-                      onClick={onCloseClick}
-                    >
-                      <CloseIcon />
-                    </StyledCloseButton>
-                  </>
-                )
-            }
-            {
-              titleControls && (
-                <StyledTitleControls
-                  ownerState={{ position }}
-                  sx={{
-                    order: isBottom || size.width < 370 ? 'unset' : 1000,
-                  }}
-                  className={ns('companion-window-title-controls')}
-                >
-                  {titleControls}
-                </StyledTitleControls>
-              )
-            }
-          </StyledToolbar>
-          <Contents
-            className={ns('scrollto-scrollable')}
-            elevation={0}
-          >
-            {childrenWithAdditionalProps}
-          </Contents>
-        </StyledRnd>
-      </Root>
+      },
     );
-  }
+  });
+
+  return (
+    <Root
+      ownerState={props}
+      ref={innerRef}
+      style={{
+        display: isDisplayed ? null : 'none',
+        order: position === 'left' ? -1 : null,
+      }}
+      className={[ns(`companion-window-${position}`), paperClassName, position === 'bottom' ? classes.horizontal : classes.vertical].join(' ')}
+      square
+      component="aside"
+      aria-label={ariaLabel || title}
+    >
+      <StyledRnd
+        style={{ display: 'inherit', position: 'inherit' }}
+        ownerState={props}
+        default={{
+          height: isBottom ? defaultSidebarPanelHeight : '100%',
+          width: isBottom ? 'auto' : defaultSidebarPanelWidth,
+        }}
+        disableDragging
+        enableResizing={resizeHandles()}
+        minHeight={50}
+        minWidth={position === 'left' ? 235 : 100}
+      >
+
+        <StyledToolbar
+          variant="dense"
+          className={[ns('companion-window-header'), size.width < 370 ? 'test' : null].join(' ')}
+          disableGutters
+        >
+          <StyledTitle variant="h3">{title}</StyledTitle>
+          {
+            position === 'left'
+              ? updateCompanionWindow
+              && (
+                <MiradorMenuButton
+                  aria-label={t('openInCompanionWindow')}
+                  onClick={() => { updateCompanionWindow({ position: 'right' }); }}
+                >
+                  <OpenInNewIcon style={openInNewStyle()} />
+                </MiradorMenuButton>
+              )
+              : (
+                <>
+                  {
+                    updateCompanionWindow && (
+                      <StyledPositionButton
+                        aria-label={position === 'bottom' ? t('moveCompanionWindowToRight') : t('moveCompanionWindowToBottom')}
+                        onClick={() => { updateCompanionWindow({ position: position === 'bottom' ? 'right' : 'bottom' }); }}
+                      >
+                        <MoveIcon />
+                      </StyledPositionButton>
+                    )
+                  }
+                  <StyledCloseButton
+                    sx={{
+                      ...(size.width < 370 && {
+                        order: 'unset',
+                      }),
+                    }}
+                    aria-label={t('closeCompanionWindow')}
+                    onClick={onCloseClick}
+                  >
+                    <CloseIcon />
+                  </StyledCloseButton>
+                </>
+              )
+          }
+          {
+            titleControls && (
+              <StyledTitleControls
+                ownerState={{ position }}
+                sx={{
+                  order: isBottom || size.width < 370 ? 'unset' : 1000,
+                }}
+                className={ns('companion-window-title-controls')}
+              >
+                {titleControls}
+              </StyledTitleControls>
+            )
+          }
+        </StyledToolbar>
+        <Contents
+          className={ns('scrollto-scrollable')}
+          elevation={0}
+        >
+          {childrenWithAdditionalProps}
+        </Contents>
+      </StyledRnd>
+    </Root>
+  );
 }
 
 CompanionWindow.propTypes = {
@@ -224,7 +217,7 @@ CompanionWindow.defaultProps = {
   defaultSidebarPanelWidth: 235,
   innerRef: undefined,
   isDisplayed: false,
-  onCloseClick: () => {},
+  onCloseClick: () => { },
   paperClassName: '',
   position: null,
   size: {},

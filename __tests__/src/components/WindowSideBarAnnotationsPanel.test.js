@@ -1,5 +1,5 @@
 import { render, screen } from 'test-utils';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import CanvasAnnotations from '../../../src/containers/CanvasAnnotations';
 import WindowSideBarAnnotationsPanel from '../../../src/components/WindowSideBarAnnotationsPanel';
@@ -11,7 +11,7 @@ function createWrapper(props, state) {
       annotationCount={4}
       classes={{}}
       id="xyz"
-      t={i18next.t}
+      t={t}
       windowId="abc"
       {...props}
     />,

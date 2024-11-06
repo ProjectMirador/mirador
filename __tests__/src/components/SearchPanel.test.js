@@ -1,6 +1,6 @@
 import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
-import i18next from 'i18next';
+import { t } from 'i18next';
 
 import { SearchPanel } from '../../../src/components/SearchPanel';
 
@@ -68,7 +68,7 @@ describe('SearchPanel', () => {
     const user = userEvent.setup();
     const fetchSearch = jest.fn();
     createWrapper({
-      fetchSearch, query: '', suggestedSearches: ['abc'], t: i18next.t,
+      fetchSearch, query: '', suggestedSearches: ['abc'], t,
     });
 
     expect(screen.getByRole('button', { name: 'Search this document for "abc"' })).toBeInTheDocument();

@@ -5,9 +5,9 @@ import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 
-const Root = styled(IconButton, { name: 'MiradorMenuButton', slot: 'root' })(({ ownerState, theme }) => ({
+const Root = styled(IconButton, { name: 'MiradorMenuButton', slot: 'root' })(({ selected, theme }) => ({
   fill: 'currentcolor',
-  ...(ownerState.selected && {
+  ...(selected && {
     backgroundColor: theme.palette.action.selected,
   }),
 }));
@@ -24,6 +24,7 @@ export function MiradorMenuButton(props) {
     children,
     container,
     dispatch,
+    selected,
     BadgeProps,
     TooltipProps,
     sx,
@@ -32,7 +33,7 @@ export function MiradorMenuButton(props) {
 
   const button = (
     <Root
-      ownerState={props}
+      selected={selected}
       {...iconButtonProps}
       sx={sx}
       size="large"
