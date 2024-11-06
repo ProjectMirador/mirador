@@ -99,7 +99,6 @@
     "babel-plugin-macros": "^3.0.1",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "bundlewatch": "^0.4.0",
-    "canvas": "^2.11.0",
     "chalk": "^4.1.0",
     "core-js": "^3.21.1",
     "eslint": "^8.11.0",
