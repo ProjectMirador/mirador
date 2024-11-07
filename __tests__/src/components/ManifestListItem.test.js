@@ -20,7 +20,7 @@ function createWrapper(props) {
 
 describe('ManifestListItem', () => {
   it('renders without an error', () => {
-    createWrapper({ buttonRef: 'ref' });
+    createWrapper({ buttonRef: jest.fn() });
 
     expect(screen.getByRole('listitem')).toHaveAttribute('data-manifestid', 'http://example.com');
     expect(screen.getByRole('listitem')).toHaveClass('MuiListItem-root');
