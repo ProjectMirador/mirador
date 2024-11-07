@@ -37,9 +37,8 @@ describe('MiradorMenuButton', () => {
     const user = userEvent.setup();
     createWrapper({ TooltipProps: { placement: 'left-start' } });
 
-    await act(async () => {
-      await user.hover(screen.getByRole('button'));
-    });
+    await user.hover(screen.getByRole('button'));
+
     expect(await screen.findByRole('tooltip')).toHaveTextContent('The Label');
 
     expect(screen.getByText('The Label')).toHaveClass('MuiTooltip-tooltipPlacementLeft');
