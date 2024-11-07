@@ -18,12 +18,18 @@ class MiradorViewer {
     this.store = viewerConfig.store
       || createPluggableStore(this.config, this.plugins);
 
-    if (config.id) {
-      this.container = document.getElementById(config.id);
-      this.root = createRoot(this.container);
+    if (config.id) this.renderInto(document.getElementById(config.id));
+  }
 
-      this.root.render(this.render());
-    }
+  /**
+   * @private
+   * @param {*} container
+   */
+  renderInto(container) {
+    this.container = container;
+    this.root = createRoot(this.container);
+
+    this.root.render(this.render());
   }
 
   /**

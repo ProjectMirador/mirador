@@ -19,11 +19,15 @@ describe('MiradorViewer', () => {
   });
   describe('constructor', () => {
     it('returns viewer store', () => {
-      const instance = new MiradorViewer({ id: 'mirador' });
+      const instance = new MiradorViewer({});
+
+      act(() => { instance.renderInto(document.getElementById('mirador')); }); // eslint-disable-line testing-library/no-unnecessary-act
       expect(instance.store.dispatch).toBeDefined();
     });
     it('renders via ReactDOM', () => {
-      act(() => { new MiradorViewer({ id: 'mirador' }); }); // eslint-disable-line no-new
+      const instance = new MiradorViewer({});
+
+      act(() => { instance.renderInto(document.getElementById('mirador')); }); // eslint-disable-line testing-library/no-unnecessary-act
 
       expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
     });
@@ -35,7 +39,6 @@ describe('MiradorViewer', () => {
           catalog: [
             { manifestId: 'http://media.nga.gov/public/manifests/nga_highlights.json', provider: 'National Gallery of Art' },
           ],
-          id: 'mirador',
           windows: [
             {
               canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
@@ -59,6 +62,8 @@ describe('MiradorViewer', () => {
           }],
         },
       );
+
+      act(() => { instance.renderInto(document.getElementById('mirador')); }); // eslint-disable-line testing-library/no-unnecessary-act
 
       const { windows, catalog, config } = instance.store.getState();
       const windowIds = Object.keys(windows);
