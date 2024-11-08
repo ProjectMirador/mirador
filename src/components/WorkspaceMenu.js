@@ -69,12 +69,11 @@ export class WorkspaceMenu extends Component {
       showThemePicker,
       isWorkspaceAddVisible,
       t,
+      tReady,
       showZoomControls,
       toggleZoomControls,
-      ...rest
+      ...menuProps
     } = this.props;
-    const menuProps = { ...rest };
-    delete menuProps.tReady;
 
     const {
       changeTheme,
@@ -156,6 +155,7 @@ WorkspaceMenu.propTypes = {
   showZoomControls: PropTypes.bool,
   t: PropTypes.func,
   toggleZoomControls: PropTypes.func,
+  tReady: PropTypes.bool,
 };
 
 WorkspaceMenu.defaultProps = {
@@ -165,4 +165,5 @@ WorkspaceMenu.defaultProps = {
   showZoomControls: false,
   t: key => key,
   toggleZoomControls: () => {},
+  tReady: false,
 };
