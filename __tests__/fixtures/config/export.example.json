@@ -179,7 +179,8 @@
     "thumbnailNavigation": {
       "defaultPosition": "far-bottom",
       "height": 150,
-      "width": 100
+      "width": 100,
+      "showThumbnailLabels": true
     },
     "workspace": {
       "type": "mosaic"
