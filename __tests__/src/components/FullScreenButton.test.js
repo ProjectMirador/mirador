@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import FullScreenContext from '../../../src/contexts/FullScreenContext';
 import { FullScreenButton } from '../../../src/components/FullScreenButton';
@@ -27,7 +27,7 @@ describe('FullScreenButton', () => {
     let enter;
     let user;
     beforeEach(() => {
-      enter = jest.fn();
+      enter = vi.fn();
       user = userEvent.setup();
       createWrapper({}, { enter });
     });
@@ -47,7 +47,7 @@ describe('FullScreenButton', () => {
     let exit;
     let user;
     beforeEach(() => {
-      exit = jest.fn();
+      exit = vi.fn();
       user = userEvent.setup();
       createWrapper({}, { active: true, exit });
     });

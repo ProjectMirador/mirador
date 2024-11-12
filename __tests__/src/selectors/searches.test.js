@@ -10,12 +10,10 @@ import {
   getNextSearchId,
 } from '../../../src/state/selectors';
 
-jest.mock('../../../src/state/selectors/canvases', () => {
-  const originalModule = jest.requireActual('../../../src/state/selectors/canvases');
-
+vi.mock('../../../src/state/selectors/canvases', async (importOriginal) => {
   return {
     __esModule: true, // Use it when dealing with esModules
-    ...originalModule,
+    ...(await importOriginal()),
     getCanvases: () => [
       { id: 'http://example.com/iiif/canvas1' },
       { id: 'http://example.com/iiif/canvas2' },

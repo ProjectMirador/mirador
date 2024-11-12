@@ -1,11 +1,11 @@
-import { act, render } from 'test-utils';
+import { act, render } from '@tests/utils/test-utils';
 import TileSource from '../../../src/components/OpenSeadragonTileSource';
 import OpenSeadragonViewerContext from '../../../src/contexts/OpenSeadragonViewerContext';
 
 describe('OpenSeadragonTileSource', () => {
   it('calls addTiledImage with the tile source', () => {
     const viewer = {
-      addTiledImage: jest.fn(),
+      addTiledImage: vi.fn(),
     };
     const ref = { current: viewer };
     const tileSource = { '@id': 'http://example.com/image/info.json' };
@@ -20,11 +20,11 @@ describe('OpenSeadragonTileSource', () => {
   });
 
   it('updates the opacity when the prop changes', async () => {
-    const mockOsdItem = { setOpacity: jest.fn() };
+    const mockOsdItem = { setOpacity: vi.fn() };
     const viewer = {
-      addTiledImage: jest.fn().mockImplementation(({ success }) => { success({ item: mockOsdItem }); }),
+      addTiledImage: vi.fn().mockImplementation(({ success }) => { success({ item: mockOsdItem }); }),
       world: {
-        removeItem: jest.fn(),
+        removeItem: vi.fn(),
       },
     };
     const ref = { current: viewer };
@@ -48,12 +48,12 @@ describe('OpenSeadragonTileSource', () => {
   });
 
   it('updates the index when the prop changes', async () => {
-    const mockOsdItem = jest.fn();
+    const mockOsdItem = vi.fn();
     const viewer = {
-      addTiledImage: jest.fn().mockImplementation(({ success }) => { success({ item: mockOsdItem }); }),
+      addTiledImage: vi.fn().mockImplementation(({ success }) => { success({ item: mockOsdItem }); }),
       world: {
-        removeItem: jest.fn(),
-        setItemIndex: jest.fn(),
+        removeItem: vi.fn(),
+        setItemIndex: vi.fn(),
       },
     };
 
@@ -78,12 +78,12 @@ describe('OpenSeadragonTileSource', () => {
   });
 
   it('updates the rendered bounds when the prop changes', async () => {
-    const mockOsdItem = { fitBounds: jest.fn() };
+    const mockOsdItem = { fitBounds: vi.fn() };
     const viewer = {
-      addTiledImage: jest.fn().mockImplementation(({ success }) => { success({ item: mockOsdItem }); }),
+      addTiledImage: vi.fn().mockImplementation(({ success }) => { success({ item: mockOsdItem }); }),
       world: {
-        removeItem: jest.fn(),
-        setItemIndex: jest.fn(),
+        removeItem: vi.fn(),
+        setItemIndex: vi.fn(),
       },
     };
 
@@ -108,11 +108,11 @@ describe('OpenSeadragonTileSource', () => {
   });
 
   it('deletes the item from the world when the item is unmounted', async () => {
-    const mockOsdItem = jest.fn();
+    const mockOsdItem = vi.fn();
     const viewer = {
       addTiledImage: ({ success }) => { success({ item: mockOsdItem }); },
       world: {
-        removeItem: jest.fn(),
+        removeItem: vi.fn(),
       },
     };
     const ref = { current: viewer };

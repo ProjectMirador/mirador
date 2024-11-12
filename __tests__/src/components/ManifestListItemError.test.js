@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { ManifestListItemError } from '../../../src/components/ManifestListItemError';
 
@@ -30,7 +30,7 @@ describe('ManifestListItemError', () => {
 
   it('has a dismiss button that fires the onDismissClick prop', async () => {
     const user = userEvent.setup();
-    mockFn = jest.fn();
+    mockFn = vi.fn();
     createWrapper({ onDismissClick: mockFn });
 
     await user.click(screen.getByRole('button', { name: 'dismiss' }));
@@ -40,7 +40,7 @@ describe('ManifestListItemError', () => {
 
   it('has a try again button that fires the onTryAgainClick prop', async () => {
     const user = userEvent.setup();
-    mockFn = jest.fn();
+    mockFn = vi.fn();
     createWrapper({ onTryAgainClick: mockFn });
 
     await user.click(screen.getByRole('button', { name: 'tryAgain' }));

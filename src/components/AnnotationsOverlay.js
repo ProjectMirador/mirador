@@ -225,14 +225,14 @@ export function AnnotationsOverlay({
     hoveredAnnotationIds, searchAnnotations, selectedAnnotationId, viewer]);
 
   useEffect(() => {
-    if (!osdCanvasOverlay || !osdCanvasOverlay.canvasDiv) return;
+    if (!ref.current) return;
 
     if (hoveredAnnotationIds.length > 0) {
-      osdCanvasOverlay.canvasDiv.style.cursor = 'pointer';
+      ref.current.style.cursor = 'pointer';
     } else {
-      osdCanvasOverlay.canvasDiv.style.cursor = '';
+      ref.current.style.cursor = '';
     }
-  }, [hoveredAnnotationIds, osdCanvasOverlay]);
+  }, [hoveredAnnotationIds, ref]);
 
   if (!viewer) return null;
 

@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { t } from 'i18next';
 
 import CanvasAnnotations from '../../../src/containers/CanvasAnnotations';
@@ -41,7 +41,7 @@ describe('WindowSideBarAnnotationsPanel', () => {
   });
 
   // TODO: Requires a lot of state setup...
-  xit('renders a CanvasAnnotations for every selected canvas', () => {
+  test.skip('renders a CanvasAnnotations for every selected canvas', () => {
     wrapper = createWrapper({
       canvasIds: ['abc', 'xyz'],
     });

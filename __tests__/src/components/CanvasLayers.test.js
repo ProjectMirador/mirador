@@ -1,4 +1,4 @@
-import { screen, fireEvent, render } from 'test-utils';
+import { screen, fireEvent, render } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Resource } from 'manifesto.js';
 
@@ -50,7 +50,7 @@ describe('CanvasLayers', () => {
   });
 
   it('handles drag + drop of layers', async () => {
-    const updateLayers = jest.fn();
+    const updateLayers = vi.fn();
     createWrapper({
       canvasId: 'foo',
       layers: [
@@ -86,7 +86,7 @@ describe('CanvasLayers', () => {
     let user;
 
     beforeEach(() => {
-      updateLayers = jest.fn();
+      updateLayers = vi.fn();
       user = userEvent.setup();
       createWrapper({
         canvasId: 'https://prtd.app/hamilton/canvas/p1.json',
@@ -121,7 +121,7 @@ describe('CanvasLayers', () => {
       });
     });
 
-    xit('has a slider to changing layer opacity', async () => {
+    test.skip('has a slider to changing layer opacity', async () => {
       const target = screen.getAllByRole('slider')[1];
       await user.click(target);
       await user.type(target, '{Space}');

@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { CollectionInfo } from '../../../src/components/CollectionInfo';
 
@@ -32,7 +32,7 @@ describe('CollectionInfo', () => {
   });
   it('clicking the button fires showCollectionDialog', async () => {
     const user = userEvent.setup();
-    const showCollectionDialog = jest.fn();
+    const showCollectionDialog = vi.fn();
 
     createWrapper({ showCollectionDialog });
 

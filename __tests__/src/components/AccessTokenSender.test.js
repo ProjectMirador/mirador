@@ -1,4 +1,4 @@
-import { render } from 'test-utils';
+import { render } from '@tests/utils/test-utils';
 import { AccessTokenSender } from '../../../src/components/AccessTokenSender';
 
 /**
@@ -27,14 +27,14 @@ describe('AccessTokenSender', () => {
   });
 
   it('triggers an action when the iframe sends a message', () => {
-    const handleAccessTokenMessage = jest.fn();
+    const handleAccessTokenMessage = vi.fn();
     createWrapper({ handleAccessTokenMessage, url: 'http://example.com' });
     window.dispatchEvent(new MessageEvent('message', { data: { messageId: 'http://example.com' } }));
     expect(handleAccessTokenMessage).toHaveBeenCalledWith({ messageId: 'http://example.com' });
   });
 
   it('ignores iframe messages with the wrong messageId', () => {
-    const handleAccessTokenMessage = jest.fn();
+    const handleAccessTokenMessage = vi.fn();
     createWrapper({ handleAccessTokenMessage, url: 'http://example.com' });
     window.dispatchEvent(new MessageEvent('message', { data: { messageId: 'http://example.com/123' } }));
     expect(handleAccessTokenMessage).not.toHaveBeenCalled();

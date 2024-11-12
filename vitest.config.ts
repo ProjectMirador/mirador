@@ -1,35 +1,13 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
 
-/**
-* Vite configuration
-*/
 export default defineConfig({
-  build: {
-    lib: {
-      entry: './src/index.js',
-      fileName: (format) => (format === 'umd' ? 'mirador.js' : 'mirador.es.js'),
-      formats: ['es', 'umd'],
-      name: 'Mirador',
-    },
-    rollupOptions: {
-      external: ['__tests__/*', '__mocks__/*'],
-      output: {
-        assetFileNames: 'mirador.[ext]',
-      },
-    },
-    sourcemap: true,
-  },
-  resolve: {
-    alias: {
-      '@tests/': fileURLToPath(new URL('./__tests__', import.meta.url)),
-    },
-  },
   esbuild: {
     exclude: [],
-    include: /src\/.*\.jsx?$/,
+    include: /(src|__tests__)\/.*\.jsx?$/,
     loader: 'jsx',
   },
   optimizeDeps: {
@@ -49,8 +27,18 @@ export default defineConfig({
     },
   },
   plugins: [react()],
-  server: {
-    open: '/__tests__/integration/mirador/index.html',
-    port: '4444',
+  resolve: {
+    alias: {
+      '@tests': fileURLToPath(new URL('./__tests__', import.meta.url)),
+    },
+  },
+  test: {
+    environment: 'happy-dom',
+    exclude: ['node_modules'],
+    fileParallelism: false,
+    globals: true,
+    include: ['**/*.test.js', '**/*.test.jsx'],
+    maxConcurrency: 1,
+    setupFiles: ['./setupTest.js'],
   },
 });

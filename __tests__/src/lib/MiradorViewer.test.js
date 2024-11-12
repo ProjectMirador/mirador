@@ -1,7 +1,5 @@
-import { act, render, screen } from 'test-utils';
+import { act, render, screen } from '@tests/utils/test-utils';
 import MiradorViewer from '../../../src/lib/MiradorViewer';
-
-jest.unmock('react-i18next');
 
 /** */
 const DummyPlugin = () => <div data-testid="plugin">Plugin</div>;
