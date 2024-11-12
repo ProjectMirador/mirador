@@ -4,5 +4,4 @@ node_modules/
 *.log
 *.tgz
 /.idea/
-package-lock.json
 
