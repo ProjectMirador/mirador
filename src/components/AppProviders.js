@@ -18,8 +18,7 @@ import FullScreenContext from '../contexts/FullScreenContext';
 /**
  * Allow applications to opt-out of (or provide their own) drag and drop context
  */
-const MaybeDndProvider = (props) => {
-  const { dndManager, children } = props;
+const MaybeDndProvider = ({ dndManager = undefined, children }) => {
   if (dndManager === false) {
     return children;
   }
@@ -45,7 +44,7 @@ MaybeDndProvider.propTypes = {
     undefined,
     false,
     PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  ]).isRequired,
+  ]),
 };
 
 /**
