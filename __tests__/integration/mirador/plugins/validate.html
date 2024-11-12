@@ -10,9 +10,9 @@
     <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
     <script src="../../../../node_modules/react/umd/react.development.js"></script>
     <script src="../../../../node_modules/react-dom/umd/react-dom.development.js"></script>
-    <script>document.write("<script type='text/javascript' src='../../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script type="text/babel">
+    <script type="module">
+      import Mirador from '../../../../src/index.js';
 
       const config = { id: 'mirador' };
 
