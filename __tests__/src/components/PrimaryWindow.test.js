@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from 'test-utils';
+import { render, screen, waitFor } from '@tests/utils/test-utils';
 import { PrimaryWindow } from '../../../src/components/PrimaryWindow';
 
 /** create wrapper */

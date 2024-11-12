@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { LocalePicker } from '../../../src/components/LocalePicker';
 
@@ -49,7 +49,7 @@ describe('LocalePicker', () => {
 
   it('triggers setLocale prop when clicking a list item', async () => {
     const user = userEvent.setup();
-    const setLocale = jest.fn();
+    const setLocale = vi.fn();
     createWrapper({
       availableLocales: ['en', 'de'],
       locale: 'en',

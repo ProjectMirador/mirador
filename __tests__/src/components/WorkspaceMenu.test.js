@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceMenu } from '../../../src/components/WorkspaceMenu';
 
@@ -22,8 +22,8 @@ describe('WorkspaceMenu', () => {
   let toggleZoomControls;
 
   beforeEach(() => {
-    handleClose = jest.fn();
-    toggleZoomControls = jest.fn();
+    handleClose = vi.fn();
+    toggleZoomControls = vi.fn();
   });
 
   it('renders without an error', () => {

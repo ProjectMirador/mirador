@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { VideoViewer } from '../../../src/components/VideoViewer';
 
 /** create wrapper */

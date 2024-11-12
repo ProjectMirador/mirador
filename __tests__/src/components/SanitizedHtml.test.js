@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
 
 describe('SanitizedHtml', () => {
@@ -6,7 +6,10 @@ describe('SanitizedHtml', () => {
     render(
       <SanitizedHtml
         data-testid="subject"
-        htmlString="<script>doBadThings()</script><b>Don't worry!</b><a>Some link</a>"
+        htmlString="
+          <b>Don't worry!</b>
+          <a>Some link</a>
+          <script type='module'>doBadThings()</script>"
         ruleSet="iiif"
       />,
     );

@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from 'test-utils';
+import { render, screen, waitFor } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 import { act } from '@testing-library/react';
@@ -63,7 +63,7 @@ describe('SidebarIndexTableOfContents', () => {
   let setCanvas;
 
   beforeEach(() => {
-    setCanvas = jest.fn();
+    setCanvas = vi.fn();
   });
 
   it('does not render a TreeView if the tree structure is missing', () => {

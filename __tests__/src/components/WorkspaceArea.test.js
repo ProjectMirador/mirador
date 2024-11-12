@@ -1,4 +1,4 @@
-import { render, screen, within } from 'test-utils';
+import { render, screen, within } from '@tests/utils/test-utils';
 import { DndProvider } from 'react-dnd';
 import { TestBackend } from 'react-dnd-test-backend';
 

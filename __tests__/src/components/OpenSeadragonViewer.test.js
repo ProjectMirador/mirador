@@ -1,5 +1,5 @@
 import { cloneElement } from 'react';
-import { render, screen, waitFor } from 'test-utils';
+import { render, screen, waitFor } from '@tests/utils/test-utils';
 import PropTypes from 'prop-types';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
@@ -45,7 +45,7 @@ function createWrapper(props) {
       }]}
       windowId="base"
       config={{}}
-      updateViewport={jest.fn()}
+      updateViewport={vi.fn()}
       t={k => k}
       canvasWorld={new CanvasWorld(canvases)}
       {...props}
@@ -72,8 +72,8 @@ describe('OpenSeadragonViewer', () => {
   });
   it('renders child components enhanced with additional props', async () => {
     const { viewer } = createWrapper({});
-    const fitBounds = jest.fn();
-    jest.replaceProperty(viewer, 'viewport', { fitBounds });
+    const fitBounds = vi.fn();
+    vi.spyOn(viewer, 'viewport', 'get').mockReturnValue({ fitBounds });
 
     await user.click(screen.getByTestId('foo'));
     expect(fitBounds).toHaveBeenCalled();
@@ -82,7 +82,7 @@ describe('OpenSeadragonViewer', () => {
   describe('infoResponsesMatch', () => {
     it('when they do not match', () => {
       const { component, rerender, viewer } = createWrapper({});
-      const mockClose = jest.spyOn(viewer, 'close');
+      const mockClose = vi.spyOn(viewer, 'close');
 
       rerender(cloneElement(component, { infoResponses: [] }));
 
@@ -90,7 +90,7 @@ describe('OpenSeadragonViewer', () => {
     });
     it('with an empty array', () => {
       const { component, rerender, viewer } = createWrapper({ infoResponses: [] });
-      const mockClose = jest.spyOn(viewer, 'close');
+      const mockClose = vi.spyOn(viewer, 'close');
 
       rerender(cloneElement(component, { infoResponses: [] }));
 
@@ -98,7 +98,7 @@ describe('OpenSeadragonViewer', () => {
     });
     it('when the @ids do match', () => {
       const { component, rerender, viewer } = createWrapper({});
-      const mockClose = jest.spyOn(viewer, 'close');
+      const mockClose = vi.spyOn(viewer, 'close');
 
       const newInfos = [
         { id: 'a', json: { '@id': 'http://foo' } },
@@ -111,7 +111,7 @@ describe('OpenSeadragonViewer', () => {
     });
     it('when the @ids do not match', () => {
       const { component, rerender, viewer } = createWrapper({});
-      const mockClose = jest.spyOn(viewer, 'close');
+      const mockClose = vi.spyOn(viewer, 'close');
 
       rerender(cloneElement(component, { infoResponses: [{ id: 'a', json: { '@id': 'http://foo-degraded' } }] }));
 
@@ -128,7 +128,7 @@ describe('OpenSeadragonViewer', () => {
           },
         }],
       });
-      const mockClose = jest.spyOn(viewer, 'close');
+      const mockClose = vi.spyOn(viewer, 'close');
       rerender(cloneElement(component, { infoResponses: [{ id: 'a', json: { id: 'http://foo' } }] }));
       expect(mockClose).not.toHaveBeenCalled();
     });
@@ -137,21 +137,21 @@ describe('OpenSeadragonViewer', () => {
   describe('nonTiledImagedMatch', () => {
     it('when they do not match', () => {
       const { component, rerender, viewer } = createWrapper({});
-      const mockClose = jest.spyOn(viewer, 'close');
+      const mockClose = vi.spyOn(viewer, 'close');
 
       rerender(cloneElement(component, { nonTiledImages: [] }));
       expect(mockClose).toHaveBeenCalled();
     });
     it('with an empty array', () => {
       const { component, rerender, viewer } = createWrapper({ nonTiledImages: [] });
-      const mockClose = jest.spyOn(viewer, 'close');
+      const mockClose = vi.spyOn(viewer, 'close');
 
       rerender(cloneElement(component, { nonTiledImages: [] }));
       expect(mockClose).not.toHaveBeenCalled();
     });
     it('when the ids do match', () => {
       const { component, rerender, viewer } = createWrapper({});
-      const mockClose = jest.spyOn(viewer, 'close');
+      const mockClose = vi.spyOn(viewer, 'close');
 
       rerender(cloneElement(component, { nonTiledImages: [{ id: 'http://foo' }] }));
       expect(mockClose).not.toHaveBeenCalled();
@@ -162,8 +162,8 @@ describe('OpenSeadragonViewer', () => {
     it('calls addTileSource for every tileSources and then zoomsToWorld', async () => {
       const { component, rerender, viewer } = createWrapper({ infoResponses: [] });
 
-      const mockAddTiledImage = jest.spyOn(viewer, 'addTiledImage');
-      const mockFitBounds = jest.spyOn(viewer.viewport, 'fitBounds');
+      const mockAddTiledImage = vi.spyOn(viewer, 'addTiledImage');
+      const mockFitBounds = vi.spyOn(viewer.viewport, 'fitBounds');
 
       rerender(cloneElement(component, { infoResponses: [{ id: 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44' }, { id: 'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005' }] }));
 
@@ -174,8 +174,8 @@ describe('OpenSeadragonViewer', () => {
     it('calls addNonTileSource for every nonTiledImage and then zoomsToWorld', async () => {
       const { component, rerender, viewer } = createWrapper({ infoResponses: [], nonTiledImages: [] });
 
-      const mockAddNonTiledImage = jest.spyOn(viewer, 'addSimpleImage').mockImplementation(() => true);
-      const mockFitBounds = jest.spyOn(viewer.viewport, 'fitBounds');
+      const mockAddNonTiledImage = vi.spyOn(viewer, 'addSimpleImage').mockImplementation(() => true);
+      const mockFitBounds = vi.spyOn(viewer.viewport, 'fitBounds');
 
       rerender(cloneElement(component, {
         nonTiledImages: [
@@ -195,7 +195,7 @@ describe('OpenSeadragonViewer', () => {
   describe('addNonTiledImage', () => {
     it('calls addSimpleImage asynchronously on the OSD viewer', () => {
       const { component, rerender, viewer } = createWrapper({ nonTiledImages: [] });
-      const mockAdd = jest.spyOn(viewer, 'addSimpleImage');
+      const mockAdd = vi.spyOn(viewer, 'addSimpleImage');
       rerender(cloneElement(component, { nonTiledImages: [{ getProperty: () => 'Image', id: 'a' }] }));
 
       expect(mockAdd).toHaveBeenCalledWith(expect.objectContaining({ url: 'a' }));
@@ -203,7 +203,7 @@ describe('OpenSeadragonViewer', () => {
 
     it('only calls addSimpleImage for images', () => {
       const { component, rerender, viewer } = createWrapper({ nonTiledImages: [] });
-      const mockAdd = jest.spyOn(viewer, 'addSimpleImage');
+      const mockAdd = vi.spyOn(viewer, 'addSimpleImage');
       rerender(cloneElement(component, { nonTiledImages: [{ getProperty: () => 'Video', id: 'a' }] }));
 
       expect(mockAdd).not.toHaveBeenCalled();
@@ -212,8 +212,8 @@ describe('OpenSeadragonViewer', () => {
 
   describe('refreshTileProperties', () => {
     it('updates the index and opacity of the OSD tiles from the canvas world', () => {
-      const setOpacity = jest.fn();
-      const setItemIndex = jest.fn();
+      const setOpacity = vi.fn();
+      const setItemIndex = vi.fn();
       const canvasWorld = {
         contentResource: i => i,
         layerIndexOfImageResource: i => 1 - i,
@@ -228,9 +228,9 @@ describe('OpenSeadragonViewer', () => {
         layers: [{ id: 'a' }, { id: 'c' }],
       };
 
-      jest.spyOn(viewer.world, 'getItemAt').mockImplementation(i => ({ setOpacity, source: { id: i } }));
-      jest.spyOn(viewer.world, 'setItemIndex').mockImplementation(setItemIndex);
-      jest.spyOn(viewer.world, 'getItemCount').mockImplementation(() => 2);
+      vi.spyOn(viewer.world, 'getItemAt').mockImplementation(i => ({ setOpacity, source: { id: i } }));
+      vi.spyOn(viewer.world, 'setItemIndex').mockImplementation(setItemIndex);
+      vi.spyOn(viewer.world, 'getItemCount').mockImplementation(() => 2);
 
       rerender(cloneElement(component, { canvasWorld: newCanvasWorld }));
 
@@ -246,8 +246,8 @@ describe('OpenSeadragonViewer', () => {
   describe('zoomToWorld', () => {
     it('uses fitBounds with the existing CanvasWorld', async () => {
       const { viewer } = createWrapper({});
-      const fitBounds = jest.fn();
-      jest.replaceProperty(viewer, 'viewport', { fitBounds });
+      const fitBounds = vi.fn();
+      vi.spyOn(viewer, 'viewport', 'get').mockReturnValue({ fitBounds });
 
       await user.click(screen.getByTestId('foo'));
       expect(fitBounds).toHaveBeenCalledWith({
@@ -302,10 +302,10 @@ describe('OpenSeadragonViewer', () => {
 
   describe('onViewportChange', () => {
     it('translates the OSD viewport data into an update to the component state', () => {
-      const updateViewport = jest.fn();
+      const updateViewport = vi.fn();
       const { viewer } = createWrapper({ updateViewport });
 
-      jest.replaceProperty(viewer, 'viewport', {
+      vi.spyOn(viewer, 'viewport', 'get').mockReturnValue({
         centerSpringX: { target: { value: 1 } },
         centerSpringY: { target: { value: 0 } },
         getFlip: () => false,
@@ -326,19 +326,19 @@ describe('OpenSeadragonViewer', () => {
 
   describe('onCanvasMouseMove', () => {
     it('triggers an OSD event', () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       const { viewer } = createWrapper({});
-      const mockHandler = jest.fn();
+      const mockHandler = vi.fn();
       viewer.addHandler('mouse-move', mockHandler);
 
       const e = new MouseEvent('mousemove', { clientX: 0, clientY: 0 });
       viewer.innerTracker.moveHandler(e);
 
-      jest.advanceTimersByTime(100);
+      vi.advanceTimersByTime(100);
 
       expect(mockHandler).toHaveBeenCalledWith(e);
 
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
   });
 });

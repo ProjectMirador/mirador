@@ -7,7 +7,7 @@ describe('Thumbnail navigation', () => {
   });
 
   // TODO: pick a new url; this Harvard one is 404
-  xit('navigates a manifest using thumbnail navigation', async () => {
+  test.skip('navigates a manifest using thumbnail navigation', async () => {
     await expect(page).toMatchElement('.mirador-thumb-navigation');
     let windows = await page.evaluate(() => (
       miradorInstance.store.getState().windows
@@ -20,7 +20,7 @@ describe('Thumbnail navigation', () => {
     ));
     expect(Object.values(windows)[0].canvasId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-18737483'); // canvas @ index 1
   });
-  xit('displays on right side', async () => {
+  test.skip('displays on right side', async () => {
     await expect(page).toMatchElement('.mirador-thumb-navigation');
     await expect(page).toMatchElement('.mirador-companion-area-far-bottom .mirador-thumb-navigation');
     const windowId = await page.evaluate(() => {

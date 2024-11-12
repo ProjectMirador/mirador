@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { render } from 'test-utils';
+import { render } from '@tests/utils/test-utils';
 
 import WorkspaceElasticWindow from '../../../src/components/WorkspaceElasticWindow';
 
@@ -48,7 +48,7 @@ describe('WorkspaceElasticWindow', () => {
   describe('focuses the window', () => {
     it('calls focusWindow when clicked', async () => {
       const user = userEvent.setup();
-      const mockFocusWindow = jest.fn();
+      const mockFocusWindow = vi.fn();
       const { container } = createWrapper({ focusWindow: mockFocusWindow, layout });
       const topBar = container.querySelector('.mirador-window-top-bar');
       await user.click(topBar);
@@ -59,7 +59,7 @@ describe('WorkspaceElasticWindow', () => {
   describe('window behaviour', () => {
     it('when windows are dragged', async () => {
       const user = userEvent.setup();
-      const mockDragStop = jest.fn();
+      const mockDragStop = vi.fn();
       const { container } = createWrapper({
         layout,
         updateElasticWindowLayout: mockDragStop,
@@ -84,7 +84,7 @@ describe('WorkspaceElasticWindow', () => {
     });
     it('when windows are resized', async () => {
       const user = userEvent.setup();
-      const mockOnResize = jest.fn();
+      const mockOnResize = vi.fn();
       const { container } = createWrapper({
         layout,
         updateElasticWindowLayout: mockOnResize,

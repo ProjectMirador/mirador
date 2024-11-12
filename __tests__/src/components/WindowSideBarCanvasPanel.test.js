@@ -1,4 +1,4 @@
-import { render, screen, within } from 'test-utils';
+import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 
@@ -61,7 +61,7 @@ describe('WindowSideBarCanvasPanel', () => {
 
   it('renders correct number of sequences in form control', async () => {
     const user = userEvent.setup();
-    const updateSequence = jest.fn();
+    const updateSequence = vi.fn();
     createWrapper({ multipleSequences: true, updateSequence });
 
     expect(screen.getByTestId('sequence-select')).toHaveTextContent('a');
@@ -77,7 +77,7 @@ describe('WindowSideBarCanvasPanel', () => {
   describe('handleVariantChange', () => {
     it('updates the variant', async () => {
       const user = userEvent.setup();
-      const updateVariant = jest.fn();
+      const updateVariant = vi.fn();
       createWrapper({ multipleSequences: false, updateVariant });
 
       await user.click(screen.getByRole('tab', { name: 'thumbnailList' }));
