@@ -15,6 +15,8 @@ export default class CanvasAnnotationDisplay {
     this.hovered = hovered;
     this.imageSource = imageSource;
     this.canvasSize = canvasSize;
+
+    this.palette.selected.strokeStyle = 'red'; // TODO remove when finished
   }
 
   /** */
@@ -43,6 +45,9 @@ export default class CanvasAnnotationDisplay {
     } else {
       currentPalette = this.palette.default;
     }
+
+    console.log('currentPalette', currentPalette);
+
 
     if (currentPalette.globalAlpha === 0) return;
 

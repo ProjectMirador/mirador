@@ -633,11 +633,11 @@ export class AnnotationsOverlayVideo extends Component {
           ref={this.ref}
           style={{
             left: 0,
-            position: (this.currentOrientation === ORIENTATIONS.PORTRAIT ? 'absolute' : 'block'),
+            position: 'relative',
             top: 0,
             border: '5px solid black',
             width: (this.currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
-            height: (this.currentOrientation === ORIENTATIONS.PORTRAIT ? '100%' : 'auto'),
+            // transform: "translate(50%)",
           }}
         />
         <ResizeObserver onResize={this.onCanvasResize} />

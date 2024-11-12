@@ -152,6 +152,8 @@ export class VideoViewer extends Component {
       currentOrientation = video.getWidth() > video.getHeight() ? ORIENTATIONS.LANDSCAPE : ORIENTATIONS.PORTRAIT;
     }
 
+    console.log('currentOrientation', currentOrientation);
+
     return (
       <div
         className="outerContainer"
@@ -161,7 +163,7 @@ export class VideoViewer extends Component {
           height: '100%',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
+          position: 'relative',
         }}
       >
         {video && (
@@ -170,30 +172,26 @@ export class VideoViewer extends Component {
             border: '6px solid red',
             position: 'relative',
             width: '100%',
-            height: '100%',
             display: 'flex',
-            alignItems: 'flexEnd',
+            alignItems: 'center',
+            marginBottom: '170px', // TODO Space for navigation controls
+            flexDirection: "column",
           }}
           >
-            {/* red border */}
             <div style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain', /* Keeps entire video visible without cropping */
-              border: 'none',
-              textAlign: 'center',
+              border: '6px solid green',
+              width: 'fit-content',
+              // transform: currentOrientation == ORIENTATIONS.LANDSCAPE ? "none" : 'translate(50%)',
+
             }}
             >
               <video
                 style={{
                   border: '6px solid pink',
-                  backgroundColor: 'marroon',
                   top: 0,
-                  position: (currentOrientation === ORIENTATIONS.PORTRAIT ? 'absolute' : 'block'), // 'absolute' or 'block
-                  left: 0,
+                  position: 'absolute', // 'absolute' or 'block
                   width: (currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
                   height: (currentOrientation === ORIENTATIONS.PORTRAIT ? '100%' : 'auto'),
-
                 }}
                 key={video.id}
                 ref={this.videoRef}
@@ -212,8 +210,9 @@ export class VideoViewer extends Component {
                 videoTarget={videoTargetTemporalfragment}
                 key={`${windowId} ${video.id}`}
                 currentOrientation={currentOrientation}
+                highlightAllAnnotations={true}
                 style={{
-                  height: '100%', width: '100%', objectFit: 'contain', border: '6px solid orange', backgroundColor: 'blue',
+                  height: '100%', width: '100%', objectFit: 'contain', border: '6px solid orange', backgroundColor: 'blue'
                 }}
               />
             </div>
