@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { WindowCanvasNavigationControls } from '../../../src/components/WindowCanvasNavigationControls';
 
 /**
@@ -11,7 +11,7 @@ function Subject({ ...props }) {
       canvasLabel="label"
       size={{ width: 300 }}
       windowId="abc"
-      zoomToWorld={jest.fn()}
+      zoomToWorld={vi.fn()}
       {...props}
     />
   );

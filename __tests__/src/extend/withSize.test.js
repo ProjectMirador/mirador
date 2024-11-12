@@ -19,7 +19,7 @@ class ResizeObserver {
   }
 
   /** */
-  disconnect() { jest.fn(); } // eslint-disable-line
+  disconnect() { vi.fn(); } // eslint-disable-line
 }
 
 // Replace the global ResizeObserver with the mock

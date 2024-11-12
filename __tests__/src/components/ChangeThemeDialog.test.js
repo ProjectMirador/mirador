@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { ChangeThemeDialog } from '../../../src/components/ChangeThemeDialog';
 
@@ -43,7 +43,7 @@ describe('ChangeThemeDialog', () => {
 
   it('shows up theme selection properly', async () => {
     const user = userEvent.setup();
-    const setSelectedTheme = jest.fn();
+    const setSelectedTheme = vi.fn();
 
     createWrapper({ setSelectedTheme });
     const menuItem = screen.getByRole('menuitem', { name: 'light' });

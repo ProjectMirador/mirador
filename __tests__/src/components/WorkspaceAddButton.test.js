@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceAddButton } from '../../../src/components/WorkspaceAddButton';
 
@@ -18,7 +18,7 @@ function createWrapper(props) {
 describe('WorkspaceAddButton', () => {
   it('renders a button to open the load window area', async () => {
     const user = userEvent.setup();
-    const setWorkspaceAddVisibility = jest.fn();
+    const setWorkspaceAddVisibility = vi.fn();
     createWrapper({ isWorkspaceAddVisible: false, setWorkspaceAddVisibility });
 
     await user.click(screen.getByRole('button', { name: 'startHere' }));
@@ -28,7 +28,7 @@ describe('WorkspaceAddButton', () => {
 
   it('renders a button to close the load window area', async () => {
     const user = userEvent.setup();
-    const setWorkspaceAddVisibility = jest.fn();
+    const setWorkspaceAddVisibility = vi.fn();
     createWrapper({ isWorkspaceAddVisible: true, setWorkspaceAddVisibility });
 
     await user.click(screen.getByRole('button', { name: 'closeAddResourceMenu' }));

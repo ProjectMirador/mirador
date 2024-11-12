@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 
 import { WorkspaceControlPanel } from '../../../src/components/WorkspaceControlPanel';
 
@@ -8,6 +8,11 @@ describe('WorkspaceControlPanel', () => {
       <WorkspaceControlPanel
         t={key => key}
       />,
+      {
+        preloadedState: {
+          workspace: { windowIds: ['xyz'] },
+        },
+      },
     );
   });
 

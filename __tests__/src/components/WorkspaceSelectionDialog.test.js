@@ -1,6 +1,6 @@
 import {
   render, screen, waitFor,
-} from 'test-utils';
+} from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceSelectionDialog } from '../../../src/components/WorkspaceSelectionDialog';
 
@@ -13,8 +13,8 @@ describe('WorkspaceSelectionDialog', () => {
    * @param {*} props additional properties
    */
   function createWrapper(props) {
-    handleClose = jest.fn();
-    updateWorkspace = jest.fn();
+    handleClose = vi.fn();
+    updateWorkspace = vi.fn();
 
     return render(
       <WorkspaceSelectionDialog

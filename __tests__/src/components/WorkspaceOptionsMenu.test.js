@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceOptionsMenu } from '../../../src/components/WorkspaceOptionsMenu';
 
@@ -64,7 +64,7 @@ describe('WorkspaceOptionsMenu', () => {
   });
 
   it('fires the correct callbacks on menu close', async () => {
-    const handleClose = jest.fn();
+    const handleClose = vi.fn();
     render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} handleClose={handleClose} open />);
 
     // click a menu item should close the menu

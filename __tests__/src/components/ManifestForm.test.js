@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { ManifestForm } from '../../../src/components/ManifestForm';
 
@@ -29,7 +29,7 @@ describe('ManifestForm', () => {
 
   it('has a cancel button when a cancel action is provided', async () => {
     const user = userEvent.setup();
-    const onCancel = jest.fn();
+    const onCancel = vi.fn();
     createWrapper({ addResourcesOpen: true, onCancel });
 
     await user.type(screen.getByRole('textbox', { name: 'addManifestUrl' }), 'asdf');
@@ -42,8 +42,8 @@ describe('ManifestForm', () => {
 
   it('triggers an action when the form is submitted', async () => {
     const user = userEvent.setup();
-    const addResource = jest.fn();
-    const onSubmit = jest.fn();
+    const addResource = vi.fn();
+    const onSubmit = vi.fn();
     createWrapper({ addResource, addResourcesOpen: true, onSubmit });
     await user.type(screen.getByRole('textbox', { name: 'addManifestUrl' }), 'http://example.com/iiif');
     await user.click(screen.getByRole('button', { name: 'fetchManifest' }));
