@@ -107,6 +107,8 @@ export class VideoViewer extends Component {
     this.setState({ time: 0 });
   }
 
+
+
   /* eslint-disable jsx-a11y/media-has-caption */
   /** */
   render() {
@@ -152,13 +154,13 @@ export class VideoViewer extends Component {
       currentOrientation = video.getWidth() > video.getHeight() ? ORIENTATIONS.LANDSCAPE : ORIENTATIONS.PORTRAIT;
     }
 
-    console.log('currentOrientation', currentOrientation);
+    const debugPositionning = true;
 
     return (
       <div
         className="outerContainer"
         style={{
-          border: '6px solid blue',
+          border: debugPositionning ? '6px solid blue' : 'none',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -169,29 +171,32 @@ export class VideoViewer extends Component {
         {video && (
         <>
           <div style={{
-            border: '6px solid red',
+            border: debugPositionning ? '6px solid red' : 'none',
             position: 'relative',
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            marginBottom: '170px', // TODO Space for navigation controls
-            flexDirection: "column",
+            marginBottom: '122px', // TODO Space for navigation controls
+            flexDirection: 'column',
+            // flexDirection: currentOrientation === ORIENTATIONS.LANDSCAPE ? 'row' : 'column',
+            backgroundColor: 'black',
           }}
           >
             <div style={{
-              border: '6px solid green',
-              width: 'fit-content',
-              // transform: currentOrientation == ORIENTATIONS.LANDSCAPE ? "none" : 'translate(50%)',
-
+              border: debugPositionning ? '6px solid green' : 'none',
+              maxWidth: '100%',
+              objectFit: 'contain',
             }}
             >
               <video
                 style={{
-                  border: '6px solid pink',
-                  top: 0,
+                  border: debugPositionning ? '6px solid pink' : 'none',
                   position: 'absolute', // 'absolute' or 'block
-                  width: (currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
-                  height: (currentOrientation === ORIENTATIONS.PORTRAIT ? '100%' : 'auto'),
+                  width: 'auto',
+                  // width: (currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
+                  // height: (currentOrientation === ORIENTATIONS.PORTRAIT ? '100%' : 'auto'),
+                  height: '100%',
+
                 }}
                 key={video.id}
                 ref={this.videoRef}
@@ -210,9 +215,12 @@ export class VideoViewer extends Component {
                 videoTarget={videoTargetTemporalfragment}
                 key={`${windowId} ${video.id}`}
                 currentOrientation={currentOrientation}
-                highlightAllAnnotations={true}
+                highlightAllAnnotations
                 style={{
-                  height: '100%', width: '100%', objectFit: 'contain', border: '6px solid orange', backgroundColor: 'blue'
+                  height: '100%',
+                  width: '100%',
+                  objectFit: 'contain',
+                  border: debugPositionning ? '6px solid yellow' : 'none',
                 }}
               />
             </div>
