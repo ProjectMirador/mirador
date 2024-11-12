@@ -154,7 +154,7 @@ export class VideoViewer extends Component {
       currentOrientation = video.getWidth() > video.getHeight() ? ORIENTATIONS.LANDSCAPE : ORIENTATIONS.PORTRAIT;
     }
 
-    const debugPositionning = true;
+    const debugPositionning = false;
 
     return (
       <div
@@ -184,18 +184,17 @@ export class VideoViewer extends Component {
           >
             <div style={{
               border: debugPositionning ? '6px solid green' : 'none',
-              maxWidth: '100%',
-              objectFit: 'contain',
+              width: 'fit-content',
             }}
             >
               <video
                 style={{
                   border: debugPositionning ? '6px solid pink' : 'none',
+                  top: 0,
                   position: 'absolute', // 'absolute' or 'block
-                  width: 'auto',
-                  // width: (currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
-                  // height: (currentOrientation === ORIENTATIONS.PORTRAIT ? '100%' : 'auto'),
-                  height: '100%',
+                  width: (currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
+                  height: (currentOrientation === ORIENTATIONS.PORTRAIT ? '100%' : 'auto'),
+
 
                 }}
                 key={video.id}

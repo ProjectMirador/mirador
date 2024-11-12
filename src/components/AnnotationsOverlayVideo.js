@@ -638,7 +638,8 @@ export class AnnotationsOverlayVideo extends Component {
             position: 'relative',
             top: 0,
             border: debugPositionning ? '6px solid yellow' : 'none',
-            width: '100%',
+            width: (this.currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
+
             // transform: "translate(50%)",
           }}
         />
