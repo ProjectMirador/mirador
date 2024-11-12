@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import { ManifestListItem } from '../../../src/components/ManifestListItem';
@@ -20,7 +20,7 @@ function createWrapper(props) {
 
 describe('ManifestListItem', () => {
   it('renders without an error', () => {
-    createWrapper({ buttonRef: jest.fn() });
+    createWrapper({ buttonRef: vi.fn() });
 
     expect(screen.getByRole('listitem')).toHaveAttribute('data-manifestid', 'http://example.com');
     expect(screen.getByRole('listitem')).toHaveClass('MuiListItem-root');
@@ -49,7 +49,7 @@ describe('ManifestListItem', () => {
   });
   it('updates and adds window when button clicked', async () => {
     const user = userEvent.setup();
-    const addWindow = jest.fn();
+    const addWindow = vi.fn();
     createWrapper({ addWindow });
 
     await user.click(screen.getByRole('button'));

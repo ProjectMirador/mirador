@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { t } from 'i18next';
 
@@ -36,7 +36,7 @@ describe('SearchPanel', () => {
 
   it('the Clear chip calls the removeSearch prop', async () => {
     const user = userEvent.setup();
-    const removeSearch = jest.fn();
+    const removeSearch = vi.fn();
 
     createWrapper({ query: 'Wolpertinger', removeSearch });
 
@@ -66,7 +66,7 @@ describe('SearchPanel', () => {
 
   it('suggests searches', async () => {
     const user = userEvent.setup();
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     createWrapper({
       fetchSearch, query: '', suggestedSearches: ['abc'], t,
     });
@@ -77,7 +77,7 @@ describe('SearchPanel', () => {
   });
 
   it('does not suggest searches if the user has made a query', () => {
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     createWrapper({ fetchSearch, query: 'blah', suggestedSearches: ['abc'] });
 
     expect(screen.queryByRole('button', { name: 'Search this document for "abc"' })).not.toBeInTheDocument();

@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { IIIFIFrameCommunication } from '../../../src/components/IIIFIFrameCommunication';
 
 /** */
@@ -22,17 +22,17 @@ describe('IIIFIFrameCommunication', () => {
 
 describe('Register event listener', () => {
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
   it('should call handleReceiveMessage on message event', () => {
     const events = {};
-    jest.spyOn(window, 'addEventListener').mockImplementation((event, onReceiveMessage) => {
+    vi.spyOn(window, 'addEventListener').mockImplementation((event, onReceiveMessage) => {
       events[event] = onReceiveMessage;
     });
-    jest.spyOn(window, 'removeEventListener').mockImplementation((event, onReceiveMessage) => {
+    vi.spyOn(window, 'removeEventListener').mockImplementation((event, onReceiveMessage) => {
       events[event] = undefined;
     });
-    const props = { handleReceiveMessage: jest.fn() };
+    const props = { handleReceiveMessage: vi.fn() };
     const view = render(<IIIFIFrameCommunication {...props} />);
     events.message();
 

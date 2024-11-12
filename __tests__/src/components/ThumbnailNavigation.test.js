@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from 'test-utils';
+import { render, screen, fireEvent } from '@tests/utils/test-utils';
 import { PropTypes } from 'prop-types';
 import { Utils } from 'manifesto.js';
 
@@ -31,9 +31,11 @@ Subject.propTypes = {
   fixture: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
-jest.mock(
+vi.mock(
   'react-virtualized-auto-sizer',
-  () => ({ children }) => children({ height: 600, width: 600 }),
+  () => ({
+    default: ({ children }) => children({ height: 600, width: 600 }),
+  })
 );
 
 describe('ThumbnailNavigation', () => {
@@ -91,8 +93,8 @@ describe('ThumbnailNavigation', () => {
   });
 
   describe('keyboard navigation', () => {
-    const setNextCanvas = jest.fn();
-    const setPreviousCanvas = jest.fn();
+    const setNextCanvas = vi.fn();
+    const setPreviousCanvas = vi.fn();
 
     describe('handleKeyUp', () => {
       it('handles right arrow by advancing the current canvas', async () => {

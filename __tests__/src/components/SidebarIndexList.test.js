@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 
@@ -31,7 +31,7 @@ describe('SidebarIndexList', () => {
   let setCanvas;
 
   beforeEach(() => {
-    setCanvas = jest.fn();
+    setCanvas = vi.fn();
   });
 
   it('renders all needed elements for the thumbnail view', () => {
