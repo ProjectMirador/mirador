@@ -11,6 +11,7 @@ import CanvasOverlayVideo from '../lib/CanvasOverlayVideo';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
 import { VideosReferences } from '../plugins/VideosReferences';
+import {ORIENTATIONS} from './VideoViewer';
 
 /** AnnotationsOverlayVideo - based on AnnotationsOverlay */
 export class AnnotationsOverlayVideo extends Component {
@@ -82,6 +83,8 @@ export class AnnotationsOverlayVideo extends Component {
 
     this.imagesLoading = [];
     this.imagesReady = [];
+
+    this.currentOrientation = props.currentOrientation;
 
     const { videoTarget: temporalfragment } = this.props;
     if (temporalfragment && temporalfragment.length > 0) {
@@ -626,9 +629,19 @@ export class AnnotationsOverlayVideo extends Component {
     const circularProgress = (<CircularProgress style={{ left: '50%', position: 'absolute', top: '50%' }} />);
     return (
       <>
-            <canvas ref={this.ref} style={{ left: 0, position: 'absolute', top: 0, border : '5px solid black' }} />
-            <ResizeObserver onResize={this.onCanvasResize} />
-            { showProgress && circularProgress }
+        <canvas
+          ref={this.ref}
+          style={{
+            left: 0,
+            position: (this.currentOrientation === ORIENTATIONS.PORTRAIT ? 'absolute' : 'block'),
+            top: 0,
+            border: '5px solid black',
+            width: (this.currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
+            height: (this.currentOrientation === ORIENTATIONS.PORTRAIT ? '100%' : 'auto'),
+          }}
+        />
+        <ResizeObserver onResize={this.onCanvasResize} />
+        { showProgress && circularProgress }
       </>
     );
   }
@@ -659,6 +672,7 @@ AnnotationsOverlayVideo.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   canvas: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
+  currentOrientation: PropTypes.string,
   currentTime: PropTypes.number,
   deselectAnnotation: PropTypes.func,
   drawAnnotations: PropTypes.bool,
