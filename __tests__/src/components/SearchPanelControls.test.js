@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import { SearchPanelControls } from '../../../src/components/SearchPanelControls';
@@ -24,7 +24,7 @@ describe('SearchPanelControls', () => {
 
   it('submits a search when an autocomplete suggestion is picked', async () => {
     const user = userEvent.setup();
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     fetch.mockResponse(JSON.stringify({ terms: ['somestring 12345'] }));
 
     createWrapper({
@@ -40,7 +40,7 @@ describe('SearchPanelControls', () => {
     fetch.resetMocks();
   });
   it('should fetch result only once', async () => {
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     const user = userEvent.setup();
 
     createWrapper({
@@ -74,7 +74,7 @@ describe('SearchPanelControls', () => {
 
   it('form change and submission triggers an action', async () => {
     const user = userEvent.setup();
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     const searchService = {
       id: 'http://www.example.com/search',
       options: { resource: { id: 'example.com/manifest' } },
@@ -90,7 +90,7 @@ describe('SearchPanelControls', () => {
 
   it('does not submit an empty search', async () => {
     const user = userEvent.setup();
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     const searchService = {
       id: 'http://www.example.com/search',
       options: { resource: { id: 'example.com/manifest' } },

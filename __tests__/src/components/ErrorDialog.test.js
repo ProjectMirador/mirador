@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { ErrorDialog } from '../../../src/components/ErrorDialog';
 
@@ -34,7 +34,7 @@ describe('ErrorDialog', () => {
 
   it('triggers the handleClick prop when clicking the ok button', async () => {
     const error = { id: 'testid123', message: '' };
-    const mockHandleClick = jest.fn();
+    const mockHandleClick = vi.fn();
     const user = userEvent.setup();
 
     createWrapper({ error, removeError: mockHandleClick });

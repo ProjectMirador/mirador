@@ -1,4 +1,4 @@
-import { screen, render, waitFor } from 'test-utils';
+import { screen, render, waitFor } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { IIIFAuthentication } from '../../../src/components/IIIFAuthentication';
 
@@ -39,7 +39,7 @@ describe('IIIFAuthentication', () => {
   });
   describe('with an available auth service', () => {
     it('renders a login bar', async () => {
-      const handleAuthInteraction = jest.fn();
+      const handleAuthInteraction = vi.fn();
       createWrapper({ handleAuthInteraction });
       await user.click(screen.getByRole('button', { name: 'login' }));
       expect(handleAuthInteraction).toHaveBeenCalledWith('w', 'http://example.com/auth');
@@ -51,7 +51,7 @@ describe('IIIFAuthentication', () => {
   });
   describe('with a failed authentication', () => {
     it('renders with an error message', async () => {
-      const handleAuthInteraction = jest.fn();
+      const handleAuthInteraction = vi.fn();
       createWrapper({ handleAuthInteraction, status: 'failed' });
       await user.click(screen.getByRole('button', { name: 'continue' }));
       const confirmBtn = screen.getByRole('button', { name: /retry/ });
@@ -64,21 +64,21 @@ describe('IIIFAuthentication', () => {
   });
   describe('in the middle of authenticating', () => {
     it('does the IIIF access cookie behavior', async () => {
-      jest.useFakeTimers();
-      const mockWindow = { close: jest.fn(), closed: false };
-      const mockWindowOpen = jest.fn(() => (mockWindow));
+      vi.useFakeTimers();
+      const mockWindow = { close: vi.fn(), closed: false };
+      const mockWindowOpen = vi.fn(() => (mockWindow));
       window.open = mockWindowOpen;
-      const resolveCookieMock = jest.fn();
+      const resolveCookieMock = vi.fn();
       createWrapper({ resolveAuthenticationRequest: resolveCookieMock, status: 'cookie' });
       expect(screen.getByRole('button', { name: 'login' })).toBeInTheDocument();
       expect(mockWindowOpen).toHaveBeenCalledWith(`http://example.com/auth?origin=${window.origin}`, 'IiifLoginSender', 'centerscreen');
       mockWindow.closed = true;
-      jest.runOnlyPendingTimers();
+      vi.runOnlyPendingTimers();
       await waitFor(() => expect(resolveCookieMock).toHaveBeenCalledTimes(1));
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
     it('does the IIIF access token behavior', async () => {
-      const resolveTokenMock = jest.fn();
+      const resolveTokenMock = vi.fn();
       createWrapper({ resolveAccessTokenRequest: resolveTokenMock, status: 'token' });
       expect(screen.getByRole('button', { name: 'login' })).toBeInTheDocument();
       window.dispatchEvent(new MessageEvent('message', {
@@ -89,10 +89,10 @@ describe('IIIFAuthentication', () => {
   });
   describe('when logged in', () => {
     it('renders a logout button', async () => {
-      const mockWindow = { open: jest.fn() };
-      const mockWindowOpen = jest.fn(() => (mockWindow));
+      const mockWindow = { open: vi.fn() };
+      const mockWindowOpen = vi.fn(() => (mockWindow));
       window.open = mockWindowOpen;
-      const resetAuthenticationState = jest.fn();
+      const resetAuthenticationState = vi.fn();
       createWrapper({
         logoutConfirm: 'exit',
         openWindow: mockWindowOpen,

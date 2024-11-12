@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { Utils } from 'manifesto.js';
 
 import manifestJson from '../../fixtures/version-2/019.json';
@@ -19,7 +19,7 @@ function createWrapper(props) {
 describe('GalleryView', () => {
   let setCanvas;
   beforeEach(() => {
-    setCanvas = jest.fn();
+    setCanvas = vi.fn();
   });
   it('renders the component', () => {
     const { container } = createWrapper({ setCanvas });

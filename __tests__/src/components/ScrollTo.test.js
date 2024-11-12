@@ -16,7 +16,7 @@ describe('ScrollTo', () => {
       return originalGetBoundingClientRect.call(this);
     };
 
-    Element.prototype.scrollTo = jest.fn();
+    Element.prototype.scrollTo = vi.fn();
   });
 
   afterEach(() => {

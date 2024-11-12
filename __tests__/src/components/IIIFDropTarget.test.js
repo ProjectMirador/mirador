@@ -1,9 +1,9 @@
 import { handleDrop } from '../../../src/components/IIIFDropTarget';
 
-const monitor = jest.fn();
+const monitor = vi.fn();
 
 // jsdom doesn't load images, so we mock an implementation
-jest.mock('../../../src/lib/readImageMetadata', () => ({
+vi.mock('../../../src/lib/readImageMetadata', () => ({
   readImageMetadata: file => Promise.resolve({
     height: 105, name: file.name, type: file.type, url: 'data:blah', width: 100,
   }),
@@ -13,7 +13,7 @@ describe('handleDrop', () => {
   let onDrop;
 
   beforeEach(() => {
-    onDrop = jest.fn();
+    onDrop = vi.fn();
   });
 
   it('handles url lists', () => {

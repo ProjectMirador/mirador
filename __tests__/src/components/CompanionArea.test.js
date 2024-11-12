@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import { CompanionArea } from '../../../src/components/CompanionArea';
@@ -41,7 +41,7 @@ describe('CompanionArea', () => {
   });
 
   it('has a toggle to show the companion area window in the left position', async () => {
-    const setCompanionAreaOpen = jest.fn();
+    const setCompanionAreaOpen = vi.fn();
     const user = userEvent.setup();
 
     createWrapper({
@@ -60,7 +60,7 @@ describe('CompanionArea', () => {
   });
 
   it('has a toggle to hide the companion area window in the left position', async () => {
-    const setCompanionAreaOpen = jest.fn();
+    const setCompanionAreaOpen = vi.fn();
     const user = userEvent.setup();
 
     createWrapper({
