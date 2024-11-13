@@ -21,9 +21,7 @@
     "lint:translations": "node ./scripts/i18n-lint.cjs",
     "size": "bundlewatch --config bundlewatch.config.json",
     "start": "vite",
-    "test": "npm run build && npm run lint && npm run size && jest -c jest.json",
-    "test:debug": "node --inspect node_modules/.bin/jest -c jest.json --runInBand",
-    "test:watch": "jest -c jest.json --watch"
+    "test": "npm run build && npm run lint && npm run size && vitest run"
   },
   "license": "Apache-2.0",
   "contributors": [
@@ -85,6 +83,7 @@
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.4.3",
     "@vitejs/plugin-react": "^4.3.3",
+    "@vitest/ui": "^2.1.4",
     "bundlewatch": "^0.4.0",
     "chalk": "^4.1.0",
     "eslint": "^8.11.0",
