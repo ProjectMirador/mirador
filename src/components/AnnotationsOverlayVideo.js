@@ -11,6 +11,7 @@ import CanvasOverlayVideo from '../lib/CanvasOverlayVideo';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
 import { VideosReferences } from '../plugins/VideosReferences';
+import {ORIENTATIONS} from './VideoViewer';
 
 /** AnnotationsOverlayVideo - based on AnnotationsOverlay */
 export class AnnotationsOverlayVideo extends Component {
@@ -82,6 +83,8 @@ export class AnnotationsOverlayVideo extends Component {
 
     this.imagesLoading = [];
     this.imagesReady = [];
+
+    this.currentOrientation = props.currentOrientation;
 
     const { videoTarget: temporalfragment } = this.props;
     if (temporalfragment && temporalfragment.length > 0) {
@@ -618,15 +621,28 @@ export class AnnotationsOverlayVideo extends Component {
     }
   }
 
+
   /**
    * Renders things
    */
   render() {
     const { showProgress } = this.state;
+    const debugPositionning = false;
     const circularProgress = (<CircularProgress style={{ left: '50%', position: 'absolute', top: '50%' }} />);
     return (
       <>
-        <canvas ref={this.ref} style={{ left: 0, position: 'absolute', top: 0 }} />
+        <canvas
+          ref={this.ref}
+          style={{
+            left: 0,
+            position: 'relative',
+            top: 0,
+            border: debugPositionning ? '6px solid yellow' : 'none',
+            width: (this.currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
+
+            // transform: "translate(50%)",
+          }}
+        />
         <ResizeObserver onResize={this.onCanvasResize} />
         { showProgress && circularProgress }
       </>
@@ -659,6 +675,7 @@ AnnotationsOverlayVideo.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   canvas: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
+  currentOrientation: PropTypes.string,
   currentTime: PropTypes.number,
   deselectAnnotation: PropTypes.func,
   drawAnnotations: PropTypes.bool,

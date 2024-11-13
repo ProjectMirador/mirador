@@ -1,29 +1,15 @@
 import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
-import { createRef, Component } from 'react';
+import React, { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
 import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavigationControlsVideo';
 
-const StyledContainer = styled('div')(() => ({
-  alignItems: 'center',
-  display: 'flex',
-  width: '100%',
-  justifyContent:'center'
-}));
-
-const StyledFlexFill = styled('div')(() => ({
-  height: '100%',
-  position: 'relative',
-  display: 'flex',
-  justifyContent:'center'
-}));
-
-const StyledVideo = styled('video')(() => ({
-  maxHeight: '100%',
-}));
+export const ORIENTATIONS = {
+  LANDSCAPE: 'landscape',
+  PORTRAIT: 'portrait',
+};
 
 /** */
 export class VideoViewer extends Component {
@@ -121,6 +107,8 @@ export class VideoViewer extends Component {
     this.setState({ time: 0 });
   }
 
+
+
   /* eslint-disable jsx-a11y/media-has-caption */
   /** */
   render() {
@@ -158,23 +146,92 @@ export class VideoViewer extends Component {
       ? videoResources[len - 1].body[0] : null;
     const videoTargetTemporalfragment = len > 0
       ? videoResources[len - 1].temporalfragment : [];
+
+    let currentOrientation;
+
+    if (video) {
+      console.log('video', video);
+      currentOrientation = video.getWidth() > video.getHeight() ? ORIENTATIONS.LANDSCAPE : ORIENTATIONS.PORTRAIT;
+    }
+
+    const debugPositionning = false;
+
     return (
-      <StyledContainer>
-        <StyledFlexFill>
-          { video && (
-            <>
-              <StyledVideo key={video.id} ref={this.videoRef} {...videoOptions}>
+      <div
+        className="outerContainer"
+        style={{
+          border: debugPositionning ? '6px solid blue' : 'none',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          position: 'relative',
+        }}
+      >
+        {video && (
+        <>
+          <div style={{
+            border: debugPositionning ? '6px solid red' : 'none',
+            position: 'relative',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: '122px', // TODO Space for navigation controls
+            flexDirection: 'column',
+            // flexDirection: currentOrientation === ORIENTATIONS.LANDSCAPE ? 'row' : 'column',
+            backgroundColor: 'black',
+          }}
+          >
+            <div style={{
+              border: debugPositionning ? '6px solid green' : 'none',
+              width: 'fit-content',
+              maxWidth: '100%',
+            }}
+            >
+              <video
+                style={{
+                  border: debugPositionning ? '6px solid pink' : 'none',
+                  top: 0,
+                  position: 'absolute', // 'absolute' or 'block
+                  width: (currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
+                  height: (currentOrientation === ORIENTATIONS.PORTRAIT ? '100%' : 'auto'),
+                  maxWidth: '100%',
+
+                }}
+                key={video.id}
+                ref={this.videoRef}
+                {...videoOptions}
+              >
+                {' '}
+                {/* pink border */}
                 <source src={video.id} type={video.getFormat()} />
-                { vttContent.map(vttc => (<track key={vttc.id} src={vttc.id} srcLang={vttc.language} />)) }
-              </StyledVideo>
-              <AnnotationsOverlayVideo windowId={windowId} videoRef={this.videoRef} videoTarget={videoTargetTemporalfragment} key={`${windowId} ${video.id}`} />
-            </>
-          )}
+                {vttContent.map(vttc => (
+                  <track key={vttc.id} src={vttc.id} srcLang={vttc.language} />))}
+              </video>
+
+              <AnnotationsOverlayVideo
+                windowId={windowId}
+                videoRef={this.videoRef}
+                videoTarget={videoTargetTemporalfragment}
+                key={`${windowId} ${video.id}`}
+                currentOrientation={currentOrientation}
+                highlightAllAnnotations
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  objectFit: 'contain',
+                  border: debugPositionning ? '6px solid yellow' : 'none',
+                }}
+              />
+            </div>
+          </div>
           <WindowCanvasNavigationControlsVideo windowId={windowId} />
-        </StyledFlexFill>
-      </StyledContainer>
+        </>
+        )}
+      </div>
     );
   }
+
   /* eslint-enable jsx-a11y/media-has-caption */
 }
 
@@ -201,9 +258,12 @@ VideoViewer.defaultProps = {
   currentTime: 0,
   muted: false,
   paused: true,
-  setCurrentTime: () => {},
-  setHasTextTrack: () => {},
-  setPaused: () => {},
+  setCurrentTime: () => {
+  },
+  setHasTextTrack: () => {
+  },
+  setPaused: () => {
+  },
   textTrackDisabled: true,
   videoOptions: {},
 };
