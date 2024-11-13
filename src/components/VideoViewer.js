@@ -185,6 +185,7 @@ export class VideoViewer extends Component {
             <div style={{
               border: debugPositionning ? '6px solid green' : 'none',
               width: 'fit-content',
+              maxWidth: '100%',
             }}
             >
               <video
@@ -194,7 +195,7 @@ export class VideoViewer extends Component {
                   position: 'absolute', // 'absolute' or 'block
                   width: (currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
                   height: (currentOrientation === ORIENTATIONS.PORTRAIT ? '100%' : 'auto'),
-
+                  maxWidth: '100%',
 
                 }}
                 key={video.id}
