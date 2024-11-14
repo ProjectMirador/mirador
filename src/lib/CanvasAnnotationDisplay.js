@@ -15,8 +15,6 @@ export default class CanvasAnnotationDisplay {
     this.hovered = hovered;
     this.imageSource = imageSource;
     this.canvasSize = canvasSize;
-
-    this.palette.selected.strokeStyle = 'red'; // TODO remove when finished
   }
 
   /** */
@@ -154,3 +152,4 @@ export default class CanvasAnnotationDisplay {
     return xmlDoc.getElementsByTagName('path');
   }
 }
+
