@@ -38,7 +38,9 @@ export default class OpenSeadragonCanvasOverlay {
 
   /** */
   clear() {
-    this.context2d.clearRect(0, 0, this.containerWidth, this.containerHeight);
+    if (this.context2d) {
+      this.context2d.clearRect(0, 0, this.containerWidth, this.containerHeight);
+    }
   }
 
   /**
