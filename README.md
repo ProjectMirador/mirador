@@ -23,7 +23,7 @@ Before
 
 After
 ```json
-"mirador": "npm:mirador-video@^1.0.6"
+"mirador": "npm:mirador-video@^1.0.8"
 ```
 
 Then run `npm install` to refresh your package.
@@ -33,7 +33,11 @@ Then run `npm install` to refresh your package.
 
 Mirador local development requires [nodejs](https://nodejs.org/en/download/) to be installed.
 
-1. Run `npm install` to install the dependencies.
+### Installation
+
+```sh
+npm install
+```
 
 ### Starting the project
 
@@ -41,7 +45,9 @@ Mirador local development requires [nodejs](https://nodejs.org/en/download/) to 
 $ npm start
 ```
 
-Then navigate to [http://127.0.0.1:4444/](http://127.0.0.1:4444/)
+Then navigate to [http://127.0.0.1:$PORT/](http://127.0.0.1:$PORT/)
+
+$PORT is the port number where the project is running. Check the output of the start command to see the port number.
 
 ### Instantiating Mirador
 
