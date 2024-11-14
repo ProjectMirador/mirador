@@ -42,7 +42,7 @@ npm install
 ### Starting the project
 
 ```sh
-$ npm start
+npm start
 ```
 
 Then navigate to [http://127.0.0.1:$PORT/](http://127.0.0.1:$PORT/)
