@@ -35,7 +35,7 @@ vi.mock(
   'react-virtualized-auto-sizer',
   () => ({
     default: ({ children }) => children({ height: 600, width: 600 }),
-  })
+  }),
 );
 
 describe('ThumbnailNavigation', () => {

@@ -1,5 +1,5 @@
-import { render, screen } from '../../../__tests__/utils/test-utils';
 import userEvent from '@testing-library/user-event';
+import { render, screen } from '../../utils/test-utils';
 import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
 
 /** create wrapper */

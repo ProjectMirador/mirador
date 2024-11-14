@@ -10,25 +10,9 @@
   <body>
     <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
     <script type="module">
-     import Mirador from '../../../src/index.js';
-     var miradorInstance = Mirador.viewer({
-       id: 'mirador',
-       windows: [
-         {
-           collectionPath: [
-              "https://www.e-codices.unifr.ch/metadata/iiif/collection.json",
-              "https://www.e-codices.unifr.ch/metadata/iiif/collection/stabs.json"
-            ],
-            manifestId: "https://www.e-codices.unifr.ch/metadata/iiif/stabs-StAlban-DD1-1580/manifest.json"
-         },
-         {
-           manifestId: 'https://www.e-codices.unifr.ch/metadata/iiif/collection.json'
-         }
-       ],
-       catalog: [
-         { manifestId: "https://www.e-codices.unifr.ch/metadata/iiif/collection.json" },
-       ]
-     });
+      import Mirador from '../../../src';
+      import config from './mirador-configs/collections.js';
+      Mirador.viewer(config);
     </script>
   </body>
 </html>

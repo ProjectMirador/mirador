@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
+import { fileURLToPath } from 'url';
 
 /**
 * Vite configuration
@@ -22,14 +22,10 @@ export default defineConfig({
     },
     sourcemap: true,
   },
-  resolve: {
-    alias: {
-      '@tests/': fileURLToPath(new URL('./__tests__', import.meta.url)),
-    },
-  },
   esbuild: {
     exclude: [],
-    include: /src\/.*\.jsx?$/,
+    // Matches .js and .jsx in __tests__ and .jsx in src
+    include: [/__tests__\/.*\.(js|jsx)$/, /src\/.*\.jsx?$/],
     loader: 'jsx',
   },
   optimizeDeps: {
@@ -37,6 +33,7 @@ export default defineConfig({
       plugins: [
         {
           name: 'load-js-files-as-jsx',
+          // TODO: rename all our files to .jsx ...
           /** */
           setup(build) {
             build.onLoad({ filter: /(src|__tests__)\/.*\.js$/ }, async (args) => ({
@@ -49,6 +46,11 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@tests/': fileURLToPath(new URL('./__tests__', import.meta.url)),
+    },
+  },
   server: {
     open: '/__tests__/integration/mirador/index.html',
     port: '4444',

@@ -10,30 +10,9 @@
   <body>
     <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
     <script type="module">
-      import Mirador from '../../../src/index.js';
-     var miradorInstance = Mirador.viewer({
-       id: 'mirador',
-       theme: {
-         transitions: window.location.port === '4488' ?  { create: () => 'none' } : {},
-       },
-       windows: [{
-         manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-         canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
-         thumbnailNavigationPosition: 'far-bottom',
-         allowClose: false,
-       }],
-       window: {
-         allowWindowSideBar: false,
-         sideBarPanel: '',
-         sideBarOpen: true,
-       },
-       workspace: {
-         type: 'not-mosaic-or-elastic',
-       },
-       workspaceControlPanel: {
-         enabled: false,
-       },
-     });
+      import Mirador from '../../../src';
+      import config from './mirador-configs/minimalist.js';
+      Mirador.viewer(config)
     </script>
   </body>
 </html>
