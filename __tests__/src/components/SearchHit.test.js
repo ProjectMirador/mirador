@@ -5,7 +5,7 @@ import { SearchHit } from '../../../src/components/SearchHit';
 vi.mock(
   '../../../src/components/ScrollTo',
   () => ({
-    ScrollTo: ({ children }) => (<div data-testid="scrollto">{children}</div>),
+    ScrollTo: ({ children }) => (<div data-testid="scrollto">{children}</div>), // eslint-disable-line react/prop-types
   }),
 );
 
