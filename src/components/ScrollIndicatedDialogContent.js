@@ -49,8 +49,7 @@ const Root = styled(DialogContent, { name: 'ScrollIndicatedDialogContent', slot:
  * ScrollIndicatedDialogContent ~ Inject a style into the DialogContent component
  *                                to indicate there is scrollable content
 */
-export function ScrollIndicatedDialogContent(props) {
-  const { classes, className, ...otherProps } = props;
+export function ScrollIndicatedDialogContent({ classes = {}, className = '', ...otherProps }) {
   const ourClassName = [className, classes.shadowScrollDialog].join(' ');
 
   return (
@@ -66,9 +65,4 @@ ScrollIndicatedDialogContent.propTypes = {
     shadowScrollDialog: PropTypes.string,
   }),
   className: PropTypes.string,
-};
-
-ScrollIndicatedDialogContent.defaultProps = {
-  classes: {},
-  className: '',
 };

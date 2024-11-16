@@ -28,7 +28,7 @@ function Subject({ fixture = manifestJson, ...props }) {
 }
 
 Subject.propTypes = {
-  fixture: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  fixture: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 jest.mock(

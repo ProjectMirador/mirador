@@ -7,7 +7,7 @@ import MinimalWindow from '../containers/MinimalWindow';
 export function MosaicRenderPreview({
   t = k => k,
   title = '',
-  windowId = '',
+  windowId,
 }) {
   return (
     <MinimalWindow

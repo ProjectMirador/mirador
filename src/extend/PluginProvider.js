@@ -8,8 +8,7 @@ import {
 } from './pluginMapping';
 
 /**  */
-export default function PluginProvider(props) {
-  const { plugins, children } = props;
+export default function PluginProvider({ plugins = [], children = null }) {
   const [pluginMap, setPluginMap] = useState({});
 
   useEffect(() => {
@@ -28,9 +27,4 @@ export default function PluginProvider(props) {
 PluginProvider.propTypes = {
   children: PropTypes.node,
   plugins: PropTypes.array, // eslint-disable-line react/forbid-prop-types
-};
-
-PluginProvider.defaultProps = {
-  children: null,
-  plugins: [],
 };
