@@ -63,6 +63,12 @@ export class OpenSeadragonViewer extends Component {
 
     this.setState({ viewer });
 
+    viewer.addHandler('canvas-double-click', ({ position, shift }) => {
+      const currentZoom = viewer.viewport.getZoom();
+      const zoomRatio = (shift ? 1.0 / osdConfig.zoomPerDoubleClick : osdConfig.zoomPerDoubleClick);
+      viewer.viewport.zoomTo(currentZoom * zoomRatio, viewer.viewport.pointFromPixel(position), false);
+    });
+
     viewer.addHandler('canvas-drag', () => {
       this.setState({ grabbing: true });
     });
