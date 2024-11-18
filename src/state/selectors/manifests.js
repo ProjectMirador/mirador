@@ -29,6 +29,8 @@ const getLocale = createSelector(
   ),
 );
 
+const defaultManifestStatus = Object.freeze({ missing: true });
+
 /**
  * Convenience selector to get a manifest (or placeholder).
  * @param {object} state
@@ -38,7 +40,7 @@ const getLocale = createSelector(
  */
 export const getManifestStatus = createSelector(
   [getManifest],
-  manifest => manifest || { missing: true },
+  manifest => manifest || defaultManifestStatus,
 );
 
 /**
