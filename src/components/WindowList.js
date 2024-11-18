@@ -24,7 +24,7 @@ export class WindowList extends Component {
    */
   render() {
     const {
-      container, handleClose, windowIds, focusWindow, focusedWindowId, t,
+      container, handleClose, windowIds, focusWindow, focusedWindowId, t, tReady,
       ...menuProps
     } = this.props;
 
@@ -73,6 +73,7 @@ WindowList.propTypes = {
   handleClose: PropTypes.func.isRequired,
   t: PropTypes.func,
   titles: PropTypes.objectOf(PropTypes.string),
+  tReady: PropTypes.bool,
   windowIds: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
@@ -81,4 +82,5 @@ WindowList.defaultProps = {
   focusedWindowId: null,
   t: key => key,
   titles: {},
+  tReady: false,
 };
