@@ -146,6 +146,13 @@ const getSearchHitsForCompanionWindow = createSelector(
   })),
 );
 
+export const getSearchAnnotationsForCompanionWindow = createSelector(
+  [
+    getSearchResponsesForCompanionWindow,
+  ],
+  results => results && searchResultsToAnnotation(results),
+);
+
 /**
  * Returns sorted search hits based on canvas order.
  * @param {object} state
@@ -156,18 +163,20 @@ export const getSortedSearchHitsForCompanionWindow = createSelector(
   [
     getSearchHitsForCompanionWindow,
     getCanvases,
-    (state, { companionWindowId, windowId }) => (
-      annotationUri => getResourceAnnotationForSearchHit(state, { annotationUri, companionWindowId, windowId })
-    ),
+    getSearchAnnotationsForCompanionWindow,
   ],
-  (searchHits, canvases, annotationForSearchHit) => {
+  (searchHits, canvases, annotation) => {
     if (!canvases || canvases.length === 0) return [];
     if (!searchHits || searchHits.length === 0) return [];
     const canvasIds = canvases.map(canvas => canvas.id);
 
     return [].concat(searchHits).sort((a, b) => {
-      const hitA = annotationForSearchHit(a.annotations[0]);
-      const hitB = annotationForSearchHit(b.annotations[0]);
+      const hitA = annotation.resources.find(
+        r => r.id === a.annotations[0],
+      );
+      const hitB = annotation.resources.find(
+        r => r.id === b.annotations[0],
+      );
       return canvasIds.indexOf(hitA.targetId) - canvasIds.indexOf(hitB.targetId);
     });
   },
@@ -189,13 +198,6 @@ const searchResultsToAnnotation = (results) => {
     resources: flatten(annotations.map(a => a.resources)),
   };
 };
-
-export const getSearchAnnotationsForCompanionWindow = createSelector(
-  [
-    getSearchResponsesForCompanionWindow,
-  ],
-  results => results && searchResultsToAnnotation(results),
-);
 
 /**
  * Sorts search annotations based on canvas order.
