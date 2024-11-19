@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
@@ -17,33 +16,23 @@ const StyledOsdInfo = styled('div')(() => ({
 /**
  *
  */
-export class ViewerInfo extends Component {
-  /** */
-  render() {
-    const {
-      canvasCount,
-      canvasIndex,
-      canvasLabel,
-      t,
-    } = this.props;
-
-    return (
-      <StyledOsdInfo className={classNames(ns('osd-info'))}>
-        <Typography display="inline" variant="caption" className={ns('canvas-count')}>
-          { t('pagination', { current: canvasIndex + 1, total: canvasCount }) }
-        </Typography>
-        <Typography display="inline" variant="caption" className={ns('canvas-label')}>
-          {canvasLabel && ` • ${canvasLabel}`}
-        </Typography>
-      </StyledOsdInfo>
-    );
-  }
+export function ViewerInfo({
+  canvasCount,
+  canvasIndex,
+  canvasLabel = undefined,
+  t = k => k,
+}) {
+  return (
+    <StyledOsdInfo className={classNames(ns('osd-info'))}>
+      <Typography display="inline" variant="caption" className={ns('canvas-count')}>
+        { t('pagination', { current: canvasIndex + 1, total: canvasCount }) }
+      </Typography>
+      <Typography display="inline" variant="caption" className={ns('canvas-label')}>
+        {canvasLabel && ` • ${canvasLabel}`}
+      </Typography>
+    </StyledOsdInfo>
+  );
 }
-
-ViewerInfo.defaultProps = {
-  canvasLabel: undefined,
-  t: () => {},
-};
 
 ViewerInfo.propTypes = {
   canvasCount: PropTypes.number.isRequired,

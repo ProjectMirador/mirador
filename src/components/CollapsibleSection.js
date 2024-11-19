@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 import Accordion from '@mui/material/Accordion';
@@ -9,42 +9,27 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 /**
  * CollapsableSection ~
 */
-export class CollapsibleSection extends Component {
-  /** */
-  constructor(props) {
-    super(props);
+export function CollapsibleSection({
+  children, id, label, t,
+}) {
+  const [open, setOpen] = useState(true);
 
-    this.state = { open: true };
-    this.handleChange = this.handleChange.bind(this);
-  }
+  const handleChange = useCallback((_event, isExpanded) => {
+    setOpen(isExpanded);
+  }, [setOpen]);
 
-  /** Control the accordion state so we can provide aria labeling */
-  handleChange(event, isExpanded) {
-    this.setState({ open: isExpanded });
-  }
-
-  /**
-   * Returns the rendered component
-  */
-  render() {
-    const {
-      children, id, label, t,
-    } = this.props;
-    const { open } = this.state;
-
-    return (
-      <Accordion id={id} elevation={0} expanded={open} onChange={this.handleChange} disableGutters square variant="compact">
-        <AccordionSummary id={`${id}-header`} aria-controls={`${id}-content`} aria-label={t(open ? 'collapseSection' : 'expandSection', { section: label })} expandIcon={<ExpandMoreIcon />}>
-          <Typography variant="overline" component="h4">
-            {label}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {children}
-        </AccordionDetails>
-      </Accordion>
-    );
-  }
+  return (
+    <Accordion id={id} elevation={0} expanded={open} onChange={handleChange} disableGutters square variant="compact">
+      <AccordionSummary id={`${id}-header`} aria-controls={`${id}-content`} aria-label={t(open ? 'collapseSection' : 'expandSection', { section: label })} expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="overline" component="h4">
+          {label}
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        {children}
+      </AccordionDetails>
+    </Accordion>
+  );
 }
 
 CollapsibleSection.propTypes = {

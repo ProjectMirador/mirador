@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
@@ -12,39 +11,32 @@ const Root = styled(Fab, { name: 'WorkspaceAddButton', slot: 'root' })(({ theme 
 
 /**
  */
-export class WorkspaceAddButton extends Component {
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      t, setWorkspaceAddVisibility, isWorkspaceAddVisible, useExtendedFab,
-    } = this.props;
-    return (
-      <Tooltip title={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}>
-        <Root
-          size="medium"
-          color="primary"
-          id="addBtn"
-          aria-label={
-            isWorkspaceAddVisible
-              ? t('closeAddResourceMenu')
-              : ((useExtendedFab && t('startHere')) || t('addResource'))
-          }
-          variant={useExtendedFab ? 'extended' : 'circular'}
-          onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
-        >
-          {
-            isWorkspaceAddVisible
-              ? <CloseIcon />
-              : <AddIcon />
-          }
-          { useExtendedFab && t('startHere') }
-        </Root>
-      </Tooltip>
-    );
-  }
+export function WorkspaceAddButton({
+  t = k => k, setWorkspaceAddVisibility, isWorkspaceAddVisible = false, useExtendedFab,
+}) {
+  return (
+    <Tooltip title={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}>
+      <Root
+        size="medium"
+        color="primary"
+        id="addBtn"
+        aria-label={
+          isWorkspaceAddVisible
+            ? t('closeAddResourceMenu')
+            : ((useExtendedFab && t('startHere')) || t('addResource'))
+        }
+        variant={useExtendedFab ? 'extended' : 'circular'}
+        onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
+      >
+        {
+          isWorkspaceAddVisible
+            ? <CloseIcon />
+            : <AddIcon />
+        }
+        { useExtendedFab && t('startHere') }
+      </Root>
+    </Tooltip>
+  );
 }
 
 WorkspaceAddButton.propTypes = {
@@ -52,9 +44,4 @@ WorkspaceAddButton.propTypes = {
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   t: PropTypes.func,
   useExtendedFab: PropTypes.bool.isRequired,
-};
-
-WorkspaceAddButton.defaultProps = {
-  isWorkspaceAddVisible: false,
-  t: key => key,
 };

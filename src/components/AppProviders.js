@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
@@ -68,72 +68,70 @@ FullScreenShim.propTypes = {
 };
 
 /**
+ * Hook up the I18next provider to the configuration in redux to allow
+ * plugins + config to inject additional translations.
+ */
+const StoreAwareI18nextProvider = ({ children, language, translations }) => {
+  const [i18n] = useState(createI18nInstance());
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [i18n, language]);
+
+  useEffect(() => {
+    Object.keys(translations).forEach((lng) => {
+      i18n.addResourceBundle(lng, 'translation', translations[lng], true, true);
+    });
+  }, [i18n, translations]);
+
+  return (<I18nextProvider i18n={i18n}>{children}</I18nextProvider>);
+};
+
+StoreAwareI18nextProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+  language: PropTypes.string.isRequired,
+  translations: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
+/**
+ * Create rtl emotion cache
+ */
+const cacheRtl = createCache({
+  key: 'muirtl',
+  stylisPlugins: [prefixer, rtlPlugin],
+});
+
+/**
+ * Create default emotion cache
+ */
+const cacheDefault = createCache({
+  key: 'mui',
+});
+
+/**
  * This component adds viewer-specific providers.
  * @prop {Object} manifests
  */
-export class AppProviders extends Component {
-  /** */
-  constructor(props) {
-    super(props);
-
-    this.i18n = createI18nInstance();
-    // Set i18n language
-    this.i18n.changeLanguage(props.language);
-  }
-
-  /**
-   * Update the i18n language if it is changed
-   */
-  componentDidUpdate(prevProps) {
-    const { language } = this.props;
-    if (prevProps.language !== language) {
-      this.i18n.changeLanguage(language);
-    }
-  }
-
-  /** */
-  render() {
-    const {
-      children,
-      theme, translations,
-      dndManager,
-    } = this.props;
-
-    /**
-     * Create rtl emotion cache
-     */
-    const cacheRtl = createCache({
-      key: 'muirtl',
-      stylisPlugins: [prefixer, rtlPlugin],
-    });
-
-    /**
-     * Create default emotion cache
-     */
-    const cacheDefault = createCache({
-      key: 'mui',
-    });
-
-    Object.keys(translations).forEach((lng) => {
-      this.i18n.addResourceBundle(lng, 'translation', translations[lng], true, true);
-    });
-
-    return (
-      <FullScreenShim>
-        <I18nextProvider i18n={this.i18n}>
-          <StyledEngineProvider injectFirst>
-            <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
-              <ThemeProvider theme={createTheme((theme))}>
-                <MaybeDndProvider dndManager={dndManager}>
-                  {children}
-                </MaybeDndProvider>
-              </ThemeProvider>
-            </CacheProvider>
-          </StyledEngineProvider>
-        </I18nextProvider>
-      </FullScreenShim>
-    );
-  }
+export function AppProviders({
+  children = null,
+  language,
+  theme, translations,
+  dndManager = undefined,
+}) {
+  return (
+    <FullScreenShim>
+      <StoreAwareI18nextProvider language={language} translations={translations}>
+        <StyledEngineProvider injectFirst>
+          <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
+            <ThemeProvider theme={createTheme((theme))}>
+              <MaybeDndProvider dndManager={dndManager}>
+                {children}
+              </MaybeDndProvider>
+            </ThemeProvider>
+          </CacheProvider>
+        </StyledEngineProvider>
+      </StoreAwareI18nextProvider>
+    </FullScreenShim>
+  );
 }
 
 AppProviders.propTypes = {
@@ -142,9 +140,4 @@ AppProviders.propTypes = {
   language: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   translations: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-};
-
-AppProviders.defaultProps = {
-  children: null,
-  dndManager: undefined,
 };

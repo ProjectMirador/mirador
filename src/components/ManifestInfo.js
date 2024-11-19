@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 import CollapsibleSection from '../containers/CollapsibleSection';
@@ -9,57 +8,48 @@ import { PluginHook } from './PluginHook';
 /**
  * ManifestInfo
  */
-export class ManifestInfo extends Component {
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      manifestDescription,
-      manifestSummary,
-      manifestLabel,
-      manifestMetadata,
-      id,
-      t,
-    } = this.props;
+export function ManifestInfo({
+  manifestDescription = null, manifestLabel = null, manifestMetadata = [], manifestSummary = null, id, t = k => k,
+}) {
+  const pluginProps = {
+    id, manifestDescription, manifestLabel, manifestMetadata, manifestSummary,
+  };
 
-    return (
-      <CollapsibleSection
-        id={`${id}-resource`}
-        label={t('resource')}
-      >
-        {manifestLabel && (
-          <Typography
-            aria-labelledby={`${id}-resource ${id}-resource-heading`}
-            id={`${id}-resource-heading`}
-            variant="h4"
-            component="h5"
-          >
-            {manifestLabel}
-          </Typography>
-        )}
+  return (
+    <CollapsibleSection
+      id={`${id}-resource`}
+      label={t('resource')}
+    >
+      {manifestLabel && (
+        <Typography
+          aria-labelledby={`${id}-resource ${id}-resource-heading`}
+          id={`${id}-resource-heading`}
+          variant="h4"
+          component="h5"
+        >
+          {manifestLabel}
+        </Typography>
+      )}
 
-        {manifestDescription && (
-          <Typography variant="body1">
-            <SanitizedHtml htmlString={manifestDescription} ruleSet="iiif" />
-          </Typography>
-        )}
+      {manifestDescription && (
+        <Typography variant="body1">
+          <SanitizedHtml htmlString={manifestDescription} ruleSet="iiif" />
+        </Typography>
+      )}
 
-        {manifestSummary && (
-          <Typography variant="body1">
-            <SanitizedHtml htmlString={manifestSummary} ruleSet="iiif" />
-          </Typography>
-        )}
+      {manifestSummary && (
+        <Typography variant="body1">
+          <SanitizedHtml htmlString={manifestSummary} ruleSet="iiif" />
+        </Typography>
+      )}
 
-        {manifestMetadata.length > 0 && (
-          <LabelValueMetadata labelValuePairs={manifestMetadata} />
-        )}
+      {manifestMetadata.length > 0 && (
+        <LabelValueMetadata labelValuePairs={manifestMetadata} />
+      )}
 
-        <PluginHook {...this.props} />
-      </CollapsibleSection>
-    );
-  }
+      <PluginHook {...pluginProps} />
+    </CollapsibleSection>
+  );
 }
 
 ManifestInfo.propTypes = {
@@ -69,12 +59,4 @@ ManifestInfo.propTypes = {
   manifestMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   manifestSummary: PropTypes.string,
   t: PropTypes.func,
-};
-
-ManifestInfo.defaultProps = {
-  manifestDescription: null,
-  manifestLabel: null,
-  manifestMetadata: [],
-  manifestSummary: null,
-  t: key => key,
 };

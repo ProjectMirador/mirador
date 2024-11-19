@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { styled, lighten, darken } from '@mui/material/styles';
 import ErrorDialog from '../containers/ErrorDialog';
@@ -35,44 +34,38 @@ const ViewerArea = styled('main', { name: 'WorkspaceArea', slot: 'viewer' })(() 
  * This is the top level Mirador component.
  * @prop {Object} manifests
  */
-export class WorkspaceArea extends Component {
-  /**
-   * render
-   * @return {String} - HTML markup for the component
-   */
-  render() {
-    const {
-      areaRef,
-      controlPanelVariant,
-      isWorkspaceAddVisible,
-      isWorkspaceControlPanelVisible,
-      lang,
-      t,
-    } = this.props;
+export function WorkspaceArea({
+  areaRef = null,
+  controlPanelVariant = undefined,
+  isWorkspaceAddVisible = false,
+  isWorkspaceControlPanelVisible,
+  lang = undefined,
+  t,
+}) {
+  const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
 
-    return (
-      <Root ownerState={this.props}>
+  return (
+    <Root ownerState={ownerState}>
+      {
+        isWorkspaceControlPanelVisible
+          && <WorkspaceControlPanel variant={controlPanelVariant} />
+      }
+      <ViewerArea
+        className={ns('viewer')}
+        lang={lang}
+        aria-label={t('workspace')}
+        {...(areaRef ? { ref: areaRef } : {})}
+      >
         {
-          isWorkspaceControlPanelVisible
-            && <WorkspaceControlPanel variant={controlPanelVariant} />
+          isWorkspaceAddVisible
+            ? <WorkspaceAdd />
+            : <Workspace />
         }
-        <ViewerArea
-          className={ns('viewer')}
-          lang={lang}
-          aria-label={t('workspace')}
-          {...(areaRef ? { ref: areaRef } : {})}
-        >
-          {
-            isWorkspaceAddVisible
-              ? <WorkspaceAdd />
-              : <Workspace />
-          }
-          <ErrorDialog />
-          <BackgroundPluginArea />
-        </ViewerArea>
-      </Root>
-    );
-  }
+        <ErrorDialog />
+        <BackgroundPluginArea />
+      </ViewerArea>
+    </Root>
+  );
 }
 
 WorkspaceArea.propTypes = {
@@ -82,11 +75,4 @@ WorkspaceArea.propTypes = {
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   lang: PropTypes.string,
   t: PropTypes.func.isRequired,
-};
-
-WorkspaceArea.defaultProps = {
-  areaRef: null,
-  controlPanelVariant: undefined,
-  isWorkspaceAddVisible: false,
-  lang: undefined,
 };

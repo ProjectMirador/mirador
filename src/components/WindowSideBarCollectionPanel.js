@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -11,6 +10,15 @@ import Skeleton from '@mui/material/Skeleton';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpwardSharp';
 import CompanionWindow from '../containers/CompanionWindow';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
+
+/** */
+function getUseableLabel(resource, index) {
+  return (resource
+    && resource.getLabel
+    && resource.getLabel().length > 0)
+    ? resource.getLabel().getValue()
+    : resource.id;
+}
 
 /** */
 function Item({
@@ -37,7 +45,7 @@ function Item({
           />
         </ListItemIcon>
       )}
-      <ListItemText>{WindowSideBarCollectionPanel.getUseableLabel(manifest)}</ListItemText>
+      <ListItemText>{getUseableLabel(manifest)}</ListItemText>
     </MenuItem>
   );
 }
@@ -52,20 +60,22 @@ Item.propTypes = {
 };
 
 /** */
-export class WindowSideBarCollectionPanel extends Component {
+export function WindowSideBarCollectionPanel({
+  canvasNavigation,
+  collectionPath = [],
+  collection = null,
+  id,
+  isFetching = false,
+  manifestId,
+  parentCollection = null,
+  updateCompanionWindow,
+  updateWindow,
+  t = k => k,
+  variant = null,
+  windowId,
+}) {
   /** */
-  static getUseableLabel(resource, index) {
-    return (resource
-      && resource.getLabel
-      && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
-      : resource.id;
-  }
-
-  /** */
-  isMultipart() {
-    const { collection } = this.props;
-
+  const isMultipart = (() => {
     if (!collection) return false;
 
     const behaviors = collection.getProperty('behavior');
@@ -73,112 +83,94 @@ export class WindowSideBarCollectionPanel extends Component {
     if (Array.isArray(behaviors)) return behaviors.includes('multi-part');
 
     return behaviors === 'multi-part';
-  }
+  })();
 
-  /** */
-  render() {
-    const {
-      canvasNavigation,
-      collectionPath,
-      collection,
-      id,
-      isFetching,
-      manifestId,
-      parentCollection,
-      updateCompanionWindow,
-      updateWindow,
-      t,
-      variant,
-      windowId,
-    } = this.props;
-
-    return (
-      <CompanionWindow
-        title={t(this.isMultipart() ? 'multipartCollection' : 'collection')}
-        windowId={windowId}
-        id={id}
-        titleControls={(
-          <>
-            { parentCollection && (
-              <List>
-                <ListItem
-                  button
-                  onClick={
-                    () => updateCompanionWindow({ collectionPath: collectionPath.slice(0, -1) })
-                  }
-                >
-                  <ListItemIcon>
-                    <ArrowUpwardIcon />
-                  </ListItemIcon>
-                  <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-                    {WindowSideBarCollectionPanel.getUseableLabel(parentCollection)}
-                  </ListItemText>
-                </ListItem>
-              </List>
-            )}
-            <Typography variant="h6">
-              { collection && WindowSideBarCollectionPanel.getUseableLabel(collection)}
-              { isFetching && <Skeleton variant="text" />}
-            </Typography>
-          </>
-        )}
-      >
-        <MenuList>
-          { isFetching && (
-            <MenuItem>
-              <ListItemText>
-                <Skeleton variant="text" />
-                <Skeleton variant="text" />
-                <Skeleton variant="text" />
-              </ListItemText>
-            </MenuItem>
+  return (
+    <CompanionWindow
+      title={t(isMultipart ? 'multipartCollection' : 'collection')}
+      windowId={windowId}
+      id={id}
+      titleControls={(
+        <>
+          { parentCollection && (
+            <List>
+              <ListItem
+                button
+                onClick={
+                  () => updateCompanionWindow({ collectionPath: collectionPath.slice(0, -1) })
+                }
+              >
+                <ListItemIcon>
+                  <ArrowUpwardIcon />
+                </ListItemIcon>
+                <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
+                  {getUseableLabel(parentCollection)}
+                </ListItemText>
+              </ListItem>
+            </List>
           )}
-          {
-            collection && collection.getCollections().map((manifest) => {
-              /** select the new manifest and go back to the normal index */
-              const onClick = () => {
-                // close collection
-                updateCompanionWindow({ collectionPath: [...collectionPath, manifest.id] });
-              };
+          <Typography variant="h6">
+            { collection && getUseableLabel(collection)}
+            { isFetching && <Skeleton variant="text" />}
+          </Typography>
+        </>
+      )}
+    >
+      <MenuList>
+        { isFetching && (
+          <MenuItem>
+            <ListItemText>
+              <Skeleton variant="text" />
+              <Skeleton variant="text" />
+              <Skeleton variant="text" />
+            </ListItemText>
+          </MenuItem>
+        )}
+        {
+          collection && collection.getCollections().map((manifest) => {
+            /** select the new manifest and go back to the normal index */
+            const onClick = () => {
+              // close collection
+              updateCompanionWindow({ collectionPath: [...collectionPath, manifest.id] });
+            };
 
-              return (
-                <Item
-                  key={manifest.id}
-                  onClick={onClick}
-                  canvasNavigation={canvasNavigation}
-                  manifest={manifest}
-                  variant={variant}
-                  selected={manifestId === manifest.id}
-                />
-              );
-            })
-          }
-          {
-            collection && collection.getManifests().map((manifest) => {
-              /** select the new manifest and go back to the normal index */
-              const onClick = () => {
-                // select new manifest
-                updateWindow({ canvasId: null, collectionPath, manifestId: manifest.id });
-                // close collection
-                updateCompanionWindow({ multipart: false });
-              };
+            return (
+              <Item
+                key={manifest.id}
+                onClick={onClick}
+                canvasNavigation={canvasNavigation}
+                manifest={manifest}
+                variant={variant}
+                selected={manifestId === manifest.id}
+              />
+            );
+          })
+        }
+        {
+          collection && collection.getManifests().map((manifest) => {
+            /** select the new manifest and go back to the normal index */
+            const onClick = () => {
+              // select new manifest
+              updateWindow({ canvasId: null, collectionPath, manifestId: manifest.id });
+              // close collection
+              updateCompanionWindow({ multipart: false });
+            };
 
-              return (
-                <Item
-                  key={manifest.id}
-                  onClick={onClick}
-                  canvasNavigation={canvasNavigation}
-                  manifest={manifest}
-                  variant={variant}
-                  selected={manifestId === manifest.id}
-                />
-              );
-            })
-          }
-        </MenuList>
-      </CompanionWindow>
-    );
-  }
+            return (
+              <Item
+                key={manifest.id}
+                onClick={onClick}
+                canvasNavigation={canvasNavigation}
+                manifest={manifest}
+                variant={variant}
+                selected={manifestId === manifest.id}
+              />
+            );
+          })
+        }
+      </MenuList>
+    </CompanionWindow>
+  );
 }
 
 WindowSideBarCollectionPanel.propTypes = {
@@ -197,13 +189,4 @@ WindowSideBarCollectionPanel.propTypes = {
   updateWindow: PropTypes.func.isRequired,
   variant: PropTypes.string,
   windowId: PropTypes.string.isRequired,
-};
-
-WindowSideBarCollectionPanel.defaultProps = {
-  collection: null,
-  collectionPath: [],
-  isFetching: false,
-  parentCollection: null,
-  t: k => k,
-  variant: null,
 };
