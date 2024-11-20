@@ -125,7 +125,7 @@ export class OpenSeadragonViewer extends Component {
       }
     } else if (!isEqual(canvasWorld.layers, prevProps.canvasWorld.layers)) {
       this.refreshTileProperties();
-    } else if (viewerConfig !== prevProps.viewerConfig) {
+    } else if (viewerConfig && viewerConfig !== prevProps.viewerConfig) {
       const { viewport } = viewer;
 
       if (viewerConfig.x !== viewport.centerSpringX.target.value
