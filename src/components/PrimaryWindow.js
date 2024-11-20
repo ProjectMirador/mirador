@@ -1,4 +1,4 @@
-import { Component, lazy, Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
@@ -23,78 +23,85 @@ const Root = styled('div', { name: 'PrimaryWindow', slot: 'root' })(() => ({
   position: 'relative',
 }));
 
+/**  */
+const TypeSpecificViewer = ({
+  audioResources = [], isCollection = false,
+  isFetching = false, videoResources = [], view = undefined, windowId,
+}) => {
+  if (isCollection) {
+    return (
+      <SelectCollection
+        windowId={windowId}
+      />
+    );
+  }
+  if (isFetching === false) {
+    if (view === 'gallery') {
+      return (
+        <GalleryView
+          windowId={windowId}
+        />
+      );
+    }
+    if (videoResources.length > 0) {
+      return (
+        <VideoViewer
+          windowId={windowId}
+        />
+      );
+    }
+    if (audioResources.length > 0) {
+      return (
+        <AudioViewer
+          windowId={windowId}
+        />
+      );
+    }
+    return (
+      <WindowViewer
+        windowId={windowId}
+      />
+    );
+  }
+  return null;
+};
+
+TypeSpecificViewer.propTypes = {
+  audioResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  isCollection: PropTypes.bool,
+  isFetching: PropTypes.bool,
+  videoResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  view: PropTypes.string,
+  windowId: PropTypes.string.isRequired,
+};
+
 /**
  * PrimaryWindow - component that renders the primary content of a Mirador
  * window. Right now this differentiates between a Image, Video, or Audio viewer.
  */
-export class PrimaryWindow extends Component {
-  /**
-   * renderViewer - logic used to determine what type of view to show
-   *
-   * @return {(String|null)}
-   */
-  renderViewer() {
-    const {
-      audioResources, isCollection,
-      isFetching, videoResources, view, windowId,
-    } = this.props;
-    if (isCollection) {
-      return (
-        <SelectCollection
-          windowId={windowId}
-        />
-      );
-    }
-    if (isFetching === false) {
-      if (view === 'gallery') {
-        return (
-          <GalleryView
-            windowId={windowId}
-          />
-        );
-      }
-      if (videoResources.length > 0) {
-        return (
-          <VideoViewer
-            windowId={windowId}
-          />
-        );
-      }
-      if (audioResources.length > 0) {
-        return (
-          <AudioViewer
-            windowId={windowId}
-          />
-        );
-      }
-      return (
-        <WindowViewer
-          windowId={windowId}
-        />
-      );
-    }
-    return null;
-  }
+export function PrimaryWindow({
+  audioResources = undefined, isCollection = false, isFetching = false, videoResources = undefined,
+  view = undefined, windowId, isCollectionDialogVisible = false, children = null, className = undefined,
+}) {
+  const viewerProps = {
+    audioResources,
+    isCollection,
+    isFetching,
+    videoResources,
+    view,
+    windowId,
+  };
 
-  /**
-   * Render the component
-   */
-  render() {
-    const {
-      isCollectionDialogVisible, windowId, children, className,
-    } = this.props;
-
-    return (
-      <Root data-testid="test-window" className={classNames(ns('primary-window'), className)}>
-        <WindowSideBar windowId={windowId} />
-        <CompanionArea windowId={windowId} position="left" />
-        { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
-        <Suspense fallback={<div />}>
-          {children || this.renderViewer()}
-        </Suspense>
-      </Root>
-    );
-  }
+  return (
+    <Root data-testid="test-window" className={classNames(ns('primary-window'), className)}>
+      <WindowSideBar windowId={windowId} />
+      <CompanionArea windowId={windowId} position="left" />
+      { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }
+      <Suspense fallback={<div />}>
+        {children || <TypeSpecificViewer {...viewerProps} />}
+      </Suspense>
+    </Root>
+  );
 }
 
 PrimaryWindow.propTypes = {
@@ -107,15 +114,4 @@ PrimaryWindow.propTypes = {
   videoResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,
-};
-
-PrimaryWindow.defaultProps = {
-  audioResources: [],
-  children: undefined,
-  className: undefined,
-  isCollection: false,
-  isCollectionDialogVisible: false,
-  isFetching: false,
-  videoResources: [],
-  view: undefined,
 };

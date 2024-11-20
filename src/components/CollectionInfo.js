@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -6,64 +5,46 @@ import ViewListIcon from '@mui/icons-material/ViewListSharp';
 import CollapsibleSection from '../containers/CollapsibleSection';
 
 /**
- * ManifestInfo
+ * CollectionInfo
  */
-export class CollectionInfo extends Component {
-  /** */
-  constructor(props) {
-    super(props);
-
-    this.openCollectionDialog = this.openCollectionDialog.bind(this);
-  }
-
-  /** */
-  openCollectionDialog() {
-    const { collectionPath, showCollectionDialog, windowId } = this.props;
-
+export function CollectionInfo({
+  collectionLabel = null, collectionPath = [], id, showCollectionDialog, t = k => k, windowId = null,
+}) {
+  /**
+   * Show the containing collection.
+   */
+  const openCollectionDialog = () => {
     const manifestId = collectionPath[collectionPath.length - 1];
 
     showCollectionDialog(manifestId, collectionPath.slice(0, -1), windowId);
-  }
+  };
 
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      collectionLabel,
-      collectionPath,
-      id,
-      t,
-    } = this.props;
+  if (collectionPath.length === 0) return null;
 
-    if (collectionPath.length === 0) return null;
-
-    return (
-      <CollapsibleSection
-        id={`${id}-collection`}
-        label={t('collection')}
-      >
-        {collectionLabel && (
-          <Typography
-            aria-labelledby={`${id}-resource ${id}-resource-heading`}
-            id={`${id}-resource-heading`}
-            variant="h4"
-          >
-            {collectionLabel}
-          </Typography>
-        )}
-
-        <Button
-          color="primary"
-          onClick={this.openCollectionDialog}
-          startIcon={<ViewListIcon />}
+  return (
+    <CollapsibleSection
+      id={`${id}-collection`}
+      label={t('collection')}
+    >
+      {collectionLabel && (
+        <Typography
+          aria-labelledby={`${id}-resource ${id}-resource-heading`}
+          id={`${id}-resource-heading`}
+          variant="h4"
         >
-          {t('showCollection')}
-        </Button>
-      </CollapsibleSection>
-    );
-  }
+          {collectionLabel}
+        </Typography>
+      )}
+
+      <Button
+        color="primary"
+        onClick={openCollectionDialog}
+        startIcon={<ViewListIcon />}
+      >
+        {t('showCollection')}
+      </Button>
+    </CollapsibleSection>
+  );
 }
 
 CollectionInfo.propTypes = {
@@ -73,11 +54,4 @@ CollectionInfo.propTypes = {
   showCollectionDialog: PropTypes.func.isRequired,
   t: PropTypes.func,
   windowId: PropTypes.string,
-};
-
-CollectionInfo.defaultProps = {
-  collectionLabel: null,
-  collectionPath: [],
-  t: key => key,
-  windowId: null,
 };

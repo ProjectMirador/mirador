@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -31,75 +30,52 @@ const ThumbnailOption = styled(MenuItem, { name: 'WindowThumbnailSettings', slot
 /**
  *
  */
-export class WindowThumbnailSettings extends Component {
-  /**
-   * constructor -
-   */
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-  }
+export function WindowThumbnailSettings({
+  handleClose = () => {}, t = k => k, thumbnailNavigationPosition, direction, windowId, setWindowThumbnailPosition,
+}) {
+  /** */
+  const handleChange = (value) => { setWindowThumbnailPosition(windowId, value); handleClose(); };
 
-  /**
-   * @private
-   */
-  handleChange(value) {
-    const { windowId, setWindowThumbnailPosition } = this.props;
+  return (
+    <>
+      <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('thumbnails')}</ListSubheader>
 
-    setWindowThumbnailPosition(windowId, value);
-  }
-
-  /**
-   * render
-   *
-   * @return {type}  description
-   */
-  render() {
-    const {
-      handleClose, t, thumbnailNavigationPosition, direction,
-    } = this.props;
-
-    return (
-      <>
-        <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('thumbnails')}</ListSubheader>
-
-        <ThumbnailOption selected={thumbnailNavigationPosition === 'off'} onClick={() => { this.handleChange('off'); handleClose(); }}>
-          <FormControlLabel
-            value="off"
-            control={
-              <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} fill="currentcolor" />
-            }
-            label={t('off')}
-            labelPlacement="bottom"
-          />
-        </ThumbnailOption>
-        <ThumbnailOption selected={thumbnailNavigationPosition === 'far-bottom'} onClick={() => { this.handleChange('far-bottom'); handleClose(); }}>
-          <FormControlLabel
-            value="far-bottom"
-            control={
-              <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} fill="currentcolor" />
-            }
-            label={t('bottom')}
-            labelPlacement="bottom"
-          />
-        </ThumbnailOption>
-        <ThumbnailOption selected={thumbnailNavigationPosition === 'far-right'} onClick={() => { this.handleChange('far-right'); handleClose(); }}>
-          <FormControlLabel
-            value="far-right"
-            control={(
-              <ThumbnailNavigationRightIcon
-                color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined}
-                fill="currentcolor"
-                style={direction === 'rtl' ? { transform: 'rotate(180deg)' } : {}}
-              />
-            )}
-            label={t('right')}
-            labelPlacement="bottom"
-          />
-        </ThumbnailOption>
-      </>
-    );
-  }
+      <ThumbnailOption selected={thumbnailNavigationPosition === 'off'} onClick={() => { handleChange('off'); }}>
+        <FormControlLabel
+          value="off"
+          control={
+            <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} fill="currentcolor" />
+          }
+          label={t('off')}
+          labelPlacement="bottom"
+        />
+      </ThumbnailOption>
+      <ThumbnailOption selected={thumbnailNavigationPosition === 'far-bottom'} onClick={() => { handleChange('far-bottom'); }}>
+        <FormControlLabel
+          value="far-bottom"
+          control={
+            <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} fill="currentcolor" />
+          }
+          label={t('bottom')}
+          labelPlacement="bottom"
+        />
+      </ThumbnailOption>
+      <ThumbnailOption selected={thumbnailNavigationPosition === 'far-right'} onClick={() => { handleChange('far-right'); }}>
+        <FormControlLabel
+          value="far-right"
+          control={(
+            <ThumbnailNavigationRightIcon
+              color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined}
+              fill="currentcolor"
+              style={direction === 'rtl' ? { transform: 'rotate(180deg)' } : {}}
+            />
+          )}
+          label={t('right')}
+          labelPlacement="bottom"
+        />
+      </ThumbnailOption>
+    </>
+  );
 }
 
 WindowThumbnailSettings.propTypes = {
@@ -109,8 +85,4 @@ WindowThumbnailSettings.propTypes = {
   t: PropTypes.func,
   thumbnailNavigationPosition: PropTypes.string.isRequired,
   windowId: PropTypes.string.isRequired,
-};
-WindowThumbnailSettings.defaultProps = {
-  handleClose: () => {},
-  t: key => key,
 };

@@ -1,8 +1,9 @@
-import { Component, useContext } from 'react';
+import { useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
+import { ErrorBoundary } from 'react-error-boundary';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
@@ -78,43 +79,23 @@ const DraggableNavBar = ({ children, ...props }) => {
  * Represents a Window in the mirador workspace
  * @param {object} window
  */
-export class Window extends Component {
-  /** */
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+export function Window({
+  focusWindow = () => {}, label = null, isFetching = false, sideBarOpen = false,
+  view = undefined, windowDraggable = null, windowId, workspaceType = null, t,
+  manifestError = null,
+}) {
+  const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
+  const ErrorWindow = useCallback(({ error }) => (
+    <MinimalWindow windowId={windowId}>
+      <ErrorContent error={error} windowId={windowId} />
+    </MinimalWindow>
+  ), [windowId]);
 
-  /** */
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
-    return { error, hasError: true };
-  }
-
-  /**
-   * Renders things
-   */
-  render() {
-    const {
-      focusWindow, label, isFetching, sideBarOpen,
-      view, windowDraggable, windowId, workspaceType, t,
-      manifestError,
-    } = this.props;
-
-    const { error, hasError } = this.state;
-
-    if (hasError) {
-      return (
-        <MinimalWindow windowId={windowId}>
-          <ErrorContent error={error} windowId={windowId} />
-        </MinimalWindow>
-      );
-    }
-
-    return (
+  return (
+    <ErrorBoundary FallbackComponent={ErrorWindow}>
       <Root
         onFocus={focusWindow}
-        ownerState={this.props}
+        ownerState={ownerState}
         component="section"
         elevation={1}
         id={windowId}
@@ -144,13 +125,11 @@ export class Window extends Component {
           </StyledCompanionAreaRight>
         </ContentRow>
         <CompanionArea windowId={windowId} position="far-bottom" />
-        <PluginHook {...this.props} />
+        <PluginHook {...ownerState} />
       </Root>
-    );
-  }
+    </ErrorBoundary>
+  );
 }
-
-Window.contextType = MosaicWindowContext;
 
 Window.propTypes = {
   focusWindow: PropTypes.func,
@@ -164,16 +143,4 @@ Window.propTypes = {
   windowDraggable: PropTypes.bool,
   windowId: PropTypes.string.isRequired,
   workspaceType: PropTypes.string,
-};
-
-Window.defaultProps = {
-  focusWindow: () => {},
-  isFetching: false,
-  label: null,
-  manifestError: null,
-  maximized: false,
-  sideBarOpen: false,
-  view: undefined,
-  windowDraggable: null,
-  workspaceType: null,
 };

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import ListItem from '@mui/material/ListItem';
@@ -37,184 +37,165 @@ const StyledLogo = styled(Img, { name: 'ManifestListItem', slot: 'logo' })(({ th
   paddingRight: 1,
 }));
 
+/** */
+const Placeholder = () => (
+  <Grid container className={ns('manifest-list-item')} spacing={2}>
+    <Grid item xs={3} sm={2}>
+      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />
+    </Grid>
+    <Grid item xs={9} sm={6}>
+      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
+    </Grid>
+    <Grid item xs={8} sm={2}>
+      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
+      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
+    </Grid>
+    <Grid item xs={4} sm={2}>
+      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={60} width={60} />
+    </Grid>
+  </Grid>
+);
+
 /**
  * Represents an item in a list of currently-loaded or loading manifests
  * @param {object} props
  * @param {object} [props.manifest = string]
  */
-
-/** */
-export class ManifestListItem extends Component {
-  /** */
-  constructor(props) {
-    super(props);
-    this.handleOpenButtonClick = this.handleOpenButtonClick.bind(this);
-  }
-
-  /** */
-  componentDidMount() {
-    const {
-      fetchManifest, manifestId, ready, isFetching, error, provider,
-    } = this.props;
-
+export function ManifestListItem({
+  fetchManifest,
+  isFetching = false,
+  addWindow,
+  handleClose = () => { },
+  active = false,
+  buttonRef = undefined,
+  manifestId,
+  ready = false,
+  title = null,
+  thumbnail = null,
+  manifestLogo = null,
+  size = 0,
+  provider = null,
+  t = k => k,
+  error = null,
+  isCollection = false,
+  isMultipart = false,
+}) {
+  useEffect(() => {
     if (!ready && !error && !isFetching && provider !== 'file') fetchManifest(manifestId);
-  }
+  }, [manifestId, provider, fetchManifest, ready, error, isFetching]);
 
-  /**
-   * Handling open button click
-   */
-  handleOpenButtonClick() {
-    const {
-      addWindow,
-      handleClose,
-      manifestId,
-    } = this.props;
+  const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
 
+  /** */
+  const handleOpenButtonClick = () => {
     addWindow({ manifestId });
     handleClose();
-  }
+  };
 
-  /** */
-  render() {
-    const {
-      active,
-      buttonRef,
-      manifestId,
-      ready,
-      title,
-      thumbnail,
-      manifestLogo,
-      size,
-      provider,
-      t,
-      error,
-      isCollection,
-      isMultipart,
-    } = this.props;
-
-    const placeholder = (
-      <Grid container className={ns('manifest-list-item')} spacing={2}>
-        <Grid item xs={3} sm={2}>
-          <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />
-        </Grid>
-        <Grid item xs={9} sm={6}>
-          <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
-        </Grid>
-        <Grid item xs={8} sm={2}>
-          <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
-          <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
-        </Grid>
-        <Grid item xs={4} sm={2}>
-          <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={60} width={60} />
-        </Grid>
-      </Grid>
-    );
-
-    if (error) {
-      return (
-        <Root
-          ownerState={this.props}
-          divider
-          selected={active}
-          className={active ? 'active' : ''}
-          data-manifestid={manifestId}
-        >
-          <ManifestListItemError manifestId={manifestId} />
-        </Root>
-      );
-    }
-
+  if (error) {
     return (
       <Root
+        ownerState={ownerState}
         divider
         selected={active}
         className={active ? 'active' : ''}
         data-manifestid={manifestId}
-        data-active={active}
       >
-        {ready ? (
-          <Grid container className={ns('manifest-list-item')} spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <ButtonBase
-                ref={buttonRef}
-                className={ns('manifest-list-item-title')}
-                style={{ width: '100%' }}
-                onClick={this.handleOpenButtonClick}
-              >
-                <Grid
-                  container
-                  spacing={2}
-                  sx={{
-                    textAlign: 'left',
-                    textTransform: 'initial',
-                  }}
-                  component="span"
-                >
-                  <Grid item xs={4} sm={3} component="span">
-                    { thumbnail
-                      ? (
-                        <StyledThumbnail
-                          className={[ns('manifest-list-item-thumb')]}
-                          src={[thumbnail]}
-                          alt=""
-                          height="80"
-                          unloader={(
-                            <Skeleton
-                              variant="rectangular"
-                              animation={false}
-                              sx={{ bgcolor: 'grey[300]' }}
-                              height={80}
-                              width={120}
-                            />
-                          )}
-                        />
-                      )
-                      : <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />}
-                  </Grid>
-                  <Grid item xs={8} sm={9} component="span">
-                    { isCollection && (
-                      <Typography component="div" variant="overline">
-                        { t(isMultipart ? 'multipartCollection' : 'collection') }
-                      </Typography>
-                    )}
-                    <Typography component="span" variant="h6">
-                      {title || manifestId}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </ButtonBase>
-            </Grid>
-            <Grid item xs={8} sm={4}>
-              <Typography className={ns('manifest-list-item-provider')}>{provider}</Typography>
-              <Typography>{t('numItems', { count: size, number: size })}</Typography>
-            </Grid>
-
-            <Grid item xs={4} sm={2}>
-              { manifestLogo
-                && (
-                <StyledLogo
-                  src={[manifestLogo]}
-                  alt=""
-                  role="presentation"
-                  unloader={(
-                    <Skeleton
-                      variant="rectangular"
-                      animation={false}
-                      sx={{ bgcolor: 'grey[300]' }}
-                      height={60}
-                      width={60}
-                    />
-                  )}
-                />
-                )}
-            </Grid>
-          </Grid>
-        ) : (
-          placeholder
-        )}
+        <ManifestListItemError manifestId={manifestId} />
       </Root>
     );
   }
+
+  return (
+    <Root
+      divider
+      selected={active}
+      className={active ? 'active' : ''}
+      data-manifestid={manifestId}
+      data-active={active}
+    >
+      {ready ? (
+        <Grid container className={ns('manifest-list-item')} spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <ButtonBase
+              ref={buttonRef}
+              className={ns('manifest-list-item-title')}
+              style={{ width: '100%' }}
+              onClick={handleOpenButtonClick}
+            >
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  textAlign: 'left',
+                  textTransform: 'initial',
+                }}
+                component="span"
+              >
+                <Grid item xs={4} sm={3} component="span">
+                  { thumbnail
+                    ? (
+                      <StyledThumbnail
+                        className={[ns('manifest-list-item-thumb')]}
+                        src={[thumbnail]}
+                        alt=""
+                        height="80"
+                        unloader={(
+                          <Skeleton
+                            variant="rectangular"
+                            animation={false}
+                            sx={{ bgcolor: 'grey[300]' }}
+                            height={80}
+                            width={120}
+                          />
+                        )}
+                      />
+                    )
+                    : <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />}
+                </Grid>
+                <Grid item xs={8} sm={9} component="span">
+                  { isCollection && (
+                    <Typography component="div" variant="overline">
+                      { t(isMultipart ? 'multipartCollection' : 'collection') }
+                    </Typography>
+                  )}
+                  <Typography component="span" variant="h6">
+                    {title || manifestId}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </ButtonBase>
+          </Grid>
+          <Grid item xs={8} sm={4}>
+            <Typography className={ns('manifest-list-item-provider')}>{provider}</Typography>
+            <Typography>{t('numItems', { count: size, number: size })}</Typography>
+          </Grid>
+
+          <Grid item xs={4} sm={2}>
+            { manifestLogo
+              && (
+              <StyledLogo
+                src={[manifestLogo]}
+                alt=""
+                role="presentation"
+                unloader={(
+                  <Skeleton
+                    variant="rectangular"
+                    animation={false}
+                    sx={{ bgcolor: 'grey[300]' }}
+                    height={60}
+                    width={60}
+                  />
+                )}
+              />
+              )}
+          </Grid>
+        </Grid>
+      ) : (
+        <Placeholder />
+      )}
+    </Root>
+  );
 }
 
 ManifestListItem.propTypes = {
@@ -235,21 +216,4 @@ ManifestListItem.propTypes = {
   t: PropTypes.func,
   thumbnail: PropTypes.string,
   title: PropTypes.string,
-};
-
-ManifestListItem.defaultProps = {
-  active: false,
-  buttonRef: undefined,
-  error: null,
-  handleClose: () => {},
-  isCollection: false,
-  isFetching: false,
-  isMultipart: false,
-  manifestLogo: null,
-  provider: null,
-  ready: false,
-  size: 0,
-  t: key => key,
-  thumbnail: null,
-  title: null,
 };

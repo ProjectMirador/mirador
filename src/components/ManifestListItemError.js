@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import ErrorIcon from '@mui/icons-material/ErrorOutlineSharp';
@@ -9,51 +8,44 @@ import Typography from '@mui/material/Typography';
  * ManifestListItemError renders a component displaying a
  * message to the user about a problem loading a manifest
 */
-export class ManifestListItemError extends Component {
-  /**
-   * Returns the rendered component
-  */
-  render() {
-    const {
-      manifestId, onDismissClick, onTryAgainClick, t,
-    } = this.props;
-
-    return (
+export function ManifestListItemError({
+  manifestId, onDismissClick, onTryAgainClick, t,
+}) {
+  return (
+    <Grid container>
       <Grid container>
-        <Grid container>
-          <Grid container item xs={12} sm={6}>
-            <Grid item xs={4} sm={3}>
-              <Grid container justifyContent="center">
-                <ErrorIcon sx={{
-                  color: 'error.main',
-                  height: '2rem',
-                  width: '2rem',
-                }}
-                />
-              </Grid>
-            </Grid>
-            <Grid item xs={8} sm={9}>
-              <Typography>{t('manifestError')}</Typography>
-              <Typography sx={{ wordBreak: 'break-all' }}>{manifestId}</Typography>
+        <Grid container item xs={12} sm={6}>
+          <Grid item xs={4} sm={3}>
+            <Grid container justifyContent="center">
+              <ErrorIcon sx={{
+                color: 'error.main',
+                height: '2rem',
+                width: '2rem',
+              }}
+              />
             </Grid>
           </Grid>
-        </Grid>
-
-        <Grid container>
-          <Grid container item xs={12} sm={6} justifyContent="flex-end">
-            <Grid item>
-              <Button onClick={() => { onDismissClick(manifestId); }}>
-                {t('dismiss')}
-              </Button>
-              <Button onClick={() => { onTryAgainClick(manifestId); }}>
-                {t('tryAgain')}
-              </Button>
-            </Grid>
+          <Grid item xs={8} sm={9}>
+            <Typography>{t('manifestError')}</Typography>
+            <Typography sx={{ wordBreak: 'break-all' }}>{manifestId}</Typography>
           </Grid>
         </Grid>
       </Grid>
-    );
-  }
+
+      <Grid container>
+        <Grid container item xs={12} sm={6} justifyContent="flex-end">
+          <Grid item>
+            <Button onClick={() => { onDismissClick(manifestId); }}>
+              {t('dismiss')}
+            </Button>
+            <Button onClick={() => { onTryAgainClick(manifestId); }}>
+              {t('tryAgain')}
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
 }
 
 ManifestListItemError.propTypes = {
