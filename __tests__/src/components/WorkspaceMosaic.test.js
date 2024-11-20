@@ -82,23 +82,23 @@ describe('WorkspaceMosaic', () => {
       });
 
       wrapper.rerender(
-        <WorkspaceMosaic classes={{}} windowIds={[]} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
+        <WorkspaceMosaic layout={{}} classes={{}} windowIds={[]} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
       );
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith(null);
     });
     it('when the new and old layouts are the same', () => {
       const updateWorkspaceMosaicLayout = jest.fn();
       wrapper = createWrapper({
-        layout: { first: 1, second: 2 },
+        layout: { direction: 'row', first: '1', second: '2' },
         updateWorkspaceMosaicLayout,
         windowIds,
       });
 
       wrapper.rerender(
-        <WorkspaceMosaic classes={{}} windowIds={windowIds} layout={{ first: 1, second: 2 }} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
+        <WorkspaceMosaic classes={{}} windowIds={windowIds} layout={{ direction: 'row', first: '1', second: '2' }} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
       );
 
-      expect(updateWorkspaceMosaicLayout).toHaveBeenCalledTimes(1);
+      expect(updateWorkspaceMosaicLayout).toHaveBeenCalledTimes(0);
     });
   });
   describe('tile rendering', () => {
