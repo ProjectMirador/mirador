@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
 import classNames from 'classnames';
@@ -30,10 +31,12 @@ const Root = styled(Paper, { name: 'WindowCanvasNavigationControls', slot: 'root
 /**
  * Represents the viewer controls in the mirador workspace.
  */
-export function WindowCanvasNavigationControls({
+export const WindowCanvasNavigationControls = forwardRef(({
   showZoomControls = false, size, visible = true, windowId, zoomToWorld,
-}) {
-  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
+}, ref) => {
+  const pluginProps = {
+    showZoomControls, size, visible, windowId,
+  };
   /**
    * Determine if canvasNavControls are stacked (based on a hard-coded width)
   */
@@ -51,6 +54,7 @@ export function WindowCanvasNavigationControls({
         )
       }
       elevation={0}
+      ref={ref}
     >
       <Stack
         direction={canvasNavControlsAreStacked ? 'column' : 'row'}
@@ -65,7 +69,7 @@ export function WindowCanvasNavigationControls({
       <PluginHook {...pluginProps} />
     </Root>
   );
-}
+});
 
 WindowCanvasNavigationControls.propTypes = {
   showZoomControls: PropTypes.bool,
@@ -73,4 +77,9 @@ WindowCanvasNavigationControls.propTypes = {
   visible: PropTypes.bool,
   windowId: PropTypes.string.isRequired,
   zoomToWorld: PropTypes.func.isRequired,
+};
+
+WindowCanvasNavigationControls.defaultProps = {
+  showZoomControls: false,
+  visible: true,
 };
