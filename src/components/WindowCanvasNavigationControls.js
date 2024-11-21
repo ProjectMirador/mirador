@@ -44,13 +44,14 @@ export class WindowCanvasNavigationControls extends Component {
   /** */
   render() {
     const {
-      showZoomControls, visible, windowId, zoomToWorld,
+      innerRef, showZoomControls, visible, windowId, zoomToWorld,
     } = this.props;
 
     if (!visible) return (<Typography style={visuallyHidden} component="div"><ViewerInfo windowId={windowId} /></Typography>);
 
     return (
       <Root
+        ref={innerRef}
         square
         className={
           classNames(
@@ -77,6 +78,7 @@ export class WindowCanvasNavigationControls extends Component {
 }
 
 WindowCanvasNavigationControls.propTypes = {
+  innerRef: PropTypes.func, // eslint-disable-line react/require-default-props
   showZoomControls: PropTypes.bool,
   size: PropTypes.shape({ width: PropTypes.number }).isRequired,
   visible: PropTypes.bool,

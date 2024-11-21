@@ -4,6 +4,7 @@ import { withSize } from '../extend/withSize';
 import { withPlugins } from '../extend/withPlugins';
 import { getShowZoomControlsConfig, getWorkspace } from '../state/selectors';
 import { WindowCanvasNavigationControls } from '../components/WindowCanvasNavigationControls';
+import { withRef } from '../extend/withRef';
 
 /** */
 const mapStateToProps = (state, { windowId }) => ({
@@ -14,6 +15,7 @@ const mapStateToProps = (state, { windowId }) => ({
 const enhance = compose(
   connect(mapStateToProps),
   withSize(),
+  withRef(),
   withPlugins('WindowCanvasNavigationControls'),
 );
 
