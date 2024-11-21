@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { render, screen } from '@testing-library/react';
 import PropTypes from 'prop-types';
 import { withSize } from '../../../src/extend/withSize';
@@ -25,12 +26,12 @@ class ResizeObserver {
 global.ResizeObserver = ResizeObserver;
 
 /** */
-const TestComponent = ({ size }) => (
-  <div>
+const TestComponent = forwardRef(({ size }, ref) => (
+  <div ref={ref}>
     {size.width}
     {size.height}
   </div>
-);
+));
 
 TestComponent.propTypes = {
   size: PropTypes.shape({
