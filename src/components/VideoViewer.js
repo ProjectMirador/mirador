@@ -148,13 +148,16 @@ export class VideoViewer extends Component {
       ? videoResources[len - 1].temporalfragment : [];
 
     let currentOrientation;
+    let aspectRatio;
 
     if (video) {
       console.log('video', video);
       currentOrientation = video.getWidth() > video.getHeight() ? ORIENTATIONS.LANDSCAPE : ORIENTATIONS.PORTRAIT;
+      aspectRatio = video.getWidth() / video.getHeight();
     }
 
-    const debugPositionning = false;
+    // Ho to get the ratio of the parent ?
+    const debugPositionning = true;
 
     return (
       <div
@@ -175,6 +178,7 @@ export class VideoViewer extends Component {
             position: 'relative',
             width: '100%',
             display: 'flex',
+            justifyContent: 'center',
             alignItems: 'center',
             marginBottom: '122px', // TODO Space for navigation controls
             flexDirection: 'column',
@@ -191,11 +195,13 @@ export class VideoViewer extends Component {
               <video
                 style={{
                   border: debugPositionning ? '6px solid pink' : 'none',
-                  top: 0,
+                  // top: 0,
                   position: 'absolute', // 'absolute' or 'block
-                  width: (currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'),
+                  width: (currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'), // How to get ratio of parent ?
+
                   height: (currentOrientation === ORIENTATIONS.PORTRAIT ? '100%' : 'auto'),
                   maxWidth: '100%',
+                  maxHeight: '100%'
 
                 }}
                 key={video.id}
