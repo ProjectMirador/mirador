@@ -28,7 +28,6 @@ export class OpenSeadragonViewer extends Component {
     this.onCanvasMouseMove = debounce(this.onCanvasMouseMove.bind(this), 10);
     this.onViewportChange = this.onViewportChange.bind(this);
     this.zoomToWorld = this.zoomToWorld.bind(this);
-    this.osdUpdating = false;
   }
 
   /**
@@ -56,14 +55,7 @@ export class OpenSeadragonViewer extends Component {
 
     this.setState({ viewer });
 
-    // Set a flag when OSD starts animating (so that viewer updates are not used)
-    viewer.addHandler('animation-start', () => {
-      this.osdUpdating = true;
-    });
     viewer.addHandler('animation-finish', this.onViewportChange);
-    viewer.addHandler('animation-finish', () => {
-      this.osdUpdating = false;
-    });
 
     if (viewer.innerTracker) {
       viewer.innerTracker.moveHandler = this.onCanvasMouseMove;
@@ -105,7 +97,7 @@ export class OpenSeadragonViewer extends Component {
       this.addAllImageSources((canvasesChanged || !viewerConfig));
     } else if (!isEqual(canvasWorld.layers, prevProps.canvasWorld.layers)) {
       this.refreshTileProperties();
-    } else if (viewerConfig && !this.osdUpdating) {
+    } else if (viewerConfig !== prevProps.viewerConfig) {
       const { viewport } = viewer;
 
       if (viewerConfig.x !== viewport.centerSpringX.target.value
