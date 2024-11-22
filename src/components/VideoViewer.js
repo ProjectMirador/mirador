@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
 import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavigationControlsVideo';
+import ResizeObserver from "react-resize-observer";
 
 export const ORIENTATIONS = {
   LANDSCAPE: 'landscape',
@@ -22,6 +23,8 @@ export class VideoViewer extends Component {
       start: 0,
       time: 0,
     };
+
+    this.greenBox = undefined;
   }
 
   /** */
@@ -107,7 +110,11 @@ export class VideoViewer extends Component {
     this.setState({ time: 0 });
   }
 
-
+  setGreenBox = (ref) => {
+    this.greenBox = ref;
+    console.log('setGreenBox', ref);
+    console.log('setGreenBox Ratio', ref.width / ref.height);
+  }
 
   /* eslint-disable jsx-a11y/media-has-caption */
   /** */
@@ -153,8 +160,18 @@ export class VideoViewer extends Component {
     if (video) {
       console.log('video', video);
       currentOrientation = video.getWidth() > video.getHeight() ? ORIENTATIONS.LANDSCAPE : ORIENTATIONS.PORTRAIT;
-      aspectRatio = video.getWidth() / video.getHeight();
+      aspectRatio =   video.getWidth() / video.getHeight();
     }
+
+
+    // let greenRef = createRef();
+    //
+    // if(greenRef.current){
+    //   console.log('greenRef.current', greenRef.current);
+    //   console.log('greenRef.current Ratio', greenRef.current.getWidth() / greenRef.current.getHeight() );
+    // }
+
+    console.log('aspectRatio', aspectRatio);
 
     // Ho to get the ratio of the parent ?
     const debugPositionning = true;
@@ -189,17 +206,20 @@ export class VideoViewer extends Component {
             <div style={{
               border: debugPositionning ? '6px solid green' : 'none',
               width: 'fit-content',
+                height: 'auto',
               maxWidth: '100%',
             }}
             >
+              <ResizeObserver onResize={this.setGreenBox} />
+
               <video
                 style={{
                   border: debugPositionning ? '6px solid pink' : 'none',
                   // top: 0,
                   position: 'absolute', // 'absolute' or 'block
-                  width: (currentOrientation === ORIENTATIONS.LANDSCAPE ? '100%' : 'auto'), // How to get ratio of parent ?
+                  /*  width: (this.greenBox && (this.greenBox.width / this.greenBox.height < aspectRatio) ? '100%' : 'auto'), // How to get ratio of parent ?
+                    height: (this.greenBox && (this.greenBox.width / this.greenBox.height < aspectRatio) ? 'auto%' : '100%'), //!*!/*/
 
-                  height: (currentOrientation === ORIENTATIONS.PORTRAIT ? '100%' : 'auto'),
                   maxWidth: '100%',
                   maxHeight: '100%'
 
