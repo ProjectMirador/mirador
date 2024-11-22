@@ -20,9 +20,9 @@ export class VideoViewer extends Component {
     this.videoRef = createRef();
 
     this.state = {
+      containerRatio: 1,
       start: 0,
       time: 0,
-      containerRatio: 1,
     };
 
   }
@@ -155,16 +155,11 @@ export class VideoViewer extends Component {
     const videoTargetTemporalfragment = len > 0
       ? videoResources[len - 1].temporalfragment : [];
 
-    let currentOrientation;
     let videoAspectRatio;
 
     if (video) {
-      console.log('video', video);
-      currentOrientation = video.getWidth() > video.getHeight() ? ORIENTATIONS.LANDSCAPE : ORIENTATIONS.PORTRAIT;
       videoAspectRatio = video.getWidth() / video.getHeight();
     }
-
-    console.log('aspectRatio', videoAspectRatio);
 
     const debugPositionning = true;
 
@@ -191,7 +186,6 @@ export class VideoViewer extends Component {
             alignItems: 'center',
             marginBottom: '122px', // TODO Space for navigation controls
             flexDirection: 'column',
-            // flexDirection: currentOrientation === ORIENTATIONS.LANDSCAPE ? 'row' : 'column',
             backgroundColor: 'black',
           }}
           >
@@ -226,7 +220,6 @@ export class VideoViewer extends Component {
                 videoRef={this.videoRef}
                 videoTarget={videoTargetTemporalfragment}
                 key={`${windowId} ${video.id}`}
-                currentOrientation={currentOrientation}
                 highlightAllAnnotations
                 style={{
                   height: '100%',
