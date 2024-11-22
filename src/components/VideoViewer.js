@@ -161,7 +161,7 @@ export class VideoViewer extends Component {
       videoAspectRatio = video.getWidth() / video.getHeight();
     }
 
-    const debugPositionning = true;
+    const debugPositionning = false;
 
     return (
       <div
