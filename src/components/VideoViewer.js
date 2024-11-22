@@ -25,6 +25,7 @@ export class VideoViewer extends Component {
     };
 
     this.greenBox = undefined;
+    this.redBox = undefined;
   }
 
   /** */
@@ -112,8 +113,14 @@ export class VideoViewer extends Component {
 
   setGreenBox = (ref) => {
     this.greenBox = ref;
-    console.log('setGreenBox', ref);
-    console.log('setGreenBox Ratio', ref.width / ref.height);
+    // console.log('setGreenBox', ref);
+    // console.log('setGreenBox Ratio', ref.width / ref.height);
+  }
+
+  setRedBox = (ref) => {
+    this.redBox = ref;
+    this.redBox.ratio = ref.width / ref.height;
+    console.log('redBox Ratio', this.redBox.ratio);
   }
 
   /* eslint-disable jsx-a11y/media-has-caption */
@@ -203,6 +210,7 @@ export class VideoViewer extends Component {
             backgroundColor: 'black',
           }}
           >
+            <ResizeObserver onResize={this.setRedBox} />
             <div style={{
               border: debugPositionning ? '6px solid green' : 'none',
               width: 'fit-content',
@@ -217,9 +225,8 @@ export class VideoViewer extends Component {
                   border: debugPositionning ? '6px solid pink' : 'none',
                   // top: 0,
                   position: 'absolute', // 'absolute' or 'block
-                  /*  width: (this.greenBox && (this.greenBox.width / this.greenBox.height < aspectRatio) ? '100%' : 'auto'), // How to get ratio of parent ?
-                    height: (this.greenBox && (this.greenBox.width / this.greenBox.height < aspectRatio) ? 'auto%' : '100%'), //!*!/*/
-
+                  width: (this.redBox && (this.redBox.ratio < aspectRatio) ? '100%' : 'auto'), // How to get ratio of parent ?
+                  height: (this.redBox && (this.redBox.ratio < aspectRatio) ? 'auto' : '100%'), // How to get ratio of parent ?
                   maxWidth: '100%',
                   maxHeight: '100%'
 
