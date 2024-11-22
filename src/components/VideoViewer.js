@@ -2,10 +2,10 @@ import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
 import React, { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
+import ResizeObserver from 'react-resize-observer';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
 import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavigationControlsVideo';
-import ResizeObserver from "react-resize-observer";
 
 export const ORIENTATIONS = {
   LANDSCAPE: 'landscape',
@@ -25,7 +25,6 @@ export class VideoViewer extends Component {
       containerRatio: 1,
     };
 
-    this.redBox = undefined;
   }
 
   /** */
@@ -111,18 +110,10 @@ export class VideoViewer extends Component {
     this.setState({ time: 0 });
   }
 
-  setGreenBox = (ref) => {
-    this.greenBox = ref;
-    // console.log('setGreenBox', ref);
-    // console.log('setGreenBox Ratio', ref.width / ref.height);
-  }
 
-  setRedBox = (ref) => {
-    this.redBox = ref;
-    this.redBox.ratio = ref.width / ref.height;
-    console.log('redBox Ratio', this.redBox.ratio);
-    this.setState({ containerRatio: this.redBox.ratio });
-  }
+  setContainerRatio = (ref) => {
+    this.setState({ containerRatio: ref.width / ref.height });
+  };
 
   /* eslint-disable jsx-a11y/media-has-caption */
   /** */
@@ -165,25 +156,16 @@ export class VideoViewer extends Component {
       ? videoResources[len - 1].temporalfragment : [];
 
     let currentOrientation;
-    let aspectRatio;
+    let videoAspectRatio;
 
     if (video) {
       console.log('video', video);
       currentOrientation = video.getWidth() > video.getHeight() ? ORIENTATIONS.LANDSCAPE : ORIENTATIONS.PORTRAIT;
-      aspectRatio =   video.getWidth() / video.getHeight();
+      videoAspectRatio = video.getWidth() / video.getHeight();
     }
 
+    console.log('aspectRatio', videoAspectRatio);
 
-    // let greenRef = createRef();
-    //
-    // if(greenRef.current){
-    //   console.log('greenRef.current', greenRef.current);
-    //   console.log('greenRef.current Ratio', greenRef.current.getWidth() / greenRef.current.getHeight() );
-    // }
-
-    console.log('aspectRatio', aspectRatio);
-
-    // Ho to get the ratio of the parent ?
     const debugPositionning = true;
 
     return (
@@ -213,38 +195,32 @@ export class VideoViewer extends Component {
             backgroundColor: 'black',
           }}
           >
-            <ResizeObserver onResize={this.setRedBox} />
+            <ResizeObserver onResize={this.setContainerRatio} />
             <div style={{
               border: debugPositionning ? '6px solid green' : 'none',
-              width: 'fit-content',
-                height: 'auto',
+              height: 'auto',
               maxWidth: '100%',
+              width: 'fit-content',
             }}
             >
-              <ResizeObserver onResize={this.setGreenBox} />
-
               <video
                 style={{
                   border: debugPositionning ? '6px solid pink' : 'none',
                   // top: 0,
                   position: 'absolute', // 'absolute' or 'block
-                  width: (containerRatio < aspectRatio ? '100%' : 'auto'), // How to get ratio of parent ?
-                  height: (containerRatio < aspectRatio ? 'auto' : '100%'), // How to get ratio of parent ?
+                  width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
+                  height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
                   maxWidth: '100%',
-                  maxHeight: '100%'
-
+                  maxHeight: '100%',
                 }}
                 key={video.id}
                 ref={this.videoRef}
                 {...videoOptions}
               >
-                {' '}
-                {/* pink border */}
                 <source src={video.id} type={video.getFormat()} />
                 {vttContent.map(vttc => (
                   <track key={vttc.id} src={vttc.id} srcLang={vttc.language} />))}
               </video>
-
               <AnnotationsOverlayVideo
                 windowId={windowId}
                 videoRef={this.videoRef}
