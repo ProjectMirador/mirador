@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
 import {
@@ -11,97 +11,66 @@ import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogCon
 
 /**
  */
-export class WorkspaceImport extends Component {
-  /**
-   *
-   * constructor
-   */
-  constructor(props) {
-    super(props);
+export function WorkspaceImport({
+  addError, importConfig, classes = {}, handleClose, open = false, t = k => k,
+}) {
+  const [configImportValue, setConfigImportValue] = useState('');
 
-    this.state = {
-      configImportValue: '',
-    };
-
-    this.handleImportConfig = this.handleImportConfig.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  /**
-   * @private
-   */
-  handleChange(event) {
+  /** */
+  const handleChange = (event) => {
     event.preventDefault();
-    this.setState({
-      configImportValue: event.target.value,
-    });
-  }
+    setConfigImportValue(event.target.value);
+  };
 
-  /**
-   * @private
-   */
-  handleImportConfig(event) {
-    const { handleClose, importConfig } = this.props;
-    const { configImportValue } = this.state;
-
+  /** */
+  const handleImportConfig = (_event) => {
     try {
       const configJSON = JSON.parse(configImportValue);
       importConfig(configJSON);
       handleClose();
     } catch (ex) {
-      const { addError } = this.props;
       addError(ex.toString());
     }
-  }
+  };
 
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      classes, handleClose, open, t,
-    } = this.props;
-
-    return (
-      <WorkspaceDialog
-        aria-labelledby="workspace-import-title"
-        id="workspace-import"
-        onClose={handleClose}
-        open={open}
-        fullWidth
-        maxWidth="sm"
-      >
-        <DialogTitle id="workspace-import-title">
-          {t('importWorkspace')}
-        </DialogTitle>
-        <ScrollIndicatedDialogContent>
-          <TextField
-            className={classes.textField}
-            id="workspace-import-input"
-            multiline
-            onChange={this.handleChange}
-            minRows={15}
-            variant="filled"
-            sx={{
-              '& .MuiInputBase-input': { fontFamily: 'monospace' },
-              width: '100%',
-            }}
-            inputProps={{ autoFocus: 'autofocus' }}
-            helperText={t('importWorkspaceHint')}
-          />
-        </ScrollIndicatedDialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>
-            {t('cancel')}
-          </Button>
-          <Button color="primary" onClick={this.handleImportConfig} variant="contained">
-            {t('import')}
-          </Button>
-        </DialogActions>
-      </WorkspaceDialog>
-    );
-  }
+  return (
+    <WorkspaceDialog
+      aria-labelledby="workspace-import-title"
+      id="workspace-import"
+      onClose={handleClose}
+      open={open}
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle id="workspace-import-title">
+        {t('importWorkspace')}
+      </DialogTitle>
+      <ScrollIndicatedDialogContent>
+        <TextField
+          className={classes.textField}
+          id="workspace-import-input"
+          multiline
+          onChange={handleChange}
+          minRows={15}
+          variant="filled"
+          sx={{
+            '& .MuiInputBase-input': { fontFamily: 'monospace' },
+            width: '100%',
+          }}
+          inputProps={{ autoFocus: 'autofocus' }}
+          helperText={t('importWorkspaceHint')}
+        />
+      </ScrollIndicatedDialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>
+          {t('cancel')}
+        </Button>
+        <Button color="primary" onClick={handleImportConfig} variant="contained">
+          {t('import')}
+        </Button>
+      </DialogActions>
+    </WorkspaceDialog>
+  );
 }
 
 WorkspaceImport.propTypes = {
@@ -111,10 +80,4 @@ WorkspaceImport.propTypes = {
   importConfig: PropTypes.func.isRequired,
   open: PropTypes.bool,
   t: PropTypes.func,
-};
-
-WorkspaceImport.defaultProps = {
-  classes: {},
-  open: false,
-  t: key => key,
 };

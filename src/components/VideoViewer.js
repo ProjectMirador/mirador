@@ -125,35 +125,35 @@ export class VideoViewer extends Component {
     const { containerRatio } = this.state;
 
     const videoResources = flatten(
-      flattenDeep([
-        canvas.getContent().map(annot => {
-          const annotaion = new AnnotationItem(annot.__jsonld);
-          const temporalfragment = annotaion.temporalfragmentSelector;
-          if (temporalfragment && temporalfragment.length > 0) {
-            const start = temporalfragment[0] || 0;
-            const end = (temporalfragment.length > 1) ? temporalfragment[1] : Number.MAX_VALUE;
-            if (start <= currentTime && currentTime < end) {
-              //
-            } else {
-              return {};
+        flattenDeep([
+          canvas.getContent().map(annot => {
+            const annotaion = new AnnotationItem(annot.__jsonld);
+            const temporalfragment = annotaion.temporalfragmentSelector;
+            if (temporalfragment && temporalfragment.length > 0) {
+              const start = temporalfragment[0] || 0;
+              const end = (temporalfragment.length > 1) ? temporalfragment[1] : Number.MAX_VALUE;
+              if (start <= currentTime && currentTime < end) {
+                //
+              } else {
+                return {};
+              }
             }
-          }
-          const body = annot.getBody();
-          return { body, temporalfragment };
-        }),
-      ]).filter((resource) => resource.body && resource.body[0].__jsonld && resource.body[0].__jsonld.type === 'Video'),
+            const body = annot.getBody();
+            return { body, temporalfragment };
+          }),
+        ]).filter((resource) => resource.body && resource.body[0].__jsonld && resource.body[0].__jsonld.type === 'Video'),
     );
 
     const vttContent = annotations
-      .flatMap(annoPage => annoPage.json.items.map(anno => anno.body))
-      .flat().filter((body) => body.format === 'text/vtt');
+        .flatMap(annoPage => annoPage.json.items.map(anno => anno.body))
+        .flat().filter((body) => body.format === 'text/vtt');
 
     // Only one video can be displayed at a time in this implementation.
     const len = videoResources.length;
     const video = len > 0
-      ? videoResources[len - 1].body[0] : null;
+        ? videoResources[len - 1].body[0] : null;
     const videoTargetTemporalfragment = len > 0
-      ? videoResources[len - 1].temporalfragment : [];
+        ? videoResources[len - 1].temporalfragment : [];
 
     let videoAspectRatio;
 
@@ -164,76 +164,76 @@ export class VideoViewer extends Component {
     const debugPositionning = false;
 
     return (
-      <div
-        className="outerContainer"
-        style={{
-          border: debugPositionning ? '6px solid blue' : 'none',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          position: 'relative',
-        }}
-      >
-        {video && (
-        <>
-          <div style={{
-            border: debugPositionning ? '6px solid red' : 'none',
-            position: 'relative',
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: '122px', // TODO Space for navigation controls
-            flexDirection: 'column',
-            backgroundColor: 'black',
-          }}
-          >
-            <ResizeObserver onResize={this.setContainerRatio} />
-            <div style={{
-              border: debugPositionning ? '6px solid green' : 'none',
-              height: 'auto',
-              maxWidth: '100%',
-              width: 'fit-content',
+        <div
+            className="outerContainer"
+            style={{
+              border: debugPositionning ? '6px solid blue' : 'none',
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              position: 'relative',
             }}
-            >
-              <video
-                style={{
-                  border: debugPositionning ? '6px solid pink' : 'none',
-                  // top: 0,
-                  position: 'absolute', // 'absolute' or 'block
-                  width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
-                  height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
-                  maxWidth: '100%',
-                  maxHeight: '100%',
-                }}
-                key={video.id}
-                ref={this.videoRef}
-                {...videoOptions}
-              >
-                <source src={video.id} type={video.getFormat()} />
-                {vttContent.map(vttc => (
-                  <track key={vttc.id} src={vttc.id} srcLang={vttc.language} />))}
-              </video>
-              <AnnotationsOverlayVideo
-                windowId={windowId}
-                videoRef={this.videoRef}
-                videoTarget={videoTargetTemporalfragment}
-                key={`${windowId} ${video.id}`}
-                highlightAllAnnotations
-                style={{
-                  height: '100%',
+        >
+          {video && (
+              <>
+                <div style={{
+                  border: debugPositionning ? '6px solid red' : 'none',
+                  position: 'relative',
                   width: '100%',
-                  objectFit: 'contain',
-                  border: debugPositionning ? '6px solid yellow' : 'none',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: '122px', // TODO Space for navigation controls
+                  flexDirection: 'column',
+                  backgroundColor: 'black',
                 }}
-              />
-            </div>
-          </div>
-          <WindowCanvasNavigationControlsVideo windowId={windowId} />
-        </>
-        )}
-      </div>
+                >
+                  <ResizeObserver onResize={this.setContainerRatio} />
+                  <div style={{
+                    border: debugPositionning ? '6px solid green' : 'none',
+                    height: 'auto',
+                    maxWidth: '100%',
+                    width: 'fit-content',
+                  }}
+                  >
+                    <video
+                        style={{
+                          border: debugPositionning ? '6px solid pink' : 'none',
+                          // top: 0,
+                          position: 'absolute', // 'absolute' or 'block
+                          width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
+                          height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
+                          maxWidth: '100%',
+                          maxHeight: '100%',
+                        }}
+                        key={video.id}
+                        ref={this.videoRef}
+                        {...videoOptions}
+                    >
+                      <source src={video.id} type={video.getFormat()} />
+                      {vttContent.map(vttc => (
+                          <track key={vttc.id} src={vttc.id} srcLang={vttc.language} />))}
+                    </video>
+                    <AnnotationsOverlayVideo
+                        windowId={windowId}
+                        videoRef={this.videoRef}
+                        videoTarget={videoTargetTemporalfragment}
+                        key={`${windowId} ${video.id}`}
+                        highlightAllAnnotations
+                        style={{
+                          height: '100%',
+                          width: '100%',
+                          objectFit: 'contain',
+                          border: debugPositionning ? '6px solid yellow' : 'none',
+                        }}
+                    />
+                  </div>
+                </div>
+                <WindowCanvasNavigationControlsVideo windowId={windowId} />
+              </>
+          )}
+        </div>
     );
   }
 

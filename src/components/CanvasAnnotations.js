@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import {useState, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import Chip from '@mui/material/Chip';
 import MenuList from '@mui/material/MenuList';
@@ -38,178 +38,156 @@ const StyledFooterAnnotationContainer = styled('div')(({ theme }) => ({
 /**
  * CanvasAnnotations ~
 */
-export class CanvasAnnotations extends Component {
-  /**
-   * constructor -
-   */
-  constructor(props) {
-    super(props);
+export function CanvasAnnotations ({
+  annotations = [],
+  index,
+  label,
+  selectedAnnotationId = undefined,
+  t,
+  totalSize,
+  listContainerComponent = 'li',
+  htmlSanitizationRuleSet = 'iiif',
+  hoveredAnnotationIds = [],
+  containerRef = undefined,
+  deselectAnnotation,
+  selectAnnotation,
+  windowId,
+  hoverAnnotation,
+ }) {
 
-    this.handleClick = this.handleClick.bind(this);
-    this.handleAnnotationHover = this.handleAnnotationHover.bind(this);
-    this.handleAnnotationBlur = this.handleAnnotationBlur.bind(this);
-    this.handleAnnotationSearch = this.handleAnnotationSearch.bind(this);
+  const [inputSearch, setInputSearch] = useState('');
 
-    this.state = { };
-  }
-
-  /**
-   * Handle click event of an annotation.
-  */
-  handleClick(event, annotation) {
-    const {
-      deselectAnnotation, selectAnnotation, selectedAnnotationId, windowId,
-    } = this.props;
-
+  const handleClick = useCallback((_event, annotation) => {
     if (selectedAnnotationId === annotation.id) {
       deselectAnnotation(windowId, annotation.id);
     } else {
       selectAnnotation(windowId, annotation.id);
     }
-  }
+  }, [windowId, deselectAnnotation, selectAnnotation, selectedAnnotationId]);
 
-  /** */
-  handleAnnotationHover(annotation) {
-    const { hoverAnnotation, windowId } = this.props;
-
+  const handleAnnotationHover = useCallback((annotation) => {
     hoverAnnotation(windowId, [annotation.id]);
-  }
+  }, [hoverAnnotation, windowId]);
 
-  /** */
-  handleAnnotationBlur() {
-    const { hoverAnnotation, windowId } = this.props;
-
+  const handleAnnotationBlur = useCallback(() => {
     hoverAnnotation(windowId, []);
+  }, [hoverAnnotation, windowId]);
+
+
+  if (annotations.length === 0) return null;
+
+  let annotationsFiltered = annotations;
+
+
+  if (inputSearch !== undefined && inputSearch !== '') {
+    annotationsFiltered = filterAnnotation(annotations, inputSearch);
   }
 
-  /** */
-  handleAnnotationSearch(event) {
-    this.setState({ inputSearch: event.target.value });
-  }
-
-  /**
-   * Returns the rendered component
-  */
-  render() {
-    const {
-      annotations, autoScroll, index, label, selectedAnnotationId, t, totalSize,
-      listContainerComponent, htmlSanitizationRuleSet, hoveredAnnotationIds,
-      containerRef,
-    } = this.props;
-    if (annotations.length === 0) return null;
-
-    let annotationsFiltered = annotations;
-
-    const { inputSearch } = this.state;
-
-    if (inputSearch !== undefined && inputSearch !== '') {
-      annotationsFiltered = filterAnnotation(annotations, inputSearch);
-    }
-
-    const annotationCount = annotations.length;
+  // TODO Count filtered or all ?
+  const annotationCount = annotations.length;
 
     return (
       <>
         <Typography sx={{ paddingLeft: 2, paddingRight: 1, paddingTop: 2 }} variant="overline">
           {t('annotationCanvasLabel', { context: `${index + 1}/${totalSize}`, label })}
         </Typography>
-
         <StyledAnnotationContainer>
           <TextField
-            label={t('searchPlaceholderAnnotation')}
-            onChange={this.handleAnnotationSearch}
-            sx={{
-              width: '100%',
-            }}
-            InputProps={{
-              endAdornment: (
-                <div style={{
-                  position: 'absolute',
-                  right: 0,
-                }}
-                >
-                  <MiradorMenuButton aria-label={t('searchAnnotationTooltip')} type="submit">
-                    <SearchIcon />
-                  </MiradorMenuButton>
-                </div>
-              ),
-            }}
+              label={t('searchPlaceholderAnnotation')}
+              onChange={this.handleAnnotationSearch}
+              sx={{
+                width: '100%',
+              }}
+              InputProps={{
+                endAdornment: (
+                    <div style={{
+                      position: 'absolute',
+                      right: 0,
+                    }}
+                    >
+                      <MiradorMenuButton aria-label={t('searchAnnotationTooltip')} type="submit">
+                        <SearchIcon />
+                      </MiradorMenuButton>
+                    </div>
+                ),
+              }}
           />
         </StyledAnnotationContainer>
         <MenuList autoFocusItem variant="selectedMenu">
-          {
-            annotationsFiltered.map(annotation => (
-              <ScrollTo
-                containerRef={containerRef}
-                key={`${annotation.id}-scroll`}
-                offsetTop={96} // offset for the height of the form above
-                scrollTo={selectedAnnotationId === annotation.id}
+          {annotationsFiltered.map((annotation) => (
+            <ScrollTo
+              containerRef={containerRef}
+              key={`${annotation.id}-scroll`}
+              offsetTop={96} // offset for the height of the form above
+              scrollTo={selectedAnnotationId === annotation.id}
+              selected={selectedAnnotationId === annotation.id}
+            >
+              <MenuItem
+                component={listContainerComponent}
+                variant="multiline"
+                divider
+                sx={{
+                  '&:hover,&:focus': {
+                    backgroundColor: 'action.hover',
+                  },
+                  backgroundColor: hoveredAnnotationIds.includes(annotation.id) ? 'action.hover' : '',
+                }}
+               /* ref={containerRef}*/ // TODO useful ?
+                key={annotation.id}
+                annotationid={annotation.id}
                 selected={selectedAnnotationId === annotation.id}
+                onClick={(e) => handleClick(e, annotation)}
+                onFocus={() => handleAnnotationHover(annotation)}
+                onBlur={handleAnnotationBlur}
+                onMouseEnter={() => handleAnnotationHover(annotation)}
+                onMouseLeave={handleAnnotationBlur}
               >
-                <MenuItem
-                  component={listContainerComponent}
-                  variant="multiline"
-                  divider
-                  sx={{
-                    '&:hover,&:focus': {
-                      backgroundColor: 'action.hover',
-                    },
-                    backgroundColor: hoveredAnnotationIds.includes(annotation.id) ? 'action.hover' : '',
-                  }}
-                  ref={containerRef}
-                  key={annotation.id}
-                  annotationid={annotation.id}
-                  selected={selectedAnnotationId === annotation.id}
-                  onClick={e => this.handleClick(e, annotation)}
-                  onFocus={() => this.handleAnnotationHover(annotation)}
-                  onBlur={this.handleAnnotationBlur}
-                  onMouseEnter={() => this.handleAnnotationHover(annotation)}
-                  onMouseLeave={this.handleAnnotationBlur}
+                <ListItemText
+                  primaryTypographyProps={{ variant: 'body2' }}
                 >
-                  <ListItemText primaryTypographyProps={{ variant: 'body2' }}>
                     <SanitizedHtml
-                      ruleSet={htmlSanitizationRuleSet}
-                      htmlString={annotation.content}
+                        ruleSet={htmlSanitizationRuleSet}
+                        htmlString={annotation.content}
                     />
                     <div>
-                      {
-                        annotation.tags.map(tag => (
-                          <Chip
-                            size="small"
-                            variant="outlined"
-                            label={tag}
-                            id={tag}
-                            sx={theme => ({
-                              backgroundColor: theme.palette.background.paper,
-                              marginRight: theme.spacing(0.5),
-                              marginTop: theme.spacing(1),
-                            })}
-                            key={tag.toString()}
-                          />
-                        ))
-                      }
-                      <AnnotationManifestsAccordion
-                        annotation={annotation}
-                        t={t}
-                      />
+                        {
+                            annotation.tags.map(tag => (
+                                <Chip
+                                    size="small"
+                                    variant="outlined"
+                                    label={tag}
+                                    id={tag}
+                                    sx={theme => ({
+                                        backgroundColor: theme.palette.background.paper,
+                                        marginRight: theme.spacing(0.5),
+                                        marginTop: theme.spacing(1),
+                                    })}
+                                    key={tag.toString()}
+                                />
+                            ))
+                        }
+                        <AnnotationManifestsAccordion
+                            annotation={annotation}
+                            t={t}
+                        />
                     </div>
-                  </ListItemText>
-                </MenuItem>
-              </ScrollTo>
-            ))
-          }
-          {annotationsFiltered.length === 0
-            && (
-              <MenuItem>
-                <Typography>
-                  {t('noAnnotationFound')}
-                </Typography>
+                </ListItemText>
               </MenuItem>
+            </ScrollTo>
+          ))
+          }
+           {annotationsFiltered.length === 0
+            && (
+                <MenuItem>
+                    <Typography>
+                        {t('noAnnotationFound')}
+                    </Typography>
+                </MenuItem>
             )}
         </MenuList>
-        <StyledFooterAnnotationContainer>
+      <StyledFooterAnnotationContainer>
           <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
-        </StyledFooterAnnotationContainer>
+      </StyledFooterAnnotationContainer>
       </>
     );
   }

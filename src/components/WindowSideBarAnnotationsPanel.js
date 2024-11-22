@@ -10,8 +10,11 @@ import ns from '../config/css-ns';
 /**
  * WindowSideBarAnnotationsPanel ~
 */
-function WindowSideBarAnnotationsPanel({
-  annotationCount, canvasIds, t, windowId, id,
+export function WindowSideBarAnnotationsPanel({
+  annotationCount,
+  canvasIds = [],
+  t = k => k,
+  windowId, id,
 }) {
   /** */
   const containerRef = useRef();
@@ -42,7 +45,6 @@ function WindowSideBarAnnotationsPanel({
           index={index}
           totalSize={canvasIds.length}
           windowId={windowId}
-
         />
       ))}
     </CompanionWindow>
@@ -56,10 +58,3 @@ WindowSideBarAnnotationsPanel.propTypes = {
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };
-
-WindowSideBarAnnotationsPanel.defaultProps = {
-  canvasIds: [],
-  t: key => key,
-};
-
-export default WindowSideBarAnnotationsPanel;

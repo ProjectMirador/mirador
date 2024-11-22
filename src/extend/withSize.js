@@ -2,16 +2,20 @@
  * when its dependencies went out of date and is very much inspired by its code.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import {
+  forwardRef, useEffect, useRef, useState,
+} from 'react';
 
 /** */
 export function withSize() {
   return function WrapComponent(WrappedComponent) {
     /** */
-    const SizeAwareComponent = (props) => {
+    const SizeAwareComponent = forwardRef((props, ref) => {
       const [size, setSize] = useState({ height: undefined, width: undefined });
-      const elementRef = useRef(null);
+      const defaultElementRef = useRef(null);
       const observerRef = useRef(null);
+
+      const elementRef = ref || defaultElementRef;
 
       useEffect(() => {
         /** */
@@ -33,14 +37,12 @@ export function withSize() {
             observerRef.current.disconnect();
           }
         };
-      }, []);
+      }, [elementRef]);
 
       return (
-        <div ref={elementRef}>
-          <WrappedComponent size={size} {...props} />
-        </div>
+        <WrappedComponent ref={elementRef} size={size} {...props} />
       );
-    };
+    });
 
     return SizeAwareComponent;
   };

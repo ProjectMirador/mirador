@@ -113,7 +113,7 @@ export function updateWindow(id, payload) {
  * @param  {String} windowId
  * @memberof ActionCreators
  */
-export function maximizeWindow(windowId, layout) {
+export function maximizeWindow(windowId) {
   return { type: ActionTypes.MAXIMIZE_WINDOW, windowId };
 }
 

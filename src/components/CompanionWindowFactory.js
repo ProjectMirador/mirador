@@ -1,5 +1,6 @@
-import { createElement, Component } from 'react';
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { ErrorBoundary } from 'react-error-boundary';
 import CompanionWindowRegistry from '../lib/CompanionWindowRegistry';
 import CompanionWindow from '../containers/CompanionWindow';
 import ErrorContent from '../containers/ErrorContent';
@@ -7,63 +8,28 @@ import ErrorContent from '../containers/ErrorContent';
 /**
  * Render a companion window using the appropriate component for the content
  */
-export class CompanionWindowFactory extends Component {
-  /** */
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+export function CompanionWindowFactory({
+  content = null, id, t = key => key, windowId,
+}) {
+  const ErroredCompanionWindow = useCallback(({ error }) => (
+    <CompanionWindow
+      title={t('error')}
+      windowId={windowId}
+      id={id}
+    >
+      <ErrorContent error={error} windowId={windowId} companionWindowId={id} />
+    </CompanionWindow>
+  ), [windowId, t, id]);
 
-  /** */
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
-    return { error, hasError: true };
-  }
+  const DynamicCompanionWindowType = CompanionWindowRegistry[content];
 
-  /**
-   * Clear the error state if the internal content changes; this is a rare
-   * case, only when we reuse an existing companionWindow instance for
-   * the left-anchored companion area (anti-pattern?)
-   */
-  componentDidUpdate(prevProps) {
-    const { content } = this.props;
+  if (!DynamicCompanionWindowType) return null;
 
-    // Typical usage (don't forget to compare props):
-    if (content !== prevProps.content) {
-      this.setState({ // eslint-disable-line react/no-did-update-set-state
-        error: null, hasError: false,
-      });
-    }
-  }
-
-  /** */
-  render() {
-    const {
-      content,
-      windowId,
-      id,
-      t,
-    } = this.props;
-    const { error, hasError } = this.state;
-
-    if (hasError) {
-      return (
-        <CompanionWindow
-          title={t('error')}
-          windowId={windowId}
-          id={id}
-        >
-          <ErrorContent error={error} windowId={windowId} companionWindowId={id} />
-        </CompanionWindow>
-      );
-    }
-
-    const type = CompanionWindowRegistry[content];
-
-    if (!type) return null;
-
-    return createElement(type, { id, windowId });
-  }
+  return (
+    <ErrorBoundary fallbackComponent={ErroredCompanionWindow}>
+      <DynamicCompanionWindowType id={id} windowId={windowId} />
+    </ErrorBoundary>
+  );
 }
 
 CompanionWindowFactory.propTypes = {
@@ -71,9 +37,4 @@ CompanionWindowFactory.propTypes = {
   id: PropTypes.string.isRequired,
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
-};
-
-CompanionWindowFactory.defaultProps = {
-  content: null,
-  t: key => key,
 };

@@ -66,6 +66,7 @@
     "react-dnd-html5-backend": "^16.0.0",
     "react-dnd-multi-backend": "^8.0.0",
     "react-dnd-touch-backend": "^16.0.0",
+    "react-error-boundary": "^4.1.2",
     "react-full-screen": "^1.1.1",
     "react-i18next": "^13.0.0 || ^14.0.0 || ^15.0.0",
     "react-image": "^4.0.1",

@@ -1,4 +1,4 @@
-import { createRef, Component } from 'react';
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
@@ -8,76 +8,59 @@ import SearchPanelControls from '../containers/SearchPanelControls';
 import SearchResults from '../containers/SearchResults';
 
 /** */
-export class SearchPanel extends Component {
-  /** */
-  constructor(props) {
-    super(props);
+export function SearchPanel({
+  fetchSearch = undefined, id, query = '', removeSearch, searchService, suggestedSearches = [], t = k => k, windowId,
+}) {
+  const containerRef = useRef(null);
 
-    this.containerRef = createRef();
-  }
-
-  /** */
-  render() {
-    const {
-      fetchSearch,
-      windowId,
-      id,
-      query,
-      removeSearch,
-      searchService,
-      suggestedSearches,
-      t,
-    } = this.props;
-
-    return (
-      <CompanionWindow
-        ariaLabel={t('searchTitle')}
-        title={(
-          <>
-            {t('searchTitle')}
-            {
-              query && query !== '' && (
-                <Chip
-                  role="button"
-                  sx={{ marginLeft: 1 }}
-                  color="secondary"
-                  label={t('clearSearch')}
-                  onClick={removeSearch}
-                  onDelete={removeSearch}
-                  size="small"
-                  tabIndex={0}
-                  variant="outlined"
-                />
-              )
-            }
-          </>
-        )}
-        windowId={windowId}
-        id={id}
-        titleControls={<SearchPanelControls companionWindowId={id} windowId={windowId} />}
-        ref={this.containerRef}
-      >
-        <SearchResults
-          containerRef={this.containerRef}
-          companionWindowId={id}
-          windowId={windowId}
-        />
-        {
-          fetchSearch && suggestedSearches && query === '' && suggestedSearches.map(search => (
-            <Typography component="p" key={search} variant="body1" sx={{ margin: 2 }}>
-              <Button
-                variant="inlineText"
+  return (
+    <CompanionWindow
+      ariaLabel={t('searchTitle')}
+      title={(
+        <>
+          {t('searchTitle')}
+          {
+            query && query !== '' && (
+              <Chip
+                role="button"
+                sx={{ marginLeft: 1 }}
                 color="secondary"
-                onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}
-              >
-                {t('suggestSearch', { query: search })}
-              </Button>
-            </Typography>
-          ))
-        }
-      </CompanionWindow>
-    );
-  }
+                label={t('clearSearch')}
+                onClick={removeSearch}
+                onDelete={removeSearch}
+                size="small"
+                tabIndex={0}
+                variant="outlined"
+              />
+            )
+          }
+        </>
+      )}
+      windowId={windowId}
+      id={id}
+      titleControls={<SearchPanelControls companionWindowId={id} windowId={windowId} />}
+      ref={containerRef}
+    >
+      <SearchResults
+        containerRef={containerRef}
+        companionWindowId={id}
+        windowId={windowId}
+      />
+      {
+        fetchSearch && suggestedSearches && query === '' && suggestedSearches.map(search => (
+          <Typography component="p" key={search} variant="body1" sx={{ margin: 2 }}>
+            <Button
+              variant="inlineText"
+              color="secondary"
+              onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}
+            >
+              {t('suggestSearch', { query: search })}
+            </Button>
+          </Typography>
+        ))
+      }
+    </CompanionWindow>
+  );
 }
 
 SearchPanel.propTypes = {
@@ -91,11 +74,4 @@ SearchPanel.propTypes = {
   suggestedSearches: PropTypes.arrayOf(PropTypes.string),
   t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
-};
-
-SearchPanel.defaultProps = {
-  fetchSearch: undefined,
-  query: '',
-  suggestedSearches: [],
-  t: key => key,
 };

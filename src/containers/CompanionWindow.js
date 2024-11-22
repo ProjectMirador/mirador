@@ -45,8 +45,9 @@ const mapDispatchToProps = (dispatch, { windowId, id }) => ({
 });
 
 const enhance = compose(
-  withRef(),
   withSize(),
+  withRef(),
+  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
   withPlugins('CompanionWindow'),
 );

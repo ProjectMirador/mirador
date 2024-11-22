@@ -1,5 +1,5 @@
 import {
-  Component, useMemo, useEffect, useState,
+  useMemo, useEffect, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
@@ -129,65 +129,56 @@ LazyLoadedImage.propTypes = {
   }),
   thumbnailsConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
+/** */
+function getUseableLabel(resource, index) {
+  return (resource
+    && resource.getLabel
+    && resource.getLabel().length > 0)
+    ? resource.getLabel().getValue()
+    : String(index + 1);
+}
+
+const defaultPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
 
 /**
  * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
  */
-export class IIIFThumbnail extends Component {
-  /** */
-  static getUseableLabel(resource, index) {
-    return (resource
-      && resource.getLabel
-      && resource.getLabel().length > 0)
-      ? resource.getLabel().getValue()
-      : String(index + 1);
-  }
+export function IIIFThumbnail({
+  border = false,
+  children = null,
+  imagePlaceholder = defaultPlaceholder,
+  label = undefined,
+  labelled = false,
+  maxHeight = null,
+  maxWidth = null,
+  resource,
+  style = {},
+  thumbnail = null,
+  thumbnailsConfig = {},
+}) {
+  const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
 
-  /** */
-  label() {
-    const { label, resource } = this.props;
+  return (
+    <Root ownerState={ownerState}>
+      <LazyLoadedImage
+        placeholder={imagePlaceholder}
+        thumbnail={thumbnail}
+        resource={resource}
+        maxHeight={maxHeight}
+        maxWidth={maxWidth}
+        thumbnailsConfig={thumbnailsConfig}
+        style={style}
+        border={border}
+      />
 
-    return label || IIIFThumbnail.getUseableLabel(resource);
-  }
-
-  /**
-   */
-  render() {
-    const {
-      border,
-      children,
-      imagePlaceholder,
-      labelled,
-      maxHeight,
-      maxWidth,
-      resource,
-      style,
-      thumbnail,
-      thumbnailsConfig,
-    } = this.props;
-
-    return (
-      <Root ownerState={this.props}>
-        <LazyLoadedImage
-          placeholder={imagePlaceholder}
-          thumbnail={thumbnail}
-          resource={resource}
-          maxHeight={maxHeight}
-          maxWidth={maxWidth}
-          thumbnailsConfig={thumbnailsConfig}
-          style={style}
-          border={border}
-        />
-
-        { labelled && (
-          <Label ownerState={this.props}>
-            {this.label()}
-          </Label>
-        )}
-        {children}
-      </Root>
-    );
-  }
+      { labelled && (
+        <Label ownerState={ownerState}>
+          {label || getUseableLabel(resource)}
+        </Label>
+      )}
+      {children}
+    </Root>
+  );
 }
 
 IIIFThumbnail.propTypes = {
@@ -207,19 +198,4 @@ IIIFThumbnail.propTypes = {
   }),
   thumbnailsConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   variant: PropTypes.oneOf(['inside', 'outside']), // eslint-disable-line react/no-unused-prop-types
-};
-
-IIIFThumbnail.defaultProps = {
-  border: false,
-  children: null,
-  // Transparent "gray"
-  imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==',
-  label: undefined,
-  labelled: false,
-  maxHeight: null,
-  maxWidth: null,
-  style: {},
-  thumbnail: null,
-  thumbnailsConfig: {},
-  variant: null,
 };

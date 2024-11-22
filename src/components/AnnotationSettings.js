@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import VisibilityIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffSharp';
@@ -11,29 +10,29 @@ import { VideosReferences } from '../plugins/VideosReferences';
  * AnnotationSettings is a component to handle various annotation
  * display settings in the Annotation companion window
 */
-export class AnnotationSettings extends Component {
-  /**
-   * Returns the rendered component
-  */
-  render() {
-    const {
-      windowId, autoScroll, autoScrollDisabled,
-      displayAll, displayAllDisabled, t, toggleAnnotationAutoScroll, toggleAnnotationDisplay,
-    } = this.props;
+export function AnnotationSettings({
+  autoScroll,
+  autoScrollDisabled,
+  displayAll,
+  displayAllDisabled,
+  t,
+  toggleAnnotationDisplay,
+  toggleAnnotationAutoScroll,
+  windowId,
+}) {
+  const mediaIsVideo = typeof VideosReferences.get(windowId) !== 'undefined';
 
-    const mediaIsVideo = typeof VideosReferences.get(windowId) !== 'undefined';
-
-    return (
-      <>
-        <MiradorMenuButton
-          aria-label={t(displayAll ? 'displayNoAnnotations' : 'highlightAllAnnotations')}
-          onClick={toggleAnnotationDisplay}
-          disabled={displayAllDisabled}
-          size="small"
-        >
-          { displayAll ? <VisibilityIcon /> : <VisibilityOffIcon /> }
-        </MiradorMenuButton>
-        { mediaIsVideo && (
+  return (
+    <>
+      <MiradorMenuButton
+        aria-label={t(displayAll ? 'displayNoAnnotations' : 'highlightAllAnnotations')}
+        onClick={toggleAnnotationDisplay}
+        disabled={displayAllDisabled}
+        size="small"
+      >
+        { displayAll ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+      </MiradorMenuButton>
+      { mediaIsVideo && (
         <MiradorMenuButton
           aria-label={autoScroll ? 'Disable auto scroll' : 'Enable auto scroll'}
           onClick={toggleAnnotationAutoScroll}
@@ -42,10 +41,9 @@ export class AnnotationSettings extends Component {
         >
           { autoScroll ? <SyncIcon /> : <SyncDisabledIcon /> }
         </MiradorMenuButton>
-        )}
-      </>
-    );
-  }
+      )}
+    </>
+  );
 }
 
 AnnotationSettings.defaultProps = {

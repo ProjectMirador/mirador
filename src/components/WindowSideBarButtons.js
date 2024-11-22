@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
@@ -76,126 +75,98 @@ TabButton.propTypes = {
 /**
  *
  */
-export class WindowSideBarButtons extends Component {
+export function WindowSideBarButtons({
+  addCompanionWindow,
+  hasAnnotations = false,
+  hasAnyAnnotations = false,
+  hasAnyLayers = false,
+  hasCurrentLayers = false,
+  hasSearchResults = false,
+  hasSearchService = false,
+  panels = [],
+  PluginComponents = null,
+  sideBarPanel = 'closed',
+  t = k => k,
+}) {
   /** */
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-  }
+  const handleChange = (event, value) => { addCompanionWindow(value); };
 
-  /**
-   * @param {object} event the change event
-   * @param {string} value the tab's value
-  */
-  handleChange(event, value) {
-    const { addCompanionWindow } = this.props;
-
-    addCompanionWindow(value);
-  }
-
-  /**
-   * render
-   *
-   * @return {type}  description
-   */
-  render() {
-    const {
-      hasAnnotations,
-      hasAnyAnnotations,
-      hasAnyLayers,
-      hasCurrentLayers,
-      hasSearchResults,
-      hasSearchService,
-      panels,
-      PluginComponents,
-      sideBarPanel,
-      t,
-    } = this.props;
-
-    return (
-      <Root
-        value={sideBarPanel === 'closed' ? false : sideBarPanel}
-        onChange={this.handleChange}
-        variant="fullWidth"
-        indicatorColor="primary"
-        textColor="primary"
-        orientation="vertical"
-        aria-orientation="vertical"
-        aria-label={t('sidebarPanelsNavigation')}
-      >
-        { panels.info && (
+  return (
+    <Root
+      value={sideBarPanel === 'closed' ? false : sideBarPanel}
+      onChange={handleChange}
+      variant="fullWidth"
+      indicatorColor="primary"
+      textColor="primary"
+      orientation="vertical"
+      aria-orientation="vertical"
+      aria-label={t('sidebarPanelsNavigation')}
+    >
+      { panels.info && (
+        <TabButton
+          value="info"
+          t={t}
+          icon={(<InfoIcon />)}
+        />
+      )}
+      { panels.attribution && (
+        <TabButton
+          value="attribution"
+          t={t}
+          icon={(<AttributionIcon />)}
+        />
+      )}
+      { panels.canvas && (
+        <TabButton
+          value="canvas"
+          t={t}
+          icon={(<CanvasIndexIcon />)}
+        />
+      )}
+      {panels.annotations && (hasAnnotations || hasAnyAnnotations) && (
+        <TabButton
+          value="annotations"
+          t={t}
+          icon={(
+            <Badge overlap="rectangular" color="notification" invisible={!hasAnnotations} variant="dot">
+              <AnnotationIcon />
+            </Badge>
+          )}
+        />
+      )}
+      {panels.search && hasSearchService && (
+        <TabButton
+          value="search"
+          t={t}
+          icon={(
+            <Badge overlap="rectangular" color="notification" invisible={!hasSearchResults} variant="dot">
+              <SearchIcon />
+            </Badge>
+          )}
+        />
+      )}
+      { panels.layers && hasAnyLayers && (
+        <TabButton
+          value="layers"
+          t={t}
+          icon={(
+            <Badge overlap="rectangular" color="notification" invisible={!hasCurrentLayers} variant="dot">
+              <LayersIcon />
+            </Badge>
+          )}
+        />
+      )}
+      { PluginComponents
+        && PluginComponents.map(PluginComponent => (
           <TabButton
-            value="info"
-            onKeyUp={this.handleKeyUp}
             t={t}
-            icon={(<InfoIcon />)}
+            key={PluginComponent.value}
+            value={PluginComponent.value}
+            icon={<PluginComponent />}
           />
-        )}
-        { panels.attribution && (
-          <TabButton
-            value="attribution"
-            onKeyUp={this.handleKeyUp}
-            t={t}
-            icon={(<AttributionIcon />)}
-          />
-        )}
-        { panels.canvas && (
-          <TabButton
-            value="canvas"
-            onKeyUp={this.handleKeyUp}
-            t={t}
-            icon={(<CanvasIndexIcon />)}
-          />
-        )}
-        {panels.annotations && (hasAnnotations || hasAnyAnnotations) && (
-          <TabButton
-            value="annotations"
-            onKeyUp={this.handleKeyUp}
-            t={t}
-            icon={(
-              <Badge overlap="rectangular" color="notification" invisible={!hasAnnotations} variant="dot">
-                <AnnotationIcon />
-              </Badge>
-            )}
-          />
-        )}
-        {panels.search && hasSearchService && (
-          <TabButton
-            value="search"
-            onKeyUp={this.handleKeyUp}
-            t={t}
-            icon={(
-              <Badge overlap="rectangular" color="notification" invisible={!hasSearchResults} variant="dot">
-                <SearchIcon />
-              </Badge>
-            )}
-          />
-        )}
-        { panels.layers && hasAnyLayers && (
-          <TabButton
-            value="layers"
-            onKeyUp={this.handleKeyUp}
-            t={t}
-            icon={(
-              <Badge overlap="rectangular" color="notification" invisible={!hasCurrentLayers} variant="dot">
-                <LayersIcon />
-              </Badge>
-            )}
-          />
-        )}
-        { PluginComponents
-          && PluginComponents.map(PluginComponent => (
-            <TabButton
-              onKeyUp={this.handleKeyUp}
-              t={t}
-              key={PluginComponent.value}
-              value={PluginComponent.value}
-              icon={<PluginComponent />}
-            />
-          ))}
-      </Root>
-    );
-  }
+        ))}
+    </Root>
+  );
 }
 
 WindowSideBarButtons.propTypes = {
@@ -210,17 +181,4 @@ WindowSideBarButtons.propTypes = {
   PluginComponents: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
-};
-
-WindowSideBarButtons.defaultProps = {
-  hasAnnotations: false,
-  hasAnyAnnotations: false,
-  hasAnyLayers: false,
-  hasCurrentLayers: false,
-  hasSearchResults: false,
-  hasSearchService: false,
-  panels: [],
-  PluginComponents: null,
-  sideBarPanel: 'closed',
-  t: key => key,
 };
