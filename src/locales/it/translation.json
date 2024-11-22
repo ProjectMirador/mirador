@@ -91,7 +91,7 @@
     "mosaicDescription": "Muovi e ridimensiona le finestre, tenendole all'interno dell'area visibile",
     "moveCompanionWindowToBottom": "Sposta in fondo",
     "moveCompanionWindowToRight": "Sposta a destra",
-    "nextCanvas": "Prossimo oggetto",
+    "nextCanvas": "Oggetto Successivo",
     "noItemSelected": "Nessun oggetto selezionato",
     "numItems": "{{number}} oggetti",
     "numItems_plural": "{{number}} oggetti",
@@ -107,7 +107,7 @@
     "pagination": "{{current}} di {{total}}",
     "position": "Posizione",
     "previewWindowTitle": "{{title}}",
-    "previousCanvas": "Previous item",
+    "previousCanvas": "Oggetto precedente",
     "related": "Contenuti collegati",
     "resource": "Risorsa",
     "retry": "Riprova",
@@ -158,6 +158,6 @@
     "workspaceSelectionTitle": "Seleziona il tipo di workspace",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
-    "zoomReset": "Reset zoom"
+    "zoomReset": "Reimposta zoom"
   }
 }

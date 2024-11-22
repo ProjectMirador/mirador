@@ -220,6 +220,8 @@ export default {
     ar: 'العربية',
     de: 'Deutsch',
     en: 'English',
+    et: 'Eesti',
+    fa: 'فارسی',
     fr: 'Français',
     ja: '日本語',
     kr: '한국어',
@@ -233,7 +235,8 @@ export default {
     'zh-TW': '中文(繁體)',
     it: "Italiano",
     sr: 'Српски',
-    sv: 'Svenska'
+    sv: 'Svenska',
+    bg: 'Български'
   },
   annotations: {
     htmlSanitizationRuleSet: 'iiif', // See src/lib/htmlRules.js for acceptable values
