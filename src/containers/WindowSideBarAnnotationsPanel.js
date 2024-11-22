@@ -6,7 +6,9 @@ import {
   getVisibleCanvasIds,
   getAnnotationResourcesByMotivation,
 } from '../state/selectors';
-import WindowSideBarAnnotationsPanel from '../components/WindowSideBarAnnotationsPanel';
+import {
+  WindowSideBarAnnotationsPanel
+} from '../components/WindowSideBarAnnotationsPanel';
 
 /**
  * mapStateToProps - to hook up connect

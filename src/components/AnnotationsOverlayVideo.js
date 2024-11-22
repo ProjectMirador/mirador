@@ -11,7 +11,6 @@ import CanvasOverlayVideo from '../lib/CanvasOverlayVideo';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
 import { VideosReferences } from '../plugins/VideosReferences';
-import {ORIENTATIONS} from './VideoViewer';
 
 /** AnnotationsOverlayVideo - based on AnnotationsOverlay */
 export class AnnotationsOverlayVideo extends Component {
