@@ -22,9 +22,9 @@ export class VideoViewer extends Component {
     this.state = {
       start: 0,
       time: 0,
+      containerRatio: 1,
     };
 
-    this.greenBox = undefined;
     this.redBox = undefined;
   }
 
@@ -121,6 +121,7 @@ export class VideoViewer extends Component {
     this.redBox = ref;
     this.redBox.ratio = ref.width / ref.height;
     console.log('redBox Ratio', this.redBox.ratio);
+    this.setState({ containerRatio: this.redBox.ratio });
   }
 
   /* eslint-disable jsx-a11y/media-has-caption */
@@ -129,6 +130,8 @@ export class VideoViewer extends Component {
     const {
       annotations, canvas, currentTime, videoOptions, windowId,
     } = this.props;
+
+    const { containerRatio } = this.state;
 
     const videoResources = flatten(
       flattenDeep([
@@ -225,8 +228,8 @@ export class VideoViewer extends Component {
                   border: debugPositionning ? '6px solid pink' : 'none',
                   // top: 0,
                   position: 'absolute', // 'absolute' or 'block
-                  width: (this.redBox && (this.redBox.ratio < aspectRatio) ? '100%' : 'auto'), // How to get ratio of parent ?
-                  height: (this.redBox && (this.redBox.ratio < aspectRatio) ? 'auto' : '100%'), // How to get ratio of parent ?
+                  width: (containerRatio < aspectRatio ? '100%' : 'auto'), // How to get ratio of parent ?
+                  height: (containerRatio < aspectRatio ? 'auto' : '100%'), // How to get ratio of parent ?
                   maxWidth: '100%',
                   maxHeight: '100%'
 
