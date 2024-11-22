@@ -58,7 +58,7 @@ export default class OpenSeadragonCanvasOverlay {
     }
 
     this.viewportOrigin = new OpenSeadragon.Point(0, 0);
-    const boundsRect = this.viewer.viewport.getBoundsNoRotate(true);
+    const boundsRect = this.viewer.viewport.getBoundsNoRotateWithMargins(true);
     this.viewportOrigin.x = boundsRect.x;
     this.viewportOrigin.y = boundsRect.y * this.imgAspectRatio;
 
