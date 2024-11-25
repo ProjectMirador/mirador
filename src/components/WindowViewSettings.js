@@ -67,11 +67,12 @@ export class WindowViewSettings extends Component {
         none of the click handlers work? */
     const menuItem = ({ value, Icon }) => (
       <ViewOption
-        aria-selected={windowViewType === value}
+        aria-checked={windowViewType === value}
         autoFocus={windowViewType === value}
         key={value}
         onClick={() => { this.handleChange(value); handleClose(); }}
         selected={windowViewType === value}
+        role="menuitemradio"
       >
         <FormControlLabel
           value={value}
