@@ -110,9 +110,11 @@ export class SearchPanelControls extends Component {
       companionWindowId, fetchSearch, searchService, windowId,
     } = this.props;
     const { search } = this.state;
-    event && event.preventDefault();
     if (!search) return;
-    fetchSearch(windowId, companionWindowId, `${searchService.id}?${new URLSearchParams({ q: search })}`, search);
+    if (event) {
+      event.preventDefault();
+      fetchSearch(windowId, companionWindowId, `${searchService.id}?${new URLSearchParams({ q: search })}`, search);
+    }
   }
 
   /** */
