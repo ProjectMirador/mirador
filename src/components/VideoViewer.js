@@ -6,6 +6,7 @@ import ResizeObserver from 'react-resize-observer';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
 import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavigationControlsVideo';
+import ReactPlayer from '@celluloid/react-player';
 
 export const ORIENTATIONS = {
   LANDSCAPE: 'landscape',
@@ -18,6 +19,7 @@ export class VideoViewer extends Component {
   constructor(props) {
     super(props);
     this.videoRef = createRef();
+    this.playerRef = createRef();
 
     this.state = {
       containerRatio: 1,
@@ -32,8 +34,9 @@ export class VideoViewer extends Component {
     const { setPaused, setHasTextTrack } = this.props;
     setPaused(true);
 
-    const video = this.videoRef.current;
-    if (video && video.textTracks.length > 0) setHasTextTrack(true);
+    // TODO Implement text track support
+   /* const video = this.videoRef.current;
+    if (video && video.textTracks.length > 0) setHasTextTrack(true);*/
   }
 
   /** */
@@ -64,18 +67,19 @@ export class VideoViewer extends Component {
         }
       }
     }
-    const video = this.videoRef.current;
-    if (video) {
-      if (video.muted !== muted) {
-        video.muted = muted;
-      }
-      if (video.textTracks && video.textTracks.length > 0) {
-        const newMode = textTrackDisabled ? 'disabled' : 'showing';
-        if (video.textTracks[0].mode !== newMode) {
-          video.textTracks[0].mode = newMode;
-        }
-      }
-    }
+    // const video = this.videoRef.current;
+    // if (video) {
+    //   if (video.muted !== muted) {
+    //     video.muted = muted;
+    //   }
+    //   // TODO Implement text track support
+    //  /* if (video.textTracks && video.textTracks.length > 0) {
+    //     const newMode = textTrackDisabled ? 'disabled' : 'showing';
+    //     if (video.textTracks[0].mode !== newMode) {
+    //       video.textTracks[0].mode = newMode;
+    //     }
+    //   }*/
+    // }
   }
 
   /** */
@@ -119,7 +123,7 @@ export class VideoViewer extends Component {
   /** */
   render() {
     const {
-      annotations, canvas, currentTime, videoOptions, windowId,
+      annotations, canvas, currentTime, videoOptions, windowId, paused,
     } = this.props;
 
     const { containerRatio } = this.state;
@@ -144,9 +148,9 @@ export class VideoViewer extends Component {
         ]).filter((resource) => resource.body && resource.body[0].__jsonld && resource.body[0].__jsonld.type === 'Video'),
     );
 
-    const vttContent = annotations
-        .flatMap(annoPage => annoPage.json.items.map(anno => anno.body))
-        .flat().filter((body) => body.format === 'text/vtt');
+    // const vttContent = annotations
+    //     .flatMap(annoPage => annoPage.json.items.map(anno => anno.body))
+    //     .flat().filter((body) => body.format === 'text/vtt');
 
     // Only one video can be displayed at a time in this implementation.
     const len = videoResources.length;
@@ -197,7 +201,7 @@ export class VideoViewer extends Component {
                     width: 'fit-content',
                   }}
                   >
-                    <video
+                    {/*<video
                         style={{
                           border: debugPositionning ? '6px solid pink' : 'none',
                           // top: 0,
@@ -214,10 +218,33 @@ export class VideoViewer extends Component {
                       <source src={video.id} type={video.getFormat()} />
                       {vttContent.map(vttc => (
                           <track key={vttc.id} src={vttc.id} srcLang={vttc.language} />))}
-                    </video>
+                    </video>*/}
+                    <ReactPlayer
+                        width={(containerRatio < videoAspectRatio ? '100%' : 'auto')}
+                        height={(containerRatio < videoAspectRatio ? 'auto' : '100%')}
+                        ref={this.playerRef}
+                        url={video.id}
+                        controls={false} // Hide default controls
+                        pip={false}
+                        playbackRate={1}
+                        playing={!paused}
+                        config={{
+                          peertube: {
+                            controls: 0,
+                            mode: 'p2p-media-loader',
+                          },
+                        }}
+                        style={{
+                          border: debugPositionning ? '6px solid pink' : 'none',
+                          position: 'absolute', // 'absolute' or 'block
+                          maxWidth: '100%',
+                          maxHeight: '100%',
+                        }}
+                    />
+                    { this.playerRef.current && (
                     <AnnotationsOverlayVideo
                         windowId={windowId}
-                        videoRef={this.videoRef}
+                        videoRef={this.playerRef.current.getInternalPlayer()}
                         videoTarget={videoTargetTemporalfragment}
                         key={`${windowId} ${video.id}`}
                         highlightAllAnnotations
@@ -228,6 +255,7 @@ export class VideoViewer extends Component {
                           border: debugPositionning ? '6px solid yellow' : 'none',
                         }}
                     />
+                    )}
                   </div>
                 </div>
                 <WindowCanvasNavigationControlsVideo windowId={windowId} />

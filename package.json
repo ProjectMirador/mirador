@@ -38,6 +38,7 @@
   "dependencies": {
     "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@celluloid/react-player": "^2.14.0",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
