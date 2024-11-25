@@ -1,117 +1,57 @@
-import { cloneElement, createRef, Component } from 'react';
+import { cloneElement, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import isEmpty from 'lodash/isEmpty';
+import ns from '../config/css-ns';
+
+/**  */
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+}
 
 /**
  * ScrollTo ~
 */
-export class ScrollTo extends Component {
-  /** */
-  constructor(props) {
-    super(props);
+export function ScrollTo({
+  children, containerRef, offsetTop = 0, scrollTo, nodeId, ...otherProps
+}) {
+  const scrollToRef = useRef();
+  const prevScrollTo = usePrevious(scrollTo);
 
-    this.scrollToRef = createRef();
-  }
+  useEffect(() => {
+    if (!scrollTo || scrollTo === prevScrollTo) return;
 
-  /** */
-  componentDidMount() {
-    const { scrollTo } = this.props;
-    if (!scrollTo) return;
+    const elementToScrollTo = scrollToRef?.current;
+    if (!elementToScrollTo) return;
 
-    this.scrollToElement();
-  }
+    const scrollableContainer = containerRef?.current?.querySelector(`.${ns('scrollto-scrollable')}`);
+    if (!scrollableContainer) return;
 
-  /**
-   * If the scrollTo prop is true (and has been updated) scroll to the selected element
-  */
-  componentDidUpdate(prevProps) {
-    const { scrollTo } = this.props;
-    if (scrollTo && (prevProps.scrollTo !== scrollTo)) {
-      this.scrollToElement();
-    }
-  }
+    const containerBoundingRect = containerRef?.current?.getBoundingClientRect() || {};
+    const scrollToBoundingRect = elementToScrollTo?.getBoundingClientRect() || {};
+    const elementIsVisible = (() => {
+      if (scrollToBoundingRect.top < (containerBoundingRect.top + offsetTop)) {
+        return false;
+      } if (scrollToBoundingRect.bottom > containerBoundingRect.bottom) {
+        return false;
+      }
 
-  /**
-   * Return the getBoundingClientRect() of the containerRef prop
-  */
-  containerBoundingRect() {
-    const { containerRef } = this.props;
+      return true;
+    })();
 
-    if (!containerRef || !containerRef.current) return {};
+    if (elementIsVisible) return;
 
-    return containerRef.current.getBoundingClientRect();
-  }
+    const scrollBy = elementToScrollTo.offsetTop - (containerBoundingRect.height / 2) + offsetTop;
 
-  /**
-   * Return the getBoundingClientRect() of the scrollTo ref prop
-  */
-  scrollToBoundingRect() {
-    if (!this.elementToScrollTo()) return {};
-    return this.elementToScrollTo().getBoundingClientRect();
-  }
+    scrollableContainer.scrollTo(0, scrollBy);
+  }, [containerRef, scrollToRef, scrollTo, prevScrollTo, offsetTop]);
 
-  /**
-   * Return the current scrollToRef
-  */
-  elementToScrollTo() {
-    if (!this.scrollToRef || !this.scrollToRef.current) return null;
+  if (!scrollTo && isEmpty(otherProps)) return children;
 
-    return this.scrollToRef.current;
-  }
-
-  /**
-   * The container provided in the containersRef dom structure in which scrolling
-   * should happen.
-  */
-  scrollableContainer() {
-    const { containerRef } = this.props;
-
-    if (!containerRef || !containerRef.current) return null;
-    return containerRef.current.getElementsByClassName('mirador-scrollto-scrollable')[0];
-  }
-
-  /**
-   * Determine if the scrollTo element is visible within the given containerRef prop.
-   * Currently only supports vertical elements but could be extended to support horizontal
-  */
-  elementIsVisible() {
-    const { offsetTop } = this.props;
-
-    if (this.scrollToBoundingRect().top < (this.containerBoundingRect().top + offsetTop)) {
-      return false;
-    } if (this.scrollToBoundingRect().bottom > this.containerBoundingRect().bottom) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Scroll to the element if it is set to be scolled and is not visible
-  */
-  scrollToElement() {
-    const { offsetTop, scrollTo } = this.props;
-    if (!scrollTo) return;
-    if (!this.elementToScrollTo()) return;
-    if (this.elementIsVisible()) return;
-    if (!this.scrollableContainer()) return;
-    const scrollBy = this.elementToScrollTo().offsetTop
-      - (this.containerBoundingRect().height / 2) + offsetTop;
-    this.scrollableContainer().scrollTo(0, scrollBy);
-  }
-
-  /**
-   * Returns the rendered component
-  */
-  render() {
-    const {
-      children, containerRef, offsetTop, scrollTo, nodeId, ...otherProps
-    } = this.props;
-
-    if (!scrollTo && isEmpty(otherProps)) return children;
-
-    return cloneElement(children, { ref: this.scrollToRef, ...otherProps });
-  }
+  return cloneElement(children, { ref: scrollToRef, ...otherProps });
 }
 
 ScrollTo.propTypes = {
@@ -123,8 +63,4 @@ ScrollTo.propTypes = {
   nodeId: PropTypes.string.isRequired,
   offsetTop: PropTypes.number,
   scrollTo: PropTypes.bool.isRequired,
-};
-
-ScrollTo.defaultProps = {
-  offsetTop: 0,
 };
