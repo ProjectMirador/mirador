@@ -165,7 +165,7 @@ export class VideoViewer extends Component {
       videoAspectRatio = video.getWidth() / video.getHeight();
     }
 
-    const debugPositionning = false;
+    const debugPositionning = true;
 
     return (
         <div
@@ -198,7 +198,8 @@ export class VideoViewer extends Component {
                     border: debugPositionning ? '6px solid green' : 'none',
                     height: 'auto',
                     maxWidth: '100%',
-                    width: 'fit-content',
+                    width: '100%',
+                    maxHeight: '100%',
                   }}
                   >
                     {/*<video
@@ -220,8 +221,10 @@ export class VideoViewer extends Component {
                           <track key={vttc.id} src={vttc.id} srcLang={vttc.language} />))}
                     </video>*/}
                     <ReactPlayer
-                        width={(containerRatio < videoAspectRatio ? '100%' : 'auto')}
-                        height={(containerRatio < videoAspectRatio ? 'auto' : '100%')}
+                        // width={(containerRatio < videoAspectRatio ? '100%' : 'auto')}
+                        // height={(containerRatio < videoAspectRatio ? 'auto' : '100%')}width={(containerRatio < videoAspectRatio ? '100%' : 'auto')}
+                        width={'100%'}
+                        height={'100%'}
                         ref={this.playerRef}
                         url={video.id}
                         controls={false} // Hide default controls
@@ -236,9 +239,11 @@ export class VideoViewer extends Component {
                         }}
                         style={{
                           border: debugPositionning ? '6px solid pink' : 'none',
-                          position: 'absolute', // 'absolute' or 'block
+                          // position: 'absolute', // 'absolute' or 'block
                           maxWidth: '100%',
                           maxHeight: '100%',
+                          width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
+                          height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
                         }}
                     />
                     { this.playerRef.current && (

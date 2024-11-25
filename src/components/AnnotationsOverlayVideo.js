@@ -122,31 +122,31 @@ export class AnnotationsOverlayVideo extends Component {
     this.initializeViewer();
 
     let prevVideoPausedState;
-    if (this.video) {
-      prevVideoPausedState = this.video.paused;
-      if (this.video.paused && !paused) {
-        const promise = this.video.play();
-        if (promise !== undefined) {
-          promise.catch((e) => {});
-        }
-      } else if (!this.video.paused && paused) {
-        this.video.pause();
-      }
-      if (seekToTime !== prevProps.seekToTime) {
-        if (seekToTime !== undefined) {
-          this.seekTo(seekToTime, true);
-          return;
-        }
-      }
-      if (this.video.seeking) {
-        return;
-      }
-      if (currentTime !== prevProps.currentTime) {
-        if (paused && this.video.paused) {
-          this.video.currentTime = currentTime - this.temporalOffset;
-        }
-      }
-    }
+    // if (this.video) {
+    //   prevVideoPausedState = this.video.paused;
+    //   if (this.video.paused && !paused) {
+    //     const promise = this.video.play();
+    //     if (promise !== undefined) {
+    //       promise.catch((e) => {});
+    //     }
+    //   } else if (!this.video.paused && paused) {
+    //     this.video.pause();
+    //   }
+    //   if (seekToTime !== prevProps.seekToTime) {
+    //     if (seekToTime !== undefined) {
+    //       this.seekTo(seekToTime, true);
+    //       return;
+    //     }
+    //   }
+    //   if (this.video.seeking) {
+    //     return;
+    //   }
+    //   if (currentTime !== prevProps.currentTime) {
+    //     if (paused && this.video.paused) {
+    //       this.video.currentTime = currentTime - this.temporalOffset;
+    //     }
+    //   }
+    // }
 
     const annotationsUpdated = !AnnotationsOverlayVideo.annotationsMatch(annotations, prevProps.annotations);
     // eslint-disable-next-line max-len
@@ -176,10 +176,10 @@ export class AnnotationsOverlayVideo extends Component {
             if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
             if (!AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) {
               const temporalfragment = resource.temporalfragmentSelector;
-              if (temporalfragment && temporalfragment.length > 0 && this.video) {
-                const seekto = temporalfragment[0] || 0;
-                this.seekTo(seekto, !prevVideoPausedState);
-              }
+              // if (temporalfragment && temporalfragment.length > 0 && this.video) {
+              //   const seekto = temporalfragment[0] || 0;
+              //   this.seekTo(seekto, !prevVideoPausedState);
+              // }
             }
           });
         });
@@ -187,38 +187,38 @@ export class AnnotationsOverlayVideo extends Component {
     }
 
     // auto scroll
-    if (this.video && !this.video.paused) {
-      let minElapsedTimeAfterStart = Number.MAX_VALUE;
-      let candidateAnnotation;
-      annotations.forEach((annotation) => {
-        annotation.resources.forEach((resource) => {
-          if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-          if (AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) {
-            const temporalfragment = resource.temporalfragmentSelector;
-            if (temporalfragment && temporalfragment.length > 0 && this.video) {
-              const seekto = temporalfragment[0] || 0;
-              const elapsedTimeAfterStart = currentTime - seekto;
-              if (elapsedTimeAfterStart >= 0 && elapsedTimeAfterStart < minElapsedTimeAfterStart) {
-                minElapsedTimeAfterStart = elapsedTimeAfterStart;
-                candidateAnnotation = resource.resource;
-              }
-            }
-          }
-        });
-      });
-      if (candidateAnnotation) {
-        if (candidateAnnotation.id !== prevProps.selectedAnnotationId) {
-          const {
-            selectAnnotation,
-            windowId,
-          } = this.props;
-          if (selectedAnnotationId !== candidateAnnotation.id) {
-            selectAnnotation(windowId, candidateAnnotation.id);
-          }
-          this.currentTimeNearestAnnotationId = candidateAnnotation.id;
-        }
-      }
-    }
+    // if (this.video && !this.video.paused) {
+    //   let minElapsedTimeAfterStart = Number.MAX_VALUE;
+    //   let candidateAnnotation;
+    //   annotations.forEach((annotation) => {
+    //     annotation.resources.forEach((resource) => {
+    //       if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
+    //       if (AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) {
+    //         const temporalfragment = resource.temporalfragmentSelector;
+    //         if (temporalfragment && temporalfragment.length > 0 && this.video) {
+    //           const seekto = temporalfragment[0] || 0;
+    //           const elapsedTimeAfterStart = currentTime - seekto;
+    //           if (elapsedTimeAfterStart >= 0 && elapsedTimeAfterStart < minElapsedTimeAfterStart) {
+    //             minElapsedTimeAfterStart = elapsedTimeAfterStart;
+    //             candidateAnnotation = resource.resource;
+    //           }
+    //         }
+    //       }
+    //     });
+    //   });
+    //   if (candidateAnnotation) {
+    //     if (candidateAnnotation.id !== prevProps.selectedAnnotationId) {
+    //       const {
+    //         selectAnnotation,
+    //         windowId,
+    //       } = this.props;
+    //       if (selectedAnnotationId !== candidateAnnotation.id) {
+    //         selectAnnotation(windowId, candidateAnnotation.id);
+    //       }
+    //       this.currentTimeNearestAnnotationId = candidateAnnotation.id;
+    //     }
+    //   }
+    // }
 
     const redrawAnnotations = drawAnnotations !== prevProps.drawAnnotations
       || drawSearchAnnotations !== prevProps.drawSearchAnnotations
@@ -243,11 +243,11 @@ export class AnnotationsOverlayVideo extends Component {
       this.resizeObserver.disconnect();
     }
     if (this.video) {
-      this.video.removeEventListener('timeupdate', this.onVideoTimeUpdate);
-      this.video.removeEventListener('loadedmetadata', this.onVideoLoadedMetadata);
-      this.video.removeEventListener('waiting', this.onVideoWaiting);
-      this.video.removeEventListener('playing', this.onVideoPlaying);
-      this.video.removeEventListener('seeked', this.onVideoPlaying);
+      // this.video.removeEventListener('timeupdate', this.onVideoTimeUpdate);
+      // this.video.removeEventListener('loadedmetadata', this.onVideoLoadedMetadata);
+      // this.video.removeEventListener('waiting', this.onVideoWaiting);
+      // this.video.removeEventListener('playing', this.onVideoPlaying);
+      // this.video.removeEventListener('seeked', this.onVideoPlaying);
     }
     if (this.canvasOverlay && this.canvasOverlay.canvas) {
       this.canvasOverlay.canvas.removeEventListener('click', this.onCanvasClick);
@@ -263,24 +263,24 @@ export class AnnotationsOverlayVideo extends Component {
 
   /** */
   onVideoLoadedMetadata(event) {
-    if (this.video) {
-      const { currentTime } = this.props;
-      const { temporalOffset } = this;
-      this.video.currentTime = currentTime - temporalOffset;
-    }
+    // if (this.video) {
+    //   const { currentTime } = this.props;
+    //   const { temporalOffset } = this;
+    //   this.video.currentTime = currentTime - temporalOffset;
+    // }
   }
 
   /** */
   onVideoPlaying(event) {
-    if (this.video && this.video.currentTime !== 0) {
-      const { currentTime, seekToTime } = this.props;
-      const currentTimeToVideoTime = currentTime - this.temporalOffset;
-      const diff = Math.abs(currentTimeToVideoTime - this.video.currentTime);
-      const acceptableDiff = 1; // sec.
-      if (diff > acceptableDiff && seekToTime === undefined) {
-        this.seekTo(this.video.currentTime + this.temporalOffset, true);
-      }
-    }
+    // if (this.video && this.video.currentTime !== 0) {
+    //   const { currentTime, seekToTime } = this.props;
+    //   const currentTimeToVideoTime = currentTime - this.temporalOffset;
+    //   const diff = Math.abs(currentTimeToVideoTime - this.video.currentTime);
+    //   const acceptableDiff = 1; // sec.
+    //   if (diff > acceptableDiff && seekToTime === undefined) {
+    //     this.seekTo(this.video.currentTime + this.temporalOffset, true);
+    //   }
+    // }
     this.setState({ showProgress: false });
   }
 
@@ -442,12 +442,12 @@ export class AnnotationsOverlayVideo extends Component {
     const { setCurrentTime, setPaused } = this.props;
     setPaused(true);
     setCurrentTime(seekTo);
-    this.video.addEventListener('seeked', function seeked(event) {
-      event.currentTarget.removeEventListener(event.type, seeked);
-      if (resume) {
-        setPaused(false);
-      }
-    });
+    // this.video.addEventListener('seeked', function seeked(event) {
+    //   event.currentTarget.removeEventListener(event.type, seeked);
+    //   if (resume) {
+    //     setPaused(false);
+    //   }
+    // });
   }
 
   /** @private */
@@ -469,13 +469,13 @@ export class AnnotationsOverlayVideo extends Component {
     if (this.canvasOverlay) return;
 
     const { videoRef } = this.props;
-    if (!videoRef.current) return;
-    this.video = videoRef.current;
-    this.video.addEventListener('timeupdate', this.onVideoTimeUpdate);
+    if (!videoRef) return;
+    this.video = videoRef;
+  /*  this.video.addEventListener('timeupdate', this.onVideoTimeUpdate);
     this.video.addEventListener('loadedmetadata', this.onVideoLoadedMetadata);
     this.video.addEventListener('waiting', this.onVideoWaiting);
     this.video.addEventListener('playing', this.onVideoPlaying);
-    this.video.addEventListener('seeked', this.onVideoPlaying);
+    this.video.addEventListener('seeked', this.onVideoPlaying);*/
 
     const { canvas, canvasWorld } = this.props;
     const canvasSize = canvasWorld.canvasToWorldCoordinates(canvas.id);
