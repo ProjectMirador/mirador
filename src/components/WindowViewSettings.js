@@ -16,8 +16,17 @@ const ViewOption = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option'
     ...(selected && {
       borderBottomColor: theme.palette.secondary.main,
     }),
-    backgroundColor: 'transparent !important',
+    '&.Mui-selected': {
+      backgroundColor: 'transparent !important',
+    },
+    '&.Mui-selected.Mui-focusVisible': {
+      backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
+    },
+    '&:focused': {
+      backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
+    },
     color: selected ? theme.palette.secondary.main : undefined,
+    display: 'inline-block',
   },
 }));
 
