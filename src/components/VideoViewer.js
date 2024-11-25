@@ -160,9 +160,16 @@ export class VideoViewer extends Component {
         ? videoResources[len - 1].temporalfragment : [];
 
     let videoAspectRatio;
+    let externalVideoIn169 = false;
+
 
     if (video) {
       videoAspectRatio = video.getWidth() / video.getHeight();
+      if(video.id.includes('youtube')) {
+        videoAspectRatio = 16 / 9;
+        console.log('videoAspectRatio Tube', videoAspectRatio);
+        externalVideoIn169 = true;
+      }
     }
 
     const debugPositionning = true;
@@ -196,9 +203,11 @@ export class VideoViewer extends Component {
                   <ResizeObserver onResize={this.setContainerRatio} />
                   <div style={{
                     border: debugPositionning ? '6px solid green' : 'none',
-                    height: 'auto',
+                    // height: 'auto',
+                    width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
+                    height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
                     maxWidth: '100%',
-                    width: '100%',
+                    // width: '100%',
                     maxHeight: '100%',
                   }}
                   >
@@ -224,7 +233,7 @@ export class VideoViewer extends Component {
                         // width={(containerRatio < videoAspectRatio ? '100%' : 'auto')}
                         // height={(containerRatio < videoAspectRatio ? 'auto' : '100%')}width={(containerRatio < videoAspectRatio ? '100%' : 'auto')}
                         width={'100%'}
-                        height={'100%'}
+                        height={ externalVideoIn169 ? 'auto' : '100%'}
                         ref={this.playerRef}
                         url={video.id}
                         controls={false} // Hide default controls
@@ -236,14 +245,19 @@ export class VideoViewer extends Component {
                             controls: 0,
                             mode: 'p2p-media-loader',
                           },
+                          youtube: {
+                            controls: 0,
+                            modestbranding: 0,
+                          }
                         }}
                         style={{
                           border: debugPositionning ? '6px solid pink' : 'none',
-                          // position: 'absolute', // 'absolute' or 'block
+                          position: 'absolute', // 'absolute' or 'block
                           maxWidth: '100%',
                           maxHeight: '100%',
                           width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
                           height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
+                          aspectRatio: `${videoAspectRatio}`,
                         }}
                     />
                     { this.playerRef.current && (
