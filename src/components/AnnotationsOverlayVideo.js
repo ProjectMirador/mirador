@@ -471,11 +471,11 @@ export class AnnotationsOverlayVideo extends Component {
     const { videoRef } = this.props;
     if (!videoRef) return;
     this.video = videoRef;
-  /*  this.video.addEventListener('timeupdate', this.onVideoTimeUpdate);
+   this.video.addEventListener('timeupdate', this.onVideoTimeUpdate);
     this.video.addEventListener('loadedmetadata', this.onVideoLoadedMetadata);
     this.video.addEventListener('waiting', this.onVideoWaiting);
     this.video.addEventListener('playing', this.onVideoPlaying);
-    this.video.addEventListener('seeked', this.onVideoPlaying);*/
+    this.video.addEventListener('seeked', this.onVideoPlaying);
 
     const { canvas, canvasWorld } = this.props;
     const canvasSize = canvasWorld.canvasToWorldCoordinates(canvas.id);
