@@ -172,6 +172,22 @@ export class VideoViewer extends Component {
       }
     }
 
+    let videoStyle = {
+      height: ( videoAspectRatio < containerRatio ? '100%' : 'auto'),
+      width: (videoAspectRatio < containerRatio ? 'auto' : '100%'),
+    };
+
+    let playerStyle = {
+      height: ( videoAspectRatio < containerRatio ? '100%' : 'auto'),
+      width: (videoAspectRatio < containerRatio ? 'auto' : '100%'),
+        aspectRatio: `${videoAspectRatio}`,
+    }
+
+    let containerStyle = {
+        height: '100%',
+        width: '100%',
+    }
+
     const debugPositionning = true;
 
     return (
@@ -186,6 +202,24 @@ export class VideoViewer extends Component {
               position: 'relative',
             }}
         >
+          <span
+            style={{
+              position: 'absolute',
+              bottom: 60,
+              left: 0,
+              zIndex: 1000,
+              color: 'dark',
+            }}
+          >Video Ratio {videoAspectRatio} / isExternalVideo {externalVideoIn169.toString()}</span>
+          <span
+              style={{
+                position: 'absolute',
+                bottom: 40,
+                left: 0,
+                zIndex: 1000,
+                color: 'dark',
+              }}
+          >Container Ratio {containerRatio}</span>
           {video && (
               <>
                 <div style={{
@@ -203,11 +237,10 @@ export class VideoViewer extends Component {
                   <ResizeObserver onResize={this.setContainerRatio} />
                   <div style={{
                     border: debugPositionning ? '6px solid green' : 'none',
-                    // height: 'auto',
-                    width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
-                    height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
+                    width: playerStyle.width,
+                    height: playerStyle.height,
+                    aspectRatio: playerStyle.aspectRatio,
                     maxWidth: '100%',
-                    // width: '100%',
                     maxHeight: '100%',
                   }}
                   >
@@ -232,8 +265,8 @@ export class VideoViewer extends Component {
                     <ReactPlayer
                         // width={(containerRatio < videoAspectRatio ? '100%' : 'auto')}
                         // height={(containerRatio < videoAspectRatio ? 'auto' : '100%')}width={(containerRatio < videoAspectRatio ? '100%' : 'auto')}
-                        width={'100%'}
-                        height={ externalVideoIn169 ? 'auto' : '100%'}
+                        width={videoStyle.width}
+                        height={videoStyle.height}
                         ref={this.playerRef}
                         url={video.id}
                         controls={false} // Hide default controls
