@@ -3,10 +3,10 @@ import flattenDeep from 'lodash/flattenDeep';
 import React, { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import ResizeObserver from 'react-resize-observer';
+import ReactPlayer from '@celluloid/react-player';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
 import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavigationControlsVideo';
-import ReactPlayer from '@celluloid/react-player';
 
 export const ORIENTATIONS = {
   LANDSCAPE: 'landscape',
@@ -26,7 +26,6 @@ export class VideoViewer extends Component {
       start: 0,
       time: 0,
     };
-
   }
 
   /** */
@@ -35,8 +34,8 @@ export class VideoViewer extends Component {
     setPaused(true);
 
     // TODO Implement text track support
-   /* const video = this.videoRef.current;
-    if (video && video.textTracks.length > 0) setHasTextTrack(true);*/
+    /* const video = this.videoRef.current;
+         if (video && video.textTracks.length > 0) setHasTextTrack(true); */
   }
 
   /** */
@@ -114,11 +113,9 @@ export class VideoViewer extends Component {
     this.setState({ time: 0 });
   }
 
-
   setContainerRatio = (ref) => {
     this.setState({ containerRatio: ref.width / ref.height });
   };
-
 
   /* eslint-disable jsx-a11y/media-has-caption */
   /** */
@@ -130,23 +127,23 @@ export class VideoViewer extends Component {
     const { containerRatio } = this.state;
 
     const videoResources = flatten(
-        flattenDeep([
-          canvas.getContent().map(annot => {
-            const annotaion = new AnnotationItem(annot.__jsonld);
-            const temporalfragment = annotaion.temporalfragmentSelector;
-            if (temporalfragment && temporalfragment.length > 0) {
-              const start = temporalfragment[0] || 0;
-              const end = (temporalfragment.length > 1) ? temporalfragment[1] : Number.MAX_VALUE;
-              if (start <= currentTime && currentTime < end) {
-                //
-              } else {
-                return {};
-              }
+      flattenDeep([
+        canvas.getContent().map(annot => {
+          const annotaion = new AnnotationItem(annot.__jsonld);
+          const temporalfragment = annotaion.temporalfragmentSelector;
+          if (temporalfragment && temporalfragment.length > 0) {
+            const start = temporalfragment[0] || 0;
+            const end = (temporalfragment.length > 1) ? temporalfragment[1] : Number.MAX_VALUE;
+            if (start <= currentTime && currentTime < end) {
+              //
+            } else {
+              return {};
             }
-            const body = annot.getBody();
-            return { body, temporalfragment };
-          }),
-        ]).filter((resource) => resource.body && resource.body[0].__jsonld && resource.body[0].__jsonld.type === 'Video'),
+          }
+          const body = annot.getBody();
+          return { body, temporalfragment };
+        }),
+      ]).filter((resource) => resource.body && resource.body[0].__jsonld && resource.body[0].__jsonld.type === 'Video'),
     );
 
     // const vttContent = annotations
@@ -156,167 +153,120 @@ export class VideoViewer extends Component {
     // Only one video can be displayed at a time in this implementation.
     const len = videoResources.length;
     const video = len > 0
-        ? videoResources[len - 1].body[0] : null;
+      ? videoResources[len - 1].body[0] : null;
     const videoTargetTemporalfragment = len > 0
-        ? videoResources[len - 1].temporalfragment : [];
+      ? videoResources[len - 1].temporalfragment : [];
 
     let videoAspectRatio;
     let externalVideoIn169 = false;
 
-
     if (video) {
       videoAspectRatio = video.getWidth() / video.getHeight();
-      if(video.id.includes('youtube')) {
-
+      if (video.id.includes('youtube')) {
         console.log('videoAspectRatio Tube', videoAspectRatio);
         externalVideoIn169 = true;
       }
     }
 
-    let videoStyle = {
-      height: ( videoAspectRatio < containerRatio ? '100%' : 'auto'),
+    const videoStyle = {
+      height: (videoAspectRatio < containerRatio ? '100%' : 'auto'),
       width: (videoAspectRatio < containerRatio ? 'auto' : '100%'),
     };
 
-    let playerStyle = {
-      height: ( videoAspectRatio < containerRatio ? '100%' : 'auto'),
+    const playerStyle = {
+      height: (videoAspectRatio < containerRatio ? '100%' : 'auto'),
       width: (videoAspectRatio < containerRatio ? 'auto' : '100%'),
-        aspectRatio: `${videoAspectRatio}`,
-    }
-
-    let containerStyle = {
-        height: '100%',
-        width: '100%',
-    }
+      aspectRatio: `${videoAspectRatio}`,
+    };
 
     const debugPositionning = true;
 
-
-
     return (
-        <div
-            className="outerContainer"
-            style={{
-              border: debugPositionning ? '6px solid blue' : 'none',
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              position: 'relative',
+      <div
+        className="outerContainer"
+        style={{
+          border: debugPositionning ? '6px solid blue' : 'none',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          position: 'relative',
+        }}
+      >
+        {video && (
+        <>
+          <div style={{
+            border: debugPositionning ? '6px solid red' : 'none',
+            position: 'relative',
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: '122px', // TODO Space for navigation controls
+            flexDirection: 'column',
+            backgroundColor: 'black',
+          }}
+          >
+            <ResizeObserver onResize={this.setContainerRatio} />
+            <div style={{
+              border: debugPositionning ? '6px solid green' : 'none',
+              width: playerStyle.width,
+              height: playerStyle.height,
+              aspectRatio: playerStyle.aspectRatio,
+              maxWidth: '100%',
+              maxHeight: '100%',
             }}
-        >
-          <span
-            style={{
-              position: 'absolute',
-              bottom: 60,
-              left: 0,
-              zIndex: 1000,
-              color: 'dark',
-            }}
-          >Video Ratio {videoAspectRatio} / isExternalVideo {externalVideoIn169.toString()}</span>
-          <span
-              style={{
-                position: 'absolute',
-                bottom: 40,
-                left: 0,
-                zIndex: 1000,
-                color: 'dark',
-              }}
-          >Container Ratio {containerRatio}</span>
-          {video && (
-              <>
-                <div style={{
-                  border: debugPositionning ? '6px solid red' : 'none',
-                  position: 'relative',
-                  width: '100%',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginBottom: '122px', // TODO Space for navigation controls
-                  flexDirection: 'column',
-                  backgroundColor: 'black',
+            >
+              <ReactPlayer
+                width={videoStyle.width}
+                height={videoStyle.height}
+                ref={this.playerRef}
+                url={video.id}
+                controls={false} // Hide default controls
+                pip={false}
+                playbackRate={1}
+                playing={!paused}
+                config={{
+                  peertube: {
+                    controls: 0,
+                    mode: 'p2p-media-loader',
+                  },
+                  youtube: {
+                    controls: 0,
+                    modestbranding: 0,
+                  },
                 }}
-                >
-                  <ResizeObserver onResize={this.setContainerRatio} />
-                  <div style={{
-                    border: debugPositionning ? '6px solid green' : 'none',
-                    width: playerStyle.width,
-                    height: playerStyle.height,
-                    aspectRatio: playerStyle.aspectRatio,
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                  }}
-                  >
-                    {/*<video
-                        style={{
-                          border: debugPositionning ? '6px solid pink' : 'none',
-                          // top: 0,
-                          position: 'absolute', // 'absolute' or 'block
-                          width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
-                          height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
-                          maxWidth: '100%',
-                          maxHeight: '100%',
-                        }}
-                        key={video.id}
-                        ref={this.videoRef}
-                        {...videoOptions}
-                    >
-                      <source src={video.id} type={video.getFormat()} />
-                      {vttContent.map(vttc => (
-                          <track key={vttc.id} src={vttc.id} srcLang={vttc.language} />))}
-                    </video>*/}
-                    <ReactPlayer
-                        // width={(containerRatio < videoAspectRatio ? '100%' : 'auto')}
-                        // height={(containerRatio < videoAspectRatio ? 'auto' : '100%')}width={(containerRatio < videoAspectRatio ? '100%' : 'auto')}
-                        width={videoStyle.width}
-                        height={videoStyle.height}
-                        ref={this.playerRef}
-                        url={video.id}
-                        controls={false} // Hide default controls
-                        pip={false}
-                        playbackRate={1}
-                        playing={!paused}
-                        config={{
-                          peertube: {
-                            controls: 0,
-                            mode: 'p2p-media-loader',
-                          },
-                          youtube: {
-                            controls: 0,
-                            modestbranding: 0,
-                          }
-                        }}
-                        style={{
-                          border: debugPositionning ? '6px solid pink' : 'none',
-                          position: 'absolute', // 'absolute' or 'block
-                          maxWidth: '100%',
-                          maxHeight: '100%',
-                          width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
-                          height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
-                          aspectRatio: `${videoAspectRatio}`,
-                        }}
-                    />
-                    { this.playerRef.current && (
-                    <AnnotationsOverlayVideo
-                        windowId={windowId}
-                        videoRef={this.playerRef.current.getInternalPlayer()}
-                        videoTarget={videoTargetTemporalfragment}
-                        key={`${windowId} ${video.id}`}
-                        highlightAllAnnotations
-                        style={{
-                          height: '100%',
-                          width: '100%',
-                          objectFit: 'contain',
-                          border: debugPositionning ? '6px solid yellow' : 'none',
-                        }}
-                    />
-                    )}
-                  </div>
-                </div>
-                <WindowCanvasNavigationControlsVideo windowId={windowId} />
-              </>
-          )}
-        </div>
+                style={{
+                  border: debugPositionning ? '6px solid pink' : 'none',
+                  position: 'absolute', // 'absolute' or 'block
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                  width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
+                  height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
+                  aspectRatio: `${videoAspectRatio}`,
+                }}
+              />
+              {this.playerRef.current && (
+              <AnnotationsOverlayVideo
+                windowId={windowId}
+                videoRef={this.playerRef.current.getInternalPlayer()}
+                videoTarget={videoTargetTemporalfragment}
+                key={`${windowId} ${video.id}`}
+                highlightAllAnnotations
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  objectFit: 'contain',
+                  border: debugPositionning ? '6px solid yellow' : 'none',
+                }}
+              />
+              )}
+            </div>
+          </div>
+          <WindowCanvasNavigationControlsVideo windowId={windowId} />
+        </>
+        )}
+      </div>
     );
   }
 
