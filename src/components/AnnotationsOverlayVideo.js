@@ -638,6 +638,7 @@ export class AnnotationsOverlayVideo extends Component {
             top: 0,
             border: debugPositionning ? '6px solid yellow' : 'none',
             width: '100%',
+            height: '100%',
           }}
         />
         <ResizeObserver onResize={this.onCanvasResize} />

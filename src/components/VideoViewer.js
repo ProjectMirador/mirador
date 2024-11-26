@@ -119,6 +119,7 @@ export class VideoViewer extends Component {
     this.setState({ containerRatio: ref.width / ref.height });
   };
 
+
   /* eslint-disable jsx-a11y/media-has-caption */
   /** */
   render() {
@@ -166,7 +167,7 @@ export class VideoViewer extends Component {
     if (video) {
       videoAspectRatio = video.getWidth() / video.getHeight();
       if(video.id.includes('youtube')) {
-        videoAspectRatio = 16 / 9;
+
         console.log('videoAspectRatio Tube', videoAspectRatio);
         externalVideoIn169 = true;
       }
@@ -189,6 +190,8 @@ export class VideoViewer extends Component {
     }
 
     const debugPositionning = true;
+
+
 
     return (
         <div
