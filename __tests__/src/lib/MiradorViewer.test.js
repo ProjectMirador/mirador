@@ -126,7 +126,7 @@ describe('MiradorViewer', () => {
       const plugins = [{
         component: DummyPlugin,
         mode: 'wrap',
-        target: 'WorkspaceArea',
+        target: 'AppProviders',
       }];
 
       render(instance.render({ plugins }));
