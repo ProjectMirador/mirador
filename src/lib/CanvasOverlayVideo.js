@@ -83,8 +83,22 @@ export default class CanvasOverlayVideo {
   resize() {
     if (!this.video || !this.canvas) { return; }
 
+    // YouTube video
+    if (this.video.options && this.video.options.host.includes('youtube')) {
+      if (this.containerWidth !== this.video.width) {
+        this.containerWidth = this.video.getIframe().clientWidth;
+        this.canvas.setAttribute('width', this.containerWidth);
+      }
+      if (this.containerHeight !== this.video.height) {
+        this.containerHeight = this.video.getIframe().clientHeight;
+        this.canvas.setAttribute('height', this.containerHeight);
+      }
+      return;
+    }
+
+    // File video
     if (this.containerWidth !== this.video.clientWidth) {
-      this.containerWidth = this.video.clientWidth;
+      this.containerWidth = this.video.clientWidth; // TODO when using YT, this.video.clientWidth is undefined
       this.canvas.setAttribute('width', this.containerWidth);
     }
 

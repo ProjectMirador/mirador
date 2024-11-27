@@ -64,6 +64,10 @@ export class AnnotationsOverlayVideo extends Component {
   constructor(props) {
     super(props);
 
+    this.drawAnnotations = true; // TODO force
+    this.highlightAllAnnotations = true; // TODO force
+    this.drawSearchAnnotations = true; // TODO force
+
     this.ref = createRef();
     VideosReferences.set(props.windowId, this);
     this.canvasOverlay = null;
@@ -149,6 +153,7 @@ export class AnnotationsOverlayVideo extends Component {
     // }
 
     const annotationsUpdated = !AnnotationsOverlayVideo.annotationsMatch(annotations, prevProps.annotations);
+    console.log('annotationsUpdated', annotationsUpdated);
     // eslint-disable-next-line max-len
     const searchAnnotationsUpdated = !AnnotationsOverlayVideo.annotationsMatch(searchAnnotations, prevProps.searchAnnotations);
 
