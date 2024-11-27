@@ -42,6 +42,7 @@ export class VideoViewer extends Component {
 
   /** */
   componentDidUpdate(prevProps) {
+    console.log('componentDidUpdate in VideoViewer.js');
     const {
       canvas, currentTime, muted, paused,
       setCurrentTime, setPaused,
@@ -123,7 +124,7 @@ export class VideoViewer extends Component {
   /** */
   render() {
     const {
-      annotations, canvas, currentTime, videoOptions, windowId, paused,
+      annotations, canvas, currentTime, videoOptions, windowId, paused, muted,
     } = this.props;
 
     const { containerRatio } = this.state;
@@ -225,6 +226,8 @@ export class VideoViewer extends Component {
                 pip={false}
                 playbackRate={1}
                 playing={!paused}
+                muted={muted}
+                loop={false}
                 config={{
                   peertube: {
                     controls: 0,
