@@ -8,8 +8,6 @@ import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
 import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavigationControlsVideo';
 
-
-
 /** */
 export class VideoViewer extends Component {
   /** */
@@ -36,7 +34,7 @@ export class VideoViewer extends Component {
 
   /** */
   componentDidMount() {
-    const { setPaused, setHasTextTrack } = this.props;
+    const { setPaused } = this.props;
     setPaused(true);
 
     // TODO Implement text track support
@@ -50,74 +48,21 @@ export class VideoViewer extends Component {
     const {
       canvas, currentTime, muted, paused,
       setCurrentTime, setPaused,
-      textTrackDisabled,
     } = this.props;
 
-    if (paused !== prevProps.paused) {
-      if (currentTime === 0) {
-        this.timerReset();
-      }
-      if (paused) {
-        this.timerStop();
-      } else {
-        this.timerStart();
-      }
-    }
     if (currentTime !== prevProps.currentTime) {
       const duration = canvas.getDuration();
       if (duration && duration < currentTime) {
         if (!paused) {
           setPaused(true);
           setCurrentTime(0);
-          this.timerReset();
         }
       }
     }
-    // const video = this.videoRef.current;
-    // if (video) {
-    //   if (video.muted !== muted) {
-    //     video.muted = muted;
-    //   }
-    //   // TODO Implement text track support
-    //  /* if (video.textTracks && video.textTracks.length > 0) {
-    //     const newMode = textTrackDisabled ? 'disabled' : 'showing';
-    //     if (video.textTracks[0].mode !== newMode) {
-    //       video.textTracks[0].mode = newMode;
-    //     }
-    //   }*/
-    // }
   }
 
   /** */
   componentWillUnmount() {
-    this.timerStop();
-  }
-
-  /** */
-  timerStart() {
-    // const { currentTime } = this.props;
-    // this.setState({
-    //   start: Date.now() - currentTime * 1000,
-    //   time: currentTime * 1000,
-    // });
-    // this.timer = setInterval(() => {
-    //   const { setCurrentTime } = this.props;
-    //   this.setState(prevState => ({
-    //     time: Date.now() - prevState.start,
-    //   }));
-    //   const { time } = this.state;
-    //   setCurrentTime(time / 1000);
-    // }, 100);
-  }
-
-  /** */
-  timerStop() {
-    // clearInterval(this.timer);
-  }
-
-  /** */
-  timerReset() {
-    // this.setState({ time: 0 });
   }
 
   setContainerRatio = (ref) => {
