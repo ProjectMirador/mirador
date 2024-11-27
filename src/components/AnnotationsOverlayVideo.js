@@ -127,12 +127,10 @@ export class AnnotationsOverlayVideo extends Component {
       seekToTime,
     } = this.props;
 
-    this.initializeViewer();
+    console.log('componentDidUpdate in AnnotationsOverlayVideo.js');
+    console.log('selectedAnnotationId', selectedAnnotationId);
 
-    let prevVideoPausedState;
-    // if (this.video) {
-    //   prevVideoPausedState = this.video.paused;
-    //   if (this.video.paused && !paused) {
+    this.initializeViewer();
     //     const promise = this.video.play();
     //     if (promise !== undefined) {
     //       promise.catch((e) => {});
@@ -185,10 +183,10 @@ export class AnnotationsOverlayVideo extends Component {
             if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
             if (!AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) {
               const temporalfragment = resource.temporalfragmentSelector;
-              // if (temporalfragment && temporalfragment.length > 0 && this.video) {
-              //   const seekto = temporalfragment[0] || 0;
-              //   this.seekTo(seekto, !prevVideoPausedState);
-              // }
+              if (temporalfragment && temporalfragment.length > 0 && this.video) {
+                const seekto = temporalfragment[0] || 0;
+                this.seekTo(seekto, !prevVideoPausedState);
+              }
             }
           });
         });
@@ -454,12 +452,11 @@ export class AnnotationsOverlayVideo extends Component {
     setPaused(true);
     this.player.seekTo(seekTo);
     setCurrentTime(seekTo);
-    setPaused(false);
     // this.video.addEventListener('seeked', function seeked(event) {
     //   event.currentTarget.removeEventListener(event.type, seeked);
-    //   if (resume) {
-    //     setPaused(false);
-    //   }
+     /* if (resume) {
+        setPaused(false);
+      }*/
     // });
   }
 
