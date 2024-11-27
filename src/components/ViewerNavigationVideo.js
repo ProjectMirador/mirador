@@ -40,6 +40,7 @@ export class ViewerNavigationVideo extends Component {
     if (!paused) {
       setSeekTo(newValue);
     } else {
+      console.log('setCurrentTime', newValue);
       setCurrentTime(newValue);
     }
   };
@@ -74,6 +75,11 @@ export class ViewerNavigationVideo extends Component {
     }
     return (
       <StyledPlayControls>
+        <span>
+            <Typography variant="caption">
+                Current {currentTime}
+            </Typography>
+        </span>
         <MiradorMenuButton
           aria-label={paused ? 'Play' : 'Pause'}
           className={paused ? ns('next-canvas-button') : ns('next-canvas-button')}

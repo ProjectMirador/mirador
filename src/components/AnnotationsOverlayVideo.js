@@ -84,6 +84,10 @@ export class AnnotationsOverlayVideo extends Component {
 
     this.onCanvasResize = this.onCanvasResize.bind(this);
 
+    this.props.onFunctionsReady({
+      onPlay: this.onVideoPlaying,
+    });
+
     this.imagesLoading = [];
     this.imagesReady = [];
 
@@ -277,15 +281,18 @@ export class AnnotationsOverlayVideo extends Component {
 
   /** */
   onVideoPlaying(event) {
-    // if (this.video && this.video.currentTime !== 0) {
-    //   const { currentTime, seekToTime } = this.props;
-    //   const currentTimeToVideoTime = currentTime - this.temporalOffset;
-    //   const diff = Math.abs(currentTimeToVideoTime - this.video.currentTime);
-    //   const acceptableDiff = 1; // sec.
-    //   if (diff > acceptableDiff && seekToTime === undefined) {
-    //     this.seekTo(this.video.currentTime + this.temporalOffset, true);
-    //   }
-    // }
+
+
+    if (this.player && this.player.getCurrentTime() !== 0) {
+      const { currentTime, seekToTime } = this.props;
+      const currentTimeToVideoTime = currentTime - this.temporalOffset;
+      const diff = Math.abs(currentTimeToVideoTime - this.player.getCurrentTime());
+      const acceptableDiff = 1; // sec.
+      if (diff > acceptableDiff && seekToTime === undefined) {
+        this.seekTo(currentTime, true);
+      }
+    }
+    console.log('onVideoPlaying from AnnotationsOverlayVideo.js');
     this.setState({ showProgress: false });
   }
 
@@ -444,9 +451,12 @@ export class AnnotationsOverlayVideo extends Component {
 
   /** @private */
   seekTo(seekTo, resume) {
+    console.log('seekTo', seekTo);
     const { setCurrentTime, setPaused } = this.props;
     setPaused(true);
+    this.player.seekTo(seekTo);
     setCurrentTime(seekTo);
+    setPaused(false);
     // this.video.addEventListener('seeked', function seeked(event) {
     //   event.currentTarget.removeEventListener(event.type, seeked);
     //   if (resume) {
@@ -684,6 +694,7 @@ AnnotationsOverlayVideo.propTypes = {
   drawAnnotations: PropTypes.bool,
   drawSearchAnnotations: PropTypes.bool,
   highlightAllAnnotations: PropTypes.bool,
+  onFunctionsReady: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   hoverAnnotation: PropTypes.func,
   hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types

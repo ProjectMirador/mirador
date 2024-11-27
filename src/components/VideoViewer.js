@@ -8,10 +8,7 @@ import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
 import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavigationControlsVideo';
 
-export const ORIENTATIONS = {
-  LANDSCAPE: 'landscape',
-  PORTRAIT: 'portrait',
-};
+
 
 /** */
 export class VideoViewer extends Component {
@@ -25,8 +22,13 @@ export class VideoViewer extends Component {
       containerRatio: 1,
       start: 0,
       time: 0,
+      handleVideoEventFunctions: {},
     };
   }
+
+  handleVideoEventFunctions = (handleVideoEventFunctions) => {
+    this.setState({ handleVideoEventFunctions });
+  };
 
   /** */
   componentDidMount() {
@@ -176,6 +178,8 @@ export class VideoViewer extends Component {
 
     const debugPositionning = true;
 
+    const { handleVideoEventFunctions } = this.state;
+
     return (
       <div
         className="outerContainer"
@@ -241,9 +245,16 @@ export class VideoViewer extends Component {
                   aspectRatio: `${videoAspectRatio}`,
                 }}
                 iiifVideoInfos={video}
+                onPlay={() => {
+                  console.log('onPlay in VideoViewer.js');
+                  if (handleVideoEventFunctions.onPlay) {
+                    handleVideoEventFunctions.onPlay();
+                  }
+                }}
               />
               {this.playerRef.current && (
               <AnnotationsOverlayVideo
+                onFunctionsReady={this.handleVideoEventFunctions}
                 windowId={windowId}
                 playerRef={this.playerRef.current}
                 videoRef={this.playerRef.current.getInternalPlayer()}
