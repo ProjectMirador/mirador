@@ -9,13 +9,15 @@
 export default class CanvasOverlayVideo {
   /**
    * constructor - sets up the Canvas overlay container
+   * @param player {Object} react-player.js player
+   * @param ref {Object} Parent ref object
    * @param canvasSize {Array} IIIF Canvas size
+   *
    * If the width and height properties are not specified in the Canvas in the Manifest,
    * canvasSize will be [0, 0, 0, 0].
    */
-
-  constructor(video, ref, canvasSize) {
-    this.video = video; // TODO Rename video to player
+  constructor(player, ref, canvasSize) {
+    this.player = player; // TODO Rename video to player
     this.ref = ref;
     const [
       _canvasX, _canvasY, canvasWidth, canvasHeight, // eslint-disable-line no-unused-vars
@@ -45,10 +47,10 @@ export default class CanvasOverlayVideo {
   get scale() {
     let ratio = 1;
 
-    if (this.video) {
+    if (this.player) {
       // Here we talk about IIIF video size, as described in the manifest
-      const videoWidth = this.video.props.iiifVideoInfos.getWidth();
-      const videoHeight = this.video.props.iiifVideoInfos.getHeight();
+      const videoWidth = this.player.props.iiifVideoInfos.getWidth();
+      const videoHeight = this.player.props.iiifVideoInfos.getHeight();
 
       if (videoWidth && videoHeight) {
         const ratioWidth = this.containerWidth / videoWidth;
@@ -79,10 +81,10 @@ export default class CanvasOverlayVideo {
    * resize - resizes the added Canvas overlay.
    */
   resize() {
-    if (!this.video || !this.canvas) { return; }
+    if (!this.player || !this.canvas) { return; }
 
-    const displayedVideoWidth = this.video.wrapper.clientWidth;
-    const displayedVideoHeight = this.video.wrapper.clientHeight;
+    const displayedVideoWidth = this.player.wrapper.clientWidth;
+    const displayedVideoHeight = this.player.wrapper.clientHeight;
 
     if (this.containerWidth !== displayedVideoWidth) {
       this.containerWidth = displayedVideoWidth;
