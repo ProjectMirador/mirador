@@ -28,5 +28,7 @@ describe('NewBrowserWindow', () => {
     mockWindow.closed = true;
     vi.runOnlyPendingTimers();
     expect(onClose).toBeCalled();
+
+    vi.useRealTimers();
   });
 });
