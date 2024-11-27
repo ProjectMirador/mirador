@@ -18,3 +18,5 @@ export const PluginHook = forwardRef((props, ref) => {
     ))
   ) : null;
 });
+
+PluginHook.displayName = 'PluginHook';

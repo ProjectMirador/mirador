@@ -25,6 +25,7 @@ function useWidth() {
   );
 }
 
+/* eslint react/display-name: "off" */
 /**
  * withWidth
  * @memberof WorkspaceControlPanel
