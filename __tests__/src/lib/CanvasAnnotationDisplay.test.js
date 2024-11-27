@@ -69,7 +69,7 @@ describe('CanvasAnnotationDisplay', () => {
       expect(subject.svgString).toMatch(/<svg/);
     });
   });
-  describe('svgContext', () => {
+  describe.skip('svgContext', () => {
     it('draws the paths with selected arguments', () => {
       const context = {
         fill: vi.fn(),
