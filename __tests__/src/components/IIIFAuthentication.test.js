@@ -64,7 +64,6 @@ describe('IIIFAuthentication', () => {
   });
   describe('in the middle of authenticating', () => {
     it('does the IIIF access cookie behavior', async () => {
-      vi.useFakeTimers();
       const mockWindow = { close: vi.fn(), closed: false };
       const mockWindowOpen = vi.fn(() => (mockWindow));
       window.open = mockWindowOpen;
@@ -73,9 +72,7 @@ describe('IIIFAuthentication', () => {
       expect(screen.getByRole('button', { name: 'login' })).toBeInTheDocument();
       expect(mockWindowOpen).toHaveBeenCalledWith(`http://example.com/auth?origin=${window.origin}`, 'IiifLoginSender', 'centerscreen');
       mockWindow.closed = true;
-      vi.runOnlyPendingTimers();
       await waitFor(() => expect(resolveCookieMock).toHaveBeenCalledTimes(1));
-      vi.useRealTimers();
     });
     it('does the IIIF access token behavior', async () => {
       const resolveTokenMock = vi.fn();
