@@ -36,6 +36,10 @@ export default class CanvasOverlayVideo {
     return this.canvas ? this.canvas.getContext('2d') : null;
   }
 
+  isYoutubeVideo() {
+    return this.video.options && this.video.options.host.includes('youtube');
+  }
+
   /**
    * scale - get the display scaling factor of the HTML5 canvas.
    * It is assumed that the size of the Canvas in the Manifest is equal to the size of the video.
@@ -45,7 +49,12 @@ export default class CanvasOverlayVideo {
     let ratio = 1;
 
     if (this.video) {
-      const { videoWidth, videoHeight } = this.video;
+      // Here we talk about IIIF video size, as described in the manifest
+      let { videoWidth, videoHeight } = this.video;
+      if (this.isYoutubeVideo()) {
+        videoWidth = this.canvasWidth; // TODO Not perfect because we suppose that the video is the same size as the canvas
+        videoHeight = this.canvasHeight; // TODO Not perfect because we suppose that the video is the same size as the canvas
+      }
       if (videoWidth && videoHeight) {
         const ratioWidth = this.containerWidth / videoWidth;
         const rationHeight = this.containerHeight / videoHeight;
@@ -57,6 +66,7 @@ export default class CanvasOverlayVideo {
           }
         }
       }
+
     } else if (this.canvasWidth && this.canvasHeight) {
       // video is not loaded yet & canvas size is specified
       const ratioWidth = this.containerWidth / this.canvasWidth;
@@ -84,13 +94,13 @@ export default class CanvasOverlayVideo {
     if (!this.video || !this.canvas) { return; }
 
     // YouTube video
-    if (this.video.options && this.video.options.host.includes('youtube')) {
+    if (this.isYoutubeVideo()) {
       if (this.containerWidth !== this.video.width) {
-        this.containerWidth = this.video.getIframe().clientWidth;
+        this.containerWidth = this.video.getSize().width;
         this.canvas.setAttribute('width', this.containerWidth);
       }
       if (this.containerHeight !== this.video.height) {
-        this.containerHeight = this.video.getIframe().clientHeight;
+        this.containerHeight = this.video.getSize().height;
         this.canvas.setAttribute('height', this.containerHeight);
       }
       return;

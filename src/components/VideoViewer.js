@@ -158,14 +158,9 @@ export class VideoViewer extends Component {
       ? videoResources[len - 1].temporalfragment : [];
 
     let videoAspectRatio;
-    let externalVideoIn169 = false;
 
     if (video) {
       videoAspectRatio = video.getWidth() / video.getHeight();
-      if (video.id.includes('youtube')) {
-        console.log('videoAspectRatio Tube', videoAspectRatio);
-        externalVideoIn169 = true;
-      }
     }
 
     const videoStyle = {
