@@ -29,5 +29,7 @@ describe('NewBrowserWindow', () => {
     mockWindow.closed = true;
     jest.runOnlyPendingTimers();
     expect(onClose).toBeCalled();
+
+    jest.useRealTimers();
   });
 });
