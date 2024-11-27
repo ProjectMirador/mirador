@@ -240,10 +240,12 @@ export class VideoViewer extends Component {
                   height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
                   aspectRatio: `${videoAspectRatio}`,
                 }}
+                iiifVideoInfos={video}
               />
               {this.playerRef.current && (
               <AnnotationsOverlayVideo
                 windowId={windowId}
+                playerRef={this.playerRef.current}
                 videoRef={this.playerRef.current.getInternalPlayer()}
                 videoTarget={videoTargetTemporalfragment}
                 key={`${windowId} ${video.id}`}

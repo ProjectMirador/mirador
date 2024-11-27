@@ -473,10 +473,11 @@ export class AnnotationsOverlayVideo extends Component {
     }
     if (this.canvasOverlay) return;
 
-    const { videoRef } = this.props;
+    const { videoRef, playerRef } = this.props;
     if (!videoRef) return;
     this.video = videoRef;
-   this.video.addEventListener('timeupdate', this.onVideoTimeUpdate);
+    this.player = playerRef;
+    this.video.addEventListener('timeupdate', this.onVideoTimeUpdate);
     this.video.addEventListener('loadedmetadata', this.onVideoLoadedMetadata);
     this.video.addEventListener('waiting', this.onVideoWaiting);
     this.video.addEventListener('playing', this.onVideoPlaying);
@@ -484,7 +485,7 @@ export class AnnotationsOverlayVideo extends Component {
 
     const { canvas, canvasWorld } = this.props;
     const canvasSize = canvasWorld.canvasToWorldCoordinates(canvas.id);
-    this.canvasOverlay = new CanvasOverlayVideo(this.video, this.ref, canvasSize);
+    this.canvasOverlay = new CanvasOverlayVideo(this.player, this.ref, canvasSize);
 
     this.updateCanvas = this.canvasUpdateCallback();
 
@@ -625,7 +626,6 @@ export class AnnotationsOverlayVideo extends Component {
     }
   }
 
-
   /**
    * Renders things
    */
@@ -695,6 +695,7 @@ AnnotationsOverlayVideo.propTypes = {
   setCurrentTime: PropTypes.func,
   setPaused: PropTypes.func,
   videoRef: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  playerRef: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   videoTarget: PropTypes.arrayOf(PropTypes.number),
   windowId: PropTypes.string.isRequired,
 };
