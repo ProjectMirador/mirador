@@ -95,29 +95,29 @@ export class VideoViewer extends Component {
 
   /** */
   timerStart() {
-    const { currentTime } = this.props;
-    this.setState({
-      start: Date.now() - currentTime * 1000,
-      time: currentTime * 1000,
-    });
-    this.timer = setInterval(() => {
-      const { setCurrentTime } = this.props;
-      this.setState(prevState => ({
-        time: Date.now() - prevState.start,
-      }));
-      const { time } = this.state;
-      setCurrentTime(time / 1000);
-    }, 100);
+    // const { currentTime } = this.props;
+    // this.setState({
+    //   start: Date.now() - currentTime * 1000,
+    //   time: currentTime * 1000,
+    // });
+    // this.timer = setInterval(() => {
+    //   const { setCurrentTime } = this.props;
+    //   this.setState(prevState => ({
+    //     time: Date.now() - prevState.start,
+    //   }));
+    //   const { time } = this.state;
+    //   setCurrentTime(time / 1000);
+    // }, 100);
   }
 
   /** */
   timerStop() {
-    clearInterval(this.timer);
+    // clearInterval(this.timer);
   }
 
   /** */
   timerReset() {
-    this.setState({ time: 0 });
+    // this.setState({ time: 0 });
   }
 
   setContainerRatio = (ref) => {

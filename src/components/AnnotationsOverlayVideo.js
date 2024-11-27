@@ -130,6 +130,8 @@ export class AnnotationsOverlayVideo extends Component {
     console.log('componentDidUpdate in AnnotationsOverlayVideo.js');
     console.log('selectedAnnotationId', selectedAnnotationId);
 
+    let prevVideoPausedState;
+
     this.initializeViewer();
     //     const promise = this.video.play();
     //     if (promise !== undefined) {
@@ -194,38 +196,38 @@ export class AnnotationsOverlayVideo extends Component {
     }
 
     // auto scroll
-    // if (this.video && !this.video.paused) {
-    //   let minElapsedTimeAfterStart = Number.MAX_VALUE;
-    //   let candidateAnnotation;
-    //   annotations.forEach((annotation) => {
-    //     annotation.resources.forEach((resource) => {
-    //       if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-    //       if (AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) {
-    //         const temporalfragment = resource.temporalfragmentSelector;
-    //         if (temporalfragment && temporalfragment.length > 0 && this.video) {
-    //           const seekto = temporalfragment[0] || 0;
-    //           const elapsedTimeAfterStart = currentTime - seekto;
-    //           if (elapsedTimeAfterStart >= 0 && elapsedTimeAfterStart < minElapsedTimeAfterStart) {
-    //             minElapsedTimeAfterStart = elapsedTimeAfterStart;
-    //             candidateAnnotation = resource.resource;
-    //           }
-    //         }
-    //       }
-    //     });
-    //   });
-    //   if (candidateAnnotation) {
-    //     if (candidateAnnotation.id !== prevProps.selectedAnnotationId) {
-    //       const {
-    //         selectAnnotation,
-    //         windowId,
-    //       } = this.props;
-    //       if (selectedAnnotationId !== candidateAnnotation.id) {
-    //         selectAnnotation(windowId, candidateAnnotation.id);
-    //       }
-    //       this.currentTimeNearestAnnotationId = candidateAnnotation.id;
-    //     }
-    //   }
-    // }
+    if (this.video && !this.video.paused) {
+      let minElapsedTimeAfterStart = Number.MAX_VALUE;
+      let candidateAnnotation;
+      annotations.forEach((annotation) => {
+        annotation.resources.forEach((resource) => {
+          if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
+          if (AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) {
+            const temporalfragment = resource.temporalfragmentSelector;
+            if (temporalfragment && temporalfragment.length > 0 && this.video) {
+              const seekto = temporalfragment[0] || 0;
+              const elapsedTimeAfterStart = currentTime - seekto;
+              if (elapsedTimeAfterStart >= 0 && elapsedTimeAfterStart < minElapsedTimeAfterStart) {
+                minElapsedTimeAfterStart = elapsedTimeAfterStart;
+                candidateAnnotation = resource.resource;
+              }
+            }
+          }
+        });
+      });
+      if (candidateAnnotation) {
+        if (candidateAnnotation.id !== prevProps.selectedAnnotationId) {
+          const {
+            selectAnnotation,
+            windowId,
+          } = this.props;
+          if (selectedAnnotationId !== candidateAnnotation.id) {
+            selectAnnotation(windowId, candidateAnnotation.id);
+          }
+          this.currentTimeNearestAnnotationId = candidateAnnotation.id;
+        }
+      }
+    }
 
     const redrawAnnotations = drawAnnotations !== prevProps.drawAnnotations
       || drawSearchAnnotations !== prevProps.drawSearchAnnotations
@@ -284,7 +286,9 @@ export class AnnotationsOverlayVideo extends Component {
       const currentTimeToVideoTime = currentTime - this.temporalOffset;
       const diff = Math.abs(currentTimeToVideoTime - this.player.getCurrentTime());
       const acceptableDiff = 1; // sec.
-      if (diff > acceptableDiff && seekToTime === undefined) {
+      // if (diff > acceptableDiff && seekToTime === undefined) {
+      // TODO Remove seekToTime because it introduce problem and i dont know why it is used
+      if (diff > acceptableDiff) {
         this.seekTo(currentTime, true);
       }
     }
@@ -452,11 +456,12 @@ export class AnnotationsOverlayVideo extends Component {
     setPaused(true);
     this.player.seekTo(seekTo);
     setCurrentTime(seekTo);
+    setPaused(false);
     // this.video.addEventListener('seeked', function seeked(event) {
     //   event.currentTarget.removeEventListener(event.type, seeked);
-     /* if (resume) {
+    /* if (resume) {
         setPaused(false);
-      }*/
+      } */
     // });
   }
 
