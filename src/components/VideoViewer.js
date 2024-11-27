@@ -22,7 +22,11 @@ export class VideoViewer extends Component {
       containerRatio: 1,
       start: 0,
       time: 0,
-      handleVideoEventFunctions: {},
+      handleVideoEventFunctions: {
+        onPlay: () => {
+          console.log('onPlay');
+        },
+      },
     };
   }
 
@@ -248,12 +252,7 @@ export class VideoViewer extends Component {
                   aspectRatio: `${videoAspectRatio}`,
                 }}
                 iiifVideoInfos={video}
-                onPlay={() => {
-                  console.log('onPlay in VideoViewer.js');
-                  if (handleVideoEventFunctions.onPlay) {
-                    handleVideoEventFunctions.onPlay();
-                  }
-                }}
+                onPlay={handleVideoEventFunctions.onPlay}
               />
               {this.playerRef.current && (
               <AnnotationsOverlayVideo

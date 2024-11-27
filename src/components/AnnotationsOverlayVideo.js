@@ -281,8 +281,6 @@ export class AnnotationsOverlayVideo extends Component {
 
   /** */
   onVideoPlaying(event) {
-
-
     if (this.player && this.player.getCurrentTime() !== 0) {
       const { currentTime, seekToTime } = this.props;
       const currentTimeToVideoTime = currentTime - this.temporalOffset;
@@ -490,7 +488,7 @@ export class AnnotationsOverlayVideo extends Component {
     this.video.addEventListener('timeupdate', this.onVideoTimeUpdate);
     this.video.addEventListener('loadedmetadata', this.onVideoLoadedMetadata);
     this.video.addEventListener('waiting', this.onVideoWaiting);
-    this.video.addEventListener('playing', this.onVideoPlaying);
+    // this.video.addEventListener('playing', this.onVideoPlaying);
     this.video.addEventListener('seeked', this.onVideoPlaying);
 
     const { canvas, canvasWorld } = this.props;
