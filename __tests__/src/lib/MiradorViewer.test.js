@@ -6,26 +6,22 @@ const DummyPlugin = () => <div data-testid="plugin">Plugin</div>;
 
 describe('MiradorViewer', () => {
   let container;
-  beforeEach(() => {
-    container = document.createElement('div');
-    container.id = 'mirador';
-    container.dataset.testid = 'container';
-    document.body.appendChild(container);
+  beforeEach(async () => {
+    render(<div id="mirador" data-testid="container" />);
+    container = await screen.findByTestId('container');
   });
-  afterEach(() => {
-    document.body.removeChild(container);
-  });
+
   describe('constructor', () => {
     it('returns viewer store', () => {
       const instance = new MiradorViewer({});
 
-      act(() => { instance.renderInto(document.getElementById('mirador')); }); // eslint-disable-line testing-library/no-unnecessary-act
+      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
       expect(instance.store.dispatch).toBeDefined();
     });
     it('renders via ReactDOM', () => {
       const instance = new MiradorViewer({});
 
-      act(() => { instance.renderInto(document.getElementById('mirador')); }); // eslint-disable-line testing-library/no-unnecessary-act
+      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
 
       expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
     });
@@ -61,7 +57,7 @@ describe('MiradorViewer', () => {
         },
       );
 
-      act(() => { instance.renderInto(document.getElementById('mirador')); }); // eslint-disable-line testing-library/no-unnecessary-act
+      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
 
       const { windows, catalog, config } = instance.store.getState();
       const windowIds = Object.keys(windows);
@@ -79,11 +75,10 @@ describe('MiradorViewer', () => {
       expect(catalog[1].provider).toBe('National Gallery of Art');
       expect(config.foo).toBe('bar');
     });
+
     it('merges translation configs from multiple plugins', () => {
       const instance = new MiradorViewer(
-        {
-          id: 'mirador',
-        },
+        {},
         {
           plugins: [
             {
@@ -140,12 +135,12 @@ describe('MiradorViewer', () => {
 
   describe('unmount', () => {
     it('unmounts via ReactDOM', () => {
-      let instance;
+      const instance = new MiradorViewer({});
 
-      act(() => { instance = new MiradorViewer({ id: 'mirador' }); });
-      expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
+      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
+      expect(container).not.toBeEmptyDOMElement();
       act(() => { instance.unmount(); });
-      expect(screen.getByTestId('container')).toBeEmptyDOMElement();
+      expect(container).toBeEmptyDOMElement();
     });
   });
 });
