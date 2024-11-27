@@ -72,7 +72,7 @@ describe('OpenSeadragonCanvasOverlay', () => {
         },
       };
       canvasOverlay.clear();
-      expect(contextMock).toHaveBeenCalledTimes(1);
+      expect(contextMock).toHaveBeenCalledTimes(2);
       expect(clearRect).toHaveBeenCalledTimes(1);
     });
   });
