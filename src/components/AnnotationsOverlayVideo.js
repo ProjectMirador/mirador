@@ -648,17 +648,19 @@ export class AnnotationsOverlayVideo extends Component {
     const circularProgress = (<CircularProgress style={{ left: '50%', position: 'absolute', top: '50%' }} />);
     return (
       <>
-        <span style={{
+        <div style={{
           position: 'absolute',
           bottom: 30,
           left: 0,
           color: 'white',
         }}
         >
-          Selected Annot
-          {' '}
-          {this.props.selectedAnnotationId}
-        </span>
+          <span> Selected Annot {' '} {this.props.selectedAnnotationId} </span><br/>
+          <span> Current Time {' '} {this.props.currentTime} </span> <br/>
+          <span> Player Time {' '} {this.player ? this.player.getCurrentTime() : 'player not ready'} </span> <br/>
+          <span> Seek Time {' '} {this.props.seekToTime} </span> <br/>
+          <span> Paused {' '} {this.props.paused ? 'Paused' : 'Not paused'} </span>
+        </div>
         <canvas
           ref={this.ref}
           style={{
