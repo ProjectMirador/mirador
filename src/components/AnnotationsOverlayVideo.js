@@ -631,7 +631,7 @@ export class AnnotationsOverlayVideo extends Component {
    */
   render() {
     const { showProgress } = this.state;
-    const debug = true; // TODO remove
+    const debug = false; // TODO remove
     const circularProgress = (<CircularProgress style={{ left: '50%', position: 'absolute', top: '50%' }} />);
     return (
       <>

@@ -166,7 +166,7 @@ export class VideoViewer extends Component {
       aspectRatio: `${videoAspectRatio}`,
     };
 
-    const debugPositionning = true;
+    const debugPositionning = false;
 
     const { handleVideoEventFunctions } = this.state;
 
