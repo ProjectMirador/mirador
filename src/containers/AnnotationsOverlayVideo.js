@@ -62,6 +62,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   selectAnnotation: (...args) => dispatch(actions.selectAnnotation(...args)),
   setCurrentTime: (...args) => dispatch(actions.setWindowCurrentTime(windowId, ...args)),
   setPaused: (...args) => dispatch(actions.setWindowPaused(windowId, ...args)),
+  setSeekTo: (...args) => dispatch(actions.setWindowSeekTo(windowId, ...args)),
 });
 
 const enhance = compose(

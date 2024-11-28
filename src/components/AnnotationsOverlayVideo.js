@@ -125,6 +125,7 @@ export class AnnotationsOverlayVideo extends Component {
       highlightAllAnnotations,
       paused,
       seekToTime,
+      setSeekTo,
     } = this.props;
 
     let prevVideoPausedState;
@@ -137,15 +138,17 @@ export class AnnotationsOverlayVideo extends Component {
     //   } else if (!this.video.paused && paused) {
     //     this.video.pause();
     //   }
-    //   if (seekToTime !== prevProps.seekToTime) {
-    //     if (seekToTime !== undefined) {
-    //       this.seekTo(seekToTime, true);
-    //       return;
-    //     }
-    //   }
-    //   if (this.video.seeking) {
-    //     return;
-    //   }
+    if (seekToTime !== prevProps.seekToTime) {
+      if (seekToTime !== undefined) {
+        this.seekTo(seekToTime, true);
+        return;
+      }
+    }
+    console.log('AA player', this.player);
+    console.log('AA video', this.video);
+    /*  if (this.video.seeking) {
+        return;
+      } */
     //   if (currentTime !== prevProps.currentTime) {
     //     if (paused && this.video.paused) {
     //       this.video.currentTime = currentTime - this.temporalOffset;
@@ -271,14 +274,18 @@ export class AnnotationsOverlayVideo extends Component {
   /** */
   onVideoPlaying(event) {
     if (this.player && this.player.getCurrentTime() !== 0) {
-      const { currentTime, seekToTime } = this.props;
+      const { currentTime, seekToTime, setSeekTo } = this.props;
       const currentTimeToVideoTime = currentTime - this.temporalOffset;
       const diff = Math.abs(currentTimeToVideoTime - this.player.getCurrentTime());
       const acceptableDiff = 1; // sec.
       // if (diff > acceptableDiff && seekToTime === undefined) {
       // TODO Remove seekToTime because it introduce problem and i dont know why it is used
-      if (diff > acceptableDiff) {
+      if (diff > acceptableDiff && seekToTime === undefined) {
         this.seekTo(currentTime, true);
+      }
+      if (seekToTime !== undefined) {
+        this.seekTo(seekToTime, true);
+        setSeekTo(undefined);
       }
     }
     this.setState({ showProgress: false });
@@ -443,16 +450,12 @@ export class AnnotationsOverlayVideo extends Component {
     setPaused(true);
     this.player.seekTo(seekTo);
     setCurrentTime(seekTo);
-
-    if (resume) {
-      setPaused(false);
-    }
-    // this.video.addEventListener('seeked', function seeked(event) {
-    //   event.currentTarget.removeEventListener(event.type, seeked);
-    /* if (resume) {
+    this.video.addEventListener('seeked', function seeked(event) {
+      event.currentTarget.removeEventListener(event.type, seeked);
+      if (resume) {
         setPaused(false);
-      } */
-    // });
+      }
+    });
   }
 
   /** @private */

@@ -27,6 +27,7 @@ export class VideoViewer extends Component {
           console.log('onPlay');
         },
       },
+      isSeeking: false,
     };
   }
 
@@ -239,6 +240,7 @@ export class VideoViewer extends Component {
                 }}
                 iiifVideoInfos={video}
                 onPlay={handleVideoEventFunctions.onPlay}
+
               />
               {this.playerRef.current && (
               <AnnotationsOverlayVideo
