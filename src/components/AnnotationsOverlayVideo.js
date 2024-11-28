@@ -196,38 +196,38 @@ export class AnnotationsOverlayVideo extends Component {
     }
 
     // auto scroll
-    if (this.video && !this.video.paused) {
-      let minElapsedTimeAfterStart = Number.MAX_VALUE;
-      let candidateAnnotation;
-      annotations.forEach((annotation) => {
-        annotation.resources.forEach((resource) => {
-          if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-          if (AnnotationsOverlayVideo.isAnnotationInTemporalSegment(resource, currentTime)) {
-            const temporalfragment = resource.temporalfragmentSelector;
-            if (temporalfragment && temporalfragment.length > 0 && this.video) {
-              const seekto = temporalfragment[0] || 0;
-              const elapsedTimeAfterStart = currentTime - seekto;
-              if (elapsedTimeAfterStart >= 0 && elapsedTimeAfterStart < minElapsedTimeAfterStart) {
-                minElapsedTimeAfterStart = elapsedTimeAfterStart;
-                candidateAnnotation = resource.resource;
-              }
-            }
-          }
-        });
-      });
-      if (candidateAnnotation) {
-        if (candidateAnnotation.id !== prevProps.selectedAnnotationId) {
-          const {
-            selectAnnotation,
-            windowId,
-          } = this.props;
-          if (selectedAnnotationId !== candidateAnnotation.id) {
-            selectAnnotation(windowId, candidateAnnotation.id);
-          }
-          this.currentTimeNearestAnnotationId = candidateAnnotation.id;
-        }
-      }
-    }
+    // if (this.video && !this.video.paused) {
+    //   let minElapsedTimeAfterStart = Number.MAX_VALUE;
+    //   let candidateAnnotation;
+    //   annotations.forEach((annotation) => {
+    //     annotation.resources.forEach((resource) => {
+    //       if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
+    //       if (AnnotationsOverlayVideo.isAnnotationInTemporalSegment(resource, currentTime)) {
+    //         const temporalfragment = resource.temporalfragmentSelector;
+    //         if (temporalfragment && temporalfragment.length > 0 && this.video) {
+    //           const seekto = temporalfragment[0] || 0;
+    //           const elapsedTimeAfterStart = currentTime - seekto;
+    //           if (elapsedTimeAfterStart >= 0 && elapsedTimeAfterStart < minElapsedTimeAfterStart) {
+    //             minElapsedTimeAfterStart = elapsedTimeAfterStart;
+    //             candidateAnnotation = resource.resource;
+    //           }
+    //         }
+    //       }
+    //     });
+    //   });
+    //   if (candidateAnnotation) {
+    //     if (candidateAnnotation.id !== prevProps.selectedAnnotationId) {
+    //       const {
+    //         selectAnnotation,
+    //         windowId,
+    //       } = this.props;
+    //       if (selectedAnnotationId !== candidateAnnotation.id) {
+    //         selectAnnotation(windowId, candidateAnnotation.id);
+    //       }
+    //       this.currentTimeNearestAnnotationId = candidateAnnotation.id;
+    //     }
+    //   }
+    // }
 
     const redrawAnnotations = drawAnnotations !== prevProps.drawAnnotations
       || drawSearchAnnotations !== prevProps.drawSearchAnnotations
