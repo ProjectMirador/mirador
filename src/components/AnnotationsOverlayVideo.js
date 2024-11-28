@@ -127,8 +127,11 @@ export class AnnotationsOverlayVideo extends Component {
       seekToTime,
     } = this.props;
 
-    console.log('componentDidUpdate in AnnotationsOverlayVideo.js');
-    console.log('selectedAnnotationId', selectedAnnotationId);
+    console.log('AOV componentDidUpdate in AnnotationsOverlayVideo.js');
+    console.log('AOV selectedAnnotationId', selectedAnnotationId);
+    console.log('AOV seekToTime', seekToTime);
+    console.log('AOV playerTime', this.player.getCurrentTime());
+    console.log('AOV currentTime', currentTime);
 
     let prevVideoPausedState;
 
@@ -451,12 +454,15 @@ export class AnnotationsOverlayVideo extends Component {
 
   /** @private */
   seekTo(seekTo, resume) {
-    console.log('seekTo', seekTo);
+    console.log('AOV seekTo', seekTo);
     const { setCurrentTime, setPaused } = this.props;
     setPaused(true);
     this.player.seekTo(seekTo);
     setCurrentTime(seekTo);
-    setPaused(false);
+
+    if (resume) {
+      setPaused(false);
+    }
     // this.video.addEventListener('seeked', function seeked(event) {
     //   event.currentTarget.removeEventListener(event.type, seeked);
     /* if (resume) {
