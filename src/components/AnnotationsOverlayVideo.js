@@ -631,7 +631,8 @@ export class AnnotationsOverlayVideo extends Component {
    */
   render() {
     const { showProgress } = this.state;
-    const debug = false; // TODO remove
+    const { debug } = this.props;
+    console.log('AnnotationsOverlayVideo render debug', debug);
     const circularProgress = (<CircularProgress style={{ left: '50%', position: 'absolute', top: '50%' }} />);
     return (
       <>
@@ -647,20 +648,63 @@ export class AnnotationsOverlayVideo extends Component {
           }}
         />
         <ResizeObserver onResize={this.onCanvasResize} />
-        ( debugPositionning && (
+        { debug && (
         <div style={{
-          position: 'absolute',
           bottom: 30,
-          left: 0,
           color: 'white',
+          left: 0,
+          position: 'absolute',
         }}
         >
-          <span> Selected Annot {' '} {this.props.selectedAnnotationId} </span><br/>
-          <span> Current Time {' '} {this.props.currentTime} </span> <br/>
-          <span> Player Time {' '} {this.player ? this.player.getCurrentTime() : 'player not ready'} </span> <br/>
-          <span> Seek Time {' '} {this.props.seekToTime} </span> <br/>
-          <span> Paused {' '} {this.props.paused ? 'Paused' : 'Not paused'} </span>
-        </div>))
+          <span>
+            {' '}
+            Selected Annot
+            {' '}
+            {' '}
+            {this.props.selectedAnnotationId}
+            {' '}
+          </span>
+          <br />
+          <span>
+            {' '}
+            Current Time
+            {' '}
+            {' '}
+            {this.props.currentTime}
+            {' '}
+          </span>
+          {' '}
+          <br />
+          <span>
+            {' '}
+            Player Time
+            {' '}
+            {' '}
+            {this.player ? this.player.getCurrentTime() : 'player not ready'}
+            {' '}
+          </span>
+          {' '}
+          <br />
+          <span>
+            {' '}
+            Seek Time
+            {' '}
+            {' '}
+            {this.props.seekToTime}
+            {' '}
+          </span>
+          {' '}
+          <br />
+          <span>
+            {' '}
+            Paused
+            {' '}
+            {' '}
+            {this.props.paused ? 'Paused' : 'Not paused'}
+            {' '}
+          </span>
+        </div>
+        )}
         { showProgress && circularProgress }
       </>
     );
@@ -694,6 +738,7 @@ AnnotationsOverlayVideo.propTypes = {
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   currentOrientation: PropTypes.string,
   currentTime: PropTypes.number,
+  debug: PropTypes.bool.isRequired,
   deselectAnnotation: PropTypes.func,
   drawAnnotations: PropTypes.bool,
   drawSearchAnnotations: PropTypes.bool,

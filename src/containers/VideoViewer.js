@@ -17,13 +17,14 @@ import {
 
 /** */
 const mapStateToProps = (state, { windowId }) => ({
-  annotations: getPresentAnnotationsOnSelectedCanvases(state, { windowId }),
-  canvas: (getCurrentCanvas(state, { windowId }) || {}),
-  canvasWorld: getCurrentCanvasWorld(state, { windowId }),
-  currentTime: getWindowCurrentTime(state, { windowId }),
-  muted: getWindowMutedStatus(state, { windowId }),
-  paused: getWindowPausedStatus(state, { windowId }),
-  textTrackDisabled: getWindowTextTrackDisabledStatus(state, { windowId }),
+  annotations: getPresentAnnotationsOnSelectedCanvases(state, {windowId}),
+  canvas: (getCurrentCanvas(state, {windowId}) || {}),
+  canvasWorld: getCurrentCanvasWorld(state, {windowId}),
+  currentTime: getWindowCurrentTime(state, {windowId}),
+  debug: getConfig(state).debug || false,
+  muted: getWindowMutedStatus(state, {windowId}),
+  paused: getWindowPausedStatus(state, {windowId}),
+  textTrackDisabled: getWindowTextTrackDisabledStatus(state, {windowId}),
   videoOptions: getConfig(state).videoOptions,
 });
 

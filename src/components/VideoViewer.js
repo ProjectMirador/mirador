@@ -16,6 +16,8 @@ export class VideoViewer extends Component {
     this.videoRef = createRef();
     this.playerRef = createRef();
 
+    console.log('Debug mode', this.props.debug);
+
     this.state = {
       containerRatio: 1,
       start: 0,
@@ -113,7 +115,7 @@ export class VideoViewer extends Component {
   /** */
   render() {
     const {
-      annotations, canvas, currentTime, videoOptions, windowId, paused, muted,
+      annotations, canvas, currentTime, videoOptions, windowId, paused, muted, debug,
     } = this.props;
 
     const { containerRatio } = this.state;
@@ -166,7 +168,6 @@ export class VideoViewer extends Component {
       aspectRatio: `${videoAspectRatio}`,
     };
 
-    const debugPositionning = false;
 
     const { handleVideoEventFunctions } = this.state;
 
@@ -174,7 +175,7 @@ export class VideoViewer extends Component {
       <div
         className="outerContainer"
         style={{
-          border: debugPositionning ? '6px solid blue' : 'none',
+          border: debug ? '6px solid blue' : 'none',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -185,7 +186,7 @@ export class VideoViewer extends Component {
         {video && (
         <>
           <div style={{
-            border: debugPositionning ? '6px solid red' : 'none',
+            border: debug ? '6px solid red' : 'none',
             position: 'relative',
             width: '100%',
             display: 'flex',
@@ -198,7 +199,7 @@ export class VideoViewer extends Component {
           >
             <ResizeObserver onResize={this.setContainerRatio} />
             <div style={{
-              border: debugPositionning ? '6px solid green' : 'none',
+              border: debug ? '6px solid green' : 'none',
               width: playerStyle.width,
               height: playerStyle.height,
               aspectRatio: playerStyle.aspectRatio,
@@ -228,7 +229,7 @@ export class VideoViewer extends Component {
                   },
                 }}
                 style={{
-                  border: debugPositionning ? '6px solid pink' : 'none',
+                  border: debug ? '6px solid pink' : 'none',
                   position: 'absolute', // 'absolute' or 'block
                   maxWidth: '100%',
                   maxHeight: '100%',
@@ -252,7 +253,7 @@ export class VideoViewer extends Component {
                   height: '100%',
                   width: '100%',
                   objectFit: 'contain',
-                  border: debugPositionning ? '6px solid yellow' : 'none',
+                  border: debug ? '6px solid yellow' : 'none',
                 }}
               />
               )}
@@ -274,6 +275,7 @@ VideoViewer.propTypes = {
   canvas: PropTypes.object,
   captions: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   currentTime: PropTypes.number,
+  debug: PropTypes.bool.isRequired,
   muted: PropTypes.bool,
   paused: PropTypes.bool,
   setCurrentTime: PropTypes.func,
