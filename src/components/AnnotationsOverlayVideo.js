@@ -127,16 +127,6 @@ export class AnnotationsOverlayVideo extends Component {
       seekToTime,
     } = this.props;
 
-    console.log('AOV componentDidUpdate in AnnotationsOverlayVideo.js');
-    console.log('AOV selectedAnnotationId', selectedAnnotationId);
-    console.log('AOV seekToTime', seekToTime);
-    if (this.player) {
-      console.log('AOV playerTime', this.player.getCurrentTime());
-    } else {
-      console.log('AOV playerTime', 'player not ready');
-    }
-    console.log('AOV currentTime', currentTime);
-
     let prevVideoPausedState;
 
     this.initializeViewer();
@@ -164,7 +154,6 @@ export class AnnotationsOverlayVideo extends Component {
     // }
 
     const annotationsUpdated = !AnnotationsOverlayVideo.annotationsMatch(annotations, prevProps.annotations);
-    console.log('annotationsUpdated', annotationsUpdated);
     // eslint-disable-next-line max-len
     const searchAnnotationsUpdated = !AnnotationsOverlayVideo.annotationsMatch(searchAnnotations, prevProps.searchAnnotations);
 
@@ -292,7 +281,6 @@ export class AnnotationsOverlayVideo extends Component {
         this.seekTo(currentTime, true);
       }
     }
-    console.log('onVideoPlaying from AnnotationsOverlayVideo.js');
     this.setState({ showProgress: false });
   }
 
@@ -451,7 +439,6 @@ export class AnnotationsOverlayVideo extends Component {
 
   /** @private */
   seekTo(seekTo, resume) {
-    console.log('AOV seekTo', seekTo);
     const { setCurrentTime, setPaused } = this.props;
     setPaused(true);
     this.player.seekTo(seekTo);
@@ -644,10 +631,23 @@ export class AnnotationsOverlayVideo extends Component {
    */
   render() {
     const { showProgress } = this.state;
-    const debugPositionning = true;
+    const debug = true; // TODO remove
     const circularProgress = (<CircularProgress style={{ left: '50%', position: 'absolute', top: '50%' }} />);
     return (
       <>
+        <canvas
+          ref={this.ref}
+          style={{
+            left: 0,
+            position: 'relative',
+            top: 0,
+            border: debug ? '6px solid yellow' : 'none',
+            width: '100%',
+            height: '100%',
+          }}
+        />
+        <ResizeObserver onResize={this.onCanvasResize} />
+        ( debugPositionning && (
         <div style={{
           position: 'absolute',
           bottom: 30,
@@ -660,19 +660,7 @@ export class AnnotationsOverlayVideo extends Component {
           <span> Player Time {' '} {this.player ? this.player.getCurrentTime() : 'player not ready'} </span> <br/>
           <span> Seek Time {' '} {this.props.seekToTime} </span> <br/>
           <span> Paused {' '} {this.props.paused ? 'Paused' : 'Not paused'} </span>
-        </div>
-        <canvas
-          ref={this.ref}
-          style={{
-            left: 0,
-            position: 'relative',
-            top: 0,
-            border: debugPositionning ? '6px solid yellow' : 'none',
-            width: '100%',
-            height: '100%',
-          }}
-        />
-        <ResizeObserver onResize={this.onCanvasResize} />
+        </div>))
         { showProgress && circularProgress }
       </>
     );

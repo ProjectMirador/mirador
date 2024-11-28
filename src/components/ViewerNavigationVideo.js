@@ -40,7 +40,6 @@ export class ViewerNavigationVideo extends Component {
     if (!paused) {
       setSeekTo(newValue);
     } else {
-      console.log('setCurrentTime', newValue);
       setCurrentTime(newValue);
     }
   };
