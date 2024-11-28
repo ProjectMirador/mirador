@@ -44,7 +44,7 @@ export class AnnotationsOverlayVideo extends Component {
   }
 
   /** @private */
-  static isAnnotaionInTemporalSegment(resource, time) {
+  static isAnnotationInTemporalSegment(resource, time) {
     const temporalfragment = resource.temporalfragmentSelector;
     if (temporalfragment && temporalfragment.length > 0) {
       const start = temporalfragment[0] || 0;
@@ -130,7 +130,11 @@ export class AnnotationsOverlayVideo extends Component {
     console.log('AOV componentDidUpdate in AnnotationsOverlayVideo.js');
     console.log('AOV selectedAnnotationId', selectedAnnotationId);
     console.log('AOV seekToTime', seekToTime);
-    console.log('AOV playerTime', this.player.getCurrentTime());
+    if (this.player) {
+      console.log('AOV playerTime', this.player.getCurrentTime());
+    } else {
+      console.log('AOV playerTime', 'player not ready');
+    }
     console.log('AOV currentTime', currentTime);
 
     let prevVideoPausedState;
@@ -178,24 +182,17 @@ export class AnnotationsOverlayVideo extends Component {
 
     const selectedAnnotationsUpdated = selectedAnnotationId !== prevProps.selectedAnnotationId;
     if (selectedAnnotationsUpdated && selectedAnnotationId) {
-      if (this.currentTimeNearestAnnotationId
-        && this.currentTimeNearestAnnotationId === selectedAnnotationId) {
-        // go through
-      } else {
-        annotations.forEach((annotation) => {
-          annotation.resources.forEach((resource) => {
-            if (resource.id !== selectedAnnotationId) return;
-            if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-            if (!AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) {
-              const temporalfragment = resource.temporalfragmentSelector;
-              if (temporalfragment && temporalfragment.length > 0 && this.video) {
-                const seekto = temporalfragment[0] || 0;
-                this.seekTo(seekto, !prevVideoPausedState);
-              }
-            }
-          });
+      annotations.forEach((annotation) => {
+        annotation.resources.forEach((resource) => {
+          if (resource.id !== selectedAnnotationId) return;
+          if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
+          const temporalfragment = resource.temporalfragmentSelector;
+          if (temporalfragment && temporalfragment.length > 0 && this.player) {
+            const seekto = temporalfragment[0] || 0;
+            this.seekTo(seekto, false);
+          }
         });
-      }
+      });
     }
 
     // auto scroll
@@ -205,7 +202,7 @@ export class AnnotationsOverlayVideo extends Component {
       annotations.forEach((annotation) => {
         annotation.resources.forEach((resource) => {
           if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-          if (AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) {
+          if (AnnotationsOverlayVideo.isAnnotationInTemporalSegment(resource, currentTime)) {
             const temporalfragment = resource.temporalfragmentSelector;
             if (temporalfragment && temporalfragment.length > 0 && this.video) {
               const seekto = temporalfragment[0] || 0;
@@ -533,7 +530,7 @@ export class AnnotationsOverlayVideo extends Component {
     const relativeY = point.y - canvasY;
 
     if (resource.temporalfragmentSelector) {
-      if (!AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, time)) {
+      if (!AnnotationsOverlayVideo.isAnnotationInTemporalSegment(resource, time)) {
         return false;
       }
     }
@@ -597,7 +594,7 @@ export class AnnotationsOverlayVideo extends Component {
     annotations.forEach((annotation) => {
       annotation.resources.forEach((resource) => {
         if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-        if (!AnnotationsOverlayVideo.isAnnotaionInTemporalSegment(resource, currentTime)) return;
+        if (!AnnotationsOverlayVideo.isAnnotationInTemporalSegment(resource, currentTime)) return;
 
         const imageSource = this.getResourceImage(resource);
         const offset = canvasWorld.offsetByCanvas(resource.targetId);
@@ -651,6 +648,17 @@ export class AnnotationsOverlayVideo extends Component {
     const circularProgress = (<CircularProgress style={{ left: '50%', position: 'absolute', top: '50%' }} />);
     return (
       <>
+        <span style={{
+          position: 'absolute',
+          bottom: 30,
+          left: 0,
+          color: 'white',
+        }}
+        >
+          Selected Annot
+          {' '}
+          {this.props.selectedAnnotationId}
+        </span>
         <canvas
           ref={this.ref}
           style={{
