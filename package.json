@@ -36,8 +36,6 @@
   ],
   "repository": "https://github.com/SCENE-CE/mirador-video",
   "dependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@celluloid/react-player": "^2.14.0",
     "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.10.6",
@@ -89,6 +87,8 @@
     "uuid": "^8.1.0 || ^9.0.0 || ^10.0.0 || ^11.0.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/cli": "^7.22.10",
     "@babel/core": "^7.22.10",
     "@babel/plugin-transform-regenerator": "^7.22.10",
