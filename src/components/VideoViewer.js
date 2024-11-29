@@ -197,6 +197,7 @@ export class VideoViewer extends Component {
               maxHeight: '100%',
               maxWidth: '100%',
               width: playerStyle.width,
+              position: 'relative',
             }}
             >
               <ReactPlayer
@@ -220,7 +221,7 @@ export class VideoViewer extends Component {
                     modestbranding: 0,
                   },
                 }}
-                iiifVideoInfos={{ height: video.getHeight(), width: video.getWidth() }}
+                iiifVideoInfos={video}
                 style={{
                   aspectRatio: `${videoAspectRatio}`,
                   border: debug ? '6px solid pink' : 'none', // 'absolute' or 'block
