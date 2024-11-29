@@ -16,16 +16,6 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   setPaused: (...args) => dispatch(actions.setWindowPaused(windowId, ...args)),
 });
 
-/**
- *
- * @param theme
- */
-const styles = theme => ({
-  canvasNavStacked: {
-    flexDirection: 'column',
-  },
-});
-
 const enhance = compose(
   connect(mapStateToProps),
   withSize(),

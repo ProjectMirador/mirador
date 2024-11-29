@@ -46,7 +46,6 @@ export default class CanvasAnnotationDisplay {
 
     console.log('currentPalette', currentPalette);
 
-
     if (currentPalette.globalAlpha === 0) return;
 
     [...this.svgPaths].forEach((element) => {
@@ -152,4 +151,3 @@ export default class CanvasAnnotationDisplay {
     return xmlDoc.getElementsByTagName('path');
   }
 }
-

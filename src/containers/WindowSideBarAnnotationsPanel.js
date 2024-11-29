@@ -7,7 +7,7 @@ import {
   getAnnotationResourcesByMotivation,
 } from '../state/selectors';
 import {
-  WindowSideBarAnnotationsPanel
+  WindowSideBarAnnotationsPanel,
 } from '../components/WindowSideBarAnnotationsPanel';
 
 /**
