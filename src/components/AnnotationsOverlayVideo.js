@@ -87,7 +87,11 @@ export class AnnotationsOverlayVideo extends Component {
 
     this.onCanvasResize = this.onCanvasResize.bind(this);
 
-    const { onFunctionsReady } = this.props;
+    const { onFunctionsReady, iiifVideoInfos } = this.props;
+
+    // Used by plugin by ref // TODO Can be immproved
+    // eslint-disable-next-line react/no-unused-class-component-methods
+    this.iiifVideoInfos = iiifVideoInfos;
 
     onFunctionsReady({
       onPlay: this.onVideoPlaying,
@@ -757,6 +761,8 @@ AnnotationsOverlayVideo.propTypes = {
   highlightAllAnnotations: PropTypes.bool,
   hoverAnnotation: PropTypes.func, // eslint-disable-line react/forbid-prop-types
   hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
+  // iiifVideoInfos is used by plugin by ref
+  iiifVideoInfos: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   onFunctionsReady: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   paused: PropTypes.bool,

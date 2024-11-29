@@ -220,6 +220,7 @@ export class VideoViewer extends Component {
                     modestbranding: 0,
                   },
                 }}
+                iiifVideoInfos={{ height: video.getHeight(), width: video.getWidth() }}
                 style={{
                   aspectRatio: `${videoAspectRatio}`,
                   border: debug ? '6px solid pink' : 'none', // 'absolute' or 'block
@@ -229,7 +230,6 @@ export class VideoViewer extends Component {
                   position: 'absolute',
                   width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
                 }}
-                iiifVideoInfos={video}
                 onPlay={handleVideoEventFunctions.onPlay}
               />
               {this.playerRef.current && (
