@@ -11,13 +11,13 @@ import { VideosReferences } from '../plugins/VideosReferences';
  * display settings in the Annotation companion window
 */
 export function AnnotationSettings({
-  autoScroll,
-  autoScrollDisabled,
+  autoScroll = true,
+  autoScrollDisabled = true,
   displayAll,
   displayAllDisabled,
   t,
   toggleAnnotationDisplay,
-  toggleAnnotationAutoScroll,
+  toggleAnnotationAutoScroll = () => {},
   windowId,
 }) {
   const mediaIsVideo = typeof VideosReferences.get(windowId) !== 'undefined';
@@ -46,11 +46,6 @@ export function AnnotationSettings({
   );
 }
 
-AnnotationSettings.defaultProps = {
-  autoScroll: true,
-  autoScrollDisabled: true,
-  toggleAnnotationAutoScroll: () => {},
-};
 AnnotationSettings.propTypes = {
   autoScroll: PropTypes.bool,
   autoScrollDisabled: PropTypes.bool,
