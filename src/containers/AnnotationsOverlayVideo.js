@@ -26,29 +26,29 @@ import {
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
-  annotations: getPresentAnnotationsOnSelectedCanvases(state, {windowId}),
-  canvas: (getCurrentCanvas(state, {windowId}) || {}),
-  canvasWorld: getCurrentCanvasWorld(state, {windowId}),
-  currentTime: getWindowCurrentTime(state, {windowId}),
+  annotations: getPresentAnnotationsOnSelectedCanvases(state, { windowId }),
+  canvas: (getCurrentCanvas(state, { windowId }) || {}),
+  canvasWorld: getCurrentCanvasWorld(state, { windowId }),
+  currentTime: getWindowCurrentTime(state, { windowId }),
   debug: getConfig(state).debug || false,
   drawAnnotations: getConfig(state).window.forceDrawAnnotations || getCompanionWindowsForContent(state, {
     content: 'annotations',
-    windowId
+    windowId,
   }).length > 0,
   drawSearchAnnotations: getConfig(state).window.forceDrawAnnotations || getCompanionWindowsForContent(state, {
     content: 'search',
-    windowId
+    windowId,
   }).length > 0,
-  highlightAllAnnotations: getWindow(state, {windowId}).highlightAllAnnotations,
-  hoveredAnnotationIds: getWindow(state, {windowId}).hoveredAnnotationIds,
+  highlightAllAnnotations: getWindow(state, { windowId }).highlightAllAnnotations,
+  hoveredAnnotationIds: getWindow(state, { windowId }).hoveredAnnotationIds,
   palette: getTheme(state).palette,
-  paused: getWindowPausedStatus(state, {windowId}),
+  paused: getWindowPausedStatus(state, { windowId }),
   searchAnnotations: getSearchAnnotationsForWindow(
-      state,
-      {windowId},
+    state,
+    { windowId },
   ),
-  seekToTime: getWindowSeekToTime(state, {windowId}),
-  selectedAnnotationId: getSelectedAnnotationId(state, {windowId}),
+  seekToTime: getWindowSeekToTime(state, { windowId }),
+  selectedAnnotationId: getSelectedAnnotationId(state, { windowId }),
 });
 
 /**

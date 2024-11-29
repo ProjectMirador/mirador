@@ -12,7 +12,7 @@ export function ViewerNavigation({
   setNextCanvas = () => {},
   setPreviousCanvas = () => {},
   t,
-  beforeClick,
+  beforeClick = () => {},
   viewingDirection = '',
 }) {
   let htmlDir = 'ltr';
@@ -70,13 +70,4 @@ ViewerNavigation.propTypes = {
   setPreviousCanvas: PropTypes.func,
   t: PropTypes.func.isRequired,
   viewingDirection: PropTypes.string,
-};
-
-ViewerNavigation.defaultProps = {
-  beforeClick: () => {},
-  hasNextCanvas: false,
-  hasPreviousCanvas: false,
-  setNextCanvas: () => {},
-  setPreviousCanvas: () => {},
-  viewingDirection: '',
 };
