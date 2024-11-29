@@ -1,6 +1,6 @@
 import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
-import React, { createRef, Component } from 'react';
+import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import ResizeObserver from 'react-resize-observer';
 import ReactPlayer from '@celluloid/react-player';
@@ -13,26 +13,19 @@ export class VideoViewer extends Component {
   /** */
   constructor(props) {
     super(props);
-    this.videoRef = createRef();
     this.playerRef = createRef();
-
-    console.log('Debug mode', this.props.debug);
 
     this.state = {
       containerRatio: 1,
-      start: 0,
-      time: 0,
       handleVideoEventFunctions: {
         onPlay: () => {
           console.log('onPlay');
         },
       },
+      start: 0,
+      time: 0,
     };
   }
-
-  handleVideoEventFunctions = (handleVideoEventFunctions) => {
-    this.setState({ handleVideoEventFunctions });
-  };
 
   /** */
   componentDidMount() {
@@ -40,17 +33,14 @@ export class VideoViewer extends Component {
     setPaused(true);
 
     // TODO Implement text track support
-    /* const video = this.videoRef.current;
-         if (video && video.textTracks.length > 0) setHasTextTrack(true); */
   }
 
   /** */
   componentDidUpdate(prevProps) {
     console.log('componentDidUpdate in VideoViewer.js');
     const {
-      canvas, currentTime, muted, paused,
+      canvas, currentTime, paused,
       setCurrentTime, setPaused,
-      textTrackDisabled,
     } = this.props;
 
     if (paused !== prevProps.paused) {
@@ -80,6 +70,17 @@ export class VideoViewer extends Component {
     this.timerStop();
   }
 
+  /**
+   * @param {S[string]} handleVideoEventFunctions
+   */
+  handleVideoEventFunctions = (handleVideoEventFunctions) => {
+    this.setState({ handleVideoEventFunctions });
+  };
+
+  setContainerRatio = (ref) => {
+    this.setState({ containerRatio: ref.width / ref.height });
+  };
+
   /** */
   timerStart() {
     const { currentTime } = this.props;
@@ -107,15 +108,11 @@ export class VideoViewer extends Component {
     this.setState({ time: 0 });
   }
 
-  setContainerRatio = (ref) => {
-    this.setState({ containerRatio: ref.width / ref.height });
-  };
-
   /* eslint-disable jsx-a11y/media-has-caption */
   /** */
   render() {
     const {
-      annotations, canvas, currentTime, videoOptions, windowId, paused, muted, debug,
+      canvas, currentTime, windowId, paused, muted, debug,
     } = this.props;
 
     const { containerRatio } = this.state;
@@ -140,10 +137,6 @@ export class VideoViewer extends Component {
       ]).filter((resource) => resource.body && resource.body[0].__jsonld && resource.body[0].__jsonld.type === 'Video'),
     );
 
-    // const vttContent = annotations
-    //     .flatMap(annoPage => annoPage.json.items.map(anno => anno.body))
-    //     .flat().filter((body) => body.format === 'text/vtt');
-
     // Only one video can be displayed at a time in this implementation.
     const len = videoResources.length;
     const video = len > 0
@@ -163,11 +156,10 @@ export class VideoViewer extends Component {
     };
 
     const playerStyle = {
+      aspectRatio: `${videoAspectRatio}`,
       height: (videoAspectRatio < containerRatio ? '100%' : 'auto'),
       width: (videoAspectRatio < containerRatio ? 'auto' : '100%'),
-      aspectRatio: `${videoAspectRatio}`,
     };
-
 
     const { handleVideoEventFunctions } = this.state;
 
@@ -176,35 +168,35 @@ export class VideoViewer extends Component {
         className="outerContainer"
         style={{
           border: debug ? '6px solid blue' : 'none',
-          width: '100%',
-          height: '100%',
           display: 'flex',
+          height: '100%',
           justifyContent: 'center',
           position: 'relative',
+          width: '100%',
         }}
       >
         {video && (
         <>
           <div style={{
+            alignItems: 'center',
+            backgroundColor: 'black',
             border: debug ? '6px solid red' : 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            marginBottom: '122px', // TODO Space for navigation controls
             position: 'relative',
             width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: '122px', // TODO Space for navigation controls
-            flexDirection: 'column',
-            backgroundColor: 'black',
           }}
           >
             <ResizeObserver onResize={this.setContainerRatio} />
             <div style={{
-              border: debug ? '6px solid green' : 'none',
-              width: playerStyle.width,
-              height: playerStyle.height,
               aspectRatio: playerStyle.aspectRatio,
-              maxWidth: '100%',
+              border: debug ? '6px solid green' : 'none',
+              height: playerStyle.height,
               maxHeight: '100%',
+              maxWidth: '100%',
+              width: playerStyle.width,
             }}
             >
               <ReactPlayer
@@ -229,13 +221,13 @@ export class VideoViewer extends Component {
                   },
                 }}
                 style={{
-                  border: debug ? '6px solid pink' : 'none',
-                  position: 'absolute', // 'absolute' or 'block
-                  maxWidth: '100%',
-                  maxHeight: '100%',
-                  width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
-                  height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
                   aspectRatio: `${videoAspectRatio}`,
+                  border: debug ? '6px solid pink' : 'none', // 'absolute' or 'block
+                  height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
+                  maxHeight: '100%',
+                  maxWidth: '100%',
+                  position: 'absolute',
+                  width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
                 }}
                 iiifVideoInfos={video}
                 onPlay={handleVideoEventFunctions.onPlay}
@@ -250,10 +242,10 @@ export class VideoViewer extends Component {
                 key={`${windowId} ${video.id}`}
                 highlightAllAnnotations
                 style={{
-                  height: '100%',
-                  width: '100%',
-                  objectFit: 'contain',
                   border: debug ? '6px solid yellow' : 'none',
+                  height: '100%',
+                  objectFit: 'contain',
+                  width: '100%',
                 }}
               />
               )}
@@ -273,15 +265,12 @@ VideoViewer.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   // eslint-disable-next-line react/forbid-prop-types
   canvas: PropTypes.object,
-  captions: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   currentTime: PropTypes.number,
   debug: PropTypes.bool.isRequired,
   muted: PropTypes.bool,
   paused: PropTypes.bool,
   setCurrentTime: PropTypes.func,
-  setHasTextTrack: PropTypes.func,
   setPaused: PropTypes.func,
-  textTrackDisabled: PropTypes.bool,
   videoOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windowId: PropTypes.string.isRequired,
 };
@@ -289,16 +278,12 @@ VideoViewer.propTypes = {
 VideoViewer.defaultProps = {
   annotations: [],
   canvas: {},
-  captions: [],
   currentTime: 0,
   muted: false,
   paused: true,
   setCurrentTime: () => {
   },
-  setHasTextTrack: () => {
-  },
   setPaused: () => {
   },
-  textTrackDisabled: true,
   videoOptions: {},
 };

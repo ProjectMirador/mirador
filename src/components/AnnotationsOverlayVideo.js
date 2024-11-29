@@ -64,8 +64,11 @@ export class AnnotationsOverlayVideo extends Component {
   constructor(props) {
     super(props);
 
+    // eslint-disable-next-line react/no-unused-class-component-methods
     this.drawAnnotations = true; // TODO force
+    // eslint-disable-next-line react/no-unused-class-component-methods
     this.highlightAllAnnotations = true; // TODO force
+    // eslint-disable-next-line react/no-unused-class-component-methods
     this.drawSearchAnnotations = true; // TODO force
 
     this.ref = createRef();
@@ -84,14 +87,14 @@ export class AnnotationsOverlayVideo extends Component {
 
     this.onCanvasResize = this.onCanvasResize.bind(this);
 
-    this.props.onFunctionsReady({
+    const { onFunctionsReady } = this.props;
+
+    onFunctionsReady({
       onPlay: this.onVideoPlaying,
     });
 
     this.imagesLoading = [];
     this.imagesReady = [];
-
-    this.currentOrientation = props.currentOrientation;
 
     const { videoTarget: temporalfragment } = this.props;
     if (temporalfragment && temporalfragment.length > 0) {
@@ -99,6 +102,7 @@ export class AnnotationsOverlayVideo extends Component {
     } else {
       this.temporalOffset = 0;
     }
+    // eslint-disable-next-line react/no-unused-class-component-methods
     this.currentTimeNearestAnnotationId = null;
 
     this.state = {
@@ -259,8 +263,10 @@ export class AnnotationsOverlayVideo extends Component {
     this.updateCanvas();
   }
 
-  /** */
-  onVideoLoadedMetadata(event) {
+  /**
+   * @event event
+   * */
+  onVideoLoadedMetadata(event) { // eslint-disable-line class-methods-use-this
     // if (this.video) {
     //   const { currentTime } = this.props;
     //   const { temporalOffset } = this;
@@ -289,7 +295,9 @@ export class AnnotationsOverlayVideo extends Component {
     this.setState({ showProgress: true });
   }
 
-  /** */
+  /**
+   * @event click event
+   * */
   onCanvasClick(event) {
     const { canvas: canvas_, canvasWorld, currentTime } = this.props;
 
@@ -631,20 +639,25 @@ export class AnnotationsOverlayVideo extends Component {
    */
   render() {
     const { showProgress } = this.state;
-    const { debug } = this.props;
-    console.log('AnnotationsOverlayVideo render debug', debug);
+    const {
+      currentTime,
+      debug,
+      paused,
+      seekToTime,
+      selectedAnnotationId,
+    } = this.props;
     const circularProgress = (<CircularProgress style={{ left: '50%', position: 'absolute', top: '50%' }} />);
     return (
       <>
         <canvas
           ref={this.ref}
           style={{
+            border: debug ? '6px solid yellow' : 'none',
+            height: '100%',
             left: 0,
             position: 'relative',
             top: 0,
-            border: debug ? '6px solid yellow' : 'none',
             width: '100%',
-            height: '100%',
           }}
         />
         <ResizeObserver onResize={this.onCanvasResize} />
@@ -661,7 +674,7 @@ export class AnnotationsOverlayVideo extends Component {
             Selected Annot
             {' '}
             {' '}
-            {this.props.selectedAnnotationId}
+            {selectedAnnotationId}
             {' '}
           </span>
           <br />
@@ -670,7 +683,7 @@ export class AnnotationsOverlayVideo extends Component {
             Current Time
             {' '}
             {' '}
-            {this.props.currentTime}
+            {currentTime}
             {' '}
           </span>
           {' '}
@@ -690,7 +703,7 @@ export class AnnotationsOverlayVideo extends Component {
             Seek Time
             {' '}
             {' '}
-            {this.props.seekToTime}
+            {seekToTime}
             {' '}
           </span>
           {' '}
@@ -700,7 +713,7 @@ export class AnnotationsOverlayVideo extends Component {
             Paused
             {' '}
             {' '}
-            {this.props.paused ? 'Paused' : 'Not paused'}
+            {paused ? 'Paused' : 'Not paused'}
             {' '}
           </span>
         </div>
@@ -736,26 +749,25 @@ AnnotationsOverlayVideo.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   canvas: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
-  currentOrientation: PropTypes.string,
   currentTime: PropTypes.number,
   debug: PropTypes.bool.isRequired,
   deselectAnnotation: PropTypes.func,
   drawAnnotations: PropTypes.bool,
   drawSearchAnnotations: PropTypes.bool,
   highlightAllAnnotations: PropTypes.bool,
-  onFunctionsReady: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  hoverAnnotation: PropTypes.func,
+  hoverAnnotation: PropTypes.func, // eslint-disable-line react/forbid-prop-types
   hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
+  onFunctionsReady: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   paused: PropTypes.bool,
+  playerRef: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   searchAnnotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   seekToTime: PropTypes.number,
   selectAnnotation: PropTypes.func,
   selectedAnnotationId: PropTypes.string,
   setCurrentTime: PropTypes.func,
-  setPaused: PropTypes.func,
+  setPaused: PropTypes.func, // eslint-disable-line react/forbid-prop-types
   videoRef: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  playerRef: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   videoTarget: PropTypes.arrayOf(PropTypes.number),
   windowId: PropTypes.string.isRequired,
 };
