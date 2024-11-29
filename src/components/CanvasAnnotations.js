@@ -40,7 +40,6 @@ const StyledFooterAnnotationContainer = styled('div')(({ theme }) => ({
 */
 export function CanvasAnnotations({
   annotations = [],
-  autoScroll = true,
   index,
   label,
   selectedAnnotationId = undefined,
