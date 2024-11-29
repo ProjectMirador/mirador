@@ -295,7 +295,9 @@ export class AnnotationsOverlayVideo extends Component {
     this.setState({ showProgress: true });
   }
 
-  /** */
+  /**
+   * @event click event
+   * */
   onCanvasClick(event) {
     const { canvas: canvas_, canvasWorld, currentTime } = this.props;
 
