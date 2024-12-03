@@ -129,7 +129,7 @@ export function CollectionDialog({
   const rights = manifest && (asArray(manifest.getProperty('rights') || manifest.getProperty('license')));
 
   const requiredStatement = manifest
-    && asArray(manifest.getRequiredStatement()).filter(l => l.getValue()).map(labelValuePair => ({
+    && asArray(manifest.getRequiredStatement()).filter(l => l && l.getValue()).map(labelValuePair => ({
       label: null,
       values: labelValuePair.getValues(),
     }));

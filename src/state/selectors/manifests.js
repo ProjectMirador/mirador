@@ -275,7 +275,7 @@ export const getRequiredStatement = createSelector(
   [getManifestoInstance],
   manifest => manifest
     && asArray(manifest.getRequiredStatement())
-      .filter(l => l.getValues().some(v => v))
+      .filter(l => l && l.getValues().some(v => v))
       .map(labelValuePair => ({
         label: (labelValuePair.label && labelValuePair.label.getValue()) || null,
         values: labelValuePair.getValues(),
