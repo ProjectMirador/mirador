@@ -15,6 +15,16 @@ export const viewersReducer = (state = {}, action) => {
           ...action.payload,
         },
       };
+    case ActionTypes.ADD_WINDOW:
+      if (!action.window.initialViewerConfig) return state;
+
+      return {
+        ...state,
+        [action.window.id]: {
+          ...state[action.window.id],
+          ...action.window.initialViewerConfig,
+        },
+      };
     case ActionTypes.REMOVE_WINDOW:
       return omit(state, action.windowId);
     case ActionTypes.SET_WINDOW_VIEW_TYPE:
