@@ -37,8 +37,22 @@ describe('SearchPanelControls', () => {
     await user.keyboard('somestring');
     await user.click(await screen.findByText('somestring 12345'));
     expect(fetchSearch).toHaveBeenCalledWith('window', 'cw', 'http://example.com/search?q=somestring+12345', 'somestring 12345');
-
     fetch.resetMocks();
+  });
+  it('should fetch result only once', async () => {
+    const fetchSearch = jest.fn();
+    const user = userEvent.setup();
+
+    createWrapper({
+      autocompleteService: { id: 'http://example.com/autocomplete' },
+      fetchSearch,
+      searchService: { id: 'http://example.com/search', options: { resource: { id: 'abc' } } },
+    });
+
+    await user.click(screen.getByRole('combobox'));
+    await user.keyboard('somestring');
+    await user.keyboard('{Enter}');
+    expect(fetchSearch).toHaveBeenCalledTimes(1);
   });
 
   it('renders a text input through the renderInput prop', () => {

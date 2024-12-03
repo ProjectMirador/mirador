@@ -28,7 +28,7 @@ export class SearchPanelControls extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { search: props.query, suggestions: [] };
+    this.state = { isSuggestionSelected: false, search: props.query, suggestions: [] };
     this.handleChange = this.handleChange.bind(this);
     this.submitSearch = this.submitSearch.bind(this);
     this.getSuggestions = this.getSuggestions.bind(this);
@@ -66,6 +66,7 @@ export class SearchPanelControls extends Component {
       return;
     }
     this.setState({
+      isSuggestionSelected: false,
       search: value,
       suggestions: [],
     });
@@ -109,16 +110,24 @@ export class SearchPanelControls extends Component {
     const {
       companionWindowId, fetchSearch, searchService, windowId,
     } = this.props;
-    const { search } = this.state;
-    event && event.preventDefault();
+    const { search, isSuggestionSelected } = this.state;
     if (!search) return;
+
+    if (event && event.type === 'submit' && isSuggestionSelected) {
+      event.preventDefault();
+      return; // Do not trigger search again if a suggestion was selected
+    }
+
+    if (event) {
+      event.preventDefault();
+    }
     fetchSearch(windowId, companionWindowId, `${searchService.id}?${new URLSearchParams({ q: search })}`, search);
   }
 
   /** */
   selectItem(_event, selectedItem, _reason) {
     if (selectedItem && getMatch(selectedItem)) {
-      this.setState({ search: getMatch(selectedItem) }, this.submitSearch);
+      this.setState({ isSuggestionSelected: true, search: getMatch(selectedItem) }, this.submitSearch);
     }
   }
 
