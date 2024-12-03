@@ -78,6 +78,7 @@ export class OpenSeadragonViewer extends Component {
 
     if (prevState.viewer === undefined) {
       if (viewerConfig) {
+        viewerConfig.zoom = viewerConfig.zoom || viewer.viewport.imageToViewportZoom(1);
         viewer.viewport.panTo(viewerConfig, true);
         viewer.viewport.zoomTo(viewerConfig.zoom, viewerConfig, true);
         viewerConfig.degrees !== undefined && viewer.viewport.setRotation(viewerConfig.degrees);
