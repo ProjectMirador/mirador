@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useTranslation } from 'react-i18next';
 import CompanionWindowRegistry from '../lib/CompanionWindowRegistry';
 import CompanionWindow from '../containers/CompanionWindow';
 import ErrorContent from '../containers/ErrorContent';
@@ -9,8 +10,9 @@ import ErrorContent from '../containers/ErrorContent';
  * Render a companion window using the appropriate component for the content
  */
 export function CompanionWindowFactory({
-  content = null, id, t = key => key, windowId,
+  content = null, id, windowId,
 }) {
+  const { t } = useTranslation();
   const ErroredCompanionWindow = useCallback(({ error }) => (
     <CompanionWindow
       title={t('error')}
@@ -35,6 +37,5 @@ export function CompanionWindowFactory({
 CompanionWindowFactory.propTypes = {
   content: PropTypes.string,
   id: PropTypes.string.isRequired,
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };

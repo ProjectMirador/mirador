@@ -4,11 +4,15 @@ import PropTypes from 'prop-types';
 import { createStore, applyMiddleware } from 'redux';
 import { thunk } from 'redux-thunk';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { I18nextProvider } from 'react-i18next';
 import createRootReducer from '../../src/state/reducers/rootReducer';
 import settings from '../../src/config/settings';
+import createI18nInstance from '../../src/i18n';
 
 const rootReducer = createRootReducer();
 const theme = createTheme(settings.theme);
+
+const i18n = createI18nInstance();
 
 /**
  * Hook up our rendered object to redux
@@ -24,7 +28,15 @@ function renderWithProviders(
 ) {
   /** :nodoc: */
   function Wrapper({ children }) {
-    return <ThemeProvider theme={theme}><Provider store={store}>{children}</Provider></ThemeProvider>;
+    return (
+      <I18nextProvider i18n={i18n}>
+        <ThemeProvider theme={theme}>
+          <Provider store={store}>
+            {children}
+          </Provider>
+        </ThemeProvider>
+      </I18nextProvider>
+    );
   }
 
   Wrapper.propTypes = {

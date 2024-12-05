@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import WindowTopMenu from '../containers/WindowTopMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import WindowOptionsIcon from './icons/WindowOptionsIcon';
 
 /**
  */
-export function WindowTopMenuButton({ classes = {}, t = k => k, windowId }) {
+export function WindowTopMenuButton({ classes = {}, windowId }) {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
 
@@ -48,6 +50,5 @@ export function WindowTopMenuButton({ classes = {}, t = k => k, windowId }) {
 
 WindowTopMenuButton.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };

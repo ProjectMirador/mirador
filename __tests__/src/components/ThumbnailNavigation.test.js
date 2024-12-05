@@ -21,7 +21,6 @@ function Subject({ fixture = manifestJson, ...props }) {
       windowId="foobar"
       thumbnailNavigation={{ height: 150, width: 100 }}
       position="far-bottom"
-      t={k => k}
       {...props}
     />
   );

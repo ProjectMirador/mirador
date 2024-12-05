@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { WorkspaceSelectionDialog } from '../components/WorkspaceSelectionDialog';
 import * as actions from '../state/actions';
@@ -23,7 +22,6 @@ const mapDispatchToProps = {
 const mapStateToProps = state => ({ workspaceType: getWorkspaceType(state) });
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WorkspaceSelectionDialog'),
 );

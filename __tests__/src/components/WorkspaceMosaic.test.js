@@ -105,8 +105,8 @@ describe('WorkspaceMosaic', () => {
     it('when window is available', () => {
       wrapper = createWrapper({ windowIds });
 
-      expect(screen.getAllByLabelText('window', { container: 'section' })[0]).toHaveAttribute('id', '1');
-      expect(screen.getAllByLabelText('window', { container: 'section' })[1]).toHaveAttribute('id', '2');
+      expect(screen.getAllByLabelText('Window:', { container: 'section' })[0]).toHaveAttribute('id', '1');
+      expect(screen.getAllByLabelText('Window:', { container: 'section' })[1]).toHaveAttribute('id', '2');
 
       expect(wrapper.container.querySelector('.mosaic-window-title')).toBeEmptyDOMElement();
       expect(wrapper.container.querySelector('.mosaic-window-controls')).toBeEmptyDOMElement();
@@ -141,7 +141,7 @@ describe('WorkspaceMosaic', () => {
         },
       );
 
-      const dragTarget = screen.getAllByLabelText('windowNavigation')[0];
+      const dragTarget = screen.getAllByLabelText('Window navigation')[0];
       const dropTarget = container.querySelector('.mirador-mosaic > .drop-target-container > .drop-target.top'); // eslint-disable-line testing-library/no-container
 
       fireEvent.dragStart(dragTarget);

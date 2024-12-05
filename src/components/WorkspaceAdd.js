@@ -13,6 +13,7 @@ import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
+import { useTranslation } from 'react-i18next';
 import ns from '../config/css-ns';
 import ManifestForm from '../containers/ManifestForm';
 import ManifestListItem from '../containers/ManifestListItem';
@@ -38,9 +39,9 @@ const StyledMiradorMenuButton = styled(MiradorMenuButton)(() => ({
  * @private
  */
 export function WorkspaceAdd({
-  addResource = () => {}, catalog = [], setWorkspaceAddVisibility, t = k => k,
-  ...rest
+  addResource = () => {}, catalog = [], setWorkspaceAddVisibility, ...rest
 }) {
+  const { t } = useTranslation();
   const [addResourcesOpen, setAddResourcesVisibility] = useState(false);
   const ref = useRef();
 
@@ -197,5 +198,4 @@ WorkspaceAdd.propTypes = {
     provider: PropTypes.string,
   })),
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
-  t: PropTypes.func,
 };

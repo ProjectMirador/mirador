@@ -2,6 +2,7 @@ import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import ns from '../config/css-ns';
 
 const StyledOsdInfo = styled('div')(() => ({
@@ -20,8 +21,8 @@ export function ViewerInfo({
   canvasCount,
   canvasIndex,
   canvasLabel = undefined,
-  t = k => k,
 }) {
+  const { t } = useTranslation();
   return (
     <StyledOsdInfo className={classNames(ns('osd-info'))}>
       <Typography display="inline" variant="caption" className={ns('canvas-count')}>
@@ -38,5 +39,4 @@ ViewerInfo.propTypes = {
   canvasCount: PropTypes.number.isRequired,
   canvasIndex: PropTypes.number.isRequired,
   canvasLabel: PropTypes.string,
-  t: PropTypes.func,
 };

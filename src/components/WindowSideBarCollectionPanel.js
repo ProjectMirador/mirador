@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpwardSharp';
+import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 
@@ -70,10 +71,10 @@ export function WindowSideBarCollectionPanel({
   parentCollection = null,
   updateCompanionWindow,
   updateWindow,
-  t = k => k,
   variant = null,
   windowId,
 }) {
+  const { t } = useTranslation();
   /** */
   const isMultipart = (() => {
     if (!collection) return false;
@@ -184,7 +185,6 @@ WindowSideBarCollectionPanel.propTypes = {
   isFetching: PropTypes.bool,
   manifestId: PropTypes.string.isRequired,
   parentCollection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func,
   updateCompanionWindow: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
   variant: PropTypes.string,

@@ -36,23 +36,3 @@ i18next.init({
     en,
   },
 });
-
-jest.mock('react-i18next', () => ({
-  I18nextProvider: ({ children }) => children,
-  initReactI18next: {
-    init: jest.fn(),
-    type: '3rdParty',
-  },
-  useTranslation: () => ({
-    t: (key) => key,
-  }),
-  // this mock makes sure any components using the translate HoC receive the t function as a prop
-  withTranslation: () => (WrappedComponent) => {
-    /**
-     *
-     */
-    const I18nAwareComponent = ({ t = (k => k), ...props }) => <WrappedComponent t={t} {...props} />; // eslint-disable-line react/prop-types
-
-    return I18nAwareComponent;
-  },
-}));

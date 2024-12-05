@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { Workspace } from '../components/Workspace';
 import {
@@ -34,7 +33,6 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('Workspace'),
   // further HOC go here

@@ -12,14 +12,16 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { WorkspaceDialog } from './WorkspaceDialog';
 
 /**
  */
 export function WorkspaceExport({
-  children = null, container = null, open = false, t = k => k, handleClose, exportableState,
+  children = null, container = null, open = false, handleClose, exportableState,
 }) {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const exportedState = JSON.stringify(exportableState, null, 2);
 
@@ -92,5 +94,4 @@ WorkspaceExport.propTypes = {
   exportableState: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
-  t: PropTypes.func,
 };

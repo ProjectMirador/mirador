@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { VariableSizeList as List } from 'react-window';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import CanvasWorld from '../lib/CanvasWorld';
 import ThumbnailCanvasGrouping from '../containers/ThumbnailCanvasGrouping';
 import ns from '../config/css-ns';
@@ -11,8 +12,9 @@ import ns from '../config/css-ns';
  */
 export function ThumbnailNavigation({
   canvasGroupings, canvasIndex, hasNextCanvas = false, hasPreviousCanvas = false, position,
-  setNextCanvas = () => {}, setPreviousCanvas = () => {}, t, thumbnailNavigation, view = undefined, viewingDirection = '', windowId,
+  setNextCanvas = () => {}, setPreviousCanvas = () => {}, thumbnailNavigation, view = undefined, viewingDirection = '', windowId,
 }) {
+  const { t } = useTranslation();
   const scrollbarSize = 15;
   const spacing = 8; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
   const gridRef = useRef();
@@ -199,7 +201,6 @@ ThumbnailNavigation.propTypes = {
   position: PropTypes.string.isRequired,
   setNextCanvas: PropTypes.func,
   setPreviousCanvas: PropTypes.func,
-  t: PropTypes.func.isRequired,
   thumbnailNavigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
   viewingDirection: PropTypes.string,
