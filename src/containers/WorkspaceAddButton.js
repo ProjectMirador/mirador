@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getWindowIds, getWorkspace } from '../state/selectors';
@@ -30,7 +29,6 @@ const mapStateToProps = (state, { width }) => {
 const mapDispatchToProps = { setWorkspaceAddVisibility: actions.setWorkspaceAddVisibility };
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WorkspaceAddButton'),
 );

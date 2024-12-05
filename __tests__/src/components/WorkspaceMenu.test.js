@@ -16,7 +16,7 @@ function createShallow(props) {
   );
 }
 
-describe('WorkspaceMenu', () => {
+describe('Workspace settings', () => {
   let handleClose;
   const showZoomControls = false;
   let toggleZoomControls;
@@ -35,7 +35,7 @@ describe('WorkspaceMenu', () => {
     const user = userEvent.setup();
     createShallow({ handleClose, showZoomControls, toggleZoomControls });
 
-    await user.click(screen.getByRole('menuitem', { name: 'showZoomControls' }));
+    await user.click(screen.getByRole('menuitem', { name: 'Show zoom controls' }));
     expect(handleClose).toBeCalled();
   });
 
@@ -44,7 +44,7 @@ describe('WorkspaceMenu', () => {
       handleClose, isWorkspaceAddVisible: true, showZoomControls, toggleZoomControls,
     });
 
-    expect(screen.getByRole('menuitem', { name: 'showZoomControls' })).toHaveAttribute('aria-disabled', 'true');
+    expect(screen.getByRole('menuitem', { name: 'Show zoom controls' })).toHaveAttribute('aria-disabled', 'true');
   });
 
   describe('handleZoomToggleClick', () => {
@@ -53,7 +53,7 @@ describe('WorkspaceMenu', () => {
 
       createShallow({ handleClose, showZoomControls, toggleZoomControls });
 
-      await user.click(screen.getByRole('menuitem', { name: 'showZoomControls' }));
+      await user.click(screen.getByRole('menuitem', { name: 'Show zoom controls' }));
 
       expect(toggleZoomControls).toBeCalledWith(true);
     });

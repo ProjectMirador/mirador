@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import * as actions from '../state/actions';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchPanel } from '../components/SearchPanel';
@@ -23,7 +22,6 @@ const mapDispatchToProps = (dispatch, props) => ({
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withTranslation(),
   withPlugins('SearchPanel'),
 );
 

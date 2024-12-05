@@ -12,7 +12,7 @@ describe('Branding', () => {
   it('renders additional items for the wide variant', () => {
     render(<Branding variant="wide" />);
 
-    expect(screen.getByText('mirador')).toBeInTheDocument();
+    expect(screen.getByText('Mirador')).toBeInTheDocument();
     expect(screen.getByRole('link')).toBeInTheDocument();
   });
 });

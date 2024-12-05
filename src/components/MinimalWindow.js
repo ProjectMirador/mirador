@@ -7,6 +7,7 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/CloseSharp';
+import { useTranslation } from 'react-i18next';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
@@ -22,9 +23,9 @@ export function MinimalWindow({
   children = null,
   label = '',
   removeWindow = () => {},
-  t = k => k,
   windowId,
 }) {
+  const { t } = useTranslation();
   return (
     <Paper
       component="section"
@@ -104,6 +105,5 @@ MinimalWindow.propTypes = {
   children: PropTypes.node,
   label: PropTypes.string,
   removeWindow: PropTypes.func,
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };

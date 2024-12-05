@@ -3,6 +3,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import LanguageSettings from '../containers/LanguageSettings';
 import { NestedMenu } from './NestedMenu';
 import WorkspaceSelectionDialog from '../containers/WorkspaceSelectionDialog';
@@ -14,8 +15,9 @@ import WorkspaceContext from '../contexts/WorkspaceContext';
  */
 export function WorkspaceMenu({
   handleClose, showThemePicker = false, isWorkspaceAddVisible = false,
-  t = k => k, tReady = false, toggleZoomControls = () => {}, showZoomControls = false, ...menuProps
+  tReady = false, toggleZoomControls = () => {}, showZoomControls = false, ...menuProps
 }) {
+  const { t } = useTranslation();
   const container = useContext(WorkspaceContext);
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -108,7 +110,6 @@ WorkspaceMenu.propTypes = {
   isWorkspaceAddVisible: PropTypes.bool,
   showThemePicker: PropTypes.bool,
   showZoomControls: PropTypes.bool,
-  t: PropTypes.func,
   toggleZoomControls: PropTypes.func,
   tReady: PropTypes.bool,
 };

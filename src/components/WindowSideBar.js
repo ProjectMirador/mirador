@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
+import { useTranslation } from 'react-i18next';
 import WindowSideBarButtons from '../containers/WindowSideBarButtons';
 
 const Root = styled(Drawer, { name: 'WindowSideBar', slot: 'root' })(({ theme }) => ({
@@ -18,8 +19,9 @@ const Nav = styled('nav', { name: 'WindowSideBar', slot: 'nav' })({
  * WindowSideBar
  */
 export function WindowSideBar({
-  classes = {}, direction, t, windowId, sideBarOpen = false,
+  classes = {}, direction, windowId, sideBarOpen = false,
 }) {
+  const { t } = useTranslation();
   return (
     <Root
       variant="persistent"
@@ -42,6 +44,5 @@ WindowSideBar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   direction: PropTypes.string.isRequired,
   sideBarOpen: PropTypes.bool,
-  t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };

@@ -26,11 +26,11 @@ describe('SearchPanelNavigation', () => {
         selectAnnotation,
         selectedContentSearchAnnotation: ['2'],
       });
-      expect(screen.getByText('pagination')).toBeInTheDocument();
+      expect(screen.getByText('2 of 3')).toBeInTheDocument();
       expect(screen.getAllByRole('button').length).toEqual(2);
-      await user.click(screen.getByRole('button', { name: 'searchPreviousResult' }));
+      await user.click(screen.getByRole('button', { name: 'Previous result' }));
       expect(selectAnnotation).toHaveBeenCalledWith('1');
-      await user.click(screen.getByRole('button', { name: 'searchNextResult' }));
+      await user.click(screen.getByRole('button', { name: 'Next result' }));
       expect(selectAnnotation).toHaveBeenCalledWith('3');
     });
     it('buttons disabled when no next/prev', () => {
@@ -38,8 +38,8 @@ describe('SearchPanelNavigation', () => {
         searchHits: [{ annotations: ['1'] }],
         selectedContentSearchAnnotation: ['1'],
       });
-      expect(screen.getByRole('button', { name: 'searchPreviousResult' })).toBeDisabled();
-      expect(screen.getByRole('button', { name: 'searchNextResult' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Previous result' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Next result' })).toBeDisabled();
     });
   });
 });

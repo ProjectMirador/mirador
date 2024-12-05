@@ -79,13 +79,13 @@ describe('SearchResults', () => {
     const user = userEvent.setup();
     createWrapper({});
 
-    await user.click(screen.getByRole('button', { name: 'more' }));
+    await user.click(screen.getByRole('button', { name: 'more...' }));
     expect(screen.getByRole('listitem')).toHaveTextContent(/start the chainsaw/);
 
-    expect(screen.queryByRole('button', { name: 'more' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'more...' })).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: 'backToResults' }));
-    expect(screen.getByRole('button', { name: 'more' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Back to results' }));
+    expect(screen.getByRole('button', { name: 'more...' })).toBeInTheDocument();
   });
 
   describe('annotation-only search results', () => {
@@ -108,7 +108,7 @@ describe('SearchResults', () => {
         searchHits: [],
       });
 
-      expect(screen.getByText('searchNoResults')).toHaveClass('MuiTypography-body1');
+      expect(screen.getByText('No results found')).toHaveClass('MuiTypography-body1');
     });
 
     it('while fetching', () => {
@@ -118,7 +118,7 @@ describe('SearchResults', () => {
         searchHits: [],
       });
 
-      expect(screen.queryByText('searchNoResults')).not.toBeInTheDocument();
+      expect(screen.queryByText('No results found')).not.toBeInTheDocument();
     });
 
     it('without a query', () => {
@@ -126,7 +126,7 @@ describe('SearchResults', () => {
         isFetching: false,
         query: '',
       });
-      expect(screen.queryByText('searchNoResults')).not.toBeInTheDocument();
+      expect(screen.queryByText('No results found')).not.toBeInTheDocument();
     });
   });
 
@@ -139,7 +139,7 @@ describe('SearchResults', () => {
         nextSearch: 'search?page=2',
       });
 
-      await user.click(screen.getByRole('button', { name: /moreResults/ }));
+      await user.click(screen.getByRole('button', { name: /More results/ }));
       expect(fetchSearch).toHaveBeenCalledWith('window', 'cwid', 'search?page=2', 'query');
     });
   });

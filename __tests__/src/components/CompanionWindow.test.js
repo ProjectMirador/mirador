@@ -42,7 +42,7 @@ describe('CompanionWindow', () => {
         updateCompanionWindow,
       });
 
-      await user.click(screen.getByRole('button', { name: 'openInCompanionWindow' }));
+      await user.click(screen.getByRole('button', { name: 'Open in separate panel' }));
 
       expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'right' });
     });
@@ -57,7 +57,7 @@ describe('CompanionWindow', () => {
         onCloseClick: removeCompanionWindowEvent,
       });
 
-      await user.click(screen.getByRole('button', { name: 'closeCompanionWindow' }));
+      await user.click(screen.getByRole('button', { name: 'Close panel' }));
 
       expect(removeCompanionWindowEvent).toHaveBeenCalledTimes(1);
     });
@@ -97,7 +97,7 @@ describe('CompanionWindow', () => {
 
       expect(screen.getByRole('complementary')).toHaveClass('mirador-companion-window-right');
 
-      await user.click(screen.getByRole('button', { name: 'moveCompanionWindowToBottom' }));
+      await user.click(screen.getByRole('button', { name: 'Move to bottom' }));
 
       expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'bottom' });
     });
@@ -115,7 +115,7 @@ describe('CompanionWindow', () => {
 
       expect(screen.getByRole('complementary')).toHaveClass('mirador-companion-window-bottom ');
 
-      await user.click(screen.getByRole('button', { name: 'moveCompanionWindowToRight' }));
+      await user.click(screen.getByRole('button', { name: 'Move to right' }));
 
       expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'right' });
     });
