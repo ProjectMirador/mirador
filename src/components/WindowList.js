@@ -1,15 +1,18 @@
+import { useContext } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import PropTypes from 'prop-types';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 
 /**
  */
 export function WindowList({
-  container = null, handleClose, windowIds, focusWindow, focusedWindowId = null,
+  handleClose, windowIds, focusWindow, focusedWindowId = null,
   t = key => key, titles = {}, tReady = false, ...menuProps
 }) {
+  const container = useContext(WorkspaceContext);
   return (
     <Menu
       anchorOrigin={{

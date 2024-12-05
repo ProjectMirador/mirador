@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
@@ -8,13 +8,15 @@ import { NestedMenu } from './NestedMenu';
 import WorkspaceSelectionDialog from '../containers/WorkspaceSelectionDialog';
 import ChangeThemeDialog from '../containers/ChangeThemeDialog';
 import { PluginHook } from './PluginHook';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 
 /**
  */
 export function WorkspaceMenu({
-  container = null, handleClose, showThemePicker = false, isWorkspaceAddVisible = false,
+  handleClose, showThemePicker = false, isWorkspaceAddVisible = false,
   t = k => k, tReady = false, toggleZoomControls = () => {}, showZoomControls = false, ...menuProps
 }) {
+  const container = useContext(WorkspaceContext);
   const [selectedOption, setSelectedOption] = useState(null);
 
   const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
@@ -102,7 +104,6 @@ export function WorkspaceMenu({
 }
 
 WorkspaceMenu.propTypes = {
-  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
   isWorkspaceAddVisible: PropTypes.bool,
   showThemePicker: PropTypes.bool,

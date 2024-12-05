@@ -1,16 +1,18 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import MoreVertIcon from '@mui/icons-material/MoreVertSharp';
 import Menu from '@mui/material/Menu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { PluginHook } from './PluginHook';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 
 /**
  *
  */
 export function WindowTopBarPluginMenu({
-  container = null, PluginComponents = [], t, windowId, menuIcon = <MoreVertIcon />,
+  PluginComponents = [], t, windowId, menuIcon = <MoreVertIcon />,
 }) {
+  const container = useContext(WorkspaceContext);
   const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
