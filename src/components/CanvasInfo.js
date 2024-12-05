@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { LabelValueMetadata } from './LabelValueMetadata';
@@ -14,9 +15,9 @@ export function CanvasInfo({
   canvasMetadata = [],
   id,
   index = 1,
-  t = k => k,
   totalSize = 1,
 }) {
+  const { t } = useTranslation();
   const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
 
   return (
@@ -57,6 +58,5 @@ CanvasInfo.propTypes = {
   canvasMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   id: PropTypes.string.isRequired,
   index: PropTypes.number,
-  t: PropTypes.func,
   totalSize: PropTypes.number,
 };

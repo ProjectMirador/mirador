@@ -13,6 +13,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForwardSharp';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
 import SidebarIndexList from '../containers/SidebarIndexList';
 import SidebarIndexTableOfContents from '../containers/SidebarIndexTableOfContents';
@@ -40,13 +41,13 @@ export function WindowSideBarCanvasPanel({
   showMultipart,
   sequenceId = null,
   sequences = [],
-  t,
   variant,
   showToc = false,
   updateSequence,
   updateVariant,
   windowId,
 }) {
+  const { t } = useTranslation();
   const containerRef = useRef();
 
   /** */
@@ -158,7 +159,6 @@ WindowSideBarCanvasPanel.propTypes = {
   sequences: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   showMultipart: PropTypes.func.isRequired,
   showToc: PropTypes.bool,
-  t: PropTypes.func.isRequired,
   updateSequence: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['item', 'thumbnail', 'tableOfContents']).isRequired,

@@ -56,7 +56,7 @@ describe('WorkspaceElastic', () => {
 
   it('should render properly with an initialValue', () => {
     createWrapper({ elasticLayout });
-    expect(screen.getAllByLabelText('window')).toHaveLength(2);
+    expect(screen.getAllByLabelText('Window:')).toHaveLength(2);
   });
   describe('workspace behaviour', () => {
     it('when workspace itself is dragged', async () => {

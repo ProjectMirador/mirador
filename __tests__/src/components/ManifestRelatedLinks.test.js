@@ -43,48 +43,47 @@ describe('ManifestRelatedLinks', () => {
               value: 'http://example.com/b',
             },
           ]}
-          t={str => str}
         />,
       );
     });
 
     it('renders the content in a CollapsibleSection', async () => {
       const user = userEvent.setup();
-      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('related');
-      expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(/links/);
+      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('Related');
+      expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(/Links/);
 
-      await user.click(screen.getByRole('button', { name: 'collapseSection' }));
+      await user.click(screen.getByRole('button', { name: 'Collapse "Related" section' }));
 
       expect(screen.queryByRole('heading', { level: 5 })).not.toBeInTheDocument();
     });
 
     it('renders manifest homepage information', () => {
-      expect(screen.getByText('iiif_homepage').tagName).toEqual('DT');
+      expect(screen.getByText('About this resource').tagName).toEqual('DT');
 
       expect(screen.getByRole('link', { name: 'Home page' })).toHaveAttribute('href', 'http://example.com/');
     });
 
     it('renders manifest renderings information', () => {
-      expect(screen.getByText('iiif_renderings').tagName).toEqual('DT');
+      expect(screen.getByText('Alternate formats').tagName).toEqual('DT');
       expect(screen.getByRole('link', { name: 'PDF Version' })).toHaveAttribute('href', 'http://example.com/pdf');
     });
 
     it('renders related information', () => {
-      expect(screen.getByText('iiif_related').tagName).toEqual('DT');
+      expect(screen.getAllByText('Related')[1].tagName).toEqual('DT');
       expect(screen.getByRole('link', { name: 'http://example.com/related' })).toHaveAttribute('href', 'http://example.com/related');
       expect(screen.getByRole('link', { name: 'Video' })).toHaveAttribute('href', 'http://example.com/video');
       expect(screen.getByText('(video/ogg)')).toBeInTheDocument();
     });
 
     it('renders manifest seeAlso information', () => {
-      expect(screen.getByText('iiif_seeAlso').tagName).toEqual('DT');
+      expect(screen.getByText('See also').tagName).toEqual('DT');
       expect(screen.getByRole('link', { name: 'A' })).toHaveAttribute('href', 'http://example.com/a');
       expect(screen.getByText('(text/html)')).toBeInTheDocument();
       expect(screen.getByRole('link', { name: 'http://example.com/b' })).toHaveAttribute('href', 'http://example.com/b');
     });
 
     it('renders manifest links', () => {
-      expect(screen.getByText('iiif_manifest').tagName).toEqual('DT');
+      expect(screen.getByText('IIIF manifest').tagName).toEqual('DT');
       expect(screen.getByRole('link', { name: 'http://example.com/' })).toHaveAttribute('href', 'http://example.com/');
     });
   });

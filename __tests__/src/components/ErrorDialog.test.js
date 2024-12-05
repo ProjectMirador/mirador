@@ -8,7 +8,6 @@ import { ErrorDialog } from '../../../src/components/ErrorDialog';
 function createWrapper(props) {
   return render(
     <ErrorDialog
-      t={key => key}
       {...props}
     />,
   );
@@ -21,7 +20,7 @@ describe('ErrorDialog', () => {
     createWrapper({ error });
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByRole('heading')).toHaveTextContent('errorDialogTitle');
+    expect(screen.getByRole('heading')).toHaveTextContent('An error occurred');
   });
 
   it('shows up error message correctly', () => {
@@ -39,7 +38,7 @@ describe('ErrorDialog', () => {
 
     createWrapper({ error, removeError: mockHandleClick });
 
-    await user.click(screen.getByRole('button', { name: 'errorDialogConfirm' }));
+    await user.click(screen.getByRole('button', { name: 'OK' }));
     expect(mockHandleClick).toHaveBeenCalledTimes(1);
   });
 });

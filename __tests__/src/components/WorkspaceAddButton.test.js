@@ -8,7 +8,6 @@ function createWrapper(props) {
     <WorkspaceAddButton
       classes={{}}
       setWorkspaceAddVisibility={() => {}}
-      t={str => str}
       useExtendedFab
       {...props}
     />,
@@ -21,7 +20,7 @@ describe('WorkspaceAddButton', () => {
     const setWorkspaceAddVisibility = jest.fn();
     createWrapper({ isWorkspaceAddVisible: false, setWorkspaceAddVisibility });
 
-    await user.click(screen.getByRole('button', { name: 'startHere' }));
+    await user.click(screen.getByRole('button', { name: 'Start Here' }));
 
     expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(true);
   });
@@ -31,7 +30,7 @@ describe('WorkspaceAddButton', () => {
     const setWorkspaceAddVisibility = jest.fn();
     createWrapper({ isWorkspaceAddVisible: true, setWorkspaceAddVisibility });
 
-    await user.click(screen.getByRole('button', { name: 'closeAddResourceMenu' }));
+    await user.click(screen.getByRole('button', { name: 'Close resource list' }));
     expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(false);
   });
 
@@ -39,7 +38,7 @@ describe('WorkspaceAddButton', () => {
     it('is styled using the extended variant', () => {
       createWrapper({ useExtendedFab: true });
 
-      expect(screen.getByRole('button', { name: 'startHere' })).toHaveClass('MuiFab-extended');
+      expect(screen.getByRole('button', { name: 'Start Here' })).toHaveClass('MuiFab-extended');
     });
   });
 });

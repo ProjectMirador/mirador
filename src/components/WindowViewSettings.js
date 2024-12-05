@@ -5,6 +5,7 @@ import ListSubheader from '@mui/material/ListSubheader';
 import SingleIcon from '@mui/icons-material/CropOriginalSharp';
 import ScrollViewIcon from '@mui/icons-material/ViewColumn';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import BookViewIcon from './icons/BookViewIcon';
 import GalleryViewIcon from './icons/GalleryViewIcon';
 
@@ -32,8 +33,9 @@ const ViewOption = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option'
  *
  */
 export function WindowViewSettings({
-  handleClose = () => {}, t = k => k, windowViewType, viewTypes = [], setWindowViewType, windowId,
+  handleClose = () => {}, windowViewType, viewTypes = [], setWindowViewType, windowId,
 }) {
+  const { t } = useTranslation();
   /** */
   const handleChange = (value) => {
     setWindowViewType(windowId, value);
@@ -76,7 +78,6 @@ export function WindowViewSettings({
 WindowViewSettings.propTypes = {
   handleClose: PropTypes.func,
   setWindowViewType: PropTypes.func.isRequired,
-  t: PropTypes.func,
   viewTypes: PropTypes.arrayOf(PropTypes.string),
   windowId: PropTypes.string.isRequired,
   windowViewType: PropTypes.string.isRequired,

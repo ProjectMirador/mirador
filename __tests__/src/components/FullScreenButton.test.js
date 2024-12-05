@@ -33,7 +33,7 @@ describe('FullScreenButton', () => {
     });
 
     it('has the proper aria-label i18n key', () => {
-      expect(screen.getByRole('button')).toHaveAccessibleName('workspaceFullScreen');
+      expect(screen.getByRole('button')).toHaveAccessibleName('Full screen');
     });
 
     it('triggers the handle enter with the appropriate boolean', async () => {
@@ -53,7 +53,7 @@ describe('FullScreenButton', () => {
     });
 
     it('has the proper aria-label', () => {
-      expect(screen.getByRole('button')).toHaveAccessibleName('exitFullScreen');
+      expect(screen.getByRole('button')).toHaveAccessibleName('Exit full screen');
     });
 
     it('triggers the handle exit with the appropriate boolean', async () => {

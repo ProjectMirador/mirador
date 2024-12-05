@@ -6,6 +6,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useTranslation } from 'react-i18next';
 import { PluginHook } from './PluginHook';
 
 const ErrorStackTrace = styled('pre', { name: 'ErrorContent', slot: 'stacktrace' })({
@@ -25,8 +26,9 @@ const InlineAccordion = styled(Accordion, { name: 'ErrorContent', slot: 'accordi
 
 /** */
 export function ErrorContent({
-  error, metadata = null, showJsError = true, t = k => k, ...rest
+  error, metadata = null, showJsError = true, ...rest
 }) {
+  const { t } = useTranslation();
   if (!showJsError) return null;
 
   const pluginProps = {
@@ -58,5 +60,4 @@ ErrorContent.propTypes = {
   error: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   metadata: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   showJsError: PropTypes.bool,
-  t: PropTypes.func,
 };

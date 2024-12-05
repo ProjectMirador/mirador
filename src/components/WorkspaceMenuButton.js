@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import SettingsIcon from '@mui/icons-material/SettingsSharp';
-import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import WorkspaceMenu from '../containers/WorkspaceMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
  */
-export function WorkspaceMenuButton({ t = k => k }) {
+export function WorkspaceMenuButton() {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
 
@@ -43,7 +44,3 @@ export function WorkspaceMenuButton({ t = k => k }) {
     </>
   );
 }
-
-WorkspaceMenuButton.propTypes = {
-  t: PropTypes.func,
-};

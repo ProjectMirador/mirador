@@ -1,6 +1,7 @@
 import { createRef } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
 import AnnotationSettings from '../containers/AnnotationSettings';
 import CanvasAnnotations from '../containers/CanvasAnnotations';
 import CompanionWindow from '../containers/CompanionWindow';
@@ -11,8 +12,9 @@ import ns from '../config/css-ns';
  * WindowSideBarAnnotationsPanel ~
 */
 export function WindowSideBarAnnotationsPanel({
-  annotationCount, canvasIds = [], t = k => k, windowId, id,
+  annotationCount, canvasIds = [], windowId, id,
 }) {
+  const { t } = useTranslation();
   const containerRef = createRef();
   return (
     <CompanionWindow
@@ -45,6 +47,5 @@ WindowSideBarAnnotationsPanel.propTypes = {
   annotationCount: PropTypes.number.isRequired,
   canvasIds: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };
