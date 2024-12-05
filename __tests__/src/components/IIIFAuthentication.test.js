@@ -18,7 +18,6 @@ function createWrapper(props) {
       resetAuthenticationState={() => {}}
       resolveAccessTokenRequest={() => {}}
       resolveAuthenticationRequest={() => {}}
-      t={key => key}
       windowId="w"
       {...props}
     />,
@@ -33,7 +32,7 @@ describe('IIIFAuthentication', () => {
   describe('without an auth service', () => {
     it('renders nothing', () => {
       createWrapper({ authServiceId: null });
-      expect(screen.queryByRole('button', { name: 'login' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Log in' })).not.toBeInTheDocument();
       expect(screen.queryByRole('button')).not.toBeInTheDocument();
     });
   });
@@ -41,22 +40,22 @@ describe('IIIFAuthentication', () => {
     it('renders a login bar', async () => {
       const handleAuthInteraction = vi.fn();
       createWrapper({ handleAuthInteraction });
-      await user.click(screen.getByRole('button', { name: 'login' }));
+      await user.click(screen.getByRole('button', { name: 'Log in' }));
       expect(handleAuthInteraction).toHaveBeenCalledWith('w', 'http://example.com/auth');
     });
     it('renders nothing for a non-interactive login', () => {
       createWrapper({ isInteractive: false });
-      expect(screen.queryByText('login')).not.toBeInTheDocument();
+      expect(screen.queryByText('Log in')).not.toBeInTheDocument();
     });
   });
   describe('with a failed authentication', () => {
     it('renders with an error message', async () => {
       const handleAuthInteraction = vi.fn();
       createWrapper({ handleAuthInteraction, status: 'failed' });
-      await user.click(screen.getByRole('button', { name: 'continue' }));
-      const confirmBtn = screen.getByRole('button', { name: /retry/ });
+      await user.click(screen.getByRole('button', { name: 'Continue' }));
+      const confirmBtn = screen.getByRole('button', { name: /Retry/ });
       expect(screen.getByText('Login failed')).toBeInTheDocument();
-      expect(screen.getByText('cancel')).toBeInTheDocument();
+      expect(screen.getByText('Cancel')).toBeInTheDocument();
       expect(screen.getByText('... and this is why.')).toBeInTheDocument();
       await user.click(confirmBtn);
       expect(handleAuthInteraction).toHaveBeenCalledWith('w', 'http://example.com/auth');
@@ -69,7 +68,7 @@ describe('IIIFAuthentication', () => {
       window.open = mockWindowOpen;
       const resolveCookieMock = vi.fn();
       createWrapper({ resolveAuthenticationRequest: resolveCookieMock, status: 'cookie' });
-      expect(screen.getByRole('button', { name: 'login' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Log in' })).toBeInTheDocument();
       expect(mockWindowOpen).toHaveBeenCalledWith(`http://example.com/auth?origin=${window.origin}`, 'IiifLoginSender', 'centerscreen');
       mockWindow.closed = true;
       await waitFor(() => expect(resolveCookieMock).toHaveBeenCalledTimes(1));
@@ -77,7 +76,7 @@ describe('IIIFAuthentication', () => {
     it('does the IIIF access token behavior', async () => {
       const resolveTokenMock = vi.fn();
       createWrapper({ resolveAccessTokenRequest: resolveTokenMock, status: 'token' });
-      expect(screen.getByRole('button', { name: 'login' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Log in' })).toBeInTheDocument();
       window.dispatchEvent(new MessageEvent('message', {
         data: { messageId: 'http://example.com/token' },
       }));

@@ -4,6 +4,7 @@ import MenuIcon from '@mui/icons-material/MenuSharp';
 import CloseIcon from '@mui/icons-material/CloseSharp';
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
+import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import WindowTopMenuButton from '../containers/WindowTopMenuButton';
 import WindowTopBarPluginArea from '../containers/WindowTopBarPluginArea';
@@ -35,11 +36,12 @@ const StyledToolbar = styled(Toolbar, { name: 'WindowTopBar', slot: 'toolbar' })
  * WindowTopBar
  */
 export function WindowTopBar({
-  removeWindow, windowId, toggleWindowSideBar, t = k => k,
+  removeWindow, windowId, toggleWindowSideBar,
   maximizeWindow = () => {}, maximized = false, minimizeWindow = () => {}, allowClose = true, allowMaximize = true,
   focusWindow = () => {}, allowFullscreen = false, allowTopMenuButton = true, allowWindowSideBar = true,
   component = 'nav',
 }) {
+  const { t } = useTranslation();
   const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
 
   return (
@@ -107,7 +109,6 @@ WindowTopBar.propTypes = {
   maximizeWindow: PropTypes.func,
   minimizeWindow: PropTypes.func,
   removeWindow: PropTypes.func.isRequired,
-  t: PropTypes.func,
   toggleWindowSideBar: PropTypes.func.isRequired,
   windowDraggable: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
   windowId: PropTypes.string.isRequired,

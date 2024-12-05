@@ -12,7 +12,6 @@ function createWrapper(props) {
       ready
       addWindow={() => {}}
       fetchManifest={() => {}}
-      t={t => t}
       {...props}
     />,
   );
@@ -44,7 +43,7 @@ describe('ManifestListItem', () => {
   it('renders an error message if fetching the manifest failed', () => {
     createWrapper({ error: 'This is an error message' });
 
-    expect(screen.getByText('manifestError')).toBeInTheDocument();
+    expect(screen.getByText('The resource cannot be added:')).toBeInTheDocument();
     expect(screen.getByText('http://example.com')).toBeInTheDocument();
   });
   it('updates and adds window when button clicked', async () => {

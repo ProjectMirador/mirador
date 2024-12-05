@@ -1,6 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { t } from 'i18next';
 
 import { CanvasAnnotations } from '../../../src/components/CanvasAnnotations';
 import { ScrollTo } from '../../../src/components/ScrollTo';
@@ -15,7 +14,6 @@ function createWrapper(props) {
       index={0}
       label="A Canvas Label"
       selectAnnotation={() => {}}
-      t={t}
       totalSize={1}
       windowId="abc"
       {...props}

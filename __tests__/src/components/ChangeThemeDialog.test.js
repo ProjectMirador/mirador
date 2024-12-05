@@ -12,7 +12,6 @@ function createWrapper(props) {
       handleClose={() => {}}
       open
       setSelectedTheme={() => {}}
-      t={t => (t)}
       selectedTheme="light"
       themeIds={['light', 'dark']}
       {...props}
@@ -37,8 +36,8 @@ describe('ChangeThemeDialog', () => {
     const menuItems = screen.queryAllByRole('menuitem');
 
     expect(menuItems.length).toBe(2);
-    expect(menuItems[0]).toHaveTextContent('light');
-    expect(menuItems[1]).toHaveTextContent('dark');
+    expect(menuItems[0]).toHaveTextContent('Light theme');
+    expect(menuItems[1]).toHaveTextContent('Dark theme');
   });
 
   it('shows up theme selection properly', async () => {
@@ -46,7 +45,7 @@ describe('ChangeThemeDialog', () => {
     const setSelectedTheme = vi.fn();
 
     createWrapper({ setSelectedTheme });
-    const menuItem = screen.getByRole('menuitem', { name: 'light' });
+    const menuItem = screen.getByRole('menuitem', { name: 'Light theme' });
     expect(menuItem).toBeInTheDocument();
 
     await user.click(menuItem);
@@ -58,7 +57,7 @@ describe('ChangeThemeDialog', () => {
     it('focuses the selected item', () => {
       createWrapper({ selectedTheme: 'light' });
 
-      const menuItem = screen.getByRole('menuitem', { name: 'light' });
+      const menuItem = screen.getByRole('menuitem', { name: 'Light theme' });
       expect(menuItem).toHaveFocus();
     });
   });

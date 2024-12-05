@@ -14,6 +14,7 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBackSharp';
 import Skeleton from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import asArray from '../lib/asArray';
 import { LabelValueMetadata } from './LabelValueMetadata';
 import CollapsibleSection from '../containers/CollapsibleSection';
@@ -75,9 +76,10 @@ Placeholder.propTypes = {
 export function CollectionDialog({
   addWindow, collection = null, collectionPath = [], error = null, hideCollectionDialog,
   isMultipart = false, manifest, manifestId, ready = false,
-  setWorkspaceAddVisibility, showCollectionDialog, t, updateWindow, windowId = null,
+  setWorkspaceAddVisibility, showCollectionDialog, updateWindow, windowId = null,
 }) {
   const container = useContext(WorkspaceContext);
+  const { t } = useTranslation();
   const [filter, setFilter] = useState(null);
 
   /** */
@@ -245,7 +247,6 @@ CollectionDialog.propTypes = {
   ready: PropTypes.bool,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   showCollectionDialog: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string,
 };

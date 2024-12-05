@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
 import SearchPanelControls from '../containers/SearchPanelControls';
 import SearchResults from '../containers/SearchResults';
 
 /** */
 export function SearchPanel({
-  fetchSearch = undefined, id, query = '', removeSearch, searchService, suggestedSearches = [], t = k => k, windowId,
+  fetchSearch = undefined, id, query = '', removeSearch, searchService, suggestedSearches = [], windowId,
 }) {
+  const { t } = useTranslation();
   const containerRef = useRef(null);
 
   return (
@@ -72,6 +74,5 @@ SearchPanel.propTypes = {
     id: PropTypes.string,
   }).isRequired,
   suggestedSearches: PropTypes.arrayOf(PropTypes.string),
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };

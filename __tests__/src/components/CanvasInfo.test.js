@@ -15,13 +15,12 @@ describe('CanvasInfo', () => {
           canvasDescription="The Canvas Description"
           canvasMetadata={metadata}
           id="xyz"
-          t={str => str}
         />,
       );
     });
 
     it('renders the content in a CollapsibleSection', async () => {
-      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('currentItem');
+      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('Current item');
       expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(/The Canvas Label/);
 
       await user.click(screen.getByRole('button'));

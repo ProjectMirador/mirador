@@ -7,7 +7,6 @@ import { AccessTokenSender } from '../../../src/components/AccessTokenSender';
 function createWrapper(props) {
   return render(
     <AccessTokenSender
-      t={key => key}
       handleAccessTokenMessage={() => {}}
       {...props}
     />,

@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import MoreVertIcon from '@mui/icons-material/MoreVertSharp';
 import Menu from '@mui/material/Menu';
+import { useTranslation } from 'react-i18next';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { PluginHook } from './PluginHook';
 import WorkspaceContext from '../contexts/WorkspaceContext';
@@ -10,8 +11,9 @@ import WorkspaceContext from '../contexts/WorkspaceContext';
  *
  */
 export function WindowTopBarPluginMenu({
-  PluginComponents = [], t, windowId, menuIcon = <MoreVertIcon />,
+  PluginComponents = [], windowId, menuIcon = <MoreVertIcon />,
 }) {
+  const { t } = useTranslation();
   const container = useContext(WorkspaceContext);
   const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
   const [anchorEl, setAnchorEl] = useState(null);
@@ -73,6 +75,5 @@ WindowTopBarPluginMenu.propTypes = {
   PluginComponents: PropTypes.arrayOf(
     PropTypes.node,
   ),
-  t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };

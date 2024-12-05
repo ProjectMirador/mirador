@@ -4,14 +4,16 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import WorkspaceContext from '../contexts/WorkspaceContext';
 
 /**
  */
 export function WindowList({
   handleClose, windowIds, focusWindow, focusedWindowId = null,
-  t = key => key, titles = {}, tReady = false, ...menuProps
+  titles = {}, tReady = false, ...menuProps
 }) {
+  const { t } = useTranslation();
   const container = useContext(WorkspaceContext);
   return (
     <Menu
@@ -55,7 +57,6 @@ WindowList.propTypes = {
   focusedWindowId: PropTypes.string,
   focusWindow: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  t: PropTypes.func,
   titles: PropTypes.objectOf(PropTypes.string),
   tReady: PropTypes.bool,
   windowIds: PropTypes.arrayOf(PropTypes.string).isRequired,

@@ -8,7 +8,6 @@ function Subject({ ...props }) {
     <div>
       <WorkspaceOptionsMenu
         handleClose={() => {}}
-        t={k => k}
         {...props}
       />
       ,
@@ -38,8 +37,8 @@ describe('WorkspaceOptionsMenu', () => {
 
     const menuItems = screen.getAllByRole('menuitem');
     expect(menuItems).toHaveLength(2);
-    expect(menuItems[0]).toHaveTextContent('downloadExportWorkspace');
-    expect(menuItems[1]).toHaveTextContent('importWorkspace');
+    expect(menuItems[0]).toHaveTextContent('Export workspace');
+    expect(menuItems[1]).toHaveTextContent('Import workspace');
   });
 
   it('does not display unless open', () => {

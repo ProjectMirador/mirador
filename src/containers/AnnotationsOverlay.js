@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { AnnotationsOverlay } from '../components/AnnotationsOverlay';
 import * as actions from '../state/actions';
@@ -47,7 +46,6 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('AnnotationsOverlay'),
 );

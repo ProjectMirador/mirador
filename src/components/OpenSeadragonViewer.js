@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import OpenSeadragon from 'openseadragon';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import ns from '../config/css-ns';
 import AnnotationsOverlay from '../containers/AnnotationsOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
@@ -24,10 +25,11 @@ const StyledSection = styled('section')({
  * and rendering OSD.
  */
 export function OpenSeadragonViewer({
-  children = null, label = null, t, windowId, osdConfig = {}, viewerConfig = null,
+  children = null, label = null, windowId, osdConfig = {}, viewerConfig = null,
   drawAnnotations = false, infoResponses = [], canvasWorld, nonTiledImages = [], updateViewport,
   ...rest
 }) {
+  const { t } = useTranslation();
   const apiRef = useRef();
   const [viewer, setViewer] = useState(null);
   const onViewportChange = useCallback(({
@@ -148,7 +150,6 @@ OpenSeadragonViewer.propTypes = {
   label: PropTypes.string,
   nonTiledImages: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func.isRequired,
   updateViewport: PropTypes.func.isRequired,
   viewerConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   windowId: PropTypes.string.isRequired,

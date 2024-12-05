@@ -5,13 +5,15 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useTranslation } from 'react-i18next';
 
 /**
  * CollapsableSection ~
 */
 export function CollapsibleSection({
-  children, id, label, t,
+  children, id, label,
 }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(true);
 
   const handleChange = useCallback((_event, isExpanded) => {
@@ -37,5 +39,4 @@ CollapsibleSection.propTypes = {
 
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
 };
