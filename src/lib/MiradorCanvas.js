@@ -66,19 +66,42 @@ export default class MiradorCanvas {
 
   /** */
   get imageResources() {
+    // FIXME this is in no way production ready; current changes are only for demo purposes
     const resources = flattenDeep([
       this.canvas.getImages().map(i => i.getResource()),
-      this.canvas.getContent().map(i => i.getBody()),
+      this.canvas.getContent().map(i => (i.__jsonld.body.type === 'Choice' ? i.__jsonld.body : i.getBody())),
     ]);
 
     return flatten(resources.map((resource) => {
-      switch (resource.getProperty('type')) {
-        case 'oa:Choice':
-          return new Canvas({ images: flatten([resource.getProperty('default'), resource.getProperty('item')]).map(r => ({ resource: r })) }, this.canvas.options).getImages().map(i => i.getResource());
-        default:
-          return resource;
+      const type = resource.type || resource.getProperty('type');
+      switch (type) {
+        case 'Choice': {
+          return new Canvas({ images: resource.items.map(r => ({ resource: r })) }, this.canvas.options)
+            .getImages().map((img, index) => {
+              const r = img.getResource();
+              if (r) {
+                r.preferred = !index;
+              }
+              return r;
+            });
+        }
+        case 'oa:Choice': {
+          return new Canvas({ images: flattenDeep([resource.getProperty('default'), resource.getProperty('item')]).map(r => ({ resource: r })) }, this.canvas.options).getImages()
+            .map((img, index) => {
+              const r = img.getResource();
+              if (r) {
+                r.preferred = !index;
+              }
+              return r;
+            });
+        }
+        default: {
+          const r = resource;
+          r.preferred = true;
+          return r;
+        }
       }
-    }));
+    })).reverse();
   }
 
   /** */

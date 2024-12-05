@@ -147,7 +147,6 @@ export default class CanvasWorld {
 
   /** @private */
   getLayerMetadata(contentResource) {
-    if (!this.layers) return undefined;
     const miradorCanvas = this.canvases.find(c => (
       c.imageResources.find(r => r.id === contentResource.id)
     ));
@@ -156,15 +155,17 @@ export default class CanvasWorld {
 
     const resourceIndex = miradorCanvas.imageResources
       .findIndex(r => r.id === contentResource.id);
+    const resource = miradorCanvas.imageResources
+      .find(r => r.id === contentResource.id);
 
-    const layer = this.layers[miradorCanvas.canvas.id];
-    const imageResourceLayer = layer && layer[contentResource.id];
+    const layer = this.layers && this.layers[miradorCanvas.canvas.id];
+    const imageResourceLayer = (layer && layer[contentResource.id]) || {};
 
     return {
       index: resourceIndex,
       opacity: 1,
       total: miradorCanvas.imageResources.length,
-      visibility: true,
+      visibility: !!resource.preferred,
       ...imageResourceLayer,
     };
   }

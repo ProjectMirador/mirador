@@ -4,6 +4,9 @@ export default {
     { manifestId: 'https://prtd.app/aom/manifest.json' },
     { manifestId: 'https://prtd.app/fv/manifest.json' },
     { manifestId: 'https://manifests.britishart.yale.edu/Osbornfa1' },
+    { manifestId: 'https://dvp.prtd.app/hamilton/manifest.json' },
+    { manifestId: 'https://iiif.io/api/cookbook/recipe/0036-composition-from-multiple-images/manifest.json' },
+    { manifestId: 'https://iiif.io/api/cookbook/recipe/0033-choice/manifest.json' },
   ],
   id: 'mirador',
   window: {
