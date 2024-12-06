@@ -1,4 +1,4 @@
-import { call } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 import { expectSaga, testSaga } from 'redux-saga-test-plan';
 
 import { importConfig, importState } from '../../../src/state/sagas/app';
@@ -68,15 +68,13 @@ describe('app-level sagas', () => {
 
       return expectSaga(importConfig, action)
         .provide([
-          [call(addWindow, {
+          [put(addWindow({
             id: 'x', manifestId: 'a', thumbnailNavigationPosition: undefined,
-          }), { type: 'thunk1' }],
-          [call(addWindow, {
+          }))],
+          [put(addWindow({
             id: 'y', manifestId: 'b', thumbnailNavigationPosition: undefined,
-          }), { type: 'thunk2' }],
+          }))],
         ])
-        .put({ type: 'thunk1' })
-        .put({ type: 'thunk2' })
         .run();
     });
   });

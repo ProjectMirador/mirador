@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Mirador</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+  </head>
+  <body>
+    <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
+    <script type="text/javascript">
+     var miradorInstance = Mirador.viewer({
+       id: 'mirador',
+       theme: {
+         transitions: window.location.port === '4488' ?  { create: () => 'none' } : {},
+       },
+       windows: [{
+         manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+         canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
+         thumbnailNavigationPosition: 'far-bottom',
+         initialViewerConfig: {
+            x: 934,
+            y: 782,
+            // you need to specify zoom for this to look good
+            zoom: 0.0007,
+         }
+       }]
+     });
+    </script>
+  </body>
+</html>

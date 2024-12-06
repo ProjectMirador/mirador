@@ -4,10 +4,10 @@ import {
 import { v4 as uuid } from 'uuid';
 import { fetchManifests } from './iiif';
 import { fetchWindowManifest } from './windows';
-import { addWindow } from '../actions';
+import { addWindow, updateViewport } from '../actions';
 import ActionTypes from '../actions/action-types';
 
-/** */
+/** import Mirador workspace */
 export function* importState(action) {
   yield all([
     ...Object.entries(action.state.windows || {})
@@ -27,18 +27,30 @@ export function* importConfig({ config: { thumbnailNavigation, windows } }) {
       const windowId = `window-${uuid()}`;
       const manifestId = miradorWindow.manifestId || miradorWindow.loadedManifest;
 
-      return call(addWindow, {
-        // these are default values ...
+      // these are default values ...
+      const windowConfig = {
         id: windowId,
         manifestId,
         thumbnailNavigationPosition: thumbnailNavigation && thumbnailNavigation.defaultPosition,
         // ... overridden by values from the window configuration ...
         ...miradorWindow,
-      });
+      };
+
+      const returnedActions = [put(addWindow(windowConfig))];
+
+      if (miradorWindow.initialViewerConfig) {
+        const viewportState = {
+          ...miradorWindow.initialViewerConfig,
+          ...{ degrees: miradorWindow.initialViewerConfig.rotation },
+        };
+        returnedActions.push(put(updateViewport(windowId, viewportState)));
+      }
+
+      return returnedActions;
     }),
   );
 
-  yield all(thunks.map(thunk => put(thunk)));
+  yield all(thunks.flat());
 }
 
 /** */
