@@ -8,6 +8,8 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
 import { Rnd } from 'react-rnd';
+import { useElementSize } from '@custom-react-hooks/use-element-size';
+import mergeRefs from 'merge-refs';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
 
@@ -26,9 +28,10 @@ const StyledCloseButton = styled(MiradorMenuButton, { name: 'CompanionWindow', s
 export function CompanionWindow(props) { // eslint-disable-line react/require-default-props
   const {
     ariaLabel = undefined, classes = {}, direction, paperClassName = '', onCloseClick = () => {}, updateCompanionWindow = undefined, isDisplayed = false,
-    position = null, t = key => key, title = null, children = undefined, titleControls = null, size = {},
+    position = null, t = key => key, title = null, children = undefined, titleControls = null,
     defaultSidebarPanelWidth = 235, defaultSidebarPanelHeight = 201, innerRef = undefined,
   } = props;
+  const [sizeRef, size] = useElementSize();
 
   /** */
   const openInNewStyle = direction === 'rtl' ? { transform: 'scale(-1, 1)' } : {};
@@ -89,7 +92,7 @@ export function CompanionWindow(props) { // eslint-disable-line react/require-de
   return (
     <Root
       ownerState={props}
-      ref={innerRef}
+      ref={mergeRefs(innerRef, sizeRef)}
       style={{
         display: isDisplayed ? null : 'none',
         order: position === 'left' ? -1 : null,
