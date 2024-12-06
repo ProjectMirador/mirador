@@ -1,4 +1,4 @@
-import { useState, useReducer } from 'react';
+import { useContext, useState, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -19,6 +19,7 @@ import { LabelValueMetadata } from './LabelValueMetadata';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 import ManifestInfo from '../containers/ManifestInfo';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 
 const StyledScrollIndicatedDialogContent = styled(ScrollIndicatedDialogContent)(() => ({
   padding: (theme) => theme.spacing(1),
@@ -72,10 +73,11 @@ Placeholder.propTypes = {
  * a dialog providing the possibility to select the collection
  */
 export function CollectionDialog({
-  addWindow, collection = null, collectionPath = [], container = null, error = null, hideCollectionDialog,
+  addWindow, collection = null, collectionPath = [], error = null, hideCollectionDialog,
   isMultipart = false, manifest, manifestId, ready = false,
   setWorkspaceAddVisibility, showCollectionDialog, t, updateWindow, windowId = null,
 }) {
+  const container = useContext(WorkspaceContext);
   const [filter, setFilter] = useState(null);
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -240,7 +242,6 @@ CollectionDialog.propTypes = {
   addWindow: PropTypes.func.isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   collectionPath: PropTypes.arrayOf(PropTypes.string),
-  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   error: PropTypes.string,
   hideCollectionDialog: PropTypes.func.isRequired,
   isMultipart: PropTypes.bool,

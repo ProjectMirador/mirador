@@ -1,9 +1,11 @@
+import { useContext } from 'react';
 import Menu from '@mui/material/Menu';
 import ListSubheader from '@mui/material/ListSubheader';
 import PropTypes from 'prop-types';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
 import WindowViewSettings from '../containers/WindowViewSettings';
 import { PluginHook } from './PluginHook';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 
 /** Renders plugins */
 function PluginHookWithHeader(props) {
@@ -19,9 +21,10 @@ function PluginHookWithHeader(props) {
 /**
  */
 export function WindowTopMenu({
-  container = null, handleClose, showThumbnailNavigationSettings = true,
+  handleClose, showThumbnailNavigationSettings = true,
   toggleDraggingEnabled, windowId, anchorEl = null, open = false,
 }) {
+  const container = useContext(WorkspaceContext);
   const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
 
   return (
@@ -54,7 +57,6 @@ export function WindowTopMenu({
 
 WindowTopMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
   showThumbnailNavigationSettings: PropTypes.bool,

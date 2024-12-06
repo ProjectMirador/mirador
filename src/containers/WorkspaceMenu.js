@@ -7,7 +7,6 @@ import {
   getShowZoomControlsConfig, getThemeIds,
   getWorkspace,
 } from '../state/selectors';
-import { withWorkspaceContext } from '../contexts/WorkspaceContext';
 import { WorkspaceMenu } from '../components/WorkspaceMenu';
 
 /**
@@ -32,7 +31,6 @@ const mapStateToProps = state => ({
 
 const enhance = compose(
   withTranslation(),
-  withWorkspaceContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WorkspaceMenu'),
 );

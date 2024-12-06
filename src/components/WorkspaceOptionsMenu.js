@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import ImportIcon from '@mui/icons-material/Input';
 import SaveAltIcon from '@mui/icons-material/SaveAltSharp';
@@ -8,14 +8,16 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import WorkspaceExport from '../containers/WorkspaceExport';
 import WorkspaceImport from '../containers/WorkspaceImport';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 import { PluginHook } from './PluginHook';
 
 /**
  * WorkspaceOptionsMenu ~ the menu for workspace options such as import/export
 */
 export function WorkspaceOptionsMenu({
-  anchorEl = null, container = null, handleClose, open = false, t,
+  anchorEl = null, handleClose, open = false, t,
 }) {
+  const container = useContext(WorkspaceContext);
   const [selectedOption, setSelectedOption] = useState(null);
 
   const pluginProps = {
@@ -93,7 +95,6 @@ export function WorkspaceOptionsMenu({
 
 WorkspaceOptionsMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
   t: PropTypes.func.isRequired,

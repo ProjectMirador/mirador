@@ -1,8 +1,10 @@
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 
 const Root = styled(IconButton, { name: 'MiradorMenuButton', slot: 'root' })(({ selected, theme }) => ({
   fill: 'currentcolor',
@@ -20,7 +22,6 @@ export function MiradorMenuButton({
   'aria-label': ariaLabel,
   badge = false,
   children,
-  container = null,
   dispatch = () => {},
   selected = false,
   BadgeProps = {},
@@ -28,6 +29,7 @@ export function MiradorMenuButton({
   sx = {},
   ...iconButtonProps
 }) {
+  const container = useContext(WorkspaceContext);
   const button = (
     <Root
       selected={selected}
@@ -69,7 +71,6 @@ MiradorMenuButton.propTypes = {
   badge: PropTypes.bool,
   BadgeProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   children: PropTypes.element.isRequired,
-  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   dispatch: PropTypes.func,
   selected: PropTypes.bool,
   sx: PropTypes.object, // eslint-disable-line react/forbid-prop-types
