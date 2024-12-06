@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 /** */
-export function NewWindow({
+export function NewBrowserWindow({
   depWindow = undefined, features = undefined, name = undefined, onClose, url,
 }) {
   const released = useRef(false);
@@ -27,7 +27,7 @@ export function NewWindow({
   return null;
 }
 
-NewWindow.propTypes = {
+NewBrowserWindow.propTypes = {
   depWindow: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   features: PropTypes.string,
   name: PropTypes.string,
