@@ -1,4 +1,5 @@
-import { Component } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useEffectEvent } from 'use-effect-event';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import ListItem from '@mui/material/ListItem';
@@ -45,52 +46,30 @@ const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerSta
 }));
 
 /** */
-export class SearchHit extends Component {
-  /** */
-  constructor(props) {
-    super(props);
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  /**
-   * Announce the annotation content if the component is mounted selected
-   */
-  componentDidMount() {
-    const { selected } = this.props;
-
-    if (selected) this.announceHit();
-  }
-
-  /**
-   * Announce hit if the hit has been selected
-   */
-  componentDidUpdate(prevProps) {
-    const { selected } = this.props;
-
-    if (selected && selected !== prevProps.selected) {
-      this.announceHit();
+export function SearchHit({
+  adjacent = false, annotation = undefined, annotationId = undefined, annotationLabel = undefined,
+  announcer = undefined, canvasLabel = undefined, companionWindowId = undefined, containerRef = undefined,
+  focused = false, hit = undefined, index = undefined, selectAnnotation = () => {}, selected = false,
+  showDetails = () => {}, t = k => k, total = undefined, windowId, windowSelected = false,
+}) {
+  useEffect(() => {
+    if (selected) {
+      announceHit();
     }
-  }
+  }, [selected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /** */
-  handleClick() {
-    const {
-      annotation, annotationId, selectAnnotation,
-    } = this.props;
-
+  const handleClick = () => {
     if (annotation && annotationId) selectAnnotation(annotationId);
-  }
+  };
+
+  const truncatedHit = useMemo(() => (hit && new TruncatedHit(hit, annotation)), [hit, annotation]);
 
   /**
    * Pass content describing the hit to the announcer prop (intended for screen readers)
    */
-  announceHit() {
-    const {
-      annotation, annotationLabel, announcer, canvasLabel, hit, index, t, total,
-    } = this.props;
-    if (!hit || !announcer) return;
-    const truncatedHit = new TruncatedHit(hit, annotation);
+  const announceHit = useEffectEvent(() => {
+    if (!announcer || !truncatedHit) return;
 
     announcer(
       [
@@ -103,110 +82,91 @@ export class SearchHit extends Component {
       ].join(' '),
       'polite',
     );
-  }
+  });
 
-  /** */
-  render() {
-    const {
-      adjacent,
-      annotation,
-      annotationLabel,
-      canvasLabel,
-      companionWindowId,
-      containerRef,
-      hit,
-      focused,
-      index,
-      showDetails,
-      selected,
-      t,
-      windowSelected,
-    } = this.props;
+  if (focused && !selected) return null;
 
-    if (focused && !selected) return null;
+  const renderedHit = focused ? hit : hit && truncatedHit;
+  const truncated = hit && (renderedHit.before !== hit.before || renderedHit.after !== hit.after);
+  const canvasLabelHtmlId = `${companionWindowId}-${index}`;
+  const ownerState = {
+    adjacent, focused, selected, windowSelected,
+  };
 
-    const truncatedHit = focused ? hit : hit && new TruncatedHit(hit, annotation);
-    const truncated = hit && (truncatedHit.before !== hit.before || truncatedHit.after !== hit.after);
-    const canvasLabelHtmlId = `${companionWindowId}-${index}`;
-    const ownerState = {
-      adjacent, focused, selected, windowSelected,
-    };
+  const header = (
+    <>
+      <Counter
+        component="span"
+        ownerState={ownerState}
+        label={index + 1}
+      />
+      <CanvasLabel id={canvasLabelHtmlId}>
+        {canvasLabel}
+        {annotationLabel && (
+          <Typography component="span" sx={{ display: 'block', marginTop: 1 }}>{annotationLabel}</Typography>
+        )}
+      </CanvasLabel>
+    </>
+  );
 
-    const header = (
-      <>
-        <Counter
-          component="span"
-          ownerState={ownerState}
-          label={index + 1}
-        />
-        <CanvasLabel id={canvasLabelHtmlId}>
-          {canvasLabel}
-          {annotationLabel && (
-            <Typography component="span" sx={{ display: 'block', marginTop: 1 }}>{annotationLabel}</Typography>
-          )}
-        </CanvasLabel>
-      </>
-    );
-
-    return (
-      <ScrollTo
-        containerRef={containerRef}
-        offsetTop={96} // offset for the height of the form above
-        scrollTo={windowSelected && !focused}
+  return (
+    <ScrollTo
+      containerRef={containerRef}
+      offsetTop={96} // offset for the height of the form above
+      scrollTo={windowSelected && !focused}
+    >
+      <Root
+        ownerState={ownerState}
+        className={windowSelected ? 'windowSelected' : ''}
+        divider
+        button={!selected}
+        component="li"
+        onClick={handleClick}
+        selected={selected}
       >
-        <Root
-          ownerState={ownerState}
-          className={windowSelected ? 'windowSelected' : ''}
-          divider
-          button={!selected}
-          component="li"
-          onClick={this.handleClick}
-          selected={selected}
-        >
-          <ListItemText
-            primary={header}
-            primaryTypographyProps={{ component: 'div', sx: { marginBottom: 1 }, variant: 'subtitle2' }}
-            secondaryTypographyProps={{ variant: 'body1' }}
-            secondary={(
-              <>
-                {hit && (
-                  <>
-                    <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.before} />
-                    {' '}
-                    <strong>
-                      <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.match} />
-                    </strong>
-                    {' '}
-                    <SanitizedHtml ruleSet="iiif" htmlString={truncatedHit.after} />
-                    {' '}
-                    {truncated && !focused && (
-                      <Button
-                        sx={{
-                          '& span': {
-                            lineHeight: '1.5em',
-                          },
-                          margin: 0,
-                          padding: 0,
-                          textTransform: 'none',
-                        }}
-                        onClick={showDetails}
-                        color="secondary"
-                        size="small"
-                        aria-describedby={canvasLabelHtmlId}
-                      >
-                        {t('more')}
-                      </Button>
-                    )}
-                  </>
-                )}
-                {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
-              </>
-            )}
-          />
-        </Root>
-      </ScrollTo>
-    );
-  }
+        <ListItemText
+          primary={header}
+          primaryTypographyProps={{ component: 'div', sx: { marginBottom: 1 }, variant: 'subtitle2' }}
+          secondaryTypographyProps={{ variant: 'body1' }}
+          secondary={(
+            <>
+              {hit && (
+                <>
+                  <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.before} />
+                  {' '}
+                  <strong>
+                    <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.match} />
+                  </strong>
+                  {' '}
+                  <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.after} />
+                  {' '}
+                  {truncated && !focused && (
+                    <Button
+                      sx={{
+                        '& span': {
+                          lineHeight: '1.5em',
+                        },
+                        margin: 0,
+                        padding: 0,
+                        textTransform: 'none',
+                      }}
+                      onClick={showDetails}
+                      color="secondary"
+                      size="small"
+                      aria-describedby={canvasLabelHtmlId}
+                    >
+                      {t('more')}
+                    </Button>
+                  )}
+                </>
+              )}
+              {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
+            </>
+          )}
+        />
+      </Root>
+    </ScrollTo>
+  );
 }
 
 SearchHit.propTypes = {
@@ -238,24 +198,4 @@ SearchHit.propTypes = {
   total: PropTypes.number,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
   windowSelected: PropTypes.bool,
-};
-
-SearchHit.defaultProps = {
-  adjacent: false,
-  annotation: undefined,
-  annotationId: undefined,
-  annotationLabel: undefined,
-  announcer: undefined,
-  canvasLabel: undefined,
-  companionWindowId: undefined,
-  containerRef: undefined,
-  focused: false,
-  hit: undefined,
-  index: undefined,
-  selectAnnotation: () => {},
-  selected: false,
-  showDetails: () => {},
-  t: k => k,
-  total: undefined,
-  windowSelected: false,
 };

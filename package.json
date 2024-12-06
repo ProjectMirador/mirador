@@ -78,6 +78,8 @@
     "stylis": "^4.3.0",
     "stylis-plugin-rtl": "^2.1.1",
     "url": "^0.11.0",
+    "use-debounce": "^10.0.4",
+    "use-effect-event": "^1.0.2",
     "uuid": "^8.1.0 || ^9.0.0 || ^10.0.0 || ^11.0.0"
   },
   "devDependencies": {
