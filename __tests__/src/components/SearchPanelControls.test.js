@@ -40,7 +40,7 @@ describe('SearchPanelControls', () => {
     fetch.resetMocks();
   });
   it('should fetch result only once', async () => {
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     const user = userEvent.setup();
 
     createWrapper({
