@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Skeleton from '@mui/material/Skeleton';
+import { useTranslation } from 'react-i18next';
 import { Img } from 'react-image';
 import CompanionWindow from '../containers/CompanionWindow';
 import { CompanionWindowSection } from './CompanionWindowSection';
@@ -27,8 +28,9 @@ export function AttributionPanel({
   rights = null,
   windowId,
   id,
-  t = k => k,
 }) {
+  const { t } = useTranslation();
+
   const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
 
   return (
@@ -84,6 +86,5 @@ AttributionPanel.propTypes = {
     value: PropTypes.string,
   })),
   rights: PropTypes.arrayOf(PropTypes.string),
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };

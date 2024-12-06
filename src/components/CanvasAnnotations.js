@@ -5,6 +5,7 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
 
@@ -12,10 +13,11 @@ import { ScrollTo } from './ScrollTo';
  * CanvasAnnotations ~
 */
 export function CanvasAnnotations({
-  annotations = [], index, label, selectedAnnotationId = undefined, t, totalSize,
+  annotations = [], index, label, selectedAnnotationId = undefined, totalSize,
   listContainerComponent = 'li', htmlSanitizationRuleSet = 'iiif', hoveredAnnotationIds = [],
   containerRef = undefined, deselectAnnotation, selectAnnotation, windowId, hoverAnnotation,
 }) {
+  const { t } = useTranslation();
   const handleClick = useCallback((_event, annotation) => {
     if (selectedAnnotationId === annotation.id) {
       deselectAnnotation(windowId, annotation.id);
@@ -105,7 +107,6 @@ CanvasAnnotations.propTypes = {
   listContainerComponent: PropTypes.elementType,
   selectAnnotation: PropTypes.func.isRequired,
   selectedAnnotationId: PropTypes.string,
-  t: PropTypes.func.isRequired,
   totalSize: PropTypes.number.isRequired,
   windowId: PropTypes.string.isRequired,
 };

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { styled, lighten, darken } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import ErrorDialog from '../containers/ErrorDialog';
 import WorkspaceControlPanel from '../containers/WorkspaceControlPanel';
 import Workspace from '../containers/Workspace';
@@ -40,8 +41,8 @@ export function WorkspaceArea({
   isWorkspaceAddVisible = false,
   isWorkspaceControlPanelVisible,
   lang = undefined,
-  t,
 }) {
+  const { t } = useTranslation();
   const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
 
   return (
@@ -74,5 +75,4 @@ WorkspaceArea.propTypes = {
   isWorkspaceAddVisible: PropTypes.bool,
   isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   lang: PropTypes.string,
-  t: PropTypes.func.isRequired,
 };

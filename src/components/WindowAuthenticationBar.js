@@ -7,6 +7,7 @@ import Collapse from '@mui/material/Collapse';
 import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
 import LockIcon from '@mui/icons-material/LockSharp';
+import { useTranslation } from 'react-i18next';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { PluginHook } from './PluginHook';
 
@@ -25,9 +26,10 @@ const StyledFauxButton = styled('span')(({ theme }) => ({
 /** */
 export function WindowAuthenticationBar({
   confirmButton = undefined, continueLabel = undefined,
-  header = undefined, description = undefined, icon = undefined, label, t = k => k,
+  header = undefined, description = undefined, icon = undefined, label,
   ruleSet = 'iiif', hasLogoutService = true, status = undefined, ConfirmProps = {}, onConfirm,
 }) {
+  const { t } = useTranslation();
   const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
   const [open, setOpen] = useState(false);
 
@@ -152,5 +154,4 @@ WindowAuthenticationBar.propTypes = {
   onConfirm: PropTypes.func.isRequired,
   ruleSet: PropTypes.string,
   status: PropTypes.string,
-  t: PropTypes.func,
 };

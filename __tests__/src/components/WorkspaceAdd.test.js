@@ -20,7 +20,6 @@ function createWrapper(props) {
           { manifestId: 'foo' },
         ]}
         classes={{}}
-        t={str => str}
         {...props}
       />
     </DndProvider>,
@@ -45,7 +44,7 @@ describe('WorkspaceAdd', () => {
     createWrapper({ catalog: [] });
 
     expect(screen.queryByRole('listitem')).not.toBeInTheDocument();
-    expect(screen.getByText('emptyResourceList')).toBeInTheDocument();
+    expect(screen.getByText('Your resource list is empty')).toBeInTheDocument();
   });
 
   it('toggles the workspace visibility', async () => {
@@ -62,7 +61,7 @@ describe('WorkspaceAdd', () => {
     const user = userEvent.setup();
     createWrapper();
 
-    const fab = screen.getByRole('button', { name: 'addResource' });
+    const fab = screen.getByRole('button', { name: 'Add resource' });
 
     expect(fab).toBeInTheDocument();
     await user.click(fab);
@@ -70,7 +69,7 @@ describe('WorkspaceAdd', () => {
     expect(fab).toBeDisabled();
     expect(screen.getByRole('textbox')).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: 'closeAddResourceForm' }));
+    await user.click(screen.getByRole('button', { name: 'Close form' }));
 
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
@@ -79,10 +78,10 @@ describe('WorkspaceAdd', () => {
     const user = userEvent.setup();
     createWrapper();
 
-    await user.click(screen.getByRole('button', { name: 'addResource' }));
+    await user.click(screen.getByRole('button', { name: 'Add resource' }));
 
     await user.type(screen.getByRole('textbox'), 'abc');
-    await user.click(screen.getByRole('button', { name: 'fetchManifest' }));
+    await user.click(screen.getByRole('button', { name: 'Add' }));
 
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
@@ -95,10 +94,10 @@ describe('WorkspaceAdd', () => {
 
     jest.spyOn(container.querySelector('.mirador-workspace-add'), 'scrollTo').mockImplementation(scrollTo); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
 
-    await user.click(screen.getByRole('button', { name: 'addResource' }));
+    await user.click(screen.getByRole('button', { name: 'Add resource' }));
 
     await user.type(screen.getByRole('textbox'), 'abc');
-    await user.click(screen.getByRole('button', { name: 'fetchManifest' }));
+    await user.click(screen.getByRole('button', { name: 'Add' }));
 
     expect(scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', left: 0, top: 0 });
   });
@@ -107,10 +106,10 @@ describe('WorkspaceAdd', () => {
     const user = userEvent.setup();
     createWrapper();
 
-    await user.click(screen.getByRole('button', { name: 'addResource' }));
+    await user.click(screen.getByRole('button', { name: 'Add resource' }));
 
     await user.type(screen.getByRole('textbox'), 'abc');
-    await user.click(screen.getByRole('button', { name: 'cancel' }));
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });

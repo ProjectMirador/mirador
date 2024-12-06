@@ -8,7 +8,6 @@ function createWrapper(props) {
     <AnnotationSettings
       displayAll={false}
       displayAllDisabled={false}
-      t={k => k}
       toggleAnnotationDisplay={() => {}}
       windowId="abc123"
       {...props}

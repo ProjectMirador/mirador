@@ -9,6 +9,7 @@ import AnnotationIcon from '@mui/icons-material/CommentSharp';
 import AttributionIcon from '@mui/icons-material/CopyrightSharp';
 import LayersIcon from '@mui/icons-material/LayersSharp';
 import SearchIcon from '@mui/icons-material/SearchSharp';
+import { useTranslation } from 'react-i18next';
 import CanvasIndexIcon from './icons/CanvasIndexIcon';
 
 const Root = styled(Tabs, { name: 'WindowSideBarButtons', slot: 'root' })({
@@ -52,7 +53,8 @@ const StyledTabButton = styled(Tab, { name: 'WindowSideBarButtons', slot: 'butto
 }));
 
 /** */
-function TabButton({ t, value, ...tabProps }) {
+function TabButton({ value, ...tabProps }) {
+  const { t } = useTranslation();
   return (
     <Tooltip title={t('openCompanionWindow', { context: value })}>
       <StyledTabButton
@@ -68,7 +70,6 @@ function TabButton({ t, value, ...tabProps }) {
 }
 
 TabButton.propTypes = {
-  t: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
 };
 
@@ -86,8 +87,8 @@ export function WindowSideBarButtons({
   panels = [],
   PluginComponents = null,
   sideBarPanel = 'closed',
-  t = k => k,
 }) {
+  const { t } = useTranslation();
   /** */
   const handleChange = (event, value) => { addCompanionWindow(value); };
 
@@ -105,28 +106,24 @@ export function WindowSideBarButtons({
       { panels.info && (
         <TabButton
           value="info"
-          t={t}
           icon={(<InfoIcon />)}
         />
       )}
       { panels.attribution && (
         <TabButton
           value="attribution"
-          t={t}
           icon={(<AttributionIcon />)}
         />
       )}
       { panels.canvas && (
         <TabButton
           value="canvas"
-          t={t}
           icon={(<CanvasIndexIcon />)}
         />
       )}
       {panels.annotations && (hasAnnotations || hasAnyAnnotations) && (
         <TabButton
           value="annotations"
-          t={t}
           icon={(
             <Badge overlap="rectangular" color="notification" invisible={!hasAnnotations} variant="dot">
               <AnnotationIcon />
@@ -137,7 +134,6 @@ export function WindowSideBarButtons({
       {panels.search && hasSearchService && (
         <TabButton
           value="search"
-          t={t}
           icon={(
             <Badge overlap="rectangular" color="notification" invisible={!hasSearchResults} variant="dot">
               <SearchIcon />
@@ -148,7 +144,6 @@ export function WindowSideBarButtons({
       { panels.layers && hasAnyLayers && (
         <TabButton
           value="layers"
-          t={t}
           icon={(
             <Badge overlap="rectangular" color="notification" invisible={!hasCurrentLayers} variant="dot">
               <LayersIcon />
@@ -159,7 +154,6 @@ export function WindowSideBarButtons({
       { PluginComponents
         && PluginComponents.map(PluginComponent => (
           <TabButton
-            t={t}
             key={PluginComponent.value}
             value={PluginComponent.value}
             icon={<PluginComponent />}
@@ -180,5 +174,4 @@ WindowSideBarButtons.propTypes = {
   panels: PropTypes.arrayOf(PropTypes.bool),
   PluginComponents: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   sideBarPanel: PropTypes.string,
-  t: PropTypes.func,
 };

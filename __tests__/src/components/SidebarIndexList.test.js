@@ -16,7 +16,6 @@ function createWrapper(props) {
       id="asdf"
       canvases={canvases}
       classes={{}}
-      t={key => key}
       windowId="xyz"
       setCanvas={() => {}}
       config={{ canvasNavigation: { height: 100 } }}

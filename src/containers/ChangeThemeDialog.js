@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getThemeIds, getConfig } from '../state/selectors';
@@ -26,7 +25,6 @@ const mapStateToProps = state => ({
 });
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ChangeThemeDialog'),
 );

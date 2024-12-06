@@ -28,24 +28,24 @@ describe('ZoomControls', () => {
   });
 
   it('renders a couple buttons', () => {
-    expect(screen.getByRole('button', { name: 'zoomIn' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'zoomOut' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'zoomReset' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Zoom in' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Zoom out' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reset zoom' })).toBeInTheDocument();
   });
 
   it('has a zoom-in button', async () => {
-    await user.click(screen.getByRole('button', { name: 'zoomIn' }));
+    await user.click(screen.getByRole('button', { name: 'Zoom in' }));
 
     expect(updateViewport).toHaveBeenCalledWith('xyz', { zoom: 2 });
   });
 
   it('has a zoom-out button', async () => {
-    await user.click(screen.getByRole('button', { name: 'zoomOut' }));
+    await user.click(screen.getByRole('button', { name: 'Zoom out' }));
     expect(updateViewport).toHaveBeenCalledWith('xyz', { zoom: 0.5 });
   });
 
   it('has a zoom reset button', async () => {
-    await user.click(screen.getByRole('button', { name: 'zoomReset' }));
+    await user.click(screen.getByRole('button', { name: 'Reset zoom' }));
 
     expect(zoomToWorld).toHaveBeenCalledWith(false);
   });

@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withTranslation } from 'react-i18next';
 import { Utils } from 'manifesto.js';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
@@ -91,7 +90,6 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('IIIFAuthentication'),
 );

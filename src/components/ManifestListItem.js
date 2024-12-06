@@ -6,6 +6,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
+import { useTranslation } from 'react-i18next';
 import { Img } from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
 import ns from '../config/css-ns';
@@ -75,11 +76,11 @@ export function ManifestListItem({
   manifestLogo = null,
   size = 0,
   provider = null,
-  t = k => k,
   error = null,
   isCollection = false,
   isMultipart = false,
 }) {
+  const { t } = useTranslation();
   useEffect(() => {
     if (!ready && !error && !isFetching && provider !== 'file') fetchManifest(manifestId);
   }, [manifestId, provider, fetchManifest, ready, error, isFetching]);
@@ -213,7 +214,6 @@ ManifestListItem.propTypes = {
   provider: PropTypes.string,
   ready: PropTypes.bool,
   size: PropTypes.number,
-  t: PropTypes.func,
   thumbnail: PropTypes.string,
   title: PropTypes.string,
 };

@@ -38,11 +38,7 @@ i18next.init({
 });
 
 jest.mock('react-i18next', () => ({
-  I18nextProvider: ({ children }) => children,
-  initReactI18next: {
-    init: jest.fn(),
-    type: '3rdParty',
-  },
+  ...jest.requireActual('react-i18next'),
   // this mock makes sure any components using the translate HoC receive the t function as a prop
   withTranslation: () => (WrappedComponent) => {
     /**

@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { withPlugins } from '../extend/withPlugins';
@@ -57,7 +56,6 @@ const mapStateToProps = (state, { width }) => {
 const mapDispatchToProps = { setWorkspaceAddVisibility: actions.setWorkspaceAddVisibility };
 
 const enhance = compose(
-  withTranslation(),
   withWidth({ initialWidth: 'xs' }),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WorkspaceAddButton'),

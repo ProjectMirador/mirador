@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { getManifestStatus, getManifestTitle, getWindowConfig } from '../state/selectors';
 import { WindowTopBarTitle } from '../components/WindowTopBarTitle';
@@ -14,7 +13,6 @@ const mapStateToProps = (state, { windowId }) => ({
 });
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, null),
   withPlugins('WindowTopBarTitle'),
 );

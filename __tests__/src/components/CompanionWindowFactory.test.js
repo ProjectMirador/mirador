@@ -22,7 +22,7 @@ describe('CompanionWindowFactory', () => {
         content: 'info',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('aboutThisItem');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('About this item');
     });
   });
 
@@ -32,7 +32,7 @@ describe('CompanionWindowFactory', () => {
         content: 'canvas',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('canvasIndex');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('Index');
     });
   });
 
@@ -42,7 +42,7 @@ describe('CompanionWindowFactory', () => {
         content: 'annotations',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('annotations');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('Annotations');
     });
   });
 
@@ -52,7 +52,7 @@ describe('CompanionWindowFactory', () => {
         content: 'attribution',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('attributionTitle');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('Rights');
     });
   });
 
@@ -62,7 +62,7 @@ describe('CompanionWindowFactory', () => {
         content: 'thumbnailNavigation',
       });
 
-      expect(screen.getByRole('grid')).toHaveAccessibleName('thumbnailNavigation');
+      expect(screen.getByRole('grid')).toHaveAccessibleName('Thumbnails');
     });
   });
 
@@ -72,7 +72,7 @@ describe('CompanionWindowFactory', () => {
         content: 'search',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('searchTitle');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('Search');
     });
   });
 
@@ -82,7 +82,7 @@ describe('CompanionWindowFactory', () => {
         content: 'layers',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('layers');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('Layers');
     });
   });
 });

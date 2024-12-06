@@ -4,6 +4,7 @@ import Tooltip from '@mui/material/Tooltip';
 import AddIcon from '@mui/icons-material/AddSharp';
 import CloseIcon from '@mui/icons-material/CloseSharp';
 import { styled } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 
 const Root = styled(Fab, { name: 'WorkspaceAddButton', slot: 'root' })(({ theme }) => ({
   marginBottom: theme.spacing(1),
@@ -12,8 +13,9 @@ const Root = styled(Fab, { name: 'WorkspaceAddButton', slot: 'root' })(({ theme 
 /**
  */
 export function WorkspaceAddButton({
-  t = k => k, setWorkspaceAddVisibility, isWorkspaceAddVisible = false, useExtendedFab,
+  setWorkspaceAddVisibility, isWorkspaceAddVisible = false, useExtendedFab,
 }) {
+  const { t } = useTranslation();
   return (
     <Tooltip title={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}>
       <Root
@@ -42,6 +44,5 @@ export function WorkspaceAddButton({
 WorkspaceAddButton.propTypes = {
   isWorkspaceAddVisible: PropTypes.bool,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
-  t: PropTypes.func,
   useExtendedFab: PropTypes.bool.isRequired,
 };

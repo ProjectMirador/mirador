@@ -46,8 +46,8 @@ function createWrapper(props) {
       windowId="base"
       config={{}}
       updateViewport={jest.fn()}
-      t={k => k}
       canvasWorld={new CanvasWorld(canvases)}
+      t={k => k}
       {...props}
     >
       <Child testId="foo" />
