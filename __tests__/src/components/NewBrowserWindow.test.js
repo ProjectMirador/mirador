@@ -1,5 +1,5 @@
 import { render } from 'test-utils';
-import { NewWindow } from '../../../src/components/NewWindow';
+import { NewBrowserWindow } from '../../../src/components/NewBrowserWindow';
 
 jest.useFakeTimers();
 
@@ -8,7 +8,7 @@ jest.useFakeTimers();
  */
 function createWrapper(props) {
   return render(
-    <NewWindow
+    <NewBrowserWindow
       url="http://example.com/"
       onClose={() => {}}
       {...props}
@@ -16,7 +16,7 @@ function createWrapper(props) {
   );
 }
 
-describe('NewWindow', () => {
+describe('NewBrowserWindow', () => {
   it('renders properly and runs callbacks when the window closes', () => {
     const mockWindow = { close: jest.fn() };
     const open = jest.fn(() => mockWindow);

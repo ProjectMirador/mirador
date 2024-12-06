@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { AccessTokenSender } from './AccessTokenSender';
-import { NewWindow } from './NewWindow';
+import { NewBrowserWindow } from './NewBrowserWindow';
 import WindowAuthenticationBar from '../containers/WindowAuthenticationBar';
 
 /**
@@ -62,7 +62,7 @@ export function IIIFAuthentication({
   const renderLoggingInCookie = () => (
     <>
       {renderLogin()}
-      <NewWindow name="IiifLoginSender" url={`${authServiceId}?origin=${window.origin}`} features={features} onClose={() => resolveAuthenticationRequest(authServiceId, accessTokenServiceId)} />
+      <NewBrowserWindow name="IiifLoginSender" url={`${authServiceId}?origin=${window.origin}`} features={features} onClose={() => resolveAuthenticationRequest(authServiceId, accessTokenServiceId)} />
     </>
   );
 
