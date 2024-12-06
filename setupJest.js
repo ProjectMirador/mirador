@@ -43,6 +43,9 @@ jest.mock('react-i18next', () => ({
     init: jest.fn(),
     type: '3rdParty',
   },
+  useTranslation: () => ({
+    t: (key) => key,
+  }),
   // this mock makes sure any components using the translate HoC receive the t function as a prop
   withTranslation: () => (WrappedComponent) => {
     /**
