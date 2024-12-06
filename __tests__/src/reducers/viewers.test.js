@@ -107,4 +107,15 @@ describe('viewers reducer', () => {
       type: ActionTypes.IMPORT_MIRADOR_STATE,
     })).toEqual({ new: 'stuff' });
   });
+  it('should handle ADD_WINDOW', () => {
+    expect(viewersReducer({}, {
+      type: ActionTypes.ADD_WINDOW,
+      window: { id: 'abc123', initialViewerConfig: { x: 5, y: 15 } },
+    })).toEqual({
+      abc123: {
+        x: 5,
+        y: 15,
+      },
+    });
+  });
 });
