@@ -1,6 +1,6 @@
 import {
   render, screen, fireEvent, waitFor,
-} from 'test-utils';
+} from '@tests/utils/test-utils';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -87,7 +87,7 @@ describe('Workspace', () => {
     it('adds a new catalog entry from a manifest', async () => {
       const manifestJson = '{ "data": "123" }';
 
-      const addWindow = jest.fn();
+      const addWindow = vi.fn();
 
       const { container } = createWrapper({ addWindow });
       const dropTarget = container.querySelector('.mirador-workspace-viewport');
@@ -109,7 +109,7 @@ describe('Workspace', () => {
     it('adds a new catalog entry from a IIIF drag and drop icon', () => {
       const manifestJson = '{ "data": "123" }';
 
-      const addWindow = jest.fn();
+      const addWindow = vi.fn();
 
       const { container } = createWrapper({ addWindow, allowNewWindows: false });
 

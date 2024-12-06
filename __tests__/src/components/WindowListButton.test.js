@@ -1,4 +1,4 @@
-import { render, screen, within } from 'test-utils';
+import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import { WindowListButton } from '../../../src/components/WindowListButton';

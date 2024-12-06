@@ -124,6 +124,7 @@ export function WorkspaceAdd({
             right: theme.spacing(2),
           })}
           className={classNames(ns('add-resource-button'))}
+          aria-label={t('addResource')}
           color="primary"
           onClick={() => setAddResourcesVisibility(true)}
         >

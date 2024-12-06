@@ -1,5 +1,5 @@
-import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
-import { render, screen } from 'test-utils';
+import { MosaicWindowContext } from 'react-mosaic-component2';
+import { render, screen } from '@tests/utils/test-utils';
 
 import { Window } from '../../../src/components/Window';
 
@@ -47,7 +47,7 @@ describe('Window', () => {
   });
   describe('when workspaceType is mosaic', () => {
     it('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {
-      const connectDragSource = jest.fn(component => component);
+      const connectDragSource = vi.fn(component => component);
       render(
         <MosaicWindowContext.Provider value={{ mosaicWindowActions: { connectDragSource } }}>
           <Window
@@ -73,7 +73,7 @@ describe('Window', () => {
       expect(connectDragSource).toHaveBeenCalled();
     });
     it('does not call the context mosaicWindowActions connectDragSource when the windowDraggable is set to false', () => {
-      const connectDragSource = jest.fn(component => component);
+      const connectDragSource = vi.fn(component => component);
       render(
         <MosaicWindowContext.Provider value={{ mosaicWindowActions: { connectDragSource } }}>
           <Window

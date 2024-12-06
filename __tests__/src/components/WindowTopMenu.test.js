@@ -1,4 +1,4 @@
-import { render, screen, within } from 'test-utils';
+import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WindowTopMenu } from '../../../src/components/WindowTopMenu';
 
@@ -54,8 +54,8 @@ describe('WindowTopMenu', () => {
   it('fires the correct callbacks on menu close', async () => {
     const user = userEvent.setup();
     createAnchor();
-    const handleClose = jest.fn();
-    const toggleDraggingEnabled = jest.fn();
+    const handleClose = vi.fn();
+    const toggleDraggingEnabled = vi.fn();
     const anchorEl = screen.getByTestId('menu-trigger-button');
 
     render(<Subject

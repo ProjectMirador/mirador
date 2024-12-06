@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WindowThumbnailSettings } from '../../../src/components/WindowThumbnailSettings';
 
@@ -38,7 +38,7 @@ describe('WindowThumbnailSettings', () => {
   });
 
   it('updates state when the thumbnail config selection changes', async () => {
-    const setWindowThumbnailPosition = jest.fn();
+    const setWindowThumbnailPosition = vi.fn();
     const user = userEvent.setup();
     createWrapper({ setWindowThumbnailPosition });
     const menuItems = screen.queryAllByRole('menuitem');

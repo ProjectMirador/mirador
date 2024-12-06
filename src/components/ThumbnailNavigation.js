@@ -28,7 +28,7 @@ export function ThumbnailNavigation({
   useEffect(() => {
     let index = canvasIndex;
     if (view === 'book') index = Math.ceil(index / 2);
-    gridRef.current.scrollToItem(index, 'center');
+    gridRef.current?.scrollToItem(index, 'center');
   }, [canvasIndex, view]);
 
   /** */

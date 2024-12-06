@@ -15,41 +15,47 @@ import {
 
 describe('getSequences', () => {
   describe('with a v2 manifest', () => {
-    const state = { manifests: { x: { json: manifestFixtureGau } } };
-    const sequences = getSequences(state, { manifestId: 'x' });
-    expect(sequences.length).toEqual(2);
-    expect(sequences.map(s => s.id)).toEqual([
-      'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1740.json',
-      'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
-    ]);
+    it('works', () => {
+      const state = { manifests: { x: { json: manifestFixtureGau } } };
+      const sequences = getSequences(state, { manifestId: 'x' });
+      expect(sequences.length).toEqual(2);
+      expect(sequences.map(s => s.id)).toEqual([
+        'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1740.json',
+        'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
+      ]);
+    });
   });
   describe('with a v2 manifest with top ranges', () => {
-    const manifest = {
-      ...manifestFixture001,
-      structures: [
-        { id: 'a', type: 'sc:Range', viewingHint: 'top' },
-        { id: 'b', type: 'sc:Range', viewingHint: 'top' },
-        { id: 'a1' },
-      ],
-    };
-    const state = { manifests: { x: { json: manifest } } };
-    const sequences = getSequences(state, { manifestId: 'x' });
-    expect(sequences.length).toEqual(1);
-    expect(sequences.map(s => s.id)).toEqual(['https://iiif.bodleian.ox.ac.uk/iiif/sequence/9cca8fdd-4a61-4429-8ac1-f648764b4d6d_default.json']);
+    it('works', () => {
+      const manifest = {
+        ...manifestFixture001,
+        structures: [
+          { id: 'a', type: 'sc:Range', viewingHint: 'top' },
+          { id: 'b', type: 'sc:Range', viewingHint: 'top' },
+          { id: 'a1' },
+        ],
+      };
+      const state = { manifests: { x: { json: manifest } } };
+      const sequences = getSequences(state, { manifestId: 'x' });
+      expect(sequences.length).toEqual(1);
+      expect(sequences.map(s => s.id)).toEqual(['https://iiif.bodleian.ox.ac.uk/iiif/sequence/9cca8fdd-4a61-4429-8ac1-f648764b4d6d_default.json']);
+    });
   });
   describe('with a v3 manifest', () => {
-    const manifest = {
-      ...manifestFixturev3001,
-      structures: [
-        { behavior: ['sequence', 'individuals'], id: 'a', type: 'Range' },
-        { behavior: 'sequence', id: 'b', type: 'Range' },
-        { id: 'a1', type: 'Range' },
-      ],
-    };
-    const state = { manifests: { x: { json: manifest } } };
-    const sequences = getSequences(state, { manifestId: 'x' });
-    expect(sequences.length).toEqual(3);
-    expect(sequences.map(s => s.id)).toEqual([undefined, 'a', 'b']);
+    it('works', () => {
+      const manifest = {
+        ...manifestFixturev3001,
+        structures: [
+          { behavior: ['sequence', 'individuals'], id: 'a', type: 'Range' },
+          { behavior: 'sequence', id: 'b', type: 'Range' },
+          { id: 'a1', type: 'Range' },
+        ],
+      };
+      const state = { manifests: { x: { json: manifest } } };
+      const sequences = getSequences(state, { manifestId: 'x' });
+      expect(sequences.length).toEqual(3);
+      expect(sequences.map(s => s.id)).toEqual([undefined, 'a', 'b']);
+    });
   });
 });
 

@@ -1,5 +1,5 @@
-import { render, screen } from 'test-utils';
 import userEvent from '@testing-library/user-event';
+import { render, screen } from '../../utils/test-utils';
 import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
 
 /** create wrapper */
@@ -18,8 +18,8 @@ describe('ViewerNavigation', () => {
   let setNextCanvas;
   let setPreviousCanvas;
   beforeEach(() => {
-    setNextCanvas = jest.fn();
-    setPreviousCanvas = jest.fn();
+    setNextCanvas = vi.fn();
+    setPreviousCanvas = vi.fn();
   });
   it('renders the component', () => {
     createWrapper({
