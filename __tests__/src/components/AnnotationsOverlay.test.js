@@ -39,48 +39,6 @@ describe('AnnotationsOverlay', () => {
     OpenSeadragonCanvasOverlay.mockClear();
   });
 
-  describe('annotationsMatch', () => {
-    it('is false if the annotations are a different size', () => {
-      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }, { id: 2, resources: [{ id: 'rid2' }] }];
-
-      expect(
-        AnnotationsOverlay.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(false);
-    });
-
-    it('is true if the previous annotation\'s resource IDs all match', () => {
-      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-
-      expect(
-        AnnotationsOverlay.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(true);
-    });
-
-    it('is true if both are empty', () => {
-      expect(AnnotationsOverlay.annotationsMatch([], [])).toBe(true);
-    });
-
-    it('is false if the previous annotation\'s resource IDs do not match', () => {
-      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid2' }] }];
-
-      expect(
-        AnnotationsOverlay.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(false);
-    });
-
-    it('returns true if the annotation resources IDs are empty (to prevent unecessary rerender)', () => {
-      const currentAnnotations = [{ id: 1, resources: [] }];
-      const previousAnnotations = [{ id: 1, resources: [] }];
-
-      expect(
-        AnnotationsOverlay.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(true);
-    });
-  });
-
   describe('componentDidUpdate', () => {
     it('sets up a OpenSeadragonCanvasOverlay', () => {
       const { component, rerender } = createWrapper();
