@@ -1,8 +1,9 @@
-import { createRef, Component } from 'react';
+import {
+  useRef, useEffect, useCallback, useMemo,
+} from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
-import debounce from 'lodash/debounce';
+import { useDebouncedCallback } from 'use-debounce';
 import flatten from 'lodash/flatten';
 import sortBy from 'lodash/sortBy';
 import xor from 'lodash/xor';
@@ -10,135 +11,109 @@ import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
 
+/** @private */
+function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point) {
+  const [canvasX, canvasY] = canvasWorld.canvasToWorldCoordinates(canvas.id);
+  const relativeX = point.x - canvasX;
+  const relativeY = point.y - canvasY;
+
+  if (resource.svgSelector) {
+    const context = osdCanvasOverlay.context2d;
+    const { svgPaths } = new CanvasAnnotationDisplay({ resource });
+    return [...svgPaths].some(path => (
+      context.isPointInPath(new Path2D(path.attributes.d.nodeValue), relativeX, relativeY)
+    ));
+  }
+
+  if (resource.fragmentSelector) {
+    const [x, y, w, h] = resource.fragmentSelector;
+    return x <= relativeX && relativeX <= (x + w)
+      && y <= relativeY && relativeY <= (y + h);
+  }
+  return false;
+}
+
 /**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
  * and rendering OSD.
  */
-export class AnnotationsOverlay extends Component {
+export function AnnotationsOverlay({
+  annotations = [], canvasWorld, deselectAnnotation = () => {}, drawAnnotations = true, drawSearchAnnotations = true,
+  highlightAllAnnotations = false, hoverAnnotation = () => {}, hoveredAnnotationIds = [],
+  palette = {}, searchAnnotations = [], selectAnnotation = () => {}, selectedAnnotationId = null,
+  viewer = null, windowId,
+}) {
+  const ref = useRef();
+
+  const osdCanvasOverlay = useMemo(() => new OpenSeadragonCanvasOverlay(viewer, ref), [ref, viewer]);
+
+  const toggleAnnotation = useCallback((id) => {
+    if (selectedAnnotationId === id) {
+      deselectAnnotation(windowId, id);
+    } else {
+      selectAnnotation(windowId, id);
+    }
+  }, [selectedAnnotationId, deselectAnnotation, selectAnnotation, windowId]);
+
   /**
-   * annotationsMatch - compares previous annotations to current to determine
-   * whether to add a new updateCanvas method to draw annotations
-   * @param  {Array} currentAnnotations
-   * @param  {Array} prevAnnotations
-   * @return {Boolean}
+   * annotationsToContext - converts anontations to a canvas context
    */
-  static annotationsMatch(currentAnnotations, prevAnnotations) {
-    if (!currentAnnotations && !prevAnnotations) return true;
-    if (
-      (currentAnnotations && !prevAnnotations)
-      || (!currentAnnotations && prevAnnotations)
-    ) return false;
-
-    if (currentAnnotations.length === 0 && prevAnnotations.length === 0) return true;
-    if (currentAnnotations.length !== prevAnnotations.length) return false;
-    return currentAnnotations.every((annotation, index) => {
-      const newIds = annotation.resources.map(r => r.id);
-      const prevIds = prevAnnotations[index].resources.map(r => r.id);
-      if (newIds.length === 0 && prevIds.length === 0) return true;
-      if (newIds.length !== prevIds.length) return false;
-
-      if ((annotation.id === prevAnnotations[index].id) && (isEqual(newIds, prevIds))) {
-        return true;
-      }
-      return false;
+  const annotationsToContext = useCallback((renderedAnnotations, currentPalette) => {
+    const context = osdCanvasOverlay.context2d;
+    const zoomRatio = viewer.viewport.getZoom(true) / viewer.viewport.getMaxZoom();
+    renderedAnnotations.forEach((annotation) => {
+      annotation.resources.forEach((resource) => {
+        if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
+        const offset = canvasWorld.offsetByCanvas(resource.targetId);
+        const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
+          hovered: hoveredAnnotationIds.includes(resource.id),
+          offset,
+          palette: {
+            ...currentPalette,
+            default: {
+              ...currentPalette.default,
+              ...(!highlightAllAnnotations && currentPalette.hidden),
+            },
+          },
+          resource,
+          selected: selectedAnnotationId === resource.id,
+          zoomRatio,
+        });
+        canvasAnnotationDisplay.toContext(context);
+      });
     });
-  }
+  }, [osdCanvasOverlay, viewer, canvasWorld, highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId]);
 
-  /**
-   * @param {Object} props
-   */
-  constructor(props) {
-    super(props);
-
-    this.ref = createRef();
-    this.osdCanvasOverlay = null;
-    // An initial value for the updateCanvas method
-    this.updateCanvas = () => {};
-    this.onUpdateViewport = this.onUpdateViewport.bind(this);
-    this.onCanvasClick = this.onCanvasClick.bind(this);
-    this.onCanvasMouseMove = debounce(this.onCanvasMouseMove.bind(this), 10);
-    this.onCanvasExit = this.onCanvasExit.bind(this);
-  }
-
-  /**
-   * React lifecycle event
-   */
-  componentDidMount() {
-    this.initializeViewer();
-  }
-
-  /**
-   * When the tileSources change, make sure to close the OSD viewer.
-   * When the annotations change, reset the updateCanvas method to make sure
-   * they are added.
-   * When the viewport state changes, pan or zoom the OSD viewer as appropriate
-   */
-  componentDidUpdate(prevProps) {
-    const {
-      drawAnnotations,
-      drawSearchAnnotations,
-      annotations, searchAnnotations,
-      hoveredAnnotationIds, selectedAnnotationId,
-      highlightAllAnnotations,
-      viewer,
-    } = this.props;
-
-    this.initializeViewer();
-
-    const annotationsUpdated = !AnnotationsOverlay.annotationsMatch(annotations, prevProps.annotations);
-    const searchAnnotationsUpdated = !AnnotationsOverlay.annotationsMatch(
-      searchAnnotations,
-      prevProps.searchAnnotations,
-    );
-
-    const hoveredAnnotationsUpdated = (
-      xor(hoveredAnnotationIds, prevProps.hoveredAnnotationIds).length > 0
-    );
-
-    if (this.osdCanvasOverlay && hoveredAnnotationsUpdated) {
-      if (hoveredAnnotationIds.length > 0) {
-        this.osdCanvasOverlay.canvasDiv.style.cursor = 'pointer';
-      } else {
-        this.osdCanvasOverlay.canvasDiv.style.cursor = '';
-      }
+  const renderAnnotations = useCallback(() => {
+    if (drawSearchAnnotations) {
+      annotationsToContext(searchAnnotations, palette.search);
     }
 
-    const selectedAnnotationsUpdated = selectedAnnotationId !== prevProps.selectedAnnotationId;
-
-    const redrawAnnotations = drawAnnotations !== prevProps.drawAnnotations
-      || drawSearchAnnotations !== prevProps.drawSearchAnnotations
-      || highlightAllAnnotations !== prevProps.highlightAllAnnotations;
-
-    if (
-      searchAnnotationsUpdated
-      || annotationsUpdated
-      || selectedAnnotationsUpdated
-      || hoveredAnnotationsUpdated
-      || redrawAnnotations
-    ) {
-      this.updateCanvas = this.canvasUpdateCallback();
-      viewer.forceRedraw();
+    if (drawAnnotations) {
+      annotationsToContext(annotations, palette.annotations);
     }
-  }
+  }, [annotations, annotationsToContext, drawAnnotations, drawSearchAnnotations, palette, searchAnnotations]);
 
-  /**
-   */
-  componentWillUnmount() {
-    const { viewer } = this.props;
+  const updateCanvas = useCallback(() => {
+    if (!osdCanvasOverlay) return;
 
-    this.onCanvasMouseMove.cancel();
-    viewer.removeHandler('canvas-click', this.onCanvasClick);
-    viewer.removeHandler('canvas-exit', this.onCanvasExit);
-    viewer.removeHandler('update-viewport', this.onUpdateViewport);
-    viewer.removeHandler('mouse-move', this.onCanvasMouseMove);
-  }
+    osdCanvasOverlay.clear();
+    osdCanvasOverlay.resize();
+    osdCanvasOverlay.canvasUpdate(renderAnnotations);
+  }, [osdCanvasOverlay, renderAnnotations]);
 
-  /** */
-  onCanvasClick(event) {
-    const {
-      canvasWorld,
-    } = this.props;
+  const annotationsAtPoint = useCallback((canvas, point) => {
+    const lists = [...annotations, ...searchAnnotations];
+    const annos = flatten(lists.map(l => l.resources)).filter((resource) => {
+      if (canvas.id !== resource.targetId) return false;
 
+      return isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point);
+    });
+
+    return annos;
+  }, [annotations, canvasWorld, osdCanvasOverlay, searchAnnotations]);
+
+  const onCanvasClick = useCallback((event) => {
     const { position: webPosition, eventSource: { viewport } } = event;
     const point = viewport.pointFromPixel(webPosition);
 
@@ -149,14 +124,14 @@ export class AnnotationsOverlay extends Component {
     ] = canvasWorld.canvasToWorldCoordinates(canvas.id);
 
     // get all the annotations that contain the click
-    const annos = this.annotationsAtPoint(canvas, point);
+    const annos = annotationsAtPoint(canvas, point);
 
     if (annos.length > 0) {
       event.preventDefaultAction = true; // eslint-disable-line no-param-reassign
     }
 
     if (annos.length === 1) {
-      this.toggleAnnotation(annos[0].id);
+      toggleAnnotation(annos[0].id);
     } else if (annos.length > 0) {
       /**
        * Try to find the "right" annotation to select after a click.
@@ -177,7 +152,7 @@ export class AnnotationsOverlay extends Component {
             const x = Math.cos(degrees * degreesToRadians) * radius + point.x;
             const y = Math.sin(degrees * degreesToRadians) * radius + point.y;
 
-            if (this.isAnnotationAtPoint(anno, canvas, { x, y })) score += 1;
+            if (isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, anno, canvas, { x, y })) score += 1;
           }
 
           return { anno, score };
@@ -194,22 +169,11 @@ export class AnnotationsOverlay extends Component {
         annosWithScore = sortBy(annos.map(annosWithClickScore(radius)), 'score');
       }
 
-      this.toggleAnnotation(annosWithScore[0].anno.id);
+      toggleAnnotation(annosWithScore[0].anno.id);
     }
-  }
+  }, [annotationsAtPoint, canvasWorld, osdCanvasOverlay, toggleAnnotation]);
 
-  /** */
-  onCanvasMouseMove(event) {
-    const {
-      annotations,
-      canvasWorld,
-      hoverAnnotation,
-      hoveredAnnotationIds,
-      searchAnnotations,
-      viewer,
-      windowId,
-    } = this.props;
-
+  const onCanvasMouseMove = useDebouncedCallback(useCallback((event) => {
     if (annotations.length === 0 && searchAnnotations.length === 0) return;
 
     const { position: webPosition } = event;
@@ -221,206 +185,71 @@ export class AnnotationsOverlay extends Component {
       return;
     }
 
-    const annos = this.annotationsAtPoint(canvas, point);
+    const annos = annotationsAtPoint(canvas, point);
 
     if (xor(hoveredAnnotationIds, annos.map(a => a.id)).length > 0) {
       hoverAnnotation(windowId, annos.map(a => a.id));
     }
-  }
+  }, [annotations, annotationsAtPoint, canvasWorld, hoverAnnotation,
+    hoveredAnnotationIds, searchAnnotations, viewer, windowId]), 10);
 
-  /** If the cursor leaves the canvas, wipe out highlights */
-  onCanvasExit(event) {
-    const {
-      hoverAnnotation,
-      windowId,
-    } = this.props;
-
+  const onCanvasExit = useCallback(() => {
     // a move event may be queued up by the debouncer
-    this.onCanvasMouseMove.cancel();
+    onCanvasMouseMove.cancel();
     hoverAnnotation(windowId, []);
-  }
+  }, [hoverAnnotation, onCanvasMouseMove, windowId]);
 
-  /**
-   * onUpdateViewport - fires during OpenSeadragon render method.
-   */
-  onUpdateViewport(event) {
-    this.updateCanvas();
-  }
+  const onUpdateViewport = useCallback(() => {
+    updateCanvas();
+  }, [updateCanvas]);
 
-  /** @private */
-  initializeViewer() {
-    const { viewer } = this.props;
+  useEffect(() => {
+    if (!viewer) return undefined;
 
-    if (!viewer) return;
-    if (this.osdCanvasOverlay) return;
+    viewer.addHandler('canvas-click', onCanvasClick);
+    viewer.addHandler('canvas-exit', onCanvasExit);
+    viewer.addHandler('mouse-move', onCanvasMouseMove);
+    viewer.addHandler('update-viewport', onUpdateViewport);
 
-    this.osdCanvasOverlay = new OpenSeadragonCanvasOverlay(viewer, this.ref);
-
-    viewer.addHandler('canvas-click', this.onCanvasClick);
-    viewer.addHandler('canvas-exit', this.onCanvasExit);
-    viewer.addHandler('update-viewport', this.onUpdateViewport);
-    viewer.addHandler('mouse-move', this.onCanvasMouseMove);
-
-    this.updateCanvas = this.canvasUpdateCallback();
-  }
-
-  /** */
-  canvasUpdateCallback() {
     return () => {
-      this.osdCanvasOverlay.clear();
-      this.osdCanvasOverlay.resize();
-      this.osdCanvasOverlay.canvasUpdate(this.renderAnnotations.bind(this));
+      viewer.removeHandler('canvas-click', onCanvasClick);
+      viewer.removeHandler('canvas-exit', onCanvasExit);
+      viewer.removeHandler('mouse-move', onCanvasMouseMove);
+      viewer.removeHandler('update-viewport', onUpdateViewport);
     };
-  }
+  }, [onCanvasClick, onCanvasExit, onCanvasMouseMove, onUpdateViewport, viewer]);
 
-  /** @private */
-  isAnnotationAtPoint(resource, canvas, point) {
-    const {
-      canvasWorld,
-    } = this.props;
+  useEffect(() => {
+    if (viewer) viewer.forceRedraw();
+  }, [annotations, drawAnnotations, drawSearchAnnotations, highlightAllAnnotations,
+    hoveredAnnotationIds, searchAnnotations, selectedAnnotationId, viewer]);
 
-    const [canvasX, canvasY] = canvasWorld.canvasToWorldCoordinates(canvas.id);
-    const relativeX = point.x - canvasX;
-    const relativeY = point.y - canvasY;
+  useEffect(() => {
+    if (!osdCanvasOverlay || !osdCanvasOverlay.canvasDiv) return;
 
-    if (resource.svgSelector) {
-      const context = this.osdCanvasOverlay.context2d;
-      const { svgPaths } = new CanvasAnnotationDisplay({ resource });
-      return [...svgPaths].some(path => (
-        context.isPointInPath(new Path2D(path.attributes.d.nodeValue), relativeX, relativeY)
-      ));
-    }
-
-    if (resource.fragmentSelector) {
-      const [x, y, w, h] = resource.fragmentSelector;
-      return x <= relativeX && relativeX <= (x + w)
-        && y <= relativeY && relativeY <= (y + h);
-    }
-    return false;
-  }
-
-  /** @private */
-  annotationsAtPoint(canvas, point) {
-    const {
-      annotations, searchAnnotations,
-    } = this.props;
-
-    const lists = [...annotations, ...searchAnnotations];
-    const annos = flatten(lists.map(l => l.resources)).filter((resource) => {
-      if (canvas.id !== resource.targetId) return false;
-
-      return this.isAnnotationAtPoint(resource, canvas, point);
-    });
-
-    return annos;
-  }
-
-  /** */
-  toggleAnnotation(id) {
-    const {
-      selectedAnnotationId,
-      selectAnnotation,
-      deselectAnnotation,
-      windowId,
-    } = this.props;
-
-    if (selectedAnnotationId === id) {
-      deselectAnnotation(windowId, id);
+    if (hoveredAnnotationIds.length > 0) {
+      osdCanvasOverlay.canvasDiv.style.cursor = 'pointer';
     } else {
-      selectAnnotation(windowId, id);
+      osdCanvasOverlay.canvasDiv.style.cursor = '';
     }
-  }
+  }, [hoveredAnnotationIds, osdCanvasOverlay]);
 
-  /**
-   * annotationsToContext - converts anontations to a canvas context
-   */
-  annotationsToContext(annotations, palette) {
-    const {
-      highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId, canvasWorld,
-      viewer,
-    } = this.props;
-    const context = this.osdCanvasOverlay.context2d;
-    const zoomRatio = viewer.viewport.getZoom(true) / viewer.viewport.getMaxZoom();
-    annotations.forEach((annotation) => {
-      annotation.resources.forEach((resource) => {
-        if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-        const offset = canvasWorld.offsetByCanvas(resource.targetId);
-        const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
-          hovered: hoveredAnnotationIds.includes(resource.id),
-          offset,
-          palette: {
-            ...palette,
-            default: {
-              ...palette.default,
-              ...(!highlightAllAnnotations && palette.hidden),
-            },
-          },
-          resource,
-          selected: selectedAnnotationId === resource.id,
-          zoomRatio,
-        });
-        canvasAnnotationDisplay.toContext(context);
-      });
-    });
-  }
+  if (!viewer) return null;
 
-  /** */
-  renderAnnotations() {
-    const {
-      annotations,
-      drawAnnotations,
-      drawSearchAnnotations,
-      searchAnnotations,
-      palette,
-    } = this.props;
-
-    if (drawSearchAnnotations) {
-      this.annotationsToContext(searchAnnotations, palette.search);
-    }
-
-    if (drawAnnotations) {
-      this.annotationsToContext(annotations, palette.annotations);
-    }
-  }
-
-  /**
-   * Renders things
-   */
-  render() {
-    const { viewer } = this.props;
-
-    if (!viewer) return null;
-
-    return ReactDOM.createPortal(
-      (
-        <div
-          ref={this.ref}
-          style={{
-            height: '100%', left: 0, position: 'absolute', top: 0, width: '100%',
-          }}
-        >
-          <canvas />
-        </div>
-      ),
-      viewer.canvas,
-    );
-  }
+  return ReactDOM.createPortal(
+    (
+      <div
+        ref={ref}
+        style={{
+          height: '100%', left: 0, position: 'absolute', top: 0, width: '100%',
+        }}
+      >
+        <canvas />
+      </div>
+    ),
+    viewer.canvas,
+  );
 }
-
-AnnotationsOverlay.defaultProps = {
-  annotations: [],
-  deselectAnnotation: () => {},
-  drawAnnotations: true,
-  drawSearchAnnotations: true,
-  highlightAllAnnotations: false,
-  hoverAnnotation: () => {},
-  hoveredAnnotationIds: [],
-  palette: {},
-  searchAnnotations: [],
-  selectAnnotation: () => {},
-  selectedAnnotationId: undefined,
-  viewer: null,
-};
 
 AnnotationsOverlay.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
