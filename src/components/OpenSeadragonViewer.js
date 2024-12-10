@@ -148,6 +148,10 @@ export class OpenSeadragonViewer extends Component {
 
     const { viewport } = event.eventSource;
 
+    const imageBounds = viewport.viewportToImageRectangle(viewport.getBounds());
+    const parsedBounds = `${this.convertToIIIFCoords(imageBounds.x)},${this.convertToIIIFCoords(imageBounds.y)},${this.convertToIIIFCoords(imageBounds.width)},${this.convertToIIIFCoords(imageBounds.height)}`;
+    this.ref.current?.parentNode.setAttribute('data-xywh-coords', parsedBounds);
+
     updateViewport(windowId, {
       flip: viewport.getFlip(),
       rotation: viewport.getRotation(),
@@ -155,6 +159,14 @@ export class OpenSeadragonViewer extends Component {
       y: Math.round(viewport.centerSpringY.target.value),
       zoom: viewport.zoomSpring.target.value,
     });
+  }
+
+  /**
+ * OSD returns negative and float bounds
+ */
+  convertToIIIFCoords(bounds){
+    if (bounds < 0) return 0;
+    return Math.round(bounds);
   }
 
   /** */
