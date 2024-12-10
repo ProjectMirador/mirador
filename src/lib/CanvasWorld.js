@@ -198,6 +198,11 @@ export default class CanvasWorld {
     };
   }
 
+  /** */
+  hasDimensions() {
+    return this.canvasDimensions.length > 0;
+  }
+
   /**
    * worldBounds - calculates the "World" bounds. World in this case is canvases
    * lined up horizontally starting from left to right.
