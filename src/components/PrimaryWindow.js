@@ -93,7 +93,7 @@ export function PrimaryWindow({
   };
 
   return (
-    <Root data-testid="test-window" className={classNames(ns('primary-window'), className)}>
+    <Root data-testid="test-window" data-parent-window-id={windowId} className={classNames(ns('primary-window'), className)}>
       <WindowSideBar windowId={windowId} />
       <CompanionArea windowId={windowId} position="left" />
       { isCollectionDialogVisible && <CollectionDialog windowId={windowId} /> }

@@ -85,6 +85,7 @@ describe('OpenSeadragonViewer', () => {
         getBounds: () => [],
         getFlip: () => false,
         getRotation: () => 90,
+        viewportToImageRectangle: () => '0,0,0,0',
         zoomSpring: { target: { value: 0.5 } },
       });
 

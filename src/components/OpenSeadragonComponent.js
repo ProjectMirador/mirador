@@ -23,8 +23,18 @@ function OpenSeadragonComponent({
     viewerRef.current?.raiseEvent('mouse-move', event);
   }, [viewerRef]), 10);
 
+  /** OSD returns negative and float bounds */
+  const convertToIIIFCoords = (bounds) => {
+    if (bounds < 0) return 0;
+    return Math.round(bounds);
+  };
+
   const onViewportChange = useCallback((event) => {
     const { viewport } = event.eventSource;
+
+    const imageBounds = viewport.viewportToImageRectangle(viewport.getBounds());
+    const parsedBounds = `${convertToIIIFCoords(imageBounds.x)},${convertToIIIFCoords(imageBounds.y)},${convertToIIIFCoords(imageBounds.width)},${convertToIIIFCoords(imageBounds.height)}`;
+    viewerRef.current?.element.parentNode.setAttribute('data-xywh-coords', parsedBounds);
 
     onUpdateViewport({
       bounds: viewport.getBounds(),
