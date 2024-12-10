@@ -15,6 +15,7 @@ function OpenSeadragonComponent({
   const id = useId();
   const [grabbing, setGrabbing] = useState(false);
   const viewerRef = useRef(undefined);
+  const initialViewportSet = useRef(false);
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   const moveHandler = useDebouncedCallback(useCallback((event) => {
@@ -35,11 +36,45 @@ function OpenSeadragonComponent({
     });
   }, [onUpdateViewport]);
 
+  const setInitialBounds = useCallback(({ viewport }) => {
+    if (initialViewportSet.current) return;
+    initialViewportSet.current = true;
+
+    if (viewerConfig.x != null && viewerConfig.y != null) {
+      viewport.panTo(new Openseadragon.Point(viewerConfig.x, viewerConfig.y), true);
+    }
+
+    if (viewerConfig.zoom != null) {
+      viewport.zoomTo(viewerConfig.zoom, new Openseadragon.Point(viewerConfig.x, viewerConfig.y), true);
+    }
+
+    if (viewerConfig.rotation && viewerConfig.rotation !== viewport.getRotation()) {
+      viewport.setRotation(viewerConfig.rotation);
+    }
+
+    if (viewerConfig.flip != null && (viewerConfig.flip || false) !== viewport.getFlip()) {
+      viewport.setFlip(viewerConfig.flip);
+    }
+
+    if (!viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
+      if (viewerConfig.bounds) {
+        viewport.fitBounds(new Openseadragon.Rect(...viewerConfig.bounds), true);
+      } else {
+        viewport.goHome(true);
+      }
+    }
+  }, [initialViewportSet, viewerConfig]);
+
   useEffect(() => {
     const viewer = viewerRef.current;
     if (!viewer) return;
 
     const { viewport } = viewer;
+
+    if (!initialViewportSet.current) {
+      setInitialBounds(viewer);
+      return;
+    }
 
     // @ts-expect-error
     if (viewerConfig.x && viewerConfig.y
@@ -58,7 +93,7 @@ function OpenSeadragonComponent({
       viewport.setRotation(viewerConfig.rotation);
     }
 
-    if (viewerConfig.flip !== undefined && (viewerConfig.flip || false) !== viewport.getFlip()) {
+    if (viewerConfig.flip != null && (viewerConfig.flip || false) !== viewport.getFlip()) {
       viewport.setFlip(viewerConfig.flip);
     }
 
@@ -68,7 +103,7 @@ function OpenSeadragonComponent({
         viewport.fitBounds(rect, false);
       }
     }
-  }, [viewerConfig, viewerRef]);
+  }, [initialViewportSet, setInitialBounds, viewerConfig, viewerRef]);
 
   // initialize OSD stuff when this component is mounted
   useEffect(() => {
@@ -99,32 +134,10 @@ function OpenSeadragonComponent({
 
     viewerRef.current = viewer;
     setViewer(viewer);
+
     viewer.addOnceHandler('tile-loaded', () => {
-      const { viewport } = viewer;
-
-      if (viewerConfig.x !== undefined && viewerConfig.y !== undefined) {
-        viewport.panTo(new Openseadragon.Point(viewerConfig.x, viewerConfig.y), true);
-      }
-
-      if (viewerConfig.zoom !== undefined) {
-        viewport.zoomTo(viewerConfig.zoom, new Openseadragon.Point(viewerConfig.x, viewerConfig.y), true);
-      }
-
-      if (viewerConfig.rotation && viewerConfig.rotation !== viewport.getRotation()) {
-        viewport.setRotation(viewerConfig.rotation);
-      }
-
-      if (viewerConfig.flip !== undefined && (viewerConfig.flip || false) !== viewport.getFlip()) {
-        viewport.setFlip(viewerConfig.flip);
-      }
-
-      if (!viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
-        if (viewerConfig.bounds) {
-          viewport.fitBounds(new Openseadragon.Rect(...viewerConfig.bounds), true);
-        } else {
-          viewport.goHome();
-        }
-      }
+      initialViewportSet.current = false;
+      setInitialBounds(viewer);
     });
 
     forceUpdate();
