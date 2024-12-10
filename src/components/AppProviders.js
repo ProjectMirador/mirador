@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
@@ -14,6 +14,7 @@ import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import createI18nInstance from '../i18n';
 import FullScreenContext from '../contexts/FullScreenContext';
+import OpenSeadragonWorkspaceReferencesContext from '../contexts/OpenSeadragonWorkspaceReferencesContext';
 
 /**
  * Allow applications to opt-out of (or provide their own) drag and drop context
@@ -117,19 +118,23 @@ export function AppProviders({
   theme, translations,
   dndManager = undefined,
 }) {
+  const osdReferences = useRef({});
+
   return (
     <FullScreenShim>
-      <StoreAwareI18nextProvider language={language} translations={translations}>
-        <StyledEngineProvider injectFirst>
-          <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
-            <ThemeProvider theme={createTheme((theme))}>
-              <MaybeDndProvider dndManager={dndManager}>
-                {children}
-              </MaybeDndProvider>
-            </ThemeProvider>
-          </CacheProvider>
-        </StyledEngineProvider>
-      </StoreAwareI18nextProvider>
+      <OpenSeadragonWorkspaceReferencesContext.Provider value={osdReferences}>
+        <StoreAwareI18nextProvider language={language} translations={translations}>
+          <StyledEngineProvider injectFirst>
+            <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
+              <ThemeProvider theme={createTheme((theme))}>
+                <MaybeDndProvider dndManager={dndManager}>
+                  {children}
+                </MaybeDndProvider>
+              </ThemeProvider>
+            </CacheProvider>
+          </StyledEngineProvider>
+        </StoreAwareI18nextProvider>
+      </OpenSeadragonWorkspaceReferencesContext.Provider>
     </FullScreenShim>
   );
 }
