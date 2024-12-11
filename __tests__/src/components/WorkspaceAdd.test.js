@@ -1,6 +1,6 @@
 import {
   render, screen, fireEvent, waitFor,
-} from 'test-utils';
+} from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -50,7 +50,7 @@ describe('WorkspaceAdd', () => {
 
   it('toggles the workspace visibility', async () => {
     const user = userEvent.setup();
-    const setWorkspaceAddVisibility = jest.fn();
+    const setWorkspaceAddVisibility = vi.fn();
     createWrapper({ setWorkspaceAddVisibility });
 
     await user.click(screen.getByRole('button', { name: 'Bodleian Library Human Freaks 2 (33)' }));
@@ -91,9 +91,9 @@ describe('WorkspaceAdd', () => {
     const user = userEvent.setup();
     const { container } = createWrapper();
 
-    const scrollTo = jest.fn();
+    const scrollTo = vi.fn();
 
-    jest.spyOn(container.querySelector('.mirador-workspace-add'), 'scrollTo').mockImplementation(scrollTo); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    vi.spyOn(container.querySelector('.mirador-workspace-add'), 'scrollTo').mockImplementation(scrollTo); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
 
     await user.click(screen.getByRole('button', { name: 'addResource' }));
 
@@ -119,7 +119,7 @@ describe('WorkspaceAdd', () => {
     it('adds a new catalog entry from a manifest', async () => {
       const manifestJson = '{ "data": "123" }';
 
-      const addResource = jest.fn();
+      const addResource = vi.fn();
 
       createWrapper({ addResource });
       const dropTarget = screen.getByRole('list');
@@ -141,7 +141,7 @@ describe('WorkspaceAdd', () => {
     it('adds a new catalog entry from a IIIF drag and drop icon', () => {
       const manifestId = 'manifest.json';
 
-      const addResource = jest.fn();
+      const addResource = vi.fn();
 
       createWrapper({ addResource });
       const dropTarget = screen.getByRole('list');

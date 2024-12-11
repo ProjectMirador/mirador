@@ -75,8 +75,8 @@ describe('window actions', () => {
         workspace: { windowIds: ['a', 'b'] },
       };
 
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
+      const mockDispatch = vi.fn(() => ({}));
+      const mockGetState = vi.fn(() => mockState);
       const thunk = actions.addWindow(options);
 
       thunk(mockDispatch, mockGetState);
@@ -110,8 +110,8 @@ describe('window actions', () => {
         workspace: {},
       };
 
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
+      const mockDispatch = vi.fn(() => ({}));
+      const mockGetState = vi.fn(() => mockState);
       const thunk = actions.addWindow(options);
 
       thunk(mockDispatch, mockGetState);
@@ -140,8 +140,8 @@ describe('window actions', () => {
         workspace: {},
       };
 
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
+      const mockDispatch = vi.fn(() => ({}));
+      const mockGetState = vi.fn(() => mockState);
       const thunk = actions.addWindow(options);
 
       thunk(mockDispatch, mockGetState);
@@ -167,8 +167,8 @@ describe('window actions', () => {
         },
         workspace: {},
       };
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
+      const mockDispatch = vi.fn(() => ({}));
+      const mockGetState = vi.fn(() => mockState);
       const thunk = actions.addWindow(options);
 
       thunk(mockDispatch, mockGetState);
@@ -195,8 +195,8 @@ describe('window actions', () => {
         workspace: {},
       };
 
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
+      const mockDispatch = vi.fn(() => ({}));
+      const mockGetState = vi.fn(() => mockState);
       const thunk = actions.addWindow(options);
 
       thunk(mockDispatch, mockGetState);
@@ -289,8 +289,8 @@ describe('window actions', () => {
         },
       };
 
-      const mockDispatch = jest.fn(() => ({}));
-      const mockGetState = jest.fn(() => mockState);
+      const mockDispatch = vi.fn(() => ({}));
+      const mockGetState = vi.fn(() => mockState);
       const thunk = actions.setWindowThumbnailPosition('somewindow', 'right');
 
       thunk(mockDispatch, mockGetState);

@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import { SearchResults } from '../../../src/components/SearchResults';
@@ -133,7 +133,7 @@ describe('SearchResults', () => {
   describe('multi-page search results', () => {
     it('shows a button to request the next page', async () => {
       const user = userEvent.setup();
-      const fetchSearch = jest.fn();
+      const fetchSearch = vi.fn();
       createWrapper({
         fetchSearch,
         nextSearch: 'search?page=2',

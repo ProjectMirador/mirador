@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import PropTypes from 'prop-types';
 import userEvent from '@testing-library/user-event';
 import { CompanionWindow } from '../../../src/components/CompanionWindow';
@@ -34,7 +34,7 @@ describe('CompanionWindow', () => {
 
   describe('when the openInCompanionWindow button is clicked', () => {
     it('passes the the updateCompanionWindow prop to MiradorMenuButton with the appropriate args', async () => {
-      const updateCompanionWindow = jest.fn();
+      const updateCompanionWindow = vi.fn();
       const user = userEvent.setup();
 
       createWrapper({
@@ -50,7 +50,7 @@ describe('CompanionWindow', () => {
 
   describe('when the close companion window button is clicked', () => {
     it('triggers the onCloseClick prop with the appropriate args', async () => {
-      const removeCompanionWindowEvent = jest.fn();
+      const removeCompanionWindowEvent = vi.fn();
       const user = userEvent.setup();
 
       createWrapper({
@@ -63,7 +63,7 @@ describe('CompanionWindow', () => {
     });
 
     it('allows the children to know about onCloseClick', async () => {
-      const removeCompanionWindowEvent = jest.fn();
+      const removeCompanionWindowEvent = vi.fn();
       const user = userEvent.setup();
 
       /** Some child component */
@@ -87,7 +87,7 @@ describe('CompanionWindow', () => {
 
   describe('when the companion window is on the right', () => {
     it('can be moved to the bottom', async () => {
-      const updateCompanionWindow = jest.fn();
+      const updateCompanionWindow = vi.fn();
       const user = userEvent.setup();
 
       createWrapper({
@@ -105,7 +105,7 @@ describe('CompanionWindow', () => {
 
   describe('when the companion window is on the bottom', () => {
     it('can be moved to the right', async () => {
-      const updateCompanionWindow = jest.fn();
+      const updateCompanionWindow = vi.fn();
       const user = userEvent.setup();
 
       createWrapper({

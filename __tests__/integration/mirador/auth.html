@@ -9,22 +9,10 @@
   </head>
   <body>
     <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
-    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
-    <script type="text/javascript">
-     var miradorInstance = Mirador.viewer({
-       id: 'mirador',
-       windows: [
-       {
-         manifestId: 'https://purl.stanford.edu/ds199xg9454/iiif/manifest',
-       },
-       {
-         manifestId: 'https://edsilv.github.io/test-manifests/auth1-degraded.json'
-       },
-       {
-         manifestId: 'https://edsilv.github.io/test-manifests/auth1-standard.json'
-       }
-       ],
-     });
+    <script type="module">
+      import Mirador from '../../../src';
+      import config from './mirador-configs/auth.js';
+      Mirador.viewer(config);
     </script>
   </body>
 </html>

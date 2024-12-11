@@ -1,15 +1,15 @@
-import { screen, render } from 'test-utils';
+import { screen, render } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceExport } from '../../../src/components/WorkspaceExport';
 
 describe('WorkspaceExport', () => {
   let user;
-  let handleClose = jest.fn();
+  let handleClose = vi.fn();
   let mockState;
 
   beforeEach(() => {
     user = userEvent.setup();
-    handleClose = jest.fn();
+    handleClose = vi.fn();
     mockState = {
       companionWindows: {},
       config: {},
@@ -44,7 +44,7 @@ describe('WorkspaceExport', () => {
   it('reveals a snackbar on copy', async () => {
     // jsdom doesn't support the clipboard API or prompt (used as a fallback)
     // so we mock the prompt at least to avoid a warning in the test output
-    jest.spyOn(window, 'prompt').mockImplementation(() => true);
+    vi.spyOn(window, 'prompt').mockImplementation(() => true);
 
     await user.click(screen.getByRole('button', { name: 'copy' }));
     expect(screen.getByRole('alert')).toHaveTextContent('exportCopied');

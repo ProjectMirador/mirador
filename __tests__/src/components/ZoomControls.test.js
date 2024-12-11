@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { ZoomControls } from '../../../src/components/ZoomControls';
 
@@ -17,11 +17,11 @@ describe('ZoomControls', () => {
   const viewer = { x: 100, y: 100, zoom: 1 };
   let updateViewport;
 
-  const zoomToWorld = jest.fn();
+  const zoomToWorld = vi.fn();
   let user;
   beforeEach(() => {
     user = userEvent.setup();
-    updateViewport = jest.fn();
+    updateViewport = vi.fn();
     createWrapper({
       updateViewport, viewer, zoomToWorld,
     });

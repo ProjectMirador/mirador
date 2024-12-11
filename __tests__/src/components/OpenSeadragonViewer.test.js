@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import PropTypes from 'prop-types';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
@@ -25,7 +25,7 @@ function createWrapper(props) {
       classes={{}}
       windowId="base"
       config={{}}
-      updateViewport={jest.fn()}
+      updateViewport={vi.fn()}
       t={k => k}
       canvasWorld={new CanvasWorld(canvases)}
       {...props}
@@ -54,8 +54,8 @@ describe('OpenSeadragonViewer', () => {
 
   it('renders child components enhanced with additional props', async () => {
     const { viewer } = createWrapper({});
-    const fitBounds = jest.fn();
-    jest.replaceProperty(viewer, 'viewport', { fitBounds });
+    const fitBounds = vi.fn();
+    vi.spyOn(viewer, 'viewport', 'get').mockReturnValue({ fitBounds });
 
     await user.click(screen.getByTestId('foo'));
     expect(fitBounds).toHaveBeenCalled();
@@ -64,8 +64,8 @@ describe('OpenSeadragonViewer', () => {
   describe('zoomToWorld', () => {
     it('uses fitBounds with the existing CanvasWorld', async () => {
       const { viewer } = createWrapper({});
-      const fitBounds = jest.fn();
-      jest.replaceProperty(viewer, 'viewport', { fitBounds });
+      const fitBounds = vi.fn();
+      vi.spyOn(viewer, 'viewport', 'get').mockReturnValue({ fitBounds });
 
       await user.click(screen.getByTestId('foo'));
       expect(fitBounds).toHaveBeenCalledWith({
@@ -76,10 +76,10 @@ describe('OpenSeadragonViewer', () => {
 
   describe('onViewportChange', () => {
     it('translates the OSD viewport data into an update to the component state', () => {
-      const updateViewport = jest.fn();
+      const updateViewport = vi.fn();
       const { viewer } = createWrapper({ updateViewport });
 
-      jest.replaceProperty(viewer, 'viewport', {
+      vi.spyOn(viewer, 'viewport', 'get').mockReturnValue({
         centerSpringX: { target: { value: 1 } },
         centerSpringY: { target: { value: 0 } },
         getBounds: () => [],
@@ -101,19 +101,19 @@ describe('OpenSeadragonViewer', () => {
 
   describe('onCanvasMouseMove', () => {
     it('triggers an OSD event', () => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
       const { viewer } = createWrapper({});
-      const mockHandler = jest.fn();
+      const mockHandler = vi.fn();
       viewer.addHandler('mouse-move', mockHandler);
 
       const e = new MouseEvent('mousemove', { clientX: 0, clientY: 0 });
       viewer.innerTracker.moveHandler(e);
 
-      jest.advanceTimersByTime(100);
+      vi.advanceTimersByTime(100);
 
       expect(mockHandler).toHaveBeenCalledWith(e);
 
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
   });
 });

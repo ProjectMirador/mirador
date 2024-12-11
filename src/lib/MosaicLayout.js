@@ -1,7 +1,7 @@
-import { createRemoveUpdate, updateTree } from 'react-mosaic-component/lib/util/mosaicUpdates';
 import {
+  createRemoveUpdate, updateTree,
   getNodeAtPath, getOtherDirection, getPathToCorner, Corner,
-} from 'react-mosaic-component/lib/util/mosaicUtilities';
+} from 'react-mosaic-component2';
 import dropRight from 'lodash/dropRight';
 
 /** */
