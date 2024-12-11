@@ -56,7 +56,7 @@ function Layer({
 
   const layer = {
     opacity: 1,
-    visibility: true,
+    visibility: !!resource.preferred,
     ...(layerMetadata || {}),
   };
 
