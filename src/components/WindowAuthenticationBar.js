@@ -69,7 +69,7 @@ export function WindowAuthenticationBar({
           <Typography component="h3" variant="body1" color="inherit">
             { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
           </Typography>
-          <PluginHook {...pluginProps} />
+          <PluginHook targetName="WindowAuthenticationBar" {...pluginProps} />
           { button }
         </StyledTopBar>
       </Paper>
@@ -104,7 +104,7 @@ export function WindowAuthenticationBar({
         <Typography sx={{ paddingBlockEnd: 1, paddingBlockStart: 1 }} component="h3" variant="body1" color="inherit">
           { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
         </Typography>
-        <PluginHook {...pluginProps} />
+        <PluginHook className="WindowAuthenticationBar" {...pluginProps} />
         <StyledFauxButton>
           { !open && (
             <Typography variant="button" color="inherit">
