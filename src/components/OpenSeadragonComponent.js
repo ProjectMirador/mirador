@@ -13,6 +13,7 @@ function OpenSeadragonComponent({
   children = undefined, Container = 'div', osdConfig = {}, viewerConfig = {}, onUpdateViewport = () => {}, setViewer = () => {}, style = {}, ...passThruProps
 }) {
   const id = useId();
+  const ref = useRef();
   const [grabbing, setGrabbing] = useState(false);
   const viewerRef = useRef(undefined);
   const initialViewportSet = useRef(false);
@@ -108,7 +109,7 @@ function OpenSeadragonComponent({
   // initialize OSD stuff when this component is mounted
   useEffect(() => {
     const viewer = Openseadragon({
-      id,
+      element: ref.current,
       ...osdConfig,
     });
 
@@ -141,7 +142,7 @@ function OpenSeadragonComponent({
     });
 
     forceUpdate();
-  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [ref]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // cleanup OSD viewer cruft when this component is unmounted
   useEffect(() => () => {
@@ -175,7 +176,7 @@ function OpenSeadragonComponent({
 
   return (
     <OpenSeadragonViewerContext.Provider value={viewerRef}>
-      <Container id={id} style={{ ...style, cursor: grabbing ? 'grabbing' : 'grab' }} {...passThruProps}>
+      <Container id={id} ref={ref} style={{ ...style, cursor: grabbing ? 'grabbing' : 'grab' }} {...passThruProps}>
         {children}
       </Container>
     </OpenSeadragonViewerContext.Provider>
