@@ -15,6 +15,8 @@ function createWrapper(props) {
   );
 }
 
+jest.mock('@mui/material/useMediaQuery', () => jest.fn().mockReturnValue(true));
+
 describe('WorkspaceAddButton', () => {
   it('renders a button to open the load window area', async () => {
     const user = userEvent.setup();
