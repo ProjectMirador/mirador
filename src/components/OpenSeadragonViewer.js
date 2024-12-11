@@ -1,5 +1,5 @@
 import {
-  useRef, Children, cloneElement, useCallback, useState, useEffect,
+  useRef, Children, cloneElement, useCallback, useState, useEffect, useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
@@ -12,6 +12,7 @@ import { PluginHook } from './PluginHook';
 import { OSDReferences } from '../plugins/OSDReferences';
 import OpenSeadragonComponent from './OpenSeadragonComponent';
 import TileSource from './OpenSeadragonTileSource';
+import OpenSeadragonWorkspaceReferencesContext from '../contexts/OpenSeadragonWorkspaceReferencesContext';
 
 const StyledSection = styled('section')({
   cursor: 'grab',
@@ -28,6 +29,7 @@ export function OpenSeadragonViewer({
   drawAnnotations = false, infoResponses = [], canvasWorld, nonTiledImages = [], updateViewport,
 }) {
   const apiRef = useRef();
+  const workspaceReferencesContext = useContext(OpenSeadragonWorkspaceReferencesContext);
   const [viewer, setViewer] = useState(null);
   const onViewportChange = useCallback(({
     flip, rotation, x, y, zoom,
@@ -56,7 +58,9 @@ export function OpenSeadragonViewer({
 
   useEffect(() => {
     apiRef.current = viewer;
-  }, [apiRef, viewer]);
+
+    workspaceReferencesContext.current[windowId] = apiRef;
+  }, [apiRef, windowId, viewer, workspaceReferencesContext]);
 
   const enhancedChildren = Children.map(children, child => (
     cloneElement(
