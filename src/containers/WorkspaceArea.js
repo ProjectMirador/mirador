@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { WorkspaceArea } from '../components/WorkspaceArea';
 import { getConfig, getWindowIds, getWorkspace } from '../state/selectors';
@@ -20,7 +19,6 @@ const mapStateToProps = state => (
 );
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps),
   withPlugins('WorkspaceArea'),
 );

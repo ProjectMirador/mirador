@@ -4,13 +4,15 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import ListSharpIcon from '@mui/icons-material/ListSharp';
+import { useTranslation } from 'react-i18next';
 
 /**
  *
  */
 export function SelectCollection({
-  collectionPath = [], manifestId = null, showCollectionDialog, t = k => k, windowId = null,
+  collectionPath = [], manifestId = null, showCollectionDialog, windowId = null,
 }) {
+  const { t } = useTranslation();
   const openCollectionDialog = useCallback(() => {
     showCollectionDialog(manifestId, collectionPath.slice(0, -1), windowId);
   }, [collectionPath, manifestId, showCollectionDialog, windowId]);
@@ -41,6 +43,5 @@ SelectCollection.propTypes = {
   collectionPath: PropTypes.arrayOf(PropTypes.string),
   manifestId: PropTypes.string,
   showCollectionDialog: PropTypes.func.isRequired,
-  t: PropTypes.func,
   windowId: PropTypes.string,
 };

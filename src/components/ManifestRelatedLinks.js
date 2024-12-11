@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ns from '../config/css-ns';
 import { PluginHook } from './PluginHook';
@@ -24,8 +25,8 @@ export function ManifestRelatedLinks({
   related = null,
   renderings = null,
   seeAlso = null,
-  t = k => k,
 }) {
+  const { t } = useTranslation();
   const pluginProps = {
     homepage, id, manifestUrl, related, renderings, seeAlso, t,
   };
@@ -143,5 +144,4 @@ ManifestRelatedLinks.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
   })),
-  t: PropTypes.func,
 };

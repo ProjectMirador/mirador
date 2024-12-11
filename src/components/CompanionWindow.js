@@ -7,6 +7,7 @@ import MoveIcon from '@mui/icons-material/DragIndicatorSharp';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
+import { useTranslation } from 'react-i18next';
 import { Rnd } from 'react-rnd';
 import { useElementSize } from '@custom-react-hooks/use-element-size';
 import mergeRefs from 'merge-refs';
@@ -28,10 +29,11 @@ const StyledCloseButton = styled(MiradorMenuButton, { name: 'CompanionWindow', s
 export function CompanionWindow(props) { // eslint-disable-line react/require-default-props
   const {
     ariaLabel = undefined, classes = {}, direction, paperClassName = '', onCloseClick = () => {}, updateCompanionWindow = undefined, isDisplayed = false,
-    position = null, t = key => key, title = null, children = undefined, titleControls = null,
+    position = null, title = null, children = undefined, titleControls = null,
     defaultSidebarPanelWidth = 235, defaultSidebarPanelHeight = 201, innerRef = undefined,
   } = props;
   const [sizeRef, size] = useElementSize();
+  const { t } = useTranslation();
 
   /** */
   const openInNewStyle = direction === 'rtl' ? { transform: 'scale(-1, 1)' } : {};
@@ -199,7 +201,6 @@ CompanionWindow.propTypes = {
   paperClassName: PropTypes.string,
   position: PropTypes.string,
   size: PropTypes.shape({ width: PropTypes.number }),
-  t: PropTypes.func,
   title: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node,

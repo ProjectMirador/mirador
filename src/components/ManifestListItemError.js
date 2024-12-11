@@ -3,14 +3,16 @@ import Button from '@mui/material/Button';
 import ErrorIcon from '@mui/icons-material/ErrorOutlineSharp';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
 
 /**
  * ManifestListItemError renders a component displaying a
  * message to the user about a problem loading a manifest
 */
 export function ManifestListItemError({
-  manifestId, onDismissClick, onTryAgainClick, t,
+  manifestId, onDismissClick, onTryAgainClick,
 }) {
+  const { t } = useTranslation();
   return (
     <Grid container>
       <Grid container>
@@ -52,5 +54,4 @@ ManifestListItemError.propTypes = {
   manifestId: PropTypes.string.isRequired,
   onDismissClick: PropTypes.func.isRequired,
   onTryAgainClick: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
 };

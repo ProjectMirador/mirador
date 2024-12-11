@@ -9,6 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/SearchSharp';
+import { useTranslation } from 'react-i18next';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import SearchPanelNavigation from '../containers/SearchPanelNavigation';
 
@@ -25,8 +26,9 @@ const getMatch = (option) => (isObject(option) ? option.match : option);
 /** */
 export function SearchPanelControls({
   autocompleteService = undefined, companionWindowId, fetchSearch, query = '',
-  searchIsFetching, searchService, t = k => k, windowId,
+  searchIsFetching, searchService, windowId,
 }) {
+  const { t } = useTranslation();
   const [input, setInput] = useState(query);
   const [search, setSearch] = useState(query);
   const [suggestions, setSuggestions] = useState([]);
@@ -159,6 +161,5 @@ SearchPanelControls.propTypes = {
   searchService: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };

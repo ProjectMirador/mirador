@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { WindowSideBar } from '../components/WindowSideBar';
 import { getThemeDirection, getWindow } from '../state/selectors';
@@ -19,7 +18,6 @@ const mapStateToProps = (state, { windowId }) => (
 );
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, null),
   withPlugins('WindowSideBar'),
 );

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { AccessTokenSender } from './AccessTokenSender';
 import { NewBrowserWindow } from './NewBrowserWindow';
 import WindowAuthenticationBar from '../containers/WindowAuthenticationBar';
@@ -12,8 +13,9 @@ export function IIIFAuthentication({
   handleAuthInteraction, header = undefined, isInteractive = true, label = undefined,
   logoutConfirm = undefined, logoutServiceId = undefined, openWindow = window.open,
   resetAuthenticationState, resolveAccessTokenRequest, resolveAuthenticationRequest,
-  status = null, t = k => k, windowId,
+  status = null, windowId,
 }) {
+  const { t } = useTranslation();
   /** */
   const onReceiveAccessTokenMessage = (payload) => {
     resolveAccessTokenRequest(authServiceId, accessTokenServiceId, payload);
@@ -123,6 +125,5 @@ IIIFAuthentication.propTypes = {
   resolveAccessTokenRequest: PropTypes.func.isRequired,
   resolveAuthenticationRequest: PropTypes.func.isRequired,
   status: PropTypes.oneOf(['logout', 'ok', 'token', 'cookie', 'failed', null]),
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };

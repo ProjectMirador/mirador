@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { ViewerInfo } from '../components/ViewerInfo';
 import {
@@ -29,7 +28,6 @@ const mapStateToProps = (state, props) => {
 };
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, null),
   withPlugins('ViewerInfo'),
 );

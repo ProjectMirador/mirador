@@ -9,7 +9,6 @@ function createWrapper(props) {
       canvasCount={8}
       canvasIndex={2}
       canvasLabel="testLabel"
-      t={k => k}
       {...props}
     />,
   );
@@ -18,7 +17,7 @@ function createWrapper(props) {
 describe('ViewerNavigation', () => {
   it('renders the component', () => {
     createWrapper();
-    expect(screen.getByText('pagination', { selector: 'span' })).toBeInTheDocument();
+    expect(screen.getByText('3 of 8', { selector: 'span' })).toBeInTheDocument();
     expect(screen.getByText(/testLabel/i, { selector: 'span' })).toBeInTheDocument();
   });
 });

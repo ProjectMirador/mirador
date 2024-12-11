@@ -26,8 +26,8 @@ function createWrapper(props) {
       windowId="base"
       config={{}}
       updateViewport={jest.fn()}
-      t={k => k}
       canvasWorld={new CanvasWorld(canvases)}
+      t={k => k}
       {...props}
     >
       <Child testId="foo" />
@@ -49,7 +49,7 @@ describe('OpenSeadragonViewer', () => {
 
   it('renders the component', () => {
     createWrapper({});
-    expect(screen.getByLabelText('item')).toHaveClass('mirador-osd-container');
+    expect(screen.getByLabelText('Item:')).toHaveClass('mirador-osd-container');
   });
 
   it('renders child components enhanced with additional props', async () => {

@@ -10,7 +10,6 @@ function createWrapper(props, state, renderOptions) {
       windowId="xyz"
       manifestId="foo"
       classes={{}}
-      t={k => k}
       {...props}
     />,
     {
@@ -30,11 +29,11 @@ function createWrapper(props, state, renderOptions) {
 describe('Window', () => {
   it('should render outer element', () => {
     createWrapper();
-    expect(screen.getByLabelText('window')).toHaveClass('mirador-window');
+    expect(screen.getByLabelText('Window:')).toHaveClass('mirador-window');
   });
   it('should render <WindowTopBar>', () => {
     createWrapper();
-    expect(screen.getByRole('navigation', { accessibleName: 'windowNavigation' })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { accessibleName: 'Window navigation' })).toBeInTheDocument();
   });
   it('should render <PrimaryWindow>', () => {
     createWrapper();
@@ -54,7 +53,6 @@ describe('Window', () => {
             windowId="xyz"
             manifestId="foo"
             classes={{}}
-            t={k => k}
             windowDraggable
             workspaceType="mosaic"
           />
@@ -80,7 +78,6 @@ describe('Window', () => {
             windowId="xyz"
             manifestId="foo"
             classes={{}}
-            t={k => k}
             windowDraggable={false}
             workspaceType="mosaic"
           />

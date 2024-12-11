@@ -17,7 +17,6 @@ function createWrapper(props) {
       classes={{}}
       ready
       manifest={manifest}
-      t={(key) => key}
       windowId="window"
       {...props}
     />,
@@ -45,7 +44,7 @@ describe('CollectionDialog', () => {
     const hideCollectionDialog = jest.fn();
     createWrapper({ hideCollectionDialog });
 
-    await user.click(screen.getByRole('button', { name: 'close' }));
+    await user.click(screen.getByRole('button', { name: 'Close' }));
     expect(hideCollectionDialog).toHaveBeenCalled();
   });
 });
