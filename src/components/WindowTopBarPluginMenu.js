@@ -59,7 +59,7 @@ export function WindowTopBarPluginMenu({
         open={open}
         onClose={handleMenuClose}
       >
-        <PluginHook handleClose={handleMenuClose} {...pluginProps} />
+        <PluginHook targetName="WindowTopBarPluginMenu" handleClose={handleMenuClose} {...pluginProps} />
       </Menu>
     </>
   );
