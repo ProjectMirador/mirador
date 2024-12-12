@@ -34,12 +34,12 @@ const Root = styled(Paper, { name: 'WindowCanvasNavigationControls', slot: 'root
  * Represents the viewer controls in the mirador workspace.
  */
 export const WindowCanvasNavigationControls = forwardRef(({
-  showZoomControls = false, visible = true, windowId, zoomToWorld,
+  showZoomControls = false, visible = true, windowId, zoomToWorld, ...rest
 }, ref) => {
   const [sizeRef, size] = useElementSize();
 
   const pluginProps = {
-    showZoomControls, size, visible, windowId,
+    showZoomControls, size, visible, windowId, ...rest,
   };
   /**
    * Determine if canvasNavControls are stacked (based on a hard-coded width)
