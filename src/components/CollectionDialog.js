@@ -1,4 +1,4 @@
-import { useContext, useState, useReducer } from 'react';
+import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -79,7 +79,6 @@ export function CollectionDialog({
 }) {
   const container = useContext(WorkspaceContext);
   const [filter, setFilter] = useState(null);
-  const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   /** */
   const hideDialog = () => {
@@ -115,18 +114,14 @@ export function CollectionDialog({
   };
 
   /** */
-  const dialogContainer = () => (container?.current || document.body).querySelector(`#${windowId}`);
+  const dialogContainer = (container?.current || document.body).querySelector(`#${windowId}`);
 
   if (error) return null;
-  // If this component is optimistically rendering ahead of the window its in
-  // force a re-render so that it is placed correctly. The right thing here is
-  // to maybe pass a ref.
-  if (!dialogContainer()) {
-    forceUpdate();
+  if (!dialogContainer) {
     return null;
   }
 
-  if (!ready) return <Placeholder container={dialogContainer()} onClose={hideDialog} />;
+  if (!ready) return <Placeholder container={dialogContainer} onClose={hideDialog} />;
 
   const rights = manifest && (asArray(manifest.getProperty('rights') || manifest.getProperty('license')));
 
@@ -144,7 +139,7 @@ export function CollectionDialog({
     <Dialog
       variant="contained"
       onClose={hideDialog}
-      container={dialogContainer()}
+      container={dialogContainer}
       open
     >
       <DialogTitle id="select-collection">
