@@ -10,9 +10,10 @@ import { PluginHook } from './PluginHook';
  */
 export function ManifestInfo({
   manifestDescription = null, manifestLabel = null, manifestMetadata = [], manifestSummary = null, id, t = k => k,
+  ...rest
 }) {
   const pluginProps = {
-    id, manifestDescription, manifestLabel, manifestMetadata, manifestSummary,
+    id, manifestDescription, manifestLabel, manifestMetadata, manifestSummary, ...rest,
   };
 
   return (
