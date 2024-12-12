@@ -26,6 +26,7 @@ const StyledSection = styled('section')({
 export function OpenSeadragonViewer({
   children = null, label = null, t, windowId, osdConfig = {}, viewerConfig = null,
   drawAnnotations = false, infoResponses = [], canvasWorld, nonTiledImages = [], updateViewport,
+  ...rest
 }) {
   const apiRef = useRef();
   const [viewer, setViewer] = useState(null);
@@ -78,6 +79,7 @@ export function OpenSeadragonViewer({
     updateViewport,
     viewerConfig,
     windowId,
+    ...rest,
   };
 
   return (

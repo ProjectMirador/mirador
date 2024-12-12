@@ -39,6 +39,7 @@ const StyledMiradorMenuButton = styled(MiradorMenuButton)(() => ({
  */
 export function WorkspaceAdd({
   addResource = () => {}, catalog = [], setWorkspaceAddVisibility, t = k => k,
+  ...rest
 }) {
   const [addResourcesOpen, setAddResourcesVisibility] = useState(false);
   const ref = useRef();
@@ -79,7 +80,7 @@ export function WorkspaceAdd({
   ));
 
   const pluginProps = {
-    addResource, catalog, setWorkspaceAddVisibility, t,
+    addResource, catalog, setWorkspaceAddVisibility, t, ...rest,
   };
 
   return (
