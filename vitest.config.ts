@@ -35,10 +35,8 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     exclude: ['node_modules'],
-    fileParallelism: false,
     globals: true,
     include: ['**/*.test.js', '**/*.test.jsx'],
-    maxConcurrency: 1,
     setupFiles: ['./setupTest.js'],
   },
 });
