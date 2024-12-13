@@ -1,8 +1,8 @@
 import Openseadragon from 'openseadragon';
 import PropTypes from 'prop-types';
 import {
-  Children, useEffect, useId, useRef, useReducer,
-  useState, useCallback, cloneElement,
+  useEffect, useId, useRef, useReducer,
+  useState, useCallback,
 } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 import { useTranslation } from 'react-i18next';
@@ -176,7 +176,7 @@ function OpenSeadragonComponent({
   return (
     <OpenSeadragonViewerContext.Provider value={viewerRef}>
       <Container id={id} style={{ ...style, cursor: grabbing ? 'grabbing' : 'grab' }} {...passThruProps}>
-        {Children.map(children, child => (child && cloneElement(child, { viewer: child.props.viewer || viewerRef })))}
+        {children}
       </Container>
     </OpenSeadragonViewerContext.Provider>
   );
