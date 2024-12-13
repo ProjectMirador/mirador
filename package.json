@@ -17,8 +17,8 @@
     "build": "vite build --config vite.config.js",
     "clean": "rm -rf ./dist",
     "lint": "node_modules/.bin/eslint ./ && npm run lint:translations && npm run lint:containers",
-    "lint:containers": "node ./scripts/container-lint.cjs",
-    "lint:translations": "node ./scripts/i18n-lint.cjs",
+    "lint:containers": "node ./scripts/container-lint.js",
+    "lint:translations": "node ./scripts/i18n-lint.js",
     "size": "bundlewatch --config bundlewatch.config.json",
     "start": "vite",
     "test": "npm run build && npm run lint && npm run size && vitest run"
