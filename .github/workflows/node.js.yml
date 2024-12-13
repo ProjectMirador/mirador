@@ -11,9 +11,7 @@ on:
 
 jobs:
   build:
-    # Pin to ubuntu-22 until a solution is found for this issue:
-    # https://chromium.googlesource.com/chromium/src/+/main/docs/security/apparmor-userns-restrictions.md
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
