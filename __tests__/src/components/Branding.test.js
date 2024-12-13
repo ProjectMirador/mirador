@@ -1,4 +1,4 @@
-import { render, screen, within } from 'test-utils';
+import { render, screen, within } from '@tests/utils/test-utils';
 import { Branding } from '../../../src/components/Branding';
 
 describe('Branding', () => {

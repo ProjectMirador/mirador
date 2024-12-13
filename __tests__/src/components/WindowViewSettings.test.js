@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WindowViewSettings } from '../../../src/components/WindowViewSettings';
 
@@ -48,7 +48,7 @@ describe('WindowViewSettings', () => {
     expect(screen.getByRole('menuitem', { name: /single/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
   });
   it('updates state when the view config selection changes', async () => {
-    const setWindowViewType = jest.fn();
+    const setWindowViewType = vi.fn();
     createWrapper({ setWindowViewType });
     const user = userEvent.setup();
     const menuItems = screen.queryAllByRole('menuitem');

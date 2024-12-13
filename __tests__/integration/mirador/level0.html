@@ -9,19 +9,10 @@
   </head>
   <body>
     <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
-    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
-    <script type="text/javascript">
-     var miradorInstance = Mirador.viewer({
-       id: 'mirador',
-       windows: [
-       {
-         manifestId: 'https://iiif.io/api/presentation/2.1/example/fixtures/1/manifest.json',
-       },
-       {
-         manifestId: 'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/manifest.json',
-       }
-      ],
-     });
+    <script type="module">
+      import Mirador from '../../../src';
+      import config from './mirador-configs/level0.js';
+      Mirador.viewer(config)
     </script>
   </body>
 </html>

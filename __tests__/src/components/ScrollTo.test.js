@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { createRef } from 'react';
 import { ScrollTo } from '../../../src/components/ScrollTo';
 
@@ -16,7 +16,7 @@ describe('ScrollTo', () => {
       return originalGetBoundingClientRect.call(this);
     };
 
-    Element.prototype.scrollTo = jest.fn();
+    Element.prototype.scrollTo = vi.fn();
   });
 
   afterEach(() => {

@@ -1,4 +1,4 @@
-import { screen, fireEvent, render } from 'test-utils';
+import { screen, fireEvent, render } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WindowTopBar } from '../../../src/components/WindowTopBar';
 
@@ -7,7 +7,7 @@ import FullscreenContext from '../../../src/contexts/FullScreenContext';
 /** create wrapper */
 function Subject({ ...props }) {
   return (
-    <FullscreenContext.Provider value={jest.fn()}>
+    <FullscreenContext.Provider value={vi.fn()}>
       <WindowTopBar
         windowId="xyz"
         classes={{}}
@@ -55,7 +55,7 @@ describe('WindowTopBar', () => {
   });
 
   it('triggers window focus when clicked', () => {
-    const focusWindow = jest.fn();
+    const focusWindow = vi.fn();
     render(<Subject focusWindow={focusWindow} />);
     const toolbar = screen.getByRole('navigation', { name: 'windowNavigation' }).firstChild; // eslint-disable-line testing-library/no-node-access
     expect(toolbar).toBeInTheDocument();
@@ -65,7 +65,7 @@ describe('WindowTopBar', () => {
   });
 
   it('passes correct callback to toggleWindowSideBar button', async () => {
-    const toggleWindowSideBar = jest.fn();
+    const toggleWindowSideBar = vi.fn();
     render(
       <Subject allowWindowSideBar toggleWindowSideBar={toggleWindowSideBar} />,
       { preloadedState: { windows: { xyz: { sideBarOpen: false } } } },
@@ -77,7 +77,7 @@ describe('WindowTopBar', () => {
   });
 
   it('passes correct callback to closeWindow button', async () => {
-    const removeWindow = jest.fn();
+    const removeWindow = vi.fn();
     render(<Subject allowClose removeWindow={removeWindow} />);
     const button = screen.getByRole('button', { name: 'closeWindow' });
     expect(button).toBeInTheDocument();
@@ -86,7 +86,7 @@ describe('WindowTopBar', () => {
   });
 
   it('passes correct callback to maximizeWindow button', async () => {
-    const maximizeWindow = jest.fn();
+    const maximizeWindow = vi.fn();
     render(<Subject allowMaximize maximizeWindow={maximizeWindow} />);
     const button = screen.getByRole('button', { name: 'maximizeWindow' });
     expect(button).toBeInTheDocument();

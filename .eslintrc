@@ -5,7 +5,8 @@
   "extends": ["airbnb","react-app", "plugin:jest-dom/recommended", "plugin:testing-library/react"],
   "globals": {
     "page": true,
-    "document": true
+    "document": true,
+    "vi": true,
   },
   "plugins": ["jest", "jest-dom", "react", "react-hooks", "testing-library"],
   "rules": {
@@ -35,6 +36,7 @@
     "default-param-last": "off",
     "arrow-parens": "off",
     "import/no-anonymous-default-export": "off",
+    "import/no-extraneous-dependencies": "off",
     "max-len": ["error", {
       "code": 120,
       "ignoreComments": true,

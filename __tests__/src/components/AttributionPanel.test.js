@@ -1,7 +1,7 @@
 /**
  * @jest-environment-options { "resources": "usable" }
  */
-import { render, screen, waitFor } from 'test-utils';
+import { render, screen, waitFor } from '@tests/utils/test-utils';
 
 import { AttributionPanel } from '../../../src/components/AttributionPanel';
 

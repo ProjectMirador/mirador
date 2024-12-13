@@ -1,4 +1,4 @@
-import { render, screen, within } from 'test-utils';
+import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { config } from 'react-transition-group'; // eslint-disable-line import/no-extraneous-dependencies
 import { WindowAuthenticationBar } from '../../../src/components/WindowAuthenticationBar';
@@ -73,7 +73,7 @@ describe('AuthenticationControl', () => {
   });
 
   it('triggers an action when the confirm button is clicked', async () => {
-    const onConfirm = jest.fn();
+    const onConfirm = vi.fn();
     createWrapper({ onConfirm });
     await user.click(screen.getByRole('button', { name: 'Login' }));
     expect(onConfirm).toHaveBeenCalled();

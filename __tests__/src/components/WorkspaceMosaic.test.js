@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from 'test-utils';
+import { render, screen, fireEvent } from '@tests/utils/test-utils';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -45,7 +45,7 @@ describe('WorkspaceMosaic', () => {
 
   describe('componentDidUpdate', () => {
     it('updates the workspace layout when windows change', () => {
-      const updateWorkspaceMosaicLayout = jest.fn();
+      const updateWorkspaceMosaicLayout = vi.fn();
       wrapper = createWrapper({
         updateWorkspaceMosaicLayout,
         windowIds,
@@ -58,7 +58,7 @@ describe('WorkspaceMosaic', () => {
       expect(updateWorkspaceMosaicLayout).toHaveBeenCalled();
     });
     it('updates the workspace layout when windows are removed', () => {
-      const updateWorkspaceMosaicLayout = jest.fn();
+      const updateWorkspaceMosaicLayout = vi.fn();
       const props = {
         classes: {},
         layout: { direction: 'row', first: '1', second: '2' },
@@ -75,7 +75,7 @@ describe('WorkspaceMosaic', () => {
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith('1');
     });
     it('when no windows remain', () => {
-      const updateWorkspaceMosaicLayout = jest.fn();
+      const updateWorkspaceMosaicLayout = vi.fn();
       wrapper = createWrapper({
         updateWorkspaceMosaicLayout,
         windowIds,
@@ -87,7 +87,7 @@ describe('WorkspaceMosaic', () => {
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith(null);
     });
     it('when the new and old layouts are the same', () => {
-      const updateWorkspaceMosaicLayout = jest.fn();
+      const updateWorkspaceMosaicLayout = vi.fn();
       wrapper = createWrapper({
         layout: { direction: 'row', first: '1', second: '2' },
         updateWorkspaceMosaicLayout,
@@ -116,7 +116,7 @@ describe('WorkspaceMosaic', () => {
   });
   describe('mosaicChange', () => {
     it('calls the provided prop to update layout', async () => {
-      const updateWorkspaceMosaicLayout = jest.fn();
+      const updateWorkspaceMosaicLayout = vi.fn();
 
       const { container } = render(
         <DndProvider backend={HTML5Backend}>
