@@ -15,13 +15,13 @@ import { PluginHook } from './PluginHook';
  * WorkspaceOptionsMenu ~ the menu for workspace options such as import/export
 */
 export function WorkspaceOptionsMenu({
-  anchorEl = null, handleClose, open = false, t,
+  anchorEl = null, handleClose, open = false, t, ...rest
 }) {
   const container = useContext(WorkspaceContext);
   const [selectedOption, setSelectedOption] = useState(null);
 
   const pluginProps = {
-    anchorEl, container, handleClose, open, t,
+    anchorEl, container, handleClose, open, t, ...rest,
   };
 
   /** */

@@ -25,9 +25,10 @@ export function ManifestRelatedLinks({
   renderings = null,
   seeAlso = null,
   t = k => k,
+  ...rest
 }) {
   const pluginProps = {
-    homepage, id, manifestUrl, related, renderings, seeAlso, t,
+    homepage, id, manifestUrl, related, renderings, seeAlso, t, ...rest,
   };
 
   return (
