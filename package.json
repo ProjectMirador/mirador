@@ -92,7 +92,6 @@
     "chalk": "^5.3.0",
     "eslint": "^8.11.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-react-app": "^7.0.0",
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest-dom": "^5.1.0",

@@ -87,3 +87,5 @@ WindowCanvasNavigationControls.defaultProps = {
   showZoomControls: false,
   visible: true,
 };
+
+WindowCanvasNavigationControls.displayName = 'WindowCanvasNavigationControls';
