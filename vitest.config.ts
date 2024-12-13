@@ -33,10 +33,17 @@ export default defineConfig({
     },
   },
   test: {
+    coverage: {
+      all: true,
+      enabled: true,
+    },
     environment: 'happy-dom',
     exclude: ['node_modules'],
     globals: true,
     include: ['**/*.test.js', '**/*.test.jsx'],
+    sequence: {
+      shuffle: true,
+    },
     setupFiles: ['./setupTest.js'],
   },
 });
