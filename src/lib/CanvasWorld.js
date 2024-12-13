@@ -38,7 +38,7 @@ export default class CanvasWorld {
       let canvasHeight = 0;
       let canvasWidth = 0;
 
-      if (!isNaN(canvas.aspectRatio)) {
+      if (!Number.isNaN(canvas.aspectRatio)) {
         if (dirY === 0) {
           // constant height
           canvasHeight = scale;
