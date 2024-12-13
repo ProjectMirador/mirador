@@ -11,7 +11,7 @@ export default function OpenSeadragonTileSource({
   const tiledImage = useRef(undefined);
 
   useEffect(() => {
-    if (!opacity) return;
+    if (opacity == null) return;
 
     tiledImage.current?.setOpacity(opacity);
   }, [opacity]);
@@ -23,7 +23,7 @@ export default function OpenSeadragonTileSource({
   }, [fitBounds]);
 
   useEffect(() => {
-    if (!tiledImage.current || !viewer?.current || !index) return;
+    if (!tiledImage.current || !viewer?.current || index == null) return;
 
     viewer.current.world.setItemIndex(tiledImage.current, index);
   }, [index, viewer]);
