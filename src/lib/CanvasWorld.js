@@ -184,7 +184,7 @@ export default class CanvasWorld {
     const layer = this.getLayerMetadata(contentResource);
     if (!layer) return undefined;
 
-    return layer.total - layer.index - 1;
+    return layer.index;
   }
 
   /**

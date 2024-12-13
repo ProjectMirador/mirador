@@ -66,7 +66,7 @@ export default class MiradorCanvas {
 
   /** */
   get imageResources() {
-    // FIXME this is in no way production ready; current changes are only for demo purposes
+    // TODO Clean up the following hack as soon as manifesto.js provides any information if an annotation body is a Choice option, and if so, whether it is the preferred one.
     const resources = flattenDeep([
       this.canvas.getImages().map(i => i.getResource()),
       this.canvas.getContent().map(i => (i.__jsonld.body.type === 'Choice' ? i.__jsonld.body : i.getBody())),
@@ -101,7 +101,7 @@ export default class MiradorCanvas {
           return r;
         }
       }
-    })).reverse();
+    }));
   }
 
   /** */
