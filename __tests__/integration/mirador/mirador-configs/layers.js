@@ -17,7 +17,8 @@ export default {
     },
     sideBarOpenByDefault: true,
   },
-  windows: [{
-    manifestId: 'https://dvp.prtd.app/hamilton/manifest.json',
-  }],
+  windows: [
+    { manifestId: 'https://dvp.prtd.app/hamilton/manifest.json' },
+    { manifestId: 'https://iiif.io/api/cookbook/recipe/0036-composition-from-multiple-images/manifest.json' },
+  ],
 };
