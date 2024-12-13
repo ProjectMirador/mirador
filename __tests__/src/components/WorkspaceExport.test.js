@@ -37,7 +37,7 @@ describe('WorkspaceExport', () => {
   });
 
   it('is closable by clicking the cancel button', async () => {
-    await user.click(screen.getByRole('button', { name: 'cancel' }));
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(handleClose).toHaveBeenCalled();
   });
 
@@ -46,15 +46,15 @@ describe('WorkspaceExport', () => {
     // so we mock the prompt at least to avoid a warning in the test output
     vi.spyOn(window, 'prompt').mockImplementation(() => true);
 
-    await user.click(screen.getByRole('button', { name: 'copy' }));
-    expect(screen.getByRole('alert')).toHaveTextContent('exportCopied');
+    await user.click(screen.getByRole('button', { name: 'Copy' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('The workspace configuration was copied to your clipboard');
 
-    await user.click(screen.getByRole('button', { name: 'dismiss' }));
+    await user.click(screen.getByRole('button', { name: 'Dismiss' }));
     expect(handleClose).toHaveBeenCalled();
   });
 
   it('renders an exportable version of state', async () => {
-    await user.click(screen.getByRole('button', { name: 'viewWorkspaceConfiguration' }));
+    await user.click(screen.getByRole('button', { name: 'View workspace configuration' }));
     expect(screen.getByRole('region').querySelector('pre')).toHaveTextContent( // eslint-disable-line testing-library/no-node-access
       '{ "companionWindows": {}, "config": {}, "elasticLayout": {}, "viewers": {}, "windows": {}, "workspace": {} }',
     );

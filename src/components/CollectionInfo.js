@@ -2,14 +2,17 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import ViewListIcon from '@mui/icons-material/ViewListSharp';
+import { useTranslation } from 'react-i18next';
 import CollapsibleSection from '../containers/CollapsibleSection';
 
 /**
  * CollectionInfo
  */
 export function CollectionInfo({
-  collectionLabel = null, collectionPath = [], id, showCollectionDialog, t = k => k, windowId = null,
+  collectionLabel = null, collectionPath = [], id, showCollectionDialog, windowId = null,
 }) {
+  const { t } = useTranslation();
+
   /**
    * Show the containing collection.
    */
@@ -52,6 +55,5 @@ CollectionInfo.propTypes = {
   collectionPath: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   showCollectionDialog: PropTypes.func.isRequired,
-  t: PropTypes.func,
   windowId: PropTypes.string,
 };

@@ -4,6 +4,7 @@ import Slide from '@mui/material/Slide';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeftSharp';
 import ArrowRightIcon from '@mui/icons-material/ArrowRightSharp';
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 import CompanionWindowFactory from '../containers/CompanionWindowFactory';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ns from '../config/css-ns';
@@ -51,8 +52,9 @@ const StyledToggle = styled('div', { name: 'CompanionArea', slot: 'toggle' })(({
 export function CompanionArea({
   classes = {}, className = undefined, direction,
   companionWindowIds, companionAreaOpen, setCompanionAreaOpen = () => {},
-  position, sideBarOpen = false, t, windowId,
+  position, sideBarOpen = false, windowId,
 }) {
+  const { t } = useTranslation();
   /** */
   const areaLayoutClass = (position === 'bottom' || position === 'far-bottom') ? classes.horizontal : null;
 
@@ -125,6 +127,5 @@ CompanionArea.propTypes = {
   position: PropTypes.string.isRequired,
   setCompanionAreaOpen: PropTypes.func,
   sideBarOpen: PropTypes.bool,
-  t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };

@@ -1,6 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { t } from 'i18next';
 import { WindowSideBarButtons } from '../../../src/components/WindowSideBarButtons';
 
 /** create wrapper */
@@ -8,7 +7,6 @@ function createWrapper(props) {
   return render(
     <WindowSideBarButtons
       addCompanionWindow={() => {}}
-      t={t}
       {...props}
       panels={{
         annotations: true,

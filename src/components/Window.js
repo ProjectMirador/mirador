@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import { MosaicWindowContext } from 'react-mosaic-component2';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useTranslation } from 'react-i18next';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
@@ -81,9 +82,10 @@ const DraggableNavBar = ({ children, ...props }) => {
  */
 export function Window({
   focusWindow = () => {}, label = null, isFetching = false, sideBarOpen = false,
-  view = undefined, windowDraggable = null, windowId, workspaceType = null, t,
+  view = undefined, windowDraggable = null, windowId, workspaceType = null,
   manifestError = null,
 }) {
+  const { t } = useTranslation();
   const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
   const ErrorWindow = useCallback(({ error }) => (
     <MinimalWindow windowId={windowId}>
@@ -138,7 +140,6 @@ Window.propTypes = {
   manifestError: PropTypes.string,
   maximized: PropTypes.bool,
   sideBarOpen: PropTypes.bool,
-  t: PropTypes.func.isRequired,
   view: PropTypes.string,
   windowDraggable: PropTypes.bool,
   windowId: PropTypes.string.isRequired,

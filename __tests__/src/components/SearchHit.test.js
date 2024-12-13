@@ -86,7 +86,7 @@ describe('SearchHit', () => {
 
       rerender(<Subject {...props} selected />);
       expect(announcer).toHaveBeenCalledWith(
-        'pagination The Canvas Label The Annotation Label Light up the moose , and start the chai',
+        '1 of 9 The Canvas Label The Annotation Label Light up the moose , and start the chai',
         'polite',
       );
     });

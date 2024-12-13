@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import VisibilityIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffSharp';
+import { useTranslation } from 'react-i18next';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
@@ -8,8 +9,9 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
  * display settings in the Annotation companion window
 */
 export function AnnotationSettings({
-  displayAll, displayAllDisabled, t, toggleAnnotationDisplay,
+  displayAll, displayAllDisabled, toggleAnnotationDisplay,
 }) {
+  const { t } = useTranslation();
   return (
     <MiradorMenuButton
       aria-label={t(displayAll ? 'displayNoAnnotations' : 'highlightAllAnnotations')}
@@ -25,7 +27,6 @@ export function AnnotationSettings({
 AnnotationSettings.propTypes = {
   displayAll: PropTypes.bool.isRequired,
   displayAllDisabled: PropTypes.bool.isRequired,
-  t: PropTypes.func.isRequired,
   toggleAnnotationDisplay: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };

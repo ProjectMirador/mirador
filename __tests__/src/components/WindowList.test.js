@@ -46,7 +46,7 @@ describe('WindowList', () => {
     it('renders without an error', async () => {
       const user = userEvent.setup();
       expect(screen.getByRole('menuitem')).toBeInTheDocument();
-      await user.click(screen.getByRole('menuitem', { name: 'untitled' }));
+      await user.click(screen.getByRole('menuitem', { name: '[Untitled]' }));
 
       expect(handleClose).toBeCalled();
       expect(focusWindow).toBeCalledWith('xyz', true);

@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getFocusedWindowId, getWindowIds, getWindowTitles } from '../state/selectors';
@@ -29,7 +28,6 @@ const mapStateToProps = state => (
 );
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowList'),
 );

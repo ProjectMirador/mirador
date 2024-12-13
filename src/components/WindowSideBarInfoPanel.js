@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
 import { CompanionWindowSection } from './CompanionWindowSection';
 import CanvasInfo from '../containers/CanvasInfo';
@@ -16,12 +17,12 @@ export function WindowSideBarInfoPanel({
   id,
   canvasIds = [],
   collectionPath = [],
-  t = k => k,
   locale = '',
   setLocale = undefined,
   availableLocales = [],
   showLocalePicker = false,
 }) {
+  const { t } = useTranslation();
   return (
     <CompanionWindow
       title={t('aboutThisItem')}
@@ -79,6 +80,5 @@ WindowSideBarInfoPanel.propTypes = {
   locale: PropTypes.string,
   setLocale: PropTypes.func,
   showLocalePicker: PropTypes.bool,
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
 };

@@ -7,6 +7,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import TruncatedHit from '../lib/TruncatedHit';
 import { ScrollTo } from './ScrollTo';
@@ -50,8 +51,9 @@ export function SearchHit({
   adjacent = false, annotation = undefined, annotationId = undefined, annotationLabel = undefined,
   announcer = undefined, canvasLabel = undefined, companionWindowId = undefined, containerRef = undefined,
   focused = false, hit = undefined, index = undefined, selectAnnotation = () => {}, selected = false,
-  showDetails = () => {}, t = k => k, total = undefined, windowId, windowSelected = false,
+  showDetails = () => {}, total = undefined, windowId, windowSelected = false,
 }) {
+  const { t } = useTranslation();
   useEffect(() => {
     if (selected) {
       announceHit();
@@ -194,7 +196,6 @@ SearchHit.propTypes = {
   selectAnnotation: PropTypes.func,
   selected: PropTypes.bool,
   showDetails: PropTypes.func,
-  t: PropTypes.func,
   total: PropTypes.number,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
   windowSelected: PropTypes.bool,

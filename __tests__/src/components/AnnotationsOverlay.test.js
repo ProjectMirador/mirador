@@ -25,7 +25,6 @@ const createWrapper = (props) => {
       windowId="base"
       config={{}}
       updateViewport={vi.fn()}
-      t={k => k}
       canvasWorld={new CanvasWorld(canvases)}
       {...props}
     />

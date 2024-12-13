@@ -6,14 +6,16 @@ import {
   TextField,
 } from '@mui/material';
 import Button from '@mui/material/Button';
+import { useTranslation } from 'react-i18next';
 import { WorkspaceDialog } from './WorkspaceDialog';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 
 /**
  */
 export function WorkspaceImport({
-  addError, importConfig, classes = {}, handleClose, open = false, t = k => k,
+  addError, importConfig, classes = {}, handleClose, open = false,
 }) {
+  const { t } = useTranslation();
   const [configImportValue, setConfigImportValue] = useState('');
 
   /** */
@@ -79,5 +81,4 @@ WorkspaceImport.propTypes = {
   handleClose: PropTypes.func.isRequired,
   importConfig: PropTypes.func.isRequired,
   open: PropTypes.bool,
-  t: PropTypes.func,
 };

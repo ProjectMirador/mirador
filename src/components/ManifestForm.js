@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Provides a form for user input of a manifest url
  * @prop {Function} fetchManifest
  */
 export function ManifestForm({
-  addResourcesOpen, addResource, onSubmit = () => {}, onCancel = null, t = k => k,
+  addResourcesOpen, addResource, onSubmit = () => {}, onCancel = null,
 }) {
+  const { t } = useTranslation();
   const [formValue, setFormValue] = useState('');
 
   /** */
@@ -85,5 +87,4 @@ ManifestForm.propTypes = {
   addResourcesOpen: PropTypes.bool.isRequired,
   onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
-  t: PropTypes.func,
 };

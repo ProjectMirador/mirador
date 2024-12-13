@@ -19,9 +19,9 @@ function Subject({ ...props }) {
 describe('WindowCanvasNavigationControls', () => {
   it('renders properly', async () => {
     const { container } = render(<Subject />);
-    expect(screen.getByLabelText('previousCanvas', { selector: 'button' })).toBeInTheDocument();
-    expect(screen.getByLabelText('nextCanvas', { selector: 'button' })).toBeInTheDocument();
-    expect(screen.getByText('pagination')).toBeInTheDocument();
+    expect(screen.getByLabelText('Previous item', { selector: 'button' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Next item', { selector: 'button' })).toBeInTheDocument();
+    expect(screen.getByText(/1 of/)).toBeInTheDocument();
     expect(container.firstChild).not.toHaveClass('mirador-canvas-nav-stacked'); // eslint-disable-line testing-library/no-node-access
   });
 
@@ -37,8 +37,8 @@ describe('WindowCanvasNavigationControls', () => {
 
   it('shows the zoom control component when specified', () => {
     render(<Subject showZoomControls />);
-    expect(screen.getByRole('button', { name: 'zoomIn' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'zoomOut' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'zoomReset' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Zoom in' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Zoom out' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reset zoom' })).toBeInTheDocument();
   });
 });

@@ -33,16 +33,16 @@ describe('WindowTopMenu', () => {
 
     const menuSections = within(screen.getByRole('menu')).getAllByRole('presentation');
     expect(menuSections).toHaveLength(2);
-    expect(menuSections[0]).toHaveTextContent('view');
-    expect(menuSections[1]).toHaveTextContent('thumbnail');
+    expect(menuSections[0]).toHaveTextContent('View');
+    expect(menuSections[1]).toHaveTextContent('Thumbnails');
 
     const menuItems = screen.getAllByRole('menuitem');
     expect(menuItems).toHaveLength(5);
-    expect(menuItems[0]).toHaveTextContent('single');
-    expect(menuItems[1]).toHaveTextContent('gallery');
-    expect(menuItems[2]).toHaveTextContent('off');
-    expect(menuItems[3]).toHaveTextContent('bottom');
-    expect(menuItems[4]).toHaveTextContent('right');
+    expect(menuItems[0]).toHaveTextContent('Single');
+    expect(menuItems[1]).toHaveTextContent('Gallery');
+    expect(menuItems[2]).toHaveTextContent('Off');
+    expect(menuItems[3]).toHaveTextContent('Bottom');
+    expect(menuItems[4]).toHaveTextContent('Right');
   });
 
   it('does not display unless open', () => {

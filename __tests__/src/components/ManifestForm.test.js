@@ -7,7 +7,6 @@ function createWrapper(props) {
   return render(
     <ManifestForm
       addResource={() => {}}
-      t={str => str}
       {...props}
     />,
   );
@@ -17,13 +16,13 @@ describe('ManifestForm', () => {
   it('renders nothing if it is not open', () => {
     createWrapper({ addResourcesOpen: false });
 
-    expect(screen.queryByRole('textbox', { name: 'addManifestUrl' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('textbox', { name: 'Resource location' })).not.toBeInTheDocument();
   });
 
   it('renders the form fields', () => {
     createWrapper({ addResourcesOpen: true });
 
-    expect(screen.getByRole('textbox', { name: 'addManifestUrl' })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Resource location' })).toBeInTheDocument();
     expect(screen.getByRole('button')).toHaveAttribute('type', 'submit');
   });
 
@@ -32,9 +31,9 @@ describe('ManifestForm', () => {
     const onCancel = vi.fn();
     createWrapper({ addResourcesOpen: true, onCancel });
 
-    await user.type(screen.getByRole('textbox', { name: 'addManifestUrl' }), 'asdf');
+    await user.type(screen.getByRole('textbox', { name: 'Resource location' }), 'asdf');
 
-    await user.click(screen.getByRole('button', { name: 'cancel' }));
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
 
     expect(onCancel).toHaveBeenCalled();
     expect(screen.getByRole('textbox')).toHaveValue('');
@@ -45,8 +44,8 @@ describe('ManifestForm', () => {
     const addResource = vi.fn();
     const onSubmit = vi.fn();
     createWrapper({ addResource, addResourcesOpen: true, onSubmit });
-    await user.type(screen.getByRole('textbox', { name: 'addManifestUrl' }), 'http://example.com/iiif');
-    await user.click(screen.getByRole('button', { name: 'fetchManifest' }));
+    await user.type(screen.getByRole('textbox', { name: 'Resource location' }), 'http://example.com/iiif');
+    await user.click(screen.getByRole('button', { name: 'Add' }));
 
     expect(addResource).toHaveBeenCalledWith('http://example.com/iiif');
     expect(onSubmit).toHaveBeenCalled();

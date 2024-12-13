@@ -5,6 +5,7 @@ import AddIcon from '@mui/icons-material/AddSharp';
 import CloseIcon from '@mui/icons-material/CloseSharp';
 import { styled, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Be careful using this hook. It only works because the number of
@@ -30,9 +31,10 @@ const Root = styled(Fab, { name: 'WorkspaceAddButton', slot: 'root' })(({ theme 
 /**
  */
 export function WorkspaceAddButton({
-  t = k => k, setWorkspaceAddVisibility, isWorkspaceAddVisible = false, useExtendedFab,
+  setWorkspaceAddVisibility, isWorkspaceAddVisible = false, useExtendedFab,
 }) {
   const width = useWidth();
+  const { t } = useTranslation();
 
   return (
     <Tooltip title={isWorkspaceAddVisible ? t('closeAddResourceMenu') : t('addResource')}>
@@ -62,6 +64,5 @@ export function WorkspaceAddButton({
 WorkspaceAddButton.propTypes = {
   isWorkspaceAddVisible: PropTypes.bool,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
-  t: PropTypes.func,
   useExtendedFab: PropTypes.bool.isRequired,
 };
