@@ -32,12 +32,14 @@ describe('CanvasLayers', () => {
   });
 
   it('renders canvas layers in a list', () => {
+    // TODO clean up this test once manifesto.js provides info about Choice options
+    const res1 = new Resource({ id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg' }, {});
+    res1.preferred = true;
+    const res2 = new Resource({ id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png' }, {});
+    res2.preferred = true;
     createWrapper({
       canvasId: 'https://prtd.app/hamilton/canvas/p1.json',
-      layers: [
-        new Resource({ id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg' }, {}),
-        new Resource({ id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png' }, {}),
-      ],
+      layers: [res1, res2],
     });
 
     expect(screen.getAllByRole('listitem')[0]).toHaveTextContent('1');
@@ -87,12 +89,15 @@ describe('CanvasLayers', () => {
     beforeEach(() => {
       updateLayers = vi.fn();
       user = userEvent.setup();
+      // TODO clean up this test setup once manifesto.js provides info about Choice options
+      const res1 = new Resource({ id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg' }, {});
+      const res2 = new Resource({ id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png' }, {});
+      res1.preferred = true;
+      res2.preferred = true;
+
       createWrapper({
         canvasId: 'https://prtd.app/hamilton/canvas/p1.json',
-        layers: [
-          new Resource({ id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg' }, {}),
-          new Resource({ id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png' }, {}),
-        ],
+        layers: [res1, res2],
         updateLayers,
       });
     });
