@@ -1,6 +1,6 @@
-const fs = require('fs');
-const glob = require('glob'); // eslint-disable-line import/no-extraneous-dependencies
-const chalk = require('chalk'); // eslint-disable-line import/no-extraneous-dependencies
+import fs from 'fs';
+import * as glob from 'glob';
+import chalk from 'chalk';
 
 const { log } = console;
 const globOpts = { cwd: 'src/locales' };
@@ -21,7 +21,6 @@ function lowerCaseSortedArray(arr) {
  */
 function unsortedKeys(arr) {
   const sortedArray = lowerCaseSortedArray(arr);
-
   return arr.filter((v, i) => v.toLowerCase() !== sortedArray[i]);
 }
 
