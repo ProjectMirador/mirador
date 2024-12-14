@@ -107,7 +107,7 @@
     "react-dom": "^18.0.0",
     "redux-mock-store": "^1.5.1",
     "redux-saga-test-plan": "^4.0.0-rc.3",
-    "vite": "^5.4.11",
+    "vite": "^6.0.0",
     "vitest": "^2.1.4",
     "vitest-fetch-mock": "^0.4.2"
   },
