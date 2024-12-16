@@ -49,7 +49,7 @@ function OpenSeadragonComponent({
       viewport.zoomTo(viewerConfig.zoom, new Openseadragon.Point(viewerConfig.x, viewerConfig.y), true);
     }
 
-    if (viewerConfig.rotation && viewerConfig.rotation !== viewport.getRotation()) {
+    if (viewerConfig.rotation != null && viewerConfig.rotation !== viewport.getRotation()) {
       viewport.setRotation(viewerConfig.rotation);
     }
 
@@ -78,7 +78,7 @@ function OpenSeadragonComponent({
     }
 
     // @ts-expect-error
-    if (viewerConfig.x && viewerConfig.y
+    if (viewerConfig.x != null && viewerConfig.y != null
       && (Math.round(viewerConfig.x) !== Math.round(viewport.centerSpringX.target.value)
       // @ts-expect-error
       || Math.round(viewerConfig.y) !== Math.round(viewport.centerSpringY.target.value))) {
@@ -86,11 +86,11 @@ function OpenSeadragonComponent({
     }
 
     // @ts-expect-error
-    if (viewerConfig.zoom && viewerConfig.zoom !== viewport.zoomSpring.target.value) {
+    if (viewerConfig.zoom != null && viewerConfig.zoom !== viewport.zoomSpring.target.value) {
       viewport.zoomTo(viewerConfig.zoom, new Openseadragon.Point(viewerConfig.x, viewerConfig.y), false);
     }
 
-    if (viewerConfig.rotation && viewerConfig.rotation !== viewport.getRotation()) {
+    if (viewerConfig.rotation != null && viewerConfig.rotation !== viewport.getRotation()) {
       viewport.setRotation(viewerConfig.rotation);
     }
 
