@@ -4,6 +4,7 @@ import fs from 'fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import { globSync } from 'glob';
+import * as packageJson from './package.json';
 
 /**
 * Vite configuration
@@ -39,9 +40,19 @@ export default defineConfig({
           name: 'Mirador',
         },
         rollupOptions: {
-          external: ['__tests__/*', '__mocks__/*'],
+          external: [
+            ...Object.keys(packageJson.peerDependencies),
+            'react/jsx-runtime',
+            '__tests__/*',
+            '__mocks__/*'
+          ],
           output: {
             assetFileNames: 'mirador.[ext]',
+            globals: {
+              react: 'React',
+              'react/jsx-runtime': 'react/jsx-runtime',
+              'react-dom': 'ReactDOM',
+            }
           },
         },
         sourcemap: true,
