@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { DialogActions, DialogContentText } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useTranslation } from 'react-i18next';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 
 /**
  */
