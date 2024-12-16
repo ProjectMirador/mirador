@@ -74,15 +74,21 @@ store.getState()
 ```
 
 ## Running the tests
+We use Vitest to run our test suite.
 
 ```sh
-$ npm test # For headless CI=true npm test
+$ npm test
 ```
 
-or to continually watch the source files
+You can see the helpful Vitest UI in your browser by running Vitest with the `--ui` flag. To pass the flag through to npm run the following:
 
 ```sh
-$ npm run test:watch
+$ npm test -- --ui
+```
+
+You can run Vitest without the additional linting and size checks in our `npm test` command. You can also test a single file:
+```sh
+$ npx vitest __tests__/integration/mirador/tests/sequence-switching.test.js --ui
 ```
 
 ## Linting the project
