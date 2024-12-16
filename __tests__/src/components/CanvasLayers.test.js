@@ -46,7 +46,7 @@ describe('CanvasLayers', () => {
     expect(screen.getAllByRole('listitem')[1]).toHaveTextContent('2');
 
     expect(screen.getAllByRole('button', { name: 'Hide layer' }).length).toEqual(2);
-    expect(screen.getAllByRole('button', { name: 'Move layer to top' }).length).toEqual(2);
+    expect(screen.getAllByRole('button', { name: 'Move layer to background' }).length).toEqual(2);
     expect(screen.getAllByRole('spinbutton', { name: 'Layer opacity' }).length).toEqual(2);
   });
 
@@ -103,7 +103,7 @@ describe('CanvasLayers', () => {
     });
 
     it('has a button for moving a layer to the top', async () => {
-      await user.click(screen.getAllByLabelText('Move layer to top')[1]);
+      await user.click(screen.getAllByLabelText('Move layer to background')[1]);
 
       expect(updateLayers).toHaveBeenCalledWith('abc', 'https://prtd.app/hamilton/canvas/p1.json', {
         'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg': {

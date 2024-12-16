@@ -72,6 +72,7 @@
     "layer_hide": "Ebene verbergen",
     "layer_move": "Ebene verschieben",
     "layer_moveToTop": "Ebene ganz nach vorn bringen",
+    "layer_moveToBackground": "Ebene in der Hintergrund verschieben",
     "layer_opacity": "Ebenendeckkraft",
     "layer_show": "Ebene anzeigen",
     "layers": "Ebenen",

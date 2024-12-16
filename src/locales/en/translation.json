@@ -72,6 +72,7 @@
     "layer_hide": "Hide layer",
     "layer_move": "Move layer",
     "layer_moveToTop": "Move layer to top",
+    "layer_moveToBackground": "Move layer to background",
     "layer_opacity": "Layer opacity",
     "layer_show": "Show layer",
     "layers": "Layers",

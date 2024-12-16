@@ -8,7 +8,7 @@ import ListItem from '@mui/material/ListItem';
 import Slider from '@mui/material/Slider';
 import Tooltip from '@mui/material/Tooltip';
 import DragHandleIcon from '@mui/icons-material/DragHandleSharp';
-import MoveToTopIcon from '@mui/icons-material/VerticalAlignTopSharp';
+import MoveDownSharp from '@mui/icons-material/MoveDownSharp';
 import VisibilityIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffSharp';
 import OpacityIcon from '@mui/icons-material/OpacitySharp';
@@ -43,7 +43,7 @@ const reorder = (list, startIndex, endIndex) => {
 
 /** @private */
 function Layer({
-  resource, layerMetadata = {}, index, handleOpacityChange, setLayerVisibility, moveToTop,
+  resource, layerMetadata = {}, index, handleOpacityChange, setLayerVisibility, moveToBackground,
 }) {
   const { t } = useTranslation();
   const { width, height } = { height: undefined, width: 50 };
@@ -76,8 +76,8 @@ function Layer({
               { layer.visibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }
             </MiradorMenuButton>
             { layer.index !== 0 && (
-              <MiradorMenuButton aria-label={t('layer_moveToTop')} size="small" onClick={() => { moveToTop(resource.id); }}>
-                <MoveToTopIcon />
+              <MiradorMenuButton aria-label={t('layer_moveToBackground')} size="small" onClick={() => { moveToBackground(resource.id); }}>
+                <MoveDownSharp />
               </MiradorMenuButton>
             )}
           </div>
@@ -133,7 +133,7 @@ Layer.propTypes = {
     opacity: PropTypes.number,
     visibility: PropTypes.bool,
   })), // eslint-disable-line react/forbid-prop-types
-  moveToTop: PropTypes.func.isRequired,
+  moveToBackground: PropTypes.func.isRequired,
   resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   setLayerVisibility: PropTypes.func.isRequired,
 };
@@ -235,7 +235,7 @@ export function CanvasLayers({
   }, [canvasId, updateLayers, windowId]);
 
   /** */
-  const moveToTop = useCallback((layerId) => {
+  const moveToBackground = useCallback((layerId) => {
     const sortedLayers = reorder(layers.map(l => l.id), layers.findIndex(l => l.id === layerId), 0);
 
     const payload = layers.reduce((acc, layer) => {
@@ -279,7 +279,7 @@ export function CanvasLayers({
                       layerMetadata={(layerMetadata || {})[r.id] || {}}
                       handleOpacityChange={handleOpacityChange}
                       setLayerVisibility={setLayerVisibility}
-                      moveToTop={moveToTop}
+                      moveToBackground={moveToBackground}
                     />
                   </DraggableLayer>
                 ))
