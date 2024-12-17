@@ -20,7 +20,7 @@ function createManifestoInstance(json, locale) {
 }
 
 /** */
-const getLocale = createSelector(
+export const getLocale = createSelector(
   [
     getCompanionWindowLocale,
     getConfig,
