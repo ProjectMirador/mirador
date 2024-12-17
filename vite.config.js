@@ -44,15 +44,15 @@ export default defineConfig({
             ...Object.keys(packageJson.peerDependencies),
             'react/jsx-runtime',
             '__tests__/*',
-            '__mocks__/*'
+            '__mocks__/*',
           ],
           output: {
             assetFileNames: 'mirador.[ext]',
             globals: {
               react: 'React',
-              'react/jsx-runtime': 'react/jsx-runtime',
               'react-dom': 'ReactDOM',
-            }
+              'react/jsx-runtime': 'react/jsx-runtime',
+            },
           },
         },
         sourcemap: true,
