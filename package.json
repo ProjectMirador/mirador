@@ -11,7 +11,11 @@
   ],
   "sideEffects": false,
   "exports": {
-    "./src": "./src/index.js"
+    "./src": "./src/index.js",
+    ".": {
+        "import": "./dist/mirador.es.js",
+        "require": "./dist/mirador.js"
+    }
   },
   "scripts": {
     "build": "vite build --config vite.config.js",
