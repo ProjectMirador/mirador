@@ -3,7 +3,7 @@ import { createCachedSelector } from 're-reselect';
 import { PropertyValue, Utils, Resource } from 'manifesto.js';
 import getThumbnail from '../../lib/ThumbnailFactory';
 import asArray from '../../lib/asArray';
-import { getCompanionWindow } from './companionWindows';
+import { getCompanionWindowLocale } from './companionWindows';
 import { getManifest } from './getters';
 import { getConfig } from './config';
 
@@ -22,11 +22,11 @@ function createManifestoInstance(json, locale) {
 /** */
 const getLocale = createSelector(
   [
-    getCompanionWindow,
+    getCompanionWindowLocale,
     getConfig,
   ],
-  (companionWindow = {}, config = {}) => (
-    companionWindow.locale || config.language
+  (companionWindowLocale, config = {}) => (
+    companionWindowLocale || config.language
   ),
 );
 
