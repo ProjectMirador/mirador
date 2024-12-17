@@ -14,7 +14,6 @@ describe('CanvasInfo', () => {
           canvasLabel="The Canvas Label"
           canvasDescription="The Canvas Description"
           canvasMetadata={metadata}
-          id="xyz"
         />,
       );
     });
@@ -45,7 +44,7 @@ describe('CanvasInfo', () => {
   describe('when metadata is not present', () => {
     beforeEach(() => {
       render(
-        <CanvasInfo id="xyz" />,
+        <CanvasInfo />,
       );
     });
 

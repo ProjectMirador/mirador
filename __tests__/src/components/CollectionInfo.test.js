@@ -6,7 +6,6 @@ import { CollectionInfo } from '../../../src/components/CollectionInfo';
 function createWrapper(props) {
   return render(
     <CollectionInfo
-      id="test"
       collectionPath={[1, 2]}
       showCollectionDialog={() => {}}
       {...props}

@@ -15,7 +15,7 @@ import { ManifestRelatedLinks } from '../components/ManifestRelatedLinks';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { id, windowId }) => ({
+const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   homepage: getManifestHomepage(state, { windowId }),
   manifestUrl: getManifestUrl(state, { windowId }),
   related: getManifestRelated(state, { windowId }),
