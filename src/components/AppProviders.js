@@ -14,6 +14,7 @@ import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import createI18nInstance from '../i18n';
 import FullScreenContext from '../contexts/FullScreenContext';
+import LocaleContext from '../contexts/LocaleContext';
 
 /**
  * Allow applications to opt-out of (or provide their own) drag and drop context
@@ -120,15 +121,17 @@ export function AppProviders({
   return (
     <FullScreenShim>
       <StoreAwareI18nextProvider language={language} translations={translations}>
-        <StyledEngineProvider injectFirst>
-          <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
-            <ThemeProvider theme={createTheme((theme))}>
-              <MaybeDndProvider dndManager={dndManager}>
-                {children}
-              </MaybeDndProvider>
-            </ThemeProvider>
-          </CacheProvider>
-        </StyledEngineProvider>
+        <LocaleContext.Provider value={language}>
+          <StyledEngineProvider injectFirst>
+            <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
+              <ThemeProvider theme={createTheme((theme))}>
+                <MaybeDndProvider dndManager={dndManager}>
+                  {children}
+                </MaybeDndProvider>
+              </ThemeProvider>
+            </CacheProvider>
+          </StyledEngineProvider>
+        </LocaleContext.Provider>
       </StoreAwareI18nextProvider>
     </FullScreenShim>
   );
