@@ -30,6 +30,18 @@ export const getCompanionWindow = createSelector(
 );
 
 /**
+ * Returns the companion window locale.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.companionWindowId
+ * @returns {string|undefined}
+ */
+export const getCompanionWindowLocale = createSelector(
+  [getCompanionWindow],
+  companionWindow => companionWindow && companionWindow.locale,
+);
+
+/**
  * Return position of thumbnail navigation in a certain window.
  * @param {object} state
  * @param {object} props
