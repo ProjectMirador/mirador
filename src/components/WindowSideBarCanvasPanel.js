@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useId, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Tabs from '@mui/material/Tabs';
@@ -49,6 +49,7 @@ export function WindowSideBarCanvasPanel({
 }) {
   const { t } = useTranslation();
   const containerRef = useRef();
+  const tabPanelId = useId();
 
   /** */
   const handleSequenceChange = (event) => {
@@ -126,15 +127,15 @@ export function WindowSideBarCanvasPanel({
             textColor="primary"
           >
             {showToc && (
-              <Tooltip title={t('tableOfContentsList')} value="tableOfContents"><Tab sx={{ minWidth: 'auto' }} value="tableOfContents" aria-label={t('tableOfContentsList')} aria-controls={`tab-panel-${id}`} icon={<TocIcon style={{ transform: 'scale(-1, 1)' }} />} /></Tooltip>
+              <Tooltip title={t('tableOfContentsList')} value="tableOfContents"><Tab sx={{ minWidth: 'auto' }} value="tableOfContents" aria-label={t('tableOfContentsList')} aria-controls={tabPanelId} icon={<TocIcon style={{ transform: 'scale(-1, 1)' }} />} /></Tooltip>
             )}
-            <Tooltip title={t('itemList')} value="item"><Tab sx={{ minWidth: 'auto' }} value="item" aria-label={t('itemList')} aria-controls={`tab-panel-${id}`} icon={<ItemListIcon />} /></Tooltip>
-            <Tooltip title={t('thumbnailList')} value="thumbnail"><Tab sx={{ minWidth: 'auto' }} value="thumbnail" aria-label={t('thumbnailList')} aria-controls={`tab-panel-${id}`} icon={<ThumbnailListIcon />} /></Tooltip>
+            <Tooltip title={t('itemList')} value="item"><Tab sx={{ minWidth: 'auto' }} value="item" aria-label={t('itemList')} aria-controls={tabPanelId} icon={<ItemListIcon />} /></Tooltip>
+            <Tooltip title={t('thumbnailList')} value="thumbnail"><Tab sx={{ minWidth: 'auto' }} value="thumbnail" aria-label={t('thumbnailList')} aria-controls={tabPanelId} icon={<ThumbnailListIcon />} /></Tooltip>
           </Tabs>
         </>
       )}
     >
-      <div id={`tab-panel-${id}`}>
+      <div id={tabPanelId}>
         { collection && (
           <Button
             fullWidth

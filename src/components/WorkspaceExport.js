@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -19,10 +19,11 @@ import { WorkspaceDialog } from './WorkspaceDialog';
 /**
  */
 export function WorkspaceExport({
-  children = null, container = null, open = false, handleClose, exportableState,
+  children = null, container = null, id = undefined, open = false, handleClose, exportableState,
 }) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
+  const titleId = useId();
   const exportedState = JSON.stringify(exportableState, null, 2);
 
   if (copied) {
@@ -47,7 +48,8 @@ export function WorkspaceExport({
 
   return (
     <WorkspaceDialog
-      id="workspace-export"
+      aria-labelledby={titleId}
+      id={id}
       container={container}
       open={open}
       onClose={handleClose}
@@ -55,7 +57,7 @@ export function WorkspaceExport({
       fullWidth
       maxWidth="sm"
     >
-      <DialogTitle id="form-dialog-title">
+      <DialogTitle id={titleId}>
         {t('downloadExport')}
       </DialogTitle>
 
@@ -93,5 +95,6 @@ WorkspaceExport.propTypes = {
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   exportableState: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
+  id: PropTypes.string,
   open: PropTypes.bool,
 };

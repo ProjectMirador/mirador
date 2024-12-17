@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useId, useState } from 'react';
 import PropTypes from 'prop-types';
 import ImportIcon from '@mui/icons-material/Input';
 import SaveAltIcon from '@mui/icons-material/SaveAltSharp';
@@ -21,6 +21,8 @@ export function WorkspaceOptionsMenu({
   const { t } = useTranslation();
   const container = useContext(WorkspaceContext);
   const [selectedOption, setSelectedOption] = useState(null);
+  const exportId = useId();
+  const importId = useId();
 
   const pluginProps = {
     anchorEl, container, handleClose, open, t, ...rest,
@@ -57,7 +59,7 @@ export function WorkspaceOptionsMenu({
         <MenuItem
           aria-haspopup="true"
           onClick={() => { handleClick('exportWorkspace'); }}
-          aria-owns={selectedOption === 'exportWorkspace' ? 'workspace-export' : undefined}
+          aria-owns={selectedOption === 'exportWorkspace' ? exportId : undefined}
         >
           <ListItemIcon>
             <SaveAltIcon />
@@ -66,9 +68,8 @@ export function WorkspaceOptionsMenu({
         </MenuItem>
         <MenuItem
           aria-haspopup="true"
-          id="workspace-menu-import"
           onClick={() => { handleClick('importWorkspace'); }}
-          aria-owns={selectedOption === 'importWorkspace' ? 'workspace-import' : undefined}
+          aria-owns={selectedOption === 'importWorkspace' ? importId : undefined}
         >
           <ListItemIcon>
             <ImportIcon />
@@ -79,6 +80,7 @@ export function WorkspaceOptionsMenu({
       </Menu>
       {selectedOption === 'exportWorkspace' && (
         <WorkspaceExport
+          id={exportId}
           open={selectedOption === 'exportWorkspace'}
           container={container?.current}
           handleClose={handleDialogClose}
@@ -86,6 +88,7 @@ export function WorkspaceOptionsMenu({
       )}
       {selectedOption === 'importWorkspace' && (
         <WorkspaceImport
+          id={importId}
           open={selectedOption === 'importWorkspace'}
           container={container?.current}
           handleClose={handleDialogClose}
