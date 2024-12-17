@@ -9,10 +9,10 @@ import {
 import { CanvasLayers } from '../components/CanvasLayers';
 
 /** For connect */
-const mapStateToProps = (state, { canvasId, windowId }) => ({
-  label: getCanvasLabel(state, { canvasId, windowId }),
-  layerMetadata: getLayers(state, { canvasId, windowId }),
-  layers: getSortedLayers(state, { canvasId, windowId }),
+const mapStateToProps = (state, { canvasId, companionWindowId, windowId }) => ({
+  label: getCanvasLabel(state, { canvasId, companionWindowId, windowId }),
+  layerMetadata: getLayers(state, { canvasId, companionWindowId, windowId }),
+  layers: getSortedLayers(state, { canvasId, companionWindowId, windowId }),
 });
 
 /**
