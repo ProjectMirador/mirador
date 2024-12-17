@@ -97,7 +97,7 @@ export function CompanionArea({
           className={`${ns('companion-windows')}`}
         >
           {companionWindowIds.map((id) => (
-            <CompanionWindowFactory id={id} key={id} windowId={windowId} />
+            <CompanionWindowFactory id={id} key={id} />
           ))}
         </Container>
       </Slide>

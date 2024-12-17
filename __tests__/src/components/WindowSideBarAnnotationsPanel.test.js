@@ -9,10 +9,9 @@ function createWrapper(props, state) {
       annotationCount={4}
       classes={{}}
       id="xyz"
-      windowId="abc"
       {...props}
     />,
-    { preloadedState: { companionWindows: { xyz: { content: 'annotations' } }, windows: { abc: {} }, ...state } },
+    { preloadedState: { companionWindows: { xyz: { content: 'annotations' } }, windows: { abc: {} }, ...state }, windowId: 'abc' },
   );
 }
 

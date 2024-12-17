@@ -72,7 +72,6 @@ export function WindowSideBarCollectionPanel({
   updateCompanionWindow,
   updateWindow,
   variant = null,
-  windowId,
 }) {
   const { t } = useTranslation();
   /** */
@@ -89,7 +88,6 @@ export function WindowSideBarCollectionPanel({
   return (
     <CompanionWindow
       title={t(isMultipart ? 'multipartCollection' : 'collection')}
-      windowId={windowId}
       id={id}
       titleControls={(
         <>
@@ -188,5 +186,4 @@ WindowSideBarCollectionPanel.propTypes = {
   updateCompanionWindow: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
   variant: PropTypes.string,
-  windowId: PropTypes.string.isRequired,
 };

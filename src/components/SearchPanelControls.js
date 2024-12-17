@@ -145,7 +145,7 @@ export function SearchPanelControls({
           )}
         />
       </StyledForm>
-      <SearchPanelNavigation windowId={windowId} companionWindowId={companionWindowId} />
+      <SearchPanelNavigation companionWindowId={companionWindowId} />
     </>
   );
 }

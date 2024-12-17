@@ -8,6 +8,7 @@ import { I18nextProvider } from 'react-i18next';
 import createRootReducer from '../../src/state/reducers/rootReducer';
 import settings from '../../src/config/settings';
 import createI18nInstance from '../../src/i18n';
+import WindowContext from '../../src/contexts/WindowContext';
 
 /** Mirador viewer setup for Integration tests */
 import Mirador from '../../src/index';
@@ -29,19 +30,24 @@ function renderWithProviders(
     preloadedState = {},
     // Automatically create a store instance if no store was passed in
     store = createStore(rootReducer, preloadedState, applyMiddleware(thunk)),
+    windowId,
     ...renderOptions
   } = {},
 ) {
+  const windowContext = windowId ? { id: windowId } : {};
+
   /** :nodoc: */
   function Wrapper({ children }) {
     return (
-      <I18nextProvider i18n={i18n}>
-        <ThemeProvider theme={theme}>
-          <Provider store={store}>
-            {children}
-          </Provider>
-        </ThemeProvider>
-      </I18nextProvider>
+      <WindowContext.Provider value={windowContext}>
+        <I18nextProvider i18n={i18n}>
+          <ThemeProvider theme={theme}>
+            <Provider store={store}>
+              {children}
+            </Provider>
+          </ThemeProvider>
+        </I18nextProvider>
+      </WindowContext.Provider>
     );
   }
 

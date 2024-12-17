@@ -9,6 +9,7 @@ import {
   getConfig,
 } from '../state/selectors';
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * @param {Array} resources
@@ -48,6 +49,7 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CanvasAnnotations'),
 );

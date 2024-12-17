@@ -5,6 +5,7 @@ import { LayersPanel } from '../components/LayersPanel';
 import {
   getVisibleCanvasIds,
 } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -14,6 +15,7 @@ const mapStateToProps = (state, { id, windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps),
   withPlugins('LayersPanel'),
 );

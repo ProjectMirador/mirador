@@ -10,6 +10,7 @@ import {
   getPresentAnnotationsOnSelectedCanvases,
   getCompanionWindowsForContent,
 } from '../state/selectors';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** */
 const mapStateToProps = (state, { canvas, windowId }) => {
@@ -57,6 +58,7 @@ const mapDispatchToProps = (dispatch, { canvas, id, windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   // further HOC go here
 );

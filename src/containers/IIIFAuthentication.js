@@ -10,6 +10,7 @@ import {
   getAccessTokens,
 } from '../state/selectors';
 import { IIIFAuthentication } from '../components/IIIFAuthentication';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -90,6 +91,7 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('IIIFAuthentication'),
 );

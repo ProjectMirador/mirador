@@ -45,7 +45,6 @@ export function WindowSideBarCanvasPanel({
   showToc = false,
   updateSequence,
   updateVariant,
-  windowId,
 }) {
   const { t } = useTranslation();
   const containerRef = useRef();
@@ -67,7 +66,6 @@ export function WindowSideBarCanvasPanel({
       <SidebarIndexTableOfContents
         id={id}
         containerRef={containerRef}
-        windowId={windowId}
       />
     );
   } else {
@@ -75,7 +73,6 @@ export function WindowSideBarCanvasPanel({
       <SidebarIndexList
         id={id}
         containerRef={containerRef}
-        windowId={windowId}
       />
     );
   }
@@ -84,7 +81,6 @@ export function WindowSideBarCanvasPanel({
     <CompanionWindow
       title={t('canvasIndex')}
       id={id}
-      windowId={windowId}
       ref={containerRef}
       titleControls={(
         <>
@@ -162,5 +158,4 @@ WindowSideBarCanvasPanel.propTypes = {
   updateSequence: PropTypes.func.isRequired,
   updateVariant: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['item', 'thumbnail', 'tableOfContents']).isRequired,
-  windowId: PropTypes.string.isRequired,
 };

@@ -1,10 +1,10 @@
 import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { WindowTopBarPluginArea } from '../components/WindowTopBarPluginArea';
+import { withWindowContext } from '../contexts/WindowContext';
 
 const enhance = compose(
-  connect(null, null),
+  withWindowContext,
   withPlugins('WindowTopBarPluginArea'),
 );
 

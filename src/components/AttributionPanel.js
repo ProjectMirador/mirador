@@ -26,7 +26,6 @@ export function AttributionPanel({
   manifestLogo = null,
   requiredStatement = null,
   rights = null,
-  windowId,
   id,
 }) {
   const { t } = useTranslation();
@@ -37,7 +36,6 @@ export function AttributionPanel({
     <CompanionWindow
       title={t('attributionTitle')}
       paperClassName={ns('attribution-panel')}
-      windowId={windowId}
       id={id}
     >
       <CompanionWindowSection>
@@ -86,5 +84,4 @@ AttributionPanel.propTypes = {
     value: PropTypes.string,
   })),
   rights: PropTypes.arrayOf(PropTypes.string),
-  windowId: PropTypes.string.isRequired,
 };

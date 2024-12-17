@@ -10,18 +10,17 @@ import ErrorContent from '../containers/ErrorContent';
  * Render a companion window using the appropriate component for the content
  */
 export function CompanionWindowFactory({
-  content = null, id, windowId,
+  content = null, id,
 }) {
   const { t } = useTranslation();
   const ErroredCompanionWindow = useCallback(({ error }) => (
     <CompanionWindow
       title={t('error')}
-      windowId={windowId}
       id={id}
     >
-      <ErrorContent error={error} windowId={windowId} companionWindowId={id} />
+      <ErrorContent error={error} companionWindowId={id} />
     </CompanionWindow>
-  ), [windowId, t, id]);
+  ), [t, id]);
 
   const DynamicCompanionWindowType = CompanionWindowRegistry[content];
 
@@ -29,7 +28,7 @@ export function CompanionWindowFactory({
 
   return (
     <ErrorBoundary fallbackComponent={ErroredCompanionWindow}>
-      <DynamicCompanionWindowType id={id} windowId={windowId} />
+      <DynamicCompanionWindowType id={id} />
     </ErrorBoundary>
   );
 }
@@ -37,5 +36,4 @@ export function CompanionWindowFactory({
 CompanionWindowFactory.propTypes = {
   content: PropTypes.string,
   id: PropTypes.string.isRequired,
-  windowId: PropTypes.string.isRequired,
 };

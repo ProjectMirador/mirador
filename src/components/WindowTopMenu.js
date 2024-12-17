@@ -22,7 +22,7 @@ function PluginHookWithHeader(props) {
  */
 export function WindowTopMenu({
   handleClose, showThumbnailNavigationSettings = true,
-  toggleDraggingEnabled, windowId, anchorEl = null, open = false,
+  toggleDraggingEnabled, anchorEl = null, open = false,
 }) {
   const container = useContext(WorkspaceContext);
   const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
@@ -47,9 +47,9 @@ export function WindowTopMenu({
       anchorEl={anchorEl}
       open={open}
     >
-      <WindowViewSettings windowId={windowId} handleClose={handleClose} />
+      <WindowViewSettings handleClose={handleClose} />
       {showThumbnailNavigationSettings
-        && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}
+        && <WindowThumbnailSettings handleClose={handleClose} />}
       <PluginHookWithHeader {...pluginProps} />
     </Menu>
   );
@@ -61,5 +61,4 @@ WindowTopMenu.propTypes = {
   open: PropTypes.bool,
   showThumbnailNavigationSettings: PropTypes.bool,
   toggleDraggingEnabled: PropTypes.func.isRequired,
-  windowId: PropTypes.string.isRequired,
 };

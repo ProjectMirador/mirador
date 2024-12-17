@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import WindowTopMenu from '../containers/WindowTopMenu';
@@ -7,7 +7,7 @@ import WindowOptionsIcon from './icons/WindowOptionsIcon';
 
 /**
  */
-export function WindowTopMenuButton({ classes = {}, windowId }) {
+export function WindowTopMenuButton({ classes = {} }) {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
@@ -24,7 +24,7 @@ export function WindowTopMenuButton({ classes = {}, windowId }) {
     setOpen(false);
   };
 
-  const menuId = `window-menu_${windowId}`;
+  const menuId = useId();
   return (
     <>
       <MiradorMenuButton
@@ -38,7 +38,6 @@ export function WindowTopMenuButton({ classes = {}, windowId }) {
         <WindowOptionsIcon />
       </MiradorMenuButton>
       <WindowTopMenu
-        windowId={windowId}
         anchorEl={anchorEl}
         handleClose={handleMenuClose}
         id={menuId}
@@ -50,5 +49,4 @@ export function WindowTopMenuButton({ classes = {}, windowId }) {
 
 WindowTopMenuButton.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
-  windowId: PropTypes.string.isRequired,
 };

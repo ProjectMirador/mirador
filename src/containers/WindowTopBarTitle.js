@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { getManifestStatus, getManifestTitle, getWindowConfig } from '../state/selectors';
 import { WindowTopBarTitle } from '../components/WindowTopBarTitle';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { windowId }) => ({
@@ -13,6 +14,7 @@ const mapStateToProps = (state, { windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, null),
   withPlugins('WindowTopBarTitle'),
 );
