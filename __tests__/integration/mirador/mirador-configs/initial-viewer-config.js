@@ -1,8 +1,5 @@
 export default {
   id: 'mirador',
-  theme: {
-    transitions: window.location.port === '4488' ? { create: () => 'none' } : {},
-  },
   windows: [{
     canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
     initialViewerConfig: {
