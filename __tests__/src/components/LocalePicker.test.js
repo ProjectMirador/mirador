@@ -27,7 +27,7 @@ describe('LocalePicker', () => {
     createWrapper({ availableLocales: ['en', 'de'], locale: 'de' });
     // The option to expand the dropdown menu is rendered by a CompanionWindow titleControls prop in WindowSideBarInfoPanel, which is a combobox
     const dropdownTitle = screen.getByRole('combobox');
-    expect(dropdownTitle).toHaveTextContent('de');
+    expect(dropdownTitle).toHaveTextContent('Deutsch');
   });
 
   it('renders a select with both options and sets the current value', async () => {
@@ -41,10 +41,10 @@ describe('LocalePicker', () => {
     // Assert that the menu element has 2 children (2 options)
     expect(menu.children).toHaveLength(2); // eslint-disable-line testing-library/no-node-access
     // Verify that the select element has the correct value ('de')
-    const deOption = screen.getByRole('option', { name: 'de' });
+    const deOption = screen.getByRole('option', { name: 'Deutsch' });
     expect(deOption).toHaveAttribute('aria-selected', 'true');
     // Verify en is also an option
-    expect(screen.getByRole('option', { name: 'en' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'English' })).toBeInTheDocument();
   });
 
   it('triggers setLocale prop when clicking a list item', async () => {
@@ -59,7 +59,7 @@ describe('LocalePicker', () => {
     // Open the Select component
     await user.click(dropdownTitle);
     // Change the locale to 'de'
-    await user.click(screen.getByRole('option', { name: 'de' }));
+    await user.click(screen.getByRole('option', { name: 'Deutsch' }));
     expect(setLocale).toHaveBeenCalledTimes(1);
     expect(setLocale).toHaveBeenCalledWith('de');
   });

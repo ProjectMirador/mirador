@@ -415,14 +415,31 @@ export const getManifestMetadata = createSelector(
 
 /** */
 function getLocalesForStructure(item) {
-  const languages = [];
+  const languages = new Set([]);
+
+  /** Extract language indicators from IIIF v2 or v3 manifests */
+  const extractLanguage = (i) => {
+    if (!(i && typeof i === 'object')) return;
+
+    // IIIF v2 pattern
+    if (i['@language'] && i['@value']) {
+      languages.add(i['@language']);
+      return;
+    }
+
+    // IIIF v3 pattern
+    Object.keys(i).forEach((key) => {
+      languages.add(key);
+    });
+  };
 
   if (Array.isArray(item)) {
-    languages.push(...item.filter(i => (typeof i === 'object' && i['@language'])).map(i => i['@language']));
-  } else if (item && typeof item === 'object') {
-    if (item['@language']) languages.push(item['@language']);
+    item.forEach(i => extractLanguage(i));
+  } else {
+    extractLanguage(item);
   }
-  return languages;
+
+  return [...languages];
 }
 
 /** */
