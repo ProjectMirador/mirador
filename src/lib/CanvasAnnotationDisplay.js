@@ -44,8 +44,6 @@ export default class CanvasAnnotationDisplay {
       currentPalette = this.palette.default;
     }
 
-    console.log('currentPalette', currentPalette);
-
     if (currentPalette.globalAlpha === 0) return;
 
     [...this.svgPaths].forEach((element) => {
