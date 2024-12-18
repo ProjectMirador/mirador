@@ -20,7 +20,6 @@ export function WindowSideBarAnnotationsPanel({
   const containerRef = useRef();
 
   useEffect(() => {
-    console.log(`Use effect current ${containerRef.current}`);
   });
 
   return (

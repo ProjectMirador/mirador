@@ -36,9 +36,13 @@ export class ViewerNavigationVideo extends Component {
 
   /** */
   handleChange = (event, newValue) => {
-    const { paused, setCurrentTime, setSeekTo } = this.props;
+    const {
+      paused, setCurrentTime, setSeekTo, setPaused,
+    } = this.props;
     if (!paused) {
+      setPaused(true);
       setSeekTo(newValue);
+      setCurrentTime(newValue);
     } else {
       setCurrentTime(newValue);
     }
@@ -59,7 +63,7 @@ export class ViewerNavigationVideo extends Component {
       setTextTrackDisabled,
       textTrackDisabled,
     } = this.props;
-
+    console.log('currentTime', currentTime);
     const start = (duration > 3600 || duration === undefined) ? 11 : 14;
     const len = (duration > 3600 || duration === undefined) ? 8 : 5;
     let durationLabel = new Date(currentTime * 1000).toISOString().substr(start, len);

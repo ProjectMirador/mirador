@@ -19,7 +19,6 @@ export class VideoViewer extends Component {
       containerRatio: 1,
       handleVideoEventFunctions: {
         onPlay: () => {
-          console.log('onPlay');
         },
       },
       start: 0,
@@ -37,30 +36,27 @@ export class VideoViewer extends Component {
 
   /** */
   componentDidUpdate(prevProps) {
-    console.log('componentDidUpdate in VideoViewer.js');
     const {
-      canvas, currentTime, paused,
-      setCurrentTime, setPaused,
+      canvas, currentTime, paused, setCurrentTime, setPaused,
     } = this.props;
-
     if (paused !== prevProps.paused) {
-      if (currentTime === 0) {
-        this.timerReset();
-      }
       if (paused) {
         this.timerStop();
       } else {
         this.timerStart();
       }
     }
+    // Ensure `currentTime` updates are consistent
     if (currentTime !== prevProps.currentTime) {
       const duration = canvas.getDuration();
-      if (duration && duration < currentTime) {
-        if (!paused) {
-          setPaused(true);
-          setCurrentTime(0);
-          this.timerReset();
-        }
+      //Fix issue where reactPlayer didn't populate seek to time when the time was at 0
+      if (prevProps.currentTime === 0 || paused === true) {
+        this.playerRef.current.seekTo(currentTime);
+      }
+      if (duration && currentTime > duration) {
+        setPaused(true);
+        setCurrentTime(0);
+        this.timerReset();
       }
     }
   }
@@ -176,84 +172,84 @@ export class VideoViewer extends Component {
         }}
       >
         {video && (
-        <>
-          <div style={{
-            alignItems: 'center',
-            backgroundColor: 'black',
-            border: debug ? '6px solid red' : 'none',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            marginBottom: '122px', // TODO Space for navigation controls
-            position: 'relative',
-            width: '100%',
-          }}
-          >
-            <ResizeObserver onResize={this.setContainerRatio} />
+          <>
             <div style={{
-              aspectRatio: playerStyle.aspectRatio,
-              border: debug ? '6px solid green' : 'none',
-              height: playerStyle.height,
-              maxHeight: '100%',
-              maxWidth: '100%',
-              width: playerStyle.width,
+              alignItems: 'center',
+              backgroundColor: 'black',
+              border: debug ? '6px solid red' : 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              marginBottom: '122px', // TODO Space for navigation controls
               position: 'relative',
+              width: '100%',
             }}
             >
-              <ReactPlayer
-                width={videoStyle.width}
-                height={videoStyle.height}
-                ref={this.playerRef}
-                url={video.id}
-                controls={false} // Hide default controls
-                pip={false}
-                playbackRate={1}
-                playing={!paused}
-                muted={muted}
-                loop={false}
-                config={{
-                  peertube: {
-                    controls: 0,
-                    mode: 'p2p-media-loader',
-                  },
-                  youtube: {
-                    controls: 0,
-                    modestbranding: 0,
-                  },
-                }}
-                iiifVideoInfos={video}
-                style={{
-                  aspectRatio: `${videoAspectRatio}`,
-                  border: debug ? '6px solid pink' : 'none', // 'absolute' or 'block
-                  height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
-                  maxHeight: '100%',
-                  maxWidth: '100%',
-                  position: 'absolute',
-                  width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
-                }}
-                onPlay={handleVideoEventFunctions.onPlay}
-              />
-              {this.playerRef.current && (
-              <AnnotationsOverlayVideo
-                onFunctionsReady={this.handleVideoEventFunctions}
-                windowId={windowId}
-                playerRef={this.playerRef.current}
-                videoRef={this.playerRef.current.getInternalPlayer()}
-                videoTarget={videoTargetTemporalfragment}
-                key={`${windowId} ${video.id}`}
-                highlightAllAnnotations
-                style={{
-                  border: debug ? '6px solid yellow' : 'none',
-                  height: '100%',
-                  objectFit: 'contain',
-                  width: '100%',
-                }}
-              />
-              )}
+              <ResizeObserver onResize={this.setContainerRatio} />
+              <div style={{
+                aspectRatio: playerStyle.aspectRatio,
+                border: debug ? '6px solid green' : 'none',
+                height: playerStyle.height,
+                maxHeight: '100%',
+                maxWidth: '100%',
+                width: playerStyle.width,
+                position: 'relative',
+              }}
+              >
+                <ReactPlayer
+                  width={videoStyle.width}
+                  height={videoStyle.height}
+                  ref={this.playerRef}
+                  url={video.id}
+                  controls={false} // Hide default controls
+                  pip={false}
+                  playbackRate={1}
+                  playing={!paused}
+                  muted={muted}
+                  loop={false}
+                  config={{
+                    peertube: {
+                      controls: 0,
+                      mode: 'p2p-media-loader',
+                    },
+                    youtube: {
+                      controls: 0,
+                      modestbranding: 0,
+                    },
+                  }}
+                  iiifVideoInfos={video}
+                  style={{
+                    aspectRatio: `${videoAspectRatio}`,
+                    border: debug ? '6px solid pink' : 'none', // 'absolute' or 'block
+                    height: (containerRatio < videoAspectRatio ? 'auto' : '100%'),
+                    maxHeight: '100%',
+                    maxWidth: '100%',
+                    position: 'absolute',
+                    width: (containerRatio < videoAspectRatio ? '100%' : 'auto'),
+                  }}
+                  onPlay={handleVideoEventFunctions.onPlay}
+                />
+                {this.playerRef.current && (
+                <AnnotationsOverlayVideo
+                  onFunctionsReady={this.handleVideoEventFunctions}
+                  windowId={windowId}
+                  playerRef={this.playerRef.current}
+                  videoRef={this.playerRef.current.getInternalPlayer()}
+                  videoTarget={videoTargetTemporalfragment}
+                  key={`${windowId} ${video.id}`}
+                  highlightAllAnnotations
+                  style={{
+                    border: debug ? '6px solid yellow' : 'none',
+                    height: '100%',
+                    objectFit: 'contain',
+                    width: '100%',
+                  }}
+                />
+                )}
+              </div>
             </div>
-          </div>
-          <WindowCanvasNavigationControlsVideo windowId={windowId} />
-        </>
+            <WindowCanvasNavigationControlsVideo windowId={windowId} playerRef={this.playerRef} />
+          </>
         )}
       </div>
     );
