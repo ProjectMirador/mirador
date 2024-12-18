@@ -27,6 +27,8 @@ function OpenSeadragonComponent({
   const onViewportChange = useCallback((event) => {
     const { viewport } = event.eventSource;
 
+    if (!initialViewportSet.current) return;
+
     onUpdateViewport({
       bounds: viewport.getBounds(),
       flip: viewport.getFlip(),
@@ -35,7 +37,7 @@ function OpenSeadragonComponent({
       y: Math.round(viewport.centerSpringY.target.value),
       zoom: viewport.zoomSpring.target.value,
     });
-  }, [onUpdateViewport]);
+  }, [onUpdateViewport, initialViewportSet]);
 
   const setInitialBounds = useCallback(({ viewport }) => {
     if (initialViewportSet.current) return;
