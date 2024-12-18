@@ -167,6 +167,7 @@ export function ThumbnailNavigation({
       role="grid"
     >
       <div role="row" style={{ height: '100%', width: '100%' }}>
+        { canvasGroupings.length > 0 && (
         <AutoSizer
           defaultHeight={100}
           defaultWidth={400}
@@ -186,6 +187,7 @@ export function ThumbnailNavigation({
             </List>
           )}
         </AutoSizer>
+        )}
       </div>
     </Paper>
   );
