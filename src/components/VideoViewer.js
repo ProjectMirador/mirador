@@ -51,7 +51,7 @@ export class VideoViewer extends Component {
     if (currentTime !== prevProps.currentTime) {
       const duration = canvas.getDuration();
       //Fix issue where reactPlayer didn't populate seek to time when the time was at 0
-      if (prevProps.currentTime === 0) {
+      if (prevProps.currentTime === 0 || paused === true) {
         this.playerRef.current.seekTo(currentTime);
       }
       if (duration && currentTime > duration) {
