@@ -16,7 +16,7 @@ function usePrevious(value) {
  * ScrollTo ~
 */
 export function ScrollTo({
-  children, containerRef, offsetTop = 0, scrollTo, nodeId, ...otherProps
+  children, containerRef, offsetTop = 0, scrollTo, ...otherProps
 }) {
   const scrollToRef = useRef();
   const prevScrollTo = usePrevious(scrollTo);
@@ -60,7 +60,6 @@ ScrollTo.propTypes = {
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   ]).isRequired,
-  nodeId: PropTypes.string.isRequired,
   offsetTop: PropTypes.number,
   scrollTo: PropTypes.bool.isRequired,
 };

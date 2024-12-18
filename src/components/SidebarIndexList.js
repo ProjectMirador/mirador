@@ -76,7 +76,10 @@ export function SidebarIndexList({
 
 SidebarIndexList.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
-  containerRef: PropTypes.oneOf([PropTypes.func, PropTypes.object]).isRequired,
+  containerRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]).isRequired,
   selectedCanvasIds: PropTypes.arrayOf(PropTypes.string),
   setCanvas: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['item', 'thumbnail']),
