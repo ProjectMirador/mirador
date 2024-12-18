@@ -36,8 +36,6 @@ export class ViewerNavigationVideo extends Component {
 
   /** */
   handleChange = (event, newValue) => {
-    console.log('on change');
-    console.log('newValue', newValue);
     const {
       paused, setCurrentTime, setSeekTo, setPaused,
     } = this.props;

@@ -19,7 +19,6 @@ export class VideoViewer extends Component {
       containerRatio: 1,
       handleVideoEventFunctions: {
         onPlay: () => {
-          console.log('onPlay');
         },
       },
       start: 0,
@@ -97,13 +96,11 @@ export class VideoViewer extends Component {
 
   /** */
   timerStop() {
-    console.log('timerStop');
     clearInterval(this.timer);
   }
 
   /** */
   timerReset() {
-    console.log('timerReset');
     this.setState({ time: 0 });
   }
 
