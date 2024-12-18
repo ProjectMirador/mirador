@@ -71,9 +71,9 @@ FullScreenShim.propTypes = {
  * plugins + config to inject additional translations.
  */
 const StoreAwareI18nextProvider = ({ children, language, translations }) => {
-  const [i18n] = useState(createI18nInstance());
+  const [i18n] = useState(createI18nInstance({ lng: language }));
   useEffect(() => {
-    i18n.changeLanguage(language);
+    if (i18n && i18n.language !== language) i18n.changeLanguage(language);
   }, [i18n, language]);
 
   useEffect(() => {
