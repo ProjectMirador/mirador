@@ -1,3 +1,4 @@
+import { cloneElement } from 'react';
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
@@ -7,13 +8,16 @@ import { SearchPanelControls } from '../../../src/components/SearchPanelControls
  * Helper function to create a shallow wrapper around AttributionPanel
  */
 function createWrapper(props) {
-  return render(
+  const component = (
     <SearchPanelControls
       companionWindowId="cw"
       windowId="window"
+      fetchSearch={vi.fn()}
+      searchService={{ id: 'http://example.com/search' }}
       {...props}
-    />,
+    />
   );
+  return { component, ...render(component) };
 }
 
 describe('SearchPanelControls', () => {
@@ -110,16 +114,10 @@ describe('SearchPanelControls', () => {
     });
 
     it('clears the local search state/input when the incoming query prop has been cleared', () => {
-      const wrapper = createWrapper({ query: 'Wolpertinger' });
+      const { component, rerender } = createWrapper({ query: 'Wolpertinger' });
       expect(screen.getByRole('combobox')).toHaveValue('Wolpertinger');
 
-      wrapper.rerender((
-        <SearchPanelControls
-          companionWindowId="cw"
-          windowId="window"
-          query=""
-        />
-      ));
+      rerender(cloneElement(component, { query: '' }));
 
       expect(screen.getByRole('combobox')).toHaveValue('');
     });
