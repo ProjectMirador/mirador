@@ -37,30 +37,25 @@ export class VideoViewer extends Component {
 
   /** */
   componentDidUpdate(prevProps) {
-    console.log('componentDidUpdate in VideoViewer.js');
     const {
-      canvas, currentTime, paused,
-      setCurrentTime, setPaused,
+      canvas, currentTime, paused, setCurrentTime, setPaused,
     } = this.props;
-
+console.log('currentTime',currentTime)
     if (paused !== prevProps.paused) {
-      if (currentTime === 0) {
-        this.timerReset();
-      }
       if (paused) {
         this.timerStop();
       } else {
         this.timerStart();
       }
     }
+
+    // Ensure `currentTime` updates are consistent
     if (currentTime !== prevProps.currentTime) {
       const duration = canvas.getDuration();
-      if (duration && duration < currentTime) {
-        if (!paused) {
-          setPaused(true);
-          setCurrentTime(0);
-          this.timerReset();
-        }
+      if (duration && currentTime > duration) {
+        setPaused(true);
+        setCurrentTime(0);
+        this.timerReset();
       }
     }
   }
@@ -83,6 +78,7 @@ export class VideoViewer extends Component {
 
   /** */
   timerStart() {
+    console.log('timerStart');
     const { currentTime } = this.props;
     this.setState({
       start: Date.now() - currentTime * 1000,
@@ -100,11 +96,13 @@ export class VideoViewer extends Component {
 
   /** */
   timerStop() {
+    console.log('timerStop');
     clearInterval(this.timer);
   }
 
   /** */
   timerReset() {
+    console.log('timerReset');
     this.setState({ time: 0 });
   }
 
