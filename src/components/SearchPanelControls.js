@@ -26,7 +26,7 @@ const getMatch = (option) => (isObject(option) ? option.match : option);
 /** */
 export function SearchPanelControls({
   autocompleteService = undefined, companionWindowId, fetchSearch, query = '',
-  searchIsFetching, searchService, windowId,
+  searchIsFetching = false, searchService, windowId,
 }) {
   const { t } = useTranslation();
   const [input, setInput] = useState(query);
@@ -157,7 +157,7 @@ SearchPanelControls.propTypes = {
   companionWindowId: PropTypes.string.isRequired,
   fetchSearch: PropTypes.func.isRequired,
   query: PropTypes.string,
-  searchIsFetching: PropTypes.bool.isRequired,
+  searchIsFetching: PropTypes.bool,
   searchService: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
