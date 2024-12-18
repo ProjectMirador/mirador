@@ -14,7 +14,6 @@ describe('initialViewerConfig', () => {
       await waitFor(() => {
         const { viewers = {} } = context.miradorInstance.store.getState();
         viewerObject = viewers[Object.keys(viewers)[0]];
-        console.log('viewerObject', viewerObject);
         expect(viewerObject?.x).toBe(934);
       }, { timeout: 3000 });
 
