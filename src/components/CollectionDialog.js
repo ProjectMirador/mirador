@@ -21,6 +21,7 @@ import CollapsibleSection from '../containers/CollapsibleSection';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 import ManifestInfo from '../containers/ManifestInfo';
 import WorkspaceContext from '../contexts/WorkspaceContext';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 const StyledScrollIndicatedDialogContent = styled(ScrollIndicatedDialogContent)(() => ({
   padding: (theme) => theme.spacing(1),
@@ -37,15 +38,6 @@ const StyledCollectionFilter = styled('div')(() => ({
   padding: (theme) => theme.spacing(2),
   paddingTop: 0,
 }));
-
-/** */
-function getUseableLabel(resource, index) {
-  return (resource
-    && resource.getLabel
-    && resource.getLabel().length > 0)
-    ? resource.getLabel().getValue()
-    : String(index + 1);
-}
 
 /** */
 const Placeholder = ({ onClose, container }) => (
@@ -149,7 +141,7 @@ export function CollectionDialog({
           { t(isMultipart ? 'multipartCollection' : 'collection') }
         </Typography>
         <Typography component="div" variant="h3">
-          {getUseableLabel(manifest)}
+          <IIIFResourceLabel resource={manifest} />
         </Typography>
       </DialogTitle>
       <StyledScrollIndicatedDialogContent>
@@ -158,7 +150,7 @@ export function CollectionDialog({
             startIcon={<ArrowBackIcon />}
             onClick={() => goToPreviousCollection()}
           >
-            {getUseableLabel(collection)}
+            <IIIFResourceLabel resource={collection} />
           </Button>
         )}
 
@@ -204,7 +196,7 @@ export function CollectionDialog({
                   onClick={() => { selectCollection(c); }}
                   variant="multiline"
                 >
-                  {getUseableLabel(c)}
+                  <IIIFResourceLabel resource={c} />
                 </MenuItem>
               ))
             }
@@ -219,7 +211,7 @@ export function CollectionDialog({
                   onClick={() => { selectManifest(m); }}
                   variant="multiline"
                 >
-                  {getUseableLabel(m)}
+                  <IIIFResourceLabel resource={m} />
                 </MenuItem>
               ))
             }

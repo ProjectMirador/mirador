@@ -11,15 +11,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpwardSharp';
 import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
-
-/** */
-function getUseableLabel(resource, index) {
-  return (resource
-    && resource.getLabel
-    && resource.getLabel().length > 0)
-    ? resource.getLabel().getValue()
-    : resource.id;
-}
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 /** */
 function Item({
@@ -46,7 +38,7 @@ function Item({
           />
         </ListItemIcon>
       )}
-      <ListItemText>{getUseableLabel(manifest)}</ListItemText>
+      <ListItemText><IIIFResourceLabel resource={manifest} /></ListItemText>
     </MenuItem>
   );
 }
@@ -105,13 +97,13 @@ export function WindowSideBarCollectionPanel({
                   <ArrowUpwardIcon />
                 </ListItemIcon>
                 <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-                  {getUseableLabel(parentCollection)}
+                  <IIIFResourceLabel resource={parentCollection} />
                 </ListItemText>
               </ListItem>
             </List>
           )}
           <Typography variant="h6">
-            { collection && getUseableLabel(collection)}
+            { collection && <IIIFResourceLabel resource={collection} />}
             { isFetching && <Skeleton variant="text" />}
           </Typography>
         </>

@@ -17,20 +17,12 @@ import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
 import SidebarIndexList from '../containers/SidebarIndexList';
 import SidebarIndexTableOfContents from '../containers/SidebarIndexTableOfContents';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 const StyledBreak = styled('div')(() => ({
   flexBasis: '100%',
   height: 0,
 }));
-
-/** */
-function getUseableLabel(resource, index) {
-  return (resource
-    && resource.getLabel
-    && resource.getLabel().length > 0)
-    ? resource.getLabel().getValue()
-    : resource.id;
-}
 
 /**
  * a panel showing the canvases for a given manifest
@@ -112,7 +104,7 @@ export function WindowSideBarCanvasPanel({
                   }}
                   data-testid="sequence-select"
                 >
-                  { sequences.map((s, i) => <MenuItem value={s.id} key={s.id}><Typography variant="body2">{ getUseableLabel(s, i) }</Typography></MenuItem>) }
+                  { sequences.map((s, i) => <MenuItem value={s.id} key={s.id}><Typography variant="body2"><IIIFResourceLabel resource={s} /></Typography></MenuItem>) }
                 </Select>
               </FormControl>
             )
@@ -142,7 +134,7 @@ export function WindowSideBarCanvasPanel({
             endIcon={<ArrowForwardIcon />}
           >
             <Typography sx={{ textTransform: 'none' }}>
-              {getUseableLabel(collection)}
+              <IIIFResourceLabel resource={collection} />
             </Typography>
           </Button>
         )}

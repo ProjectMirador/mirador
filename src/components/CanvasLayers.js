@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 const StyledDragHandle = styled('div')(({ theme }) => ({
   alignItems: 'center',
@@ -39,15 +40,6 @@ const reorder = (list, startIndex, endIndex) => {
 
   return result;
 };
-
-/** */
-function getUseableLabel(resource, index) {
-  return (resource
-    && resource.getLabel
-    && resource.getLabel().length > 0)
-    ? resource.getLabel().getValue()
-    : String(index + 1);
-}
 
 /** @private */
 function Layer({
@@ -78,7 +70,7 @@ function Layer({
           component="div"
           variant="body1"
         >
-          {getUseableLabel(resource, index)}
+          <IIIFResourceLabel resource={resource} fallback={index + 1} />
           <div>
             <MiradorMenuButton aria-label={t(layer.visibility ? 'layer_hide' : 'layer_show')} edge="start" size="small" onClick={() => { setLayerVisibility(resource.id, !layer.visibility); }}>
               { layer.visibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }
