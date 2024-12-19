@@ -46,6 +46,7 @@ describe('ManifestListItem', () => {
     expect(screen.getByText('The resource cannot be added:')).toBeInTheDocument();
     expect(screen.getByText('http://example.com')).toBeInTheDocument();
   });
+
   it('renders an error message when fetched manifest is empty', () => {
     const state = { manifests: { x: { json: {} } } };
     const manifesto = getManifestoInstance(state, { manifestId: 'x' });
