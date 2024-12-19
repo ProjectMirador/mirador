@@ -1,4 +1,4 @@
-import { createRef, Component } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
@@ -51,61 +51,46 @@ const AnnotationChip = styled(Chip, { name: 'GalleryView', slot: 'chip' })(({ th
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
  * OSD and Navigation
  */
-export class GalleryViewThumbnail extends Component {
-  /** */
-  constructor(props) {
-    super(props);
+export function GalleryViewThumbnail({
+  canvas, selected = false, setCanvas, focusOnCanvas, annotationsCount = undefined, requestCanvasAnnotations = () => {},
+  searchAnnotationsCount = 0,
+  config = { height: 100, width: null },
+}) {
+  const myRef = useRef();
+  const [requestedAnnotations, setRequestedAnnotations] = useState(false);
 
-    this.myRef = createRef();
-    this.state = { requestedAnnotations: false };
-
-    this.handleSelect = this.handleSelect.bind(this);
-    this.handleKey = this.handleKey.bind(this);
-    this.handleIntersection = this.handleIntersection.bind(this);
-  }
-
-  // eslint-disable-next-line require-jsdoc
-  componentDidMount() {
-    const { selected } = this.props;
+  useEffect(() => {
     if (selected) {
-      this.myRef.current?.scrollIntoView(true);
+      myRef.current?.scrollIntoView(true);
     }
-  }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   /** @private */
-  handleSelect() {
-    const {
-      canvas, selected, setCanvas, focusOnCanvas,
-    } = this.props;
-
+  const handleSelect = () => {
     if (selected) {
       focusOnCanvas();
     } else {
       setCanvas(canvas.id);
     }
-  }
+  };
 
   /** @private */
-  handleKey(event) {
-    const {
-      canvas, setCanvas, focusOnCanvas,
-    } = this.props;
-
-    this.keys = {
+  const handleKey = (event) => {
+    const keys = {
       enter: 'Enter',
       space: ' ',
     };
 
-    this.chars = {
+    const chars = {
       enter: 13,
       space: 32,
     };
 
     const enterOrSpace = (
-      event.key === this.keys.enter
-      || event.which === this.chars.enter
-      || event.key === this.keys.space
-      || event.which === this.chars.space
+      event.key === keys.enter
+      || event.which === chars.enter
+      || event.key === keys.space
+      || event.which === chars.space
     );
 
     if (enterOrSpace) {
@@ -113,76 +98,63 @@ export class GalleryViewThumbnail extends Component {
     } else {
       setCanvas(canvas.id);
     }
-  }
+  };
 
   /** */
-  handleIntersection(_inView, { isIntersecting }) {
-    const {
-      annotationsCount,
-      requestCanvasAnnotations,
-    } = this.props;
-
-    const { requestedAnnotations } = this.state;
-
+  const handleIntersection = (_inView, { isIntersecting }) => {
     if (
       !isIntersecting
       || annotationsCount === undefined
       || annotationsCount > 0
       || requestedAnnotations) return;
 
-    this.setState({ requestedAnnotations: true });
+    setRequestedAnnotations(true);
     requestCanvasAnnotations();
-  }
+  };
 
-  /**
-   * Renders things
-   */
-  render() {
-    const {
-      annotationsCount, searchAnnotationsCount,
-      canvas, config, selected,
-    } = this.props;
+  const ownerState = {
+    annotationsCount, canvas, config, searchAnnotationsCount, selected,
+  };
 
-    return (
-      <InView onChange={this.handleIntersection}>
-        <Root
-          ownerState={this.props}
-          key={canvas.id || canvas.index}
-          className={selected ? 'selected' : ''}
-          onClick={this.handleSelect}
-          onKeyUp={this.handleKey}
-          ref={this.myRef}
-          role="button"
-          tabIndex={0}
+  return (
+    <InView onChange={handleIntersection}>
+      <Root
+        ownerState={ownerState}
+        key={canvas.id || canvas.index}
+        className={selected ? 'selected' : ''}
+        onClick={handleSelect}
+        onKeyUp={handleKey}
+        ref={myRef}
+        role="button"
+        tabIndex={0}
+      >
+        <IIIFThumbnail
+          resource={canvas}
+          labelled
+          variant="outside"
+          maxHeight={config.height}
+          maxWidth={config.width}
         >
-          <IIIFThumbnail
-            resource={canvas}
-            labelled
-            variant="outside"
-            maxHeight={config.height}
-            maxWidth={config.width}
-          >
-            <StyledChipsContainer>
-              {searchAnnotationsCount > 0 && (
-                <AnnotationChip
-                  icon={<SearchIcon fontSize="small" />}
-                  label={searchAnnotationsCount}
-                  size="small"
-                />
-              )}
-              {annotationsCount > 0 && (
-                <AnnotationChip
-                  icon={<AnnotationIcon fontSize="small" />}
-                  label={annotationsCount}
-                  size="small"
-                />
-              )}
-            </StyledChipsContainer>
-          </IIIFThumbnail>
-        </Root>
-      </InView>
-    );
-  }
+          <StyledChipsContainer>
+            {searchAnnotationsCount > 0 && (
+              <AnnotationChip
+                icon={<SearchIcon fontSize="small" />}
+                label={searchAnnotationsCount}
+                size="small"
+              />
+            )}
+            {annotationsCount > 0 && (
+              <AnnotationChip
+                icon={<AnnotationIcon fontSize="small" />}
+                label={annotationsCount}
+                size="small"
+              />
+            )}
+          </StyledChipsContainer>
+        </IIIFThumbnail>
+      </Root>
+    </InView>
+  );
 }
 
 GalleryViewThumbnail.propTypes = {
@@ -197,15 +169,4 @@ GalleryViewThumbnail.propTypes = {
   searchAnnotationsCount: PropTypes.number,
   selected: PropTypes.bool,
   setCanvas: PropTypes.func.isRequired,
-};
-
-GalleryViewThumbnail.defaultProps = {
-  annotationsCount: undefined,
-  config: {
-    height: 100,
-    width: null,
-  },
-  requestCanvasAnnotations: () => {},
-  searchAnnotationsCount: 0,
-  selected: false,
 };

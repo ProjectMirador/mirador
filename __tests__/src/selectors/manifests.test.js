@@ -370,7 +370,7 @@ describe('getManifestLocale', () => {
 });
 
 describe('getMetadataLocales', () => {
-  it('gets the locales preseent in the manifest metadata', () => {
+  it('gets the locales preseent in the IIIF v2 manifest metadata', () => {
     const manifest = {
       '@context': 'http://iiif.io/api/presentation/2/context.json',
       '@id':
@@ -402,6 +402,59 @@ describe('getMetadataLocales', () => {
     const state = { manifests: { x: { json: manifest } } };
     const received = getMetadataLocales(state, { manifestId: 'x' });
     expect(received).toEqual(['de-label', 'en-label', 'en-value', 'de-value', 'one-value']);
+  });
+  it('gets the locales preseent in the IIIF v3 manifest metadata', () => {
+    const manifest = {
+      '@context': 'http://iiif.io/api/presentation/3/context.json',
+      id: 'https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json',
+      label: {
+        en: [
+          "Whistler's Mother",
+        ],
+        fr: [
+          'La Mère de Whistler',
+        ],
+      },
+      metadata: [
+        {
+          label: {
+            en: [
+              'Creator',
+            ],
+            fr: [
+              'Auteur',
+            ],
+          },
+          value: {
+            none: [
+              'Whistler, James Abbott McNeill',
+            ],
+          },
+        },
+        {
+          label: {
+            en: [
+              'Subject',
+            ],
+            fr: [
+              'Sujet',
+            ],
+          },
+          value: {
+            en: [
+              'McNeill Anna Matilda, mother of Whistler (1804-1881)',
+            ],
+            fr: [
+              'McNeill Anna Matilda, mère de Whistler (1804-1881)',
+            ],
+          },
+        },
+      ],
+      type: 'Manifest',
+    };
+    const state = { manifests: { x: { json: manifest } } };
+    const received = getMetadataLocales(state, { manifestId: 'x' });
+    expect(received).toEqual(['en', 'fr', 'none']);
   });
 });
 

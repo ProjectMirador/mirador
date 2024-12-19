@@ -1,4 +1,4 @@
-import { render, fireEvent, screen } from 'test-utils';
+import { render, fireEvent, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
@@ -20,7 +20,7 @@ function createWrapper(props) {
 
 describe('GalleryView', () => {
   beforeEach(() => {
-    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
   });
   it('renders the thumbnail', () => {
     createWrapper({ config: { height: 55 } });
@@ -28,7 +28,7 @@ describe('GalleryView', () => {
     expect(screen.getByRole('presentation')).toHaveStyle('height: 55px');
   });
   it('sets the selected canvas on click', async () => {
-    const setCanvas = jest.fn();
+    const setCanvas = vi.fn();
     createWrapper({ setCanvas });
     const user = userEvent.setup();
     await user.click(screen.getByRole('button'));
@@ -36,7 +36,7 @@ describe('GalleryView', () => {
   });
 
   it('sets the window mode if the selected canvas is clicked', async () => {
-    const focusOnCanvas = jest.fn();
+    const focusOnCanvas = vi.fn();
     createWrapper({ focusOnCanvas, selected: true });
     const user = userEvent.setup();
     await user.click(screen.getByRole('button'));
@@ -44,7 +44,7 @@ describe('GalleryView', () => {
   });
 
   it('sets the window mode if the user hits enter while on a canvas', () => {
-    const focusOnCanvas = jest.fn();
+    const focusOnCanvas = vi.fn();
     createWrapper({ focusOnCanvas, selected: true });
     const button = screen.getByRole('button');
     button.focus();
@@ -53,7 +53,7 @@ describe('GalleryView', () => {
   });
 
   it('sets the window mode if the user hits space while on a canvas', () => {
-    const focusOnCanvas = jest.fn();
+    const focusOnCanvas = vi.fn();
     createWrapper({ focusOnCanvas, selected: true });
     const button = screen.getByRole('button');
     button.focus();
@@ -62,7 +62,7 @@ describe('GalleryView', () => {
   });
 
   it('sets the canvas if the user hits a key (non-space or non-enter) while on a canvas', () => {
-    const setCanvas = jest.fn();
+    const setCanvas = vi.fn();
     createWrapper({ selected: true, setCanvas });
     const button = screen.getByRole('button');
     button.focus();
@@ -73,17 +73,17 @@ describe('GalleryView', () => {
   describe('on-demand annotation fetching', () => {
     const canvas = {
       getHeight: () => 50,
-      getServices: jest.fn(),
-      getThumbnail: jest.fn(),
-      getType: jest.fn(),
+      getServices: vi.fn(),
+      getThumbnail: vi.fn(),
+      getType: vi.fn(),
       getWidth: () => 50,
-      isCanvas: jest.fn(),
-      isCollection: jest.fn(),
-      isManifest: jest.fn(),
+      isCanvas: vi.fn(),
+      isCollection: vi.fn(),
+      isManifest: vi.fn(),
     };
     let requestCanvasAnnotations;
 
-    beforeEach(() => { requestCanvasAnnotations = jest.fn(); });
+    beforeEach(() => { requestCanvasAnnotations = vi.fn(); });
     it('triggers requestCanvasAnnotations when there is an intersection and no annotions ', () => {
       createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
       mockAllIsIntersecting(true);

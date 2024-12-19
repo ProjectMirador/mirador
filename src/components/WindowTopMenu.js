@@ -1,10 +1,11 @@
-import { Component } from 'react';
+import { useContext } from 'react';
 import ListSubheader from '@mui/material/ListSubheader';
 import Popover from '@mui/material/Popover';
 import PropTypes from 'prop-types';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
 import WindowViewSettings from '../containers/WindowViewSettings';
 import { PluginHook } from './PluginHook';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 
 /** Renders plugins */
 function PluginHookWithHeader(props) {
@@ -19,60 +20,47 @@ function PluginHookWithHeader(props) {
 
 /**
  */
-export class WindowTopMenu extends Component {
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      container, handleClose, showThumbnailNavigationSettings,
-      toggleDraggingEnabled, windowId, anchorEl, open,
-    } = this.props;
+export function WindowTopMenu({
+  handleClose, showThumbnailNavigationSettings = true,
+  toggleDraggingEnabled, windowId, anchorEl = null, open = false,
+}) {
+  const container = useContext(WorkspaceContext);
+  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
 
-    return (
-      <Popover
-        container={container?.current}
-        anchorOrigin={{
-          horizontal: 'right',
-          vertical: 'bottom',
-        }}
-        transformOrigin={{
-          horizontal: 'right',
-          vertical: 'top',
-        }}
-        onClose={() => handleClose(anchorEl)}
-        TransitionProps={{
-          onEntering: toggleDraggingEnabled,
-          onExit: toggleDraggingEnabled,
-        }}
-        orientation="horizontal"
-        anchorEl={anchorEl}
-        open={open}
-        role="menu"
-      >
-        <WindowViewSettings windowId={windowId} handleClose={() => handleClose(anchorEl)} />
-        {showThumbnailNavigationSettings
-          && <WindowThumbnailSettings windowId={windowId} handleClose={() => handleClose(anchorEl)} />}
-        <PluginHookWithHeader {...this.props} />
-      </Popover>
-    );
-  }
+  return (
+    <Popover
+      container={container?.current}
+      anchorOrigin={{
+        horizontal: 'right',
+        vertical: 'bottom',
+      }}
+      transformOrigin={{
+        horizontal: 'right',
+        vertical: 'top',
+      }}
+      onClose={handleClose}
+      TransitionProps={{
+        onEntering: toggleDraggingEnabled,
+        onExit: toggleDraggingEnabled,
+      }}
+      orientation="horizontal"
+      anchorEl={anchorEl}
+      open={open}
+      role="menu"
+    >
+      <WindowViewSettings windowId={windowId} handleClose={() => handleClose(anchorEl)} />
+      {showThumbnailNavigationSettings
+        && <WindowThumbnailSettings windowId={windowId} handleClose={() => handleClose(anchorEl)} />}
+      <PluginHookWithHeader {...pluginProps} />
+    </Popover>
+  );
 }
 
 WindowTopMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
   showThumbnailNavigationSettings: PropTypes.bool,
   toggleDraggingEnabled: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
-};
-
-WindowTopMenu.defaultProps = {
-  anchorEl: null,
-  container: null,
-  open: false,
-  showThumbnailNavigationSettings: true,
 };

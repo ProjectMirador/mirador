@@ -3,6 +3,8 @@ import deepmerge from 'deepmerge';
 import { miradorSlice } from './utils';
 import { getWorkspace } from './getters';
 
+const defaultConfig = Object.freeze({});
+
 /**
  * Returns the config from the redux state.
  * @param {object} state
@@ -10,7 +12,7 @@ import { getWorkspace } from './getters';
  */
 export function getConfig(state) {
   const slice = miradorSlice(state || {});
-  return slice.config || {};
+  return slice.config || defaultConfig;
 }
 
 /**

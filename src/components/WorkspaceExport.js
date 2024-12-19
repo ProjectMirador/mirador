@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -12,114 +12,80 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { WorkspaceDialog } from './WorkspaceDialog';
 
 /**
  */
-export class WorkspaceExport extends Component {
-  /** */
-  constructor(props) {
-    super(props);
+export function WorkspaceExport({
+  children = null, container = null, open = false, handleClose, exportableState,
+}) {
+  const { t } = useTranslation();
+  const [copied, setCopied] = useState(false);
+  const exportedState = JSON.stringify(exportableState, null, 2);
 
-    this.state = { copied: false };
-    this.onCopy = this.onCopy.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-  }
-
-  /** Handle closing after the content is copied and the snackbar is done */
-  handleClose() {
-    const { handleClose } = this.props;
-
-    handleClose();
-  }
-
-  /** Show the snackbar */
-  onCopy() {
-    this.setState({ copied: true });
-  }
-
-  /**
-   * @private
-   */
-  exportedState() {
-    const { exportableState } = this.props;
-
-    return JSON.stringify(exportableState, null, 2);
-  }
-
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      children, container, open, t,
-    } = this.props;
-    const { copied } = this.state;
-
-    if (copied) {
-      return (
-        <Snackbar
-          anchorOrigin={{
-            horizontal: 'center',
-            vertical: 'top',
-          }}
-          open
-          autoHideDuration={6000}
-          onClose={this.handleClose}
-          message={t('exportCopied')}
-          action={(
-            <IconButton size="small" aria-label={t('dismiss')} color="inherit" onClick={this.handleClose}>
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          )}
-        />
-      );
-    }
-
+  if (copied) {
     return (
-      <WorkspaceDialog
-        id="workspace-export"
-        container={container}
-        open={open}
-        onClose={this.handleClose}
-        scroll="paper"
-        fullWidth
-        maxWidth="sm"
-      >
-        <DialogTitle id="form-dialog-title">
-          {t('downloadExport')}
-        </DialogTitle>
-
-        <DialogContent>
-          <Accordion elevation={2}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-            >
-              <Typography variant="h4">{t('viewWorkspaceConfiguration')}</Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ overflow: 'scroll' }}>
-              {children}
-              <pre>
-                {this.exportedState()}
-              </pre>
-            </AccordionDetails>
-          </Accordion>
-        </DialogContent>
-
-        <DialogActions>
-          <Button onClick={this.handleClose}>{t('cancel')}</Button>
-          <CopyToClipboard
-            onCopy={this.onCopy}
-            text={this.exportedState()}
-          >
-            <Button variant="contained" color="primary">{t('copy')}</Button>
-          </CopyToClipboard>
-        </DialogActions>
-      </WorkspaceDialog>
+      <Snackbar
+        anchorOrigin={{
+          horizontal: 'center',
+          vertical: 'top',
+        }}
+        open
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={t('exportCopied')}
+        action={(
+          <IconButton size="small" aria-label={t('dismiss')} color="inherit" onClick={handleClose}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        )}
+      />
     );
   }
+
+  return (
+    <WorkspaceDialog
+      id="workspace-export"
+      container={container}
+      open={open}
+      onClose={handleClose}
+      scroll="paper"
+      fullWidth
+      maxWidth="sm"
+    >
+      <DialogTitle id="form-dialog-title">
+        {t('downloadExport')}
+      </DialogTitle>
+
+      <DialogContent>
+        <Accordion elevation={2}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+          >
+            <Typography variant="h4">{t('viewWorkspaceConfiguration')}</Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ overflow: 'scroll' }}>
+            {children}
+            <pre>
+              {exportedState}
+            </pre>
+          </AccordionDetails>
+        </Accordion>
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={handleClose}>{t('cancel')}</Button>
+        <CopyToClipboard
+          onCopy={() => setCopied(true)}
+          text={exportedState}
+        >
+          <Button variant="contained" color="primary">{t('copy')}</Button>
+        </CopyToClipboard>
+      </DialogActions>
+    </WorkspaceDialog>
+  );
 }
 
 WorkspaceExport.propTypes = {
@@ -128,12 +94,4 @@ WorkspaceExport.propTypes = {
   exportableState: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
-  t: PropTypes.func,
-};
-
-WorkspaceExport.defaultProps = {
-  children: null,
-  container: null,
-  open: false,
-  t: key => key,
 };

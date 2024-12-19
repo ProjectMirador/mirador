@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
@@ -18,44 +17,32 @@ const Root = styled(Paper, { name: 'GalleryView', slot: 'root' })(({ theme }) =>
 /**
  * Renders a GalleryView overview of the manifest.
  */
-export class GalleryView extends Component {
-  /**
-   * Renders things
-   */
-  render() {
-    const {
-      canvases, viewingDirection, windowId,
-    } = this.props;
-    const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
-    return (
-      <Root
-        component="section"
-        aria-label="gallery section"
-        dir={htmlDir}
-        square
-        elevation={0}
-        id={`${windowId}-gallery`}
-      >
-        {
-          canvases.map(canvas => (
-            <GalleryViewThumbnail
-              key={canvas.id}
-              windowId={windowId}
-              canvas={canvas}
-            />
-          ))
-        }
-      </Root>
-    );
-  }
+export function GalleryView({ canvases, viewingDirection = '', windowId }) {
+  const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
+  return (
+    <Root
+      component="section"
+      aria-label="gallery section"
+      dir={htmlDir}
+      square
+      elevation={0}
+      id={`${windowId}-gallery`}
+    >
+      {
+        canvases.map(canvas => (
+          <GalleryViewThumbnail
+            key={canvas.id}
+            windowId={windowId}
+            canvas={canvas}
+          />
+        ))
+      }
+    </Root>
+  );
 }
 
 GalleryView.propTypes = {
   canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   viewingDirection: PropTypes.string,
   windowId: PropTypes.string.isRequired,
-};
-
-GalleryView.defaultProps = {
-  viewingDirection: '',
 };

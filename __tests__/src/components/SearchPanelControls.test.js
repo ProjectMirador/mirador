@@ -1,4 +1,5 @@
-import { render, screen } from 'test-utils';
+import { cloneElement } from 'react';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import { SearchPanelControls } from '../../../src/components/SearchPanelControls';
@@ -7,13 +8,16 @@ import { SearchPanelControls } from '../../../src/components/SearchPanelControls
  * Helper function to create a shallow wrapper around AttributionPanel
  */
 function createWrapper(props) {
-  return render(
+  const component = (
     <SearchPanelControls
       companionWindowId="cw"
       windowId="window"
+      fetchSearch={vi.fn()}
+      searchService={{ id: 'http://example.com/search' }}
       {...props}
-    />,
+    />
   );
+  return { component, ...render(component) };
 }
 
 describe('SearchPanelControls', () => {
@@ -24,7 +28,7 @@ describe('SearchPanelControls', () => {
 
   it('submits a search when an autocomplete suggestion is picked', async () => {
     const user = userEvent.setup();
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     fetch.mockResponse(JSON.stringify({ terms: ['somestring 12345'] }));
 
     createWrapper({
@@ -37,8 +41,22 @@ describe('SearchPanelControls', () => {
     await user.keyboard('somestring');
     await user.click(await screen.findByText('somestring 12345'));
     expect(fetchSearch).toHaveBeenCalledWith('window', 'cw', 'http://example.com/search?q=somestring+12345', 'somestring 12345');
-
     fetch.resetMocks();
+  });
+  it('should fetch result only once', async () => {
+    const fetchSearch = vi.fn();
+    const user = userEvent.setup();
+
+    createWrapper({
+      autocompleteService: { id: 'http://example.com/autocomplete' },
+      fetchSearch,
+      searchService: { id: 'http://example.com/search', options: { resource: { id: 'abc' } } },
+    });
+
+    await user.click(screen.getByRole('combobox'));
+    await user.keyboard('somestring');
+    await user.keyboard('{Enter}');
+    expect(fetchSearch).toHaveBeenCalledTimes(1);
   });
 
   it('renders a text input through the renderInput prop', () => {
@@ -60,7 +78,7 @@ describe('SearchPanelControls', () => {
 
   it('form change and submission triggers an action', async () => {
     const user = userEvent.setup();
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     const searchService = {
       id: 'http://www.example.com/search',
       options: { resource: { id: 'example.com/manifest' } },
@@ -76,7 +94,7 @@ describe('SearchPanelControls', () => {
 
   it('does not submit an empty search', async () => {
     const user = userEvent.setup();
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     const searchService = {
       id: 'http://www.example.com/search',
       options: { resource: { id: 'example.com/manifest' } },
@@ -85,7 +103,7 @@ describe('SearchPanelControls', () => {
     createWrapper({ fetchSearch, query: '', searchService });
 
     await user.clear(screen.getByRole('combobox'));
-    await user.click(screen.getByRole('button', { name: 'searchSubmitAria' }));
+    await user.click(screen.getByRole('button', { name: 'Submit search' }));
     expect(fetchSearch).not.toHaveBeenCalled();
   });
 
@@ -96,16 +114,10 @@ describe('SearchPanelControls', () => {
     });
 
     it('clears the local search state/input when the incoming query prop has been cleared', () => {
-      const wrapper = createWrapper({ query: 'Wolpertinger' });
+      const { component, rerender } = createWrapper({ query: 'Wolpertinger' });
       expect(screen.getByRole('combobox')).toHaveValue('Wolpertinger');
 
-      wrapper.rerender((
-        <SearchPanelControls
-          companionWindowId="cw"
-          windowId="window"
-          query=""
-        />
-      ));
+      rerender(cloneElement(component, { query: '' }));
 
       expect(screen.getByRole('combobox')).toHaveValue('');
     });

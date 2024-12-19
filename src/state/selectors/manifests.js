@@ -10,7 +10,8 @@ import { getConfig } from './config';
 /** */
 function createManifestoInstance(json, locale) {
   if (!json) return undefined;
-  const manifestoObject = Utils.parseManifest(json, locale ? { locale } : undefined);
+  // Use JSON stringify/parse to create a deep copy and prevent Manifesto from mutating the json
+  const manifestoObject = Utils.parseManifest(JSON.parse(JSON.stringify(json)), locale ? { locale } : undefined);
   // Local patching of Manifesto so that when its a Collection, it behaves similarly
   if (typeof manifestoObject.getSequences != 'function') {
     manifestoObject.getSequences = () => [];
@@ -29,6 +30,8 @@ const getLocale = createSelector(
   ),
 );
 
+const defaultManifestStatus = Object.freeze({ missing: true });
+
 /**
  * Convenience selector to get a manifest (or placeholder).
  * @param {object} state
@@ -38,7 +41,7 @@ const getLocale = createSelector(
  */
 export const getManifestStatus = createSelector(
   [getManifest],
-  manifest => manifest || { missing: true },
+  manifest => manifest || defaultManifestStatus,
 );
 
 /**
@@ -273,7 +276,7 @@ export const getRequiredStatement = createSelector(
   [getManifestoInstance],
   manifest => manifest
     && asArray(manifest.getRequiredStatement())
-      .filter(l => l.getValues().some(v => v))
+      .filter(l => l && l.getValues().some(v => v))
       .map(labelValuePair => ({
         label: (labelValuePair.label && labelValuePair.label.getValue()) || null,
         values: labelValuePair.getValues(),
@@ -412,14 +415,31 @@ export const getManifestMetadata = createSelector(
 
 /** */
 function getLocalesForStructure(item) {
-  const languages = [];
+  const languages = new Set([]);
+
+  /** Extract language indicators from IIIF v2 or v3 manifests */
+  const extractLanguage = (i) => {
+    if (!(i && typeof i === 'object')) return;
+
+    // IIIF v2 pattern
+    if (i['@language'] && i['@value']) {
+      languages.add(i['@language']);
+      return;
+    }
+
+    // IIIF v3 pattern
+    Object.keys(i).forEach((key) => {
+      languages.add(key);
+    });
+  };
 
   if (Array.isArray(item)) {
-    languages.push(...item.filter(i => (typeof i === 'object' && i['@language'])).map(i => i['@language']));
-  } else if (item && typeof item === 'object') {
-    if (item['@language']) languages.push(item['@language']);
+    item.forEach(i => extractLanguage(i));
+  } else {
+    extractLanguage(item);
   }
-  return languages;
+
+  return [...languages];
 }
 
 /** */

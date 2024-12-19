@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getVisibleCanvasIds,
@@ -22,7 +21,6 @@ const mapStateToProps = (state, { windowId }) => ({
 });
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, null),
   withPlugins('WindowSideBarAnnotationsPanel'),
   // further HOC

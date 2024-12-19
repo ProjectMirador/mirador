@@ -1,4 +1,3 @@
-⚠️ This project is for Mirador 3, the latest version of Mirador. For Mirador 2, please see [ProjectMirador/mirador2](https://github.com/projectmirador/mirador2) or legacy documentation on the [Mirador 2 wiki](https://github.com/ProjectMirador/mirador-2-wiki/wiki). Please note that the community's focus is on Mirador 3, and are unlikely to accept pull requests or provide support for Mirador 2.
 # Mirador
 ![Node.js CI](https://github.com/ProjectMirador/mirador/workflows/Node.js%20CI/badge.svg) [![codecov](https://codecov.io/gh/ProjectMirador/mirador/branch/master/graph/badge.svg)](https://codecov.io/gh/ProjectMirador/mirador) 
 
@@ -75,15 +74,21 @@ store.getState()
 ```
 
 ## Running the tests
+We use Vitest to run our test suite.
 
 ```sh
-$ npm test # For headless CI=true npm test
+$ npm test
 ```
 
-or to continually watch the source files
+You can see the helpful Vitest UI in your browser by running Vitest with the `--ui` flag. To pass the flag through to npm run the following:
 
 ```sh
-$ npm run test:watch
+$ npm test -- --ui
+```
+
+You can run Vitest without the additional linting and size checks in our `npm test` command. You can also test a single file:
+```sh
+$ npx vitest __tests__/integration/mirador/tests/sequence-switching.test.js --ui
 ```
 
 ## Linting the project
