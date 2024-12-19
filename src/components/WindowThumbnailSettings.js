@@ -25,6 +25,7 @@ const ThumbnailOption = styled(MenuItem, { name: 'WindowThumbnailSettings', slot
       backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
     },
     color: selected ? theme.palette.secondary.main : undefined,
+    display: 'inline-flex',
   },
 }));
 

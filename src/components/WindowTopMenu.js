@@ -48,9 +48,9 @@ export function WindowTopMenu({
       open={open}
       role="menu"
     >
-      <WindowViewSettings windowId={windowId} handleClose={() => handleClose(anchorEl)} />
+      <WindowViewSettings windowId={windowId} handleClose={handleClose} />
       {showThumbnailNavigationSettings
-        && <WindowThumbnailSettings windowId={windowId} handleClose={() => handleClose(anchorEl)} />}
+        && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}
       <PluginHookWithHeader {...pluginProps} />
     </Popover>
   );
