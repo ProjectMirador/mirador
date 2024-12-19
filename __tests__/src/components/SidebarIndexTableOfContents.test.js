@@ -220,35 +220,36 @@ describe('SidebarIndexTableOfContents', async () => {
     expect(setCanvas).toHaveBeenLastCalledWith('a', 'http://foo.test/1/canvas/c11');
   });
 
-  // it('sets the canvas to a start canvas if present (IIIF v3)', async () => {
-  //   const user = userEvent.setup();
+  it('sets the canvas to a start canvas if present (IIIF v3)', async () => {
+    const user = userEvent.setup();
 
-  //   const { store } = createInteractiveWrapper({
-  //     manifest: manifestVersion3,
-  //   });
+    const { store } = createInteractiveWrapper({
+      manifest: manifestVersion3,
+    });
 
-  const root = screen.getByRole('treeitem');
-  act(() => {
-    root.focus();
+    const root = screen.getByRole('treeitem');
+    act(() => {
+      root.focus();
+    });
+    await user.keyboard('{Enter}');
+
+    const leafNode1 = screen.getAllByRole('treeitem')[2];
+    act(() => {
+      leafNode1.focus();
+    });
+    await user.keyboard('{Enter}');
+    expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c7');
+
+    const leafNode2 = screen.getAllByRole('treeitem')[3];
+    act(() => {
+      leafNode2.focus();
+    });
+    await user.keyboard('{Enter}');
+    expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c9');
+
+    const leafNode3 = screen.getAllByRole('treeitem')[4];
+    leafNode3.focus();
+    await user.keyboard('{Enter}');
+    expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c10');
   });
-  await user.keyboard('{Enter}');
-
-  const leafNode1 = screen.getAllByRole('treeitem')[2];
-  act(() => {
-    leafNode1.focus();
-  });
-  await user.keyboard('{Enter}');
-  expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c7');
-
-  const leafNode2 = screen.getAllByRole('treeitem')[3];
-  act(() => {
-    leafNode2.focus();
-  });
-  await user.keyboard('{Enter}');
-  expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c9');
-
-  const leafNode3 = screen.getAllByRole('treeitem')[4];
-  leafNode3.focus();
-  await user.keyboard('{Enter}');
-  expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c10');
 });
