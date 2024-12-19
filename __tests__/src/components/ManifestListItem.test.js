@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { getManifestoInstance } from '../../../src/state/selectors';
 import { ManifestListItem } from '../../../src/components/ManifestListItem';
@@ -12,7 +12,6 @@ function createWrapper(props) {
       ready
       addWindow={() => {}}
       fetchManifest={() => {}}
-      t={t => t}
       {...props}
     />,
   );
@@ -20,7 +19,7 @@ function createWrapper(props) {
 
 describe('ManifestListItem', () => {
   it('renders without an error', () => {
-    createWrapper({ buttonRef: 'ref' });
+    createWrapper({ buttonRef: vi.fn() });
 
     expect(screen.getByRole('listitem')).toHaveAttribute('data-manifestid', 'http://example.com');
     expect(screen.getByRole('listitem')).toHaveClass('MuiListItem-root');
@@ -44,7 +43,7 @@ describe('ManifestListItem', () => {
   it('renders an error message if fetching the manifest failed', () => {
     createWrapper({ error: 'This is an error message' });
 
-    expect(screen.getByText('manifestError')).toBeInTheDocument();
+    expect(screen.getByText('The resource cannot be added:')).toBeInTheDocument();
     expect(screen.getByText('http://example.com')).toBeInTheDocument();
   });
   it('renders an error message when fetched manifest is empty', () => {
@@ -53,13 +52,13 @@ describe('ManifestListItem', () => {
 
     createWrapper({ error: !manifesto });
 
-    expect(screen.getByText('manifestError')).toBeInTheDocument();
+    expect(screen.getByText('The resource cannot be added:')).toBeInTheDocument();
     expect(screen.getByText('http://example.com')).toBeInTheDocument();
   });
 
   it('updates and adds window when button clicked', async () => {
     const user = userEvent.setup();
-    const addWindow = jest.fn();
+    const addWindow = vi.fn();
     createWrapper({ addWindow });
 
     await user.click(screen.getByRole('button'));

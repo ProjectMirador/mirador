@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { AnnotationSettings } from '../../../src/components/AnnotationSettings';
 
@@ -8,7 +8,6 @@ function createWrapper(props) {
     <AnnotationSettings
       displayAll={false}
       displayAllDisabled={false}
-      t={k => k}
       toggleAnnotationDisplay={() => {}}
       windowId="abc123"
       {...props}
@@ -17,7 +16,7 @@ function createWrapper(props) {
 }
 
 describe('AnnotationSettings', () => {
-  const toggleAnnotationDisplayMock = jest.fn();
+  const toggleAnnotationDisplayMock = vi.fn();
 
   it('renders a MiradorMenuButton', () => {
     createWrapper();

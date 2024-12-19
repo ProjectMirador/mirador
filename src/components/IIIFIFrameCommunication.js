@@ -1,10 +1,20 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+const IIIFIFrameCommunicationDefaultProps = {
+  'aria-hidden': true,
+  frameBorder: 0,
+  height: 1,
+  name: undefined,
+  scrolling: undefined,
+  style: { visibility: 'hidden' },
+  width: 1,
+};
+
 /**
  *  Handle IIIF Auth token validation using iframe message events
  */
-export function IIIFIFrameCommunication({ handleReceiveMessage, ...props }) {
+export function IIIFIFrameCommunication({ handleReceiveMessage = undefined, ...props }) {
   // Attaches the 'message' event listener to the window.
   useEffect(() => {
     if (!handleReceiveMessage) return undefined;
@@ -19,6 +29,7 @@ export function IIIFIFrameCommunication({ handleReceiveMessage, ...props }) {
     // iframe "title" attribute is passed in via props for accessibility
     // eslint-disable-next-line jsx-a11y/iframe-has-title
     <iframe
+      {...IIIFIFrameCommunicationDefaultProps}
       {...props}
     />
   );
@@ -34,15 +45,4 @@ IIIFIFrameCommunication.propTypes = {
   src: PropTypes.string.isRequired,
   style: PropTypes.shape({}),
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
-
-IIIFIFrameCommunication.defaultProps = {
-  'aria-hidden': true,
-  frameBorder: 0,
-  handleReceiveMessage: undefined,
-  height: 1,
-  name: undefined,
-  scrolling: undefined,
-  style: { visibility: 'hidden' },
-  width: 1,
 };

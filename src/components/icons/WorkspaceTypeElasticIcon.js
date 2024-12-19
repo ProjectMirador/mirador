@@ -3,7 +3,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 /**
  * ElasticWorkspaceIcon ~
 */
-export default function ElasticWorkspaceIcon(props) {
+export default function WorkspaceTypeElasticIcon(props) {
   return (
     <SvgIcon {...props}>
       <svg xmlns="http://www.w3.org/2000/svg" width="120" height="90" viewBox="0 0 300 225">

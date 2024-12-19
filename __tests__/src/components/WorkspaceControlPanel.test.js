@@ -1,22 +1,25 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 
 import { WorkspaceControlPanel } from '../../../src/components/WorkspaceControlPanel';
 
 describe('WorkspaceControlPanel', () => {
   beforeEach(() => {
     render(
-      <WorkspaceControlPanel
-        t={key => key}
-      />,
+      <WorkspaceControlPanel />,
+      {
+        preloadedState: {
+          workspace: { windowIds: ['xyz'] },
+        },
+      },
     );
   });
 
   it('renders without an error', () => {
-    expect(screen.getByRole('navigation', { name: 'workspaceNavigation' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'addResource' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'listAllOpenWindows' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'workspaceMenu' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'workspaceOptions' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'aboutMirador' })).toHaveAttribute('href', 'https://projectmirador.org');
+    expect(screen.getByRole('navigation', { name: 'Workspace navigation' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Add resource' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Jump to window' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Workspace settings' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Workspace options' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'About Project Mirador' })).toHaveAttribute('href', 'https://projectmirador.org');
   });
 });

@@ -1,127 +1,86 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { AccessTokenSender } from './AccessTokenSender';
-import { NewWindow } from './NewWindow';
+import { NewBrowserWindow } from './NewBrowserWindow';
 import WindowAuthenticationBar from '../containers/WindowAuthenticationBar';
 
 /**
  * Opens a new window for click
  */
-export class IIIFAuthentication extends Component {
+export function IIIFAuthentication({
+  accessTokenServiceId, authServiceId, confirm = undefined, description = undefined,
+  failureDescription = undefined, failureHeader = undefined, features = 'centerscreen',
+  handleAuthInteraction, header = undefined, isInteractive = true, label = undefined,
+  logoutConfirm = undefined, logoutServiceId = undefined, openWindow = window.open,
+  resetAuthenticationState, resolveAccessTokenRequest, resolveAuthenticationRequest,
+  status = null, windowId,
+}) {
+  const { t } = useTranslation();
   /** */
-  constructor(props) {
-    super(props);
-
-    this.performLogout = this.performLogout.bind(this);
-    this.onReceiveAccessTokenMessage = this.onReceiveAccessTokenMessage.bind(this);
-  }
-
-  /** */
-  onReceiveAccessTokenMessage(payload) {
-    const {
-      authServiceId, accessTokenServiceId, resolveAccessTokenRequest,
-    } = this.props;
-
+  const onReceiveAccessTokenMessage = (payload) => {
     resolveAccessTokenRequest(authServiceId, accessTokenServiceId, payload);
-  }
+  };
 
   /** */
-  defaultAuthBarProps() {
-    const {
-      authServiceId, windowId, status, logoutServiceId,
-    } = this.props;
-
-    return {
-      authServiceId,
-      hasLogoutService: !!logoutServiceId,
-      status,
-      windowId,
-    };
-  }
+  const defaultAuthBarProps = () => ({
+    authServiceId,
+    hasLogoutService: !!logoutServiceId,
+    status,
+    windowId,
+  });
 
   /** handle the IIIF logout workflow */
-  performLogout() {
-    const {
-      accessTokenServiceId, authServiceId, features,
-      logoutServiceId, resetAuthenticationState, openWindow,
-    } = this.props;
+  const performLogout = () => {
     openWindow(logoutServiceId, undefined, features);
 
     resetAuthenticationState({ authServiceId, tokenServiceId: accessTokenServiceId });
-  }
+  };
 
   /** Render the auth bar for logged in users */
-  renderLoggedIn() {
-    const {
-      isInteractive, logoutConfirm, t,
-    } = this.props;
-
+  const renderLoggedIn = () => {
     if (!isInteractive) return null;
 
     return (
       <WindowAuthenticationBar
         confirmButton={logoutConfirm || t('logout')}
-        onConfirm={this.performLogout}
-        {...this.defaultAuthBarProps()}
+        onConfirm={performLogout}
+        {...defaultAuthBarProps()}
       />
     );
-  }
+  };
 
   /** Render whatever shows up after the interactive login attempt fails */
-  renderFailure() {
-    const {
-      handleAuthInteraction, failureHeader: header, failureDescription: description, t,
-      authServiceId, windowId,
-    } = this.props;
+  const renderFailure = () => (
+    <WindowAuthenticationBar
+      header={failureHeader}
+      description={failureDescription}
+      confirmButton={t('retry')}
+      onConfirm={() => handleAuthInteraction(windowId, authServiceId)}
+      {...defaultAuthBarProps()}
+    />
+  );
 
-    return (
-      <WindowAuthenticationBar
-        header={header}
-        description={description}
-        confirmButton={t('retry')}
-        onConfirm={() => handleAuthInteraction(windowId, authServiceId)}
-        {...this.defaultAuthBarProps()}
+  /** Render the login bar after we're logging in */
+  const renderLoggingInCookie = () => (
+    <>
+      {renderLogin()}
+      <NewBrowserWindow name="IiifLoginSender" url={`${authServiceId}?origin=${window.origin}`} features={features} onClose={() => resolveAuthenticationRequest(authServiceId, accessTokenServiceId)} />
+    </>
+  );
+
+  /** Render the login bar after we're logging in */
+  const renderLoggingInToken = () => (
+    <>
+      {renderLogin()}
+      <AccessTokenSender
+        handleAccessTokenMessage={onReceiveAccessTokenMessage}
+        url={accessTokenServiceId}
       />
-    );
-  }
-
-  /** Render the login bar after we're logging in */
-  renderLoggingInCookie() {
-    const {
-      accessTokenServiceId, authServiceId, resolveAuthenticationRequest, features,
-    } = this.props;
-
-    return (
-      <>
-        {this.renderLogin()}
-        <NewWindow name="IiifLoginSender" url={`${authServiceId}?origin=${window.origin}`} features={features} onClose={() => resolveAuthenticationRequest(authServiceId, accessTokenServiceId)} />
-      </>
-    );
-  }
-
-  /** Render the login bar after we're logging in */
-  renderLoggingInToken() {
-    const {
-      accessTokenServiceId,
-    } = this.props;
-
-    return (
-      <>
-        {this.renderLogin()}
-        <AccessTokenSender
-          handleAccessTokenMessage={this.onReceiveAccessTokenMessage}
-          url={accessTokenServiceId}
-        />
-      </>
-    );
-  }
+    </>
+  );
 
   /** Render a login bar */
-  renderLogin() {
-    const {
-      confirm, description, handleAuthInteraction, header, isInteractive, label,
-      authServiceId, windowId,
-    } = this.props;
+  const renderLogin = () => {
     if (!isInteractive) return null;
 
     return (
@@ -131,25 +90,20 @@ export class IIIFAuthentication extends Component {
         label={label}
         confirmButton={confirm}
         onConfirm={() => handleAuthInteraction(windowId, authServiceId)}
-        {...this.defaultAuthBarProps()}
+        {...defaultAuthBarProps()}
       />
     );
-  }
+  };
 
-  /** */
-  render() {
-    const { authServiceId, status } = this.props;
+  if (!authServiceId) return null;
 
-    if (!authServiceId) return null;
+  if (status === null) return renderLogin();
+  if (status === 'cookie') return renderLoggingInCookie();
+  if (status === 'token') return renderLoggingInToken();
+  if (status === 'failed') return renderFailure();
+  if (status === 'ok') return renderLoggedIn();
 
-    if (status === null) return this.renderLogin();
-    if (status === 'cookie') return this.renderLoggingInCookie();
-    if (status === 'token') return this.renderLoggingInToken();
-    if (status === 'failed') return this.renderFailure();
-    if (status === 'ok') return this.renderLoggedIn();
-
-    return null;
-  }
+  return null;
 }
 
 IIIFAuthentication.propTypes = {
@@ -171,22 +125,5 @@ IIIFAuthentication.propTypes = {
   resolveAccessTokenRequest: PropTypes.func.isRequired,
   resolveAuthenticationRequest: PropTypes.func.isRequired,
   status: PropTypes.oneOf(['logout', 'ok', 'token', 'cookie', 'failed', null]),
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
-};
-
-IIIFAuthentication.defaultProps = {
-  confirm: undefined,
-  description: undefined,
-  failureDescription: undefined,
-  failureHeader: undefined,
-  features: 'centerscreen',
-  header: undefined,
-  isInteractive: true,
-  label: undefined,
-  logoutConfirm: undefined,
-  logoutServiceId: undefined,
-  openWindow: window.open,
-  status: null,
-  t: k => k,
 };

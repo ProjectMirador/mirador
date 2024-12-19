@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { SidebarIndexThumbnail } from '../components/SidebarIndexThumbnail';
 import { getConfig } from '../state/selectors';
@@ -15,7 +14,6 @@ const mapStateToProps = (state, { data }) => ({
 });
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, null),
   withPlugins('SidebarIndexThumbnail'),
 );

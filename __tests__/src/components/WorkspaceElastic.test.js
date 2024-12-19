@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from 'test-utils';
+import { fireEvent, render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import WorkspaceElastic from '../../../src/components/WorkspaceElastic';
@@ -56,12 +56,12 @@ describe('WorkspaceElastic', () => {
 
   it('should render properly with an initialValue', () => {
     createWrapper({ elasticLayout });
-    expect(screen.getAllByLabelText('window')).toHaveLength(2);
+    expect(screen.getAllByLabelText('Window:')).toHaveLength(2);
   });
   describe('workspace behaviour', () => {
     it('when workspace itself is dragged', async () => {
       const user = userEvent.setup();
-      const mockDragStop = jest.fn();
+      const mockDragStop = vi.fn();
       const { container } = createWrapper({
         elasticLayout,
         setWorkspaceViewportPosition: mockDragStop,
@@ -93,7 +93,7 @@ describe('WorkspaceElastic', () => {
     });
 
     it('when workspace itself is resized', () => {
-      const mockResize = jest.fn();
+      const mockResize = vi.fn();
       const { container } = createWrapper({
         elasticLayout,
         setWorkspaceViewportDimensions: mockResize,

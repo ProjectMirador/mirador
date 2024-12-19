@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { WindowTopBarPluginArea } from '../../../src/components/WindowTopBarPluginArea';
 
 /** */
