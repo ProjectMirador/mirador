@@ -1,9 +1,9 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import { useTranslation } from 'react-i18next';
 import WorkspaceAddButton from '../containers/WorkspaceAddButton';
 import WorkspaceControlPanelButtons from '../containers/WorkspaceControlPanelButtons';
 import Branding from '../containers/Branding';
@@ -57,42 +57,31 @@ const StyledBranding = styled(Branding, { name: 'WorkspaceControlPanel', slot: '
 /**
  * Provides the panel responsible for controlling the entire workspace
  */
-export class WorkspaceControlPanel extends Component {
-  /**
-   * render
-   * @return {String} - HTML markup for the component
-   */
-  render() {
-    const { t, variant } = this.props;
-    return (
-      <Root
-        ownerState={this.props}
-        className={classNames(ns('workspace-control-panel'))}
-        color="default"
-        enableColorOnDark
-        position="absolute"
-        component="nav"
-        aria-label={t('workspaceNavigation')}
+export function WorkspaceControlPanel({ variant = 'default', ...rest }) {
+  const { t } = useTranslation();
+  return (
+    <Root
+      ownerState={{ t, variant, ...rest }}
+      className={classNames(ns('workspace-control-panel'))}
+      color="default"
+      enableColorOnDark
+      position="absolute"
+      component="nav"
+      aria-label={t('workspaceNavigation')}
+    >
+      <StyledToolbar
+        disableGutters
       >
-        <StyledToolbar
-          disableGutters
-        >
-          <WorkspaceAddButton />
-          <StyledWorkspaceButtons>
-            <WorkspaceControlPanelButtons />
-          </StyledWorkspaceButtons>
-        </StyledToolbar>
-        <StyledBranding t={t} variant={variant} />
-      </Root>
-    );
-  }
+        <WorkspaceAddButton />
+        <StyledWorkspaceButtons>
+          <WorkspaceControlPanelButtons />
+        </StyledWorkspaceButtons>
+      </StyledToolbar>
+      <StyledBranding variant={variant} />
+    </Root>
+  );
 }
 
 WorkspaceControlPanel.propTypes = {
-  t: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['default', 'wide']),
-};
-
-WorkspaceControlPanel.defaultProps = {
-  variant: 'default',
 };

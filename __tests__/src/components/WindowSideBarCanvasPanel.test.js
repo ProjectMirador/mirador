@@ -1,4 +1,4 @@
-import { render, screen, within } from 'test-utils';
+import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 
@@ -24,7 +24,6 @@ function createWrapper(props) {
       id="asdf"
       canvases={canvases}
       classes={{}}
-      t={key => key}
       windowId="xyz"
       setCanvas={() => {}}
       config={{ canvasNavigation: { height: 100 } }}
@@ -43,25 +42,25 @@ describe('WindowSideBarCanvasPanel', () => {
   it('renders SidebarIndexList', () => {
     createWrapper({ multipleSequences: false });
 
-    expect(screen.getByRole('heading', { name: 'canvasIndex' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Index' })).toBeInTheDocument();
     expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
   it('without a treeStructure will not render the table of contents tab', () => {
     createWrapper({ multipleSequences: false });
 
-    expect(screen.queryByRole('tab', { name: 'tableOfContentsList' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: 'Table of contents' })).not.toBeInTheDocument();
   });
 
   it('renders form control when multiple sequences present', () => {
     createWrapper({ multipleSequences: true, showToc: true });
 
-    expect(screen.getByRole('tab', { name: 'tableOfContentsList' })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'Table of contents' })).toBeInTheDocument();
   });
 
   it('renders correct number of sequences in form control', async () => {
     const user = userEvent.setup();
-    const updateSequence = jest.fn();
+    const updateSequence = vi.fn();
     createWrapper({ multipleSequences: true, updateSequence });
 
     expect(screen.getByTestId('sequence-select')).toHaveTextContent('a');
@@ -77,10 +76,10 @@ describe('WindowSideBarCanvasPanel', () => {
   describe('handleVariantChange', () => {
     it('updates the variant', async () => {
       const user = userEvent.setup();
-      const updateVariant = jest.fn();
+      const updateVariant = vi.fn();
       createWrapper({ multipleSequences: false, updateVariant });
 
-      await user.click(screen.getByRole('tab', { name: 'thumbnailList' }));
+      await user.click(screen.getByRole('tab', { name: 'Thumbnail list' }));
       expect(updateVariant).toHaveBeenCalledWith('thumbnail');
     });
   });

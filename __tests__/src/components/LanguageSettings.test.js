@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { LanguageSettings } from '../../../src/components/LanguageSettings';
 
@@ -50,7 +50,7 @@ describe('LanguageSettings', () => {
 
   it('triggers the handleClick prop when clicking a list item', async () => {
     const user = userEvent.setup();
-    const mockHandleClick = jest.fn();
+    const mockHandleClick = vi.fn();
     createWrapper({
       handleClick: mockHandleClick,
       languages,

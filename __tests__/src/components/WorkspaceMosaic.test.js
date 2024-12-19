@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from 'test-utils';
+import { render, screen, fireEvent } from '@tests/utils/test-utils';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -45,7 +45,7 @@ describe('WorkspaceMosaic', () => {
 
   describe('componentDidUpdate', () => {
     it('updates the workspace layout when windows change', () => {
-      const updateWorkspaceMosaicLayout = jest.fn();
+      const updateWorkspaceMosaicLayout = vi.fn();
       wrapper = createWrapper({
         updateWorkspaceMosaicLayout,
         windowIds,
@@ -58,7 +58,7 @@ describe('WorkspaceMosaic', () => {
       expect(updateWorkspaceMosaicLayout).toHaveBeenCalled();
     });
     it('updates the workspace layout when windows are removed', () => {
-      const updateWorkspaceMosaicLayout = jest.fn();
+      const updateWorkspaceMosaicLayout = vi.fn();
       const props = {
         classes: {},
         layout: { direction: 'row', first: '1', second: '2' },
@@ -75,38 +75,38 @@ describe('WorkspaceMosaic', () => {
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith('1');
     });
     it('when no windows remain', () => {
-      const updateWorkspaceMosaicLayout = jest.fn();
+      const updateWorkspaceMosaicLayout = vi.fn();
       wrapper = createWrapper({
         updateWorkspaceMosaicLayout,
         windowIds,
       });
 
       wrapper.rerender(
-        <WorkspaceMosaic classes={{}} windowIds={[]} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
+        <WorkspaceMosaic layout={{}} classes={{}} windowIds={[]} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
       );
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith(null);
     });
     it('when the new and old layouts are the same', () => {
-      const updateWorkspaceMosaicLayout = jest.fn();
+      const updateWorkspaceMosaicLayout = vi.fn();
       wrapper = createWrapper({
-        layout: { first: 1, second: 2 },
+        layout: { direction: 'row', first: '1', second: '2' },
         updateWorkspaceMosaicLayout,
         windowIds,
       });
 
       wrapper.rerender(
-        <WorkspaceMosaic classes={{}} windowIds={windowIds} layout={{ first: 1, second: 2 }} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
+        <WorkspaceMosaic classes={{}} windowIds={windowIds} layout={{ direction: 'row', first: '1', second: '2' }} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
       );
 
-      expect(updateWorkspaceMosaicLayout).toHaveBeenCalledTimes(1);
+      expect(updateWorkspaceMosaicLayout).toHaveBeenCalledTimes(0);
     });
   });
   describe('tile rendering', () => {
     it('when window is available', () => {
       wrapper = createWrapper({ windowIds });
 
-      expect(screen.getAllByLabelText('window', { container: 'section' })[0]).toHaveAttribute('id', '1');
-      expect(screen.getAllByLabelText('window', { container: 'section' })[1]).toHaveAttribute('id', '2');
+      expect(screen.getAllByLabelText('Window:', { container: 'section' })[0]).toHaveAttribute('id', '1');
+      expect(screen.getAllByLabelText('Window:', { container: 'section' })[1]).toHaveAttribute('id', '2');
 
       expect(wrapper.container.querySelector('.mosaic-window-title')).toBeEmptyDOMElement();
       expect(wrapper.container.querySelector('.mosaic-window-controls')).toBeEmptyDOMElement();
@@ -116,7 +116,7 @@ describe('WorkspaceMosaic', () => {
   });
   describe('mosaicChange', () => {
     it('calls the provided prop to update layout', async () => {
-      const updateWorkspaceMosaicLayout = jest.fn();
+      const updateWorkspaceMosaicLayout = vi.fn();
 
       const { container } = render(
         <DndProvider backend={HTML5Backend}>
@@ -141,7 +141,7 @@ describe('WorkspaceMosaic', () => {
         },
       );
 
-      const dragTarget = screen.getAllByLabelText('windowNavigation')[0];
+      const dragTarget = screen.getAllByLabelText('Window navigation')[0];
       const dropTarget = container.querySelector('.mirador-mosaic > .drop-target-container > .drop-target.top'); // eslint-disable-line testing-library/no-container
 
       fireEvent.dragStart(dragTarget);

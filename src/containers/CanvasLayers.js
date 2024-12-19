@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import * as actions from '../state/actions';
 import {
   getCanvasLabel,
@@ -10,10 +9,10 @@ import {
 import { CanvasLayers } from '../components/CanvasLayers';
 
 /** For connect */
-const mapStateToProps = (state, { canvasId, windowId }) => ({
-  label: getCanvasLabel(state, { canvasId, windowId }),
-  layerMetadata: getLayers(state, { canvasId, windowId }),
-  layers: getSortedLayers(state, { canvasId, windowId }),
+const mapStateToProps = (state, { canvasId, companionWindowId, windowId }) => ({
+  label: getCanvasLabel(state, { canvasId, companionWindowId, windowId }),
+  layerMetadata: getLayers(state, { canvasId, companionWindowId, windowId }),
+  layers: getSortedLayers(state, { canvasId, companionWindowId, windowId }),
 });
 
 /**
@@ -26,7 +25,6 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
 );
 

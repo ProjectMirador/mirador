@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { ManifestInfo } from '../../../src/components/ManifestInfo';
 
 describe('ManifestInfo', () => {
@@ -13,13 +13,12 @@ describe('ManifestInfo', () => {
           manifestDescription="The Manifest Description"
           manifestMetadata={metadata}
           manifestSummary="The Manifest Summary"
-          t={str => str}
         />,
       );
     });
 
     it('renders the content in a CollapsibleSection', () => {
-      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('resource');
+      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('Resource');
     });
 
     it('renders manifest label', () => {

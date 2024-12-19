@@ -1,43 +1,28 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
 
 /**
  * a custom panel that can be used for anything
  */
-export class CustomPanel extends Component {
-  /**
-   * render
-   */
-  render() {
-    const {
-      id,
-      children,
-      t,
-      title,
-      windowId,
-    } = this.props;
-
-    return (
-      <CompanionWindow
-        title={t(title)}
-        id={id}
-        windowId={windowId}
-      >
-        {children}
-      </CompanionWindow>
-    );
-  }
+export function CustomPanel({
+  id, children = null, title, windowId,
+}) {
+  const { t } = useTranslation();
+  return (
+    <CompanionWindow
+      title={t(title)}
+      id={id}
+      windowId={windowId}
+    >
+      {children}
+    </CompanionWindow>
+  );
 }
 
 CustomPanel.propTypes = {
   children: PropTypes.node,
   id: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   windowId: PropTypes.string.isRequired,
-};
-
-CustomPanel.defaultProps = {
-  children: null,
 };
