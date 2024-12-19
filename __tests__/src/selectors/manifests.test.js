@@ -1,5 +1,4 @@
 import { Utils } from 'manifesto.js';
-import { vi } from 'vitest';
 
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
@@ -9,6 +8,7 @@ import manifestFixturev3001 from '../../fixtures/version-3/001.json';
 import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
 import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
 import manifestFixtureRelated from '../../fixtures/version-2/related.json';
+import collection from '../../fixtures/version-2/collection.json';
 
 import {
   getManifestoInstance,
@@ -62,17 +62,12 @@ describe('getManifestoInstance', () => {
     const received = getManifestoInstance(state, { manifestId: 'x' });
     expect(received.id).toEqual('http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json');
   });
-  it('creates a manifesto instance and patches getSequences if not defined', () => {
-    const state = { manifests: { x: { json: manifestFixture019 } } };
-    vi.spyOn(Utils, 'parseManifest').mockImplementation((json) => ({
-      id: 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
-    }));
+  it('creates a manifesto collection instance and patches getSequences', () => {
+    const state = { manifests: { x: { json: collection } } };
 
     const received = getManifestoInstance(state, { manifestId: 'x' });
-
-    expect(received.id).toEqual('http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json');
-
     expect(typeof received.getSequences).toBe('function');
+
     expect(received.getSequences()).toEqual([]);
   });
   it('is cached based off of input props', () => {
