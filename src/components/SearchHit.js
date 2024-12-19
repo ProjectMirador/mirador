@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useId, useMemo } from 'react';
 import { useEffectEvent } from 'use-effect-event';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
@@ -86,11 +86,12 @@ export function SearchHit({
     );
   });
 
+  const canvasLabelHtmlId = useId();
+
   if (focused && !selected) return null;
 
   const renderedHit = focused ? hit : hit && truncatedHit;
   const truncated = hit && (renderedHit.before !== hit.before || renderedHit.after !== hit.after);
-  const canvasLabelHtmlId = `${companionWindowId}-${index}`;
   const ownerState = {
     adjacent, focused, selected, windowSelected,
   };

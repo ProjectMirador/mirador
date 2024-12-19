@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import { useId } from 'react';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ns from '../config/css-ns';
 import { PluginHook } from './PluginHook';
@@ -28,18 +29,19 @@ export function ManifestRelatedLinks({
   ...rest
 }) {
   const { t } = useTranslation();
+  const titleId = useId();
+
   const pluginProps = {
     homepage, id, manifestUrl, related, renderings, seeAlso, t, ...rest,
   };
 
   return (
     <CollapsibleSection
-      id={`${id}-related`}
+      aria-labelledby={titleId}
       label={t('related')}
     >
       <Typography
-        aria-labelledby={`${id}-related ${id}-related-heading`}
-        id={`${id}-related-heading`}
+        id={titleId}
         variant="h4"
         component="h5"
       >
