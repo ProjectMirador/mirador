@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
@@ -7,6 +7,7 @@ import Collapse from '@mui/material/Collapse';
 import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
 import LockIcon from '@mui/icons-material/LockSharp';
+import { useTranslation } from 'react-i18next';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { PluginHook } from './PluginHook';
 
@@ -21,141 +22,124 @@ const StyledTopBar = styled('div')(({ theme }) => ({
 const StyledFauxButton = styled('span')(({ theme }) => ({
   marginLeft: theme.spacing(2.5),
 }));
+
 /** */
-export class WindowAuthenticationBar extends Component {
-  /** */
-  constructor(props) {
-    super(props);
+export function WindowAuthenticationBar({
+  confirmButton = undefined, continueLabel = undefined,
+  header = undefined, description = undefined, icon = undefined, label,
+  ruleSet = 'iiif', hasLogoutService = true, status = undefined, ConfirmProps = {}, onConfirm,
+}) {
+  const { t } = useTranslation();
+  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
+  const [open, setOpen] = useState(false);
 
-    this.state = { open: false };
-    this.setOpen = this.setOpen.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-  }
-
   /** */
-  onSubmit() {
-    const { onConfirm } = this.props;
-    this.setOpen(false);
+  const onSubmit = () => {
+    setOpen(false);
     onConfirm();
-  }
+  };
 
-  /** Toggle the full description */
-  setOpen(open) {
-    this.setState(state => ({ ...state, open }));
-  }
+  if (status === 'ok' && !hasLogoutService) return null;
 
-  /** */
-  render() {
-    const {
-      confirmButton, continueLabel,
-      header, description, icon, label, t,
-      ruleSet, hasLogoutService, status, ConfirmProps,
-    } = this.props;
+  const button = (
+    <Button
+      onClick={onSubmit}
+      color="secondary"
+      sx={(theme) => ({
+        '&:hover': {
+          backgroundColor: alpha(theme.palette.secondary.contrastText, 1 - theme.palette.action.hoverOpacity),
+        },
+        backgroundColor: theme.palette.secondary.contrastText,
+      })}
+      {...ConfirmProps}
+    >
+      {confirmButton || t('login')}
+    </Button>
+  );
 
-    if (status === 'ok' && !hasLogoutService) return null;
-
-    const { open } = this.state;
-
-    const button = (
-      <Button
-        onClick={this.onSubmit}
-        color="secondary"
-        sx={(theme) => ({
-          '&:hover': {
-            backgroundColor: alpha(theme.palette.secondary.contrastText, 1 - theme.palette.action.hoverOpacity),
-          },
-          backgroundColor: theme.palette.secondary.contrastText,
-        })}
-        {...ConfirmProps}
-      >
-        {confirmButton || t('login')}
-      </Button>
-    );
-
-    if (!description && !header) {
-      return (
-        <Paper
-          square
-          elevation={4}
-          color="secondary"
-        >
-          <StyledTopBar>
-            { icon || (
-              <LockIcon sx={{ marginInlineEnd: 1.5 }} />
-            ) }
-            <Typography component="h3" variant="body1" color="inherit">
-              { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
-            </Typography>
-            <PluginHook {...this.props} />
-            { button }
-          </StyledTopBar>
-        </Paper>
-      );
-    }
-
+  if (!description && !header) {
     return (
       <Paper
         square
         elevation={4}
         color="secondary"
       >
-        <Button
-          fullWidth
-          onClick={() => this.setOpen(true)}
-          component="div"
-          color="inherit"
-          sx={(theme) => ({
-            '&:hover': {
-              backgroundColor: theme.palette.secondary.main,
-            },
-            backgroundColor: theme.palette.secondary.main,
-            borderRadius: 0,
-            color: theme.palette.secondary.contrastText,
-            justifyContent: 'start',
-            textTransform: 'none',
-          })}
-        >
+        <StyledTopBar>
           { icon || (
-          <LockIcon sx={{ marginInlineEnd: 1.5 }} />
+            <LockIcon sx={{ marginInlineEnd: 1.5 }} />
           ) }
-          <Typography sx={{ paddingBlockEnd: 1, paddingBlockStart: 1 }} component="h3" variant="body1" color="inherit">
+          <Typography component="h3" variant="body1" color="inherit">
             { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
           </Typography>
-          <PluginHook {...this.props} />
-          <StyledFauxButton>
-            { !open && (
-              <Typography variant="button" color="inherit">
-                { continueLabel || t('continue') }
-              </Typography>
-            )}
-          </StyledFauxButton>
-        </Button>
-        <Collapse
-          sx={(theme) => ({
-            backgroundColor: theme.palette.secondary.main,
-            color: theme.palette.secondary.contrastText,
-            paddingInlineEnd: theme.spacing(1),
-            paddingInlineStart: theme.spacing(1),
-          })}
-          in={open}
-          onClose={() => this.setOpen(false)}
-        >
-          <Typography variant="body1" color="inherit">
-            { ruleSet ? <SanitizedHtml htmlString={header} ruleSet={ruleSet} /> : header }
-            { header && description ? ': ' : '' }
-            { ruleSet ? <SanitizedHtml htmlString={description} ruleSet={ruleSet} /> : description }
-          </Typography>
-          <DialogActions>
-            <Button onClick={() => this.setOpen(false)} color="inherit">
-              { t('cancel') }
-            </Button>
-
-            { button }
-          </DialogActions>
-        </Collapse>
+          <PluginHook {...pluginProps} />
+          { button }
+        </StyledTopBar>
       </Paper>
     );
   }
+
+  return (
+    <Paper
+      square
+      elevation={4}
+      color="secondary"
+    >
+      <Button
+        fullWidth
+        onClick={() => setOpen(true)}
+        component="div"
+        color="inherit"
+        sx={(theme) => ({
+          '&:hover': {
+            backgroundColor: theme.palette.secondary.main,
+          },
+          backgroundColor: theme.palette.secondary.main,
+          borderRadius: 0,
+          color: theme.palette.secondary.contrastText,
+          justifyContent: 'start',
+          textTransform: 'none',
+        })}
+      >
+        { icon || (
+        <LockIcon sx={{ marginInlineEnd: 1.5 }} />
+        ) }
+        <Typography sx={{ paddingBlockEnd: 1, paddingBlockStart: 1 }} component="h3" variant="body1" color="inherit">
+          { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
+        </Typography>
+        <PluginHook {...pluginProps} />
+        <StyledFauxButton>
+          { !open && (
+            <Typography variant="button" color="inherit">
+              { continueLabel || t('continue') }
+            </Typography>
+          )}
+        </StyledFauxButton>
+      </Button>
+      <Collapse
+        sx={(theme) => ({
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.secondary.contrastText,
+          paddingInlineEnd: theme.spacing(1),
+          paddingInlineStart: theme.spacing(1),
+        })}
+        in={open}
+        onClose={() => setOpen(false)}
+      >
+        <Typography variant="body1" color="inherit">
+          { ruleSet ? <SanitizedHtml htmlString={header} ruleSet={ruleSet} /> : header }
+          { header && description ? ': ' : '' }
+          { ruleSet ? <SanitizedHtml htmlString={description} ruleSet={ruleSet} /> : description }
+        </Typography>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)} color="inherit">
+            { t('cancel') }
+          </Button>
+
+          { button }
+        </DialogActions>
+      </Collapse>
+    </Paper>
+  );
 }
 
 WindowAuthenticationBar.propTypes = {
@@ -170,18 +154,4 @@ WindowAuthenticationBar.propTypes = {
   onConfirm: PropTypes.func.isRequired,
   ruleSet: PropTypes.string,
   status: PropTypes.string,
-  t: PropTypes.func,
-};
-
-WindowAuthenticationBar.defaultProps = {
-  confirmButton: undefined,
-  ConfirmProps: {},
-  continueLabel: undefined,
-  description: undefined,
-  hasLogoutService: true,
-  header: undefined,
-  icon: undefined,
-  ruleSet: 'iiif',
-  status: undefined,
-  t: k => k,
 };

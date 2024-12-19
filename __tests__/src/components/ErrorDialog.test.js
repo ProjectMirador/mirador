@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { ErrorDialog } from '../../../src/components/ErrorDialog';
 
@@ -8,7 +8,6 @@ import { ErrorDialog } from '../../../src/components/ErrorDialog';
 function createWrapper(props) {
   return render(
     <ErrorDialog
-      t={key => key}
       {...props}
     />,
   );
@@ -21,7 +20,7 @@ describe('ErrorDialog', () => {
     createWrapper({ error });
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByRole('heading')).toHaveTextContent('errorDialogTitle');
+    expect(screen.getByRole('heading')).toHaveTextContent('An error occurred');
   });
 
   it('shows up error message correctly', () => {
@@ -34,12 +33,12 @@ describe('ErrorDialog', () => {
 
   it('triggers the handleClick prop when clicking the ok button', async () => {
     const error = { id: 'testid123', message: '' };
-    const mockHandleClick = jest.fn();
+    const mockHandleClick = vi.fn();
     const user = userEvent.setup();
 
     createWrapper({ error, removeError: mockHandleClick });
 
-    await user.click(screen.getByRole('button', { name: 'errorDialogConfirm' }));
+    await user.click(screen.getByRole('button', { name: 'OK' }));
     expect(mockHandleClick).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getThumbnailNavigationPosition, getThemeDirection } from '../state/selectors';
@@ -26,7 +25,6 @@ const mapStateToProps = (state, { windowId }) => (
 );
 
 const enhance = compose(
-  withTranslation(null, { withRef: true }),
   connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
   withPlugins('WindowThumbnailSettings'),
   // further HOC go here

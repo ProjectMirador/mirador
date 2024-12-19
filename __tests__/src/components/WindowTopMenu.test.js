@@ -1,4 +1,4 @@
-import { render, screen, within } from 'test-utils';
+import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WindowTopMenu } from '../../../src/components/WindowTopMenu';
 
@@ -33,16 +33,16 @@ describe('WindowTopMenu', () => {
 
     const menuSections = within(screen.getByRole('menu')).getAllByRole('presentation');
     expect(menuSections).toHaveLength(2);
-    expect(menuSections[0]).toHaveTextContent('view');
-    expect(menuSections[1]).toHaveTextContent('thumbnail');
+    expect(menuSections[0]).toHaveTextContent('View');
+    expect(menuSections[1]).toHaveTextContent('Thumbnails');
 
     const menuItems = screen.getAllByRole('menuitem');
     expect(menuItems).toHaveLength(5);
-    expect(menuItems[0]).toHaveTextContent('single');
-    expect(menuItems[1]).toHaveTextContent('gallery');
-    expect(menuItems[2]).toHaveTextContent('off');
-    expect(menuItems[3]).toHaveTextContent('bottom');
-    expect(menuItems[4]).toHaveTextContent('right');
+    expect(menuItems[0]).toHaveTextContent('Single');
+    expect(menuItems[1]).toHaveTextContent('Gallery');
+    expect(menuItems[2]).toHaveTextContent('Off');
+    expect(menuItems[3]).toHaveTextContent('Bottom');
+    expect(menuItems[4]).toHaveTextContent('Right');
   });
 
   it('does not display unless open', () => {
@@ -54,8 +54,8 @@ describe('WindowTopMenu', () => {
   it('fires the correct callbacks on menu close', async () => {
     const user = userEvent.setup();
     createAnchor();
-    const handleClose = jest.fn();
-    const toggleDraggingEnabled = jest.fn();
+    const handleClose = vi.fn();
+    const toggleDraggingEnabled = vi.fn();
     const anchorEl = screen.getByTestId('menu-trigger-button');
 
     render(<Subject

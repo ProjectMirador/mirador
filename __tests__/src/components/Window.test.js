@@ -1,5 +1,5 @@
-import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
-import { render, screen } from 'test-utils';
+import { MosaicWindowContext } from 'react-mosaic-component2';
+import { render, screen } from '@tests/utils/test-utils';
 
 import { Window } from '../../../src/components/Window';
 
@@ -10,7 +10,6 @@ function createWrapper(props, state, renderOptions) {
       windowId="xyz"
       manifestId="foo"
       classes={{}}
-      t={k => k}
       {...props}
     />,
     {
@@ -30,11 +29,11 @@ function createWrapper(props, state, renderOptions) {
 describe('Window', () => {
   it('should render outer element', () => {
     createWrapper();
-    expect(screen.getByLabelText('window')).toHaveClass('mirador-window');
+    expect(screen.getByLabelText('Window:')).toHaveClass('mirador-window');
   });
   it('should render <WindowTopBar>', () => {
     createWrapper();
-    expect(screen.getByRole('navigation', { accessibleName: 'windowNavigation' })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { accessibleName: 'Window navigation' })).toBeInTheDocument();
   });
   it('should render <PrimaryWindow>', () => {
     createWrapper();
@@ -47,14 +46,13 @@ describe('Window', () => {
   });
   describe('when workspaceType is mosaic', () => {
     it('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {
-      const connectDragSource = jest.fn(component => component);
+      const connectDragSource = vi.fn(component => component);
       render(
         <MosaicWindowContext.Provider value={{ mosaicWindowActions: { connectDragSource } }}>
           <Window
             windowId="xyz"
             manifestId="foo"
             classes={{}}
-            t={k => k}
             windowDraggable
             workspaceType="mosaic"
           />
@@ -73,14 +71,13 @@ describe('Window', () => {
       expect(connectDragSource).toHaveBeenCalled();
     });
     it('does not call the context mosaicWindowActions connectDragSource when the windowDraggable is set to false', () => {
-      const connectDragSource = jest.fn(component => component);
+      const connectDragSource = vi.fn(component => component);
       render(
         <MosaicWindowContext.Provider value={{ mosaicWindowActions: { connectDragSource } }}>
           <Window
             windowId="xyz"
             manifestId="foo"
             classes={{}}
-            t={k => k}
             windowDraggable={false}
             workspaceType="mosaic"
           />

@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { FullScreenButton } from '../components/FullScreenButton';
 
@@ -19,7 +18,6 @@ const mapStateToProps = _state => ({});
 const mapDispatchToProps = {};
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('FullScreenButton'),
 );

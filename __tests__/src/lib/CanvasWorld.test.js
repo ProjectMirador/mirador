@@ -12,6 +12,12 @@ describe('CanvasWorld', () => {
       expect(new CanvasWorld([1]).canvases.map(c => c.canvas)).toEqual([1]);
     });
   });
+  describe('hasDimensions', () => {
+    it('is true if we can calculate the canvas world dimensions', () => {
+      expect(new CanvasWorld([canvases[1]]).hasDimensions()).toEqual(true);
+      expect(new CanvasWorld([]).hasDimensions()).toEqual(false);
+    });
+  });
   describe('worldBounds', () => {
     it('calculates a world bounds for the given canvases', () => {
       expect(new CanvasWorld([canvases[1]]).worldBounds()).toEqual([0, 0, 6501, 4421]);

@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -32,43 +31,35 @@ TitleTypography.propTypes = {
 /**
  * WindowTopBarTitle
  */
-export class WindowTopBarTitle extends Component {
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      error, hideWindowTitle, isFetching, manifestTitle,
-    } = this.props;
-
-    let title = null;
-    if (isFetching) {
-      title = (
-        <StyledTitleTypography>
-          <Skeleton variant="text" />
+export function WindowTopBarTitle({
+  error = null, hideWindowTitle = false, isFetching = false, manifestTitle = '',
+}) {
+  let title = null;
+  if (isFetching) {
+    title = (
+      <StyledTitleTypography>
+        <Skeleton variant="text" />
+      </StyledTitleTypography>
+    );
+  } else if (error) {
+    title = (
+      <>
+        <ErrorIcon color="error" />
+        <StyledTitleTypography color="textSecondary">
+          {error}
         </StyledTitleTypography>
-      );
-    } else if (error) {
-      title = (
-        <>
-          <ErrorIcon color="error" />
-          <StyledTitleTypography color="textSecondary">
-            {error}
-          </StyledTitleTypography>
-        </>
-      );
-    } else if (hideWindowTitle) {
-      title = (<StyledTitle />);
-    } else {
-      title = (
-        <StyledTitleTypography>
-          {manifestTitle}
-        </StyledTitleTypography>
-      );
-    }
-    return title;
+      </>
+    );
+  } else if (hideWindowTitle) {
+    title = (<StyledTitle />);
+  } else {
+    title = (
+      <StyledTitleTypography>
+        {manifestTitle}
+      </StyledTitleTypography>
+    );
   }
+  return title;
 }
 
 WindowTopBarTitle.propTypes = {
@@ -76,11 +67,4 @@ WindowTopBarTitle.propTypes = {
   hideWindowTitle: PropTypes.bool,
   isFetching: PropTypes.bool,
   manifestTitle: PropTypes.string,
-};
-
-WindowTopBarTitle.defaultProps = {
-  error: null,
-  hideWindowTitle: false,
-  isFetching: false,
-  manifestTitle: '',
 };

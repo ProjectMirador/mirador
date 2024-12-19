@@ -1,11 +1,10 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { WindowSideBar } from '../../../src/components/WindowSideBar';
 
 /** create wrapper */
 function createWrapper({ ...props }) {
   return render(
     <WindowSideBar
-      t={k => k}
       windowId="xyz"
       {...props}
     />,

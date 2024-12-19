@@ -1,14 +1,15 @@
-import { Component } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import deburr from 'lodash/deburr';
-import debounce from 'lodash/debounce';
 import isObject from 'lodash/isObject';
+import { useDebouncedCallback } from 'use-debounce';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/SearchSharp';
+import { useTranslation } from 'react-i18next';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import SearchPanelNavigation from '../containers/SearchPanelNavigation';
 
@@ -23,168 +24,130 @@ const StyledForm = styled('form', { name: 'SearchPanelControls', slot: 'form' })
 const getMatch = (option) => (isObject(option) ? option.match : option);
 
 /** */
-export class SearchPanelControls extends Component {
-  /** */
-  constructor(props) {
-    super(props);
+export function SearchPanelControls({
+  autocompleteService = undefined, companionWindowId, fetchSearch, query = '',
+  searchIsFetching = false, searchService, windowId,
+}) {
+  const { t } = useTranslation();
+  const [input, setInput] = useState(query);
+  const [search, setSearch] = useState(query);
+  const [suggestions, setSuggestions] = useState([]);
 
-    this.state = { search: props.query, suggestions: [] };
-    this.handleChange = this.handleChange.bind(this);
-    this.submitSearch = this.submitSearch.bind(this);
-    this.getSuggestions = this.getSuggestions.bind(this);
-    this.selectItem = this.selectItem.bind(this);
-    this.fetchAutocomplete = debounce(this.fetchAutocomplete.bind(this), 500);
-    this.receiveAutocomplete = this.receiveAutocomplete.bind(this);
-  }
+  useEffect(() => {
+    setInput(query);
+    setSearch(query);
+    setSuggestions([]);
+  }, [query]);
 
-  /**
-   * Update the query in the component state if the query has changed in the redux store
-   */
-  componentDidUpdate(prevProps) {
-    const { query } = this.props;
-    if (query !== prevProps.query) {
-      // We are setting local state directly here ONLY when the query prop (from redux)
-      // changed
-      this.setState({ // eslint-disable-line react/no-did-update-set-state
-        search: query,
-      });
+  useEffect(() => {
+    if (search && search !== '' && searchService) {
+      fetchSearch(windowId, companionWindowId, `${searchService.id}?${new URLSearchParams({ q: search })}`, search);
     }
-  }
-
-  /**
-   * Cancel the debounce function when the component unmounts
-   */
-  componentWillUnmount() {
-    this.fetchAutocomplete.cancel();
-  }
+  }, [search, searchService, companionWindowId, fetchSearch, windowId]);
 
   /** */
-  handleChange(event, value, reason) {
+  const handleChange = (event, value, reason) => {
     // For some reason the value gets reset to an empty value from the
     // useAutocomplete hook sometimes, we just ignore these cases
     if (reason === 'reset' && !value) {
       return;
     }
-    this.setState({
-      search: value,
-      suggestions: [],
-    });
+    setInput(value);
+    setSuggestions([]);
 
     if (value) {
-      this.fetchAutocomplete(value);
+      fetchAutocomplete(value);
     }
-  }
+  };
 
   /** */
-  getSuggestions(value, { showEmpty = false } = {}) {
-    const { suggestions } = this.state;
-
-    const inputValue = deburr(value.trim()).toLowerCase();
-    const inputLength = inputValue.length;
-
-    return inputLength === 0 && !showEmpty
-      ? []
-      : suggestions;
-  }
-
-  /** */
-  fetchAutocomplete(value) {
-    const { autocompleteService } = this.props;
-
+  const fetchAutocomplete = useDebouncedCallback(useCallback(() => {
     if (!autocompleteService) return;
-    if (!value) return;
+    if (!input) return;
 
-    fetch(`${autocompleteService.id}?${new URLSearchParams({ q: value })}`)
+    fetch(`${autocompleteService.id}?${new URLSearchParams({ q: input })}`)
       .then(response => response.json())
-      .then(this.receiveAutocomplete);
-  }
+      .then(receiveAutocomplete);
+  }, [autocompleteService, input]), 500);
 
   /** */
-  receiveAutocomplete(json) {
-    this.setState({ suggestions: json.terms });
-  }
+  const receiveAutocomplete = (json) => {
+    setSuggestions(json.terms);
+  };
 
   /** */
-  submitSearch(event) {
-    const {
-      companionWindowId, fetchSearch, searchService, windowId,
-    } = this.props;
-    const { search } = this.state;
-    event && event.preventDefault();
-    if (!search) return;
-    fetchSearch(windowId, companionWindowId, `${searchService.id}?${new URLSearchParams({ q: search })}`, search);
-  }
+  const submitSearch = (event) => {
+    if (!input) return;
 
-  /** */
-  selectItem(_event, selectedItem, _reason) {
-    if (selectedItem && getMatch(selectedItem)) {
-      this.setState({ search: getMatch(selectedItem) }, this.submitSearch);
+    if (event) {
+      event.preventDefault();
     }
-  }
+
+    setSearch(input);
+  };
 
   /** */
-  render() {
-    const {
-      companionWindowId, searchIsFetching, t, windowId,
-    } = this.props;
+  const selectItem = (_event, selectedItem, _reason) => {
+    if (selectedItem && getMatch(selectedItem)) {
+      setSearch(getMatch(selectedItem));
+    }
+  };
 
-    const { search, suggestions } = this.state;
-    const id = `search-${companionWindowId}`;
-    return (
-      <>
-        <StyledForm
-          aria-label={t('searchTitle')}
-          onSubmit={this.submitSearch}
-        >
-          <Autocomplete
-            id={id}
-            inputValue={search}
-            options={suggestions}
-            getOptionLabel={getMatch}
-            isOptionEqualToValue={(option, value) => (
-              deburr(getMatch(option).trim()).toLowerCase()
-              === deburr(getMatch(value).trim()).toLowerCase()
-            )}
-            noOptionsText=""
-            onChange={this.selectItem}
-            onInputChange={this.handleChange}
-            freeSolo
-            disableClearable
-            renderInput={params => (
-              <TextField
-                {...params}
-                label={t('searchInputLabel')}
-                variant="standard"
-                InputProps={{
-                  ...params.InputProps,
-                  endAdornment: (
-                    <InputAdornment sx={{ position: 'relative' }} position="end">
-                      <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
-                        <SearchIcon />
-                      </MiradorMenuButton>
-                      {Boolean(searchIsFetching) && (
-                      <CircularProgress
-                        sx={{
-                          left: '50%',
-                          marginLeft: '-25px',
-                          marginTop: '-25px',
-                          position: 'absolute',
-                          top: '50%',
-                        }}
-                        size={50}
-                      />
-                      )}
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            )}
-          />
-        </StyledForm>
-        <SearchPanelNavigation windowId={windowId} companionWindowId={companionWindowId} />
-      </>
-    );
-  }
+  const id = `search-${companionWindowId}`;
+  return (
+    <>
+      <StyledForm
+        aria-label={t('searchTitle')}
+        onSubmit={submitSearch}
+      >
+        <Autocomplete
+          id={id}
+          inputValue={input}
+          options={suggestions}
+          getOptionLabel={getMatch}
+          isOptionEqualToValue={(option, value) => (
+            deburr(getMatch(option).trim()).toLowerCase()
+            === deburr(getMatch(value).trim()).toLowerCase()
+          )}
+          noOptionsText=""
+          onChange={selectItem}
+          onInputChange={handleChange}
+          freeSolo
+          disableClearable
+          renderInput={params => (
+            <TextField
+              {...params}
+              label={t('searchInputLabel')}
+              variant="standard"
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <InputAdornment sx={{ position: 'relative' }} position="end">
+                    <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
+                      <SearchIcon />
+                    </MiradorMenuButton>
+                    {Boolean(searchIsFetching) && (
+                    <CircularProgress
+                      sx={{
+                        left: '50%',
+                        marginLeft: '-25px',
+                        marginTop: '-25px',
+                        position: 'absolute',
+                        top: '50%',
+                      }}
+                      size={50}
+                    />
+                    )}
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+        />
+      </StyledForm>
+      <SearchPanelNavigation windowId={windowId} companionWindowId={companionWindowId} />
+    </>
+  );
 }
 
 SearchPanelControls.propTypes = {
@@ -194,16 +157,9 @@ SearchPanelControls.propTypes = {
   companionWindowId: PropTypes.string.isRequired,
   fetchSearch: PropTypes.func.isRequired,
   query: PropTypes.string,
-  searchIsFetching: PropTypes.bool.isRequired,
+  searchIsFetching: PropTypes.bool,
   searchService: PropTypes.shape({
     id: PropTypes.string,
   }).isRequired,
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
-};
-
-SearchPanelControls.defaultProps = {
-  autocompleteService: undefined,
-  query: '',
-  t: key => key,
 };

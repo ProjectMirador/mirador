@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { Rnd } from 'react-rnd';
@@ -29,65 +28,59 @@ const StyledRnd = styled(Rnd)({
  * @memberof Workspace
  * @private
  */
-class WorkspaceElastic extends Component {
-  /**
-   */
-  render() {
-    const {
-      workspace,
-      elasticLayout,
-      setWorkspaceViewportDimensions,
-      setWorkspaceViewportPosition,
-    } = this.props;
+function WorkspaceElastic({
+  workspace,
+  elasticLayout,
+  setWorkspaceViewportDimensions,
+  setWorkspaceViewportPosition,
+}) {
+  const { viewportPosition } = workspace;
+  const offsetX = workspace.width / 2;
+  const offsetY = workspace.height / 2;
 
-    const { viewportPosition } = workspace;
-    const offsetX = workspace.width / 2;
-    const offsetY = workspace.height / 2;
+  return (
+    <Root>
+      <ResizeObserver
+        onReflow={() => {}}
+        onResize={(rect) => { setWorkspaceViewportDimensions(rect); }}
+      />
 
-    return (
-      <Root>
-        <ResizeObserver
-          onReflow={() => {}}
-          onResize={(rect) => { setWorkspaceViewportDimensions(rect); }}
-        />
-
-        <StyledRnd
-          size={{
-            height: workspace.height,
-            width: workspace.width,
-          }}
-          position={{
-            x: -1 * viewportPosition.x - offsetX, y: -1 * viewportPosition.y - offsetY,
-          }}
-          enableResizing={{
-            bottom: false,
-            bottomLeft: false,
-            bottomRight: false,
-            left: false,
-            right: false,
-            top: false,
-            topLeft: false,
-            topRight: false,
-          }}
-          onDragStop={(e, d) => {
-            setWorkspaceViewportPosition({ x: -1 * d.x - offsetX, y: -1 * d.y - offsetY });
-          }}
-          cancel={`.${ns('window')}`}
-          className={ns('workspace')}
-          disableDragging={!workspace.draggingEnabled}
-        >
-          {
-            Object.keys(elasticLayout).map(windowId => (
-              <WorkspaceElasticWindow
-                key={windowId}
-                windowId={windowId}
-              />
-            ))
-          }
-        </StyledRnd>
-      </Root>
-    );
-  }
+      <StyledRnd
+        size={{
+          height: workspace.height,
+          width: workspace.width,
+        }}
+        position={{
+          x: -1 * viewportPosition.x - offsetX, y: -1 * viewportPosition.y - offsetY,
+        }}
+        enableResizing={{
+          bottom: false,
+          bottomLeft: false,
+          bottomRight: false,
+          left: false,
+          right: false,
+          top: false,
+          topLeft: false,
+          topRight: false,
+        }}
+        onDragStop={(e, d) => {
+          setWorkspaceViewportPosition({ x: -1 * d.x - offsetX, y: -1 * d.y - offsetY });
+        }}
+        cancel={`.${ns('window')}`}
+        className={ns('workspace')}
+        disableDragging={!workspace.draggingEnabled}
+      >
+        {
+          Object.keys(elasticLayout).map(windowId => (
+            <WorkspaceElasticWindow
+              key={windowId}
+              windowId={windowId}
+            />
+          ))
+        }
+      </StyledRnd>
+    </Root>
+  );
 }
 
 WorkspaceElastic.propTypes = {

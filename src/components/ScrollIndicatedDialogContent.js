@@ -28,16 +28,9 @@ const Root = styled(DialogContent, { name: 'ScrollIndicatedDialogContent', slot:
     /* Shadow covers */
     background: `linear-gradient(${bgcolor} 30%, rgba(255, 255, 255, 0)), `
       + `linear-gradient(rgba(255, 255, 255, 0), ${bgcolor} 70%) 0 100%, `
-      // Shaddows
-      + 'radial-gradient(50% 0, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), '
-      + 'radial-gradient(50% 100%, farthest-side, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%,',
-    /* Shadow covers */
-    background: `linear-gradient(${bgcolor} 30%, rgba(255, 255, 255, 0)), ` // eslint-disable-line no-dupe-keys
-      + `linear-gradient(rgba(255, 255, 255, 0), ${bgcolor} 70%) 0 100%, `
-      // Shaddows
+      // Shadows
       + 'radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), '
       + 'radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;',
-
     backgroundAttachment: 'local, local, scroll, scroll',
     backgroundRepeat: 'no-repeat',
     backgroundSize: '100% 40px, 100% 40px, 100% 14px, 100% 14px',
@@ -49,8 +42,7 @@ const Root = styled(DialogContent, { name: 'ScrollIndicatedDialogContent', slot:
  * ScrollIndicatedDialogContent ~ Inject a style into the DialogContent component
  *                                to indicate there is scrollable content
 */
-export function ScrollIndicatedDialogContent(props) {
-  const { classes, className, ...otherProps } = props;
+export function ScrollIndicatedDialogContent({ classes = {}, className = '', ...otherProps }) {
   const ourClassName = [className, classes.shadowScrollDialog].join(' ');
 
   return (
@@ -66,9 +58,4 @@ ScrollIndicatedDialogContent.propTypes = {
     shadowScrollDialog: PropTypes.string,
   }),
   className: PropTypes.string,
-};
-
-ScrollIndicatedDialogContent.defaultProps = {
-  classes: {},
-  className: '',
 };

@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceOptionsMenu } from '../../../src/components/WorkspaceOptionsMenu';
 
@@ -8,7 +8,6 @@ function Subject({ ...props }) {
     <div>
       <WorkspaceOptionsMenu
         handleClose={() => {}}
-        t={k => k}
         {...props}
       />
       ,
@@ -38,8 +37,8 @@ describe('WorkspaceOptionsMenu', () => {
 
     const menuItems = screen.getAllByRole('menuitem');
     expect(menuItems).toHaveLength(2);
-    expect(menuItems[0]).toHaveTextContent('downloadExportWorkspace');
-    expect(menuItems[1]).toHaveTextContent('importWorkspace');
+    expect(menuItems[0]).toHaveTextContent('Export workspace');
+    expect(menuItems[1]).toHaveTextContent('Import workspace');
   });
 
   it('does not display unless open', () => {
@@ -64,7 +63,7 @@ describe('WorkspaceOptionsMenu', () => {
   });
 
   it('fires the correct callbacks on menu close', async () => {
-    const handleClose = jest.fn();
+    const handleClose = vi.fn();
     render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} handleClose={handleClose} open />);
 
     // click a menu item should close the menu

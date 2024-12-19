@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import {
   getManifestLogo,
   getRequiredStatement,
@@ -21,7 +20,6 @@ const mapStateToProps = (state, { id, windowId }) => ({
 });
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps),
   withPlugins('AttributionPanel'),
 );
