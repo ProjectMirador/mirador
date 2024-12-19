@@ -42,21 +42,25 @@ describe('getLayers', () => {
 });
 
 describe('getSortedLayers', () => {
-  const state = {
-    layers: {
-    },
-    manifests: {
-      hamilton: {
-        id: 'hamilton',
-        json: manifestFixtureHamilton,
+  let state;
+
+  beforeEach(() => {
+    state = {
+      layers: {
       },
-    },
-    windows: {
-      x: {
-        manifestId: 'hamilton',
+      manifests: {
+        hamilton: {
+          id: 'hamilton',
+          json: manifestFixtureHamilton,
+        },
       },
-    },
-  };
+      windows: {
+        x: {
+          manifestId: 'hamilton',
+        },
+      },
+    };
+  });
 
   it('returns the image resources in the manifest order when there is no configuration', () => {
     const actual = getSortedLayers(state, { canvasId: 'https://prtd.app/hamilton/canvas/p1.json', windowId: 'x' });

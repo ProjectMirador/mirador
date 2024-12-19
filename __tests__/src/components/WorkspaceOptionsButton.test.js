@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceOptionsButton } from '../../../src/components/WorkspaceOptionsButton';
 
@@ -8,7 +8,6 @@ function Subject({ ...props }) {
     <div>
       <WorkspaceOptionsButton
         classes={{}}
-        t={k => k}
         {...props}
       />
       ,
@@ -25,14 +24,14 @@ describe('WorkspaceOptionsButton', () => {
 
   it('renders the button', () => {
     render(<Subject />);
-    expect(screen.getByLabelText('workspaceOptions')).toBeInTheDocument();
+    expect(screen.getByLabelText('Workspace options')).toBeInTheDocument();
   });
 
   it('toggles open/close of <WorkspaceOptionsMenu /> when clicked', async () => {
     render(<Subject />);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
 
-    await user.click(screen.getByLabelText('workspaceOptions'));
+    await user.click(screen.getByLabelText('Workspace options'));
     expect(screen.getByRole('menu')).toBeInTheDocument();
 
     // click something else to close the menu (the windowMenu button is hidden at this point)

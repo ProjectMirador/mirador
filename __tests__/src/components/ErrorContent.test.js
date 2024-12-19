@@ -1,6 +1,4 @@
-import i18next from 'i18next';
-import { render, screen } from 'test-utils';
-
+import { render, screen } from '@tests/utils/test-utils';
 import { ErrorContent } from '../../../src/components/ErrorContent';
 
 describe('ErrorContent', () => {
@@ -11,7 +9,6 @@ describe('ErrorContent', () => {
         windowId="xyz"
         manifestId="foo"
         classes={{}}
-        t={i18next.t}
       />,
       {
         preloadedState: {
@@ -42,7 +39,6 @@ describe('ErrorContent', () => {
         manifestId="foo"
         showJsError={false}
         classes={{}}
-        t={i18next.t}
       />,
       {
         preloadedState: {

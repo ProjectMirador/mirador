@@ -1,13 +1,11 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
   getShowZoomControlsConfig, getThemeIds,
   getWorkspace,
 } from '../state/selectors';
-import { withWorkspaceContext } from '../contexts/WorkspaceContext';
 import { WorkspaceMenu } from '../components/WorkspaceMenu';
 
 /**
@@ -31,8 +29,6 @@ const mapStateToProps = state => ({
 });
 
 const enhance = compose(
-  withTranslation(),
-  withWorkspaceContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WorkspaceMenu'),
 );

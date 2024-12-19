@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,37 +8,28 @@ import PropTypes from 'prop-types';
  * LanguageSettings ~ the workspace sub menu to change the language
  * of the application
 */
-export class LanguageSettings extends Component {
-  /**
-   * Returns the rendered component
-  */
-  render() {
-    const {
-      handleClick, languages,
-    } = this.props;
-
-    return (
-      <>
-        {
-          languages.map(language => (
-            <MenuItem
-              key={language.locale}
-              onClick={() => { handleClick(language.locale); }}
-            >
-              <ListItemIcon>
-                {
-                  language.current && <CheckIcon />
-                }
-              </ListItemIcon>
-              <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-                {language.label}
-              </ListItemText>
-            </MenuItem>
-          ))
-        }
-      </>
-    );
-  }
+export function LanguageSettings({ handleClick, languages }) {
+  return (
+    <>
+      {
+        languages.map(language => (
+          <MenuItem
+            key={language.locale}
+            onClick={() => { handleClick(language.locale); }}
+          >
+            <ListItemIcon>
+              {
+                language.current && <CheckIcon />
+              }
+            </ListItemIcon>
+            <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
+              {language.label}
+            </ListItemText>
+          </MenuItem>
+        ))
+      }
+    </>
+  );
 }
 
 LanguageSettings.propTypes = {

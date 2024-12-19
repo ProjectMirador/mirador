@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 
@@ -17,7 +17,6 @@ function createWrapper(props) {
       classes={{}}
       ready
       manifest={manifest}
-      t={(key) => key}
       windowId="window"
       {...props}
     />,
@@ -42,10 +41,10 @@ describe('CollectionDialog', () => {
   });
   it('clicking the hide button fires hideCollectionDialog', async () => {
     const user = userEvent.setup();
-    const hideCollectionDialog = jest.fn();
+    const hideCollectionDialog = vi.fn();
     createWrapper({ hideCollectionDialog });
 
-    await user.click(screen.getByRole('button', { name: 'close' }));
+    await user.click(screen.getByRole('button', { name: 'Close' }));
     expect(hideCollectionDialog).toHaveBeenCalled();
   });
 });

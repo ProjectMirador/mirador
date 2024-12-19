@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WindowList } from '../../../src/components/WindowList';
 
@@ -7,8 +7,8 @@ describe('WindowList', () => {
   let focusWindow;
   let titles;
   beforeEach(() => {
-    handleClose = jest.fn();
-    focusWindow = jest.fn();
+    handleClose = vi.fn();
+    focusWindow = vi.fn();
     titles = {};
 
     render(<div data-testid="container" />);
@@ -46,7 +46,7 @@ describe('WindowList', () => {
     it('renders without an error', async () => {
       const user = userEvent.setup();
       expect(screen.getByRole('menuitem')).toBeInTheDocument();
-      await user.click(screen.getByRole('menuitem', { name: 'untitled' }));
+      await user.click(screen.getByRole('menuitem', { name: '[Untitled]' }));
 
       expect(handleClose).toBeCalled();
       expect(focusWindow).toBeCalledWith('xyz', true);

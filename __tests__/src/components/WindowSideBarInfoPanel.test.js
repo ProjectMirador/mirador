@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 
 import { WindowSideBarInfoPanel } from '../../../src/components/WindowSideBarInfoPanel';
 
@@ -8,7 +8,6 @@ function createWrapper(props) {
     <WindowSideBarInfoPanel
       id="asdf"
       windowId="zxcv"
-      t={str => str}
       {...props}
     />,
     { preloadedState: { companionWindows: { asdf: { content: 'info' } } } },
@@ -18,20 +17,19 @@ describe('WindowSideBarInfoPanel', () => {
   describe('when metadata is present', () => {
     it('renders headers', () => {
       createWrapper();
-      expect(screen.getByRole('heading', { name: 'aboutThisItem' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'About this item' })).toBeInTheDocument();
     });
 
     it('renders the manifest elements', () => {
       createWrapper();
 
-      expect(screen.getByRole('heading', { name: 'resource' })).toBeInTheDocument();
-      expect(screen.getByRole('heading', { name: 'related' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Resource' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Related' })).toBeInTheDocument();
     });
 
     it('renders the canvas elements', () => {
       createWrapper({ canvasIds: ['1', '2'] });
-
-      expect(screen.getAllByRole('heading', { name: 'currentItem' }).length).toEqual(2);
+      expect(screen.getAllByRole('heading', { name: /(Left|Right)/ }).length).toEqual(2);
     });
   });
 });

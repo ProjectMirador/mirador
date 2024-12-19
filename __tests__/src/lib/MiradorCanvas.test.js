@@ -12,7 +12,7 @@ import videoWithAnnoCaptions from '../../fixtures/version-3/video_with_annotatio
 
 describe('MiradorCanvas', () => {
   let instance;
-  beforeAll(() => {
+  beforeEach(() => {
     instance = new MiradorCanvas(
       Utils.parseManifest(fixture).getSequences()[0].getCanvases()[0],
     );

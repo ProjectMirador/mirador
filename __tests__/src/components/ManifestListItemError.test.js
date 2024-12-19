@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { ManifestListItemError } from '../../../src/components/ManifestListItemError';
 
@@ -12,7 +12,6 @@ function createWrapper(props) {
       manifestId="http://example.com"
       onDismissClick={() => {}}
       onTryAgainClick={() => {}}
-      t={key => key}
       {...props}
     />,
   );
@@ -24,26 +23,26 @@ describe('ManifestListItemError', () => {
   it('renders the failed manifest url and error key', () => {
     createWrapper();
 
-    expect(screen.getByText('manifestError')).toBeInTheDocument();
+    expect(screen.getByText('The resource cannot be added:')).toBeInTheDocument();
     expect(screen.getByText('http://example.com')).toBeInTheDocument();
   });
 
   it('has a dismiss button that fires the onDismissClick prop', async () => {
     const user = userEvent.setup();
-    mockFn = jest.fn();
+    mockFn = vi.fn();
     createWrapper({ onDismissClick: mockFn });
 
-    await user.click(screen.getByRole('button', { name: 'dismiss' }));
+    await user.click(screen.getByRole('button', { name: 'Dismiss' }));
 
     expect(mockFn).toHaveBeenCalledWith('http://example.com');
   });
 
   it('has a try again button that fires the onTryAgainClick prop', async () => {
     const user = userEvent.setup();
-    mockFn = jest.fn();
+    mockFn = vi.fn();
     createWrapper({ onTryAgainClick: mockFn });
 
-    await user.click(screen.getByRole('button', { name: 'tryAgain' }));
+    await user.click(screen.getByRole('button', { name: 'Try again' }));
 
     expect(mockFn).toHaveBeenCalledWith('http://example.com');
   });

@@ -3,13 +3,15 @@ import groupBy from 'lodash/groupBy';
 import { miradorSlice } from './utils';
 import { getWindow, getWindows } from './getters';
 
+const defaultConfig = Object.freeze({});
+
 /**
  * Returns companion windows.
  * @param {object} state
  * @returns {object}
  */
 export function getCompanionWindows(state) {
-  return miradorSlice(state).companionWindows || {};
+  return miradorSlice(state).companionWindows || defaultConfig;
 }
 
 /**
