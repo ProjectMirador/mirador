@@ -33,10 +33,6 @@ export default defineConfig({
     },
   },
   test: {
-    coverage: {
-      all: true,
-      enabled: true,
-    },
     environment: 'happy-dom',
     exclude: ['node_modules'],
     globals: true,
