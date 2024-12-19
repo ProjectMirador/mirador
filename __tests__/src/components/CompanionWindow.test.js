@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import PropTypes from 'prop-types';
 import userEvent from '@testing-library/user-event';
 import { CompanionWindow } from '../../../src/components/CompanionWindow';
@@ -11,7 +11,6 @@ function createWrapper(props) {
       isDisplayed
       direction="ltr"
       windowId="x"
-      classes={{ horizontal: 'horizontal', small: 'small', vertical: 'vertical' }}
       companionWindow={{}}
       position="right"
       {...props}
@@ -35,7 +34,7 @@ describe('CompanionWindow', () => {
 
   describe('when the openInCompanionWindow button is clicked', () => {
     it('passes the the updateCompanionWindow prop to MiradorMenuButton with the appropriate args', async () => {
-      const updateCompanionWindow = jest.fn();
+      const updateCompanionWindow = vi.fn();
       const user = userEvent.setup();
 
       createWrapper({
@@ -43,7 +42,7 @@ describe('CompanionWindow', () => {
         updateCompanionWindow,
       });
 
-      await user.click(screen.getByRole('button', { name: 'openInCompanionWindow' }));
+      await user.click(screen.getByRole('button', { name: 'Open in separate panel' }));
 
       expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'right' });
     });
@@ -51,20 +50,20 @@ describe('CompanionWindow', () => {
 
   describe('when the close companion window button is clicked', () => {
     it('triggers the onCloseClick prop with the appropriate args', async () => {
-      const removeCompanionWindowEvent = jest.fn();
+      const removeCompanionWindowEvent = vi.fn();
       const user = userEvent.setup();
 
       createWrapper({
         onCloseClick: removeCompanionWindowEvent,
       });
 
-      await user.click(screen.getByRole('button', { name: 'closeCompanionWindow' }));
+      await user.click(screen.getByRole('button', { name: 'Close panel' }));
 
       expect(removeCompanionWindowEvent).toHaveBeenCalledTimes(1);
     });
 
     it('allows the children to know about onCloseClick', async () => {
-      const removeCompanionWindowEvent = jest.fn();
+      const removeCompanionWindowEvent = vi.fn();
       const user = userEvent.setup();
 
       /** Some child component */
@@ -88,7 +87,7 @@ describe('CompanionWindow', () => {
 
   describe('when the companion window is on the right', () => {
     it('can be moved to the bottom', async () => {
-      const updateCompanionWindow = jest.fn();
+      const updateCompanionWindow = vi.fn();
       const user = userEvent.setup();
 
       createWrapper({
@@ -96,16 +95,17 @@ describe('CompanionWindow', () => {
         updateCompanionWindow,
       });
 
-      expect(screen.getByRole('complementary')).toHaveClass('vertical');
+      expect(screen.getByRole('complementary')).toHaveClass('mirador-companion-window-right');
 
-      await user.click(screen.getByRole('button', { name: 'moveCompanionWindowToBottom' }));
+      await user.click(screen.getByRole('button', { name: 'Move to bottom' }));
+
       expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'bottom' });
     });
   });
 
   describe('when the companion window is on the bottom', () => {
     it('can be moved to the right', async () => {
-      const updateCompanionWindow = jest.fn();
+      const updateCompanionWindow = vi.fn();
       const user = userEvent.setup();
 
       createWrapper({
@@ -113,9 +113,9 @@ describe('CompanionWindow', () => {
         updateCompanionWindow,
       });
 
-      expect(screen.getByRole('complementary')).toHaveClass('horizontal');
+      expect(screen.getByRole('complementary')).toHaveClass('mirador-companion-window-bottom ');
 
-      await user.click(screen.getByRole('button', { name: 'moveCompanionWindowToRight' }));
+      await user.click(screen.getByRole('button', { name: 'Move to right' }));
 
       expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'right' });
     });
@@ -125,12 +125,6 @@ describe('CompanionWindow', () => {
     createWrapper({ position: 'bottom', titleControls: <div data-testid="xyz" /> });
 
     expect(screen.getByTestId('xyz')).toBeInTheDocument();
-  });
-
-  it('adds a small class when the component width is small', () => {
-    const { container } = createWrapper({ size: { width: 369 } });
-
-    expect(container.querySelector('.MuiToolbar-root')).toHaveClass('small'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
 
   it('has a resize handler', () => {

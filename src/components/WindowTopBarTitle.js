@@ -1,9 +1,20 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import Skeleton from '@material-ui/lab/Skeleton';
-import ErrorIcon from '@material-ui/icons/ErrorOutlineSharp';
+import { styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
+import ErrorIcon from '@mui/icons-material/ErrorOutlineSharp';
 
+const StyledTitleTypography = styled(TitleTypography)(({ theme }) => ({
+  ...theme.typography.h6,
+  flexGrow: 1,
+  paddingLeft: theme.spacing(0.5),
+}));
+
+const StyledTitle = styled('div')(({ theme }) => ({
+  ...theme.typography.h6,
+  flexGrow: 1,
+  paddingLeft: theme.spacing(0.5),
+}));
 /** */
 function TitleTypography({ children, ...props }) {
   return (
@@ -20,56 +31,40 @@ TitleTypography.propTypes = {
 /**
  * WindowTopBarTitle
  */
-export class WindowTopBarTitle extends Component {
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      classes, error, hideWindowTitle, isFetching, manifestTitle,
-    } = this.props;
-
-    let title = null;
-    if (isFetching) {
-      title = (
-        <TitleTypography className={classes.title}>
-          <Skeleton variant="text" />
-        </TitleTypography>
-      );
-    } else if (error) {
-      title = (
-        <>
-          <ErrorIcon color="error" />
-          <TitleTypography color="textSecondary" className={classes.title}>
-            {error}
-          </TitleTypography>
-        </>
-      );
-    } else if (hideWindowTitle) {
-      title = (<div className={classes.title} />);
-    } else {
-      title = (
-        <TitleTypography className={classes.title}>
-          {manifestTitle}
-        </TitleTypography>
-      );
-    }
-    return title;
+export function WindowTopBarTitle({
+  error = null, hideWindowTitle = false, isFetching = false, manifestTitle = '',
+}) {
+  let title = null;
+  if (isFetching) {
+    title = (
+      <StyledTitleTypography>
+        <Skeleton variant="text" />
+      </StyledTitleTypography>
+    );
+  } else if (error) {
+    title = (
+      <>
+        <ErrorIcon color="error" />
+        <StyledTitleTypography color="textSecondary">
+          {error}
+        </StyledTitleTypography>
+      </>
+    );
+  } else if (hideWindowTitle) {
+    title = (<StyledTitle />);
+  } else {
+    title = (
+      <StyledTitleTypography>
+        {manifestTitle}
+      </StyledTitleTypography>
+    );
   }
+  return title;
 }
 
 WindowTopBarTitle.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   error: PropTypes.string,
   hideWindowTitle: PropTypes.bool,
   isFetching: PropTypes.bool,
   manifestTitle: PropTypes.string,
-};
-
-WindowTopBarTitle.defaultProps = {
-  error: null,
-  hideWindowTitle: false,
-  isFetching: false,
-  manifestTitle: '',
 };

@@ -1,67 +1,28 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { visuallyHidden } from '@mui/utils';
+import { useTranslation } from 'react-i18next';
 import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
 import WorkspaceElastic from '../containers/WorkspaceElastic';
 import ns from '../config/css-ns';
 import { IIIFDropTarget } from './IIIFDropTarget';
 
-/**
- * Represents a work area that contains any number of windows
- * @memberof Workspace
- * @private
- */
-export class Workspace extends Component {
-  /** */
-  constructor(props) {
-    super(props);
+const Root = styled('div', { name: 'Workspace', slot: 'root' })(() => ({
+  height: '100%',
+  position: 'relative',
+  width: '100%',
+}));
 
-    this.handleDrop = this.handleDrop.bind(this);
-  }
+/** */
+const ZeroWindows = () => {
+  const { t } = useTranslation();
 
-  /** */
-  handleDrop({ canvasId, manifestId, manifestJson }, props, monitor) {
-    const { addWindow, allowNewWindows } = this.props;
-
-    if (!allowNewWindows) return;
-
-    addWindow({ canvasId, manifest: manifestJson, manifestId });
-  }
-
-  /**
-   * Determine which workspace to render by configured type
-   */
-  workspaceByType() {
-    const { workspaceId, workspaceType, windowIds } = this.props;
-    if (this.maximizedWindows()) {
-      return this.maximizedWindows();
-    }
-
-    if (windowIds.length === 0) return this.zeroWindows();
-
-    switch (workspaceType) {
-      case 'elastic':
-        return <WorkspaceElastic />;
-      case 'mosaic':
-        return <WorkspaceMosaic />;
-      default:
-        return windowIds.map(windowId => (
-          <Window
-            key={`${windowId}-${workspaceId}`}
-            windowId={windowId}
-          />
-        ));
-    }
-  }
-
-  /** */
-  zeroWindows() {
-    const { t } = this.props;
-
-    return (
+  return (
+    <Root>
       <Grid
         alignItems="center"
         container
@@ -82,68 +43,88 @@ export class Workspace extends Component {
           </Typography>
         </Grid>
       </Grid>
-    );
-  }
+    </Root>
+  );
+};
+
+ZeroWindows.propTypes = {
+};
+
+/**
+ * Represents a work area that contains any number of windows
+ * @memberof Workspace
+ * @private
+ */
+export function Workspace({
+  addWindow = () => {}, allowNewWindows = true, maximizedWindowIds = [], windowIds = [], workspaceId, workspaceType,
+}) {
+  const { t } = useTranslation();
+  /** */
+  const handleDrop = ({ canvasId, manifestId, manifestJson }, _props, _monitor) => {
+    if (!allowNewWindows) return;
+
+    addWindow({ canvasId, manifest: manifestJson, manifestId });
+  };
 
   /**
-   * Determine whether or not there are maximized windows
+   * Determine which workspace to render by configured type
    */
-  maximizedWindows() {
-    const { maximizedWindowIds, workspaceId } = this.props;
-
+  const workspaceByType = () => {
     if (maximizedWindowIds.length > 0) {
-      return maximizedWindowIds.map(windowId => (
-        <Window
-          key={`${windowId}-${workspaceId}`}
-          windowId={windowId}
-          className={classNames(ns('workspace-maximized-window'))}
-        />
-      ));
+      if (maximizedWindowIds.length > 0) {
+        return maximizedWindowIds.map(windowId => (
+          <Window
+            key={`${windowId}-${workspaceId}`}
+            windowId={windowId}
+            className={classNames(ns('workspace-maximized-window'))}
+          />
+        ));
+      }
     }
-    return false;
-  }
 
-  /**
-   * render
-   */
-  render() {
-    const { classes, isWorkspaceControlPanelVisible, t } = this.props;
+    if (windowIds.length === 0) return <ZeroWindows />;
 
-    return (
-      <IIIFDropTarget onDrop={this.handleDrop}>
-        <div
-          className={
-            classNames(
-              ns('workspace-viewport'),
-              (isWorkspaceControlPanelVisible && ns('workspace-with-control-panel')),
-              (isWorkspaceControlPanelVisible && classes.workspaceWithControlPanel),
-              classes.workspaceViewport,
-            )
-          }
-        >
-          <Typography variant="srOnly" component="h1">{t('miradorViewer')}</Typography>
-          {this.workspaceByType()}
-        </div>
-      </IIIFDropTarget>
-    );
-  }
+    switch (workspaceType) {
+      case 'elastic':
+        return <WorkspaceElastic />;
+      case 'mosaic':
+        return <WorkspaceMosaic />;
+      default:
+        return windowIds.map(windowId => (
+          <Window
+            key={`${windowId}-${workspaceId}`}
+            windowId={windowId}
+          />
+        ));
+    }
+  };
+
+  const ownerState = {
+    allowNewWindows, maximizedWindowIds, windowIds, workspaceId, workspaceType,
+  };
+
+  return (
+    <IIIFDropTarget onDrop={handleDrop}>
+      <Root
+        ownerState={ownerState}
+        className={
+          classNames(
+            ns('workspace-viewport'),
+          )
+        }
+      >
+        <Typography style={visuallyHidden} component="h1">{t('miradorViewer')}</Typography>
+        {workspaceByType()}
+      </Root>
+    </IIIFDropTarget>
+  );
 }
 
 Workspace.propTypes = {
   addWindow: PropTypes.func,
   allowNewWindows: PropTypes.bool,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   maximizedWindowIds: PropTypes.arrayOf(PropTypes.string),
-  t: PropTypes.func.isRequired,
   windowIds: PropTypes.arrayOf(PropTypes.string),
   workspaceId: PropTypes.string.isRequired,
   workspaceType: PropTypes.string.isRequired,
-};
-
-Workspace.defaultProps = {
-  addWindow: () => {},
-  allowNewWindows: true,
-  maximizedWindowIds: [],
-  windowIds: [],
 };

@@ -1,132 +1,165 @@
-import { Component } from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogTitle from '@mui/material/DialogTitle';
 import {
   Card,
   CardContent,
   MenuList,
   MenuItem,
   Typography,
-} from '@material-ui/core';
+} from '@mui/material';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
+import { WorkspaceDialog } from './WorkspaceDialog';
 import WorkspaceTypeElasticIcon from './icons/WorkspaceTypeElasticIcon';
 import WorkspaceTypeMosaicIcon from './icons/WorkspaceTypeMosaicIcon';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 
+const StyledDetails = styled('div')(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+}));
+
 /**
  */
-export class WorkspaceSelectionDialog extends Component {
-  /**
-   * constructor
-   */
-  constructor(props) {
-    super(props);
-
-    this.handleWorkspaceTypeChange = this.handleWorkspaceTypeChange.bind(this);
-  }
-
-  /**
-   * Propagate workspace type selection into the global state
-   */
-  handleWorkspaceTypeChange(workspaceType) {
-    const { handleClose, updateWorkspace } = this.props;
+export function WorkspaceSelectionDialog({
+  container = null, handleClose, open = false, children = null, updateWorkspace, workspaceType,
+}) {
+  const { t } = useTranslation();
+  /** */
+  const handleWorkspaceTypeChange = (newWorkspaceType) => {
     updateWorkspace({
-      type: workspaceType,
+      type: newWorkspaceType,
     });
     handleClose();
-  }
+  };
 
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      classes, container, handleClose, open, children, t, workspaceType,
-    } = this.props;
-    return (
-      <Dialog
-        aria-labelledby="workspace-selection-dialog-title"
-        container={container}
-        id="workspace-selection-dialog"
-        onClose={handleClose}
-        open={open}
-      >
-        <DialogTitle id="workspace-selection-dialog-title" disableTypography>
-          <Typography variant="h2">{t('workspaceSelectionTitle')}</Typography>
-        </DialogTitle>
-        <ScrollIndicatedDialogContent>
-          {children}
-          <MenuList
-            classes={{ root: classes.list }}
-            selected={workspaceType}
-            autoFocusItem
+  return (
+    <WorkspaceDialog
+      aria-labelledby="workspace-selection-dialog-title"
+      container={container}
+      id="workspace-selection-dialog"
+      onClose={handleClose}
+      open={open}
+    >
+      <DialogTitle id="workspace-selection-dialog-title">
+        {t('workspaceSelectionTitle')}
+      </DialogTitle>
+      <ScrollIndicatedDialogContent>
+        {children}
+        <MenuList
+          sx={{
+            '&active': {
+              outline: 'none',
+            },
+            '&focus': {
+              outline: 'none',
+            },
+            outline: 'none',
+          }}
+          selected={workspaceType}
+          autoFocusItem
+        >
+          <MenuItem
+            sx={{
+              height: 'auto',
+              overflow: 'auto',
+              whiteSpace: 'inherit',
+            }}
+            onClick={() => handleWorkspaceTypeChange('elastic')}
+            selected={workspaceType === 'elastic'}
+            value="elastic"
           >
-            <MenuItem
-              className={classes.menuItem}
-              onClick={() => this.handleWorkspaceTypeChange('elastic')}
-              selected={workspaceType === 'elastic'}
-              value="elastic"
+            <Card sx={{
+              backgroundColor: 'transparent',
+              borderRadius: '0',
+              boxShadow: '0 0 transparent',
+              display: 'flex',
+            }}
             >
-              <Card className={classes.card}>
-                <WorkspaceTypeElasticIcon
-                  className={classes.svgIcon}
-                  viewBox="0 0 120 90"
-                />
-                <div className={classes.details}>
-                  <CardContent
-                    classes={{ root: classes.root }}
-                    className={classes.content}
-                  >
-                    <Typography className={classes.headline} component="p" variant="h3">{t('elastic')}</Typography>
-                    <Typography variant="body1">{t('elasticDescription')}</Typography>
-                  </CardContent>
-                </div>
-              </Card>
-            </MenuItem>
-            <MenuItem
-              className={classes.menuItem}
-              onClick={() => this.handleWorkspaceTypeChange('mosaic')}
-              selected={workspaceType === 'mosaic'}
-              value="mosaic"
+              <WorkspaceTypeElasticIcon
+                sx={{
+                  flexShrink: 0,
+                  height: '90px',
+                  width: '120px',
+                }}
+                viewBox="0 0 120 90"
+              />
+              <StyledDetails>
+                <CardContent
+                  sx={{
+                    '&.MuiCardContent-root': {
+                      '&:last-child': {
+                        paddingBottom: '12px',
+                      },
+                      paddingBottom: 0,
+                      paddingTop: 0,
+                      textAlign: 'left',
+                    },
+                    flex: '1 0 auto',
+                  }}
+                >
+                  <Typography sx={{ paddingBottom: '6px' }} component="p" variant="h3">{t('elastic')}</Typography>
+                  <Typography variant="body1">{t('elasticDescription')}</Typography>
+                </CardContent>
+              </StyledDetails>
+            </Card>
+          </MenuItem>
+          <MenuItem
+            sx={{
+              height: 'auto',
+              overflow: 'auto',
+              whiteSpace: 'inherit',
+            }}
+            onClick={() => handleWorkspaceTypeChange('mosaic')}
+            selected={workspaceType === 'mosaic'}
+            value="mosaic"
+          >
+            <Card sx={{
+              backgroundColor: 'transparent',
+              borderRadius: '0',
+              boxShadow: '0 0 transparent',
+              display: 'flex',
+            }}
             >
-              <Card className={classes.card}>
-                <WorkspaceTypeMosaicIcon
-                  className={classes.svgIcon}
-                  viewBox="0 0 120 90"
-                />
-                <div className={classes.details}>
-                  <CardContent
-                    className={classes.content}
-                    classes={{ root: classes.root }}
-                  >
-                    <Typography className={classes.headline} component="p" variant="h3">{t('mosaic')}</Typography>
-                    <Typography variant="body1">{t('mosaicDescription')}</Typography>
-                  </CardContent>
-                </div>
-              </Card>
-            </MenuItem>
-          </MenuList>
-        </ScrollIndicatedDialogContent>
-      </Dialog>
-    );
-  }
+              <WorkspaceTypeMosaicIcon
+                sx={{
+                  flexShrink: 0,
+                  height: '90px',
+                  width: '120px',
+                }}
+                viewBox="0 0 120 90"
+              />
+              <StyledDetails>
+                <CardContent
+                  sx={{
+                    '&.MuiCardContent-root': {
+                      '&:last-child': {
+                        paddingBottom: '12px',
+                      },
+                      paddingBottom: 0,
+                      paddingTop: 0,
+                      textAlign: 'left',
+                    },
+                    flex: '1 0 auto',
+                  }}
+                >
+                  <Typography sx={{ paddingBottom: '6px' }} component="p" variant="h3">{t('mosaic')}</Typography>
+                  <Typography variant="body1">{t('mosaicDescription')}</Typography>
+                </CardContent>
+              </StyledDetails>
+            </Card>
+          </MenuItem>
+        </MenuList>
+      </ScrollIndicatedDialogContent>
+    </WorkspaceDialog>
+  );
 }
 
 WorkspaceSelectionDialog.propTypes = {
   children: PropTypes.node,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
-  t: PropTypes.func,
   updateWorkspace: PropTypes.func.isRequired,
   workspaceType: PropTypes.string.isRequired,
-};
-
-WorkspaceSelectionDialog.defaultProps = {
-  children: null,
-  container: null,
-  open: false,
-  t: key => key,
 };

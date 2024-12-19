@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { LanguageSettings } from '../../../src/components/LanguageSettings';
 
@@ -35,13 +35,6 @@ describe('LanguageSettings', () => {
     expect(screen.getAllByRole('menuitem')).toHaveLength(2);
   });
 
-  it('non-active list items are buttons (and active are not)', () => {
-    createWrapper({ languages });
-
-    expect(screen.getByRole('menuitem', { name: 'Deutsch' })).not.toHaveClass('MuiButtonBase-root');
-    expect(screen.getByRole('menuitem', { name: 'English' })).toHaveClass('MuiButtonBase-root');
-  });
-
   it('renders the check icon when the active prop returns true', () => {
     createWrapper({ languages });
 
@@ -57,7 +50,7 @@ describe('LanguageSettings', () => {
 
   it('triggers the handleClick prop when clicking a list item', async () => {
     const user = userEvent.setup();
-    const mockHandleClick = jest.fn();
+    const mockHandleClick = vi.fn();
     createWrapper({
       handleClick: mockHandleClick,
       languages,

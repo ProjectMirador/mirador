@@ -3,14 +3,22 @@ import deepmerge from 'deepmerge';
 import { miradorSlice } from './utils';
 import { getWorkspace } from './getters';
 
-/** */
+const defaultConfig = Object.freeze({});
+
+/**
+ * Returns the config from the redux state.
+ * @param {object} state
+ * @returns {object} containing config
+ */
 export function getConfig(state) {
   const slice = miradorSlice(state || {});
-  return slice.config || {};
+  return slice.config || defaultConfig;
 }
 
 /**
  * Extract an exportable version of state using the configuration from the config.
+ * @param {object} state
+ * @returns {object} containing exportable state
  */
 export function getExportableState(state) {
   const exportConfig = getConfig(state).export;
@@ -37,9 +45,9 @@ export function getExportableState(state) {
 }
 
 /**
-* Return languages from config (in state) and indicate which is currently set
+* Return languages from config (in state) and indicate which is currently set.
 * @param {object} state
-* @return {Array} [ {locale: 'de', label: 'Deutsch', current: true}, ... ]
+* @returns {Array} [ {locale: 'de', label: 'Deutsch', current: true}, ... ]
 */
 export const getLanguagesFromConfigWithCurrent = createSelector(
   [getConfig],
@@ -50,6 +58,11 @@ export const getLanguagesFromConfigWithCurrent = createSelector(
   })),
 );
 
+/**
+ * Returns if showZoomControls is set in the config.
+ * @param {object} state
+ * @returns {boolean}
+ */
 export const getShowZoomControlsConfig = createSelector(
   [
     getWorkspace,
@@ -62,11 +75,21 @@ export const getShowZoomControlsConfig = createSelector(
   ),
 );
 
+/**
+ * Returns the theme from the config.
+ * @param {object} state
+ * @returns {object} {palette: {...}, typography: {...}, overrides: {...}, ...}
+ */
 export const getTheme = createSelector(
   [getConfig],
   ({ theme, themes, selectedTheme }) => deepmerge(theme, themes[selectedTheme] || {}),
 );
 
+/**
+ * Returns the theme ids from the config.
+ * @param {object} state
+ * @returns {Array} ['dark', 'light']
+ */
 export const getThemeIds = createSelector(
   [getConfig],
   ({ themes }) => Object.keys(themes),
@@ -78,11 +101,20 @@ export const getContainerId = createSelector(
   ({ id }) => id,
 );
 
+/**
+ * Returns the theme direction from the config.
+ * @param {object} state
+ * @returns {string}
+ */
 export const getThemeDirection = createSelector(
   [getConfig],
   ({ theme }) => theme.direction || 'ltr',
 );
-
+/**
+ * Returns the theme direction from the config.
+ * @param {object} state
+ * @returns {object} {preprocessor: [...], postprocessor: [...]}
+ */
 export const getRequestsConfig = createSelector(
   [getConfig],
   ({ requests }) => requests || {},

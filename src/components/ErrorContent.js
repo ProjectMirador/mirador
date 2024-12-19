@@ -1,64 +1,63 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Typography from '@material-ui/core/Typography';
-import Alert from '@material-ui/lab/Alert';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { styled } from '@mui/material/styles';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Stack from '@mui/material/Stack';
+import Alert from '@mui/material/Alert';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useTranslation } from 'react-i18next';
 import { PluginHook } from './PluginHook';
 
+const ErrorStackTrace = styled('pre', { name: 'ErrorContent', slot: 'stacktrace' })({
+  overflowY: 'scroll',
+});
+
+const ErrorMetadata = styled('pre', { name: 'ErrorContent', slot: 'metadata' })({
+  height: '100px',
+  overflowY: 'scroll',
+});
+
+const InlineAccordion = styled(Accordion, { name: 'ErrorContent', slot: 'accordion' })({
+  backgroundColor: 'inherit',
+  color: 'inherit',
+  margin: 0,
+});
+
 /** */
-export class ErrorContent extends Component {
-  /** */
-  render() {
-    const {
-      classes,
-      error,
-      metadata,
-      showJsError,
-      t,
-    } = this.props;
+export function ErrorContent({
+  error, metadata = null, showJsError = true, ...rest
+}) {
+  const { t } = useTranslation();
+  if (!showJsError) return null;
 
-    if (!showJsError) return null;
+  const pluginProps = {
+    error, metadata, showJsError, t, ...rest,
+  };
 
-    return (
-      <>
-        <Alert elevation={6} variant="filled" severity="error">
-          {t('errorDialogTitle')}
-        </Alert>
-
-        {showJsError && (
-          <Accordion square className={classes.alert}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-            >
-              <Typography>{t('jsError', { message: error.message, name: error.name })}</Typography>
-            </AccordionSummary>
-            <AccordionDetails className={classes.details}>
-              <pre>{ t('jsStack', { stack: error.stack }) }</pre>
-              { metadata && (
-                <pre>{JSON.stringify(metadata, null, 2)}</pre>
-              )}
-            </AccordionDetails>
-          </Accordion>
-        )}
-        <PluginHook {...this.props} />
-      </>
-    );
-  }
+  return (
+    <Alert elevation={6} variant="filled" severity="error">
+      {t('errorDialogTitle')}
+      {showJsError && (
+        <InlineAccordion elevation={2} square>
+          <AccordionSummary sx={{ marginInlineStart: '-1rem' }} expandIcon={<ExpandMoreIcon sx={{ color: '#fff' }} />}>
+            {t('jsError', { message: error.message, name: error.name })}
+          </AccordionSummary>
+          <AccordionDetails>
+            <Stack>
+              <ErrorStackTrace>{t('jsStack', { stack: error.stack })}</ErrorStackTrace>
+              {metadata && <ErrorMetadata>{JSON.stringify(metadata, null, 2)}</ErrorMetadata>}
+            </Stack>
+          </AccordionDetails>
+        </InlineAccordion>
+      )}
+      <PluginHook {...pluginProps} />
+    </Alert>
+  );
 }
 
 ErrorContent.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   error: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   metadata: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   showJsError: PropTypes.bool,
-  t: PropTypes.func,
-};
-
-ErrorContent.defaultProps = {
-  metadata: null,
-  showJsError: true,
-  t: key => key,
 };

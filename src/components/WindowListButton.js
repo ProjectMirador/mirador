@@ -1,79 +1,57 @@
-import { Component } from 'react';
-import BookmarksIcon from '@material-ui/icons/BookmarksSharp';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import BookmarksIcon from '@mui/icons-material/BookmarksSharp';
+import { useTranslation } from 'react-i18next';
 import WindowList from '../containers/WindowList';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
  * WindowListButton ~
 */
-export class WindowListButton extends Component {
+export function WindowListButton({ disabled = false, windowCount }) {
+  const { t } = useTranslation();
+  const [windowListAnchor, setWindowListAnchor] = useState(null);
+
   /** */
-  constructor(props) {
-    super(props);
+  const handleClose = () => { setWindowListAnchor(null); };
+  /** */
+  const handleOpen = (event) => { setWindowListAnchor(event.currentTarget); };
 
-    this.state = { windowListAnchor: null };
-    this.handleClose = this.handleClose.bind(this);
-    this.handleOpen = this.handleOpen.bind(this);
-  }
+  return (
+    <>
+      <MiradorMenuButton
+        aria-haspopup="true"
+        aria-label={t('listAllOpenWindows')}
+        aria-owns={windowListAnchor ? 'window-list' : null}
+        selected={Boolean(windowListAnchor)}
+        disabled={disabled}
+        badge
+        BadgeProps={{
+          badgeContent: windowCount,
+          sx: {
+            '.MuiBadge-badge': {
+              paddingLeft: 1.5,
+            },
+          },
+        }}
+        onClick={(e) => handleOpen(e)}
+      >
+        <BookmarksIcon />
+      </MiradorMenuButton>
 
-  /** Set the windowListAnchor to null on window close */
-  handleClose() {
-    this.setState({ windowListAnchor: null });
-  }
-
-  /** Set the windowListAnchor to the event's current target  */
-  handleOpen(event) {
-    this.setState({ windowListAnchor: event.currentTarget });
-  }
-
-  /**
-   * Returns the rendered component
-  */
-  render() {
-    const {
-      classes, disabled, t, windowCount,
-    } = this.props;
-    const { windowListAnchor } = this.state;
-
-    return (
-      <>
-        <MiradorMenuButton
-          aria-haspopup="true"
-          aria-label={t('listAllOpenWindows')}
-          aria-owns={windowListAnchor ? 'window-list' : null}
-          className={
-            classNames(classes.ctrlBtn, (windowListAnchor ? classes.ctrlBtnSelected : null))
-          }
-          disabled={disabled}
-          badge
-          BadgeProps={{ badgeContent: windowCount, classes: { badge: classes.badge } }}
-          onClick={e => this.handleOpen(e)}
-        >
-          <BookmarksIcon />
-        </MiradorMenuButton>
-
-        {Boolean(windowListAnchor) && (
-          <WindowList
-            anchorEl={windowListAnchor}
-            id="window-list"
-            open={Boolean(windowListAnchor)}
-            handleClose={this.handleClose}
-          />
-        )}
-      </>
-    );
-  }
+      {Boolean(windowListAnchor) && (
+      <WindowList
+        anchorEl={windowListAnchor}
+        id="window-list"
+        open={Boolean(windowListAnchor)}
+        handleClose={handleClose}
+      />
+      )}
+    </>
+  );
 }
 
 WindowListButton.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
   disabled: PropTypes.bool,
-  t: PropTypes.func.isRequired,
   windowCount: PropTypes.number.isRequired,
-};
-WindowListButton.defaultProps = {
-  classes: {},
-  disabled: false,
 };

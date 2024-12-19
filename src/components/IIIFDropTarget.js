@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import Backdrop from '@material-ui/core/Backdrop';
-import InsertDriveFileSharpIcon from '@material-ui/icons/InsertDriveFileSharp';
-import { grey } from '@material-ui/core/colors';
+import Backdrop from '@mui/material/Backdrop';
+import InsertDriveFileSharpIcon from '@mui/icons-material/InsertDriveFileSharp';
+import { grey } from '@mui/material/colors';
 import { v4 as uuid } from 'uuid';
 import { NativeTypes } from 'react-dnd-html5-backend';
 import { useDrop } from 'react-dnd';

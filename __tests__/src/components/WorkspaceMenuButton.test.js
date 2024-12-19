@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import { WorkspaceMenuButton } from '../../../src/components/WorkspaceMenuButton';
@@ -13,7 +13,7 @@ describe('WorkspaceMenuButton', () => {
   });
 
   it('renders the button', () => {
-    expect(screen.getByRole('button')).toHaveAccessibleName('workspaceMenu');
+    expect(screen.getByRole('button')).toHaveAccessibleName('Workspace settings');
   });
 
   it('toggles open/close of <WorkspaceOptionsMenu /> when clicked', async () => {

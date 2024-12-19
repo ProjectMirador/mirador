@@ -1,82 +1,53 @@
-import { Component } from 'react';
-import AddCircleIcon from '@material-ui/icons/AddCircleOutlineSharp';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircleOutlineSharp';
+import AddCircleIcon from '@mui/icons-material/AddCircleOutlineSharp';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircleOutlineSharp';
+import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import RestoreZoomIcon from './icons/RestoreZoomIcon';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
+const StyledZoomControlsWrapper = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'center',
+});
+
 /**
  */
-export class ZoomControls extends Component {
-  /**
-   * constructor -
-   */
-  constructor(props) {
-    super(props);
-
-    this.handleZoomInClick = this.handleZoomInClick.bind(this);
-    this.handleZoomOutClick = this.handleZoomOutClick.bind(this);
-  }
-
-  /**
-   * @private
-   */
-  handleZoomInClick() {
-    const { windowId, updateViewport, viewer } = this.props;
-
+export function ZoomControls({
+  windowId = '', updateViewport = () => {}, viewer = {}, zoomToWorld,
+}) {
+  const { t } = useTranslation();
+  /** */
+  const handleZoomInClick = () => {
     updateViewport(windowId, {
       zoom: viewer.zoom * 2,
     });
-  }
+  };
 
-  /**
-   * @private
-   */
-  handleZoomOutClick() {
-    const { windowId, updateViewport, viewer } = this.props;
-
+  /** */
+  const handleZoomOutClick = () => {
     updateViewport(windowId, {
       zoom: viewer.zoom / 2,
     });
-  }
+  };
 
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      displayDivider, showZoomControls, classes, t, zoomToWorld,
-    } = this.props;
-
-    if (!showZoomControls) {
-      return (
-        <>
-        </>
-      );
-    }
-    return (
-      <div className={classes.zoom_controls}>
-        <MiradorMenuButton aria-label={t('zoomIn')} onClick={this.handleZoomInClick}>
-          <AddCircleIcon />
-        </MiradorMenuButton>
-        <MiradorMenuButton aria-label={t('zoomOut')} onClick={this.handleZoomOutClick}>
-          <RemoveCircleIcon />
-        </MiradorMenuButton>
-        <MiradorMenuButton aria-label={t('zoomReset')} onClick={() => zoomToWorld(false)}>
-          <RestoreZoomIcon />
-        </MiradorMenuButton>
-        {displayDivider && <span className={classes.divider} />}
-      </div>
-    );
-  }
+  return (
+    <StyledZoomControlsWrapper>
+      <MiradorMenuButton aria-label={t('zoomIn')} onClick={handleZoomInClick}>
+        <AddCircleIcon />
+      </MiradorMenuButton>
+      <MiradorMenuButton aria-label={t('zoomOut')} onClick={handleZoomOutClick}>
+        <RemoveCircleIcon />
+      </MiradorMenuButton>
+      <MiradorMenuButton aria-label={t('zoomReset')} onClick={() => zoomToWorld(false)}>
+        <RestoreZoomIcon />
+      </MiradorMenuButton>
+    </StyledZoomControlsWrapper>
+  );
 }
 
 ZoomControls.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  displayDivider: PropTypes.bool,
-  showZoomControls: PropTypes.bool,
-  t: PropTypes.func,
   updateViewport: PropTypes.func,
   viewer: PropTypes.shape({
     x: PropTypes.number,
@@ -85,13 +56,4 @@ ZoomControls.propTypes = {
   }),
   windowId: PropTypes.string,
   zoomToWorld: PropTypes.func.isRequired,
-};
-
-ZoomControls.defaultProps = {
-  displayDivider: true,
-  showZoomControls: false,
-  t: key => key,
-  updateViewport: () => {},
-  viewer: {},
-  windowId: '',
 };

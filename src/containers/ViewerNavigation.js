@@ -1,7 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
@@ -28,15 +26,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   setPreviousCanvas: (...args) => dispatch(actions.setPreviousCanvas(windowId)),
 });
 
-const styles = {
-  osdNavigation: {
-    order: 1,
-  },
-};
-
 const enhance = compose(
-  withStyles(styles),
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ViewerNavigation'),
   // further HOC go here

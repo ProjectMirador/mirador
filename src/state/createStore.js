@@ -3,10 +3,10 @@
 // state normalisation
 // (normalizer library)
 
-import thunkMiddleware from 'redux-thunk';
+import { thunk } from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { composeWithDevTools } from '@redux-devtools/extension';
 import createRootReducer from './reducers/rootReducer';
 import getRootSaga from './sagas';
 import settings from '../config/settings';
@@ -27,7 +27,7 @@ function configureStore(pluginReducers, pluginSagas = []) {
   const store = createStore(
     rootReducer,
     composeWithDevTools(
-      applyMiddleware(thunkMiddleware, sagaMiddleware),
+      applyMiddleware(thunk, sagaMiddleware),
     ),
   );
 

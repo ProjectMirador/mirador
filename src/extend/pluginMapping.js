@@ -18,7 +18,7 @@ import CompanionWindowRegistry from '../lib/CompanionWindowRegistry';
  */
 export function createTargetToPluginMapping(plugins) {
   return plugins.reduce((map, plugin) => (
-    update(map, [plugin.target, plugin.mode], x => [...x || [], plugin])
+    update(map, [plugin.target, plugin.mode], x => [...(x || []), plugin])
   ), {});
 }
 

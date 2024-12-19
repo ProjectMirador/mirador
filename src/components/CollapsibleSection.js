@@ -1,74 +1,42 @@
-import { Component } from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
-import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDownSharp';
-import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUpSharp';
-import MiradorMenuButton from '../containers/MiradorMenuButton';
+import Typography from '@mui/material/Typography';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useTranslation } from 'react-i18next';
 
 /**
  * CollapsableSection ~
 */
-export class CollapsibleSection extends Component {
-  /** */
-  constructor(props) {
-    super(props);
+export function CollapsibleSection({
+  children, id, label,
+}) {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(true);
 
-    this.state = { open: true };
-    this.toggleSection = this.toggleSection.bind(this);
-  }
+  const handleChange = useCallback((_event, isExpanded) => {
+    setOpen(isExpanded);
+  }, [setOpen]);
 
-  /** */
-  toggleSection() {
-    const { open } = this.state;
-
-    this.setState({ open: !open });
-  }
-
-  /**
-   * Returns the rendered component
-  */
-  render() {
-    const {
-      children, classes, id, label, t,
-    } = this.props;
-    const { open } = this.state;
-
-    return (
-      <>
-        <div className={classes.container}>
-          <Typography
-            className={classes.heading}
-            id={id}
-            onClick={this.toggleSection}
-            variant="overline"
-            component="h4"
-          >
-            {label}
-          </Typography>
-          <MiradorMenuButton
-            aria-label={
-              t(
-                open ? 'collapseSection' : 'expandSection',
-                { section: label },
-              )
-            }
-            aria-expanded={open}
-            className={classes.button}
-            onClick={this.toggleSection}
-          >
-            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </MiradorMenuButton>
-        </div>
-        {open && children}
-      </>
-    );
-  }
+  return (
+    <Accordion id={id} elevation={0} expanded={open} onChange={handleChange} disableGutters square variant="compact">
+      <AccordionSummary id={`${id}-header`} aria-controls={`${id}-content`} aria-label={t(open ? 'collapseSection' : 'expandSection', { section: label })} expandIcon={<ExpandMoreIcon />}>
+        <Typography variant="overline" component="h4">
+          {label}
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        {children}
+      </AccordionDetails>
+    </Accordion>
+  );
 }
 
 CollapsibleSection.propTypes = {
   children: PropTypes.node.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
 };

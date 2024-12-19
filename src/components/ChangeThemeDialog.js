@@ -1,94 +1,65 @@
-import { Component } from 'react';
+import { useCallback } from 'react';
 import {
-  Dialog,
   DialogTitle,
   ListItemIcon,
   ListItemText,
   MenuList,
   MenuItem,
-  Typography,
   DialogContent,
-} from '@material-ui/core';
-import PaletteIcon from '@material-ui/icons/PaletteSharp';
+} from '@mui/material';
+import PaletteIcon from '@mui/icons-material/PaletteSharp';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
+import { WorkspaceDialog } from './WorkspaceDialog';
+
+const ThemeIcon = styled(PaletteIcon, { name: 'ThemeIcon', slot: 'icon' })(({ theme }) => ({
+  color: '#BDBDBD',
+}));
 
 /**
  * a simple dialog providing the possibility to switch the theme
  */
-export class ChangeThemeDialog extends Component {
-  /**
-  */
-  constructor(props) {
-    super(props);
-    this.handleThemeChange = this.handleThemeChange.bind(this);
-  }
-
-  /**
-   * Propagate theme palette type selection into the global state
-   */
-  handleThemeChange(theme) {
-    const { setSelectedTheme, handleClose } = this.props;
-
+export function ChangeThemeDialog({
+  handleClose, open = false, selectedTheme, setSelectedTheme, themeIds = [],
+}) {
+  const { t } = useTranslation();
+  const handleThemeChange = useCallback((theme) => {
     setSelectedTheme(theme);
     handleClose();
-  }
+  }, [handleClose, setSelectedTheme]);
 
-  /** */
-  render() {
-    const {
-      classes,
-      handleClose,
-      open,
-      selectedTheme,
-      t,
-      themeIds,
-    } = this.props;
-    return (
-      <Dialog
-        onClose={handleClose}
-        open={open}
-      >
-        <DialogTitle disableTypography>
-          <Typography variant="h2">
-            {t('changeTheme')}
-          </Typography>
-        </DialogTitle>
-        <DialogContent className={classes.dialogContent}>
-          <MenuList autoFocusItem>
-            {
-              themeIds.map(value => (
-                <MenuItem
-                  key={value}
-                  className={classes.listitem}
-                  onClick={() => { this.handleThemeChange(value); }}
-                  selected={value === selectedTheme}
-                  value={value}
-                >
-                  <ListItemIcon>
-                    <PaletteIcon className={classes[value]} />
-                  </ListItemIcon>
-                  <ListItemText>{t(value)}</ListItemText>
-                </MenuItem>
-              ))
-            }
-          </MenuList>
-        </DialogContent>
-      </Dialog>
-    );
-  }
+  return (
+    <WorkspaceDialog onClose={handleClose} open={open} variant="menu">
+      <DialogTitle>
+        {t('changeTheme')}
+      </DialogTitle>
+      <DialogContent>
+        <MenuList autoFocusItem>
+          {themeIds.map((value) => (
+            <MenuItem
+              key={value}
+              className="listitem"
+              onClick={() => handleThemeChange(value)}
+              selected={value === selectedTheme}
+              value={value}
+            >
+              <ListItemIcon>
+                <ThemeIcon ownerState={{ value }} />
+              </ListItemIcon>
+              <ListItemText>{t(value)}</ListItemText>
+            </MenuItem>
+          ))}
+        </MenuList>
+      </DialogContent>
+    </WorkspaceDialog>
+  );
 }
 
 ChangeThemeDialog.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
   selectedTheme: PropTypes.string.isRequired,
   setSelectedTheme: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
   themeIds: PropTypes.arrayOf(PropTypes.string),
-};
-
-ChangeThemeDialog.defaultProps = {
-  open: false,
-  themeIds: [],
 };

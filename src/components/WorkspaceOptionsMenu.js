@@ -1,132 +1,102 @@
-import { Component } from 'react';
+import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import ImportIcon from '@material-ui/icons/Input';
-import SaveAltIcon from '@material-ui/icons/SaveAltSharp';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
+import ImportIcon from '@mui/icons-material/Input';
+import SaveAltIcon from '@mui/icons-material/SaveAltSharp';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
 import WorkspaceExport from '../containers/WorkspaceExport';
 import WorkspaceImport from '../containers/WorkspaceImport';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 import { PluginHook } from './PluginHook';
 
 /**
  * WorkspaceOptionsMenu ~ the menu for workspace options such as import/export
 */
-export class WorkspaceOptionsMenu extends Component {
-  /**
-   * constructor -
-   */
-  constructor(props) {
-    super(props);
-    this.state = {
-      exportWorkspace: {},
-      importWorkspace: {},
-    };
-    this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
-    this.handleMenuItemClose = this.handleMenuItemClose.bind(this);
-  }
+export function WorkspaceOptionsMenu({
+  anchorEl = null, handleClose, open = false, ...rest
+}) {
+  const { t } = useTranslation();
+  const container = useContext(WorkspaceContext);
+  const [selectedOption, setSelectedOption] = useState(null);
 
-  /**
-   * @private
-   */
-  handleMenuItemClick(item) {
-    const obj = {};
-    obj[item] = {};
-    obj[item].open = true;
-    this.setState(obj);
-  }
+  const pluginProps = {
+    anchorEl, container, handleClose, open, t, ...rest,
+  };
 
-  /**
-   * @private
-   */
-  handleMenuItemClose(item) {
-    return (event) => {
-      const obj = {};
-      obj[item] = {};
-      obj[item].open = false;
-      this.setState(obj);
-    };
-  }
+  /** */
+  const handleClick = (option) => {
+    setSelectedOption(option);
+    handleClose();
+  };
 
-  /**
-   * Returns the rendered component
-  */
-  render() {
-    const {
-      anchorEl, container, handleClose, t, open,
-    } = this.props;
-    const { exportWorkspace, importWorkspace } = this.state;
+  /** */
+  const handleDialogClose = () => {
+    setSelectedOption(null);
+  };
 
-    return (
-      <>
-        <Menu
-          id="workspace-options-menu"
-          container={container?.current}
-          anchorEl={anchorEl}
-          anchorOrigin={{
-            horizontal: 'right',
-            vertical: 'top',
-          }}
-          transformOrigin={{
-            horizontal: 'left',
-            vertical: 'top',
-          }}
-          open={open}
-          onClose={handleClose}
+  return (
+    <>
+      <Menu
+        id="workspace-options-menu"
+        container={container?.current}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          horizontal: 'right',
+          vertical: 'top',
+        }}
+        transformOrigin={{
+          horizontal: 'left',
+          vertical: 'top',
+        }}
+        open={open}
+        onClose={handleClose}
+      >
+        <MenuItem
+          aria-haspopup="true"
+          onClick={() => { handleClick('exportWorkspace'); }}
+          aria-owns={selectedOption === 'exportWorkspace' ? 'workspace-export' : undefined}
         >
-          <MenuItem
-            aria-haspopup="true"
-            onClick={() => { this.handleMenuItemClick('exportWorkspace'); handleClose(); }}
-            aria-owns={exportWorkspace.open ? 'workspace-export' : undefined}
-          >
-            <ListItemIcon>
-              <SaveAltIcon />
-            </ListItemIcon>
-            <Typography variant="body1">{t('downloadExportWorkspace')}</Typography>
-          </MenuItem>
-          <MenuItem
-            aria-haspopup="true"
-            id="workspace-menu-import"
-            onClick={() => { this.handleMenuItemClick('importWorkspace'); handleClose(); }}
-            aria-owns={exportWorkspace.open ? 'workspace-import' : undefined}
-          >
-            <ListItemIcon>
-              <ImportIcon />
-            </ListItemIcon>
-            <Typography variant="body1">{t('importWorkspace')}</Typography>
-          </MenuItem>
-          <PluginHook {...this.props} />
-        </Menu>
-        {Boolean(exportWorkspace.open) && (
-          <WorkspaceExport
-            open={Boolean(exportWorkspace.open)}
-            container={container?.current}
-            handleClose={this.handleMenuItemClose('exportWorkspace')}
-          />
-        )}
-        {Boolean(importWorkspace.open) && (
-          <WorkspaceImport
-            open={Boolean(importWorkspace.open)}
-            container={container?.current}
-            handleClose={this.handleMenuItemClose('importWorkspace')}
-          />
-        )}
-      </>
-    );
-  }
+          <ListItemIcon>
+            <SaveAltIcon />
+          </ListItemIcon>
+          <Typography variant="body1">{t('downloadExportWorkspace')}</Typography>
+        </MenuItem>
+        <MenuItem
+          aria-haspopup="true"
+          id="workspace-menu-import"
+          onClick={() => { handleClick('importWorkspace'); }}
+          aria-owns={selectedOption === 'importWorkspace' ? 'workspace-import' : undefined}
+        >
+          <ListItemIcon>
+            <ImportIcon />
+          </ListItemIcon>
+          <Typography variant="body1">{t('importWorkspace')}</Typography>
+        </MenuItem>
+        <PluginHook {...pluginProps} />
+      </Menu>
+      {selectedOption === 'exportWorkspace' && (
+        <WorkspaceExport
+          open={selectedOption === 'exportWorkspace'}
+          container={container?.current}
+          handleClose={handleDialogClose}
+        />
+      )}
+      {selectedOption === 'importWorkspace' && (
+        <WorkspaceImport
+          open={selectedOption === 'importWorkspace'}
+          container={container?.current}
+          handleClose={handleDialogClose}
+        />
+      )}
+    </>
+  );
 }
 
 WorkspaceOptionsMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
-  t: PropTypes.func.isRequired,
-};
-
-WorkspaceOptionsMenu.defaultProps = {
-  anchorEl: null,
-  container: null,
-  open: false,
 };

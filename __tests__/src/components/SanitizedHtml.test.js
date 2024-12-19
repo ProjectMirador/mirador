@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
 
 describe('SanitizedHtml', () => {
@@ -6,8 +6,10 @@ describe('SanitizedHtml', () => {
     render(
       <SanitizedHtml
         data-testid="subject"
-        classes={{ root: 'root' }}
-        htmlString="<script>doBadThings()</script><b>Don't worry!</b><a>Some link</a>"
+        htmlString="
+          <b>Don't worry!</b>
+          <a>Some link</a>
+          <script type='module'>doBadThings()</script>"
         ruleSet="iiif"
       />,
     );
@@ -18,7 +20,6 @@ describe('SanitizedHtml', () => {
   });
 
   it('should pass correct class name to root element', () => {
-    expect(screen.getByTestId('subject')).toHaveClass('root');
     expect(screen.getByTestId('subject')).toHaveClass('mirador-third-party-html');
   });
 

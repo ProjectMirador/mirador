@@ -1,166 +1,115 @@
-import { Component } from 'react';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import Typography from '@material-ui/core/Typography';
+import { useContext, useState } from 'react';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import LanguageSettings from '../containers/LanguageSettings';
 import { NestedMenu } from './NestedMenu';
 import WorkspaceSelectionDialog from '../containers/WorkspaceSelectionDialog';
 import ChangeThemeDialog from '../containers/ChangeThemeDialog';
 import { PluginHook } from './PluginHook';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 
 /**
  */
-export class WorkspaceMenu extends Component {
-  /**
-   * constructor -
-   */
-  constructor(props) {
-    super(props);
-    this.state = {
-      changeTheme: {},
-      toggleZoom: {},
-      workspaceSelection: {},
-    };
-    this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
-    this.handleMenuItemClose = this.handleMenuItemClose.bind(this);
-  }
+export function WorkspaceMenu({
+  handleClose, showThemePicker = false, isWorkspaceAddVisible = false,
+  tReady = false, toggleZoomControls = () => {}, showZoomControls = false, ...menuProps
+}) {
+  const { t } = useTranslation();
+  const container = useContext(WorkspaceContext);
+  const [selectedOption, setSelectedOption] = useState(null);
 
-  /**
-   * @private
-   */
-  handleMenuItemClick(item, event) {
-    const obj = {};
-    obj[item] = {};
-    obj[item].open = true;
-    obj[item].anchorEl = event.currentTarget;
-    this.setState(obj);
-  }
+  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
 
-  /**
-   * @private
-   */
-  handleMenuItemClose(item) {
-    return (event) => {
-      const obj = {};
-      obj[item] = {};
-      obj[item].open = false;
-      obj[item].anchorEl = null;
-      this.setState(obj);
-    };
-  }
+  /** */
+  const handleClick = (option, e) => {
+    setSelectedOption(option);
+    handleClose(e);
+  };
 
-  /**
-   * @private
-   */
-  handleZoomToggleClick() {
-    const { toggleZoomControls, showZoomControls } = this.props;
+  /** */
+  const handleDialogClose = () => {
+    setSelectedOption(null);
+  };
+
+  /** */
+  const handleZoomToggleClick = (e) => {
     toggleZoomControls(!showZoomControls);
-  }
+    handleClose(e);
+  };
 
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      container,
-      handleClose,
-      showThemePicker,
-      isWorkspaceAddVisible,
-      t,
-      showZoomControls,
-      toggleZoomControls,
-      ...menuProps
-    } = this.props;
-
-    const {
-      changeTheme,
-      toggleZoom,
-      workspaceSelection,
-    } = this.state;
-
-    return (
-      <>
-        <Menu
-          container={container?.current}
-          anchorOrigin={{
-            horizontal: 'right',
-            vertical: 'top',
-          }}
-          transformOrigin={{
-            horizontal: 'left',
-            vertical: 'top',
-          }}
-          onClose={handleClose}
-          {...menuProps}
+  return (
+    <>
+      <Menu
+        container={container?.current}
+        anchorOrigin={{
+          horizontal: 'right',
+          vertical: 'top',
+        }}
+        transformOrigin={{
+          horizontal: 'left',
+          vertical: 'top',
+        }}
+        onClose={handleClose}
+        {...menuProps}
+      >
+        <MenuItem
+          aria-haspopup="true"
+          disabled={isWorkspaceAddVisible}
+          onClick={(e) => { handleZoomToggleClick(e); }}
+          aria-owns={selectedOption === 'toggleZoom' ? 'toggle-zoom-menu' : undefined}
         >
-          <MenuItem
-            aria-haspopup="true"
-            disabled={isWorkspaceAddVisible}
-            onClick={(e) => { this.handleZoomToggleClick(e); handleClose(e); }}
-            aria-owns={toggleZoom.anchorEl ? 'toggle-zoom-menu' : undefined}
-          >
-            <Typography variant="body1">
-              { showZoomControls ? t('hideZoomControls') : t('showZoomControls') }
-            </Typography>
-          </MenuItem>
-          <MenuItem
-            aria-haspopup="true"
-            onClick={(e) => { this.handleMenuItemClick('workspaceSelection', e); handleClose(e); }}
-            aria-owns={workspaceSelection.anchorEl ? 'workspace-selection' : undefined}
-          >
-            <Typography variant="body1">{t('selectWorkspaceMenu')}</Typography>
-          </MenuItem>
+          <Typography variant="body1">
+            { showZoomControls ? t('hideZoomControls') : t('showZoomControls') }
+          </Typography>
+        </MenuItem>
+        <MenuItem
+          aria-haspopup="true"
+          onClick={(e) => { handleClick('workspaceSelection', e); }}
+          aria-owns={selectedOption === 'workspaceSelection' ? 'workspace-selection' : undefined}
+        >
+          <Typography variant="body1">{t('selectWorkspaceMenu')}</Typography>
+        </MenuItem>
 
-          <NestedMenu label={t('language')}>
-            <LanguageSettings afterSelect={handleClose} />
-          </NestedMenu>
-          { showThemePicker && (
-            <MenuItem
-              aria-haspopup="true"
-              onClick={(e) => { this.handleMenuItemClick('changeTheme', e); handleClose(e); }}
-              aria-owns={changeTheme.anchorEl ? 'change-theme' : undefined}
-            >
-              <Typography variant="body1">{t('changeTheme')}</Typography>
-            </MenuItem>
-          )}
-          <PluginHook {...this.props} />
-        </Menu>
-        {Boolean(changeTheme.open) && (
-          <ChangeThemeDialog
-            container={container?.current}
-            handleClose={this.handleMenuItemClose('changeTheme')}
-            open={Boolean(changeTheme.open)}
-          />
+        <NestedMenu label={t('language')}>
+          <LanguageSettings afterSelect={handleClose} />
+        </NestedMenu>
+        { showThemePicker && (
+          <MenuItem
+            aria-haspopup="true"
+            onClick={(e) => { handleClick('changeTheme', e); }}
+            aria-owns={selectedOption === 'changeTheme' ? 'change-theme' : undefined}
+          >
+            <Typography variant="body1">{t('changeTheme')}</Typography>
+          </MenuItem>
         )}
-        {Boolean(workspaceSelection.open) && (
-          <WorkspaceSelectionDialog
-            open={Boolean(workspaceSelection.open)}
-            container={container?.current}
-            handleClose={this.handleMenuItemClose('workspaceSelection')}
-          />
-        )}
-      </>
-    );
-  }
+        <PluginHook {...pluginProps} />
+      </Menu>
+      {selectedOption === 'changeTheme' && (
+        <ChangeThemeDialog
+          container={container?.current}
+          handleClose={handleDialogClose}
+          open={selectedOption === 'changeTheme'}
+        />
+      )}
+      {selectedOption === 'workspaceSelection' && (
+        <WorkspaceSelectionDialog
+          open={selectedOption === 'workspaceSelection'}
+          container={container?.current}
+          handleClose={handleDialogClose}
+        />
+      )}
+    </>
+  );
 }
 
 WorkspaceMenu.propTypes = {
-  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   handleClose: PropTypes.func.isRequired,
   isWorkspaceAddVisible: PropTypes.bool,
   showThemePicker: PropTypes.bool,
   showZoomControls: PropTypes.bool,
-  t: PropTypes.func,
   toggleZoomControls: PropTypes.func,
-};
-
-WorkspaceMenu.defaultProps = {
-  container: null,
-  isWorkspaceAddVisible: false,
-  showThemePicker: false,
-  showZoomControls: false,
-  t: key => key,
-  toggleZoomControls: () => {},
+  tReady: PropTypes.bool,
 };

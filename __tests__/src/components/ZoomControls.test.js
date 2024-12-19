@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { ZoomControls } from '../../../src/components/ZoomControls';
 
@@ -6,74 +6,47 @@ import { ZoomControls } from '../../../src/components/ZoomControls';
 function createWrapper(props) {
   return render(
     <ZoomControls
-      classes={{ divider: 'divider', zoom_controls: 'zoom_controls' }}
       windowId="xyz"
       zoomToWorld={() => {}}
       {...props}
-
     />,
   );
 }
 
 describe('ZoomControls', () => {
   const viewer = { x: 100, y: 100, zoom: 1 };
-  const showZoomControls = false;
   let updateViewport;
 
-  describe('with showZoomControls=false', () => {
-    it('renders nothing unless asked', () => {
-      const { container } = createWrapper({ showZoomControls, updateViewport, viewer });
-      expect(container).toBeEmptyDOMElement();
+  const zoomToWorld = vi.fn();
+  let user;
+  beforeEach(() => {
+    user = userEvent.setup();
+    updateViewport = vi.fn();
+    createWrapper({
+      updateViewport, viewer, zoomToWorld,
     });
   });
 
-  describe('with showZoomControls=true', () => {
-    const zoomToWorld = jest.fn();
-    let user;
-    beforeEach(() => {
-      user = userEvent.setup();
-      updateViewport = jest.fn();
-      createWrapper({
-        showZoomControls: true, updateViewport, viewer, zoomToWorld,
-      });
-    });
-
-    it('renders a couple buttons', () => {
-      expect(screen.getByRole('button', { name: 'zoomIn' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'zoomOut' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'zoomReset' })).toBeInTheDocument();
-    });
-
-    it('has a zoom-in button', async () => {
-      await user.click(screen.getByRole('button', { name: 'zoomIn' }));
-
-      expect(updateViewport).toHaveBeenCalledWith('xyz', { zoom: 2 });
-    });
-
-    it('has a zoom-out button', async () => {
-      await user.click(screen.getByRole('button', { name: 'zoomOut' }));
-      expect(updateViewport).toHaveBeenCalledWith('xyz', { zoom: 0.5 });
-    });
-
-    it('has a zoom reset button', async () => {
-      await user.click(screen.getByRole('button', { name: 'zoomReset' }));
-
-      expect(zoomToWorld).toHaveBeenCalledWith(false);
-    });
+  it('renders a couple buttons', () => {
+    expect(screen.getByRole('button', { name: 'Zoom in' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Zoom out' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reset zoom' })).toBeInTheDocument();
   });
 
-  /* eslint-disable testing-library/no-container, testing-library/no-node-access */
-  describe('responsive divider', () => {
-    it('is present when the displayDivider prop is true (default)', () => {
-      const { container } = createWrapper({ showZoomControls: true, viewer });
+  it('has a zoom-in button', async () => {
+    await user.click(screen.getByRole('button', { name: 'Zoom in' }));
 
-      expect(container.querySelector('.divider')).toBeInTheDocument();
-    });
+    expect(updateViewport).toHaveBeenCalledWith('xyz', { zoom: 2 });
+  });
 
-    it('is not present when the displayDivider prop is false', () => {
-      const { container } = createWrapper({ displayDivider: false, showZoomControls: true, viewer });
+  it('has a zoom-out button', async () => {
+    await user.click(screen.getByRole('button', { name: 'Zoom out' }));
+    expect(updateViewport).toHaveBeenCalledWith('xyz', { zoom: 0.5 });
+  });
 
-      expect(container.querySelector('.divider')).not.toBeInTheDocument();
-    });
+  it('has a zoom reset button', async () => {
+    await user.click(screen.getByRole('button', { name: 'Reset zoom' }));
+
+    expect(zoomToWorld).toHaveBeenCalledWith(false);
   });
 });

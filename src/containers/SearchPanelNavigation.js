@@ -1,7 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchPanelNavigation } from '../components/SearchPanelNavigation';
 import * as actions from '../state/actions';
@@ -37,18 +35,8 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   ),
 });
 
-/** */
-const styles = theme => ({
-  body2: {
-    marginLeft: '-16px',
-    width: '100%',
-  },
-});
-
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withStyles(styles),
-  withTranslation(),
   withPlugins('SearchPanelNavigation'),
 );
 

@@ -1,12 +1,10 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { WindowSideBar } from '../../../src/components/WindowSideBar';
 
 /** create wrapper */
 function createWrapper({ ...props }) {
   return render(
     <WindowSideBar
-      classes={{ drawer: 'test-drawer' }}
-      t={k => k}
       windowId="xyz"
       {...props}
     />,
@@ -26,7 +24,6 @@ function createWrapper({ ...props }) {
 describe('WindowSideBar when closed', () => {
   it('renders without an error', () => {
     createWrapper({});
-    expect(document.querySelector('.test-drawer')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
     expect(screen.queryByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' })).not.toBeInTheDocument();
   });
 });

@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 
@@ -33,14 +33,15 @@ describe('ThumbnailCanvasGrouping', () => {
     position: 'far-bottom',
   };
   beforeEach(() => {
-    setCanvas = jest.fn();
+    setCanvas = vi.fn();
     wrapper = createWrapper({ data, setCanvas });
+  });
+  const spyCurrentCanvasClass = vi.spyOn(ThumbnailCanvasGrouping.prototype, 'currentCanvasClass');
+  afterEach(() => {
+    spyCurrentCanvasClass.mockClear();
   });
   it('renders', () => {
     expect(screen.getByRole('gridcell')).toBeInTheDocument();
-  });
-  it('sets a mirador-current-canvas-grouping class on current canvas', () => {
-    expect(screen.getByRole('button')).toHaveClass('mirador-current-canvas-grouping');
   });
   it('renders a CaptionedIIIFThumbnail', () => {
     expect(screen.getByText('Image 1')).toBeInTheDocument();
@@ -49,9 +50,9 @@ describe('ThumbnailCanvasGrouping', () => {
     wrapper.unmount();
     const user = userEvent.setup();
     wrapper = createWrapper({ data, index: 0, setCanvas });
-
     await user.click(wrapper.container.querySelector('.mirador-thumbnail-nav-canvas-0')); // eslint-disable-line testing-library/no-node-access
-
+    expect(spyCurrentCanvasClass).toHaveBeenCalledWith([0]);
+    expect(spyCurrentCanvasClass).toHaveReturnedWith('current-canvas-grouping');
     expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
   });
   describe('attributes based off far-bottom position', () => {

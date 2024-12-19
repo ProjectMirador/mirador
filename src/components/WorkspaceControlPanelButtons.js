@@ -1,5 +1,3 @@
-import { Component } from 'react';
-import PropTypes from 'prop-types';
 import FullScreenButton from '../containers/FullScreenButton';
 import WorkspaceMenuButton from '../containers/WorkspaceMenuButton';
 import WorkspaceOptionsButton from '../containers/WorkspaceOptionsButton';
@@ -9,30 +7,14 @@ import { PluginHook } from './PluginHook';
 /**
  *
  */
-export class WorkspaceControlPanelButtons extends Component {
-  /**
-   * render
-   *
-   * @return {type}  description
-   */
-  render() {
-    const { classes } = this.props;
-    return (
-      <>
-        <WindowListButton />
-        <WorkspaceMenuButton />
-        <WorkspaceOptionsButton />
-        <FullScreenButton className={classes.ctrlBtn} />
-        <PluginHook {...this.props} />
-      </>
-    );
-  }
+export function WorkspaceControlPanelButtons({ ...rest }) {
+  return (
+    <>
+      <WindowListButton />
+      <WorkspaceMenuButton />
+      <WorkspaceOptionsButton />
+      <FullScreenButton />
+      <PluginHook {...rest} />
+    </>
+  );
 }
-
-WorkspaceControlPanelButtons.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
-};
-
-WorkspaceControlPanelButtons.defaultProps = {
-  classes: {},
-};

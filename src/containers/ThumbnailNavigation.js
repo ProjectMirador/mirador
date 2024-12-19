@@ -1,7 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { ThumbnailNavigation } from '../components/ThumbnailNavigation';
@@ -40,21 +38,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   setPreviousCanvas: (...args) => dispatch(actions.setPreviousCanvas(windowId)),
 });
 
-/**
- * Styles for withStyles HOC
- */
-const styles = theme => ({
-  thumbNavigation: {
-    '&:focus': {
-      boxShadow: 0,
-      outline: 0,
-    },
-  },
-});
-
 const enhance = compose(
-  withStyles(styles),
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ThumbnailNavigation'),
 );

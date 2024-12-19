@@ -1,16 +1,19 @@
-import { createRef, Component } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
-import AddIcon from '@material-ui/icons/AddSharp';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMoreSharp';
-import AppBar from '@material-ui/core/AppBar';
-import Drawer from '@material-ui/core/Drawer';
-import Grid from '@material-ui/core/Grid';
-import Fab from '@material-ui/core/Fab';
-import List from '@material-ui/core/List';
-import Paper from '@material-ui/core/Paper';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import AddIcon from '@mui/icons-material/AddSharp';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMoreSharp';
+import AppBar from '@mui/material/AppBar';
+import Drawer from '@mui/material/Drawer';
+import Grid from '@mui/material/Grid';
+import Fab from '@mui/material/Fab';
+import List from '@mui/material/List';
+import Paper from '@mui/material/Paper';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { visuallyHidden } from '@mui/utils';
+import { useTranslation } from 'react-i18next';
 import ns from '../config/css-ns';
 import ManifestForm from '../containers/ManifestForm';
 import ManifestListItem from '../containers/ManifestListItem';
@@ -18,190 +21,191 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { IIIFDropTarget } from './IIIFDropTarget';
 import { PluginHook } from './PluginHook';
 
+const StyledWorkspaceAdd = styled('div')(() => ({
+  boxSizing: 'border-box',
+  height: '100%',
+  overflowX: 'hidden',
+  overflowY: 'auto',
+}));
+
+const StyledMiradorMenuButton = styled(MiradorMenuButton)(() => ({
+  marginLeft: -12,
+  marginRight: 20,
+}));
+
 /**
  * An area for managing manifests and adding them to workspace
  * @memberof Workspace
  * @private
  */
-export class WorkspaceAdd extends Component {
-  /** */
-  constructor(props) {
-    super(props);
-
-    this.ref = createRef();
-    this.state = { addResourcesOpen: false, refWidth: '100%' };
-
-    this.onSubmit = this.onSubmit.bind(this);
-    this.setAddResourcesVisibility = this.setAddResourcesVisibility.bind(this);
-    this.handleDrop = this.handleDrop.bind(this);
-
-    this.updateRefWidth = this.updateRefWidth.bind(this);
-  }
+export function WorkspaceAdd({
+  addResource = () => {}, catalog = [], setWorkspaceAddVisibility, ...rest
+}) {
+  const { t } = useTranslation();
+  const [addResourcesOpen, setAddResourcesVisibility] = useState(false);
+  const ref = useRef();
+  const [refWidth, setRefWidth] = useState('100%');
 
   /** */
-  componentDidMount() {
-    window.addEventListener('resize', this.updateRefWidth);
-    this.updateRefWidth();
-  }
+  const updateRefWidth = () => {
+    if (ref.current) {
+      setRefWidth(ref.current.offsetWidth);
+    }
+  };
 
   /** */
-  handleDrop({ manifestId, manifestJson }, props, monitor) {
-    const { addResource } = this.props;
-
+  const handleDrop = ({ manifestId, manifestJson }, props, monitor) => {
     if (manifestJson) {
       addResource(manifestId, manifestJson, { provider: 'file' });
     } else {
       addResource(manifestId);
     }
 
-    this.scrollToTop();
-  }
+    scrollToTop();
+  };
 
   /** @private */
-  onSubmit() {
-    this.setAddResourcesVisibility(false);
-    this.scrollToTop();
-  }
-
-  /**
-   * @private
-   */
-  setAddResourcesVisibility(bool) {
-    this.setState({ addResourcesOpen: bool });
-  }
+  const onSubmit = () => {
+    setAddResourcesVisibility(false);
+    scrollToTop();
+  };
 
   /** Scroll the list back to the top */
-  scrollToTop() {
-    if (this.ref.current) {
-      const el = this.ref.current;
+  const scrollToTop = () => {
+    if (ref.current) {
+      const el = ref.current;
       el.scrollTo({ behavior: 'smooth', left: 0, top: 0 });
     }
-  }
+  };
 
-  /** Update ref width */
-  updateRefWidth() {
-    if (this.ref.current) {
-      const refWidth = this.ref.current.offsetWidth;
-      this.setState({ refWidth });
-    }
-  }
+  const manifestList = catalog.map((resource, index) => (
+    <ManifestListItem
+      {...(index === 0 && { buttonRef: (buttonRef => buttonRef && buttonRef.focus()) })}
+      key={resource.manifestId}
+      manifestId={resource.manifestId}
+      provider={resource.provider}
+      handleClose={() => setWorkspaceAddVisibility(false)}
+    />
+  ));
 
-  /**
-   * render
-   */
-  render() {
-    const {
-      catalog, setWorkspaceAddVisibility, t, classes, isWorkspaceControlPanelVisible,
-    } = this.props;
-    const { addResourcesOpen, refWidth } = this.state;
+  const pluginProps = {
+    addResource, catalog, setWorkspaceAddVisibility, t, ...rest,
+  };
 
-    const manifestList = catalog.map((resource, index) => (
-      <ManifestListItem
-        {...(index === 0 && { buttonRef: (ref => ref && ref.focus()) })}
-        key={resource.manifestId}
-        manifestId={resource.manifestId}
-        provider={resource.provider}
-        handleClose={() => setWorkspaceAddVisibility(false)}
-      />
-    ));
+  useEffect(() => {
+    window.addEventListener('resize', updateRefWidth);
 
-    return (
-      <IIIFDropTarget onDrop={this.handleDrop}>
-        <div
-          ref={this.ref}
-          className={classNames(
-            ns('workspace-add'),
-            classes.workspaceAdd,
-            { [classes.workspaceAddMargin]: isWorkspaceControlPanelVisible },
-          )}
-        >
-          {catalog.length < 1 ? (
+    updateRefWidth();
+
+    return () => {
+      window.removeEventListener('resize', updateRefWidth);
+    };
+  }, []);
+
+  return (
+    <IIIFDropTarget onDrop={handleDrop}>
+      <StyledWorkspaceAdd className={classNames(ns('workspace-add'))} ref={ref}>
+        {catalog.length < 1 ? (
+          <Grid
+            alignItems="center"
+            container
+            style={{
+              height: '100%',
+            }}
+          >
             <Grid
-              alignItems="center"
-              container
-              style={{
-                height: '100%',
-              }}
+              xs={12}
+              item
             >
-              <Grid
-                xs={12}
-                item
+              <Typography
+                variant="h1"
+                component="div"
+                align="center"
               >
-                <Typography
-                  variant="h1"
-                  component="div"
-                  align="center"
-                >
-                  {t('emptyResourceList')}
-                </Typography>
-              </Grid>
+                {t('emptyResourceList')}
+              </Typography>
             </Grid>
-          ) : (
-            <Paper className={classes.list}>
-              <Typography variant="srOnly" component="h1">{t('miradorResources')}</Typography>
-              <PluginHook {...this.props} />
-              <List disablePadding>
-                {manifestList}
-              </List>
-            </Paper>
-          )}
-          <Fab
-            variant="extended"
-            disabled={addResourcesOpen}
-            className={classNames(classes.fab, ns('add-resource-button'))}
-            color="primary"
-            onClick={() => (this.setAddResourcesVisibility(true))}
-          >
-            <AddIcon />
-            {t('addResource')}
-          </Fab>
+          </Grid>
+        ) : (
+          <Paper sx={{ margin: 2 }}>
+            <Typography style={visuallyHidden} component="h1">{t('miradorResources')}</Typography>
+            <PluginHook {...pluginProps} />
+            <List disablePadding>
+              {manifestList}
+            </List>
+          </Paper>
+        )}
+        <Fab
+          variant="extended"
+          disabled={addResourcesOpen}
+          sx={(theme) => ({
+            bottom: theme.spacing(2),
+            position: 'absolute',
+            right: theme.spacing(2),
+          })}
+          className={classNames(ns('add-resource-button'))}
+          aria-label={t('addResource')}
+          color="primary"
+          onClick={() => setAddResourcesVisibility(true)}
+        >
+          <AddIcon />
+          {t('addResource')}
+        </Fab>
 
-          <Drawer
-            className={classNames({
-              [classes.displayNone]: !addResourcesOpen,
-            })}
-            classes={{ paper: classes.paper }}
-            variant="persistent"
-            anchor="bottom"
-            open={addResourcesOpen}
-            ModalProps={{
-              disablePortal: true,
-              hideBackdrop: true,
-              style: { position: 'absolute' },
-            }}
-            PaperProps={{
-              style: { width: refWidth },
+        <Drawer
+          sx={theme => ({
+            '.MuiDrawer-paper': {
+              borderTop: '0',
+              left: 'unset',
+              width: refWidth,
+            },
+            ...(!addResourcesOpen && {
+              display: 'none',
+            }),
+          })}
+          variant="persistent"
+          anchor="bottom"
+          open={addResourcesOpen}
+          ModalProps={{
+            disablePortal: true,
+            hideBackdrop: true,
+            style: { position: 'absolute' },
+          }}
+        >
+          <Paper
+            sx={{
+              left: '0',
+              marginTop: 6,
+              paddingBottom: 2,
+              paddingLeft: { sm: 3, xs: 2 },
+              paddingRight: { sm: 3, xs: 2 },
+              paddingTop: 2,
+              right: '0',
             }}
           >
-            <Paper
-              className={classes.form}
-            >
-              <AppBar position="absolute" color="primary" onClick={() => (this.setAddResourcesVisibility(false))}>
-                <Toolbar variant="dense">
-                  <MiradorMenuButton
-                    aria-label={t('closeAddResourceForm')}
-                    className={classes.menuButton}
-                    color="inherit"
-                  >
-                    <ExpandMoreIcon />
-                  </MiradorMenuButton>
-                  <Typography variant="h2" noWrap color="inherit" className={classes.typographyBody}>
-                    {t('addResource')}
-                  </Typography>
-                </Toolbar>
-              </AppBar>
-              <ManifestForm
-                addResourcesOpen={addResourcesOpen}
-                onSubmit={this.onSubmit}
-                onCancel={() => (this.setAddResourcesVisibility(false))}
-              />
-            </Paper>
-          </Drawer>
-        </div>
-
-      </IIIFDropTarget>
-    );
-  }
+            <AppBar position="absolute" color="primary" enableColorOnDark onClick={() => setAddResourcesVisibility(false)}>
+              <Toolbar variant="dense">
+                <StyledMiradorMenuButton
+                  aria-label={t('closeAddResourceForm')}
+                  color="inherit"
+                >
+                  <ExpandMoreIcon />
+                </StyledMiradorMenuButton>
+                <Typography variant="h2" noWrap color="inherit" sx={{ flexGrow: 1 }}>
+                  {t('addResource')}
+                </Typography>
+              </Toolbar>
+            </AppBar>
+            <ManifestForm
+              addResourcesOpen={addResourcesOpen}
+              onSubmit={onSubmit}
+              onCancel={() => setAddResourcesVisibility(false)}
+            />
+          </Paper>
+        </Drawer>
+      </StyledWorkspaceAdd>
+    </IIIFDropTarget>
+  );
 }
 
 WorkspaceAdd.propTypes = {
@@ -210,15 +214,5 @@ WorkspaceAdd.propTypes = {
     manifestId: PropTypes.string.isRequired,
     provider: PropTypes.string,
   })),
-  classes: PropTypes.objectOf(PropTypes.string),
-  isWorkspaceControlPanelVisible: PropTypes.bool.isRequired,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
-  t: PropTypes.func,
-};
-
-WorkspaceAdd.defaultProps = {
-  addResource: () => {},
-  catalog: [],
-  classes: {},
-  t: key => key,
 };

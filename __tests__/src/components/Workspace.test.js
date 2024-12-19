@@ -1,6 +1,6 @@
 import {
   render, screen, fireEvent, waitFor,
-} from 'test-utils';
+} from '@tests/utils/test-utils';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -19,7 +19,6 @@ function createWrapper(props) {
         windowIds={['1', '2']}
         workspaceId="foo"
         workspaceType="mosaic"
-        t={k => k}
         {...props}
       />
     </DndProvider>,
@@ -42,7 +41,7 @@ describe('Workspace', () => {
     it('should render <WorkspaceElastic/> properly', () => {
       const { container } = createWrapper({ workspaceType: 'elastic' });
 
-      expect(screen.getByRole('heading', { name: 'miradorViewer' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Mirador viewer' })).toBeInTheDocument();
 
       expect(container.querySelector('.mirador-workspace.react-draggable')).toBeInTheDocument();
     });
@@ -51,7 +50,7 @@ describe('Workspace', () => {
     it('should render <WorkspaceMosaic/> properly', () => {
       const { container } = createWrapper();
 
-      expect(screen.getByRole('heading', { name: 'miradorViewer' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Mirador viewer' })).toBeInTheDocument();
 
       expect(container.querySelector('.mirador-mosaic')).toBeInTheDocument();
       expect(container.querySelector('.drop-target-container')).toBeInTheDocument();
@@ -61,16 +60,16 @@ describe('Workspace', () => {
     it('should render <Window/> components as list', () => {
       createWrapper({ workspaceType: 'bubu' });
 
-      expect(screen.getByRole('heading', { name: 'miradorViewer' })).toBeInTheDocument();
-      expect(screen.getAllByLabelText('window')).toHaveLength(2);
+      expect(screen.getByRole('heading', { name: 'Mirador viewer' })).toBeInTheDocument();
+      expect(screen.getAllByLabelText('Window:')).toHaveLength(2);
     });
   });
   describe('if any windows are maximized', () => {
     it('should render only maximized <Window/> components', () => {
       createWrapper({ maximizedWindowIds: ['1'] });
 
-      expect(screen.getByRole('heading', { name: 'miradorViewer' })).toBeInTheDocument();
-      expect(screen.getByLabelText('window')).toHaveAttribute('id', '1');
+      expect(screen.getByRole('heading', { name: 'Mirador viewer' })).toBeInTheDocument();
+      expect(screen.getByLabelText('Window:')).toHaveAttribute('id', '1');
     });
   });
 
@@ -78,24 +77,8 @@ describe('Workspace', () => {
     it('should render placeholder content', () => {
       createWrapper({ windowIds: [] });
 
-      expect(screen.getByRole('heading', { name: 'miradorViewer' })).toBeInTheDocument();
-      expect(screen.getByText('welcome')).toHaveClass('MuiTypography-h1');
-    });
-  });
-
-  describe('when the workspace control panel is displayed', () => {
-    it('has the *-with-control-panel class applied', () => {
-      const { container } = createWrapper();
-
-      expect(container.querySelector('.mirador-workspace-with-control-panel')).toBeInTheDocument();
-    });
-  });
-
-  describe('when the workspace control panel is not displayed', () => {
-    it('does not have the *-with-control-panel class applied', () => {
-      const { container } = createWrapper({ isWorkspaceControlPanelVisible: false });
-
-      expect(container.querySelector('.mirador-workspace-with-control-panel')).not.toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Mirador viewer' })).toBeInTheDocument();
+      expect(screen.getByText('Welcome to Mirador')).toHaveClass('MuiTypography-h1');
     });
   });
 
@@ -103,10 +86,10 @@ describe('Workspace', () => {
     it('adds a new catalog entry from a manifest', async () => {
       const manifestJson = '{ "data": "123" }';
 
-      const addWindow = jest.fn();
+      const addWindow = vi.fn();
 
       const { container } = createWrapper({ addWindow });
-      const dropTarget = container.querySelector('.mirador-workspace-with-control-panel');
+      const dropTarget = container.querySelector('.mirador-workspace-viewport');
 
       const file = new File([manifestJson], 'manifest.json', { type: 'application/json' });
       const dataTransfer = {
@@ -125,11 +108,11 @@ describe('Workspace', () => {
     it('adds a new catalog entry from a IIIF drag and drop icon', () => {
       const manifestJson = '{ "data": "123" }';
 
-      const addWindow = jest.fn();
+      const addWindow = vi.fn();
 
       const { container } = createWrapper({ addWindow, allowNewWindows: false });
 
-      const dropTarget = container.querySelector('.mirador-workspace-with-control-panel');
+      const dropTarget = container.querySelector('.mirador-workspace-viewport');
 
       const file = new File([manifestJson], 'manifest.json', { type: 'application/json' });
       const dataTransfer = {

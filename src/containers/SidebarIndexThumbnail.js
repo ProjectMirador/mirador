@@ -1,7 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
 import { withPlugins } from '../extend/withPlugins';
 import { SidebarIndexThumbnail } from '../components/SidebarIndexThumbnail';
 import { getConfig } from '../state/selectors';
@@ -15,18 +13,7 @@ const mapStateToProps = (state, { data }) => ({
   ...(getConfig(state).canvasNavigation || {}),
 });
 
-/**
- * Styles for withStyles HOC
- */
-const styles = theme => ({
-  label: {
-    paddingLeft: theme.spacing(1),
-  },
-});
-
 const enhance = compose(
-  withStyles(styles),
-  withTranslation(),
   connect(mapStateToProps, null),
   withPlugins('SidebarIndexThumbnail'),
 );
