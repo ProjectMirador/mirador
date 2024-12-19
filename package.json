@@ -4,6 +4,12 @@
   "description": "An open-source, web-based 'multi-up' viewer that supports zoom-pan-rotate functionality, ability to display/compare simple images, and images with annotations.",
   "main": "dist/cjs/src/index.js",
   "module": "dist/es/src/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/es/src/index.js",
+      "require": "./dist/cjs/src/index.js"
+    }
+  },
   "files": [
     "dist"
   ],
@@ -67,7 +73,7 @@
     "react-i18next": "^13.0.0 || ^14.0.0 || ^15.0.0",
     "react-image": "^4.0.1",
     "react-intersection-observer": "^9.0.0",
-    "react-mosaic-component": "^6.0.0",
+    "react-mosaic-component2": "^6.0.0",
     "react-redux": "^8.0.0 || ^9.0.0",
     "react-resize-observer": "^1.1.1",
     "react-rnd": "^10.1",

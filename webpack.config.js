@@ -21,6 +21,10 @@ const baseConfig = mode => ({
         },
         test: /\.(js|mjs|jsx)$/,
       },
+      {
+        test: /\.mjs$/i,
+        resolve: { byDependency: { esm: { fullySpecified: false } } }
+      },
     ],
   },
   optimization: {
