@@ -6,6 +6,7 @@ import {
   getWindow,
 } from '../state/selectors';
 import { SelectCollection } from '../components/SelectCollection';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /** */
 const mapStateToProps = (state, { windowId }) => {
@@ -22,6 +23,7 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('SelectCollection'),
 );

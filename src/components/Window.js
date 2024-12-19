@@ -6,6 +6,7 @@ import { MosaicWindowContext } from 'react-mosaic-component2';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import ns from '../config/css-ns';
+import WindowContext from '../contexts/WindowContext';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
 import CompanionArea from '../containers/CompanionArea';
@@ -76,6 +77,17 @@ const DraggableNavBar = ({ children, ...props }) => {
   );
 };
 
+/** a minimal window for displaying an error message */
+const ErrorWindow = ({ error }) => (
+  <MinimalWindow>
+    <ErrorContent error={error} />
+  </MinimalWindow>
+);
+
+ErrorWindow.propTypes = {
+  error: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
 /**
  * Represents a Window in the mirador workspace
  * @param {object} window
@@ -87,11 +99,6 @@ export function Window({
 }) {
   const { t } = useTranslation();
   const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
-  const ErrorWindow = useCallback(({ error }) => (
-    <MinimalWindow windowId={windowId}>
-      <ErrorContent error={error} windowId={windowId} />
-    </MinimalWindow>
-  ), [windowId]);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorWindow}>
@@ -99,34 +106,32 @@ export function Window({
         onFocus={focusWindow}
         ownerState={ownerState}
         component="section"
-        elevation={1}
         id={windowId}
+        elevation={1}
         className={ns('window')}
         aria-label={t('window', { label })}
       >
         <WindowTopBar
           component={workspaceType === 'mosaic' && windowDraggable ? DraggableNavBar : undefined}
-          windowId={windowId}
           windowDraggable={windowDraggable}
         />
-        <IIIFAuthentication windowId={windowId} />
-        { manifestError && <ErrorContent error={{ stack: manifestError }} windowId={windowId} /> }
+        <IIIFAuthentication />
+        { manifestError && <ErrorContent error={{ stack: manifestError }} /> }
         <ContentRow>
           <ContentColumn>
             <StyledPrimaryWindow
               view={view}
-              windowId={windowId}
               isFetching={isFetching}
               sideBarOpen={sideBarOpen}
             />
-            <StyledCompanionAreaBottom windowId={windowId} position="bottom" />
+            <StyledCompanionAreaBottom position="bottom" />
           </ContentColumn>
           <StyledCompanionAreaRight>
-            <CompanionArea windowId={windowId} position="right" />
-            <CompanionArea windowId={windowId} position="far-right" />
+            <CompanionArea position="right" />
+            <CompanionArea position="far-right" />
           </StyledCompanionAreaRight>
         </ContentRow>
-        <CompanionArea windowId={windowId} position="far-bottom" />
+        <CompanionArea position="far-bottom" />
         <PluginHook {...ownerState} />
       </Root>
     </ErrorBoundary>

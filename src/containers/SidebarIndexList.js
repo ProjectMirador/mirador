@@ -8,6 +8,7 @@ import {
   getVisibleCanvasIds,
 } from '../state/selectors';
 import { SidebarIndexList } from '../components/SidebarIndexList';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -28,6 +29,7 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('SidebarIndexList'),
 );

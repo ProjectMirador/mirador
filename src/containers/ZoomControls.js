@@ -4,6 +4,7 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { getViewer } from '../state/selectors';
 import { ZoomControls } from '../components/ZoomControls';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -24,6 +25,7 @@ const mapStateToProps = (state, { windowId }) => (
 const mapDispatchToProps = { updateViewport: actions.updateViewport };
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('ZoomControls'),
 );

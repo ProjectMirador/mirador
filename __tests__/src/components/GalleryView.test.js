@@ -9,10 +9,10 @@ function createWrapper(props) {
   return render(
     <GalleryView
       canvases={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()}
-      windowId="1234"
       selectedCanvasIndex={0}
       {...props}
     />,
+    { windowId: '1234' },
   );
 }
 

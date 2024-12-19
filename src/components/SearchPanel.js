@@ -10,7 +10,7 @@ import SearchResults from '../containers/SearchResults';
 
 /** */
 export function SearchPanel({
-  fetchSearch = undefined, id, query = '', removeSearch, searchService, suggestedSearches = [], windowId,
+  fetchSearch = undefined, id, query = '', removeSearch, searchService, suggestedSearches = [],
 }) {
   const { t } = useTranslation();
   const containerRef = useRef(null);
@@ -38,15 +38,13 @@ export function SearchPanel({
           }
         </>
       )}
-      windowId={windowId}
       id={id}
-      titleControls={<SearchPanelControls companionWindowId={id} windowId={windowId} />}
+      titleControls={<SearchPanelControls companionWindowId={id} />}
       ref={containerRef}
     >
       <SearchResults
         containerRef={containerRef}
         companionWindowId={id}
-        windowId={windowId}
       />
       {
         fetchSearch && suggestedSearches && query === '' && suggestedSearches.map(search => (
@@ -74,5 +72,4 @@ SearchPanel.propTypes = {
     id: PropTypes.string,
   }).isRequired,
   suggestedSearches: PropTypes.arrayOf(PropTypes.string),
-  windowId: PropTypes.string.isRequired,
 };

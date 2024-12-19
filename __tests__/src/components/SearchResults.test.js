@@ -64,6 +64,7 @@ function createWrapper(props) {
           window: {},
         },
       },
+      windowId: 'window',
     },
   );
 }

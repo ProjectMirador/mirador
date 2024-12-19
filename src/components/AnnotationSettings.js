@@ -28,5 +28,4 @@ AnnotationSettings.propTypes = {
   displayAll: PropTypes.bool.isRequired,
   displayAllDisabled: PropTypes.bool.isRequired,
   toggleAnnotationDisplay: PropTypes.func.isRequired,
-  windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };

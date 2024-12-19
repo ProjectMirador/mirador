@@ -6,6 +6,7 @@ import {
   getAnnotationResourcesByMotivation,
 } from '../state/selectors';
 import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnotationsPanel';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -21,6 +22,7 @@ const mapStateToProps = (state, { windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps, null),
   withPlugins('WindowSideBarAnnotationsPanel'),
   // further HOC

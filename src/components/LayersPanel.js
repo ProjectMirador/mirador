@@ -7,14 +7,13 @@ import CanvasLayers from '../containers/CanvasLayers';
  * a panel showing the canvases for a given manifest
  */
 export function LayersPanel({
-  canvasIds = [], id, windowId,
+  canvasIds = [], id,
 }) {
   const { t } = useTranslation();
   return (
     <CompanionWindow
       title={t('layers')}
       id={id}
-      windowId={windowId}
     >
       {canvasIds.map((canvasId, index) => (
         <CanvasLayers
@@ -22,7 +21,6 @@ export function LayersPanel({
           index={index}
           key={canvasId}
           totalSize={canvasIds.length}
-          windowId={windowId}
         />
       ))}
     </CompanionWindow>
@@ -32,5 +30,4 @@ export function LayersPanel({
 LayersPanel.propTypes = {
   canvasIds: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
-  windowId: PropTypes.string.isRequired,
 };

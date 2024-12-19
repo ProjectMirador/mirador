@@ -76,5 +76,4 @@ SearchPanelNavigation.propTypes = {
   searchHits: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   selectAnnotation: PropTypes.func.isRequired,
   selectedContentSearchAnnotation: PropTypes.arrayOf(PropTypes.string).isRequired,
-  windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };

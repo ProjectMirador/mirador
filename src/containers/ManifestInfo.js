@@ -8,6 +8,7 @@ import {
   getManifestMetadata,
 } from '../state/selectors';
 import { ManifestInfo } from '../components/ManifestInfo';
+import { withWindowContext } from '../contexts/WindowContext';
 
 /**
  * mapStateToProps - to hook up connect
@@ -26,6 +27,7 @@ const mapStateToProps = (state, { id, manifestId, windowId }) => ({
 });
 
 const enhance = compose(
+  withWindowContext,
   connect(mapStateToProps),
   withPlugins('ManifestInfo'),
 );

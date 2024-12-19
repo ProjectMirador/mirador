@@ -6,12 +6,11 @@ import { CompanionWindowFactory } from '../../../src/components/CompanionWindowF
 function createWrapper({ content = 'closed', ...props }) {
   return render(
     <CompanionWindowFactory
-      windowId="x"
       id="123"
       content={content}
       {...props}
     />,
-    { preloadedState: { companionWindows: { 123: { content }, thumb: {} }, windows: { x: { thumbnailNavigationId: 'thumb' } } } },
+    { preloadedState: { companionWindows: { 123: { content }, thumb: {} }, windows: { x: { thumbnailNavigationId: 'thumb' } } }, windowId: 'x' },
   );
 }
 
