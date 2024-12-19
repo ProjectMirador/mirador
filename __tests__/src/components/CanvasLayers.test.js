@@ -1,4 +1,4 @@
-import { screen, fireEvent, render } from 'test-utils';
+import { screen, fireEvent, render } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Resource } from 'manifesto.js';
 
@@ -14,7 +14,6 @@ function createWrapper(props) {
       label="A Canvas Label"
       layerMetadata={{}}
       layers={[]}
-      t={t => t}
       totalSize={1}
       updateLayers={() => {}}
       windowId="abc"
@@ -28,7 +27,7 @@ describe('CanvasLayers', () => {
     it('displays the canvas label', () => {
       createWrapper({ totalSize: 2 });
 
-      expect(screen.getByText('annotationCanvasLabel', { container: '.MuiTypography-overline' })).toBeInTheDocument();
+      expect(screen.getByText('Left: [A Canvas Label]', { container: '.MuiTypography-overline' })).toBeInTheDocument();
     });
   });
 
@@ -44,13 +43,13 @@ describe('CanvasLayers', () => {
     expect(screen.getAllByRole('listitem')[0]).toHaveTextContent('1');
     expect(screen.getAllByRole('listitem')[1]).toHaveTextContent('2');
 
-    expect(screen.getAllByRole('button', { name: 'layer_hide' }).length).toEqual(2);
-    expect(screen.getAllByRole('button', { name: 'layer_moveToTop' }).length).toEqual(2);
-    expect(screen.getAllByRole('spinbutton', { name: 'layer_opacity' }).length).toEqual(2);
+    expect(screen.getAllByRole('button', { name: 'Hide layer' }).length).toEqual(2);
+    expect(screen.getAllByRole('button', { name: 'Move layer to top' }).length).toEqual(2);
+    expect(screen.getAllByRole('spinbutton', { name: 'Layer opacity' }).length).toEqual(2);
   });
 
   it('handles drag + drop of layers', async () => {
-    const updateLayers = jest.fn();
+    const updateLayers = vi.fn();
     createWrapper({
       canvasId: 'foo',
       layers: [
@@ -86,7 +85,7 @@ describe('CanvasLayers', () => {
     let user;
 
     beforeEach(() => {
-      updateLayers = jest.fn();
+      updateLayers = vi.fn();
       user = userEvent.setup();
       createWrapper({
         canvasId: 'https://prtd.app/hamilton/canvas/p1.json',
@@ -99,7 +98,7 @@ describe('CanvasLayers', () => {
     });
 
     it('has a button for moving a layer to the top', async () => {
-      await user.click(screen.getAllByLabelText('layer_moveToTop')[1]);
+      await user.click(screen.getAllByLabelText('Move layer to top')[1]);
 
       expect(updateLayers).toHaveBeenCalledWith('abc', 'https://prtd.app/hamilton/canvas/p1.json', {
         'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg': {
@@ -112,7 +111,7 @@ describe('CanvasLayers', () => {
     });
 
     it('has a button for toggling visibility', async () => {
-      await user.click(screen.getAllByLabelText('layer_hide')[1]);
+      await user.click(screen.getAllByLabelText('Hide layer')[1]);
 
       expect(updateLayers).toHaveBeenCalledWith('abc', 'https://prtd.app/hamilton/canvas/p1.json', {
         'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png': {
@@ -121,7 +120,7 @@ describe('CanvasLayers', () => {
       });
     });
 
-    xit('has a slider to changing layer opacity', async () => {
+    test.skip('has a slider to changing layer opacity', async () => {
       const target = screen.getAllByRole('slider')[1];
       await user.click(target);
       await user.type(target, '{Space}');

@@ -1,32 +1,26 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 
 /** */
-export class SidebarIndexThumbnail extends Component {
-  /** */
-  render() {
-    const {
-      canvas, height, label, width,
-    } = this.props;
-
-    return (
-      <>
-        <div style={{ minWidth: 50 }}>
-          <IIIFThumbnail
-            label={label}
-            resource={canvas}
-            maxHeight={height}
-            maxWidth={width}
-          />
-        </div>
-        <Typography>
-          {label}
-        </Typography>
-      </>
-    );
-  }
+export function SidebarIndexThumbnail({
+  canvas, height = undefined, label, width = undefined,
+}) {
+  return (
+    <>
+      <div style={{ minWidth: 50 }}>
+        <IIIFThumbnail
+          label={label}
+          resource={canvas}
+          maxHeight={height}
+          maxWidth={width}
+        />
+      </div>
+      <Typography>
+        {label}
+      </Typography>
+    </>
+  );
 }
 
 SidebarIndexThumbnail.propTypes = {
@@ -34,9 +28,4 @@ SidebarIndexThumbnail.propTypes = {
   height: PropTypes.number,
   label: PropTypes.string.isRequired,
   width: PropTypes.number,
-};
-
-SidebarIndexThumbnail.defaultProps = {
-  height: undefined,
-  width: undefined,
 };

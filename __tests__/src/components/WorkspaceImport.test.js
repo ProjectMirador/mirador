@@ -1,11 +1,11 @@
-import { screen, render } from 'test-utils';
+import { screen, render } from '@tests/utils/test-utils';
 import { WorkspaceImport } from '../../../src/components/WorkspaceImport';
 
 describe('WorkspaceImport', () => {
   let handleClose;
 
   beforeEach(() => {
-    handleClose = jest.fn();
+    handleClose = vi.fn();
 
     render(
       <WorkspaceImport

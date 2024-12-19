@@ -1,7 +1,7 @@
-import { render, screen, waitFor } from 'test-utils';
+import { render, screen, waitFor } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
-
+import { act } from '@testing-library/react';
 import { SidebarIndexTableOfContents } from '../../../src/components/SidebarIndexTableOfContents';
 import ConnectedSidebarIndexTableOfContents from '../../../src/containers/SidebarIndexTableOfContents';
 import manifestVersion2 from '../../fixtures/version-2/structures.json';
@@ -63,7 +63,7 @@ describe('SidebarIndexTableOfContents', () => {
   let setCanvas;
 
   beforeEach(() => {
-    setCanvas = jest.fn();
+    setCanvas = vi.fn();
   });
 
   it('does not render a TreeView if the tree structure is missing', () => {
@@ -139,11 +139,14 @@ describe('SidebarIndexTableOfContents', () => {
 
     const { store } = createInteractiveWrapper({});
     const root = screen.getByRole('treeitem');
-
-    root.focus();
+    act(() => {
+      root.focus();
+    });
     await user.keyboard('{ArrowRight}');
+
     expect(screen.getAllByRole('treeitem')).toHaveLength(5);
     await user.keyboard('{ArrowLeft}');
+
     await waitFor(() => {
       expect(screen.getByRole('treeitem')).toBeInTheDocument();
     });
@@ -157,7 +160,9 @@ describe('SidebarIndexTableOfContents', () => {
     const { store } = createInteractiveWrapper({});
     const root = screen.getByRole('treeitem');
 
-    root.focus();
+    act(() => {
+      root.focus();
+    });
     await user.keyboard('{Enter}');
     expect(screen.getAllByRole('treeitem')).toHaveLength(5);
     await user.keyboard('{ArrowLeft}');
@@ -176,12 +181,16 @@ describe('SidebarIndexTableOfContents', () => {
     const { store } = createInteractiveWrapper({});
     const root = screen.getByRole('treeitem');
 
-    root.focus();
+    act(() => {
+      root.focus();
+    });
     await user.keyboard('{Enter}');
 
     const leafNode = screen.getAllByRole('treeitem')[1];
 
-    leafNode.focus();
+    act(() => {
+      leafNode.focus();
+    });
     await user.keyboard('{Enter}');
 
     expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c2');
@@ -197,7 +206,9 @@ describe('SidebarIndexTableOfContents', () => {
     });
 
     const leafNode = screen.getAllByRole('treeitem')[3];
-    leafNode.focus();
+    act(() => {
+      leafNode.focus();
+    });
     await user.keyboard('{Enter}');
 
     expect(setCanvas).toHaveBeenLastCalledWith('a', 'http://foo.test/1/canvas/c11');
@@ -211,21 +222,29 @@ describe('SidebarIndexTableOfContents', () => {
     });
 
     const root = screen.getByRole('treeitem');
-    root.focus();
+    act(() => {
+      root.focus();
+    });
     await user.keyboard('{Enter}');
 
     const leafNode1 = screen.getAllByRole('treeitem')[2];
-    leafNode1.focus();
+    act(() => {
+      leafNode1.focus();
+    });
     await user.keyboard('{Enter}');
     expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c7');
 
     const leafNode2 = screen.getAllByRole('treeitem')[3];
-    leafNode2.focus();
+    act(() => {
+      leafNode2.focus();
+    });
     await user.keyboard('{Enter}');
     expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c9');
 
     const leafNode3 = screen.getAllByRole('treeitem')[4];
-    leafNode3.focus();
+    act(() => {
+      leafNode3.focus();
+    });
     await user.keyboard('{Enter}');
     expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c10');
   });

@@ -1,12 +1,14 @@
+import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 
-const Root = styled(IconButton, { name: 'MiradorMenuButton', slot: 'root' })(({ ownerState, theme }) => ({
+const Root = styled(IconButton, { name: 'MiradorMenuButton', slot: 'root' })(({ selected, theme }) => ({
   fill: 'currentcolor',
-  ...(ownerState.selected && {
+  ...(selected && {
     backgroundColor: theme.palette.action.selected,
   }),
 }));
@@ -16,22 +18,22 @@ const Root = styled(IconButton, { name: 'MiradorMenuButton', slot: 'root' })(({ 
  * This shares the passed in aria-label w/ the Tooltip (as title) and the IconButton
  * All props besides icon are spread to the IconButton component
 */
-export function MiradorMenuButton(props) {
-  const { 'aria-label': ariaLabel } = props;
-  const {
-    badge,
-    children,
-    container,
-    dispatch,
-    BadgeProps,
-    TooltipProps,
-    sx,
-    ...iconButtonProps
-  } = props;
-
+export function MiradorMenuButton({
+  'aria-label': ariaLabel,
+  badge = false,
+  children,
+  dispatch = () => {},
+  selected = false,
+  BadgeProps = {},
+  TooltipProps = {},
+  sx = {},
+  ...iconButtonProps
+}) {
+  const container = useContext(WorkspaceContext);
   const button = (
     <Root
-      ownerState={props}
+      selected={selected}
+      aria-label={ariaLabel}
       {...iconButtonProps}
       sx={sx}
       size="large"
@@ -69,19 +71,8 @@ MiradorMenuButton.propTypes = {
   badge: PropTypes.bool,
   BadgeProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   children: PropTypes.element.isRequired,
-  container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   dispatch: PropTypes.func,
   selected: PropTypes.bool,
   sx: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   TooltipProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-};
-
-MiradorMenuButton.defaultProps = {
-  badge: false,
-  BadgeProps: {},
-  container: null,
-  dispatch: () => {},
-  selected: false,
-  sx: {},
-  TooltipProps: {},
 };
