@@ -61,8 +61,8 @@ export function WindowViewSettings({
       autoFocus={windowViewType === value}
       key={value}
       onClick={() => { handleChange(value); handleClose(); }}
-      selected={windowViewType === value}
       role="menuitemradio"
+      selected={windowViewType === value}
     >
       <FormControlLabel
         value={value}

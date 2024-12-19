@@ -47,10 +47,11 @@ export function WindowThumbnailSettings({
       <ListSubheader role="presentation" disableSticky>{t('thumbnails')}</ListSubheader>
       <StyledMenuList role="menubar">
         <ThumbnailOption
-          aria-selected={thumbnailNavigationPosition === 'off'}
+          aria-checked={thumbnailNavigationPosition === 'off'}
           autoFocus={thumbnailNavigationPosition === 'off'}
           key="off"
           onClick={() => { handleChange('off'); }}
+          role="menuitemradio"
           selected={thumbnailNavigationPosition === 'off'}
         >
           <FormControlLabel
@@ -63,10 +64,11 @@ export function WindowThumbnailSettings({
           />
         </ThumbnailOption>
         <ThumbnailOption
-          aria-selected={thumbnailNavigationPosition === 'far-bottom'}
+          aria-checked={thumbnailNavigationPosition === 'far-bottom'}
           autoFocus={thumbnailNavigationPosition === 'far-bottom'}
           key="far-bottom"
           onClick={() => { handleChange('far-bottom'); }}
+          role="menuitemradio"
           selected={thumbnailNavigationPosition === 'far-bottom'}
         >
           <FormControlLabel
@@ -79,10 +81,11 @@ export function WindowThumbnailSettings({
           />
         </ThumbnailOption>
         <ThumbnailOption
-          aria-selected={thumbnailNavigationPosition === 'far-right'}
+          aria-checked={thumbnailNavigationPosition === 'far-right'}
           autoFocus={thumbnailNavigationPosition === 'far-right'}
           key="far-right"
           onClick={() => { handleChange('far-right'); }}
+          role="menuitemradio"
           selected={thumbnailNavigationPosition === 'far-right'}
         >
           <FormControlLabel
