@@ -77,7 +77,6 @@ export const WindowCanvasNavigationControls = forwardRef(({
 
 WindowCanvasNavigationControls.propTypes = {
   showZoomControls: PropTypes.bool,
-  size: PropTypes.shape({ width: PropTypes.number }).isRequired,
   visible: PropTypes.bool,
   windowId: PropTypes.string.isRequired,
   zoomToWorld: PropTypes.func.isRequired,
