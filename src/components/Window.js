@@ -2,7 +2,7 @@ import { useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
-import { MosaicWindowContext } from 'react-mosaic-component/lib/contextTypes';
+import { MosaicWindowContext } from 'react-mosaic-component2';
 import { ErrorBoundary } from 'react-error-boundary';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
