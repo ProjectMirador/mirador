@@ -177,7 +177,7 @@ WindowSideBarButtons.propTypes = {
   hasCurrentLayers: PropTypes.bool,
   hasSearchResults: PropTypes.bool,
   hasSearchService: PropTypes.bool,
-  panels: PropTypes.arrayOf(PropTypes.bool),
+  panels: PropTypes.objectOf(PropTypes.bool),
   PluginComponents: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   sideBarPanel: PropTypes.string,
   t: PropTypes.func,
