@@ -28,57 +28,44 @@ const StyledToolbar = styled(Toolbar, { name: 'WindowTopBar', slot: 'toolbar' })
 /**
  * WindowTopBar
  */
-export class WindowTopBar extends Component {
-  /**
-   * render
-   * @return
-   */
-  render() {
-    const {
-      windowId, toggleWindowSideBar, t, focusWindow, allowWindowSideBar, component,
-    } = this.props;
+export function WindowTopBar({
+  windowId, toggleWindowSideBar, focusWindow = () => {}, allowWindowSideBar = true, component = 'nav',
+}) {
+  const { t } = useTranslation();
+  const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
 
-    return (
-      <Root component={component} aria-label={t('windowNavigation')} position="relative" color="default" enableColorOnDark>
-        <StyledToolbar
-          disableGutters
-          onMouseDown={focusWindow}
-          ownerState={this.props}
-          className={classNames(ns('window-top-bar'))}
-          variant="dense"
+  return (
+    <Root component={component} aria-label={t('windowNavigation')} position="relative" color="default" enableColorOnDark>
+      <StyledToolbar
+        disableGutters
+        onMouseDown={focusWindow}
+        ownerState={ownerState}
+        className={classNames(ns('window-top-bar'))}
+        variant="dense"
+      >
+        {allowWindowSideBar && (
+        <MiradorMenuButton
+          aria-label={t('toggleWindowSideBar')}
+          onClick={toggleWindowSideBar}
+          className={ns('window-menu-btn')}
         >
-          {allowWindowSideBar && (
-            <MiradorMenuButton
-              aria-label={t('toggleWindowSideBar')}
-              onClick={toggleWindowSideBar}
-              className={ns('window-menu-btn')}
-            >
-              <MenuIcon />
-            </MiradorMenuButton>
-          )}
-          <WindowTopBarMenu
-            windowId={windowId}
-            {...this.props}
-          />
-        </StyledToolbar>
-      </Root>
-    );
-  }
+          <MenuIcon />
+        </MiradorMenuButton>
+        )}
+        <WindowTopBarMenu
+          windowId={windowId}
+          ownerState={ownerState}
+        />
+      </StyledToolbar>
+    </Root>
+  );
 }
 
 WindowTopBar.propTypes = {
-  allowClose: PropTypes.bool,
-  allowFullscreen: PropTypes.bool,
-  allowMaximize: PropTypes.bool,
-  allowTopMenuButton: PropTypes.bool,
   allowWindowSideBar: PropTypes.bool,
   component: PropTypes.elementType,
   focused: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
   focusWindow: PropTypes.func,
-  maximized: PropTypes.bool,
-  maximizeWindow: PropTypes.func,
-  minimizeWindow: PropTypes.func,
-  removeWindow: PropTypes.func.isRequired,
   toggleWindowSideBar: PropTypes.func.isRequired,
   windowDraggable: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
   windowId: PropTypes.string.isRequired,

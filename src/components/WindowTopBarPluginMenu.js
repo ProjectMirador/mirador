@@ -1,16 +1,23 @@
-import React from 'react';
+import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import Menu from '@mui/material/Menu';
 import MoreVertIcon from '@mui/icons-material/MoreVertSharp';
-import { PluginHook } from './PluginHook';
+import Menu from '@mui/material/Menu';
+import { useTranslation } from 'react-i18next';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import { PluginHook } from './PluginHook';
+import WorkspaceContext from '../contexts/WorkspaceContext';
 
 /**
  *
  */
-export function WindowTopBarPluginMenu(props) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
+export function WindowTopBarPluginMenu({
+  PluginComponents = [], windowId, menuIcon = <MoreVertIcon />, moreButtons = null,
+}) {
+  const { t } = useTranslation();
+  const container = useContext(WorkspaceContext);
+  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
   /**
    * Set the anchorEl state to the click target
   */
@@ -27,11 +34,9 @@ export function WindowTopBarPluginMenu(props) {
     setOpen(false);
   };
 
-  const {
-    windowId, t, menuIcon, container, moreButtons,
-  } = props;
-
   const windowPluginMenuId = `window-plugin-menu_${windowId}`;
+  if (!PluginComponents || PluginComponents.length === 0) return null;
+
   return (
     <>
       <MiradorMenuButton
@@ -59,12 +64,11 @@ export function WindowTopBarPluginMenu(props) {
         onClose={handleMenuClose}
       >
         {moreButtons}
-        <PluginHook {...props} />
+        <PluginHook handleClose={handleMenuClose} {...pluginProps} />
       </Menu>
     </>
   );
 }
-// "<rootDir>/**/__tests__/integration/mirador/plugins/add.test.js"
 
 WindowTopBarPluginMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
@@ -76,13 +80,4 @@ WindowTopBarPluginMenu.propTypes = {
     PropTypes.node,
   ),
   windowId: PropTypes.string.isRequired,
-};
-
-WindowTopBarPluginMenu.defaultProps = {
-  anchorEl: null,
-  container: null,
-  menuIcon: <MoreVertIcon />,
-  moreButtons: null,
-  open: false,
-  PluginComponents: [],
 };

@@ -5,6 +5,7 @@ import CloseIcon from '@mui/icons-material/CloseSharp';
 import classNames from 'classnames';
 import ResizeObserver from 'react-resize-observer';
 import { Portal } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import WindowTopMenuButton from '../containers/WindowTopMenuButton';
 import WindowTopBarPluginArea from '../containers/WindowTopBarPluginArea';
 import WindowTopBarPluginMenu from '../containers/WindowTopBarPluginMenu';
@@ -16,9 +17,9 @@ import WindowMinIcon from './icons/WindowMinIcon';
 import ns from '../config/css-ns';
 import PluginContext from '../extend/PluginContext';
 
-const IconButtonsWrapper = styled('div', ({}))(({}) => ({
+const IconButtonsWrapper = styled('div')({
   display: 'flex',
-}));
+});
 
 const InvisibleIconButtonsWrapper = styled(IconButtonsWrapper)(() => ({
   visibility: 'hidden',
@@ -39,11 +40,13 @@ const removeAttributes = (attributeList = [], node) => {
 /**
  * WindowTopBarMenu
  */
-export function WindowTopBarMenu(props) {
-  const {
-    removeWindow, windowId, t, maximizeWindow, maximized, minimizeWindow,
-    allowClose, allowMaximize, allowFullscreen, allowTopMenuButton,
-  } = props;
+export function WindowTopBarMenu({
+  removeWindow, windowId,
+  maximizeWindow = () => {}, maximized = false, minimizeWindow = () => {}, allowClose = true, allowMaximize = true,
+  allowFullscreen = false, allowTopMenuButton = true
+  ,
+}) {
+  const { t } = useTranslation();
 
   const [outerW, setOuterW] = React.useState();
   const [visibleButtonsNum, setVisibleButtonsNum] = React.useState(0);
@@ -96,7 +99,7 @@ export function WindowTopBarMenu(props) {
     const children = Array.from(portalRef.current.childNodes ?? []);
     let accWidth = 0;
     // sum widths of top bar elements until wider than half of the available space
-    let newVisibleButtonsNum = children.reduce((acc, child, index) => {
+    let newVisibleButtonsNum = children.reduce((acc, child) => {
       const width = child?.offsetWidth;
       accWidth += width;
       if (accWidth <= (0.5 * outerW)) {
@@ -160,18 +163,5 @@ WindowTopBarMenu.propTypes = {
   maximizeWindow: PropTypes.func,
   minimizeWindow: PropTypes.func,
   removeWindow: PropTypes.func.isRequired,
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired,
-};
-
-WindowTopBarMenu.defaultProps = {
-  allowClose: true,
-  allowFullscreen: false,
-  allowMaximize: true,
-  allowTopMenuButton: true,
-  container: null,
-  maximized: false,
-  maximizeWindow: () => {},
-  minimizeWindow: () => {},
-  t: key => key,
 };
