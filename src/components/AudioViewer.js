@@ -13,12 +13,8 @@ const StyledAudio = styled('audio')({
 });
 
 /** */
-export function AudioViewer(props) {
+export function AudioViewer({ audioOptions = {}, audioResources = [], captions = [] }) {
   /* eslint-disable jsx-a11y/media-has-caption */
-  /** */
-  const {
-    captions, audioOptions, audioResources,
-  } = props;
 
   return (
     <StyledContainer>
@@ -43,10 +39,4 @@ AudioViewer.propTypes = {
   audioOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   audioResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   captions: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
-};
-
-AudioViewer.defaultProps = {
-  audioOptions: {},
-  audioResources: [],
-  captions: [],
 };

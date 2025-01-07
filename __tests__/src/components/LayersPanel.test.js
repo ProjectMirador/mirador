@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 
 import { LayersPanel } from '../../../src/components/LayersPanel';
 
@@ -9,7 +9,6 @@ function createWrapper(props) {
   return render(
     <LayersPanel
       id="xyz"
-      t={str => str}
       windowId="window"
       {...props}
     />,
@@ -22,7 +21,6 @@ describe('LayersPanel', () => {
     const canvasIds = ['a', 'b'];
     createWrapper({ canvasIds });
 
-    expect(screen.getAllByText('annotationCanvasLabel').length).toBe(2);
     expect(screen.getAllByRole('list').length).toBe(2);
   });
 });

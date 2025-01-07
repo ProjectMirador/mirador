@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
@@ -9,7 +9,6 @@ import { WindowTopBarPluginMenu } from '../../../src/components/WindowTopBarPlug
 function Subject({ ...props }) {
   return (
     <WindowTopBarPluginMenu
-      t={k => k}
       windowId="abc123"
       {...props}
     />
@@ -31,7 +30,7 @@ describe('WindowTopBarPluginMenu', () => {
     it('renders nothing (and no Button/Menu/PluginHook)', () => {
       render(<WindowTopBarMenu />);
       expect(screen.queryByTestId('testA')).not.toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: 'windowPluginMenu' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Window options' })).not.toBeInTheDocument();
     });
   });
 
@@ -43,7 +42,7 @@ describe('WindowTopBarPluginMenu', () => {
     });
 
     it('renders the Button', async () => {
-      expect(screen.getByRole('button', { name: 'windowPluginMenu' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Window options' })).toBeInTheDocument();
     });
 
     it('the Menu is controlled by the Button clicks', async () => {
@@ -51,7 +50,7 @@ describe('WindowTopBarPluginMenu', () => {
       expect(screen.queryByTestId('testA')).not.toBeInTheDocument();
 
       // open
-      await user.click(screen.getByRole('button', { name: 'windowPluginMenu' }));
+      await user.click(screen.getByRole('button', { name: 'Window options' }));
       expect(screen.getByRole('menu')).toBeInTheDocument();
 
       await user.keyboard('{Escape}');

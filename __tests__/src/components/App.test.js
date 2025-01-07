@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 
 import { App } from '../../../src/components/App';
 
@@ -16,8 +16,6 @@ describe('App', () => {
     createWrapper();
 
     expect(screen.queryByRole('main')).not.toBeInTheDocument();
-    await screen.findByText('welcome');
-
-    expect(screen.getByRole('main')).toBeInTheDocument();
+    expect(await screen.findByRole('main')).toBeInTheDocument();
   });
 });

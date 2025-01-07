@@ -1,9 +1,9 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/MenuSharp';
 import Toolbar from '@mui/material/Toolbar';
 import AppBar from '@mui/material/AppBar';
+import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import WindowTopBarMenu from '../containers/WindowTopBarMenu';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
@@ -79,24 +79,7 @@ WindowTopBar.propTypes = {
   maximizeWindow: PropTypes.func,
   minimizeWindow: PropTypes.func,
   removeWindow: PropTypes.func.isRequired,
-  t: PropTypes.func,
   toggleWindowSideBar: PropTypes.func.isRequired,
   windowDraggable: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
   windowId: PropTypes.string.isRequired,
-};
-
-WindowTopBar.defaultProps = {
-  allowClose: true,
-  allowFullscreen: false,
-  allowMaximize: true,
-  allowTopMenuButton: true,
-  allowWindowSideBar: true,
-  component: 'nav',
-  focused: false,
-  focusWindow: () => {},
-  maximized: false,
-  maximizeWindow: () => {},
-  minimizeWindow: () => {},
-  t: key => key,
-  windowDraggable: true,
 };

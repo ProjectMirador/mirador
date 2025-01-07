@@ -1,14 +1,10 @@
-import { Component } from 'react';
 import { PluginHook } from './PluginHook';
 
 /**
  *
  */
-export class WindowTopBarPluginArea extends Component {
-  /** */
-  render() {
-    return (
-      <PluginHook {...this.props} />
-    );
-  }
+export function WindowTopBarPluginArea(props) {
+  return (
+    <PluginHook {...props} />
+  );
 }

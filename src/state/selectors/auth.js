@@ -6,6 +6,11 @@ import { miradorSlice } from './utils';
 import { getConfig } from './config';
 import { getVisibleCanvases, selectInfoResponses } from './canvases';
 
+/**
+ * Returns the authentification profile from the configuration
+ * @param {object} state
+ * @returns {Array}
+ */
 export const getAuthProfiles = createSelector(
   [
     getConfig,
@@ -13,12 +18,26 @@ export const getAuthProfiles = createSelector(
   ({ auth: { serviceProfiles = [] } = {} }) => serviceProfiles,
 );
 
-/** */
+/**
+ * Returns access tokens from the state
+ * @param {object} state
+ * @returns {object}
+ */
 export const getAccessTokens = state => miradorSlice(state).accessTokens || {};
 
-/** */
+/**
+ * Return the authentification data from the state
+ * @param {object} state
+ * @returns {object}
+ */
 export const getAuth = state => miradorSlice(state).auth || {};
 
+/**
+ * Returns current authentification services based on state and windowId
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {Array}
+ */
 export const selectCurrentAuthServices = createSelector(
   [
     getVisibleCanvases,

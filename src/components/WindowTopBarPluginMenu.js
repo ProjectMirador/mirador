@@ -75,7 +75,6 @@ WindowTopBarPluginMenu.propTypes = {
   PluginComponents: PropTypes.arrayOf(
     PropTypes.node,
   ),
-  t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };
 

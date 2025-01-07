@@ -418,8 +418,10 @@ export default {
     ar: 'العربية',
     de: 'Deutsch',
     en: 'English',
+    et: 'Eesti',
     fa: 'فارسی',
     fr: 'Français',
+    hr: 'Hrvatski',
     ja: '日本語',
     kr: '한국어',
     lt: 'Lietuvių',
@@ -500,6 +502,7 @@ export default {
       manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
       canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/page_2',
       thumbnailNavigationPosition: 'far-bottom',
+      maximized: false,
     }
     // ../state/actions/window.js `defaultOptions`
     // ../lib/MiradorViewer.js `windowAction`
@@ -521,7 +524,7 @@ export default {
     isWorkspaceAddVisible: false, // Catalog/Workspace add window feature visible by default
     exposeModeOn: false, // unused?
     height: 5000, // height of the elastic mode's virtual canvas
-    showZoomControls: false, // Configure if zoom controls should be displayed by default
+    showZoomControls: true, // Configure if zoom controls should be displayed by default
     type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic". If "mosaic" or "elastic" are not selected no worksapce type will be used.
     viewportPosition: { // center coordinates for the elastic mode workspace
       x: 0,
@@ -542,6 +545,8 @@ export default {
     preserveImageSizeOnResize: true,
     preserveViewport: true,
     showNavigationControl: false,
+    zoomPerClick: 1, // disable zoom-to-click
+    zoomPerDoubleClick: 2.0
   },
   export: {
     catalog: true,

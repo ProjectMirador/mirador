@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
 import { TreeView } from '@mui/x-tree-view/TreeView';
@@ -59,36 +58,26 @@ ScrollToForTreeItem.propTypes = {
 };
 
 /** */
-export class SidebarIndexTableOfContents extends Component {
+export function SidebarIndexTableOfContents({
+  toggleNode, expandNodes, setCanvas, windowId,
+  treeStructure, visibleNodeIds, expandedNodeIds, containerRef, nodeIdToScrollTo,
+}) {
   /** */
-  constructor(props) {
-    super(props);
-    this.handleNodeSelect = this.handleNodeSelect.bind(this);
-    this.handleNodeToggle = this.handleNodeToggle.bind(this);
-  }
-
-  /** */
-  handleNodeSelect(event, nodeId) {
-    const { toggleNode } = this.props;
-
+  const handleNodeSelect = (event, nodeId) => {
     if (event.key === ' ' || event.key === 'Spacebar') {
       toggleNode(nodeId);
     }
 
-    this.selectTreeItem(nodeId);
-  }
+    selectTreeItem(nodeId);
+  };
 
   /** */
-  handleNodeToggle(_event, nodeIds) {
-    const { expandNodes } = this.props;
-
+  const handleNodeToggle = (_event, nodeIds) => {
     expandNodes(nodeIds);
-  }
+  };
 
   /** */
-  selectTreeItem(nodeId) {
-    const { setCanvas, treeStructure, windowId } = this.props;
-
+  const selectTreeItem = (nodeId) => {
     const node = deepFind(treeStructure, nodeId);
 
     // Do not select if there are no canvases listed or it has children
@@ -100,89 +89,82 @@ export class SidebarIndexTableOfContents extends Component {
     const target = getStartCanvasId(node);
     const canvasId = target.indexOf('#') === -1 ? target : target.substr(0, target.indexOf('#'));
     setCanvas(windowId, canvasId);
+  };
+
+  if (!treeStructure) {
+    return null;
   }
 
-  /** */
-  render() {
-    const {
-      treeStructure, visibleNodeIds, expandedNodeIds, containerRef, nodeIdToScrollTo,
-    } = this.props;
-
-    if (!treeStructure) {
-      return null;
-    }
-
-    /** Render the tree structure recursively */
-    const renderTree = (node) => (
-      <ScrollToForTreeItem
-        containerRef={containerRef}
-        key={node.id}
+  /** Render the tree structure recursively */
+  const renderTree = (node) => (
+    <ScrollToForTreeItem
+      containerRef={containerRef}
+      key={node.id}
+      nodeId={node.id}
+      offsetTop={96} // offset for the height of the form above
+      scrollTo={nodeIdToScrollTo === node.id}
+    >
+      <TreeItem
         nodeId={node.id}
-        offsetTop={96} // offset for the height of the form above
-        scrollTo={nodeIdToScrollTo === node.id}
+        sx={{
+          '& .MuiTreeItem-content': {
+            alignItems: 'flex-start',
+            borderLeft: '1px solid transparent',
+            padding: '8px 16px 8px 0',
+            width: 'auto',
+          },
+          '& .MuiTreeItem-group': {
+            borderLeft: '1px solid',
+            borderLeftColor: 'grey.300',
+          },
+          '& .MuiTreeItem-iconContainer': {
+            paddingBlockStart: 0.5,
+          },
+          '& .MuiTreeItem-label': {
+            paddingLeft: 0,
+          },
+          '& .MuiTreeItem-root': {
+            '&:focus > .MuiTreeItem-content': {
+              backgroundColor: 'action.selected',
+            },
+            '&:hover > .MuiTreeItem-content': {
+              backgroundColor: 'action.hover',
+            },
+            '&:hover > .MuiTreeItem-content .MuiTreeItem-label, &:focus > .MuiTreeItem-content .MuiTreeItem-label, &.MuiTreeItem-selected > .MuiTreeItem-content .MuiTreeItem-label, &.MuiTreeItem-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, &.MuiTreeItem-selected:focus > .MuiTreeItem-content .MuiTreeItem-label': {
+              backgroundColor: 'transparent',
+            },
+          },
+        }}
+        label={(
+          <StyledVisibleNode
+            sx={theme => ({
+              backgroundColor: visibleNodeIds.indexOf(node.id) !== -1
+              && alpha(theme.palette.highlights?.primary || theme.palette.action.selected, 0.35),
+              display: visibleNodeIds.indexOf(node.id) !== -1 && 'inline',
+            })}
+          >
+            {node.label}
+          </StyledVisibleNode>
+      )}
       >
-        <TreeItem
-          nodeId={node.id}
-          sx={{
-            '& .MuiTreeItem-content': {
-              alignItems: 'flex-start',
-              borderLeft: '1px solid transparent',
-              padding: '8px 16px 8px 0',
-              width: 'auto',
-            },
-            '& .MuiTreeItem-group': {
-              borderLeft: '1px solid',
-              borderLeftColor: 'grey.300',
-            },
-            '& .MuiTreeItem-iconContainer': {
-              paddingBlockStart: 0.5,
-            },
-            '& .MuiTreeItem-label': {
-              paddingLeft: 0,
-            },
-            '& .MuiTreeItem-root': {
-              '&:focus > .MuiTreeItem-content': {
-                backgroundColor: 'action.selected',
-              },
-              '&:hover > .MuiTreeItem-content': {
-                backgroundColor: 'action.hover',
-              },
-              '&:hover > .MuiTreeItem-content .MuiTreeItem-label, &:focus > .MuiTreeItem-content .MuiTreeItem-label, &.MuiTreeItem-selected > .MuiTreeItem-content .MuiTreeItem-label, &.MuiTreeItem-selected > .MuiTreeItem-content .MuiTreeItem-label:hover, &.MuiTreeItem-selected:focus > .MuiTreeItem-content .MuiTreeItem-label': {
-                backgroundColor: 'transparent',
-              },
-            },
-          }}
-          label={(
-            <StyledVisibleNode
-              sx={theme => ({
-                backgroundColor: visibleNodeIds.indexOf(node.id) !== -1
-                && alpha(theme.palette.highlights?.primary || theme.palette.action.selected, 0.35),
-                display: visibleNodeIds.indexOf(node.id) !== -1 && 'inline',
-              })}
-            >
-              {node.label}
-            </StyledVisibleNode>
-        )}
-        >
-          {Array.isArray(node.nodes) ? node.nodes.map((n) => renderTree(n)) : null}
-        </TreeItem>
-      </ScrollToForTreeItem>
-    );
+        {Array.isArray(node.nodes) ? node.nodes.map((n) => renderTree(n)) : null}
+      </TreeItem>
+    </ScrollToForTreeItem>
+  );
 
-    return (
-      <TreeView
-        sx={{ flexGrow: 1 }}
-        defaultCollapseIcon={<ExpandMoreIcon color="action" />}
-        defaultExpandIcon={<ChevronRightIcon color="action" />}
-        defaultEndIcon={null}
-        onNodeSelect={this.handleNodeSelect}
-        onNodeToggle={this.handleNodeToggle}
-        expanded={expandedNodeIds}
-      >
-        { Array.isArray(treeStructure.nodes) ? treeStructure.nodes.map(n => renderTree(n)) : null }
-      </TreeView>
-    );
-  }
+  return (
+    <TreeView
+      sx={{ flexGrow: 1 }}
+      defaultCollapseIcon={<ExpandMoreIcon color="action" />}
+      defaultExpandIcon={<ChevronRightIcon color="action" />}
+      defaultEndIcon={null}
+      onNodeSelect={handleNodeSelect}
+      onNodeToggle={handleNodeToggle}
+      expanded={expandedNodeIds}
+    >
+      { Array.isArray(treeStructure.nodes) ? treeStructure.nodes.map(n => renderTree(n)) : null }
+    </TreeView>
+  );
 }
 
 SidebarIndexTableOfContents.propTypes = {

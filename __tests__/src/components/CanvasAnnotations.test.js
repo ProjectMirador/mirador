@@ -1,6 +1,5 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import i18next from 'i18next';
 
 import { CanvasAnnotations } from '../../../src/components/CanvasAnnotations';
 import { ScrollTo } from '../../../src/components/ScrollTo';
@@ -15,7 +14,6 @@ function createWrapper(props) {
       index={0}
       label="A Canvas Label"
       selectAnnotation={() => {}}
-      t={i18next.t}
       totalSize={1}
       windowId="abc"
       {...props}
@@ -63,7 +61,7 @@ describe('CanvasAnnotations', () => {
     expect(screen.getAllByRole('menuitem').length).toEqual(2);
   });
 
-  xit('scrolls to the selected annotation', () => {
+  test.skip('scrolls to the selected annotation', () => {
     wrapper = createWrapper({ annotations, selectedAnnotationId: 'abc123' });
 
     expect(wrapper.find(ScrollTo).length).toEqual(2);
@@ -85,7 +83,7 @@ describe('CanvasAnnotations', () => {
 
   describe('interacting with annotations', () => {
     it('triggers the selectAnnotation prop with the correct arguments when clicking an unselected annotation', async () => {
-      const selectAnnotation = jest.fn();
+      const selectAnnotation = vi.fn();
       const user = userEvent.setup();
 
       wrapper = createWrapper({
@@ -99,7 +97,7 @@ describe('CanvasAnnotations', () => {
     });
 
     it('triggers the deselectAnnotation prop with the correct arguments when clicking a selected annotation', async () => {
-      const deselectAnnotation = jest.fn();
+      const deselectAnnotation = vi.fn();
       const user = userEvent.setup();
 
       wrapper = createWrapper({
@@ -114,7 +112,7 @@ describe('CanvasAnnotations', () => {
     });
 
     it('highlights annotations on mouse enter', async () => {
-      const hoverAnnotation = jest.fn();
+      const hoverAnnotation = vi.fn();
       const user = userEvent.setup();
 
       wrapper = createWrapper({
@@ -135,7 +133,7 @@ describe('CanvasAnnotations', () => {
     });
 
     it('highlights annotations on focus', async () => {
-      const hoverAnnotation = jest.fn();
+      const hoverAnnotation = vi.fn();
       const user = userEvent.setup();
 
       wrapper = createWrapper({
@@ -162,7 +160,7 @@ describe('CanvasAnnotations', () => {
     });
 
     it('sets the highlighted annotation to null on mouse leave', async () => {
-      const hoverAnnotation = jest.fn();
+      const hoverAnnotation = vi.fn();
       const user = userEvent.setup();
 
       wrapper = createWrapper({

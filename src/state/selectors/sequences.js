@@ -5,6 +5,13 @@ import {
 } from './manifests';
 import { getWindow } from './getters';
 
+/**
+ * Returns the sequences for a given windowId
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @returns {Array}
+ */
 export const getSequences = createSelector(
   [getManifestoInstance],
   (manifest) => {
@@ -29,6 +36,13 @@ export const getSequences = createSelector(
   },
 );
 
+/**
+ * Returns the sequence for a given windowId
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @returns {Array}
+ */
 export const getSequence = createSelector(
   [
     getSequences,
@@ -48,11 +62,12 @@ export const getSequence = createSelector(
   },
 );
 
-/** Return the canvas index for a certain window.
-* @param {object} state
-* @param {String} windowId
-* @param {Number}
-*/
+/**
+ * Return the canvas index for a certain window.
+ * @param {Object} state
+ * @param {string} windowId
+ * @returns {number}
+ */
 export const getCanvasIndex = createSelector(
   [
     getWindow,
@@ -65,12 +80,12 @@ export const getCanvasIndex = createSelector(
 );
 
 /**
- * Returns the viewing hint for the first sequence in the manifest or the manifest
+ * Returns the viewing hint for the first sequence in the manifest or the manifest.
  * @param {object} state
  * @param {object} props
  * @param {string} props.manifestId
  * @param {string} props.windowId
- * @return {Number}
+ * @returns {number}
  */
 export const getSequenceViewingHint = createSelector(
   [getSequence, getManifestoInstance],
@@ -83,7 +98,11 @@ export const getSequenceViewingHint = createSelector(
   },
 );
 
-/** */
+/**
+ * @param {object} state
+ * @param {string} windowId
+ * @return {string|null}
+ */
 export const getSequenceViewingDirection = createSelector(
   [getWindow, getSequence, getManifestoInstance],
   (window, sequence, manifest) => {
@@ -97,11 +116,11 @@ export const getSequenceViewingDirection = createSelector(
 
 /**
  * Returns the behaviors viewing hint for the manifest
- * @param {object} state
- * @param {object} props
+ * @param {Object} state
+ * @param {Object} props
  * @param {string} props.manifestId
  * @param {string} props.windowId
- * @return {Number}
+ * @return {number}
  */
 export const getSequenceBehaviors = createSelector(
   [getSequence, getManifestoInstance],
@@ -122,7 +141,13 @@ export const getSequenceBehaviors = createSelector(
   },
 );
 
-/** */
+/**
+ * Retruns a sequence tree structure.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @returns {object}
+ */
 export const getSequenceTreeStructure = createSelector(
   [getSequence, getManifestoInstance],
   (sequence, manifest) => {

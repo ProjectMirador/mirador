@@ -38,6 +38,8 @@ export default class OpenSeadragonCanvasOverlay {
 
   /** */
   clear() {
+    if (!this.context2d) return;
+
     this.context2d.clearRect(0, 0, this.containerWidth, this.containerHeight);
   }
 
@@ -77,6 +79,8 @@ export default class OpenSeadragonCanvasOverlay {
    * @param {Function} update
    */
   canvasUpdate(update) {
+    if (!this.context2d) return;
+
     const viewportZoom = this.viewer.viewport.getZoom(true);
     const image1 = this.viewer.world.getItemAt(0);
     if (!image1) return;

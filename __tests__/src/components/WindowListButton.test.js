@@ -1,4 +1,4 @@
-import { render, screen, within } from 'test-utils';
+import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import { WindowListButton } from '../../../src/components/WindowListButton';
@@ -9,7 +9,6 @@ import { WindowListButton } from '../../../src/components/WindowListButton';
 function createWrapper(props) {
   return render(
     <WindowListButton
-      t={str => str}
       windowCount={3}
       {...props}
     />,
@@ -35,10 +34,10 @@ describe('WindowListButton', () => {
     createWrapper();
     await user.click(screen.getByRole('button'));
 
-    expect(screen.getByText('openWindows', { container: '.MuiListSubheader-root' })).toBeInTheDocument();
+    expect(screen.getByText('Current open windows', { container: '.MuiListSubheader-root' })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('menuitem', { name: 'untitled' }));
+    await user.click(screen.getByRole('menuitem', { name: '[Untitled]' }));
 
-    expect(screen.queryByText('openWindows', { container: '.MuiListSubheader-root' })).not.toBeInTheDocument();
+    expect(screen.queryByText('Current open windows', { container: '.MuiListSubheader-root' })).not.toBeInTheDocument();
   });
 });
