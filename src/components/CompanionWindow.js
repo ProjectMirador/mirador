@@ -1,4 +1,5 @@
-import { Children, cloneElement } from 'react';
+/* eslint-disable react/require-default-props */
+import { Children, cloneElement, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/CloseSharp';
@@ -26,11 +27,11 @@ const StyledCloseButton = styled(MiradorMenuButton, { name: 'CompanionWindow', s
 /**
  * CompanionWindow
  */
-export function CompanionWindow(props) { // eslint-disable-line react/require-default-props
+export const CompanionWindow = forwardRef((props, innerRef) => {
   const {
     ariaLabel = undefined, classes = {}, direction, paperClassName = '', onCloseClick = () => {}, updateCompanionWindow = undefined, isDisplayed = false,
     position = null, title = null, children = undefined, titleControls = null,
-    defaultSidebarPanelWidth = 235, defaultSidebarPanelHeight = 201, innerRef = undefined,
+    defaultSidebarPanelWidth = 235, defaultSidebarPanelHeight = 201,
   } = props;
   const [sizeRef, size] = useElementSize();
   const { t } = useTranslation();
@@ -183,7 +184,7 @@ export function CompanionWindow(props) { // eslint-disable-line react/require-de
       </StyledRnd>
     </Root>
   );
-}
+});
 
 CompanionWindow.propTypes = {
   ariaLabel: PropTypes.string,
@@ -192,10 +193,6 @@ CompanionWindow.propTypes = {
   defaultSidebarPanelHeight: PropTypes.number,
   defaultSidebarPanelWidth: PropTypes.number,
   direction: PropTypes.string.isRequired,
-  innerRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]),
   isDisplayed: PropTypes.bool,
   onCloseClick: PropTypes.func,
   paperClassName: PropTypes.string,
@@ -208,3 +205,5 @@ CompanionWindow.propTypes = {
   titleControls: PropTypes.node,
   updateCompanionWindow: PropTypes.func,
 };
+
+CompanionWindow.displayName = 'CompanionWindow';
