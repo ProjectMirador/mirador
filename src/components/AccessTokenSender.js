@@ -12,13 +12,17 @@ export function AccessTokenSender({ handleAccessTokenMessage, url = undefined })
 
   if (!url) return null;
 
+  const src = new URL(url);
+  src.searchParams.append('origin', window.origin);
+  src.searchParams.append('messageId', url);
+
   /**
   login, clickthrough/kiosk open @id, wait for close
   external, no-op
   */
   return (
     <IIIFIFrameCommunication
-      src={`${url}?origin=${window.origin}&messageId=${url}`}
+      src={src.toString()}
       title="AccessTokenSender"
       handleReceiveMessage={onReceiveAccessTokenMessage}
     />
