@@ -100,20 +100,6 @@ function getProperty(property) {
 }
 
 /**
- * Returns the manifest provider.
- * @param {object} state
- * @param {object} props
- * @param {string} props.companionWindowId
- * @returns {string}
- */
-export const getManifestProvider = createSelector(
-  [
-    getProperty('provider'),
-  ],
-  (provider) => provider,
-);
-
-/**
  * Return the IIIF v3 provider of a manifest or null.
  * @param {object} state
  * @param {object} props
@@ -138,7 +124,7 @@ export const getManifestProviderName = createSelector(
  * @returns {string|null}
  */
 export const getProviderLogo = createSelector(
-  [getManifestProvider],
+  [getProperty('provider')],
   (provider) => {
     const logo = provider && provider[0] && provider[0].logo && provider[0].logo[0];
     if (!logo) return null;
