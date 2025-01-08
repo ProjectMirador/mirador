@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -20,7 +21,6 @@ const StyledDl = styled('dl')(({ theme }) => ({
  */
 export function ManifestRelatedLinks({
   homepage = null,
-  id,
   manifestUrl = null,
   related = null,
   renderings = null,
@@ -28,18 +28,22 @@ export function ManifestRelatedLinks({
   ...rest
 }) {
   const { t } = useTranslation();
+  const id = useId();
+  const titleId = useId();
+
   const pluginProps = {
-    homepage, id, manifestUrl, related, renderings, seeAlso, t, ...rest,
+    homepage, manifestUrl, related, renderings, seeAlso, t, ...rest,
   };
 
   return (
     <CollapsibleSection
-      id={`${id}-related`}
+      aria-labelledby={titleId}
+      id={id}
       label={t('related')}
     >
       <Typography
-        aria-labelledby={`${id}-related ${id}-related-heading`}
-        id={`${id}-related-heading`}
+        aria-labelledby={`${id} ${titleId}`}
+        id={titleId}
         variant="h4"
         component="h5"
       >
@@ -129,7 +133,6 @@ ManifestRelatedLinks.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
   })),
-  id: PropTypes.string.isRequired,
   manifestUrl: PropTypes.string,
   related: PropTypes.arrayOf(PropTypes.shape({
     format: PropTypes.string,

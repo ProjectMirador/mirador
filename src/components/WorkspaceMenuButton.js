@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import SettingsIcon from '@mui/icons-material/SettingsSharp';
 import { useTranslation } from 'react-i18next';
 import WorkspaceMenu from '../containers/WorkspaceMenu';
@@ -10,6 +10,7 @@ export function WorkspaceMenuButton() {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
+  const id = useId();
 
   /**  */
   const handleMenuClick = (event) => {
@@ -28,7 +29,7 @@ export function WorkspaceMenuButton() {
       <MiradorMenuButton
         aria-haspopup="true"
         aria-label={t('workspaceMenu')}
-        aria-owns={open ? 'workspace-menu' : undefined}
+        aria-owns={open ? id : undefined}
         selected={open}
         id="menuBtn"
         onClick={handleMenuClick}
@@ -37,7 +38,7 @@ export function WorkspaceMenuButton() {
       </MiradorMenuButton>
       <WorkspaceMenu
         anchorEl={anchorEl}
-        id="workspace-menu"
+        id={id}
         handleClose={handleMenuClose}
         open={open}
       />

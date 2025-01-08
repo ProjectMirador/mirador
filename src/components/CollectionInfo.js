@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -9,9 +10,11 @@ import CollapsibleSection from '../containers/CollapsibleSection';
  * CollectionInfo
  */
 export function CollectionInfo({
-  collectionLabel = null, collectionPath = [], id, showCollectionDialog, windowId = null,
+  collectionLabel = null, collectionPath = [], showCollectionDialog, windowId = null,
 }) {
   const { t } = useTranslation();
+  const id = useId();
+  const titleId = useId();
 
   /**
    * Show the containing collection.
@@ -26,13 +29,13 @@ export function CollectionInfo({
 
   return (
     <CollapsibleSection
-      id={`${id}-collection`}
+      id={id}
       label={t('collection')}
     >
       {collectionLabel && (
         <Typography
-          aria-labelledby={`${id}-resource ${id}-resource-heading`}
-          id={`${id}-resource-heading`}
+          aria-labelledby={`${id} ${titleId}`}
+          id={titleId}
           variant="h4"
         >
           {collectionLabel}
@@ -53,7 +56,6 @@ export function CollectionInfo({
 CollectionInfo.propTypes = {
   collectionLabel: PropTypes.string,
   collectionPath: PropTypes.arrayOf(PropTypes.string),
-  id: PropTypes.string.isRequired,
   showCollectionDialog: PropTypes.func.isRequired,
   windowId: PropTypes.string,
 };
