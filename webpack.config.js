@@ -22,8 +22,8 @@ const baseConfig = mode => ({
         test: /\.(js|mjs|jsx)$/,
       },
       {
+        resolve: { byDependency: { esm: { fullySpecified: false } } },
         test: /\.mjs$/i,
-        resolve: { byDependency: { esm: { fullySpecified: false } } }
       },
     ],
   },
