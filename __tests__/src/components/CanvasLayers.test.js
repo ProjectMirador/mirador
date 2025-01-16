@@ -47,6 +47,7 @@ describe('CanvasLayers', () => {
 
     expect(screen.getAllByRole('button', { name: 'Hide layer' }).length).toEqual(2);
     expect(screen.getAllByRole('button', { name: 'Move layer to background' }).length).toEqual(2);
+    expect(screen.getAllByRole('button', { name: 'Move layer to front' }).length).toEqual(2);
     expect(screen.getAllByRole('spinbutton', { name: 'Layer opacity' }).length).toEqual(2);
   });
 
@@ -102,8 +103,21 @@ describe('CanvasLayers', () => {
       });
     });
 
-    it('has a button for moving a layer to the top', async () => {
+    it('has a button for moving a layer to the background', async () => {
       await user.click(screen.getAllByLabelText('Move layer to background')[1]);
+
+      expect(updateLayers).toHaveBeenCalledWith('abc', 'https://prtd.app/hamilton/canvas/p1.json', {
+        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg': {
+          index: 1,
+        },
+        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png': {
+          index: 0,
+        },
+      });
+    });
+
+    it('has a button for moving a layer to the front', async () => {
+      await user.click(screen.getAllByLabelText('Move layer to front')[0]);
 
       expect(updateLayers).toHaveBeenCalledWith('abc', 'https://prtd.app/hamilton/canvas/p1.json', {
         'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg': {
