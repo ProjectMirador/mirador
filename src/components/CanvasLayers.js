@@ -8,7 +8,8 @@ import ListItem from '@mui/material/ListItem';
 import Slider from '@mui/material/Slider';
 import Tooltip from '@mui/material/Tooltip';
 import DragHandleIcon from '@mui/icons-material/DragHandleSharp';
-import MoveDownSharp from '@mui/icons-material/MoveDownSharp';
+import VerticalAlignTopSharp from '@mui/icons-material/VerticalAlignTopSharp';
+import VerticalAlignBottomSharp from '@mui/icons-material/VerticalAlignBottomSharp';
 import VisibilityIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffSharp';
 import OpacityIcon from '@mui/icons-material/OpacitySharp';
@@ -43,10 +44,10 @@ const reorder = (list, startIndex, endIndex) => {
 
 /** @private */
 function Layer({
-  resource, layerMetadata = {}, index, handleOpacityChange, setLayerVisibility, moveToBackground,
+  resource, layerMetadata = {}, index, handleOpacityChange, setLayerVisibility, moveToBackground, moveToFront,
 }) {
   const { t } = useTranslation();
-  const { width, height } = { height: undefined, width: 50 };
+  const { width, height } = { height: undefined, width: 40 };
 
   const layer = {
     opacity: 1,
@@ -77,7 +78,12 @@ function Layer({
             </MiradorMenuButton>
             { layer.index !== 0 && (
               <MiradorMenuButton aria-label={t('layer_moveToBackground')} size="small" onClick={() => { moveToBackground(resource.id); }}>
-                <MoveDownSharp />
+                <VerticalAlignTopSharp />
+              </MiradorMenuButton>
+            )}
+            { layer.index !== layerMetadata && (
+              <MiradorMenuButton aria-label={t('layer_moveToFront')} size="small" onClick={() => { moveToFront(resource.id); }}>
+                <VerticalAlignBottomSharp />
               </MiradorMenuButton>
             )}
           </div>
@@ -134,6 +140,7 @@ Layer.propTypes = {
     visibility: PropTypes.bool,
   })), // eslint-disable-line react/forbid-prop-types
   moveToBackground: PropTypes.func.isRequired,
+  moveToFront: PropTypes.func.isRequired,
   resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   setLayerVisibility: PropTypes.func.isRequired,
 };
@@ -246,6 +253,17 @@ export function CanvasLayers({
     updateLayers(windowId, canvasId, payload);
   }, [canvasId, layers, updateLayers, windowId]);
 
+  const moveToFront = useCallback((layerId) => {
+    const sortedLayers = reorder(layers.map(l => l.id), layers.findIndex(l => l.id === layerId), layers.length - 1);
+
+    const payload = layers.reduce((acc, layer) => {
+      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) };
+      return acc;
+    }, {});
+
+    updateLayers(windowId, canvasId, payload);
+  }, [canvasId, layers, updateLayers, windowId]);
+
   return (
     <>
       { totalSize > 1 && (
@@ -280,6 +298,7 @@ export function CanvasLayers({
                       handleOpacityChange={handleOpacityChange}
                       setLayerVisibility={setLayerVisibility}
                       moveToBackground={moveToBackground}
+                      moveToFront={moveToFront}
                     />
                   </DraggableLayer>
                 ))
