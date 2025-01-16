@@ -73,6 +73,7 @@ describe('GalleryView', () => {
   describe('on-demand annotation fetching', () => {
     const canvas = {
       getHeight: () => 50,
+      getLabel: () => ({ getValue: () => 'label' }),
       getServices: vi.fn(),
       getThumbnail: vi.fn(),
       getType: vi.fn(),

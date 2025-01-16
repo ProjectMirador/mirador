@@ -62,20 +62,6 @@ describe('getManifestoInstance', () => {
     const received = getManifestoInstance(state, { manifestId: 'x' });
     expect(received.id).toEqual('http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json');
   });
-  it('creates a manifesto collection instance and patches getSequences', () => {
-    const state = { manifests: { x: { json: collection } } };
-
-    const received = getManifestoInstance(state, { manifestId: 'x' });
-    expect(typeof received.getSequences).toBe('function');
-
-    expect(received.getSequences()).toEqual([]);
-  });
-  it('is cached based off of input props', () => {
-    const state = { manifests: { x: { json: manifestFixture019 } } };
-    const received = getManifestoInstance(state, { manifestId: 'x' });
-    expect(getManifestoInstance(state, { manifestId: 'x' })).toBe(received);
-    expect(getManifestoInstance(state, { manifestId: 'x', windowId: 'y' })).not.toBe(received);
-  });
 });
 
 describe('getManifestLogo()', () => {

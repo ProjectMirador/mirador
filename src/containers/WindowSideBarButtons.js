@@ -41,6 +41,15 @@ function hasAnnotations(canvases) {
   });
 }
 
+/** */
+function hasSearchResults(state, { windowId }) {
+  const { suggestedSearches } = getWindow(state, { windowId });
+  const companionWindowId = getCompanionWindowsForPosition(state, { position: 'left', windowId })?.[0]?.id;
+  const searchQuery = getSearchQuery(state, { companionWindowId, windowId });
+
+  return Boolean(suggestedSearches || searchQuery);
+}
+
 /**
  * mapStateToProps - used to hook up connect to state
  * @memberof WindowSideButtons
@@ -54,10 +63,7 @@ const mapStateToProps = (state, { windowId }) => ({
   hasAnyAnnotations: hasAnnotations(getCanvases(state, { windowId })),
   hasAnyLayers: hasLayers(getCanvases(state, { windowId })),
   hasCurrentLayers: hasLayers(getVisibleCanvases(state, { windowId })),
-  hasSearchResults: getWindow(state, { windowId }).suggestedSearches || getSearchQuery(state, {
-    companionWindowId: (getCompanionWindowsForPosition(state, { position: 'left', windowId })[0] || {}).id,
-    windowId,
-  }),
+  hasSearchResults: hasSearchResults(state, { windowId }),
   hasSearchService: getManifestSearchService(state, { windowId }) !== null,
   panels: getWindowConfig(state, { windowId }).panels,
   sideBarPanel: ((getCompanionWindowsForPosition(state, { position: 'left', windowId }))[0] || {}).content,

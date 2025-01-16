@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
@@ -10,12 +11,13 @@ import { PluginHook } from './PluginHook';
  * ManifestInfo
  */
 export function ManifestInfo({
-  manifestDescription = null, manifestLabel = null, manifestMetadata = [], manifestSummary = null, id,
+  manifestDescription = null, manifestLabel = null, manifestMetadata = [], manifestSummary = null,
   ...rest
 }) {
   const { t } = useTranslation();
+  const id = useId();
   const pluginProps = {
-    id, manifestDescription, manifestLabel, manifestMetadata, manifestSummary, ...rest,
+    manifestDescription, manifestLabel, manifestMetadata, manifestSummary, ...rest,
   };
 
   return (
@@ -56,7 +58,6 @@ export function ManifestInfo({
 }
 
 ManifestInfo.propTypes = {
-  id: PropTypes.string.isRequired,
   manifestDescription: PropTypes.string,
   manifestLabel: PropTypes.string,
   manifestMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types

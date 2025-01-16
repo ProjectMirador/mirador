@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
 import {
@@ -13,10 +13,11 @@ import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogCon
 /**
  */
 export function WorkspaceImport({
-  addError, importConfig, classes = {}, handleClose, open = false,
+  addError, id = undefined, importConfig, classes = {}, handleClose, open = false,
 }) {
   const { t } = useTranslation();
   const [configImportValue, setConfigImportValue] = useState('');
+  const titleId = useId();
 
   /** */
   const handleChange = (event) => {
@@ -37,14 +38,14 @@ export function WorkspaceImport({
 
   return (
     <WorkspaceDialog
-      aria-labelledby="workspace-import-title"
-      id="workspace-import"
+      aria-labelledby={titleId}
+      id={id}
       onClose={handleClose}
       open={open}
       fullWidth
       maxWidth="sm"
     >
-      <DialogTitle id="workspace-import-title">
+      <DialogTitle id={titleId}>
         {t('importWorkspace')}
       </DialogTitle>
       <ScrollIndicatedDialogContent>
@@ -79,6 +80,7 @@ WorkspaceImport.propTypes = {
   addError: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.string),
   handleClose: PropTypes.func.isRequired,
+  id: PropTypes.string,
   importConfig: PropTypes.func.isRequired,
   open: PropTypes.bool,
 };

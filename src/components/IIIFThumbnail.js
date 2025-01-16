@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { useInView } from 'react-intersection-observer';
 import getThumbnail from '../lib/ThumbnailFactory';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 const Root = styled('div', { name: 'IIIFThumbnail', slot: 'root' })({});
 
@@ -23,7 +24,7 @@ const Image = styled('img', { name: 'IIIFThumbnail', slot: 'image' })(() => ({
  */
 const LazyLoadedImage = ({
   border = false, placeholder, style = {}, thumbnail = null,
-  resource, maxHeight, maxWidth, thumbnailsConfig = {}, ...props
+  resource, maxHeight = null, maxWidth = null, thumbnailsConfig = {}, ...props
 }) => {
   const { ref, inView } = useInView();
   const [loaded, setLoaded] = useState(false);
@@ -117,8 +118,8 @@ const LazyLoadedImage = ({
 
 LazyLoadedImage.propTypes = {
   border: PropTypes.bool,
-  maxHeight: PropTypes.number.isRequired,
-  maxWidth: PropTypes.number.isRequired,
+  maxHeight: PropTypes.number,
+  maxWidth: PropTypes.number,
   placeholder: PropTypes.string.isRequired,
   resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
@@ -129,14 +130,6 @@ LazyLoadedImage.propTypes = {
   }),
   thumbnailsConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
-/** */
-function getUseableLabel(resource, index) {
-  return (resource
-    && resource.getLabel
-    && resource.getLabel().length > 0)
-    ? resource.getLabel().getValue()
-    : String(index + 1);
-}
 
 const defaultPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
 
@@ -173,7 +166,7 @@ export function IIIFThumbnail({
 
       { labelled && (
         <Label ownerState={ownerState}>
-          {label || getUseableLabel(resource)}
+          {label || <IIIFResourceLabel resource={resource} />}
         </Label>
       )}
       {children}

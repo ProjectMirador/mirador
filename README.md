@@ -1,5 +1,5 @@
 # Mirador
-![Node.js CI](https://github.com/ProjectMirador/mirador/workflows/Node.js%20CI/badge.svg) [![codecov](https://codecov.io/gh/ProjectMirador/mirador/branch/master/graph/badge.svg)](https://codecov.io/gh/ProjectMirador/mirador) 
+![Node.js CI](https://github.com/ProjectMirador/mirador/workflows/Node.js%20CI/badge.svg) [![codecov](https://codecov.io/gh/ProjectMirador/mirador/branch/main/graph/badge.svg)](https://codecov.io/gh/ProjectMirador/mirador) 
 
 ## For Mirador Users
 You can quickly use and configure Mirador by remixing the [mirador-start](https://mirador-start.glitch.me/) Glitch.
@@ -14,7 +14,7 @@ $ npm install mirador
 $ yarn add mirador
 ```
 
-If you are interested in integrating Mirador with plugins into your project, we recommend using webpack or parcel to integrate the es version of the packages. Examples are here:
+If you are interested in integrating Mirador with plugins into your project, we recommend using vite to integrate the es version of the packages. Examples are here:
 
 [https://github.com/ProjectMirador/mirador-integration](https://github.com/ProjectMirador/mirador-integration)
 
@@ -24,7 +24,7 @@ If you want to simply embed Mirador in an HTML page without further customizatio
 <script src="https://unpkg.com/mirador@latest/dist/mirador.min.js"></script>
 ```
 
-More examples of embedding Mirador can be found at [https://github.com/ProjectMirador/mirador/wiki/M3-Embedding-in-Another-Environment#in-an-html-document-with-javascript](https://github.com/ProjectMirador/mirador/wiki/M3-Embedding-in-Another-Environment#in-an-html-document-with-javascript).
+More examples of embedding Mirador can be found at [https://github.com/ProjectMirador/mirador/wiki/M3-Embedding-in-Another-Environment#in-an-html-document-with-javascript](https://github.com/ProjectMirador/mirador/wiki/Embedding-in-Another-Environment).
 
 ## Adding translations to Mirador
 For help with adding a translation, see [src/locales/README.md](src/locales/README.md)

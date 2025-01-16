@@ -46,8 +46,8 @@ export function WindowSideBarInfoPanel({
             key={canvasId}
           >
             <CanvasInfo
-              id={id}
               canvasId={canvasId}
+              companionWindowId={id}
               index={index}
               totalSize={canvasIds.length}
               windowId={windowId}
@@ -57,16 +57,16 @@ export function WindowSideBarInfoPanel({
       }
       { collectionPath.length > 0 && (
         <CompanionWindowSection>
-          <CollectionInfo id={id} windowId={windowId} />
+          <CollectionInfo companionWindowId={id} windowId={windowId} />
         </CompanionWindowSection>
       )}
 
       <CompanionWindowSection>
-        <ManifestInfo id={id} windowId={windowId} />
+        <ManifestInfo companionWindowId={id} windowId={windowId} />
       </CompanionWindowSection>
 
       <CompanionWindowSection>
-        <ManifestRelatedLinks id={id} windowId={windowId} />
+        <ManifestRelatedLinks companionWindowId={id} windowId={windowId} />
       </CompanionWindowSection>
     </CompanionWindow>
   );

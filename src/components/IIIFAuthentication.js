@@ -8,7 +8,7 @@ import WindowAuthenticationBar from '../containers/WindowAuthenticationBar';
  * Opens a new window for click
  */
 export function IIIFAuthentication({
-  accessTokenServiceId, authServiceId, confirm = undefined, description = undefined,
+  accessTokenServiceId = undefined, authServiceId = undefined, confirm = undefined, description = undefined,
   failureDescription = undefined, failureHeader = undefined, features = 'centerscreen',
   handleAuthInteraction, header = undefined, isInteractive = true, label = undefined,
   logoutConfirm = undefined, logoutServiceId = undefined, openWindow = window.open,
@@ -16,6 +16,9 @@ export function IIIFAuthentication({
   status = null, windowId,
 }) {
   const { t } = useTranslation();
+
+  if (!accessTokenServiceId || !authServiceId) return null;
+
   /** */
   const onReceiveAccessTokenMessage = (payload) => {
     resolveAccessTokenRequest(authServiceId, accessTokenServiceId, payload);
@@ -95,8 +98,6 @@ export function IIIFAuthentication({
     );
   };
 
-  if (!authServiceId) return null;
-
   if (status === null) return renderLogin();
   if (status === 'cookie') return renderLoggingInCookie();
   if (status === 'token') return renderLoggingInToken();
@@ -107,8 +108,8 @@ export function IIIFAuthentication({
 }
 
 IIIFAuthentication.propTypes = {
-  accessTokenServiceId: PropTypes.string.isRequired,
-  authServiceId: PropTypes.string.isRequired,
+  accessTokenServiceId: PropTypes.string,
+  authServiceId: PropTypes.string,
   confirm: PropTypes.string,
   description: PropTypes.string,
   failureDescription: PropTypes.string,

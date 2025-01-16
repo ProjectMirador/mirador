@@ -14,14 +14,14 @@ import { ManifestInfo } from '../components/ManifestInfo';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { id, manifestId, windowId }) => ({
+const mapStateToProps = (state, { companionWindowId, manifestId, windowId }) => ({
   manifestDescription: getManifestDescription(state, {
-    companionWindowId: id, manifestId, windowId,
+    companionWindowId, manifestId, windowId,
   }),
-  manifestLabel: getManifestTitle(state, { companionWindowId: id, manifestId, windowId }),
-  manifestMetadata: getManifestMetadata(state, { companionWindowId: id, manifestId, windowId }),
+  manifestLabel: getManifestTitle(state, { companionWindowId, manifestId, windowId }),
+  manifestMetadata: getManifestMetadata(state, { companionWindowId, manifestId, windowId }),
   manifestSummary: getManifestSummary(state, {
-    companionWindowId: id, manifestId, windowId,
+    companionWindowId, manifestId, windowId,
   }),
 });
 

@@ -7,10 +7,10 @@ Contributions to Mirador are always welcome!
 
 It is always helpful to begin any large change by submitting an issue or engaging with the Mirador community. Mirador 3.0 and beyond adheres to [semantic versioning](https://semver.org/) so that adopters and contributors can better understand what changes can be expected in released versions of the software.
 
-All contributions should be submitted as a [GitHub pull request](https://help.github.com/articles/about-pull-requests/) to the master branch. Pull requests must be reviewed and accepted by another Mirador maintainer and pass all continuous integration checks. Contributions should have tests for the feature or bug fix, documentation, should maintain high code coverage, and should conform to the Mirador agreed-upon coding style. Contributions should not include a “built” version of Mirador—this will help to reduce merge conflicts.
+All contributions should be submitted as a [GitHub pull request](https://help.github.com/articles/about-pull-requests/) to the main branch. Pull requests must be reviewed and accepted by another Mirador maintainer and pass all continuous integration checks. Contributions should have tests for the feature or bug fix, documentation, should maintain high code coverage, and should conform to the Mirador agreed-upon coding style. Contributions should not include a “built” version of Mirador—this will help to reduce merge conflicts.
 
 ### Code of Conduct
-Everyone interacting in this community is expected to follow the [Mirador Code of Conduct](https://github.com/ProjectMirador/mirador/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in this community is expected to follow the [Mirador Code of Conduct](https://github.com/ProjectMirador/mirador/blob/main/CODE_OF_CONDUCT.md).
 
 ### Accessibility
 Mirador 3 aims to comply with the [Web Content Accessibility Guidelines (WCAG) 2.1 AA](https://www.w3.org/WAI/standards-guidelines/wcag/). These guidelines, authored by the W3C and legally adopted [internationally](https://www.w3.org/WAI/policies/?q=wcag-20), are comprehensive and provide the success criteria designers and developers need to build accessible web applications.
