@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import { useTranslation } from 'react-i18next';
 import WorkspaceAddButton from '../containers/WorkspaceAddButton';
 import WorkspaceControlPanelButtons from '../containers/WorkspaceControlPanelButtons';
 import Branding from '../containers/Branding';
@@ -56,7 +57,8 @@ const StyledBranding = styled(Branding, { name: 'WorkspaceControlPanel', slot: '
 /**
  * Provides the panel responsible for controlling the entire workspace
  */
-export function WorkspaceControlPanel({ t, variant = 'default', ...rest }) {
+export function WorkspaceControlPanel({ variant = 'default', ...rest }) {
+  const { t } = useTranslation();
   return (
     <Root
       ownerState={{ t, variant, ...rest }}
@@ -75,12 +77,11 @@ export function WorkspaceControlPanel({ t, variant = 'default', ...rest }) {
           <WorkspaceControlPanelButtons />
         </StyledWorkspaceButtons>
       </StyledToolbar>
-      <StyledBranding t={t} variant={variant} />
+      <StyledBranding variant={variant} />
     </Root>
   );
 }
 
 WorkspaceControlPanel.propTypes = {
-  t: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['default', 'wide']),
 };

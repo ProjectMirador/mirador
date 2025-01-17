@@ -14,12 +14,14 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBackSharp';
 import Skeleton from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import asArray from '../lib/asArray';
 import { LabelValueMetadata } from './LabelValueMetadata';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 import ManifestInfo from '../containers/ManifestInfo';
 import WorkspaceContext from '../contexts/WorkspaceContext';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 const StyledScrollIndicatedDialogContent = styled(ScrollIndicatedDialogContent)(() => ({
   padding: (theme) => theme.spacing(1),
@@ -36,15 +38,6 @@ const StyledCollectionFilter = styled('div')(() => ({
   padding: (theme) => theme.spacing(2),
   paddingTop: 0,
 }));
-
-/** */
-function getUseableLabel(resource, index) {
-  return (resource
-    && resource.getLabel
-    && resource.getLabel().length > 0)
-    ? resource.getLabel().getValue()
-    : String(index + 1);
-}
 
 /** */
 const Placeholder = ({ onClose, container }) => (
@@ -75,9 +68,10 @@ Placeholder.propTypes = {
 export function CollectionDialog({
   addWindow, collection = null, collectionPath = [], error = null, hideCollectionDialog,
   isMultipart = false, manifest, manifestId, ready = false,
-  setWorkspaceAddVisibility, showCollectionDialog, t, updateWindow, windowId = null,
+  setWorkspaceAddVisibility, showCollectionDialog, updateWindow, windowId = null,
 }) {
   const container = useContext(WorkspaceContext);
+  const { t } = useTranslation();
   const [filter, setFilter] = useState(null);
 
   /** */
@@ -147,7 +141,7 @@ export function CollectionDialog({
           { t(isMultipart ? 'multipartCollection' : 'collection') }
         </Typography>
         <Typography component="div" variant="h3">
-          {getUseableLabel(manifest)}
+          <IIIFResourceLabel resource={manifest} />
         </Typography>
       </DialogTitle>
       <StyledScrollIndicatedDialogContent>
@@ -156,7 +150,7 @@ export function CollectionDialog({
             startIcon={<ArrowBackIcon />}
             onClick={() => goToPreviousCollection()}
           >
-            {getUseableLabel(collection)}
+            <IIIFResourceLabel resource={collection} />
           </Button>
         )}
 
@@ -202,7 +196,7 @@ export function CollectionDialog({
                   onClick={() => { selectCollection(c); }}
                   variant="multiline"
                 >
-                  {getUseableLabel(c)}
+                  <IIIFResourceLabel resource={c} />
                 </MenuItem>
               ))
             }
@@ -217,7 +211,7 @@ export function CollectionDialog({
                   onClick={() => { selectManifest(m); }}
                   variant="multiline"
                 >
-                  {getUseableLabel(m)}
+                  <IIIFResourceLabel resource={m} />
                 </MenuItem>
               ))
             }
@@ -245,7 +239,6 @@ CollectionDialog.propTypes = {
   ready: PropTypes.bool,
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
   showCollectionDialog: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string,
 };

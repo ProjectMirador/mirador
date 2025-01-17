@@ -4,6 +4,7 @@ import ListSubheader from '@mui/material/ListSubheader';
 import MenuItem from '@mui/material/MenuItem';
 import ThumbnailsOffIcon from '@mui/icons-material/CropDinSharp';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
 import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';
 
@@ -31,8 +32,9 @@ const ThumbnailOption = styled(MenuItem, { name: 'WindowThumbnailSettings', slot
  *
  */
 export function WindowThumbnailSettings({
-  handleClose = () => {}, t = k => k, thumbnailNavigationPosition, direction, windowId, setWindowThumbnailPosition,
+  handleClose = () => {}, thumbnailNavigationPosition, direction, windowId, setWindowThumbnailPosition,
 }) {
+  const { t } = useTranslation();
   /** */
   const handleChange = (value) => { setWindowThumbnailPosition(windowId, value); handleClose(); };
 
@@ -82,7 +84,6 @@ WindowThumbnailSettings.propTypes = {
   direction: PropTypes.string.isRequired,
   handleClose: PropTypes.func,
   setWindowThumbnailPosition: PropTypes.func.isRequired,
-  t: PropTypes.func,
   thumbnailNavigationPosition: PropTypes.string.isRequired,
   windowId: PropTypes.string.isRequired,
 };

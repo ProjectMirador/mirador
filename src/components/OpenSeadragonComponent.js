@@ -13,6 +13,7 @@ function OpenSeadragonComponent({
   children = undefined, Container = 'div', osdConfig = {}, viewerConfig = {}, onUpdateViewport = () => {}, setViewer = () => {}, style = {}, ...passThruProps
 }) {
   const id = useId();
+  const ref = useRef();
   const [grabbing, setGrabbing] = useState(false);
   const viewerRef = useRef(undefined);
   const initialViewportSet = useRef(false);
@@ -26,6 +27,8 @@ function OpenSeadragonComponent({
   const onViewportChange = useCallback((event) => {
     const { viewport } = event.eventSource;
 
+    if (!initialViewportSet.current) return;
+
     onUpdateViewport({
       bounds: viewport.getBounds(),
       flip: viewport.getFlip(),
@@ -34,7 +37,7 @@ function OpenSeadragonComponent({
       y: Math.round(viewport.centerSpringY.target.value),
       zoom: viewport.zoomSpring.target.value,
     });
-  }, [onUpdateViewport]);
+  }, [onUpdateViewport, initialViewportSet]);
 
   const setInitialBounds = useCallback(({ viewport }) => {
     if (initialViewportSet.current) return;
@@ -48,7 +51,7 @@ function OpenSeadragonComponent({
       viewport.zoomTo(viewerConfig.zoom, new Openseadragon.Point(viewerConfig.x, viewerConfig.y), true);
     }
 
-    if (viewerConfig.rotation && viewerConfig.rotation !== viewport.getRotation()) {
+    if (viewerConfig.rotation != null && viewerConfig.rotation !== viewport.getRotation()) {
       viewport.setRotation(viewerConfig.rotation);
     }
 
@@ -77,7 +80,7 @@ function OpenSeadragonComponent({
     }
 
     // @ts-expect-error
-    if (viewerConfig.x && viewerConfig.y
+    if (viewerConfig.x != null && viewerConfig.y != null
       && (Math.round(viewerConfig.x) !== Math.round(viewport.centerSpringX.target.value)
       // @ts-expect-error
       || Math.round(viewerConfig.y) !== Math.round(viewport.centerSpringY.target.value))) {
@@ -85,11 +88,11 @@ function OpenSeadragonComponent({
     }
 
     // @ts-expect-error
-    if (viewerConfig.zoom && viewerConfig.zoom !== viewport.zoomSpring.target.value) {
+    if (viewerConfig.zoom != null && viewerConfig.zoom !== viewport.zoomSpring.target.value) {
       viewport.zoomTo(viewerConfig.zoom, new Openseadragon.Point(viewerConfig.x, viewerConfig.y), false);
     }
 
-    if (viewerConfig.rotation && viewerConfig.rotation !== viewport.getRotation()) {
+    if (viewerConfig.rotation != null && viewerConfig.rotation !== viewport.getRotation()) {
       viewport.setRotation(viewerConfig.rotation);
     }
 
@@ -108,7 +111,7 @@ function OpenSeadragonComponent({
   // initialize OSD stuff when this component is mounted
   useEffect(() => {
     const viewer = Openseadragon({
-      id,
+      element: ref.current,
       ...osdConfig,
     });
 
@@ -141,7 +144,7 @@ function OpenSeadragonComponent({
     });
 
     forceUpdate();
-  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [ref]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // cleanup OSD viewer cruft when this component is unmounted
   useEffect(() => () => {
@@ -175,7 +178,7 @@ function OpenSeadragonComponent({
 
   return (
     <OpenSeadragonViewerContext.Provider value={viewerRef}>
-      <Container id={id} style={{ ...style, cursor: grabbing ? 'grabbing' : 'grab' }} {...passThruProps}>
+      <Container id={id} ref={ref} style={{ ...style, cursor: grabbing ? 'grabbing' : 'grab' }} {...passThruProps}>
         {children}
       </Container>
     </OpenSeadragonViewerContext.Provider>

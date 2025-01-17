@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getCompanionWindowIdsForPosition, getCompanionAreaVisibility, getThemeDirection, getWindow,
@@ -21,7 +20,6 @@ const mapDispatchToProps = ({
 });
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CompanionArea'),
 );

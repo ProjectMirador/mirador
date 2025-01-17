@@ -5,6 +5,7 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import BackIcon from '@mui/icons-material/ArrowBackSharp';
 import { announce } from '@react-aria/live-announcer';
+import { useTranslation } from 'react-i18next';
 import SearchHit from '../containers/SearchHit';
 import { ScrollTo } from './ScrollTo';
 
@@ -65,9 +66,9 @@ export function SearchResults({
   searchAnnotations = [],
   searchHits = [],
   searchNumTotal = undefined,
-  t = k => k,
   windowId,
 }) {
+  const { t } = useTranslation();
   const [focused, setFocused] = useState(false);
 
   /** */
@@ -137,6 +138,5 @@ SearchResults.propTypes = {
   searchAnnotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   searchHits: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   searchNumTotal: PropTypes.number,
-  t: PropTypes.func,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
 };

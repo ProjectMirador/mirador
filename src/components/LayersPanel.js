@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
 import CanvasLayers from '../containers/CanvasLayers';
 
@@ -6,8 +7,9 @@ import CanvasLayers from '../containers/CanvasLayers';
  * a panel showing the canvases for a given manifest
  */
 export function LayersPanel({
-  canvasIds = [], id, t, windowId,
+  canvasIds = [], id, windowId,
 }) {
+  const { t } = useTranslation();
   return (
     <CompanionWindow
       title={t('layers')}
@@ -30,6 +32,5 @@ export function LayersPanel({
 LayersPanel.propTypes = {
   canvasIds: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
-  t: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };

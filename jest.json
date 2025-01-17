@@ -35,7 +35,7 @@
     "preset": "jest-puppeteer",
     "setupFilesAfterEnv": ["@testing-library/jest-dom/jest-globals"],
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch)"
+      "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch|react-mosaic-component2|lodash-es)"
     ],
     "testEnvironment": "jsdom"
   }, {
@@ -49,9 +49,7 @@
       "\\.s?css$": "<rootDir>/__mocks__/css.js",
       "^uuid$": "uuid"
     },
-    "setupFiles": [
-      "<rootDir>/setupJest.js"
-    ],
+    "setupFiles": [],
     "testMatch": [
       "<rootDir>/**/__tests__/integration/**/*.{js,jsx}"
     ],
@@ -61,7 +59,7 @@
       "@testing-library/jest-dom/jest-globals"
     ],
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch)"
+      "<rootDir>/node_modules/(?!@react-dnd|react-dnd|dnd-core|react-dnd-html5-backend|dnd-multi-backend|rdndmb-html5-to-touch|react-mosaic-component2|lodash-es)"
     ]
   }]
 }

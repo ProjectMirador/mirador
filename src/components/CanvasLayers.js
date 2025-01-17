@@ -13,9 +13,11 @@ import VisibilityIcon from '@mui/icons-material/VisibilitySharp';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOffSharp';
 import OpacityIcon from '@mui/icons-material/OpacitySharp';
 import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 const StyledDragHandle = styled('div')(({ theme }) => ({
   alignItems: 'center',
@@ -39,19 +41,11 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
-/** */
-function getUseableLabel(resource, index) {
-  return (resource
-    && resource.getLabel
-    && resource.getLabel().length > 0)
-    ? resource.getLabel().getValue()
-    : String(index + 1);
-}
-
 /** @private */
 function Layer({
-  resource, layerMetadata = {}, index, t, handleOpacityChange, setLayerVisibility, moveToTop,
+  resource, layerMetadata = {}, index, handleOpacityChange, setLayerVisibility, moveToTop,
 }) {
+  const { t } = useTranslation();
   const { width, height } = { height: undefined, width: 50 };
 
   const layer = {
@@ -76,7 +70,7 @@ function Layer({
           component="div"
           variant="body1"
         >
-          {getUseableLabel(resource, index)}
+          <IIIFResourceLabel resource={resource} fallback={index + 1} />
           <div>
             <MiradorMenuButton aria-label={t(layer.visibility ? 'layer_hide' : 'layer_show')} edge="start" size="small" onClick={() => { setLayerVisibility(resource.id, !layer.visibility); }}>
               { layer.visibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }
@@ -142,13 +136,13 @@ Layer.propTypes = {
   moveToTop: PropTypes.func.isRequired,
   resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   setLayerVisibility: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
 };
 
 /** @private */
 function DraggableLayer({
-  children, resource, index, t,
+  children, resource, index,
 }) {
+  const { t } = useTranslation();
   return (
     <Draggable draggableId={resource.id} index={index}>
       {(provided, snapshot) => (
@@ -194,13 +188,13 @@ DraggableLayer.propTypes = {
   children: PropTypes.node.isRequired,
   index: PropTypes.number.isRequired,
   resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  t: PropTypes.func.isRequired,
 };
 
 /** */
 export function CanvasLayers({
-  canvasId, index, label, layers, layerMetadata = {}, t, totalSize, updateLayers, windowId,
+  canvasId, index, label, layers, layerMetadata = {}, totalSize, updateLayers, windowId,
 }) {
+  const { t } = useTranslation();
   const droppableId = useId();
 
   const handleOpacityChange = useCallback((layerId, value) => {
@@ -278,12 +272,11 @@ export function CanvasLayers({
             >
               {
                 layers && layers.map((r, i) => (
-                  <DraggableLayer key={r.id} resource={r} index={i} t={t}>
+                  <DraggableLayer key={r.id} resource={r} index={i}>
                     <Layer
                       resource={r}
                       index={i}
                       layerMetadata={(layerMetadata || {})[r.id] || {}}
-                      t={t}
                       handleOpacityChange={handleOpacityChange}
                       setLayerVisibility={setLayerVisibility}
                       moveToTop={moveToTop}
@@ -309,7 +302,6 @@ CanvasLayers.propTypes = {
   })),
   layers: PropTypes.arrayOf(PropTypes.shape({
   })).isRequired,
-  t: PropTypes.func.isRequired,
   totalSize: PropTypes.number.isRequired,
   updateLayers: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,

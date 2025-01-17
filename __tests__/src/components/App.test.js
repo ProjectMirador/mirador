@@ -2,6 +2,9 @@ import { render, screen } from 'test-utils';
 
 import { App } from '../../../src/components/App';
 
+// bypass component lazy-loading to make the test less flappy
+import WorkspaceArea from '../../../src/containers/WorkspaceArea'; // eslint-disable-line no-unused-vars
+
 /** */
 function createWrapper(props) {
   return render(

@@ -10,6 +10,7 @@ import {
 import PaletteIcon from '@mui/icons-material/PaletteSharp';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import { WorkspaceDialog } from './WorkspaceDialog';
 
 const ThemeIcon = styled(PaletteIcon, { name: 'ThemeIcon', slot: 'icon' })(({ theme }) => ({
@@ -20,8 +21,9 @@ const ThemeIcon = styled(PaletteIcon, { name: 'ThemeIcon', slot: 'icon' })(({ th
  * a simple dialog providing the possibility to switch the theme
  */
 export function ChangeThemeDialog({
-  handleClose, open = false, selectedTheme, setSelectedTheme, t, themeIds = [],
+  handleClose, open = false, selectedTheme, setSelectedTheme, themeIds = [],
 }) {
+  const { t } = useTranslation();
   const handleThemeChange = useCallback((theme) => {
     setSelectedTheme(theme);
     handleClose();
@@ -59,6 +61,5 @@ ChangeThemeDialog.propTypes = {
   open: PropTypes.bool,
   selectedTheme: PropTypes.string.isRequired,
   setSelectedTheme: PropTypes.func.isRequired,
-  t: PropTypes.func.isRequired,
   themeIds: PropTypes.arrayOf(PropTypes.string),
 };

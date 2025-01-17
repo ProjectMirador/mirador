@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import MoreHorizontalIcon from '@mui/icons-material/MoreHorizSharp';
+import { useTranslation } from 'react-i18next';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import WorkspaceOptionsMenu from '../containers/WorkspaceOptionsMenu';
 
 /**
  * WorkspaceOptionsButton ~
 */
-export function WorkspaceOptionsButton({ t }) {
+export function WorkspaceOptionsButton() {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
 
@@ -40,7 +41,3 @@ export function WorkspaceOptionsButton({ t }) {
     </>
   );
 }
-
-WorkspaceOptionsButton.propTypes = {
-  t: PropTypes.func.isRequired,
-};

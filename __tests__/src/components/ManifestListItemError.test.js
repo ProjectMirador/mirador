@@ -12,7 +12,6 @@ function createWrapper(props) {
       manifestId="http://example.com"
       onDismissClick={() => {}}
       onTryAgainClick={() => {}}
-      t={key => key}
       {...props}
     />,
   );
@@ -24,7 +23,7 @@ describe('ManifestListItemError', () => {
   it('renders the failed manifest url and error key', () => {
     createWrapper();
 
-    expect(screen.getByText('manifestError')).toBeInTheDocument();
+    expect(screen.getByText('The resource cannot be added:')).toBeInTheDocument();
     expect(screen.getByText('http://example.com')).toBeInTheDocument();
   });
 
@@ -33,7 +32,7 @@ describe('ManifestListItemError', () => {
     mockFn = jest.fn();
     createWrapper({ onDismissClick: mockFn });
 
-    await user.click(screen.getByRole('button', { name: 'dismiss' }));
+    await user.click(screen.getByRole('button', { name: 'Dismiss' }));
 
     expect(mockFn).toHaveBeenCalledWith('http://example.com');
   });
@@ -43,7 +42,7 @@ describe('ManifestListItemError', () => {
     mockFn = jest.fn();
     createWrapper({ onTryAgainClick: mockFn });
 
-    await user.click(screen.getByRole('button', { name: 'tryAgain' }));
+    await user.click(screen.getByRole('button', { name: 'Try again' }));
 
     expect(mockFn).toHaveBeenCalledWith('http://example.com');
   });

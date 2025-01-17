@@ -13,8 +13,8 @@ function createWrapper(props) {
   let sequences;
 
   if (props.multipleSequences) {
-    sequences = [{ id: 'a', label: 'seq1' },
-      { id: 'b', label: 'seq2' }];
+    sequences = [{ getLabel: () => ({ getValue: () => undefined }), id: 'a', label: 'seq1' },
+      { getLabel: () => ({ getValue: () => undefined }), id: 'b', label: 'seq2' }];
   } else {
     sequences = Utils.parseManifest(manifestJson).getSequences();
   }
@@ -24,7 +24,6 @@ function createWrapper(props) {
       id="asdf"
       canvases={canvases}
       classes={{}}
-      t={key => key}
       windowId="xyz"
       setCanvas={() => {}}
       config={{ canvasNavigation: { height: 100 } }}
@@ -43,20 +42,20 @@ describe('WindowSideBarCanvasPanel', () => {
   it('renders SidebarIndexList', () => {
     createWrapper({ multipleSequences: false });
 
-    expect(screen.getByRole('heading', { name: 'canvasIndex' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Index' })).toBeInTheDocument();
     expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
   it('without a treeStructure will not render the table of contents tab', () => {
     createWrapper({ multipleSequences: false });
 
-    expect(screen.queryByRole('tab', { name: 'tableOfContentsList' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: 'Table of contents' })).not.toBeInTheDocument();
   });
 
   it('renders form control when multiple sequences present', () => {
     createWrapper({ multipleSequences: true, showToc: true });
 
-    expect(screen.getByRole('tab', { name: 'tableOfContentsList' })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'Table of contents' })).toBeInTheDocument();
   });
 
   it('renders correct number of sequences in form control', async () => {
@@ -80,7 +79,7 @@ describe('WindowSideBarCanvasPanel', () => {
       const updateVariant = jest.fn();
       createWrapper({ multipleSequences: false, updateVariant });
 
-      await user.click(screen.getByRole('tab', { name: 'thumbnailList' }));
+      await user.click(screen.getByRole('tab', { name: 'Thumbnail list' }));
       expect(updateVariant).toHaveBeenCalledWith('thumbnail');
     });
   });

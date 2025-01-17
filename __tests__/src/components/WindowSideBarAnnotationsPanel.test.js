@@ -1,5 +1,4 @@
 import { render, screen } from 'test-utils';
-import { t } from 'i18next';
 
 import CanvasAnnotations from '../../../src/containers/CanvasAnnotations';
 import { WindowSideBarAnnotationsPanel } from '../../../src/components/WindowSideBarAnnotationsPanel';
@@ -11,7 +10,6 @@ function createWrapper(props, state) {
       annotationCount={4}
       classes={{}}
       id="xyz"
-      t={t}
       windowId="abc"
       {...props}
     />,
@@ -31,7 +29,7 @@ describe('WindowSideBarAnnotationsPanel', () => {
   it('has the AnnotationSettings component', () => {
     createWrapper();
 
-    expect(screen.getByRole('button', { name: 'highlightAllAnnotations' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Highlight all' })).toBeInTheDocument();
   });
 
   it('renders the annotationsCount', () => {

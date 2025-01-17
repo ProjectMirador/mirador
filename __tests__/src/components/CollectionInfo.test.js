@@ -19,12 +19,12 @@ describe('CollectionInfo', () => {
     const user = userEvent.setup();
     createWrapper();
 
-    expect(screen.getByRole('heading', { name: 'collection' })).toBeVisible();
-    expect(screen.getByRole('button', { name: 'showCollection' })).toBeVisible();
+    expect(screen.getByRole('heading', { name: 'Collection' })).toBeVisible();
+    expect(screen.getByRole('button', { name: 'Show collection' })).toBeVisible();
 
-    await user.click(screen.getByRole('button', { name: 'collapseSection' }));
+    await user.click(screen.getByRole('button', { name: 'Collapse "Collection" section' }));
 
-    expect(screen.queryByRole('button', { name: 'showCollection' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Show collection' })).not.toBeInTheDocument();
   });
   it('without a collectionPath, renders nothing', () => {
     const wrapper = createWrapper({ collectionPath: [] });
@@ -36,7 +36,7 @@ describe('CollectionInfo', () => {
 
     createWrapper({ showCollectionDialog });
 
-    await user.click(screen.getByRole('button', { name: 'showCollection' }));
+    await user.click(screen.getByRole('button', { name: 'Show collection' }));
     expect(showCollectionDialog).toHaveBeenCalled();
   });
 });

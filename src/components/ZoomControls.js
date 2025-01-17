@@ -2,6 +2,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircleOutlineSharp';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircleOutlineSharp';
 import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import RestoreZoomIcon from './icons/RestoreZoomIcon';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
@@ -14,8 +15,9 @@ const StyledZoomControlsWrapper = styled('div')({
 /**
  */
 export function ZoomControls({
-  windowId = '', updateViewport = () => {}, viewer = {}, t = k => k, zoomToWorld,
+  windowId = '', updateViewport = () => {}, viewer = {}, zoomToWorld,
 }) {
+  const { t } = useTranslation();
   /** */
   const handleZoomInClick = () => {
     updateViewport(windowId, {
@@ -46,7 +48,6 @@ export function ZoomControls({
 }
 
 ZoomControls.propTypes = {
-  t: PropTypes.func,
   updateViewport: PropTypes.func,
   viewer: PropTypes.shape({
     x: PropTypes.number,

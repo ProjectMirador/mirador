@@ -24,14 +24,14 @@ describe('SearchPanel', () => {
   it('renders a CompanionWindow', () => {
     createWrapper();
     expect(screen.getByRole('complementary')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'searchTitle' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Search' })).toBeInTheDocument();
   });
 
   it('passes a Clear chip as the CompanionWindow title prop', () => {
     createWrapper({ query: 'Wolpertinger' });
 
-    expect(screen.getByRole('heading', { name: /searchTitle/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'clearSearch' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Search/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'clear' })).toBeInTheDocument();
   });
 
   it('the Clear chip calls the removeSearch prop', async () => {
@@ -40,7 +40,7 @@ describe('SearchPanel', () => {
 
     createWrapper({ query: 'Wolpertinger', removeSearch });
 
-    await user.click(screen.getByRole('button', { name: 'clearSearch' }));
+    await user.click(screen.getByRole('button', { name: 'clear' }));
 
     expect(removeSearch).toHaveBeenCalled();
   });
@@ -48,14 +48,14 @@ describe('SearchPanel', () => {
   it('does not render a Clear chip if there is no search query to be cleared', () => {
     createWrapper();
 
-    expect(screen.queryByRole('button', { name: 'clearSearch' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'clear' })).not.toBeInTheDocument();
   });
 
   it('has the SearchPanelControls component', () => {
     createWrapper();
 
-    expect(screen.getByRole('combobox', { name: 'searchInputLabel' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'searchSubmitAria' })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: 'search terms' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Submit search' })).toBeInTheDocument();
   });
 
   it('has the SearchResults list', () => {

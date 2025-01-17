@@ -7,7 +7,6 @@ import { AccessTokenSender } from '../../../src/components/AccessTokenSender';
 function createWrapper(props) {
   return render(
     <AccessTokenSender
-      t={key => key}
       handleAccessTokenMessage={() => {}}
       {...props}
     />,
@@ -23,7 +22,7 @@ describe('AccessTokenSender', () => {
   it('renders properly', () => {
     const { container } = createWrapper({ url: 'http://example.com' });
 
-    expect(container.querySelector('iframe')).toHaveAttribute('src', 'http://example.com?origin=http://localhost&messageId=http://example.com'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('iframe')).toHaveAttribute('src', 'http://example.com/?origin=http%3A%2F%2Flocalhost&messageId=http%3A%2F%2Fexample.com'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
 
   it('triggers an action when the iframe sends a message', () => {

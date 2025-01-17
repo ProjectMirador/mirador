@@ -6,6 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+import { useTranslation } from 'react-i18next';
 import WorkspaceExport from '../containers/WorkspaceExport';
 import WorkspaceImport from '../containers/WorkspaceImport';
 import WorkspaceContext from '../contexts/WorkspaceContext';
@@ -15,8 +16,9 @@ import { PluginHook } from './PluginHook';
  * WorkspaceOptionsMenu ~ the menu for workspace options such as import/export
 */
 export function WorkspaceOptionsMenu({
-  anchorEl = null, handleClose, open = false, t, ...rest
+  anchorEl = null, handleClose, open = false, ...rest
 }) {
+  const { t } = useTranslation();
   const container = useContext(WorkspaceContext);
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -97,5 +99,4 @@ WorkspaceOptionsMenu.propTypes = {
   anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
-  t: PropTypes.func.isRequired,
 };

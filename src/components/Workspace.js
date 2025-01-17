@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { visuallyHidden } from '@mui/utils';
+import { useTranslation } from 'react-i18next';
 import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
 import WorkspaceElastic from '../containers/WorkspaceElastic';
@@ -17,33 +18,36 @@ const Root = styled('div', { name: 'Workspace', slot: 'root' })(() => ({
 }));
 
 /** */
-const ZeroWindows = ({ t }) => (
-  <Root>
-    <Grid
-      alignItems="center"
-      container
-      style={{
-        height: '100%',
-      }}
-    >
+const ZeroWindows = () => {
+  const { t } = useTranslation();
+
+  return (
+    <Root>
       <Grid
-        xs={12}
-        item
+        alignItems="center"
+        container
+        style={{
+          height: '100%',
+        }}
       >
-        <Typography
-          variant="h1"
-          component="div"
-          align="center"
+        <Grid
+          xs={12}
+          item
         >
-          {t('welcome')}
-        </Typography>
+          <Typography
+            variant="h1"
+            component="div"
+            align="center"
+          >
+            {t('welcome')}
+          </Typography>
+        </Grid>
       </Grid>
-    </Grid>
-  </Root>
-);
+    </Root>
+  );
+};
 
 ZeroWindows.propTypes = {
-  t: PropTypes.func.isRequired,
 };
 
 /**
@@ -52,8 +56,9 @@ ZeroWindows.propTypes = {
  * @private
  */
 export function Workspace({
-  addWindow = () => {}, allowNewWindows = true, maximizedWindowIds = [], t, windowIds = [], workspaceId, workspaceType,
+  addWindow = () => {}, allowNewWindows = true, maximizedWindowIds = [], windowIds = [], workspaceId, workspaceType,
 }) {
+  const { t } = useTranslation();
   /** */
   const handleDrop = ({ canvasId, manifestId, manifestJson }, _props, _monitor) => {
     if (!allowNewWindows) return;
@@ -77,7 +82,7 @@ export function Workspace({
       }
     }
 
-    if (windowIds.length === 0) return <ZeroWindows t={t} />;
+    if (windowIds.length === 0) return <ZeroWindows />;
 
     switch (workspaceType) {
       case 'elastic':
@@ -119,7 +124,6 @@ Workspace.propTypes = {
   addWindow: PropTypes.func,
   allowNewWindows: PropTypes.bool,
   maximizedWindowIds: PropTypes.arrayOf(PropTypes.string),
-  t: PropTypes.func.isRequired,
   windowIds: PropTypes.arrayOf(PropTypes.string),
   workspaceId: PropTypes.string.isRequired,
   workspaceType: PropTypes.string.isRequired,
