@@ -29,8 +29,6 @@ export class WindowCanvasNavigationControlsVideo extends Component {
       classes, visible, windowId, setPaused,
     } = this.props;
 
-    if (!visible) return (<Typography variant="srOnly" component="div"><ViewerInfo windowId={windowId} /></Typography>);
-
     return (
       <Paper
         square
@@ -55,7 +53,6 @@ export class WindowCanvasNavigationControlsVideo extends Component {
           zIndex: 50,
         })}
       >
-
         <ViewerNavigation windowId={windowId} beforeClick={setPaused} />
         <ViewerInfo windowId={windowId} />
         <ViewerNavigationVideo windowId={windowId} />
