@@ -49,7 +49,7 @@ export class VideoViewer extends Component {
     // Ensure `currentTime` updates are consistent
     if (currentTime !== prevProps.currentTime) {
       const duration = canvas.getDuration();
-      //Fix issue where reactPlayer didn't populate seek to time when the time was at 0
+      // Fix issue where reactPlayer didn't populate seek to time when the time was at 0
       if (prevProps.currentTime === 0 || paused === true) {
         this.playerRef.current.seekTo(currentTime);
       }
@@ -248,7 +248,10 @@ export class VideoViewer extends Component {
                 )}
               </div>
             </div>
-            <WindowCanvasNavigationControlsVideo windowId={windowId} playerRef={this.playerRef} />
+            <WindowCanvasNavigationControlsVideo
+              windowId={windowId}
+              playerRef={this.playerRef}
+            />
           </>
         )}
       </div>
