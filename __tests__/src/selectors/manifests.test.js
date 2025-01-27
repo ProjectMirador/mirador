@@ -506,7 +506,7 @@ describe('getManifestSearchService', () => {
   });
 
   it('supports v1 of the search spec', () => {
-    const v1 = JSON.parse(JSON.stringify(manifestFixtureFg165hz3589));
+    const v1 = structuredClone(manifestFixtureFg165hz3589);
     v1.service[0].profile = 'http://iiif.io/api/search/1/search';
     const state = { manifests: { x: { json: v1 } } };
     expect(getManifestSearchService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/search');
@@ -525,7 +525,7 @@ describe('getManifestAutocompleteService', () => {
   });
 
   it('supports v1 of the search spec', () => {
-    const v1 = JSON.parse(JSON.stringify(manifestFixtureFg165hz3589));
+    const v1 = structuredClone(manifestFixtureFg165hz3589);
     v1.service[0].profile = 'http://iiif.io/api/search/1/search';
     v1.service[0].service.profile = 'http://iiif.io/api/search/1/autocomplete';
     const state = { manifests: { x: { json: v1 } } };
