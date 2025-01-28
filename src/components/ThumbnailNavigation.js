@@ -84,6 +84,16 @@ export function ThumbnailNavigation({
   };
 
   /** */
+  const calculateForItems = (n) => {
+    let total = 0;
+    for (let i = 0; i < n; i += 1) {
+      total += calculateScaledSize(i);
+    }
+
+    return total + spacing;
+  };
+
+  /** */
   const calculatingWidth = (canvasesLength) => {
     if (canvasesLength === 1) {
       return thumbnailNavigation.width;
@@ -172,20 +182,26 @@ export function ThumbnailNavigation({
           defaultHeight={100}
           defaultWidth={400}
         >
-          {({ height, width }) => (
-            <List
-              direction={htmlDir}
-              height={areaHeight(height)}
-              itemCount={itemCount()}
-              itemSize={calculateScaledSize}
-              width={width}
-              layout={(position === 'far-bottom') ? 'horizontal' : 'vertical'}
-              itemData={itemData}
-              ref={gridRef}
-            >
-              {ThumbnailCanvasGrouping}
-            </List>
-          )}
+          {({ height, width }) => {
+            const calculatedHeight = (position === 'far-bottom') ? areaHeight(height) : calculateForItems(thumbnailNavigation.count ?? 1);
+            const calculatedWidth = (position === 'far-bottom') ? calculateForItems(thumbnailNavigation.count ?? 1) : width;
+            const layout = (position === 'far-bottom') ? 'horizontal' : 'vertical';
+
+            return (
+              <List
+                direction={htmlDir}
+                height={thumbnailNavigation.limit ? calculatedHeight : areaHeight(height)}
+                itemCount={itemCount()}
+                itemSize={calculateScaledSize}
+                width={thumbnailNavigation.limit ? calculatedWidth : width}
+                layout={layout}
+                itemData={itemData}
+                ref={gridRef}
+              >
+                {ThumbnailCanvasGrouping}
+              </List>
+            );
+          } }
         </AutoSizer>
         )}
       </div>
