@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
@@ -44,6 +44,14 @@ export function WorkspaceAdd({
   const { t } = useTranslation();
   const [addResourcesOpen, setAddResourcesVisibility] = useState(false);
   const ref = useRef();
+  const [refWidth, setRefWidth] = useState('100%');
+
+  /** */
+  const updateRefWidth = () => {
+    if (ref.current) {
+      setRefWidth(ref.current.offsetWidth);
+    }
+  };
 
   /** */
   const handleDrop = ({ manifestId, manifestJson }, props, monitor) => {
@@ -84,9 +92,19 @@ export function WorkspaceAdd({
     addResource, catalog, setWorkspaceAddVisibility, t, ...rest,
   };
 
+  useEffect(() => {
+    window.addEventListener('resize', updateRefWidth);
+
+    updateRefWidth();
+
+    return () => {
+      window.removeEventListener('resize', updateRefWidth);
+    };
+  }, []);
+
   return (
     <IIIFDropTarget onDrop={handleDrop}>
-      <StyledWorkspaceAdd ref={ref} className={classNames(ns('workspace-add'))}>
+      <StyledWorkspaceAdd className={classNames(ns('workspace-add'))} ref={ref}>
         {catalog.length < 1 ? (
           <Grid
             alignItems="center"
@@ -138,10 +156,8 @@ export function WorkspaceAdd({
           sx={theme => ({
             '.MuiDrawer-paper': {
               borderTop: '0',
-              left: '0',
-              [theme.breakpoints.up('sm')]: {
-                left: '65px',
-              },
+              left: 'unset',
+              width: refWidth,
             },
             ...(!addResourcesOpen && {
               display: 'none',
