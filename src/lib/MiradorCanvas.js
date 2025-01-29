@@ -1,6 +1,12 @@
 import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
 import { Canvas, AnnotationPage, Annotation } from 'manifesto.js';
+import {
+  audioResourcesFrom, choiceResourcesFrom, hasImageService, imageResourcesFrom, iiifImageResourcesFrom,
+  textResourcesFrom, videoResourcesFrom,
+} from './resourceFilters';
+import canvasTypes from './canvasTypes';
+
 /**
  * MiradorCanvas - adds additional, testable logic around Manifesto's Canvas
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
@@ -68,7 +74,8 @@ export default class MiradorCanvas {
   get imageResources() {
     const resources = flattenDeep([
       this.canvas.getImages().map(i => i.getResource()),
-      this.canvas.getContent().map(i => i.getBody()),
+      imageResourcesFrom(this.contentBodies),
+      choiceResourcesFrom(this.contentBodies),
     ]);
 
     return flatten(resources.map((resource) => {
@@ -82,27 +89,30 @@ export default class MiradorCanvas {
   }
 
   /** */
-  get videoResources() {
-    const resources = flattenDeep([
+  get contentBodies() {
+    return flattenDeep([
       this.canvas.getContent().map(i => i.getBody()),
     ]);
-    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Video'));
+  }
+
+  /** */
+  get textResources() {
+    return textResourcesFrom(this.contentBodies);
+  }
+
+  /** */
+  get videoResources() {
+    return flatten(videoResourcesFrom(this.contentBodies));
   }
 
   /** */
   get audioResources() {
-    const resources = flattenDeep([
-      this.canvas.getContent().map(i => i.getBody()),
-    ]);
-
-    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Sound'));
+    return flatten(audioResourcesFrom(this.contentBodies));
   }
 
   /** */
   get v2VttContent() {
-    const resources = flattenDeep([
-      this.canvas.getContent().map(i => i.getBody()),
-    ]);
+    const resources = this.contentBodies;
 
     return flatten(resources.filter((resource) => resource.getProperty('format') === 'text/vtt'));
   }
@@ -158,13 +168,12 @@ export default class MiradorCanvas {
 
   /** */
   get iiifImageResources() {
-    return this.imageResources
-      .filter(r => r && r.getServices()[0] && r.getServices()[0].id);
+    return iiifImageResourcesFrom(this.imageResources);
   }
 
   /** */
   get imageServiceIds() {
-    return this.iiifImageResources.map(r => r.getServices()[0].id);
+    return this.iiifImageResources.map(hasImageService);
   }
 
   /**
