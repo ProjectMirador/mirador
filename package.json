@@ -8,7 +8,9 @@
     ".": {
       "import": "./dist/es/src/index.js",
       "require": "./dist/cjs/src/index.js"
-    }
+    },
+    "./dist/cjs/*": "./dist/cjs/*",
+    "./dist/es/*": "./dist/es/*"
   },
   "files": [
     "dist"
