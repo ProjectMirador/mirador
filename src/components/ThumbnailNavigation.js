@@ -183,17 +183,17 @@ export function ThumbnailNavigation({
           defaultWidth={400}
         >
           {({ height, width }) => {
-            const calculatedHeight = (position === 'far-bottom') ? areaHeight(height) : calculateForItems(thumbnailNavigation.count ?? 1);
-            const calculatedWidth = (position === 'far-bottom') ? calculateForItems(thumbnailNavigation.count ?? 1) : width;
+            const calculatedHeight = (position === 'far-bottom') ? areaHeight(height) : calculateForItems(thumbnailNavigation.maxNumberOfThumbnails ?? 1);
+            const calculatedWidth = (position === 'far-bottom') ? calculateForItems(thumbnailNavigation.maxNumberOfThumbnails ?? 1) : width;
             const layout = (position === 'far-bottom') ? 'horizontal' : 'vertical';
 
             return (
               <List
                 direction={htmlDir}
-                height={thumbnailNavigation.limit ? calculatedHeight : areaHeight(height)}
+                height={thumbnailNavigation.maxNumberOfThumbnails ? calculatedHeight : areaHeight(height)}
                 itemCount={itemCount()}
                 itemSize={calculateScaledSize}
-                width={thumbnailNavigation.limit ? calculatedWidth : width}
+                width={thumbnailNavigation.maxNumberOfThumbnails ? calculatedWidth : width}
                 layout={layout}
                 itemData={itemData}
                 ref={gridRef}
