@@ -512,6 +512,8 @@ export default {
     preferredFormats: ['jpg', 'png', 'webp', 'tif'],
   },
   thumbnailNavigation: {
+    count: 5, // The amount of thumbnails to be shown
+    limit: false, // Limits the shown thumbnails in the thumbnail navigation
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     displaySettings: true, // Display the settings for this in WindowTopMenu
     height: 130, // height of entire ThumbnailNavigation area when position is "far-bottom"
