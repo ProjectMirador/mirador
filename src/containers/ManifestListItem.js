@@ -23,7 +23,7 @@ const mapStateToProps = (state, { manifestId, provider }) => {
     : getCanvases(state, { manifestId }).length;
   return {
     active: getWindowManifests(state).includes(manifestId),
-    error: manifest.error || !manifesto,
+    error: manifest.error || (!manifesto && !!manifest.json),
     isCollection,
     isFetching: manifest.isFetching,
     isMultipart: isCollection
