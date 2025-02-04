@@ -11,11 +11,14 @@ function createManifestoInstance(json, locale) {
   if (!json) return undefined;
   // Use structuredClone to create a deep copy and prevent Manifesto from mutating the json
   const manifestoObject = Utils.parseManifest(structuredClone(json), locale ? { locale } : undefined);
-  // Local patching of Manifesto so that when its a Collection, it behaves similarly
-  if (typeof manifestoObject.getSequences != 'function') {
-    manifestoObject.getSequences = () => [];
+  if (manifestoObject) {
+    // Local patching of Manifesto so that when its a Collection, it behaves similarly
+    if (typeof manifestoObject.getSequences != 'function') {
+      manifestoObject.getSequences = () => [];
+    }
+    return manifestoObject;
   }
-  return manifestoObject;
+  return undefined;
 }
 
 /** */
