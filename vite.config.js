@@ -43,6 +43,8 @@ export default defineConfig({
           external: [
             ...Object.keys(packageJson.peerDependencies),
             'react/jsx-runtime',
+            'react-i18next',
+            'i18next',
             '__tests__/*',
             '__mocks__/*',
           ],
