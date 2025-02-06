@@ -72,8 +72,6 @@ WindowTopBarPluginMenu.propTypes = {
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   menuIcon: PropTypes.element,
   open: PropTypes.bool,
-  PluginComponents: PropTypes.arrayOf(
-    PropTypes.node,
-  ),
+  PluginComponents: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   windowId: PropTypes.string.isRequired,
 };
