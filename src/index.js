@@ -9,6 +9,7 @@ export * from './extend';
 export * from './lib';
 export * from './plugins';
 export { default as settings } from './config/settings';
+export { useTranslation } from 'react-i18next';
 
 export default {
   ...init,
