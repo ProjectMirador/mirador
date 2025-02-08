@@ -21,9 +21,9 @@ import { withRef } from '../extend/withRef';
 function getIdAndContentOfResources(resources) {
   return resources.map((resource, i) => ({
     content: resource.chars,
-    creator: resource?.creator,
+    creator: resource?.resource?.creator,
     id: resource.id,
-    lastEditor: resource?.lastEditor,
+    lastEditor: resource?.resource?.lastEditor,
     tags: resource.tags,
     targetId: resource.targetId,
   }));
