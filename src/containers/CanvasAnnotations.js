@@ -16,11 +16,14 @@ import { withRef } from '../extend/withRef';
 /**
  * @param {Array} resources
  * @return {Array} [{ id: 'abc123', content: 'Annotation Content' }, ...]
+ * TODO it's not the best to add creator and creationDate here, but it's the easiest way to get it
  */
 function getIdAndContentOfResources(resources) {
   return resources.map((resource, i) => ({
     content: resource.chars,
+    creator: resource?.creator,
     id: resource.id,
+    lastEditor: resource?.lastEditor,
     tags: resource.tags,
     targetId: resource.targetId,
   }));
