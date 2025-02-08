@@ -173,13 +173,16 @@ export function CanvasAnnotations({
             </MenuItem>
           </ScrollTo>
         ))}
+        {annotationsFiltered.length === 0 && (
+        <MenuItem>
+          <Typography>
+            {t('noAnnotationFound')}
+          </Typography>
+        </MenuItem>
+        )}
 
       </MenuList>
-      {annotationsFiltered.length === 0 && (
-      <Typography>
-        {t('noAnnotationFound')}
-      </Typography>
-      )}
+
       <StyledFooterAnnotationContainer>
         <Typography component="p" variant="subtitle2">
           {t('showingNumAnnotations', {
