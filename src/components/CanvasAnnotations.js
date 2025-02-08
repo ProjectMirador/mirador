@@ -110,7 +110,7 @@ export function CanvasAnnotations({
           }}
         />
       </StyledAnnotationContainer>
-      <MenuList autoFocusItem variant="selectedMenu">
+      <MenuList variant="selectedMenu">
         {annotationsFiltered.map((annotation) => (
           <ScrollTo
             containerRef={containerRef}
@@ -118,6 +118,7 @@ export function CanvasAnnotations({
             offsetTop={96} // offset for the height of the form above
             scrollTo={selectedAnnotationId === annotation.id}
             selected={selectedAnnotationId === annotation.id}
+            nodeId={annotation.id}
           >
             <MenuItem
               component={listContainerComponent}
@@ -172,15 +173,13 @@ export function CanvasAnnotations({
             </MenuItem>
           </ScrollTo>
         ))}
-        {annotationsFiltered.length === 0
-                    && (
-                    <MenuItem>
-                      <Typography>
-                        {t('noAnnotationFound')}
-                      </Typography>
-                    </MenuItem>
-                    )}
+
       </MenuList>
+      {annotationsFiltered.length === 0 && (
+      <Typography>
+        {t('noAnnotationFound')}
+      </Typography>
+      )}
       <StyledFooterAnnotationContainer>
         <Typography component="p" variant="subtitle2">
           {t('showingNumAnnotations', {
