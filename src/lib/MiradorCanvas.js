@@ -82,6 +82,14 @@ export default class MiradorCanvas {
   }
 
   /** */
+  get textResources() {
+    const resources = flattenDeep([
+      this.canvas.getContent().map(i => i.getBody()),
+    ]);
+    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Text'));
+  }
+
+  /** */
   get videoResources() {
     const resources = flattenDeep([
       this.canvas.getContent().map(i => i.getBody()),

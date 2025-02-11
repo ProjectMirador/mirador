@@ -7,6 +7,7 @@ import otherContentStringsFixture from '../../fixtures/version-2/BibliographicRe
 import fragmentFixture from '../../fixtures/version-2/hamilton.json';
 import fragmentFixtureV3 from '../../fixtures/version-3/hamilton.json';
 import audioFixture from '../../fixtures/version-3/0002-mvm-audio.json';
+import textFixture from '../../fixtures/version-3/text-pdf.json';
 import videoFixture from '../../fixtures/version-3/0015-start.json';
 import videoWithAnnoCaptions from '../../fixtures/version-3/video_with_annotation_captions.json';
 
@@ -131,6 +132,14 @@ describe('MiradorCanvas', () => {
         Utils.parseManifest(videoWithAnnoCaptions).getSequences()[0].getCanvases()[0],
       );
       expect(instance.v3VttContent.length).toEqual(1);
+    });
+  });
+  describe('textResources', () => {
+    it('returns text', () => {
+      instance = new MiradorCanvas(
+        Utils.parseManifest(textFixture).getSequences()[0].getCanvases()[0],
+      );
+      expect(instance.textResources.length).toEqual(1);
     });
   });
 });
