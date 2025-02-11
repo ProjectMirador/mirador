@@ -218,6 +218,20 @@ export const getVisibleCanvasNonTiledResources = createSelector(
 );
 
 /**
+ * Returns visible canvas text resources.
+ * @param {object} state
+ * @param {string} windowId
+ * @return {Array}
+ */
+export const getVisibleCanvasTextResources = createSelector(
+  [
+    getVisibleCanvases,
+  ],
+  canvases => flatten(canvases
+    .map(canvas => new MiradorCanvas(canvas).textResources)),
+);
+
+/**
  * Returns visible canvas video resources.
  * @param {object} state
  * @param {string} windowId

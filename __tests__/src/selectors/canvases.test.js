@@ -3,6 +3,7 @@ import manifestFixture019 from '../../fixtures/version-2/019.json';
 import minimumRequired from '../../fixtures/version-2/minimumRequired.json';
 import minimumRequired3 from '../../fixtures/version-3/minimumRequired.json';
 import audioFixture from '../../fixtures/version-3/0002-mvm-audio.json';
+import textFixture from '../../fixtures/version-3/text-pdf.json';
 import videoFixture from '../../fixtures/version-3/0015-start.json';
 import videoWithAnnoCaptions from '../../fixtures/version-3/video_with_annotation_captions.json';
 import settings from '../../../src/config/settings';
@@ -15,6 +16,7 @@ import {
   getCanvasLabel,
   selectInfoResponse,
   getVisibleCanvasNonTiledResources,
+  getVisibleCanvasTextResources,
   getVisibleCanvasVideoResources,
   getVisibleCanvasAudioResources,
   getVisibleCanvasCaptions,
@@ -460,6 +462,28 @@ describe('getVisibleCanvasNonTiledResources', () => {
         },
       };
       expect(getVisibleCanvasAudioResources(state, { windowId: 'a' })[0].id).toBe('https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4');
+    });
+  });
+
+  describe('getVisibleCanvasTextResources', () => {
+    it('returns canvases resources', () => {
+      const state = {
+        manifests: {
+          'https://iiif.io/api/cookbook/recipe/0001-text-pdf/manifest.json': {
+            id: 'https://iiif.io/api/cookbook/recipe/0001-text-pdf/manifest.json',
+            json: textFixture,
+          },
+        },
+        windows: {
+          a: {
+            manifestId: 'https://iiif.io/api/cookbook/recipe/0001-text-pdf/manifest.json',
+            visibleCanvases: [
+              'https://iiif.io/api/cookbook/recipe/0001-text-pdf/canvas',
+            ],
+          },
+        },
+      };
+      expect(getVisibleCanvasTextResources(state, { windowId: 'a' })[0].id).toBe('https://fixtures.iiif.io/other/UCLA/kabuki_ezukushi_rtl.pdf');
     });
   });
 });
