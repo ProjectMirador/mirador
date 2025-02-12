@@ -28,7 +28,6 @@ function getStartCanvasId(node) {
 
 /** */
 function deepFind(treeNode, id) {
-  console.log('deepFind', treeNode, id);
   if (treeNode.id === id) {
     return treeNode;
   }
