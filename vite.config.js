@@ -42,16 +42,15 @@ export default defineConfig({
         rollupOptions: {
           external: [
             ...Object.keys(packageJson.peerDependencies),
-            'react/jsx-runtime',
             '__tests__/*',
             '__mocks__/*',
           ],
           output: {
             assetFileNames: 'mirador.[ext]',
+            exports: 'named',
             globals: {
               react: 'React',
               'react-dom': 'ReactDOM',
-              'react/jsx-runtime': 'react/jsx-runtime',
             },
           },
         },
@@ -59,6 +58,9 @@ export default defineConfig({
       },
     }
   ),
+  define: {
+    'process.env': {},
+  },
   esbuild: {
     exclude: [],
     // Matches .js and .jsx in __tests__ and .jsx in src
