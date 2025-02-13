@@ -48,7 +48,6 @@ export function WindowThumbnailSettings({
       <StyledMenuList role="menubar">
         <ThumbnailOption
           aria-checked={thumbnailNavigationPosition === 'off'}
-          autoFocus={thumbnailNavigationPosition === 'off'}
           key="off"
           onClick={() => { handleChange('off'); }}
           role="menuitemradio"
@@ -65,7 +64,6 @@ export function WindowThumbnailSettings({
         </ThumbnailOption>
         <ThumbnailOption
           aria-checked={thumbnailNavigationPosition === 'far-bottom'}
-          autoFocus={thumbnailNavigationPosition === 'far-bottom'}
           key="far-bottom"
           onClick={() => { handleChange('far-bottom'); }}
           role="menuitemradio"
@@ -82,7 +80,6 @@ export function WindowThumbnailSettings({
         </ThumbnailOption>
         <ThumbnailOption
           aria-checked={thumbnailNavigationPosition === 'far-right'}
-          autoFocus={thumbnailNavigationPosition === 'far-right'}
           key="far-right"
           onClick={() => { handleChange('far-right'); }}
           role="menuitemradio"
