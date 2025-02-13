@@ -48,6 +48,7 @@ export default defineConfig({
           ],
           output: {
             assetFileNames: 'mirador.[ext]',
+            exports: 'named',
             globals: {
               react: 'React',
               'react-dom': 'ReactDOM',
