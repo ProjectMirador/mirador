@@ -115,7 +115,10 @@
     "vitest-fetch-mock": "^0.4.2"
   },
   "peerDependencies": {
-    "@mui/material": "^5.13.5",
+    "@mui/material": "^5.x",
+    "@mui/system": "^5.x",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-i18next": "^13.0.0 || ^14.0.0 || ^15.0.0"
