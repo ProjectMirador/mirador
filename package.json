@@ -36,12 +36,10 @@
   "dependencies": {
     "@custom-react-hooks/use-element-size": "^1.5.1",
     "@emotion/cache": "^11.11.0",
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
     "@hello-pangea/dnd": "^16.0.1 || ^17.0.0",
-    "@mui/icons-material": "^5.11.16",
-    "@mui/utils": "^5.13.1",
-    "@mui/x-tree-view": "^6.17.0",
+    "@mui/icons-material": "^6.0.0",
+    "@mui/utils": "^6.0.0",
+    "@mui/x-tree-view": "^7.25.0",
     "@react-aria/live-announcer": "^3.1.2",
     "@redux-devtools/extension": "^3.3.0",
     "classnames": "^2.2.6",
@@ -83,7 +81,10 @@
     "uuid": "^8.1.0 || ^9.0.0 || ^10.0.0 || ^11.0.0"
   },
   "devDependencies": {
-    "@mui/material": "^5.13.5",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^6.x",
+    "@mui/system": "^6.x",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^16.0.1",
@@ -115,8 +116,8 @@
     "vitest-fetch-mock": "^0.4.2"
   },
   "peerDependencies": {
-    "@mui/material": "^5.x",
-    "@mui/system": "^5.x",
+    "@mui/material": "^6.x",
+    "@mui/system": "^6.x",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "react": "^18.0.0",
