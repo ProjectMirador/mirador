@@ -10,7 +10,7 @@ import OpenSeadragonViewerContext from '../contexts/OpenSeadragonViewerContext';
 
 /** Handle setting up OSD for use in mirador + react */
 function OpenSeadragonComponent({
-  children = undefined, Container = 'div', osdConfig = {}, viewerConfig = {}, onUpdateViewport = () => {}, setViewer = () => {}, style = {}, ...passThruProps
+  children = undefined, Container = 'div', osdConfig = {}, viewerConfig = {}, worldBounds = undefined, onUpdateViewport = () => {}, setViewer = () => {}, style = {}, ...passThruProps
 }) {
   const id = useId();
   const ref = useRef();
@@ -59,14 +59,16 @@ function OpenSeadragonComponent({
       viewport.setFlip(viewerConfig.flip);
     }
 
+    const bounds = viewerConfig.bounds || worldBounds;
+
     if (!viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
-      if (viewerConfig.bounds) {
-        viewport.fitBounds(new Openseadragon.Rect(...viewerConfig.bounds), true);
+      if (bounds) {
+        viewport.fitBounds(new Openseadragon.Rect(...bounds), true);
       } else {
         viewport.goHome(true);
       }
     }
-  }, [initialViewportSet, viewerConfig]);
+  }, [initialViewportSet, viewerConfig, worldBounds]);
 
   useEffect(() => {
     const viewer = viewerRef.current;
@@ -100,13 +102,14 @@ function OpenSeadragonComponent({
       viewport.setFlip(viewerConfig.flip);
     }
 
-    if (viewerConfig.bounds && !viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
-      const rect = new Openseadragon.Rect(...viewerConfig.bounds);
+    const bounds = viewerConfig.bounds || worldBounds;
+    if (bounds && !viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
+      const rect = new Openseadragon.Rect(...bounds);
       if (rect.equals(viewport.getBounds())) {
         viewport.fitBounds(rect, false);
       }
     }
-  }, [initialViewportSet, setInitialBounds, viewerConfig, viewerRef]);
+  }, [initialViewportSet, setInitialBounds, viewerConfig, viewerRef, worldBounds]);
 
   // initialize OSD stuff when this component is mounted
   useEffect(() => {
@@ -200,6 +203,7 @@ OpenSeadragonComponent.propTypes = {
     y: PropTypes.number,
     zoom: PropTypes.number,
   }),
+  worldBounds: PropTypes.arrayOf(PropTypes.number),
 };
 
 export default OpenSeadragonComponent;
