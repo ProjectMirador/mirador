@@ -18,7 +18,13 @@ export const configReducer = (state = initialState, action) => {
     case ActionTypes.SET_CONFIG:
       return action.config;
     case ActionTypes.IMPORT_MIRADOR_STATE:
-      return action.state.config || {};
+      return {
+        ...(action.state.config || {}),
+        export: deepmerge(state.export || {}, action.state.config?.export || {}, { arrayMerge: overwriteMerge }),
+        requests: deepmerge(state.requests || {}, action.state.config?.requests || {}, { arrayMerge: overwriteMerge }),
+        theme: deepmerge(state.theme || {}, action.state.config?.theme || {}, { arrayMerge: overwriteMerge }),
+        themes: deepmerge(state.themes || {}, action.state.config?.themes || {}, { arrayMerge: overwriteMerge }),
+      };
     default:
       return state;
   }
