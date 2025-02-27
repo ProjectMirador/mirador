@@ -35,7 +35,7 @@ export default defineConfig({
       build: {
         lib: {
           entry: './src/index.js',
-          fileName: (format) => (format === 'umd' ? 'mirador.js' : 'mirador.es.js'),
+          fileName: (format) => (format === 'umd' ? 'mirador.min.js' : 'mirador.es.js'),
           formats: ['es', 'umd'],
           name: 'Mirador',
         },

@@ -3,7 +3,7 @@
   "version": "4.0.0-alpha.13",
   "description": "An open-source, web-based 'multi-up' viewer that supports zoom-pan-rotate functionality, ability to display/compare simple images, and images with annotations.",
   "type": "module",
-  "main": "./dist/mirador.js",
+  "main": "./dist/mirador.min.js",
   "module": "./dist/mirador.es.js",
   "files": [
     "dist",
@@ -14,7 +14,7 @@
     "./src": "./src/index.js",
     ".": {
         "import": "./dist/mirador.es.js",
-        "require": "./dist/mirador.js"
+        "require": "./dist/mirador.min.js"
     }
   },
   "scripts": {
