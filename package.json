@@ -18,7 +18,7 @@
     }
   },
   "scripts": {
-    "build": "vite build --config vite.config.js",
+    "build": "vite build --config vite.config.js && vite build --config vite-umd.config.js",
     "clean": "rm -rf ./dist",
     "lint": "node_modules/.bin/eslint ./ && npm run lint:translations && npm run lint:containers",
     "lint:containers": "node ./scripts/container-lint.js",
@@ -40,7 +40,6 @@
     "@emotion/styled": "^11.10.6",
     "@hello-pangea/dnd": "^16.0.1 || ^17.0.0",
     "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.13.5",
     "@mui/utils": "^5.13.1",
     "@mui/x-tree-view": "^6.17.0",
     "@react-aria/live-announcer": "^3.1.2",
@@ -64,7 +63,6 @@
     "react-dnd-touch-backend": "^16.0.0",
     "react-error-boundary": "^4.1.2",
     "react-full-screen": "^1.1.1",
-    "react-i18next": "^13.0.0 || ^14.0.0 || ^15.0.0",
     "react-image": "^4.0.1",
     "react-intersection-observer": "^9.0.0",
     "react-mosaic-component2": "^6.0.0",
@@ -85,6 +83,7 @@
     "uuid": "^8.1.0 || ^9.0.0 || ^10.0.0 || ^11.0.0"
   },
   "devDependencies": {
+    "@mui/material": "^5.13.5",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^16.0.1",
@@ -108,6 +107,7 @@
     "react": "^18.0.0",
     "react-dnd-test-backend": "^16.0.1",
     "react-dom": "^18.0.0",
+    "react-i18next": "^13.0.0 || ^14.0.0 || ^15.0.0",
     "redux-mock-store": "^1.5.1",
     "redux-saga-test-plan": "^4.0.0-rc.3",
     "vite": "^6.0.0",
@@ -115,7 +115,12 @@
     "vitest-fetch-mock": "^0.4.2"
   },
   "peerDependencies": {
+    "@mui/material": "^5.x",
+    "@mui/system": "^5.x",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-i18next": "^13.0.0 || ^14.0.0 || ^15.0.0"
   }
 }
