@@ -33,6 +33,13 @@ function OpenSeadragonComponent({
       bounds: viewport.getBounds(),
       flip: viewport.getFlip(),
       rotation: viewport.getRotation(),
+      worldBounds: (() => {
+        const homeBounds = viewport.viewer?.world?.getHomeBounds();
+
+        if (!homeBounds) return undefined;
+
+        return [homeBounds.x, homeBounds.y, homeBounds.width, homeBounds.height];
+      })(),
       x: Math.round(viewport.centerSpringX.target.value),
       y: Math.round(viewport.centerSpringY.target.value),
       zoom: viewport.zoomSpring.target.value,
@@ -105,17 +112,41 @@ function OpenSeadragonComponent({
     const bounds = viewerConfig.bounds || worldBounds;
     if (bounds && !viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
       const rect = new Openseadragon.Rect(...bounds);
-      if (rect.equals(viewport.getBounds())) {
+      if (!rect.equals(viewport.getBounds())) {
         viewport.fitBounds(rect, false);
       }
     }
   }, [initialViewportSet, setInitialBounds, viewerConfig, viewerRef, worldBounds]);
+
+  useEffect(() => {
+    if (!osdConfig.preserveViewport) return;
+    if (!viewerConfig?.worldBounds || !worldBounds) return;
+
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+    const { viewport } = viewer;
+
+    const [_x, _y, width, height] = viewerConfig.worldBounds;
+    const [_x1, _y1, width1, height1] = worldBounds;
+
+    const previousAspectRatio = (1.0 * width) / height;
+    const newAspectRatio = (1.0 * width1) / height1;
+
+    if ((previousAspectRatio < (1 - osdConfig.resetViewportAfterAspectRatioDelta) * newAspectRatio)
+        || (previousAspectRatio > (1 + osdConfig.resetViewportAfterAspectRatioDelta) * newAspectRatio)) {
+      const rect = new Openseadragon.Rect(...worldBounds);
+      if (!rect.equals(viewport.getBounds())) {
+        viewport.fitBounds(rect, false);
+      }
+    }
+  }, [osdConfig, viewerConfig, worldBounds, viewerRef]);
 
   // initialize OSD stuff when this component is mounted
   useEffect(() => {
     const viewer = Openseadragon({
       element: ref.current,
       ...osdConfig,
+      preserveViewportAspectRatio: undefined,
     });
 
     viewer.addHandler('canvas-drag', () => {

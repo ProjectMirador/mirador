@@ -33,11 +33,12 @@ export function OpenSeadragonViewer({
   const apiRef = useRef();
   const [viewer, setViewer] = useState(null);
   const onViewportChange = useCallback(({
-    flip, rotation, x, y, zoom,
+    flip, rotation, worldBounds, x, y, zoom,
   }) => {
     updateViewport(windowId, {
       flip,
       rotation,
+      worldBounds,
       x,
       y,
       zoom,
