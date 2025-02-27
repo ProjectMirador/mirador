@@ -48,6 +48,7 @@ export { default as ConnectedSidebarIndexItem } from './SidebarIndexItem';
 export { default as ConnectedSidebarIndexList } from './SidebarIndexList';
 export { default as ConnectedSidebarIndexTableOfContents } from './SidebarIndexTableOfContents';
 export { default as ConnectedSidebarIndexThumbnail } from './SidebarIndexThumbnail';
+export { default as ConnectedTextViewer } from './TextViewer';
 export { default as ConnectedThumbnailCanvasGrouping } from './ThumbnailCanvasGrouping';
 export { default as ConnectedThumbnailNavigation } from './ThumbnailNavigation';
 export { default as ConnectedVideoViewer } from './VideoViewer';

@@ -1,0 +1,35 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://iiif.io/api/cookbook/recipe/0001-text-pdf/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "Simplest Text Example 1"
+    ]
+  },
+  "items": [
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0001-text-pdf/canvas",
+      "type": "Canvas",
+      "items": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0001-text-pdf/canvas/page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.io/api/cookbook/recipe/0001-text-pdf/canvas/page/annotation",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://fixtures.iiif.io/other/UCLA/kabuki_ezukushi_rtl.pdf",
+                "type": "Text",
+                "format": "application/pdf"
+              },
+              "target": "https://iiif.io/api/cookbook/recipe/0001-text-pdf/canvas/page"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

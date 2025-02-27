@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getCurrentCanvas } from '../state/selectors';
+import { getCurrentCanvas, getConfig } from '../state/selectors';
 import { ThumbnailCanvasGrouping } from '../components/ThumbnailCanvasGrouping';
 
 /**
@@ -21,6 +21,7 @@ const mapDispatchToProps = (dispatch, { data }) => ({
  */
 const mapStateToProps = (state, { data }) => ({
   currentCanvasId: (getCurrentCanvas(state, { windowId: data.windowId }) || {}).id,
+  showThumbnailLabels: getConfig(state).thumbnailNavigation.showThumbnailLabels,
 });
 
 const enhance = compose(

@@ -12,6 +12,7 @@ const GalleryView = lazy(() => import('../containers/GalleryView'));
 const SelectCollection = lazy(() => import('../containers/SelectCollection'));
 const WindowViewer = lazy(() => import('../containers/WindowViewer'));
 const VideoViewer = lazy(() => import('../containers/VideoViewer'));
+const TextViewer = lazy(() => import('../containers/TextViewer'));
 
 GalleryView.displayName = 'GalleryView';
 SelectCollection.displayName = 'SelectCollection';
@@ -25,8 +26,8 @@ const Root = styled('div', { name: 'PrimaryWindow', slot: 'root' })(() => ({
 
 /**  */
 const TypeSpecificViewer = ({
-  audioResources = [], isCollection = false,
-  isFetching = false, videoResources = [], view = undefined, windowId,
+  audioResources = [], isCollection = false, isFetching = false, textResources = [],
+  videoResources = [], view = undefined, windowId,
 }) => {
   if (isCollection) {
     return (
@@ -57,6 +58,13 @@ const TypeSpecificViewer = ({
         />
       );
     }
+    if (textResources.length > 0) {
+      return (
+        <TextViewer
+          windowId={windowId}
+        />
+      );
+    }
     return (
       <WindowViewer
         windowId={windowId}
@@ -70,6 +78,7 @@ TypeSpecificViewer.propTypes = {
   audioResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   isCollection: PropTypes.bool,
   isFetching: PropTypes.bool,
+  textResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   videoResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,
@@ -80,13 +89,15 @@ TypeSpecificViewer.propTypes = {
  * window. Right now this differentiates between a Image, Video, or Audio viewer.
  */
 export function PrimaryWindow({
-  audioResources = undefined, isCollection = false, isFetching = false, videoResources = undefined,
-  view = undefined, windowId, isCollectionDialogVisible = false, children = null, className = undefined,
+  audioResources = undefined, children = null, className = undefined, isCollection = false,
+  isCollectionDialogVisible = false, isFetching = false, textResources = undefined, videoResources = undefined,
+  view = undefined, windowId,
 }) {
   const viewerProps = {
     audioResources,
     isCollection,
     isFetching,
+    textResources,
     videoResources,
     view,
     windowId,
@@ -111,6 +122,7 @@ PrimaryWindow.propTypes = {
   isCollection: PropTypes.bool,
   isCollectionDialogVisible: PropTypes.bool,
   isFetching: PropTypes.bool,
+  textResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   videoResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,
