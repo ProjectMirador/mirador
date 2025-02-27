@@ -11,7 +11,7 @@ const miradorConfigSlice = () => ({ auth: settings.auth, canvas: settings.canvas
 describe('getThumbnailFactory', () => {
   const state = { config: miradorConfigSlice() };
   const iiifOpts = {};
-  it('returns the manifest of a certain id', () => {
+  it('returns a ThumbnailFactory', () => {
     const received = getThumbnailFactory(state, iiifOpts);
     expect(received).toBeInstanceOf(ThumbnailFactory);
   });
