@@ -2,7 +2,6 @@ import { createSelector } from 'reselect';
 import { getMiradorCanvasWrapper } from './wrappers';
 import { getCanvas, getVisibleCanvasIds } from './canvases';
 import { miradorSlice, EMPTY_ARRAY } from './utils';
-import { getConfig } from './config';
 
 /**
  * Get the image layers from a canvas.
