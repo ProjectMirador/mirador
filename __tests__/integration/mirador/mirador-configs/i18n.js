@@ -3,7 +3,6 @@ export default {
     { manifestId: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json' },
     { manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843' },
     { manifestId: 'https://media.nga.gov/public/manifests/nga_highlights.json', provider: 'National Gallery of Art' },
-    { manifestId: 'https://data.ucd.ie/api/img/manifests/ucdlib:33064', provider: 'Irish Architectural Archive' },
     { manifestId: 'https://wellcomelibrary.org/iiif/b18035723/manifest', provider: 'Wellcome Library' },
     { manifestId: 'https://demos.biblissima.fr/iiif/metadata/florus-dispersus/manifest.json', provider: 'Biblissima' },
     { manifestId: 'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/manifest.json', provider: 'e-codices - Virtual Manuscript Library of Switzerland' },
