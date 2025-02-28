@@ -61,29 +61,6 @@ export default defineConfig({
   define: {
     'process.env': {},
   },
-  esbuild: {
-    exclude: [],
-    // Matches .js and .jsx in __tests__ and .jsx in src
-    include: [/__tests__\/.*\.(js|jsx)$/, /src\/.*\.jsx?$/],
-    loader: 'jsx',
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      plugins: [
-        {
-          name: 'load-js-files-as-jsx',
-          // TODO: rename all our files to .jsx ...
-          /** */
-          setup(build) {
-            build.onLoad({ filter: /(src|__tests__)\/.*\.js$/ }, async (args) => ({
-              contents: await fs.readFile(args.path, 'utf8'),
-              loader: 'jsx',
-            }));
-          },
-        },
-      ],
-    },
-  },
   plugins: [react()],
   resolve: {
     alias: {
