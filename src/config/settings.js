@@ -545,6 +545,7 @@ export default {
     blendTime: 0.1,
     preserveImageSizeOnResize: true,
     preserveViewport: true,
+    resetViewportAfterAspectRatioDelta: 0.25,
     showNavigationControl: false,
     zoomPerClick: 1, // disable zoom-to-click
     zoomPerDoubleClick: 2.0

@@ -10,7 +10,7 @@ import OpenSeadragonViewerContext from '../contexts/OpenSeadragonViewerContext';
 
 /** Handle setting up OSD for use in mirador + react */
 function OpenSeadragonComponent({
-  children = undefined, Container = 'div', osdConfig = {}, viewerConfig = {}, onUpdateViewport = () => {}, setViewer = () => {}, style = {}, ...passThruProps
+  children = undefined, Container = 'div', osdConfig = {}, viewerConfig = {}, worldBounds = undefined, onUpdateViewport = () => {}, setViewer = () => {}, style = {}, ...passThruProps
 }) {
   const id = useId();
   const ref = useRef();
@@ -33,6 +33,13 @@ function OpenSeadragonComponent({
       bounds: viewport.getBounds(),
       flip: viewport.getFlip(),
       rotation: viewport.getRotation(),
+      worldBounds: (() => {
+        const homeBounds = viewport.viewer?.world?.getHomeBounds();
+
+        if (!homeBounds) return undefined;
+
+        return [homeBounds.x, homeBounds.y, homeBounds.width, homeBounds.height];
+      })(),
       x: Math.round(viewport.centerSpringX.target.value),
       y: Math.round(viewport.centerSpringY.target.value),
       zoom: viewport.zoomSpring.target.value,
@@ -59,14 +66,16 @@ function OpenSeadragonComponent({
       viewport.setFlip(viewerConfig.flip);
     }
 
+    const bounds = viewerConfig.bounds || worldBounds;
+
     if (!viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
-      if (viewerConfig.bounds) {
-        viewport.fitBounds(new Openseadragon.Rect(...viewerConfig.bounds), true);
+      if (bounds) {
+        viewport.fitBounds(new Openseadragon.Rect(...bounds), true);
       } else {
         viewport.goHome(true);
       }
     }
-  }, [initialViewportSet, viewerConfig]);
+  }, [initialViewportSet, viewerConfig, worldBounds]);
 
   useEffect(() => {
     const viewer = viewerRef.current;
@@ -100,19 +109,44 @@ function OpenSeadragonComponent({
       viewport.setFlip(viewerConfig.flip);
     }
 
-    if (viewerConfig.bounds && !viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
-      const rect = new Openseadragon.Rect(...viewerConfig.bounds);
-      if (rect.equals(viewport.getBounds())) {
+    const bounds = viewerConfig.bounds || worldBounds;
+    if (bounds && !viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
+      const rect = new Openseadragon.Rect(...bounds);
+      if (!rect.equals(viewport.getBounds())) {
         viewport.fitBounds(rect, false);
       }
     }
-  }, [initialViewportSet, setInitialBounds, viewerConfig, viewerRef]);
+  }, [initialViewportSet, setInitialBounds, viewerConfig, viewerRef, worldBounds]);
+
+  useEffect(() => {
+    if (!osdConfig.preserveViewport) return;
+    if (!viewerConfig?.worldBounds || !worldBounds) return;
+
+    const viewer = viewerRef.current;
+    if (!viewer) return;
+    const { viewport } = viewer;
+
+    const [_x, _y, width, height] = viewerConfig.worldBounds;
+    const [_x1, _y1, width1, height1] = worldBounds;
+
+    const previousAspectRatio = (1.0 * width) / height;
+    const newAspectRatio = (1.0 * width1) / height1;
+
+    if ((previousAspectRatio < (1 - osdConfig.resetViewportAfterAspectRatioDelta) * newAspectRatio)
+        || (previousAspectRatio > (1 + osdConfig.resetViewportAfterAspectRatioDelta) * newAspectRatio)) {
+      const rect = new Openseadragon.Rect(...worldBounds);
+      if (!rect.equals(viewport.getBounds())) {
+        viewport.fitBounds(rect, false);
+      }
+    }
+  }, [osdConfig, viewerConfig, worldBounds, viewerRef]);
 
   // initialize OSD stuff when this component is mounted
   useEffect(() => {
     const viewer = Openseadragon({
       element: ref.current,
       ...osdConfig,
+      preserveViewportAspectRatio: undefined,
     });
 
     viewer.addHandler('canvas-drag', () => {
@@ -200,6 +234,7 @@ OpenSeadragonComponent.propTypes = {
     y: PropTypes.number,
     zoom: PropTypes.number,
   }),
+  worldBounds: PropTypes.arrayOf(PropTypes.number),
 };
 
 export default OpenSeadragonComponent;
