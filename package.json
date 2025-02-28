@@ -36,7 +36,7 @@
   "dependencies": {
     "@custom-react-hooks/use-element-size": "^1.5.1",
     "@emotion/cache": "^11.11.0",
-    "@hello-pangea/dnd": "^16.0.1 || ^17.0.0",
+    "@hello-pangea/dnd": "^16.0.1 || ^17.0.0 || ^18.0.0",
     "@mui/icons-material": "^6.0.0",
     "@mui/utils": "^6.0.0",
     "@mui/x-tree-view": "^7.25.0",
