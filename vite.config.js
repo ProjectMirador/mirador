@@ -91,7 +91,7 @@ export default defineConfig({
     },
   },
   server: {
-    open: '/__tests__/integration/mirador/index.html',
-    port: '4444',
+    open: 'index.html',
+    port: 4444,
   },
 });
