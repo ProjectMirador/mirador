@@ -9,7 +9,7 @@ describe('SanitizedHtml', () => {
         htmlString="
           <b>Don't worry!</b>
           <a>Some link</a>
-          <script type='module'>doBadThings()</script>"
+          <script data-testid='script' type='module'></script>"
         ruleSet="iiif"
       />,
     );
@@ -28,5 +28,9 @@ describe('SanitizedHtml', () => {
     expect(screen.getByText('Don\'t worry!')).toBeInTheDocument();
     expect(screen.getByText('Some link')).toHaveAttribute('target', '_blank');
     expect(screen.getByText('Some link')).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('removes script tags', () => {
+    expect(screen.queryByTestId('script')).not.toBeInTheDocument();
   });
 });
