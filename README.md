@@ -24,6 +24,13 @@ If you want to simply embed Mirador in an HTML page without further customizatio
 <script src="https://unpkg.com/mirador@latest/dist/mirador.min.js"></script>
 ```
 
+Be aware that `latest` will at some point switch from version 3 to version 4. If you use Mirador via CDN in a production environment, consider pinning Mirador to version 3 to avoid sudden breaking changes:
+
+```
+<script src="https://unpkg.com/mirador@^3/dist/mirador.min.js"></script>
+```
+
+
 More examples of embedding Mirador can be found at [https://github.com/ProjectMirador/mirador/wiki/M3-Embedding-in-Another-Environment#in-an-html-document-with-javascript](https://github.com/ProjectMirador/mirador/wiki/Embedding-in-Another-Environment).
 
 ## Adding translations to Mirador
