@@ -17,8 +17,6 @@ export function IIIFAuthentication({
 }) {
   const { t } = useTranslation();
 
-  if (!accessTokenServiceId || !authServiceId) return null;
-
   /** */
   const onReceiveAccessTokenMessage = (payload) => {
     resolveAccessTokenRequest(authServiceId, accessTokenServiceId, payload);
@@ -98,6 +96,7 @@ export function IIIFAuthentication({
     );
   };
 
+  if (!authServiceId) return null;
   if (status === null) return renderLogin();
   if (status === 'cookie') return renderLoggingInCookie();
   if (status === 'token') return renderLoggingInToken();
