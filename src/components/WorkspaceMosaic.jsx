@@ -5,7 +5,7 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import { DndContext } from 'react-dnd';
 import {
   Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
-} from 'react-mosaic-component2';
+} from 'react-mosaic-component';
 import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
