@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useCallback, useId, useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -12,8 +12,8 @@ import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import PropTypes from 'prop-types';
+import copy from 'copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { WorkspaceDialog } from './WorkspaceDialog';
 
 /**
@@ -24,7 +24,12 @@ export function WorkspaceExport({
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const titleId = useId();
-  const exportedState = JSON.stringify(exportableState, null, 2);
+  const exportedState = useMemo(() => JSON.stringify(exportableState, null, 2), [exportableState]);
+  const onCopyClick = useCallback(() => {
+    copy(exportedState);
+    setCopied(true)
+  }, [exportedState, setCopied])
+
 
   if (copied) {
     return (
@@ -45,7 +50,6 @@ export function WorkspaceExport({
       />
     );
   }
-
   return (
     <WorkspaceDialog
       aria-labelledby={titleId}
@@ -79,12 +83,7 @@ export function WorkspaceExport({
 
       <DialogActions>
         <Button onClick={handleClose}>{t('cancel')}</Button>
-        <CopyToClipboard
-          onCopy={() => setCopied(true)}
-          text={exportedState}
-        >
-          <Button variant="contained" color="primary">{t('copy')}</Button>
-        </CopyToClipboard>
+        <Button onClick={onCopyClick} variant="contained" color="primary">{t('copy')}</Button>
       </DialogActions>
     </WorkspaceDialog>
   );
