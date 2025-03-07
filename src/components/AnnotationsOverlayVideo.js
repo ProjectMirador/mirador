@@ -714,6 +714,16 @@ export class AnnotationsOverlayVideo extends Component {
           <br />
           <span>
             {' '}
+            Video Duration Time
+            {' '}
+            {' '}
+            {this.player ? this.player.getDuration() : 'player not ready'}
+            {' '}
+          </span>
+          {' '}
+          <br />
+          <span>
+            {' '}
             Paused
             {' '}
             {' '}

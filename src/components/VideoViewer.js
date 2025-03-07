@@ -7,6 +7,7 @@ import ReactPlayer from '@celluloid/react-player';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
 import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavigationControlsVideo';
+import { setWindowSeekTo } from '../state/actions';
 
 /** */
 export class VideoViewer extends Component {
@@ -37,7 +38,7 @@ export class VideoViewer extends Component {
   /** */
   componentDidUpdate(prevProps) {
     const {
-      canvas, currentTime, paused, setCurrentTime, setPaused,
+      canvas, currentTime, paused, setCurrentTime, setPaused, windowId, setSeekTo,
     } = this.props;
     if (paused !== prevProps.paused) {
       if (paused) {
@@ -48,16 +49,18 @@ export class VideoViewer extends Component {
     }
     // Ensure `currentTime` updates are consistent
     if (currentTime !== prevProps.currentTime) {
-      const duration = canvas.getDuration();
       // Fix issue where reactPlayer didn't populate seek to time when the time was at 0
       if (prevProps.currentTime === 0 || paused === true) {
         this.playerRef.current.seekTo(currentTime);
       }
-      if (duration && currentTime > duration) {
-        setPaused(true);
-        setCurrentTime(0);
-        this.timerReset();
-      }
+    }
+    const duration = canvas.getDuration();
+    if (duration && currentTime > duration) {
+      // It can happen when switching canvas
+      setPaused(true);
+      setCurrentTime(0);
+      setSeekTo(0);
+      this.timerReset();
     }
   }
 
@@ -270,6 +273,7 @@ VideoViewer.propTypes = {
   paused: PropTypes.bool,
   setCurrentTime: PropTypes.func,
   setPaused: PropTypes.func,
+  setSeekTo: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };
 
