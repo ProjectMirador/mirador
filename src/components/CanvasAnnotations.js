@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import {useState, useCallback, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import Chip from '@mui/material/Chip';
 import MenuList from '@mui/material/MenuList';
@@ -59,6 +59,7 @@ export function CanvasAnnotations({
   const handleClick = useCallback((_event, annotation) => {
     if (selectedAnnotationId === annotation.id) {
       deselectAnnotation(windowId, annotation.id);
+      selectedAnnotationId = undefined;
     } else {
       selectAnnotation(windowId, annotation.id);
     }
@@ -125,7 +126,7 @@ export function CanvasAnnotations({
               variant="multiline"
               divider
               sx={{
-                '&:hover,&:focus': {
+                '&:hover': {
                   backgroundColor: 'action.hover',
                 },
                 backgroundColor: hoveredAnnotationIds.includes(annotation.id) ? 'action.hover' : '',
@@ -149,21 +150,21 @@ export function CanvasAnnotations({
                 />
                 <div>
                   {
-                                        annotation.tags.map(tag => (
-                                          <Chip
-                                            size="small"
-                                            variant="outlined"
-                                            label={tag}
-                                            id={tag}
-                                            sx={theme => ({
-                                              backgroundColor: theme.palette.background.paper,
-                                              marginRight: theme.spacing(0.5),
-                                              marginTop: theme.spacing(1),
-                                            })}
-                                            key={tag.toString()}
-                                          />
-                                        ))
-                                    }
+                      annotation.tags.map(tag => (
+                        <Chip
+                          size="small"
+                          variant="outlined"
+                          label={tag}
+                          id={tag}
+                          sx={theme => ({
+                            backgroundColor: theme.palette.background.paper,
+                            marginRight: theme.spacing(0.5),
+                            marginTop: theme.spacing(1),
+                          })}
+                          key={tag.toString()}
+                        />
+                      ))
+                  }
                   <AnnotationManifestsAccordion
                     annotation={annotation}
                     t={t}
