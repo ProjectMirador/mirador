@@ -33,6 +33,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   setCurrentTime: (...args) => dispatch(actions.setWindowCurrentTime(windowId, ...args)),
   setHasTextTrack: (...args) => dispatch(actions.setWindowHasTextTrack(windowId, ...args)),
   setPaused: (...args) => dispatch(actions.setWindowPaused(windowId, ...args)),
+  setSeekTo: (...args) => dispatch(actions.setWindowSeekTo(windowId, ...args)),
 });
 
 const enhance = compose(
