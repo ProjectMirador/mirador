@@ -55,7 +55,7 @@ export function CanvasAnnotations({
               variant="multiline"
               divider
               sx={{
-                '&:hover,&:focus': {
+                '&:hover': {
                   backgroundColor: 'action.hover',
                 },
                 backgroundColor: hoveredAnnotationIds.includes(annotation.id) ? 'action.hover' : '',
