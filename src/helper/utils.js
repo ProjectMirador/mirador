@@ -9,7 +9,7 @@ export const filterAnnotation = (annotations, query) => annotations.filter((anno
         || (annotation?.content && annotation?.content.toLowerCase().includes(queryLowered))
         || (annotation?.creator && annotation?.creator.toLowerCase().includes(queryLowered))
         || (annotation?.lastEditor && annotation?.lastEditor.toLowerCase().includes(queryLowered))
-        || filterTagInAnnotation(annotation.tags, query);
+        || filterTagInAnnotation(annotation?.tags, query);
 });
 
 /**
