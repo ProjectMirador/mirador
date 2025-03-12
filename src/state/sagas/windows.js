@@ -2,8 +2,6 @@ import {
   all, call, put, select, takeEvery,
 } from 'redux-saga/effects';
 import ActionTypes from '../actions/action-types';
-import MiradorManifest from '../../lib/MiradorManifest';
-import MiradorCanvas from '../../lib/MiradorCanvas';
 import {
   setContentSearchCurrentAnnotation,
   selectAnnotation,
@@ -32,6 +30,7 @@ import {
   getMiradorManifestWrapper,
 } from '../selectors';
 import { fetchManifests } from './iiif';
+import { getIiifResourceImageService } from '../../lib/iiif';
 
 /** */
 export function* fetchWindowManifest(action) {
@@ -248,7 +247,7 @@ export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowI
   yield all(visibleCanvases.map((canvas) => {
     const miradorCanvas = getMiradorCanvas(canvas);
     return all(miradorCanvas.iiifImageResources.map(imageResource => (
-      !infoResponses[imageResource.getServices()[0].id]
+      !infoResponses[getIiifResourceImageService(imageResource)?.id]
         && put(fetchInfoResponse({ imageResource, windowId }))
     )).filter(Boolean));
   }));

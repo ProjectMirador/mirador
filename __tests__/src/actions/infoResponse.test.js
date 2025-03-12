@@ -30,9 +30,8 @@ describe('infoResponse actions', () => {
   describe('fetchInfoResponse', () => {
     describe('success response', () => {
       it('dispatches the REQUEST_INFO_RESPONSE action', () => {
-        const imageResource = { getServices: () => ['service'] };
-        expect(actions.fetchInfoResponse({ imageId: 'someUrl', imageResource })).toEqual({
-          imageResource: 'service',
+        const imageResource = { getServices: () => [{ getIIIFResourceType: () => 'ImageService2', getProfile: () => '' }] };
+        expect(actions.fetchInfoResponse({ imageId: 'someUrl', imageResource })).toMatchObject({
           infoId: 'someUrl',
           type: 'mirador/REQUEST_INFO_RESPONSE',
         });
