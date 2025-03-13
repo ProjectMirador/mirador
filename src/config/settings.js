@@ -526,7 +526,7 @@ export default {
     id: uuid(),
     isWorkspaceAddVisible: false, // Catalog/Workspace add window feature visible by default
     showZoomControls: true, // Configure if zoom controls should be displayed by default
-    type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic". If "mosaic" or "elastic" are not selected no worksapce type will be used.
+    type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic". If "mosaic" or "elastic" are not selected no workspace type will be used.
     viewportPosition: { // center coordinates for the elastic mode workspace
       x: 0,
       y: 0,
