@@ -1,6 +1,8 @@
 import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
 import { Canvas, AnnotationPage, Annotation } from 'manifesto.js';
+import { getIiifResourceImageService } from './iiif';
+
 /**
  * MiradorCanvas - adds additional, testable logic around Manifesto's Canvas
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
@@ -189,13 +191,12 @@ export default class MiradorCanvas {
 
   /** */
   get iiifImageResources() {
-    return this.imageResources
-      .filter(r => r && r.getServices()[0] && r.getServices()[0].id);
+    return this.imageResources.filter(r => r && getIiifResourceImageService(r)?.id);
   }
 
   /** */
   get imageServiceIds() {
-    return this.iiifImageResources.map(r => r.getServices()[0].id);
+    return this.iiifImageResources.map(r => getIiifResourceImageService(r).id);
   }
 
   /**
