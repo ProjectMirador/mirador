@@ -35,23 +35,22 @@ export default defineConfig({
       build: {
         lib: {
           entry: './src/index.js',
-          fileName: (format) => (format === 'umd' ? 'mirador.js' : 'mirador.es.js'),
-          formats: ['es', 'umd'],
+          fileName: (format) => (format === 'es' ? 'mirador.es.js' : undefined),
+          formats: ['es'],
           name: 'Mirador',
         },
         rollupOptions: {
           external: [
             ...Object.keys(packageJson.peerDependencies),
-            'react/jsx-runtime',
             '__tests__/*',
             '__mocks__/*',
           ],
           output: {
             assetFileNames: 'mirador.[ext]',
+            exports: 'named',
             globals: {
               react: 'React',
               'react-dom': 'ReactDOM',
-              'react/jsx-runtime': 'react/jsx-runtime',
             },
           },
         },
@@ -59,28 +58,8 @@ export default defineConfig({
       },
     }
   ),
-  esbuild: {
-    exclude: [],
-    // Matches .js and .jsx in __tests__ and .jsx in src
-    include: [/__tests__\/.*\.(js|jsx)$/, /src\/.*\.jsx?$/],
-    loader: 'jsx',
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      plugins: [
-        {
-          name: 'load-js-files-as-jsx',
-          // TODO: rename all our files to .jsx ...
-          /** */
-          setup(build) {
-            build.onLoad({ filter: /(src|__tests__)\/.*\.js$/ }, async (args) => ({
-              contents: await fs.readFile(args.path, 'utf8'),
-              loader: 'jsx',
-            }));
-          },
-        },
-      ],
-    },
+  define: {
+    'process.env': {},
   },
   plugins: [react()],
   resolve: {

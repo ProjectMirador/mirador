@@ -8,7 +8,6 @@ describe('ManifestInfo', () => {
     beforeEach(() => {
       render(
         <ManifestInfo
-          id="xyz"
           manifestLabel="The Manifest Label"
           manifestDescription="The Manifest Description"
           manifestMetadata={metadata}
@@ -42,7 +41,7 @@ describe('ManifestInfo', () => {
   describe('when metadata is not present', () => {
     beforeEach(() => {
       render(
-        <ManifestInfo id="xyz" />,
+        <ManifestInfo />,
       );
     });
 

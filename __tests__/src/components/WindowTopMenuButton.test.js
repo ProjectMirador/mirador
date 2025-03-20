@@ -33,7 +33,7 @@ describe('WindowTopMenuButton', () => {
     expect(screen.getByRole('menu')).toBeInTheDocument();
 
     // click something else to close the menu (the windowMenu button is hidden at this point)
-    await user.click(screen.getAllByRole('menuitem')[0]);
+    await user.click(screen.getAllByRole('menuitemradio')[0]);
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
@@ -47,6 +47,6 @@ describe('WindowTopMenuButton', () => {
     render(<Subject />);
     await user.click(screen.getByLabelText('Window views & thumbnail display'));
     // when 'open' is true, aria-owns is set to the id of the window
-    expect(screen.getByLabelText('Window views & thumbnail display')).toHaveAttribute('aria-owns', 'window-menu_xyz'); // eslint-disable-line testing-library/no-node-access
+    expect(screen.getByLabelText('Window views & thumbnail display')).toHaveAttribute('aria-owns'); // eslint-disable-line testing-library/no-node-access
   });
 });

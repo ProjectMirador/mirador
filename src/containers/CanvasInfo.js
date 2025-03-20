@@ -14,11 +14,11 @@ import { CanvasInfo } from '../components/CanvasInfo';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { canvasId, id, windowId }) => ({
-  canvasDescription: getCanvasDescription(state, { canvasId, companionWindowId: id, windowId }),
-  canvasLabel: getCanvasLabel(state, { canvasId, companionWindowId: id, windowId }),
+const mapStateToProps = (state, { canvasId, companionWindowId, windowId }) => ({
+  canvasDescription: getCanvasDescription(state, { canvasId, companionWindowId, windowId }),
+  canvasLabel: getCanvasLabel(state, { canvasId, companionWindowId, windowId }),
   canvasMetadata: getDestructuredMetadata(
-    getCanvas(state, { canvasId, companionWindowId: id, windowId }),
+    getCanvas(state, { canvasId, companionWindowId, windowId }),
   ),
 });
 

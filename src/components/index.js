@@ -61,6 +61,7 @@ export * from './SidebarIndexItem';
 export * from './SidebarIndexList';
 export * from './SidebarIndexTableOfContents';
 export * from './SidebarIndexThumbnail';
+export * from './TextViewer';
 export * from './ThumbnailCanvasGrouping';
 export * from './ThumbnailNavigation';
 export * from './VideoViewer';

@@ -61,6 +61,16 @@ describe('IIIFAuthentication', () => {
       expect(handleAuthInteraction).toHaveBeenCalledWith('w', 'http://example.com/auth');
     });
   });
+  describe('with a failed external authentication', () => {
+    it('renders with an error message', async () => {
+      const handleAuthInteraction = vi.fn();
+      createWrapper({
+        accessTokenServiceId: null, handleAuthInteraction, isInteractive: false, status: 'failed',
+      });
+      expect(screen.getByText('Login failed')).toBeInTheDocument();
+      expect(screen.getByText('... and this is why.')).toBeInTheDocument();
+    });
+  });
   describe('in the middle of authenticating', () => {
     it('does the IIIF access cookie behavior', async () => {
       const mockWindow = { close: vi.fn(), closed: false };
