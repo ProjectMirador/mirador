@@ -1,5 +1,5 @@
 {
-  "name": "arvest-mv",
+  "name": "mirador-video",
   "version": "1.0.22",
   "description": "Mirador IIIF Viewer with annotation on video support",
   "main": "dist/cjs/src/index.js",
