@@ -179,52 +179,59 @@ export class AnnotationsOverlayVideo extends Component {
 
     const selectedAnnotationsUpdated = selectedAnnotationId !== prevProps.selectedAnnotationId;
     if (selectedAnnotationsUpdated && selectedAnnotationId) {
-      annotations.forEach((annotation) => {
-        annotation.resources.forEach((resource) => {
-          if (resource.id !== selectedAnnotationId) return;
-          if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-          const temporalfragment = resource.temporalfragmentSelector;
-          if (temporalfragment && temporalfragment.length > 0 && this.player) {
-            const seekto = temporalfragment[0] || 0;
-            this.seekTo(seekto, false);
-          }
+      if (this.currentTimeNearestAnnotationId
+          && this.currentTimeNearestAnnotationId === selectedAnnotationId) {
+        // go through
+      } else {
+        annotations.forEach((annotation) => {
+          annotation.resources.forEach((resource) => {
+            if (resource.id !== selectedAnnotationId) return;
+            if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
+            if (!AnnotationsOverlayVideo.isAnnotationInTemporalSegment(resource, currentTime)) {
+              const temporalfragment = resource.temporalfragmentSelector;
+              if (temporalfragment && temporalfragment.length > 0 && this.player) {
+                const seekto = temporalfragment[0] || 0;
+                this.seekTo(seekto, false);
+              }
+            }
+          });
         });
-      });
+      }
     }
 
     // auto scroll
-    // if (this.video && !this.video.paused) {
-    //   let minElapsedTimeAfterStart = Number.MAX_VALUE;
-    //   let candidateAnnotation;
-    //   annotations.forEach((annotation) => {
-    //     annotation.resources.forEach((resource) => {
-    //       if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-    //       if (AnnotationsOverlayVideo.isAnnotationInTemporalSegment(resource, currentTime)) {
-    //         const temporalfragment = resource.temporalfragmentSelector;
-    //         if (temporalfragment && temporalfragment.length > 0 && this.video) {
-    //           const seekto = temporalfragment[0] || 0;
-    //           const elapsedTimeAfterStart = currentTime - seekto;
-    //           if (elapsedTimeAfterStart >= 0 && elapsedTimeAfterStart < minElapsedTimeAfterStart) {
-    //             minElapsedTimeAfterStart = elapsedTimeAfterStart;
-    //             candidateAnnotation = resource.resource;
-    //           }
-    //         }
-    //       }
-    //     });
-    //   });
-    //   if (candidateAnnotation) {
-    //     if (candidateAnnotation.id !== prevProps.selectedAnnotationId) {
-    //       const {
-    //         selectAnnotation,
-    //         windowId,
-    //       } = this.props;
-    //       if (selectedAnnotationId !== candidateAnnotation.id) {
-    //         selectAnnotation(windowId, candidateAnnotation.id);
-    //       }
-    //       this.currentTimeNearestAnnotationId = candidateAnnotation.id;
-    //     }
-    //   }
-    // }
+    if (this.video && !this.video.paused) {
+      let minElapsedTimeAfterStart = Number.MAX_VALUE;
+      let candidateAnnotation;
+      annotations.forEach((annotation) => {
+        annotation.resources.forEach((resource) => {
+          if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
+          if (AnnotationsOverlayVideo.isAnnotationInTemporalSegment(resource, currentTime)) {
+            const temporalfragment = resource.temporalfragmentSelector;
+            if (temporalfragment && temporalfragment.length > 0 && this.video) {
+              const seekto = temporalfragment[0] || 0;
+              const elapsedTimeAfterStart = currentTime - seekto;
+              if (elapsedTimeAfterStart >= 0 && elapsedTimeAfterStart < minElapsedTimeAfterStart) {
+                minElapsedTimeAfterStart = elapsedTimeAfterStart;
+                candidateAnnotation = resource.resource;
+              }
+            }
+          }
+        });
+      });
+      if (candidateAnnotation) {
+        if (candidateAnnotation.id !== prevProps.selectedAnnotationId) {
+          const {
+            selectAnnotation,
+            windowId,
+          } = this.props;
+          if (selectedAnnotationId !== candidateAnnotation.id) {
+            selectAnnotation(windowId, candidateAnnotation.id);
+          }
+          this.currentTimeNearestAnnotationId = candidateAnnotation.id;
+        }
+      }
+    }
 
     const redrawAnnotations = drawAnnotations !== prevProps.drawAnnotations
       || drawSearchAnnotations !== prevProps.drawSearchAnnotations
