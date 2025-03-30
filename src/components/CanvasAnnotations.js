@@ -5,15 +5,11 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import SearchIcon from '@mui/icons-material/SearchSharp';
-import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
-import Select from 'react-select';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
 import AnnotationManifestsAccordion from '../containers/AnnotationManifestsAccordion';
 import { filterAnnotation, filterAnnotationByTags } from '../helper/utils';
-import { MiradorMenuButton } from './MiradorMenuButton';
 import { AnnotationsFilter } from './AnnotationFilter';
 
 const StyledAnnotationContainer = styled('div')(({ theme }) => ({
@@ -201,7 +197,7 @@ CanvasAnnotations.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   ),
-  annotationTagsSuggestion: PropTypes.arrayOf(PropTypes.string).isRequired,
+  annotationTagsSuggestion: PropTypes.arrayOf(PropTypes.string),
   containerRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
