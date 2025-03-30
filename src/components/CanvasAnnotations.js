@@ -1,4 +1,4 @@
-import {useState, useCallback, useEffect} from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Chip from '@mui/material/Chip';
 import MenuList from '@mui/material/MenuList';
@@ -8,11 +8,13 @@ import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/SearchSharp';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
+import Select from 'react-select';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import { ScrollTo } from './ScrollTo';
 import AnnotationManifestsAccordion from '../containers/AnnotationManifestsAccordion';
-import { filterAnnotation } from '../helper/utils';
+import { filterAnnotation, filterAnnotationByTags } from '../helper/utils';
 import { MiradorMenuButton } from './MiradorMenuButton';
+import { AnnotationsFilter } from './AnnotationFilter';
 
 const StyledAnnotationContainer = styled('div')(({ theme }) => ({
   background: theme.palette.background.paper,
@@ -40,6 +42,7 @@ const StyledFooterAnnotationContainer = styled('div')(({ theme }) => ({
 */
 export function CanvasAnnotations({
   annotations = [],
+  annotationTagsSuggestion = [],
   index,
   label,
   selectedAnnotationId = undefined,
@@ -55,6 +58,11 @@ export function CanvasAnnotations({
   hoverAnnotation,
 }) {
   const [inputSearch, setInputSearch] = useState('');
+  const [tagsSearch, setTagsSearch] = useState([]);
+
+  const allTagsFromAnnotations = annotations.map(annotation => annotation.tags).flat();
+
+  const allTags = [...new Set(allTagsFromAnnotations), ...annotationTagsSuggestion];
 
   const handleClick = useCallback((_event, annotation) => {
     if (selectedAnnotationId === annotation.id) {
@@ -78,7 +86,10 @@ export function CanvasAnnotations({
   let annotationsFiltered = annotations;
 
   if (inputSearch !== undefined && inputSearch !== '') {
-    annotationsFiltered = filterAnnotation(annotations, inputSearch);
+    annotationsFiltered = filterAnnotation(annotationsFiltered, inputSearch);
+  }
+  if (tagsSearch.length > 0) {
+    annotationsFiltered = filterAnnotationByTags(annotationsFiltered, tagsSearch);
   }
 
   // TODO Count filtered or all ?
@@ -90,27 +101,14 @@ export function CanvasAnnotations({
         {t('annotationCanvasLabel', { context: `${index + 1}/${totalSize}`, label })}
       </Typography>
       <StyledAnnotationContainer>
-        <TextField
-          label={t('searchPlaceholderAnnotation')}
-          onChange={(e) => setInputSearch(e.target.value)}
-          sx={{
-            width: '100%',
-          }}
-          InputProps={{
-            endAdornment: (
-              <div style={{
-                position: 'absolute',
-                right: 0,
-              }}
-              >
-                <MiradorMenuButton aria-label={t('searchAnnotationTooltip')} type="submit">
-                  <SearchIcon />
-                </MiradorMenuButton>
-              </div>
-            ),
-          }}
+        <AnnotationsFilter
+          setInputSearch={setInputSearch}
+          setTagsSearch={setTagsSearch}
+          availableTags={allTags}
+          t={t}
         />
       </StyledAnnotationContainer>
+
       <MenuList variant="selectedMenu">
         {annotationsFiltered.map((annotation) => (
           <ScrollTo
@@ -203,6 +201,7 @@ CanvasAnnotations.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   ),
+  annotationTagsSuggestion: PropTypes.arrayOf(PropTypes.string).isRequired,
   containerRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.instanceOf(Element) }),

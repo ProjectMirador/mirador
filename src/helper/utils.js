@@ -26,3 +26,16 @@ export const filterTagInAnnotation = (tags, query) => {
   const matchingTags = tags.filter((tag) => tag.toLowerCase().includes(queryLowered));
   return matchingTags.length > 0;
 };
+
+/**
+ * Filter annotations by tags. Multiple tags can be selected.
+ */
+export const filterAnnotationByTags = (annotations, selectedTags) => {
+  if (!selectedTags || !selectedTags.length) {
+    return annotations;
+  }
+  return annotations.filter((annotation) => {
+    const matchingTags = annotation?.tags.filter((tag) => selectedTags.includes(tag));
+    return matchingTags.length > 0;
+  });
+};

@@ -74,6 +74,7 @@
     "react-redux": "^8.0.0 || ^9.0.0",
     "react-resize-observer": "^1.1.1",
     "react-rnd": "^10.1",
+    "react-select": "^5.10.1",
     "react-sizeme": "^3.0.2",
     "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5",
@@ -87,10 +88,10 @@
     "uuid": "^8.1.0 || ^9.0.0 || ^10.0.0 || ^11.0.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/cli": "^7.22.10",
     "@babel/core": "^7.22.10",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/plugin-transform-regenerator": "^7.22.10",
     "@babel/plugin-transform-runtime": "^7.22.10",
     "@babel/preset-env": "^7.22.10",

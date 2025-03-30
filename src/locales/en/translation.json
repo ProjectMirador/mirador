@@ -52,6 +52,7 @@
     "expandSidePanel": "Expand sidebar",
     "exportCopied": "The workspace configuration was copied to your clipboard",
     "fetchManifest": "Add",
+    "filteringByTags" : "Tags filtering",
     "fullScreen": "Full Screen",
     "gallery": "Gallery",
     "hideZoomControls": "Hide zoom controls",
