@@ -34,8 +34,9 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
   annotations: getIdAndContentOfResources(
     getAnnotationResourcesByMotivationForCanvas(state, { canvasId, windowId }),
   ),
+  annotationTagsSuggestion: getConfig(state)?.annotation?.tagsSuggestions,
   autoScroll: getWindow(state, { windowId }).autoScrollAnnotationList,
-  htmlSanitizationRuleSet: getConfig(state).annotations.htmlSanitizationRuleSet,
+  htmlSanitizationRuleSet: getConfig(state)?.annotations?.htmlSanitizationRuleSet,
   label: getCanvasLabel(state, {
     canvasId,
     windowId,
