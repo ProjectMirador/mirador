@@ -155,6 +155,7 @@ export function CanvasAnnotations({
                             marginRight: theme.spacing(0.5),
                             marginTop: theme.spacing(1),
                           })}
+                          key={tag.toString()}
                         />
                       ))
                   }
