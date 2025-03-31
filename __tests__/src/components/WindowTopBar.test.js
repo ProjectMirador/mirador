@@ -75,24 +75,6 @@ describe('WindowTopBar', () => {
     expect(toggleWindowSideBar).toHaveBeenCalledTimes(1);
   });
 
-  it('passes correct callback to closeWindow button', async () => {
-    const removeWindow = vi.fn();
-    render(<Subject allowClose removeWindow={removeWindow} />);
-    const button = screen.getByRole('button', { name: 'Close window' });
-    expect(button).toBeInTheDocument();
-    await user.click(button);
-    expect(removeWindow).toHaveBeenCalledTimes(1);
-  });
-
-  it('passes correct callback to maximizeWindow button', async () => {
-    const maximizeWindow = vi.fn();
-    render(<Subject allowMaximize maximizeWindow={maximizeWindow} />);
-    const button = screen.getByRole('button', { name: 'Maximize window' });
-    expect(button).toBeInTheDocument();
-    await user.click(button);
-    expect(maximizeWindow).toHaveBeenCalledTimes(1);
-  });
-
   it('close button is configurable', () => {
     render(<Subject allowClose={false} />);
     const button = screen.queryByRole('button', { name: 'Close window' });

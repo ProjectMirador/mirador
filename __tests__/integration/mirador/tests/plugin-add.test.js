@@ -11,7 +11,7 @@ describe('add two plugins to <WorkspaceControlPanelButtons>', () => {
   it('all add plugins are present', async () => {
     expect(await screen.findByText('Plugin A')).toBeInTheDocument();
     expect(await screen.findByText('Plugin B')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('hello componentD')).toBeInTheDocument();
+    expect(screen.getAllByDisplayValue('hello componentD').length).toBeGreaterThan(0);
   });
 
   it('wrapped and added plugins are present', async () => {

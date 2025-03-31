@@ -10,13 +10,7 @@ import { WindowTopBarMenu } from '../components/WindowTopBarMenu';
 const mapStateToProps = (state, { windowId }) => {
   const config = getWindowConfig(state, { windowId });
 
-  return {
-    allowClose: config.allowClose,
-    allowFullscreen: config.allowFullscreen,
-    allowMaximize: config.allowMaximize,
-    allowTopMenuButton: config.allowTopMenuButton,
-    maximized: config.maximized,
-  };
+  return {};
 };
 
 /**

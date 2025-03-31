@@ -29,7 +29,9 @@ const StyledToolbar = styled(Toolbar, { name: 'WindowTopBar', slot: 'toolbar' })
  * WindowTopBar
  */
 export function WindowTopBar({
-  windowId, toggleWindowSideBar, focusWindow = () => {}, allowWindowSideBar = true, component = 'nav',
+  windowId, toggleWindowSideBar, maximized = false, allowClose = true, allowMaximize = true,
+  focusWindow = () => {}, allowFullscreen = false, allowTopMenuButton = true, allowWindowSideBar = true,
+  component = 'nav',
 }) {
   const { t } = useTranslation();
   const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
@@ -53,8 +55,13 @@ export function WindowTopBar({
         </MiradorMenuButton>
         )}
         <WindowTopBarMenu
-          windowId={windowId}
+          allowClose={allowClose}
+          allowFullscreen={allowFullscreen}
+          allowMaximize={allowMaximize}
+          allowTopMenuButton={allowTopMenuButton}
+          maximized={maximized}
           ownerState={ownerState}
+          windowId={windowId}
         />
       </StyledToolbar>
     </Root>
@@ -62,10 +69,15 @@ export function WindowTopBar({
 }
 
 WindowTopBar.propTypes = {
+  allowClose: PropTypes.bool,
+  allowFullscreen: PropTypes.bool,
+  allowMaximize: PropTypes.bool,
+  allowTopMenuButton: PropTypes.bool,
   allowWindowSideBar: PropTypes.bool,
   component: PropTypes.elementType,
   focused: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
   focusWindow: PropTypes.func,
+  maximized: PropTypes.bool,
   toggleWindowSideBar: PropTypes.func.isRequired,
   windowDraggable: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
   windowId: PropTypes.string.isRequired,

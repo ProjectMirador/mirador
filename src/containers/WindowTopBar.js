@@ -10,8 +10,13 @@ const mapStateToProps = (state, { windowId }) => {
   const config = getWindowConfig(state, { windowId });
 
   return {
+    allowClose: config.allowClose,
+    allowFullscreen: config.allowFullscreen,
+    allowMaximize: config.allowMaximize,
+    allowTopMenuButton: config.allowTopMenuButton,
     allowWindowSideBar: config.allowWindowSideBar,
     focused: isFocused(state, { windowId }),
+    maximized: config.maximized,
   };
 };
 

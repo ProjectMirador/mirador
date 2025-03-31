@@ -37,7 +37,7 @@ const removeAttributes = (attributes = [], node) => {
 export function WindowTopBarMenu({
   removeWindow, windowId,
   maximizeWindow = () => {}, maximized = false, minimizeWindow = () => {},
-  allowClose = true, allowMaximize = true, allowFullscreen = false, allowTopMenuButton = true,
+  allowClose, allowMaximize, allowFullscreen, allowTopMenuButton,
 }) {
   const { t } = useTranslation();
   const [outerW, setOuterW] = useState();
@@ -122,10 +122,10 @@ export function WindowTopBarMenu({
 }
 
 WindowTopBarMenu.propTypes = {
-  allowClose: PropTypes.bool,
-  allowFullscreen: PropTypes.bool,
-  allowMaximize: PropTypes.bool,
-  allowTopMenuButton: PropTypes.bool,
+  allowClose: PropTypes.bool.isRequired,
+  allowFullscreen: PropTypes.bool.isRequired,
+  allowMaximize: PropTypes.bool.isRequired,
+  allowTopMenuButton: PropTypes.bool.isRequired,
   maximized: PropTypes.bool,
   maximizeWindow: PropTypes.func,
   minimizeWindow: PropTypes.func,
