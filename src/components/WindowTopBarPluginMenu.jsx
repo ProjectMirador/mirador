@@ -36,6 +36,8 @@ export function WindowTopBarPluginMenu({
     setOpen(false);
   };
 
+  if (!moreButtons && (!PluginComponents || PluginComponents.length === 0)) return null;
+
   return (
     <>
       <MiradorMenuButton
