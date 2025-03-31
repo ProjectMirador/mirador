@@ -58,7 +58,7 @@ export function CanvasAnnotations({
 
   const allTagsFromAnnotations = annotations.map(annotation => annotation.tags).flat();
 
-  const allTags = [...new Set(allTagsFromAnnotations), ...annotationTagsSuggestion];
+  const allTags = [...new Set(allTagsFromAnnotations), ...annotationTagsSuggestion].sort((a, b) => a.localeCompare(b));
 
   const handleClick = useCallback((_event, annotation) => {
     if (selectedAnnotationId === annotation.id) {
@@ -155,7 +155,6 @@ export function CanvasAnnotations({
                             marginRight: theme.spacing(0.5),
                             marginTop: theme.spacing(1),
                           })}
-                          key={tag.toString()}
                         />
                       ))
                   }
