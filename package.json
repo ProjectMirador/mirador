@@ -34,7 +34,7 @@
     "David Rouquet <david.rouquet@tetras-libre.fr> (https://www.tetras-libre.fr)",
     "Antoine Roy <antoine.roy@tetras-libre.fr> (https://www.tetras-libre.fr)"
   ],
-  "repository": "https://github.com/ARVEST-APP/mirador-video",
+  "repository": "https://github.com/Tetras-IIIF/mirador-video",
   "dependencies": {
     "@celluloid/react-player": "^2.14.0",
     "@emotion/cache": "^11.11.0",
