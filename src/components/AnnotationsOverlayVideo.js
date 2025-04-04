@@ -521,6 +521,9 @@ export class AnnotationsOverlayVideo extends Component {
   /** */
   canvasUpdateCallback() {
     return () => {
+      if (!this.canvasOverlay) {
+        return; // avoid crashing if the canvasOverlay is not ready
+      }
       this.canvasOverlay.clear();
       this.canvasOverlay.resize();
       this.canvasOverlay.canvasUpdate(this.renderAnnotations.bind(this));
