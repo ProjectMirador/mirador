@@ -216,7 +216,7 @@ export const getVisibleCanvasNonTiledResources = createSelector(
   ],
   (canvases, getMiradorCanvas) => flatten(canvases
     .map(canvas => getMiradorCanvas(canvas).imageResources))
-    .filter(resource => resource.getServices().length < 1),
+    .filter(resource => getIiifResourceImageService(resource).length < 1),
 );
 
 /**
