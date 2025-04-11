@@ -22,7 +22,11 @@ describe('NewBrowserWindow', () => {
     vi.useFakeTimers();
 
     createWrapper({ depWindow: { open }, onClose });
-    expect(open).toHaveBeenCalledWith('http://example.com/', undefined, undefined);
+    expect(open).toHaveBeenCalledWith(
+      'http://example.com/',
+      undefined,
+      undefined,
+    );
     vi.runOnlyPendingTimers();
     expect(onClose).not.toBeCalled();
     mockWindow.closed = true;

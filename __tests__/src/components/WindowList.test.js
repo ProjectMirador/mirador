@@ -70,7 +70,9 @@ describe('WindowList', () => {
     });
 
     it('renders without an error', () => {
-      expect(screen.getByRole('menuitem', { name: 'Some title' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('menuitem', { name: 'Some title' }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -92,7 +94,9 @@ describe('WindowList', () => {
     });
 
     it('puts focus on the currently focused window', () => {
-      expect(screen.getByRole('menuitem', { name: 'Some title' })).toHaveFocus();
+      expect(
+        screen.getByRole('menuitem', { name: 'Some title' }),
+      ).toHaveFocus();
     });
   });
 });

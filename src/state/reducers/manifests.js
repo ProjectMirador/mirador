@@ -39,12 +39,13 @@ export const manifestsReducer = (state = {}, action) => {
     case ActionTypes.REMOVE_MANIFEST:
       return Object.keys(state).reduce((object, key) => {
         if (key !== action.manifestId) {
-          object[key] = state[key]; // eslint-disable-line no-param-reassign
+          object[key] = state[key];
         }
         return object;
       }, {});
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.manifests || {};
-    default: return state;
+    default:
+      return state;
   }
 };

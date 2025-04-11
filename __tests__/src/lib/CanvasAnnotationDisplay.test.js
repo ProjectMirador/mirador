@@ -39,7 +39,9 @@ describe('CanvasAnnotationDisplay', () => {
         stroke: vi.fn(),
       };
       const subject = createSubject({
-        resource: new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }),
+        resource: new AnnotationResource({
+          on: 'www.example.com/#xywh=10,10,100,200',
+        }),
       });
       subject.svgContext = vi.fn();
       subject.fragmentContext = vi.fn();
@@ -119,7 +121,9 @@ describe('CanvasAnnotationDisplay', () => {
       };
       const subject = createSubject({
         hovered: true,
-        resource: new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }),
+        resource: new AnnotationResource({
+          on: 'www.example.com/#xywh=10,10,100,200',
+        }),
       });
       subject.context = context;
       subject.fragmentContext();

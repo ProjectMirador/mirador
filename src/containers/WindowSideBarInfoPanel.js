@@ -18,17 +18,22 @@ import { WindowSideBarInfoPanel } from '../components/WindowSideBarInfoPanel';
  * @private
  */
 const mapStateToProps = (state, { id, windowId }) => ({
-  availableLocales: getMetadataLocales(state, { companionWindowId: id, windowId }),
+  availableLocales: getMetadataLocales(state, {
+    companionWindowId: id,
+    windowId,
+  }),
   canvasIds: getVisibleCanvasIds(state, { windowId }),
   collectionPath: (getWindow(state, { windowId }) || {}).collectionPath,
-  locale: getCompanionWindow(state, { companionWindowId: id }).locale
-    || getManifestLocale(state, { windowId }),
+  locale:
+    getCompanionWindow(state, { companionWindowId: id }).locale ||
+    getManifestLocale(state, { windowId }),
   showLocalePicker: getWindowConfig(state, { windowId }).showLocalePicker,
 });
 
 /** */
 const mapDispatchToProps = (dispatch, { windowId, id }) => ({
-  setLocale: locale => dispatch(actions.updateCompanionWindow(windowId, id, { locale })),
+  setLocale: (locale) =>
+    dispatch(actions.updateCompanionWindow(windowId, id, { locale })),
 });
 
 const enhance = compose(

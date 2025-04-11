@@ -12,7 +12,9 @@ describe('layers actions', () => {
         type: ActionTypes.UPDATE_LAYERS,
         windowId,
       };
-      expect(actions.updateLayers(windowId, canvasId, { some: 'data' })).toEqual(expectedAction);
+      expect(
+        actions.updateLayers(windowId, canvasId, { some: 'data' }),
+      ).toEqual(expectedAction);
     });
   });
 });

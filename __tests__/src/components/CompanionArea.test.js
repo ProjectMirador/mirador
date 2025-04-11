@@ -15,7 +15,14 @@ function createWrapper(props) {
       companionWindowIds={['foo', 'baz']}
       {...props}
     />,
-    { preloadedState: { companionWindows: { baz: { content: 'attribution' }, foo: { content: 'info' } } } },
+    {
+      preloadedState: {
+        companionWindows: {
+          baz: { content: 'attribution' },
+          foo: { content: 'info' },
+        },
+      },
+    },
   );
 }
 
@@ -29,13 +36,17 @@ describe('CompanionArea', () => {
   it('should add the appropriate classes when the companion area fills the full width', () => {
     const { container } = createWrapper({ position: 'bottom' });
 
-    expect(container.querySelector('.mirador-companion-area-bottom')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    expect(
+      container.querySelector('.mirador-companion-area-bottom'),
+    ).toBeInTheDocument();
   });
 
   it('renders the appropriate <CompanionWindow> components', () => {
     createWrapper();
 
-    expect(screen.getByRole('heading', { name: 'About this item' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'About this item' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Rights' })).toBeInTheDocument();
   });
 
@@ -50,7 +61,9 @@ describe('CompanionArea', () => {
       sideBarOpen: true,
     });
 
-    expect(screen.getByRole('button', { name: 'Expand sidebar' })).toHaveAttribute('aria-expanded', 'false');
+    expect(
+      screen.getByRole('button', { name: 'Expand sidebar' }),
+    ).toHaveAttribute('aria-expanded', 'false');
     expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Expand sidebar' }));
@@ -69,7 +82,9 @@ describe('CompanionArea', () => {
       sideBarOpen: true,
     });
 
-    expect(screen.getByRole('button', { name: 'Collapse sidebar' })).toHaveAttribute('aria-expanded', 'true');
+    expect(
+      screen.getByRole('button', { name: 'Collapse sidebar' }),
+    ).toHaveAttribute('aria-expanded', 'true');
     await user.click(screen.getByRole('button', { name: 'Collapse sidebar' }));
 
     expect(setCompanionAreaOpen).toHaveBeenCalledWith('abc123', false);
@@ -83,7 +98,9 @@ describe('CompanionArea', () => {
       sideBarOpen: false,
     });
 
-    expect(screen.queryByRole('button', { name: 'Collapse sidebar' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Collapse sidebar' }),
+    ).not.toBeInTheDocument();
   });
 
   it('does not show a toggle in other positions', () => {
@@ -94,6 +111,8 @@ describe('CompanionArea', () => {
       sideBarOpen: true,
     });
 
-    expect(screen.queryByRole('button', { name: 'Collapse sidebar' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Collapse sidebar' }),
+    ).not.toBeInTheDocument();
   });
 });

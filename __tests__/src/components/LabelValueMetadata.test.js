@@ -1,7 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
 
-/* eslint-disable testing-library/no-node-access */
 describe('LabelValueMetadata', () => {
   let wrapper;
   let labelValuePair;
@@ -18,9 +17,7 @@ describe('LabelValueMetadata', () => {
           values: ['Value 2'],
         },
       ];
-      wrapper = render(
-        <LabelValueMetadata labelValuePairs={labelValuePair} />,
-      );
+      wrapper = render(<LabelValueMetadata labelValuePairs={labelValuePair} />);
     });
 
     it('renders a dt/dd for each label/value pair', () => {
@@ -43,9 +40,7 @@ describe('LabelValueMetadata', () => {
   describe('when the labelValuePair has no content', () => {
     beforeEach(() => {
       labelValuePair = [];
-      wrapper = render(
-        <LabelValueMetadata labelValuePairs={labelValuePair} />,
-      );
+      wrapper = render(<LabelValueMetadata labelValuePairs={labelValuePair} />);
     });
 
     it('renders an empty fragment instead of an empty dl', () => {
@@ -65,7 +60,10 @@ describe('LabelValueMetadata', () => {
         },
       ];
       wrapper = render(
-        <LabelValueMetadata labelValuePairs={labelValuePair} defaultLabel="Default label" />,
+        <LabelValueMetadata
+          labelValuePairs={labelValuePair}
+          defaultLabel="Default label"
+        />,
       );
     });
 

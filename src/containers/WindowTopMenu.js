@@ -10,8 +10,9 @@ import { getConfig } from '../state/selectors';
  * @memberof WindowTopMenu
  * @private
  */
-const mapStateToProps = state => ({
-  showThumbnailNavigationSettings: getConfig(state).thumbnailNavigation.displaySettings,
+const mapStateToProps = (state) => ({
+  showThumbnailNavigationSettings:
+    getConfig(state).thumbnailNavigation.displaySettings,
 });
 
 /**
@@ -19,7 +20,7 @@ const mapStateToProps = state => ({
  * @memberof WindowTopMenu
  * @private
  */
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   toggleDraggingEnabled: () => dispatch(actions.toggleDraggingEnabled()),
 });
 

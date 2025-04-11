@@ -19,10 +19,7 @@ const getSearches = (state) => miradorSlice(state).searches;
  * @returns {object}
  */
 export const getSearchForWindow = createSelector(
-  [
-    (state, { windowId }) => windowId,
-    getSearches,
-  ],
+  [(state, { windowId }) => windowId, getSearches],
   (windowId, searches) => {
     if (!windowId || !searches) return EMPTY_OBJECT;
 
@@ -37,10 +34,7 @@ export const getSearchForWindow = createSelector(
  * @returns {object|undefined}
  */
 const getSearchForCompanionWindow = createSelector(
-  [
-    getSearchForWindow,
-    (state, { companionWindowId }) => companionWindowId,
-  ],
+  [getSearchForWindow, (state, { companionWindowId }) => companionWindowId],
   (results, companionWindowId) => {
     if (!results || !companionWindowId) return undefined;
     return results[companionWindowId];
@@ -53,9 +47,7 @@ const getSearchForCompanionWindow = createSelector(
  * @returns {Array}
  */
 const getSearchResponsesForCompanionWindow = createSelector(
-  [
-    getSearchForCompanionWindow,
-  ],
+  [getSearchForCompanionWindow],
   (results) => {
     if (!results) return EMPTY_ARRAY;
     return Object.values(results.data);
@@ -69,10 +61,8 @@ const getSearchResponsesForCompanionWindow = createSelector(
  * @returns {string|undefined}
  */
 export const getSearchQuery = createSelector(
-  [
-    getSearchForCompanionWindow,
-  ],
-  results => results && results.query,
+  [getSearchForCompanionWindow],
+  (results) => results && results.query,
 );
 
 /**
@@ -81,10 +71,8 @@ export const getSearchQuery = createSelector(
  * @returns {boolean}
  */
 export const getSearchIsFetching = createSelector(
-  [
-    getSearchResponsesForCompanionWindow,
-  ],
-  results => results.some(result => result.isFetching),
+  [getSearchResponsesForCompanionWindow],
+  (results) => results.some((result) => result.isFetching),
 );
 
 /**
@@ -94,17 +82,13 @@ export const getSearchIsFetching = createSelector(
  * @returns {number|undefined}
  */
 export const getSearchNumTotal = createSelector(
-  [
-    getSearchForCompanionWindow,
-  ],
+  [getSearchForCompanionWindow],
   (results) => {
     if (!results || !results.data) return undefined;
 
-    const resultWithWithin = Object.values(results.data).find(result => (
-      !result.isFetching
-        && result.json
-        && result.json.within
-    ));
+    const resultWithWithin = Object.values(results.data).find(
+      (result) => !result.isFetching && result.json && result.json.within,
+    );
     return resultWithWithin?.json?.within?.total;
   },
 );
@@ -116,41 +100,42 @@ export const getSearchNumTotal = createSelector(
  * @returns {number|undefined}
  */
 export const getNextSearchId = createSelector(
-  [
-    getSearchForCompanionWindow,
-  ],
+  [getSearchForCompanionWindow],
   (results) => {
     if (!results || !results.data) return undefined;
 
-    const resultWithAnUnresolvedNext = Object.values(results.data).find(result => (
-      !result.isFetching
-        && result.json
-        && result.json.next
-        && !results.data[result.json.next]
-    ));
+    const resultWithAnUnresolvedNext = Object.values(results.data).find(
+      (result) =>
+        !result.isFetching &&
+        result.json &&
+        result.json.next &&
+        !results.data[result.json.next],
+    );
 
-    return resultWithAnUnresolvedNext
-      && resultWithAnUnresolvedNext.json
-      && resultWithAnUnresolvedNext.json.next;
+    return (
+      resultWithAnUnresolvedNext &&
+      resultWithAnUnresolvedNext.json &&
+      resultWithAnUnresolvedNext.json.next
+    );
   },
 );
 
 const getSearchHitsForCompanionWindow = createSelector(
-  [
-    getSearchResponsesForCompanionWindow,
-  ],
-  results => flatten(results.map((result) => {
-    if (!result || !result.json || result.isFetching || !result.json.hits) return EMPTY_ARRAY;
+  [getSearchResponsesForCompanionWindow],
+  (results) =>
+    flatten(
+      results.map((result) => {
+        if (!result || !result.json || result.isFetching || !result.json.hits)
+          return EMPTY_ARRAY;
 
-    return result.json.hits;
-  })),
+        return result.json.hits;
+      }),
+    ),
 );
 
 export const getSearchAnnotationsForCompanionWindow = createSelector(
-  [
-    getSearchResponsesForCompanionWindow,
-  ],
-  results => results && searchResultsToAnnotation(results),
+  [getSearchResponsesForCompanionWindow],
+  (results) => results && searchResultsToAnnotation(results),
 );
 
 /**
@@ -168,34 +153,40 @@ export const getSortedSearchHitsForCompanionWindow = createSelector(
   (searchHits, canvases, annotation) => {
     if (!canvases || canvases.length === 0) return EMPTY_ARRAY;
     if (!searchHits || searchHits.length === 0) return EMPTY_ARRAY;
-    const canvasIds = canvases.map(canvas => canvas.id);
+    const canvasIds = canvases.map((canvas) => canvas.id);
 
     return [].concat(searchHits).sort((a, b) => {
-      const hitA = annotation.resources.find(
-        r => r.id === a.annotations[0],
+      const hitA = annotation.resources.find((r) => r.id === a.annotations[0]);
+      const hitB = annotation.resources.find((r) => r.id === b.annotations[0]);
+      return (
+        canvasIds.indexOf(hitA.targetId) - canvasIds.indexOf(hitB.targetId)
       );
-      const hitB = annotation.resources.find(
-        r => r.id === b.annotations[0],
-      );
-      return canvasIds.indexOf(hitA.targetId) - canvasIds.indexOf(hitB.targetId);
     });
   },
 );
 
 /** convert search results to an annotation */
 const searchResultsToAnnotation = (results) => {
-  const annotations = results.map((result) => {
-    if (!result || !result.json || result.isFetching || !result.json.resources) return undefined;
-    const anno = new AnnotationList(result.json);
-    return {
-      id: anno.id,
-      resources: anno.resources,
-    };
-  }).filter(Boolean);
+  const annotations = results
+    .map((result) => {
+      if (
+        !result ||
+        !result.json ||
+        result.isFetching ||
+        !result.json.resources
+      )
+        return undefined;
+      const anno = new AnnotationList(result.json);
+      return {
+        id: anno.id,
+        resources: anno.resources,
+      };
+    })
+    .filter(Boolean);
 
   return {
-    id: (annotations.find(a => a.id) || {}).id,
-    resources: flatten(annotations.map(a => a.resources)),
+    id: (annotations.find((a) => a.id) || {}).id,
+    resources: flatten(annotations.map((a) => a.resources)),
   };
 };
 
@@ -203,16 +194,25 @@ const searchResultsToAnnotation = (results) => {
  * Sorts search annotations based on canvas order.
  * @returns {Array}
  */
-export function sortSearchAnnotationsByCanvasOrder(searchAnnotations, canvases) {
-  if (!searchAnnotations
-      || !searchAnnotations.resources
-      || searchAnnotations.length === 0) return EMPTY_ARRAY;
+export function sortSearchAnnotationsByCanvasOrder(
+  searchAnnotations,
+  canvases,
+) {
+  if (
+    !searchAnnotations ||
+    !searchAnnotations.resources ||
+    searchAnnotations.length === 0
+  )
+    return EMPTY_ARRAY;
   if (!canvases || canvases.length === 0) return EMPTY_ARRAY;
-  const canvasIds = canvases.map(canvas => canvas.id);
+  const canvasIds = canvases.map((canvas) => canvas.id);
 
-  return [].concat(searchAnnotations.resources).sort(
-    (annoA, annoB) => canvasIds.indexOf(annoA.targetId) - canvasIds.indexOf(annoB.targetId),
-  );
+  return []
+    .concat(searchAnnotations.resources)
+    .sort(
+      (annoA, annoB) =>
+        canvasIds.indexOf(annoA.targetId) - canvasIds.indexOf(annoB.targetId),
+    );
 }
 
 /**
@@ -222,11 +222,9 @@ export function sortSearchAnnotationsByCanvasOrder(searchAnnotations, canvases) 
  * @returns {Array}
  */
 export const getSortedSearchAnnotationsForCompanionWindow = createSelector(
-  [
-    getSearchAnnotationsForCompanionWindow,
-    getCanvases,
-  ],
-  (searchAnnotations, canvases) => sortSearchAnnotationsByCanvasOrder(searchAnnotations, canvases),
+  [getSearchAnnotationsForCompanionWindow, getCanvases],
+  (searchAnnotations, canvases) =>
+    sortSearchAnnotationsByCanvasOrder(searchAnnotations, canvases),
 );
 
 /**
@@ -236,14 +234,14 @@ export const getSortedSearchAnnotationsForCompanionWindow = createSelector(
  * @returns {Array}
  */
 export const getSearchAnnotationsForWindow = createSelector(
-  [
-    getSearchForWindow,
-  ],
+  [getSearchForWindow],
   (results) => {
     if (!results) return EMPTY_ARRAY;
-    const data = Object.values(results).map(r => Object.values(r.data));
+    const data = Object.values(results).map((r) => Object.values(r.data));
 
-    return data.map(d => searchResultsToAnnotation(d)).filter(a => a.resources.length > 0);
+    return data
+      .map((d) => searchResultsToAnnotation(d))
+      .filter((a) => a.resources.length > 0);
   },
 );
 
@@ -254,12 +252,9 @@ export const getSearchAnnotationsForWindow = createSelector(
  * @returns {Array}
  */
 export const getSelectedContentSearchAnnotationIds = createSelector(
-  [
-    getWindow,
-    getSearchForCompanionWindow,
-  ],
-  (window, search) => (search && search.selectedContentSearchAnnotationIds)
-    || [],
+  [getWindow, getSearchForCompanionWindow],
+  (window, search) =>
+    (search && search.selectedContentSearchAnnotationIds) || [],
 );
 
 /**
@@ -273,9 +268,8 @@ export const getResourceAnnotationForSearchHit = createSelector(
     getSearchAnnotationsForCompanionWindow,
     (state, { annotationUri }) => annotationUri,
   ],
-  (annotation, annotationUri) => annotation.resources.find(
-    r => r.id === annotationUri,
-  ),
+  (annotation, annotationUri) =>
+    annotation.resources.find((r) => r.id === annotationUri),
 );
 
 /**
@@ -285,27 +279,28 @@ export const getResourceAnnotationForSearchHit = createSelector(
  * @returns {Array}
  */
 export const getResourceAnnotationLabel = createSelector(
-  [
-    getResourceAnnotationForSearchHit,
-    getManifestLocale,
-  ],
+  [getResourceAnnotationForSearchHit, getManifestLocale],
   (resourceAnnotation, locale) => {
     if (
-      !(resourceAnnotation && resourceAnnotation.resource && resourceAnnotation.resource.label)
-    ) return EMPTY_ARRAY;
+      !(
+        resourceAnnotation &&
+        resourceAnnotation.resource &&
+        resourceAnnotation.resource.label
+      )
+    )
+      return EMPTY_ARRAY;
 
-    return PropertyValue.parse(resourceAnnotation.resource.label).getValues(locale);
+    return PropertyValue.parse(resourceAnnotation.resource.label).getValues(
+      locale,
+    );
   },
 );
 
 const getAnnotationById = createSelector(
-  [
-    getSearchAnnotationsForWindow,
-    (state, { annotationId }) => (annotationId),
-  ],
+  [getSearchAnnotationsForWindow, (state, { annotationId }) => annotationId],
   (annotations, annotationId) => {
-    const resourceAnnotations = flatten(annotations.map(a => a.resources));
-    return resourceAnnotations.find(r => r.id === annotationId);
+    const resourceAnnotations = flatten(annotations.map((a) => a.resources));
+    return resourceAnnotations.find((r) => r.id === annotationId);
   },
 );
 
@@ -318,7 +313,9 @@ const getAnnotationById = createSelector(
 export const getCanvasForAnnotation = createSelector(
   [
     getAnnotationById,
-    (state, { windowId }) => canvasId => getCanvas(state, { canvasId, windowId }),
+    (state, { windowId }) =>
+      (canvasId) =>
+        getCanvas(state, { canvasId, windowId }),
   ],
   (annotation, getCanvasById) => {
     const canvasId = annotation && annotation.targetId;

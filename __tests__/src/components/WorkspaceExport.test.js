@@ -47,15 +47,19 @@ describe('WorkspaceExport', () => {
     vi.spyOn(window, 'prompt').mockImplementation(() => true);
 
     await user.click(screen.getByRole('button', { name: 'Copy' }));
-    expect(screen.getByRole('alert')).toHaveTextContent('The workspace configuration was copied to your clipboard');
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'The workspace configuration was copied to your clipboard',
+    );
 
     await user.click(screen.getByRole('button', { name: 'Dismiss' }));
     expect(handleClose).toHaveBeenCalled();
   });
 
   it('renders an exportable version of state', async () => {
-    await user.click(screen.getByRole('button', { name: 'View workspace configuration' }));
-    expect(screen.getByRole('region').querySelector('pre')).toHaveTextContent( // eslint-disable-line testing-library/no-node-access
+    await user.click(
+      screen.getByRole('button', { name: 'View workspace configuration' }),
+    );
+    expect(screen.getByRole('region').querySelector('pre')).toHaveTextContent(
       '{ "companionWindows": {}, "config": {}, "elasticLayout": {}, "viewers": {}, "windows": {}, "workspace": {} }',
     );
   });

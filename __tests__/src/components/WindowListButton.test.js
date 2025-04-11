@@ -7,20 +7,20 @@ import { WindowListButton } from '../../../src/components/WindowListButton';
  * Helper function to create a shallow wrapper around WindowListButton
  */
 function createWrapper(props) {
-  return render(
-    <WindowListButton
-      windowCount={3}
-      {...props}
-    />,
-    { preloadedState: { workspace: { windowIds: ['abc123'] } } },
-  );
+  return render(<WindowListButton windowCount={3} {...props} />, {
+    preloadedState: { workspace: { windowIds: ['abc123'] } },
+  });
 }
 
 describe('WindowListButton', () => {
   it('shows the window count as a badge on the button', () => {
     createWrapper();
 
-    expect(within(screen.getByRole('button')).getByText('3', { container: '.MuiBadge-badge' })).toBeInTheDocument();
+    expect(
+      within(screen.getByRole('button')).getByText('3', {
+        container: '.MuiBadge-badge',
+      }),
+    ).toBeInTheDocument();
   });
 
   it('disabled the MiradorMenuButton if the disabled prop is true', () => {
@@ -34,10 +34,18 @@ describe('WindowListButton', () => {
     createWrapper();
     await user.click(screen.getByRole('button'));
 
-    expect(screen.getByText('Current open windows', { container: '.MuiListSubheader-root' })).toBeInTheDocument();
+    expect(
+      screen.getByText('Current open windows', {
+        container: '.MuiListSubheader-root',
+      }),
+    ).toBeInTheDocument();
 
     await user.click(screen.getByRole('menuitem', { name: '[Untitled]' }));
 
-    expect(screen.queryByText('Current open windows', { container: '.MuiListSubheader-root' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Current open windows', {
+        container: '.MuiListSubheader-root',
+      }),
+    ).not.toBeInTheDocument();
   });
 });

@@ -2,8 +2,7 @@ import ActionTypes from './action-types';
 
 /**
  * requestInfoResponse - action creator
- *
- * @param  {String} infoId
+ * @param  {string} infoId
  * @memberof ActionCreators
  */
 export function requestInfoResponse(infoId, imageResource, windowId) {
@@ -17,9 +16,10 @@ export function requestInfoResponse(infoId, imageResource, windowId) {
 
 /**
  * receiveInfoResponse - action creator
- *
- * @param  {String} infoId
- * @param  {Object} manifestJson
+ * @param  {string} infoId
+ * @param  {object} infoJson
+ * @param  {boolean} ok
+ * @param  {string} tokenServiceId
  * @memberof ActionCreators
  */
 export function receiveInfoResponse(infoId, infoJson, ok, tokenServiceId) {
@@ -33,13 +33,21 @@ export function receiveInfoResponse(infoId, infoJson, ok, tokenServiceId) {
 }
 
 /**
- * receiveDegradedInfoResponse - action creator
- *
- * @param  {String} infoId
- * @param  {Object} manifestJson
+ * receiveInfoResponse - action creator
+ * @param  {string} infoId
+ * @param  {object} infoJson
+ * @param  {boolean} ok
+ * @param  {string} tokenServiceId
+ * @param  {string} windowId
  * @memberof ActionCreators
  */
-export function receiveDegradedInfoResponse(infoId, infoJson, ok, tokenServiceId, windowId) {
+export function receiveDegradedInfoResponse(
+  infoId,
+  infoJson,
+  ok,
+  tokenServiceId,
+  windowId,
+) {
   return {
     infoId,
     infoJson,
@@ -52,9 +60,8 @@ export function receiveDegradedInfoResponse(infoId, infoJson, ok, tokenServiceId
 
 /**
  * receiveInfoResponseFailure - action creator
- *
- * @param  {String} infoId
- * @param  {String} error
+ * @param  {string} infoId
+ * @param  {string} error
  * @memberof ActionCreators
  */
 export function receiveInfoResponseFailure(infoId, error, tokenServiceId) {
@@ -68,20 +75,18 @@ export function receiveInfoResponseFailure(infoId, error, tokenServiceId) {
 
 /**
  * fetchInfoResponse - action creator
- *
- * @param  {String} infoId
+ * @param  {string} infoId
  * @memberof ActionCreators
  */
 export function fetchInfoResponse({ imageId, imageResource, windowId }) {
   const imageService = imageResource && imageResource.getServices()[0];
-  const infoId = (imageId || imageService.id);
+  const infoId = imageId || imageService.id;
   return requestInfoResponse(infoId, imageService, windowId);
 }
 
 /**
  * removeInfoResponse - action creator
- *
- * @param  {String} infoId
+ * @param  {string} infoId
  * @memberof ActionCreators
  */
 export function removeInfoResponse(infoId) {

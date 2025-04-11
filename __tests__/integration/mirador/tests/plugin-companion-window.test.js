@@ -14,12 +14,16 @@ describe('add plugins for companion windows', () => {
 
     // Open sidebar where our custom plugin button will be
     await waitFor(async () => {
-      const companionWindowLeft = document.querySelector('.mirador-companion-window-left.mirador-window-sidebar-info-panel'); // eslint-disable-line testing-library/no-node-access
+      const companionWindowLeft = document.querySelector(
+        '.mirador-companion-window-left.mirador-window-sidebar-info-panel',
+      );
       expect(companionWindowLeft).toBeInTheDocument();
     });
 
     // Click our custom button
-    const pluginButton = screen.getByTestId('add-plugin-companion-window-button');
+    const pluginButton = screen.getByTestId(
+      'add-plugin-companion-window-button',
+    );
     expect(pluginButton).toBeInTheDocument();
     fireEvent.click(pluginButton);
 

@@ -9,18 +9,17 @@ import { getConfig, getWindowIds, getWorkspace } from '../state/selectors';
  * @memberof App
  * @private
  */
-const mapStateToProps = state => (
-  {
-    controlPanelVariant: getWorkspace(state).isWorkspaceAddVisible || getWindowIds(state).length > 0 ? undefined : 'wide',
-    isWorkspaceAddVisible: getWorkspace(state).isWorkspaceAddVisible,
-    isWorkspaceControlPanelVisible: getConfig(state).workspaceControlPanel.enabled,
-    lang: getConfig(state).language,
-  }
-);
+const mapStateToProps = (state) => ({
+  controlPanelVariant:
+    getWorkspace(state).isWorkspaceAddVisible || getWindowIds(state).length > 0
+      ? undefined
+      : 'wide',
+  isWorkspaceAddVisible: getWorkspace(state).isWorkspaceAddVisible,
+  isWorkspaceControlPanelVisible:
+    getConfig(state).workspaceControlPanel.enabled,
+  lang: getConfig(state).language,
+});
 
-const enhance = compose(
-  connect(mapStateToProps),
-  withPlugins('WorkspaceArea'),
-);
+const enhance = compose(connect(mapStateToProps), withPlugins('WorkspaceArea'));
 
 export default enhance(WorkspaceArea);

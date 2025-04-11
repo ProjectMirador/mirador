@@ -16,22 +16,27 @@ describe('companionWindowsReducer', () => {
           position: 'right',
         },
       };
-      expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
+      expect(companionWindowsReducer(beforeState, action)).toEqual(
+        expectedState,
+      );
     });
   });
 
   describe('ADD_WINDOW', () => {
     it('adds default companion window(s)', () => {
       const action = {
-        companionWindows: [{
-          content: 'info',
-          id: 'banana',
-          position: 'left',
-        }, {
-          content: 'canvas',
-          id: 'Banane',
-          position: 'right',
-        }],
+        companionWindows: [
+          {
+            content: 'info',
+            id: 'banana',
+            position: 'left',
+          },
+          {
+            content: 'canvas',
+            id: 'Banane',
+            position: 'right',
+          },
+        ],
         type: ActionTypes.ADD_WINDOW,
       };
       const beforeState = {};
@@ -47,7 +52,9 @@ describe('companionWindowsReducer', () => {
           position: 'right',
         },
       };
-      expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
+      expect(companionWindowsReducer(beforeState, action)).toEqual(
+        expectedState,
+      );
     });
   });
 
@@ -71,7 +78,9 @@ describe('companionWindowsReducer', () => {
           position: 'right',
         },
       };
-      expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
+      expect(companionWindowsReducer(beforeState, action)).toEqual(
+        expectedState,
+      );
     });
   });
 
@@ -88,7 +97,9 @@ describe('companionWindowsReducer', () => {
         },
       };
       const expectedState = {};
-      expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
+      expect(companionWindowsReducer(beforeState, action)).toEqual(
+        expectedState,
+      );
     });
   });
 
@@ -104,7 +115,9 @@ describe('companionWindowsReducer', () => {
         c: { windowId: 'other' },
       };
       const expectedState = { c: { windowId: 'other' } };
-      expect(companionWindowsReducer(beforeState, action)).toEqual(expectedState);
+      expect(companionWindowsReducer(beforeState, action)).toEqual(
+        expectedState,
+      );
     });
   });
 
@@ -141,7 +154,9 @@ describe('companionWindowsReducer', () => {
         },
         cw456: {},
       };
-      expect(companionWindowsReducer(emptyBeforeState, actionOpen)).toEqual(expectedStateFromEmpty);
+      expect(companionWindowsReducer(emptyBeforeState, actionOpen)).toEqual(
+        expectedStateFromEmpty,
+      );
 
       const beforeState = {
         cw123: {
@@ -162,7 +177,9 @@ describe('companionWindowsReducer', () => {
         },
         cw456: {},
       };
-      expect(companionWindowsReducer(beforeState, actionOpen)).toEqual(expectedStateAfterFilled);
+      expect(companionWindowsReducer(beforeState, actionOpen)).toEqual(
+        expectedStateAfterFilled,
+      );
     });
 
     it('should update expanded value for existing nodeIds in the state', () => {
@@ -188,17 +205,30 @@ describe('companionWindowsReducer', () => {
         cw456: {},
       };
 
-      expect(companionWindowsReducer(stateWithTrue, actionOpen)).toEqual(stateWithTrue);
-      expect(companionWindowsReducer(stateWithFalse, actionOpen)).toEqual(stateWithTrue);
-      expect(companionWindowsReducer(stateWithTrue, actionClose)).toEqual(stateWithFalse);
-      expect(companionWindowsReducer(stateWithFalse, actionClose)).toEqual(stateWithFalse);
+      expect(companionWindowsReducer(stateWithTrue, actionOpen)).toEqual(
+        stateWithTrue,
+      );
+      expect(companionWindowsReducer(stateWithFalse, actionOpen)).toEqual(
+        stateWithTrue,
+      );
+      expect(companionWindowsReducer(stateWithTrue, actionClose)).toEqual(
+        stateWithFalse,
+      );
+      expect(companionWindowsReducer(stateWithFalse, actionClose)).toEqual(
+        stateWithFalse,
+      );
     });
   });
 
   it('should handle IMPORT_MIRADOR_STATE', () => {
-    expect(companionWindowsReducer({}, {
-      state: { companionWindows: { new: 'stuff' } },
-      type: ActionTypes.IMPORT_MIRADOR_STATE,
-    })).toEqual({ new: 'stuff' });
+    expect(
+      companionWindowsReducer(
+        {},
+        {
+          state: { companionWindows: { new: 'stuff' } },
+          type: ActionTypes.IMPORT_MIRADOR_STATE,
+        },
+      ),
+    ).toEqual({ new: 'stuff' });
   });
 });

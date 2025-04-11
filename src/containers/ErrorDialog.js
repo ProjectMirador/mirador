@@ -10,7 +10,7 @@ import { getLatestError } from '../state/selectors';
  * @memberof ErrorDialog
  * @private
  */
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   error: getLatestError(state),
 });
 

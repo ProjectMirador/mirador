@@ -10,20 +10,20 @@ import { WorkspaceMosaic } from '../components/WorkspaceMosaic';
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => (
-  {
-    layout: getWorkspace(state).layout,
-    windowIds: getWorkspace(state).windowIds,
-    workspaceId: getWorkspace(state).id,
-  }
-);
+const mapStateToProps = (state) => ({
+  layout: getWorkspace(state).layout,
+  windowIds: getWorkspace(state).windowIds,
+  workspaceId: getWorkspace(state).id,
+});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
  * @memberof Workspace
  * @private
  */
-const mapDispatchToProps = { updateWorkspaceMosaicLayout: actions.updateWorkspaceMosaicLayout };
+const mapDispatchToProps = {
+  updateWorkspaceMosaicLayout: actions.updateWorkspaceMosaicLayout,
+};
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),

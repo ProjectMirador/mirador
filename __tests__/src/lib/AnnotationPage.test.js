@@ -18,16 +18,16 @@ describe('AnnotationPage', () => {
   });
   describe('items', () => {
     it('returns items', () => {
-      new AnnotationPage(
-        { items: [{ foo: 'bar' }] },
-      ).items.forEach(resource => expect(resource).toBeInstanceOf(AnnotationItem));
+      new AnnotationPage({ items: [{ foo: 'bar' }] }).items.forEach(
+        (resource) => expect(resource).toBeInstanceOf(AnnotationItem),
+      );
     });
   });
   describe('resources', () => {
     it('returns items', () => {
-      new AnnotationPage(
-        { items: [{ foo: 'bar' }] },
-      ).items.forEach(resource => expect(resource).toBeInstanceOf(AnnotationItem));
+      new AnnotationPage({ items: [{ foo: 'bar' }] }).items.forEach(
+        (resource) => expect(resource).toBeInstanceOf(AnnotationItem),
+      );
     });
   });
 });

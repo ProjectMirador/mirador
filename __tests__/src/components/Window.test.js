@@ -6,12 +6,7 @@ import { Window } from '../../../src/components/Window';
 /** create wrapper */
 function createWrapper(props, state, renderOptions) {
   return render(
-    <Window
-      windowId="xyz"
-      manifestId="foo"
-      classes={{}}
-      {...props}
-    />,
+    <Window windowId="xyz" manifestId="foo" classes={{}} {...props} />,
     {
       preloadedState: {
         windows: {
@@ -33,11 +28,15 @@ describe('Window', () => {
   });
   it('should render <WindowTopBar>', () => {
     createWrapper();
-    expect(screen.getByRole('navigation', { accessibleName: 'Window navigation' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('navigation', { accessibleName: 'Window navigation' }),
+    ).toBeInTheDocument();
   });
   it('should render <PrimaryWindow>', () => {
     createWrapper();
-    expect(document.querySelector('.mirador-primary-window')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
+    expect(
+      document.querySelector('.mirador-primary-window'),
+    ).toBeInTheDocument();
   });
   // See ErrorContent.test.js for futher testing of this functionality
   it('renders alert box when there is an error', async () => {
@@ -46,9 +45,11 @@ describe('Window', () => {
   });
   describe('when workspaceType is mosaic', () => {
     it('calls the context mosaicWindowActions connectDragSource method to make WindowTopBar draggable', () => {
-      const connectDragSource = vi.fn(component => component);
+      const connectDragSource = vi.fn((component) => component);
       render(
-        <MosaicWindowContext.Provider value={{ mosaicWindowActions: { connectDragSource } }}>
+        <MosaicWindowContext.Provider
+          value={{ mosaicWindowActions: { connectDragSource } }}
+        >
           <Window
             windowId="xyz"
             manifestId="foo"
@@ -71,9 +72,11 @@ describe('Window', () => {
       expect(connectDragSource).toHaveBeenCalled();
     });
     it('does not call the context mosaicWindowActions connectDragSource when the windowDraggable is set to false', () => {
-      const connectDragSource = vi.fn(component => component);
+      const connectDragSource = vi.fn((component) => component);
       render(
-        <MosaicWindowContext.Provider value={{ mosaicWindowActions: { connectDragSource } }}>
+        <MosaicWindowContext.Provider
+          value={{ mosaicWindowActions: { connectDragSource } }}
+        >
           <Window
             windowId="xyz"
             manifestId="foo"

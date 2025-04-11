@@ -1,9 +1,13 @@
+import { all, put, select, takeEvery } from 'redux-saga/effects';
 import {
-  all, put, select, takeEvery,
-} from 'redux-saga/effects';
-import { requestCanvasAnnotations, receiveAnnotation, requestAnnotation } from '../actions';
+  requestCanvasAnnotations,
+  receiveAnnotation,
+  requestAnnotation,
+} from '../actions';
 import {
-  getAnnotations, getCanvas, getMiradorCanvasWrapper,
+  getAnnotations,
+  getCanvas,
+  getMiradorCanvasWrapper,
 } from '../selectors';
 import ActionTypes from '../actions/action-types';
 import MiradorCanvas from '../../lib/MiradorCanvas';
@@ -18,11 +22,14 @@ export function* fetchCanvasAnnotations({ canvasId, windowId }) {
   return yield all([
     // IIIF v2
     ...miradorCanvas.annotationListUris
-      .filter(uri => !(annotations[canvas.id] && annotations[canvas.id][uri]))
-      .map(uri => put(requestAnnotation(canvas.id, uri))),
+      .filter((uri) => !(annotations[canvas.id] && annotations[canvas.id][uri]))
+      .map((uri) => put(requestAnnotation(canvas.id, uri))),
     // IIIF v3
     ...miradorCanvas.canvasAnnotationPages
-      .filter(annotation => !(annotations[canvas.id] && annotations[canvas.id][annotation.id]))
+      .filter(
+        (annotation) =>
+          !(annotations[canvas.id] && annotations[canvas.id][annotation.id]),
+      )
       .map((annotation) => {
         // If there are no items, try to retrieve the referenced resource.
         // otherwise the resource should be embedded and just add to the store.
@@ -40,9 +47,11 @@ export function* fetchCanvasAnnotations({ canvasId, windowId }) {
  */
 export function* fetchAnnotations({ visibleCanvases = [], windowId }) {
   // this little indirection allows plugins to also handle the request
-  return yield all(visibleCanvases.map(canvasId => (
-    put(requestCanvasAnnotations(windowId, canvasId))
-  )));
+  return yield all(
+    visibleCanvases.map((canvasId) =>
+      put(requestCanvasAnnotations(windowId, canvasId)),
+    ),
+  );
 }
 
 /** */

@@ -22,15 +22,19 @@ import {
 const mapStateToProps = (state, { windowId }) => ({
   annotations: getPresentAnnotationsOnSelectedCanvases(state, { windowId }),
   canvasWorld: getCurrentCanvasWorld(state, { windowId }),
-  drawAnnotations: getConfig(state).window.forceDrawAnnotations || getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0,
-  drawSearchAnnotations: getConfig(state).window.forceDrawAnnotations || getCompanionWindowsForContent(state, { content: 'search', windowId }).length > 0,
-  highlightAllAnnotations: getWindow(state, { windowId }).highlightAllAnnotations,
+  drawAnnotations:
+    getConfig(state).window.forceDrawAnnotations ||
+    getCompanionWindowsForContent(state, { content: 'annotations', windowId })
+      .length > 0,
+  drawSearchAnnotations:
+    getConfig(state).window.forceDrawAnnotations ||
+    getCompanionWindowsForContent(state, { content: 'search', windowId })
+      .length > 0,
+  highlightAllAnnotations: getWindow(state, { windowId })
+    .highlightAllAnnotations,
   hoveredAnnotationIds: getWindow(state, { windowId }).hoveredAnnotationIds,
   palette: getTheme(state).palette,
-  searchAnnotations: getSearchAnnotationsForWindow(
-    state,
-    { windowId },
-  ),
+  searchAnnotations: getSearchAnnotationsForWindow(state, { windowId }),
   selectedAnnotationId: getSelectedAnnotationId(state, { windowId }),
 });
 

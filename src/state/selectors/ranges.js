@@ -37,9 +37,10 @@ function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
       (acc, canvasId) => acc || rangeContainsCanvasId(node.data, canvasId),
       false,
     );
-    const subTreeVisibleNodeIds = node.nodes.length > 0
-      ? getVisibleNodeIdsInSubTree(node.nodes, canvasIds)
-      : [];
+    const subTreeVisibleNodeIds =
+      node.nodes.length > 0
+        ? getVisibleNodeIdsInSubTree(node.nodes, canvasIds)
+        : [];
     result.push(...subTreeVisibleNodeIds);
     if (nodeContainsVisibleCanvas || subTreeVisibleNodeIds.length > 0) {
       result.push({
@@ -56,10 +57,7 @@ function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
 
 /** */
 const getVisibleLeafAndBranchNodeIds = createSelector(
-  [
-    getSequenceTreeStructure,
-    getVisibleCanvasIds,
-  ],
+  [getSequenceTreeStructure, getVisibleCanvasIds],
   (tree, canvasIds) => {
     if (canvasIds.length === 0 || !tree) return [];
     return getVisibleNodeIdsInSubTree(tree.nodes, canvasIds);
@@ -74,30 +72,30 @@ const getVisibleLeafAndBranchNodeIds = createSelector(
  * @returns {Array}
  */
 export const getVisibleNodeIds = createSelector(
-  [
-    getVisibleLeafAndBranchNodeIds,
-  ],
-  visibleLeafAndBranchNodeIds => visibleLeafAndBranchNodeIds.map(item => item.id),
+  [getVisibleLeafAndBranchNodeIds],
+  (visibleLeafAndBranchNodeIds) =>
+    visibleLeafAndBranchNodeIds.map((item) => item.id),
 );
 
 const getVisibleBranchNodeIds = createSelector(
-  [
-    getVisibleLeafAndBranchNodeIds,
-  ],
-  visibleLeafAndBranchNodeIds => visibleLeafAndBranchNodeIds.reduce(
-    (acc, item) => (item.leaf || !item.descendantsContainVisibleCanvas ? acc : [...acc, item.id]),
-    [],
-  ),
+  [getVisibleLeafAndBranchNodeIds],
+  (visibleLeafAndBranchNodeIds) =>
+    visibleLeafAndBranchNodeIds.reduce(
+      (acc, item) =>
+        item.leaf || !item.descendantsContainVisibleCanvas
+          ? acc
+          : [...acc, item.id],
+      [],
+    ),
 );
 
 const getCanvasContainingNodeIds = createSelector(
-  [
-    getVisibleLeafAndBranchNodeIds,
-  ],
-  visibleLeafAndBranchNodeIds => visibleLeafAndBranchNodeIds.reduce(
-    (acc, item) => (item.containsVisibleCanvas ? [...acc, item] : acc),
-    [],
-  ),
+  [getVisibleLeafAndBranchNodeIds],
+  (visibleLeafAndBranchNodeIds) =>
+    visibleLeafAndBranchNodeIds.reduce(
+      (acc, item) => (item.containsVisibleCanvas ? [...acc, item] : acc),
+      [],
+    ),
 );
 
 /**
@@ -108,14 +106,21 @@ const getCanvasContainingNodeIds = createSelector(
  * @param expanded
  * @returns {Array}
  */
-export function getManuallyExpandedNodeIds(state, { companionWindowId }, expanded) {
+export function getManuallyExpandedNodeIds(
+  state,
+  { companionWindowId },
+  expanded,
+) {
   const companionWindow = getCompanionWindow(state, { companionWindowId });
-  return companionWindow.tocNodes ? Object.keys(companionWindow.tocNodes).reduce(
-    (acc, nodeId) => (companionWindow.tocNodes[nodeId].expanded === expanded
-      ? [...acc, nodeId]
-      : acc),
-    [],
-  ) : [];
+  return companionWindow.tocNodes
+    ? Object.keys(companionWindow.tocNodes).reduce(
+        (acc, nodeId) =>
+          companionWindow.tocNodes[nodeId].expanded === expanded
+            ? [...acc, nodeId]
+            : acc,
+        [],
+      )
+    : [];
 }
 
 /**
@@ -127,10 +132,24 @@ export function getManuallyExpandedNodeIds(state, { companionWindowId }, expande
  * @returns {Array}
  */
 export function getExpandedNodeIds(state, { companionWindowId, windowId }) {
-  const visibleBranchNodeIds = getVisibleBranchNodeIds(state, { companionWindowId, windowId });
-  const manuallyExpandedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId }, true);
-  const manuallyClosedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId }, false);
-  return without(union(manuallyExpandedNodeIds, visibleBranchNodeIds), ...manuallyClosedNodeIds);
+  const visibleBranchNodeIds = getVisibleBranchNodeIds(state, {
+    companionWindowId,
+    windowId,
+  });
+  const manuallyExpandedNodeIds = getManuallyExpandedNodeIds(
+    state,
+    { companionWindowId },
+    true,
+  );
+  const manuallyClosedNodeIds = getManuallyExpandedNodeIds(
+    state,
+    { companionWindowId },
+    false,
+  );
+  return without(
+    union(manuallyExpandedNodeIds, visibleBranchNodeIds),
+    ...manuallyClosedNodeIds,
+  );
 }
 
 /**
@@ -143,11 +162,15 @@ export function getExpandedNodeIds(state, { companionWindowId, windowId }) {
  * @returns {string}
  */
 export function getNodeIdToScrollTo(state, { ...args }) {
-  const canvasContainingNodeIds = getCanvasContainingNodeIds(state, { ...args });
+  const canvasContainingNodeIds = getCanvasContainingNodeIds(state, {
+    ...args,
+  });
   const collapsedNodeIds = getManuallyExpandedNodeIds(state, args, false);
   if (canvasContainingNodeIds && canvasContainingNodeIds.length > 0) {
     for (let i = 0; i < canvasContainingNodeIds[0].parentIds.length; i += 1) {
-      if (collapsedNodeIds.indexOf(canvasContainingNodeIds[0].parentIds[i]) !== -1) {
+      if (
+        collapsedNodeIds.indexOf(canvasContainingNodeIds[0].parentIds[i]) !== -1
+      ) {
         return canvasContainingNodeIds[0].parentIds[i];
       }
     }
@@ -163,10 +186,7 @@ export function getNodeIdToScrollTo(state, { ...args }) {
  * @returns {string}
  */
 export const getDefaultSidebarVariant = createSelector(
-  [
-    getSequenceTreeStructure,
-  ],
-  tree => (
-    tree && tree.nodes && tree.nodes.length > 0 ? 'tableOfContents' : 'item'
-  ),
+  [getSequenceTreeStructure],
+  (tree) =>
+    tree && tree.nodes && tree.nodes.length > 0 ? 'tableOfContents' : 'item',
 );

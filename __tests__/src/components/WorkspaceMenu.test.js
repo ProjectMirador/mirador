@@ -35,16 +35,23 @@ describe('Workspace settings', () => {
     const user = userEvent.setup();
     createShallow({ handleClose, showZoomControls, toggleZoomControls });
 
-    await user.click(screen.getByRole('menuitem', { name: 'Show zoom controls' }));
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Show zoom controls' }),
+    );
     expect(handleClose).toBeCalled();
   });
 
   it('disables zoom controls if the workspaceAdd UI is visible', () => {
     createShallow({
-      handleClose, isWorkspaceAddVisible: true, showZoomControls, toggleZoomControls,
+      handleClose,
+      isWorkspaceAddVisible: true,
+      showZoomControls,
+      toggleZoomControls,
     });
 
-    expect(screen.getByRole('menuitem', { name: 'Show zoom controls' })).toHaveAttribute('aria-disabled', 'true');
+    expect(
+      screen.getByRole('menuitem', { name: 'Show zoom controls' }),
+    ).toHaveAttribute('aria-disabled', 'true');
   });
 
   describe('handleZoomToggleClick', () => {
@@ -53,7 +60,9 @@ describe('Workspace settings', () => {
 
       createShallow({ handleClose, showZoomControls, toggleZoomControls });
 
-      await user.click(screen.getByRole('menuitem', { name: 'Show zoom controls' }));
+      await user.click(
+        screen.getByRole('menuitem', { name: 'Show zoom controls' }),
+      );
 
       expect(toggleZoomControls).toBeCalledWith(true);
     });

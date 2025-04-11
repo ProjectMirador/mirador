@@ -51,7 +51,10 @@ describe('AnnotationsOverlay', () => {
       const mockAddHandler = vi.spyOn(viewer, 'addHandler');
 
       rerender(cloneElement(component, { viewer }));
-      expect(mockAddHandler).toHaveBeenCalledWith('update-viewport', expect.anything());
+      expect(mockAddHandler).toHaveBeenCalledWith(
+        'update-viewport',
+        expect.anything(),
+      );
     });
 
     it('sets up canvasUpdate to add annotations to the canvas and forces a redraw', () => {
@@ -69,17 +72,14 @@ describe('AnnotationsOverlay', () => {
 
       const forceRedraw = vi.spyOn(viewer, 'forceRedraw');
 
-      rerender(cloneElement(
-        component,
-        {
+      rerender(
+        cloneElement(component, {
           annotations: [
-            new AnnotationList(
-              { '@id': 'foo', resources: [{ foo: 'bar' }] },
-            ),
+            new AnnotationList({ '@id': 'foo', resources: [{ foo: 'bar' }] }),
           ],
           viewer,
-        },
-      ));
+        }),
+      );
 
       // OSD ordinarily would fire this event:
       viewer.raiseEvent('update-viewport');
@@ -95,8 +95,8 @@ describe('AnnotationsOverlay', () => {
     it('converts the annotations to canvas and checks that the canvas is displayed', () => {
       const strokeRect = vi.fn();
       const context2d = {
-        restore: () => { },
-        save: () => { },
+        restore: () => {},
+        save: () => {},
         strokeRect,
       };
 
@@ -110,19 +110,29 @@ describe('AnnotationsOverlay', () => {
       const palette = {
         default: { strokeStyle: 'yellow' },
       };
-      const { component, rerender, viewer } = createWrapper({ palette: { annotations: palette }, viewer: null });
+      const { component, rerender, viewer } = createWrapper({
+        palette: { annotations: palette },
+        viewer: null,
+      });
 
-      vi.spyOn(viewer.viewport, 'getMaxZoom').mockImplementation(() => (1));
-      vi.spyOn(viewer.viewport, 'getZoom').mockImplementation(() => (0.05));
+      vi.spyOn(viewer.viewport, 'getMaxZoom').mockImplementation(() => 1);
+      vi.spyOn(viewer.viewport, 'getZoom').mockImplementation(() => 0.05);
 
-      rerender(cloneElement(component, {
-        annotations: [
-          new AnnotationList(
-            { '@id': 'foo', resources: [{ on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=10,10,100,200' }] },
-          ),
-        ],
-        viewer,
-      }));
+      rerender(
+        cloneElement(component, {
+          annotations: [
+            new AnnotationList({
+              '@id': 'foo',
+              resources: [
+                {
+                  on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=10,10,100,200',
+                },
+              ],
+            }),
+          ],
+          viewer,
+        }),
+      );
 
       // OSD ordinarily would fire this event:
       viewer.raiseEvent('update-viewport');
@@ -140,17 +150,17 @@ describe('AnnotationsOverlay', () => {
 
       const { viewer } = createWrapper({
         annotations: [
-          new AnnotationList(
-            {
-              '@id': 'foo',
-              resources: [{
+          new AnnotationList({
+            '@id': 'foo',
+            resources: [
+              {
                 '@id': 'http://example.org/identifier/annotation/anno-line',
                 '@type': 'oa:Annotation',
                 motivation: 'sc:painting',
                 on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
-              }],
-            },
-          ),
+              },
+            ],
+          }),
         ],
         selectAnnotation,
       });
@@ -160,7 +170,10 @@ describe('AnnotationsOverlay', () => {
         position: new OpenSeadragon.Point(101, 101),
       });
 
-      expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
+      expect(selectAnnotation).toHaveBeenCalledWith(
+        'base',
+        'http://example.org/identifier/annotation/anno-line',
+      );
     });
 
     it('triggers a deselectAnnotation for an already-selected annotation', () => {
@@ -168,20 +181,21 @@ describe('AnnotationsOverlay', () => {
 
       const { viewer } = createWrapper({
         annotations: [
-          new AnnotationList(
-            {
-              '@id': 'foo',
-              resources: [{
+          new AnnotationList({
+            '@id': 'foo',
+            resources: [
+              {
                 '@id': 'http://example.org/identifier/annotation/anno-line',
                 '@type': 'oa:Annotation',
                 motivation: 'sc:painting',
                 on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
-              }],
-            },
-          ),
+              },
+            ],
+          }),
         ],
         deselectAnnotation,
-        selectedAnnotationId: 'http://example.org/identifier/annotation/anno-line',
+        selectedAnnotationId:
+          'http://example.org/identifier/annotation/anno-line',
       });
 
       viewer.raiseEvent('canvas-click', {
@@ -189,7 +203,10 @@ describe('AnnotationsOverlay', () => {
         position: new OpenSeadragon.Point(101, 101),
       });
 
-      expect(deselectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
+      expect(deselectAnnotation).toHaveBeenCalledWith(
+        'base',
+        'http://example.org/identifier/annotation/anno-line',
+      );
     });
 
     it('selects the closest annotation', () => {
@@ -197,27 +214,30 @@ describe('AnnotationsOverlay', () => {
 
       const { viewer } = createWrapper({
         annotations: [
-          new AnnotationList(
-            {
-              '@id': 'foo',
-              resources: [{
+          new AnnotationList({
+            '@id': 'foo',
+            resources: [
+              {
                 '@id': 'http://example.org/identifier/annotation/anno-line',
                 '@type': 'oa:Annotation',
                 motivation: 'sc:painting',
                 on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
-              }, {
+              },
+              {
                 '@id': 'http://example.org/identifier/annotation/larger-box',
                 '@type': 'oa:Annotation',
                 motivation: 'sc:painting',
                 on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,250,250',
-              }, {
-                '@id': 'http://example.org/identifier/annotation/on-another-canvas',
+              },
+              {
+                '@id':
+                  'http://example.org/identifier/annotation/on-another-canvas',
                 '@type': 'oa:Annotation',
                 motivation: 'sc:painting',
                 on: 'http://iiif.io/some-other-canvas#xywh=101,101,3,3',
-              }],
-            },
-          ),
+              },
+            ],
+          }),
         ],
         selectAnnotation,
       });
@@ -227,7 +247,10 @@ describe('AnnotationsOverlay', () => {
         position: new OpenSeadragon.Point(101, 101),
       });
 
-      expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
+      expect(selectAnnotation).toHaveBeenCalledWith(
+        'base',
+        'http://example.org/identifier/annotation/anno-line',
+      );
     });
   });
 
@@ -238,27 +261,29 @@ describe('AnnotationsOverlay', () => {
 
       const { viewer } = createWrapper({
         annotations: [
-          new AnnotationList(
-            {
-              '@id': 'foo',
-              resources: [{
+          new AnnotationList({
+            '@id': 'foo',
+            resources: [
+              {
                 '@id': 'foo',
                 '@type': 'oa:Annotation',
                 motivation: 'sc:painting',
                 on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=100,100,250,20',
-              }, {
+              },
+              {
                 '@id': 'bar',
                 '@type': 'oa:Annotation',
                 motivation: 'sc:painting',
                 on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,250,250',
-              }, {
+              },
+              {
                 '@id': 'irrelevant-box',
                 '@type': 'oa:Annotation',
                 motivation: 'sc:painting',
                 on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=0,0,50,50',
-              }],
-            },
-          ),
+              },
+            ],
+          }),
         ],
         hoverAnnotation,
       });

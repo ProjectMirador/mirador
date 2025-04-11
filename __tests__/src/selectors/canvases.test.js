@@ -68,7 +68,9 @@ describe('getVisibleCanvasIds', () => {
   });
 
   it('should return undefined when there is no manifestation to get a canvas from', () => {
-    const selectedCanvas = getVisibleCanvasIds(noManifestationState, { windowId: 'a' });
+    const selectedCanvas = getVisibleCanvasIds(noManifestationState, {
+      windowId: 'a',
+    });
 
     expect(selectedCanvas).toEqual([]);
   });
@@ -116,14 +118,16 @@ describe('getVisibleCanvases', () => {
     const selectedCanvases = getVisibleCanvases(state, { windowId: 'a' });
 
     expect(selectedCanvases.length).toEqual(2);
-    expect(selectedCanvases.map(canvas => canvas.id)).toEqual([
+    expect(selectedCanvases.map((canvas) => canvas.id)).toEqual([
       'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
       'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
     ]);
   });
 
   it('should return undefined when there is no manifestation to get a canvas from', () => {
-    const selectedCanvas = getVisibleCanvases(noManifestationState, { windowId: 'a' });
+    const selectedCanvas = getVisibleCanvases(noManifestationState, {
+      windowId: 'a',
+    });
 
     expect(selectedCanvas).toEqual([]);
   });
@@ -139,7 +143,8 @@ describe('getNextCanvasGrouping', () => {
     },
     windows: {
       a: {
-        canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+        canvasId:
+          'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
         id: 'a',
         manifestId: 'x',
         view: 'book',
@@ -155,7 +160,7 @@ describe('getNextCanvasGrouping', () => {
   it('should return the next canvas groupings', () => {
     const selectedCanvases = getNextCanvasGrouping(state, { windowId: 'a' });
 
-    expect(selectedCanvases.map(canvas => canvas.id)).toEqual([
+    expect(selectedCanvases.map((canvas) => canvas.id)).toEqual([
       'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
       'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
     ]);
@@ -176,7 +181,8 @@ describe('getPreviousCanvasGrouping', () => {
     },
     windows: {
       a: {
-        canvasId: 'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
+        canvasId:
+          'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
         id: 'a',
         manifestId: 'x',
         view: 'book',
@@ -190,9 +196,11 @@ describe('getPreviousCanvasGrouping', () => {
   };
 
   it('should return the next canvas groupings', () => {
-    const selectedCanvases = getPreviousCanvasGrouping(state, { windowId: 'a' });
+    const selectedCanvases = getPreviousCanvasGrouping(state, {
+      windowId: 'a',
+    });
 
-    expect(selectedCanvases.map(canvas => canvas.id)).toEqual([
+    expect(selectedCanvases.map((canvas) => canvas.id)).toEqual([
       'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
     ]);
   });
@@ -206,10 +214,13 @@ describe('getCanvas', () => {
   it('returns the canvas by id', () => {
     const state = { manifests: { a: { json: manifestFixture001 } } };
     const received = getCanvas(state, {
-      canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
+      canvasId:
+        'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
       manifestId: 'a',
     });
-    expect(received.id).toBe('https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json');
+    expect(received.id).toBe(
+      'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
+    );
   });
 });
 
@@ -217,25 +228,29 @@ describe('getCanvasLabel', () => {
   it('should return label of the canvas', () => {
     const state = { manifests: { a: { json: manifestFixture001 } } };
     const received = getCanvasLabel(state, {
-      canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
+      canvasId:
+        'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
       manifestId: 'a',
     });
     expect(received).toBe('Whole Page');
   });
 
   it('should return undefined if the canvas is undefined', () => {
-    const state = { manifests: { } };
-    expect(getCanvasLabel(state, {
-      canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
-      manifestId: 'b',
-    })).toBeUndefined();
+    const state = { manifests: {} };
+    expect(
+      getCanvasLabel(state, {
+        canvasId:
+          'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
+        manifestId: 'b',
+      }),
+    ).toBeUndefined();
   });
 
   it('should return the canvas index as (+1) as string if no label given', () => {
     const manifest = {
       '@context': 'http://iiif.io/api/presentation/2/context.json',
       '@id':
-       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+        'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
       '@type': 'sc:Manifest',
       sequences: [
         {
@@ -265,9 +280,10 @@ describe('selectInfoResponse', () => {
       auth: {},
       config: { auth: settings.auth },
       infoResponses: {
-        'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
-          json: resource,
-        },
+        'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d':
+          {
+            json: resource,
+          },
       },
       manifests: {
         a: {
@@ -276,7 +292,13 @@ describe('selectInfoResponse', () => {
       },
     };
 
-    expect(selectInfoResponse(state, { canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json', manifestId: 'a' }).json).toBe(resource);
+    expect(
+      selectInfoResponse(state, {
+        canvasId:
+          'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
+        manifestId: 'a',
+      }).json,
+    ).toBe(resource);
   });
 
   it('returns nothing if there are no canvas resources', () => {
@@ -287,7 +309,7 @@ describe('selectInfoResponse', () => {
           json: {
             '@context': 'http://iiif.io/api/presentation/2/context.json',
             '@id':
-             'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+              'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
             '@type': 'sc:Manifest',
             sequences: [
               {
@@ -303,7 +325,12 @@ describe('selectInfoResponse', () => {
       },
     };
 
-    expect(selectInfoResponse(state, { canvasId: 'some-canvas-without-resources', manifestId: 'a' })).toBe(undefined);
+    expect(
+      selectInfoResponse(state, {
+        canvasId: 'some-canvas-without-resources',
+        manifestId: 'a',
+      }),
+    ).toBe(undefined);
   });
 
   it('returns nothing if there are no canvas services', () => {
@@ -314,7 +341,7 @@ describe('selectInfoResponse', () => {
           json: {
             '@context': 'http://iiif.io/api/presentation/2/context.json',
             '@id':
-             'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+              'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
             '@type': 'sc:Manifest',
             sequences: [
               {
@@ -323,8 +350,7 @@ describe('selectInfoResponse', () => {
                     '@id': 'some-canvas-without-services',
                     images: [
                       {
-                        resource: {
-                        },
+                        resource: {},
                       },
                     ],
                   },
@@ -336,7 +362,12 @@ describe('selectInfoResponse', () => {
       },
     };
 
-    expect(selectInfoResponse(state, { canvasId: 'some-canvas-without-services', manifestId: 'a' })).toBe(undefined);
+    expect(
+      selectInfoResponse(state, {
+        canvasId: 'some-canvas-without-services',
+        manifestId: 'a',
+      }),
+    ).toBe(undefined);
   });
 });
 
@@ -344,40 +375,52 @@ describe('getVisibleCanvasNonTiledResources', () => {
   it('returns canvases resources without services', () => {
     const state = {
       manifests: {
-        'http://iiif.io/api/presentation/2.0/example/fixtures/1/manifest.json': {
-          id: 'http://iiif.io/api/presentation/2.0/example/fixtures/1/manifest.json',
-          json: minimumRequired,
-        },
+        'http://iiif.io/api/presentation/2.0/example/fixtures/1/manifest.json':
+          {
+            id: 'http://iiif.io/api/presentation/2.0/example/fixtures/1/manifest.json',
+            json: minimumRequired,
+          },
       },
       windows: {
         a: {
-          manifestId: 'http://iiif.io/api/presentation/2.0/example/fixtures/1/manifest.json',
+          manifestId:
+            'http://iiif.io/api/presentation/2.0/example/fixtures/1/manifest.json',
           visibleCanvases: [
             'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/1/c1.json',
           ],
         },
       },
     };
-    expect(getVisibleCanvasNonTiledResources(state, { windowId: 'a' })[0].id).toBe('http://iiif.io/api/presentation/2.0/example/fixtures/resources/page1-full.png');
+    expect(
+      getVisibleCanvasNonTiledResources(state, { windowId: 'a' })[0].id,
+    ).toBe(
+      'http://iiif.io/api/presentation/2.0/example/fixtures/resources/page1-full.png',
+    );
   });
   it('works for v3 Presentation API', () => {
     const state = {
       manifests: {
-        'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/manifest.json': {
-          id: 'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/manifest.json',
-          json: minimumRequired3,
-        },
+        'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/manifest.json':
+          {
+            id: 'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/manifest.json',
+            json: minimumRequired3,
+          },
       },
       windows: {
         a: {
-          manifestId: 'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/manifest.json',
+          manifestId:
+            'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/manifest.json',
           visibleCanvases: [
             'https://preview.iiif.io/cookbook/master/recipe/0001-mvm-image/canvas/p1',
           ],
         },
       },
     };
-    expect(getVisibleCanvasNonTiledResources(state, { windowId: 'a' })[0].id).toBe('http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png');
+    expect(
+      getVisibleCanvasNonTiledResources(state, { windowId: 'a' })[0].id,
+    ).toBe(
+      'http://iiif.io/api/presentation/2.1/example/fixtures/resources/page1-full.png',
+    );
   });
 
   describe('getVisibleCanvasVideoResources', () => {
@@ -391,14 +434,19 @@ describe('getVisibleCanvasNonTiledResources', () => {
         },
         windows: {
           a: {
-            manifestId: 'https://iiif.io/api/cookbook/recipe/0015-start/manifest.json',
+            manifestId:
+              'https://iiif.io/api/cookbook/recipe/0015-start/manifest.json',
             visibleCanvases: [
               'https://iiif.io/api/cookbook/recipe/0015-start/canvas/segment1',
             ],
           },
         },
       };
-      expect(getVisibleCanvasVideoResources(state, { windowId: 'a' })[0].id).toBe('https://fixtures.iiif.io/video/indiana/30-minute-clock/medium/30-minute-clock.mp4');
+      expect(
+        getVisibleCanvasVideoResources(state, { windowId: 'a' })[0].id,
+      ).toBe(
+        'https://fixtures.iiif.io/video/indiana/30-minute-clock/medium/30-minute-clock.mp4',
+      );
     });
   });
 
@@ -413,33 +461,40 @@ describe('getVisibleCanvasNonTiledResources', () => {
         },
         windows: {
           a: {
-            manifestId: 'https://iiif.io/api/cookbook/recipe/0015-start/manifest.json',
+            manifestId:
+              'https://iiif.io/api/cookbook/recipe/0015-start/manifest.json',
             visibleCanvases: [
               'https://iiif.io/api/cookbook/recipe/0015-start/canvas/segment1',
             ],
           },
         },
       };
-      expect(getVisibleCanvasCaptions(state, { windowId: 'a' })[0].id).toBe('https://example.com/file.vtt');
+      expect(getVisibleCanvasCaptions(state, { windowId: 'a' })[0].id).toBe(
+        'https://example.com/file.vtt',
+      );
     });
     it('returns v3 canvases resources', () => {
       const state = {
         manifests: {
-          'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/manifest.json': {
-            id: 'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/manifest.json',
-            json: videoWithAnnoCaptions,
-          },
+          'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/manifest.json':
+            {
+              id: 'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/manifest.json',
+              json: videoWithAnnoCaptions,
+            },
         },
         windows: {
           b: {
-            manifestId: 'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/manifest.json',
+            manifestId:
+              'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/manifest.json',
             visibleCanvases: [
               'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/canvas',
             ],
           },
         },
       };
-      expect(getVisibleCanvasCaptions(state, { windowId: 'b' })[0].id).toBe('https://fixtures.iiif.io/video/indiana/lunchroom_manners/lunchroom_manners.vtt');
+      expect(getVisibleCanvasCaptions(state, { windowId: 'b' })[0].id).toBe(
+        'https://fixtures.iiif.io/video/indiana/lunchroom_manners/lunchroom_manners.vtt',
+      );
     });
   });
 
@@ -454,14 +509,19 @@ describe('getVisibleCanvasNonTiledResources', () => {
         },
         windows: {
           a: {
-            manifestId: 'https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest.json',
+            manifestId:
+              'https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest.json',
             visibleCanvases: [
               'https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas',
             ],
           },
         },
       };
-      expect(getVisibleCanvasAudioResources(state, { windowId: 'a' })[0].id).toBe('https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4');
+      expect(
+        getVisibleCanvasAudioResources(state, { windowId: 'a' })[0].id,
+      ).toBe(
+        'https://fixtures.iiif.io/audio/indiana/mahler-symphony-3/CD1/medium/128Kbps.mp4',
+      );
     });
   });
 
@@ -476,14 +536,17 @@ describe('getVisibleCanvasNonTiledResources', () => {
         },
         windows: {
           a: {
-            manifestId: 'https://iiif.io/api/cookbook/recipe/0001-text-pdf/manifest.json',
+            manifestId:
+              'https://iiif.io/api/cookbook/recipe/0001-text-pdf/manifest.json',
             visibleCanvases: [
               'https://iiif.io/api/cookbook/recipe/0001-text-pdf/canvas',
             ],
           },
         },
       };
-      expect(getVisibleCanvasTextResources(state, { windowId: 'a' })[0].id).toBe('https://fixtures.iiif.io/other/UCLA/kabuki_ezukushi_rtl.pdf');
+      expect(
+        getVisibleCanvasTextResources(state, { windowId: 'a' })[0].id,
+      ).toBe('https://fixtures.iiif.io/other/UCLA/kabuki_ezukushi_rtl.pdf');
     });
   });
 });

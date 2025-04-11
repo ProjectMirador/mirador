@@ -13,10 +13,7 @@ import { miradorSlice, EMPTY_ARRAY } from './utils';
  * @returns {Array}
  */
 export const getCanvasLayers = createSelector(
-  [
-    getCanvas,
-    getMiradorCanvasWrapper,
-  ],
+  [getCanvas, getMiradorCanvasWrapper],
   (canvas, getMiradorCanvas) => {
     if (!canvas) return [];
     return getMiradorCanvas(canvas).imageResources;
@@ -24,11 +21,9 @@ export const getCanvasLayers = createSelector(
 );
 
 export const getLayersForWindow = createSelector(
-  [
-    state => miradorSlice(state).layers,
-    (state, { windowId }) => windowId,
-  ],
-  (layers, windowId) => (layers ? (layers[windowId] || EMPTY_ARRAY) : EMPTY_ARRAY),
+  [(state) => miradorSlice(state).layers, (state, { windowId }) => windowId],
+  (layers, windowId) =>
+    layers ? layers[windowId] || EMPTY_ARRAY : EMPTY_ARRAY,
 );
 
 /**
@@ -38,10 +33,7 @@ export const getLayersForWindow = createSelector(
  * @returns {object}
  */
 export const getLayers = createSelector(
-  [
-    getLayersForWindow,
-    (state, { canvasId }) => canvasId,
-  ],
+  [getLayersForWindow, (state, { canvasId }) => canvasId],
   (layers, canvasId) => layers[canvasId],
 );
 
@@ -53,16 +45,17 @@ export const getLayers = createSelector(
  * @returns {Array}
  */
 export const getSortedLayers = createSelector(
-  [
-    getCanvasLayers,
-    getLayers,
-  ],
+  [getCanvasLayers, getLayers],
   (canvasLayers, layerConfig) => {
     if (!layerConfig) return canvasLayers;
 
     const sorted = canvasLayers.sort((a, b) => {
-      if (layerConfig[a.id] && layerConfig[a.id].index !== undefined
-        && layerConfig[b.id] && layerConfig[b.id].index !== undefined) {
+      if (
+        layerConfig[a.id] &&
+        layerConfig[a.id].index !== undefined &&
+        layerConfig[b.id] &&
+        layerConfig[b.id].index !== undefined
+      ) {
         return layerConfig[a.id].index - layerConfig[b.id].index;
       }
 
@@ -85,14 +78,10 @@ export const getSortedLayers = createSelector(
  * @returns {object}
  */
 export const getLayersForVisibleCanvases = createSelector(
-  [
-    getVisibleCanvasIds,
-    getLayersForWindow,
-  ],
-  (canvasIds, layers) => (
+  [getVisibleCanvasIds, getLayersForWindow],
+  (canvasIds, layers) =>
     canvasIds.reduce((acc, canvasId) => {
       acc[canvasId] = layers[canvasId];
       return acc;
-    }, {})
-  ),
+    }, {}),
 );

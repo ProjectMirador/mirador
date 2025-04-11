@@ -20,7 +20,9 @@ describe('Application language', () => {
     fireEvent.click(screen.getByRole('menuitem', { name: 'Deutsch' }));
 
     // The viewer is now in German
-    const starten = await screen.findByRole('button', { name: /Hier starten/i });
+    const starten = await screen.findByRole('button', {
+      name: /Hier starten/i,
+    });
     expect(starten).toBeInTheDocument();
   });
 });

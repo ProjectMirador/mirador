@@ -10,7 +10,7 @@ import { getCatalog } from '../state/selectors';
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => ({ catalog: getCatalog(state) });
+const mapStateToProps = (state) => ({ catalog: getCatalog(state) });
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

@@ -3,18 +3,22 @@ import ActionTypes from '../actions/action-types';
 
 /** Check if the viewport dimensions are fully specified */
 function hasViewportPosition(viewportPosition) {
-  return viewportPosition.x !== undefined
-    && viewportPosition.y !== undefined
-    && viewportPosition.width !== undefined
-    && viewportPosition.height !== undefined;
+  return (
+    viewportPosition.x !== undefined &&
+    viewportPosition.y !== undefined &&
+    viewportPosition.width !== undefined &&
+    viewportPosition.height !== undefined
+  );
 }
 
 /** Check if the containee is fully within the bounds on the container */
 function contains(container, containee) {
-  return containee.x - containee.width / 2 > container.x - container.width / 2
-    && containee.y - containee.height / 2 > container.y - container.height / 2
-    && containee.x + containee.width / 2 < container.x + container.width / 2
-    && containee.y + containee.height / 2 < container.y + container.height / 2;
+  return (
+    containee.x - containee.width / 2 > container.x - container.width / 2 &&
+    containee.y - containee.height / 2 > container.y - container.height / 2 &&
+    containee.x + containee.width / 2 < container.x + container.width / 2 &&
+    containee.y + containee.height / 2 < container.y + container.height / 2
+  );
 }
 
 /**
@@ -49,13 +53,16 @@ export const workspaceReducer = (
         windowIds: [...(state.windowIds || []), action.window.id],
       };
     case ActionTypes.REMOVE_WINDOW:
-      newWindowIds = (state.windowIds || []).filter(v => v !== action.windowId);
+      newWindowIds = (state.windowIds || []).filter(
+        (v) => v !== action.windowId,
+      );
 
       return {
         ...state,
-        focusedWindowId: action.windowId === state.focusedWindowId
-          ? newWindowIds[newWindowIds.length - 1]
-          : state.focusedWindowId,
+        focusedWindowId:
+          action.windowId === state.focusedWindowId
+            ? newWindowIds[newWindowIds.length - 1]
+            : state.focusedWindowId,
         windowIds: newWindowIds,
       };
     case ActionTypes.SET_WORKSPACE_FULLSCREEN:
@@ -75,10 +82,16 @@ export const workspaceReducer = (
       };
 
       if (
-        hasViewportPosition(viewportPosition)
-        && !contains({
-          height: state.height, width: state.width, x: 0, y: 0,
-        }, viewportPosition)
+        hasViewportPosition(viewportPosition) &&
+        !contains(
+          {
+            height: state.height,
+            width: state.width,
+            x: 0,
+            y: 0,
+          },
+          viewportPosition,
+        )
       ) {
         newWorkspaceDimensions = {
           height: state.height * 2,

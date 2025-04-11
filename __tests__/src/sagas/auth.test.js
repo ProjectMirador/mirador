@@ -11,9 +11,7 @@ import {
   rerequestOnAccessTokenFailure,
   invalidateInvalidAuth,
 } from '../../../src/state/sagas/auth';
-import {
-  fetchInfoResponse,
-} from '../../../src/state/sagas/iiif';
+import { fetchInfoResponse } from '../../../src/state/sagas/iiif';
 import {
   getAccessTokens,
   getWindows,
@@ -28,7 +26,8 @@ describe('IIIF Authentication sagas', () => {
     it('delays and then refetches info responses', () => {
       const tokenServiceId = 'whatever';
       /** stub out delay... ugh. */
-      const provideDelay = ({ fn }, next) => ((fn.name === 'delayP') ? null : next());
+      const provideDelay = ({ fn }, next) =>
+        fn.name === 'delayP' ? null : next();
 
       return expectSaga(refetchInfoResponsesOnLogout, { tokenServiceId })
         .provide([
@@ -45,17 +44,19 @@ describe('IIIF Authentication sagas', () => {
       const tokenService = { id: serviceId };
 
       const authStanza = {
-        service: [{
-          '@context': 'http://iiif.io/api/auth/1/context.json',
-          '@id': 'https://authentication.example.org/login',
-          profile: 'http://iiif.io/api/auth/1/login',
-          service: [
-            {
-              '@id': serviceId,
-              profile: 'http://iiif.io/api/auth/1/token',
-            },
-          ],
-        }],
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.org/login',
+            profile: 'http://iiif.io/api/auth/1/login',
+            service: [
+              {
+                '@id': serviceId,
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+        ],
       };
 
       const x = {
@@ -88,17 +89,20 @@ describe('IIIF Authentication sagas', () => {
       const tokenService = { id: serviceId };
 
       const authStanza = {
-        service: [{
-          '@context': 'http://iiif.io/api/auth/1/context.json',
-          '@id': 'https://authentication.example.org/login',
-          profile: 'http://iiif.io/api/auth/1/login',
-          service: [
-            {
-              '@id': 'https://authentication.example.org/some-other-token-service',
-              profile: 'http://iiif.io/api/auth/1/token',
-            },
-          ],
-        }],
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.org/login',
+            profile: 'http://iiif.io/api/auth/1/login',
+            service: [
+              {
+                '@id':
+                  'https://authentication.example.org/some-other-token-service',
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+        ],
       };
 
       const wrongService = {
@@ -125,7 +129,10 @@ describe('IIIF Authentication sagas', () => {
         ])
         .not.put({ infoId: 'noAuth', type: ActionTypes.REMOVE_INFO_RESPONSE })
         .not.put({ infoId: 'noJson', type: ActionTypes.REMOVE_INFO_RESPONSE })
-        .not.put({ infoId: 'wrongService', type: ActionTypes.REMOVE_INFO_RESPONSE })
+        .not.put({
+          infoId: 'wrongService',
+          type: ActionTypes.REMOVE_INFO_RESPONSE,
+        })
         .run();
     });
 
@@ -134,17 +141,19 @@ describe('IIIF Authentication sagas', () => {
       const tokenService = { id: serviceId };
 
       const authStanza = {
-        service: [{
-          '@context': 'http://iiif.io/api/auth/1/context.json',
-          '@id': 'https://authentication.example.org/login',
-          profile: 'http://iiif.io/api/auth/1/login',
-          service: [
-            {
-              '@id': serviceId,
-              profile: 'http://iiif.io/api/auth/1/token',
-            },
-          ],
-        }],
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.org/login',
+            profile: 'http://iiif.io/api/auth/1/login',
+            service: [
+              {
+                '@id': serviceId,
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+        ],
       };
 
       const window = {};
@@ -152,7 +161,8 @@ describe('IIIF Authentication sagas', () => {
         Utils.parseManifest(serviceFixture).getSequences()[0].getCanvases()[0],
       ];
 
-      const iiifInfoId = 'https://api.digitale-sammlungen.de/iiif/image/v2/bsb00122140_00001';
+      const iiifInfoId =
+        'https://api.digitale-sammlungen.de/iiif/image/v2/bsb00122140_00001';
       const infoResponse = {
         id: iiifInfoId,
         json: {
@@ -175,17 +185,19 @@ describe('IIIF Authentication sagas', () => {
   describe('doAuthWorkflow', () => {
     it('kicks off the first external auth from the info.json', () => {
       const infoJson = {
-        service: [{
-          '@context': 'http://iiif.io/api/auth/1/context.json',
-          '@id': 'https://authentication.example.com/external',
-          profile: 'http://iiif.io/api/auth/1/external',
-          service: [
-            {
-              '@id': 'https://authentication.example.com/token',
-              profile: 'http://iiif.io/api/auth/1/token',
-            },
-          ],
-        }],
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.com/external',
+            profile: 'http://iiif.io/api/auth/1/external',
+            service: [
+              {
+                '@id': 'https://authentication.example.com/token',
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+        ],
       };
       const windowId = 'window';
       return expectSaga(doAuthWorkflow, { infoJson, windowId })
@@ -208,22 +220,27 @@ describe('IIIF Authentication sagas', () => {
 
     it('does nothing if the auth service has been tried already', () => {
       const infoJson = {
-        service: [{
-          '@context': 'http://iiif.io/api/auth/1/context.json',
-          '@id': 'https://authentication.example.com/external',
-          profile: 'http://iiif.io/api/auth/1/external',
-          service: [
-            {
-              '@id': 'https://authentication.example.com/token',
-              profile: 'http://iiif.io/api/auth/1/token',
-            },
-          ],
-        }],
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.com/external',
+            profile: 'http://iiif.io/api/auth/1/external',
+            service: [
+              {
+                '@id': 'https://authentication.example.com/token',
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+        ],
       };
       const windowId = 'window';
       return expectSaga(doAuthWorkflow, { infoJson, windowId })
         .provide([
-          [select(getAuth), { 'https://authentication.example.com/external': { ok: false } }],
+          [
+            select(getAuth),
+            { 'https://authentication.example.com/external': { ok: false } },
+          ],
           [select(getConfig), { auth: settings.auth }],
         ])
         .not.put.like({ type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST })
@@ -233,17 +250,19 @@ describe('IIIF Authentication sagas', () => {
 
     it('does nothing if the auth service is "interactive"', () => {
       const infoJson = {
-        service: [{
-          '@context': 'http://iiif.io/api/auth/1/context.json',
-          '@id': 'https://authentication.example.com/login',
-          profile: 'http://iiif.io/api/auth/1/login',
-          service: [
-            {
-              '@id': 'https://authentication.example.com/token',
-              profile: 'http://iiif.io/api/auth/1/token',
-            },
-          ],
-        }],
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.com/login',
+            profile: 'http://iiif.io/api/auth/1/login',
+            service: [
+              {
+                '@id': 'https://authentication.example.com/token',
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+        ],
       };
       const windowId = 'window';
       return expectSaga(doAuthWorkflow, { infoJson, windowId })
@@ -258,17 +277,19 @@ describe('IIIF Authentication sagas', () => {
 
     it('kicks off the kiosk auth from the info.json', () => {
       const infoJson = {
-        service: [{
-          '@context': 'http://iiif.io/api/auth/1/context.json',
-          '@id': 'https://authentication.example.com/kiosk',
-          profile: 'http://iiif.io/api/auth/1/kiosk',
-          service: [
-            {
-              '@id': 'https://authentication.example.com/token',
-              profile: 'http://iiif.io/api/auth/1/token',
-            },
-          ],
-        }],
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.com/kiosk',
+            profile: 'http://iiif.io/api/auth/1/kiosk',
+            service: [
+              {
+                '@id': 'https://authentication.example.com/token',
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+        ],
       };
       const windowId = 'window';
       return expectSaga(doAuthWorkflow, { infoJson, windowId })
@@ -291,31 +312,39 @@ describe('IIIF Authentication sagas', () => {
       const infoJson = {};
       const windowId = 'window';
       const tokenServiceId = undefined;
-      return expectSaga(rerequestOnAccessTokenFailure, { infoJson, tokenServiceId, windowId })
-        .provide([
-          [select(getAccessTokens), {}],
-        ])
+      return expectSaga(rerequestOnAccessTokenFailure, {
+        infoJson,
+        tokenServiceId,
+        windowId,
+      })
+        .provide([[select(getAccessTokens), {}]])
         .not.put.like({ type: ActionTypes.REQUEST_ACCESS_TOKEN })
         .run();
     });
 
     it('does nothing if the access token has never worked', () => {
       const infoJson = {
-        service: [{
-          '@context': 'http://iiif.io/api/auth/1/context.json',
-          '@id': 'https://authentication.example.com/kiosk',
-          profile: 'http://iiif.io/api/auth/1/kiosk',
-          service: [
-            {
-              '@id': 'https://authentication.example.com/token',
-              profile: 'http://iiif.io/api/auth/1/token',
-            },
-          ],
-        }],
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.com/kiosk',
+            profile: 'http://iiif.io/api/auth/1/kiosk',
+            service: [
+              {
+                '@id': 'https://authentication.example.com/token',
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+        ],
       };
       const windowId = 'window';
       const tokenServiceId = 'https://authentication.example.com/token';
-      return expectSaga(rerequestOnAccessTokenFailure, { infoJson, tokenServiceId, windowId })
+      return expectSaga(rerequestOnAccessTokenFailure, {
+        infoJson,
+        tokenServiceId,
+        windowId,
+      })
         .provide([
           [select(getAccessTokens), { [tokenServiceId]: { success: false } }],
         ])
@@ -325,21 +354,27 @@ describe('IIIF Authentication sagas', () => {
 
     it('re-requests the access token if it might be reneweable', () => {
       const infoJson = {
-        service: [{
-          '@context': 'http://iiif.io/api/auth/1/context.json',
-          '@id': 'https://authentication.example.com/kiosk',
-          profile: 'http://iiif.io/api/auth/1/kiosk',
-          service: [
-            {
-              '@id': 'https://authentication.example.com/token',
-              profile: 'http://iiif.io/api/auth/1/token',
-            },
-          ],
-        }],
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.com/kiosk',
+            profile: 'http://iiif.io/api/auth/1/kiosk',
+            service: [
+              {
+                '@id': 'https://authentication.example.com/token',
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+        ],
       };
       const windowId = 'window';
       const tokenServiceId = 'https://authentication.example.com/token';
-      return expectSaga(rerequestOnAccessTokenFailure, { infoJson, tokenServiceId, windowId })
+      return expectSaga(rerequestOnAccessTokenFailure, {
+        infoJson,
+        tokenServiceId,
+        windowId,
+      })
         .provide([
           [select(getAccessTokens), { [tokenServiceId]: { success: true } }],
         ])
@@ -359,7 +394,10 @@ describe('IIIF Authentication sagas', () => {
 
       return expectSaga(invalidateInvalidAuth, { serviceId })
         .provide([
-          [select(getAccessTokens), { [serviceId]: { authId, id: serviceId, success: true } }],
+          [
+            select(getAccessTokens),
+            { [serviceId]: { authId, id: serviceId, success: true } },
+          ],
           [select(getAuth), { [authId]: { id: authId } }],
         ])
         .put({

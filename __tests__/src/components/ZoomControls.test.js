@@ -5,11 +5,7 @@ import { ZoomControls } from '../../../src/components/ZoomControls';
 /** Utility function to create a shallow rendering */
 function createWrapper(props) {
   return render(
-    <ZoomControls
-      windowId="xyz"
-      zoomToWorld={() => {}}
-      {...props}
-    />,
+    <ZoomControls windowId="xyz" zoomToWorld={() => {}} {...props} />,
   );
 }
 
@@ -23,14 +19,20 @@ describe('ZoomControls', () => {
     user = userEvent.setup();
     updateViewport = vi.fn();
     createWrapper({
-      updateViewport, viewer, zoomToWorld,
+      updateViewport,
+      viewer,
+      zoomToWorld,
     });
   });
 
   it('renders a couple buttons', () => {
     expect(screen.getByRole('button', { name: 'Zoom in' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Zoom out' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Reset zoom' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Zoom out' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Reset zoom' }),
+    ).toBeInTheDocument();
   });
 
   it('has a zoom-in button', async () => {

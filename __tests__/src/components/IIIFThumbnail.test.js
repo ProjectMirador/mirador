@@ -1,87 +1,143 @@
-import { render, screen, act } from '@tests/utils/test-utils';
-import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
-import { IIIFThumbnail } from '../../../src/components/IIIFThumbnail';
+import { act, render } from '@tests/utils/test-utils';
+import TileSource from '../../../src/components/OpenSeadragonTileSource';
+import OpenSeadragonViewerContext from '../../../src/contexts/OpenSeadragonViewerContext';
 
-/**
- * Helper function to create a shallow wrapper around IIIFThumbnail
- */
-function createWrapper(props) {
-  return render(
-    <IIIFThumbnail
-      resource={{}}
-      {...props}
-    />,
-  );
-}
+describe('OpenSeadragonTileSource', () => {
+  it('calls addTiledImage with the tile source', () => {
+    const viewer = {
+      addTiledImage: vi.fn(),
+    };
+    const ref = { current: viewer };
+    const tileSource = { '@id': 'http://example.com/image/info.json' };
 
-/* eslint-disable testing-library/no-node-access, testing-library/no-container */
-describe('IIIFThumbnail', () => {
-  const url = 'http://example.com/iiif/image';
-  const thumbnail = { height: 120, url, width: 100 };
-  it('renders properly', () => {
-    const { container } = createWrapper({ thumbnail });
-    const img = container.querySelector('img');
-    expect(img).toBeInTheDocument();
-    expect(img).not.toHaveAccessibleName();
-    expect(img).toHaveAttribute('src', expect.stringContaining('data:image'));
+    render(
+      <OpenSeadragonViewerContext.Provider value={ref}>
+        <TileSource tileSource={tileSource} />
+      </OpenSeadragonViewerContext.Provider>,
+    );
+
+    expect(viewer.addTiledImage).toHaveBeenCalledWith(
+      expect.objectContaining({ tileSource }),
+    );
   });
 
-  it('renders a placeholder if there is no image', () => {
-    const { container } = createWrapper({ thumbnail });
-    const img = container.querySelector('img');
-    expect(img).toHaveAttribute('src', expect.stringContaining('data:image'));
-  });
+  it('updates the opacity when the prop changes', async () => {
+    const mockOsdItem = { setOpacity: vi.fn() };
+    const viewer = {
+      addTiledImage: vi.fn().mockImplementation(({ success }) => {
+        success({ item: mockOsdItem });
+      }),
+      world: {
+        removeItem: vi.fn(),
+      },
+    };
+    const ref = { current: viewer };
+    const tileSource = { '@id': 'http://example.com/image/info.json' };
 
-  it('when handleIntersection is called, loads the image', async () => {
-    const { container } = createWrapper({ thumbnail });
-    const img = container.querySelector('img');
-
-    act(() => {
-      mockAllIsIntersecting(true);
+    const { rerender } = render(
+      <OpenSeadragonViewerContext.Provider value={ref}>
+        <TileSource tileSource={tileSource} />
+      </OpenSeadragonViewerContext.Provider>,
+    );
+    await act(async () => {
+      rerender(
+        <OpenSeadragonViewerContext.Provider value={ref}>
+          <TileSource tileSource={tileSource} opacity={0.5} />
+        </OpenSeadragonViewerContext.Provider>,
+      );
     });
 
-    expect(img).toHaveAttribute('src', url);
+    expect(viewer.addTiledImage).toHaveBeenCalledTimes(1);
+    expect(mockOsdItem.setOpacity).toHaveBeenCalledWith(0.5);
   });
 
-  it('can be constrained by maxHeight', () => {
-    const { container } = createWrapper({ maxHeight: 100, thumbnail });
-    const img = container.querySelector('img');
+  it('updates the index when the prop changes', async () => {
+    const mockOsdItem = vi.fn();
+    const viewer = {
+      addTiledImage: vi.fn().mockImplementation(({ success }) => {
+        success({ item: mockOsdItem });
+      }),
+      world: {
+        removeItem: vi.fn(),
+        setItemIndex: vi.fn(),
+      },
+    };
 
-    expect(img).toHaveStyle({ height: '100px', width: 'auto' });
-  });
+    const ref = { current: viewer };
+    const tileSource = { '@id': 'http://example.com/image/info.json' };
 
-  it('can be constrained by maxWidth', () => {
-    const { container } = createWrapper({ maxWidth: 80, thumbnail });
-    const img = container.querySelector('img');
-
-    expect(img).toHaveStyle({ height: 'auto', width: '80px' });
-  });
-
-  it('can be constrained by maxWidth and maxHeight', () => {
-    const { container } = createWrapper({ maxHeight: 90, maxWidth: 50, thumbnail });
-    const img = container.querySelector('img');
-
-    expect(img).toHaveStyle({ height: '60px', width: '50px' });
-  });
-
-  it('constrains what it can when the image dimensions are unknown', () => {
-    const { container } = createWrapper({ maxHeight: 90, thumbnail: { height: 120, url } });
-    const img = container.querySelector('img');
-
-    expect(img).toHaveStyle({ height: '90px', width: 'auto' });
-  });
-
-  it('renders a provided label', () => {
-    createWrapper({
-      classes: { label: 'label' }, label: 'Some label', labelled: true, thumbnail,
+    const { rerender } = render(
+      <OpenSeadragonViewerContext.Provider value={ref}>
+        <TileSource tileSource={tileSource} />
+      </OpenSeadragonViewerContext.Provider>,
+    );
+    await act(async () => {
+      rerender(
+        <OpenSeadragonViewerContext.Provider value={ref}>
+          <TileSource tileSource={tileSource} index={5} />
+        </OpenSeadragonViewerContext.Provider>,
+      );
     });
 
-    expect(screen.getByText('Some label')).toBeInTheDocument();
+    expect(viewer.addTiledImage).toHaveBeenCalledTimes(1);
+    expect(viewer.world.setItemIndex).toHaveBeenCalledWith(mockOsdItem, 5);
   });
 
-  it('renders children', () => {
-    createWrapper({ children: <span data-testid="hi" />, thumbnail });
+  it('updates the rendered bounds when the prop changes', async () => {
+    const mockOsdItem = { fitBounds: vi.fn() };
+    const viewer = {
+      addTiledImage: vi.fn().mockImplementation(({ success }) => {
+        success({ item: mockOsdItem });
+      }),
+      world: {
+        removeItem: vi.fn(),
+        setItemIndex: vi.fn(),
+      },
+    };
 
-    expect(screen.getByTestId('hi')).toBeInTheDocument();
+    const ref = { current: viewer };
+    const tileSource = { '@id': 'http://example.com/image/info.json' };
+
+    const { rerender } = render(
+      <OpenSeadragonViewerContext.Provider value={ref}>
+        <TileSource tileSource={tileSource} />
+      </OpenSeadragonViewerContext.Provider>,
+    );
+    await act(async () => {
+      rerender(
+        <OpenSeadragonViewerContext.Provider value={ref}>
+          <TileSource tileSource={tileSource} fitBounds={[0, 0, 10, 10]} />
+        </OpenSeadragonViewerContext.Provider>,
+      );
+    });
+
+    expect(viewer.addTiledImage).toHaveBeenCalledTimes(1);
+    expect(mockOsdItem.fitBounds).toHaveBeenCalled();
+  });
+
+  it('deletes the item from the world when the item is unmounted', async () => {
+    const mockOsdItem = vi.fn();
+    const viewer = {
+      addTiledImage: ({ success }) => {
+        success({ item: mockOsdItem });
+      },
+      world: {
+        removeItem: vi.fn(),
+      },
+    };
+    const ref = { current: viewer };
+    const tileSource = { '@id': 'http://example.com/image/info.json' };
+
+    const { rerender } = render(
+      <OpenSeadragonViewerContext.Provider value={ref}>
+        <TileSource tileSource={tileSource} />
+      </OpenSeadragonViewerContext.Provider>,
+    );
+
+    await act(async () => {
+      rerender(<OpenSeadragonViewerContext.Provider value={ref} />);
+    });
+
+    expect(viewer.world.removeItem).toHaveBeenCalledWith(mockOsdItem);
   });
 });

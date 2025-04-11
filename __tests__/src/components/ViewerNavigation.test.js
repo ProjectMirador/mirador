@@ -4,13 +4,7 @@ import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
 
 /** create wrapper */
 function createWrapper(props) {
-  return render(
-    <ViewerNavigation
-      classes={{}}
-      canvases={[1, 2]}
-      {...props}
-    />,
-  );
+  return render(<ViewerNavigation classes={{}} canvases={[1, 2]} {...props} />);
 }
 
 describe('ViewerNavigation', () => {
@@ -28,7 +22,7 @@ describe('ViewerNavigation', () => {
       setPreviousCanvas,
     });
     const buttons = screen.queryAllByRole('button');
-    expect(buttons[0].closest('div')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
+    expect(buttons[0].closest('div')).toBeInTheDocument();
   });
   describe('when next canvases are present', () => {
     it('nextCanvas button is not disabled', () => {
@@ -38,7 +32,9 @@ describe('ViewerNavigation', () => {
         setNextCanvas,
         setPreviousCanvas,
       });
-      expect(screen.getByRole('button', { name: 'Next item' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Next item' }),
+      ).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Next item' })).toBeEnabled();
     });
     it('setNextCanvas function is called after click', async () => {
@@ -72,8 +68,12 @@ describe('ViewerNavigation', () => {
         setNextCanvas,
         setPreviousCanvas,
       });
-      expect(screen.getByRole('button', { name: 'Previous item' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Previous item' })).toBeEnabled();
+      expect(
+        screen.getByRole('button', { name: 'Previous item' }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Previous item' }),
+      ).toBeEnabled();
     });
     it('setPreviousCanvas function is called after click', async () => {
       createWrapper({
@@ -95,7 +95,9 @@ describe('ViewerNavigation', () => {
         setNextCanvas,
         setPreviousCanvas,
       });
-      expect(screen.getByRole('button', { name: 'Previous item' })).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'Previous item' }),
+      ).toBeDisabled();
     });
   });
   describe('when viewingDirection is right-to-left', () => {
@@ -107,8 +109,14 @@ describe('ViewerNavigation', () => {
         setPreviousCanvas,
         viewingDirection: 'right-to-left',
       });
-      expect(screen.getByRole('button', { name: 'Previous item' }).querySelector('svg')).not.toHaveStyle('transform: rotate(180deg);'); // eslint-disable-line testing-library/no-node-access
-      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(180deg);'); // eslint-disable-line testing-library/no-node-access
+      expect(
+        screen
+          .getByRole('button', { name: 'Previous item' })
+          .querySelector('svg'),
+      ).not.toHaveStyle('transform: rotate(180deg);');
+      expect(
+        screen.getByRole('button', { name: 'Next item' }).querySelector('svg'),
+      ).toHaveStyle('transform: rotate(180deg);');
     });
 
     it('sets the dir="rtl"', () => {
@@ -120,7 +128,7 @@ describe('ViewerNavigation', () => {
         viewingDirection: 'right-to-left',
       });
       const buttons = screen.queryAllByRole('button');
-      expect(buttons[0].closest('div')).toHaveAttribute('dir', 'rtl'); // eslint-disable-line testing-library/no-node-access
+      expect(buttons[0].closest('div')).toHaveAttribute('dir', 'rtl');
     });
   });
 
@@ -133,8 +141,14 @@ describe('ViewerNavigation', () => {
         setPreviousCanvas,
         viewingDirection: 'top-to-bottom',
       });
-      expect(screen.getByRole('button', { name: 'Previous item' }).querySelector('svg')).toHaveStyle('transform: rotate(270deg);'); // eslint-disable-line testing-library/no-node-access
-      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(90deg);'); // eslint-disable-line testing-library/no-node-access
+      expect(
+        screen
+          .getByRole('button', { name: 'Previous item' })
+          .querySelector('svg'),
+      ).toHaveStyle('transform: rotate(270deg);');
+      expect(
+        screen.getByRole('button', { name: 'Next item' }).querySelector('svg'),
+      ).toHaveStyle('transform: rotate(90deg);');
     });
   });
   describe('when viewingDirection is bottom-to-top', () => {
@@ -146,8 +160,14 @@ describe('ViewerNavigation', () => {
         setPreviousCanvas,
         viewingDirection: 'bottom-to-top',
       });
-      expect(screen.getByRole('button', { name: 'Previous item' }).querySelector('svg')).toHaveStyle('transform: rotate(90deg);'); // eslint-disable-line testing-library/no-node-access
-      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(270deg);'); // eslint-disable-line testing-library/no-node-access
+      expect(
+        screen
+          .getByRole('button', { name: 'Previous item' })
+          .querySelector('svg'),
+      ).toHaveStyle('transform: rotate(90deg);');
+      expect(
+        screen.getByRole('button', { name: 'Next item' }).querySelector('svg'),
+      ).toHaveStyle('transform: rotate(270deg);');
     });
   });
 });

@@ -12,7 +12,13 @@ function createWrapper(props, state) {
       windowId="abc"
       {...props}
     />,
-    { preloadedState: { companionWindows: { xyz: { content: 'annotations' } }, windows: { abc: {} }, ...state } },
+    {
+      preloadedState: {
+        companionWindows: { xyz: { content: 'annotations' } },
+        windows: { abc: {} },
+        ...state,
+      },
+    },
   );
 }
 
@@ -28,13 +34,17 @@ describe('WindowSideBarAnnotationsPanel', () => {
   it('has the AnnotationSettings component', () => {
     createWrapper();
 
-    expect(screen.getByRole('button', { name: 'Highlight all' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Highlight all' }),
+    ).toBeInTheDocument();
   });
 
   it('renders the annotationsCount', () => {
     createWrapper();
 
-    expect(screen.getByText('Showing 4 annotations')).toHaveClass('MuiTypography-subtitle2');
+    expect(screen.getByText('Showing 4 annotations')).toHaveClass(
+      'MuiTypography-subtitle2',
+    );
   });
 
   // TODO: Requires a lot of state setup...

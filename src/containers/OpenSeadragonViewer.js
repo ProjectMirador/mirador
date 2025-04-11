@@ -23,17 +23,26 @@ import {
 const mapStateToProps = (state, { windowId }) => {
   const canvasWorld = getCurrentCanvasWorld(state, { windowId });
   const infoResponses = selectInfoResponses(state);
-  const imageServiceIds = flatten(canvasWorld.canvases.map(c => c.imageServiceIds));
+  const imageServiceIds = flatten(
+    canvasWorld.canvases.map((c) => c.imageServiceIds),
+  );
 
   return {
     canvasWorld,
-    drawAnnotations: getConfig(state).window.forceDrawAnnotations
-      || getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0
-      || getCompanionWindowsForContent(state, { content: 'search', windowId }).length > 0,
-    infoResponses: imageServiceIds.map(id => infoResponses[id])
-      .filter(infoResponse => (infoResponse !== undefined
-        && infoResponse.isFetching === false
-        && infoResponse.error === undefined)),
+    drawAnnotations:
+      getConfig(state).window.forceDrawAnnotations ||
+      getCompanionWindowsForContent(state, { content: 'annotations', windowId })
+        .length > 0 ||
+      getCompanionWindowsForContent(state, { content: 'search', windowId })
+        .length > 0,
+    infoResponses: imageServiceIds
+      .map((id) => infoResponses[id])
+      .filter(
+        (infoResponse) =>
+          infoResponse !== undefined &&
+          infoResponse.isFetching === false &&
+          infoResponse.error === undefined,
+      ),
     label: getCanvasLabel(state, {
       canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
       windowId,

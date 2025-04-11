@@ -72,8 +72,12 @@ describe('CanvasAnnotations', () => {
   it('renders a Chip for every tag', () => {
     createWrapper({ annotations });
 
-    expect(screen.getByText('abc123', { container: 'span.MuiChip-label' })).toBeInTheDocument();
-    expect(screen.getByText('def456', { container: 'span.MuiChip-label' })).toBeInTheDocument();
+    expect(
+      screen.getByText('abc123', { container: 'span.MuiChip-label' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('def456', { container: 'span.MuiChip-label' }),
+    ).toBeInTheDocument();
   });
 
   it('renders nothing when there are no annotations', () => {
@@ -91,7 +95,9 @@ describe('CanvasAnnotations', () => {
         selectAnnotation,
       });
 
-      await user.click(screen.getByRole('menuitem', { name: /First Annotation/ }));
+      await user.click(
+        screen.getByRole('menuitem', { name: /First Annotation/ }),
+      );
 
       expect(selectAnnotation).toHaveBeenCalledWith('abc', 'abc123');
     });
@@ -106,7 +112,9 @@ describe('CanvasAnnotations', () => {
         selectedAnnotationId: 'abc123',
       });
 
-      await user.click(screen.getByRole('menuitem', { name: /First Annotation/ }));
+      await user.click(
+        screen.getByRole('menuitem', { name: /First Annotation/ }),
+      );
 
       expect(deselectAnnotation).toHaveBeenCalledWith('abc', 'abc123');
     });

@@ -11,16 +11,19 @@ export default class AnnotationResource {
 
   /** */
   isOnlyTag() {
-    return (this.motivations.length === 1 && this.motivations[0] === 'oa:tagging');
+    return (
+      this.motivations.length === 1 && this.motivations[0] === 'oa:tagging'
+    );
   }
 
   /** */
   get id() {
-    this._id = this._id
-      || this.resource['@id']
-      || (this.resources[0] && this.resources[0]['@id'])
-      || uuid();
-    return this._id; // eslint-disable-line no-underscore-dangle
+    this._id =
+      this._id ||
+      this.resource['@id'] ||
+      (this.resources[0] && this.resources[0]['@id']) ||
+      uuid();
+    return this._id;
   }
 
   /** */
@@ -37,7 +40,7 @@ export default class AnnotationResource {
   }
 
   /**
-   * @return {[Array]}
+   * @returns {[Array]}
    */
   get motivations() {
     return flatten(compact(new Array(this.resource.motivation)));
@@ -56,14 +59,19 @@ export default class AnnotationResource {
   /** */
   get tags() {
     if (this.isOnlyTag()) {
-      return this.resources.map(r => r.chars);
+      return this.resources.map((r) => r.chars);
     }
-    return this.resources.filter(r => r['@type'] === 'oa:Tag').map(r => r.chars);
+    return this.resources
+      .filter((r) => r['@type'] === 'oa:Tag')
+      .map((r) => r.chars);
   }
 
   /** */
   get chars() {
-    return this.resources.filter(r => r['@type'] !== 'oa:Tag').map(r => r.chars).join(' ');
+    return this.resources
+      .filter((r) => r['@type'] !== 'oa:Tag')
+      .map((r) => r.chars)
+      .join(' ');
   }
 
   /** */
@@ -92,7 +100,11 @@ export default class AnnotationResource {
       case 'string':
         return null;
       case 'object':
-        if (on.selector && on.selector.item && on.selector.item['@type'] === 'oa:SvgSelector') {
+        if (
+          on.selector &&
+          on.selector.item &&
+          on.selector.item['@type'] === 'oa:SvgSelector'
+        ) {
           return on.selector.item;
         }
         return null;
@@ -118,6 +130,6 @@ export default class AnnotationResource {
         return null;
     }
 
-    return match && match[1].split(',').map(str => parseInt(str, 10));
+    return match && match[1].split(',').map((str) => parseInt(str, 10));
   }
 }

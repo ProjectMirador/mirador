@@ -6,18 +6,19 @@ import isNull from 'lodash/isNull';
 import values from 'lodash/values';
 
 /** */
-export const validatePlugin = plugin => [
-  checkPlugin,
-  checkName,
-  checkTarget,
-  checkMode,
-  checkMapStateToProps,
-  checkMapDispatchToProps,
-  checkReducers,
-].every(check => check(plugin));
+export const validatePlugin = (plugin) =>
+  [
+    checkPlugin,
+    checkName,
+    checkTarget,
+    checkMode,
+    checkMapStateToProps,
+    checkMapDispatchToProps,
+    checkReducers,
+  ].every((check) => check(plugin));
 
 /** */
-const checkPlugin = plugin => isObject(plugin);
+const checkPlugin = (plugin) => isObject(plugin);
 
 /** */
 const checkName = (plugin) => {
@@ -36,29 +37,35 @@ const checkTarget = (plugin) => {
 /** */
 const checkMode = (plugin) => {
   const { mode } = plugin;
-  return isUndefined(mode) || ['add', 'wrap'].some(s => s === mode);
+  return isUndefined(mode) || ['add', 'wrap'].some((s) => s === mode);
 };
 
 /** */
 const checkMapStateToProps = (plugin) => {
   const { mapStateToProps } = plugin;
-  return isUndefined(mapStateToProps)
-    || isNull(mapStateToProps)
-    || isFunction(mapStateToProps);
+  return (
+    isUndefined(mapStateToProps) ||
+    isNull(mapStateToProps) ||
+    isFunction(mapStateToProps)
+  );
 };
 
 /** */
 const checkMapDispatchToProps = (plugin) => {
   const { mapDispatchToProps } = plugin;
-  return isUndefined(mapDispatchToProps)
-    || isNull(mapDispatchToProps)
-    || isFunction(mapDispatchToProps)
-    || isObject(mapDispatchToProps);
+  return (
+    isUndefined(mapDispatchToProps) ||
+    isNull(mapDispatchToProps) ||
+    isFunction(mapDispatchToProps) ||
+    isObject(mapDispatchToProps)
+  );
 };
 
 /** */
 const checkReducers = (plugin) => {
   const { reducers } = plugin;
-  return isUndefined(reducers)
-    || (isObject(reducers) && values(reducers).every(isFunction));
+  return (
+    isUndefined(reducers) ||
+    (isObject(reducers) && values(reducers).every(isFunction))
+  );
 };

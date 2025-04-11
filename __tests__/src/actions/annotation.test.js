@@ -11,7 +11,9 @@ describe('annotation actions', () => {
         type: ActionTypes.REQUEST_CANVAS_ANNOTATIONS,
         windowId,
       };
-      expect(actions.requestCanvasAnnotations(windowId, canvasId)).toEqual(expectedAction);
+      expect(actions.requestCanvasAnnotations(windowId, canvasId)).toEqual(
+        expectedAction,
+      );
     });
   });
   describe('requestAnnotation', () => {
@@ -23,7 +25,9 @@ describe('annotation actions', () => {
         targetId,
         type: ActionTypes.REQUEST_ANNOTATION,
       };
-      expect(actions.requestAnnotation(targetId, annotationId)).toEqual(expectedAction);
+      expect(actions.requestAnnotation(targetId, annotationId)).toEqual(
+        expectedAction,
+      );
     });
   });
   describe('receiveAnnotation', () => {
@@ -40,7 +44,9 @@ describe('annotation actions', () => {
         targetId,
         type: ActionTypes.RECEIVE_ANNOTATION,
       };
-      expect(actions.receiveAnnotation(targetId, annotationId, json)).toEqual(expectedAction);
+      expect(actions.receiveAnnotation(targetId, annotationId, json)).toEqual(
+        expectedAction,
+      );
     });
   });
 
@@ -52,7 +58,9 @@ describe('annotation actions', () => {
       type: ActionTypes.SELECT_ANNOTATION,
       windowId,
     };
-    expect(actions.selectAnnotation(windowId, annotationId)).toEqual(expectedAction);
+    expect(actions.selectAnnotation(windowId, annotationId)).toEqual(
+      expectedAction,
+    );
   });
 
   it('handles the deselectAnnotation action', () => {
@@ -63,7 +71,9 @@ describe('annotation actions', () => {
       type: ActionTypes.DESELECT_ANNOTATION,
       windowId,
     };
-    expect(actions.deselectAnnotation(windowId, annotationId)).toEqual(expectedAction);
+    expect(actions.deselectAnnotation(windowId, annotationId)).toEqual(
+      expectedAction,
+    );
   });
 
   it('handles the toggleAnnotationDisplay action', () => {
@@ -83,6 +93,8 @@ describe('annotation actions', () => {
       type: ActionTypes.HOVER_ANNOTATION,
       windowId,
     };
-    expect(actions.hoverAnnotation(windowId, annotationIds)).toEqual(expectedAction);
+    expect(actions.hoverAnnotation(windowId, annotationIds)).toEqual(
+      expectedAction,
+    );
   });
 });

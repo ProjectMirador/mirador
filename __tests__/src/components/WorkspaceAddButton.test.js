@@ -14,7 +14,9 @@ function createWrapper(props) {
   );
 }
 
-vi.mock('@mui/material/useMediaQuery', () => ({ default: vi.fn().mockReturnValue(true) }));
+vi.mock('@mui/material/useMediaQuery', () => ({
+  default: vi.fn().mockReturnValue(true),
+}));
 
 describe('WorkspaceAddButton', () => {
   it('renders a button to open the load window area', async () => {
@@ -32,7 +34,9 @@ describe('WorkspaceAddButton', () => {
     const setWorkspaceAddVisibility = vi.fn();
     createWrapper({ isWorkspaceAddVisible: true, setWorkspaceAddVisibility });
 
-    await user.click(screen.getByRole('button', { name: 'Close resource list' }));
+    await user.click(
+      screen.getByRole('button', { name: 'Close resource list' }),
+    );
     expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(false);
   });
 
@@ -40,7 +44,9 @@ describe('WorkspaceAddButton', () => {
     it('is styled using the extended variant', () => {
       createWrapper({ useExtendedFab: true });
 
-      expect(screen.getByRole('button', { name: 'Start Here' })).toHaveClass('MuiFab-extended');
+      expect(screen.getByRole('button', { name: 'Start Here' })).toHaveClass(
+        'MuiFab-extended',
+      );
     });
   });
 });

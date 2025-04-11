@@ -1,6 +1,6 @@
 import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { config } from 'react-transition-group'; // eslint-disable-line import/no-extraneous-dependencies
+import { config } from 'react-transition-group';
 import { WindowAuthenticationBar } from '../../../src/components/WindowAuthenticationBar';
 
 /**
@@ -21,7 +21,6 @@ function createWrapper(props) {
   );
 }
 
-/* eslint-disable testing-library/no-node-access */
 describe('AuthenticationControl', () => {
   let user;
   beforeEach(() => {
@@ -35,12 +34,17 @@ describe('AuthenticationControl', () => {
 
   it('renders a non-collapsing version if there is no description', () => {
     createWrapper({ description: undefined, header: undefined });
-    expect(screen.getByText('Log in to see more', { selector: 'span' })).toBeInTheDocument();
+    expect(
+      screen.getByText('Log in to see more', { selector: 'span' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button')).toHaveTextContent('Login');
   });
 
   it('renders a collapsable version if there is a description', async () => {
-    createWrapper({ description: 'long description', header: 'Login to Example Institution' });
+    createWrapper({
+      description: 'long description',
+      header: 'Login to Example Institution',
+    });
     const continueBtn = document.querySelectorAll('.MuiButtonBase-root')[0];
     const collapseEl = document.querySelector('.MuiCollapse-hidden');
 
@@ -48,8 +52,12 @@ describe('AuthenticationControl', () => {
     config.disabled = true;
     // initial collapsed state: Presence of continue button text. Hidden cancelBtn, loginBtn, and description
     expect(screen.getByText('Continue')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Cancel' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Login' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Cancel' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Login' }),
+    ).not.toBeInTheDocument();
     expect(within(collapseEl).getByText('long description')).not.toBeVisible();
     // click to expand
     await user.click(continueBtn);
@@ -64,8 +72,12 @@ describe('AuthenticationControl', () => {
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
     // collapsed state: Presence of continue button text. Hidden cancelBtn, loginBtn, and description
     expect(screen.getByText('Continue')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Cancel' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Login' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Cancel' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Login' }),
+    ).not.toBeInTheDocument();
     expect(within(collapseEl).getByText('long description')).not.toBeVisible();
     // re-enable transition animation
     config.disabled = false;

@@ -1,6 +1,4 @@
-import {
-  getCurrentCanvasWorld,
-} from '../../../src/state/selectors/viewer';
+import { getCurrentCanvasWorld } from '../../../src/state/selectors/viewer';
 
 describe('getCurrentCanvasWorld', () => {
   it('returns a CanvasWorld', () => {
@@ -23,9 +21,7 @@ describe('getCurrentCanvasWorld', () => {
       windows: {
         [windowId]: {
           manifestId: 'a',
-          visibleCanvases: [
-            'a1', 'a2',
-          ],
+          visibleCanvases: ['a1', 'a2'],
         },
       },
     };

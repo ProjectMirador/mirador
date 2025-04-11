@@ -15,7 +15,8 @@ import { SidebarIndexList } from '../components/SidebarIndexList';
 const mapStateToProps = (state, { id, windowId }) => ({
   canvases: getCanvases(state, { windowId }),
   selectedCanvasIds: getVisibleCanvasIds(state, { windowId }),
-  variant: getCompanionWindow(state, { companionWindowId: id, windowId }).variant,
+  variant: getCompanionWindow(state, { companionWindowId: id, windowId })
+    .variant,
 });
 
 /**

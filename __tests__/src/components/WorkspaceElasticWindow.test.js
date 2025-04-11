@@ -24,11 +24,16 @@ function createWrapper(props) {
         {...props}
       />
     </DndProvider>,
-    { preloadedState: { companionWindows: {}, windows: { 1: { companionWindowIds: [] } }, workspace: {} } },
+    {
+      preloadedState: {
+        companionWindows: {},
+        windows: { 1: { companionWindowIds: [] } },
+        workspace: {},
+      },
+    },
   );
 }
 
-/* eslint-disable testing-library/no-container, testing-library/no-node-access */
 describe('WorkspaceElasticWindow', () => {
   const layout = {
     height: 200,
@@ -43,13 +48,20 @@ describe('WorkspaceElasticWindow', () => {
     const el = container.firstChild;
 
     expect(el).toHaveClass('react-draggable');
-    expect(el).toHaveStyle({ height: '200px', transform: 'translate(5040px,5040px)', width: '200px' });
+    expect(el).toHaveStyle({
+      height: '200px',
+      transform: 'translate(5040px,5040px)',
+      width: '200px',
+    });
   });
   describe('focuses the window', () => {
     it('calls focusWindow when clicked', async () => {
       const user = userEvent.setup();
       const mockFocusWindow = vi.fn();
-      const { container } = createWrapper({ focusWindow: mockFocusWindow, layout });
+      const { container } = createWrapper({
+        focusWindow: mockFocusWindow,
+        layout,
+      });
       const topBar = container.querySelector('.mirador-window-top-bar');
       await user.click(topBar);
 
@@ -97,7 +109,9 @@ describe('WorkspaceElasticWindow', () => {
         top: -2500,
       });
 
-      const el = container.querySelector('[style="position: absolute; user-select: none; width: 20px; height: 20px; right: -10px; bottom: -10px; cursor: se-resize;"]');
+      const el = container.querySelector(
+        '[style="position: absolute; user-select: none; width: 20px; height: 20px; right: -10px; bottom: -10px; cursor: se-resize;"]',
+      );
 
       const oldCoords = {
         x: 0,
@@ -114,10 +128,13 @@ describe('WorkspaceElasticWindow', () => {
         { coords },
         { coords, keys: '[/MouseLeft]', target: el },
       ]);
-      expect(mockOnResize).toHaveBeenCalledWith('1', expect.objectContaining({
-        height: 200,
-        width: 400,
-      }));
+      expect(mockOnResize).toHaveBeenCalledWith(
+        '1',
+        expect.objectContaining({
+          height: 200,
+          width: 400,
+        }),
+      );
     });
   });
 });

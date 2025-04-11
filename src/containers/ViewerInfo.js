@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { ViewerInfo } from '../components/ViewerInfo';
 import {
-  getCanvasLabel, getCanvases, getCanvasIndex, getCurrentCanvas,
+  getCanvasLabel,
+  getCanvases,
+  getCanvasIndex,
+  getCurrentCanvas,
 } from '../state/selectors';
 
 /**

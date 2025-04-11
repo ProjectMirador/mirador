@@ -12,7 +12,7 @@ import { CanvasAnnotations } from '../components/CanvasAnnotations';
 
 /**
  * @param {Array} resources
- * @return {Array} [{ id: 'abc123', content: 'Annotation Content' }, ...]
+ * @returns {Array} [{ id: 'abc123', content: 'Annotation Content' }, ...]
  */
 function getIdAndContentOfResources(resources) {
   return resources.map((resource, i) => ({

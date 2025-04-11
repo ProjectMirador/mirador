@@ -6,12 +6,7 @@ import { WorkspaceOptionsMenu } from '../../../src/components/WorkspaceOptionsMe
 function Subject({ ...props }) {
   return (
     <div>
-      <WorkspaceOptionsMenu
-        handleClose={() => {}}
-        {...props}
-      />
-      ,
-      ,
+      <WorkspaceOptionsMenu handleClose={() => {}} {...props} />, ,
     </div>
   );
 }
@@ -19,7 +14,9 @@ function Subject({ ...props }) {
 /** create anchor element */
 function createAnchor() {
   return render(
-    <button type="button" data-testid="menu-trigger-button">Button</button>,
+    <button type="button" data-testid="menu-trigger-button">
+      Button
+    </button>,
   );
 }
 
@@ -31,7 +28,9 @@ describe('WorkspaceOptionsMenu', () => {
   });
 
   it('renders all needed elements when open', () => {
-    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
+    render(
+      <Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />,
+    );
 
     expect(screen.getByRole('menu')).toBeInTheDocument();
 
@@ -47,24 +46,46 @@ describe('WorkspaceOptionsMenu', () => {
   });
 
   it('renders the export dialog when export option is clicked', async () => {
-    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
-    expect(screen.queryByRole('heading', { name: 'Export workspace' })).not.toBeInTheDocument();
+    render(
+      <Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />,
+    );
+    expect(
+      screen.queryByRole('heading', { name: 'Export workspace' }),
+    ).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole('menuitem', { name: 'Export workspace' }));
-    expect(screen.getByRole('heading', { name: 'Export workspace' })).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Export workspace' }),
+    );
+    expect(
+      screen.getByRole('heading', { name: 'Export workspace' }),
+    ).toBeInTheDocument();
   });
 
   it('renders the import dialog when import option is clicked', async () => {
-    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
-    expect(screen.queryByRole('heading', { name: 'Import workspace' })).not.toBeInTheDocument();
+    render(
+      <Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />,
+    );
+    expect(
+      screen.queryByRole('heading', { name: 'Import workspace' }),
+    ).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole('menuitem', { name: 'Import workspace' }));
-    expect(screen.getByRole('heading', { name: 'Import workspace' })).toBeInTheDocument();
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Import workspace' }),
+    );
+    expect(
+      screen.getByRole('heading', { name: 'Import workspace' }),
+    ).toBeInTheDocument();
   });
 
   it('fires the correct callbacks on menu close', async () => {
     const handleClose = vi.fn();
-    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} handleClose={handleClose} open />);
+    render(
+      <Subject
+        anchorEl={screen.getByTestId('menu-trigger-button')}
+        handleClose={handleClose}
+        open
+      />,
+    );
 
     // click a menu item should close the menu
     const menuItems = screen.getAllByRole('menuitem');

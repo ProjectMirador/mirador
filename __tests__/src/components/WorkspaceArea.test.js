@@ -27,33 +27,57 @@ describe('WorkspaceArea', () => {
   });
 
   it('should render all needed elements', () => {
-    const { container } = createWrapper();
+    const { container } = createWrapper(); // eslint-disable testing-library/no-container
 
-    expect(screen.getByRole('button', { name: 'Jump to window' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Workspace settings' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Workspace options' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Jump to window' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Workspace settings' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Workspace options' }),
+    ).toBeInTheDocument();
 
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Mirador viewer');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Mirador viewer',
+    );
     expect(screen.getByRole('main')).toHaveTextContent('Welcome to Mirador');
 
-    expect(container.querySelector('.mirador-background-plugin-area')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    expect(
+      container.querySelector('.mirador-background-plugin-area'),
+    ).toBeInTheDocument();
   });
 
   it('should not render WorkspaceControlPanel when isWorkspaceControlPanelVisible is false', () => {
     createWrapper({ isWorkspaceControlPanelVisible: false });
 
-    expect(screen.queryByRole('button', { name: 'Jump to window' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Workspace settings' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Workspace options' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Jump to window' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Workspace settings' }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Workspace options' }),
+    ).not.toBeInTheDocument();
   });
 
   describe('with isWorkspaceAddVisible', () => {
     it('should render WorkspaceAdd when isWorkspaceAddVisible is true', () => {
       createWrapper({ isWorkspaceAddVisible: true });
 
-      expect(screen.queryByRole('heading', { level: 1, name: 'Mirador viewer' })).not.toBeInTheDocument();
-      expect(screen.getByRole('main')).toHaveTextContent('Your resource list is empty');
-      expect(within(screen.getByRole('main')).getByRole('button', { name: 'Add resource' })).toBeInTheDocument();
+      expect(
+        screen.queryByRole('heading', { level: 1, name: 'Mirador viewer' }),
+      ).not.toBeInTheDocument();
+      expect(screen.getByRole('main')).toHaveTextContent(
+        'Your resource list is empty',
+      );
+      expect(
+        within(screen.getByRole('main')).getByRole('button', {
+          name: 'Add resource',
+        }),
+      ).toBeInTheDocument();
     });
   });
 });

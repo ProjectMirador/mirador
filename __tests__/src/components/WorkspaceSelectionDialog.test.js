@@ -1,6 +1,4 @@
-import {
-  render, screen, waitFor,
-} from '@tests/utils/test-utils';
+import { render, screen, waitFor } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceSelectionDialog } from '../../../src/components/WorkspaceSelectionDialog';
 
@@ -32,8 +30,12 @@ describe('WorkspaceSelectionDialog', () => {
     createWrapper();
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByRole('menuitem', { name: /Elastic/ })).toBeInTheDocument();
-    expect(screen.getByRole('menuitem', { name: /Mosaic/ })).toBeInTheDocument();
+    expect(
+      screen.getByRole('menuitem', { name: /Elastic/ }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('menuitem', { name: /Mosaic/ }),
+    ).toBeInTheDocument();
   });
 
   it('sends the updateConfig and handleClose props on workspace selection', async () => {
@@ -41,10 +43,14 @@ describe('WorkspaceSelectionDialog', () => {
     createWrapper();
 
     user.click(screen.getByRole('menuitem', { name: /Elastic/ }));
-    await waitFor(() => expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'elastic' }));
+    await waitFor(() =>
+      expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'elastic' }),
+    );
 
     user.click(screen.getByRole('menuitem', { name: /Mosaic/ }));
-    await waitFor(() => expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'mosaic' }));
+    await waitFor(() =>
+      expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'mosaic' }),
+    );
     await waitFor(() => expect(handleClose).toHaveBeenCalledTimes(2));
   });
 

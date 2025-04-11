@@ -1,6 +1,10 @@
 import {
-  createRemoveUpdate, updateTree,
-  getNodeAtPath, getOtherDirection, getPathToCorner, Corner,
+  createRemoveUpdate,
+  updateTree,
+  getNodeAtPath,
+  getOtherDirection,
+  getPathToCorner,
+  Corner,
 } from 'react-mosaic-component2';
 import dropRight from 'lodash/dropRight';
 
@@ -67,13 +71,12 @@ export default class MosaicLayout {
    * removeWindows - Generate a set of "removeUpdates" to update layout binary
    * tree. Then update the layout.
    * @param  {Array} removedWindowIds
-   * @param  {Object} windowPaths - a lookup table for window paths
+   * @param  {object} windowPaths - a lookup table for window paths
    */
   removeWindows(removedWindowIds, windowPaths) {
-    const removeUpdates = removedWindowIds
-      .map(windowId => (
-        createRemoveUpdate(this.layout, windowPaths[windowId])
-      ));
+    const removeUpdates = removedWindowIds.map((windowId) =>
+      createRemoveUpdate(this.layout, windowPaths[windowId]),
+    );
     this.layout = updateTree(this.layout, removeUpdates);
   }
 }

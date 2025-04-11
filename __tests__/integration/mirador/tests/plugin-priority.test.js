@@ -7,17 +7,25 @@ describe('try to apply 2 add plugins and 2 wrap plugins to <WorkspaceControlPane
   setupIntegrationTestViewer(settings.config, settings.plugins);
 
   it('only apply the first wrap plugin', async () => {
-    const wrapPluginComponentA = await screen.findByTestId('wrap-plugin-component-a');
+    const wrapPluginComponentA = await screen.findByTestId(
+      'wrap-plugin-component-a',
+    );
     expect(wrapPluginComponentA).toBeInTheDocument();
 
-    const wrapPluginComponentB = screen.queryByTestId('wrap-plugin-component-b');
+    const wrapPluginComponentB = screen.queryByTestId(
+      'wrap-plugin-component-b',
+    );
     expect(wrapPluginComponentB).not.toBeInTheDocument();
 
-    const addPluginComponentA = await screen.findByTestId('add-plugin-component-a');
+    const addPluginComponentA = await screen.findByTestId(
+      'add-plugin-component-a',
+    );
     expect(addPluginComponentA).toBeInTheDocument();
 
     // Check if the second add plugin component is in the document
-    const addPluginComponentB = await screen.findByTestId('add-plugin-component-b');
+    const addPluginComponentB = await screen.findByTestId(
+      'add-plugin-component-b',
+    );
     expect(addPluginComponentB).toBeInTheDocument();
   });
 });

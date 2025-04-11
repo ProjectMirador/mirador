@@ -4,7 +4,7 @@ import { MiradorMenuButton } from '../../../src/components/MiradorMenuButton';
 
 /**
  * Helper function to wrap creating a MiradorMenuButton component
-*/
+ */
 function createWrapper(props) {
   return render(
     <MiradorMenuButton aria-label="The Label" {...props}>
@@ -41,13 +41,17 @@ describe('MiradorMenuButton', () => {
 
     expect(await screen.findByRole('tooltip')).toHaveTextContent('The Label');
 
-    expect(screen.getByText('The Label')).toHaveClass('MuiTooltip-tooltipPlacementLeft');
+    expect(screen.getByText('The Label')).toHaveClass(
+      'MuiTooltip-tooltipPlacementLeft',
+    );
   });
 
   it('spreads any other props to IconButton', () => {
     createWrapper({ color: 'inherit' });
 
-    expect(screen.getByRole('button')).toHaveClass('MuiIconButton-colorInherit');
+    expect(screen.getByRole('button')).toHaveClass(
+      'MuiIconButton-colorInherit',
+    );
   });
 
   it('wraps the child component in a badge if the badge prop is set to true (and passes BadgeProps)', () => {

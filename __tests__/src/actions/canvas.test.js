@@ -87,7 +87,9 @@ describe('canvas actions', () => {
         type: ActionTypes.UPDATE_VIEWPORT,
         windowId: id,
       };
-      expect(actions.updateViewport(id, { x: 1, y: 0, zoom: 0.5 })).toEqual(expectedAction);
+      expect(actions.updateViewport(id, { x: 1, y: 0, zoom: 0.5 })).toEqual(
+        expectedAction,
+      );
     });
   });
 });

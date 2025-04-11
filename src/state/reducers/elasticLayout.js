@@ -11,12 +11,17 @@ export const elasticLayoutReducer = (state = {}, action) => {
       return {
         ...state,
         [action.window.id]: {
-          windowId: action.window.id, ...action.elasticLayout,
+          windowId: action.window.id,
+          ...action.elasticLayout,
         },
       };
 
     case ActionTypes.UPDATE_ELASTIC_WINDOW_LAYOUT:
-      return update([action.windowId], orig => ({ ...(orig || {}), ...action.payload }), state);
+      return update(
+        [action.windowId],
+        (orig) => ({ ...(orig || {}), ...action.payload }),
+        state,
+      );
 
     case ActionTypes.REMOVE_WINDOW:
       return omit(state, action.windowId);

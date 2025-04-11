@@ -12,8 +12,9 @@ import createI18nInstance from '../../src/i18n';
 /** Mirador viewer setup for Integration tests */
 import { viewer as miradorViewer } from '../../src/index';
 
-export * from '@testing-library/react';
-export { renderWithProviders as render };
+// TODO: not export render from test-library to prevent duplication?
+export * from '@testing-library/react'; // eslint-disable-line import/export
+export { renderWithProviders as render }; // eslint-disable-line import/export
 
 const rootReducer = createRootReducer();
 const theme = createTheme(settings.theme);
@@ -37,9 +38,7 @@ function renderWithProviders(
     return (
       <I18nextProvider i18n={i18n}>
         <ThemeProvider theme={theme}>
-          <Provider store={store}>
-            {children}
-          </Provider>
+          <Provider store={store}>{children}</Provider>
         </ThemeProvider>
       </I18nextProvider>
     );
@@ -55,7 +54,12 @@ function renderWithProviders(
   return {
     store,
     ...rendered,
-    rerender: (newUi, options) => render(newUi, { container: rendered.container, wrapper: Wrapper, ...options }),
+    rerender: (newUi, options) =>
+      render(newUi, {
+        container: rendered.container,
+        wrapper: Wrapper,
+        ...options,
+      }),
   };
 }
 
@@ -67,7 +71,11 @@ const setupMiradorViewer = async (config, plugins) => {
     <div
       data-testid="mirador"
       style={{
-        bottom: 0, left: 0, position: 'absolute', right: 0, top: 0,
+        bottom: 0,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
       }}
     >
       {viewer.render()}

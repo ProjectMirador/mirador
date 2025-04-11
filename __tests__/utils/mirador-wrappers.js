@@ -5,4 +5,5 @@ import MiradorCanvas from '../../src/lib/MiradorCanvas';
 export const wrapCanvas = (c) => new MiradorCanvas(c);
 
 /** CanvasWorld factory function provided by container */
-export const getCanvasWorld = (canvases) => new CanvasWorld(canvases.map(wrapCanvas));
+export const getCanvasWorld = (canvases) =>
+  new CanvasWorld(canvases.map(wrapCanvas));

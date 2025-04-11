@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 import { setupIntersectionMocking } from 'react-intersection-observer/test-utils';
-import i18next from 'i18next';
+import { init as i18nextInit } from 'i18next';
 import createFetchMock from 'vitest-fetch-mock';
 import en from './src/locales/en/translation.json';
 
@@ -22,15 +22,13 @@ beforeEach((context) => {
 });
 
 /** */
-class Path2D {
-
-}
+class Path2D {}
 
 global.Path2D = Path2D;
 
 setupIntersectionMocking(vi.fn);
 
-i18next.init({
+i18nextInit({
   lng: 'en',
   resources: {
     en,

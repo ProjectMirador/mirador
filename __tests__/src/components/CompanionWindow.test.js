@@ -23,12 +23,16 @@ describe('CompanionWindow', () => {
     it('has an aria-label for the landmark derived from the title', () => {
       createWrapper({ title: 'some title' });
 
-      expect(screen.getByRole('complementary')).toHaveAccessibleName('some title');
+      expect(screen.getByRole('complementary')).toHaveAccessibleName(
+        'some title',
+      );
     });
     it('can be overridden with an explicit ariaLabel prop', () => {
       createWrapper({ ariaLabel: 'some label', title: 'some title' });
 
-      expect(screen.getByRole('complementary')).toHaveAccessibleName('some label');
+      expect(screen.getByRole('complementary')).toHaveAccessibleName(
+        'some label',
+      );
     });
   });
 
@@ -42,7 +46,9 @@ describe('CompanionWindow', () => {
         updateCompanionWindow,
       });
 
-      await user.click(screen.getByRole('button', { name: 'Open in separate panel' }));
+      await user.click(
+        screen.getByRole('button', { name: 'Open in separate panel' }),
+      );
 
       expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'right' });
     });
@@ -68,11 +74,19 @@ describe('CompanionWindow', () => {
 
       /** Some child component */
       const Button = ({ parentactions, ...props }) => (
-        <button type="button" onClick={parentactions.closeCompanionWindow} {...props}>Close</button>
+        <button
+          type="button"
+          onClick={parentactions.closeCompanionWindow}
+          {...props}
+        >
+          Close
+        </button>
       );
 
       Button.propTypes = {
-        parentactions: PropTypes.shape({ closeCompanionWindow: PropTypes.func.isRequired }).isRequired,
+        parentactions: PropTypes.shape({
+          closeCompanionWindow: PropTypes.func.isRequired,
+        }).isRequired,
       };
 
       createWrapper({
@@ -95,11 +109,15 @@ describe('CompanionWindow', () => {
         updateCompanionWindow,
       });
 
-      expect(screen.getByRole('complementary')).toHaveClass('mirador-companion-window-right');
+      expect(screen.getByRole('complementary')).toHaveClass(
+        'mirador-companion-window-right',
+      );
 
       await user.click(screen.getByRole('button', { name: 'Move to bottom' }));
 
-      expect(updateCompanionWindow).toHaveBeenCalledWith({ position: 'bottom' });
+      expect(updateCompanionWindow).toHaveBeenCalledWith({
+        position: 'bottom',
+      });
     });
   });
 
@@ -113,7 +131,9 @@ describe('CompanionWindow', () => {
         updateCompanionWindow,
       });
 
-      expect(screen.getByRole('complementary')).toHaveClass('mirador-companion-window-bottom ');
+      expect(screen.getByRole('complementary')).toHaveClass(
+        'mirador-companion-window-bottom ',
+      );
 
       await user.click(screen.getByRole('button', { name: 'Move to right' }));
 
@@ -122,7 +142,10 @@ describe('CompanionWindow', () => {
   });
 
   it('renders title controls when available', () => {
-    createWrapper({ position: 'bottom', titleControls: <div data-testid="xyz" /> });
+    createWrapper({
+      position: 'bottom',
+      titleControls: <div data-testid="xyz" />,
+    });
 
     expect(screen.getByTestId('xyz')).toBeInTheDocument();
   });
@@ -130,14 +153,24 @@ describe('CompanionWindow', () => {
   it('has a resize handler', () => {
     const { container } = createWrapper();
 
-    expect(container.querySelector('.react-draggable')).toHaveStyle({ height: '100%', width: '235px' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
-    expect(container.querySelector('[style*="cursor: col-resize;"]')).toHaveStyle({ left: '-5px' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('.react-draggable')).toHaveStyle({
+      height: '100%',
+      width: '235px',
+    });
+    expect(
+      container.querySelector('[style*="cursor: col-resize;"]'),
+    ).toHaveStyle({ left: '-5px' });
   });
 
   it('has a vertical resize handle when position is bottom', () => {
     const { container } = createWrapper({ position: 'bottom' });
 
-    expect(container.querySelector('.react-draggable')).toHaveStyle({ height: '201px', width: 'auto' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
-    expect(container.querySelector('[style*="cursor: row-resize;"]')).toHaveStyle({ top: '-5px' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('.react-draggable')).toHaveStyle({
+      height: '201px',
+      width: 'auto',
+    });
+    expect(
+      container.querySelector('[style*="cursor: row-resize;"]'),
+    ).toHaveStyle({ top: '-5px' });
   });
 });

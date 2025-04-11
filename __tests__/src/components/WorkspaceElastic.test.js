@@ -28,14 +28,16 @@ function createWrapper({ elasticLayout = {}, ...props }) {
       preloadedState: {
         companionWindows: {},
         elasticLayout,
-        windows: { 1: { companionWindowIds: [] }, 2: { companionWindowIds: [] } },
+        windows: {
+          1: { companionWindowIds: [] },
+          2: { companionWindowIds: [] },
+        },
         workspace: { draggingEnabled: true },
       },
     },
   );
 }
 
-/* eslint-disable testing-library/no-node-access, testing-library/no-container */
 describe('WorkspaceElastic', () => {
   const elasticLayout = {
     1: {
@@ -81,7 +83,11 @@ describe('WorkspaceElastic', () => {
       };
 
       await user.pointer([
-        { coords: { clientX: 0, clientY: 0 }, keys: '[MouseLeft>]', target: el },
+        {
+          coords: { clientX: 0, clientY: 0 },
+          keys: '[MouseLeft>]',
+          target: el,
+        },
         { coords },
         { coords, keys: '[/MouseLeft]', target: el },
       ]);

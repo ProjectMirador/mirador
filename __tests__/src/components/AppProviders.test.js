@@ -42,7 +42,9 @@ function createWrapper(props = {}) {
       }}
       {...props}
     >
-      <Button color="primary" data-testid="test-button">Test</Button>
+      <Button color="primary" data-testid="test-button">
+        Test
+      </Button>
       <MockTranslationComponent />
       <MockDnDComponent />
     </AppProviders>,
@@ -75,10 +77,14 @@ describe('AppProviders', () => {
   });
   it('displays the default language if none set', () => {
     createWrapper();
-    expect(screen.getByTestId('test-translation')).toHaveTextContent('About Project Mirador');
+    expect(screen.getByTestId('test-translation')).toHaveTextContent(
+      'About Project Mirador',
+    );
   });
   it('displays the specified language translations', async () => {
     createWrapper({ language: 'de' });
-    expect(await screen.findByTestId('test-translation')).toHaveTextContent('Über Mirador');
+    expect(await screen.findByTestId('test-translation')).toHaveTextContent(
+      'Über Mirador',
+    );
   });
 });

@@ -17,11 +17,15 @@ describe('ManifestInfo', () => {
     });
 
     it('renders the content in a CollapsibleSection', () => {
-      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('Resource');
+      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
+        'Resource',
+      );
     });
 
     it('renders manifest label', () => {
-      expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent('The Manifest Label');
+      expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(
+        'The Manifest Label',
+      );
     });
 
     it('renders manifest description in SanitizedHtml component', () => {
@@ -40,13 +44,13 @@ describe('ManifestInfo', () => {
 
   describe('when metadata is not present', () => {
     beforeEach(() => {
-      render(
-        <ManifestInfo />,
-      );
+      render(<ManifestInfo />);
     });
 
     it('does not render empty elements elements', () => {
-      expect(screen.queryByRole('heading', { level: 5 })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('heading', { level: 5 }),
+      ).not.toBeInTheDocument();
     });
   });
 });

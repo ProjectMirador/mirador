@@ -5,7 +5,7 @@ import { miradorSlice } from './utils';
 /**
  * Returns the elastic layout from the state.
  * @param {object} state
- * @returns {Object}
+ * @returns {object}
  */
 export function getElasticLayout(state) {
   return miradorSlice(state).elasticLayout;
@@ -18,7 +18,7 @@ export function getElasticLayout(state) {
  */
 export const getFullScreenEnabled = createSelector(
   [getWorkspace],
-  workspace => workspace.isFullscreenEnabled,
+  (workspace) => workspace.isFullscreenEnabled,
 );
 
 /**
@@ -34,7 +34,7 @@ export function getLatestError(state) {
 
 /**
  * Returns the type of the workspace.
- * @param {Object} state
+ * @param {object} state
  * @returns {string} 'mosaic' | 'elastic'
  */
 export const getWorkspaceType = createSelector(
@@ -58,6 +58,5 @@ export const getFocusedWindowId = createSelector(
  * @param {string} windowId
  * @returns {boolean}
  */
-export const isFocused = (state, { windowId }) => (
-  getFocusedWindowId(state) === windowId
-);
+export const isFocused = (state, { windowId }) =>
+  getFocusedWindowId(state) === windowId;

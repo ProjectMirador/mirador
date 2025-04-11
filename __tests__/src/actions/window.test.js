@@ -85,17 +85,25 @@ describe('window actions', () => {
 
       expect(action).toMatchObject(expectedAction);
       expect(action.window.companionWindowIds.length).toEqual(2);
-      expect(action.window.companionWindowIds[0]).toEqual(action.companionWindows[0].id);
-      expect(action.window.companionWindowIds[1]).toEqual(action.window.thumbnailNavigationId);
-      expect(action.window.companionWindowIds[1]).toEqual(action.companionWindows[1].id);
+      expect(action.window.companionWindowIds[0]).toEqual(
+        action.companionWindows[0].id,
+      );
+      expect(action.window.companionWindowIds[1]).toEqual(
+        action.window.thumbnailNavigationId,
+      );
+      expect(action.window.companionWindowIds[1]).toEqual(
+        action.companionWindows[1].id,
+      );
     });
     it('creates a new window with additional companion windows', () => {
       const options = {
         canvasIndex: 1,
-        companionWindows: [{
-          content: 'attribution',
-          position: 'right',
-        }],
+        companionWindows: [
+          {
+            content: 'attribution',
+            position: 'right',
+          },
+        ],
         id: 'helloworld',
       };
 
@@ -119,8 +127,13 @@ describe('window actions', () => {
       const action = mockDispatch.mock.calls[0][0];
 
       expect(action.window.companionWindowIds.length).toEqual(3);
-      expect(action.window.companionWindowIds[2]).toEqual(action.companionWindows[2].id);
-      expect(action.companionWindows[2]).toMatchObject({ content: 'attribution', position: 'right' });
+      expect(action.window.companionWindowIds[2]).toEqual(
+        action.companionWindows[2].id,
+      );
+      expect(action.companionWindows[2]).toMatchObject({
+        content: 'attribution',
+        position: 'right',
+      });
     });
     it('creates a new window without a default sidebar', () => {
       const options = {
@@ -149,7 +162,9 @@ describe('window actions', () => {
       const action = mockDispatch.mock.calls[0][0];
 
       expect(action.window.companionWindowIds.length).toEqual(1);
-      expect(action.companionWindows[0]).toMatchObject({ content: 'thumbnailNavigation' });
+      expect(action.companionWindows[0]).toMatchObject({
+        content: 'thumbnailNavigation',
+      });
     });
 
     it('enables a window to override the panel being displayed', () => {

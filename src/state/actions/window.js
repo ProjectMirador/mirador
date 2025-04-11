@@ -4,8 +4,7 @@ import { miradorSlice } from '../selectors/utils';
 
 /**
  * focusWindow - action creator
- *
- * @param  {String} windowId
+ * @param  {string} windowId
  * @memberof ActionCreators
  */
 export function focusWindow(windowId, pan = false) {
@@ -18,13 +17,17 @@ export function focusWindow(windowId, pan = false) {
 
 /**
  * addWindow - action creator
- *
- * @param  {Object} options
+ * @param  {object} options
+ * @param {string} options.companionWindows
+ * @param {object} options.manifest
  * @memberof ActionCreators
  */
 export function addWindow({ companionWindows, manifest, ...options }) {
   return (dispatch, getState) => {
-    const { config, workspace: { windowIds = [] } } = miradorSlice(getState());
+    const {
+      config,
+      workspace: { windowIds = [] },
+    } = miradorSlice(getState());
     const numWindows = windowIds.length;
 
     const windowId = options.id || `window-${uuid()}`;
@@ -35,36 +38,41 @@ export function addWindow({ companionWindows, manifest, ...options }) {
         content: 'thumbnailNavigation',
         default: true,
         id: cwThumbs,
-        position: options.thumbnailNavigationPosition
-          || config.thumbnailNavigation.defaultPosition,
+        position:
+          options.thumbnailNavigationPosition ||
+          config.thumbnailNavigation.defaultPosition,
         windowId,
       },
-      ...(
-        (companionWindows || []).map((cw, i) => ({ ...cw, id: `cw-${uuid()}` }))
-      ),
+      ...(companionWindows || []).map((cw, i) => ({
+        ...cw,
+        id: `cw-${uuid()}`,
+      })),
     ];
 
-    if (options.sideBarPanel || config.window.defaultSideBarPanel || config.window.sideBarPanel) {
-      defaultCompanionWindows.unshift(
-        {
-          content: options.sideBarPanel
-            || (options.defaultSearchQuery && 'search')
-            || config.window.defaultSideBarPanel
-            || config.window.sideBarPanel,
+    if (
+      options.sideBarPanel ||
+      config.window.defaultSideBarPanel ||
+      config.window.sideBarPanel
+    ) {
+      defaultCompanionWindows.unshift({
+        content:
+          options.sideBarPanel ||
+          (options.defaultSearchQuery && 'search') ||
+          config.window.defaultSideBarPanel ||
+          config.window.sideBarPanel,
 
-          default: true,
-          id: `cw-${uuid()}`,
-          position: 'left',
-          windowId,
-        },
-      );
+        default: true,
+        id: `cw-${uuid()}`,
+        position: 'left',
+        windowId,
+      });
     }
 
     const defaultOptions = {
       canvasId: undefined,
       collectionIndex: 0,
       companionAreaOpen: true,
-      companionWindowIds: defaultCompanionWindows.map(cw => cw.id),
+      companionWindowIds: defaultCompanionWindows.map((cw) => cw.id),
       draggingEnabled: true,
       highlightAllAnnotations: config.window.highlightAllAnnotations || false,
       id: windowId,
@@ -73,18 +81,20 @@ export function addWindow({ companionWindows, manifest, ...options }) {
       rangeId: null,
       rotation: null,
       selectedAnnotations: {},
-      sideBarOpen: config.window.sideBarOpenByDefault !== undefined
-        ? config.window.sideBarOpenByDefault || !!options.defaultSearchQuery
-        : config.window.sideBarOpen || !!options.defaultSearchQuery,
-      sideBarPanel: options.sideBarPanel
-        || config.window.defaultSideBarPanel
-        || config.window.sideBarPanel,
+      sideBarOpen:
+        config.window.sideBarOpenByDefault !== undefined
+          ? config.window.sideBarOpenByDefault || !!options.defaultSearchQuery
+          : config.window.sideBarOpen || !!options.defaultSearchQuery,
+      sideBarPanel:
+        options.sideBarPanel ||
+        config.window.defaultSideBarPanel ||
+        config.window.sideBarPanel,
       thumbnailNavigationId: cwThumbs,
     };
 
     const elasticLayout = {
       ...(config.window.elastic || { height: 400, width: 480 }),
-      x: 200 + (Math.floor(numWindows / 10) * 50 + (numWindows * 30) % 300),
+      x: 200 + (Math.floor(numWindows / 10) * 50 + ((numWindows * 30) % 300)),
       y: 200 + ((numWindows * 50) % 300),
     };
 
@@ -109,7 +119,7 @@ export function updateWindow(id, payload) {
 
 /**
  * maximizeWindow
- * @param  {String} windowId
+ * @param  {string} windowId
  * @memberof ActionCreators
  */
 export function maximizeWindow(windowId) {
@@ -118,7 +128,7 @@ export function maximizeWindow(windowId) {
 
 /**
  * minimizeWindow
- * @param  {String} windowId
+ * @param  {string} windowId
  * @memberof ActionCreators
  */
 export function minimizeWindow(windowId) {
@@ -136,8 +146,7 @@ export function setCompanionAreaOpen(id, companionAreaOpen) {
 
 /**
  * removeWindow - action creator
- *
- * @param  {String} windowId
+ * @param  {string} windowId
  * @memberof ActionCreators
  */
 export function removeWindow(windowId) {
@@ -149,8 +158,7 @@ export function removeWindow(windowId) {
 
 /**
  * toggleWindowSideBar - action creator
- *
- * @param  {String} windowId
+ * @param  {string} windowId
  * @memberof ActionCreators
  */
 export function toggleWindowSideBar(windowId) {
@@ -159,9 +167,8 @@ export function toggleWindowSideBar(windowId) {
 
 /**
  * setWindowThumbnailPosition - action creator
- *
- * @param  {String} windowId
- * @param  {String} position
+ * @param  {string} windowId
+ * @param  {string} position
  * @memberof ActionCreators
  */
 export function setWindowThumbnailPosition(windowId, position) {
@@ -179,9 +186,8 @@ export function setWindowThumbnailPosition(windowId, position) {
 
 /**
  * setWindowViewType - action creator
- *
- * @param  {String} windowId
- * @param  {String} viewType
+ * @param  {string} windowId
+ * @param  {string} viewType
  * @memberof ActionCreators
  */
 export function setWindowViewType(windowId, viewType) {
@@ -193,7 +199,11 @@ export function setWindowViewType(windowId, viewType) {
 }
 
 /** */
-export function showCollectionDialog(manifestId, collectionPath = [], windowId) {
+export function showCollectionDialog(
+  manifestId,
+  collectionPath = [],
+  windowId,
+) {
   return {
     collectionPath,
     manifestId,

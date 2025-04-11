@@ -16,9 +16,8 @@ export function requestCanvasAnnotations(windowId, canvasId) {
 
 /**
  * requestAnnotation - action creator
- *
- * @param  {String} targetId
- * @param  {String} annotationId
+ * @param  {string} targetId
+ * @param  {string} annotationId
  * @memberof ActionCreators
  */
 export function requestAnnotation(targetId, annotationId) {
@@ -31,10 +30,9 @@ export function requestAnnotation(targetId, annotationId) {
 
 /**
  * receiveAnnotation - action creator
- *
- * @param  {String} targetId
- * @param  {String} annotationId
- * @param  {Object} annotationJson
+ * @param  {string} targetId
+ * @param  {string} annotationId
+ * @param  {object} annotationJson
  * @memberof ActionCreators
  */
 export function receiveAnnotation(targetId, annotationId, annotationJson) {
@@ -48,10 +46,9 @@ export function receiveAnnotation(targetId, annotationId, annotationJson) {
 
 /**
  * receiveAnnotationFailure - action creator
- *
- * @param  {String} targetId
- * @param  {String} annotationId
- * @param  {String} error
+ * @param  {string} targetId
+ * @param  {string} annotationId
+ * @param  {string} error
  * @memberof ActionCreators
  */
 export function receiveAnnotationFailure(targetId, annotationId, error) {
@@ -65,10 +62,8 @@ export function receiveAnnotationFailure(targetId, annotationId, error) {
 
 /**
  * selectAnnotation - action creator
- *
- * @param  {String} windowId
- * @param  {String} targetId
- * @param  {String} annotationId
+ * @param  {string} windowId
+ * @param  {string} annotationId
  * @memberof ActionCreators
  */
 export function selectAnnotation(windowId, annotationId) {
@@ -81,10 +76,8 @@ export function selectAnnotation(windowId, annotationId) {
 
 /**
  * deselectAnnotation - action creator
- *
- * @param  {String} windowId
- * @param  {String} targetId
- * @param  {String} annotationId
+ * @param  {string} windowId
+ * @param  {string} annotationId
  * @memberof ActionCreators
  */
 export function deselectAnnotation(windowId, annotationId) {
@@ -97,24 +90,25 @@ export function deselectAnnotation(windowId, annotationId) {
 
 /**
  * toggleAnnotationDisplay - action creator
- *
- * @param  {String} windowId
+ * @param  {string} windowId
  * @memberof ActionCreators
  */
 export function toggleAnnotationDisplay(windowId) {
   return {
-    type: ActionTypes.TOGGLE_ANNOTATION_DISPLAY, windowId,
+    type: ActionTypes.TOGGLE_ANNOTATION_DISPLAY,
+    windowId,
   };
 }
 
 /**
  * toggleAnnotationDisplay - action creator
- *
- * @param  {String} windowId
+ * @param  {string} windowId
  * @memberof ActionCreators
  */
 export function hoverAnnotation(windowId, annotationIds) {
   return {
-    annotationIds, type: ActionTypes.HOVER_ANNOTATION, windowId,
+    annotationIds,
+    type: ActionTypes.HOVER_ANNOTATION,
+    windowId,
   };
 }

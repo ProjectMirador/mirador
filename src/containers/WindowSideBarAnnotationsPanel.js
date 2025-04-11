@@ -13,10 +13,8 @@ import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnota
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
-  annotationCount: getAnnotationResourcesByMotivation(
-    state,
-    { windowId },
-  ).length,
+  annotationCount: getAnnotationResourcesByMotivation(state, { windowId })
+    .length,
   canvasIds: getVisibleCanvasIds(state, { windowId }),
 });
 

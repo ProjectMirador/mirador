@@ -22,7 +22,11 @@ describe('getWindowConfig', () => {
       },
     };
 
-    expect(getWindowConfig(state, { windowId: 'a' })).toEqual({ a: '1', b: '3', c: '4' });
+    expect(getWindowConfig(state, { windowId: 'a' })).toEqual({
+      a: '1',
+      b: '3',
+      c: '4',
+    });
   });
   it('gracefully handles missing windows', () => {
     const state = {
@@ -34,7 +38,10 @@ describe('getWindowConfig', () => {
       },
     };
 
-    expect(getWindowConfig(state, { windowId: 'c' })).toEqual({ a: '1', b: '2' });
+    expect(getWindowConfig(state, { windowId: 'c' })).toEqual({
+      a: '1',
+      b: '2',
+    });
   });
 });
 

@@ -20,18 +20,24 @@ function Subject({ ...props }) {
 /** create anchor element */
 function createAnchor() {
   return render(
-    <button type="button" data-testid="menu-trigger-button">Button</button>,
+    <button type="button" data-testid="menu-trigger-button">
+      Button
+    </button>,
   );
 }
 
 describe('WindowTopMenu', () => {
   it('renders all needed elements when open', () => {
     createAnchor();
-    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
+    render(
+      <Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />,
+    );
 
     expect(screen.getByRole('menu')).toBeInTheDocument();
 
-    const menuSections = within(screen.getByRole('menu')).getAllByRole('presentation');
+    const menuSections = within(screen.getByRole('menu')).getAllByRole(
+      'presentation',
+    );
     expect(menuSections).toHaveLength(2);
 
     expect(menuSections[0]).toHaveTextContent('View');
@@ -63,12 +69,14 @@ describe('WindowTopMenu', () => {
     const toggleDraggingEnabled = vi.fn();
     const anchorEl = screen.getByTestId('menu-trigger-button');
 
-    render(<Subject
-      anchorEl={anchorEl}
-      handleClose={handleClose}
-      open
-      toggleDraggingEnabled={toggleDraggingEnabled}
-    />);
+    render(
+      <Subject
+        anchorEl={anchorEl}
+        handleClose={handleClose}
+        open
+        toggleDraggingEnabled={toggleDraggingEnabled}
+      />,
+    );
 
     // click a menu item should close the menu
     const menuItems = screen.getAllByRole('menuitemradio');
