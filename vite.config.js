@@ -40,11 +40,13 @@ export default defineConfig({
           name: 'Mirador',
         },
         rollupOptions: {
-          external: [
-            ...Object.keys(packageJson.peerDependencies),
-            '__tests__/*',
-            '__mocks__/*',
-          ],
+          external: (id, parentId) => {
+            const peers = Object.keys(packageJson.peerDependencies);
+            return peers.indexOf(id) > -1
+              || peers.find((peer) => id.startsWith(`${peer}/`))
+              || id.startsWith('__tests__/')
+              || id.startsWith('__mocks__/');
+          },
           output: {
             assetFileNames: 'mirador.[ext]',
             exports: 'named',
