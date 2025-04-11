@@ -13,7 +13,9 @@ describe('Annotations in Mirador', () => {
   setupIntegrationTestViewer(config);
 
   it('Loads the manifest', async () => {
-    const element = await screen.findByRole('region', { name: /Window: Self-Portrait Dedicated to Paul Gauguin/i });
+    const element = await screen.findByRole('region', {
+      name: /Window: Self-Portrait Dedicated to Paul Gauguin/i,
+    });
     expect(element).toBeInTheDocument();
   });
 
@@ -40,11 +42,17 @@ describe('Annotations in Mirador', () => {
     const annotationButtons = await screen.findAllByLabelText(/annotations/i);
     fireEvent.click(annotationButtons[0]);
 
-    expect(await screen.findByRole('heading', { name: 'Annotations' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: 'Annotations' }),
+    ).toBeInTheDocument();
 
-    expect(await screen.findByText('Showing 5 annotations')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Showing 5 annotations'),
+    ).toBeInTheDocument();
 
-    const annotationPanel = await screen.findByRole('complementary', { name: /annotations/i });
+    const annotationPanel = await screen.findByRole('complementary', {
+      name: /annotations/i,
+    });
     expect(annotationPanel).toBeInTheDocument();
 
     const listItems = await within(annotationPanel).findAllByRole('menuitem');

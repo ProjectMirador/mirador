@@ -22,7 +22,11 @@ describe('SearchPanelNavigation', () => {
       const selectAnnotation = vi.fn();
       const user = userEvent.setup();
       createWrapper({
-        searchHits: [{ annotations: ['1'] }, { annotations: ['2'] }, { annotations: ['3'] }],
+        searchHits: [
+          { annotations: ['1'] },
+          { annotations: ['2'] },
+          { annotations: ['3'] },
+        ],
         selectAnnotation,
         selectedContentSearchAnnotation: ['2'],
       });
@@ -38,8 +42,12 @@ describe('SearchPanelNavigation', () => {
         searchHits: [{ annotations: ['1'] }],
         selectedContentSearchAnnotation: ['1'],
       });
-      expect(screen.getByRole('button', { name: 'Previous result' })).toBeDisabled();
-      expect(screen.getByRole('button', { name: 'Next result' })).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'Previous result' }),
+      ).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'Next result' }),
+      ).toBeDisabled();
     });
   });
 });

@@ -7,8 +7,16 @@ import { ThumbnailFactory } from '../../lib/ThumbnailFactory';
 
 /** memoize thumbnail opts for selector */
 export const getIiifThumbnailOpts = createSelector(
-  [getThumbnailsConfig, (state, maxHeight, maxWidth) => maxHeight, (state, maxHeight, maxWidth) => maxWidth],
-  (thumbnails, maxHeight, maxWidth) => ({ maxHeight, maxWidth, preferredFormats: thumbnails.preferredFormats }),
+  [
+    getThumbnailsConfig,
+    (state, maxHeight, maxWidth) => maxHeight,
+    (state, maxHeight, maxWidth) => maxWidth,
+  ],
+  (thumbnails, maxHeight, maxWidth) => ({
+    maxHeight,
+    maxWidth,
+    preferredFormats: thumbnails.preferredFormats,
+  }),
 );
 
 /**
@@ -16,12 +24,10 @@ export const getIiifThumbnailOpts = createSelector(
  * @param {object} state
  * @param {integer} maxHeight
  * @param {integer} maxWidth
- * @return {object}
+ * @returns {object}
  */
 export const getThumbnailFactory = createSelector(
   [getIiifThumbnailOpts, getMiradorCanvasWrapper, getMiradorManifestWrapper],
-  (iiifOpts, getMiradorCanvas, getMiradorManifest) => new ThumbnailFactory(
-    iiifOpts,
-    { getMiradorCanvas, getMiradorManifest },
-  ),
+  (iiifOpts, getMiradorCanvas, getMiradorManifest) =>
+    new ThumbnailFactory(iiifOpts, { getMiradorCanvas, getMiradorManifest }),
 );

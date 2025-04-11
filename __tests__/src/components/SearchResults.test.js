@@ -72,7 +72,9 @@ describe('SearchResults', () => {
   it('renders a SearchHit for each hit', () => {
     createWrapper({});
 
-    expect(screen.getByRole('button', { name: /Light up the moose/ })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Light up the moose/ }),
+    ).toBeInTheDocument();
   });
 
   it('can focus on a single item', async () => {
@@ -80,9 +82,13 @@ describe('SearchResults', () => {
     createWrapper({});
 
     await user.click(screen.getByRole('button', { name: 'more...' }));
-    expect(screen.getByRole('listitem')).toHaveTextContent(/start the chainsaw/);
+    expect(screen.getByRole('listitem')).toHaveTextContent(
+      /start the chainsaw/,
+    );
 
-    expect(screen.queryByRole('button', { name: 'more...' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'more...' }),
+    ).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Back to results' }));
     expect(screen.getByRole('button', { name: 'more...' })).toBeInTheDocument();
@@ -95,8 +101,12 @@ describe('SearchResults', () => {
         searchHits: [],
       });
 
-      expect(screen.getByRole('heading', { level: 4, name: 'The Anno Label' })).toBeInTheDocument();
-      expect(screen.getByRole('heading', { level: 4, name: 'Annother Anno Label' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { level: 4, name: 'The Anno Label' }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { level: 4, name: 'Annother Anno Label' }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -108,7 +118,9 @@ describe('SearchResults', () => {
         searchHits: [],
       });
 
-      expect(screen.getByText('No results found')).toHaveClass('MuiTypography-body1');
+      expect(screen.getByText('No results found')).toHaveClass(
+        'MuiTypography-body1',
+      );
     });
 
     it('while fetching', () => {
@@ -140,7 +152,12 @@ describe('SearchResults', () => {
       });
 
       await user.click(screen.getByRole('button', { name: /More results/ }));
-      expect(fetchSearch).toHaveBeenCalledWith('window', 'cwid', 'search?page=2', 'query');
+      expect(fetchSearch).toHaveBeenCalledWith(
+        'window',
+        'cwid',
+        'search?page=2',
+        'query',
+      );
     });
   });
 });

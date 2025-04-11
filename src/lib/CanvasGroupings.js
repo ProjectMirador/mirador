@@ -7,7 +7,7 @@ export default class CanvasGroupings {
   constructor(canvases, viewType = 'single') {
     this.canvases = canvases;
     this.viewType = viewType;
-    this._groupings = null; // eslint-disable-line no-underscore-dangle
+    this._groupings = null;
   }
 
   /**
@@ -26,14 +26,14 @@ export default class CanvasGroupings {
    * of canvases, while book view creates pairs.
    */
   groupings() {
-    if (this._groupings) { // eslint-disable-line no-underscore-dangle
-      return this._groupings; // eslint-disable-line no-underscore-dangle
+    if (this._groupings) {
+      return this._groupings;
     }
     if (this.viewType === 'scroll') {
       return [this.canvases];
     }
     if (this.viewType !== 'book') {
-      return this.canvases.map(canvas => [canvas]);
+      return this.canvases.map((canvas) => [canvas]);
     }
     const groupings = [];
     this.canvases.forEach((canvas, i) => {
@@ -49,7 +49,7 @@ export default class CanvasGroupings {
         groupings[Math.ceil(i / 2)].push(canvas);
       }
     });
-    this._groupings = groupings; // eslint-disable-line no-underscore-dangle
+    this._groupings = groupings;
     return groupings;
   }
 }

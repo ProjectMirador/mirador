@@ -20,7 +20,8 @@ const mapDispatchToProps = (dispatch, { data }) => ({
  * @private
  */
 const mapStateToProps = (state, { data }) => ({
-  currentCanvasId: (getCurrentCanvas(state, { windowId: data.windowId }) || {}).id,
+  currentCanvasId: (getCurrentCanvas(state, { windowId: data.windowId }) || {})
+    .id,
   showThumbnailLabels: getConfig(state).thumbnailNavigation.showThumbnailLabels,
 });
 

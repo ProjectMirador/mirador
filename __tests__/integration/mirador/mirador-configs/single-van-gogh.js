@@ -6,8 +6,11 @@ export default {
   thumbnailNavigation: {
     defaultPosition: 'far-bottom',
   },
-  windows: [{
-    canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
-    manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
-  }],
+  windows: [
+    {
+      canvasId:
+        'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
+      manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+    },
+  ],
 };

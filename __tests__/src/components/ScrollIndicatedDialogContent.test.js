@@ -4,10 +4,7 @@ import { ScrollIndicatedDialogContent } from '../../../src/components/ScrollIndi
 /** Utility function to wrap  */
 function createWrapper(props) {
   return render(
-    <ScrollIndicatedDialogContent
-      data-testid="subject"
-      {...props}
-    />,
+    <ScrollIndicatedDialogContent data-testid="subject" {...props} />,
   );
 }
 
@@ -15,7 +12,10 @@ describe('ScrollIndicatedDialogContent', () => {
   it('renders a DialogContnet component passing props', () => {
     createWrapper({ randomprop: 'randomPropValue' });
 
-    expect(screen.getByTestId('subject')).toHaveAttribute('randomprop', 'randomPropValue');
+    expect(screen.getByTestId('subject')).toHaveAttribute(
+      'randomprop',
+      'randomPropValue',
+    );
   });
 
   it('joins an incoming className prop with our className', () => {

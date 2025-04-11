@@ -14,20 +14,32 @@ import { ManifestInfo } from '../components/ManifestInfo';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { companionWindowId, manifestId, windowId }) => ({
+const mapStateToProps = (
+  state,
+  { companionWindowId, manifestId, windowId },
+) => ({
   manifestDescription: getManifestDescription(state, {
-    companionWindowId, manifestId, windowId,
+    companionWindowId,
+    manifestId,
+    windowId,
   }),
-  manifestLabel: getManifestTitle(state, { companionWindowId, manifestId, windowId }),
-  manifestMetadata: getManifestMetadata(state, { companionWindowId, manifestId, windowId }),
+  manifestLabel: getManifestTitle(state, {
+    companionWindowId,
+    manifestId,
+    windowId,
+  }),
+  manifestMetadata: getManifestMetadata(state, {
+    companionWindowId,
+    manifestId,
+    windowId,
+  }),
   manifestSummary: getManifestSummary(state, {
-    companionWindowId, manifestId, windowId,
+    companionWindowId,
+    manifestId,
+    windowId,
   }),
 });
 
-const enhance = compose(
-  connect(mapStateToProps),
-  withPlugins('ManifestInfo'),
-);
+const enhance = compose(connect(mapStateToProps), withPlugins('ManifestInfo'));
 
 export default enhance(ManifestInfo);

@@ -6,7 +6,10 @@ import ActionTypes from './action-types';
  */
 export function addResource(manifestId, manifestJson = undefined, payload) {
   return {
-    manifestId, manifestJson, payload, type: ActionTypes.ADD_RESOURCE,
+    manifestId,
+    manifestJson,
+    payload,
+    type: ActionTypes.ADD_RESOURCE,
   };
 }
 

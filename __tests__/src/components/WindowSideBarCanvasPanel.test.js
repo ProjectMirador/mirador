@@ -9,12 +9,24 @@ import manifestJson from '../../fixtures/version-2/019.json';
  * Helper function to create a shallow wrapper around WindowSideBarCanvasPanel
  */
 function createWrapper(props) {
-  const canvases = Utils.parseManifest(manifestJson).getSequences()[0].getCanvases();
+  const canvases = Utils.parseManifest(manifestJson)
+    .getSequences()[0]
+    .getCanvases();
   let sequences;
 
   if (props.multipleSequences) {
-    sequences = [{ getLabel: () => ({ getValue: () => undefined }), id: 'a', label: 'seq1' },
-      { getLabel: () => ({ getValue: () => undefined }), id: 'b', label: 'seq2' }];
+    sequences = [
+      {
+        getLabel: () => ({ getValue: () => undefined }),
+        id: 'a',
+        label: 'seq1',
+      },
+      {
+        getLabel: () => ({ getValue: () => undefined }),
+        id: 'b',
+        label: 'seq2',
+      },
+    ];
   } else {
     sequences = Utils.parseManifest(manifestJson).getSequences();
   }
@@ -49,13 +61,17 @@ describe('WindowSideBarCanvasPanel', () => {
   it('without a treeStructure will not render the table of contents tab', () => {
     createWrapper({ multipleSequences: false });
 
-    expect(screen.queryByRole('tab', { name: 'Table of contents' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('tab', { name: 'Table of contents' }),
+    ).not.toBeInTheDocument();
   });
 
   it('renders form control when multiple sequences present', () => {
     createWrapper({ multipleSequences: true, showToc: true });
 
-    expect(screen.getByRole('tab', { name: 'Table of contents' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', { name: 'Table of contents' }),
+    ).toBeInTheDocument();
   });
 
   it('renders correct number of sequences in form control', async () => {
@@ -64,7 +80,9 @@ describe('WindowSideBarCanvasPanel', () => {
     createWrapper({ multipleSequences: true, updateSequence });
 
     expect(screen.getByTestId('sequence-select')).toHaveTextContent('a');
-    await user.click(within(screen.getByTestId('sequence-select')).getByRole('combobox'));
+    await user.click(
+      within(screen.getByTestId('sequence-select')).getByRole('combobox'),
+    );
 
     const listbox = within(screen.getByRole('listbox'));
     expect(listbox.getAllByRole('option')).toHaveLength(2);

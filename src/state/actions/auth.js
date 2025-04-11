@@ -2,9 +2,8 @@ import ActionTypes from './action-types';
 
 /**
  * addAuthenticationRequest - action creator
- *
- * @param  {String} windowId
- * @param  {String} id
+ * @param  {string} windowId
+ * @param  {string} id
  * @memberof ActionCreators
  */
 export function addAuthenticationRequest(windowId, id, profile = undefined) {
@@ -19,9 +18,8 @@ export function addAuthenticationRequest(windowId, id, profile = undefined) {
 /**
  * resolveAuthenticationRequest - action creator
  * Triggered when we might have an IIIF auth cookie available (but we
- *   can't be really sure until try the access token)
- *
- * @param {String} id
+ * can't be really sure until try the access token)
+ * @param {string} id
  * @memberof ActionCreators
  */
 export function resolveAuthenticationRequest(id, tokenServiceId, props) {
@@ -36,9 +34,8 @@ export function resolveAuthenticationRequest(id, tokenServiceId, props) {
 /**
  * requestAccessToken - action creator
  * @private
- *
- * @param  {String} serviceId
- * @param  {String} authId
+ * @param  {string} serviceId
+ * @param  {string} authId
  * @memberof ActionCreators
  */
 export function requestAccessToken(serviceId, authId) {
@@ -52,9 +49,9 @@ export function requestAccessToken(serviceId, authId) {
 /**
  * receiveAccessToken - action creator
  * @private
- *
- * @param  {String} serviceId
- * @param  {Object} json
+ * @param  {string} authId
+ * @param  {string} serviceId
+ * @param  {object} json
  * @memberof ActionCreators
  */
 export function receiveAccessToken(authId, serviceId, json) {
@@ -69,9 +66,9 @@ export function receiveAccessToken(authId, serviceId, json) {
 /**
  * receiveAccessTokenFailure - action creator
  * @private
- *
- * @param  {String} serviceId
- * @param  {Object} error
+ * @param  {string} authId
+ * @param  {string} serviceId
+ * @param  {object} error
  * @memberof ActionCreators
  */
 export function receiveAccessTokenFailure(authId, serviceId, error) {
@@ -85,14 +82,14 @@ export function receiveAccessTokenFailure(authId, serviceId, error) {
 
 /**
  * resolveAccessTokenRequest - action creator
- *
- * @param {String} authServiceId
- * @param {String} tokenServiceId
- * @param {Object} json
+ * @param {string} authServiceId
+ * @param {string} tokenServiceId
+ * @param {object} json
  * @memberof ActionCreators
  */
 export function resolveAccessTokenRequest(authServiceId, tokenServiceId, json) {
-  if (!json.accessToken) return receiveAccessTokenFailure(authServiceId, tokenServiceId, json);
+  if (!json.accessToken)
+    return receiveAccessTokenFailure(authServiceId, tokenServiceId, json);
 
   return receiveAccessToken(authServiceId, tokenServiceId, json);
 }

@@ -14,10 +14,7 @@ const mapStateToProps = (state, { width }) => {
   const { isWorkspaceAddVisible } = getWorkspace(state);
   return {
     isWorkspaceAddVisible,
-    useExtendedFab: (
-      !isWorkspaceAddVisible
-        && getWindowIds(state).length === 0
-    ),
+    useExtendedFab: !isWorkspaceAddVisible && getWindowIds(state).length === 0,
   };
 };
 
@@ -26,7 +23,9 @@ const mapStateToProps = (state, { width }) => {
  * @memberof Workspace
  * @private
  */
-const mapDispatchToProps = { setWorkspaceAddVisibility: actions.setWorkspaceAddVisibility };
+const mapDispatchToProps = {
+  setWorkspaceAddVisibility: actions.setWorkspaceAddVisibility,
+};
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),

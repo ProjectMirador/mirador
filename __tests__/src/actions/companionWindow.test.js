@@ -2,8 +2,12 @@ import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 vi.mock('../../../src/state/selectors', async (importOriginal) => ({
-  ...await importOriginal(),
-  getVisibleNodeIds: (state, args) => ['openVisible', 'closedVisible', 'visible'],
+  ...(await importOriginal()),
+  getVisibleNodeIds: (state, args) => [
+    'openVisible',
+    'closedVisible',
+    'visible',
+  ],
 }));
 
 describe('companionWindow actions', () => {
@@ -18,9 +22,7 @@ describe('companionWindow actions', () => {
       const action = actions.addCompanionWindow('abc123', payload);
 
       expect(action.type).toBe(ActionTypes.ADD_COMPANION_WINDOW);
-      expect(action.id).toEqual(
-        expect.stringMatching(/^cw-\w+-\w+/),
-      );
+      expect(action.id).toEqual(expect.stringMatching(/^cw-\w+-\w+/));
       expect(action.windowId).toEqual('abc123');
       expect(action.payload).toMatchObject(payload);
       expect(action.payload.id).toEqual(action.id);
@@ -76,7 +78,11 @@ describe('companionWindow actions', () => {
       expect(action.id).toBe('cw1');
       expect(action.windowId).toBe('window1');
       expect(action.type).toBe(ActionTypes.TOGGLE_TOC_NODE);
-      expect(action.payload).toMatchObject({ a: { expanded: true }, b: { expanded: true }, c: { expanded: true } });
+      expect(action.payload).toMatchObject({
+        a: { expanded: true },
+        b: { expanded: true },
+        c: { expanded: true },
+      });
     });
 
     it('marks currently expanded nodes as collapsed', () => {
@@ -97,7 +103,11 @@ describe('companionWindow actions', () => {
       expect(action.id).toBe('cw1');
       expect(action.windowId).toBe('window1');
       expect(action.type).toBe(ActionTypes.TOGGLE_TOC_NODE);
-      expect(action.payload).toMatchObject({ a: { expanded: true }, b: { expanded: false }, c: { expanded: false } });
+      expect(action.payload).toMatchObject({
+        a: { expanded: true },
+        b: { expanded: false },
+        c: { expanded: false },
+      });
     });
   });
 
@@ -145,13 +155,21 @@ describe('companionWindow actions', () => {
     });
 
     it('returns a correct action any node that is present in the state', () => {
-      const openVisibleThunk = actions.toggleNode('window1', 'cw1', 'openVisible');
+      const openVisibleThunk = actions.toggleNode(
+        'window1',
+        'cw1',
+        'openVisible',
+      );
       openVisibleThunk(mockDispatch, mockGetState);
 
       const openThunk = actions.toggleNode('window1', 'cw1', 'open');
       openThunk(mockDispatch, mockGetState);
 
-      const closedVisibleThunk = actions.toggleNode('window1', 'cw1', 'closedVisible');
+      const closedVisibleThunk = actions.toggleNode(
+        'window1',
+        'cw1',
+        'closedVisible',
+      );
       closedVisibleThunk(mockDispatch, mockGetState);
 
       const closedThunk = actions.toggleNode('window1', 'cw1', 'closed');
@@ -161,19 +179,27 @@ describe('companionWindow actions', () => {
       expect(actionForOpenVisible.id).toBe('cw1');
       expect(actionForOpenVisible.windowId).toBe('window1');
       expect(actionForOpenVisible.type).toBe(ActionTypes.TOGGLE_TOC_NODE);
-      expect(actionForOpenVisible.payload).toMatchObject({ openVisible: { expanded: false } });
+      expect(actionForOpenVisible.payload).toMatchObject({
+        openVisible: { expanded: false },
+      });
 
       const actionForOpen = mockDispatch.mock.calls[1][0];
       expect(actionForOpen.type).toBe(ActionTypes.TOGGLE_TOC_NODE);
-      expect(actionForOpen.payload).toMatchObject({ open: { expanded: false } });
+      expect(actionForOpen.payload).toMatchObject({
+        open: { expanded: false },
+      });
 
       const actionForClosedVisible = mockDispatch.mock.calls[2][0];
       expect(actionForClosedVisible.type).toBe(ActionTypes.TOGGLE_TOC_NODE);
-      expect(actionForClosedVisible.payload).toMatchObject({ closedVisible: { expanded: true } });
+      expect(actionForClosedVisible.payload).toMatchObject({
+        closedVisible: { expanded: true },
+      });
 
       const actionForClosed = mockDispatch.mock.calls[3][0];
       expect(actionForClosed.type).toBe(ActionTypes.TOGGLE_TOC_NODE);
-      expect(actionForClosed.payload).toMatchObject({ closed: { expanded: true } });
+      expect(actionForClosed.payload).toMatchObject({
+        closed: { expanded: true },
+      });
     });
   });
 });

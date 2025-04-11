@@ -11,7 +11,12 @@ function createWrapper({ content = 'closed', ...props }) {
       content={content}
       {...props}
     />,
-    { preloadedState: { companionWindows: { 123: { content }, thumb: {} }, windows: { x: { thumbnailNavigationId: 'thumb' } } } },
+    {
+      preloadedState: {
+        companionWindows: { 123: { content }, thumb: {} },
+        windows: { x: { thumbnailNavigationId: 'thumb' } },
+      },
+    },
   );
 }
 
@@ -22,7 +27,9 @@ describe('CompanionWindowFactory', () => {
         content: 'info',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('About this item');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName(
+        'About this item',
+      );
     });
   });
 
@@ -32,7 +39,9 @@ describe('CompanionWindowFactory', () => {
         content: 'canvas',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('Index');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName(
+        'Index',
+      );
     });
   });
 
@@ -42,7 +51,9 @@ describe('CompanionWindowFactory', () => {
         content: 'annotations',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('Annotations');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName(
+        'Annotations',
+      );
     });
   });
 
@@ -52,7 +63,9 @@ describe('CompanionWindowFactory', () => {
         content: 'attribution',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('Rights');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName(
+        'Rights',
+      );
     });
   });
 
@@ -72,7 +85,9 @@ describe('CompanionWindowFactory', () => {
         content: 'search',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('Search');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName(
+        'Search',
+      );
     });
   });
 
@@ -82,7 +97,9 @@ describe('CompanionWindowFactory', () => {
         content: 'layers',
       });
 
-      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName('Layers');
+      expect(screen.getByRole('heading', { level: 3 })).toHaveAccessibleName(
+        'Layers',
+      );
     });
   });
 });

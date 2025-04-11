@@ -6,12 +6,10 @@ import { FullScreenButton } from '../../../src/components/FullScreenButton';
 /** */
 function createWrapper(props, contextProps = { active: false }) {
   return render(
-    <FullScreenContext.Provider value={{ enter: () => { }, exit: () => { }, ...contextProps }}>
-      <FullScreenButton
-        classes={{}}
-        className="xyz"
-        {...props}
-      />
+    <FullScreenContext.Provider
+      value={{ enter: () => {}, exit: () => {}, ...contextProps }}
+    >
+      <FullScreenButton classes={{}} className="xyz" {...props} />
     </FullScreenContext.Provider>,
   );
 }
@@ -53,7 +51,9 @@ describe('FullScreenButton', () => {
     });
 
     it('has the proper aria-label', () => {
-      expect(screen.getByRole('button')).toHaveAccessibleName('Exit full screen');
+      expect(screen.getByRole('button')).toHaveAccessibleName(
+        'Exit full screen',
+      );
     });
 
     it('triggers the handle exit with the appropriate boolean', async () => {

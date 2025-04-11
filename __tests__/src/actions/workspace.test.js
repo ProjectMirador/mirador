@@ -21,7 +21,9 @@ describe('workspace actions', () => {
         layout: { foo: 'bar' },
         type: ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT,
       };
-      expect(actions.updateWorkspaceMosaicLayout(options)).toEqual(expectedAction);
+      expect(actions.updateWorkspaceMosaicLayout(options)).toEqual(
+        expectedAction,
+      );
     });
   });
   describe('toggleZoomControls', () => {
@@ -53,10 +55,12 @@ describe('workspace actions', () => {
         },
         type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
       };
-      expect(actions.setWorkspaceViewportDimensions({
-        height: 25,
-        width: 20,
-      })).toEqual(expectedAction);
+      expect(
+        actions.setWorkspaceViewportDimensions({
+          height: 25,
+          width: 20,
+        }),
+      ).toEqual(expectedAction);
     });
   });
   describe('setWorkspaceViewportPosition', () => {
@@ -70,10 +74,12 @@ describe('workspace actions', () => {
         },
         type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
       };
-      expect(actions.setWorkspaceViewportPosition({
-        x: 20,
-        y: 20,
-      })).toEqual(expectedAction);
+      expect(
+        actions.setWorkspaceViewportPosition({
+          x: 20,
+          y: 20,
+        }),
+      ).toEqual(expectedAction);
     });
   });
   describe('toggleDraggingEnabled', () => {

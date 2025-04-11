@@ -11,16 +11,20 @@ describe('AnnotationFactory', () => {
     });
     describe('when Presentation v3', () => {
       it('returns an AnnotationPage', () => {
-        expect(AnnotationFactory.determineAnnotation({
-          type: 'AnnotationPage',
-        })).toBeInstanceOf(AnnotationPage);
+        expect(
+          AnnotationFactory.determineAnnotation({
+            type: 'AnnotationPage',
+          }),
+        ).toBeInstanceOf(AnnotationPage);
       });
     });
     describe('when Presentation v2', () => {
       it('returns an AnnotationPage', () => {
-        expect(AnnotationFactory.determineAnnotation({
-          '@type': 'AnnotationList',
-        })).toBeInstanceOf(AnnotationList);
+        expect(
+          AnnotationFactory.determineAnnotation({
+            '@type': 'AnnotationList',
+          }),
+        ).toBeInstanceOf(AnnotationList);
       });
     });
   });

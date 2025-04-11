@@ -3,8 +3,7 @@ import ActionTypes from './action-types';
 
 /**
  * importConfig - action creator
- *
- * @param  {Object} config
+ * @param  {object} config
  * @memberof ActionCreators
  */
 export function importConfig(config) {
@@ -13,8 +12,7 @@ export function importConfig(config) {
 
 /**
  * setConfig - action creator
- *
- * @param  {Object} config
+ * @param  {object} config
  * @memberof ActionCreators
  */
 export function setConfig(config) {
@@ -23,8 +21,7 @@ export function setConfig(config) {
 
 /**
  * updateConfig - action creator
- *
- * @param  {Object} config
+ * @param  {object} config
  * @memberof ActionCreators
  */
 export function updateConfig(config) {
@@ -33,8 +30,7 @@ export function updateConfig(config) {
 
 /**
  * importMiradorState - action creator
- *
- * @param  {Object} config
+ * @param  {object} state
  * @memberof ActionCreators
  */
 export function importMiradorState(state) {

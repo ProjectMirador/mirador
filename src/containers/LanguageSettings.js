@@ -8,7 +8,7 @@ import { LanguageSettings } from '../components/LanguageSettings';
 /**
  * Map state to props for connect
  */
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   languages: getLanguagesFromConfigWithCurrent(state),
 });
 

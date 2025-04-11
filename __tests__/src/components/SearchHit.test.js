@@ -2,12 +2,9 @@ import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { SearchHit } from '../../../src/components/SearchHit';
 
-vi.mock(
-  '../../../src/components/ScrollTo',
-  () => ({
-    ScrollTo: ({ children }) => (<div data-testid="scrollto">{children}</div>), // eslint-disable-line react/prop-types
-  }),
-);
+vi.mock('../../../src/components/ScrollTo', () => ({
+  ScrollTo: ({ children }) => <div data-testid="scrollto">{children}</div>, // eslint-disable-line react/prop-types
+}));
 
 /**
  * Helper function to create a shallow wrapper around SearchResults
@@ -38,7 +35,9 @@ describe('SearchHit', () => {
     render(<Subject selectAnnotation={selectAnnotation} />);
 
     expect(screen.getByRole('listitem')).toHaveClass('windowSelected');
-    expect(screen.getByRole('listitem')).toHaveTextContent('1Light up the moose , and start the chai more');
+    expect(screen.getByRole('listitem')).toHaveTextContent(
+      '1Light up the moose , and start the chai more',
+    );
 
     await user.click(screen.getByRole('button'));
     expect(selectAnnotation).toHaveBeenCalledWith('foo');
@@ -60,7 +59,9 @@ describe('SearchHit', () => {
     it('renders the annotationLabel if present', () => {
       render(<Subject annotationLabel="The Anno Label" />);
 
-      expect(screen.getByRole('heading', { level: 4, name: 'The Anno Label' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { level: 4, name: 'The Anno Label' }),
+      ).toBeInTheDocument();
     });
 
     it('does not render the typography if no annotation label is present', () => {

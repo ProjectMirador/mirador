@@ -3,13 +3,7 @@ import { SidebarIndexItem } from '../../../src/components/SidebarIndexItem';
 
 /** */
 function createWrapper(props) {
-  return render(
-    <SidebarIndexItem
-      label="yolo"
-      classes={{}}
-      {...props}
-    />,
-  );
+  return render(<SidebarIndexItem label="yolo" classes={{}} {...props} />);
 }
 
 describe('SidebarIndexItem', () => {

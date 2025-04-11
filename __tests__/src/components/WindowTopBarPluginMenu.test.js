@@ -9,21 +9,14 @@ vi.mock('../../../src/extend/usePlugins');
 
 /** create wrapper */
 function Subject({ ...props }) {
-  return (
-    <WindowTopBarPluginMenu
-      windowId="abc123"
-      {...props}
-    />
-  );
+  return <WindowTopBarPluginMenu windowId="abc123" {...props} />;
 }
 // needs to be a non-functional component to accept forwardRef the way we have it set up
 /**  */
 class mockComponentA extends React.Component {
   /**  */
   render() {
-    return (
-      <div data-testid="testA" />
-    );
+    return <div data-testid="testA" />;
   }
 }
 
@@ -33,7 +26,9 @@ describe('WindowTopBarPluginMenu', () => {
       vi.mocked(usePlugins).mockReturnValue({ PluginComponents: [] });
       render(<Subject />);
       expect(screen.queryByTestId('testA')).not.toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: 'Window options' })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Window options' }),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -42,12 +37,16 @@ describe('WindowTopBarPluginMenu', () => {
 
     beforeEach(() => {
       user = userEvent.setup();
-      vi.mocked(usePlugins).mockReturnValue({ PluginComponents: [mockComponentA] });
+      vi.mocked(usePlugins).mockReturnValue({
+        PluginComponents: [mockComponentA],
+      });
       render(<Subject />);
     });
 
     it('renders the Button', async () => {
-      expect(screen.getByRole('button', { name: 'Window options' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Window options' }),
+      ).toBeInTheDocument();
     });
 
     it('the Menu is controlled by the Button clicks', async () => {

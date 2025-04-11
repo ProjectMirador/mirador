@@ -9,12 +9,10 @@ import { getCanvases, getSequenceViewingDirection } from '../state/selectors';
  * @memberof WindowViewer
  * @private
  */
-const mapStateToProps = (state, { windowId }) => (
-  {
-    canvases: getCanvases(state, { windowId }),
-    viewingDirection: getSequenceViewingDirection(state, { windowId }),
-  }
-);
+const mapStateToProps = (state, { windowId }) => ({
+  canvases: getCanvases(state, { windowId }),
+  viewingDirection: getSequenceViewingDirection(state, { windowId }),
+});
 
 const enhance = compose(
   connect(mapStateToProps),

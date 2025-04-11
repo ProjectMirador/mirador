@@ -48,12 +48,13 @@ export const infoResponsesReducer = (state = {}, action) => {
     case ActionTypes.REMOVE_INFO_RESPONSE:
       return Object.keys(state).reduce((object, key) => {
         if (key !== action.infoId) {
-          object[key] = state[key]; // eslint-disable-line no-param-reassign
+          object[key] = state[key];
         }
         return object;
       }, {});
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};
-    default: return state;
+    default:
+      return state;
   }
 };

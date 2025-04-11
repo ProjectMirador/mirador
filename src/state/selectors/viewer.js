@@ -10,16 +10,15 @@ import { getMiradorCanvasWrapper } from './wrappers';
  *  Instantiate a manifesto instance.
  * @param {object} state
  * @param {string} windowId
- * @return {object}
+ * @returns {object}
  */
 export const getCurrentCanvasWorld = createSelector(
   [
-    getVisibleCanvases, getLayersForVisibleCanvases, getSequenceViewingDirection,
+    getVisibleCanvases,
+    getLayersForVisibleCanvases,
+    getSequenceViewingDirection,
     getMiradorCanvasWrapper,
   ],
-  (canvases, layers, viewingDirection, getMiradorCanvas) => new CanvasWorld(
-    canvases.map(getMiradorCanvas),
-    layers,
-    viewingDirection,
-  ),
+  (canvases, layers, viewingDirection, getMiradorCanvas) =>
+    new CanvasWorld(canvases.map(getMiradorCanvas), layers, viewingDirection),
 );

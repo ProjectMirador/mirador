@@ -19,11 +19,17 @@ describe('CollectionInfo', () => {
     createWrapper();
 
     expect(screen.getByRole('heading', { name: 'Collection' })).toBeVisible();
-    expect(screen.getByRole('button', { name: 'Show collection' })).toBeVisible();
+    expect(
+      screen.getByRole('button', { name: 'Show collection' }),
+    ).toBeVisible();
 
-    await user.click(screen.getByRole('button', { name: 'Collapse "Collection" section' }));
+    await user.click(
+      screen.getByRole('button', { name: 'Collapse "Collection" section' }),
+    );
 
-    expect(screen.queryByRole('button', { name: 'Show collection' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Show collection' }),
+    ).not.toBeInTheDocument();
   });
   it('without a collectionPath, renders nothing', () => {
     const wrapper = createWrapper({ collectionPath: [] });

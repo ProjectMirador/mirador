@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react';
 import fs from 'fs/promises';
 
 /**
-* Vite configuration
-*/
+ * Vite configuration
+ */
 export default defineConfig({
   build: {
     emptyOutDir: false,
@@ -15,10 +15,7 @@ export default defineConfig({
       name: 'Mirador',
     },
     rollupOptions: {
-      external: [
-        '__tests__/*',
-        '__mocks__/*',
-      ],
+      external: ['__tests__/*', '__mocks__/*'],
       output: {
         assetFileNames: 'mirador.[ext]',
         exports: 'named',

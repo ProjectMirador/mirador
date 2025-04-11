@@ -86,12 +86,14 @@ export default class OpenSeadragonCanvasOverlay {
     if (!image1) return;
     const zoom = image1.viewportToImageZoom(viewportZoom);
 
-    const x = (
-      (this.viewportOrigin.x / this.imgWidth - this.viewportOrigin.x) / this.viewportWidth
-    ) * this.containerWidth;
-    const y = (
-      (this.viewportOrigin.y / this.imgHeight - this.viewportOrigin.y) / this.viewportHeight
-    ) * this.containerHeight;
+    const x =
+      ((this.viewportOrigin.x / this.imgWidth - this.viewportOrigin.x) /
+        this.viewportWidth) *
+      this.containerWidth;
+    const y =
+      ((this.viewportOrigin.y / this.imgHeight - this.viewportOrigin.y) /
+        this.viewportHeight) *
+      this.containerHeight;
 
     if (this.clearBeforeRedraw) this.clear();
     this.context2d.translate(x, y);
@@ -108,7 +110,7 @@ export default class OpenSeadragonCanvasOverlay {
     const rotation = this.viewer.viewport.getRotation();
     if (rotation !== 0) {
       this.context2d.translate(center.x, center.y);
-      this.context2d.rotate(rotation * Math.PI / 180);
+      this.context2d.rotate((rotation * Math.PI) / 180);
       this.context2d.translate(-1 * center.x, -1 * center.y);
     }
     update();

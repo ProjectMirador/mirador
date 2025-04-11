@@ -8,8 +8,14 @@ describe('WorkspaceControlPanelButtons', () => {
   });
 
   it('render all needed elements', () => {
-    expect(screen.getByRole('button', { name: 'Jump to window' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Workspace settings' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Workspace options' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Jump to window' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Workspace settings' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Workspace options' }),
+    ).toBeInTheDocument();
   });
 });

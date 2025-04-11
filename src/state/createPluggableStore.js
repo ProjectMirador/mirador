@@ -20,9 +20,7 @@ function createPluggableStore(config, plugins = []) {
   );
 
   store.dispatch(
-    importConfig(
-      deepmerge(getConfigFromPlugins(filteredPlugins), config),
-    ),
+    importConfig(deepmerge(getConfigFromPlugins(filteredPlugins), config)),
   );
 
   return store;

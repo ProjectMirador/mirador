@@ -13,7 +13,8 @@ import {
 /** mapStateToProps */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   metadata: {
-    companionWindow: companionWindowId && getCompanionWindow(state, { companionWindowId }),
+    companionWindow:
+      companionWindowId && getCompanionWindow(state, { companionWindowId }),
     manifest: getManifest(state, { windowId }),
     viewer: getViewer(state, { windowId }),
     window: getWindow(state, { windowId }),
@@ -21,9 +22,6 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   showJsError: getConfig(state).window.showJsError,
 });
 
-const enhance = compose(
-  connect(mapStateToProps),
-  withPlugins('ErrorContent'),
-);
+const enhance = compose(connect(mapStateToProps), withPlugins('ErrorContent'));
 
 export default enhance(ErrorContent);

@@ -4,9 +4,8 @@
  * - One with a specific manifest
  *
  * You can pass in an `id` to ensure that the configuration objects do not conflict when used in integration tests.
- *
  * @param {string} [id] - Optional unique identifier for the config to avoid conflicts in tests.
- * @returns {Object} The Mirador configuration object with two windows.
+ * @returns {object} The Mirador configuration object with two windows.
  */
 export default function createConfig(id) {
   return {
@@ -14,10 +13,12 @@ export default function createConfig(id) {
     windows: [
       {
         canvasIndex: 2,
-        loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+        loadedManifest:
+          'https://iiif.harvardartmuseums.org/manifests/object/299843',
       },
       {
-        loadedManifest: 'https://media.nga.gov/public/manifests/nga_highlights.json',
+        loadedManifest:
+          'https://media.nga.gov/public/manifests/nga_highlights.json',
         thumbnailNavigationPosition: 'off',
       },
     ],

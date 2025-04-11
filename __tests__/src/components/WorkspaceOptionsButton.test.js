@@ -6,12 +6,7 @@ import { WorkspaceOptionsButton } from '../../../src/components/WorkspaceOptions
 function Subject({ ...props }) {
   return (
     <div>
-      <WorkspaceOptionsButton
-        classes={{}}
-        {...props}
-      />
-      ,
-      ,
+      <WorkspaceOptionsButton classes={{}} {...props} />, ,
     </div>
   );
 }

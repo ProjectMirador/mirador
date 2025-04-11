@@ -17,7 +17,11 @@ function createWrapper(props) {
 describe('ViewerNavigation', () => {
   it('renders the component', () => {
     createWrapper();
-    expect(screen.getByText('3 of 8', { selector: 'span' })).toBeInTheDocument();
-    expect(screen.getByText(/testLabel/i, { selector: 'span' })).toBeInTheDocument();
+    expect(
+      screen.getByText('3 of 8', { selector: 'span' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/testLabel/i, { selector: 'span' }),
+    ).toBeInTheDocument();
   });
 });

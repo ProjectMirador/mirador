@@ -6,7 +6,8 @@ import ActionTypes from '../actions/action-types';
  * searchReducer
  */
 export const searchesReducer = (state = {}, action) => {
-  const searchStruct = (state[action.windowId] || {})[action.companionWindowId] || {};
+  const searchStruct =
+    (state[action.windowId] || {})[action.companionWindowId] || {};
   switch (action.type) {
     case ActionTypes.REQUEST_SEARCH:
       if (searchStruct.query !== action.query) {
@@ -82,12 +83,15 @@ export const searchesReducer = (state = {}, action) => {
     case ActionTypes.REMOVE_SEARCH:
       return {
         ...state,
-        [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
-          if (key !== action.companionWindowId) {
-            object[key] = state[action.windowId][key]; // eslint-disable-line no-param-reassign
-          }
-          return object;
-        }, {}),
+        [action.windowId]: Object.keys(state[action.windowId]).reduce(
+          (object, key) => {
+            if (key !== action.companionWindowId) {
+              object[key] = state[action.windowId][key];
+            }
+            return object;
+          },
+          {},
+        ),
       };
     case ActionTypes.SET_CONTENT_SEARCH_CURRENT_ANNOTATIONS:
       return {
@@ -105,25 +109,31 @@ export const searchesReducer = (state = {}, action) => {
 
       return {
         ...state,
-        [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
-          const search = state[action.windowId][key];
-          const searchHasAnnotation = search.data
-            && Object.values(search.data)
-              .filter(resp => resp.json && resp.json.resources)
-              .some(resp => (
-                flatten([resp.json.resources]).some(r => r['@id'] === action.annotationId)
-              ));
+        [action.windowId]: Object.keys(state[action.windowId]).reduce(
+          (object, key) => {
+            const search = state[action.windowId][key];
+            const searchHasAnnotation =
+              search.data &&
+              Object.values(search.data)
+                .filter((resp) => resp.json && resp.json.resources)
+                .some((resp) =>
+                  flatten([resp.json.resources]).some(
+                    (r) => r['@id'] === action.annotationId,
+                  ),
+                );
 
-          if (searchHasAnnotation) {
-            object[key] = { // eslint-disable-line no-param-reassign
-              ...search,
-              selectedContentSearchAnnotationIds: [action.annotationId],
-            };
-          } else {
-            object[key] = search; // eslint-disable-line no-param-reassign
-          }
-          return object;
-        }, {}),
+            if (searchHasAnnotation) {
+              object[key] = {
+                ...search,
+                selectedContentSearchAnnotationIds: [action.annotationId],
+              };
+            } else {
+              object[key] = search;
+            }
+            return object;
+          },
+          {},
+        ),
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};
@@ -138,6 +148,7 @@ export const searchesReducer = (state = {}, action) => {
           ...omit(state[action.windowId], action.id),
         },
       };
-    default: return state;
+    default:
+      return state;
   }
 };

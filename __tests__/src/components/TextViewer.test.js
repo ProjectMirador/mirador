@@ -15,33 +15,60 @@ function createWrapper(props, suspenseFallback) {
 describe('TextViewer', () => {
   describe('render', () => {
     it('textResources as source elements', () => {
-      createWrapper({
-        textResources: [
-          { getFormat: () => 'application/pdf', getType: () => 'Text', id: 1 },
-        ],
-        windowId: 'a',
-      }, true);
+      createWrapper(
+        {
+          textResources: [
+            {
+              getFormat: () => 'application/pdf',
+              getType: () => 'Text',
+              id: 1,
+            },
+          ],
+          windowId: 'a',
+        },
+        true,
+      );
       const text = screen.getByTestId('text');
-      expect(text.querySelector('source:nth-of-type(1)')).toHaveAttribute('type', 'application/pdf'); // eslint-disable-line testing-library/no-node-access
+      expect(text.querySelector('source:nth-of-type(1)')).toHaveAttribute(
+        'type',
+        'application/pdf',
+      );
     });
     it('passes through configurable options', () => {
-      createWrapper({
-        textResources: [
-          { getFormat: () => 'application/pdf', getType: () => 'Text', id: 1 },
-        ],
-        windowId: 'a',
-      }, true);
-      expect(screen.getByTestId('text')).toHaveAttribute('crossOrigin', 'anonymous');
+      createWrapper(
+        {
+          textResources: [
+            {
+              getFormat: () => 'application/pdf',
+              getType: () => 'Text',
+              id: 1,
+            },
+          ],
+          windowId: 'a',
+        },
+        true,
+      );
+      expect(screen.getByTestId('text')).toHaveAttribute(
+        'crossOrigin',
+        'anonymous',
+      );
     });
     it('canvas navigation', () => {
-      createWrapper({
-        textResources: [
-          { getFormat: () => 'application/pdf', getType: () => 'Text', id: 1 },
-        ],
-        windowId: 'a',
-      }, true);
+      createWrapper(
+        {
+          textResources: [
+            {
+              getFormat: () => 'application/pdf',
+              getType: () => 'Text',
+              id: 1,
+            },
+          ],
+          windowId: 'a',
+        },
+        true,
+      );
       const text = screen.getByTestId('text');
-      expect(text.querySelector('.mirador-canvas-nav')).toBeDefined(); // eslint-disable-line testing-library/no-node-access
+      expect(text.querySelector('.mirador-canvas-nav')).toBeDefined();
     });
   });
 });

@@ -2,10 +2,10 @@ import ActionTypes from './action-types';
 
 /**
  * requestSearch - action creator
- *
- * @param  {String} windowId
- * @param  {String} searchId
- * @param  {String} query
+ * @param  {string} windowId
+ * @param  {string} companionWindowId
+ * @param  {string} searchId
+ * @param  {string} query
  * @memberof ActionCreators
  */
 export function requestSearch(windowId, companionWindowId, searchId, query) {
@@ -20,13 +20,18 @@ export function requestSearch(windowId, companionWindowId, searchId, query) {
 
 /**
  * receiveSearch - action creator
- *
- * @param  {String} windowId
- * @param  {String} searchId
- * @param  {Object} searchJson
+ * @param  {string} windowId
+ * @param  {string} companionWindowId
+ * @param  {string} searchId
+ * @param  {object} searchJson
  * @memberof ActionCreators
  */
-export function receiveSearch(windowId, companionWindowId, searchId, searchJson) {
+export function receiveSearch(
+  windowId,
+  companionWindowId,
+  searchId,
+  searchJson,
+) {
   return {
     companionWindowId,
     searchId,
@@ -38,13 +43,18 @@ export function receiveSearch(windowId, companionWindowId, searchId, searchJson)
 
 /**
  * receiveSearchFailure - action creator
- *
- * @param  {String} windowId
- * @param  {String} searchId
- * @param  {String} error
+ * @param  {string} windowId
+ * @param  {string} companionWindowId
+ * @param  {string} searchId
+ * @param  {string} error
  * @memberof ActionCreators
  */
-export function receiveSearchFailure(windowId, companionWindowId, searchId, error) {
+export function receiveSearchFailure(
+  windowId,
+  companionWindowId,
+  searchId,
+  error,
+) {
   return {
     companionWindowId,
     error,
@@ -56,9 +66,8 @@ export function receiveSearchFailure(windowId, companionWindowId, searchId, erro
 
 /**
  * removeSearch - action creator
- *
- * @param  {String} windowId
- * @param  {String} companionWindowId
+ * @param  {string} windowId
+ * @param  {string} companionWindowId
  * @memberof ActionCreators
  */
 export function removeSearch(windowId, companionWindowId) {
@@ -71,9 +80,10 @@ export function removeSearch(windowId, companionWindowId) {
 
 /**
  * fetchSearch - action creator
- *
- * @param  {String} searchId
- * @param  {String} query
+ * @param  {string} windowId
+ * @param  {string} companionWindowId
+ * @param  {string} searchId
+ * @param  {string} query
  * @memberof ActionCreators
  */
 export function fetchSearch(windowId, companionWindowId, searchId, query) {
@@ -82,12 +92,16 @@ export function fetchSearch(windowId, companionWindowId, searchId, query) {
 
 /**
  * setContentSearchCurrentAnnotation - action creator
- *
- * @param  {String} windowId
- * @param  {String} annotationId
+ * @param  {string} windowId
+ * @param  {string} companionWindowId
+ * @param  {string} annotationIds
  * @memberof ActionCreators
  */
-export function setContentSearchCurrentAnnotation(windowId, companionWindowId, annotationIds) {
+export function setContentSearchCurrentAnnotation(
+  windowId,
+  companionWindowId,
+  annotationIds,
+) {
   return {
     annotationIds,
     companionWindowId,

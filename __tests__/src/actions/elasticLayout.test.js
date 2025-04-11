@@ -12,9 +12,11 @@ describe('updateElasticWindowLayout', () => {
       type: ActionTypes.UPDATE_ELASTIC_WINDOW_LAYOUT,
       windowId: id,
     };
-    expect(actions.updateElasticWindowLayout(id, {
-      x: 20,
-      y: 20,
-    })).toEqual(expectedAction);
+    expect(
+      actions.updateElasticWindowLayout(id, {
+        x: 20,
+        y: 20,
+      }),
+    ).toEqual(expectedAction);
   });
 });

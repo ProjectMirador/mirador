@@ -19,7 +19,7 @@ function createWrapper(props) {
     />,
   );
 }
-/* eslint-disable testing-library/no-node-access */
+
 describe('WindowSideBarButtons', () => {
   const windowId = 'test123';
   let user;
@@ -50,35 +50,57 @@ describe('WindowSideBarButtons', () => {
 
     tab = screen.getByRole('tab', { name: 'Annotations' });
     expect(tab).toBeInTheDocument();
-    expect(tab.querySelector('.MuiBadge-dot:not(.MuiBadge-invisible)')).toBeInTheDocument();
+    expect(
+      tab.querySelector('.MuiBadge-dot:not(.MuiBadge-invisible)'),
+    ).toBeInTheDocument();
 
     wrapper.unmount();
 
-    wrapper = createWrapper({ hasAnnotations: false, hasAnyAnnotations: true, windowId });
+    wrapper = createWrapper({
+      hasAnnotations: false,
+      hasAnyAnnotations: true,
+      windowId,
+    });
 
     tab = screen.getByRole('tab', { name: 'Annotations' });
-    expect(tab.querySelector('.MuiBadge-dot.MuiBadge-invisible')).toBeInTheDocument();
+    expect(
+      tab.querySelector('.MuiBadge-dot.MuiBadge-invisible'),
+    ).toBeInTheDocument();
   });
 
   it('hides the annotation panel if there are no annotations', () => {
     wrapper = createWrapper({ hasAnyAnnotations: false, windowId });
 
-    expect(screen.queryByRole('tab', { name: 'Annotations' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('tab', { name: 'Annotations' }),
+    ).not.toBeInTheDocument();
   });
 
   it('can hide annotation panel when configured to do so', () => {
-    wrapper = createWrapper({ hasAnnotations: true, panels: { annotations: false }, windowId });
+    wrapper = createWrapper({
+      hasAnnotations: true,
+      panels: { annotations: false },
+      windowId,
+    });
 
-    expect(screen.queryByRole('tab', { name: 'Annotations' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('tab', { name: 'Annotations' }),
+    ).not.toBeInTheDocument();
   });
 
   describe('search', () => {
     it('by default is off', () => {
-      expect(screen.queryByRole('tab', { name: 'Search' })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('tab', { name: 'Search' }),
+      ).not.toBeInTheDocument();
     });
 
     it('can be configured to be on', () => {
-      wrapper = createWrapper({ hasSearchService: true, panels: { search: true }, windowId });
+      wrapper = createWrapper({
+        hasSearchService: true,
+        panels: { search: true },
+        windowId,
+      });
       expect(screen.getByRole('tab', { name: 'Search' })).toBeInTheDocument();
     });
 
@@ -93,7 +115,9 @@ describe('WindowSideBarButtons', () => {
         windowId,
       });
       tab = screen.getByRole('tab', { name: 'Search' });
-      expect(tab.querySelector('.MuiBadge-dot:not(.MuiBadge-invisible)')).toBeInTheDocument();
+      expect(
+        tab.querySelector('.MuiBadge-dot:not(.MuiBadge-invisible)'),
+      ).toBeInTheDocument();
 
       wrapper.unmount();
 
@@ -107,17 +131,25 @@ describe('WindowSideBarButtons', () => {
       });
       tab = screen.getByRole('tab', { name: 'Search' });
 
-      expect(tab.querySelector('.MuiBadge-dot.MuiBadge-invisible')).toBeInTheDocument();
+      expect(
+        tab.querySelector('.MuiBadge-dot.MuiBadge-invisible'),
+      ).toBeInTheDocument();
     });
   });
 
   describe('layers', () => {
     it('by default is off', () => {
-      expect(screen.queryByRole('tab', { name: 'Layers' })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('tab', { name: 'Layers' }),
+      ).not.toBeInTheDocument();
     });
 
     it('can be configured to be on', () => {
-      wrapper = createWrapper({ hasAnyLayers: true, panels: { layers: true }, windowId });
+      wrapper = createWrapper({
+        hasAnyLayers: true,
+        panels: { layers: true },
+        windowId,
+      });
       expect(screen.getByRole('tab', { name: 'Layers' })).toBeInTheDocument();
     });
 
@@ -132,7 +164,9 @@ describe('WindowSideBarButtons', () => {
         windowId,
       });
       tab = screen.getByRole('tab', { name: 'Layers' });
-      expect(tab.querySelector('.MuiBadge-dot:not(.MuiBadge-invisible)')).toBeInTheDocument();
+      expect(
+        tab.querySelector('.MuiBadge-dot:not(.MuiBadge-invisible)'),
+      ).toBeInTheDocument();
 
       wrapper.unmount();
 
@@ -146,7 +180,9 @@ describe('WindowSideBarButtons', () => {
       });
       tab = screen.getByRole('tab', { name: 'Layers' });
 
-      expect(tab.querySelector('.MuiBadge-dot.MuiBadge-invisible')).toBeInTheDocument();
+      expect(
+        tab.querySelector('.MuiBadge-dot.MuiBadge-invisible'),
+      ).toBeInTheDocument();
     });
   });
 });

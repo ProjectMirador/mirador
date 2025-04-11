@@ -20,14 +20,21 @@ describe('SanitizedHtml', () => {
   });
 
   it('should pass correct class name to root element', () => {
-    expect(screen.getByTestId('subject')).toHaveClass('mirador-third-party-html');
+    expect(screen.getByTestId('subject')).toHaveClass(
+      'mirador-third-party-html',
+    );
   });
 
   it('should pass sanitized html string to dangerouslySetInnerHTML attribute', () => {
-    expect(screen.getByTestId('subject').querySelector('script')).not.toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/prefer-presence-queries
-    expect(screen.getByText('Don\'t worry!')).toBeInTheDocument();
+    expect(
+      screen.queryByTestId('subject').querySelector('script'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("Don't worry!")).toBeInTheDocument();
     expect(screen.getByText('Some link')).toHaveAttribute('target', '_blank');
-    expect(screen.getByText('Some link')).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(screen.getByText('Some link')).toHaveAttribute(
+      'rel',
+      'noopener noreferrer',
+    );
   });
 
   it('removes script tags', () => {

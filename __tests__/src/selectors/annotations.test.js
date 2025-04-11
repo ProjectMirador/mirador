@@ -28,7 +28,10 @@ describe('getAnnotationResourcesByMotivationForCanvas', () => {
               resources: [
                 { '@id': 'annoId1', motivation: 'oa:commenting' },
                 { '@id': 'annoId2', motivation: 'oa:not-commenting' },
-                { '@id': 'annoId3', motivation: ['sc:something-else', 'oa:commenting'] },
+                {
+                  '@id': 'annoId3',
+                  motivation: ['sc:something-else', 'oa:commenting'],
+                },
               ],
             },
           },
@@ -38,14 +41,12 @@ describe('getAnnotationResourcesByMotivationForCanvas', () => {
         mid: {
           json: {
             '@context': 'http://iiif.io/api/presentation/2/context.json',
-            '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+            '@id':
+              'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
             '@type': 'sc:Manifest',
             sequences: [
               {
-                canvases: [
-                  { '@id': 'cid1' },
-                  { '@id': 'cid2' },
-                ],
+                canvases: [{ '@id': 'cid1' }, { '@id': 'cid2' }],
               },
             ],
           },
@@ -59,7 +60,11 @@ describe('getAnnotationResourcesByMotivationForCanvas', () => {
     };
 
     expect(
-      getAnnotationResourcesByMotivationForCanvas(state, { canvasId: 'cid2', motivations: ['something', 'oa:commenting'], windowId: 'abc123' }).map(r => r.motivations),
+      getAnnotationResourcesByMotivationForCanvas(state, {
+        canvasId: 'cid2',
+        motivations: ['something', 'oa:commenting'],
+        windowId: 'abc123',
+      }).map((r) => r.motivations),
     ).toEqual(expected);
   });
 });
@@ -80,7 +85,10 @@ describe('getAnnotationResourcesByMotivation', () => {
               resources: [
                 { '@id': 'annoId1', motivation: 'oa:commenting' },
                 { '@id': 'annoId2', motivation: 'oa:not-commenting' },
-                { '@id': 'annoId3', motivation: ['sc:something-else', 'oa:commenting'] },
+                {
+                  '@id': 'annoId3',
+                  motivation: ['sc:something-else', 'oa:commenting'],
+                },
               ],
             },
           },
@@ -91,7 +99,7 @@ describe('getAnnotationResourcesByMotivation', () => {
           json: {
             '@context': 'http://iiif.io/api/presentation/2/context.json',
             '@id':
-             'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+              'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
             '@type': 'sc:Manifest',
             sequences: [
               {
@@ -114,7 +122,10 @@ describe('getAnnotationResourcesByMotivation', () => {
     };
 
     expect(
-      getAnnotationResourcesByMotivation(state, { motivations: ['something', 'oa:commenting'], windowId: 'abc123' }).map(r => r.motivations),
+      getAnnotationResourcesByMotivation(state, {
+        motivations: ['something', 'oa:commenting'],
+        windowId: 'abc123',
+      }).map((r) => r.motivations),
     ).toEqual(expected);
   });
 });
@@ -126,7 +137,7 @@ it('getSelectedAnnotationId returns the selected annotation ID from state', () =
         json: {
           '@context': 'http://iiif.io/api/presentation/2/context.json',
           '@id':
-           'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+            'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
           '@type': 'sc:Manifest',
           sequences: [
             {
@@ -150,7 +161,5 @@ it('getSelectedAnnotationId returns the selected annotation ID from state', () =
     },
   };
 
-  expect(getSelectedAnnotationId(state, { windowId: 'wid' })).toEqual(
-    'aid1',
-  );
+  expect(getSelectedAnnotationId(state, { windowId: 'wid' })).toEqual('aid1');
 });

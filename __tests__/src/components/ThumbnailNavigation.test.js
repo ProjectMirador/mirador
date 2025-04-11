@@ -27,15 +27,12 @@ function Subject({ fixture = manifestJson, ...props }) {
 }
 
 Subject.propTypes = {
-  fixture: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  fixture: PropTypes.object,
 };
 
-vi.mock(
-  'react-virtualized-auto-sizer',
-  () => ({
-    default: ({ children }) => children({ height: 600, width: 600 }),
-  }),
-);
+vi.mock('react-virtualized-auto-sizer', () => ({
+  default: ({ children }) => children({ height: 600, width: 600 }),
+}));
 
 describe('ThumbnailNavigation', () => {
   it('renders the component', async () => {
@@ -54,10 +51,17 @@ describe('ThumbnailNavigation', () => {
 
   it('gives the grid a size', () => {
     const { rerender } = render(<Subject />);
-    expect(screen.getByRole('grid')).toHaveStyle({ height: '150px', width: '100%' });
+    expect(screen.getByRole('grid')).toHaveStyle({
+      height: '150px',
+      width: '100%',
+    });
 
     rerender(<Subject position="far-right" />);
-    expect(screen.getByRole('grid')).toHaveStyle({ height: '100%', minHeight: 0, width: '123px' });
+    expect(screen.getByRole('grid')).toHaveStyle({
+      height: '100%',
+      minHeight: 0,
+      width: '123px',
+    });
   });
 
   it('roughly doubles the width of the grid in book view', () => {
@@ -97,31 +101,69 @@ describe('ThumbnailNavigation', () => {
 
     describe('handleKeyUp', () => {
       it('handles right arrow by advancing the current canvas', async () => {
-        render(<Subject canvasIndex={1} hasNextCanvas setNextCanvas={setNextCanvas} />);
+        render(
+          <Subject
+            canvasIndex={1}
+            hasNextCanvas
+            setNextCanvas={setNextCanvas}
+          />,
+        );
 
         screen.getByRole('grid').focus();
-        fireEvent.keyDown(screen.getByRole('grid'), { code: 'ArrowRight', key: 'ArrowRight' });
+        fireEvent.keyDown(screen.getByRole('grid'), {
+          code: 'ArrowRight',
+          key: 'ArrowRight',
+        });
         expect(setNextCanvas).toHaveBeenCalled();
       });
       it('handles down arrow by advancing the current canvas when the canvas is on the right', () => {
-        render(<Subject canvasIndex={1} hasNextCanvas position="far-right" setNextCanvas={setNextCanvas} />);
+        render(
+          <Subject
+            canvasIndex={1}
+            hasNextCanvas
+            position="far-right"
+            setNextCanvas={setNextCanvas}
+          />,
+        );
 
         screen.getByRole('grid').focus();
-        fireEvent.keyDown(screen.getByRole('grid'), { code: 'ArrowDown', key: 'ArrowDown' });
+        fireEvent.keyDown(screen.getByRole('grid'), {
+          code: 'ArrowDown',
+          key: 'ArrowDown',
+        });
         expect(setNextCanvas).toHaveBeenCalled();
       });
       it('handles left arrow by selecting the previous canvas', () => {
-        render(<Subject canvasIndex={2} hasPreviousCanvas setPreviousCanvas={setPreviousCanvas} />);
+        render(
+          <Subject
+            canvasIndex={2}
+            hasPreviousCanvas
+            setPreviousCanvas={setPreviousCanvas}
+          />,
+        );
 
         screen.getByRole('grid').focus();
-        fireEvent.keyDown(screen.getByRole('grid'), { code: 'ArrowLeft', key: 'ArrowLeft' });
+        fireEvent.keyDown(screen.getByRole('grid'), {
+          code: 'ArrowLeft',
+          key: 'ArrowLeft',
+        });
         expect(setPreviousCanvas).toHaveBeenCalled();
       });
       it('handles up arrow by selecting the previous canvas when the canvas is on the right', () => {
-        render(<Subject canvasIndex={2} hasPreviousCanvas position="far-right" setPreviousCanvas={setPreviousCanvas} />);
+        render(
+          <Subject
+            canvasIndex={2}
+            hasPreviousCanvas
+            position="far-right"
+            setPreviousCanvas={setPreviousCanvas}
+          />,
+        );
 
         screen.getByRole('grid').focus();
-        fireEvent.keyDown(screen.getByRole('grid'), { code: 'ArrowUp', key: 'ArrowUp' });
+        fireEvent.keyDown(screen.getByRole('grid'), {
+          code: 'ArrowUp',
+          key: 'ArrowUp',
+        });
         expect(setPreviousCanvas).toHaveBeenCalled();
       });
     });
@@ -131,7 +173,9 @@ describe('ThumbnailNavigation', () => {
     it('sets up react-window to be rtl', () => {
       render(<Subject viewingDirection="right-to-left" />);
 
-      expect(screen.getByRole('row').children[0]).toHaveStyle({ direction: 'rtl' }); // eslint-disable-line testing-library/no-node-access
+      expect(screen.getByRole('row').children[0]).toHaveStyle({
+        direction: 'rtl',
+      });
     });
   });
 });

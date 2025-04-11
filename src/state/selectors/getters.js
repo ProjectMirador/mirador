@@ -7,7 +7,9 @@ import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
  * @returns {Array} containing manifests ids.
  */
 export function getWindowManifests(state) {
-  return Object.values(miradorSlice(state).windows).map(window => window.manifestId);
+  return Object.values(miradorSlice(state).windows).map(
+    (window) => window.manifestId,
+  );
 }
 
 /**
@@ -33,15 +35,11 @@ export function getWindow(state, { windowId }) {
 /**
  * Returns the viewer for a given window.
  * @param {object} state
- * @param {object} props
- * @param {string} props.windowId
- * @returns {object|undefined} {flip: false, rotation: 0, x: 1, y: 2, zoom: 0.5}
+ * @param {string} state.windowId
+ * @returns {object|undefined} The viewer state, e.g. {flip: false, rotation: 0, x: 1, y: 2, zoom: 0.5}
  */
 export const getViewer = createSelector(
-  [
-    state => miradorSlice(state).viewers,
-    (state, { windowId }) => windowId,
-  ],
+  [(state) => miradorSlice(state).viewers, (state, { windowId }) => windowId],
   (viewers, windowId) => viewers[windowId],
 );
 
@@ -83,10 +81,14 @@ export function getManifests(state) {
  */
 export function getManifest(state, { manifestId, windowId }) {
   const manifests = getManifests(state);
-  return manifests && manifests[
-    manifestId
-    || (windowId && (getWindow(state, { windowId }) || EMPTY_OBJECT).manifestId)
-  ];
+  return (
+    manifests &&
+    manifests[
+      manifestId ||
+        (windowId &&
+          (getWindow(state, { windowId }) || EMPTY_OBJECT).manifestId)
+    ]
+  );
 }
 
 /**
