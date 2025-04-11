@@ -2,7 +2,7 @@ import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 vi.mock('../../../src/state/selectors', async (importOriginal) => ({
-  ...await importOriginal(),
+  ...(await importOriginal()),
   getVisibleNodeIds: (state, args) => ['openVisible', 'closedVisible', 'visible'],
 }));
 
