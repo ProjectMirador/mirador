@@ -40,7 +40,7 @@ const StyledLogo = styled(Img, { name: 'ManifestListItem', slot: 'logo' })(({ th
 
 /** */
 const Placeholder = () => (
-  <Grid container className={ns('manifest-list-item')} spacing={2}>
+  <Grid container className={ns('manifest-list-item')}>
     <Grid size={{ sm: 2, xs: 3 }}>
       <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />
     </Grid>
@@ -116,8 +116,8 @@ export function ManifestListItem({
       data-active={active}
     >
       {ready ? (
-        <Grid container className={ns('manifest-list-item')} spacing={2} size="grow">
-          <Grid size={{ sm: 6, xs: 12 }}>
+        <Grid container className={ns('manifest-list-item')}>
+          <Grid size={{ sm: 6, xs: 12 }} sx={{ flex: '0 0 50%' }}>
             <ButtonBase
               ref={buttonRef}
               className={ns('manifest-list-item-title')}
@@ -125,15 +125,14 @@ export function ManifestListItem({
             >
               <Grid
                 container
-                spacing={2}
                 sx={{
                   textAlign: 'left',
                   textTransform: 'initial',
                 }}
-                component="span"
+                component="div"
               >
-                <Grid size={{ sm: 3, xs: 4 }} component="span">
-                  { thumbnail
+                <Grid size={{ sm: 3, xs: 4 }} component="div">
+                  {thumbnail
                     ? (
                       <StyledThumbnail
                         className={[ns('manifest-list-item-thumb')]}
@@ -153,41 +152,42 @@ export function ManifestListItem({
                     )
                     : <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />}
                 </Grid>
-                <Grid xs={8} sm={9} component="span">
-                  { isCollection && (
+                <Grid xs={8} sm={9} component="div" paddingLeft={2}>
+                  {isCollection && (
                     <Typography component="div" variant="overline">
-                      { t(isMultipart ? 'multipartCollection' : 'collection') }
+                      {t(isMultipart ? 'multipartCollection' : 'collection')}
                     </Typography>
                   )}
-                  <Typography component="span" variant="h6">
+                  <Typography component="div" variant="h6">
                     {title || manifestId}
                   </Typography>
                 </Grid>
               </Grid>
             </ButtonBase>
           </Grid>
-          <Grid size={{ sm: 4, xs: 8 }}>
+
+          <Grid size={{ sm: 4, xs: 8 }} sx={{ flex: 1 }}>
             <Typography className={ns('manifest-list-item-provider')}>{provider}</Typography>
             <Typography>{t('numItems', { count: size, number: size })}</Typography>
           </Grid>
 
-          <Grid size={{ sm: 2, xs: 4 }}>
-            { manifestLogo
+          <Grid size={{ sm: 2, xs: 4 }} sx={{ flex: 1 }}>
+            {manifestLogo
               && (
-              <StyledLogo
-                src={[manifestLogo]}
-                alt=""
-                role="presentation"
-                unloader={(
-                  <Skeleton
-                    variant="rectangular"
-                    animation={false}
-                    sx={{ bgcolor: 'grey[300]' }}
-                    height={60}
-                    width={60}
-                  />
-                )}
-              />
+                <StyledLogo
+                  src={[manifestLogo]}
+                  alt=""
+                  role="presentation"
+                  unloader={(
+                    <Skeleton
+                      variant="rectangular"
+                      animation={false}
+                      sx={{ bgcolor: 'grey[300]' }}
+                      height={60}
+                      width={60}
+                    />
+                  )}
+                />
               )}
           </Grid>
         </Grid>

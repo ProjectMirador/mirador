@@ -35,7 +35,7 @@ export function ManifestListItemError({
       </Grid>
 
       <Grid container>
-        <Grid container justifyContent="flex-end" size={{ sm: 6, xs: 12 }}>
+        <Grid container size={{ sm: 6, xs: 12 }}>
           <Grid>
             <Button onClick={() => { onDismissClick(manifestId); }}>
               {t('dismiss')}
