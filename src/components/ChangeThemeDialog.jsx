@@ -21,7 +21,7 @@ const ThemeIcon = styled(PaletteIcon, { name: 'ThemeIcon', slot: 'icon' })(({ th
  * a simple dialog providing the possibility to switch the theme
  */
 export function ChangeThemeDialog({
-  handleClose, open = false, selectedTheme, setSelectedTheme, themeIds = [],
+  container = null, handleClose, open = false, selectedTheme, setSelectedTheme, themeIds = [],
 }) {
   const { t } = useTranslation();
   const handleThemeChange = useCallback((theme) => {
@@ -30,7 +30,7 @@ export function ChangeThemeDialog({
   }, [handleClose, setSelectedTheme]);
 
   return (
-    <WorkspaceDialog onClose={handleClose} open={open} variant="menu">
+    <WorkspaceDialog container={container} onClose={handleClose} open={open} variant="menu">
       <DialogTitle>
         {t('changeTheme')}
       </DialogTitle>
@@ -57,6 +57,7 @@ export function ChangeThemeDialog({
 }
 
 ChangeThemeDialog.propTypes = {
+  container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
   selectedTheme: PropTypes.string.isRequired,
