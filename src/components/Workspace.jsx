@@ -28,6 +28,7 @@ const ZeroWindows = () => {
         container
         style={{
           height: '100%',
+          justifyContent: 'center',
         }}
       >
         <Grid size={12}>
