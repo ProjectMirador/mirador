@@ -1,10 +1,11 @@
 import { createSelector } from 'reselect';
-import { Utils } from 'manifesto.js';
 import flatten from 'lodash/flatten';
+import { Utils } from 'manifesto.js';
 import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
 import { getConfig } from './config';
 import { getVisibleCanvases, selectInfoResponses } from './canvases';
 import { getMiradorCanvasWrapper } from './wrappers';
+import { getIiifResourceImageService } from '../../lib/iiif';
 
 /**
  * Returns the authentification profile from the configuration
@@ -56,7 +57,7 @@ export const selectCurrentAuthServices = createSelector(
         const images = miradorCanvas.iiifImageResources;
 
         return images.map(i => {
-          const iiifImageService = i.getServices()[0];
+          const iiifImageService = getIiifResourceImageService(i);
 
           const infoResponse = infoResponses[iiifImageService.id];
           if (infoResponse && infoResponse.json) {
