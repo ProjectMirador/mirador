@@ -21,6 +21,7 @@ import lt from './locales/lt/translation.json';
 import vi from './locales/vi/translation.json';
 import bg from './locales/bg/translation.json';
 import nbNo from './locales/nbNo/translation.json';
+import hu from './locales/hu/translation.json';
 
 /**
  * Load translations for each language
@@ -35,6 +36,7 @@ function createI18nInstance(i18nConfig = {}) {
     fa,
     fr,
     hr,
+    hu,
     it,
     ja,
     kr,

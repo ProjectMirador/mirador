@@ -425,6 +425,7 @@ export default {
     ja: '日本語',
     kr: '한국어',
     lt: 'Lietuvių',
+    hu: 'Magyar',
     nl: 'Nederlands',
     'nb-NO': 'Norwegian Bokmål',
     pl: 'Polski',
