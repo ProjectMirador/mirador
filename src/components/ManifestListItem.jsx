@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import ListItem from '@mui/material/ListItem';
 import ButtonBase from '@mui/material/ButtonBase';
-import Grid2 from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 import { useTranslation } from 'react-i18next';
@@ -40,21 +40,21 @@ const StyledLogo = styled(Img, { name: 'ManifestListItem', slot: 'logo' })(({ th
 
 /** */
 const Placeholder = () => (
-  <Grid2 container className={ns('manifest-list-item')} spacing={2}>
-    <Grid2 xs={3} sm={2}>
+  <Grid container className={ns('manifest-list-item')}>
+    <Grid size={{ sm: 2, xs: 3 }}>
       <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />
-    </Grid2>
-    <Grid2 xs={9} sm={6}>
+    </Grid>
+    <Grid size={{ sm: 6, xs: 9 }}>
       <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
-    </Grid2>
-    <Grid2 xs={8} sm={2}>
+    </Grid>
+    <Grid size={{ sm: 2, xs: 8 }}>
       <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
       <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
-    </Grid2>
-    <Grid2 xs={4} sm={2}>
+    </Grid>
+    <Grid size={{ sm: 2, xs: 4 }}>
       <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={60} width={60} />
-    </Grid2>
-  </Grid2>
+    </Grid>
+  </Grid>
 );
 
 /**
@@ -116,25 +116,23 @@ export function ManifestListItem({
       data-active={active}
     >
       {ready ? (
-        <Grid2 container className={ns('manifest-list-item')} spacing={2}>
-          <Grid2 xs={12} sm={6}>
+        <Grid container className={ns('manifest-list-item')}>
+          <Grid size={{ sm: 6, xs: 12 }} sx={{ flex: '0 0 50%' }}>
             <ButtonBase
               ref={buttonRef}
               className={ns('manifest-list-item-title')}
-              style={{ width: '100%' }}
               onClick={handleOpenButtonClick}
             >
-              <Grid2
+              <Grid
                 container
-                spacing={2}
                 sx={{
                   textAlign: 'left',
                   textTransform: 'initial',
                 }}
-                component="span"
+                component="div"
               >
-                <Grid2 xs={4} sm={3} component="span">
-                  { thumbnail
+                <Grid size={{ sm: 3, xs: 4 }} component="div">
+                  {thumbnail
                     ? (
                       <StyledThumbnail
                         className={[ns('manifest-list-item-thumb')]}
@@ -153,45 +151,46 @@ export function ManifestListItem({
                       />
                     )
                     : <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />}
-                </Grid2>
-                <Grid2 xs={8} sm={9} component="span">
-                  { isCollection && (
+                </Grid>
+                <Grid xs={8} sm={9} component="div" paddingLeft={2}>
+                  {isCollection && (
                     <Typography component="div" variant="overline">
-                      { t(isMultipart ? 'multipartCollection' : 'collection') }
+                      {t(isMultipart ? 'multipartCollection' : 'collection')}
                     </Typography>
                   )}
-                  <Typography component="span" variant="h6">
+                  <Typography component="div" variant="h6">
                     {title || manifestId}
                   </Typography>
-                </Grid2>
-              </Grid2>
+                </Grid>
+              </Grid>
             </ButtonBase>
-          </Grid2>
-          <Grid2 xs={8} sm={4}>
+          </Grid>
+
+          <Grid size={{ sm: 4, xs: 8 }} sx={{ flex: 1 }}>
             <Typography className={ns('manifest-list-item-provider')}>{provider}</Typography>
             <Typography>{t('numItems', { count: size, number: size })}</Typography>
-          </Grid2>
+          </Grid>
 
-          <Grid2 xs={4} sm={2}>
-            { manifestLogo
+          <Grid size={{ sm: 2, xs: 4 }} sx={{ flex: 1 }}>
+            {manifestLogo
               && (
-              <StyledLogo
-                src={[manifestLogo]}
-                alt=""
-                role="presentation"
-                unloader={(
-                  <Skeleton
-                    variant="rectangular"
-                    animation={false}
-                    sx={{ bgcolor: 'grey[300]' }}
-                    height={60}
-                    width={60}
-                  />
-                )}
-              />
+                <StyledLogo
+                  src={[manifestLogo]}
+                  alt=""
+                  role="presentation"
+                  unloader={(
+                    <Skeleton
+                      variant="rectangular"
+                      animation={false}
+                      sx={{ bgcolor: 'grey[300]' }}
+                      height={60}
+                      width={60}
+                    />
+                  )}
+                />
               )}
-          </Grid2>
-        </Grid2>
+          </Grid>
+        </Grid>
       ) : (
         <Placeholder />
       )}
