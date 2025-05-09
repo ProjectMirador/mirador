@@ -13,7 +13,7 @@ import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogCon
 /**
  */
 export function WorkspaceImport({
-  addError, id = undefined, importConfig, classes = {}, handleClose, open = false,
+  addError, container = null, id = undefined, importConfig, classes = {}, handleClose, open = false,
 }) {
   const { t } = useTranslation();
   const [configImportValue, setConfigImportValue] = useState('');
@@ -39,6 +39,7 @@ export function WorkspaceImport({
   return (
     <WorkspaceDialog
       aria-labelledby={titleId}
+      container={container}
       id={id}
       onClose={handleClose}
       open={open}
@@ -79,6 +80,7 @@ export function WorkspaceImport({
 WorkspaceImport.propTypes = {
   addError: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.string),
+  container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   handleClose: PropTypes.func.isRequired,
   id: PropTypes.string,
   importConfig: PropTypes.func.isRequired,
