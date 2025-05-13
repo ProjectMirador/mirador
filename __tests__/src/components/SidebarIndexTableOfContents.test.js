@@ -12,12 +12,16 @@ import manifestVersion3 from '../../fixtures/version-3/structures.json';
  * @param {*} props
  */
 function createWrapper(props) {
-  const manifest = Utils.parseManifest(props.manifest ? props.manifest : manifestVersion2);
+  const manifest = Utils.parseManifest(
+    props.manifest ? props.manifest : manifestVersion2,
+  );
   return render(
     <SidebarIndexTableOfContents
       id="something"
       classes={{}}
-      treeStructure={props.treeStructure ? props.treeStructure : manifest.getDefaultTree()}
+      treeStructure={
+        props.treeStructure ? props.treeStructure : manifest.getDefaultTree()
+      }
       visibleNodeIds={props.visibleNodeIds ? props.visibleNodeIds : []}
       expandedNodeIds={props.expandedNodeIds ? props.expandedNodeIds : []}
       containerRef={props.containerRef}
@@ -122,10 +126,10 @@ describe('SidebarIndexTableOfContents', () => {
     expect(screen.getByRole('treeitem')).toBeInTheDocument();
     const root = screen.getByRole('treeitem');
 
-    await user.click(root.querySelector('.MuiTreeItem-iconContainer')); // eslint-disable-line testing-library/no-node-access
+    await user.click(root.querySelector('.MuiTreeItem-iconContainer'));
     expect(screen.getAllByRole('treeitem')).toHaveLength(5);
 
-    await user.click(root.querySelector('.MuiTreeItem-iconContainer')); // eslint-disable-line testing-library/no-node-access
+    await user.click(root.querySelector('.MuiTreeItem-iconContainer'));
 
     await waitFor(() => {
       expect(screen.getByRole('treeitem')).toBeInTheDocument();
@@ -192,13 +196,15 @@ describe('SidebarIndexTableOfContents', () => {
     });
     await user.keyboard('{Enter}');
 
-    expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c2');
+    expect(store.getState().windows.a.canvasId).toEqual(
+      'http://foo.test/1/canvas/c2',
+    );
   });
 
   it('sets the canvas to a start canvas if present (IIIF v2)', async () => {
     const user = userEvent.setup();
     createWrapper({
-      expandItems: () => { },
+      expandItems: () => {},
       manifest: manifestVersion2,
       setCanvas,
       windowId: 'a',
@@ -210,7 +216,10 @@ describe('SidebarIndexTableOfContents', () => {
     });
     await user.keyboard('{Enter}');
 
-    expect(setCanvas).toHaveBeenLastCalledWith('a', 'http://foo.test/1/canvas/c11');
+    expect(setCanvas).toHaveBeenLastCalledWith(
+      'a',
+      'http://foo.test/1/canvas/c11',
+    );
   });
 
   it('sets the canvas to a start canvas if present (IIIF v3)', async () => {
@@ -231,20 +240,26 @@ describe('SidebarIndexTableOfContents', () => {
       leafNode1.focus();
     });
     await user.keyboard('{Enter}');
-    expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c7');
+    expect(store.getState().windows.a.canvasId).toEqual(
+      'http://foo.test/1/canvas/c7',
+    );
 
     const leafNode2 = screen.getAllByRole('treeitem')[3];
     act(() => {
       leafNode2.focus();
     });
     await user.keyboard('{Enter}');
-    expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c9');
+    expect(store.getState().windows.a.canvasId).toEqual(
+      'http://foo.test/1/canvas/c9',
+    );
 
     const leafNode3 = screen.getAllByRole('treeitem')[4];
     act(() => {
       leafNode3.focus();
     });
     await user.keyboard('{Enter}');
-    expect(store.getState().windows.a.canvasId).toEqual('http://foo.test/1/canvas/c10');
+    expect(store.getState().windows.a.canvasId).toEqual(
+      'http://foo.test/1/canvas/c10',
+    );
   });
 });

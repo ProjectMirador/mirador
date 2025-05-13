@@ -7,7 +7,9 @@ import collection from '../../fixtures/version-2/collection.json';
 
 /** */
 function createWrapper(props) {
-  const manifest = Utils.parseManifest(props.manifest ? props.manifest : collection);
+  const manifest = Utils.parseManifest(
+    props.manifest ? props.manifest : collection,
+  );
 
   render(<div id="window" />);
 
@@ -30,14 +32,20 @@ describe('CollectionDialog', () => {
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getAllByRole('menuitem')).toHaveLength(55);
-    expect(screen.getByRole('menuitem', { name: 'Test 1 Manifest: Minimum Required Fields' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('menuitem', {
+        name: 'Test 1 Manifest: Minimum Required Fields',
+      }),
+    ).toBeInTheDocument();
   });
   it('when not ready returns placeholder skeleton', () => {
     createWrapper({ ready: false });
 
     expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
 
-    expect(screen.getByRole('dialog').querySelectorAll('.MuiSkeleton-root')).toHaveLength(3); // eslint-disable-line testing-library/no-node-access
+    expect(
+      screen.getByRole('dialog').querySelectorAll('.MuiSkeleton-root'),
+    ).toHaveLength(3);
   });
   it('clicking the hide button fires hideCollectionDialog', async () => {
     const user = userEvent.setup();

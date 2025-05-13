@@ -4,7 +4,7 @@ import { ManifestListItemError } from '../../../src/components/ManifestListItemE
 
 /**
  * Helper function to wrap creating a ManifestListItemError component
-*/
+ */
 function createWrapper(props) {
   return render(
     <ManifestListItemError
@@ -23,7 +23,9 @@ describe('ManifestListItemError', () => {
   it('renders the failed manifest url and error key', () => {
     createWrapper();
 
-    expect(screen.getByText('The resource cannot be added:')).toBeInTheDocument();
+    expect(
+      screen.getByText('The resource cannot be added:'),
+    ).toBeInTheDocument();
     expect(screen.getByText('http://example.com')).toBeInTheDocument();
   });
 

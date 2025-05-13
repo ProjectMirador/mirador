@@ -19,7 +19,9 @@ function createWrapper(props) {
 describe('WindowViewSettings', () => {
   it('renders all elements correctly', () => {
     createWrapper();
-    expect(screen.getByRole('presentation', { selector: 'li' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('presentation', { selector: 'li' }),
+    ).toBeInTheDocument();
     const menuItems = screen.queryAllByRole('menuitemradio');
     expect(menuItems.length).toBe(4);
     expect(menuItems[0]).toHaveTextContent(/Single/i);
@@ -29,23 +31,51 @@ describe('WindowViewSettings', () => {
   });
   it('single should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ windowViewType: 'single' });
-    expect(screen.getByRole('menuitemradio', { name: /Single/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
-    expect(screen.getByRole('menuitemradio', { name: /Book/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
+    expect(
+      screen
+        .getByRole('menuitemradio', { name: /Single/ })
+        .querySelector('svg'),
+    ).toHaveClass('MuiSvgIcon-colorSecondary');
+    expect(
+      screen.getByRole('menuitemradio', { name: /Book/ }).querySelector('svg'),
+    ).not.toHaveClass('MuiSvgIcon-colorSecondary');
   });
   it('book should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ windowViewType: 'book' });
-    expect(screen.getByRole('menuitemradio', { name: /Book/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
-    expect(screen.getByRole('menuitemradio', { name: /Single/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
+    expect(
+      screen.getByRole('menuitemradio', { name: /Book/ }).querySelector('svg'),
+    ).toHaveClass('MuiSvgIcon-colorSecondary');
+    expect(
+      screen
+        .getByRole('menuitemradio', { name: /Single/ })
+        .querySelector('svg'),
+    ).not.toHaveClass('MuiSvgIcon-colorSecondary');
   });
   it('scroll should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ windowViewType: 'scroll' });
-    expect(screen.getByRole('menuitemradio', { name: /Scroll/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
-    expect(screen.getByRole('menuitemradio', { name: /Single/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
+    expect(
+      screen
+        .getByRole('menuitemradio', { name: /Scroll/ })
+        .querySelector('svg'),
+    ).toHaveClass('MuiSvgIcon-colorSecondary');
+    expect(
+      screen
+        .getByRole('menuitemradio', { name: /Single/ })
+        .querySelector('svg'),
+    ).not.toHaveClass('MuiSvgIcon-colorSecondary');
   });
   it('gallery should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ windowViewType: 'gallery' });
-    expect(screen.getByRole('menuitemradio', { name: /Gallery/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
-    expect(screen.getByRole('menuitemradio', { name: /Single/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
+    expect(
+      screen
+        .getByRole('menuitemradio', { name: /Gallery/ })
+        .querySelector('svg'),
+    ).toHaveClass('MuiSvgIcon-colorSecondary');
+    expect(
+      screen
+        .getByRole('menuitemradio', { name: /Single/ })
+        .querySelector('svg'),
+    ).not.toHaveClass('MuiSvgIcon-colorSecondary');
   });
   it('updates state when the view config selection changes', async () => {
     const setWindowViewType = vi.fn();

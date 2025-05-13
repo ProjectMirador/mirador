@@ -7,7 +7,9 @@ export function usePlugins(targetName) {
 
   const plugins = (pluginMap || {})[targetName];
 
-  const PluginComponents = (plugins?.add || []).map(plugin => plugin.component);
+  const PluginComponents = (plugins?.add || []).map(
+    (plugin) => plugin.component,
+  );
 
   return { PluginComponents };
 }

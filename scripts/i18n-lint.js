@@ -13,7 +13,10 @@ const errors = {};
  * Return a new copy of the array lowercased and sorted
  */
 function lowerCaseSortedArray(arr) {
-  return arr.slice().map(v => v.toLowerCase()).sort();
+  return arr
+    .slice()
+    .map((v) => v.toLowerCase())
+    .sort();
 }
 
 /**
@@ -32,12 +35,16 @@ function missingKeys(arr1, arr2) {
   const sortedDowncasedLeftHandArray = lowerCaseSortedArray(arr1);
   const sortedDowncasedRightHandArray = lowerCaseSortedArray(arr2);
 
-  return sortedDowncasedLeftHandArray.filter((v, i) => !sortedDowncasedRightHandArray.includes(v));
+  return sortedDowncasedLeftHandArray.filter(
+    (v, i) => !sortedDowncasedRightHandArray.includes(v),
+  );
 }
 
 files.forEach((fileName) => {
   const fileContent = fs.readFileSync(`src/locales/${fileName}`);
-  normalizedFiles[fileName] = Object.keys(JSON.parse(fileContent.toString()).translation);
+  normalizedFiles[fileName] = Object.keys(
+    JSON.parse(fileContent.toString()).translation,
+  );
 });
 
 const completeKeys = normalizedFiles[defaultLocaleFile].slice().sort();
@@ -57,14 +64,16 @@ Object.keys(normalizedFiles).forEach((fileName) => {
   if (missing.length) {
     errors[fileName] = errors[fileName] || [];
     errors[fileName].push('Some keys from the default locale file are missing');
-    errors[fileName].push(
-      `\tMissing keys: ${missing.join(', ')}`,
-    );
+    errors[fileName].push(`\tMissing keys: ${missing.join(', ')}`);
   }
 });
 
 Object.keys(errors).forEach((errorFileName) => {
-  log(chalk.red(`${chalk.inverse.bold(errorFileName)} has ${chalk.underline.bold('internationalization')} errors`));
+  log(
+    chalk.red(
+      `${chalk.inverse.bold(errorFileName)} has ${chalk.underline.bold('internationalization')} errors`,
+    ),
+  );
   errors[errorFileName].forEach((error) => {
     log(`\t${chalk.yellow(error)}`);
   });

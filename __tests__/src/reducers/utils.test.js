@@ -41,7 +41,7 @@ describe('updateItem', () => {
 
   it('updates an item based on the function passed', () => {
     const object = { bar: { b: 2, c: 3 }, foo: { a: 1 } };
-    /** */ const fn = props => ({ ...props, c: props.c + 1 });
+    /** */ const fn = (props) => ({ ...props, c: props.c + 1 });
     const result = update(object, 'bar', fn);
     expect(result).toEqual({
       bar: { b: 2, c: 4 },

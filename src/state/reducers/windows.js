@@ -28,7 +28,11 @@ export const windowsReducer = (state = {}, action) => {
       };
 
     case ActionTypes.UPDATE_WINDOW:
-      return update([action.id], orig => ({ ...(orig || {}), ...action.payload }), state);
+      return update(
+        [action.id],
+        (orig) => ({ ...(orig || {}), ...action.payload }),
+        state,
+      );
 
     case ActionTypes.REMOVE_WINDOW:
       return omit(state, [action.windowId]);
@@ -71,18 +75,23 @@ export const windowsReducer = (state = {}, action) => {
     case ActionTypes.SET_CANVAS:
       if (!state[action.windowId]) return state;
 
-      return update([action.windowId], orig => (
-        {
+      return update(
+        [action.windowId],
+        (orig) => ({
           ...(orig || {}),
           canvasId: action.canvasId,
           visibleCanvases: action.visibleCanvases || [],
-        }), state);
+        }),
+        state,
+      );
     case ActionTypes.ADD_COMPANION_WINDOW:
       return {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          companionWindowIds: state[action.windowId].companionWindowIds.concat([action.id]),
+          companionWindowIds: state[action.windowId].companionWindowIds.concat([
+            action.id,
+          ]),
           ...(action.payload.position === 'left'
             ? { companionAreaOpen: true, sideBarPanel: action.payload.content }
             : {}),
@@ -103,8 +112,9 @@ export const windowsReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          companionWindowIds: state[action.windowId]
-            .companionWindowIds.filter(id => id !== action.id),
+          companionWindowIds: state[action.windowId].companionWindowIds.filter(
+            (id) => id !== action.id,
+          ),
         },
       };
     case ActionTypes.SELECT_ANNOTATION:
@@ -137,7 +147,8 @@ export const windowsReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          highlightAllAnnotations: !state[action.windowId].highlightAllAnnotations,
+          highlightAllAnnotations:
+            !state[action.windowId].highlightAllAnnotations,
         },
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:

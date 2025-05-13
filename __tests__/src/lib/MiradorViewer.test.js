@@ -15,13 +15,17 @@ describe('MiradorViewer', () => {
     it('returns viewer store', () => {
       const instance = new MiradorViewer({});
 
-      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
+      act(() => {
+        instance.renderInto(container);
+      });
       expect(instance.store.dispatch).toBeDefined();
     });
     it('renders via ReactDOM', () => {
       const instance = new MiradorViewer({});
 
-      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
+      act(() => {
+        instance.renderInto(container);
+      });
 
       expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
     });
@@ -31,47 +35,66 @@ describe('MiradorViewer', () => {
       const instance = new MiradorViewer(
         {
           catalog: [
-            { manifestId: 'http://media.nga.gov/public/manifests/nga_highlights.json', provider: 'National Gallery of Art' },
+            {
+              manifestId:
+                'http://media.nga.gov/public/manifests/nga_highlights.json',
+              provider: 'National Gallery of Art',
+            },
           ],
           windows: [
             {
-              canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
-              loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+              canvasId:
+                'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
+              loadedManifest:
+                'https://iiif.harvardartmuseums.org/manifests/object/299843',
               thumbnailNavigationPosition: 'far-bottom',
             },
             {
-              loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+              loadedManifest:
+                'https://iiif.harvardartmuseums.org/manifests/object/299843',
               view: 'book',
             },
           ],
         },
         {
-          plugins: [{
-            component: DummyPlugin,
-            config: {
-              foo: 'bar',
+          plugins: [
+            {
+              component: DummyPlugin,
+              config: {
+                foo: 'bar',
+              },
+              mode: 'add',
+              target: 'WindowTopBarPluginArea',
             },
-            mode: 'add',
-            target: 'WindowTopBarPluginArea',
-          }],
+          ],
         },
       );
 
-      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
+      act(() => {
+        instance.renderInto(container);
+      });
 
       const { windows, catalog, config } = instance.store.getState();
       const windowIds = Object.keys(windows);
       expect(Object.keys(windowIds).length).toBe(2);
-      expect(windows[windowIds[0]].canvasId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892');
+      expect(windows[windowIds[0]].canvasId).toBe(
+        'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
+      );
       expect(windows[windowIds[1]].canvasId).toBe(undefined);
-      expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe('far-bottom');
+      expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe(
+        'far-bottom',
+      );
       expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe(undefined);
       expect(windows[windowIds[0]].view).toBe(undefined);
       expect(windows[windowIds[1]].view).toBe('book');
 
       expect(catalog.length).toBe(2);
-      expect(catalog[0].manifestId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843');
-      expect(catalog[1].manifestId).toBe('http://media.nga.gov/public/manifests/nga_highlights.json');
+      expect(catalog[0].manifestId).toBe(
+        'https://iiif.harvardartmuseums.org/manifests/object/299843',
+      );
+      expect(catalog[1].manifestId).toBe(
+        'http://media.nga.gov/public/manifests/nga_highlights.json',
+      );
       expect(catalog[1].provider).toBe('National Gallery of Art');
       expect(config.foo).toBe('bar');
     });
@@ -111,21 +134,25 @@ describe('MiradorViewer', () => {
 
       const { config } = instance.store.getState();
 
-      expect(config.translations.en).toEqual(expect.objectContaining({
-        bat: 'bar',
-        foo: 'bar',
-      }));
+      expect(config.translations.en).toEqual(
+        expect.objectContaining({
+          bat: 'bar',
+          foo: 'bar',
+        }),
+      );
     });
   });
 
   describe('render', () => {
     it('passes props through to the App component', async () => {
       const instance = new MiradorViewer({});
-      const plugins = [{
-        component: DummyPlugin,
-        mode: 'wrap',
-        target: 'AppProviders',
-      }];
+      const plugins = [
+        {
+          component: DummyPlugin,
+          mode: 'wrap',
+          target: 'AppProviders',
+        },
+      ];
 
       render(instance.render({ plugins }));
 
@@ -137,9 +164,13 @@ describe('MiradorViewer', () => {
     it('unmounts via ReactDOM', () => {
       const instance = new MiradorViewer({});
 
-      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
+      act(() => {
+        instance.renderInto(container);
+      });
       expect(container).not.toBeEmptyDOMElement();
-      act(() => { instance.unmount(); });
+      act(() => {
+        instance.unmount();
+      });
       expect(container).toBeEmptyDOMElement();
     });
   });

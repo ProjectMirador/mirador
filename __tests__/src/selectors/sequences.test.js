@@ -19,7 +19,7 @@ describe('getSequences', () => {
       const state = { manifests: { x: { json: manifestFixtureGau } } };
       const sequences = getSequences(state, { manifestId: 'x' });
       expect(sequences.length).toEqual(2);
-      expect(sequences.map(s => s.id)).toEqual([
+      expect(sequences.map((s) => s.id)).toEqual([
         'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1740.json',
         'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
       ]);
@@ -38,7 +38,9 @@ describe('getSequences', () => {
       const state = { manifests: { x: { json: manifest } } };
       const sequences = getSequences(state, { manifestId: 'x' });
       expect(sequences.length).toEqual(1);
-      expect(sequences.map(s => s.id)).toEqual(['https://iiif.bodleian.ox.ac.uk/iiif/sequence/9cca8fdd-4a61-4429-8ac1-f648764b4d6d_default.json']);
+      expect(sequences.map((s) => s.id)).toEqual([
+        'https://iiif.bodleian.ox.ac.uk/iiif/sequence/9cca8fdd-4a61-4429-8ac1-f648764b4d6d_default.json',
+      ]);
     });
   });
   describe('with a v3 manifest', () => {
@@ -54,7 +56,7 @@ describe('getSequences', () => {
       const state = { manifests: { x: { json: manifest } } };
       const sequences = getSequences(state, { manifestId: 'x' });
       expect(sequences.length).toEqual(3);
-      expect(sequences.map(s => s.id)).toEqual([undefined, 'a', 'b']);
+      expect(sequences.map((s) => s.id)).toEqual([undefined, 'a', 'b']);
     });
   });
 });
@@ -70,7 +72,13 @@ describe('getSequence', () => {
   it('picks the sequence selected by the window', () => {
     const state = {
       manifests: { x: { json: manifestFixtureGau } },
-      windows: { a: { manifestId: 'x', sequenceId: 'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json' } },
+      windows: {
+        a: {
+          manifestId: 'x',
+          sequenceId:
+            'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
+        },
+      },
     };
     const sequence = getSequence(state, { windowId: 'a' });
     expect(sequence.id).toEqual(
@@ -79,7 +87,11 @@ describe('getSequence', () => {
   });
   it('picks the sequences with an explicit sequenceId', () => {
     const state = { manifests: { x: { json: manifestFixtureGau } } };
-    const sequence = getSequence(state, { manifestId: 'x', sequenceId: 'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json' });
+    const sequence = getSequence(state, {
+      manifestId: 'x',
+      sequenceId:
+        'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
+    });
     expect(sequence.id).toEqual(
       'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
     );
@@ -93,7 +105,11 @@ describe('getCanvasIndex', () => {
         y: { json: { ...manifestFixture015 } },
       },
       windows: {
-        a: { canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json', manifestId: 'y' },
+        a: {
+          canvasId:
+            'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/15/c2.json',
+          manifestId: 'y',
+        },
       },
     };
 
@@ -107,7 +123,9 @@ describe('getCanvasIndex', () => {
 describe('getSequenceViewingHint', () => {
   it('gets from the manifest', () => {
     const state = { manifests: { x: { json: manifestFixture001 } } };
-    expect(getSequenceViewingHint(state, { manifestId: 'x' })).toEqual('individuals');
+    expect(getSequenceViewingHint(state, { manifestId: 'x' })).toEqual(
+      'individuals',
+    );
   });
 
   it('gets from the manifest if this is no sequence', () => {
@@ -129,12 +147,16 @@ describe('getSequenceViewingHint', () => {
 describe('getSequenceViewingDirection', () => {
   it('gets from the manifest', () => {
     const state = { manifests: { x: { json: manifestFixture001 } } };
-    expect(getSequenceViewingDirection(state, { manifestId: 'x' })).toEqual('left-to-right');
+    expect(getSequenceViewingDirection(state, { manifestId: 'x' })).toEqual(
+      'left-to-right',
+    );
   });
 
   it('gets from the sequence', () => {
     const state = { manifests: { x: { json: manifestFixture015 } } };
-    expect(getSequenceViewingDirection(state, { manifestId: 'x' })).toEqual('left-to-right');
+    expect(getSequenceViewingDirection(state, { manifestId: 'x' })).toEqual(
+      'left-to-right',
+    );
   });
 
   it('is null if no viewingDirection is specified', () => {
@@ -146,6 +168,8 @@ describe('getSequenceViewingDirection', () => {
 describe('getSequenceBehaviors', () => {
   it('gets from the manifest', () => {
     const state = { manifests: { x: { json: manifestFixturev3001 } } };
-    expect(getSequenceBehaviors(state, { manifestId: 'x' })).toEqual(['individuals']);
+    expect(getSequenceBehaviors(state, { manifestId: 'x' })).toEqual([
+      'individuals',
+    ]);
   });
 });

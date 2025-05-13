@@ -22,15 +22,19 @@ const mapStateToProps = (state, { id, windowId }) => {
   const { config } = state;
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
   const collectionPath = window.collectionPath || [];
-  const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
+  const collectionId =
+    collectionPath && collectionPath[collectionPath.length - 1];
   const sequence = getSequence(state, { windowId });
   return {
-    collection: collectionId && getManifestoInstance(state, { manifestId: collectionId }),
+    collection:
+      collectionId && getManifestoInstance(state, { manifestId: collectionId }),
     config,
     sequenceId: sequence && sequence.id,
     sequences: getSequences(state, { windowId }),
-    showToc: treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
-    variant: companionWindow.variant || getDefaultSidebarVariant(state, { windowId }),
+    showToc:
+      treeStructure && treeStructure.nodes && treeStructure.nodes.length > 0,
+    variant:
+      companionWindow.variant || getDefaultSidebarVariant(state, { windowId }),
   };
 };
 
@@ -40,15 +44,17 @@ const mapStateToProps = (state, { id, windowId }) => {
  * @private
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
-  showMultipart: () => dispatch(
-    actions.addOrUpdateCompanionWindow(windowId, { content: 'collection', position: 'right' }),
-  ),
-  updateSequence: sequenceId => dispatch(
-    actions.updateWindow(windowId, { sequenceId }),
-  ),
-  updateVariant: variant => dispatch(
-    actions.updateCompanionWindow(windowId, id, { variant }),
-  ),
+  showMultipart: () =>
+    dispatch(
+      actions.addOrUpdateCompanionWindow(windowId, {
+        content: 'collection',
+        position: 'right',
+      }),
+    ),
+  updateSequence: (sequenceId) =>
+    dispatch(actions.updateWindow(windowId, { sequenceId })),
+  updateVariant: (variant) =>
+    dispatch(actions.updateCompanionWindow(windowId, id, { variant })),
 });
 
 const enhance = compose(

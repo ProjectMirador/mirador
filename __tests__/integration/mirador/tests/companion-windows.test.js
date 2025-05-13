@@ -11,19 +11,27 @@ describe('Basic end to end Mirador', () => {
     fireEvent.click(toggleButtons[0]);
 
     // Companion window is on the left
-    expect(await screen.findByRole('complementary', { name: /About this item/i })).toHaveClass('mirador-companion-window-left');
+    expect(
+      await screen.findByRole('complementary', { name: /About this item/i }),
+    ).toHaveClass('mirador-companion-window-left');
 
-    const openButton = screen.getByRole('button', { name: /Open in separate panel/i });
+    const openButton = screen.getByRole('button', {
+      name: /Open in separate panel/i,
+    });
     fireEvent.click(openButton);
 
     // Companion window is on the right
-    expect(await screen.findByRole('complementary', { name: /About this item/i })).toHaveClass('mirador-companion-window-right');
+    expect(
+      await screen.findByRole('complementary', { name: /About this item/i }),
+    ).toHaveClass('mirador-companion-window-right');
 
     // Close the panel
     const closeButton = screen.getByRole('button', { name: /Close panel/i });
     fireEvent.click(closeButton);
 
     // The companion window is removed
-    expect(screen.queryByRole('complementary', { name: /About this item/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('complementary', { name: /About this item/i }),
+    ).not.toBeInTheDocument();
   });
 });

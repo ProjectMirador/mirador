@@ -18,15 +18,15 @@ describe('AnnotationList', () => {
   });
   describe('resources', () => {
     it('maps resources to AnnotationResource', () => {
-      new AnnotationList(
-        { resources: [{ foo: 'bar' }] },
-      ).resources.forEach(resource => expect(resource).toBeInstanceOf(AnnotationResource));
+      new AnnotationList({ resources: [{ foo: 'bar' }] }).resources.forEach(
+        (resource) => expect(resource).toBeInstanceOf(AnnotationResource),
+      );
     });
 
     it('handles resources that are just a single object instead of an array of objects', () => {
-      new AnnotationList(
-        { resources: { foo: 'bar' } },
-      ).resources.forEach(resource => expect(resource).toBeInstanceOf(AnnotationResource));
+      new AnnotationList({ resources: { foo: 'bar' } }).resources.forEach(
+        (resource) => expect(resource).toBeInstanceOf(AnnotationResource),
+      );
     });
   });
 });

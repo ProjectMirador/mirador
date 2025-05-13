@@ -139,7 +139,9 @@ describe('getCompanionAreaVisibility', () => {
       };
       const props = { position: 'left', windowId: 'abc123' };
 
-      expect(getCompanionAreaVisibility(companionAreaClosedState, props)).toBe(false);
+      expect(getCompanionAreaVisibility(companionAreaClosedState, props)).toBe(
+        false,
+      );
       expect(getCompanionAreaVisibility(sideBarClosedState, props)).toBe(false);
     });
   });
@@ -191,8 +193,8 @@ describe('getCompanionWindowsForContent', () => {
 
     const props = { content: 'search', windowId: 'a' };
 
-    expect(getCompanionWindowsForContent(state, props).map(cw => cw.id)).toEqual([
-      'abc', 'def',
-    ]);
+    expect(
+      getCompanionWindowsForContent(state, props).map((cw) => cw.id),
+    ).toEqual(['abc', 'def']);
   });
 });

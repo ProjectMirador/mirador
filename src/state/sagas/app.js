@@ -1,6 +1,4 @@
-import {
-  all, call, put, takeEvery,
-} from 'redux-saga/effects';
+import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { v4 as uuid } from 'uuid';
 import { fetchManifests } from './iiif';
 import { fetchWindowManifest } from './windows';
@@ -10,8 +8,9 @@ import ActionTypes from '../actions/action-types';
 /** */
 export function* importState(action) {
   yield all([
-    ...Object.entries(action.state.windows || {})
-      .map(([_, window]) => call(fetchWindowManifest, { id: window.id, payload: window })),
+    ...Object.entries(action.state.windows || {}).map(([_, window]) =>
+      call(fetchWindowManifest, { id: window.id, payload: window }),
+    ),
     ...Object.entries(action.state.manifests || {})
       .filter(([_, manifest]) => !manifest.json)
       .map(([_, manifest]) => call(fetchManifests, manifest.id)),
@@ -25,20 +24,22 @@ export function* importConfig({ config: { thumbnailNavigation, windows } }) {
   const thunks = yield all(
     windows.map((miradorWindow) => {
       const windowId = `window-${uuid()}`;
-      const manifestId = miradorWindow.manifestId || miradorWindow.loadedManifest;
+      const manifestId =
+        miradorWindow.manifestId || miradorWindow.loadedManifest;
 
       return call(addWindow, {
         // these are default values ...
         id: windowId,
         manifestId,
-        thumbnailNavigationPosition: thumbnailNavigation && thumbnailNavigation.defaultPosition,
+        thumbnailNavigationPosition:
+          thumbnailNavigation && thumbnailNavigation.defaultPosition,
         // ... overridden by values from the window configuration ...
         ...miradorWindow,
       });
     }),
   );
 
-  yield all(thunks.map(thunk => put(thunk)));
+  yield all(thunks.map((thunk) => put(thunk)));
 }
 
 /** */

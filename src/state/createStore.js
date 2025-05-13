@@ -26,9 +26,7 @@ function configureStore(pluginReducers, pluginSagas = []) {
 
   const store = createStore(
     rootReducer,
-    composeWithDevTools(
-      applyMiddleware(thunk, sagaMiddleware),
-    ),
+    composeWithDevTools(applyMiddleware(thunk, sagaMiddleware)),
   );
 
   // then run the saga

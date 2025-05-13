@@ -26,7 +26,7 @@ describe('OpenSeadragonCanvasOverlay', () => {
         getCenter: () => ({ x: 0, y: 0 }),
         getFlip: () => false,
         getRotation: () => 0,
-        getZoom: vi.fn(() => (0.75)),
+        getZoom: vi.fn(() => 0.75),
       },
       world: {
         getItemAt: vi.fn(() => ({
@@ -36,7 +36,7 @@ describe('OpenSeadragonCanvasOverlay', () => {
               y: 2000,
             },
           },
-          viewportToImageZoom: vi.fn(() => (0.075)),
+          viewportToImageZoom: vi.fn(() => 0.075),
         })),
       },
     }));
@@ -92,7 +92,9 @@ describe('OpenSeadragonCanvasOverlay', () => {
           clientWidth: 200,
         },
         viewport: {
-          getBoundsNoRotateWithMargins: vi.fn(() => (new OpenSeadragon.Rect(0, 0, 200, 200))),
+          getBoundsNoRotateWithMargins: vi.fn(
+            () => new OpenSeadragon.Rect(0, 0, 200, 200),
+          ),
         },
         world: {
           getItemAt: vi.fn(),

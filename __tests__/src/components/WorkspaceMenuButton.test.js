@@ -13,7 +13,9 @@ describe('WorkspaceMenuButton', () => {
   });
 
   it('renders the button', () => {
-    expect(screen.getByRole('button')).toHaveAccessibleName('Workspace settings');
+    expect(screen.getByRole('button')).toHaveAccessibleName(
+      'Workspace settings',
+    );
   });
 
   it('toggles open/close of <WorkspaceOptionsMenu /> when clicked', async () => {

@@ -6,14 +6,9 @@ import { LayersPanel } from '../../../src/components/LayersPanel';
  * Helper function to create a shallow wrapper around AttributionPanel
  */
 function createWrapper(props) {
-  return render(
-    <LayersPanel
-      id="xyz"
-      windowId="window"
-      {...props}
-    />,
-    { preloadedState: { companionWindows: { xyz: { content: 'layers' } } } },
-  );
+  return render(<LayersPanel id="xyz" windowId="window" {...props} />, {
+    preloadedState: { companionWindows: { xyz: { content: 'layers' } } },
+  });
 }
 
 describe('LayersPanel', () => {

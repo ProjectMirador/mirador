@@ -4,9 +4,7 @@
  */
 export default class CanvasAnnotationDisplay {
   /** */
-  constructor({
-    resource, palette, zoomRatio, offset, selected, hovered,
-  }) {
+  constructor({ resource, palette, zoomRatio, offset, selected, hovered }) {
     this.resource = resource;
     this.palette = palette;
     this.zoomRatio = zoomRatio;
@@ -56,7 +54,9 @@ export default class CanvasAnnotationDisplay {
       // Setup styling from SVG -> Canvas
       this.context.strokeStyle = this.color;
       if (element.attributes['stroke-dasharray']) {
-        this.context.setLineDash(element.attributes['stroke-dasharray'].nodeValue.split(','));
+        this.context.setLineDash(
+          element.attributes['stroke-dasharray'].nodeValue.split(','),
+        );
       }
       const svgToCanvasMap = {
         fill: 'fillStyle',
@@ -78,11 +78,14 @@ export default class CanvasAnnotationDisplay {
 
       // Reset the color if it is selected or hovered on
       if (this.selected || this.hovered) {
-        this.context.strokeStyle = currentPalette.strokeStyle || currentPalette.fillStyle;
+        this.context.strokeStyle =
+          currentPalette.strokeStyle || currentPalette.fillStyle;
       }
 
       if (element.attributes['stroke-opacity']) {
-        this.context.globalAlpha = currentPalette.globalAlpha * element.attributes['stroke-opacity'].nodeValue;
+        this.context.globalAlpha =
+          currentPalette.globalAlpha *
+          element.attributes['stroke-opacity'].nodeValue;
       } else {
         this.context.globalAlpha = currentPalette.globalAlpha;
       }
@@ -90,9 +93,14 @@ export default class CanvasAnnotationDisplay {
       this.context.stroke(p);
 
       // Wait to set the fill, so we can adjust the globalAlpha value if we need to
-      if (element.attributes.fill && element.attributes.fill.nodeValue !== 'none') {
+      if (
+        element.attributes.fill &&
+        element.attributes.fill.nodeValue !== 'none'
+      ) {
         if (element.attributes['fill-opacity']) {
-          this.context.globalAlpha = currentPalette.globalAlpha * element.attributes['fill-opacity'].nodeValue;
+          this.context.globalAlpha =
+            currentPalette.globalAlpha *
+            element.attributes['fill-opacity'].nodeValue;
         } else {
           this.context.globalAlpha = currentPalette.globalAlpha;
         }

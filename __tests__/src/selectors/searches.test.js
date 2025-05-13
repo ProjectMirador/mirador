@@ -32,12 +32,12 @@ describe('getSearchQuery', () => {
         },
       },
     };
-    expect(
-      getSearchQuery(state, { companionWindowId, windowId: 'a' }),
-    ).toEqual('xyz');
-    expect(
-      getSearchQuery(state, { companionWindowId, windowId: 'b' }),
-    ).toEqual(undefined);
+    expect(getSearchQuery(state, { companionWindowId, windowId: 'a' })).toEqual(
+      'xyz',
+    );
+    expect(getSearchQuery(state, { companionWindowId, windowId: 'b' })).toEqual(
+      undefined,
+    );
   });
 });
 
@@ -102,9 +102,9 @@ describe('getNextSearchId', () => {
     expect(
       getNextSearchId(state, { companionWindowId, windowId: 'a' }),
     ).toEqual('search?page=3');
-    expect(
-      getSearchQuery(state, { companionWindowId, windowId: 'b' }),
-    ).toEqual(undefined);
+    expect(getSearchQuery(state, { companionWindowId, windowId: 'b' })).toEqual(
+      undefined,
+    );
   });
 });
 
@@ -112,9 +112,18 @@ describe('getSortedSearchHitsForCompanionWindow', () => {
   const companionWindowId = 'cwid';
   it('returns flattened and sorted (by canvas/target order) hits for a manifest', () => {
     const resources = [
-      { '@id': 'http://example.com/iiif/canvas1', on: 'http://example.com/iiif/canvas1' },
-      { '@id': 'http://example.com/iiif/canvas2', on: 'http://example.com/iiif/canvas2' },
-      { '@id': 'http://example.com/iiif/canvas3', on: 'http://example.com/iiif/canvas3' },
+      {
+        '@id': 'http://example.com/iiif/canvas1',
+        on: 'http://example.com/iiif/canvas1',
+      },
+      {
+        '@id': 'http://example.com/iiif/canvas2',
+        on: 'http://example.com/iiif/canvas2',
+      },
+      {
+        '@id': 'http://example.com/iiif/canvas3',
+        on: 'http://example.com/iiif/canvas3',
+      },
     ];
     const state = {
       companionWindows: {
@@ -158,7 +167,10 @@ describe('getSortedSearchHitsForCompanionWindow', () => {
       },
     };
     expect(
-      getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'a' }),
+      getSortedSearchHitsForCompanionWindow(state, {
+        companionWindowId,
+        windowId: 'a',
+      }),
     ).toEqual([
       { annotations: ['http://example.com/iiif/canvas1'], id: 2 },
       { annotations: ['http://example.com/iiif/canvas1'], id: 5 },
@@ -167,10 +179,16 @@ describe('getSortedSearchHitsForCompanionWindow', () => {
       { annotations: ['http://example.com/iiif/canvas3'], id: 4 },
     ]);
     expect(
-      getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'b' }),
+      getSortedSearchHitsForCompanionWindow(state, {
+        companionWindowId,
+        windowId: 'b',
+      }),
     ).toEqual([]);
     expect(
-      getSortedSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' }),
+      getSortedSearchHitsForCompanionWindow(
+        {},
+        { companionWindowId, windowId: 'a' },
+      ),
     ).toEqual([]);
   });
 });
@@ -179,9 +197,18 @@ describe('getSortedSearchAnnotationsForCompanionWindow', () => {
   it('sorts the search annotations for the companion window based on the "on" target', () => {
     const companionWindowId = 'cwid';
     const resources = [
-      { '@id': 'http://example.com/iiif/canvas3', on: 'http://example.com/iiif/canvas3' },
-      { '@id': 'http://example.com/iiif/canvas1', on: 'http://example.com/iiif/canvas1' },
-      { '@id': 'http://example.com/iiif/canvas2', on: 'http://example.com/iiif/canvas2' },
+      {
+        '@id': 'http://example.com/iiif/canvas3',
+        on: 'http://example.com/iiif/canvas3',
+      },
+      {
+        '@id': 'http://example.com/iiif/canvas1',
+        on: 'http://example.com/iiif/canvas1',
+      },
+      {
+        '@id': 'http://example.com/iiif/canvas2',
+        on: 'http://example.com/iiif/canvas2',
+      },
     ];
     const state = {
       companionWindows: {
@@ -199,7 +226,10 @@ describe('getSortedSearchAnnotationsForCompanionWindow', () => {
     };
 
     expect(
-      getSortedSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId: 'a' }).map(r => r.id),
+      getSortedSearchAnnotationsForCompanionWindow(state, {
+        companionWindowId,
+        windowId: 'a',
+      }).map((r) => r.id),
     ).toEqual([
       'http://example.com/iiif/canvas1',
       'http://example.com/iiif/canvas2',
@@ -238,23 +268,29 @@ describe('getSearchAnnotationsForWindow', () => {
       },
     };
     expect(
-      getSearchAnnotationsForWindow(state, { companionWindowId, windowId: 'a' }),
-    ).toEqual([{
-      id: 'yolo',
-      resources: [
-        { resource: { '@id': 'annoId2' } },
-        { resource: { '@id': 'annoId3' } },
-      ],
-    }]);
+      getSearchAnnotationsForWindow(state, {
+        companionWindowId,
+        windowId: 'a',
+      }),
+    ).toEqual([
+      {
+        id: 'yolo',
+        resources: [
+          { resource: { '@id': 'annoId2' } },
+          { resource: { '@id': 'annoId3' } },
+        ],
+      },
+    ]);
     expect(
-      getSearchAnnotationsForWindow(state, { companionWindowId, windowId: 'b' }),
+      getSearchAnnotationsForWindow(state, {
+        companionWindowId,
+        windowId: 'b',
+      }),
     ).toEqual([]);
     expect(
       getSearchAnnotationsForWindow({}, { companionWindowId, windowId: 'a' }),
     ).toEqual([]);
-    expect(
-      getSearchAnnotationsForWindow({}, { windowId: 'a' }),
-    ).toEqual([]);
+    expect(getSearchAnnotationsForWindow({}, { windowId: 'a' })).toEqual([]);
   });
 });
 
@@ -274,7 +310,10 @@ describe('getSelectedContentSearchAnnotationIds', () => {
     };
 
     expect(
-      getSelectedContentSearchAnnotationIds(state, { companionWindowId: 'bar', windowId: 'foo' }),
+      getSelectedContentSearchAnnotationIds(state, {
+        companionWindowId: 'bar',
+        windowId: 'foo',
+      }),
     ).toEqual(['baz']);
 
     expect(
@@ -305,7 +344,11 @@ describe('getResourceAnnotationForSearchHit', () => {
     };
 
     expect(
-      getResourceAnnotationForSearchHit(state, { annotationUri: annoId, companionWindowId, windowId: 'a' }).resource['@id'],
+      getResourceAnnotationForSearchHit(state, {
+        annotationUri: annoId,
+        companionWindowId,
+        windowId: 'a',
+      }).resource['@id'],
     ).toEqual(annoId);
   });
 });
@@ -325,10 +368,15 @@ describe('getResourceAnnotationLabel', () => {
               'search?page=1': {
                 json: {
                   '@id': 'yolo',
-                  resources: [{
-                    '@id': annoId,
-                    label: { '@language': 'en', '@value': 'The Annotation Label' },
-                  }],
+                  resources: [
+                    {
+                      '@id': annoId,
+                      label: {
+                        '@language': 'en',
+                        '@value': 'The Annotation Label',
+                      },
+                    },
+                  ],
                 },
               },
             },
@@ -338,7 +386,11 @@ describe('getResourceAnnotationLabel', () => {
     };
 
     expect(
-      getResourceAnnotationLabel(state, { annotationUri: annoId, companionWindowId, windowId: 'a' }),
+      getResourceAnnotationLabel(state, {
+        annotationUri: annoId,
+        companionWindowId,
+        windowId: 'a',
+      }),
     ).toEqual(['The Annotation Label']);
   });
 
@@ -361,7 +413,11 @@ describe('getResourceAnnotationLabel', () => {
     };
 
     expect(
-      getResourceAnnotationLabel(state, { annotationUri: annoId, companionWindowId, windowId: 'a' }),
+      getResourceAnnotationLabel(state, {
+        annotationUri: annoId,
+        companionWindowId,
+        windowId: 'a',
+      }),
     ).toEqual([]);
   });
 });

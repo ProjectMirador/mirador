@@ -9,10 +9,14 @@ describe('Invalid response while adding manifest', () => {
   /** */
   const addManifest = async (uri) => {
     // Now we are in the resource list view
-    fireEvent.click(await screen.findByRole('button', { name: 'Add resource' }));
+    fireEvent.click(
+      await screen.findByRole('button', { name: 'Add resource' }),
+    );
 
     // Input a manifest URL
-    fireEvent.change(screen.getByLabelText('Resource location'), { target: { value: uri } });
+    fireEvent.change(screen.getByLabelText('Resource location'), {
+      target: { value: uri },
+    });
     fireEvent.click(screen.getByText('Add'));
   };
 
@@ -25,21 +29,28 @@ describe('Invalid response while adding manifest', () => {
     await addManifest(invalidUrl);
 
     await waitFor(() => {
-      const listItem = document.querySelector(`[data-manifestid="${invalidUrl}"]`); // eslint-disable-line testing-library/no-node-access
+      const listItem = document.querySelector(
+        `[data-manifestid="${invalidUrl}"]`,
+      );
       expect(listItem).toBeInTheDocument();
     });
   }, 2000); // Wait 2 seconds
 
   // TODO: fix this. The error is not being rendered because of an overlay
   it.skip('renders an error message when a manifest cannot be loaded (and allows it to be dismissed)', async () => {
-    const uri = 'http://localhost:4444/__tests__/fixtures/version-2/broken.json';
-    await addManifest('http://localhost:4444/__tests__/fixtures/version-2/broken.json');
+    const uri =
+      'http://localhost:4444/__tests__/fixtures/version-2/broken.json';
+    await addManifest(
+      'http://localhost:4444/__tests__/fixtures/version-2/broken.json',
+    );
 
     // Try the added manifest item
-    const listItem = document.querySelector(`[data-manifestid="${uri}"]`); // eslint-disable-line testing-library/no-node-access
+    const listItem = document.querySelector(`[data-manifestid="${uri}"]`);
     expect(listItem).toBeInTheDocument();
 
-    const errorMessage = await screen.findByText('The resource cannot be added');
+    const errorMessage = await screen.findByText(
+      'The resource cannot be added',
+    );
     expect(errorMessage).toBeInTheDocument();
   });
 });

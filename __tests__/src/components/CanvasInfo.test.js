@@ -19,16 +19,24 @@ describe('CanvasInfo', () => {
     });
 
     it('renders the content in a CollapsibleSection', async () => {
-      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('Current item');
-      expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(/The Canvas Label/);
+      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(
+        'Current item',
+      );
+      expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(
+        /The Canvas Label/,
+      );
 
       await user.click(screen.getByRole('button'));
 
-      expect(screen.queryByRole('heading', { level: 5 })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('heading', { level: 5 }),
+      ).not.toBeInTheDocument();
     });
 
     it('renders canvas label', () => {
-      expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(/The Canvas Label/);
+      expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(
+        /The Canvas Label/,
+      );
     });
 
     it('renders canvas description', () => {
@@ -43,13 +51,13 @@ describe('CanvasInfo', () => {
 
   describe('when metadata is not present', () => {
     beforeEach(() => {
-      render(
-        <CanvasInfo />,
-      );
+      render(<CanvasInfo />);
     });
 
     it('does not render empty elements elements', () => {
-      expect(screen.queryByRole('heading', { level: 5 })).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('heading', { level: 5 }),
+      ).not.toBeInTheDocument();
     });
   });
 });

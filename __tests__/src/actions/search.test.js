@@ -74,7 +74,9 @@ describe('search actions', () => {
         type: ActionTypes.REMOVE_SEARCH,
         windowId,
       };
-      expect(actions.removeSearch(windowId, companionWindowId)).toEqual(expectedAction);
+      expect(actions.removeSearch(windowId, companionWindowId)).toEqual(
+        expectedAction,
+      );
     });
   });
 
@@ -103,7 +105,11 @@ describe('search actions', () => {
       const companionWindowId = 'cwid';
       const annotationIds = ['abc123'];
       expect(
-        actions.setContentSearchCurrentAnnotation(windowId, companionWindowId, annotationIds),
+        actions.setContentSearchCurrentAnnotation(
+          windowId,
+          companionWindowId,
+          annotationIds,
+        ),
       ).toEqual({
         annotationIds,
         companionWindowId,

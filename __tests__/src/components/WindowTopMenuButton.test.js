@@ -22,7 +22,9 @@ describe('WindowTopMenuButton', () => {
 
   it('renders the button element', () => {
     render(<Subject />);
-    expect(screen.getByLabelText('Window views & thumbnail display')).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('Window views & thumbnail display'),
+    ).toBeInTheDocument();
   });
 
   it('toggles open/close of <WindowTopMenu/> when clicked', async () => {
@@ -40,13 +42,17 @@ describe('WindowTopMenuButton', () => {
   it('the open attribute of the button is null without being clicked', async () => {
     render(<Subject />);
     // without a click, the button is not open and therefore doesn't have aria-owns attr
-    expect(screen.getByLabelText('Window views & thumbnail display')).not.toHaveAttribute('aria-owns'); // eslint-disable-line testing-library/no-node-access
+    expect(
+      screen.getByLabelText('Window views & thumbnail display'),
+    ).not.toHaveAttribute('aria-owns');
   });
 
   it('the open attribute of the button is applied once it is clicked', async () => {
     render(<Subject />);
     await user.click(screen.getByLabelText('Window views & thumbnail display'));
     // when 'open' is true, aria-owns is set to the id of the window
-    expect(screen.getByLabelText('Window views & thumbnail display')).toHaveAttribute('aria-owns'); // eslint-disable-line testing-library/no-node-access
+    expect(
+      screen.getByLabelText('Window views & thumbnail display'),
+    ).toHaveAttribute('aria-owns');
   });
 });

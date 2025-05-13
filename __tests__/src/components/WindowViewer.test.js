@@ -3,11 +3,7 @@ import { WindowViewer } from '../../../src/components/WindowViewer';
 
 /** create wrapper */
 function createWrapper(props) {
-  return render(
-    <WindowViewer
-      {...props}
-    />,
-  );
+  return render(<WindowViewer {...props} />);
 }
 
 describe('WindowViewer', () => {

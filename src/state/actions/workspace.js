@@ -2,8 +2,7 @@ import ActionTypes from './action-types';
 
 /**
  * updateWorkspace - action creator
- *
- * @param {Object} config
+ * @param {object} config
  */
 export function updateWorkspace(config) {
   return { config, type: ActionTypes.UPDATE_WORKSPACE };
@@ -11,17 +10,16 @@ export function updateWorkspace(config) {
 
 /**
  * toggleZoomControls - action creator
- * @param {Boolean} showZoomControls
+ * @param {boolean} showZoomControls
  * @memberof ActionCreators
-*/
+ */
 export function toggleZoomControls(showZoomControls) {
   return { showZoomControls, type: ActionTypes.TOGGLE_ZOOM_CONTROLS };
 }
 
 /**
  * updateWorkspaceMosaicLayout - action creator
- *
- * @param  {Object} layout
+ * @param  {object} layout
  * @memberof ActionCreators
  */
 export function updateWorkspaceMosaicLayout(layout) {
@@ -30,18 +28,21 @@ export function updateWorkspaceMosaicLayout(layout) {
 
 /**
  * updateWorkspaceMosaicLayout - action creator
- *
- * @param  {Object} isWorkspaceAddVisible
+ * @param  {object} isWorkspaceAddVisible
  * @memberof ActionCreators
  */
 export function setWorkspaceAddVisibility(isWorkspaceAddVisible) {
-  return { isWorkspaceAddVisible, type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY };
+  return {
+    isWorkspaceAddVisible,
+    type: ActionTypes.SET_WORKSPACE_ADD_VISIBILITY,
+  };
 }
 
 /**
  * setWorkspaceViewportPosition - action creator
- *
- * @param  {Object} position
+ * @param {object} position
+ * @param {number} position.x
+ * @param {number} position.y
  * @memberof ActionCreators
  */
 export function setWorkspaceViewportPosition({ x, y }) {
@@ -58,8 +59,9 @@ export function setWorkspaceViewportPosition({ x, y }) {
 
 /**
  * setWorkspaceViewportDimensions - action creator
- *
- * @param  {Object} position
+ * @param  {object} position
+ * @param {number} position.width
+ * @param {number} position.height
  * @memberof ActionCreators
  */
 export function setWorkspaceViewportDimensions({ width, height }) {

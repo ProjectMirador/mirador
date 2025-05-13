@@ -2,8 +2,7 @@ import ActionTypes from './action-types';
 
 /**
  * requestManifest - action creator
- *
- * @param  {String} manifestId
+ * @param  {string} manifestId
  * @memberof ActionCreators
  */
 export function requestManifest(manifestId, properties) {
@@ -16,9 +15,8 @@ export function requestManifest(manifestId, properties) {
 
 /**
  * receiveManifest - action creator
- *
- * @param  {String} manifestId
- * @param  {Object} manifestJson
+ * @param  {string} manifestId
+ * @param  {object} manifestJson
  * @memberof ActionCreators
  */
 export function receiveManifest(manifestId, manifestJson) {
@@ -31,9 +29,8 @@ export function receiveManifest(manifestId, manifestJson) {
 
 /**
  * receiveManifestFailure - action creator
- *
- * @param  {String} windowId
- * @param  {String} error
+ * @param  {string} manifestId
+ * @param  {string} error
  * @memberof ActionCreators
  */
 export function receiveManifestFailure(manifestId, error) {
@@ -46,8 +43,7 @@ export function receiveManifestFailure(manifestId, error) {
 
 /**
  * fetchManifest - action creator
- *
- * @param  {String} manifestId
+ * @param  {string} manifestId
  * @memberof ActionCreators
  */
 export function fetchManifest(manifestId, properties) {
@@ -56,8 +52,7 @@ export function fetchManifest(manifestId, properties) {
 
 /**
  * removeManifest - action creator
- *
- * @param  {String} manifestId
+ * @param  {string} manifestId
  * @memberof ActionCreators
  */
 export function removeManifest(manifestId) {

@@ -1,6 +1,4 @@
-import {
-  all, call, spawn,
-} from 'redux-saga/effects';
+import { all, call, spawn } from 'redux-saga/effects';
 
 import appSaga from './app';
 import iiifSaga from './iiif';
@@ -32,7 +30,7 @@ function getRootSaga(pluginSagas = []) {
       ...pluginSagas,
     ];
 
-    yield all(sagas.map(saga => spawn(launchSaga, saga)));
+    yield all(sagas.map((saga) => spawn(launchSaga, saga)));
   };
 }
 

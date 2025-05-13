@@ -8,7 +8,7 @@ import { FullScreenButton } from '../components/FullScreenButton';
  * @memberof FullScreenButton
  * @private
  */
-const mapStateToProps = _state => ({});
+const mapStateToProps = (_state) => ({});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

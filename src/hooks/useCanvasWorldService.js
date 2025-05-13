@@ -6,5 +6,8 @@ import { getMiradorCanvasWrapper } from '../state/selectors/wrappers';
 /** */
 export default function useCanvasWorldService() {
   const getMiradorCanvas = useSelector(getMiradorCanvasWrapper);
-  return { get: (canvases) => canvases && new CanvasWorld(canvases.map(getMiradorCanvas)) };
+  return {
+    get: (canvases) =>
+      canvases && new CanvasWorld(canvases.map(getMiradorCanvas)),
+  };
 }

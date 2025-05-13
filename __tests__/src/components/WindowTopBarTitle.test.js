@@ -22,7 +22,9 @@ describe('WindowTopBarTitle', () => {
 
   it('renders a Skeleton when loading', () => {
     createWrapper({ isFetching: true });
-    expect(screen.getByRole('heading')).not.toHaveTextContent('awesome manifest');
+    expect(screen.getByRole('heading')).not.toHaveTextContent(
+      'awesome manifest',
+    );
   });
 
   it('renders an error', () => {

@@ -13,10 +13,15 @@ describe('Import/Export state', () => {
       y: 1000,
       zoom: 0.001,
     };
-    context.miradorInstance.store.dispatch({ state, type: 'mirador/IMPORT_MIRADOR_STATE' });
-    expect(state.viewers[windows[0]]).toEqual(
-      { x: 1000, y: 1000, zoom: 0.001 },
-    );
+    context.miradorInstance.store.dispatch({
+      state,
+      type: 'mirador/IMPORT_MIRADOR_STATE',
+    });
+    expect(state.viewers[windows[0]]).toEqual({
+      x: 1000,
+      y: 1000,
+      zoom: 0.001,
+    });
   });
 
   // TODO: test the bugfix for the OSD viewer somehow?

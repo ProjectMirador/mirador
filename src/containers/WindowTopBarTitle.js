@@ -1,7 +1,11 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
-import { getManifestStatus, getManifestTitle, getWindowConfig } from '../state/selectors';
+import {
+  getManifestStatus,
+  getManifestTitle,
+  getWindowConfig,
+} from '../state/selectors';
 import { WindowTopBarTitle } from '../components/WindowTopBarTitle';
 
 /** mapStateToProps */

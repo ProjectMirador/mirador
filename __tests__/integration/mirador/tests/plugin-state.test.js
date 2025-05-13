@@ -7,7 +7,8 @@ describe('how plugins relate to state', () => {
   setupIntegrationTestViewer(settings.config, settings.plugins);
 
   it('plugin can read from state', async () => {
-    const text = 'Plugin:https://iiif.harvardartmuseums.org/manifests/object/299843';
+    const text =
+      'Plugin:https://iiif.harvardartmuseums.org/manifests/object/299843';
     const elementWithText = await screen.findByText(text);
     expect(elementWithText).toHaveTextContent(text);
   });
@@ -20,9 +21,14 @@ describe('how plugins relate to state', () => {
 
   // TODO: not working, likely due to thumnails not loading, see thumbnail-navigation.test.js
   it.skip('plugin can dispatch custom action to write to its reducer', async (context) => {
-    expect(context.miradorInstance.store.getState().pluginState.canvasChangeCount).toBe(0);
+    expect(
+      context.miradorInstance.store.getState().pluginState.canvasChangeCount,
+    ).toBe(0);
     const nextCanvas = screen.getByRole('button', { name: 'Next item' });
     fireEvent.click(nextCanvas);
-    expect(await context.miradorInstance.store.getState().pluginState.canvasChangeCount).toBe(1);
+    expect(
+      await context.miradorInstance.store.getState().pluginState
+        .canvasChangeCount,
+    ).toBe(1);
   });
 });
