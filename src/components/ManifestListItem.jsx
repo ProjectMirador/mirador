@@ -152,7 +152,7 @@ export function ManifestListItem({
                     )
                     : <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />}
                 </Grid>
-                <Grid xs={8} sm={9} component="div" paddingLeft={2}>
+                <Grid size={{ sm: 9, xs: 8 }} component="div" paddingLeft={2}>
                   {isCollection && (
                     <Typography component="div" variant="overline">
                       {t(isMultipart ? 'multipartCollection' : 'collection')}
