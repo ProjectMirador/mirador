@@ -20,7 +20,7 @@ export function SelectCollection({
   return (
     <Grid container justifyContent="center" alignItems="center">
       <Grid container direction="column" alignItems="center">
-        <Typography variant="h4" paragraph>
+        <Typography variant="h4" component="p">
           <em>
             {t('noItemSelected')}
           </em>

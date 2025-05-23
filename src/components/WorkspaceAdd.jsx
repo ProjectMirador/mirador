@@ -113,10 +113,7 @@ export function WorkspaceAdd({
               height: '100%',
             }}
           >
-            <Grid
-              xs={12}
-              item
-            >
+            <Grid size={12}>
               <Typography
                 variant="h1"
                 component="div"
