@@ -196,7 +196,7 @@ export default class MiradorCanvas {
 
   /** */
   get imageServiceIds() {
-    return this.iiifImageResources.map(r => getIiifResourceImageService(r).id);
+    return this.iiifImageResources.map(r => r && getIiifResourceImageService(r)?.id);
   }
 
   /**
