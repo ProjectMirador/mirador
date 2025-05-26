@@ -15,6 +15,7 @@ export function LanguageSettings({ handleClick, languages }) {
         languages.map(language => (
           <MenuItem
             key={language.locale}
+            lang={language.locale}
             onClick={() => { handleClick(language.locale); }}
           >
             <ListItemIcon>
