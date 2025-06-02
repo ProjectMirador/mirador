@@ -38,14 +38,15 @@ export function ManifestForm({
   if (!addResourcesOpen) return null;
 
   return (
-    <form onSubmit={formSubmit}>
-      <Grid container spacing={2}>
-        <Grid
-          size={{
-            xs: 12,
-            sm: 8,
-            md: 9
-          }}>
+<form onSubmit={formSubmit}>
+      <Grid
+        container
+        spacing={2}
+        columns={12}
+        wrap="nowrap"
+        sx={{ mt: 0.5 }}
+      >
+        <Grid size={9} sx={{ flexGrow: 1}}>
           <TextField
             autoFocus
             fullWidth
@@ -62,21 +63,20 @@ export function ManifestForm({
             }}
           />
         </Grid>
-        <Grid
-          sx={{
-            textAlign: { sm: 'inherit', xs: 'right' },
-          }}
-          size={{
-            xs: 12,
-            sm: 4,
-            md: 3
-          }}>
-          { onCancel && (
+        {onCancel && (
+          <Grid size="auto">
             <Button onClick={handleCancel}>
               {t('cancel')}
             </Button>
-          )}
-          <Button id="fetchBtn" type="submit" variant="contained" color="primary">
+          </Grid>
+        )}
+        <Grid size="auto">
+          <Button 
+            id="fetchBtn"
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
             {t('fetchManifest')}
           </Button>
         </Grid>
