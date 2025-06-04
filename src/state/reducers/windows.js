@@ -166,6 +166,7 @@ export const windowsReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           collectionDialogOn: false,
+          collectionPath: action.collectionPath
         },
       };
     default:

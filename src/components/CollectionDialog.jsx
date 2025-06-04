@@ -76,7 +76,7 @@ export function CollectionDialog({
 
   /** */
   const hideDialog = () => {
-    hideCollectionDialog(windowId);
+    hideCollectionDialog([...collectionPath, manifestId], windowId);
   };
 
   /** */
