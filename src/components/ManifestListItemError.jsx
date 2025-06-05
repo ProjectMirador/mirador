@@ -14,37 +14,26 @@ export function ManifestListItemError({
 }) {
   const { t } = useTranslation();
   return (
-    <Grid container>
-      <Grid container>
-        <Grid container size={{ sm: 6, xs: 12 }}>
-          <Grid size={{ sm: 3, xs: 4 }}>
-            <Grid container justifyContent="center">
-              <ErrorIcon sx={{
-                color: 'error.main',
-                height: '2rem',
-                width: '2rem',
-              }}
-              />
-            </Grid>
-          </Grid>
-          <Grid size={{ sm: 9, xs: 8 }}>
-            <Typography>{t('manifestError')}</Typography>
-            <Typography sx={{ wordBreak: 'break-all' }}>{manifestId}</Typography>
-          </Grid>
-        </Grid>
+    <Grid container sx={{ width: '100%', alignItems: 'center', flexWrap: 'nowrap' }}>
+      <Grid container size={{ sm: 5, xs: 6 }} sx={{alignItems: 'center'}}>
+        <ErrorIcon sx={{
+          color: 'error.main',
+          height: '2rem',
+          width: '2rem',
+          marginRight: '0.5rem',
+        }}
+        />
+          <Typography>{t('manifestError')}</Typography>
+          <Typography sx={{ wordBreak: 'break-all' }}>{manifestId}</Typography>
       </Grid>
 
-      <Grid container>
-        <Grid container size={{ sm: 6, xs: 12 }}>
-          <Grid>
-            <Button onClick={() => { onDismissClick(manifestId); }}>
-              {t('dismiss')}
-            </Button>
-            <Button onClick={() => { onTryAgainClick(manifestId); }}>
-              {t('tryAgain')}
-            </Button>
-          </Grid>
-        </Grid>
+      <Grid container size={{ sm: 7, xs: 6 }}>
+        <Button onClick={() => { onDismissClick(manifestId); }}>
+          {t('dismiss')}
+        </Button>
+        <Button onClick={() => { onTryAgainClick(manifestId); }}>
+          {t('tryAgain')}
+        </Button>
       </Grid>
     </Grid>
   );

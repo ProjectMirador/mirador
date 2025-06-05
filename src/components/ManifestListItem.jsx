@@ -114,51 +114,56 @@ export function ManifestListItem({
       className={active ? 'active' : ''}
       data-manifestid={manifestId}
       data-active={active}
+      sx={{ width: '100%' }}
     >
       {ready ? (
-        <Grid container className={ns('manifest-list-item')}>
-          <Grid size={{ sm: 6, xs: 12 }} sx={{ flex: '0 0 50%' }}>
+        <Grid
+          container
+          className={ns('manifest-list-item')}
+          sx={{ width: '100%', alignItems: 'center', flexWrap: 'nowrap' }}
+        >
+          <Grid size={{ sm: 5, xs: 12 }}>
             <ButtonBase
               ref={buttonRef}
               className={ns('manifest-list-item-title')}
               onClick={handleOpenButtonClick}
+              sx={{ justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}
             >
-              <Grid
-                container
-                sx={{
-                  textAlign: 'left',
-                  textTransform: 'initial',
-                }}
-                component="div"
-              >
-                <Grid size={{ sm: 3, xs: 4 }} component="div">
-                  {thumbnail
-                    ? (
-                      <StyledThumbnail
-                        className={[ns('manifest-list-item-thumb')]}
-                        src={[thumbnail]}
-                        alt=""
-                        height="80"
-                        unloader={(
-                          <Skeleton
-                            variant="rectangular"
-                            animation={false}
-                            sx={{ bgcolor: 'grey[300]' }}
-                            height={80}
-                            width={120}
-                          />
-                        )}
-                      />
-                    )
-                    : <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />}
+              <Grid container component="div" sx={{ width: '100%' }}>
+                {/* <Grid size={3} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: 120, flexShrink: 0, }} > */}
+                <Grid size={3} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }} >
+                  {thumbnail ? (
+                    <StyledThumbnail
+                      className={[ns('manifest-list-item-thumb')]}
+                      src={[thumbnail]}
+                      alt=""
+                      height="80"
+                      unloader={(
+                        <Skeleton
+                          variant="rectangular"
+                          animation={false}
+                          sx={{ bgcolor: 'grey[300]' }}
+                          height={80}
+                          width={120}
+                        />
+                      )}
+                    />
+                  ) : (
+                    <Skeleton
+                      sx={{ bgcolor: 'grey[300]' }}
+                      variant="rectangular"
+                      height={80}
+                      width={120}
+                    />
+                  )}
                 </Grid>
-                <Grid size={{ sm: 9, xs: 8 }} component="div" paddingLeft={2}>
+                <Grid size={9} sx={{ paddingLeft: 2, alignContent: 'center' }}>
                   {isCollection && (
-                    <Typography component="div" variant="overline">
+                    <Typography component="div" variant="overline" sx={{ textAlign: 'left' }}>
                       {t(isMultipart ? 'multipartCollection' : 'collection')}
                     </Typography>
                   )}
-                  <Typography component="div" variant="h6">
+                  <Typography component="div" variant="h6" sx={{ textAlign: 'left' }}>
                     {title || manifestId}
                   </Typography>
                 </Grid>
@@ -166,29 +171,32 @@ export function ManifestListItem({
             </ButtonBase>
           </Grid>
 
-          <Grid size={{ sm: 4, xs: 8 }} sx={{ flex: 1 }}>
-            <Typography className={ns('manifest-list-item-provider')}>{provider}</Typography>
-            <Typography>{t('numItems', { count: size, number: size })}</Typography>
+          <Grid size={{ sm: 4, xs: 8 }} >
+            <Typography className={ns('manifest-list-item-provider')}>
+              {provider}
+            </Typography>
+            <Typography>
+              {t('numItems', { count: size, number: size })}
+            </Typography>
           </Grid>
 
-          <Grid size={{ sm: 2, xs: 4 }} sx={{ flex: 1 }}>
-            {manifestLogo
-              && (
-                <StyledLogo
-                  src={[manifestLogo]}
-                  alt=""
-                  role="presentation"
-                  unloader={(
-                    <Skeleton
-                      variant="rectangular"
-                      animation={false}
-                      sx={{ bgcolor: 'grey[300]' }}
-                      height={60}
-                      width={60}
-                    />
-                  )}
-                />
-              )}
+          <Grid size={{ sm: 3, xs: 4 }}>
+            {manifestLogo && (
+              <StyledLogo
+                src={[manifestLogo]}
+                alt=""
+                role="presentation"
+                unloader={(
+                  <Skeleton
+                    variant="rectangular"
+                    animation={false}
+                    sx={{ bgcolor: 'grey[300]' }}
+                    height={60}
+                    width={60}
+                  />
+                )}
+              />
+            )}
           </Grid>
         </Grid>
       ) : (
