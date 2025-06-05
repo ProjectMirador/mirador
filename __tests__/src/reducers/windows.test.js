@@ -404,6 +404,7 @@ describe('windows reducer', () => {
         },
       };
       const action = {
+        collectionPath: [],
         type: ActionTypes.HIDE_COLLECTION_DIALOG,
         windowId: 'abc123',
       };
