@@ -66,7 +66,7 @@ Placeholder.propTypes = {
  * a dialog providing the possibility to select the collection
  */
 export function CollectionDialog({
-  addWindow, collection = null, collectionPath = [], error = null, hideCollectionDialog,
+  addWindow, collection = null, dialogCollectionPath = [], error = null, hideCollectionDialog,
   isMultipart = false, manifest, manifestId, ready = false,
   setWorkspaceAddVisibility, showCollectionDialog, updateWindow, windowId = null,
 }) {
@@ -76,19 +76,19 @@ export function CollectionDialog({
 
   /** */
   const hideDialog = () => {
-    hideCollectionDialog([...collectionPath, manifestId], windowId);
+    hideCollectionDialog(windowId);
   };
 
   /** */
   const selectCollection = (c) => {
-    showCollectionDialog(c.id, [...collectionPath, manifestId], windowId);
+    showCollectionDialog(c.id, [...dialogCollectionPath, manifestId], windowId);
   };
 
   /** */
   const goToPreviousCollection = () => {
     showCollectionDialog(
-      collectionPath[collectionPath.length - 1],
-      collectionPath.slice(0, -1),
+      dialogCollectionPath[dialogCollectionPath.length - 1],
+      dialogCollectionPath.slice(0, -1),
       windowId,
     );
   };
@@ -97,10 +97,10 @@ export function CollectionDialog({
   const selectManifest = (m) => {
     if (windowId) {
       updateWindow(windowId, {
-        canvasId: null, collectionPath: [...collectionPath, manifestId], manifestId: m.id,
+        canvasId: null, collectionPath: [...dialogCollectionPath, manifestId], manifestId: m.id,
       });
     } else {
-      addWindow({ collectionPath: [...collectionPath, manifestId], manifestId: m.id });
+      addWindow({ collectionPath: [...dialogCollectionPath, manifestId], manifestId: m.id });
     }
 
     hideDialog();
@@ -230,7 +230,7 @@ export function CollectionDialog({
 CollectionDialog.propTypes = {
   addWindow: PropTypes.func.isRequired,
   collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  collectionPath: PropTypes.arrayOf(PropTypes.string),
+  dialogCollectionPath: PropTypes.arrayOf(PropTypes.string),
   error: PropTypes.string,
   hideCollectionDialog: PropTypes.func.isRequired,
   isMultipart: PropTypes.bool,
