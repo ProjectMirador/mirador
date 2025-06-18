@@ -120,7 +120,7 @@ export function ManifestListItem({
         <Grid
           container
           className={ns('manifest-list-item')}
-          sx={{ width: '100%', alignItems: 'center', flexWrap: 'nowrap' }}
+          sx={{ width: '100%', alignItems: 'center' }}
         >
           <Grid size={{ sm: 5, xs: 12 }}>
             <ButtonBase
@@ -130,7 +130,6 @@ export function ManifestListItem({
               sx={{ justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}
             >
               <Grid container component="div" sx={{ width: '100%' }}>
-                {/* <Grid size={3} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: 120, flexShrink: 0, }} > */}
                 <Grid size={3} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }} >
                   {thumbnail ? (
                     <StyledThumbnail

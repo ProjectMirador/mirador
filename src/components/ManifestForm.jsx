@@ -38,15 +38,14 @@ export function ManifestForm({
   if (!addResourcesOpen) return null;
 
   return (
-<form onSubmit={formSubmit}>
+    <form onSubmit={formSubmit}>
       <Grid
         container
         spacing={2}
         columns={12}
-        wrap="nowrap"
         sx={{ mt: 0.5 }}
       >
-        <Grid size={9} sx={{ flexGrow: 1}}>
+        <Grid size={{ sm: 'grow', xs: 12 }}>
           <TextField
             autoFocus
             fullWidth

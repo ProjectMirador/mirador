@@ -14,8 +14,8 @@ export function ManifestListItemError({
 }) {
   const { t } = useTranslation();
   return (
-    <Grid container sx={{ width: '100%', alignItems: 'center', flexWrap: 'nowrap' }}>
-      <Grid container size={{ sm: 5, xs: 6 }} sx={{alignItems: 'center'}}>
+    <Grid container sx={{ width: '100%', alignItems: 'center' }}>
+      <Grid container size={{ sm: 5, xs: 12 }} sx={{alignItems: 'center'}}>
         <ErrorIcon sx={{
           color: 'error.main',
           height: '2rem',
@@ -27,7 +27,7 @@ export function ManifestListItemError({
           <Typography sx={{ wordBreak: 'break-all' }}>{manifestId}</Typography>
       </Grid>
 
-      <Grid container size={{ sm: 7, xs: 6 }}>
+      <Grid container size={{ sm: 7, xs: 12 }}>
         <Button onClick={() => { onDismissClick(manifestId); }}>
           {t('dismiss')}
         </Button>
