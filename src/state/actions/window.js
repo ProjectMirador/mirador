@@ -193,9 +193,9 @@ export function setWindowViewType(windowId, viewType) {
 }
 
 /** */
-export function showCollectionDialog(manifestId, collectionPath = [], windowId) {
+export function showCollectionDialog(manifestId, dialogCollectionPath = [], windowId) {
   return {
-    collectionPath,
+    dialogCollectionPath,
     manifestId,
     type: ActionTypes.SHOW_COLLECTION_DIALOG,
     windowId,
@@ -203,9 +203,8 @@ export function showCollectionDialog(manifestId, collectionPath = [], windowId) 
 }
 
 /** */
-export function hideCollectionDialog(collectionPath = [], windowId) {
+export function hideCollectionDialog(windowId) {
   return {
-    collectionPath,
     type: ActionTypes.HIDE_COLLECTION_DIALOG,
     windowId,
   };
