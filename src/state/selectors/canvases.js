@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import flatten from 'lodash/flatten';
 import CanvasGroupings from '../../lib/CanvasGroupings';
+import { getIiifResourceImageService } from '../../lib/iiif';
 import { getMiradorCanvasWrapper } from './wrappers';
 import { miradorSlice, EMPTY_ARRAY } from './utils';
 import { getWindow } from './getters';
@@ -215,7 +216,7 @@ export const getVisibleCanvasNonTiledResources = createSelector(
   ],
   (canvases, getMiradorCanvas) => flatten(canvases
     .map(canvas => getMiradorCanvas(canvas).imageResources))
-    .filter(resource => resource.getServices().length < 1),
+    .filter(resource => !getIiifResourceImageService(resource)),
 );
 
 /**
@@ -304,7 +305,7 @@ export const selectInfoResponse = createSelector(
     if (!infoId) {
       if (!canvas) return undefined;
       const image = getMiradorCanvas(canvas).iiifImageResources[0];
-      iiifServiceId = image && image.getServices()[0].id;
+      iiifServiceId = image && getIiifResourceImageService(image)?.id;
     }
 
     return iiifServiceId && infoResponses[iiifServiceId]

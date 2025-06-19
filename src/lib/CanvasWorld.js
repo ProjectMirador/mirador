@@ -1,5 +1,5 @@
 import normalizeUrl from 'normalize-url';
-import MiradorCanvas from './MiradorCanvas';
+import { getIiifResourceImageService } from './iiif';
 
 /**
  * CanvasWorld
@@ -141,7 +141,7 @@ export default class CanvasWorld {
     if (!miradorCanvas) return undefined;
     return miradorCanvas.imageResources
       .find(r => (
-        normalizeUrl(r.getServices()[0].id, { stripAuthentication: false })
+        normalizeUrl(getIiifResourceImageService(r).id, { stripAuthentication: false })
         === normalizeUrl(infoResponseId, { stripAuthentication: false })));
   }
 
