@@ -39,8 +39,13 @@ export function ManifestForm({
 
   return (
     <form onSubmit={formSubmit}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={8} md={9}>
+      <Grid
+        container
+        spacing={2}
+        columns={12}
+        sx={{ mt: 0.5 }}
+      >
+        <Grid size={{ sm: 'grow', xs: 12 }}>
           <TextField
             autoFocus
             fullWidth
@@ -51,29 +56,26 @@ export function ManifestForm({
             variant="filled"
             label={t('addManifestUrl')}
             helperText={t('addManifestUrlHelp')}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            InputProps={{
-              style: { typography: 'body1' },
+            slotProps={{
+              inputLabel: { shrink: true },
+              inputProps: { style: { typography: 'body1' } },
             }}
           />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={4}
-          md={3}
-          sx={{
-            textAlign: { sm: 'inherit', xs: 'right' },
-          }}
-        >
-          { onCancel && (
+        {onCancel && (
+          <Grid size="auto">
             <Button onClick={handleCancel}>
               {t('cancel')}
             </Button>
-          )}
-          <Button id="fetchBtn" type="submit" variant="contained" color="primary">
+          </Grid>
+        )}
+        <Grid size="auto">
+          <Button 
+            id="fetchBtn"
+            type="submit"
+            variant="contained"
+            color="primary"
+          >
             {t('fetchManifest')}
           </Button>
         </Grid>

@@ -28,12 +28,10 @@ const ZeroWindows = () => {
         container
         style={{
           height: '100%',
+          justifyContent: 'center',
         }}
       >
-        <Grid
-          xs={12}
-          item
-        >
+        <Grid size={12}>
           <Typography
             variant="h1"
             component="div"

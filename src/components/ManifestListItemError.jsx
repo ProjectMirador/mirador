@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import ErrorIcon from '@mui/icons-material/ErrorOutlineSharp';
-import Grid2 from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 
@@ -14,39 +14,28 @@ export function ManifestListItemError({
 }) {
   const { t } = useTranslation();
   return (
-    <Grid2 container>
-      <Grid2 container>
-        <Grid2 container xs={12} sm={6}>
-          <Grid2 xs={4} sm={3}>
-            <Grid2 container justifyContent="center">
-              <ErrorIcon sx={{
-                color: 'error.main',
-                height: '2rem',
-                width: '2rem',
-              }}
-              />
-            </Grid2>
-          </Grid2>
-          <Grid2 xs={8} sm={9}>
-            <Typography>{t('manifestError')}</Typography>
-            <Typography sx={{ wordBreak: 'break-all' }}>{manifestId}</Typography>
-          </Grid2>
-        </Grid2>
-      </Grid2>
+    <Grid container sx={{ width: '100%', alignItems: 'center' }}>
+      <Grid container size={{ sm: 5, xs: 12 }} sx={{alignItems: 'center'}}>
+        <ErrorIcon sx={{
+          color: 'error.main',
+          height: '2rem',
+          width: '2rem',
+          marginRight: '0.5rem',
+        }}
+        />
+          <Typography>{t('manifestError')}</Typography>
+          <Typography sx={{ wordBreak: 'break-all' }}>{manifestId}</Typography>
+      </Grid>
 
-      <Grid2 container>
-        <Grid2 container xs={12} sm={6} justifyContent="flex-end">
-          <Grid2>
-            <Button onClick={() => { onDismissClick(manifestId); }}>
-              {t('dismiss')}
-            </Button>
-            <Button onClick={() => { onTryAgainClick(manifestId); }}>
-              {t('tryAgain')}
-            </Button>
-          </Grid2>
-        </Grid2>
-      </Grid2>
-    </Grid2>
+      <Grid container size={{ sm: 7, xs: 12 }}>
+        <Button onClick={() => { onDismissClick(manifestId); }}>
+          {t('dismiss')}
+        </Button>
+        <Button onClick={() => { onTryAgainClick(manifestId); }}>
+          {t('tryAgain')}
+        </Button>
+      </Grid>
+    </Grid>
   );
 }
 
