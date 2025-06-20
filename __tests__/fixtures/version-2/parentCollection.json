@@ -1,0 +1,13 @@
+{
+  "@context": "http://iiif.io/api/presentation/2/context.json",
+  "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/parentCollection.json",
+  "@type": "sc:Collection",
+  "label": "Parent Collection of Collection",
+  "collections": [
+    {
+      "@id": "http://iiif.io/api/presentation/2.1/example/fixtures/collection.json",
+      "@type": "sc:Collection",
+      "label": "Collection of Test Cases - label for parent"
+    }
+  ]
+}
