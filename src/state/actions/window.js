@@ -203,8 +203,9 @@ export function showCollectionDialog(manifestId, collectionPath = [], windowId) 
 }
 
 /** */
-export function hideCollectionDialog(windowId) {
+export function hideCollectionDialog(collectionPath = [], windowId) {
   return {
+    collectionPath,
     type: ActionTypes.HIDE_COLLECTION_DIALOG,
     windowId,
   };
