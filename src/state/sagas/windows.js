@@ -82,14 +82,10 @@ export function* setCollectionPath({ manifestId, windowId }) {
 
 /** */
 export function* fetchCollectionManifests(action) {
-  const { collectionPath, dialogCollectionPath } = action.payload;
+  const { collectionPath } = action.payload;
+  if (!collectionPath) return;
 
-  if (collectionPath) {
-    yield call(fetchManifests, ...collectionPath);
-  }
-  if (dialogCollectionPath) {
-    yield call(fetchManifests, ...dialogCollectionPath);
-  }
+  yield call(fetchManifests, ...collectionPath);
 }
 
 /** @private */
