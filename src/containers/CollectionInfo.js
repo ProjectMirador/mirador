@@ -13,7 +13,7 @@ import { CollectionInfo } from '../components/CollectionInfo';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { companionWindowId, windowId }) => {
+const mapStateToProps = (state, { windowId }) => {
   const { collectionPath } = (getWindow(state, { windowId }) || {});
   const manifestId = collectionPath[collectionPath.length - 1];
 

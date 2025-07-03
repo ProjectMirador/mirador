@@ -267,6 +267,7 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.ADD_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, setCanvasOnNewSequence),
+    takeEvery(ActionTypes.UPDATE_WINDOW, fetchCollectionManifests),
     takeEvery(ActionTypes.SET_CANVAS, setCurrentAnnotationsOnCurrentCanvas),
     takeEvery(ActionTypes.SET_CANVAS, fetchInfoResponses),
     takeEvery(ActionTypes.UPDATE_COMPANION_WINDOW, fetchCollectionManifests),
