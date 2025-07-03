@@ -42,12 +42,12 @@ describe('Annotations in Mirador', () => {
 
     expect(await screen.findByRole('heading', { name: 'Annotations' })).toBeInTheDocument();
 
-    expect(await screen.findByText('Showing 6 annotations')).toBeInTheDocument();
+    expect(await screen.findByText('Showing 12 annotations')).toBeInTheDocument();
 
     const annotationPanel = await screen.findByRole('complementary', { name: /annotations/i });
     expect(annotationPanel).toBeInTheDocument();
 
     const listItems = await within(annotationPanel).findAllByRole('menuitem');
-    expect(listItems).toHaveLength(6);
+    expect(listItems).toHaveLength(12);
   });
 });
