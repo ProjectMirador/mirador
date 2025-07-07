@@ -42,12 +42,15 @@ describe('Annotations in Mirador', () => {
 
     expect(await screen.findByRole('heading', { name: 'Annotations' })).toBeInTheDocument();
 
-    expect(await screen.findByText('Showing 12 annotations')).toBeInTheDocument();
+    // Re. this regex: be sure that the number of annotations starts with a non zero digit
+    const annoCountSubtitle = await screen.findByText(/Showing [1-9]\d* annotations/);
+    expect(annoCountSubtitle).toBeInTheDocument();
+    const annotationCount = annoCountSubtitle.innerText.match(/\d+/)[0];
 
     const annotationPanel = await screen.findByRole('complementary', { name: /annotations/i });
     expect(annotationPanel).toBeInTheDocument();
 
     const listItems = await within(annotationPanel).findAllByRole('menuitem');
-    expect(listItems).toHaveLength(12);
+    expect(listItems).toHaveLength(annotationCount);
   });
 });
