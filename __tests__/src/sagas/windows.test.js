@@ -507,7 +507,7 @@ describe('window-level sagas', () => {
         ])
         .put.like({
           action: {
-            collectionPath: [],
+            dialogCollectionPath: [],
             manifestId: 'manifest.json',
             type: 'mirador/SHOW_COLLECTION_DIALOG',
             windowId: 'x',
@@ -525,7 +525,7 @@ describe('window-level sagas', () => {
         ])
         .not.put.like({
           action: {
-            collectionPath: [],
+            dialogCollectionPath: [],
             manifestId: 'manifest.json',
             type: 'mirador/SHOW_COLLECTION_DIALOG',
             windowId: 'x',
