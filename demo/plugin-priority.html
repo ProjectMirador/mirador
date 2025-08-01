@@ -9,9 +9,9 @@
   <body>
     <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
     <script type="module">
-      import Mirador from '../../../src';
-      import settings from './mirador-configs/plugin-validate.js';
+      import Mirador from '../src';
+      import settings from '../__tests__/integration/mirador-configs/plugin-priority.js';
       Mirador.viewer(settings.config, settings.plugins);
-     </script>
+    </script>
   </body>
 </html>
