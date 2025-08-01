@@ -2,4 +2,5 @@ codecov:
   coverage:
     precision: 1
     round: up
-    
+  ignore:
+    - vite.config.js
