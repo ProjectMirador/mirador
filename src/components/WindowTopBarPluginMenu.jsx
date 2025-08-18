@@ -7,12 +7,11 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
 import { PluginHook } from './PluginHook';
 import WorkspaceContext from '../contexts/WorkspaceContext';
 import { usePlugins } from '../extend/usePlugins';
-
 /**
  *
  */
 export function WindowTopBarPluginMenu({
-  windowId, menuIcon = <MoreVertIcon />,
+  windowId, menuIcon = <MoreVertIcon />, pluginTarget = 'WindowTopBarPluginMenu', 
 }) {
   const { t } = useTranslation();
   const container = useContext(WorkspaceContext);
@@ -20,7 +19,7 @@ export function WindowTopBarPluginMenu({
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
   const windowPluginMenuId = useId();
-  const { PluginComponents } = usePlugins('WindowTopBarPluginMenu');
+  const { PluginComponents } = usePlugins(pluginTarget);
 
   /** */
   const handleMenuClick = (event) => {
@@ -63,7 +62,7 @@ export function WindowTopBarPluginMenu({
         open={open}
         onClose={handleMenuClose}
       >
-        <PluginHook targetName="WindowTopBarPluginMenu" handleClose={handleMenuClose} {...pluginProps} />
+        <PluginHook targetName={pluginTarget} handleClose={handleMenuClose} {...pluginProps} />
       </Menu>
     </>
   );
@@ -74,5 +73,6 @@ WindowTopBarPluginMenu.propTypes = {
   container: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   menuIcon: PropTypes.element,
   open: PropTypes.bool,
+  pluginTarget: PropTypes.string,
   windowId: PropTypes.string.isRequired,
 };
