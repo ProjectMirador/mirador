@@ -1,3 +1,4 @@
+TEST
 # Contributing a Mirador translation
 
 Mirador is built with internationalization and translation support. It uses a translation file and [react-i18next](https://react.i18next.com/) to provide translations in user interface elements.
