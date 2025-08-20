@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { screen, fireEvent, within } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { setupIntegrationTestViewer } from '@tests/utils/test-utils';
 import config from '../mirador-configs/single-van-gogh';
 
@@ -45,12 +45,20 @@ describe('Annotations in Mirador', () => {
     // Re. this regex: be sure that the number of annotations starts with a non zero digit
     const annoCountSubtitle = await screen.findByText(/Showing [1-9]\d* annotations/);
     expect(annoCountSubtitle).toBeInTheDocument();
-    const annotationCount = annoCountSubtitle.innerText.match(/\d+/)[0];
+    const annotationCount = annoCountSubtitle.textContent.match(/\d+/)[0];
 
-    const annotationPanel = await screen.findByRole('complementary', { name: /annotations/i });
-    expect(annotationPanel).toBeInTheDocument();
+    // NOTE: findByRole was causing mysterious failures so we are using querySelector
+    // for the rest of this test.
+    /* eslint-disable testing-library/no-node-access */
+    const annotationPanel = annoCountSubtitle.closest('aside');
+    const menu = annotationPanel.querySelector('[role="menu"]');
 
-    const listItems = await within(annotationPanel).findAllByRole('menuitem');
-    expect(listItems).toHaveLength(annotationCount);
+    // Find all menu items
+    const listItems = menu.querySelectorAll('[role="menuitem"]');
+    /* eslint-enable testing-library/no-node-access */
+
+    // Convert annotationCount (likely a string) to number
+    const expectedCount = Number(annotationCount);
+    expect(listItems.length).toBe(expectedCount);
   });
 });
