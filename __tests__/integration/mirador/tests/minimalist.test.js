@@ -7,7 +7,7 @@ describe('Minimalist configuration to Mirador', () => {
   setupIntegrationTestViewer(config);
 
   it('Loads a manifest and displays it without some of the default controls', async () => {
-    expect(await screen.findByRole('region', { name: /Window: Self-Portrait Dedicated to Paul Gauguin/i })).toBeInTheDocument();
+    expect(await screen.findByLabelText(/Window: Self-Portrait Dedicated to Paul Gauguin/i)).toBeInTheDocument();
 
     const infoButton = await screen.findByRole('tab', { name: /Information/i });
     expect(infoButton).toBeInTheDocument();

@@ -13,7 +13,7 @@ describe('Annotations in Mirador', () => {
   setupIntegrationTestViewer(config);
 
   it('Loads the manifest', async () => {
-    const element = await screen.findByRole('region', { name: /Window: Self-Portrait Dedicated to Paul Gauguin/i });
+    const element = await screen.findByLabelText(/Window: Self-Portrait Dedicated to Paul Gauguin/i);
     expect(element).toBeInTheDocument();
   });
 

@@ -8,7 +8,7 @@ describe('initialViewerConfig', () => {
 
   describe('initialViewerConfig', () => {
     it('allows initialViewerConfig to be passed', async (context) => {
-      expect(await screen.findByRole('region', { name: /Window: Self-Portrait Dedicated to Paul Gauguin/i })).toBeInTheDocument();
+      expect(await screen.findByLabelText(/Window: Self-Portrait Dedicated to Paul Gauguin/i)).toBeInTheDocument();
 
       let viewerObject;
       await waitFor(() => {
