@@ -103,6 +103,7 @@ export function Window({
         id={windowId}
         className={ns('window')}
         aria-label={t('window', { label })}
+        data-testid="test-region"
       >
         <WindowTopBar
           component={workspaceType === 'mosaic' && windowDraggable ? DraggableNavBar : undefined}

@@ -65,7 +65,7 @@ const setupMiradorViewer = async (config, plugins) => {
 
   render(
     <div
-      data-testid="mirador"
+      data-testid="test-mirador"
       style={{
         bottom: 0, left: 0, position: 'absolute', right: 0, top: 0,
       }}
@@ -85,11 +85,7 @@ export const setupIntegrationTestViewer = (config, plugins) => {
     context.miradorInstance = miradorInstance;
 
     // Wait for the viewer to render
-    expect(await screen.findByTestId('mirador')).toBeInTheDocument();
+    expect(await screen.findByTestId('test-mirador')).toBeInTheDocument();
     expect(await screen.findByLabelText('Workspace')).toBeInTheDocument();
-
-    if ((config.windows || []).length > 0) {
-      await screen.findAllByRole('region', { name: /Window:/i });
-    }
   });
 };
