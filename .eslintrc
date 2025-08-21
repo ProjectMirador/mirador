@@ -95,6 +95,7 @@
       {
         "allowTestingFrameworkSetupHook": "beforeEach"
       }
-    ]
+    ],
+    "testing-library/prefer-find-by": "off"
   }
 }

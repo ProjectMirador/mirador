@@ -25,7 +25,7 @@
     "lint:translations": "node ./scripts/i18n-lint.js",
     "size": "bundlewatch --config bundlewatch.config.json",
     "start": "vite",
-    "test": "npm run build && npm run lint && npm run size && vitest run"
+    "test": "npm run build && npm run lint && npm run size && DEBUG_PRINT_LIMIT=70000 vitest run"
   },
   "license": "Apache-2.0",
   "contributors": [
