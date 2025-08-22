@@ -1,3 +1,5 @@
+import { PRIMARY_MANIFEST_FIXTURE_URL } from '../constants';
+
 /**
  * Creates a Mirador config object with two windows:
  * - One with a specific canvas index
@@ -14,7 +16,7 @@ export default function createConfig(id) {
     windows: [
       {
         canvasIndex: 2,
-        loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+        loadedManifest: PRIMARY_MANIFEST_FIXTURE_URL,
       },
       {
         loadedManifest: 'https://media.nga.gov/public/manifests/nga_highlights.json',

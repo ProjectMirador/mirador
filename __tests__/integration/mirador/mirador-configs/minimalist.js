@@ -1,3 +1,5 @@
+import { PRIMARY_MANIFEST_FIXTURE_URL, PRIMARY_CANVAS_FIXTURE_URL } from '../constants';
+
 export default {
   id: 'mirador',
   theme: {
@@ -10,8 +12,8 @@ export default {
   },
   windows: [{
     allowClose: false,
-    canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
-    manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+    canvasId: PRIMARY_CANVAS_FIXTURE_URL,
+    manifestId: PRIMARY_MANIFEST_FIXTURE_URL,
     thumbnailNavigationPosition: 'far-bottom',
   }],
   workspace: {

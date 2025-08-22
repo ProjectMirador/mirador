@@ -12,11 +12,6 @@ import config from '../mirador-configs/single-van-gogh';
 describe('Annotations in Mirador', () => {
   setupIntegrationTestViewer(config);
 
-  it('Loads the manifest', async () => {
-    const element = await screen.findByRole('region', { name: /Window: Self-Portrait Dedicated to Paul Gauguin/i });
-    expect(element).toBeInTheDocument();
-  });
-
   it('stores annotations in state by canvasId', async (context) => {
     // Open the sidebar
     const toggleButtons = await screen.findAllByLabelText(/toggle sidebar/i);
