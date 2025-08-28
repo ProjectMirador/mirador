@@ -62,4 +62,24 @@ describe('WindowTopBarPluginMenu', () => {
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
   });
+
+  describe('pluginTarget prop', () => {
+    it('passes the pluginTarget to usePlugins', () => {
+      const spy = vi.mocked(usePlugins);
+      spy.mockReturnValue({ PluginComponents: [mockComponentA] });
+
+      render(<Subject pluginTarget="CustomPluginTarget" />);
+
+      expect(spy).toHaveBeenCalledWith('CustomPluginTarget');
+    });
+
+    it('defaults pluginTarget to WindowTopBarPluginMenu if not provided', () => {
+      const spy = vi.mocked(usePlugins);
+      spy.mockReturnValue({ PluginComponents: [mockComponentA] });
+
+      render(<Subject />);
+
+      expect(spy).toHaveBeenCalledWith('WindowTopBarPluginMenu');
+    });
+  });
 });
