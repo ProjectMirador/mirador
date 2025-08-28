@@ -1,3 +1,5 @@
+import { PRIMARY_MANIFEST_FIXTURE_URL } from '../constants';
+
 export const rtl1 = {
   createGenerateClassNameOptions: {
     seed: 'one',
@@ -32,7 +34,7 @@ export const rtl3 = {
   id: 'instanceThree',
   windows: [
     {
-      manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+      manifestId: PRIMARY_MANIFEST_FIXTURE_URL,
     },
   ],
 };

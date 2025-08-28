@@ -1,8 +1,10 @@
+import { PRIMARY_CANVAS_FIXTURE_URL, PRIMARY_MANIFEST_FIXTURE_URL } from '../constants';
+
 // has 2 windows, one gaugin and one bodleian
 export default {
   catalog: [
+    { manifestId: PRIMARY_MANIFEST_FIXTURE_URL },
     { manifestId: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json' },
-    { manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843' },
     { manifestId: 'https://media.nga.gov/public/manifests/nga_highlights.json', provider: 'National Gallery of Art' },
     { manifestId: 'https://wellcomelibrary.org/iiif/b18035723/manifest', provider: 'Wellcome Library' },
     { manifestId: 'https://demos.biblissima.fr/iiif/metadata/florus-dispersus/manifest.json', provider: 'Biblissima' },
@@ -19,8 +21,8 @@ export default {
     transitions: {},
   },
   windows: [{
-    canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
-    manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+    canvasId: PRIMARY_CANVAS_FIXTURE_URL,
+    manifestId: PRIMARY_MANIFEST_FIXTURE_URL,
   },
   {
     canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/e58b8c60-005c-4c41-a22f-07d49cb25ede.json',
