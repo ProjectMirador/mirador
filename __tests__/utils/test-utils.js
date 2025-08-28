@@ -8,12 +8,13 @@ import { I18nextProvider } from 'react-i18next';
 import createRootReducer from '../../src/state/reducers/rootReducer';
 import settings from '../../src/config/settings';
 import createI18nInstance from '../../src/i18n';
+import { failIfErrorDialogPresent, safeFindByRole, safeFindAllByRole } from './safe-queries';
 
 /** Mirador viewer setup for Integration tests */
 import { viewer as miradorViewer } from '../../src/index';
 
 export * from '@testing-library/react';
-export { renderWithProviders as render };
+export { renderWithProviders as render, safeFindByRole };
 
 const rootReducer = createRootReducer();
 const theme = createTheme(settings.theme);
@@ -88,8 +89,10 @@ export const setupIntegrationTestViewer = (config, plugins) => {
     expect(await screen.findByTestId('mirador')).toBeInTheDocument();
     expect(await screen.findByLabelText('Workspace')).toBeInTheDocument();
 
+    await failIfErrorDialogPresent({ waitForRole: 'main' });
+
     if ((config.windows || []).length > 0) {
-      await screen.findAllByRole('region', { name: /Window:/i });
+      await safeFindAllByRole('region', { name: /Window:/i });
     }
   });
 };
