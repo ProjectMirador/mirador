@@ -1,4 +1,4 @@
-import { PRIMARY_MANIFEST_FIXTURE_URL } from '../constants';
+import { PRIMARY_MANIFEST_FIXTURE_URL } from './constants';
 
 /**
  * Creates a Mirador config object with two windows:

@@ -1,5 +1,5 @@
 import { stateDependentPlugin } from '../plugins/index';
-import { PRIMARY_MANIFEST_FIXTURE_URL } from '../constants';
+import { PRIMARY_MANIFEST_FIXTURE_URL } from './constants';
 
 export default {
   config: {
