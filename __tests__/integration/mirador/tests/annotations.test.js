@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
 import { screen, fireEvent, within } from '@testing-library/react';
-import { setupIntegrationTestViewer } from '@tests/utils/test-utils';
+import { setupIntegrationTestViewer, safeFindByRole } from '@tests/utils/test-utils';
 import config from '../mirador-configs/single-van-gogh';
 
 // TODO: sometimes this is failing with
@@ -42,7 +42,9 @@ describe('Annotations in Mirador', () => {
     expect(annoCountSubtitle).toBeInTheDocument();
     const annotationCount = annoCountSubtitle.innerText.match(/\d+/)[0];
 
-    const annotationPanel = await screen.findByRole('complementary', { name: /annotations/i });
+    // use safeFindByRole here. This specific test is consistently hard to interpret on failure,
+    // since another async operation has happened after setupIntegrationTestViewer
+    const annotationPanel = await safeFindByRole('complementary', { name: /annotations/i });
     expect(annotationPanel).toBeInTheDocument();
 
     const listItems = await within(annotationPanel).findAllByRole('menuitem');
