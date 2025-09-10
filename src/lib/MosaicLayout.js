@@ -1,7 +1,7 @@
 import {
   createRemoveUpdate, updateTree,
   getNodeAtPath, getOtherDirection, getPathToCorner, Corner,
-} from 'react-mosaic-component2';
+} from '@lonli-lokli/react-mosaic-component';
 import dropRight from 'lodash/dropRight';
 
 /** */

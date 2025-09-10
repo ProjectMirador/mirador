@@ -1,4 +1,4 @@
-import { MosaicWindowContext } from 'react-mosaic-component2';
+import { MosaicWindowContext } from '@lonli-lokli/react-mosaic-component';
 import { render, screen } from '@tests/utils/test-utils';
 
 import { Window } from '../../../src/components/Window';
