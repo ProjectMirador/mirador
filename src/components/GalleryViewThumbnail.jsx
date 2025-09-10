@@ -61,7 +61,7 @@ export function GalleryViewThumbnail({
 
   useEffect(() => {
     if (selected) {
-      myRef.current?.scrollIntoView(true);
+      myRef.current?.scrollIntoView({ block: 'nearest'});
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
