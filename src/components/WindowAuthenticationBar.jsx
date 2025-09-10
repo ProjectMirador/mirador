@@ -12,11 +12,11 @@ import SanitizedHtml from '../containers/SanitizedHtml';
 import { PluginHook } from './PluginHook';
 
 const StyledTopBar = styled('div')(({ theme }) => ({
-  '&:hover': {
-    backgroundColor: theme.palette.secondary.main,
-  },
+  backgroundColor: theme.palette.secondary.main,
+  color: theme.palette.secondary.contrastText,
   alignItems: 'center',
   display: 'flex',
+  padding: theme.spacing(1),
 }));
 
 const StyledFauxButton = styled('span')(({ theme }) => ({
@@ -46,11 +46,10 @@ export function WindowAuthenticationBar({
       onClick={onSubmit}
       color="secondary"
       sx={(theme) => ({
-        '&:hover': {
-          backgroundColor: alpha(theme.palette.secondary.contrastText, 1 - theme.palette.action.hoverOpacity),
-        },
         backgroundColor: theme.palette.secondary.contrastText,
+        lineHeight: '1.5rem',
       })}
+
       {...ConfirmProps}
     >
       {confirmButton || t('login')}
@@ -66,7 +65,7 @@ export function WindowAuthenticationBar({
       >
         <StyledTopBar>
           { icon || (
-            <LockIcon sx={{ marginInlineEnd: 1.5 }} />
+            <LockIcon sx={{ marginInlineEnd: 5 }} />
           ) }
           <Typography component="h3" variant="body1" color="inherit">
             { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
