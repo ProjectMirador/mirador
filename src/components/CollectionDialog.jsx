@@ -67,7 +67,7 @@ Placeholder.propTypes = {
  */
 export function CollectionDialog({
   addWindow, collection = null, dialogCollectionPath = [], error = null, hideCollectionDialog,
-  isMultipart = false, manifest, manifestId, ready = false,
+  isMultipart = false, manifest, manifestId, ready = false, labelValueJoiner,
   setWorkspaceAddVisibility, showCollectionDialog, updateWindow, windowId = null,
 }) {
   const container = useContext(WorkspaceContext);
@@ -161,7 +161,7 @@ export function CollectionDialog({
             label={t('attributionTitle')}
           >
             { requiredStatement && (
-              <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
+              <LabelValueMetadata labelValuePairs={requiredStatement} labelValueJoiner={labelValueJoiner} defaultLabel={t('attribution')} />
             )}
             {
               rights && rights.length > 0 && (
@@ -241,4 +241,5 @@ CollectionDialog.propTypes = {
   showCollectionDialog: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string,
+  labelValueJoiner: PropTypes.string,
 };
