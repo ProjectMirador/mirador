@@ -36,3 +36,36 @@ i18next.init({
     en,
   },
 });
+
+// --- Fullscreen mocking ---
+const originalCreateElement = document.createElement;
+
+/**
+ * Mock requestFullscreen globally for divs (used by FullScreenButton)
+ * This simulates an environment where requestFullscreen is supported
+ * This is the case for most browsers except iPhone Safari
+ */
+function mockRequestFullscreen() {
+  document.createElement = function createElementMock(tagName) {
+    const element = originalCreateElement.call(document, tagName);
+    if (tagName === 'div' && typeof element.requestFullscreen !== 'function') {
+      element.requestFullscreen = vi.fn(); // Simulate support
+    }
+    return element;
+  };
+}
+
+// Restore original createElement method
+/**
+ *
+ */
+function disableMockRequestFullscreen() {
+  document.createElement = originalCreateElement;
+}
+
+// Mock fullscreen support by default
+mockRequestFullscreen();
+
+// Expose globally for tests to call when needed
+global.__mockRequestFullscreen = mockRequestFullscreen;
+global.__disableMockRequestFullscreen = disableMockRequestFullscreen;
