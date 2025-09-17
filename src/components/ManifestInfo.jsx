@@ -12,6 +12,7 @@ import { PluginHook } from './PluginHook';
  */
 export function ManifestInfo({
   manifestDescription = null, manifestLabel = null, manifestMetadata = [], manifestSummary = null,
+  labelValueJoiner,
   ...rest
 }) {
   const { t } = useTranslation();
@@ -49,7 +50,7 @@ export function ManifestInfo({
       )}
 
       {manifestMetadata.length > 0 && (
-        <LabelValueMetadata labelValuePairs={manifestMetadata} />
+        <LabelValueMetadata labelValuePairs={manifestMetadata} labelValueJoiner={labelValueJoiner} />
       )}
 
       <PluginHook targetName="ManifestInfo" {...pluginProps} />
@@ -62,4 +63,5 @@ ManifestInfo.propTypes = {
   manifestLabel: PropTypes.string,
   manifestMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   manifestSummary: PropTypes.string,
+  labelValueJoiner: PropTypes.string
 };

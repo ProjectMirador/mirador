@@ -16,6 +16,7 @@ export function CanvasInfo({
   canvasMetadata = [],
   index = 1,
   totalSize = 1,
+  labelValueJoiner,
 }) {
   const { t } = useTranslation();
   const id = useId();
@@ -47,7 +48,7 @@ export function CanvasInfo({
       )}
 
       {canvasMetadata && canvasMetadata.length > 0 && (
-        <LabelValueMetadata labelValuePairs={canvasMetadata} />
+        <LabelValueMetadata labelValuePairs={canvasMetadata} labelValueJoiner={labelValueJoiner} />
       )}
       <PluginHook targetName="CanvasInfo" {...pluginProps} />
     </CollapsibleSection>
@@ -60,4 +61,5 @@ CanvasInfo.propTypes = {
   canvasMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   index: PropTypes.number,
   totalSize: PropTypes.number,
+  labelValueJoiner: PropTypes.string,
 };

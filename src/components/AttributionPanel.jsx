@@ -28,6 +28,7 @@ export function AttributionPanel({
   rights = null,
   windowId,
   id,
+  labelValueJoiner,
 }) {
   const { t } = useTranslation();
 
@@ -42,7 +43,7 @@ export function AttributionPanel({
     >
       <CompanionWindowSection>
         { requiredStatement && (
-        <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
+        <LabelValueMetadata labelValuePairs={requiredStatement} labelValueJoiner={labelValueJoiner} defaultLabel={t('attribution')} />
         )}
         {
             rights && rights.length > 0 && (
@@ -87,4 +88,5 @@ AttributionPanel.propTypes = {
   })),
   rights: PropTypes.arrayOf(PropTypes.string),
   windowId: PropTypes.string.isRequired,
+  labelValueJoiner: PropTypes.string,
 };

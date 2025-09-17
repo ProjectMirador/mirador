@@ -6,6 +6,7 @@ import {
   getCanvas,
   getCanvasLabel,
   getCanvasDescription,
+  getConfig,
 } from '../state/selectors';
 import { CanvasInfo } from '../components/CanvasInfo';
 
@@ -20,6 +21,7 @@ const mapStateToProps = (state, { canvasId, companionWindowId, windowId }) => ({
   canvasMetadata: getDestructuredMetadata(
     getCanvas(state, { canvasId, companionWindowId, windowId }),
   ),
+  labelValueJoiner: getConfig(state).labelValueJoiner,
 });
 
 const enhance = compose(
