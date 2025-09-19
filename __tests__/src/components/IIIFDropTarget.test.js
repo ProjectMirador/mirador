@@ -94,4 +94,46 @@ describe('handleDrop', () => {
       );
     });
   });
+
+  it('handles HTML drops by extracting a manifest URL from a link', () => {
+    // This is an example taken from the wild because it contains nested
+    // links to various sources.
+    const htmlString = `
+      <html>
+        <body>
+          <a href="https://iiifviewer.universiteitleiden.nl/?manifest=https://digitalcollections.universiteitleiden.nl/iiif_manifest/item%253A1607191/manifest&canvas=https%3A//digitalcollections.universiteitleiden.nl/iiif_manifest/item%3A1607203/canvas/default" target="_blank" title="Drag and drop to a IIIF-compliant viewer."><div class="iiifbutton" data-manifest="https://digitalcollections.universiteitleiden.nl/iiif_manifest/item%3A1607191/manifest"><img src="https://digitalcollections.universiteitleiden.nl/sites/all/modules/custom/islandora_iiif_manifests/images/iiif-logo.svg" alt=""><div class="iiiftext">Advanced Viewer</div></div></a>
+        </body>
+      </html>
+    `;
+
+    const item = {
+      html: htmlString,
+    };
+
+    const props = { onDrop };
+
+    handleDrop(item, monitor, props);
+
+    expect(onDrop).toHaveBeenCalledWith(
+      { canvasId: 'https://digitalcollections.universiteitleiden.nl/iiif_manifest/item:1607203/canvas/default', manifestId: 'https://digitalcollections.universiteitleiden.nl/iiif_manifest/item%3A1607191/manifest' },
+      props,
+      monitor,
+    );
+  });
+
+  it('warns when dropped URL is invalid', () => {
+    const item = {
+      urls: ['not a valid url'],
+    };
+    const props = { onDrop };
+
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    handleDrop(item, monitor, props);
+
+    expect(consoleSpy).toHaveBeenCalledWith('Invalid URL:', 'not a valid url');
+    expect(onDrop).not.toHaveBeenCalled();
+
+    consoleSpy.mockRestore();
+  });
 });

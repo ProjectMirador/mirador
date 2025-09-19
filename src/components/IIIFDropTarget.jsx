@@ -7,13 +7,40 @@ import { NativeTypes } from 'react-dnd-html5-backend';
 import { useDrop } from 'react-dnd';
 import { readImageMetadata } from '../lib/readImageMetadata';
 
+
+/** */
+const safeParseURL = (str) => {
+  try {
+    return new URL(str);
+  } catch (e) {
+    console.warn('Invalid URL:', str);
+    return null;
+  }
+};
+
 /** */
 export const handleDrop = (item, monitor, props) => {
   const { onDrop } = props;
 
+  if (item.html) {
+    const doc = new DOMParser().parseFromString(item.html, 'text/html');
+
+    // Try to find a link tag
+    const link = doc.querySelector('a[href]');
+    if (link) {
+      const url = safeParseURL(link.href);
+      if (url) {
+        // Recursively call the method again with the extracted URL
+        return handleDrop({ urls: [url.toString()] }, monitor, props);
+      }
+    }
+  }
+
   if (item.urls) {
     item.urls.forEach((str) => {
-      const url = new URL(str);
+      const url = safeParseURL(str);
+      if (!url) return;
+
       const manifestId = url.searchParams.get('manifest');
       const canvasId = url.searchParams.get('canvas');
 
@@ -96,7 +123,7 @@ export const handleDrop = (item, monitor, props) => {
 export const IIIFDropTarget = (props) => {
   const { children, onDrop } = props;
   const [{ canDrop, isOver }, drop] = useDrop({
-    accept: [NativeTypes.URL, NativeTypes.FILE],
+    accept: [NativeTypes.URL, NativeTypes.FILE, NativeTypes.HTML],
     collect: monitor => ({
       canDrop: monitor.canDrop(),
       isOver: monitor.isOver(),
