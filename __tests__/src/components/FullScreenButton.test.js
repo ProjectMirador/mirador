@@ -6,7 +6,7 @@ import { FullScreenButton } from '../../../src/components/FullScreenButton';
 /** */
 function createWrapper(props, contextProps = { active: false }) {
   return render(
-    <FullScreenContext.Provider value={{ enter: () => { }, exit: () => { }, ...contextProps }}>
+    <FullScreenContext.Provider value={{ enter: () => {}, exit: () => {}, ...contextProps }}>
       <FullScreenButton
         classes={{}}
         className="xyz"
@@ -19,13 +19,13 @@ function createWrapper(props, contextProps = { active: false }) {
 describe('FullScreenButton', () => {
   it('renders without an error', () => {
     createWrapper();
-
     expect(screen.getByRole('button')).toHaveClass('xyz');
   });
 
   describe('when not in fullscreen', () => {
     let enter;
     let user;
+
     beforeEach(() => {
       enter = vi.fn();
       user = userEvent.setup();
@@ -38,7 +38,6 @@ describe('FullScreenButton', () => {
 
     it('triggers the handle enter with the appropriate boolean', async () => {
       await user.click(screen.getByRole('button'));
-
       expect(enter).toHaveBeenCalled();
     });
   });
@@ -46,6 +45,7 @@ describe('FullScreenButton', () => {
   describe('when in fullscreen', () => {
     let exit;
     let user;
+
     beforeEach(() => {
       exit = vi.fn();
       user = userEvent.setup();
@@ -58,8 +58,22 @@ describe('FullScreenButton', () => {
 
     it('triggers the handle exit with the appropriate boolean', async () => {
       await user.click(screen.getByRole('button'));
-
       expect(exit).toHaveBeenCalled();
+    });
+  });
+
+  describe('when requestFullscreen is not supported', () => {
+    beforeAll(() => {
+      __disableMockRequestFullscreen();
+    });
+
+    afterAll(() => {
+      __mockRequestFullscreen();
+    });
+
+    it('does not render the button', () => {
+      createWrapper();
+      expect(screen.queryByRole('button')).toBeNull();
     });
   });
 });
