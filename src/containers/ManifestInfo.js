@@ -6,7 +6,6 @@ import {
   getManifestSummary,
   getManifestTitle,
   getManifestMetadata,
-  getConfig,
 } from '../state/selectors';
 import { ManifestInfo } from '../components/ManifestInfo';
 
@@ -16,7 +15,6 @@ import { ManifestInfo } from '../components/ManifestInfo';
  * @private
  */
 const mapStateToProps = (state, { companionWindowId, manifestId, windowId }) => ({
-  labelValueJoiner: getConfig(state).labelValueJoiner,
   manifestDescription: getManifestDescription(state, {
     companionWindowId, manifestId, windowId,
   }),

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Img } from 'react-image';
 import CompanionWindow from '../containers/CompanionWindow';
 import { CompanionWindowSection } from './CompanionWindowSection';
-import { LabelValueMetadata } from './LabelValueMetadata';
+import LabelValueMetadata from '../containers/LabelValueMetadata';
 import ns from '../config/css-ns';
 import { PluginHook } from './PluginHook';
 
@@ -28,7 +28,6 @@ export function AttributionPanel({
   rights = null,
   windowId,
   id,
-  labelValueJoiner,
 }) {
   const { t } = useTranslation();
 
@@ -43,7 +42,7 @@ export function AttributionPanel({
     >
       <CompanionWindowSection>
         { requiredStatement && (
-        <LabelValueMetadata labelValuePairs={requiredStatement} labelValueJoiner={labelValueJoiner} defaultLabel={t('attribution')} />
+        <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
         )}
         {
             rights && rights.length > 0 && (
@@ -88,5 +87,4 @@ AttributionPanel.propTypes = {
   })),
   rights: PropTypes.arrayOf(PropTypes.string),
   windowId: PropTypes.string.isRequired,
-  labelValueJoiner: PropTypes.string,
 };

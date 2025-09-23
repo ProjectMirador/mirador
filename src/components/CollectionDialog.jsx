@@ -16,7 +16,7 @@ import Skeleton from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import asArray from '../lib/asArray';
-import { LabelValueMetadata } from './LabelValueMetadata';
+import LabelValueMetadata from '../containers/LabelValueMetadata';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogContent';
 import ManifestInfo from '../containers/ManifestInfo';
@@ -67,7 +67,7 @@ Placeholder.propTypes = {
  */
 export function CollectionDialog({
   addWindow, collection = null, dialogCollectionPath = [], error = null, hideCollectionDialog,
-  isMultipart = false, manifest, manifestId, ready = false, labelValueJoiner,
+  isMultipart = false, manifest, manifestId, ready = false,
   setWorkspaceAddVisibility, showCollectionDialog, updateWindow, windowId = null,
 }) {
   const container = useContext(WorkspaceContext);
@@ -161,7 +161,7 @@ export function CollectionDialog({
             label={t('attributionTitle')}
           >
             { requiredStatement && (
-              <LabelValueMetadata labelValuePairs={requiredStatement} labelValueJoiner={labelValueJoiner} defaultLabel={t('attribution')} />
+              <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
             )}
             {
               rights && rights.length > 0 && (
@@ -241,5 +241,4 @@ CollectionDialog.propTypes = {
   showCollectionDialog: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
   windowId: PropTypes.string,
-  labelValueJoiner: PropTypes.string,
 };

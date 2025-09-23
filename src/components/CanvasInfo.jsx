@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import SanitizedHtml from '../containers/SanitizedHtml';
-import { LabelValueMetadata } from './LabelValueMetadata';
+import LabelValueMetadata from '../containers/LabelValueMetadata';
 import { PluginHook } from './PluginHook';
 
 /**
@@ -16,7 +16,6 @@ export function CanvasInfo({
   canvasMetadata = [],
   index = 1,
   totalSize = 1,
-  labelValueJoiner,
 }) {
   const { t } = useTranslation();
   const id = useId();
@@ -48,7 +47,7 @@ export function CanvasInfo({
       )}
 
       {canvasMetadata && canvasMetadata.length > 0 && (
-        <LabelValueMetadata labelValuePairs={canvasMetadata} labelValueJoiner={labelValueJoiner} />
+        <LabelValueMetadata labelValuePairs={canvasMetadata} />
       )}
       <PluginHook targetName="CanvasInfo" {...pluginProps} />
     </CollapsibleSection>
@@ -61,5 +60,4 @@ CanvasInfo.propTypes = {
   canvasMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
   index: PropTypes.number,
   totalSize: PropTypes.number,
-  labelValueJoiner: PropTypes.string,
 };

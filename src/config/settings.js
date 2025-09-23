@@ -582,5 +582,5 @@ export default {
       { profile: 'http://iiif.io/api/auth/0/login' }
     ]
   },
-  labelValueJoiner: ", "
+  labelValueJoiner: ', '
 };

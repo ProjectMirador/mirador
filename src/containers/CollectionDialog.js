@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
-  getManifest, getManifestoInstance, getSequenceBehaviors, getWindow, getConfig,
+  getManifest, getManifestoInstance, getSequenceBehaviors, getWindow,
 } from '../state/selectors';
 import { CollectionDialog } from '../components/CollectionDialog';
 
@@ -37,7 +37,6 @@ const mapStateToProps = (state, { windowId }) => {
     dialogCollectionPath,
     error: manifest && manifest.error,
     isMultipart: getSequenceBehaviors(state, { manifestId }).includes('multi-part'),
-    labelValueJoiner: getConfig(state).labelValueJoiner,
     manifest: manifest && getManifestoInstance(state, { manifestId }),
     manifestId,
     open: state.workspace.collectionDialogOn,

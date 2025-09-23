@@ -24,6 +24,7 @@ export { default as ConnectedGalleryViewThumbnail } from './GalleryViewThumbnail
 export { default as ConnectedIIIFAuthentication } from './IIIFAuthentication';
 export { default as ConnectedIIIFThumbnail } from './IIIFThumbnail';
 export { default as ConnectedLanguageSettings } from './LanguageSettings';
+export { default as ConnectedLabelValueMetadata } from './LabelValueMetadata';
 export { default as ConnectedLayersPanel } from './LayersPanel';
 export { default as ConnectedLocalePicker } from './LocalePicker';
 export { default as ConnectedManifestForm } from './ManifestForm';
