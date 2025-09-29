@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import CollapsibleSection from '../containers/CollapsibleSection';
 import SanitizedHtml from '../containers/SanitizedHtml';
-import { LabelValueMetadata } from './LabelValueMetadata';
+import LabelValueMetadata from '../containers/LabelValueMetadata';
 import { PluginHook } from './PluginHook';
 
 /**

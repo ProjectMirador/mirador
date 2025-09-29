@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Img } from 'react-image';
 import CompanionWindow from '../containers/CompanionWindow';
 import { CompanionWindowSection } from './CompanionWindowSection';
-import { LabelValueMetadata } from './LabelValueMetadata';
+import LabelValueMetadata from '../containers/LabelValueMetadata';
 import ns from '../config/css-ns';
 import { PluginHook } from './PluginHook';
 
