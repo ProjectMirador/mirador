@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getManifestTitle,
@@ -14,7 +13,7 @@ import { CollectionInfo } from '../components/CollectionInfo';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { id, windowId }) => {
+const mapStateToProps = (state, { windowId }) => {
   const { collectionPath } = (getWindow(state, { windowId }) || {});
   const manifestId = collectionPath[collectionPath.length - 1];
 
@@ -29,7 +28,6 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CollectionInfo'),
 );

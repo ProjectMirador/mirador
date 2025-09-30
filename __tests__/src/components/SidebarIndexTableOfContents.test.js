@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from 'test-utils';
+import { render, screen, waitFor } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 import { act } from '@testing-library/react';
@@ -63,7 +63,7 @@ describe('SidebarIndexTableOfContents', () => {
   let setCanvas;
 
   beforeEach(() => {
-    setCanvas = jest.fn();
+    setCanvas = vi.fn();
   });
 
   it('does not render a TreeView if the tree structure is missing', () => {
@@ -119,7 +119,6 @@ describe('SidebarIndexTableOfContents', () => {
   it('toggles branch nodes on click', async () => {
     const user = userEvent.setup();
     const { store } = createInteractiveWrapper({});
-
     expect(screen.getByRole('treeitem')).toBeInTheDocument();
     const root = screen.getByRole('treeitem');
 
@@ -199,7 +198,7 @@ describe('SidebarIndexTableOfContents', () => {
   it('sets the canvas to a start canvas if present (IIIF v2)', async () => {
     const user = userEvent.setup();
     createWrapper({
-      expandNodes: () => { },
+      expandItems: () => { },
       manifest: manifestVersion2,
       setCanvas,
       windowId: 'a',

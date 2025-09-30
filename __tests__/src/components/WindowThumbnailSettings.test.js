@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WindowThumbnailSettings } from '../../../src/components/WindowThumbnailSettings';
 
@@ -20,28 +20,28 @@ describe('WindowThumbnailSettings', () => {
   it('renders all elements correctly', () => {
     createWrapper();
     expect(screen.getByRole('presentation', { selector: 'li' })).toBeInTheDocument();
-    expect(screen.getByRole('menuitem', { name: /off/ })).toBeInTheDocument();
-    expect(screen.getByRole('menuitem', { name: /bottom/ })).toBeInTheDocument();
-    expect(screen.getByRole('menuitem', { name: /right/ })).toBeInTheDocument();
+    expect(screen.getByRole('menuitemradio', { name: /Off/ })).toBeInTheDocument();
+    expect(screen.getByRole('menuitemradio', { name: /Bottom/ })).toBeInTheDocument();
+    expect(screen.getByRole('menuitemradio', { name: /Right/ })).toBeInTheDocument();
   });
   it('for far-bottom it should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ thumbnailNavigationPosition: 'far-bottom' });
-    expect(screen.getByRole('menuitem', { name: /bottom/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
-    expect(screen.getByRole('menuitem', { name: /right/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
-    expect(screen.getByRole('menuitem', { name: /off/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
+    expect(screen.getByRole('menuitemradio', { name: /Bottom/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
+    expect(screen.getByRole('menuitemradio', { name: /Right/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
+    expect(screen.getByRole('menuitemradio', { name: /Off/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
   });
   it('for far-right it should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ thumbnailNavigationPosition: 'far-right' });
-    expect(screen.getByRole('menuitem', { name: /right/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
-    expect(screen.getByRole('menuitem', { name: /off/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
-    expect(screen.getByRole('menuitem', { name: /bottom/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
+    expect(screen.getByRole('menuitemradio', { name: /Right/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
+    expect(screen.getByRole('menuitemradio', { name: /Off/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
+    expect(screen.getByRole('menuitemradio', { name: /Bottom/ }).querySelector('svg')).not.toHaveClass('MuiSvgIcon-colorSecondary'); // eslint-disable-line testing-library/no-node-access
   });
 
   it('updates state when the thumbnail config selection changes', async () => {
-    const setWindowThumbnailPosition = jest.fn();
+    const setWindowThumbnailPosition = vi.fn();
     const user = userEvent.setup();
     createWrapper({ setWindowThumbnailPosition });
-    const menuItems = screen.queryAllByRole('menuitem');
+    const menuItems = screen.queryAllByRole('menuitemradio');
     expect(menuItems.length).toBe(3);
     expect(menuItems[0]).toBeInTheDocument();
     expect(menuItems[1]).toBeInTheDocument();
@@ -57,6 +57,6 @@ describe('WindowThumbnailSettings', () => {
 
   it('when rtl flips an icon', () => {
     createWrapper({ direction: 'rtl' });
-    expect(screen.getByRole('menuitem', { name: /right/ }).querySelector('svg')).toHaveStyle('transform: rotate(180deg);'); // eslint-disable-line testing-library/no-node-access
+    expect(screen.getByRole('menuitemradio', { name: /Right/ }).querySelector('svg')).toHaveStyle('transform: rotate(180deg);'); // eslint-disable-line testing-library/no-node-access
   });
 });

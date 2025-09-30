@@ -1,6 +1,15 @@
 # This is the configuration file for the netlify preview deploys
 # See https://www.netlify.com/docs/netlify-toml-reference/ for more
 
+[build]
+  publish = "dist/"
+
 [[redirects]]
   from = "/"
-  to = "/__tests__/integration/mirador/"
+  to = "/__tests__/integration/mirador/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/:page"
+  to = "/__tests__/integration/mirador/:page"
+  status = 200

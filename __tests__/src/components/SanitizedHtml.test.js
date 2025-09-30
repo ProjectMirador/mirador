@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
 
 describe('SanitizedHtml', () => {
@@ -6,7 +6,10 @@ describe('SanitizedHtml', () => {
     render(
       <SanitizedHtml
         data-testid="subject"
-        htmlString="<script>doBadThings()</script><b>Don't worry!</b><a>Some link</a>"
+        htmlString="
+          <b>Don't worry!</b>
+          <a>Some link</a>
+          <script data-testid='script' type='module'></script>"
         ruleSet="iiif"
       />,
     );
@@ -25,5 +28,9 @@ describe('SanitizedHtml', () => {
     expect(screen.getByText('Don\'t worry!')).toBeInTheDocument();
     expect(screen.getByText('Some link')).toHaveAttribute('target', '_blank');
     expect(screen.getByText('Some link')).toHaveAttribute('rel', 'noopener noreferrer');
+  });
+
+  it('removes script tags', () => {
+    expect(screen.queryByTestId('script')).not.toBeInTheDocument();
   });
 });

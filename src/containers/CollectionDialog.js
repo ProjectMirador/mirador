@@ -1,13 +1,11 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
   getManifest, getManifestoInstance, getSequenceBehaviors, getWindow,
 } from '../state/selectors';
 import { CollectionDialog } from '../components/CollectionDialog';
-import { withWorkspaceContext } from '../contexts/WorkspaceContext';
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -28,15 +26,15 @@ const mapDispatchToProps = {
  * @private
  */
 const mapStateToProps = (state, { windowId }) => {
-  const { collectionPath, collectionManifestId: manifestId } = getWindow(state, { windowId });
+  const { collectionManifestId: manifestId, dialogCollectionPath } = getWindow(state, { windowId });
   const manifest = getManifest(state, { manifestId });
 
-  const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
+  const collectionId = dialogCollectionPath && dialogCollectionPath[dialogCollectionPath.length - 1];
   const collection = collectionId && getManifest(state, { manifestId: collectionId });
 
   return {
     collection: collection && getManifestoInstance(state, { manifestId: collection.id }),
-    collectionPath,
+    dialogCollectionPath,
     error: manifest && manifest.error,
     isMultipart: getSequenceBehaviors(state, { manifestId }).includes('multi-part'),
     manifest: manifest && getManifestoInstance(state, { manifestId }),
@@ -48,8 +46,6 @@ const mapStateToProps = (state, { windowId }) => {
 };
 
 const enhance = compose(
-  withTranslation(),
-  withWorkspaceContext,
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CollectionDialog'),
 );

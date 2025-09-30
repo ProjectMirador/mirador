@@ -1,4 +1,4 @@
-import { render, screen, act } from 'test-utils';
+import { render, screen, act } from '@tests/utils/test-utils';
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
 import { IIIFThumbnail } from '../../../src/components/IIIFThumbnail';
 
@@ -8,6 +8,7 @@ import { IIIFThumbnail } from '../../../src/components/IIIFThumbnail';
 function createWrapper(props) {
   return render(
     <IIIFThumbnail
+      resource={{}}
       {...props}
     />,
   );

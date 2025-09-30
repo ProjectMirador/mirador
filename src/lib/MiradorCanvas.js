@@ -1,6 +1,8 @@
 import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
 import { Canvas, AnnotationPage, Annotation } from 'manifesto.js';
+import { getIiifResourceImageService } from './iiif';
+
 /**
  * MiradorCanvas - adds additional, testable logic around Manifesto's Canvas
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
@@ -66,19 +68,50 @@ export default class MiradorCanvas {
 
   /** */
   get imageResources() {
+    // TODO Clean up the following hack as soon as manifesto.js provides any information if an annotation body is a Choice option, and if so, whether it is the preferred one.
     const resources = flattenDeep([
       this.canvas.getImages().map(i => i.getResource()),
-      this.canvas.getContent().map(i => i.getBody()),
+      this.canvas.getContent().map(i => (i.__jsonld.body.type === 'Choice' ? i.__jsonld.body : i.getBody())),
     ]);
 
     return flatten(resources.map((resource) => {
-      switch (resource.getProperty('type')) {
-        case 'oa:Choice':
-          return new Canvas({ images: flatten([resource.getProperty('default'), resource.getProperty('item')]).map(r => ({ resource: r })) }, this.canvas.options).getImages().map(i => i.getResource());
-        default:
-          return resource;
+      const type = resource.type || resource.getProperty('type');
+      switch (type) {
+        case 'Choice': {
+          return new Canvas({ images: resource.items.map(r => ({ resource: r })) }, this.canvas.options)
+            .getImages().map((img, index) => {
+              const r = img.getResource();
+              if (r) {
+                r.preferred = !index;
+              }
+              return r;
+            });
+        }
+        case 'oa:Choice': {
+          return new Canvas({ images: flattenDeep([resource.getProperty('default'), resource.getProperty('item')]).map(r => ({ resource: r })) }, this.canvas.options).getImages()
+            .map((img, index) => {
+              const r = img.getResource();
+              if (r) {
+                r.preferred = !index;
+              }
+              return r;
+            });
+        }
+        default: {
+          const r = resource;
+          r.preferred = true;
+          return r;
+        }
       }
     }));
+  }
+
+  /** */
+  get textResources() {
+    const resources = flattenDeep([
+      this.canvas.getContent().map(i => i.getBody()),
+    ]);
+    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Text'));
   }
 
   /** */
@@ -158,13 +191,12 @@ export default class MiradorCanvas {
 
   /** */
   get iiifImageResources() {
-    return this.imageResources
-      .filter(r => r && r.getServices()[0] && r.getServices()[0].id);
+    return this.imageResources.filter(r => r && getIiifResourceImageService(r)?.id);
   }
 
   /** */
   get imageServiceIds() {
-    return this.iiifImageResources.map(r => r.getServices()[0].id);
+    return this.iiifImageResources.map(r => r && getIiifResourceImageService(r)?.id);
   }
 
   /**
@@ -177,9 +209,9 @@ export default class MiradorCanvas {
   /**
    * Get the canvas label
    */
-  getLabel() {
+  getLabel(locale = undefined) {
     return this.canvas.getLabel().length > 0
-      ? this.canvas.getLabel().getValue()
+      ? this.canvas.getLabel().getValue(locale)
       : String(this.canvas.index + 1);
   }
 }

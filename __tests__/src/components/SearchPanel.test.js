@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { t } from 'i18next';
 
@@ -24,23 +24,23 @@ describe('SearchPanel', () => {
   it('renders a CompanionWindow', () => {
     createWrapper();
     expect(screen.getByRole('complementary')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'searchTitle' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Search' })).toBeInTheDocument();
   });
 
   it('passes a Clear chip as the CompanionWindow title prop', () => {
     createWrapper({ query: 'Wolpertinger' });
 
-    expect(screen.getByRole('heading', { name: /searchTitle/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'clearSearch' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Search/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'clear' })).toBeInTheDocument();
   });
 
   it('the Clear chip calls the removeSearch prop', async () => {
     const user = userEvent.setup();
-    const removeSearch = jest.fn();
+    const removeSearch = vi.fn();
 
     createWrapper({ query: 'Wolpertinger', removeSearch });
 
-    await user.click(screen.getByRole('button', { name: 'clearSearch' }));
+    await user.click(screen.getByRole('button', { name: 'clear' }));
 
     expect(removeSearch).toHaveBeenCalled();
   });
@@ -48,14 +48,14 @@ describe('SearchPanel', () => {
   it('does not render a Clear chip if there is no search query to be cleared', () => {
     createWrapper();
 
-    expect(screen.queryByRole('button', { name: 'clearSearch' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'clear' })).not.toBeInTheDocument();
   });
 
   it('has the SearchPanelControls component', () => {
     createWrapper();
 
-    expect(screen.getByRole('combobox', { name: 'searchInputLabel' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'searchSubmitAria' })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: 'search terms' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Submit search' })).toBeInTheDocument();
   });
 
   it('has the SearchResults list', () => {
@@ -66,7 +66,7 @@ describe('SearchPanel', () => {
 
   it('suggests searches', async () => {
     const user = userEvent.setup();
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     createWrapper({
       fetchSearch, query: '', suggestedSearches: ['abc'], t,
     });
@@ -77,7 +77,7 @@ describe('SearchPanel', () => {
   });
 
   it('does not suggest searches if the user has made a query', () => {
-    const fetchSearch = jest.fn();
+    const fetchSearch = vi.fn();
     createWrapper({ fetchSearch, query: 'blah', suggestedSearches: ['abc'] });
 
     expect(screen.queryByRole('button', { name: 'Search this document for "abc"' })).not.toBeInTheDocument();

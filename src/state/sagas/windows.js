@@ -2,8 +2,6 @@ import {
   all, call, put, select, takeEvery,
 } from 'redux-saga/effects';
 import ActionTypes from '../actions/action-types';
-import MiradorManifest from '../../lib/MiradorManifest';
-import MiradorCanvas from '../../lib/MiradorCanvas';
 import {
   setContentSearchCurrentAnnotation,
   selectAnnotation,
@@ -28,8 +26,11 @@ import {
   getCanvases,
   selectInfoResponses,
   getWindowConfig,
+  getMiradorCanvasWrapper,
+  getMiradorManifestWrapper,
 } from '../selectors';
 import { fetchManifests } from './iiif';
+import { getIiifResourceImageService } from '../../lib/iiif';
 
 /** */
 export function* fetchWindowManifest(action) {
@@ -97,10 +98,11 @@ export function* setWindowStartingCanvas(action) {
     const thunk = yield call(setCanvas, windowId, canvasId, null, { preserveViewport: !!action.payload });
     yield put(thunk);
   } else {
+    const getMiradorManifest = yield select(getMiradorManifestWrapper);
     const manifestoInstance = yield select(getManifestoInstance, { manifestId });
     if (manifestoInstance) {
       // set the startCanvas
-      const miradorManifest = new MiradorManifest(manifestoInstance);
+      const miradorManifest = getMiradorManifest(manifestoInstance);
       const startCanvas = miradorManifest.startCanvas
         || miradorManifest.canvasAt(canvasIndex || 0)
         || miradorManifest.canvasAt(0);
@@ -240,11 +242,12 @@ export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowI
   const canvases = yield select(getCanvases, { windowId });
   const infoResponses = yield select(selectInfoResponses);
   const visibleCanvases = (canvases || []).filter(c => visibleCanvasIds.includes(c.id));
+  const getMiradorCanvas = yield select(getMiradorCanvasWrapper);
 
   yield all(visibleCanvases.map((canvas) => {
-    const miradorCanvas = new MiradorCanvas(canvas);
+    const miradorCanvas = getMiradorCanvas(canvas);
     return all(miradorCanvas.iiifImageResources.map(imageResource => (
-      !infoResponses[imageResource.getServices()[0].id]
+      !infoResponses[getIiifResourceImageService(imageResource)?.id]
         && put(fetchInfoResponse({ imageResource, windowId }))
     )).filter(Boolean));
   }));
@@ -264,6 +267,7 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.ADD_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, setCanvasOnNewSequence),
+    takeEvery(ActionTypes.UPDATE_WINDOW, fetchCollectionManifests),
     takeEvery(ActionTypes.SET_CANVAS, setCurrentAnnotationsOnCurrentCanvas),
     takeEvery(ActionTypes.SET_CANVAS, fetchInfoResponses),
     takeEvery(ActionTypes.UPDATE_COMPANION_WINDOW, fetchCollectionManifests),

@@ -1,3 +1,4 @@
+import { getIiifResourceImageService } from '../../lib/iiif';
 import ActionTypes from './action-types';
 
 /**
@@ -73,7 +74,7 @@ export function receiveInfoResponseFailure(infoId, error, tokenServiceId) {
  * @memberof ActionCreators
  */
 export function fetchInfoResponse({ imageId, imageResource, windowId }) {
-  const imageService = imageResource && imageResource.getServices()[0];
+  const imageService = imageResource && getIiifResourceImageService(imageResource);
   const infoId = (imageId || imageService.id);
   return requestInfoResponse(infoId, imageService, windowId);
 }

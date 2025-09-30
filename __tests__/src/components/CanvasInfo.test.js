@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { CanvasInfo } from '../../../src/components/CanvasInfo';
 
@@ -14,14 +14,12 @@ describe('CanvasInfo', () => {
           canvasLabel="The Canvas Label"
           canvasDescription="The Canvas Description"
           canvasMetadata={metadata}
-          id="xyz"
-          t={str => str}
         />,
       );
     });
 
     it('renders the content in a CollapsibleSection', async () => {
-      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('currentItem');
+      expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent('Current item');
       expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent(/The Canvas Label/);
 
       await user.click(screen.getByRole('button'));
@@ -46,7 +44,7 @@ describe('CanvasInfo', () => {
   describe('when metadata is not present', () => {
     beforeEach(() => {
       render(
-        <CanvasInfo id="xyz" />,
+        <CanvasInfo />,
       );
     });
 

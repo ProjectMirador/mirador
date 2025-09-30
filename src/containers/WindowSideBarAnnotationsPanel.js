@@ -24,8 +24,8 @@ const mapStateToProps = (state, { windowId }) => ({
 });
 
 const enhance = compose(
-  withTranslation(),
-  connect(mapStateToProps, null, null, { forwardRef: true }),
+  withTranslation(), // TODO Merge probably useless
+  connect(mapStateToProps, null, null, { forwardRef: true }), // TODO Why use forward ref ?
   withPlugins('WindowSideBarAnnotationsPanel'),
   // further HOC
 );

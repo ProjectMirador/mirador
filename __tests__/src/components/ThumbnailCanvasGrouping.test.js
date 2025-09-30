@@ -1,4 +1,4 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 
@@ -18,6 +18,7 @@ function createWrapper(props) {
         top: 0,
         width: 100,
       }}
+      showThumbnailLabels
       {...props}
     />,
   );
@@ -33,10 +34,10 @@ describe('ThumbnailCanvasGrouping', () => {
     position: 'far-bottom',
   };
   beforeEach(() => {
-    setCanvas = jest.fn();
+    setCanvas = vi.fn();
     wrapper = createWrapper({ data, setCanvas });
   });
-  const spyCurrentCanvasClass = jest.spyOn(ThumbnailCanvasGrouping.prototype, 'currentCanvasClass');
+  const spyCurrentCanvasClass = vi.spyOn(ThumbnailCanvasGrouping.prototype, 'currentCanvasClass');
   afterEach(() => {
     spyCurrentCanvasClass.mockClear();
   });

@@ -45,10 +45,10 @@ const mapDispatchToProps = (dispatch, { windowId, id }) => ({
 });
 
 const enhance = compose(
-  withSize(),
-  withRef(),
-  withTranslation(),
   connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
+  withSize(), // TODO Merge probably useless
+  withRef(), // TODO Merge probably useless
+  withTranslation(),// TODO Merge probably useless
   withPlugins('CompanionWindow'),
 );
 

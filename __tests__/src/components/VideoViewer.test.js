@@ -1,11 +1,7 @@
-import { render } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { Utils } from 'manifesto.js';
 import AnnotationFactory from '../../../src/lib/AnnotationFactory';
 import { VideoViewer } from '../../../src/components/VideoViewer';
-import videoSimple from '../../fixtures/version-3/video.json';
-import videoCaptions from '../../fixtures/version-3/video_captions.json';
-import videoMultiCaptions from '../../fixtures/version-3/video_multiples_captions.json';
-import videoMultiCaptionsMultiAnno from '../../fixtures/version-3/video_captions_other.json';
 
 /** create wrapper */
 function createWrapper(props, suspenseFallback) {

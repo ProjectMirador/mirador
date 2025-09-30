@@ -425,6 +425,7 @@ export default {
     ja: '日本語',
     kr: '한국어',
     lt: 'Lietuvių',
+    hu: 'Magyar',
     nl: 'Nederlands',
     'nb-NO': 'Norwegian Bokmål',
     pl: 'Polski',
@@ -515,17 +516,18 @@ export default {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     displaySettings: true, // Display the settings for this in WindowTopMenu
     height: 130, // height of entire ThumbnailNavigation area when position is "far-bottom"
+    showThumbnailLabels: true, // Configure if thumbnail labels should be displayed
     width: 100, // width of one canvas (doubled for book view) in ThumbnailNavigation area when position is "far-right"
   },
   workspace: {
-    draggingEnabled: true,
     allowNewWindows: true,
-    id: uuid(),
-    isWorkspaceAddVisible: false, // Catalog/Workspace add window feature visible by default
+    draggingEnabled: true,
     exposeModeOn: false, // unused?
     height: 5000, // height of the elastic mode's virtual canvas
+    id: uuid(),
+    isWorkspaceAddVisible: false, // Catalog/Workspace add window feature visible by default
     showZoomControls: true, // Configure if zoom controls should be displayed by default
-    type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic". If "mosaic" or "elastic" are not selected no worksapce type will be used.
+    type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic". If "mosaic" or "elastic" are not selected no workspace type will be used.
     viewportPosition: { // center coordinates for the elastic mode workspace
       x: 0,
       y: 0,
@@ -579,5 +581,6 @@ export default {
       { profile: 'http://iiif.io/api/auth/0/clickthrough' },
       { profile: 'http://iiif.io/api/auth/0/login' }
     ]
-  }
+  },
+  labelValueJoiner: ', '
 };

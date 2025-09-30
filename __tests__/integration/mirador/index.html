@@ -1,45 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
     <title>MV - Mirador Video</title>
-  </head>
-  <body>
-    <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
-    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
-    <script type="text/javascript">
-     var miradorInstance = Mirador.viewer({
-       id: 'mirador',
-       theme: {
-         transitions: window.location.port === '4488' ?  { create: () => 'none' } : {},
-       },
-       catalog: [
-/*         { manifestId: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/e32a277e-91e2-4a6d-8ba6-cc4bad230410.json' },
-         { manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843' },*/
-         { manifestId: "https://files.tetras-libre.fr/dev/vertical_video_with_annot.json"},
-         { manifestId: "https://files.tetras-libre.fr/dev/cats_video_with_annot.json"},
-         { manifestId: "https://files.tetras-libre.fr/dev/Heterogeneous-media-on-several-canvases.json"},
-         { manifestId: "https://dzkimgs.l.u-tokyo.ac.jp/videos/cat2020/manifest.json"},
-         { manifestId: "https://files.tetras-libre.fr/dev/vertical_video_with_annot.json"},
-         { manifestId: "https://files.tetras-libre.fr/dev/youtube.json"},
-         { manifestId: "https://files.tetras-libre.fr/dev/youtube_withannot.json"},
-         { manifestId: "https://files.tetras-libre.fr/dev/peertube.json"},
-         { manifestId: "https://files.tetras-libre.fr/dev/cats_simplify_video_with_annot.json"},
-         { manifestId: "https://files.tetras-libre.fr/dev/milansanremo25.json"},
-         { manifestId: "https://files.tetras-libre.fr/dev/sun-400x400-with-svg-target.json"}
-       ],
-       windows : [
-       ],
-       debug: true,
-       annotations: {
-        htmlSanitizationRuleSet: 'liberal',
-       },
-       annotation : {
-         tagsSuggestions : ["Mirador", "IIIF", "Video", "Annotation", "Canyon"],
-       }
-     });
-    </script>
-  </body>
+</head>
+
+<body>
+  <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
+
+  <script type="module">
+    import Mirador from '../../../src';
+    import config from './mirador-configs/index.js';
+    Mirador.viewer(config);
+    // TODO Check
+  </script>
+</body>
+
 </html>

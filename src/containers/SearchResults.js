@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchResults } from '../components/SearchResults';
 import * as actions from '../state/actions';
@@ -34,7 +33,6 @@ const mapDispatchToProps = {
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),
-  withTranslation(),
   withPlugins('SearchResults'),
 );
 

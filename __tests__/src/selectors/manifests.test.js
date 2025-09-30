@@ -1,4 +1,6 @@
 import { Utils } from 'manifesto.js';
+
+import collection from '../../fixtures/version-2/collection.json';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
@@ -7,6 +9,7 @@ import manifestFixturev3001 from '../../fixtures/version-3/001.json';
 import manifestFixtureWithAProvider from '../../fixtures/version-3/with_a_provider.json';
 import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
 import manifestFixtureRelated from '../../fixtures/version-2/related.json';
+
 import {
   getManifestoInstance,
   getManifestLocale,
@@ -58,12 +61,6 @@ describe('getManifestoInstance', () => {
     const state = { manifests: { x: { json: manifestFixture019 } } };
     const received = getManifestoInstance(state, { manifestId: 'x' });
     expect(received.id).toEqual('http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json');
-  });
-  it('is cached based off of input props', () => {
-    const state = { manifests: { x: { json: manifestFixture019 } } };
-    const received = getManifestoInstance(state, { manifestId: 'x' });
-    expect(getManifestoInstance(state, { manifestId: 'x' })).toBe(received);
-    expect(getManifestoInstance(state, { manifestId: 'x', windowId: 'y' })).not.toBe(received);
   });
 });
 
@@ -370,7 +367,7 @@ describe('getManifestLocale', () => {
 });
 
 describe('getMetadataLocales', () => {
-  it('gets the locales preseent in the manifest metadata', () => {
+  it('gets the locales preseent in the IIIF v2 manifest metadata', () => {
     const manifest = {
       '@context': 'http://iiif.io/api/presentation/2/context.json',
       '@id':
@@ -402,6 +399,59 @@ describe('getMetadataLocales', () => {
     const state = { manifests: { x: { json: manifest } } };
     const received = getMetadataLocales(state, { manifestId: 'x' });
     expect(received).toEqual(['de-label', 'en-label', 'en-value', 'de-value', 'one-value']);
+  });
+  it('gets the locales preseent in the IIIF v3 manifest metadata', () => {
+    const manifest = {
+      '@context': 'http://iiif.io/api/presentation/3/context.json',
+      id: 'https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json',
+      label: {
+        en: [
+          "Whistler's Mother",
+        ],
+        fr: [
+          'La Mère de Whistler',
+        ],
+      },
+      metadata: [
+        {
+          label: {
+            en: [
+              'Creator',
+            ],
+            fr: [
+              'Auteur',
+            ],
+          },
+          value: {
+            none: [
+              'Whistler, James Abbott McNeill',
+            ],
+          },
+        },
+        {
+          label: {
+            en: [
+              'Subject',
+            ],
+            fr: [
+              'Sujet',
+            ],
+          },
+          value: {
+            en: [
+              'McNeill Anna Matilda, mother of Whistler (1804-1881)',
+            ],
+            fr: [
+              'McNeill Anna Matilda, mère de Whistler (1804-1881)',
+            ],
+          },
+        },
+      ],
+      type: 'Manifest',
+    };
+    const state = { manifests: { x: { json: manifest } } };
+    const received = getMetadataLocales(state, { manifestId: 'x' });
+    expect(received).toEqual(['en', 'fr', 'none']);
   });
 });
 
@@ -459,7 +509,7 @@ describe('getManifestSearchService', () => {
   });
 
   it('supports v1 of the search spec', () => {
-    const v1 = JSON.parse(JSON.stringify(manifestFixtureFg165hz3589));
+    const v1 = structuredClone(manifestFixtureFg165hz3589);
     v1.service[0].profile = 'http://iiif.io/api/search/1/search';
     const state = { manifests: { x: { json: v1 } } };
     expect(getManifestSearchService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/search');
@@ -478,7 +528,7 @@ describe('getManifestAutocompleteService', () => {
   });
 
   it('supports v1 of the search spec', () => {
-    const v1 = JSON.parse(JSON.stringify(manifestFixtureFg165hz3589));
+    const v1 = structuredClone(manifestFixtureFg165hz3589);
     v1.service[0].profile = 'http://iiif.io/api/search/1/search';
     v1.service[0].service.profile = 'http://iiif.io/api/search/1/autocomplete';
     const state = { manifests: { x: { json: v1 } } };

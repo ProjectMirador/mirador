@@ -1,21 +1,21 @@
 import { cloneElement } from 'react';
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import OpenSeadragon from 'openseadragon';
 import { Utils } from 'manifesto.js';
+import { getCanvasWorld } from '../../utils/mirador-wrappers';
 import { AnnotationsOverlay } from '../../../src/components/AnnotationsOverlay';
 import OpenSeadragonCanvasOverlay from '../../../src/lib/OpenSeadragonCanvasOverlay';
 import AnnotationList from '../../../src/lib/AnnotationList';
-import CanvasWorld from '../../../src/lib/CanvasWorld';
 import fixture from '../../fixtures/version-2/019.json';
 
 const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
 
-jest.mock('../../../src/lib/OpenSeadragonCanvasOverlay');
+vi.mock('../../../src/lib/OpenSeadragonCanvasOverlay');
 
 /** */
 const createWrapper = (props) => {
-  render(<canvas data-testid="viewer" />);
-  const viewer = new OpenSeadragon({ element: screen.getByTestId('viewer') });
+  render(<div data-testid="osd" />);
+  const viewer = new OpenSeadragon({ element: screen.getByTestId('osd') });
   const component = (
     <AnnotationsOverlay
       annotations={[]}
@@ -24,9 +24,8 @@ const createWrapper = (props) => {
       searchAnnotations={[]}
       windowId="base"
       config={{}}
-      updateViewport={jest.fn()}
-      t={k => k}
-      canvasWorld={new CanvasWorld(canvases)}
+      updateViewport={vi.fn()}
+      canvasWorld={getCanvasWorld(canvases)}
       {...props}
     />
   );
@@ -39,48 +38,6 @@ describe('AnnotationsOverlay', () => {
     OpenSeadragonCanvasOverlay.mockClear();
   });
 
-  describe('annotationsMatch', () => {
-    it('is false if the annotations are a different size', () => {
-      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }, { id: 2, resources: [{ id: 'rid2' }] }];
-
-      expect(
-        AnnotationsOverlay.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(false);
-    });
-
-    it('is true if the previous annotation\'s resource IDs all match', () => {
-      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-
-      expect(
-        AnnotationsOverlay.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(true);
-    });
-
-    it('is true if both are empty', () => {
-      expect(AnnotationsOverlay.annotationsMatch([], [])).toBe(true);
-    });
-
-    it('is false if the previous annotation\'s resource IDs do not match', () => {
-      const currentAnnotations = [{ id: 1, resources: [{ id: 'rid1' }] }];
-      const previousAnnotations = [{ id: 1, resources: [{ id: 'rid2' }] }];
-
-      expect(
-        AnnotationsOverlay.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(false);
-    });
-
-    it('returns true if the annotation resources IDs are empty (to prevent unecessary rerender)', () => {
-      const currentAnnotations = [{ id: 1, resources: [] }];
-      const previousAnnotations = [{ id: 1, resources: [] }];
-
-      expect(
-        AnnotationsOverlay.annotationsMatch(currentAnnotations, previousAnnotations),
-      ).toBe(true);
-    });
-  });
-
   describe('componentDidUpdate', () => {
     it('sets up a OpenSeadragonCanvasOverlay', () => {
       const { component, rerender } = createWrapper();
@@ -91,16 +48,16 @@ describe('AnnotationsOverlay', () => {
 
     it('sets up a listener on update-viewport', () => {
       const { component, rerender, viewer } = createWrapper({ viewer: null });
-      const mockAddHandler = jest.spyOn(viewer, 'addHandler');
+      const mockAddHandler = vi.spyOn(viewer, 'addHandler');
 
       rerender(cloneElement(component, { viewer }));
       expect(mockAddHandler).toHaveBeenCalledWith('update-viewport', expect.anything());
     });
 
     it('sets up canvasUpdate to add annotations to the canvas and forces a redraw', () => {
-      const clear = jest.fn();
-      const resize = jest.fn();
-      const canvasUpdate = jest.fn();
+      const clear = vi.fn();
+      const resize = vi.fn();
+      const canvasUpdate = vi.fn();
 
       OpenSeadragonCanvasOverlay.mockImplementation(() => ({
         canvasUpdate,
@@ -110,7 +67,7 @@ describe('AnnotationsOverlay', () => {
 
       const { component, rerender, viewer } = createWrapper({ viewer: null });
 
-      const forceRedraw = jest.spyOn(viewer, 'forceRedraw');
+      const forceRedraw = vi.spyOn(viewer, 'forceRedraw');
 
       rerender(cloneElement(
         component,
@@ -136,7 +93,7 @@ describe('AnnotationsOverlay', () => {
 
   describe('annotationsToContext', () => {
     it('converts the annotations to canvas and checks that the canvas is displayed', () => {
-      const strokeRect = jest.fn();
+      const strokeRect = vi.fn();
       const context2d = {
         restore: () => { },
         save: () => { },
@@ -145,9 +102,9 @@ describe('AnnotationsOverlay', () => {
 
       OpenSeadragonCanvasOverlay.mockImplementation(() => ({
         canvasUpdate: (f) => f(),
-        clear: jest.fn(),
+        clear: vi.fn(),
         context2d,
-        resize: jest.fn(),
+        resize: vi.fn(),
       }));
 
       const palette = {
@@ -155,8 +112,8 @@ describe('AnnotationsOverlay', () => {
       };
       const { component, rerender, viewer } = createWrapper({ palette: { annotations: palette }, viewer: null });
 
-      jest.spyOn(viewer.viewport, 'getMaxZoom').mockImplementation(() => (1));
-      jest.spyOn(viewer.viewport, 'getZoom').mockImplementation(() => (0.05));
+      vi.spyOn(viewer.viewport, 'getMaxZoom').mockImplementation(() => (1));
+      vi.spyOn(viewer.viewport, 'getZoom').mockImplementation(() => (0.05));
 
       rerender(cloneElement(component, {
         annotations: [
@@ -179,7 +136,7 @@ describe('AnnotationsOverlay', () => {
 
   describe('onCanvasClick', () => {
     it('triggers a selectAnnotation for the clicked-on annotation', () => {
-      const selectAnnotation = jest.fn();
+      const selectAnnotation = vi.fn();
 
       const { viewer } = createWrapper({
         annotations: [
@@ -207,7 +164,7 @@ describe('AnnotationsOverlay', () => {
     });
 
     it('triggers a deselectAnnotation for an already-selected annotation', () => {
-      const deselectAnnotation = jest.fn();
+      const deselectAnnotation = vi.fn();
 
       const { viewer } = createWrapper({
         annotations: [
@@ -236,7 +193,7 @@ describe('AnnotationsOverlay', () => {
     });
 
     it('selects the closest annotation', () => {
-      const selectAnnotation = jest.fn();
+      const selectAnnotation = vi.fn();
 
       const { viewer } = createWrapper({
         annotations: [
@@ -276,8 +233,8 @@ describe('AnnotationsOverlay', () => {
 
   describe('onCanvasMouseMove', () => {
     it('triggers the hover event for every annotation at that point', () => {
-      jest.useFakeTimers();
-      const hoverAnnotation = jest.fn();
+      vi.useFakeTimers();
+      const hoverAnnotation = vi.fn();
 
       const { viewer } = createWrapper({
         annotations: [
@@ -310,10 +267,10 @@ describe('AnnotationsOverlay', () => {
         position: new OpenSeadragon.Point(101, 101),
       });
 
-      jest.advanceTimersByTime(20);
+      vi.advanceTimersByTime(20);
       expect(hoverAnnotation).toHaveBeenCalledWith('base', ['foo', 'bar']);
 
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
   });
 });

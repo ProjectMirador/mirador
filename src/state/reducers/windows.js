@@ -165,7 +165,7 @@ export const windowsReducer = (state = {}, action) => {
           ...state[action.windowId],
           collectionDialogOn: true,
           collectionManifestId: action.manifestId,
-          collectionPath: action.collectionPath,
+          dialogCollectionPath: action.dialogCollectionPath,
         },
       };
     case ActionTypes.HIDE_COLLECTION_DIALOG:

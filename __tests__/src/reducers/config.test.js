@@ -1,6 +1,7 @@
 import { configReducer } from '../../../src/state/reducers/config';
 import ActionTypes from '../../../src/state/actions/action-types';
 import configFixture from '../../fixtures/config/export.example.json';
+import settings from '../../../src/config/settings';
 
 describe('config reducer', () => {
   describe('SET_CONFIG', () => {
@@ -55,6 +56,14 @@ describe('config reducer', () => {
     expect(configReducer({}, {
       state: { config: { new: 'stuff' } },
       type: ActionTypes.IMPORT_MIRADOR_STATE,
-    })).toEqual({ new: 'stuff' });
+    })).toMatchObject({ new: 'stuff' });
+  });
+  it('handles pre-existing functions in IMPORT_MIRADOR_STATE by deep merging those stems', () => {
+    const actual = configReducer(settings, {
+      state: { config: { new: 'stuff', theme: { palette: { mode: 'dark' } } } },
+      type: ActionTypes.IMPORT_MIRADOR_STATE,
+    });
+
+    expect(actual).toMatchObject({ theme: { ...settings.theme, palette: { ...settings.theme.palette, mode: 'dark' } } });
   });
 });

@@ -1,8 +1,8 @@
 import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
 
-jest.mock('../../../src/state/selectors', () => ({
-  ...jest.requireActual('../../../src/state/selectors'),
+vi.mock('../../../src/state/selectors', async (importOriginal) => ({
+  ...(await importOriginal()),
   getVisibleNodeIds: (state, args) => ['openVisible', 'closedVisible', 'visible'],
 }));
 
@@ -64,8 +64,8 @@ describe('companionWindow actions', () => {
           cw1: {},
         },
       };
-      mockDispatch = jest.fn(() => ({}));
-      mockGetState = jest.fn(() => mockState);
+      mockDispatch = vi.fn(() => ({}));
+      mockGetState = vi.fn(() => mockState);
     });
 
     it('marks the provided nodes as expanded', () => {
@@ -118,8 +118,8 @@ describe('companionWindow actions', () => {
           },
         },
       };
-      mockDispatch = jest.fn(() => ({}));
-      mockGetState = jest.fn(() => mockState);
+      mockDispatch = vi.fn(() => ({}));
+      mockGetState = vi.fn(() => mockState);
     });
 
     it('returns a collapsing action for visible nodes that are not present in the state', () => {

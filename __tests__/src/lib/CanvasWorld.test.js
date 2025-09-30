@@ -1,15 +1,22 @@
 import { Utils } from 'manifesto.js';
+import { wrapCanvas } from '../../utils/mirador-wrappers';
 import fixture from '../../fixtures/version-2/019.json';
 import fragmentFixture from '../../fixtures/version-2/hamilton.json';
 import CanvasWorld from '../../../src/lib/CanvasWorld';
 
-const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
+const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases().map(wrapCanvas);
 const canvasSubset = [canvases[1], canvases[2]];
 
 describe('CanvasWorld', () => {
   describe('constructor', () => {
     it('sets canvases', () => {
-      expect(new CanvasWorld([1]).canvases.map(c => c.canvas)).toEqual([1]);
+      expect(new CanvasWorld([wrapCanvas(1)]).canvases.map(c => c.canvas)).toEqual([1]);
+    });
+  });
+  describe('hasDimensions', () => {
+    it('is true if we can calculate the canvas world dimensions', () => {
+      expect(new CanvasWorld([canvases[1]]).hasDimensions()).toEqual(true);
+      expect(new CanvasWorld([]).hasDimensions()).toEqual(false);
     });
   });
   describe('worldBounds', () => {
@@ -39,7 +46,7 @@ describe('CanvasWorld', () => {
     });
     it('when placed by a fragment contains the offset', () => {
       const subject = new CanvasWorld(
-        [Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0]],
+        [Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0]].map(wrapCanvas),
       );
       expect(subject.contentResourceToWorldCoordinates({ id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg' }))
         .toEqual([552, 1584, 3360, 2368]);
@@ -120,10 +127,10 @@ describe('CanvasWorld', () => {
 
   describe('layerIndexOfImageResource', () => {
     const tileSource0 = { id: 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/full/0/default.jpg' };
-    it('returns undefined by default', () => {
+    it('returns actual index of the image annotation', () => {
       expect(
         new CanvasWorld(canvases).layerIndexOfImageResource(tileSource0),
-      ).toEqual(undefined);
+      ).toEqual(0);
     });
 
     it('returns the inverse of the configured index', () => {

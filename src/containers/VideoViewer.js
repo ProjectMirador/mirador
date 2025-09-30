@@ -37,7 +37,7 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
 });
 
 const enhance = compose(
-  withTranslation(),
+  withTranslation(), // TODO Merge probably useless
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('VideoViewer'),
 );

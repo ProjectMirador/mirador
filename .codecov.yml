@@ -1,0 +1,12 @@
+coverage:
+  precision: 1
+  round: up
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: false
+  ignore:
+    - vite.config.js

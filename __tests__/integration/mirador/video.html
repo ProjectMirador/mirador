@@ -8,25 +8,10 @@
   </head>
   <body>
     <div id="mirador" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div>
-    <script>document.write("<script type='text/javascript' src='../../../dist/mirador.min.js?v=" + Date.now() + "'><\/script>");</script>
-    <script type="text/javascript">
-     var miradorInstance = Mirador.viewer({
-       id: 'mirador',
-       windows: [
-         {
-           manifestId: 'https://preview.iiif.io/cookbook/master/recipe/0003-mvm-video/manifest.json',
-         },
-         {
-           manifestId: 'https://preview.iiif.io/cookbook/0026_0064_0065-opera-recipes/recipe/0064-opera-one-canvas/manifest.json',
-         },
-         {
-           manifestId: 'https://iiif.io/api/cookbook/recipe/0014-accompanyingcanvas/manifest.json'
-         },
-         {
-           manifestId: 'https://preview.iiif.io/cookbook/0219-using-caption-file/recipe/0219-using-caption-file/manifest.json'
-         }
-      ],
-     });
+    <script type="module">
+       import Mirador from '../../../src';
+      import config from './mirador-configs/video.js';
+      Mirador.viewer(config);
     </script>
   </body>
 </html>

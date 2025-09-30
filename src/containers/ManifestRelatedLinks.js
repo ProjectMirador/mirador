@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withTranslation } from 'react-i18next';
 import { withPlugins } from '../extend/withPlugins';
 import {
   getManifestHomepage,
@@ -16,7 +15,7 @@ import { ManifestRelatedLinks } from '../components/ManifestRelatedLinks';
  * @memberof WindowSideBarInfoPanel
  * @private
  */
-const mapStateToProps = (state, { id, windowId }) => ({
+const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   homepage: getManifestHomepage(state, { windowId }),
   manifestUrl: getManifestUrl(state, { windowId }),
   related: getManifestRelated(state, { windowId }),
@@ -25,7 +24,6 @@ const mapStateToProps = (state, { id, windowId }) => ({
 });
 
 const enhance = compose(
-  withTranslation(),
   connect(mapStateToProps),
   withPlugins('ManifestRelatedLinks'),
 );

@@ -43,8 +43,8 @@ export function* importConfig({ config: { thumbnailNavigation, windows } }) {
 
 /** */
 export function* fetchCollectionManifests(action) {
-  const { collectionPath, manifestId } = action;
-  yield call(fetchManifests, manifestId, ...collectionPath);
+  const { dialogCollectionPath, manifestId } = action;
+  yield call(fetchManifests, manifestId, ...dialogCollectionPath);
 }
 
 /** */

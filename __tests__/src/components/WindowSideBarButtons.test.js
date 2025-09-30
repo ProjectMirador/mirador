@@ -1,6 +1,5 @@
-import { render, screen } from 'test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { t } from 'i18next';
 import { WindowSideBarButtons } from '../../../src/components/WindowSideBarButtons';
 
 /** create wrapper */
@@ -8,7 +7,6 @@ function createWrapper(props) {
   return render(
     <WindowSideBarButtons
       addCompanionWindow={() => {}}
-      t={t}
       {...props}
       panels={{
         annotations: true,
@@ -37,7 +35,7 @@ describe('WindowSideBarButtons', () => {
   });
 
   it('triggers the addCompanionWindow prop on click', async () => {
-    const addCompanionWindow = jest.fn();
+    const addCompanionWindow = vi.fn();
     wrapper = createWrapper({ addCompanionWindow, windowId });
 
     await user.click(screen.getByRole('tab', { name: 'Information' }));

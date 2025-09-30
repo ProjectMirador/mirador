@@ -1,5 +1,5 @@
 import normalizeUrl from 'normalize-url';
-import MiradorCanvas from './MiradorCanvas';
+import { getIiifResourceImageService } from './iiif';
 
 /**
  * CanvasWorld
@@ -9,8 +9,8 @@ export default class CanvasWorld {
    * @param {Array} canvases - Array of Manifesto:Canvas objects to create a
    * world from.
    */
-  constructor(canvases, layers, viewingDirection = 'left-to-right') {
-    this.canvases = canvases.map(c => new MiradorCanvas(c));
+  constructor(miradorCanvases, layers, viewingDirection = 'left-to-right') {
+    this.canvases = miradorCanvases;
     this.layers = layers;
     this.viewingDirection = viewingDirection;
     this._canvasDimensions = null; // eslint-disable-line no-underscore-dangle
@@ -38,7 +38,7 @@ export default class CanvasWorld {
       let canvasHeight = 0;
       let canvasWidth = 0;
 
-      if (!isNaN(canvas.aspectRatio)) {
+      if (!Number.isNaN(canvas.aspectRatio)) {
         if (dirY === 0) {
           // constant height
           canvasHeight = scale;
@@ -141,13 +141,12 @@ export default class CanvasWorld {
     if (!miradorCanvas) return undefined;
     return miradorCanvas.imageResources
       .find(r => (
-        normalizeUrl(r.getServices()[0].id, { stripAuthentication: false })
+        normalizeUrl(getIiifResourceImageService(r).id, { stripAuthentication: false })
         === normalizeUrl(infoResponseId, { stripAuthentication: false })));
   }
 
   /** @private */
   getLayerMetadata(contentResource) {
-    if (!this.layers) return undefined;
     const miradorCanvas = this.canvases.find(c => (
       c.imageResources.find(r => r.id === contentResource.id)
     ));
@@ -156,15 +155,17 @@ export default class CanvasWorld {
 
     const resourceIndex = miradorCanvas.imageResources
       .findIndex(r => r.id === contentResource.id);
+    const resource = miradorCanvas.imageResources
+      .find(r => r.id === contentResource.id);
 
-    const layer = this.layers[miradorCanvas.canvas.id];
-    const imageResourceLayer = layer && layer[contentResource.id];
+    const layer = this.layers && this.layers[miradorCanvas.canvas.id];
+    const imageResourceLayer = (layer && layer[contentResource.id]) || {};
 
     return {
       index: resourceIndex,
       opacity: 1,
       total: miradorCanvas.imageResources.length,
-      visibility: true,
+      visibility: !!resource.preferred,
       ...imageResourceLayer,
     };
   }
@@ -183,7 +184,7 @@ export default class CanvasWorld {
     const layer = this.getLayerMetadata(contentResource);
     if (!layer) return undefined;
 
-    return layer.total - layer.index - 1;
+    return layer.index;
   }
 
   /**
@@ -196,6 +197,11 @@ export default class CanvasWorld {
       x: coordinates[0],
       y: coordinates[1],
     };
+  }
+
+  /** */
+  hasDimensions() {
+    return this.canvasDimensions.length > 0;
   }
 
   /**
