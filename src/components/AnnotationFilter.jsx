@@ -1,27 +1,37 @@
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/SearchSharp';
-import Typography from '@mui/material/Typography';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { MiradorMenuButton } from './MiradorMenuButton';
 
 const customStyles = {
-    menuPortal: base => ({ ...base, zIndex: 9999 }),
-    control: (provided) => ({
-        ...provided,
-        marginTop: '10px', // Adjust as needed
-        fontFamily: 'Arial',
-    }),
-    menu: (provided) => ({
-        ...provided,
-        fontFamily: 'Arial',
-    }),
-    option: (provided) => ({
-        ...provided,
-        fontFamily: 'Arial',
-    }),
-}
+  control: (provided) => ({
+    ...provided,
+    fontFamily: 'Arial', // Adjust as needed
+    marginTop: '10px',
+  }),
+  menu: (provided) => ({
+    ...provided,
+    fontFamily: 'Arial',
+  }),
+  menuPortal: base => ({
+    ...base,
+    zIndex: 9999,
+  }),
+  option: (provided) => ({
+    ...provided,
+    fontFamily: 'Arial',
+  }),
+};
 
+/**
+ * @param availableTags
+ * @param setInputSearch
+ * @param setTagsSearch
+ * @param t
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export function AnnotationsFilter({
   availableTags,
   setInputSearch,

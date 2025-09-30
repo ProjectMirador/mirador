@@ -1,9 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withTranslation } from 'react-i18next';
-import { withSize } from '../extend/withSize';
 import { withPlugins } from '../extend/withPlugins';
-import { withRef } from '../extend/withRef';
 import * as actions from '../state/actions';
 import { getCompanionWindow, getThemeDirection, getWindowConfig } from '../state/selectors';
 import { CompanionWindow } from '../components/CompanionWindow';
@@ -46,9 +44,7 @@ const mapDispatchToProps = (dispatch, { windowId, id }) => ({
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
-  withSize(), // TODO Merge probably useless
-  withRef(), // TODO Merge probably useless
-  withTranslation(),// TODO Merge probably useless
+  withTranslation(), // TODO Merge probably useless
   withPlugins('CompanionWindow'),
 );
 

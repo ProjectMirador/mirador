@@ -10,7 +10,6 @@ import {
   getWindow,
 } from '../state/selectors';
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
-import { withRef } from '../extend/withRef';
 
 /**
  * @param {Array} resources
@@ -55,8 +54,6 @@ const mapDispatchToProps = {
 };
 
 const enhance = compose(
-  withRef(),// TODO Merge probably useless
-  withTranslation(), // TODO Merge probably useless
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('CanvasAnnotations'),
 );
