@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withSize } from 'react-sizeme';
 import { withPlugins } from '../extend/withPlugins';
 import { getWorkspace } from '../state/selectors';
 import { WindowCanvasNavigationControlsVideo } from '../components/WindowCanvasNavigationControlsVideo';
@@ -18,7 +17,6 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
 
 const enhance = compose(
   connect(mapStateToProps),
-  withSize(),
   connect(mapStateToProps, mapDispatchToProps),
   withPlugins('WindowCanvasNavigationControlsVideo'),
 );
