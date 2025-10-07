@@ -22,7 +22,7 @@ Before
 
 After
 ```json
-"mirador": "npm:arvest-mv@^1.0.8"
+"mirador": "npm:mirador-video@^1.0.30"
 ```
 
 Then run `npm install` to refresh your package.
