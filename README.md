@@ -4,9 +4,9 @@
 - https://mirador-video.larus.tetras-libre.fr/
 
 We will soon submit a PR to the official Mirador repository to add video support for annotations.
-We already support React 18 and MUI5 are up-to-date to Mirador 4 alpha 2. We provide also a new plugin to display and edit annotations on videos : 
+We already support React 18/19 and MUI7 are up-to-date to Mirador 4 RC1. We provide also a new plugin to display and edit annotations on videos : 
 
-https://github.com/TETRAS-IIIF/mirador-video
+https://github.com/TETRAS-IIIF/mirador-annotation-editor-video
 
 Forked from https://github.com/ARVEST-APP/mirador-video
 
