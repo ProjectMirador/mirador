@@ -103,7 +103,7 @@
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-testing-library": "^6.2.0",
-    "glob": "^10.3.0",
+    "glob": "^11.0.3",
     "happy-dom": "^17.0",
     "react": "^19.0.0",
     "react-dnd-test-backend": "^16.0.1",
