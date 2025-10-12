@@ -322,23 +322,23 @@ export class VideoViewer extends Component {
                 onPlay={handleVideoEventFunctions.onPlay}
               />
 
-              {/*{this.playerRef.current && (*/}
-              {/*// <AnnotationsOverlayVideo*/}
-              {/*//   onFunctionsReady={this.handleVideoEventFunctions}*/}
-              {/*//   windowId={windowId}*/}
-              {/*//   playerRef={this.playerRef.current}*/}
-              {/*//   videoRef={this.playerRef.current.getInternalPlayer()}*/}
-              {/*//   videoTarget={videoTargetTemporalfragment}*/}
-              {/*//   key={`${windowId} ${video.id}`}*/}
-              {/*//   highlightAllAnnotations*/}
-              {/*//   style={{*/}
-              {/*//     border: debug ? '6px solid yellow' : 'none',*/}
-              {/*//     height: '100%',*/}
-              {/*//     objectFit: 'contain',*/}
-              {/*//     width: '100%',*/}
-              {/*//   }}*/}
-              {/*// />*/}
-              {/*)}*/}
+              {this.playerRef.current && (
+              <AnnotationsOverlayVideo
+                onFunctionsReady={this.handleVideoEventFunctions}
+                windowId={windowId}
+                playerRef={this.playerRef.current}
+                videoRef={this.playerRef.current.getInternalPlayer()}
+                videoTarget={videoTargetTemporalfragment}
+                key={`${windowId} ${video.id}`}
+                highlightAllAnnotations
+                style={{
+                  border: debug ? '6px solid yellow' : 'none',
+                  height: '100%',
+                  objectFit: 'contain',
+                  width: '100%',
+                }}
+              />
+              )}
             </div>
           </div>
 
