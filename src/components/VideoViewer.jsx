@@ -3,7 +3,7 @@ import flattenDeep from 'lodash/flattenDeep';
 import { createRef, Component } from 'react';
 import PropTypes from 'prop-types';
 import ResizeObserver from 'react-resize-observer';
-import ReactPlayer from '@celluloid/react-player';
+import ReactPlayer from 'react-player';
 import AnnotationItem from '../lib/AnnotationItem';
 import AnnotationsOverlayVideo from '../containers/AnnotationsOverlayVideo';
 import WindowCanvasNavigationControlsVideo from '../containers/WindowCanvasNavigationControlsVideo';
