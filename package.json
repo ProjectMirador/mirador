@@ -34,6 +34,7 @@
   ],
   "repository": "https://github.com/Tetras-IIIF/mirador-video",
   "dependencies": {
+    "@celluloid/react-player": "^2.14.0",
     "@custom-react-hooks/use-element-size": "^1.5.1",
     "@emotion/cache": "^11.11.0",
     "@hello-pangea/dnd": "^16.0.1 || ^17.0.0 || ^18.0.0",
