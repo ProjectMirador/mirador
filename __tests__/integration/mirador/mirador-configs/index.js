@@ -26,5 +26,5 @@ export default {
   theme: {
     transitions: {},
   },
-  windows: [],
+  windows: [{ manifestId: 'https://files.tetras-libre.fr/dev/peertube.json' }],
 };
