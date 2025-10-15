@@ -1,0 +1,252 @@
+name: Stable + latest demo deploy
+
+on:
+  push:
+    branches: [ main, demo ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      # --- repo vars ---
+      - name: Set repo vars
+        id: vars
+        run: |
+          echo "REPO_SLUG=${{ github.repository }}" >> $GITHUB_ENV
+          echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
+
+      # --- checkout both branches ---
+      - name: Checkout stable (demo)
+        uses: actions/checkout@v4
+        with:
+          ref: demo
+          path: demo_src
+
+      - name: Checkout latest (main)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main_src
+
+      # --- node setup ---
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.1'
+          cache: 'npm'
+          cache-dependency-path: |
+            demo_src/package-lock.json
+            main_src/package-lock.json
+
+      # -------- stable build --------
+      - name: Install (stable)
+        working-directory: demo_src
+        run: npm ci
+
+      - name: Build (stable)
+        working-directory: demo_src
+        env:
+          GITHUB_PAGES: "true"
+          BASE_PATH: "/${{ env.REPO_NAME }}/stable/"
+        run: | 
+          npm run build:demo
+
+      - name: Metadata (stable)
+        working-directory: demo_src
+        env:
+          REPO_SLUG: ${{ github.repository }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          SHA=$(git rev-parse HEAD)
+          DATE=$(git log -1 --date=iso-strict --format='%cd')
+          PKG_NAME=$(node -p "require('./package.json').name || ''")
+          VERSION=$(node -p "require('./package.json').version || ''")
+          
+          [ -f dist/demo/src/index.html ] && mv dist/demo/src/index.html dist/index.html
+          cp dist/index.html dist/404.html
+          
+          PKG_URL="https://www.npmjs.com/package/${PKG_NAME}"
+          VERSION_URL="${PKG_URL}/v/${VERSION}"
+          
+          cat > dist/meta.json <<JSON
+          {
+            "branch": "demo",
+            "commit": "${SHA}",
+            "commit_url": "https://github.com/${REPO_SLUG}/commit/${SHA}",
+            "date": "${DATE}",
+            "package_name": "${PKG_NAME}",
+            "package_url": "${PKG_URL}",
+            "version": "${VERSION}",
+            "version_url": "${VERSION_URL}",
+            "base_path": "/${REPO_NAME}/stable/"
+          }
+          JSON
+      
+
+      # -------- latest build --------
+      - name: Install (latest)
+        working-directory: main_src
+        run: npm ci
+
+      - name: Build (latest)
+        working-directory: main_src
+        env:
+          GITHUB_PAGES: "true"
+          BASE_PATH: "/${{ env.REPO_NAME }}/latest/"
+        run: npm run build:demo
+
+      - name: Metadata (latest)
+        working-directory: main_src
+        env:
+          REPO_SLUG: ${{ github.repository }}
+          REPO_NAME: ${{ github.event.repository.name }}
+        run: |
+          SHA=$(git rev-parse HEAD)
+          DATE=$(git log -1 --date=iso-strict --format='%cd')
+          PKG_NAME=$(node -p "require('./package.json').name || ''")
+          VERSION=$(node -p "require('./package.json').version || ''")
+          PKG_DESC=$(node -p "require('./package.json').description || ''" | sed 's/"/\\"/g')
+          
+          [ -f dist/demo/src/index.html ] && mv dist/demo/src/index.html dist/index.html
+          cp dist/index.html dist/404.html
+          
+          PKG_URL="https://www.npmjs.com/package/${PKG_NAME}"
+          VERSION_URL="${PKG_URL}/v/${VERSION}"
+          
+          cat > dist/meta.json <<JSON
+          {
+            "branch": "main",
+            "commit": "${SHA}",
+            "commit_url": "https://github.com/${REPO_SLUG}/commit/${SHA}",
+            "date": "${DATE}",
+            "package_name": "${PKG_NAME}",
+            "package_url": "${PKG_URL}",
+            "version": "${VERSION}",
+            "version_url": "${VERSION_URL}",
+            "base_path": "/${REPO_NAME}/latest/",
+            "package_description": "${PKG_DESC}"
+          }
+          JSON
+          
+          
+          # -------- assemble site --------
+      - name: Assemble site
+        run: |
+          mkdir -p site/stable site/latest
+          cp -r demo_src/dist/* site/stable/
+          cp -r main_src/dist/* site/latest/
+          cat > site/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Demos</title>
+          <style>
+            body { font: 16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial,sans-serif; margin: 2rem; }
+            .grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1rem; }
+            .card { border: 1px solid #ddd; border-radius: 10px; padding: 1rem; }
+            .muted { color:#555; font-size:.92rem; }
+            code { background:#f6f8fa; padding:.15rem .35rem; border-radius:4px; }
+            a { text-decoration:none; }
+            footer { margin-top:2rem; padding-top:1rem; border-top:1px solid #ddd; color:#555; font-size:.9rem; }
+          </style>
+          <h1>Demos</h1>
+          <div id="latest-global-desc">(loading description...)</div>
+          <br>
+          <div class="grid">
+            <div class="card">
+              <h2><a href="./stable/">Stable demo</a></h2>
+              <div class="muted">Branch: <code>demo</code></div>
+              <div id="stable-version" class="muted">Version: …</div>
+              <div id="stable-date" class="muted">Last change: …</div>
+              <div id="stable-sha" class="muted">Commit: …</div>
+            </div>
+            <div class="card">
+              <h2><a href="./latest/">Latest demo</a></h2>
+              <div class="muted">Branch: <code>main</code></div>
+              <div id="latest-version" class="muted">Version: …</div>
+              <div id="latest-date" class="muted">Last change: …</div>
+              <div id="latest-sha" class="muted">Commit: …</div>
+            </div>
+          </div>
+          <footer>
+          <p>
+            Maintained by <a href="https://github.com/orgs/TETRAS-IIIF/" target="_blank" rel="noopener noreferrer">TETRAS-IIIF</a> ·
+            Contact: <a href="mailto:iiif@tetras-libre.fr">iiif@tetras-libre.fr</a>
+          </p>
+          </footer>
+          <script>
+          function fmtDate(iso){
+            try{
+              const d=new Date(iso);
+              return d.toLocaleString(undefined,{year:'numeric',month:'short',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false,timeZoneName:'short'});
+            }catch(e){return iso;}
+          }
+          async function loadMeta(prefix,id,globalDesc=false){
+            const vEl=document.getElementById(id+'-version');
+            const dEl=document.getElementById(id+'-date');
+            const sEl=document.getElementById(id+'-sha');
+            try{
+              const r=await fetch(prefix+'/meta.json',{cache:'no-store'});
+              if(!r.ok) throw 0;
+              const j=await r.json();
+          
+              // set global page title from latest meta
+              if(globalDesc && j.package_name){
+                document.title = `Demo – ${j.package_name}`;
+              }
+          
+              // global description (from latest only)
+              if(globalDesc && j.package_description){
+                document.getElementById('latest-global-desc').textContent=j.package_description;
+              }
+          
+              // Version with link to npm version (falls back to package root)
+              const vLink=j.version_url || j.package_url || '#';
+              const vText=j.version || 'n/a';
+              const pkgName=j.package_name ? ` (<code>${j.package_name}</code>)` : '';
+          
+              vEl.innerHTML='Version: <a href="'+vLink+'" target="_blank" rel="noopener noreferrer"><code>'+vText+'</code></a>';
+          
+              // Date humanized
+              dEl.innerHTML='Last change: <time datetime="'+j.date+'">'+fmtDate(j.date)+'</time>';
+          
+              // Commit short + link
+              const short=(j.commit||'').slice(0,7);
+              sEl.innerHTML='Commit: <a href="'+j.commit_url+'" target="_blank" rel="noopener noreferrer"><code>'+short+'</code></a>';
+            } catch {
+              vEl.textContent='Version: unavailable';
+              dEl.textContent='Last change: unavailable';
+              sEl.textContent='Commit: unavailable';
+            }
+          }
+          loadMeta('./stable','stable');
+          loadMeta('./latest','latest', true);
+          </script>
+          HTML
+
+      # -------- deploy --------
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy
+        id: deploy
+        uses: actions/deploy-pages@v4
