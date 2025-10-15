@@ -64,7 +64,6 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           role="button"
           data-canvas-id={currentGroupings[0].id}
           data-canvas-index={currentGroupings[0].index}
-          onKeyUp={this.setCanvas}
           onClick={this.setCanvas}
           tabIndex={-1}
           sx={theme => ({
