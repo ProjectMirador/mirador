@@ -76,7 +76,6 @@ jobs:
           PKG_NAME=$(node -p "require('./package.json').name || ''")
           VERSION=$(node -p "require('./package.json').version || ''")
           
-          [ -f dist/demo/src/index.html ] && mv dist/demo/src/index.html dist/index.html
           cp dist/index.html dist/404.html
           
           PKG_URL="https://www.npmjs.com/package/${PKG_NAME}"
@@ -121,7 +120,6 @@ jobs:
           VERSION=$(node -p "require('./package.json').version || ''")
           PKG_DESC=$(node -p "require('./package.json').description || ''" | sed 's/"/\\"/g')
           
-          [ -f dist/demo/src/index.html ] && mv dist/demo/src/index.html dist/index.html
           cp dist/index.html dist/404.html
           
           PKG_URL="https://www.npmjs.com/package/${PKG_NAME}"
