@@ -10,21 +10,24 @@ export default {
   },
   catalog: [
     { manifestId: 'https://files.tetras-libre.fr/dev/vertical_video_with_annot.json' },
-    { manifestId: 'https://files.tetras-libre.fr/dev/cats_video_with_annot.json' },
     { manifestId: 'https://files.tetras-libre.fr/dev/Heterogeneous-media-on-several-canvases.json' },
-    { manifestId: 'https://dzkimgs.l.u-tokyo.ac.jp/videos/cat2020/manifest.json' },
-    { manifestId: 'https://files.tetras-libre.fr/dev/vertical_video_with_annot.json' },
     { manifestId: 'https://files.tetras-libre.fr/dev/youtube.json' },
     { manifestId: 'https://files.tetras-libre.fr/dev/youtube_withannot.json' },
     { manifestId: 'https://files.tetras-libre.fr/dev/peertube.json' },
-    { manifestId: 'https://files.tetras-libre.fr/dev/cats_simplify_video_with_annot.json' },
-    { manifestId: 'https://files.tetras-libre.fr/dev/milansanremo25.json' },
-    { manifestId: 'https://files.tetras-libre.fr/dev/sun-400x400-with-svg-target.json' },
   ],
-  debug: true,
+  debug: false,
   id: 'mirador',
   theme: {
     transitions: {},
   },
-  windows: [{ manifestId: 'https://files.tetras-libre.fr/dev/peertube.json' }],
+  window: {
+    defaultSideBarPanel: 'annotations',
+    sideBarOpenByDefault: true,
+  },
+  windows: [{
+    canvasIndex: 0,
+    loadedManifest: 'https://files.tetras-libre.fr/dev/vertical_video_with_annot.json',
+    sideBarOpen: true,
+    view: 'single',
+  }],
 };
