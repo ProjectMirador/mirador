@@ -50,7 +50,8 @@ export default {
         main: '#b00020',
       },
       notification: { // Color used in MUI Badge dots
-        main: '#ffa224'
+        main: '#ffa224',
+        contrastText: '#ffa224',
       },
       hitCounter: {
         default: '#bdbdbd',
