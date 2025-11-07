@@ -3,7 +3,7 @@
 Forked from official  https://github.com/ProjectMirador/mirador#
 
 ### Demo
-- https://mirador-video.larus.tetras-libre.fr/
+- https://tetras-iiif.github.io/mirador-video/
 
 We will soon submit a PR to the official Mirador repository to add video support for annotations and other enhancement.
 We already support React 18/19, MUI7 and are up-to-date to Mirador 4 (4.0.0 version). 
