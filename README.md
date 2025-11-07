@@ -1,5 +1,5 @@
 # Mirador
-![Node.js CI](https://github.com/ProjectMirador/mirador/workflows/Node.js%20CI/badge.svg) [![codecov](https://codecov.io/gh/ProjectMirador/mirador/branch/main/graph/badge.svg)](https://codecov.io/gh/ProjectMirador/mirador) 
+[![Node.js CI](https://github.com/ProjectMirador/mirador/workflows/Node.js%20CI/badge.svg)](https://github.com/ProjectMirador/mirador/actions/workflows/node.js.yml) [![codecov](https://codecov.io/gh/ProjectMirador/mirador/branch/main/graph/badge.svg)](https://codecov.io/gh/ProjectMirador/mirador) 
 
 ## For Mirador Users
 You can quickly use and configure Mirador by remixing the [mirador-start](https://mirador-start.glitch.me/) Glitch.
@@ -20,13 +20,13 @@ If you are interested in integrating Mirador with plugins into your project, we 
 
 If you want to simply embed Mirador in an HTML page without further customization, include the Mirador UMD build:
 
-```
+```html
 <script src="https://unpkg.com/mirador@latest/dist/mirador.min.js"></script>
 ```
 
 Be aware that `latest` will at some point switch from version 3 to version 4. If you use Mirador via CDN in a production environment, consider pinning Mirador to version 3 to avoid sudden breaking changes:
 
-```
+```html
 <script src="https://unpkg.com/mirador@^3/dist/mirador.min.js"></script>
 ```
 
