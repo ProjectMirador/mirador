@@ -21,12 +21,27 @@ DOMPurify.addHook('afterSanitizeAttributes', (node) => {
 export function SanitizedHtml({
   classes = {}, htmlString, ruleSet, ...rest
 }) {
+  console.log('SanitizedHtml render');
+  console.log(ruleSet);
+
+  const stopIfAnchor = (e) => {
+    console.log('SanitizedHtml stopIfAnchor');
+    const el = e.target instanceof Node ? e.target : null;
+    if (el && (el.closest && el.closest('a'))) {
+      // allow the browser default (open/focus tab), but don’t notify parents
+      e.stopPropagation();
+      window.open(el.closest('a').href, '_blank', 'noopener');
+    }
+  };
+
   return (
     <Root
       className={[ns('third-party-html'), classes.root].join(' ')}
       dangerouslySetInnerHTML={{ // eslint-disable-line react/no-danger
         __html: DOMPurify.sanitize(htmlString, htmlRules[ruleSet]),
       }}
+      onClickCapture={stopIfAnchor} // left-click, keyboard “Enter/Space”
+      onMouseDownCapture={stopIfAnchor} // middle-click open in new tab
       {...rest}
     />
   );
