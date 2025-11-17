@@ -139,7 +139,8 @@ export function CanvasAnnotations({
               onMouseLeave={handleAnnotationBlur}
             >
               <ListItemText
-                primaryTypographyProps={{ variant: 'body2' }}
+                component="div"
+                variant="body2"
               >
                 <SanitizedHtml
                   ruleSet={htmlSanitizationRuleSet}
