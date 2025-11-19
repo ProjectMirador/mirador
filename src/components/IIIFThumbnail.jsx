@@ -1,11 +1,13 @@
 import {
-  useMemo, useEffect, useState,
+  useMemo, useEffect, useState, useContext,
 } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { useInView } from 'react-intersection-observer';
 import { IIIFResourceLabel } from './IIIFResourceLabel';
 import { useThumbnailService } from '../hooks';
+import FailedImageContext from '../contexts/FailedImageContext';
+import FailedImageProvider from '../contexts/FailedImageProvider';
 
 const Root = styled('div', { name: 'IIIFThumbnail', slot: 'root' })({});
 
@@ -28,7 +30,11 @@ const LazyLoadedImage = ({
 }) => {
   const { ref, inView } = useInView();
   const [loaded, setLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
   const thumbnailService = useThumbnailService(maxHeight, maxWidth);
+  const { markFailed, fallbackImage } = useContext(FailedImageContext);
+
+
   /**
    * Handles the intersection (visibility) of a given thumbnail, by requesting
    * the image and then updating the state.
@@ -102,6 +108,8 @@ const LazyLoadedImage = ({
   }, [image, maxWidth, maxHeight, style]);
 
   const { url: src = placeholder } = (loaded && (thumbnail || image)) || {};
+  // Decide final image source: normal, failed fallback, or placeholder
+  const finalSrc = failed ? fallbackImage || placeholder : src;
 
   return (
     <Image
@@ -109,8 +117,9 @@ const LazyLoadedImage = ({
       ref={ref}
       alt=""
       role="presentation"
-      src={src}
+      src={finalSrc}
       style={imageStyles}
+      onError={() => setFailed(true)}
       {...props}
     />
   );
@@ -151,22 +160,24 @@ export function IIIFThumbnail({
 
   return (
     <Root ownerState={ownerState}>
-      <LazyLoadedImage
-        placeholder={imagePlaceholder}
-        thumbnail={thumbnail}
-        resource={resource}
-        maxHeight={maxHeight}
-        maxWidth={maxWidth}
-        style={style}
-        border={border}
-      />
+      <FailedImageProvider>
+        <LazyLoadedImage
+          placeholder={imagePlaceholder}
+          thumbnail={thumbnail}
+          resource={resource}
+          maxHeight={maxHeight}
+          maxWidth={maxWidth}
+          style={style}
+          border={border}
+        />
 
-      { labelled && (
-        <Label ownerState={ownerState}>
-          {label || <IIIFResourceLabel resource={resource} />}
-        </Label>
-      )}
-      {children}
+        { labelled && (
+          <Label ownerState={ownerState}>
+            {label || <IIIFResourceLabel resource={resource} />}
+          </Label>
+        )}
+        {children}
+      </FailedImageProvider>
     </Root>
   );
 }

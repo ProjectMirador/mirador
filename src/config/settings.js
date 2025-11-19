@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid';
+import defaultFallback from '../assets/default-fallback.jpg';
 
 export default {
   state: {
@@ -8,6 +9,8 @@ export default {
     height: 50,
     width: 50,
   },
+  // A default is provided but you can set a custom image for loading failures
+  // fallbackImage: defaultFallback,
   selectedTheme: 'light', // dark also available
   themes: {
     dark: {
