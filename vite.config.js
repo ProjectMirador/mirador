@@ -118,7 +118,9 @@ export default defineConfig({
   server: {
     fs: {
       allow: [path.resolve(__dirname, 'src'),
-        path.resolve(__dirname, '__tests__/integration/mirador')], // allow serving from here
+        path.resolve(__dirname, '__tests__/integration/mirador'),
+        path.resolve(__dirname, '__tests__/fixtures'),
+      ], // allow serving from here
     },
     middlewareMode: false,
     open: '/index.html',
