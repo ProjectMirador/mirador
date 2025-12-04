@@ -34,6 +34,15 @@ export function ThumbnailNavigation({
     gridRef.current?.scrollToItem(index, 'center');
   }, [canvasIndex, view]);
 
+  // Prevent loss of focus when navigating thumbnails
+  const paperRef = useRef(null);
+
+  useEffect(() => {
+    if (paperRef.current && document.activeElement !== paperRef.current) {
+      paperRef.current.focus();
+    }
+  }, [canvasIndex]);
+
   /** */
   const handleKeyDown = (e) => {
     let nextKey = 'ArrowRight';
@@ -166,6 +175,7 @@ export function ThumbnailNavigation({
       tabIndex={0}
       onKeyDown={handleKeyDown}
       role="grid"
+      ref={paperRef}
     >
       <div role="row" style={{ height: '100%', width: '100%' }}>
         { canvasGroupings.length > 0 && (
@@ -183,6 +193,7 @@ export function ThumbnailNavigation({
               layout={(position === 'far-bottom') ? 'horizontal' : 'vertical'}
               itemData={itemData}
               ref={gridRef}
+              itemKey={(index) => index}
             >
               {ThumbnailCanvasGrouping}
             </List>
