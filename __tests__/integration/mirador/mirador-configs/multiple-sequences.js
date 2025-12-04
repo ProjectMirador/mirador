@@ -5,7 +5,7 @@ export default {
   },
   windows: [
     {
-      manifestId: 'http://localhost:4444/__tests__/fixtures/version-2/multipleSequences.json',
+      manifestId: '/__tests__/fixtures/version-2/multipleSequences.json',
       thumbnailNavigation: 'far-bottom',
     }],
 };
