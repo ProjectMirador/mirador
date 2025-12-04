@@ -7,6 +7,8 @@ import {
 import { useDebouncedCallback } from 'use-debounce';
 import { useTranslation } from 'react-i18next';
 import OpenSeadragonViewerContext from '../contexts/OpenSeadragonViewerContext';
+import FailedImageProvider from '../contexts/FailedImageProvider.jsx';
+
 
 /** Handle setting up OSD for use in mirador + react */
 function OpenSeadragonComponent({
@@ -18,6 +20,7 @@ function OpenSeadragonComponent({
   const viewerRef = useRef(undefined);
   const initialViewportSet = useRef(false);
   const [, forceUpdate] = useReducer(x => x + 1, 0);
+
 
   const moveHandler = useDebouncedCallback(useCallback((event) => {
     /** Shim to provide a mouse-move event coming from the viewer */
@@ -178,9 +181,11 @@ function OpenSeadragonComponent({
 
   return (
     <OpenSeadragonViewerContext.Provider value={viewerRef}>
-      <Container id={id} ref={ref} style={{ ...style, cursor: grabbing ? 'grabbing' : 'grab' }} {...passThruProps}>
-        {children}
-      </Container>
+      <FailedImageProvider>
+        <Container id={id} ref={ref} style={{ ...style, cursor: grabbing ? 'grabbing' : 'grab' }} {...passThruProps}>
+          {children}
+        </Container>
+      </FailedImageProvider>
     </OpenSeadragonViewerContext.Provider>
   );
 }
