@@ -14,7 +14,7 @@ import { getWindow } from './getters';
  */
 export const getAnnotations = state => miradorSlice(state).annotations;
 
-const getMotivation = createSelector(
+const getMotivations = createSelector(
   [
     getConfig,
     (state, { motivations }) => motivations,
@@ -88,16 +88,20 @@ export const getPresentAnnotationsOnSelectedCanvases = createSelector(
  * @returns {Array}
  */
 export const getAnnotationResourcesByMotivationForCanvas = createSelector(
-  [
-    getPresentAnnotationsCanvas,
-    getMotivation,
-  ],
-  (annotations, motivations) => filter(
-    flatten(annotations.map(annotation => annotation.resources)),
-    resource => resource.motivations.some(
-      motivation => motivations.includes(motivation),
-    ),
-  ),
+  [getPresentAnnotationsCanvas, getMotivations],
+  (annotations, motivations) => {
+    const resources = flatten(
+      annotations.map(annotation => annotation.resources),
+    );
+
+    // If motivations is empty, null, or undefined, return everything
+    if (!motivations || motivations.length === 0) {
+      return resources;
+    }
+
+    // Otherwise filter by motivations
+    return resources.filter(resource => resource.motivations.some(motivation => motivations.includes(motivation)));
+  },
 );
 
 /**
@@ -109,14 +113,21 @@ export const getAnnotationResourcesByMotivationForCanvas = createSelector(
 export const getAnnotationResourcesByMotivation = createSelector(
   [
     getPresentAnnotationsOnSelectedCanvases,
-    getMotivation,
+    getMotivations,
   ],
-  (annotations, motivations) => filter(
-    flatten(annotations.map(annotation => annotation.resources)),
-    resource => resource.motivations.some(
-      motivation => motivations.includes(motivation),
-    ),
-  ),
+  (annotations, motivations) => {
+    const resources = flatten(
+      annotations.map(annotation => annotation.resources),
+    );
+
+    // If motivations is empty, null, or undefined, return everything
+    if (!motivations || motivations.length === 0) {
+      return resources;
+    }
+
+    // Otherwise filter by motivations
+    return resources.filter(resource => resource.motivations.some(motivation => motivations.includes(motivation)));
+  },
 );
 
 /**

@@ -154,3 +154,56 @@ it('getSelectedAnnotationId returns the selected annotation ID from state', () =
     'aid1',
   );
 });
+
+it('returns all annotation resources when no motivations are passed and config.filteredMotivations is empty', () => {
+  const state = {
+    annotations: {
+      cid1: {
+        annoId1: {
+          id: 'annoId1',
+          json: {
+            resources: [
+              { '@id': 'annoId1', motivations: ['oa:commenting'] },
+              { '@id': 'annoId2', motivations: ['oa:not-commenting'] },
+              { '@id': 'annoId3', motivations: ['sc:something-else', 'oa:commenting'] },
+            ],
+          },
+        },
+      },
+    },
+    config: {
+      annotations: {
+        filteredMotivations: [], // Empty array
+        htmlSanitizationRuleSet: 'iiif',
+      },
+    },
+    manifests: {
+      mid: {
+        json: {
+          '@context': 'http://iiif.io/api/presentation/2/context.json',
+          '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+          '@type': 'sc:Manifest',
+          sequences: [
+            {
+              canvases: [{ '@id': 'cid1' }],
+            },
+          ],
+        },
+      },
+    },
+    windows: {
+      abc123: {
+        manifestId: 'mid',
+        visibleCanvases: ['cid1'],
+      },
+    },
+  };
+
+  // Ask for resources with no motivations provided
+  const result = getAnnotationResourcesByMotivation(state, { windowId: 'abc123' });
+
+  // Returns all three resources
+  expect(result).toHaveLength(3);
+  const resourceIds = result.map(r => r.resource['@id']);
+  expect(resourceIds).toEqual(['annoId1', 'annoId2', 'annoId3']);
+});
