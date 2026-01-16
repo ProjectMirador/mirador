@@ -25,9 +25,8 @@ export function setCanvas(windowId, canvasId, newGroup = undefined, options = {}
     }
 
     dispatch({
-      ...options,
       canvasId,
-      preserveViewport,
+      preserveViewport: options?.preserveViewport ?? preserveViewport,
       type: ActionTypes.SET_CANVAS,
       visibleCanvases,
       windowId,
