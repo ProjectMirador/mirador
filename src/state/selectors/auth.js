@@ -1,13 +1,15 @@
 import { createSelector } from 'reselect';
 import flatten from 'lodash/flatten';
+import { Utils } from 'manifesto.js';
 import { anyProbeServices } from '../../lib/getServices';
 import {
   audioResourcesFrom, iiifImageResourcesFrom, textResourcesFrom, videoResourcesFrom,
 } from '../../lib/typeFilters';
 import MiradorCanvas from '../../lib/MiradorCanvas';
-import { miradorSlice } from './utils';
+import { miradorSlice, EMPTY_OBJECT } from './utils';
 import { getConfig } from './config';
 import { getVisibleCanvases, selectInfoResponses, selectProbeResponses } from './canvases';
+import { getMiradorCanvasWrapper } from './wrappers';
 
 /**
  * Returns the authentification profile from the configuration
@@ -46,7 +48,7 @@ export const selectCurrentAuthServices = createSelector(
     getMiradorCanvasWrapper,
     (state, { iiifResources }) => iiifResources,
   ],
-  (canvases, infoResponses = {}, probeResponses = {}, serviceProfiles, auth, iiifResources) => {
+  (canvases, infoResponses = {}, probeResponses = {}, serviceProfiles, auth, getMiradorCanvas, iiifResources) => {
     let currentAuthResources = iiifResources;
 
     if (!currentAuthResources && canvases) {

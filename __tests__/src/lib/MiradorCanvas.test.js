@@ -180,26 +180,28 @@ describe('MiradorCanvas', () => {
     it('returns text', () => {
       instance = new MiradorCanvas(Utils.parseManifest(textFixture).getSequences()[0].getCanvases()[0]);
       expect(instance.textResources.length).toEqual(1);
-  describe('iiifImageResources', () => {
-    it('returns image resources', () => {
-      instance = new MiradorCanvas(
-        Utils.parseManifest(auth2WithImage).getSequences()[0].getCanvases()[0],
-      );
-      expect(instance.iiifImageResources.length).toEqual(1);
-    });
-    it('returns only image resources', () => {
-      instance = new MiradorCanvas(
-        Utils.parseManifest(auth2WithVideo).getSequences()[0].getCanvases()[0],
-      );
-      expect(instance.iiifImageResources.length).toEqual(0);
-    });
-  });
-  describe('imageServiceIds', () => {
-    it('returns image service IDs', () => {
-      instance = new MiradorCanvas(
-        Utils.parseManifest(auth2WithImage).getSequences()[0].getCanvases()[0],
-      );
-      expect(instance.imageServiceIds[0]).toEqual('https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen');
-    });
+      describe('iiifImageResources', () => {
+        it('returns image resources', () => {
+          instance = new MiradorCanvas(
+            Utils.parseManifest(auth2WithImage).getSequences()[0].getCanvases()[0],
+          );
+          expect(instance.iiifImageResources.length).toEqual(1);
+        });
+        it('returns only image resources', () => {
+          instance = new MiradorCanvas(
+            Utils.parseManifest(auth2WithVideo).getSequences()[0].getCanvases()[0],
+          );
+          expect(instance.iiifImageResources.length).toEqual(0);
+        });
+      });
+      describe('imageServiceIds', () => {
+        it('returns image service IDs', () => {
+          instance = new MiradorCanvas(
+            Utils.parseManifest(auth2WithImage).getSequences()[0].getCanvases()[0],
+          );
+          expect(instance.imageServiceIds[0]).toEqual('https://iiif.io/api/image/3.0/example/reference/918ecd18c2592080851777620de9bcb5-gottingen');
+        });
+      });
+    })
   });
 });

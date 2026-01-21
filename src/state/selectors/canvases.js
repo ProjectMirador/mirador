@@ -8,6 +8,7 @@ import { miradorSlice, EMPTY_ARRAY } from './utils';
 import { getWindow } from './getters';
 import { getSequence } from './sequences';
 import { getWindowViewType } from './windows';
+import { getManifestLocale } from './manifests';
 import { getProbeService } from '../../lib/getServices';
 import { anyImageServices } from '../../lib/typeFilters';
 
@@ -187,10 +188,11 @@ const probeReplacements = (resources, probeResponses) => {
 
 export const getVisibleCanvasNonTiledResources = createSelector(
   [
-    getVisibleCanvases
+    getVisibleCanvases,
+    getMiradorCanvasWrapper,
   ],
-  canvases => flatten(canvases
-    .map(canvas => new MiradorCanvas(canvas).imageResources))
+  (canvases, getMiradorCanvas) => flatten(canvases
+    .map(canvas => getMiradorCanvas(canvas).imageResources))
     .filter(resource => anyImageServices(resource).length < 1),
 );
 
@@ -214,10 +216,11 @@ export const getVisibleCanvasTextResources = createSelector(
 export const getVisibleCanvasVideoResources = createSelector(
   [
     getVisibleCanvases,
+    getMiradorCanvasWrapper,
     selectProbeResponses,
   ],
-  (canvases, probeResponses) => flatten(canvases
-    .map(canvas => probeReplacements(new MiradorCanvas(canvas).videoResources, probeResponses))),
+  (canvases, getMiradorCanvas, probeResponses) => flatten(canvases
+    .map(canvas => probeReplacements(getMiradorCanvas(canvas).videoResources, probeResponses))),
 );
 
 /**
@@ -248,15 +251,16 @@ export const getVisibleCanvasCaptions = createSelector(
 export const getVisibleCanvasAudioResources = createSelector(
   [
     getVisibleCanvases,
+    getMiradorCanvasWrapper,
     selectProbeResponses,
   ],
-  (canvases, probeResponses) => flatten(canvases
-    .map(canvas => probeReplacements(new MiradorCanvas(canvas).audioResources, probeResponses))),
+  (canvases, getMiradorCanvas, probeResponses) => flatten(canvases
+    .map(canvas => probeReplacements(getMiradorCanvas(canvas).audioResources, probeResponses))),
 );
 
 /**
  * Returns info response.
- * @param {object} state
+* @param {object} state
  * @param {object} props
  * @param {string} props.windowId
  * @param {string} props.canvasId
