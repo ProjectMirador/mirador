@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withTranslation } from 'react-i18next';
+import { PropertyValue } from 'manifesto.js';
 import { withPlugins } from '../extend/withPlugins';
 import { getLogoutService, getTokenService } from '../lib/getServices';
 import * as actions from '../state/actions';
@@ -47,17 +47,32 @@ const mapStateToProps = (state, { windowId }) => {
 
   const isInteractive = authProfiles.some((config) => config.profile === profile && !(config.external || config.kiosk));
 
+  // Helper to convert IIIF i18n values to strings
+  const getI18nValue = (value) => {
+    if (!value) return undefined;
+    if (typeof value === 'string') return value;
+    if (value.getValue) return value.getValue();
+    // Handle Auth2 probe response i18n format {en: ["text"]}
+    if (typeof value === 'object' && !Array.isArray(value)) {
+      const propertyValue = new PropertyValue(value);
+      return propertyValue.getValue();
+    }
+    return undefined;
+  };
+
   return {
     accessTokenServiceId: accessTokenService && accessTokenService.id,
     authServiceId: service && service.id,
-    confirm: service && service.getConfirmLabel(),
-    description: service && service.getDescription(),
-    failureDescription: service && service.getFailureDescription(),
-    failureHeader: service && service.getFailureHeader(),
-    header: service && service.getHeader(),
+    confirm: getI18nValue(service && service.getConfirmLabel && service.getConfirmLabel()),
+    description: getI18nValue(service && service.getDescription && service.getDescription()),
+    failureDescription: getI18nValue(service && service.getFailureDescription && service.getFailureDescription()),
+    failureHeader: getI18nValue(service && service.getFailureHeader && service.getFailureHeader()),
+    header: getI18nValue(service && service.getHeader && service.getHeader()),
     isInteractive,
-    label: service && service.getLabel()[0].value,
-    logoutConfirm: logoutService && logoutService.getLabel()[0] && logoutService.getLabel()[0].value,
+    label: getI18nValue(service && service.getLabel && service.getLabel()),
+    logoutConfirm: getI18nValue(logoutService
+      && logoutService.getLabel
+      && logoutService.getLabel()),
     logoutServiceId: logoutService && logoutService.id,
     profile,
     status,
