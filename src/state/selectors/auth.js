@@ -51,18 +51,27 @@ export const selectCurrentAuthServices = createSelector(
   (canvases, infoResponses = {}, probeResponses = {}, serviceProfiles, auth, getMiradorCanvas, iiifResources) => {
     let currentAuthResources = iiifResources;
 
+    // Debug: log canvases and iiifResources
+    console.log('[selectCurrentAuthServices] canvases:', canvases);
+    console.log('[selectCurrentAuthServices] iiifResources:', iiifResources);
+
     if (!currentAuthResources && canvases) {
       currentAuthResources = flatten(canvases.map(c => {
+        console.log('in the flatten')
         const miradorCanvas = new MiradorCanvas(c);
         const canvasResources = miradorCanvas.imageResources;
+        // Debug: log canvasResources
+        // console.log('[selectCurrentAuthServices] canvasResources:', canvasResources);
         const authResources = iiifImageResourcesFrom(canvasResources).map(i => {
           const iiifImageService = i.getServices()[0];
-
-            const infoResponse = infoResponses[iiifImageService.id];
-            if (infoResponse && infoResponse.json) {
-              return { ...infoResponse.json, options: {} };
-            }
-
+          // Debug: log iiifImageService
+          // console.log('[selectCurrentAuthServices] iiifImageService:', iiifImageService);
+          const infoResponse = infoResponses[iiifImageService?.id];
+          if (infoResponse && infoResponse.json) {
+            // Debug: log infoResponse
+            // console.log('[selectCurrentAuthServices] infoResponse:', infoResponse);
+            return { ...infoResponse.json, options: {} };
+          }
           return iiifImageService;
         });
         return authResources.concat(videoResourcesFrom(canvasResources))
@@ -71,24 +80,40 @@ export const selectCurrentAuthServices = createSelector(
       }));
     }
 
+    // Debug: log currentAuthResources
+    console.log('[selectCurrentAuthServices] currentAuthResources:', currentAuthResources);
+
     if (!currentAuthResources) return [];
     if (currentAuthResources.length === 0) return [];
 
-    const currentAuthServices = currentAuthResources.map((resource) => {
+    const currentAuthServices = currentAuthResources.map(resource => {
+      console.log('in the method')
       let lastAttemptedService;
+      // Debug: log resource before getServices
+      console.log('[selectCurrentAuthServices] resource for getServices:', resource);
       const resourceServices = Utils.getServices(resource);
+      // Debug: log resourceServices
+      console.log('[selectCurrentAuthServices] resourceServices:', resourceServices);
       const probeServices = anyProbeServices(resource);
+      // Debug: log probeServices
+      console.log('[selectCurrentAuthServices] probeServices:', probeServices);
       const probeServiceServices = flatten(probeServices.map(p => Utils.getServices(p)));
+      // Debug: log probeServiceServices
+      console.log('[selectCurrentAuthServices] probeServiceServices:', probeServiceServices);
 
       for (const authProfile of serviceProfiles) {
         const profiledAuthServices = resourceServices.concat(probeServiceServices).filter(
           p => authProfile.profile === p.getProfile(),
         );
+        // Debug: log profiledAuthServices
+        console.log('[selectCurrentAuthServices] profiledAuthServices:', profiledAuthServices);
 
         for (const service of profiledAuthServices) {
           lastAttemptedService = service;
 
           if (!auth[service.id] || auth[service.id].isFetching || auth[service.id].ok) {
+            // Debug: log selected service
+            console.log('[selectCurrentAuthServices] selected service:', service);
             return service;
           }
         }
@@ -96,6 +121,9 @@ export const selectCurrentAuthServices = createSelector(
 
       return lastAttemptedService;
     });
+
+    // Debug: log final currentAuthServices
+    console.log('[selectCurrentAuthServices] final currentAuthServices:', currentAuthServices);
 
     return Object.values(currentAuthServices.reduce((h, service) => {
       if (service && !h[service.id]) {

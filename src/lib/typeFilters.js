@@ -20,11 +20,16 @@ export function audioResourcesFrom(resources) {
  */
 export function anyImageServices(resource) {
   const services = resource ? resource.getServices() : [];
-  return services.filter(s => canvasTypes.imageServiceProfiles.includes(s.getProfile()));
+  return services.filter(s => {
+    const profile = s.getProfile && s.getProfile();
+    const type = s.getProperty && s.getProperty('type');
+    return canvasTypes.imageServiceProfiles.includes(profile) || type === 'AuthProbeService2';
+  });
 }
 
 /** */
 export function hasImageService(resource) {
+  // failing
   const imageServices = anyImageServices(resource);
   return imageServices[0] && imageServices[0].id;
 }

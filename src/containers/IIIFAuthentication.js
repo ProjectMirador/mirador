@@ -14,7 +14,18 @@ import { IIIFAuthentication } from '../components/IIIFAuthentication';
  */
 // eslint-disable-next-line complexity
 const mapStateToProps = (state, { windowId }) => {
-  const services = selectCurrentAuthServices(state, { windowId });
+    // Debug: log all current auth services and probe responses
+    const services = selectCurrentAuthServices(state, { windowId });
+    console.log('[IIIFAuthentication] Auth services for window', windowId, services);
+
+    const probeResponses = state.mirador?.probeResponses || {};
+    if (services && services.length) {
+      services.forEach(svc => {
+        const probe = probeResponses[svc.id];
+        console.log('[IIIFAuthentication] Service:', svc.id, 'Type:', svc.getProfile && svc.getProfile(), 'Probe:', probe);
+      });
+    }
+  // const services = selectCurrentAuthServices(state, { windowId });
 
   // TODO: get the most actionable auth service...
   const service = services[0];
