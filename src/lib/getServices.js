@@ -2,13 +2,14 @@ import { Utils } from 'manifesto.js';
 import { filterByTypes } from './typeFilters';
 
 /**
+ * Detects BOTH Auth1 profile URLs and Auth2 type strings
  */
 export function anyAuthServices(resource) {
   return resource
   && Utils.getServices(resource).filter(s => (s.getProfile()
-    && s.getProfile().match(/http:\/\/iiif.io\/api\/auth\//))
+    && s.getProfile().match(/http:\/\/iiif.io\/api\/auth\//)) // Auth 1
       || (s.getProperty('type')
-        && s.getProperty('type').match(/^Auth.*2$/)));
+        && s.getProperty('type').match(/^Auth.*2$/))); // Auth 2
 }
 
 /**
@@ -27,6 +28,7 @@ export function getProbeService(resource) {
 }
 
 /**
+ * Fallback from Auth 1, 0, 2
  */
 export function getTokenService(resource) {
   return resource
