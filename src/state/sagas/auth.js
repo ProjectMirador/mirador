@@ -9,6 +9,7 @@ import {
   resolveAuthenticationRequest,
   requestAccessToken,
   resetAuthenticationState,
+  requestProbeResponse,
 } from '../actions';
 import {
   selectInfoResponses,
@@ -119,27 +120,53 @@ export function* refetchProbeResponses({ serviceId }) {
 export function* doAuthWorkflow({ infoJson, windowId }) {
   const auths = yield select(getAuth);
   const { auth: { serviceProfiles = [] } = {} } = yield select(getConfig);
-  const nonInteractiveAuthFlowProfiles = serviceProfiles.filter((p) => p.external || p.kiosk);
-
-  // try to get an untried, non-interactive auth service
-  const authService = Utils.getServices(infoJson)
-    .filter((s) => !auths[s.id])
-    .find((e) => nonInteractiveAuthFlowProfiles.some((p) => p.profile === e.getProfile()));
-  if (!authService) return;
-
-  const profileConfig = nonInteractiveAuthFlowProfiles.find((p) => p.profile === authService.getProfile());
-
-  if (profileConfig.kiosk) {
-    // start the auth
-    yield put(addAuthenticationRequest(windowId, authService.id, authService.getProfile()));
-  } else if (profileConfig.external) {
-    const tokenService = getTokenService(authService);
-
-    if (!tokenService) return;
-    // resolve the auth
-    yield put(resolveAuthenticationRequest(authService.id, tokenService.id));
-    // start access tokens
-    yield put(requestAccessToken(tokenService.id, authService.id));
+  
+  // For Auth 2.0, we should handle both interactive and non-interactive flows
+  // Auth 2.0 "active" profile is interactive and should show auth dialog
+  const authServices = Utils.getServices(infoJson).filter(s => !auths[s.id]);
+  
+  for (const authService of authServices) {
+    const profile = authService.getProfile();
+    
+    // Handle Auth 2.0 services (identified by type)
+    if (authService.getProperty && authService.getProperty('type') === 'AuthAccessService2') {
+      // Auth 2.0 service - always trigger authentication request for active/interactive profiles
+      yield put(addAuthenticationRequest(windowId, authService.id, profile));
+      
+      // Also check if this info.json has probe services we should fetch
+      // According to IIIF spec, probe services MUST be in info.json
+      const probeServices = Utils.getServices(infoJson).filter(s => 
+        s.getProperty && s.getProperty('type') === 'AuthProbeService2'
+      );
+      
+      // Fetch probe responses for any probe services found in this info.json
+      for (const probeService of probeServices) {
+        yield put(requestProbeResponse({ 
+          resource: infoJson,
+          probeId: probeService.id,
+          windowId
+        }));
+      }
+      
+      return;
+    }
+    
+    // Handle Auth 1.0 non-interactive services (original logic)
+    const nonInteractiveAuthFlowProfiles = serviceProfiles.filter(p => p.external || p.kiosk);
+    const profileConfig = nonInteractiveAuthFlowProfiles.find(p => p.profile === profile);
+    
+    if (profileConfig) {
+      if (profileConfig.kiosk) {
+        yield put(addAuthenticationRequest(windowId, authService.id, profile));
+        return;
+      } else if (profileConfig.external) {
+        const tokenService = getTokenService(authService);
+        if (!tokenService) continue;
+        yield put(resolveAuthenticationRequest(authService.id, tokenService.id));
+        yield put(requestAccessToken(tokenService.id, authService.id));
+        return;
+      }
+    }
   }
 }
 

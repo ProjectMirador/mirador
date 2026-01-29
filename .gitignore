@@ -3,3 +3,5 @@ coverage/
 node_modules/
 *.log
 *.tgz
+.vscode
+packages/
