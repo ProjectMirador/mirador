@@ -87,33 +87,23 @@ export const selectCurrentAuthServices = createSelector(
     if (currentAuthResources.length === 0) return [];
 
     const currentAuthServices = currentAuthResources.map(resource => {
-      console.log('in the method')
       let lastAttemptedService;
-      // Debug: log resource before getServices
-      console.log('[selectCurrentAuthServices] resource for getServices:', resource);
       const resourceServices = Utils.getServices(resource);
-      // Debug: log resourceServices
-      console.log('[selectCurrentAuthServices] resourceServices:', resourceServices);
       const probeServices = anyProbeServices(resource);
-      // Debug: log probeServices
-      console.log('[selectCurrentAuthServices] probeServices:', probeServices);
       const probeServiceServices = flatten(probeServices.map(p => Utils.getServices(p)));
-      // Debug: log probeServiceServices
-      console.log('[selectCurrentAuthServices] probeServiceServices:', probeServiceServices);
+
+      // Check for probe responses for this resource
+      const resourceProbeResponse = probeResponses[resource.id];
 
       for (const authProfile of serviceProfiles) {
         const profiledAuthServices = resourceServices.concat(probeServiceServices).filter(
           p => authProfile.profile === p.getProfile(),
         );
-        // Debug: log profiledAuthServices
-        console.log('[selectCurrentAuthServices] profiledAuthServices:', profiledAuthServices);
 
         for (const service of profiledAuthServices) {
           lastAttemptedService = service;
 
           if (!auth[service.id] || auth[service.id].isFetching || auth[service.id].ok) {
-            // Debug: log selected service
-            console.log('[selectCurrentAuthServices] selected service:', service);
             return service;
           }
         }
@@ -121,9 +111,6 @@ export const selectCurrentAuthServices = createSelector(
 
       return lastAttemptedService;
     });
-
-    // Debug: log final currentAuthServices
-    console.log('[selectCurrentAuthServices] final currentAuthServices:', currentAuthServices);
 
     return Object.values(currentAuthServices.reduce((h, service) => {
       if (service && !h[service.id]) {

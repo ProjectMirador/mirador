@@ -12,6 +12,7 @@ import {
   getConfig,
   getCompanionWindowsForContent,
   selectInfoResponses,
+  selectProbeResponses,
   getCurrentCanvasWorld,
 } from '../state/selectors';
 
@@ -23,19 +24,19 @@ import {
 const mapStateToProps = (state, { windowId }) => {
   const canvasWorld = getCurrentCanvasWorld(state, { windowId });
   const infoResponses = selectInfoResponses(state);
-  const imageServiceIds = flatten(canvasWorld.canvases.map((c) => c.imageServiceIds));
+  const probeResponses = selectProbeResponses(state); // Force re-render when probe responses change
+  const imageServiceIds = flatten(canvasWorld.canvases.map(c => c.imageServiceIds));
 
   return {
     canvasWorld,
-    drawAnnotations:
-      getConfig(state).window.forceDrawAnnotations ||
-      getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0 ||
-      getCompanionWindowsForContent(state, { content: 'search', windowId }).length > 0,
-    infoResponses: imageServiceIds
-      .map((id) => infoResponses[id])
-      .filter(
-        (infoResponse) => infoResponse !== undefined && infoResponse.isFetching === false && infoResponse.error === undefined,
-      ),
+    drawAnnotations: getConfig(state).window.forceDrawAnnotations
+      || getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0
+      || getCompanionWindowsForContent(state, { content: 'search', windowId }).length > 0,
+    infoResponses: imageServiceIds.map(id => infoResponses[id])
+      .filter(infoResponse => (infoResponse !== undefined
+        && infoResponse.isFetching === false
+        && infoResponse.error === undefined)),
+    probeResponseCount: Object.keys(probeResponses).length, // Include for re-rendering trigger
     label: getCanvasLabel(state, {
       canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
       windowId,

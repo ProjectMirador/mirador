@@ -118,37 +118,76 @@ export function* refetchProbeResponses({ serviceId }) {
 
 /** try to start any non-interactive auth flows */
 export function* doAuthWorkflow({ infoJson, windowId }) {
+  // Prevent auth workflow if infoJson is undefined
+  if (!infoJson) {
+    console.log('[doAuthWorkflow] Skipping auth workflow - infoJson is undefined');
+    return;
+  }
+
   const auths = yield select(getAuth);
   const { auth: { serviceProfiles = [] } = {} } = yield select(getConfig);
   
-  // For Auth 2.0, we should handle both interactive and non-interactive flows
-  // Auth 2.0 "active" profile is interactive and should show auth dialog
+  console.log('[doAuthWorkflow] Starting auth workflow for infoJson:', infoJson);
+  console.log('[doAuthWorkflow] Services found:', Utils.getServices(infoJson));
+  
+  // For Auth 2.0, check for probe services first (per IIIF spec)
+  const probeServices = Utils.getServices(infoJson).filter(s => 
+    s.getProperty && s.getProperty('type') === 'AuthProbeService2'
+  );
+  
+  console.log('[doAuthWorkflow] Found probe services:', probeServices);
+  
+  // If we have Auth 2.0 probe services, handle them
+  if (probeServices.length > 0) {
+    for (const probeService of probeServices) {
+      console.log('[doAuthWorkflow] Requesting probe response for:', probeService.id);
+      
+      // Only request probe response if not already requested or fetching
+      const probeResponses = yield select(selectProbeResponses);
+      const existingProbeResponse = probeResponses[probeService.id];
+      
+      if (!existingProbeResponse || (!existingProbeResponse.isFetching && !existingProbeResponse.json)) {
+        console.log('[doAuthWorkflow] Requesting new probe response');
+        yield put(requestProbeResponse(
+          probeService.id,
+          infoJson,
+          windowId
+        ));
+      } else {
+        console.log('[doAuthWorkflow] Probe response already exists or fetching:', existingProbeResponse);
+      }
+      // Also check for nested access services in the probe service
+      const nestedAccessServices = Utils.getServices(probeService).filter(s => 
+        s.getProperty && s.getProperty('type') === 'AuthAccessService2'
+      );
+      
+      for (const accessService of nestedAccessServices) {
+        const profile = accessService.getProperty('profile');
+        console.log('[doAuthWorkflow] Found nested access service with profile:', profile);
+        
+        // Only add auth request if not already in progress
+        if (!auths[accessService.id] || (!auths[accessService.id].isFetching && auths[accessService.id].ok === undefined)) {
+          console.log('[doAuthWorkflow] Adding new auth request for:', accessService.id);
+          yield put(addAuthenticationRequest(windowId, accessService.id, profile));
+        } else {
+          console.log('[doAuthWorkflow] Auth request already exists for:', accessService.id, auths[accessService.id]);
+        }
+      }
+    }
+    return;
+  }
+  
+  // Fallback to Auth 1.0 detection for access services directly in info.json
   const authServices = Utils.getServices(infoJson).filter(s => !auths[s.id]);
   
   for (const authService of authServices) {
     const profile = authService.getProfile();
     
-    // Handle Auth 2.0 services (identified by type)
+    // Handle Auth 2.0 services (identified by type) - but these should be nested in probe services
     if (authService.getProperty && authService.getProperty('type') === 'AuthAccessService2') {
-      // Auth 2.0 service - always trigger authentication request for active/interactive profiles
+      console.log('[doAuthWorkflow] Found standalone Auth2 access service (unusual):', authService.id);
       yield put(addAuthenticationRequest(windowId, authService.id, profile));
-      
-      // Also check if this info.json has probe services we should fetch
-      // According to IIIF spec, probe services MUST be in info.json
-      const probeServices = Utils.getServices(infoJson).filter(s => 
-        s.getProperty && s.getProperty('type') === 'AuthProbeService2'
-      );
-      
-      // Fetch probe responses for any probe services found in this info.json
-      for (const probeService of probeServices) {
-        yield put(requestProbeResponse({ 
-          resource: infoJson,
-          probeId: probeService.id,
-          windowId
-        }));
-      }
-      
-      return;
+      continue;
     }
     
     // Handle Auth 1.0 non-interactive services (original logic)
@@ -219,14 +258,48 @@ export function* invalidateInvalidAuth({ serviceId }) {
 /** */
 export default function* authSaga() {
   yield all([
-    takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, rerequestOnAccessTokenFailure),
-    takeEvery(ActionTypes.RECEIVE_DEGRADED_PROBE_RESPONSE, rerequestOnAccessTokenFailure),
-    takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN_FAILURE, invalidateInvalidAuth),
-    takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, doAuthWorkflow),
-    takeEvery(ActionTypes.RECEIVE_DEGRADED_PROBE_RESPONSE, doAuthWorkflow),
-    takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchInfoResponses),
-    takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchProbeResponses),
-    takeEvery(ActionTypes.RESET_AUTHENTICATION_STATE, refetchInfoResponsesOnLogout),
-    takeEvery(ActionTypes.RESET_AUTHENTICATION_STATE, refetchProbeResponsesOnLogout),
+    takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, function* (action) {
+      console.log('[authSaga] RECEIVE_DEGRADED_INFO_RESPONSE triggered:', action);
+      yield call(rerequestOnAccessTokenFailure, action);
+    }),
+    takeEvery(ActionTypes.RECEIVE_DEGRADED_PROBE_RESPONSE, function* (action) {
+      console.log('[authSaga] RECEIVE_DEGRADED_PROBE_RESPONSE triggered:', action);
+      yield call(rerequestOnAccessTokenFailure, action);
+    }),
+    takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN_FAILURE, function* (action) {
+      console.log('[authSaga] RECEIVE_ACCESS_TOKEN_FAILURE triggered:', action);
+      yield call(invalidateInvalidAuth, action);
+    }),
+    takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, function* (action) {
+      console.log('[authSaga] RECEIVE_DEGRADED_INFO_RESPONSE -> doAuthWorkflow:', action);
+      yield call(doAuthWorkflow, { infoJson: action.infoJson, windowId: action.windowId });
+    }),
+    takeEvery(ActionTypes.RECEIVE_INFO_RESPONSE, function* (action) {
+      console.log('[authSaga] RECEIVE_INFO_RESPONSE (regular success) - checking for auth services:', action);
+      // Check if successful response has auth services that should trigger workflow
+      if (action.infoJson && Utils.getServices(action.infoJson).some(s => 
+        (s.getProperty && s.getProperty('type') === 'AuthProbeService2') ||
+        (s.getProperty && s.getProperty('type') === 'AuthAccessService2')
+      )) {
+        console.log('[authSaga] SUCCESS response has auth services - triggering workflow');
+        yield call(doAuthWorkflow, { infoJson: action.infoJson, windowId: action.windowId });
+      }
+    }),
+    takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, function* (action) {
+      console.log('[authSaga] RECEIVE_ACCESS_TOKEN triggered:', action);
+      yield call(refetchInfoResponses, action);
+    }),
+    takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, function* (action) {
+      console.log('[authSaga] RECEIVE_ACCESS_TOKEN -> refetchProbeResponses:', action);
+      yield call(refetchProbeResponses, action);
+    }),
+    takeEvery(ActionTypes.RESET_AUTHENTICATION_STATE, function* (action) {
+      console.log('[authSaga] RESET_AUTHENTICATION_STATE -> refetchInfoResponsesOnLogout:', action);
+      yield call(refetchInfoResponsesOnLogout, action);
+    }),
+    takeEvery(ActionTypes.RESET_AUTHENTICATION_STATE, function* (action) {
+      console.log('[authSaga] RESET_AUTHENTICATION_STATE -> refetchProbeResponsesOnLogout:', action);
+      yield call(refetchProbeResponsesOnLogout, action);
+    }),
   ]);
 }

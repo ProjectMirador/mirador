@@ -3,7 +3,8 @@ import { filterByTypes } from './typeFilters';
 
 /**
  * Detects BOTH Auth1 profile URLs and Auth2 type strings
- */
+* resource agnostic: can check manifest or info.json
+*/
 export function anyAuthServices(resource) {
   return resource
   && Utils.getServices(resource).filter(s => (s.getProfile()

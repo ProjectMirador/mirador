@@ -22,18 +22,38 @@ import {
 
 /** */
 function fetchWrapper(url, options, { success, degraded, failure }) {
+  console.log('[fetchWrapper] Making request to:', url);
+  console.log('[fetchWrapper] Request options:', options);
+  
   return fetch(url, options)
-    .then((response) =>
-      response
-        .json()
-        .then((json) => {
-          if (response.status === 401) return (degraded || success)({ json, response });
-          if (response.ok) return success({ json, response });
-          return failure({ error: response.statusText, json, response });
-        })
-        .catch((error) => failure({ error, response })),
-    )
-    .catch((error) => failure({ error }));
+    .then(response => {
+      console.log('[fetchWrapper] Response received for:', url);
+      console.log('[fetchWrapper] Response status:', response.status);
+      console.log('[fetchWrapper] Response headers:', [...response.headers.entries()]);
+      console.log('[fetchWrapper] Response URL (after redirects):', response.url);
+      
+      return response.json().then((json) => {
+        console.log('[fetchWrapper] JSON parsed:', json);
+        
+        if (response.status === 401) {
+          console.log('[fetchWrapper] 401 response - calling degraded handler');
+          return (degraded || success)({ json, response });
+        }
+        if (response.ok) {
+          console.log('[fetchWrapper] OK response - calling success handler');
+          return success({ json, response });
+        }
+        console.log('[fetchWrapper] Non-OK response - calling failure handler');
+        return failure({ error: response.statusText, json, response });
+      }).catch(error => {
+        console.log('[fetchWrapper] JSON parsing failed:', error);
+        return failure({ error, response });
+      });
+    })
+    .catch(error => {
+      console.log('[fetchWrapper] Fetch failed for:', url, error);
+      return failure({ error });
+    });
 }
 
 /** */
@@ -159,23 +179,53 @@ function* getAccessTokenService(resource) {
 
 /** @private */
 export function* fetchInfoResponse({ imageResource, infoId, windowId }) {
+  console.log('[fetchInfoResponse] Starting fetch for infoId:', infoId);
+  console.log('[fetchInfoResponse] imageResource:', imageResource);
+  console.log('[fetchInfoResponse] windowId:', windowId);
+  
   let iiifResource = imageResource;
   if (!iiifResource) {
     iiifResource = yield select(selectInfoResponse, { infoId });
   }
 
   const callbacks = {
-    degraded: ({ json, response, tokenServiceId }) =>
-      receiveDegradedInfoResponse(infoId, json, response.ok, tokenServiceId, windowId),
-    failure: ({ error, json, response, tokenServiceId }) => receiveInfoResponseFailure(infoId, error, tokenServiceId),
-    success: ({ json, response, tokenServiceId }) => receiveInfoResponse(infoId, json, response.ok, tokenServiceId),
+    degraded: ({
+      json, response, tokenServiceId,
+    }) => {
+      console.log('[fetchInfoResponse] DEGRADED response received for:', infoId);
+      console.log('[fetchInfoResponse] Degraded JSON:', json);
+      console.log('[fetchInfoResponse] Response status:', response.status);
+      return receiveDegradedInfoResponse(infoId, json, response.ok, tokenServiceId, windowId);
+    },
+    failure: ({
+      error, json, response, tokenServiceId,
+    }) => {
+      console.log('[fetchInfoResponse] FAILURE response for:', infoId);
+      console.log('[fetchInfoResponse] Error:', error);
+      return receiveInfoResponseFailure(infoId, error, tokenServiceId);
+    },
+    success: ({
+      json, response, tokenServiceId,
+    }) => {
+      console.log('[fetchInfoResponse] SUCCESS response for:', infoId);
+      console.log('[fetchInfoResponse] JSON:', json);
+      console.log('[fetchInfoResponse] Response status:', response.status);
+      return receiveInfoResponse(infoId, json, response.ok, tokenServiceId);
+    },
   };
 
-  yield call(fetchIiifResourceWithAuth, `${infoId.replace(/\/$/, '')}/info.json`, iiifResource, {}, callbacks);
+  const finalUrl = `${infoId.replace(/\/$/, '')}/info.json`;
+  console.log('[fetchInfoResponse] Final URL will be:', finalUrl);
+  
+  yield call(fetchIiifResourceWithAuth, finalUrl, iiifResource, {}, callbacks);
 }
 
 /** @private */
 export function* fetchProbeResponse({ resource, probeId, windowId }) {
+  console.log('[fetchProbeResponse] Starting probe fetch for probeId:', probeId);
+  console.log('[fetchProbeResponse] resource:', resource);
+  console.log('[fetchProbeResponse] windowId:', windowId);
+  
   let iiifResource = resource;
   if (!iiifResource) {
     iiifResource = yield select(selectProbeResponse, { probeId });
@@ -184,15 +234,28 @@ export function* fetchProbeResponse({ resource, probeId, windowId }) {
   const callbacks = {
     degraded: ({
       json, response, tokenServiceId,
-    }) => receiveDegradedProbeResponse(probeId, json, response.ok, tokenServiceId, windowId),
+    }) => {
+      console.log('[fetchProbeResponse] DEGRADED probe response:', json);
+      console.log('[fetchProbeResponse] Probe response status:', response.status);
+      console.log('[fetchProbeResponse] Storing degraded with probeId:', probeId);
+      console.log('[fetchProbeResponse] Time:', new Date().toISOString());
+      return receiveDegradedProbeResponse(probeId, json, response.ok, tokenServiceId, windowId);
+    },
     failure: ({
       error, json, response, tokenServiceId,
-    }) => (
-      receiveProbeResponseFailure(probeId, error, tokenServiceId)
-    ),
+    }) => {
+      console.log('[fetchProbeResponse] FAILED probe response:', error);
+      return receiveProbeResponseFailure(probeId, error, tokenServiceId);
+    },
     success: ({
       json, response, tokenServiceId,
-    }) => receiveProbeResponse(probeId, json, response.ok, tokenServiceId),
+    }) => {
+      console.log('[fetchProbeResponse] SUCCESS probe response:', json);
+      console.log('[fetchProbeResponse] Probe response status:', response.status);
+      console.log('[fetchProbeResponse] Storing with probeId:', probeId);
+      console.log('[fetchProbeResponse] Time:', new Date().toISOString());
+      return receiveProbeResponse(probeId, json, response.ok, tokenServiceId);
+    },
   };
 
   yield call(fetchIiifResourceWithAuth, probeId, iiifResource, {}, callbacks);

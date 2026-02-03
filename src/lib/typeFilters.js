@@ -29,7 +29,6 @@ export function anyImageServices(resource) {
 
 /** */
 export function hasImageService(resource) {
-  // failing
   const imageServices = anyImageServices(resource);
   return imageServices[0] && imageServices[0].id;
 }
