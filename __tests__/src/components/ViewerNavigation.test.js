@@ -28,7 +28,7 @@ describe('ViewerNavigation', () => {
       setPreviousCanvas,
     });
     const buttons = screen.queryAllByRole('button');
-    expect(buttons[0].closest('div')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
+    expect(buttons[0].closest('div')).toBeInTheDocument();
   });
   describe('when next canvases are present', () => {
     it('nextCanvas button is not disabled', () => {
@@ -107,8 +107,8 @@ describe('ViewerNavigation', () => {
         setPreviousCanvas,
         viewingDirection: 'right-to-left',
       });
-      expect(screen.getByRole('button', { name: 'Previous item' }).querySelector('svg')).not.toHaveStyle('transform: rotate(180deg);'); // eslint-disable-line testing-library/no-node-access
-      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(180deg);'); // eslint-disable-line testing-library/no-node-access
+      expect(screen.getByRole('button', { name: 'Previous item' }).querySelector('svg')).not.toHaveStyle('transform: rotate(180deg);');
+      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(180deg);');
     });
 
     it('sets the dir="rtl"', () => {
@@ -120,7 +120,7 @@ describe('ViewerNavigation', () => {
         viewingDirection: 'right-to-left',
       });
       const buttons = screen.queryAllByRole('button');
-      expect(buttons[0].closest('div')).toHaveAttribute('dir', 'rtl'); // eslint-disable-line testing-library/no-node-access
+      expect(buttons[0].closest('div')).toHaveAttribute('dir', 'rtl');
     });
   });
 
@@ -133,8 +133,8 @@ describe('ViewerNavigation', () => {
         setPreviousCanvas,
         viewingDirection: 'top-to-bottom',
       });
-      expect(screen.getByRole('button', { name: 'Previous item' }).querySelector('svg')).toHaveStyle('transform: rotate(270deg);'); // eslint-disable-line testing-library/no-node-access
-      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(90deg);'); // eslint-disable-line testing-library/no-node-access
+      expect(screen.getByRole('button', { name: 'Previous item' }).querySelector('svg')).toHaveStyle('transform: rotate(270deg);');
+      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(90deg);');
     });
   });
   describe('when viewingDirection is bottom-to-top', () => {
@@ -146,8 +146,8 @@ describe('ViewerNavigation', () => {
         setPreviousCanvas,
         viewingDirection: 'bottom-to-top',
       });
-      expect(screen.getByRole('button', { name: 'Previous item' }).querySelector('svg')).toHaveStyle('transform: rotate(90deg);'); // eslint-disable-line testing-library/no-node-access
-      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(270deg);'); // eslint-disable-line testing-library/no-node-access
+      expect(screen.getByRole('button', { name: 'Previous item' }).querySelector('svg')).toHaveStyle('transform: rotate(90deg);');
+      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(270deg);');
     });
   });
 });

@@ -7,7 +7,7 @@ describe('Canvas navigation by clicking thumbnails', () => {
   setupIntegrationTestViewer(config);
 
   // TODO: fix this (possible issue with lazy loading the images) -- no thumbnails are rendered
-  /* eslint-disable */
+
   it.skip('navigates a manifest using thumbnail navigation', async (context) => {
     // Make sure we have the manifest
     const windowElement = await screen.findByRole('region', { name: /Window: Bodleian Library MS. Ind. Inst. Misc. 22/i });
@@ -20,5 +20,4 @@ describe('Canvas navigation by clicking thumbnails', () => {
     const thumbnailButtons = thumbnailsContainer.querySelectorAll('.mirador-thumbnail-nav-canvas');
     fireEvent.click(thumbnailButtons[4]);
   });
-  /* eslint-enable */
 });

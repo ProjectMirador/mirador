@@ -21,7 +21,6 @@ function createWrapper(props) {
   );
 }
 
-/* eslint-disable testing-library/no-node-access */
 describe('AuthenticationControl', () => {
   let user;
   beforeEach(() => {

@@ -28,7 +28,6 @@ export function IIIFIFrameCommunication({ handleReceiveMessage = undefined, ...p
   return (
   // iframe "title" attribute is passed in via props for accessibility
   /* eslint-disable jsx-a11y/iframe-has-title */
-
     (
       <iframe
         {...IIIFIFrameCommunicationDefaultProps}

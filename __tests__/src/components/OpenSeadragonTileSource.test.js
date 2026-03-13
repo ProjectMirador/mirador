@@ -41,7 +41,7 @@ describe('OpenSeadragonTileSource', () => {
         </OpenSeadragonViewerContext.Provider>
       </FailedImageProvider>,
     );
-    await act(async () => { // eslint-disable-line testing-library/no-unnecessary-act
+    await act(async () => {
       rerender(
         <FailedImageProvider>
           <OpenSeadragonViewerContext.Provider value={ref}>
@@ -75,7 +75,7 @@ describe('OpenSeadragonTileSource', () => {
         </OpenSeadragonViewerContext.Provider>
       </FailedImageProvider>,
     );
-    await act(async () => { // eslint-disable-line testing-library/no-unnecessary-act
+    await act(async () => {
       rerender(
         <FailedImageProvider>
           <OpenSeadragonViewerContext.Provider value={ref}>
@@ -109,7 +109,7 @@ describe('OpenSeadragonTileSource', () => {
         </OpenSeadragonViewerContext.Provider>
       </FailedImageProvider>,
     );
-    await act(async () => { // eslint-disable-line testing-library/no-unnecessary-act
+    await act(async () => {
       rerender(
         <FailedImageProvider>
           <OpenSeadragonViewerContext.Provider value={ref}>
@@ -142,7 +142,7 @@ describe('OpenSeadragonTileSource', () => {
       </FailedImageProvider>,
     );
 
-    await act(async () => { // eslint-disable-line testing-library/no-unnecessary-act
+    await act(async () => {
       rerender(
         <FailedImageProvider>
           <OpenSeadragonViewerContext.Provider value={ref} />

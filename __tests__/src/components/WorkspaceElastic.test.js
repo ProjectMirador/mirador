@@ -35,7 +35,6 @@ function createWrapper({ elasticLayout = {}, ...props }) {
   );
 }
 
-/* eslint-disable testing-library/no-node-access, testing-library/no-container */
 describe('WorkspaceElastic', () => {
   const elasticLayout = {
     1: {

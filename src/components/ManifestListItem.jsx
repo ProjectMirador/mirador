@@ -11,38 +11,54 @@ import { Img } from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
 import ns from '../config/css-ns';
 
-const Root = styled(ListItem, { name: 'ManifestListItem', slot: 'root' })(({ ownerState, theme }) => ({
-  '&:hover,&:focus-within': {
-    backgroundColor: theme.palette.action.hover,
-    borderLeftColor: ownerState?.active ? theme.palette.primary.main : theme.palette.action.hover,
-  },
-  borderLeft: '4px solid',
-  borderLeftColor: ownerState?.active ? theme.palette.primary.main : 'transparent',
-  paddingLeft: theme.spacing(2),
-  paddingRight: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-  },
-}));
+const Root = styled(ListItem, { name: 'ManifestListItem', slot: 'root' })(
+  ({ ownerState, theme }) => ({
+    '&:hover,&:focus-within': {
+      backgroundColor: theme.palette.action.hover,
+      borderLeftColor: ownerState?.active
+        ? theme.palette.primary.main
+        : theme.palette.action.hover,
+    },
+    borderLeft: '4px solid',
+    borderLeftColor: ownerState?.active
+      ? theme.palette.primary.main
+      : 'transparent',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+    },
+  }),
+);
 
-const StyledThumbnail = styled(Img, { name: 'ManifestListItem', slot: 'thumbnail' })(({ theme }) => ({
+const StyledThumbnail = styled(Img, {
+  name: 'ManifestListItem',
+  slot: 'thumbnail',
+})(({ theme }) => ({
   maxWidth: '100%',
   objectFit: 'contain',
 }));
 
-const StyledLogo = styled(Img, { name: 'ManifestListItem', slot: 'logo' })(({ theme }) => ({
-  height: '2.5rem',
-  maxWidth: '100%',
-  objectFit: 'contain',
-  paddingRight: 1,
-}));
+const StyledLogo = styled(Img, { name: 'ManifestListItem', slot: 'logo' })(
+  ({ theme }) => ({
+    height: '2.5rem',
+    maxWidth: '100%',
+    objectFit: 'contain',
+    paddingRight: 1,
+  }),
+);
 
 /** */
 const Placeholder = () => (
   <Grid container className={ns('manifest-list-item')}>
     <Grid size={{ sm: 2, xs: 3 }}>
-      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />
+      <Skeleton
+        sx={{ bgcolor: 'grey[300]' }}
+        variant="rectangular"
+        height={80}
+        width={120}
+      />
     </Grid>
     <Grid size={{ sm: 6, xs: 9 }}>
       <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
@@ -52,7 +68,12 @@ const Placeholder = () => (
       <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
     </Grid>
     <Grid size={{ sm: 2, xs: 4 }}>
-      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={60} width={60} />
+      <Skeleton
+        sx={{ bgcolor: 'grey[300]' }}
+        variant="rectangular"
+        height={60}
+        width={60}
+      />
     </Grid>
   </Grid>
 );
@@ -66,7 +87,7 @@ export function ManifestListItem({
   fetchManifest,
   isFetching = false,
   addWindow,
-  handleClose = () => { },
+  handleClose = () => {},
   active = false,
   buttonRef = undefined,
   manifestId,
@@ -158,11 +179,19 @@ export function ManifestListItem({
                 </Grid>
                 <Grid size={9} sx={{ alignContent: 'center', paddingLeft: 2 }}>
                   {isCollection && (
-                    <Typography component="div" variant="overline" sx={{ textAlign: 'left' }}>
+                    <Typography
+                      component="div"
+                      variant="overline"
+                      sx={{ textAlign: 'left' }}
+                    >
                       {t(isMultipart ? 'multipartCollection' : 'collection')}
                     </Typography>
                   )}
-                  <Typography component="div" variant="h6" sx={{ textAlign: 'left' }}>
+                  <Typography
+                    component="div"
+                    variant="h6"
+                    sx={{ textAlign: 'left' }}
+                  >
                     {title || manifestId}
                   </Typography>
                 </Grid>

@@ -19,7 +19,7 @@ function createWrapper(props) {
     />,
   );
 }
-/* eslint-disable testing-library/no-node-access */
+
 describe('WindowSideBarButtons', () => {
   const windowId = 'test123';
   let user;

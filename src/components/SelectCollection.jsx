@@ -11,7 +11,10 @@ import { useTranslation } from 'react-i18next';
  *
  */
 export function SelectCollection({
-  collectionPath = [], manifestId = null, showCollectionDialog, windowId = null,
+  collectionPath = [],
+  manifestId = null,
+  showCollectionDialog,
+  windowId = null,
 }) {
   const { t } = useTranslation();
   const openCollectionDialog = useCallback(() => {

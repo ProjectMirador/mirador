@@ -122,10 +122,10 @@ describe('SidebarIndexTableOfContents', () => {
     expect(screen.getByRole('treeitem')).toBeInTheDocument();
     const root = screen.getByRole('treeitem');
 
-    await user.click(root.querySelector('.MuiTreeItem-iconContainer')); // eslint-disable-line testing-library/no-node-access
+    await user.click(root.querySelector('.MuiTreeItem-iconContainer'));
     expect(screen.getAllByRole('treeitem')).toHaveLength(5);
 
-    await user.click(root.querySelector('.MuiTreeItem-iconContainer')); // eslint-disable-line testing-library/no-node-access
+    await user.click(root.querySelector('.MuiTreeItem-iconContainer'));
 
     await waitFor(() => {
       expect(screen.getByRole('treeitem')).toBeInTheDocument();

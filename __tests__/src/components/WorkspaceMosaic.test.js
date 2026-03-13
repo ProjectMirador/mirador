@@ -141,7 +141,7 @@ describe('WorkspaceMosaic', () => {
       );
 
       const dragTarget = screen.getAllByLabelText('Window navigation')[0];
-      const dropTarget = container.querySelector('.mirador-mosaic > .drop-target-container > .drop-target.top'); // eslint-disable-line testing-library/no-container
+      const dropTarget = container.querySelector('.mirador-mosaic > .drop-target-container > .drop-target.top');
 
       fireEvent.dragStart(dragTarget);
       fireEvent.drag(dragTarget);

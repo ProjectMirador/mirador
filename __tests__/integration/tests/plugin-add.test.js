@@ -17,7 +17,7 @@ describe('add two plugins to <WorkspaceControlPanelButtons>', () => {
   it('wrapped and added plugins are present', async () => {
     const pluginDiv = screen.getByTestId('wrapped-plugin-with-adds');
     // The umbrella icon that this component wraps
-    expect(pluginDiv.querySelector('.umbrella')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
+    expect(pluginDiv.querySelector('.umbrella')).toBeInTheDocument();
 
     const button = within(pluginDiv).getByRole('button');
     fireEvent.click(button);
