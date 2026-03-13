@@ -5,10 +5,10 @@ const CustomIcon = () => (
     </svg>
   );
 
-  const WrapIconComponent = (plugin) => {
+  const WrapIconComponent = ({ TargetComponent, targetProps, ...plugin }) => {
     return (
       <div data-testid="wrapped-plugin-with-adds">
-        <plugin.TargetComponent menuIcon={<CustomIcon/>} {...plugin.targetProps} {...plugin} />
+        <TargetComponent menuIcon={<CustomIcon/>} {...targetProps} {...plugin} />
       </div>
     )
   }
