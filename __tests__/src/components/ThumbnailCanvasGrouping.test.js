@@ -8,6 +8,10 @@ import manifestJson from '../../fixtures/version-2/019.json';
 
 /** create wrapper */
 function createWrapper(props) {
+  const canvasGroupings = new CanvasGroupings(
+    Utils.parseManifest(manifestJson).getSequences()[0].getCanvases(),
+  ).groupings();
+
   return render(
     <ThumbnailCanvasGrouping
       index={1}
@@ -19,6 +23,9 @@ function createWrapper(props) {
         width: 100,
       }}
       showThumbnailLabels
+      canvasGroupings={canvasGroupings}
+      height={131}
+      position="far-bottom"
       {...props}
     />,
   );
@@ -27,17 +34,14 @@ function createWrapper(props) {
 describe('ThumbnailCanvasGrouping', () => {
   let wrapper;
   let setCanvas;
-  const data = {
-    canvasGroupings: new CanvasGroupings(Utils.parseManifest(manifestJson)
-      .getSequences()[0].getCanvases()).groupings(),
-    height: 131,
-    position: 'far-bottom',
-  };
   beforeEach(() => {
     setCanvas = vi.fn();
-    wrapper = createWrapper({ data, setCanvas });
+    wrapper = createWrapper({ setCanvas });
   });
-  const spyCurrentCanvasClass = vi.spyOn(ThumbnailCanvasGrouping.prototype, 'currentCanvasClass');
+  const spyCurrentCanvasClass = vi.spyOn(
+    ThumbnailCanvasGrouping.prototype,
+    'currentCanvasClass',
+  );
   afterEach(() => {
     spyCurrentCanvasClass.mockClear();
   });
@@ -50,11 +54,15 @@ describe('ThumbnailCanvasGrouping', () => {
   it('when clicked, updates the current canvas', async () => {
     wrapper.unmount();
     const user = userEvent.setup();
-    wrapper = createWrapper({ data, index: 0, setCanvas });
-    await user.click(wrapper.container.querySelector('.mirador-thumbnail-nav-canvas-0')); // eslint-disable-line testing-library/no-node-access
+    wrapper = createWrapper({ index: 0, setCanvas });
+    await user.click(
+      wrapper.container.querySelector('.mirador-thumbnail-nav-canvas-0'), // eslint-disable-line testing-library/no-node-access
+    );
     expect(spyCurrentCanvasClass).toHaveBeenCalledWith([0]);
     expect(spyCurrentCanvasClass).toHaveReturnedWith('current-canvas-grouping');
-    expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
+    expect(setCanvas).toHaveBeenCalledWith(
+      'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+    );
   });
   describe('attributes based off far-bottom position', () => {
     it('in button div', () => {
@@ -68,10 +76,7 @@ describe('ThumbnailCanvasGrouping', () => {
     beforeEach(() => {
       wrapper.unmount();
       createWrapper({
-        data: {
-          ...data,
-          position: 'far-right',
-        },
+        position: 'far-right',
         setCanvas,
       });
     });
