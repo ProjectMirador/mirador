@@ -10,3 +10,4 @@ coverage:
         informational: false
   ignore:
     - vite.config.js
+    - vite-umd.config.js
