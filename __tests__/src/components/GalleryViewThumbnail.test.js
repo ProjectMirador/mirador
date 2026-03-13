@@ -70,6 +70,21 @@ describe('GalleryView', () => {
     expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
   });
 
+  it('scrolls into view when selected prop changes to true', () => {
+    const { rerender } = createWrapper({ selected: false });
+    expect(window.HTMLElement.prototype.scrollIntoView).not.toHaveBeenCalled();
+
+    rerender(
+      <GalleryViewThumbnail
+        canvas={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()[0]}
+        focusOnCanvas={() => {}}
+        setCanvas={() => {}}
+        selected
+      />,
+    );
+    expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
+  });
+
   describe('on-demand annotation fetching', () => {
     const canvas = {
       getHeight: () => 50,

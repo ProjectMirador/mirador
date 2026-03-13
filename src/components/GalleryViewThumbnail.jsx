@@ -63,7 +63,7 @@ export function GalleryViewThumbnail({
     if (selected) {
       myRef.current?.scrollIntoView({ block: 'nearest'});
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selected]);
 
   /** @private */
   const handleSelect = () => {
