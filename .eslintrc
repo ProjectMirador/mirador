@@ -7,7 +7,7 @@
     }
   },
   "extends": [
-    "airbnb",
+    "./.eslint-config-local/index.cjs",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:testing-library/react"
