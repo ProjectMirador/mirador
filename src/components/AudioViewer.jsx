@@ -14,8 +14,6 @@ const StyledAudio = styled('audio')({
 
 /** */
 export function AudioViewer({ audioOptions = {}, audioResources = [], captions = [] }) {
-  /* eslint-disable jsx-a11y/media-has-caption */
-
   return (
     <StyledContainer>
       <StyledAudio {...audioOptions}>
@@ -33,7 +31,6 @@ export function AudioViewer({ audioOptions = {}, audioResources = [], captions =
     </StyledContainer>
   );
 }
-/* eslint-enable jsx-a11y/media-has-caption */
 
 AudioViewer.propTypes = {
   audioOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types

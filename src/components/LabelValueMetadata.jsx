@@ -7,8 +7,7 @@ import ns from '../config/css-ns';
  * Renders label/value pair metadata in a dl
  * @prop {object} labelValuePair
  */
-export function LabelValueMetadata({ defaultLabel = undefined, labelValuePairs, labelValueJoiner=', ' }) {
-  
+export function LabelValueMetadata({ defaultLabel = undefined, labelValuePairs, labelValueJoiner = ', ' }) {
   if (labelValuePairs.length === 0) {
     return null;
   }

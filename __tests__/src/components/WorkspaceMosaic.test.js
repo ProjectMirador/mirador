@@ -26,7 +26,6 @@ function createWrapper(props) {
   );
 }
 
-/* eslint-disable testing-library/no-node-access */
 describe('WorkspaceMosaic', () => {
   const windowIds = ['1', '2'];
   let wrapper;

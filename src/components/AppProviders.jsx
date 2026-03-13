@@ -44,7 +44,7 @@ MaybeDndProvider.propTypes = {
   dndManager: PropTypes.oneOf([
     undefined,
     false,
-    PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    PropTypes.object,
   ]),
 };
 

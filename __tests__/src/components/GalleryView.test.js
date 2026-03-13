@@ -23,7 +23,7 @@ describe('GalleryView', () => {
   });
   it('renders the component', () => {
     const { container } = createWrapper({ setCanvas });
-    expect(container.querySelector('section')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('section')).toBeInTheDocument(); // eslint-disable-line testing-library/no-container
   });
   it('renders gallery items for all canvases', () => {
     createWrapper({ setCanvas });
@@ -37,7 +37,7 @@ describe('GalleryView', () => {
         viewingDirection: 'right-to-left',
       });
       const buttons = screen.queryAllByRole('button');
-      expect(buttons[0].closest('section')).toHaveAttribute('dir', 'rtl'); // eslint-disable-line testing-library/no-node-access
+      expect(buttons[0].closest('section')).toHaveAttribute('dir', 'rtl');
     });
   });
 });

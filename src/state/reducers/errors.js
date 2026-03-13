@@ -10,7 +10,7 @@ export const errorsReducer = (state = defaultState, action) => {
   let ret;
   switch (action.type) {
     case ActionTypes.ADD_ERROR:
-      return { ...state, [action.id]: { id: action.id, message: action.message }, items: [...state.items, action.id] }; // eslint-disable-line max-len
+      return { ...state, [action.id]: { id: action.id, message: action.message }, items: [...state.items, action.id] };
     case ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE:
       return {
         ...state,

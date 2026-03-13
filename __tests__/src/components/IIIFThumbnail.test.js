@@ -14,7 +14,7 @@ function createWrapper(props) {
   );
 }
 
-/* eslint-disable testing-library/no-node-access, testing-library/no-container */
+/* eslint-disable testing-library/no-container */
 describe('IIIFThumbnail', () => {
   const url = 'http://example.com/iiif/image';
   const thumbnail = { height: 120, url, width: 100 };

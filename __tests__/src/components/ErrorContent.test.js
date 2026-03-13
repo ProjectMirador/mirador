@@ -29,7 +29,7 @@ describe('ErrorContent', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(screen.getByText('An error occurred')).toBeInTheDocument();
     expect(screen.getByText('Technical details')).toBeInTheDocument();
-    expect(document.querySelector('pre')).toHaveTextContent('Invalid JSON'); // eslint-disable-line testing-library/no-node-access
+    expect(document.querySelector('pre')).toHaveTextContent('Invalid JSON');
   });
   it('does not render the alert when showJsError is false ', async () => {
     render(

@@ -4,7 +4,7 @@ import isEmpty from 'lodash/isEmpty';
 import PluginContext from './PluginContext';
 
 /** withPlugins should be the innermost HOC */
-function _withPlugins(targetName, TargetComponent) { // eslint-disable-line no-underscore-dangle
+function _withPlugins(targetName, TargetComponent) {
   /** */
   function PluginHoc(props, ref) {
     const pluginMap = useContext(PluginContext);

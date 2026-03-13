@@ -1,6 +1,6 @@
 const StateDependentComponent = ({ incSomeNumber, manifestId }) => (
   <button id="plugin-button" onClick={incSomeNumber} style={{ width: 64 }} type="button">
-      { "Plugin:" + manifestId }
+    { `Plugin:${manifestId}` }
   </button>
 );
 

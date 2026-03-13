@@ -24,12 +24,12 @@ export default class AnnotationPage {
 
   /** */
   get items() {
-    this._items = this._items || (() => { // eslint-disable-line no-underscore-dangle
+    this._items = this._items || (() => {
       if (!this.json || !this.json.items) return [];
 
       return flatten([this.json.items]).map(resource => new AnnotationItem(resource));
     })();
-    return this._items; // eslint-disable-line no-underscore-dangle
+    return this._items;
   }
 
   /**

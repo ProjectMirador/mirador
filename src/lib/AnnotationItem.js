@@ -18,8 +18,8 @@ export default class AnnotationItem {
 
   /** */
   get id() {
-    this._id = this._id || this.resource.id || uuid(); // eslint-disable-line no-underscore-dangle
-    return this._id; // eslint-disable-line no-underscore-dangle
+    this._id = this._id || this.resource.id || uuid();
+    return this._id;
   }
 
   /** */

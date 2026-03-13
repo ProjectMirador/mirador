@@ -73,7 +73,7 @@ describe('FullScreenButton', () => {
 
     it('does not render the button', () => {
       createWrapper();
-      expect(screen.queryByRole('button')).toBeNull();
+      expect(screen.queryByRole('button')).not.toBeInTheDocument();
     });
   });
 });

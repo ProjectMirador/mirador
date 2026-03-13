@@ -61,7 +61,7 @@ export function GalleryViewThumbnail({
 
   useEffect(() => {
     if (selected) {
-      myRef.current?.scrollIntoView({ block: 'nearest'});
+      myRef.current?.scrollIntoView({ block: 'nearest' });
     }
   }, [selected]);
 

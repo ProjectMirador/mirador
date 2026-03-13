@@ -7,7 +7,6 @@ import { NativeTypes } from 'react-dnd-html5-backend';
 import { useDrop } from 'react-dnd';
 import { readImageMetadata } from '../lib/readImageMetadata';
 
-
 /** */
 const safeParseURL = (str) => {
   try {

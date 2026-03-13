@@ -45,7 +45,7 @@ export default class MiradorCanvas {
    */
   get annotationListUris() {
     return flatten(
-      new Array(this.canvas.__jsonld.otherContent), // eslint-disable-line no-underscore-dangle
+      new Array(this.canvas.__jsonld.otherContent),
     )
       .filter(otherContent => otherContent && (typeof otherContent === 'string' || otherContent['@type'] === 'sc:AnnotationList'))
       .map(otherContent => (typeof otherContent === 'string' ? otherContent : otherContent['@id']));
@@ -54,7 +54,7 @@ export default class MiradorCanvas {
   /** */
   get canvasAnnotationPages() {
     return flatten(
-      new Array(this.canvas.__jsonld.annotations), // eslint-disable-line no-underscore-dangle
+      new Array(this.canvas.__jsonld.annotations),
     )
       .filter(annotations => annotations && annotations.type === 'AnnotationPage');
   }
@@ -203,7 +203,7 @@ export default class MiradorCanvas {
    * Get the canvas service
    */
   get service() {
-    return this.canvas.__jsonld.service; // eslint-disable-line no-underscore-dangle
+    return this.canvas.__jsonld.service;
   }
 
   /**

@@ -20,7 +20,7 @@ describe('LocalePicker', () => {
   it('hides the control if there are not locales to switch to', () => {
     const { container } = createWrapper({ availableLocales: ['en'] });
 
-    expect(container).toBeEmptyDOMElement(); // eslint-disable-line testing-library/no-container
+    expect(container).toBeEmptyDOMElement();
   });
 
   it('renders a select with the current value', () => {

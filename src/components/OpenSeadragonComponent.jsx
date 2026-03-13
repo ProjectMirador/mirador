@@ -30,7 +30,7 @@ function OpenSeadragonComponent({
     const { viewport } = event.eventSource;
 
     if (!initialViewportSet.current) return;
-    
+
     // Don't save viewport changes during automatic recentering
     if (isResettingViewport.current) return;
 
@@ -90,19 +90,19 @@ function OpenSeadragonComponent({
       const boundsChanged = !lastAppliedBounds.current
         || viewerConfig.bounds.length !== lastAppliedBounds.current.length
         || viewerConfig.bounds.some((val, idx) => val !== lastAppliedBounds.current[idx]);
-      
+
       // Bounds changed - recenter regardless of whether x/y/zoom exist
       if (boundsChanged) {
         isResettingViewport.current = true;
         lastAppliedBounds.current = viewerConfig.bounds;
-        
+
         // Wait for the tiles to be fully loaded before recentering
         const handleTilesLoaded = () => {
           const rect = new Openseadragon.Rect(...viewerConfig.bounds);
           viewport.fitBoundsWithConstraints(rect, true);
           isResettingViewport.current = false;
         };
-        
+
         viewer.addOnceHandler('tile-loaded', handleTilesLoaded);
         return;
       }
@@ -113,7 +113,7 @@ function OpenSeadragonComponent({
     if (!viewerConfig.x || !viewerConfig.y || !viewerConfig.zoom) {
       return;
     }
-    
+
     // @ts-expect-error
     if (viewerConfig.x != null && viewerConfig.y != null
       && (Math.round(viewerConfig.x) !== Math.round(viewport.centerSpringX.target.value)

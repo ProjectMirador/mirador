@@ -138,5 +138,5 @@ SearchResults.propTypes = {
   searchAnnotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   searchHits: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
   searchNumTotal: PropTypes.number,
-  windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+  windowId: PropTypes.string.isRequired,
 };

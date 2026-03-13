@@ -138,7 +138,7 @@ Layer.propTypes = {
   layerMetadata: PropTypes.objectOf(PropTypes.shape({
     opacity: PropTypes.number,
     visibility: PropTypes.bool,
-  })), // eslint-disable-line react/forbid-prop-types
+  })),
   moveToBackground: PropTypes.func.isRequired,
   moveToFront: PropTypes.func.isRequired,
   resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
