@@ -97,7 +97,7 @@ describe('WorkspaceElasticWindow', () => {
         top: -2500,
       });
 
-      const el = container.querySelector('[style="position: absolute; user-select: none; width: 20px; height: 20px; right: -10px; bottom: -10px; cursor: se-resize;"]');
+      const el = container.querySelector('[style="position: absolute; user-select: none; width: 20px; height: 20px; z-index: 1; right: -10px; bottom: -10px; cursor: se-resize;"]');
 
       const oldCoords = {
         x: 0,
