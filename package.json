@@ -13,8 +13,8 @@
   "exports": {
     "./src": "./src/index.js",
     ".": {
-        "import": "./dist/mirador.es.js",
-        "require": "./dist/mirador.min.js"
+      "import": "./dist/mirador.es.js",
+      "require": "./dist/mirador.min.js"
     }
   },
   "scripts": {
@@ -104,7 +104,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-testing-library": "^6.2.0",
     "glob": "^11.0.3",
-    "happy-dom": "^17.0",
+    "happy-dom": "^20.0",
     "react": "^19.0.0",
     "react-dnd-test-backend": "^16.0.1",
     "react-dom": "^19.0.0",
