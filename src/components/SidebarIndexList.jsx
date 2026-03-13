@@ -48,7 +48,7 @@ export function SidebarIndexList({
     <MenuList variant="selectedMenu">
       {
         canvasesIdAndLabel.map((canvas, canvasIndex) => {
-          const onClick = () => { setCanvas(windowId, canvas.id); }; // eslint-disable-line require-jsdoc
+          const onClick = () => { setCanvas(windowId, canvas.id); };
 
           return (
             <ScrollTo

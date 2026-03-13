@@ -14,13 +14,13 @@ export function ManifestListItemError({
 }) {
   const { t } = useTranslation();
   return (
-    <Grid container sx={{ width: '100%', alignItems: 'center' }}>
+    <Grid container sx={{ alignItems: 'center', width: '100%' }}>
       <Grid container size={{ sm: 5, xs: 12 }} sx={{ alignItems: 'center' }}>
         <ErrorIcon sx={{
           color: 'error.main',
           height: '2rem',
-          width: '2rem',
           marginRight: '0.5rem',
+          width: '2rem',
         }}
         />
         <Typography>{t('manifestError')}</Typography>
