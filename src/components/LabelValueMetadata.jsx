@@ -31,6 +31,7 @@ export function LabelValueMetadata({ defaultLabel = undefined, labelValuePairs, 
 
 LabelValueMetadata.propTypes = {
   defaultLabel: PropTypes.string,
+  labelValueJoiner: PropTypes.string,
   labelValuePairs: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,
     values: PropTypes.arrayOf(PropTypes.string),
