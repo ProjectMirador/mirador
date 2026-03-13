@@ -17,6 +17,8 @@ function OpenSeadragonComponent({
   const [grabbing, setGrabbing] = useState(false);
   const viewerRef = useRef(undefined);
   const initialViewportSet = useRef(false);
+  const lastAppliedBounds = useRef(null);
+  const isResettingViewport = useRef(false);
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   const moveHandler = useDebouncedCallback(useCallback((event) => {
@@ -28,6 +30,9 @@ function OpenSeadragonComponent({
     const { viewport } = event.eventSource;
 
     if (!initialViewportSet.current) return;
+    
+    // Don't save viewport changes during automatic recentering
+    if (isResettingViewport.current) return;
 
     onUpdateViewport({
       bounds: viewport.getBounds(),
@@ -62,6 +67,7 @@ function OpenSeadragonComponent({
     if (!viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
       if (viewerConfig.bounds) {
         viewport.fitBounds(new Openseadragon.Rect(...viewerConfig.bounds), true);
+        lastAppliedBounds.current = viewerConfig.bounds;
       } else {
         viewport.goHome(true);
       }
@@ -79,6 +85,35 @@ function OpenSeadragonComponent({
       return;
     }
 
+    // Check if bounds changed - always recenter when bounds change)
+    if (viewerConfig.bounds) {
+      const boundsChanged = !lastAppliedBounds.current
+        || viewerConfig.bounds.length !== lastAppliedBounds.current.length
+        || viewerConfig.bounds.some((val, idx) => val !== lastAppliedBounds.current[idx]);
+      
+      // Bounds changed - recenter regardless of whether x/y/zoom exist
+      if (boundsChanged) {
+        isResettingViewport.current = true;
+        lastAppliedBounds.current = viewerConfig.bounds;
+        
+        // Wait for the tiles to be fully loaded before recentering
+        const handleTilesLoaded = () => {
+          const rect = new Openseadragon.Rect(...viewerConfig.bounds);
+          viewport.fitBoundsWithConstraints(rect, true);
+          isResettingViewport.current = false;
+        };
+        
+        viewer.addOnceHandler('tile-loaded', handleTilesLoaded);
+        return;
+      }
+    }
+
+    // Apply preserved viewport only if bounds haven't changed
+    // Don't apply x/y/zoom if we don't have them (rely on bounds instead)
+    if (!viewerConfig.x || !viewerConfig.y || !viewerConfig.zoom) {
+      return;
+    }
+    
     // @ts-expect-error
     if (viewerConfig.x != null && viewerConfig.y != null
       && (Math.round(viewerConfig.x) !== Math.round(viewport.centerSpringX.target.value)
@@ -98,13 +133,6 @@ function OpenSeadragonComponent({
 
     if (viewerConfig.flip != null && (viewerConfig.flip || false) !== viewport.getFlip()) {
       viewport.setFlip(viewerConfig.flip);
-    }
-
-    if (viewerConfig.bounds && !viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
-      const rect = new Openseadragon.Rect(...viewerConfig.bounds);
-      if (rect.equals(viewport.getBounds())) {
-        viewport.fitBounds(rect, false);
-      }
     }
   }, [initialViewportSet, setInitialBounds, viewerConfig, viewerRef]);
 

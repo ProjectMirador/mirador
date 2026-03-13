@@ -77,7 +77,7 @@
     "import/no-anonymous-default-export": "off",
     "import/no-extraneous-dependencies": "off",
     "max-len": ["error", {
-      "code": 120,
+      "code": 130,
       "ignoreComments": true,
       "ignoreStrings": true,
       "ignoreTemplateLiterals": true,

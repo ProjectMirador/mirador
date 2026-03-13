@@ -148,6 +148,29 @@ describe('window-level sagas', () => {
         .run();
     });
 
+    it('overrides default preserveViewport: false when initialViewerConfig is set', () => {
+      const action = {
+        window: {
+          canvasId: '1',
+          id: 'x',
+          initialViewerConfig: {
+            x: 934,
+            y: 782,
+            zoom: 0.0007,
+          },
+          manifestId: 'manifest.json',
+        },
+      };
+
+      return expectSaga(setWindowStartingCanvas, action)
+        .provide([
+          [select(getManifests), { 'manifest.json': {} }],
+          [call(setCanvas, 'x', '1', null, { preserveViewport: true }), { type: 'setCanvasThunk' }],
+        ])
+        .put({ type: 'setCanvasThunk' })
+        .run();
+    });
+
     it('calculates the starting canvas and calls setCanvas', () => {
       const action = {
         window: {
