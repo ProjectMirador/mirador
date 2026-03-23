@@ -159,7 +159,7 @@ export function WindowAuthenticationBar({
 
 WindowAuthenticationBar.propTypes = {
   confirmButton: PropTypes.string,
-  ConfirmProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  ConfirmProps: PropTypes.object,
   continueLabel: PropTypes.string,
   description: PropTypes.node,
   hasLogoutService: PropTypes.bool,

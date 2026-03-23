@@ -57,7 +57,7 @@ export function ErrorContent({
 }
 
 ErrorContent.propTypes = {
-  error: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  metadata: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  error: PropTypes.object.isRequired,
+  metadata: PropTypes.object,
   showJsError: PropTypes.bool,
 };

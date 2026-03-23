@@ -206,14 +206,14 @@ export function ThumbnailNavigation({
 }
 
 ThumbnailNavigation.propTypes = {
-  canvasGroupings: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvasGroupings: PropTypes.array.isRequired,
   canvasIndex: PropTypes.number.isRequired,
   hasNextCanvas: PropTypes.bool,
   hasPreviousCanvas: PropTypes.bool,
   position: PropTypes.string.isRequired,
   setNextCanvas: PropTypes.func,
   setPreviousCanvas: PropTypes.func,
-  thumbnailNavigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  thumbnailNavigation: PropTypes.object.isRequired,
   view: PropTypes.string,
   viewingDirection: PropTypes.string,
   windowId: PropTypes.string.isRequired,

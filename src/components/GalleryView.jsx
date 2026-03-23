@@ -42,7 +42,7 @@ export function GalleryView({ canvases, viewingDirection = '', windowId }) {
 }
 
 GalleryView.propTypes = {
-  canvases: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvases: PropTypes.array.isRequired,
   viewingDirection: PropTypes.string,
   windowId: PropTypes.string.isRequired,
 };

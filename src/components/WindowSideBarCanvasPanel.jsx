@@ -146,10 +146,10 @@ export function WindowSideBarCanvasPanel({
 }
 
 WindowSideBarCanvasPanel.propTypes = {
-  collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  collection: PropTypes.object,
   id: PropTypes.string.isRequired,
   sequenceId: PropTypes.string,
-  sequences: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  sequences: PropTypes.arrayOf(PropTypes.object),
   showMultipart: PropTypes.func.isRequired,
   showToc: PropTypes.bool,
   updateSequence: PropTypes.func.isRequired,

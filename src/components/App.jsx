@@ -31,8 +31,8 @@ export function App({ dndManager = undefined, plugins = [] }) {
 }
 
 App.propTypes = {
-  dndManager: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  plugins: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  dndManager: PropTypes.object,
+  plugins: PropTypes.array,
 };
 
 export default App;

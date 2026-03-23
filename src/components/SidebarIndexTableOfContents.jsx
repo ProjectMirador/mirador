@@ -6,8 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { ScrollTo } from './ScrollTo';
 
-const StyledVisibleNode = styled('div')(() => ({
-}));
+const StyledVisibleNode = styled('div')(() => ({}));
 
 /** */
 function getStartCanvasId(node) {
@@ -45,9 +44,7 @@ function deepFind(treeNode, id) {
 
 /** */
 const ScrollToForTreeItem = ({ children, itemId, ...props }) => (
-  <ScrollTo {...props}>
-    {children}
-  </ScrollTo>
+  <ScrollTo {...props}>{children}</ScrollTo>
 );
 
 ScrollToForTreeItem.propTypes = {
@@ -60,10 +57,17 @@ const CollapseIcon = (props) => <ExpandMoreIcon {...props} color="action" />;
 /** */
 const ExpandIcon = (props) => <ChevronRightIcon {...props} color="action" />;
 /** */
-export function SidebarIndexTableOfContents({
-  toggleNode, expandNodes, setCanvas, windowId,
-  treeStructure, visibleNodeIds, expandedNodeIds, containerRef, nodeIdToScrollTo,
-}) {
+export function SidebarIndexTableOfContents(
+  toggleNode,
+  expandNodes,
+   setCanvas,
+   windowId,
+  treeStructure,
+  visibleNodeIds,
+  expandedNodeIds,
+  containerRef,
+  nodeIdToScrollTo
+) {
   /** */
   const handleNodeSelect = (event, itemId) => {
     if (event.key === ' ' || event.key === 'Spacebar') {
@@ -83,9 +87,11 @@ export function SidebarIndexTableOfContents({
     const node = deepFind(treeStructure, itemId);
 
     // Do not select if there are no canvases listed or it has children
-    if (!node.data.getCanvasIds()
-        || node.data.getCanvasIds().length === 0
-        || node.nodes.length > 0) {
+    if (
+      !node.data.getCanvasIds() ||
+      node.data.getCanvasIds().length === 0 ||
+      node.nodes.length > 0
+    ) {
       return;
     }
     const target = getStartCanvasId(node);
@@ -108,17 +114,18 @@ export function SidebarIndexTableOfContents({
     >
       <TreeItem
         itemId={node.id}
-        label={(
+        label={
           <StyledVisibleNode
-            sx={theme => ({
-              backgroundColor: visibleNodeIds.indexOf(node.id) !== -1
-                && alpha(theme.palette.highlights?.primary || theme.palette.action.selected, 0.35),
+            sx={(theme) => ({
+              backgroundColor:
+                visibleNodeIds.indexOf(node.id) !== -1 &&
+                alpha(theme.palette.highlights?.primary || theme.palette.action.selected, 0.35),
               display: visibleNodeIds.indexOf(node.id) !== -1 && 'inline',
             })}
           >
             {node.label}
           </StyledVisibleNode>
-        )}
+        }
       >
         {node.nodes && node.nodes.length > 0 ? node.nodes.map(renderTree) : null}
       </TreeItem>
@@ -137,9 +144,11 @@ export function SidebarIndexTableOfContents({
       onExpandedItemsChange={handleNodeToggle}
       expandedItems={expandedNodeIds}
     >
-      {Array.isArray(treeStructure.nodes) && treeStructure.nodes.length > 0
-        ? treeStructure.nodes.map(n => renderTree(n))
-        : <p>No items found</p>}
+      {Array.isArray(treeStructure.nodes) && treeStructure.nodes.length > 0 ? (
+        treeStructure.nodes.map((n) => renderTree(n))
+      ) : (
+        <p>No items found</p>
+      )}
     </SimpleTreeView>
   );
 }
@@ -157,11 +166,13 @@ SidebarIndexTableOfContents.propTypes = {
   treeStructure: PropTypes.shape({
     id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    nodes: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      nodes: PropTypes.array, // eslint-disable-line react/forbid-prop-types
-    })),
+    nodes: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        label: PropTypes.string.isRequired,
+        nodes: PropTypes.array,
+      }),
+    ),
   }).isRequired,
   visibleNodeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   windowId: PropTypes.string.isRequired,

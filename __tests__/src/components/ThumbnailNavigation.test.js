@@ -27,7 +27,7 @@ function Subject({ fixture = manifestJson, ...props }) {
 }
 
 Subject.propTypes = {
-  fixture: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  fixture: PropTypes.object,
 };
 
 vi.mock(

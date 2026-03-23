@@ -141,7 +141,7 @@ Layer.propTypes = {
   })),
   moveToBackground: PropTypes.func.isRequired,
   moveToFront: PropTypes.func.isRequired,
-  resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  resource: PropTypes.object.isRequired,
   setLayerVisibility: PropTypes.func.isRequired,
 };
 
@@ -194,7 +194,7 @@ function DraggableLayer({
 DraggableLayer.propTypes = {
   children: PropTypes.node.isRequired,
   index: PropTypes.number.isRequired,
-  resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  resource: PropTypes.object.isRequired,
 };
 
 /** */

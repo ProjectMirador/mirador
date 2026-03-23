@@ -90,7 +90,7 @@ const StoreAwareI18nextProvider = ({ children, language, translations }) => {
 StoreAwareI18nextProvider.propTypes = {
   children: PropTypes.node.isRequired,
   language: PropTypes.string.isRequired,
-  translations: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  translations: PropTypes.object.isRequired,
 };
 
 /**
@@ -141,8 +141,8 @@ export function AppProviders({
 
 AppProviders.propTypes = {
   children: PropTypes.node,
-  dndManager: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  dndManager: PropTypes.object,
   language: PropTypes.string.isRequired,
-  theme: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  translations: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  theme: PropTypes.object.isRequired,
+  translations: PropTypes.object.isRequired,
 };

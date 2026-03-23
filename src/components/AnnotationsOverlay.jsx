@@ -252,7 +252,7 @@ export function AnnotationsOverlay({
 }
 
 AnnotationsOverlay.propTypes = {
-  annotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  annotations: PropTypes.arrayOf(PropTypes.object),
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   deselectAnnotation: PropTypes.func,
   drawAnnotations: PropTypes.bool,
@@ -260,10 +260,10 @@ AnnotationsOverlay.propTypes = {
   highlightAllAnnotations: PropTypes.bool,
   hoverAnnotation: PropTypes.func,
   hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
-  palette: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  searchAnnotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  palette: PropTypes.object,
+  searchAnnotations: PropTypes.arrayOf(PropTypes.object),
   selectAnnotation: PropTypes.func,
   selectedAnnotationId: PropTypes.string,
-  viewer: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  viewer: PropTypes.object,
   windowId: PropTypes.string.isRequired,
 };

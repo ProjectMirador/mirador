@@ -49,7 +49,7 @@ Item.propTypes = {
     height: PropTypes.number,
     width: PropTypes.number,
   }).isRequired,
-  manifest: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  manifest: PropTypes.object.isRequired,
   variant: PropTypes.string.isRequired,
 };
 
@@ -171,12 +171,12 @@ WindowSideBarCollectionPanel.propTypes = {
     height: PropTypes.number,
     width: PropTypes.number,
   }).isRequired,
-  collection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  collection: PropTypes.object,
   collectionPath: PropTypes.arrayOf(PropTypes.string),
   id: PropTypes.string.isRequired,
   isFetching: PropTypes.bool,
   manifestId: PropTypes.string.isRequired,
-  parentCollection: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  parentCollection: PropTypes.object,
   updateCompanionWindow: PropTypes.func.isRequired,
   updateWindow: PropTypes.func.isRequired,
   variant: PropTypes.string,

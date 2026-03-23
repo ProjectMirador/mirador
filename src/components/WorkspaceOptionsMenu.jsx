@@ -99,7 +99,7 @@ export function WorkspaceOptionsMenu({
 }
 
 WorkspaceOptionsMenu.propTypes = {
-  anchorEl: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  anchorEl: PropTypes.object,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
 };

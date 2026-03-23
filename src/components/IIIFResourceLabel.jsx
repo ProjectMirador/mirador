@@ -24,5 +24,5 @@ export function IIIFResourceLabel({ fallback, resource }) {
 
 IIIFResourceLabel.propTypes = {
   fallback: PropTypes.string,
-  resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  resource: PropTypes.object.isRequired,
 };

@@ -73,7 +73,7 @@ export function SearchPanelNavigation({
 SearchPanelNavigation.propTypes = {
   direction: PropTypes.string.isRequired,
   numTotal: PropTypes.number,
-  searchHits: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  searchHits: PropTypes.arrayOf(PropTypes.object),
   selectAnnotation: PropTypes.func.isRequired,
   selectedContentSearchAnnotation: PropTypes.arrayOf(PropTypes.string).isRequired,
   windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types

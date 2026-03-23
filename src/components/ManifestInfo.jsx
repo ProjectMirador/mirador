@@ -60,6 +60,6 @@ export function ManifestInfo({
 ManifestInfo.propTypes = {
   manifestDescription: PropTypes.string,
   manifestLabel: PropTypes.string,
-  manifestMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  manifestMetadata: PropTypes.array,
   manifestSummary: PropTypes.string,
 };

@@ -159,7 +159,7 @@ export function WorkspaceSelectionDialog({
 
 WorkspaceSelectionDialog.propTypes = {
   children: PropTypes.node,
-  container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  container: PropTypes.object,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
   updateWorkspace: PropTypes.func.isRequired,

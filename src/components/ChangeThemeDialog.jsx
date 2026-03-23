@@ -57,7 +57,7 @@ export function ChangeThemeDialog({
 }
 
 ChangeThemeDialog.propTypes = {
-  container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  container: PropTypes.object,
   handleClose: PropTypes.func.isRequired,
   open: PropTypes.bool,
   selectedTheme: PropTypes.string.isRequired,

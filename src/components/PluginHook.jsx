@@ -24,6 +24,6 @@ export const PluginHook = forwardRef(({ classes = {}, targetName, ...otherProps 
 PluginHook.displayName = 'PluginHook';
 
 PluginHook.propTypes = {
-  classes: PropTypes.object, // eslint-disable-line react/forbid-prop-types, react/require-default-props
+  classes: PropTypes.object,
   targetName: PropTypes.string.isRequired,
 };

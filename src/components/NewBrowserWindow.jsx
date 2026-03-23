@@ -28,7 +28,7 @@ export function NewBrowserWindow({
 }
 
 NewBrowserWindow.propTypes = {
-  depWindow: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  depWindow: PropTypes.object,
   features: PropTypes.string,
   name: PropTypes.string,
   onClose: PropTypes.func.isRequired,

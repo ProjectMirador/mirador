@@ -57,7 +57,7 @@ export function CanvasInfo({
 CanvasInfo.propTypes = {
   canvasDescription: PropTypes.string,
   canvasLabel: PropTypes.string,
-  canvasMetadata: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  canvasMetadata: PropTypes.array,
   index: PropTypes.number,
   totalSize: PropTypes.number,
 };

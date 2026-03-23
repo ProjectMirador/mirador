@@ -84,10 +84,10 @@ function WorkspaceElastic({
 }
 
 WorkspaceElastic.propTypes = {
-  elasticLayout: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  elasticLayout: PropTypes.object.isRequired,
   setWorkspaceViewportDimensions: PropTypes.func.isRequired,
   setWorkspaceViewportPosition: PropTypes.func.isRequired,
-  workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  workspace: PropTypes.object.isRequired,
 };
 
 export default WorkspaceElastic;
