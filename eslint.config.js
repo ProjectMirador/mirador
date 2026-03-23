@@ -89,7 +89,7 @@ export default [
         'error',
         {
           props: true,
-          ignorePropertyModificationsFor: ['acc', 'event', 'h', 'newState', 'object', 'req', 'responseAction', 'stemAcc'],
+          ignorePropertyModificationsFor: ['acc', 'accumulator', 'context', 'event', 'h', 'newState', 'object', 'req', 'responseAction', 'stemAcc'],
         },
       ],
       'no-restricted-globals': [
