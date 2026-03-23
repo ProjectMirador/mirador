@@ -55,177 +55,72 @@ export default [
     },
 
     rules: {
-      // React plugin recommended rules
       ...reactPlugin.configs.recommended.rules,
       ...reactHooksPlugin.configs.recommended.rules,
       ...jsxA11yPlugin.configs.recommended.rules,
-
-      // Testing Library rules
+      ...jestDomPlugin.configs['flat/recommended'].rules,
       ...testingLibraryPlugin.configs['flat/react'].rules,
 
-      // Jest DOM rules
-      ...jestDomPlugin.configs['flat/recommended'].rules,
-
-      // All custom rules in alphabetical order
-      'arrow-parens': 'off',
-      'default-param-last': 'off',
-      eqeqeq: ['warn', 'smart'],
-      'import/no-anonymous-default-export': 'off',
-      'import/no-extraneous-dependencies': 'off',
-      'import/no-unresolved': [
-        2,
-        { ignore: ['test-utils', '@vitejs/plugin-react'] },
-      ],
-      'import/prefer-default-export': 'off',
-      // will be handled by prettier
-      'max-len': 'off',
-      // === Critical Code Quality Rules (from Airbnb) ===
-
-      // Prevent bugs
-      'no-param-reassign': ['error', { props: false }],
-      'no-shadow': ['error', { builtinGlobals: false, hoist: 'functions' }],
-      'eqeqeq': ['warn', 'smart'],
-      'no-restricted-globals': [
-        'error',
-        {
-          name: 'isFinite',
-          message: 'Use Number.isFinite instead',
-        },
-        {
-          name: 'isNaN',
-          message: 'Use Number.isNaN instead',
-        },
-      ],
-      'no-restricted-syntax': ['warn', 'WithStatement'],
-
-      // Code organization
-      'prefer-destructuring': [
-        'warn',
-        {
-          VariableDeclarator: { array: false, object: true },
-          AssignmentExpression: { array: false, object: false },
-        },
-      ],
-      'dot-notation': ['error', { allowKeywords: true }],
-      'prefer-template': 'warn',
-      'no-nested-ternary': 'warn',
-
-      // Error prevention
+      'camelcase': ['error', { properties: 'never', ignoreDestructuring: false }],
+      'complexity': ['warn', 20],
       'consistent-return': 'error',
       'default-case': ['error', { commentPattern: '^no default$' }],
-      'no-else-return': ['error', { allowElseIf: false }],
-      'no-return-assign': ['error', 'always'],
-      'no-useless-return': 'error',
-      'radix': 'error',
-
-      // Function quality
-      'complexity': ['warn', 20],
-      'no-empty-function': [
-        'error',
-        {
-          allow: ['arrowFunctions', 'functions', 'methods'],
-        },
-      ],
-      'no-implicit-coercion': [
-        'error',
-        {
-          boolean: false,
-          number: true,
-          string: true,
-          allow: [],
-        },
-      ],
-      'no-lonely-if': 'error',
-
-      // Variable management
-      'no-use-before-define': [
-        'warn',
-        {
-          functions: false,
-          classes: false,
-          variables: false,
-        },
-      ],
-      'no-unused-expressions': [
-        'error',
-        {
-          allowShortCircuit: true,
-          allowTernary: true,
-        },
-      ],
-
-      // === Additional High-Value Rules ===
-      'camelcase': [
-        'error',
-        {
-          properties: 'never',
-          ignoreDestructuring: false,
-        },
-      ],
+      'dot-notation': ['error', { allowKeywords: true }],
+      'eqeqeq': ['warn', 'smart'],
+      'import/extensions': ['error', 'ignorePackages', { js: 'never', jsx: 'never' }],
+      'import/first': 'error',
+      'import/newline-after-import': ['error', { count: 1 }],
+      'import/no-anonymous-default-export': 'off',
+      'import/no-cycle': ['error', { maxDepth: Infinity }],
+      'import/no-duplicates': 'error',
+      'import/no-extraneous-dependencies': 'off',
+      'import/no-mutable-exports': 'error',
+      'import/no-unresolved': [2, { ignore: ['test-utils', '@vitejs/plugin-react'] }],
+      'import/prefer-default-export': 'off',
       'max-depth': ['warn', 4],
       'max-params': ['warn', 5],
-      'prefer-const': 'error',
-      'no-var': 'error',
-
-      // === Import Rules ===
-      'import/no-unresolved': [
-        2,
-        {
-          ignore: ['test-utils', '@vitejs/plugin-react'],
-        },
-      ],
-      'import/prefer-default-export': 'off',
-      'import/no-anonymous-default-export': 'off',
-      'import/no-extraneous-dependencies': 'off',
-      'import/first': 'error',
-      'import/no-duplicates': 'error',
-      'import/extensions': [
-        'error',
-        'ignorePackages',
-        {
-          js: 'never',
-          jsx: 'never',
-        },
-      ],
-      'import/newline-after-import': ['error', { count: 1 }],
-      'import/no-cycle': ['error', { maxDepth: Infinity }],
-      'import/no-mutable-exports': 'error',
-
-      // === React Rules (additional) ===
-      'react/no-array-index-key': 'warn',
-      'react/no-danger': 'warn',
-      'react/self-closing-comp': 'error',
-      'react/style-prop-object': 'error',
-
-      // === Project-Specific Overrides ===
       'no-console': 'off',
-      'no-unused-vars': 'off',
+      'no-else-return': ['error', { allowElseIf: false }],
+      'no-empty-function': ['error', { allow: ['arrowFunctions', 'functions', 'methods'] }],
+      'no-implicit-coercion': ['error', { boolean: false, number: true, string: true, allow: [] }],
+      'no-lonely-if': 'error',
+      'no-nested-ternary': 'warn',
+      'no-param-reassign': ['error', { props: false }],
+      'no-restricted-globals': [
+        'error',
+        { name: 'isFinite', message: 'Use Number.isFinite instead' },
+        { name: 'isNaN', message: 'Use Number.isNaN instead' },
+      ],
+      'no-restricted-syntax': ['warn', 'WithStatement'],
+      'no-return-assign': ['error', 'always'],
+      'no-shadow': ['error', { builtinGlobals: false, hoist: 'functions' }],
       'no-undef': 'off',
+      'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
+      'no-unused-vars': 'off',
+      'no-use-before-define': ['warn', { functions: false, classes: false, variables: false }],
+      'no-useless-return': 'error',
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'prefer-destructuring': ['warn', { VariableDeclarator: { array: false, object: true }, AssignmentExpression: { array: false, object: false } }],
+      'prefer-template': 'warn',
+      'radix': 'error',
+      'react-hooks/exhaustive-deps': 'error',
+      'react/function-component-definition': 'off',
       'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
       'react/jsx-props-no-spreading': 'off',
       'react/jsx-uses-react': 'off',
-      'react/react-in-jsx-scope': 'off',
-      'react/require-default-props': [
-        2,
-        {
-          functions: 'defaultArguments',
-        },
-      ],
-      'react/function-component-definition': 'off',
+      'react/no-array-index-key': 'warn',
+      'react/no-danger': 'warn',
       'react/prefer-stateless-function': 'off',
-      'react-hooks/exhaustive-deps': 'error',
-
-      // === Testing Library Rules ===
+      'react/react-in-jsx-scope': 'off',
+      'react/require-default-props': [2, { functions: 'defaultArguments' }],
+      'react/self-closing-comp': 'error',
+      'react/style-prop-object': 'error',
       'testing-library/await-async-queries': 'error',
       'testing-library/no-await-sync-queries': 'error',
       'testing-library/no-debugging-utils': 'warn',
       'testing-library/no-dom-import': 'off',
-      'testing-library/no-render-in-lifecycle': [
-        'error',
-        {
-          allowTestingFrameworkSetupHook: 'beforeEach',
-        },
-      ],
+      'testing-library/no-render-in-lifecycle': ['error', { allowTestingFrameworkSetupHook: 'beforeEach' }],
       'testing-library/render-result-naming-convention': 'off',
     },
 
