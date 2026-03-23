@@ -84,7 +84,7 @@ export const searchesReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
           if (key !== action.companionWindowId) {
-            object[key] = state[action.windowId][key]; // eslint-disable-line no-param-reassign
+            object[key] = state[action.windowId][key];
           }
           return object;
         }, {}),
@@ -115,12 +115,12 @@ export const searchesReducer = (state = {}, action) => {
               ));
 
           if (searchHasAnnotation) {
-            object[key] = { // eslint-disable-line no-param-reassign
+            object[key] = {
               ...search,
               selectedContentSearchAnnotationIds: [action.annotationId],
             };
           } else {
-            object[key] = search; // eslint-disable-line no-param-reassign
+            object[key] = search;
           }
           return object;
         }, {}),

@@ -95,7 +95,7 @@ export const selectCurrentAuthServices = createSelector(
 
     return Object.values(currentAuthServices.reduce((h, service) => {
       if (service && !h[service.id]) {
-        h[service.id] = service; // eslint-disable-line no-param-reassign
+        h[service.id] = service;
       }
 
       return h;
