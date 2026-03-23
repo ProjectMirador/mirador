@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys */
 const ActionTypes = {
   ADD_COMPANION_WINDOW: 'mirador/ADD_COMPANION_WINDOW',
   UPDATE_COMPANION_WINDOW: 'mirador/UPDATE_COMPANION_WINDOW',
