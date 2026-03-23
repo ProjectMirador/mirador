@@ -102,6 +102,7 @@ export default [
       'no-var': 'error',
       'prefer-const': 'error',
       'prefer-destructuring': ['warn', { VariableDeclarator: { array: false, object: true }, AssignmentExpression: { array: false, object: false } }],
+      'prefer-rest-params': 'error',
       'prefer-template': 'warn',
       'radix': 'error',
       'react-hooks/exhaustive-deps': 'error',
