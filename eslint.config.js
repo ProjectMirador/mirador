@@ -6,16 +6,6 @@ import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import importPlugin from 'eslint-plugin-import';
 import testingLibraryPlugin from 'eslint-plugin-testing-library';
 import jestDomPlugin from 'eslint-plugin-jest-dom';
-import { FlatCompat } from '@eslint/eslintrc';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
 
 export default [
   // Ignore patterns
@@ -26,17 +16,12 @@ export default [
       '**/coverage/**',
       '**/config/**',
       '**/styles/**',
-      '**/.eslint-config-local/**',
+      '**/packages/**',
     ],
   },
 
   // Base ESLint recommended rules
   js.configs.recommended,
-
-  // Apply local airbnb-style config using compat
-  ...compat.config({
-    extends: ['./.eslint-config-local/index.cjs'],
-  }),
 
   // Main configuration
   {
@@ -92,52 +77,133 @@ export default [
         { ignore: ['test-utils', '@vitejs/plugin-react'] },
       ],
       'import/prefer-default-export': 'off',
-      'max-len': [
+      // will be handled by prettier
+      'max-len': 'off',
+      // === Critical Code Quality Rules (from Airbnb) ===
+
+      // Prevent bugs
+      'no-param-reassign': ['error', { props: false }],
+      'no-shadow': ['error', { builtinGlobals: false, hoist: 'functions' }],
+      'eqeqeq': ['warn', 'smart'],
+      'no-restricted-globals': [
         'error',
         {
-          code: 130,
-          ignoreComments: true,
-          ignoreRegExpLiterals: true,
-          ignoreStrings: true,
-          ignoreTemplateLiterals: true,
+          name: 'isFinite',
+          message: 'Use Number.isFinite instead',
+        },
+        {
+          name: 'isNaN',
+          message: 'Use Number.isNaN instead',
         },
       ],
-      'no-console': 'off',
-      'no-mixed-operators': [
+      'no-restricted-syntax': ['warn', 'WithStatement'],
+
+      // Code organization
+      'prefer-destructuring': [
         'warn',
         {
-          allowSamePrecedence: false,
-          groups: [
-            ['&', '|', '^', '~', '<<', '>>', '>>>'],
-            ['==', '!=', '===', '!==', '>', '>=', '<', '<='],
-            ['&&', '||'],
-            ['in', 'instanceof'],
-          ],
+          VariableDeclarator: { array: false, object: true },
+          AssignmentExpression: { array: false, object: false },
         },
       ],
-      'no-restricted-globals': ['error'],
-      'no-restricted-syntax': ['warn', 'WithStatement'],
-      'no-undef': 'off',
-      'no-underscore-dangle': 'off',
-      'no-unused-expressions': [
+      'dot-notation': ['error', { allowKeywords: true }],
+      'prefer-template': 'warn',
+      'no-nested-ternary': 'warn',
+
+      // Error prevention
+      'consistent-return': 'error',
+      'default-case': ['error', { commentPattern: '^no default$' }],
+      'no-else-return': ['error', { allowElseIf: false }],
+      'no-return-assign': ['error', 'always'],
+      'no-useless-return': 'error',
+      'radix': 'error',
+
+      // Function quality
+      'complexity': ['warn', 20],
+      'no-empty-function': [
         'error',
-        { allowShortCircuit: true, allowTernary: true },
+        {
+          allow: ['arrowFunctions', 'functions', 'methods'],
+        },
       ],
-      'no-unused-vars': 'off',
+      'no-implicit-coercion': [
+        'error',
+        {
+          boolean: false,
+          number: true,
+          string: true,
+          allow: [],
+        },
+      ],
+      'no-lonely-if': 'error',
+
+      // Variable management
       'no-use-before-define': [
         'warn',
         {
-          classes: false,
           functions: false,
+          classes: false,
           variables: false,
         },
       ],
-      'react-hooks/exhaustive-deps': 'error',
-      'react/function-component-definition': 'off',
+      'no-unused-expressions': [
+        'error',
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+        },
+      ],
+
+      // === Additional High-Value Rules ===
+      'camelcase': [
+        'error',
+        {
+          properties: 'never',
+          ignoreDestructuring: false,
+        },
+      ],
+      'max-depth': ['warn', 4],
+      'max-params': ['warn', 5],
+      'prefer-const': 'error',
+      'no-var': 'error',
+
+      // === Import Rules ===
+      'import/no-unresolved': [
+        2,
+        {
+          ignore: ['test-utils', '@vitejs/plugin-react'],
+        },
+      ],
+      'import/prefer-default-export': 'off',
+      'import/no-anonymous-default-export': 'off',
+      'import/no-extraneous-dependencies': 'off',
+      'import/first': 'error',
+      'import/no-duplicates': 'error',
+      'import/extensions': [
+        'error',
+        'ignorePackages',
+        {
+          js: 'never',
+          jsx: 'never',
+        },
+      ],
+      'import/newline-after-import': ['error', { count: 1 }],
+      'import/no-cycle': ['error', { maxDepth: Infinity }],
+      'import/no-mutable-exports': 'error',
+
+      // === React Rules (additional) ===
+      'react/no-array-index-key': 'warn',
+      'react/no-danger': 'warn',
+      'react/self-closing-comp': 'error',
+      'react/style-prop-object': 'error',
+
+      // === Project-Specific Overrides ===
+      'no-console': 'off',
+      'no-unused-vars': 'off',
+      'no-undef': 'off',
       'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
       'react/jsx-props-no-spreading': 'off',
       'react/jsx-uses-react': 'off',
-      'react/prefer-stateless-function': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/require-default-props': [
         2,
@@ -145,14 +211,11 @@ export default [
           functions: 'defaultArguments',
         },
       ],
-      'sort-keys': [
-        'error',
-        'asc',
-        {
-          caseSensitive: false,
-          natural: false,
-        },
-      ],
+      'react/function-component-definition': 'off',
+      'react/prefer-stateless-function': 'off',
+      'react-hooks/exhaustive-deps': 'error',
+
+      // === Testing Library Rules ===
       'testing-library/await-async-queries': 'error',
       'testing-library/no-await-sync-queries': 'error',
       'testing-library/no-debugging-utils': 'warn',
