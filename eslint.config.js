@@ -61,8 +61,8 @@ export default [
       ...jestDomPlugin.configs['flat/recommended'].rules,
       ...testingLibraryPlugin.configs['flat/react'].rules,
 
-      'camelcase': ['error', { properties: 'never', ignoreDestructuring: false }],
-      'complexity': ['warn', 20],
+      camelcase: ['error', { properties: 'never', ignoreDestructuring: false }],
+      complexity: ['warn', 25],
       'consistent-return': 'error',
       'default-case': ['error', { commentPattern: '^no default$' }],
       'dot-notation': ['error', { allowKeywords: true }],

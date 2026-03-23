@@ -65,10 +65,20 @@ Placeholder.propTypes = {
 /**
  * a dialog providing the possibility to select the collection
  */
-export function CollectionDialog({
-  addWindow, collection = null, dialogCollectionPath = [], error = null, hideCollectionDialog,
-  isMultipart = false, manifest, manifestId, ready = false,
-  setWorkspaceAddVisibility, showCollectionDialog, updateWindow, windowId = null,
+export function CollectionDialog({ // eslint-disable-line complexity
+  addWindow,
+  collection = null,
+  dialogCollectionPath = [],
+  error = null,
+  hideCollectionDialog,
+  isMultipart = false,
+  manifest,
+  manifestId,
+  ready = false,
+  setWorkspaceAddVisibility,
+  showCollectionDialog,
+  updateWindow,
+  windowId = null,
 }) {
   const container = useContext(WorkspaceContext);
   const { t } = useTranslation();

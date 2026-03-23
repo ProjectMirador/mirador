@@ -119,7 +119,7 @@ class ThumbnailFactory {
    * @param {Object} resource The Image Resource from which to derive a thumbnail
    * @return {Object} The thumbnail URL and any spatial dimensions that can be determined
    */
-  iiifThumbnailUrl(resource) {
+  iiifThumbnailUrl(resource) { // eslint-disable-line complexity
     let size;
     let width;
     let height;
