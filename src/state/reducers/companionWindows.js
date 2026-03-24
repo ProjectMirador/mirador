@@ -19,7 +19,7 @@ export function companionWindowsReducer(state = {}, action) {
             windowId: action.id,
           };
           return newState;
-        }, {})),
+        }, {}),
       };
 
     case ActionTypes.REMOVE_WINDOW:
@@ -29,13 +29,16 @@ export function companionWindowsReducer(state = {}, action) {
         }
         return object;
       }, {});
+
     case ActionTypes.UPDATE_COMPANION_WINDOW:
       return update([action.id], orig => ({ ...(orig || {}), ...action.payload }), state);
 
     case ActionTypes.REMOVE_COMPANION_WINDOW:
       return omit(state, action.id);
+
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.companionWindows || [];
+
     case ActionTypes.TOGGLE_TOC_NODE:
       return update([action.id, 'tocNodes'], orig => ({ ...(orig || {}), ...action.payload }), state);
     default:
