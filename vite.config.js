@@ -65,6 +65,16 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    // Copy fixtures to dist for Netlify
+    process.env.NETLIFY && {
+      closeBundle: async () => {
+        const fixturesSource = path.resolve(__dirname, '__tests__/fixtures');
+        const fixturesDest = path.resolve(__dirname, 'dist/__tests__/fixtures');
+        await fs.cp(fixturesSource, fixturesDest, { recursive: true });
+        console.log('[copy] Copied fixtures to dist');
+      },
+      name: 'copy-fixtures',
+    },
     {
       /**
         * Middleware to rewrite HTML URLs to point to the deep path
