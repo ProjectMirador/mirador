@@ -48,6 +48,7 @@
     "errorDialogConfirm": "OK",
     "errorDialogTitle": "An error occurred",
     "exitFullScreen": "Exit full screen",
+    "imageFailedToLoad": "Problem loading image. See console for details.",
     "expandSection": "Expand \"{{section}}\" section",
     "expandSidePanel": "Expand sidebar",
     "exportCopied": "The workspace configuration was copied to your clipboard",

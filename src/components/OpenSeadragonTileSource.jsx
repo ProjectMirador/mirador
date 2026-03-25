@@ -2,12 +2,14 @@ import Openseadragon from 'openseadragon';
 import PropTypes from 'prop-types';
 import { useContext, useEffect, useRef } from 'react';
 import OpenSeadragonViewerContext from '../contexts/OpenSeadragonViewerContext';
+import FailedImageContext from '../contexts/FailedImageContext';
 
 /** OSD tile source shim that adds + updates its tile source data */
 export default function OpenSeadragonTileSource({
   index = undefined, opacity = undefined, fitBounds = undefined, tileSource = {}, url = undefined,
 }) {
   const viewer = useContext(OpenSeadragonViewerContext);
+  const { notifyFailure, fallbackImage } = useContext(FailedImageContext);
   const tiledImage = useRef(undefined);
 
   useEffect(() => {
@@ -31,6 +33,20 @@ export default function OpenSeadragonTileSource({
   useEffect(() => {
     if (!viewer?.current) return undefined;
 
+    const loadFallback = () => {
+      if (!fallbackImage) {
+        return;
+      }
+
+      viewer.current.addTiledImage({
+        tileSource: { type: 'image', url: fallbackImage },
+        index,
+        opacity,
+        fitBounds: fitBounds ? new Openseadragon.Rect(...fitBounds) : undefined,
+        success: (ev) => { tiledImage.current = ev.item; },
+      });
+    };
+
     const promise = new Promise((resolve, reject) => {
       const localTileSource = (url && { type: 'image', url })
         || (((typeof tileSource === 'string' || tileSource instanceof String) && tileSource)
@@ -38,15 +54,23 @@ export default function OpenSeadragonTileSource({
         || { ...tileSource });
 
       viewer.current?.addTiledImage({
-        error: (event) => reject(event),
-        fitBounds: (fitBounds ? new Openseadragon.Rect(...fitBounds) : undefined),
+        tileSource: localTileSource,
         index,
         opacity,
+        fitBounds: fitBounds ? new Openseadragon.Rect(...fitBounds) : undefined,
+
         success: (event) => resolve(event),
-        tileSource: localTileSource,
+
+        error: (event) => {
+          notifyFailure();
+          loadFallback();
+
+          reject(event);
+        },
       });
-    }).then((event) => {
-      tiledImage.current = event.item;
+    }).then((event) => { tiledImage.current = event.item;
+    }).catch((err) => {
+      console.warn('[Mirador: OSD tile image load failed]', err);
     });
 
     const osd = viewer.current;

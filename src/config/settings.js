@@ -8,6 +8,8 @@ export default {
     height: 50,
     width: 50,
   },
+  // Override the default fallback image with a custom one for loading failures
+  // fallbackImage: 'path/to/your/custom/fallback.jpg',
   selectedTheme: 'light', // dark also available
   themes: {
     dark: {

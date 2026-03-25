@@ -103,6 +103,17 @@ $ npx vitest __tests__/integration/mirador/tests/sequence-switching.test.js --ui
 ```sh
 $ npm run lint
 ```
+## Image Fallback
+
+Mirador automatically displays a simple fallback placeholder when images fail to load. Customize the fallback image via configuration:
+
+```javascript
+const config = {
+  fallbackImage: 'https://example.com/custom-fallback.jpg',
+};
+```
+
+The error message is translatable via the `imageFailedToLoad` translation key. Detailed error information is logged to the console for debugging.
 
 ## Debugging
 

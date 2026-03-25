@@ -13,6 +13,7 @@ import { prefixer } from 'stylis';
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import createI18nInstance from '../i18n';
+import FailedImageProvider from '../contexts/FailedImageProvider';
 import FullScreenContext from '../contexts/FullScreenContext';
 import LocaleContext from '../contexts/LocaleContext';
 
@@ -125,7 +126,9 @@ export function AppProviders({
             <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
               <ThemeProvider theme={createTheme((theme))}>
                 <MaybeDndProvider dndManager={dndManager}>
-                  {children}
+                  <FailedImageProvider>
+                    {children}
+                  </FailedImageProvider>
                 </MaybeDndProvider>
               </ThemeProvider>
             </CacheProvider>
