@@ -24,7 +24,7 @@ export function ThumbnailNavigation({
 }) {
   const { t } = useTranslation();
   const scrollbarSize = 15;
-  const spacing = 8; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
+  const spacing = 12; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
   const gridRef = useRef();
   const previousView = useRef(view);
   const canvasWorlds = useCanvasWorldService();
@@ -68,7 +68,7 @@ export function ThumbnailNavigation({
   }, [canvasIndex]);
 
   /** */
-  const handleKeyDown = e => {
+  const handleKeyDown = (e) => {
     let nextKey = 'ArrowRight';
     let previousKey = 'ArrowLeft';
     if (position === 'far-right') {
@@ -91,7 +91,7 @@ export function ThumbnailNavigation({
    * When on right, row height
    * When on bottom, column width
    */
-  const calculateScaledSize = index => {
+  const calculateScaledSize = (index) => {
     const canvases = canvasGroupings[index];
     if (!canvases) return thumbnailNavigation.width + spacing;
 
@@ -100,7 +100,7 @@ export function ThumbnailNavigation({
     switch (position) {
       case 'far-right': {
         const calc = Math.floor(
-          (calculatingWidth(canvases.length) * bounds[3]) / bounds[2],
+          calculatingWidth(canvases.length) * bounds[3] / bounds[2]
         );
         if (!Number.isInteger(calc)) return thumbnailNavigation.width + spacing;
         return calc + spacing;
@@ -109,9 +109,8 @@ export function ThumbnailNavigation({
       default: {
         if (bounds[3] === 0) return thumbnailNavigation.width + spacing;
         const calc = Math.ceil(
-          ((thumbnailNavigation.height - scrollbarSize - spacing - 4)
-            * bounds[2])
-            / bounds[3],
+          (thumbnailNavigation.height - scrollbarSize - spacing - 4)
+           * bounds[2] / bounds[3],
         );
         return calc;
       }
@@ -119,7 +118,7 @@ export function ThumbnailNavigation({
   };
 
   /** */
-  const calculatingWidth = canvasesLength => {
+  const calculatingWidth = (canvasesLength) => {
     if (canvasesLength === 1) {
       return thumbnailNavigation.width;
     }
@@ -128,9 +127,7 @@ export function ThumbnailNavigation({
 
   /** */
   const style = useCallback(() => {
-    const width = view === 'book'
-      ? thumbnailNavigation.width * 2
-      : thumbnailNavigation.width;
+    const width = view === 'book' ? thumbnailNavigation.width * 2 : thumbnailNavigation.width;
 
     switch (position) {
       case 'far-right':
@@ -172,7 +169,9 @@ export function ThumbnailNavigation({
   };
   return (
     <Paper
-      className={classNames(ns('thumb-navigation'))}
+      className={classNames(
+        ns('thumb-navigation'),
+      )}
       sx={{
         '&:focus': {
           boxShadow: 0,
@@ -185,10 +184,9 @@ export function ThumbnailNavigation({
       style={style()}
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      role="grid"
       ref={paperRef}
     >
-      <div role="row" style={{ height: '100%', width: '100%' }}>
+      <div style={{ height: '100%', width: '100%' }}>
         {canvasGroupings.length > 0 && position === 'far-bottom' && (
           <Grid
             columnCount={canvasGroupings.length}

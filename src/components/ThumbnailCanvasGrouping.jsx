@@ -53,8 +53,8 @@ export class ThumbnailCanvasGrouping extends PureComponent {
     const currentGroupings = canvasGroupings[itemIndex];
     const SPACING = 12;
 
-    // In react-window v2 horizontal lists, width is not provided in style
-    // The height value in style is actually the width for horizontal lists
+    // In react-window v2 Grid (horizontal layout), columnWidth is passed as style.height
+    // For List (vertical layout), rowHeight is passed as style.height
     const isHorizontal = position === 'far-bottom';
     let calculatedWidth = null;
     if (isHorizontal && style.height) {
@@ -72,9 +72,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
         style={{
           ...style,
           boxSizing: 'content-box',
-          height: Number.isInteger(style.height)
-            ? style.height - SPACING
-            : null,
+          height: Number.isInteger(style.height) ? style.height - SPACING : null,
           left: Number.isInteger(style.left) ? style.left + SPACING / 2 : null,
           padding: SPACING / 2,
           top: Number.isInteger(style.top) ? style.top + SPACING / 2 : null,
@@ -109,13 +107,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             width: position === 'far-bottom' ? 'auto' : `${style.width}px`,
           })}
           className={classNames(
-            ns([
-              'thumbnail-nav-canvas',
-              `thumbnail-nav-canvas-${itemIndex}`,
-              this.currentCanvasClass(
-                currentGroupings.map(canvas => canvas.index),
-              ),
-            ]),
+            ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${itemIndex}`, this.currentCanvasClass( currentGroupings.map(canvas => canvas.index))]),
           )}
         >
           {currentGroupings.map((canvas, i) => (
@@ -123,11 +115,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
               key={canvas.id}
               resource={canvas}
               labelled={showThumbnailLabels}
-              maxHeight={
-                position === 'far-right'
-                  ? style.height - 1.5 * SPACING
-                  : height - 1.5 * SPACING
-              }
+              maxHeight={(position === 'far-right') ? style.height - (1.5 * SPACING) : height - (1.5 * SPACING)}
               variant="inside"
             />
           ))}

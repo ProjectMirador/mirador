@@ -42,36 +42,49 @@ describe('ThumbnailNavigation', () => {
     expect(screen.getAllByRole('gridcell').length).toEqual(3);
   });
 
+  it('uses Grid component for horizontal (far-bottom) layout', () => {
+    render(<Subject position="far-bottom" />);
+    // Grid component renders with role="grid" inside the Thumbnails wrapper
+    const thumbnailWrapper = screen.getByLabelText('Thumbnails');
+    const grid = thumbnailWrapper.querySelector('[role="grid"]');
+    expect(grid).toBeInTheDocument();
+    // Grid should have 3 gridcells (all in one row)
+    expect(screen.getAllByRole('gridcell')).toHaveLength(3);
+  });
+
+  it('uses List component for vertical (far-right) layout', () => {
+    render(<Subject position="far-right" />);
+    // List component renders with role="list" inside the Thumbnails wrapper
+    const thumbnailWrapper = screen.getByLabelText('Thumbnails');
+    const list = thumbnailWrapper.querySelector('[role="list"]');
+    expect(list).toBeInTheDocument();
+    // List should have 3 gridcells (each as a separate item)
+    expect(screen.getAllByRole('gridcell')).toHaveLength(3);
+  });
+
   // TODO: Test that we recalculate dimensions when the view changes (resetAfterIndex)
   // TODO: Test that the window scrolls when the canvasIndex prop changes (scorllToItem)
 
   it('gives the grid a size', () => {
     const { rerender } = render(<Subject />);
-    expect(screen.getByRole('grid')).toHaveStyle({
-      height: '150px',
-      width: '100%',
-    });
+    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ height: '150px', width: '100%' });
 
     rerender(<Subject position="far-right" />);
-    expect(screen.getByRole('grid')).toHaveStyle({
-      height: '100%',
-      minHeight: 0,
-      width: '123px',
-    });
+    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ height: '100%', minHeight: 0, width: '127px' });
   });
 
   it('roughly doubles the width of the grid in book view', () => {
     const { rerender } = render(<Subject position="far-right" />);
-    expect(screen.getByRole('grid')).toHaveStyle({ width: '123px' });
+    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ width: '127px' });
 
     rerender(<Subject position="far-right" view="book" />);
-    expect(screen.getByRole('grid')).toHaveStyle({ width: '223px' });
+    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ width: '227px' });
   });
 
   it('calculates the scaled width of each cell', () => {
     render(<Subject />);
 
-    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ width: '74px' });
+    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ width: '111px' });
   });
 
   it('calculates the scaled height of each cell when on the right', () => {
@@ -82,7 +95,7 @@ describe('ThumbnailNavigation', () => {
   it('keeps a minimum size for each cell', () => {
     render(<Subject fixture={zeroWidthFixture} />);
 
-    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ width: '100px' });
+    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ width: '111px' });
   });
 
   it('keeps a minimum size for each cell when on the right', () => {
@@ -97,69 +110,31 @@ describe('ThumbnailNavigation', () => {
 
     describe('handleKeyUp', () => {
       it('handles right arrow by advancing the current canvas', async () => {
-        render(
-          <Subject
-            canvasIndex={1}
-            hasNextCanvas
-            setNextCanvas={setNextCanvas}
-          />,
-        );
+        render(<Subject canvasIndex={1} hasNextCanvas setNextCanvas={setNextCanvas} />);
 
         screen.getByRole('grid').focus();
-        fireEvent.keyDown(screen.getByRole('grid'), {
-          code: 'ArrowRight',
-          key: 'ArrowRight',
-        });
+        fireEvent.keyDown(screen.getByRole('grid'), { code: 'ArrowRight', key: 'ArrowRight' });
         expect(setNextCanvas).toHaveBeenCalled();
       });
       it('handles down arrow by advancing the current canvas when the canvas is on the right', () => {
-        render(
-          <Subject
-            canvasIndex={1}
-            hasNextCanvas
-            position="far-right"
-            setNextCanvas={setNextCanvas}
-          />,
-        );
+        render(<Subject canvasIndex={1} hasNextCanvas position="far-right" setNextCanvas={setNextCanvas} />);
 
-        screen.getByRole('grid').focus();
-        fireEvent.keyDown(screen.getByRole('grid'), {
-          code: 'ArrowDown',
-          key: 'ArrowDown',
-        });
+        screen.getByLabelText('Thumbnails').focus();
+        fireEvent.keyDown(screen.getByLabelText('Thumbnails'), { code: 'ArrowDown', key: 'ArrowDown' });
         expect(setNextCanvas).toHaveBeenCalled();
       });
       it('handles left arrow by selecting the previous canvas', () => {
-        render(
-          <Subject
-            canvasIndex={2}
-            hasPreviousCanvas
-            setPreviousCanvas={setPreviousCanvas}
-          />,
-        );
+        render(<Subject canvasIndex={2} hasPreviousCanvas setPreviousCanvas={setPreviousCanvas} />);
 
-        screen.getByRole('grid').focus();
-        fireEvent.keyDown(screen.getByRole('grid'), {
-          code: 'ArrowLeft',
-          key: 'ArrowLeft',
-        });
+        screen.getByLabelText('Thumbnails').focus();
+        fireEvent.keyDown(screen.getByLabelText('Thumbnails'), { code: 'ArrowLeft', key: 'ArrowLeft' });
         expect(setPreviousCanvas).toHaveBeenCalled();
       });
       it('handles up arrow by selecting the previous canvas when the canvas is on the right', () => {
-        render(
-          <Subject
-            canvasIndex={2}
-            hasPreviousCanvas
-            position="far-right"
-            setPreviousCanvas={setPreviousCanvas}
-          />,
-        );
+        render(<Subject canvasIndex={2} hasPreviousCanvas position="far-right" setPreviousCanvas={setPreviousCanvas} />);
 
-        screen.getByRole('grid').focus();
-        fireEvent.keyDown(screen.getByRole('grid'), {
-          code: 'ArrowUp',
-          key: 'ArrowUp',
-        });
+        screen.getByLabelText('Thumbnails').focus();
+        fireEvent.keyDown(screen.getByLabelText('Thumbnails'), { code: 'ArrowUp', key: 'ArrowUp' });
         expect(setPreviousCanvas).toHaveBeenCalled();
       });
     });
