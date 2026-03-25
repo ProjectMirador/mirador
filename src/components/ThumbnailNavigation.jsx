@@ -1,7 +1,7 @@
 import { useCallback, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@mui/material/Paper';
-import { List } from 'react-window';
+import { List, Grid } from 'react-window';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useCanvasWorldService } from '../hooks';
@@ -42,9 +42,21 @@ export function ThumbnailNavigation({
     if (view === 'book') index = Math.ceil(index / 2);
     // Only scroll if the index is valid
     if (gridRef.current && index >= 0 && index < canvasGroupings.length) {
-      gridRef.current.scrollToRow({ align: 'center', index });
+      // For horizontal Grid, scroll to column; for vertical List, scroll to row
+      if (position === 'far-bottom') {
+        // react-window Grid API in v2
+        gridRef.current.scrollToCell({
+          columnIndex: index,
+          rowIndex: 0,
+          columnAlign: 'center',
+          rowAlign: 'center',
+        });
+      } else {
+        // react-window List API in v2
+        gridRef.current.scrollToRow({ index, align: 'center' });
+      }
     }
-  }, [canvasIndex, view, canvasGroupings.length]);
+  }, [canvasIndex, view, canvasGroupings.length, position]);
 
   // Prevent loss of focus when navigating thumbnails
   const paperRef = useRef(null);
@@ -177,20 +189,32 @@ export function ThumbnailNavigation({
       ref={paperRef}
     >
       <div role="row" style={{ height: '100%', width: '100%' }}>
-        {canvasGroupings.length > 0 && (
+        {canvasGroupings.length > 0 && position === 'far-bottom' && (
+          <Grid
+            columnCount={canvasGroupings.length}
+            columnWidth={calculateScaledSize}
+            rowCount={1}
+            rowHeight={() => thumbnailNavigation.height - spacing - scrollbarSize}
+            height={thumbnailNavigation.height}
+            width="100%"
+            style={{
+              direction: htmlDir === 'rtl' ? 'rtl' : 'ltr',
+            }}
+            cellProps={rowData}
+            gridRef={gridRef}
+            cellComponent={ThumbnailCanvasGrouping}
+          />
+        )}
+        {canvasGroupings.length > 0 && position === 'far-right' && (
           <List
             defaultHeight={100}
             rowCount={canvasGroupings.length}
             rowHeight={calculateScaledSize}
             style={{
               direction: htmlDir === 'rtl' ? 'rtl' : 'ltr',
-              height:
-                position === 'far-right'
-                  ? '100%'
-                  : `${thumbnailNavigation.height}px`,
+              height: '100%',
               width: '100%',
             }}
-            direction={position === 'far-bottom' ? 'horizontal' : 'vertical'}
             rowProps={rowData}
             listRef={gridRef}
             rowComponent={ThumbnailCanvasGrouping}
