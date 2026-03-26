@@ -31,6 +31,7 @@ export * from './IIIFAuthentication';
 export * from './IIIFDropTarget';
 export * from './IIIFIFrameCommunication';
 export * from './IIIFThumbnail';
+export * from './ImageFailureMessage';
 export * from './LabelValueMetadata';
 export * from './LanguageSettings';
 export * from './LayersPanel';

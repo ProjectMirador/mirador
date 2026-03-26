@@ -13,6 +13,7 @@ import { PluginHook } from './PluginHook';
 import { OSDReferences } from '../plugins/OSDReferences';
 import OpenSeadragonComponent from './OpenSeadragonComponent';
 import TileSource from './OpenSeadragonTileSource';
+import { ImageFailureMessage } from './ImageFailureMessage';
 
 const StyledSection = styled('section')({
   cursor: 'grab',
@@ -137,6 +138,7 @@ export function OpenSeadragonViewer({
       { drawAnnotations
           && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
       { enhancedChildren }
+      <ImageFailureMessage />
       <PluginHook targetName="OpenSeadragonViewer" viewer={viewer} {...pluginProps} />
     </OpenSeadragonComponent>
   );
