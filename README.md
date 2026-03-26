@@ -95,7 +95,7 @@ $ npm test -- --ui
 
 You can run Vitest without the additional linting and size checks in our `npm test` command. You can also test a single file:
 ```sh
-$ npx vitest __tests__/integration/mirador/tests/sequence-switching.test.js --ui
+$ npx vitest __tests__/integration/tests/sequence-switching.test.js --ui
 ```
 
 ## Linting the project
