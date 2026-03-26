@@ -19,9 +19,9 @@ export function SelectCollection({
   }, [collectionPath, manifestId, showCollectionDialog, windowId]);
 
   return (
-    <Grid container sx={{ width: '100%', alignContent: 'center', justifyContent: 'center' }}>
+    <Grid container sx={{ alignContent: 'center', justifyContent: 'center', width: '100%' }}>
       <Stack>
-        <Typography variant="h4" component="p" sx={{ textAlign: 'center', mb: 2 }}>
+        <Typography variant="h4" component="p" sx={{ mb: 2, textAlign: 'center' }}>
           <em>
             {t('noItemSelected')}
           </em>

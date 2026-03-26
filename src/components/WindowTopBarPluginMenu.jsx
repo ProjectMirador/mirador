@@ -11,7 +11,7 @@ import { usePlugins } from '../extend/usePlugins';
  *
  */
 export function WindowTopBarPluginMenu({
-  windowId, menuIcon = <MoreVertIcon />, pluginTarget = 'WindowTopBarPluginMenu', 
+  windowId, menuIcon = <MoreVertIcon />, pluginTarget = 'WindowTopBarPluginMenu',
 }) {
   const { t } = useTranslation();
   const container = useContext(WorkspaceContext);

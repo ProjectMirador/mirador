@@ -120,17 +120,17 @@ export function ManifestListItem({
         <Grid
           container
           className={ns('manifest-list-item')}
-          sx={{ width: '100%', alignItems: 'center' }}
+          sx={{ alignItems: 'center', width: '100%' }}
         >
           <Grid size={{ sm: 5, xs: 12 }}>
             <ButtonBase
               ref={buttonRef}
               className={ns('manifest-list-item-title')}
               onClick={handleOpenButtonClick}
-              sx={{ justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}
+              sx={{ alignItems: 'center', justifyContent: 'flex-start', width: '100%' }}
             >
               <Grid container component="div" sx={{ width: '100%' }}>
-                <Grid size={3} sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }} >
+                <Grid size={3} sx={{ alignItems: 'center', display: 'flex', justifyContent: 'flex-start' }}>
                   {thumbnail ? (
                     <StyledThumbnail
                       className={[ns('manifest-list-item-thumb')]}
@@ -156,7 +156,7 @@ export function ManifestListItem({
                     />
                   )}
                 </Grid>
-                <Grid size={9} sx={{ paddingLeft: 2, alignContent: 'center' }}>
+                <Grid size={9} sx={{ alignContent: 'center', paddingLeft: 2 }}>
                   {isCollection && (
                     <Typography component="div" variant="overline" sx={{ textAlign: 'left' }}>
                       {t(isMultipart ? 'multipartCollection' : 'collection')}
@@ -170,7 +170,7 @@ export function ManifestListItem({
             </ButtonBase>
           </Grid>
 
-          <Grid size={{ sm: 4, xs: 8 }} >
+          <Grid size={{ sm: 4, xs: 8 }}>
             <Typography className={ns('manifest-list-item-provider')}>
               {provider}
             </Typography>

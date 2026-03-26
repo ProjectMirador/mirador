@@ -12,7 +12,6 @@ function createWrapper(props, suspenseFallback) {
   );
 }
 
-/* eslint-disable testing-library/no-node-access */
 describe('AudioViewer', () => {
   describe('render', () => {
     it('audioResources', () => {

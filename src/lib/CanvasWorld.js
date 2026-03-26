@@ -13,7 +13,7 @@ export default class CanvasWorld {
     this.canvases = miradorCanvases;
     this.layers = layers;
     this.viewingDirection = viewingDirection;
-    this._canvasDimensions = null; // eslint-disable-line no-underscore-dangle
+    this._canvasDimensions = null;
   }
 
   /** */
@@ -23,8 +23,8 @@ export default class CanvasWorld {
 
   /** */
   get canvasDimensions() {
-    if (this._canvasDimensions) { // eslint-disable-line no-underscore-dangle
-      return this._canvasDimensions; // eslint-disable-line no-underscore-dangle
+    if (this._canvasDimensions) {
+      return this._canvasDimensions;
     }
 
     const [dirX, dirY] = this.canvasDirection;
@@ -66,7 +66,7 @@ export default class CanvasWorld {
     const worldHeight = dirY === 0 ? scale : Math.abs(incY);
     const worldWidth = dirX === 0 ? scale : Math.abs(incX);
 
-    this._canvasDimensions = canvasDims // eslint-disable-line no-underscore-dangle
+    this._canvasDimensions = canvasDims
       .reduce((acc, dims) => {
         acc.push({
           ...dims,
@@ -77,7 +77,7 @@ export default class CanvasWorld {
         return acc;
       }, []);
 
-    return this._canvasDimensions; // eslint-disable-line no-underscore-dangle
+    return this._canvasDimensions;
   }
 
   /**

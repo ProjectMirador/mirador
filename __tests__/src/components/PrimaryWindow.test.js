@@ -19,8 +19,8 @@ describe('PrimaryWindow', () => {
   it('should render expected elements', async () => {
     createWrapper({ isFetching: false });
     await screen.findByTestId('test-window');
-    expect(document.querySelector('.mirador-primary-window')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
-    expect(document.querySelector('.mirador-companion-area-left')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
+    expect(document.querySelector('.mirador-primary-window')).toBeInTheDocument();
+    expect(document.querySelector('.mirador-companion-area-left')).toBeInTheDocument();
   });
   it('should render children when available', () => {
     createWrapper({ children: <span>hi</span>, isFetching: false });
@@ -34,7 +34,7 @@ describe('PrimaryWindow', () => {
     createWrapper({ isFetching: false, view: 'gallery' });
     await screen.findByTestId('test-window');
     await waitFor(() => {
-      expect(document.querySelector('#xyz-gallery')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
+      expect(document.querySelector('#xyz-gallery')).toBeInTheDocument();
     });
   });
   it('should render <CollectionDialog> and <SelectCollection> if manifest is collection and isCollectionDialogVisible', async () => {
@@ -74,7 +74,7 @@ describe('PrimaryWindow', () => {
       { preloadedState: { manifests, windows: { xyz } } },
     );
     await waitFor(() => {
-      expect(document.querySelector('source:nth-of-type(1)')).toHaveAttribute('type', 'application/pdf'); // eslint-disable-line testing-library/no-node-access
+      expect(document.querySelector('source:nth-of-type(1)')).toHaveAttribute('type', 'application/pdf');
     });
   });
 });

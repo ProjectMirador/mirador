@@ -33,7 +33,7 @@ const CanvasLabel = styled('h4', { name: 'SearchHit', slot: 'canvasLabel' })(({ 
 }));
 
 const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerState, theme }) => ({
-  // eslint-disable-next-line no-nested-ternary
+
   backgroundColor: theme.palette.hitCounter.default,
   ...(ownerState.windowSelected && {
     backgroundColor: theme.palette.highlights.primary,
@@ -198,6 +198,6 @@ SearchHit.propTypes = {
   selected: PropTypes.bool,
   showDetails: PropTypes.func,
   total: PropTypes.number,
-  windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+  windowId: PropTypes.string.isRequired,
   windowSelected: PropTypes.bool,
 };

@@ -120,7 +120,7 @@ export function AnnotationsOverlay({
     const canvas = canvasWorld.canvasAtPoint(point);
     if (!canvas) return;
     const [
-      _canvasX, _canvasY, canvasWidth, canvasHeight, // eslint-disable-line no-unused-vars
+      _canvasX, _canvasY, canvasWidth, canvasHeight,
     ] = canvasWorld.canvasToWorldCoordinates(canvas.id);
 
     // get all the annotations that contain the click

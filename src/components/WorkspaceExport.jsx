@@ -1,4 +1,6 @@
-import { useCallback, useId, useMemo, useState } from 'react';
+import {
+  useCallback, useId, useMemo, useState,
+} from 'react';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -27,9 +29,8 @@ export function WorkspaceExport({
   const exportedState = useMemo(() => JSON.stringify(exportableState, null, 2), [exportableState]);
   const onCopyClick = useCallback(() => {
     copy(exportedState);
-    setCopied(true)
-  }, [exportedState, setCopied])
-
+    setCopied(true);
+  }, [exportedState, setCopied]);
 
   if (copied) {
     return (

@@ -11,7 +11,7 @@ const StyledVisibleNode = styled('div')(() => ({
 
 /** */
 function getStartCanvasId(node) {
-  const jsonld = node.data.__jsonld; // eslint-disable-line no-underscore-dangle
+  const jsonld = node.data.__jsonld;
   if (jsonld.startCanvas && typeof jsonld.startCanvas === 'string') {
     return jsonld.startCanvas;
   }

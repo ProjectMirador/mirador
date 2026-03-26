@@ -156,7 +156,7 @@ export function WorkspaceMosaic({
 WorkspaceMosaic.propTypes = {
   layout: PropTypes.oneOfType(
     [PropTypes.object, PropTypes.string],
-  ), // eslint-disable-line react/forbid-prop-types
+  ),
   updateWorkspaceMosaicLayout: PropTypes.func.isRequired,
   windowIds: PropTypes.arrayOf(PropTypes.string),
   workspaceId: PropTypes.string.isRequired,

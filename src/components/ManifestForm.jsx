@@ -70,7 +70,7 @@ export function ManifestForm({
           </Grid>
         )}
         <Grid size="auto">
-          <Button 
+          <Button
             id="fetchBtn"
             type="submit"
             variant="contained"

@@ -37,7 +37,7 @@ describe('Window', () => {
   });
   it('should render <PrimaryWindow>', () => {
     createWrapper();
-    expect(document.querySelector('.mirador-primary-window')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
+    expect(document.querySelector('.mirador-primary-window')).toBeInTheDocument();
   });
   // See ErrorContent.test.js for futher testing of this functionality
   it('renders alert box when there is an error', async () => {

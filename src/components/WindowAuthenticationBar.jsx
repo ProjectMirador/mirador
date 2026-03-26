@@ -12,9 +12,9 @@ import SanitizedHtml from '../containers/SanitizedHtml';
 import { PluginHook } from './PluginHook';
 
 const StyledTopBar = styled('div')(({ theme }) => ({
+  alignItems: 'center',
   backgroundColor: theme.palette.secondary.main,
   color: theme.palette.secondary.contrastText,
-  alignItems: 'center',
   display: 'flex',
   padding: theme.spacing(1),
 }));
@@ -49,7 +49,6 @@ export function WindowAuthenticationBar({
         backgroundColor: theme.palette.secondary.contrastText,
         lineHeight: '1.5rem',
       })}
-
       {...ConfirmProps}
     >
       {confirmButton || t('login')}

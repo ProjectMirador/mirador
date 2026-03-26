@@ -89,7 +89,7 @@ export function WindowSideBarButtons({
   sideBarPanel = 'closed',
 }) {
   const { t } = useTranslation();
-  const { PluginComponents } = usePlugins("WindowSideBarButtons");
+  const { PluginComponents } = usePlugins('WindowSideBarButtons');
   /** */
   const handleChange = (event, value) => { addCompanionWindow(value); };
 

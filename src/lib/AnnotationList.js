@@ -21,11 +21,11 @@ export default class AnnotationList {
 
   /** */
   get resources() {
-    this._resources = this._resources || (() => { // eslint-disable-line no-underscore-dangle
+    this._resources = this._resources || (() => {
       if (!this.json || !this.json.resources) return [];
 
       return flatten([this.json.resources]).map(resource => new AnnotationResource(resource));
     })();
-    return this._resources; // eslint-disable-line no-underscore-dangle
+    return this._resources;
   }
 }

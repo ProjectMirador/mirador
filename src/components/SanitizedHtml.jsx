@@ -24,7 +24,7 @@ export function SanitizedHtml({
   return (
     <Root
       className={[ns('third-party-html'), classes.root].join(' ')}
-      dangerouslySetInnerHTML={{ // eslint-disable-line react/no-danger
+      dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(htmlString, htmlRules[ruleSet]),
       }}
       {...rest}
