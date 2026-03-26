@@ -23,12 +23,12 @@ export function getExportableState(state) {
 
   return Object.entries(exportConfig).reduce((acc, [stem, value]) => {
     if (value === true) {
-      acc[stem] = state[stem];
+      acc[stem] = state[stem];  // eslint-disable-line no-param-reassign
     } else if (value.filter) {
-      acc[stem] = Object.entries(state[stem])
+      acc[stem] = Object.entries(state[stem])  // eslint-disable-line no-param-reassign
         .filter(value.filter)
         .reduce((stemAcc, [k, v]) => {
-          stemAcc[k] = v;
+          stemAcc[k] = v;  // eslint-disable-line no-param-reassign
           return stemAcc;
         }, {});
     }

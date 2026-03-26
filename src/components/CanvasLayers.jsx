@@ -225,7 +225,7 @@ export function CanvasLayers({
     );
 
     const payload = layers.reduce((acc, layer) => {
-      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) };
+      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) }; // eslint-disable-line no-param-reassign
       return acc;
     }, {});
 
@@ -246,7 +246,7 @@ export function CanvasLayers({
     const sortedLayers = reorder(layers.map(l => l.id), layers.findIndex(l => l.id === layerId), 0);
 
     const payload = layers.reduce((acc, layer) => {
-      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) };
+      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) }; // eslint-disable-line no-param-reassign
       return acc;
     }, {});
 
@@ -257,7 +257,7 @@ export function CanvasLayers({
     const sortedLayers = reorder(layers.map(l => l.id), layers.findIndex(l => l.id === layerId), layers.length - 1);
 
     const payload = layers.reduce((acc, layer) => {
-      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) };
+      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) }; // eslint-disable-line no-param-reassign
       return acc;
     }, {});
 

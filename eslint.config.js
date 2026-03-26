@@ -88,13 +88,7 @@ export default [
       'no-lonely-if': 'error',
       'no-nested-ternary': 'warn',
       'no-new-func': 'error',
-      'no-param-reassign': [
-        'error',
-        {
-          props: true,
-          ignorePropertyModificationsFor: ['acc', 'accumulator', 'context', 'event', 'h', 'newState', 'object', 'req', 'responseAction', 'stemAcc'],
-        },
-      ],
+      'no-param-reassign': ['error', { props: true}],
       'no-restricted-globals': [
         'error',
         { name: 'isFinite', message: 'Use Number.isFinite instead' },

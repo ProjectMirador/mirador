@@ -32,7 +32,7 @@ export const errorsReducer = (state = defaultState, action) => {
     case ActionTypes.REMOVE_ERROR:
       ret = Object.keys(state).reduce((object, key) => {
         if (key !== action.id) {
-          object[key] = state[key];
+          object[key] = state[key]; // eslint-disable-line no-param-reassign
         }
         return object;
       }, {});

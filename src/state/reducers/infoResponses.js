@@ -48,7 +48,7 @@ export const infoResponsesReducer = (state = {}, action) => {
     case ActionTypes.REMOVE_INFO_RESPONSE:
       return Object.keys(state).reduce((object, key) => {
         if (key !== action.infoId) {
-          object[key] = state[key];
+          object[key] = state[key]; // eslint-disable-line no-param-reassign
         }
         return object;
       }, {});

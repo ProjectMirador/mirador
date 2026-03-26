@@ -127,7 +127,7 @@ export function AnnotationsOverlay({
     const annos = annotationsAtPoint(canvas, point);
 
     if (annos.length > 0) {
-      event.preventDefaultAction = true;
+      event.preventDefaultAction = true;  // eslint-disable-line no-param-reassign
     }
 
     if (annos.length === 1) {

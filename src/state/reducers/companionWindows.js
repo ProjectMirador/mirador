@@ -13,7 +13,7 @@ export function companionWindowsReducer(state = {}, action) {
       return {
         ...state,
         ...(action.companionWindows || []).reduce((newState, cw) => {
-          newState[cw.id] = {
+          newState[cw.id] = { // eslint-disable-line no-param-reassign
             ...state[cw.id],
             ...cw,
             windowId: action.id,
@@ -25,7 +25,7 @@ export function companionWindowsReducer(state = {}, action) {
     case ActionTypes.REMOVE_WINDOW:
       return Object.keys(state).reduce((object, key) => {
         if (state[key].windowId !== action.windowId) {
-          object[key] = state[key];
+          object[key] = state[key]; // eslint-disable-line no-param-reassign
         }
         return object;
       }, {});

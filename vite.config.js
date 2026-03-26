@@ -86,7 +86,7 @@ export default defineConfig({
 
           // Handle root URL directly
           if (originalUrl === '/') {
-            req.url = '/demo/index.html';
+            req.url = '/demo/index.html';  // eslint-disable-line no-param-reassign
             return next();
           }
 
@@ -107,7 +107,7 @@ export default defineConfig({
           try {
             // Check if this is a file we own (not HMR-related vite files, for example)
             await fs.access(deepPath);
-            req.url = `/demo${pathWithExtension}`;
+            req.url = `/demo${pathWithExtension}`;  // eslint-disable-line no-param-reassign
           } catch {
             // Not ours / does not exist — skip rewrite
           }

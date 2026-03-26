@@ -82,7 +82,7 @@ describe('IIIF sagas', () => {
           [select(getRequestsConfig), {
             postprocessors: [
               (url, responseAction) => {
-                responseAction.manifestJson = { foo: 'modified!' };
+                responseAction.manifestJson = { foo: 'modified!' }; // eslint-disable-line no-param-reassign
               },
             ],
           }],
