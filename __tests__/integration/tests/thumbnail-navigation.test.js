@@ -17,7 +17,7 @@ describe('Canvas navigation by clicking thumbnails', () => {
     const storedCanvasId = context.miradorInstance.store.getState().windows[windowId].canvasId;
 
     const thumbnailsContainer = await screen.findByLabelText('Thumbnails');
-    const thumbnailButtons = thumbnailsContainer.querySelectorAll('.mirador-thumbnail-nav-canvas');
+    const thumbnailButtons = thumbnailsContainer.querySelectorAll('.mirador-thumbnail-nav-canvas'); // eslint-disable-line testing-library/no-node-access
     fireEvent.click(thumbnailButtons[4]);
   });
 });

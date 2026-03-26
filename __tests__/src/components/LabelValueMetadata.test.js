@@ -10,6 +10,7 @@ function createWrapper(props) {
   );
 }
 
+/* eslint-disable testing-library/no-node-access */
 describe('LabelValueMetadata', () => {
   let wrapper;
   let labelValuePairs;

@@ -130,14 +130,14 @@ describe('CompanionWindow', () => {
   it('has a resize handler', () => {
     const { container } = createWrapper();
 
-    expect(container.querySelector('.react-draggable')).toHaveStyle({ height: '100%', width: '235px' });
-    expect(container.querySelector('[style*="cursor: col-resize;"]')).toHaveStyle({ left: '-5px' });
+    expect(container.querySelector('.react-draggable')).toHaveStyle({ height: '100%', width: '235px' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('[style*="cursor: col-resize;"]')).toHaveStyle({ left: '-5px' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
 
   it('has a vertical resize handle when position is bottom', () => {
     const { container } = createWrapper({ position: 'bottom' });
 
-    expect(container.querySelector('.react-draggable')).toHaveStyle({ height: '201px', width: 'auto' });
-    expect(container.querySelector('[style*="cursor: row-resize;"]')).toHaveStyle({ top: '-5px' });
+    expect(container.querySelector('.react-draggable')).toHaveStyle({ height: '201px', width: 'auto' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('[style*="cursor: row-resize;"]')).toHaveStyle({ top: '-5px' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
 });

@@ -56,7 +56,7 @@ describe('WindowTopBar', () => {
   it('triggers window focus when clicked', () => {
     const focusWindow = vi.fn();
     render(<Subject focusWindow={focusWindow} />);
-    const toolbar = screen.getByRole('navigation', { name: 'Window navigation' }).firstChild;
+    const toolbar = screen.getByRole('navigation', { name: 'Window navigation' }).firstChild; // eslint-disable-line testing-library/no-node-access
     expect(toolbar).toBeInTheDocument();
     // we specifically need mouseDown not click for MUI Toolbar here
     fireEvent.mouseDown(toolbar);

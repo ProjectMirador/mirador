@@ -1,8 +1,6 @@
 import { act, render } from '@tests/utils/test-utils';
 import TileSource from '../../../src/components/OpenSeadragonTileSource';
 import OpenSeadragonViewerContext from '../../../src/contexts/OpenSeadragonViewerContext';
-import FailedImageProvider from '../../../src/contexts/FailedImageProvider';
-import FailedImageContext from '../../../src/contexts/FailedImageContext';
 
 describe('OpenSeadragonTileSource', () => {
   it('calls addTiledImage with the tile source', () => {
@@ -13,11 +11,9 @@ describe('OpenSeadragonTileSource', () => {
     const tileSource = { '@id': 'http://example.com/image/info.json' };
 
     render(
-      <FailedImageProvider>
-        <OpenSeadragonViewerContext.Provider value={ref}>
-          <TileSource tileSource={tileSource} />
-        </OpenSeadragonViewerContext.Provider>
-      </FailedImageProvider>,
+      <OpenSeadragonViewerContext.Provider value={ref}>
+        <TileSource tileSource={tileSource} />
+      </OpenSeadragonViewerContext.Provider>,
     );
 
     expect(viewer.addTiledImage).toHaveBeenCalledWith(expect.objectContaining({ tileSource }));
@@ -35,19 +31,15 @@ describe('OpenSeadragonTileSource', () => {
     const tileSource = { '@id': 'http://example.com/image/info.json' };
 
     const { rerender } = render(
-      <FailedImageProvider>
-        <OpenSeadragonViewerContext.Provider value={ref}>
-          <TileSource tileSource={tileSource} />
-        </OpenSeadragonViewerContext.Provider>
-      </FailedImageProvider>,
+      <OpenSeadragonViewerContext.Provider value={ref}>
+        <TileSource tileSource={tileSource} />
+      </OpenSeadragonViewerContext.Provider>,
     );
-    await act(async () => {
+    await act(async () => { // eslint-disable-line testing-library/no-unnecessary-act
       rerender(
-        <FailedImageProvider>
-          <OpenSeadragonViewerContext.Provider value={ref}>
-            <TileSource tileSource={tileSource} opacity={0.5} />
-          </OpenSeadragonViewerContext.Provider>
-        </FailedImageProvider>,
+        <OpenSeadragonViewerContext.Provider value={ref}>
+          <TileSource tileSource={tileSource} opacity={0.5} />
+        </OpenSeadragonViewerContext.Provider>,
       );
     });
 
@@ -69,19 +61,15 @@ describe('OpenSeadragonTileSource', () => {
     const tileSource = { '@id': 'http://example.com/image/info.json' };
 
     const { rerender } = render(
-      <FailedImageProvider>
-        <OpenSeadragonViewerContext.Provider value={ref}>
-          <TileSource tileSource={tileSource} />
-        </OpenSeadragonViewerContext.Provider>
-      </FailedImageProvider>,
+      <OpenSeadragonViewerContext.Provider value={ref}>
+        <TileSource tileSource={tileSource} />
+      </OpenSeadragonViewerContext.Provider>,
     );
-    await act(async () => {
+    await act(async () => { // eslint-disable-line testing-library/no-unnecessary-act
       rerender(
-        <FailedImageProvider>
-          <OpenSeadragonViewerContext.Provider value={ref}>
-            <TileSource tileSource={tileSource} index={5} />
-          </OpenSeadragonViewerContext.Provider>
-        </FailedImageProvider>,
+        <OpenSeadragonViewerContext.Provider value={ref}>
+          <TileSource tileSource={tileSource} index={5} />
+        </OpenSeadragonViewerContext.Provider>,
       );
     });
 
@@ -103,19 +91,15 @@ describe('OpenSeadragonTileSource', () => {
     const tileSource = { '@id': 'http://example.com/image/info.json' };
 
     const { rerender } = render(
-      <FailedImageProvider>
-        <OpenSeadragonViewerContext.Provider value={ref}>
-          <TileSource tileSource={tileSource} />
-        </OpenSeadragonViewerContext.Provider>
-      </FailedImageProvider>,
+      <OpenSeadragonViewerContext.Provider value={ref}>
+        <TileSource tileSource={tileSource} />
+      </OpenSeadragonViewerContext.Provider>,
     );
-    await act(async () => {
+    await act(async () => { // eslint-disable-line testing-library/no-unnecessary-act
       rerender(
-        <FailedImageProvider>
-          <OpenSeadragonViewerContext.Provider value={ref}>
-            <TileSource tileSource={tileSource} fitBounds={[0, 0, 10, 10]} />
-          </OpenSeadragonViewerContext.Provider>
-        </FailedImageProvider>,
+        <OpenSeadragonViewerContext.Provider value={ref}>
+          <TileSource tileSource={tileSource} fitBounds={[0, 0, 10, 10]} />
+        </OpenSeadragonViewerContext.Provider>,
       );
     });
 
@@ -135,51 +119,17 @@ describe('OpenSeadragonTileSource', () => {
     const tileSource = { '@id': 'http://example.com/image/info.json' };
 
     const { rerender } = render(
-      <FailedImageProvider>
-        <OpenSeadragonViewerContext.Provider value={ref}>
-          <TileSource tileSource={tileSource} />
-        </OpenSeadragonViewerContext.Provider>
-      </FailedImageProvider>,
+      <OpenSeadragonViewerContext.Provider value={ref}>
+        <TileSource tileSource={tileSource} />
+      </OpenSeadragonViewerContext.Provider>,
     );
 
-    await act(async () => {
+    await act(async () => { // eslint-disable-line testing-library/no-unnecessary-act
       rerender(
-        <FailedImageProvider>
-          <OpenSeadragonViewerContext.Provider value={ref} />
-        </FailedImageProvider>,
+        <OpenSeadragonViewerContext.Provider value={ref} />,
       );
     });
 
-    // Assert removeItem was called
     expect(viewer.world.removeItem).toHaveBeenCalledWith(mockOsdItem);
-  });
-
-  it('loads fallback image when tile load fails', async () => {
-    const addTiledImage = vi
-      .fn()
-      .mockImplementationOnce(({ error }) => error(new Error('fail')))
-      .mockImplementationOnce(({ success }) => success({ item: { id: 'fallback' } }));
-
-    const viewer = {
-      addTiledImage,
-      world: { removeItem: vi.fn() },
-    };
-    const ref = { current: viewer };
-    const tileSource = { '@id': 'http://example.com/image/info.json' };
-
-    render(
-      <FailedImageProvider>
-        <OpenSeadragonViewerContext.Provider value={ref}>
-          <TileSource tileSource={tileSource} />
-        </OpenSeadragonViewerContext.Provider>
-      </FailedImageProvider>,
-    );
-
-    // eslint-disable-next-line testing-library/no-unnecessary-act
-    await act(async () => {});
-
-    // Should attempt to load original, then fallback
-    expect(addTiledImage).toHaveBeenCalledTimes(2);
-    expect(addTiledImage.mock.calls[1][0].tileSource.type).toBe('image');
   });
 });

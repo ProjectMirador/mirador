@@ -48,8 +48,8 @@ describe('AttributionPanel', () => {
     const manifestLogo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
 
     const { container } = createWrapper({ manifestLogo });
-    await waitFor(() => { expect(container.querySelector('img')).toBeInTheDocument(); }); // eslint-disable-line testing-library/no-container
+    await waitFor(() => { expect(container.querySelector('img')).toBeInTheDocument(); }); // eslint-disable-line testing-library/no-container, testing-library/no-node-access
 
-    expect(container.querySelector('img')).toHaveAttribute('src', manifestLogo); // eslint-disable-line testing-library/no-container
+    expect(container.querySelector('img')).toHaveAttribute('src', manifestLogo); // eslint-disable-line testing-library/no-container, testing-library/no-node-access
   });
 });

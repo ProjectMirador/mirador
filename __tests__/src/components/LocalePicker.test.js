@@ -20,7 +20,7 @@ describe('LocalePicker', () => {
   it('hides the control if there are not locales to switch to', () => {
     const { container } = createWrapper({ availableLocales: ['en'] });
 
-    expect(container).toBeEmptyDOMElement();
+    expect(container).toBeEmptyDOMElement(); // eslint-disable-line testing-library/no-container
   });
 
   it('renders a select with the current value', () => {
@@ -39,7 +39,7 @@ describe('LocalePicker', () => {
     // The dropddown menu is not nested within the combobox, it is a sibling in the DOM, an MuiMenu
     const menu = screen.getByRole('listbox');
     // Assert that the menu element has 2 children (2 options)
-    expect(menu.children).toHaveLength(2);
+    expect(menu.children).toHaveLength(2); // eslint-disable-line testing-library/no-node-access
     // Verify that the select element has the correct value ('de')
     const deOption = screen.getByRole('option', { name: 'Deutsch' });
     expect(deOption).toHaveAttribute('aria-selected', 'true');

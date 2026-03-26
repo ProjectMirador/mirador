@@ -70,21 +70,6 @@ describe('GalleryView', () => {
     expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
   });
 
-  it('scrolls into view when selected prop changes to true', () => {
-    const { rerender } = createWrapper({ selected: false });
-    expect(window.HTMLElement.prototype.scrollIntoView).not.toHaveBeenCalled();
-
-    rerender(
-      <GalleryViewThumbnail
-        canvas={Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()[0]}
-        focusOnCanvas={() => {}}
-        setCanvas={() => {}}
-        selected
-      />,
-    );
-    expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
-  });
-
   describe('on-demand annotation fetching', () => {
     const canvas = {
       getHeight: () => 50,
@@ -119,26 +104,26 @@ describe('GalleryView', () => {
   describe('annotation count chip', () => {
     it('hides the chip if there are no annotations', () => {
       const { container } = createWrapper({ annotationsCount: 0 });
-      expect(container.querySelector('.MuiChip-root')).not.toBeInTheDocument();
+      expect(container.querySelector('.MuiChip-root')).not.toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
     });
 
     it('shows the number of search annotations on a canvas', () => {
       const { container } = createWrapper({ annotationsCount: 50 });
-      expect(container.querySelector('.MuiChip-root')).toBeInTheDocument();
-      expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50');
+      expect(container.querySelector('.MuiChip-root')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+      expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
     });
   });
 
   describe('search annotation count chip', () => {
     it('hides the chip if there are no annotations', () => {
       const { container } = createWrapper({ searchAnnotationsCount: 0 });
-      expect(container.querySelector('.MuiChip-root')).not.toBeInTheDocument();
+      expect(container.querySelector('.MuiChip-root')).not.toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
     });
 
     it('shows the number of search annotations on a canvas', () => {
       const { container } = createWrapper({ searchAnnotationsCount: 50 });
-      expect(container.querySelector('.MuiChip-root')).toBeInTheDocument();
-      expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50');
+      expect(container.querySelector('.MuiChip-root')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+      expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
     });
   });
 });

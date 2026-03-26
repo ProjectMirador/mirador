@@ -27,7 +27,7 @@ function Subject({ fixture = manifestJson, ...props }) {
 }
 
 Subject.propTypes = {
-  fixture: PropTypes.object,
+  fixture: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 };
 
 vi.mock(
@@ -131,7 +131,7 @@ describe('ThumbnailNavigation', () => {
     it('sets up react-window to be rtl', () => {
       render(<Subject viewingDirection="right-to-left" />);
 
-      expect(screen.getByRole('row').children[0]).toHaveStyle({ direction: 'rtl' });
+      expect(screen.getByRole('row').children[0]).toHaveStyle({ direction: 'rtl' }); // eslint-disable-line testing-library/no-node-access
     });
   });
 });

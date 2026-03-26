@@ -23,7 +23,7 @@ describe('Window Sidebar Sequence Dropdown', () => {
 
     // Confirm initial sequence (1740) is loaded
     const sequenceWrapper = await screen.findByTestId('sequence-select');
-    const sequenceInput = sequenceWrapper.querySelector('input[name="sequenceId"]');
+    const sequenceInput = sequenceWrapper.querySelector('input[name="sequenceId"]'); // eslint-disable-line testing-library/no-node-access
 
     expect(sequenceInput).toHaveValue('https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1740.json');
 

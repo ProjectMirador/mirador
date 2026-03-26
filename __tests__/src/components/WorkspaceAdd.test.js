@@ -92,7 +92,7 @@ describe('WorkspaceAdd', () => {
 
     const scrollTo = vi.fn();
 
-    vi.spyOn(container.querySelector('.mirador-workspace-add'), 'scrollTo').mockImplementation(scrollTo);
+    vi.spyOn(container.querySelector('.mirador-workspace-add'), 'scrollTo').mockImplementation(scrollTo); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
 
     await user.click(screen.getByRole('button', { name: 'Add resource' }));
 

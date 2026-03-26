@@ -55,7 +55,7 @@ describe('WorkspaceExport', () => {
 
   it('renders an exportable version of state', async () => {
     await user.click(screen.getByRole('button', { name: 'View workspace configuration' }));
-    expect(screen.getByRole('region').querySelector('pre')).toHaveTextContent(
+    expect(screen.getByRole('region').querySelector('pre')).toHaveTextContent( // eslint-disable-line testing-library/no-node-access
       '{ "companionWindows": {}, "config": {}, "elasticLayout": {}, "viewers": {}, "windows": {}, "workspace": {} }',
     );
   });

@@ -44,7 +44,7 @@ describe('CollectionDialog', () => {
 
     expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
 
-    expect(screen.getByRole('dialog').querySelectorAll('.MuiSkeleton-root')).toHaveLength(3);
+    expect(screen.getByRole('dialog').querySelectorAll('.MuiSkeleton-root')).toHaveLength(3); // eslint-disable-line testing-library/no-node-access
   });
 
   it('clicking the hide button fires hideCollectionDialog', async () => {

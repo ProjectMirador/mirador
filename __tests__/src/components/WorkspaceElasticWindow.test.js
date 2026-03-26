@@ -28,6 +28,7 @@ function createWrapper(props) {
   );
 }
 
+/* eslint-disable testing-library/no-container, testing-library/no-node-access */
 describe('WorkspaceElasticWindow', () => {
   const layout = {
     height: 200,

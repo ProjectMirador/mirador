@@ -14,12 +14,12 @@ describe('Basic end to end Mirador', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Add resource' }));
 
     // Input a manifest URL
-    fireEvent.change(document.getElementById('manifestURL'), { target: { value: 'https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/manifest.json' } });
+    fireEvent.change(document.getElementById('manifestURL'), { target: { value: 'https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/manifest.json' } }); // eslint-disable-line testing-library/no-node-access
 
     fireEvent.click(screen.getByText('Add'));
 
     // Click the added manifest item
-    const listItem = document.querySelector('[data-manifestid="https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/manifest.json"]');
+    const listItem = document.querySelector('[data-manifestid="https://iiif.io/api/cookbook/recipe/0266-full-canvas-annotation/manifest.json"]'); // eslint-disable-line testing-library/no-node-access
     const button = await within(listItem).findByRole('button');
     fireEvent.click(button);
 

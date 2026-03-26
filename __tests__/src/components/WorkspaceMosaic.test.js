@@ -26,6 +26,7 @@ function createWrapper(props) {
   );
 }
 
+/* eslint-disable testing-library/no-node-access */
 describe('WorkspaceMosaic', () => {
   const windowIds = ['1', '2'];
   let wrapper;
@@ -141,7 +142,7 @@ describe('WorkspaceMosaic', () => {
       );
 
       const dragTarget = screen.getAllByLabelText('Window navigation')[0];
-      const dropTarget = container.querySelector('.mirador-mosaic > .drop-target-container > .drop-target.top');
+      const dropTarget = container.querySelector('.mirador-mosaic > .drop-target-container > .drop-target.top'); // eslint-disable-line testing-library/no-container
 
       fireEvent.dragStart(dragTarget);
       fireEvent.drag(dragTarget);
