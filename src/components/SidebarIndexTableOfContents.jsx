@@ -58,17 +58,17 @@ const CollapseIcon = (props) => <ExpandMoreIcon {...props} color="action" />;
 const ExpandIcon = (props) => <ChevronRightIcon {...props} color="action" />;
 /** */
 // eslint-disable-next-line max-params
-export function SidebarIndexTableOfContents(
+export function SidebarIndexTableOfContents({
   toggleNode,
   expandNodes,
-   setCanvas,
-   windowId,
+  setCanvas,
+  windowId,
   treeStructure,
   visibleNodeIds,
   expandedNodeIds,
   containerRef,
-  nodeIdToScrollTo
-) {
+  nodeIdToScrollTo,
+}) {
   /** */
   const handleNodeSelect = (event, itemId) => {
     if (event.key === ' ' || event.key === 'Spacebar') {
