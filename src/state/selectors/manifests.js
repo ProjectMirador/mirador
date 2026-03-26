@@ -76,7 +76,7 @@ export const getManifestoInstance = createSelector(
   getContextualManifestoInstance,
   (state, { json }) => json,
   (manifesto, manifestJson) => (
-    manifestJson && createManifestoInstance(manifestJson, locale)
+    manifestJson && createManifestoInstance(manifestJson)
   ) || manifesto,
 );
 

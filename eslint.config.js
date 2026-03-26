@@ -82,9 +82,12 @@ export default [
       'no-console': 'off',
       'no-else-return': ['error', { allowElseIf: false }],
       'no-empty-function': ['error', { allow: ['arrowFunctions', 'functions', 'methods'] }],
+      'no-eval': 'error',
+      'no-implied-eval': 'error',
       'no-implicit-coercion': ['error', { boolean: false, number: true, string: true, allow: [] }],
       'no-lonely-if': 'error',
       'no-nested-ternary': 'warn',
+      'no-new-func': 'error',
       'no-param-reassign': [
         'error',
         {
@@ -99,10 +102,11 @@ export default [
       ],
       'no-restricted-syntax': ['warn', 'WithStatement'],
       'no-return-assign': ['error', 'always'],
+      'no-script-url': 'error',
       'no-shadow': ['error', { builtinGlobals: false, hoist: 'functions' }],
-      'no-undef': 'off',
+      'no-undef': 'error',
       'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
-      'no-unused-vars': 'off',
+      'no-unused-vars': 'warn',
       'no-use-before-define': ['warn', { functions: false, classes: false, variables: false }],
       'no-useless-return': 'error',
       'no-var': 'error',
@@ -141,6 +145,14 @@ export default [
       react: {
         version: 'detect',
       },
+    },
+  },
+
+  // Test file overrides
+  {
+    files: ['**/__tests__/**', '**/*.test.js', '**/*.test.jsx', 'setupTest.js'],
+    rules: {
+      'no-undef': 'off', // Test globals (describe, it, expect, etc.) provided by vitest
     },
   },
 ];
