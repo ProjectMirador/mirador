@@ -58,7 +58,7 @@ export function WindowViewSettings({
   const menuItem = ({ value, Icon }) => (
     <ViewOption
       aria-checked={windowViewType === value}
-      autoFocus={windowViewType === value}
+      autoFocus={windowViewType === value} // eslint-disable-line jsx-a11y/no-autofocus
       key={value}
       onClick={() => { handleChange(value); handleClose(); }}
       role="menuitemradio"

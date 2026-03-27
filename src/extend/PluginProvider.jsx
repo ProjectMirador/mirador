@@ -26,5 +26,5 @@ export default function PluginProvider({ plugins = [], children = null }) {
 
 PluginProvider.propTypes = {
   children: PropTypes.node,
-  plugins: PropTypes.array, // eslint-disable-line react/forbid-prop-types
+  plugins: PropTypes.array,
 };

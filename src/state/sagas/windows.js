@@ -147,7 +147,7 @@ export function getAnnotationsBySearch(state, { canvasIds, companionWindowIds, w
     const resourceAnnotations = annotations.resources;
     const hitAnnotation = resourceAnnotations.find(r => canvasIds.includes(r.targetId));
 
-    if (hitAnnotation) accumulator[companionWindowId] = [hitAnnotation.id];
+    if (hitAnnotation) accumulator[companionWindowId] = [hitAnnotation.id];  // eslint-disable-line no-param-reassign
 
     return accumulator;
   }, {});

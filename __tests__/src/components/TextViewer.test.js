@@ -22,7 +22,7 @@ describe('TextViewer', () => {
         windowId: 'a',
       }, true);
       const text = screen.getByTestId('text');
-      expect(text.querySelector('source:nth-of-type(1)')).toHaveAttribute('type', 'application/pdf');
+      expect(text.querySelector('source:nth-of-type(1)')).toHaveAttribute('type', 'application/pdf'); // eslint-disable-line testing-library/no-node-access
     });
     it('passes through configurable options', () => {
       createWrapper({
@@ -41,7 +41,7 @@ describe('TextViewer', () => {
         windowId: 'a',
       }, true);
       const text = screen.getByTestId('text');
-      expect(text.querySelector('.mirador-canvas-nav')).toBeDefined();
+      expect(text.querySelector('.mirador-canvas-nav')).toBeDefined(); // eslint-disable-line testing-library/no-node-access
     });
   });
 });

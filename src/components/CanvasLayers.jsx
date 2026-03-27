@@ -141,7 +141,7 @@ Layer.propTypes = {
   })),
   moveToBackground: PropTypes.func.isRequired,
   moveToFront: PropTypes.func.isRequired,
-  resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  resource: PropTypes.object.isRequired,
   setLayerVisibility: PropTypes.func.isRequired,
 };
 
@@ -194,7 +194,7 @@ function DraggableLayer({
 DraggableLayer.propTypes = {
   children: PropTypes.node.isRequired,
   index: PropTypes.number.isRequired,
-  resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  resource: PropTypes.object.isRequired,
 };
 
 /** */
@@ -225,7 +225,7 @@ export function CanvasLayers({
     );
 
     const payload = layers.reduce((acc, layer) => {
-      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) };
+      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) }; // eslint-disable-line no-param-reassign
       return acc;
     }, {});
 
@@ -246,7 +246,7 @@ export function CanvasLayers({
     const sortedLayers = reorder(layers.map(l => l.id), layers.findIndex(l => l.id === layerId), 0);
 
     const payload = layers.reduce((acc, layer) => {
-      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) };
+      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) }; // eslint-disable-line no-param-reassign
       return acc;
     }, {});
 
@@ -257,7 +257,7 @@ export function CanvasLayers({
     const sortedLayers = reorder(layers.map(l => l.id), layers.findIndex(l => l.id === layerId), layers.length - 1);
 
     const payload = layers.reduce((acc, layer) => {
-      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) };
+      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) }; // eslint-disable-line no-param-reassign
       return acc;
     }, {});
 

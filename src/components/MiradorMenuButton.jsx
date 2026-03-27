@@ -69,10 +69,10 @@ export function MiradorMenuButton({
 MiradorMenuButton.propTypes = {
   'aria-label': PropTypes.string.isRequired,
   badge: PropTypes.bool,
-  BadgeProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  BadgeProps: PropTypes.object,
   children: PropTypes.element.isRequired,
   dispatch: PropTypes.func,
   selected: PropTypes.bool,
-  sx: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  TooltipProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  sx: PropTypes.object,
+  TooltipProps: PropTypes.object,
 };

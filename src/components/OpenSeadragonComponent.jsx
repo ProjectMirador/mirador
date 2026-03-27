@@ -217,9 +217,9 @@ OpenSeadragonComponent.propTypes = {
   children: PropTypes.node,
   Container: PropTypes.elementType,
   onUpdateViewport: PropTypes.func,
-  osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  osdConfig: PropTypes.object,
   setViewer: PropTypes.func,
-  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  style: PropTypes.object,
   viewerConfig: PropTypes.shape({
     bounds: PropTypes.arrayOf(PropTypes.number),
     flip: PropTypes.bool,

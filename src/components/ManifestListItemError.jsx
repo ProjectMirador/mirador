@@ -8,9 +8,11 @@ import { useTranslation } from 'react-i18next';
 /**
  * ManifestListItemError renders a component displaying a
  * message to the user about a problem loading a manifest
-*/
+ */
 export function ManifestListItemError({
-  manifestId, onDismissClick, onTryAgainClick,
+  manifestId,
+  onDismissClick,
+  onTryAgainClick,
 }) {
   const { t } = useTranslation();
   return (
@@ -28,10 +30,18 @@ export function ManifestListItemError({
       </Grid>
 
       <Grid container size={{ sm: 7, xs: 12 }}>
-        <Button onClick={() => { onDismissClick(manifestId); }}>
+        <Button
+          onClick={() => {
+            onDismissClick(manifestId);
+          }}
+        >
           {t('dismiss')}
         </Button>
-        <Button onClick={() => { onTryAgainClick(manifestId); }}>
+        <Button
+          onClick={() => {
+            onTryAgainClick(manifestId);
+          }}
+        >
           {t('tryAgain')}
         </Button>
       </Grid>

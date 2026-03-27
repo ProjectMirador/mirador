@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import FailedImageContext from './FailedImageContext';
-import config from '../config/settings.js';
+import config from '../config/settings';
 
 // SVG fallback with Material-UI Warning icon
 // Uses default primary blue (#1967d2) - override entire image via config.fallbackImage if needed
@@ -25,3 +26,7 @@ export default function FailedImageProvider({ children }) {
     </FailedImageContext.Provider>
   );
 }
+
+FailedImageProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};

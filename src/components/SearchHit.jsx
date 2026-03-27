@@ -48,11 +48,24 @@ const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerSta
 }));
 
 /** */
-export function SearchHit({
-  adjacent = false, annotation = undefined, annotationId = undefined, annotationLabel = undefined,
-  announcer = undefined, canvasLabel = undefined, companionWindowId = undefined, containerRef = undefined,
-  focused = false, hit = undefined, index = undefined, selectAnnotation = () => {}, selected = false,
-  showDetails = () => {}, total = undefined, windowId, windowSelected = false,
+export function SearchHit({ // eslint-disable-line complexity
+  adjacent = false,
+  annotation = undefined,
+  annotationId = undefined,
+  annotationLabel = undefined,
+  announcer = undefined,
+  canvasLabel = undefined,
+  companionWindowId = undefined,
+  containerRef = undefined,
+  focused = false,
+  hit = undefined,
+  index = undefined,
+  selectAnnotation = () => {},
+  selected = false,
+  showDetails = () => {},
+  total = undefined,
+  windowId,
+  windowSelected = false,
 }) {
   const { t } = useTranslation();
   useEffect(() => {

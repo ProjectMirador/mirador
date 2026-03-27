@@ -33,7 +33,7 @@ export function AudioViewer({ audioOptions = {}, audioResources = [], captions =
 }
 
 AudioViewer.propTypes = {
-  audioOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  audioResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
-  captions: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  audioOptions: PropTypes.object,
+  audioResources: PropTypes.arrayOf(PropTypes.object),
+  captions: PropTypes.arrayOf(PropTypes.object),
 };

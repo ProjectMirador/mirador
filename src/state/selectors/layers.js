@@ -91,7 +91,7 @@ export const getLayersForVisibleCanvases = createSelector(
   ],
   (canvasIds, layers) => (
     canvasIds.reduce((acc, canvasId) => {
-      acc[canvasId] = layers[canvasId];
+      acc[canvasId] = layers[canvasId];  // eslint-disable-line no-param-reassign
       return acc;
     }, {})
   ),

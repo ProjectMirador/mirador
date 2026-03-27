@@ -142,8 +142,8 @@ LazyLoadedImage.propTypes = {
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
   placeholder: PropTypes.string.isRequired,
-  resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  resource: PropTypes.object.isRequired,
+  style: PropTypes.object,
   thumbnail: PropTypes.shape({
     height: PropTypes.number,
     url: PropTypes.string.isRequired,
@@ -200,8 +200,8 @@ IIIFThumbnail.propTypes = {
   labelled: PropTypes.bool,
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
-  resource: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  resource: PropTypes.object.isRequired,
+  style: PropTypes.object,
   thumbnail: PropTypes.shape({
     height: PropTypes.number,
     url: PropTypes.string.isRequired,

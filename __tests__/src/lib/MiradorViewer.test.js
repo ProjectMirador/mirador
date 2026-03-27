@@ -15,13 +15,15 @@ describe('MiradorViewer', () => {
     it('returns viewer store', () => {
       const instance = new MiradorViewer({});
 
-      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
+      // eslint-disable-next-line testing-library/no-unnecessary-act
+      act(() => { instance.renderInto(container); });
       expect(instance.store.dispatch).toBeDefined();
     });
     it('renders via ReactDOM', () => {
       const instance = new MiradorViewer({});
 
-      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
+      // eslint-disable-next-line testing-library/no-unnecessary-act
+      act(() => { instance.renderInto(container); });
 
       expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
     });
@@ -57,7 +59,8 @@ describe('MiradorViewer', () => {
         },
       );
 
-      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
+      // eslint-disable-next-line testing-library/no-unnecessary-act
+      act(() => { instance.renderInto(container); });
 
       const { windows, catalog, config } = instance.store.getState();
       const windowIds = Object.keys(windows);
@@ -137,8 +140,10 @@ describe('MiradorViewer', () => {
     it('unmounts via ReactDOM', () => {
       const instance = new MiradorViewer({});
 
-      act(() => { instance.renderInto(container); }); // eslint-disable-line testing-library/no-unnecessary-act
+      // eslint-disable-next-line testing-library/no-unnecessary-act
+      act(() => { instance.renderInto(container); });
       expect(container).not.toBeEmptyDOMElement();
+      // eslint-disable-next-line testing-library/no-unnecessary-act
       act(() => { instance.unmount(); });
       expect(container).toBeEmptyDOMElement();
     });

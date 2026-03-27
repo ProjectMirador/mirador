@@ -30,7 +30,7 @@ const StyledCloseButton = styled(MiradorMenuButton, { name: 'CompanionWindow', s
 /**
  * CompanionWindow
  */
-export const CompanionWindow = forwardRef((props, innerRef) => {
+export const CompanionWindow = forwardRef((props, innerRef) => { // eslint-disable-line complexity
   const {
     ariaLabel = undefined, classes = {}, direction, id, paperClassName = '', onCloseClick = () => {}, updateCompanionWindow = undefined, isDisplayed = false,
     position = null, title = null, children = undefined, titleControls = null,

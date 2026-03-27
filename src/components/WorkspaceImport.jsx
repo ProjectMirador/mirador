@@ -80,7 +80,7 @@ export function WorkspaceImport({
 WorkspaceImport.propTypes = {
   addError: PropTypes.func.isRequired,
   classes: PropTypes.objectOf(PropTypes.string),
-  container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  container: PropTypes.object,
   handleClose: PropTypes.func.isRequired,
   id: PropTypes.string,
   importConfig: PropTypes.func.isRequired,

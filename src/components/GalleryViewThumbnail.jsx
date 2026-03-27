@@ -159,7 +159,7 @@ export function GalleryViewThumbnail({
 
 GalleryViewThumbnail.propTypes = {
   annotationsCount: PropTypes.number,
-  canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvas: PropTypes.object.isRequired,
   config: PropTypes.shape({
     height: PropTypes.number,
     width: PropTypes.number,

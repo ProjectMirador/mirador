@@ -21,25 +21,19 @@ export function getConfig(state) {
 export function getExportableState(state) {
   const exportConfig = getConfig(state).export;
 
-  return Object.entries(exportConfig).reduce(
-    (acc, [stem, value]) => {
-      if (value === true) {
-        acc[stem] = state[stem];
-      } else if (value.filter) {
-        acc[stem] = Object.entries(state[stem])
-          .filter(value.filter)
-          .reduce(
-            (stemAcc, [k, v]) => {
-              stemAcc[k] = v; // eslint-disable-line no-param-reassign
-              return stemAcc;
-            },
-            {},
-          );
-      }
-      return acc;
-    },
-    {},
-  );
+  return Object.entries(exportConfig).reduce((acc, [stem, value]) => {
+    if (value === true) {
+      acc[stem] = state[stem];  // eslint-disable-line no-param-reassign
+    } else if (value.filter) {
+      acc[stem] = Object.entries(state[stem])  // eslint-disable-line no-param-reassign
+        .filter(value.filter)
+        .reduce((stemAcc, [k, v]) => {
+          stemAcc[k] = v;  // eslint-disable-line no-param-reassign
+          return stemAcc;
+        }, {});
+    }
+    return acc;
+  }, {});
 }
 
 /**

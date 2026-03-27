@@ -3,7 +3,7 @@ import { renderHook } from '@testing-library/react';
 import { useContext } from 'react';
 import FailedImageProvider from '../../../src/contexts/FailedImageProvider';
 import FailedImageContext from '../../../src/contexts/FailedImageContext';
-import config from '../../../src/config/settings.js';
+import config from '../../../src/config/settings';
 
 describe('FailedImageProvider', () => {
   let originalFallback;

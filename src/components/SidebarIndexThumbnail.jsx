@@ -24,7 +24,7 @@ export function SidebarIndexThumbnail({
 }
 
 SidebarIndexThumbnail.propTypes = {
-  canvas: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  canvas: PropTypes.object.isRequired,
   height: PropTypes.number,
   label: PropTypes.string.isRequired,
   width: PropTypes.number,

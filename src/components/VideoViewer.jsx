@@ -29,7 +29,7 @@ export function VideoViewer({ captions = [], videoOptions = {}, videoResources =
 }
 
 VideoViewer.propTypes = {
-  captions: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
-  videoOptions: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  videoResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  captions: PropTypes.arrayOf(PropTypes.object),
+  videoOptions: PropTypes.object,
+  videoResources: PropTypes.arrayOf(PropTypes.object),
 };

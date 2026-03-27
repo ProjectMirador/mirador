@@ -92,8 +92,8 @@ export function WorkspaceExport({
 
 WorkspaceExport.propTypes = {
   children: PropTypes.node,
-  container: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  exportableState: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  container: PropTypes.object,
+  exportableState: PropTypes.object.isRequired,
   handleClose: PropTypes.func.isRequired,
   id: PropTypes.string,
   open: PropTypes.bool,

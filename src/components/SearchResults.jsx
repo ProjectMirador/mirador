@@ -135,8 +135,8 @@ SearchResults.propTypes = {
   isFetching: PropTypes.bool,
   nextSearch: PropTypes.string,
   query: PropTypes.string,
-  searchAnnotations: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
-  searchHits: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  searchAnnotations: PropTypes.arrayOf(PropTypes.object),
+  searchHits: PropTypes.arrayOf(PropTypes.object),
   searchNumTotal: PropTypes.number,
   windowId: PropTypes.string.isRequired,
 };

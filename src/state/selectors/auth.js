@@ -48,7 +48,7 @@ export const selectCurrentAuthServices = createSelector(
     getMiradorCanvasWrapper,
     (state, { iiifResources }) => iiifResources,
   ],
-  (canvases, infoResponses = {}, serviceProfiles, auth, getMiradorCanvas, iiifResources) => {
+  (canvases, infoResponses = {}, serviceProfiles, auth, getMiradorCanvas, iiifResources) => { // eslint-disable-line max-params
     let currentAuthResources = iiifResources;
 
     if (!currentAuthResources && canvases) {

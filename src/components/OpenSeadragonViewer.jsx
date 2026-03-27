@@ -148,11 +148,11 @@ OpenSeadragonViewer.propTypes = {
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   children: PropTypes.node,
   drawAnnotations: PropTypes.bool,
-  infoResponses: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  infoResponses: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
-  nonTiledImages: PropTypes.array, // eslint-disable-line react/forbid-prop-types
-  osdConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  nonTiledImages: PropTypes.array,
+  osdConfig: PropTypes.object,
   updateViewport: PropTypes.func.isRequired,
-  viewerConfig: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  viewerConfig: PropTypes.object,
   windowId: PropTypes.string.isRequired,
 };

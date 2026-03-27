@@ -29,12 +29,10 @@ export async function failIfErrorDialogPresent({ waitForRole, roleOptions } = {}
  * Helper to extract the error message from the dialog
  */
 function getErrorDialogMessage() {
-  /* eslint-disable testing-library/no-node-access */
-  const errorDialog = document.querySelector('h2#error-dialog-title');
+  const errorDialog = document.querySelector('h2#error-dialog-title'); // eslint-disable-line testing-library/no-node-access
   return errorDialog
     ? errorDialog.closest('[role="dialog"]')?.querySelector('p')?.textContent ?? 'Unknown error'
     : null;
-  /* eslint-enable testing-library/no-node-access */
 }
 
 /**

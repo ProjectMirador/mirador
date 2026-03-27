@@ -79,7 +79,7 @@ WorkspaceElasticWindow.propTypes = {
     y: PropTypes.number,
   }).isRequired,
   updateElasticWindowLayout: PropTypes.func.isRequired,
-  workspace: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  workspace: PropTypes.object.isRequired,
 };
 
 export default WorkspaceElasticWindow;

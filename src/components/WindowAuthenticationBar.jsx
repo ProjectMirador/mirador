@@ -25,9 +25,17 @@ const StyledFauxButton = styled('span')(({ theme }) => ({
 
 /** */
 export function WindowAuthenticationBar({
-  confirmButton = undefined, continueLabel = undefined,
-  header = undefined, description = undefined, icon = undefined, label,
-  ruleSet = 'iiif', hasLogoutService = true, status = undefined, ConfirmProps = {}, onConfirm,
+  confirmButton = undefined,
+  continueLabel = undefined,
+  header = undefined,
+  description = undefined,
+  icon = undefined,
+  label,
+  ruleSet = 'iiif',
+  hasLogoutService = true,
+  status = undefined,
+  ConfirmProps = {},
+  onConfirm,
 }) {
   const { t } = useTranslation();
   const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
@@ -45,7 +53,7 @@ export function WindowAuthenticationBar({
     <Button
       onClick={onSubmit}
       color="secondary"
-      sx={(theme) => ({
+      sx={theme => ({
         backgroundColor: theme.palette.secondary.contrastText,
         lineHeight: '1.5rem',
       })}
@@ -57,37 +65,31 @@ export function WindowAuthenticationBar({
 
   if (!description && !header) {
     return (
-      <Paper
-        square
-        elevation={4}
-        color="secondary"
-      >
+      <Paper square elevation={4} color="secondary">
         <StyledTopBar>
-          { icon || (
-            <LockIcon sx={{ marginInlineEnd: 5 }} />
-          ) }
+          {icon || <LockIcon sx={{ marginInlineEnd: 5 }} />}
           <Typography component="h3" variant="body1" color="inherit">
-            { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
+            {ruleSet ? (
+              <SanitizedHtml htmlString={label} ruleSet={ruleSet} />
+            ) : (
+              label
+            )}
           </Typography>
           <PluginHook targetName="WindowAuthenticationBar" {...pluginProps} />
-          { button }
+          {button}
         </StyledTopBar>
       </Paper>
     );
   }
 
   return (
-    <Paper
-      square
-      elevation={4}
-      color="secondary"
-    >
+    <Paper square elevation={4} color="secondary">
       <Button
         fullWidth
         onClick={() => setOpen(true)}
         component="div"
         color="inherit"
-        sx={(theme) => ({
+        sx={theme => ({
           '&:hover': {
             backgroundColor: theme.palette.secondary.main,
           },
@@ -98,23 +100,30 @@ export function WindowAuthenticationBar({
           textTransform: 'none',
         })}
       >
-        { icon || (
-        <LockIcon sx={{ marginInlineEnd: 1.5 }} />
-        ) }
-        <Typography sx={{ paddingBlockEnd: 1, paddingBlockStart: 1 }} component="h3" variant="body1" color="inherit">
-          { ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label }
+        {icon || <LockIcon sx={{ marginInlineEnd: 1.5 }} />}
+        <Typography
+          sx={{ paddingBlockEnd: 1, paddingBlockStart: 1 }}
+          component="h3"
+          variant="body1"
+          color="inherit"
+        >
+          {ruleSet ? (
+            <SanitizedHtml htmlString={label} ruleSet={ruleSet} />
+          ) : (
+            label
+          )}
         </Typography>
         <PluginHook targetName="WindowAuthenticationBar" {...pluginProps} />
         <StyledFauxButton>
-          { !open && (
+          {!open && (
             <Typography variant="button" color="inherit">
-              { continueLabel || t('continue') }
+              {continueLabel || t('continue')}
             </Typography>
           )}
         </StyledFauxButton>
       </Button>
       <Collapse
-        sx={(theme) => ({
+        sx={theme => ({
           backgroundColor: theme.palette.secondary.main,
           color: theme.palette.secondary.contrastText,
           paddingInlineEnd: theme.spacing(1),
@@ -124,16 +133,24 @@ export function WindowAuthenticationBar({
         onClose={() => setOpen(false)}
       >
         <Typography variant="body1" color="inherit">
-          { ruleSet ? <SanitizedHtml htmlString={header} ruleSet={ruleSet} /> : header }
-          { header && description ? ': ' : '' }
-          { ruleSet ? <SanitizedHtml htmlString={description} ruleSet={ruleSet} /> : description }
+          {ruleSet ? (
+            <SanitizedHtml htmlString={header} ruleSet={ruleSet} />
+          ) : (
+            header
+          )}
+          {header && description ? ': ' : ''}
+          {ruleSet ? (
+            <SanitizedHtml htmlString={description} ruleSet={ruleSet} />
+          ) : (
+            description
+          )}
         </Typography>
         <DialogActions>
           <Button onClick={() => setOpen(false)} color="inherit">
-            { t('cancel') }
+            {t('cancel')}
           </Button>
 
-          { button }
+          {button}
         </DialogActions>
       </Collapse>
     </Paper>
@@ -142,7 +159,7 @@ export function WindowAuthenticationBar({
 
 WindowAuthenticationBar.propTypes = {
   confirmButton: PropTypes.string,
-  ConfirmProps: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  ConfirmProps: PropTypes.object,
   continueLabel: PropTypes.string,
   description: PropTypes.node,
   hasLogoutService: PropTypes.bool,

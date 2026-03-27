@@ -83,7 +83,7 @@ const setupMiradorViewer = async (config, plugins) => {
 export const setupIntegrationTestViewer = (config, plugins) => {
   beforeEach(async (context) => {
     const miradorInstance = await setupMiradorViewer(config, plugins);
-    context.miradorInstance = miradorInstance;
+    context.miradorInstance = miradorInstance; // eslint-disable-line no-param-reassign
 
     // Wait for the viewer to render
     expect(await screen.findByTestId('mirador')).toBeInTheDocument();

@@ -75,11 +75,11 @@ const TypeSpecificViewer = ({
 };
 
 TypeSpecificViewer.propTypes = {
-  audioResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  audioResources: PropTypes.arrayOf(PropTypes.object),
   isCollection: PropTypes.bool,
   isFetching: PropTypes.bool,
-  textResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
-  videoResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  textResources: PropTypes.arrayOf(PropTypes.object),
+  videoResources: PropTypes.arrayOf(PropTypes.object),
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,
 };
@@ -116,14 +116,14 @@ export function PrimaryWindow({
 }
 
 PrimaryWindow.propTypes = {
-  audioResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  audioResources: PropTypes.arrayOf(PropTypes.object),
   children: PropTypes.node,
   className: PropTypes.string,
   isCollection: PropTypes.bool,
   isCollectionDialogVisible: PropTypes.bool,
   isFetching: PropTypes.bool,
-  textResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
-  videoResources: PropTypes.arrayOf(PropTypes.object), // eslint-disable-line react/forbid-prop-types
+  textResources: PropTypes.arrayOf(PropTypes.object),
+  videoResources: PropTypes.arrayOf(PropTypes.object),
   view: PropTypes.string,
   windowId: PropTypes.string.isRequired,
 };

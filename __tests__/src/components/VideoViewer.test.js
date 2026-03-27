@@ -22,8 +22,8 @@ describe('VideoViewer', () => {
         ],
       }, true);
       const video = screen.getByTestId('video');
-      expect(video.querySelector('source:nth-of-type(1)')).toHaveAttribute('type', 'video/mp4');
-      expect(video.querySelector('source:nth-of-type(2)')).toHaveAttribute('type', 'video/mp4');
+      expect(video.querySelector('source:nth-of-type(1)')).toHaveAttribute('type', 'video/mp4'); // eslint-disable-line testing-library/no-node-access
+      expect(video.querySelector('source:nth-of-type(2)')).toHaveAttribute('type', 'video/mp4'); // eslint-disable-line testing-library/no-node-access
     });
     it('passes through configurable options', () => {
       createWrapper({
@@ -44,10 +44,10 @@ describe('VideoViewer', () => {
         ],
       }, true);
       const video = screen.getByTestId('video');
-      expect(video.querySelector('track:nth-of-type(1)')).toHaveAttribute('srcLang', 'en');
-      expect(video.querySelector('track:nth-of-type(1)')).toHaveAttribute('label', 'English');
-      expect(video.querySelector('track:nth-of-type(2)')).toHaveAttribute('srcLang', 'fr');
-      expect(video.querySelector('track:nth-of-type(2)')).toHaveAttribute('label', 'French');
+      expect(video.querySelector('track:nth-of-type(1)')).toHaveAttribute('srcLang', 'en'); // eslint-disable-line testing-library/no-node-access
+      expect(video.querySelector('track:nth-of-type(1)')).toHaveAttribute('label', 'English'); // eslint-disable-line testing-library/no-node-access
+      expect(video.querySelector('track:nth-of-type(2)')).toHaveAttribute('srcLang', 'fr'); // eslint-disable-line testing-library/no-node-access
+      expect(video.querySelector('track:nth-of-type(2)')).toHaveAttribute('label', 'French'); // eslint-disable-line testing-library/no-node-access
     });
   });
 });

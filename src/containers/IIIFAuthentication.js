@@ -16,7 +16,7 @@ import { IIIFAuthentication } from '../components/IIIFAuthentication';
  * @memberof FullScreenButton
  * @private
  */
-const mapStateToProps = (state, { windowId }) => {
+const mapStateToProps = (state, { windowId }) => { // eslint-disable-line complexity
   const services = selectCurrentAuthServices(state, { windowId });
 
   // TODO: get the most actionable auth service...

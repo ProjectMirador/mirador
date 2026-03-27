@@ -15,7 +15,7 @@ function createWrapper(props) {
   );
 }
 
-/* eslint-disable testing-library/no-container */
+/* eslint-disable testing-library/no-node-access, testing-library/no-container */
 describe('IIIFThumbnail', () => {
   const url = 'http://example.com/iiif/image';
   const thumbnail = { height: 120, url, width: 100 };
@@ -86,7 +86,7 @@ describe('IIIFThumbnail', () => {
     expect(screen.getByTestId('hi')).toBeInTheDocument();
   });
 
-  it('handles image load failure correctly', () => {
+  it('handles image load failure correctly', () => {  
     const notifyFailure = vi.fn();
     const fallbackImage = 'data:image/svg+xml,fallback';
     const mockContext = {

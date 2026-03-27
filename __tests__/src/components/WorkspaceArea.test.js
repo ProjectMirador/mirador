@@ -36,7 +36,7 @@ describe('WorkspaceArea', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Mirador viewer');
     expect(screen.getByRole('main')).toHaveTextContent('Welcome to Mirador');
 
-    expect(container.querySelector('.mirador-background-plugin-area')).toBeInTheDocument(); // eslint-disable-line testing-library/no-container
+    expect(container.querySelector('.mirador-background-plugin-area')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
   });
 
   it('should not render WorkspaceControlPanel when isWorkspaceControlPanelVisible is false', () => {

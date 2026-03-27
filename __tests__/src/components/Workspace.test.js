@@ -35,7 +35,7 @@ function createWrapper(props) {
   );
 }
 
-/* eslint-disable testing-library/no-container */
+/* eslint-disable testing-library/no-container, testing-library/no-node-access */
 describe('Workspace', () => {
   describe('if workspace type is elastic', () => {
     it('should render <WorkspaceElastic/> properly', () => {
