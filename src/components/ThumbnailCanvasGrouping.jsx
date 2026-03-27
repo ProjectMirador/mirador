@@ -129,11 +129,15 @@ ThumbnailCanvasGrouping.propTypes = {
   canvasGroupings: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   columnIndex: PropTypes.number,
   currentCanvasId: PropTypes.string.isRequired,
-  data: PropTypes.object.isRequired,
   height: PropTypes.number.isRequired,
   index: PropTypes.number,
   position: PropTypes.string.isRequired,
   setCanvas: PropTypes.func.isRequired,
   showThumbnailLabels: PropTypes.bool.isRequired,
   style: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
+
+ThumbnailCanvasGrouping.defaultProps = {
+  columnIndex: undefined,
+  index: undefined,
 };
