@@ -1,6 +1,7 @@
 import { render, screen, act } from '@tests/utils/test-utils';
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
 import { IIIFThumbnail } from '../../../src/components/IIIFThumbnail';
+import FailedImageContext from '../../../src/contexts/FailedImageContext';
 
 /**
  * Helper function to create a shallow wrapper around IIIFThumbnail
@@ -83,5 +84,71 @@ describe('IIIFThumbnail', () => {
     createWrapper({ children: <span data-testid="hi" />, thumbnail });
 
     expect(screen.getByTestId('hi')).toBeInTheDocument();
+  });
+
+  it('handles image load failure correctly', () => {  
+    const notifyFailure = vi.fn();
+    const fallbackImage = 'data:image/svg+xml,fallback';
+    const mockContext = {
+      fallbackImage,
+      hasFailed: false,
+      notifyFailure,
+    };
+
+    const { container } = render(
+      <FailedImageContext.Provider value={mockContext}>
+        <IIIFThumbnail resource={{}} thumbnail={thumbnail} />
+      </FailedImageContext.Provider>,
+    );
+
+    const img = container.querySelector('img');
+
+    // Trigger image to load first
+    act(() => {
+      mockAllIsIntersecting(true);
+    });
+
+    // Simulate image load error
+    act(() => {
+      img.dispatchEvent(new Event('error'));
+    });
+
+    expect(notifyFailure).toHaveBeenCalled();
+    expect(img).toHaveAttribute('src', fallbackImage);
+    expect(img).toHaveAttribute('alt', 'Thumbnail image unavailable');
+  });
+
+  it('applies object-fit contain style when using fallback image', () => {
+    const fallbackImage = 'data:image/svg+xml,fallback';
+    const mockContext = {
+      fallbackImage,
+      hasFailed: false,
+      notifyFailure: vi.fn(),
+    };
+
+    const { container } = render(
+      <FailedImageContext.Provider value={mockContext}>
+        <IIIFThumbnail resource={{}} thumbnail={thumbnail} maxWidth={80} maxHeight={90} />
+      </FailedImageContext.Provider>,
+    );
+
+    const img = container.querySelector('img');
+
+    // Trigger image to load
+    act(() => {
+      mockAllIsIntersecting(true);
+    });
+
+    // Simulate image load error to trigger fallback
+    act(() => {
+      img.dispatchEvent(new Event('error'));
+    });
+
+    // Should apply objectFit: contain with max dimensions
+    expect(img).toHaveStyle({
+      maxHeight: '90px',
+      maxWidth: '80px',
+      objectFit: 'contain',
+    });
   });
 });
