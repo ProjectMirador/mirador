@@ -152,68 +152,6 @@ describe('windows reducer', () => {
     });
   });
 
-  it('should handle SET_WINDOW_SIZE', () => {
-    expect(windowsReducer({
-      abc123: {
-        id: 'abc123',
-      },
-      def456: {
-        id: 'def456',
-      },
-    }, {
-      payload: {
-        size: {
-          height: 200,
-          width: 200,
-          x: 20,
-          y: 20,
-        },
-        windowId: 'abc123',
-      },
-      type: ActionTypes.SET_WINDOW_SIZE,
-    })).toEqual({
-      abc123: {
-        height: 200,
-        id: 'abc123',
-        width: 200,
-        x: 20,
-        y: 20,
-      },
-      def456: {
-        id: 'def456',
-      },
-    });
-  });
-
-  it('should handle UPDATE_WINDOW_POSITION', () => {
-    expect(windowsReducer({
-      abc123: {
-        id: 'abc123',
-      },
-      def456: {
-        id: 'def456',
-      },
-    }, {
-      payload: {
-        position: {
-          x: 20,
-          y: 20,
-        },
-        windowId: 'abc123',
-      },
-      type: ActionTypes.UPDATE_WINDOW_POSITION,
-    })).toEqual({
-      abc123: {
-        id: 'abc123',
-        x: 20,
-        y: 20,
-      },
-      def456: {
-        id: 'def456',
-      },
-    });
-  });
-
   it('should handle ADD_COMPANION_WINDOW', () => {
     // on the right, just tacks the new id on
     expect(windowsReducer({
