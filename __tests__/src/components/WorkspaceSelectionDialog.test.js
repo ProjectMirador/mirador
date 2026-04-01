@@ -40,10 +40,10 @@ describe('WorkspaceSelectionDialog', () => {
     const user = userEvent.setup();
     createWrapper();
 
-    user.click(screen.getByRole('menuitem', { name: /Elastic/ }));
+    await user.click(screen.getByRole('menuitem', { name: /Elastic/ }));
     await waitFor(() => expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'elastic' }));
 
-    user.click(screen.getByRole('menuitem', { name: /Mosaic/ }));
+    await user.click(screen.getByRole('menuitem', { name: /Mosaic/ }));
     await waitFor(() => expect(updateWorkspace).toHaveBeenLastCalledWith({ type: 'mosaic' }));
     await waitFor(() => expect(handleClose).toHaveBeenCalledTimes(2));
   });
