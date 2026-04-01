@@ -43,7 +43,7 @@ export default defineConfig({
           external: (id, parentId) => {
             const peers = Object.keys(packageJson.peerDependencies);
             return peers.indexOf(id) > -1
-              || peers.find((peer) => id.startsWith(`${peer}/`))
+              || peers.some((peer) => id.startsWith(`${peer}/`))
               || id.startsWith('__tests__/')
               || id.startsWith('__mocks__/');
           },
