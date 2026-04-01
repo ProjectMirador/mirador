@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 import { globSync } from 'glob';
 import * as packageJson from './package.json';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 /**
 * Vite configuration
 */
