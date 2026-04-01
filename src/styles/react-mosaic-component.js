@@ -218,12 +218,14 @@ const globalReactMosaicStyles = {
     ],
     zIndex: '3',
   },
-  '.mosaic-window .mosaic-window-additional-actions-bar .bp3-button, .mosaic-preview .mosaic-window-additional-actions-bar .bp3-button': {
-    margin: '0',
-  },
-  '.mosaic-window .mosaic-window-additional-actions-bar .bp3-button:after, .mosaic-preview .mosaic-window-additional-actions-bar .bp3-button:after': {
-    display: 'none',
-  },
+  '.mosaic-window .mosaic-window-additional-actions-bar .bp3-button, .mosaic-preview .mosaic-window-additional-actions-bar .bp3-button':
+    {
+      margin: '0',
+    },
+  '.mosaic-window .mosaic-window-additional-actions-bar .bp3-button:after, .mosaic-preview .mosaic-window-additional-actions-bar .bp3-button:after':
+    {
+      display: 'none',
+    },
   '.mosaic-window .mosaic-window-body-overlay, .mosaic-preview .mosaic-window-body-overlay': {
     position: 'absolute',
     top: '0',
@@ -235,12 +237,14 @@ const globalReactMosaicStyles = {
     display: 'none',
     zIndex: '2',
   },
-  '.mosaic-window.additional-controls-open .mosaic-window-additional-actions-bar, .mosaic-preview.additional-controls-open .mosaic-window-additional-actions-bar': {
-    height: 30,
-  },
-  '.mosaic-window.additional-controls-open .mosaic-window-body-overlay, .mosaic-preview.additional-controls-open .mosaic-window-body-overlay': {
-    display: 'block',
-  },
+  '.mosaic-window.additional-controls-open .mosaic-window-additional-actions-bar, .mosaic-preview.additional-controls-open .mosaic-window-additional-actions-bar':
+    {
+      height: 30,
+    },
+  '.mosaic-window.additional-controls-open .mosaic-window-body-overlay, .mosaic-preview.additional-controls-open .mosaic-window-body-overlay':
+    {
+      display: 'block',
+    },
   '.mosaic-window .mosaic-preview, .mosaic-preview .mosaic-preview': {
     height: '100%',
     width: '100%',
@@ -268,16 +272,16 @@ const globalReactMosaicStyles = {
     marginBottom: 10,
   },
   '.mosaic:not(.mosaic-blueprint-theme) .mosaic-default-control.close-button:before': {
-    content: '\'Close\'',
+    content: "'Close'",
   },
   '.mosaic:not(.mosaic-blueprint-theme) .mosaic-default-control.split-button:before': {
-    content: '\'Split\'',
+    content: "'Split'",
   },
   '.mosaic:not(.mosaic-blueprint-theme) .mosaic-default-control.replace-button:before': {
-    content: '\'Replace\'',
+    content: "'Replace'",
   },
   '.mosaic:not(.mosaic-blueprint-theme) .mosaic-default-control.expand-button:before': {
-    content: '\'Expand\'',
+    content: "'Expand'",
   },
 };
 

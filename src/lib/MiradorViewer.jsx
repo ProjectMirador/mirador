@@ -1,9 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import HotApp from '../components/App';
-import {
-  filterValidPlugins,
-} from '../extend/pluginPreprocessing';
+import { filterValidPlugins } from '../extend/pluginPreprocessing';
 import createPluggableStore from '../state/createPluggableStore';
 
 /**
@@ -15,8 +13,7 @@ class MiradorViewer {
   constructor(config, viewerConfig = {}) {
     this.plugins = filterValidPlugins(viewerConfig.plugins || []);
     this.config = config;
-    this.store = viewerConfig.store
-      || createPluggableStore(this.config, this.plugins);
+    this.store = viewerConfig.store || createPluggableStore(this.config, this.plugins);
 
     if (config.id) this.renderInto(document.getElementById(config.id));
   }

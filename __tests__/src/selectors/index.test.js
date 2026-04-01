@@ -6,10 +6,7 @@ import {
 
 describe('getAnnotationResourcesByMotivation', () => {
   it('returns an array of annotation resources (filtered by the passed in array of motiviations)', () => {
-    const expected = [
-      ['oa:commenting'],
-      ['sc:something-else', 'oa:commenting'],
-    ];
+    const expected = [['oa:commenting'], ['sc:something-else', 'oa:commenting']];
 
     const state = {
       annotations: {
@@ -30,8 +27,7 @@ describe('getAnnotationResourcesByMotivation', () => {
         mid: {
           json: {
             '@context': 'http://iiif.io/api/presentation/2/context.json',
-            '@id':
-             'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+            '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
             '@type': 'sc:Manifest',
             sequences: [
               {
@@ -54,7 +50,10 @@ describe('getAnnotationResourcesByMotivation', () => {
     };
 
     expect(
-      getAnnotationResourcesByMotivation(state, { motivations: ['something', 'oa:commenting'], windowId: 'abc123' }).map(r => r.motivations),
+      getAnnotationResourcesByMotivation(state, {
+        motivations: ['something', 'oa:commenting'],
+        windowId: 'abc123',
+      }).map((r) => r.motivations),
     ).toEqual(expected);
   });
 });
@@ -94,8 +93,7 @@ it('getSelectedAnnotationId returns an array of selected annotation IDs from sta
       mid: {
         json: {
           '@context': 'http://iiif.io/api/presentation/2/context.json',
-          '@id':
-           'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+          '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
           '@type': 'sc:Manifest',
           sequences: [
             {
@@ -118,7 +116,5 @@ it('getSelectedAnnotationId returns an array of selected annotation IDs from sta
     },
   };
 
-  expect(getSelectedAnnotationId(state, { windowId: 'wid' })).toEqual(
-    'aid1',
-  );
+  expect(getSelectedAnnotationId(state, { windowId: 'wid' })).toEqual('aid1');
 });

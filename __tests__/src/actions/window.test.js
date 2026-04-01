@@ -92,10 +92,12 @@ describe('window actions', () => {
     it('creates a new window with additional companion windows', () => {
       const options = {
         canvasIndex: 1,
-        companionWindows: [{
-          content: 'attribution',
-          position: 'right',
-        }],
+        companionWindows: [
+          {
+            content: 'attribution',
+            position: 'right',
+          },
+        ],
         id: 'helloworld',
       };
 
@@ -120,7 +122,10 @@ describe('window actions', () => {
 
       expect(action.window.companionWindowIds.length).toEqual(3);
       expect(action.window.companionWindowIds[2]).toEqual(action.companionWindows[2].id);
-      expect(action.companionWindows[2]).toMatchObject({ content: 'attribution', position: 'right' });
+      expect(action.companionWindows[2]).toMatchObject({
+        content: 'attribution',
+        position: 'right',
+      });
     });
     it('creates a new window without a default sidebar', () => {
       const options = {

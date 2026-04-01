@@ -7,9 +7,13 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
  * SearchPanelNavigation ~
-*/
+ */
 export function SearchPanelNavigation({
-  numTotal = undefined, searchHits = [], selectedContentSearchAnnotation, direction, selectAnnotation,
+  numTotal = undefined,
+  searchHits = [],
+  selectedContentSearchAnnotation,
+  direction,
+  selectAnnotation,
 }) {
   const { t } = useTranslation();
   /** */
@@ -38,8 +42,7 @@ export function SearchPanelNavigation({
 
   const iconStyle = direction === 'rtl' ? { transform: 'rotate(180deg)' } : {};
 
-  const currentHitIndex = searchHits
-    .findIndex(val => val.annotations.includes(selectedContentSearchAnnotation[0]));
+  const currentHitIndex = searchHits.findIndex((val) => val.annotations.includes(selectedContentSearchAnnotation[0]));
   let lengthText = searchHits.length;
   if (searchHits.length < numTotal) {
     lengthText += '+';
@@ -56,9 +59,7 @@ export function SearchPanelNavigation({
       >
         <ChevronLeftIcon style={iconStyle} />
       </MiradorMenuButton>
-      <span style={{ unicodeBidi: 'plaintext' }}>
-        {t('pagination', { current: currentHitIndex + 1, total: lengthText })}
-      </span>
+      <span style={{ unicodeBidi: 'plaintext' }}>{t('pagination', { current: currentHitIndex + 1, total: lengthText })}</span>
       <MiradorMenuButton
         aria-label={t('searchNextResult')}
         disabled={!hasNextResult(currentHitIndex)}
@@ -76,5 +77,6 @@ SearchPanelNavigation.propTypes = {
   searchHits: PropTypes.arrayOf(PropTypes.object),
   selectAnnotation: PropTypes.func.isRequired,
   selectedContentSearchAnnotation: PropTypes.arrayOf(PropTypes.string).isRequired,
-  windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+  // eslint-disable-next-line react/no-unused-prop-types
+  windowId: PropTypes.string.isRequired,
 };

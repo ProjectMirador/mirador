@@ -38,9 +38,7 @@ const StyledMiradorMenuButton = styled(MiradorMenuButton)(() => ({
  * @memberof Workspace
  * @private
  */
-export function WorkspaceAdd({
-  addResource = () => {}, catalog = [], setWorkspaceAddVisibility, ...rest
-}) {
+export function WorkspaceAdd({ addResource = () => {}, catalog = [], setWorkspaceAddVisibility, ...rest }) {
   const { t } = useTranslation();
   const [addResourcesOpen, setAddResourcesVisibility] = useState(false);
   const ref = useRef();
@@ -80,7 +78,7 @@ export function WorkspaceAdd({
 
   const manifestList = catalog.map((resource, index) => (
     <ManifestListItem
-      {...(index === 0 && { buttonRef: (buttonRef => buttonRef && buttonRef.focus()) })}
+      {...(index === 0 && { buttonRef: (buttonRef) => buttonRef && buttonRef.focus() })}
       key={resource.manifestId}
       manifestId={resource.manifestId}
       provider={resource.provider}
@@ -89,7 +87,11 @@ export function WorkspaceAdd({
   ));
 
   const pluginProps = {
-    addResource, catalog, setWorkspaceAddVisibility, t, ...rest,
+    addResource,
+    catalog,
+    setWorkspaceAddVisibility,
+    t,
+    ...rest,
   };
 
   useEffect(() => {
@@ -114,22 +116,18 @@ export function WorkspaceAdd({
             }}
           >
             <Grid size={12}>
-              <Typography
-                variant="h1"
-                component="div"
-                align="center"
-              >
+              <Typography variant="h1" component="div" align="center">
                 {t('emptyResourceList')}
               </Typography>
             </Grid>
           </Grid>
         ) : (
           <Paper sx={{ margin: 2 }}>
-            <Typography style={visuallyHidden} component="h1">{t('miradorResources')}</Typography>
+            <Typography style={visuallyHidden} component="h1">
+              {t('miradorResources')}
+            </Typography>
             <PluginHook targetName="WorkspaceAdd" {...pluginProps} />
-            <List disablePadding>
-              {manifestList}
-            </List>
+            <List disablePadding>{manifestList}</List>
           </Paper>
         )}
         <Fab
@@ -150,7 +148,7 @@ export function WorkspaceAdd({
         </Fab>
 
         <Drawer
-          sx={theme => ({
+          sx={(theme) => ({
             '.MuiDrawer-paper': {
               borderTop: '0',
               left: 'unset',
@@ -182,10 +180,7 @@ export function WorkspaceAdd({
           >
             <AppBar position="absolute" color="primary" enableColorOnDark onClick={() => setAddResourcesVisibility(false)}>
               <Toolbar variant="dense">
-                <StyledMiradorMenuButton
-                  aria-label={t('closeAddResourceForm')}
-                  color="inherit"
-                >
+                <StyledMiradorMenuButton aria-label={t('closeAddResourceForm')} color="inherit">
                   <ExpandMoreIcon />
                 </StyledMiradorMenuButton>
                 <Typography variant="h2" noWrap color="inherit" sx={{ flexGrow: 1 }}>
@@ -207,9 +202,11 @@ export function WorkspaceAdd({
 
 WorkspaceAdd.propTypes = {
   addResource: PropTypes.func,
-  catalog: PropTypes.arrayOf(PropTypes.shape({
-    manifestId: PropTypes.string.isRequired,
-    provider: PropTypes.string,
-  })),
+  catalog: PropTypes.arrayOf(
+    PropTypes.shape({
+      manifestId: PropTypes.string.isRequired,
+      provider: PropTypes.string,
+    }),
+  ),
   setWorkspaceAddVisibility: PropTypes.func.isRequired,
 };

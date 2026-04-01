@@ -4,16 +4,13 @@ import { WindowSideBarAnnotationsPanel } from '../../../src/components/WindowSid
 
 /** */
 function createWrapper(props, state) {
-  return render(
-    <WindowSideBarAnnotationsPanel
-      annotationCount={4}
-      classes={{}}
-      id="xyz"
-      windowId="abc"
-      {...props}
-    />,
-    { preloadedState: { companionWindows: { xyz: { content: 'annotations' } }, windows: { abc: {} }, ...state } },
-  );
+  return render(<WindowSideBarAnnotationsPanel annotationCount={4} classes={{}} id="xyz" windowId="abc" {...props} />, {
+    preloadedState: {
+      companionWindows: { xyz: { content: 'annotations' } },
+      windows: { abc: {} },
+      ...state,
+    },
+  });
 }
 
 describe('WindowSideBarAnnotationsPanel', () => {

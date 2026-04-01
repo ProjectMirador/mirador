@@ -18,9 +18,6 @@ const mapStateToProps = (state, { id }) => {
   };
 };
 
-const enhance = compose(
-  connect(mapStateToProps),
-  withPlugins('CompanionWindowFactory'),
-);
+const enhance = compose(connect(mapStateToProps), withPlugins('CompanionWindowFactory'));
 
 export default enhance(CompanionWindowFactory);

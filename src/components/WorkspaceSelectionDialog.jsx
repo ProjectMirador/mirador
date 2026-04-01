@@ -1,11 +1,5 @@
 import DialogTitle from '@mui/material/DialogTitle';
-import {
-  Card,
-  CardContent,
-  MenuList,
-  MenuItem,
-  Typography,
-} from '@mui/material';
+import { Card, CardContent, MenuList, MenuItem, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +17,12 @@ const StyledDetails = styled('div')(() => ({
 /**
  */
 export function WorkspaceSelectionDialog({
-  container = null, handleClose, open = false, children = null, updateWorkspace, workspaceType,
+  container = null,
+  handleClose,
+  open = false,
+  children = null,
+  updateWorkspace,
+  workspaceType,
 }) {
   const { t } = useTranslation();
   const dialogTitleId = useId();
@@ -37,15 +36,8 @@ export function WorkspaceSelectionDialog({
   };
 
   return (
-    <WorkspaceDialog
-      aria-labelledby={dialogTitleId}
-      container={container}
-      onClose={handleClose}
-      open={open}
-    >
-      <DialogTitle id={dialogTitleId}>
-        {t('workspaceSelectionTitle')}
-      </DialogTitle>
+    <WorkspaceDialog aria-labelledby={dialogTitleId} container={container} onClose={handleClose} open={open}>
+      <DialogTitle id={dialogTitleId}>{t('workspaceSelectionTitle')}</DialogTitle>
       <ScrollIndicatedDialogContent>
         {children}
         <MenuList
@@ -71,12 +63,13 @@ export function WorkspaceSelectionDialog({
             selected={workspaceType === 'elastic'}
             value="elastic"
           >
-            <Card sx={{
-              backgroundColor: 'transparent',
-              borderRadius: '0',
-              boxShadow: '0 0 transparent',
-              display: 'flex',
-            }}
+            <Card
+              sx={{
+                backgroundColor: 'transparent',
+                borderRadius: '0',
+                boxShadow: '0 0 transparent',
+                display: 'flex',
+              }}
             >
               <WorkspaceTypeElasticIcon
                 sx={{
@@ -100,7 +93,9 @@ export function WorkspaceSelectionDialog({
                     flex: '1 0 auto',
                   }}
                 >
-                  <Typography sx={{ paddingBottom: '6px' }} component="p" variant="h3">{t('elastic')}</Typography>
+                  <Typography sx={{ paddingBottom: '6px' }} component="p" variant="h3">
+                    {t('elastic')}
+                  </Typography>
                   <Typography variant="body1">{t('elasticDescription')}</Typography>
                 </CardContent>
               </StyledDetails>
@@ -116,12 +111,13 @@ export function WorkspaceSelectionDialog({
             selected={workspaceType === 'mosaic'}
             value="mosaic"
           >
-            <Card sx={{
-              backgroundColor: 'transparent',
-              borderRadius: '0',
-              boxShadow: '0 0 transparent',
-              display: 'flex',
-            }}
+            <Card
+              sx={{
+                backgroundColor: 'transparent',
+                borderRadius: '0',
+                boxShadow: '0 0 transparent',
+                display: 'flex',
+              }}
             >
               <WorkspaceTypeMosaicIcon
                 sx={{
@@ -145,7 +141,9 @@ export function WorkspaceSelectionDialog({
                     flex: '1 0 auto',
                   }}
                 >
-                  <Typography sx={{ paddingBottom: '6px' }} component="p" variant="h3">{t('mosaic')}</Typography>
+                  <Typography sx={{ paddingBottom: '6px' }} component="p" variant="h3">
+                    {t('mosaic')}
+                  </Typography>
                   <Typography variant="body1">{t('mosaicDescription')}</Typography>
                 </CardContent>
               </StyledDetails>

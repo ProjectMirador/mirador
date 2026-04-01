@@ -8,7 +8,7 @@ import { LanguageSettings } from '../components/LanguageSettings';
 /**
  * Map state to props for connect
  */
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   languages: getLanguagesFromConfigWithCurrent(state),
 });
 
@@ -23,7 +23,4 @@ const mapDispatchToProps = (dispatch, { afterSelect }) => ({
   },
 });
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('LanguageSettings'),
-)(LanguageSettings);
+export default compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('LanguageSettings'))(LanguageSettings);

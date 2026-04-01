@@ -4,13 +4,7 @@ import { ZoomControls } from '../../../src/components/ZoomControls';
 
 /** Utility function to create a shallow rendering */
 function createWrapper(props) {
-  return render(
-    <ZoomControls
-      windowId="xyz"
-      zoomToWorld={() => {}}
-      {...props}
-    />,
-  );
+  return render(<ZoomControls windowId="xyz" zoomToWorld={() => {}} {...props} />);
 }
 
 describe('ZoomControls', () => {
@@ -23,7 +17,9 @@ describe('ZoomControls', () => {
     user = userEvent.setup();
     updateViewport = vi.fn();
     createWrapper({
-      updateViewport, viewer, zoomToWorld,
+      updateViewport,
+      viewer,
+      zoomToWorld,
     });
   });
 

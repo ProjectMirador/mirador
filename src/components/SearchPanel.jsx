@@ -10,7 +10,13 @@ import SearchResults from '../containers/SearchResults';
 
 /** */
 export function SearchPanel({
-  fetchSearch = undefined, id, query = '', removeSearch, searchService, suggestedSearches = [], windowId,
+  fetchSearch = undefined,
+  id,
+  query = '',
+  removeSearch,
+  searchService,
+  suggestedSearches = [],
+  windowId,
 }) {
   const { t } = useTranslation();
   const containerRef = useRef(null);
@@ -18,49 +24,40 @@ export function SearchPanel({
   return (
     <CompanionWindow
       ariaLabel={t('searchTitle')}
-      title={(
+      title={
         <>
           {t('searchTitle')}
-          {
-            query && query !== '' && (
-              <Chip
-                role="button"
-                sx={{ marginLeft: 1 }}
-                color="secondary"
-                label={t('clearSearch')}
-                onClick={removeSearch}
-                onDelete={removeSearch}
-                size="small"
-                tabIndex={0}
-                variant="outlined"
-              />
-            )
-          }
+          {query && query !== '' && (
+            <Chip
+              role="button"
+              sx={{ marginLeft: 1 }}
+              color="secondary"
+              label={t('clearSearch')}
+              onClick={removeSearch}
+              onDelete={removeSearch}
+              size="small"
+              tabIndex={0}
+              variant="outlined"
+            />
+          )}
         </>
-      )}
+      }
       windowId={windowId}
       id={id}
       titleControls={<SearchPanelControls companionWindowId={id} windowId={windowId} />}
       ref={containerRef}
     >
-      <SearchResults
-        containerRef={containerRef}
-        companionWindowId={id}
-        windowId={windowId}
-      />
-      {
-        fetchSearch && suggestedSearches && query === '' && suggestedSearches.map(search => (
+      <SearchResults containerRef={containerRef} companionWindowId={id} windowId={windowId} />
+      {fetchSearch &&
+        suggestedSearches &&
+        query === '' &&
+        suggestedSearches.map((search) => (
           <Typography component="p" key={search} variant="body1" sx={{ margin: 2 }}>
-            <Button
-              variant="inlineText"
-              color="secondary"
-              onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}
-            >
+            <Button variant="inlineText" color="secondary" onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}>
               {t('suggestSearch', { query: search })}
             </Button>
           </Typography>
-        ))
-      }
+        ))}
     </CompanionWindow>
   );
 }

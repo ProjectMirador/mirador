@@ -13,7 +13,7 @@ export default class AnnotationItem {
 
   /** */
   isOnlyTag() {
-    return (this.motivations.length === 1 && this.motivations[0] === 'tagging');
+    return this.motivations.length === 1 && this.motivations[0] === 'tagging';
   }
 
   /** */
@@ -55,9 +55,9 @@ export default class AnnotationItem {
   /** */
   get tags() {
     if (this.isOnlyTag()) {
-      return this.body.map(r => r.value);
+      return this.body.map((r) => r.value);
     }
-    return this.body.filter(r => r.purpose === 'tagging').map(r => r.value);
+    return this.body.filter((r) => r.purpose === 'tagging').map((r) => r.value);
   }
 
   /** */
@@ -68,7 +68,10 @@ export default class AnnotationItem {
   /** */
   get chars() {
     if (this.isOnlyTag()) return null;
-    return this.body.filter(r => r.purpose !== 'tagging').map(r => r.value).join(' ');
+    return this.body
+      .filter((r) => r.purpose !== 'tagging')
+      .map((r) => r.value)
+      .join(' ');
   }
 
   /** */
@@ -91,7 +94,7 @@ export default class AnnotationItem {
       case 'string':
         return null;
       case 'object':
-        return selector.find(s => s.type && s.type === 'SvgSelector');
+        return selector.find((s) => s.type && s.type === 'SvgSelector');
       default:
         return null;
     }
@@ -109,13 +112,13 @@ export default class AnnotationItem {
         match = selector.match(/xywh=(.*)$/);
         break;
       case 'object':
-        fragmentSelector = selector.find(s => s.type && s.type === 'FragmentSelector');
+        fragmentSelector = selector.find((s) => s.type && s.type === 'FragmentSelector');
         match = fragmentSelector && fragmentSelector.value.match(/xywh=(.*)$/);
         break;
       default:
         return null;
     }
 
-    return match && match[1].split(',').map(str => parseInt(str, 10));
+    return match && match[1].split(',').map((str) => parseInt(str, 10));
   }
 }

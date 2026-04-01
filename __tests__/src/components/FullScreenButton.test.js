@@ -7,11 +7,7 @@ import { FullScreenButton } from '../../../src/components/FullScreenButton';
 function createWrapper(props, contextProps = { active: false }) {
   return render(
     <FullScreenContext.Provider value={{ enter: () => {}, exit: () => {}, ...contextProps }}>
-      <FullScreenButton
-        classes={{}}
-        className="xyz"
-        {...props}
-      />
+      <FullScreenButton classes={{}} className="xyz" {...props} />
     </FullScreenContext.Provider>,
   );
 }

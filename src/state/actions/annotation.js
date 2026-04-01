@@ -103,7 +103,8 @@ export function deselectAnnotation(windowId, annotationId) {
  */
 export function toggleAnnotationDisplay(windowId) {
   return {
-    type: ActionTypes.TOGGLE_ANNOTATION_DISPLAY, windowId,
+    type: ActionTypes.TOGGLE_ANNOTATION_DISPLAY,
+    windowId,
   };
 }
 
@@ -115,6 +116,8 @@ export function toggleAnnotationDisplay(windowId) {
  */
 export function hoverAnnotation(windowId, annotationIds) {
   return {
-    annotationIds, type: ActionTypes.HOVER_ANNOTATION, windowId,
+    annotationIds,
+    type: ActionTypes.HOVER_ANNOTATION,
+    windowId,
   };
 }

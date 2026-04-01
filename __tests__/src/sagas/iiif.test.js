@@ -7,13 +7,7 @@ import {
   fetchInfoResponse,
   fetchResourceManifest,
 } from '../../../src/state/sagas/iiif';
-import {
-  getConfig,
-  getManifests,
-  selectInfoResponse,
-  getAccessTokens,
-  getRequestsConfig,
-} from '../../../src/state/selectors';
+import { getConfig, getManifests, selectInfoResponse, getAccessTokens, getRequestsConfig } from '../../../src/state/selectors';
 
 describe('IIIF sagas', () => {
   describe('fetchManifest', () => {
@@ -24,9 +18,7 @@ describe('IIIF sagas', () => {
       };
 
       return expectSaga(fetchManifest, action)
-        .provide([
-          [select(getConfig), {}],
-        ])
+        .provide([[select(getConfig), {}]])
         .put({
           manifestId: 'manifestId',
           manifestJson: { data: '12345' },
@@ -42,26 +34,25 @@ describe('IIIF sagas', () => {
       };
 
       return expectSaga(fetchManifest, action)
-        .provide([
-          [select(getConfig), {}],
-        ])
+        .provide([[select(getConfig), {}]])
         .put.actionType('mirador/RECEIVE_MANIFEST_FAILURE')
         .run();
     });
 
     it('supports request configuration preprocessors', () => {
-      fetch.once(req => Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })));
+      fetch.once((req) => Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })));
       const action = {
         manifestId: 'manifestId',
       };
 
       return expectSaga(fetchManifest, action)
         .provide([
-          [select(getRequestsConfig), {
-            preprocessors: [
-              (url, options) => ({ ...options, headers: { CustomHeader: 'config injected' } }),
-            ],
-          }],
+          [
+            select(getRequestsConfig),
+            {
+              preprocessors: [(url, options) => ({ ...options, headers: { CustomHeader: 'config injected' } })],
+            },
+          ],
         ])
         .put({
           manifestId: 'manifestId',
@@ -72,20 +63,24 @@ describe('IIIF sagas', () => {
     });
 
     it('supports response postprocessors', () => {
-      fetch.once(req => Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })));
+      fetch.once((req) => Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })));
       const action = {
         manifestId: 'manifestId',
       };
 
       return expectSaga(fetchManifest, action)
         .provide([
-          [select(getRequestsConfig), {
-            postprocessors: [
-              (url, responseAction) => {
-                responseAction.manifestJson = { foo: 'modified!' }; // eslint-disable-line no-param-reassign
-              },
-            ],
-          }],
+          [
+            select(getRequestsConfig),
+            {
+              postprocessors: [
+                (url, responseAction) => {
+                  // eslint-disable-next-line no-param-reassign
+                  responseAction.manifestJson = { foo: 'modified!' };
+                },
+              ],
+            },
+          ],
         ])
         .put({
           manifestId: 'manifestId',
@@ -122,23 +117,30 @@ describe('IIIF sagas', () => {
       };
       const infoResponse = {
         id: 'degradedInfoId',
-        service: [{
-          '@context': 'http://iiif.io/api/auth/1/context.json',
-          '@id': 'https://authentication.example.org/login',
-          profile: 'http://iiif.io/api/auth/1/login',
-          service: [
-            {
-              '@id': 'https://authentication.example.org/token',
-              profile: 'http://iiif.io/api/auth/1/token',
-            },
-          ],
-        }],
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.org/login',
+            profile: 'http://iiif.io/api/auth/1/login',
+            service: [
+              {
+                '@id': 'https://authentication.example.org/token',
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+        ],
       };
 
       return expectSaga(fetchInfoResponse, action)
         .provide([
           [select(selectInfoResponse, { infoId: 'infoId' }), infoResponse],
-          [select(getAccessTokens), { 'https://authentication.example.org/token': { id: 'x', json: { accessToken: '123' } } }],
+          [
+            select(getAccessTokens),
+            {
+              'https://authentication.example.org/token': { id: 'x', json: { accessToken: '123' } },
+            },
+          ],
         ])
         .put({
           infoId: 'infoId',
@@ -157,9 +159,7 @@ describe('IIIF sagas', () => {
         infoId: 'infoId',
       };
 
-      return expectSaga(fetchInfoResponse, action)
-        .put.actionType('mirador/RECEIVE_INFO_RESPONSE_FAILURE')
-        .run();
+      return expectSaga(fetchInfoResponse, action).put.actionType('mirador/RECEIVE_INFO_RESPONSE_FAILURE').run();
     });
     it('handles degraded requests', () => {
       fetch.mockResponseOnce(JSON.stringify({ id: 'otherInfoId' }));
@@ -184,17 +184,19 @@ describe('IIIF sagas', () => {
     it('rerequests documents if the authoritative response suggests a different access token service', () => {
       const degradedInfoResponse = {
         id: 'degradedInfoId',
-        service: [{
-          '@context': 'http://iiif.io/api/auth/1/context.json',
-          '@id': 'https://authentication.example.org/login',
-          profile: 'http://iiif.io/api/auth/1/login',
-          service: [
-            {
-              '@id': 'https://authentication.example.org/token',
-              profile: 'http://iiif.io/api/auth/1/token',
-            },
-          ],
-        }],
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.org/login',
+            profile: 'http://iiif.io/api/auth/1/login',
+            service: [
+              {
+                '@id': 'https://authentication.example.org/token',
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+        ],
       };
       fetch.once(JSON.stringify(degradedInfoResponse)).once(JSON.stringify({ id: 'infoId' }));
       const action = {
@@ -205,7 +207,12 @@ describe('IIIF sagas', () => {
       return expectSaga(fetchInfoResponse, action)
         .provide([
           [select(selectInfoResponse, { infoId: 'infoId' }), undefined],
-          [select(getAccessTokens), { 'https://authentication.example.org/token': { id: 'x', json: { accessToken: '123' } } }],
+          [
+            select(getAccessTokens),
+            {
+              'https://authentication.example.org/token': { id: 'x', json: { accessToken: '123' } },
+            },
+          ],
         ])
         .put({
           infoId: 'infoId',
@@ -248,9 +255,7 @@ describe('IIIF sagas', () => {
         windowId: 'windowId',
       };
 
-      return expectSaga(fetchSearchResponse, action)
-        .put.actionType('mirador/RECEIVE_SEARCH_FAILURE')
-        .run();
+      return expectSaga(fetchSearchResponse, action).put.actionType('mirador/RECEIVE_SEARCH_FAILURE').run();
     });
   });
 
@@ -279,9 +284,7 @@ describe('IIIF sagas', () => {
         targetId: 'targetId',
       };
 
-      return expectSaga(fetchAnnotation, action)
-        .put.actionType('mirador/RECEIVE_ANNOTATION_FAILURE')
-        .run();
+      return expectSaga(fetchAnnotation, action).put.actionType('mirador/RECEIVE_ANNOTATION_FAILURE').run();
     });
   });
 
@@ -332,7 +335,8 @@ describe('IIIF sagas', () => {
           [select(getConfig), {}],
           [select(getManifests), { manifestId: {} }],
         ])
-        .run().then(({ allEffects }) => allEffects.length === 0);
+        .run()
+        .then(({ allEffects }) => allEffects.length === 0);
     });
   });
 });

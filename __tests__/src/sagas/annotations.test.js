@@ -14,9 +14,7 @@ describe('annotation sagas', () => {
 
       return expectSaga(fetchCanvasAnnotations, action)
         .provide([
-          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }),
-            { __jsonld: { otherContent: 'annoId' }, id: 'a' },
-          ],
+          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }), { __jsonld: { otherContent: 'annoId' }, id: 'a' }],
           [select(getAnnotations), { a: {} }],
         ])
         .put({
@@ -34,9 +32,7 @@ describe('annotation sagas', () => {
 
       return expectSaga(fetchCanvasAnnotations, action)
         .provide([
-          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }),
-            { __jsonld: { otherContent: ['annoId'] }, id: 'a' },
-          ],
+          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }), { __jsonld: { otherContent: ['annoId'] }, id: 'a' }],
           [select(getAnnotations), { a: { annoId: {} } }],
         ])
         .run();
@@ -49,7 +45,8 @@ describe('annotation sagas', () => {
 
       return expectSaga(fetchCanvasAnnotations, action)
         .provide([
-          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }),
+          [
+            select(getCanvas, { canvasId: 'a', windowId: 'foo' }),
             { __jsonld: { annotations: { id: 'annoId', type: 'AnnotationPage' } }, id: 'a' },
           ],
           [select(getAnnotations), { a: {} }],
@@ -71,9 +68,7 @@ describe('annotation sagas', () => {
 
       return expectSaga(fetchCanvasAnnotations, action)
         .provide([
-          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }),
-            { __jsonld: { annotations }, id: 'a' },
-          ],
+          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }), { __jsonld: { annotations }, id: 'a' }],
           [select(getAnnotations), { a: {} }],
         ])
         .put({

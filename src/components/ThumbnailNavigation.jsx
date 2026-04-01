@@ -99,19 +99,14 @@ export function ThumbnailNavigation({
     const bounds = world.worldBounds();
     switch (position) {
       case 'far-right': {
-        const calc = Math.floor(
-          calculatingWidth(canvases.length) * bounds[3] / bounds[2]
-        );
+        const calc = Math.floor((calculatingWidth(canvases.length) * bounds[3]) / bounds[2]);
         if (!Number.isInteger(calc)) return thumbnailNavigation.width + spacing;
         return calc + spacing;
       }
       // Default case bottom
       default: {
         if (bounds[3] === 0) return thumbnailNavigation.width + spacing;
-        const calc = Math.ceil(
-          (thumbnailNavigation.height - scrollbarSize - spacing - 4)
-           * bounds[2] / bounds[3],
-        );
+        const calc = Math.ceil(((thumbnailNavigation.height - scrollbarSize - spacing - 4) * bounds[2]) / bounds[3]);
         return calc;
       }
     }
@@ -169,9 +164,7 @@ export function ThumbnailNavigation({
   };
   return (
     <Paper
-      className={classNames(
-        ns('thumb-navigation'),
-      )}
+      className={classNames(ns('thumb-navigation'))}
       sx={{
         '&:focus': {
           boxShadow: 0,

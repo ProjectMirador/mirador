@@ -41,7 +41,8 @@ describe('SidebarIndexList', () => {
     expect(screen.getByRole('menuitem', { name: 'Image 1' })).toBeInTheDocument();
     expect(screen.getByRole('menuitem', { name: 'Image 2' })).toBeInTheDocument();
 
-    expect(container.querySelectorAll('img').length).toBe(3); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelectorAll('img').length).toBe(3);
 
     expect(screen.getByRole('menuitem', { name: 'Image 1' })).toHaveClass('Mui-selected');
   });

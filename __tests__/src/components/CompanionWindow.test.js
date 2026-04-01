@@ -6,15 +6,7 @@ import { CompanionWindow } from '../../../src/components/CompanionWindow';
 /** create wrapper */
 function createWrapper(props) {
   return render(
-    <CompanionWindow
-      id="abc123"
-      isDisplayed
-      direction="ltr"
-      windowId="x"
-      companionWindow={{}}
-      position="right"
-      {...props}
-    />,
+    <CompanionWindow id="abc123" isDisplayed direction="ltr" windowId="x" companionWindow={{}} position="right" {...props} />,
   );
 }
 
@@ -68,7 +60,9 @@ describe('CompanionWindow', () => {
 
       /** Some child component */
       const Button = ({ parentactions, ...props }) => (
-        <button type="button" onClick={parentactions.closeCompanionWindow} {...props}>Close</button>
+        <button type="button" onClick={parentactions.closeCompanionWindow} {...props}>
+          Close
+        </button>
       );
 
       Button.propTypes = {
@@ -130,14 +124,24 @@ describe('CompanionWindow', () => {
   it('has a resize handler', () => {
     const { container } = createWrapper();
 
-    expect(container.querySelector('.react-draggable')).toHaveStyle({ height: '100%', width: '235px' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
-    expect(container.querySelector('[style*="cursor: col-resize;"]')).toHaveStyle({ left: '-5px' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('.react-draggable')).toHaveStyle({
+      height: '100%',
+      width: '235px',
+    });
+    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('[style*="cursor: col-resize;"]')).toHaveStyle({ left: '-5px' });
   });
 
   it('has a vertical resize handle when position is bottom', () => {
     const { container } = createWrapper({ position: 'bottom' });
 
-    expect(container.querySelector('.react-draggable')).toHaveStyle({ height: '201px', width: 'auto' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
-    expect(container.querySelector('[style*="cursor: row-resize;"]')).toHaveStyle({ top: '-5px' }); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('.react-draggable')).toHaveStyle({
+      height: '201px',
+      width: 'auto',
+    });
+    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('[style*="cursor: row-resize;"]')).toHaveStyle({ top: '-5px' });
   });
 });

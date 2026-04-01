@@ -9,21 +9,14 @@ import { AttributionPanel } from '../../../src/components/AttributionPanel';
  * Helper function to create a shallow wrapper around AttributionPanel
  */
 function createWrapper(props) {
-  return render(
-    <AttributionPanel
-      id="xyz"
-      windowId="window"
-      {...props}
-    />,
-    { preloadedState: { companionWindows: { xyz: { content: 'attribution' } } } },
-  );
+  return render(<AttributionPanel id="xyz" windowId="window" {...props} />, {
+    preloadedState: { companionWindows: { xyz: { content: 'attribution' } } },
+  });
 }
 
 describe('AttributionPanel', () => {
   it('renders the required statement', () => {
-    const requiredStatement = [
-      { label: 'required statement', values: ['must be shown'] },
-    ];
+    const requiredStatement = [{ label: 'required statement', values: ['must be shown'] }];
     createWrapper({ requiredStatement });
 
     expect(screen.getByText('required statement')).toBeInTheDocument();
@@ -45,11 +38,16 @@ describe('AttributionPanel', () => {
 
   // Requires canvas to handle img loading.
   it.skip('renders the manifest logo', async () => {
-    const manifestLogo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
+    const manifestLogo =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
 
     const { container } = createWrapper({ manifestLogo });
-    await waitFor(() => { expect(container.querySelector('img')).toBeInTheDocument(); }); // eslint-disable-line testing-library/no-container, testing-library/no-node-access
+    await waitFor(() => {
+      // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
+      expect(container.querySelector('img')).toBeInTheDocument();
+    });
 
-    expect(container.querySelector('img')).toHaveAttribute('src', manifestLogo); // eslint-disable-line testing-library/no-container, testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
+    expect(container.querySelector('img')).toHaveAttribute('src', manifestLogo);
   });
 });

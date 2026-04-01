@@ -36,13 +36,23 @@ const StyledToolbar = styled(Toolbar, { name: 'WindowTopBar', slot: 'toolbar' })
  * WindowTopBar
  */
 export function WindowTopBar({
-  removeWindow, windowId, toggleWindowSideBar,
-  maximizeWindow = () => {}, maximized = false, minimizeWindow = () => {}, allowClose = true, allowMaximize = true,
-  focusWindow = () => {}, allowFullscreen = false, allowTopMenuButton = true, allowWindowSideBar = true,
+  removeWindow,
+  windowId,
+  toggleWindowSideBar,
+  maximizeWindow = () => {},
+  maximized = false,
+  minimizeWindow = () => {},
+  allowClose = true,
+  allowMaximize = true,
+  focusWindow = () => {},
+  allowFullscreen = false,
+  allowTopMenuButton = true,
+  allowWindowSideBar = true,
   component = 'nav',
 }) {
   const { t } = useTranslation();
-  const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
+  // eslint-disable-next-line prefer-rest-params
+  const ownerState = arguments[0];
 
   return (
     <Root component={component} aria-label={t('windowNavigation')} position="relative" color="default" enableColorOnDark>
@@ -62,26 +72,20 @@ export function WindowTopBar({
             <MenuIcon />
           </MiradorMenuButton>
         )}
-        <WindowTopBarTitle
-          windowId={windowId}
-        />
-        {allowTopMenuButton && (
-          <WindowTopMenuButton windowId={windowId} className={ns('window-menu-btn')} />
-        )}
+        <WindowTopBarTitle windowId={windowId} />
+        {allowTopMenuButton && <WindowTopMenuButton windowId={windowId} className={ns('window-menu-btn')} />}
         <WindowTopBarPluginArea windowId={windowId} />
         <WindowTopBarPluginMenu windowId={windowId} />
         {allowMaximize && (
           <MiradorMenuButton
-            aria-label={(maximized ? t('minimizeWindow') : t('maximizeWindow'))}
+            aria-label={maximized ? t('minimizeWindow') : t('maximizeWindow')}
             className={classNames(ns('window-maximize'), ns('window-menu-btn'))}
-            onClick={(maximized ? minimizeWindow : maximizeWindow)}
+            onClick={maximized ? minimizeWindow : maximizeWindow}
           >
-            {(maximized ? <WindowMinIcon /> : <WindowMaxIcon />)}
+            {maximized ? <WindowMinIcon /> : <WindowMaxIcon />}
           </MiradorMenuButton>
         )}
-        {allowFullscreen && (
-          <FullScreenButton className={ns('window-menu-btn')} />
-        )}
+        {allowFullscreen && <FullScreenButton className={ns('window-menu-btn')} />}
         {allowClose && (
           <MiradorMenuButton
             aria-label={t('closeWindow')}
@@ -103,13 +107,15 @@ WindowTopBar.propTypes = {
   allowTopMenuButton: PropTypes.bool,
   allowWindowSideBar: PropTypes.bool,
   component: PropTypes.elementType,
-  focused: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
+  // eslint-disable-next-line react/no-unused-prop-types
+  focused: PropTypes.bool,
   focusWindow: PropTypes.func,
   maximized: PropTypes.bool,
   maximizeWindow: PropTypes.func,
   minimizeWindow: PropTypes.func,
   removeWindow: PropTypes.func.isRequired,
   toggleWindowSideBar: PropTypes.func.isRequired,
-  windowDraggable: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
+  // eslint-disable-next-line react/no-unused-prop-types
+  windowDraggable: PropTypes.bool,
   windowId: PropTypes.string.isRequired,
 };

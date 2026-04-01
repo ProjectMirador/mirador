@@ -13,9 +13,7 @@ import zeroWidthFixture from '../../fixtures/version-2/zeroWidthCanvas.json';
 function Subject({ fixture = manifestJson, ...props }) {
   return (
     <ThumbnailNavigation
-      canvasGroupings={new CanvasGroupings(
-        Utils.parseManifest(fixture).getSequences()[0].getCanvases(),
-      ).groupings()}
+      canvasGroupings={new CanvasGroupings(Utils.parseManifest(fixture).getSequences()[0].getCanvases()).groupings()}
       canvasIndex={1}
       classes={{}}
       windowId="foobar"
@@ -27,7 +25,8 @@ function Subject({ fixture = manifestJson, ...props }) {
 }
 
 Subject.propTypes = {
-  fixture: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  // eslint-disable-next-line react/forbid-prop-types
+  fixture: PropTypes.object,
 };
 
 describe('ThumbnailNavigation', () => {
@@ -70,7 +69,11 @@ describe('ThumbnailNavigation', () => {
     expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ height: '150px', width: '100%' });
 
     rerender(<Subject position="far-right" />);
-    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ height: '100%', minHeight: 0, width: '127px' });
+    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({
+      height: '100%',
+      minHeight: 0,
+      width: '127px',
+    });
   });
 
   it('roughly doubles the width of the grid in book view', () => {
@@ -120,14 +123,20 @@ describe('ThumbnailNavigation', () => {
         render(<Subject canvasIndex={1} hasNextCanvas position="far-right" setNextCanvas={setNextCanvas} />);
 
         screen.getByLabelText('Thumbnails').focus();
-        fireEvent.keyDown(screen.getByLabelText('Thumbnails'), { code: 'ArrowDown', key: 'ArrowDown' });
+        fireEvent.keyDown(screen.getByLabelText('Thumbnails'), {
+          code: 'ArrowDown',
+          key: 'ArrowDown',
+        });
         expect(setNextCanvas).toHaveBeenCalled();
       });
       it('handles left arrow by selecting the previous canvas', () => {
         render(<Subject canvasIndex={2} hasPreviousCanvas setPreviousCanvas={setPreviousCanvas} />);
 
         screen.getByLabelText('Thumbnails').focus();
-        fireEvent.keyDown(screen.getByLabelText('Thumbnails'), { code: 'ArrowLeft', key: 'ArrowLeft' });
+        fireEvent.keyDown(screen.getByLabelText('Thumbnails'), {
+          code: 'ArrowLeft',
+          key: 'ArrowLeft',
+        });
         expect(setPreviousCanvas).toHaveBeenCalled();
       });
       it('handles up arrow by selecting the previous canvas when the canvas is on the right', () => {
@@ -144,7 +153,8 @@ describe('ThumbnailNavigation', () => {
     it('sets up react-window to be rtl', () => {
       render(<Subject viewingDirection="right-to-left" />);
 
-      expect(screen.getByRole('row').children[0]).toHaveStyle({ direction: 'rtl' }); // eslint-disable-line testing-library/no-node-access
+      // eslint-disable-next-line testing-library/no-node-access
+      expect(screen.getByRole('row').children[0]).toHaveStyle({ direction: 'rtl' });
     });
   });
 });

@@ -70,7 +70,10 @@ describe('ManifestRelatedLinks', () => {
 
     it('renders related information', () => {
       expect(screen.getAllByText('Related')[1].tagName).toEqual('DT');
-      expect(screen.getByRole('link', { name: 'http://example.com/related' })).toHaveAttribute('href', 'http://example.com/related');
+      expect(screen.getByRole('link', { name: 'http://example.com/related' })).toHaveAttribute(
+        'href',
+        'http://example.com/related',
+      );
       expect(screen.getByRole('link', { name: 'Video' })).toHaveAttribute('href', 'http://example.com/video');
       expect(screen.getByText('(video/ogg)')).toBeInTheDocument();
     });

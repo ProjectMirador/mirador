@@ -5,16 +5,10 @@ import CompanionWindow from '../containers/CompanionWindow';
 /**
  * a custom panel that can be used for anything
  */
-export function CustomPanel({
-  id, children = null, title, windowId,
-}) {
+export function CustomPanel({ id, children = null, title, windowId }) {
   const { t } = useTranslation();
   return (
-    <CompanionWindow
-      title={t(title)}
-      id={id}
-      windowId={windowId}
-    >
+    <CompanionWindow title={t(title)} id={id} windowId={windowId}>
       {children}
     </CompanionWindow>
   );

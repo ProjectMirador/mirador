@@ -14,10 +14,7 @@ const mapStateToProps = (state, { width }) => {
   const { isWorkspaceAddVisible } = getWorkspace(state);
   return {
     isWorkspaceAddVisible,
-    useExtendedFab: (
-      !isWorkspaceAddVisible
-        && getWindowIds(state).length === 0
-    ),
+    useExtendedFab: !isWorkspaceAddVisible && getWindowIds(state).length === 0,
   };
 };
 
@@ -28,9 +25,6 @@ const mapStateToProps = (state, { width }) => {
  */
 const mapDispatchToProps = { setWorkspaceAddVisibility: actions.setWorkspaceAddVisibility };
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('WorkspaceAddButton'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('WorkspaceAddButton'));
 
 export default enhance(WorkspaceAddButton);

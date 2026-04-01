@@ -20,9 +20,6 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   removeWindow: () => dispatch(actions.removeWindow(windowId)),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('MinimalWindow'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('MinimalWindow'));
 
 export default enhance(MinimalWindow);

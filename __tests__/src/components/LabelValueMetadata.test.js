@@ -3,11 +3,7 @@ import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
 
 /** */
 function createWrapper(props) {
-  return render(
-    <LabelValueMetadata
-      {...props}
-    />,
-  );
+  return render(<LabelValueMetadata {...props} />);
 }
 
 /* eslint-disable testing-library/no-node-access */

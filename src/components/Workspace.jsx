@@ -32,11 +32,7 @@ const ZeroWindows = () => {
         }}
       >
         <Grid size={12}>
-          <Typography
-            variant="h1"
-            component="div"
-            align="center"
-          >
+          <Typography variant="h1" component="div" align="center">
             {t('welcome')}
           </Typography>
         </Grid>
@@ -45,8 +41,7 @@ const ZeroWindows = () => {
   );
 };
 
-ZeroWindows.propTypes = {
-};
+ZeroWindows.propTypes = {};
 
 /**
  * Represents a work area that contains any number of windows
@@ -54,7 +49,12 @@ ZeroWindows.propTypes = {
  * @private
  */
 export function Workspace({
-  addWindow = () => {}, allowNewWindows = true, maximizedWindowIds = [], windowIds = [], workspaceId, workspaceType,
+  addWindow = () => {},
+  allowNewWindows = true,
+  maximizedWindowIds = [],
+  windowIds = [],
+  workspaceId,
+  workspaceType,
 }) {
   const { t } = useTranslation();
   /** */
@@ -70,7 +70,7 @@ export function Workspace({
   const workspaceByType = () => {
     if (maximizedWindowIds.length > 0) {
       if (maximizedWindowIds.length > 0) {
-        return maximizedWindowIds.map(windowId => (
+        return maximizedWindowIds.map((windowId) => (
           <Window
             key={`${windowId}-${workspaceId}`}
             windowId={windowId}
@@ -88,30 +88,24 @@ export function Workspace({
       case 'mosaic':
         return <WorkspaceMosaic />;
       default:
-        return windowIds.map(windowId => (
-          <Window
-            key={`${windowId}-${workspaceId}`}
-            windowId={windowId}
-          />
-        ));
+        return windowIds.map((windowId) => <Window key={`${windowId}-${workspaceId}`} windowId={windowId} />);
     }
   };
 
   const ownerState = {
-    allowNewWindows, maximizedWindowIds, windowIds, workspaceId, workspaceType,
+    allowNewWindows,
+    maximizedWindowIds,
+    windowIds,
+    workspaceId,
+    workspaceType,
   };
 
   return (
     <IIIFDropTarget onDrop={handleDrop}>
-      <Root
-        ownerState={ownerState}
-        className={
-          classNames(
-            ns('workspace-viewport'),
-          )
-        }
-      >
-        <Typography style={visuallyHidden} component="h1">{t('miradorViewer')}</Typography>
+      <Root ownerState={ownerState} className={classNames(ns('workspace-viewport'))}>
+        <Typography style={visuallyHidden} component="h1">
+          {t('miradorViewer')}
+        </Typography>
         {workspaceByType()}
       </Root>
     </IIIFDropTarget>

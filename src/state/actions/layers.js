@@ -6,6 +6,9 @@ import ActionTypes from './action-types';
  */
 export function updateLayers(windowId, canvasId, payload) {
   return {
-    canvasId, payload, type: ActionTypes.UPDATE_LAYERS, windowId,
+    canvasId,
+    payload,
+    type: ActionTypes.UPDATE_LAYERS,
+    windowId,
   };
 }

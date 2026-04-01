@@ -6,11 +6,7 @@ import { ErrorDialog } from '../../../src/components/ErrorDialog';
  * Helper function to create a shallow wrapper around ErrorDialog
  */
 function createWrapper(props) {
-  return render(
-    <ErrorDialog
-      {...props}
-    />,
-  );
+  return render(<ErrorDialog {...props} />);
 }
 
 describe('ErrorDialog', () => {

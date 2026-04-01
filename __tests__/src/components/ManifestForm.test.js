@@ -4,12 +4,7 @@ import { ManifestForm } from '../../../src/components/ManifestForm';
 
 /** create wrapper */
 function createWrapper(props) {
-  return render(
-    <ManifestForm
-      addResource={() => {}}
-      {...props}
-    />,
-  );
+  return render(<ManifestForm addResource={() => {}} {...props} />);
 }
 
 describe('ManifestForm', () => {

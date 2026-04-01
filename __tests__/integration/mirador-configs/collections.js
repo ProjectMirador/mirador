@@ -1,7 +1,5 @@
 export default {
-  catalog: [
-    { manifestId: 'https://www.e-codices.unifr.ch/metadata/iiif/collection.json' },
-  ],
+  catalog: [{ manifestId: 'https://www.e-codices.unifr.ch/metadata/iiif/collection.json' }],
   id: 'mirador',
   windows: [
     {

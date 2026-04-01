@@ -7,13 +7,7 @@ import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
 /** create wrapper */
 function createWrapper(props) {
   return render(
-    <WorkspaceMosaic
-      classes={{}}
-      windowIds={[]}
-      workspaceId="foo"
-      updateWorkspaceMosaicLayout={() => {}}
-      {...props}
-    />,
+    <WorkspaceMosaic classes={{}} windowIds={[]} workspaceId="foo" updateWorkspaceMosaicLayout={() => {}} {...props} />,
     {
       preloadedState: {
         windows: {
@@ -36,10 +30,16 @@ describe('WorkspaceMosaic', () => {
 
     expect(tiles).toHaveLength(2);
     expect(tiles[0]).toHaveStyle({
-      bottom: '0%', left: '0%', right: '50%', top: '0%',
+      bottom: '0%',
+      left: '0%',
+      right: '50%',
+      top: '0%',
     });
     expect(tiles[1]).toHaveStyle({
-      bottom: '0%', left: '50%', right: '0%', top: '0%',
+      bottom: '0%',
+      left: '50%',
+      right: '0%',
+      top: '0%',
     });
   });
 
@@ -52,7 +52,12 @@ describe('WorkspaceMosaic', () => {
       });
 
       wrapper.rerender(
-        <WorkspaceMosaic classes={{}} windowIds={['1', '2', '3']} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
+        <WorkspaceMosaic
+          classes={{}}
+          windowIds={['1', '2', '3']}
+          workspaceId="foo"
+          updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout}
+        />,
       );
 
       expect(updateWorkspaceMosaicLayout).toHaveBeenCalled();
@@ -68,9 +73,7 @@ describe('WorkspaceMosaic', () => {
       };
       wrapper = createWrapper(props);
 
-      wrapper.rerender(
-        <WorkspaceMosaic {...props} windowIds={['1']} />,
-      );
+      wrapper.rerender(<WorkspaceMosaic {...props} windowIds={['1']} />);
 
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith('1');
     });
@@ -82,7 +85,13 @@ describe('WorkspaceMosaic', () => {
       });
 
       wrapper.rerender(
-        <WorkspaceMosaic layout={{}} classes={{}} windowIds={[]} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
+        <WorkspaceMosaic
+          layout={{}}
+          classes={{}}
+          windowIds={[]}
+          workspaceId="foo"
+          updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout}
+        />,
       );
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith(null);
     });
@@ -95,7 +104,13 @@ describe('WorkspaceMosaic', () => {
       });
 
       wrapper.rerender(
-        <WorkspaceMosaic classes={{}} windowIds={windowIds} layout={{ direction: 'row', first: '1', second: '2' }} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
+        <WorkspaceMosaic
+          classes={{}}
+          windowIds={windowIds}
+          layout={{ direction: 'row', first: '1', second: '2' }}
+          workspaceId="foo"
+          updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout}
+        />,
       );
 
       expect(updateWorkspaceMosaicLayout).toHaveBeenCalledTimes(0);
@@ -142,7 +157,8 @@ describe('WorkspaceMosaic', () => {
       );
 
       const dragTarget = screen.getAllByLabelText('Window navigation')[0];
-      const dropTarget = container.querySelector('.mirador-mosaic > .drop-target-container > .drop-target.top'); // eslint-disable-line testing-library/no-container
+      // eslint-disable-next-line testing-library/no-container
+      const dropTarget = container.querySelector('.mirador-mosaic > .drop-target-container > .drop-target.top');
 
       fireEvent.dragStart(dragTarget);
       fireEvent.drag(dragTarget);

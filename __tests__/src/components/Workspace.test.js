@@ -1,6 +1,4 @@
-import {
-  render, screen, fireEvent, waitFor,
-} from '@tests/utils/test-utils';
+import { render, screen, fireEvent, waitFor } from '@tests/utils/test-utils';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -9,7 +7,7 @@ import { Workspace } from '../../../src/components/Workspace';
 /**
  * Utility function to create a Worksapce
  * component with all required props set
-*/
+ */
 function createWrapper(props) {
   return render(
     <DndProvider backend={HTML5Backend}>
@@ -27,7 +25,10 @@ function createWrapper(props) {
         windows: { 1: {}, 2: {} },
         workspace: {
           viewportPosition: {
-            height: 10, width: 10, x: 0, y: 0,
+            height: 10,
+            width: 10,
+            x: 0,
+            y: 0,
           },
         },
       },
@@ -102,7 +103,12 @@ describe('Workspace', () => {
       fireEvent.dragOver(dropTarget, { dataTransfer });
       fireEvent.drop(dropTarget, { dataTransfer });
 
-      await waitFor(() => expect(addWindow).toHaveBeenCalledWith({ manifest: manifestJson, manifestId: expect.stringMatching(/^[0-9a-f-]+$/) }));
+      await waitFor(() =>
+        expect(addWindow).toHaveBeenCalledWith({
+          manifest: manifestJson,
+          manifestId: expect.stringMatching(/^[0-9a-f-]+$/),
+        }),
+      );
     });
 
     it('adds a new catalog entry from a IIIF drag and drop icon', () => {

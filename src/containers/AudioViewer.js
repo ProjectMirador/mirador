@@ -5,17 +5,12 @@ import { AudioViewer } from '../components/AudioViewer';
 import { getConfig, getVisibleCanvasAudioResources, getVisibleCanvasCaptions } from '../state/selectors';
 
 /** */
-const mapStateToProps = (state, { windowId }) => (
-  {
-    audioOptions: getConfig(state).audioOptions,
-    audioResources: getVisibleCanvasAudioResources(state, { windowId }) || [],
-    captions: getVisibleCanvasCaptions(state, { windowId }) || [],
-  }
-);
+const mapStateToProps = (state, { windowId }) => ({
+  audioOptions: getConfig(state).audioOptions,
+  audioResources: getVisibleCanvasAudioResources(state, { windowId }) || [],
+  captions: getVisibleCanvasCaptions(state, { windowId }) || [],
+});
 
-const enhance = compose(
-  connect(mapStateToProps, null),
-  withPlugins('AudioViewer'),
-);
+const enhance = compose(connect(mapStateToProps, null), withPlugins('AudioViewer'));
 
 export default enhance(AudioViewer);

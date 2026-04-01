@@ -18,17 +18,18 @@ export default class AnnotationPage {
 
   /** */
   present() {
-    return (this.items
-      && this.items.length > 0);
+    return this.items && this.items.length > 0;
   }
 
   /** */
   get items() {
-    this._items = this._items || (() => {
-      if (!this.json || !this.json.items) return [];
+    this._items =
+      this._items ||
+      (() => {
+        if (!this.json || !this.json.items) return [];
 
-      return flatten([this.json.items]).map(resource => new AnnotationItem(resource));
-    })();
+        return flatten([this.json.items]).map((resource) => new AnnotationItem(resource));
+      })();
     return this._items;
   }
 

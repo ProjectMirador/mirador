@@ -9,21 +9,14 @@ vi.mock('../../../src/extend/usePlugins');
 
 /** create wrapper */
 function Subject({ ...props }) {
-  return (
-    <WindowTopBarPluginMenu
-      windowId="abc123"
-      {...props}
-    />
-  );
+  return <WindowTopBarPluginMenu windowId="abc123" {...props} />;
 }
 // needs to be a non-functional component to accept forwardRef the way we have it set up
 /**  */
 class mockComponentA extends React.Component {
   /**  */
   render() {
-    return (
-      <div data-testid="testA" />
-    );
+    return <div data-testid="testA" />;
   }
 }
 

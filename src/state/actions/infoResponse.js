@@ -75,7 +75,7 @@ export function receiveInfoResponseFailure(infoId, error, tokenServiceId) {
  */
 export function fetchInfoResponse({ imageId, imageResource, windowId }) {
   const imageService = imageResource && getIiifResourceImageService(imageResource);
-  const infoId = (imageId || imageService.id);
+  const infoId = imageId || imageService.id;
   return requestInfoResponse(infoId, imageService, windowId);
 }
 

@@ -1,6 +1,4 @@
-import {
-  useRef, Children, cloneElement, useCallback, useState, useEffect,
-} from 'react';
+import { useRef, Children, cloneElement, useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import OpenSeadragon from 'openseadragon';
@@ -26,33 +24,42 @@ const StyledSection = styled('section')({
  * and rendering OSD.
  */
 export function OpenSeadragonViewer({
-  children = null, label = null, windowId, osdConfig = {}, viewerConfig = null,
-  drawAnnotations = false, infoResponses = [], canvasWorld, nonTiledImages = [], updateViewport,
+  children = null,
+  label = null,
+  windowId,
+  osdConfig = {},
+  viewerConfig = null,
+  drawAnnotations = false,
+  infoResponses = [],
+  canvasWorld,
+  nonTiledImages = [],
+  updateViewport,
   ...rest
 }) {
   const { t } = useTranslation();
   const apiRef = useRef();
   const [viewer, setViewer] = useState(null);
-  const onViewportChange = useCallback(({
-    flip, rotation, x, y, zoom,
-  }) => {
-    updateViewport(windowId, {
-      flip,
-      rotation,
-      x,
-      y,
-      zoom,
-    });
-  }, [updateViewport, windowId]);
+  const onViewportChange = useCallback(
+    ({ flip, rotation, x, y, zoom }) => {
+      updateViewport(windowId, {
+        flip,
+        rotation,
+        x,
+        y,
+        zoom,
+      });
+    },
+    [updateViewport, windowId],
+  );
 
-  const zoomToWorld = useCallback((immediately = true) => {
-    if (!apiRef.current?.viewport) return;
+  const zoomToWorld = useCallback(
+    (immediately = true) => {
+      if (!apiRef.current?.viewport) return;
 
-    apiRef.current.viewport.fitBounds(
-      new OpenSeadragon.Rect(...canvasWorld.worldBounds()),
-      immediately,
-    );
-  }, [canvasWorld, apiRef]);
+      apiRef.current.viewport.fitBounds(new OpenSeadragon.Rect(...canvasWorld.worldBounds()), immediately);
+    },
+    [canvasWorld, apiRef],
+  );
 
   useEffect(() => {
     OSDReferences.set(windowId, apiRef);
@@ -62,14 +69,11 @@ export function OpenSeadragonViewer({
     apiRef.current = viewer;
   }, [apiRef, viewer]);
 
-  const enhancedChildren = Children.map(children, child => (
-    cloneElement(
-      child,
-      {
-        zoomToWorld,
-      },
-    )
-  ));
+  const enhancedChildren = Children.map(children, (child) =>
+    cloneElement(child, {
+      zoomToWorld,
+    }),
+  );
 
   const pluginProps = {
     canvasWorld,
@@ -96,7 +100,7 @@ export function OpenSeadragonViewer({
       aria-label={t('item', { label })}
       aria-live="polite"
     >
-      { infoResponses.map((infoResponse) => {
+      {infoResponses.map((infoResponse) => {
         const contentResource = canvasWorld.contentResource(infoResponse.id);
 
         if (!contentResource) return null;
@@ -115,7 +119,7 @@ export function OpenSeadragonViewer({
           />
         );
       })}
-      { nonTiledImages.map((contentResource) => {
+      {nonTiledImages.map((contentResource) => {
         const type = contentResource.getProperty('type');
         const format = contentResource.getProperty('format') || '';
 
@@ -126,18 +130,11 @@ export function OpenSeadragonViewer({
         const opacity = canvasWorld.layerOpacityOfImageResource(contentResource);
 
         return (
-          <TileSource
-            key={contentResource.id}
-            url={contentResource.id}
-            fitBounds={fitBounds}
-            index={index}
-            opacity={opacity}
-          />
+          <TileSource key={contentResource.id} url={contentResource.id} fitBounds={fitBounds} index={index} opacity={opacity} />
         );
       })}
-      { drawAnnotations
-          && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
-      { enhancedChildren }
+      {drawAnnotations && <AnnotationsOverlay viewer={viewer} windowId={windowId} />}
+      {enhancedChildren}
       <ImageFailureMessage />
       <PluginHook targetName="OpenSeadragonViewer" viewer={viewer} {...pluginProps} />
     </OpenSeadragonComponent>

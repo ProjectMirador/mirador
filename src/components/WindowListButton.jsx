@@ -7,16 +7,20 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
  * WindowListButton ~
-*/
+ */
 export function WindowListButton({ disabled = false, windowCount }) {
   const { t } = useTranslation();
   const [windowListAnchor, setWindowListAnchor] = useState(null);
   const id = useId();
 
   /** */
-  const handleClose = () => { setWindowListAnchor(null); };
+  const handleClose = () => {
+    setWindowListAnchor(null);
+  };
   /** */
-  const handleOpen = (event) => { setWindowListAnchor(event.currentTarget); };
+  const handleOpen = (event) => {
+    setWindowListAnchor(event.currentTarget);
+  };
 
   return (
     <>
@@ -41,12 +45,7 @@ export function WindowListButton({ disabled = false, windowCount }) {
       </MiradorMenuButton>
 
       {Boolean(windowListAnchor) && (
-      <WindowList
-        anchorEl={windowListAnchor}
-        id={id}
-        open={Boolean(windowListAnchor)}
-        handleClose={handleClose}
-      />
+        <WindowList anchorEl={windowListAnchor} id={id} open={Boolean(windowListAnchor)} handleClose={handleClose} />
       )}
     </>
   );

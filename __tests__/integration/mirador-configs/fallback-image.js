@@ -10,5 +10,6 @@ export default {
     {
       manifestId: '/__tests__/fixtures/version-3/fallback-image.json',
       thumbnailNavigation: 'far-bottom',
-    }],
+    },
+  ],
 };

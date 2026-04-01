@@ -2,12 +2,10 @@ import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { SearchHit } from '../../../src/components/SearchHit';
 
-vi.mock(
-  '../../../src/components/ScrollTo',
-  () => ({
-    ScrollTo: ({ children }) => (<div data-testid="scrollto">{children}</div>), // eslint-disable-line react/prop-types
-  }),
-);
+vi.mock('../../../src/components/ScrollTo', () => ({
+  // eslint-disable-next-line react/prop-types
+  ScrollTo: ({ children }) => <div data-testid="scrollto">{children}</div>,
+}));
 
 /**
  * Helper function to create a shallow wrapper around SearchResults

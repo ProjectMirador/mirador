@@ -16,14 +16,18 @@ describe('MiradorViewer', () => {
       const instance = new MiradorViewer({});
 
       // eslint-disable-next-line testing-library/no-unnecessary-act
-      act(() => { instance.renderInto(container); });
+      act(() => {
+        instance.renderInto(container);
+      });
       expect(instance.store.dispatch).toBeDefined();
     });
     it('renders via ReactDOM', () => {
       const instance = new MiradorViewer({});
 
       // eslint-disable-next-line testing-library/no-unnecessary-act
-      act(() => { instance.renderInto(container); });
+      act(() => {
+        instance.renderInto(container);
+      });
 
       expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
     });
@@ -33,7 +37,10 @@ describe('MiradorViewer', () => {
       const instance = new MiradorViewer(
         {
           catalog: [
-            { manifestId: 'http://media.nga.gov/public/manifests/nga_highlights.json', provider: 'National Gallery of Art' },
+            {
+              manifestId: 'http://media.nga.gov/public/manifests/nga_highlights.json',
+              provider: 'National Gallery of Art',
+            },
           ],
           windows: [
             {
@@ -48,24 +55,30 @@ describe('MiradorViewer', () => {
           ],
         },
         {
-          plugins: [{
-            component: DummyPlugin,
-            config: {
-              foo: 'bar',
+          plugins: [
+            {
+              component: DummyPlugin,
+              config: {
+                foo: 'bar',
+              },
+              mode: 'add',
+              target: 'WindowTopBarPluginArea',
             },
-            mode: 'add',
-            target: 'WindowTopBarPluginArea',
-          }],
+          ],
         },
       );
 
       // eslint-disable-next-line testing-library/no-unnecessary-act
-      act(() => { instance.renderInto(container); });
+      act(() => {
+        instance.renderInto(container);
+      });
 
       const { windows, catalog, config } = instance.store.getState();
       const windowIds = Object.keys(windows);
       expect(Object.keys(windowIds).length).toBe(2);
-      expect(windows[windowIds[0]].canvasId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892');
+      expect(windows[windowIds[0]].canvasId).toBe(
+        'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
+      );
       expect(windows[windowIds[1]].canvasId).toBe(undefined);
       expect(windows[windowIds[0]].thumbnailNavigationPosition).toBe('far-bottom');
       expect(windows[windowIds[1]].thumbnailNavigationPosition).toBe(undefined);
@@ -114,21 +127,25 @@ describe('MiradorViewer', () => {
 
       const { config } = instance.store.getState();
 
-      expect(config.translations.en).toEqual(expect.objectContaining({
-        bat: 'bar',
-        foo: 'bar',
-      }));
+      expect(config.translations.en).toEqual(
+        expect.objectContaining({
+          bat: 'bar',
+          foo: 'bar',
+        }),
+      );
     });
   });
 
   describe('render', () => {
     it('passes props through to the App component', async () => {
       const instance = new MiradorViewer({});
-      const plugins = [{
-        component: DummyPlugin,
-        mode: 'wrap',
-        target: 'AppProviders',
-      }];
+      const plugins = [
+        {
+          component: DummyPlugin,
+          mode: 'wrap',
+          target: 'AppProviders',
+        },
+      ];
 
       render(instance.render({ plugins }));
 
@@ -141,10 +158,14 @@ describe('MiradorViewer', () => {
       const instance = new MiradorViewer({});
 
       // eslint-disable-next-line testing-library/no-unnecessary-act
-      act(() => { instance.renderInto(container); });
+      act(() => {
+        instance.renderInto(container);
+      });
       expect(container).not.toBeEmptyDOMElement();
       // eslint-disable-next-line testing-library/no-unnecessary-act
-      act(() => { instance.unmount(); });
+      act(() => {
+        instance.unmount();
+      });
       expect(container).toBeEmptyDOMElement();
     });
   });

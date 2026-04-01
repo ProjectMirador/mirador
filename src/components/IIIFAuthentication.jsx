@@ -8,12 +8,25 @@ import WindowAuthenticationBar from '../containers/WindowAuthenticationBar';
  * Opens a new window for click
  */
 export function IIIFAuthentication({
-  accessTokenServiceId = undefined, authServiceId = undefined, confirm = undefined, description = undefined,
-  failureDescription = undefined, failureHeader = undefined, features = 'centerscreen',
-  handleAuthInteraction, header = undefined, isInteractive = true, label = undefined,
-  logoutConfirm = undefined, logoutServiceId = undefined, openWindow = window.open,
-  resetAuthenticationState, resolveAccessTokenRequest, resolveAuthenticationRequest,
-  status = null, windowId,
+  accessTokenServiceId = undefined,
+  authServiceId = undefined,
+  confirm = undefined,
+  description = undefined,
+  failureDescription = undefined,
+  failureHeader = undefined,
+  features = 'centerscreen',
+  handleAuthInteraction,
+  header = undefined,
+  isInteractive = true,
+  label = undefined,
+  logoutConfirm = undefined,
+  logoutServiceId = undefined,
+  openWindow = window.open,
+  resetAuthenticationState,
+  resolveAccessTokenRequest,
+  resolveAuthenticationRequest,
+  status = null,
+  windowId,
 }) {
   const { t } = useTranslation();
 
@@ -65,7 +78,12 @@ export function IIIFAuthentication({
   const renderLoggingInCookie = () => (
     <>
       {renderLogin()}
-      <NewBrowserWindow name="IiifLoginSender" url={`${authServiceId}?origin=${window.origin}`} features={features} onClose={() => resolveAuthenticationRequest(authServiceId, accessTokenServiceId)} />
+      <NewBrowserWindow
+        name="IiifLoginSender"
+        url={`${authServiceId}?origin=${window.origin}`}
+        features={features}
+        onClose={() => resolveAuthenticationRequest(authServiceId, accessTokenServiceId)}
+      />
     </>
   );
 
@@ -73,10 +91,7 @@ export function IIIFAuthentication({
   const renderLoggingInToken = () => (
     <>
       {renderLogin()}
-      <AccessTokenSender
-        handleAccessTokenMessage={onReceiveAccessTokenMessage}
-        url={accessTokenServiceId}
-      />
+      <AccessTokenSender handleAccessTokenMessage={onReceiveAccessTokenMessage} url={accessTokenServiceId} />
     </>
   );
 

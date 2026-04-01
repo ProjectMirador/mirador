@@ -14,16 +14,9 @@ import {
 function createPluggableStore(config, plugins = []) {
   const filteredPlugins = filterValidPlugins(plugins);
 
-  const store = createStore(
-    getReducersFromPlugins(filteredPlugins),
-    getSagasFromPlugins(filteredPlugins),
-  );
+  const store = createStore(getReducersFromPlugins(filteredPlugins), getSagasFromPlugins(filteredPlugins));
 
-  store.dispatch(
-    importConfig(
-      deepmerge(getConfigFromPlugins(filteredPlugins), config),
-    ),
-  );
+  store.dispatch(importConfig(deepmerge(getConfigFromPlugins(filteredPlugins), config)));
 
   return store;
 }

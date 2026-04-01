@@ -10,11 +10,9 @@ import { ZoomControls } from '../components/ZoomControls';
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = (state, { windowId }) => (
-  {
-    viewer: getViewer(state, { windowId }),
-  }
-);
+const mapStateToProps = (state, { windowId }) => ({
+  viewer: getViewer(state, { windowId }),
+});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -23,9 +21,6 @@ const mapStateToProps = (state, { windowId }) => (
  */
 const mapDispatchToProps = { updateViewport: actions.updateViewport };
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('ZoomControls'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('ZoomControls'));
 
 export default enhance(ZoomControls);

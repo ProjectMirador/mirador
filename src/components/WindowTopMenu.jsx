@@ -15,7 +15,9 @@ function PluginHookWithHeader({ targetName, ...props }) {
   const { t } = useTranslation();
   return PluginComponents?.length > 0 ? (
     <>
-      <ListSubheader role="presentation" disableSticky tabIndex={-1}>{t('windowPluginButtons')}</ListSubheader>
+      <ListSubheader role="presentation" disableSticky tabIndex={-1}>
+        {t('windowPluginButtons')}
+      </ListSubheader>
       <PluginHook targetName={targetName} {...props} />
     </>
   ) : null;
@@ -28,11 +30,16 @@ PluginHookWithHeader.propTypes = {
 /**
  */
 export function WindowTopMenu({
-  handleClose, showThumbnailNavigationSettings = true,
-  toggleDraggingEnabled, windowId, anchorEl = null, open = false,
+  handleClose,
+  showThumbnailNavigationSettings = true,
+  toggleDraggingEnabled,
+  windowId,
+  anchorEl = null,
+  open = false,
 }) {
   const container = useContext(WorkspaceContext);
-  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
+  // eslint-disable-next-line prefer-rest-params
+  const pluginProps = arguments[0];
 
   return (
     <Popover
@@ -56,8 +63,7 @@ export function WindowTopMenu({
       role="menu"
     >
       <WindowViewSettings windowId={windowId} handleClose={handleClose} />
-      {showThumbnailNavigationSettings
-        && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}
+      {showThumbnailNavigationSettings && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}
       <PluginHookWithHeader targetName="WindowTopMenu" {...pluginProps} />
     </Popover>
   );

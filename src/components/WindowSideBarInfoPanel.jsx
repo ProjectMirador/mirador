@@ -29,33 +29,16 @@ export function WindowSideBarInfoPanel({
       paperClassName={ns('window-sidebar-info-panel')}
       windowId={windowId}
       id={id}
-      titleControls={(
-        showLocalePicker
-          && (
-          <LocalePicker
-            locale={locale}
-            setLocale={setLocale}
-            availableLocales={availableLocales}
-          />
-          )
-      )}
-    >
-      {
-        canvasIds.map((canvasId, index) => (
-          <CompanionWindowSection
-            key={canvasId}
-          >
-            <CanvasInfo
-              canvasId={canvasId}
-              companionWindowId={id}
-              index={index}
-              totalSize={canvasIds.length}
-              windowId={windowId}
-            />
-          </CompanionWindowSection>
-        ))
+      titleControls={
+        showLocalePicker && <LocalePicker locale={locale} setLocale={setLocale} availableLocales={availableLocales} />
       }
-      { collectionPath.length > 0 && (
+    >
+      {canvasIds.map((canvasId, index) => (
+        <CompanionWindowSection key={canvasId}>
+          <CanvasInfo canvasId={canvasId} companionWindowId={id} index={index} totalSize={canvasIds.length} windowId={windowId} />
+        </CompanionWindowSection>
+      ))}
+      {collectionPath.length > 0 && (
         <CompanionWindowSection>
           <CollectionInfo companionWindowId={id} windowId={windowId} />
         </CompanionWindowSection>

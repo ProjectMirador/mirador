@@ -10,12 +10,7 @@ import { useTranslation } from 'react-i18next';
 /**
  *
  */
-export function SelectCollection({
-  collectionPath = [],
-  manifestId = null,
-  showCollectionDialog,
-  windowId = null,
-}) {
+export function SelectCollection({ collectionPath = [], manifestId = null, showCollectionDialog, windowId = null }) {
   const { t } = useTranslation();
   const openCollectionDialog = useCallback(() => {
     showCollectionDialog(manifestId, collectionPath.slice(0, -1), windowId);
@@ -25,9 +20,7 @@ export function SelectCollection({
     <Grid container sx={{ alignContent: 'center', justifyContent: 'center', width: '100%' }}>
       <Stack>
         <Typography variant="h4" component="p" sx={{ mb: 2, textAlign: 'center' }}>
-          <em>
-            {t('noItemSelected')}
-          </em>
+          <em>{t('noItemSelected')}</em>
         </Typography>
         <Button
           aria-label="show collection"

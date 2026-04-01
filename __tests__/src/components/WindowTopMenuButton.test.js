@@ -4,14 +4,7 @@ import { WindowTopMenuButton } from '../../../src/components/WindowTopMenuButton
 
 /** create wrapper */
 function Subject({ ...props }) {
-  return (
-    <WindowTopMenuButton
-      windowId="xyz"
-      data-testid="test"
-      classes={{ ctrlBtnSelected: 'ctrlBtnSelected' }}
-      {...props}
-    />
-  );
+  return <WindowTopMenuButton windowId="xyz" data-testid="test" classes={{ ctrlBtnSelected: 'ctrlBtnSelected' }} {...props} />;
 }
 
 describe('WindowTopMenuButton', () => {
@@ -40,13 +33,15 @@ describe('WindowTopMenuButton', () => {
   it('the open attribute of the button is null without being clicked', async () => {
     render(<Subject />);
     // without a click, the button is not open and therefore doesn't have aria-owns attr
-    expect(screen.getByLabelText('Window views & thumbnail display')).not.toHaveAttribute('aria-owns'); // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(screen.getByLabelText('Window views & thumbnail display')).not.toHaveAttribute('aria-owns');
   });
 
   it('the open attribute of the button is applied once it is clicked', async () => {
     render(<Subject />);
     await user.click(screen.getByLabelText('Window views & thumbnail display'));
     // when 'open' is true, aria-owns is set to the id of the window
-    expect(screen.getByLabelText('Window views & thumbnail display')).toHaveAttribute('aria-owns'); // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(screen.getByLabelText('Window views & thumbnail display')).toHaveAttribute('aria-owns');
   });
 });

@@ -1,10 +1,7 @@
 import { useId, useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
-import {
-  DialogActions,
-  TextField,
-} from '@mui/material';
+import { DialogActions, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useTranslation } from 'react-i18next';
 import { WorkspaceDialog } from './WorkspaceDialog';
@@ -13,7 +10,13 @@ import ScrollIndicatedDialogContent from '../containers/ScrollIndicatedDialogCon
 /**
  */
 export function WorkspaceImport({
-  addError, container = null, id = undefined, importConfig, classes = {}, handleClose, open = false,
+  addError,
+  container = null,
+  id = undefined,
+  importConfig,
+  classes = {},
+  handleClose,
+  open = false,
 }) {
   const { t } = useTranslation();
   const [configImportValue, setConfigImportValue] = useState('');
@@ -46,9 +49,7 @@ export function WorkspaceImport({
       fullWidth
       maxWidth="sm"
     >
-      <DialogTitle id={titleId}>
-        {t('importWorkspace')}
-      </DialogTitle>
+      <DialogTitle id={titleId}>{t('importWorkspace')}</DialogTitle>
       <ScrollIndicatedDialogContent>
         <TextField
           className={classes.textField}
@@ -66,9 +67,7 @@ export function WorkspaceImport({
         />
       </ScrollIndicatedDialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>
-          {t('cancel')}
-        </Button>
+        <Button onClick={handleClose}>{t('cancel')}</Button>
         <Button color="primary" onClick={handleImportConfig} variant="contained">
           {t('import')}
         </Button>
