@@ -7,6 +7,10 @@ import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer
 import fixture from '../../fixtures/version-2/019.json';
 import { OSDReferences } from '../../../src/plugins/OSDReferences';
 
+vi.mock('../../../src/components/ImageFailureMessage', () => ({
+  ImageFailureMessage: vi.fn(() => null),
+}));
+
 const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
 
 /**
@@ -113,6 +117,31 @@ describe('OpenSeadragonViewer', () => {
       expect(mockHandler).toHaveBeenCalledWith(e);
 
       vi.useRealTimers();
+    });
+  });
+
+  describe('ImageFailureMessage', () => {
+    it('passes imageUrls from infoResponses and nonTiledImages', async () => {
+      const { ImageFailureMessage } = await import('../../../src/components/ImageFailureMessage');
+      
+      const infoResponses = [
+        { id: 'http://example.com/image1', json: {} },
+        { id: 'http://example.com/image2', json: {} },
+      ];
+      const nonTiledImages = [
+        { id: 'http://example.com/image3', getProperty: () => 'Image' },
+      ];
+
+      createWrapper({ infoResponses, nonTiledImages });
+      
+      // lastCall[0] returns props object
+      expect(ImageFailureMessage.mock.lastCall[0]).toMatchObject({
+        imageUrls: [
+          'http://example.com/image1',
+          'http://example.com/image2',
+          'http://example.com/image3',
+        ],
+      });
     });
   });
 });

@@ -39,23 +39,18 @@ describe('FailedImageProvider', () => {
     expect(result.current.fallbackImage).toContain('%231967d2'); // Blue color
   });
 
-  it('provides hasFailed as false initially', () => {
+  it('provides failedImages as empty Set initially and can add to it', () => {
     const wrapper = ({ children }) => <FailedImageProvider>{children}</FailedImageProvider>;
     const { result } = renderHook(() => useContext(FailedImageContext), { wrapper });
 
-    expect(result.current.hasFailed).toBe(false);
-  });
-
-  it('sets hasFailed to true after notifyFailure is called', () => {
-    const wrapper = ({ children }) => <FailedImageProvider>{children}</FailedImageProvider>;
-    const { result } = renderHook(() => useContext(FailedImageContext), { wrapper });
-
-    expect(result.current.hasFailed).toBe(false);
+    expect(result.current.failedImages).toBeInstanceOf(Set);
+    expect(result.current.failedImages.size).toBe(0);
 
     act(() => {
-      result.current.notifyFailure();
+      result.current.notifyFailure('https://example.com/image1.jpg');
     });
 
-    expect(result.current.hasFailed).toBe(true);
+    expect(result.current.failedImages.size).toBe(1);
+    expect(result.current.failedImages.has('https://example.com/image1.jpg')).toBe(true);
   });
 });
