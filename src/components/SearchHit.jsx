@@ -33,14 +33,14 @@ const CanvasLabel = styled('h4', { name: 'SearchHit', slot: 'canvasLabel' })(({ 
 }));
 
 const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerState, theme }) => ({
-
   backgroundColor: theme.palette.hitCounter.default,
   ...(ownerState.windowSelected && {
     backgroundColor: theme.palette.highlights.primary,
   }),
-  ...(ownerState.adjacent && !ownerState.windowSelected && {
-    backgroundColor: theme.palette.highlights.secondary,
-  }),
+  ...(ownerState.adjacent &&
+    !ownerState.windowSelected && {
+      backgroundColor: theme.palette.highlights.secondary,
+    }),
   height: 30,
   marginRight: theme.spacing(1),
   typography: 'subtitle2',
@@ -48,7 +48,8 @@ const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerSta
 }));
 
 /** */
-export function SearchHit({ // eslint-disable-line complexity
+// eslint-disable-next-line complexity
+export function SearchHit({
   adjacent = false,
   annotation = undefined,
   annotationId = undefined,
@@ -72,14 +73,15 @@ export function SearchHit({ // eslint-disable-line complexity
     if (selected) {
       announceHit();
     }
-  }, [selected]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
 
   /** */
   const handleClick = () => {
     if (annotation && annotationId) selectAnnotation(annotationId);
   };
 
-  const truncatedHit = useMemo(() => (hit && new TruncatedHit(hit, annotation)), [hit, annotation]);
+  const truncatedHit = useMemo(() => hit && new TruncatedHit(hit, annotation), [hit, annotation]);
 
   /**
    * Pass content describing the hit to the announcer prop (intended for screen readers)
@@ -107,20 +109,21 @@ export function SearchHit({ // eslint-disable-line complexity
   const renderedHit = focused ? hit : hit && truncatedHit;
   const truncated = hit && (renderedHit.before !== hit.before || renderedHit.after !== hit.after);
   const ownerState = {
-    adjacent, focused, selected, windowSelected,
+    adjacent,
+    focused,
+    selected,
+    windowSelected,
   };
 
   const header = (
     <>
-      <Counter
-        component="span"
-        ownerState={ownerState}
-        label={index + 1}
-      />
+      <Counter component="span" ownerState={ownerState} label={index + 1} />
       <CanvasLabel id={canvasLabelHtmlId}>
         {canvasLabel}
         {annotationLabel && (
-          <Typography component="span" sx={{ display: 'block', marginTop: 1 }}>{annotationLabel}</Typography>
+          <Typography component="span" sx={{ display: 'block', marginTop: 1 }}>
+            {annotationLabel}
+          </Typography>
         )}
       </CanvasLabel>
     </>
@@ -142,20 +145,21 @@ export function SearchHit({ // eslint-disable-line complexity
       >
         <ListItemText
           primary={header}
-          primaryTypographyProps={{ component: 'div', sx: { marginBottom: 1 }, variant: 'subtitle2' }}
+          primaryTypographyProps={{
+            component: 'div',
+            sx: { marginBottom: 1 },
+            variant: 'subtitle2',
+          }}
           secondaryTypographyProps={{ variant: 'body1' }}
-          secondary={(
+          secondary={
             <>
               {hit && (
                 <>
-                  <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.before} />
-                  {' '}
+                  <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.before} />{' '}
                   <strong>
                     <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.match} />
-                  </strong>
-                  {' '}
-                  <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.after} />
-                  {' '}
+                  </strong>{' '}
+                  <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.after} />{' '}
                   {truncated && !focused && (
                     <Button
                       sx={{
@@ -178,7 +182,7 @@ export function SearchHit({ // eslint-disable-line complexity
               )}
               {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
             </>
-          )}
+          }
         />
       </Root>
     </ScrollTo>

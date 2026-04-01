@@ -6,9 +6,12 @@ import { IIIFIFrameCommunication } from './IIIFIFrameCommunication';
  * Opens a new window for click
  */
 export function AccessTokenSender({ handleAccessTokenMessage, url = undefined }) {
-  const onReceiveAccessTokenMessage = useCallback((e) => {
-    if (e.data && e.data.messageId && e.data.messageId === url) handleAccessTokenMessage(e.data);
-  }, [handleAccessTokenMessage, url]);
+  const onReceiveAccessTokenMessage = useCallback(
+    (e) => {
+      if (e.data && e.data.messageId && e.data.messageId === url) handleAccessTokenMessage(e.data);
+    },
+    [handleAccessTokenMessage, url],
+  );
 
   if (!url) return null;
 

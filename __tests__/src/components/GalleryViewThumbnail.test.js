@@ -32,7 +32,9 @@ describe('GalleryView', () => {
     createWrapper({ setCanvas });
     const user = userEvent.setup();
     await user.click(screen.getByRole('button'));
-    expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
+    expect(setCanvas).toHaveBeenCalledWith(
+      'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+    );
   });
 
   it('sets the window mode if the selected canvas is clicked', async () => {
@@ -67,10 +69,12 @@ describe('GalleryView', () => {
     const button = screen.getByRole('button');
     button.focus();
     fireEvent.keyUp(button, { code: 'd', key: 'd' });
-    expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
+    expect(setCanvas).toHaveBeenCalledWith(
+      'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+    );
   });
 
-  it('scrolls into view when selected prop changes to true', () => {  
+  it('scrolls into view when selected prop changes to true', () => {
     const { rerender } = createWrapper({ selected: false });
     expect(window.HTMLElement.prototype.scrollIntoView).not.toHaveBeenCalled();
 
@@ -99,7 +103,9 @@ describe('GalleryView', () => {
     };
     let requestCanvasAnnotations;
 
-    beforeEach(() => { requestCanvasAnnotations = vi.fn(); });
+    beforeEach(() => {
+      requestCanvasAnnotations = vi.fn();
+    });
     it('triggers requestCanvasAnnotations when there is an intersection and no annotions ', () => {
       createWrapper({ annotationsCount: 0, canvas, requestCanvasAnnotations });
       mockAllIsIntersecting(true);
@@ -119,26 +125,32 @@ describe('GalleryView', () => {
   describe('annotation count chip', () => {
     it('hides the chip if there are no annotations', () => {
       const { container } = createWrapper({ annotationsCount: 0 });
-      expect(container.querySelector('.MuiChip-root')).not.toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+      // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+      expect(container.querySelector('.MuiChip-root')).not.toBeInTheDocument();
     });
 
     it('shows the number of search annotations on a canvas', () => {
       const { container } = createWrapper({ annotationsCount: 50 });
-      expect(container.querySelector('.MuiChip-root')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
-      expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+      // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+      expect(container.querySelector('.MuiChip-root')).toBeInTheDocument();
+      // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+      expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50');
     });
   });
 
   describe('search annotation count chip', () => {
     it('hides the chip if there are no annotations', () => {
       const { container } = createWrapper({ searchAnnotationsCount: 0 });
-      expect(container.querySelector('.MuiChip-root')).not.toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+      // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+      expect(container.querySelector('.MuiChip-root')).not.toBeInTheDocument();
     });
 
     it('shows the number of search annotations on a canvas', () => {
       const { container } = createWrapper({ searchAnnotationsCount: 50 });
-      expect(container.querySelector('.MuiChip-root')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
-      expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50'); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+      // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+      expect(container.querySelector('.MuiChip-root')).toBeInTheDocument();
+      // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+      expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50');
     });
   });
 });

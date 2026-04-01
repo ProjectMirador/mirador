@@ -14,9 +14,7 @@ import videoWithAnnoCaptions from '../../fixtures/version-3/video_with_annotatio
 describe('MiradorCanvas', () => {
   let instance;
   beforeEach(() => {
-    instance = new MiradorCanvas(
-      Utils.parseManifest(fixture).getSequences()[0].getCanvases()[0],
-    );
+    instance = new MiradorCanvas(Utils.parseManifest(fixture).getSequences()[0].getCanvases()[0]);
   });
   describe('annotationListUris', () => {
     describe('when no annotationLists are present', () => {
@@ -74,7 +72,9 @@ describe('MiradorCanvas', () => {
         Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0],
       );
       expect(
-        instance.resourceAnnotation('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg').id,
+        instance.resourceAnnotation(
+          'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg',
+        ).id,
       ).toEqual('https://prtd.app/hamilton/canvas/p1/anno-02.json');
     });
     it('returns the containing Annotation for a given contentResource id v3', () => {
@@ -82,7 +82,9 @@ describe('MiradorCanvas', () => {
         Utils.parseManifest(fragmentFixtureV3).getSequences()[0].getCanvases()[0],
       );
       expect(
-        instance.resourceAnnotation('https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg').id,
+        instance.resourceAnnotation(
+          'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg',
+        ).id,
       ).toEqual('https://dvp.prtd.app/hamilton/canvas/p1/anno-02.json');
     });
   });
@@ -92,7 +94,9 @@ describe('MiradorCanvas', () => {
         Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0],
       );
       expect(
-        instance.onFragment('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg'),
+        instance.onFragment(
+          'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg',
+        ),
       ).toEqual([552, 1584, 3360, 2368]);
     });
     it('when a fragment selector exists for a given contentResources id, returns that fragment v3', () => {
@@ -100,7 +104,9 @@ describe('MiradorCanvas', () => {
         Utils.parseManifest(fragmentFixtureV3).getSequences()[0].getCanvases()[0],
       );
       expect(
-        instance.onFragment('https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg'),
+        instance.onFragment(
+          'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg',
+        ),
       ).toEqual([552, 1584, 3360, 2368]);
     });
   });
@@ -136,9 +142,7 @@ describe('MiradorCanvas', () => {
   });
   describe('IIIF image annotations', () => {
     it('sets preferred=true for prezi v2 image annotations without Choices', () => {
-      instance = new MiradorCanvas(
-        Utils.parseManifest(fixture).getSequences()[0].getCanvases()[0],
-      );
+      instance = new MiradorCanvas(Utils.parseManifest(fixture).getSequences()[0].getCanvases()[0]);
       expect(instance.imageResources[0].preferred).toBe(true);
     });
 
@@ -146,9 +150,17 @@ describe('MiradorCanvas', () => {
       instance = new MiradorCanvas(
         Utils.parseManifest(fragmentFixtureV3).getSequences()[0].getCanvases()[0],
       );
-      const firstImgWithoutChoice = instance.imageResources.find((resource) => resource.id === 'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg');
+      const firstImgWithoutChoice = instance.imageResources.find(
+        (resource) =>
+          resource.id ===
+          'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg',
+      );
       expect(firstImgWithoutChoice.preferred).toBe(true);
-      const lastImgWithoutChoice = instance.imageResources.find((resource) => resource.id === 'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PCA_RGB-1-3-5_gradi/full/739,521/0/default.jpg');
+      const lastImgWithoutChoice = instance.imageResources.find(
+        (resource) =>
+          resource.id ===
+          'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PCA_RGB-1-3-5_gradi/full/739,521/0/default.jpg',
+      );
       expect(lastImgWithoutChoice.preferred).toBe(true);
     });
 
@@ -156,7 +168,11 @@ describe('MiradorCanvas', () => {
       instance = new MiradorCanvas(
         Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0],
       );
-      const preferredOption = instance.imageResources.find((resource) => resource.id === 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg');
+      const preferredOption = instance.imageResources.find(
+        (resource) =>
+          resource.id ===
+          'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg',
+      );
       expect(preferredOption.preferred).toBe(true);
     });
 
@@ -164,7 +180,11 @@ describe('MiradorCanvas', () => {
       instance = new MiradorCanvas(
         Utils.parseManifest(fragmentFixtureV3).getSequences()[0].getCanvases()[0],
       );
-      const preferredOption = instance.imageResources.find((resource) => resource.id === 'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/,800/0/default.jpg');
+      const preferredOption = instance.imageResources.find(
+        (resource) =>
+          resource.id ===
+          'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/,800/0/default.jpg',
+      );
       expect(preferredOption.preferred).toBe(true);
     });
 
@@ -172,9 +192,17 @@ describe('MiradorCanvas', () => {
       instance = new MiradorCanvas(
         Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0],
       );
-      const firstAlternative = instance.imageResources.find((img) => img.id === 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png');
+      const firstAlternative = instance.imageResources.find(
+        (img) =>
+          img.id ===
+          'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png',
+      );
       expect(firstAlternative.preferred).toBe(false);
-      const lastAlternative = instance.imageResources.find((img) => img.id === 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_017_F/full/862,1024/0/default.jpg');
+      const lastAlternative = instance.imageResources.find(
+        (img) =>
+          img.id ===
+          'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_017_F/full/862,1024/0/default.jpg',
+      );
       expect(lastAlternative.preferred).toBe(false);
     });
 
@@ -182,9 +210,17 @@ describe('MiradorCanvas', () => {
       instance = new MiradorCanvas(
         Utils.parseManifest(fragmentFixtureV3).getSequences()[0].getCanvases()[0],
       );
-      const firstAlternative = instance.imageResources.find((img) => img.id === 'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png');
+      const firstAlternative = instance.imageResources.find(
+        (img) =>
+          img.id ===
+          'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png',
+      );
       expect(firstAlternative.preferred).toBe(false);
-      const lastAlternative = instance.imageResources.find((img) => img.id === 'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_017_F/full/,800/0/default.jpg');
+      const lastAlternative = instance.imageResources.find(
+        (img) =>
+          img.id ===
+          'https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_017_F/full/,800/0/default.jpg',
+      );
       expect(lastAlternative.preferred).toBe(false);
     });
   });

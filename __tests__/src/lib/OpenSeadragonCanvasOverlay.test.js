@@ -58,7 +58,8 @@ describe('OpenSeadragonCanvasOverlay', () => {
           getContext: contextMock,
         },
       };
-      canvasOverlay.context2d; // eslint-disable-line no-unused-expressions
+      // eslint-disable-next-line no-unused-expressions
+      canvasOverlay.context2d;
       expect(contextMock).toHaveBeenCalledTimes(1);
     });
   });

@@ -9,19 +9,16 @@ import ErrorContent from '../containers/ErrorContent';
 /**
  * Render a companion window using the appropriate component for the content
  */
-export function CompanionWindowFactory({
-  content = null, id, windowId,
-}) {
+export function CompanionWindowFactory({ content = null, id, windowId }) {
   const { t } = useTranslation();
-  const ErroredCompanionWindow = useCallback(({ error }) => (
-    <CompanionWindow
-      title={t('error')}
-      windowId={windowId}
-      id={id}
-    >
-      <ErrorContent error={error} windowId={windowId} companionWindowId={id} />
-    </CompanionWindow>
-  ), [windowId, t, id]);
+  const ErroredCompanionWindow = useCallback(
+    ({ error }) => (
+      <CompanionWindow title={t('error')} windowId={windowId} id={id}>
+        <ErrorContent error={error} windowId={windowId} companionWindowId={id} />
+      </CompanionWindow>
+    ),
+    [windowId, t, id],
+  );
 
   const DynamicCompanionWindowType = CompanionWindowRegistry[content];
 

@@ -164,9 +164,10 @@ const globalReactMosaicStyles = {
     background: 'white',
     boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
   },
-  '.mosaic-window .mosaic-window-toolbar.draggable, .mosaic-preview .mosaic-window-toolbar.draggable': {
-    cursor: 'move',
-  },
+  '.mosaic-window .mosaic-window-toolbar.draggable, .mosaic-preview .mosaic-window-toolbar.draggable':
+    {
+      cursor: 'move',
+    },
   '.mosaic-window .mosaic-window-title, .mosaic-preview .mosaic-window-title': {
     paddingLeft: 15,
     webkitBoxFlex: '1',
@@ -185,11 +186,12 @@ const globalReactMosaicStyles = {
     ],
     height: '100%',
   },
-  '.mosaic-window .mosaic-window-controls .separator, .mosaic-preview .mosaic-window-controls .separator': {
-    height: 20,
-    borderLeft: '1px solid black',
-    margin: '5px 4px',
-  },
+  '.mosaic-window .mosaic-window-controls .separator, .mosaic-preview .mosaic-window-controls .separator':
+    {
+      height: 20,
+      borderLeft: '1px solid black',
+      margin: '5px 4px',
+    },
   '.mosaic-window .mosaic-window-body, .mosaic-preview .mosaic-window-body': {
     position: 'relative',
     webkitBoxFlex: '1',
@@ -199,31 +201,34 @@ const globalReactMosaicStyles = {
     zIndex: '1',
     overflow: 'hidden',
   },
-  '.mosaic-window .mosaic-window-additional-actions-bar, .mosaic-preview .mosaic-window-additional-actions-bar': {
-    position: 'absolute',
-    top: 30,
-    right: '0',
-    bottom: 'initial',
-    left: '0',
-    height: '0',
-    overflow: 'hidden',
-    background: 'white',
-    webkitBoxPack: 'end',
-    justifyContent: 'flex-end',
-    display: 'flex',
-    fallbacks: [
-      {
-        display: '-webkit-box',
-      },
-    ],
-    zIndex: '3',
-  },
-  '.mosaic-window .mosaic-window-additional-actions-bar .bp3-button, .mosaic-preview .mosaic-window-additional-actions-bar .bp3-button': {
-    margin: '0',
-  },
-  '.mosaic-window .mosaic-window-additional-actions-bar .bp3-button:after, .mosaic-preview .mosaic-window-additional-actions-bar .bp3-button:after': {
-    display: 'none',
-  },
+  '.mosaic-window .mosaic-window-additional-actions-bar, .mosaic-preview .mosaic-window-additional-actions-bar':
+    {
+      position: 'absolute',
+      top: 30,
+      right: '0',
+      bottom: 'initial',
+      left: '0',
+      height: '0',
+      overflow: 'hidden',
+      background: 'white',
+      webkitBoxPack: 'end',
+      justifyContent: 'flex-end',
+      display: 'flex',
+      fallbacks: [
+        {
+          display: '-webkit-box',
+        },
+      ],
+      zIndex: '3',
+    },
+  '.mosaic-window .mosaic-window-additional-actions-bar .bp3-button, .mosaic-preview .mosaic-window-additional-actions-bar .bp3-button':
+    {
+      margin: '0',
+    },
+  '.mosaic-window .mosaic-window-additional-actions-bar .bp3-button:after, .mosaic-preview .mosaic-window-additional-actions-bar .bp3-button:after':
+    {
+      display: 'none',
+    },
   '.mosaic-window .mosaic-window-body-overlay, .mosaic-preview .mosaic-window-body-overlay': {
     position: 'absolute',
     top: '0',
@@ -235,12 +240,14 @@ const globalReactMosaicStyles = {
     display: 'none',
     zIndex: '2',
   },
-  '.mosaic-window.additional-controls-open .mosaic-window-additional-actions-bar, .mosaic-preview.additional-controls-open .mosaic-window-additional-actions-bar': {
-    height: 30,
-  },
-  '.mosaic-window.additional-controls-open .mosaic-window-body-overlay, .mosaic-preview.additional-controls-open .mosaic-window-body-overlay': {
-    display: 'block',
-  },
+  '.mosaic-window.additional-controls-open .mosaic-window-additional-actions-bar, .mosaic-preview.additional-controls-open .mosaic-window-additional-actions-bar':
+    {
+      height: 30,
+    },
+  '.mosaic-window.additional-controls-open .mosaic-window-body-overlay, .mosaic-preview.additional-controls-open .mosaic-window-body-overlay':
+    {
+      display: 'block',
+    },
   '.mosaic-window .mosaic-preview, .mosaic-preview .mosaic-preview': {
     height: '100%',
     width: '100%',
@@ -249,35 +256,36 @@ const globalReactMosaicStyles = {
     border: '1px solid black',
     maxHeight: 400,
   },
-  '.mosaic-window .mosaic-preview .mosaic-window-body, .mosaic-preview .mosaic-preview .mosaic-window-body': {
-    display: 'flex',
-    fallbacks: [
-      {
-        display: '-webkit-box',
-      },
-    ],
-    webkitBoxOrient: 'vertical',
-    webkitBoxDirection: 'normal',
-    flexDirection: 'column',
-    webkitBoxAlign: 'center',
-    alignItems: 'center',
-    webkitBoxPack: 'center',
-    justifyContent: 'center',
-  },
+  '.mosaic-window .mosaic-preview .mosaic-window-body, .mosaic-preview .mosaic-preview .mosaic-window-body':
+    {
+      display: 'flex',
+      fallbacks: [
+        {
+          display: '-webkit-box',
+        },
+      ],
+      webkitBoxOrient: 'vertical',
+      webkitBoxDirection: 'normal',
+      flexDirection: 'column',
+      webkitBoxAlign: 'center',
+      alignItems: 'center',
+      webkitBoxPack: 'center',
+      justifyContent: 'center',
+    },
   '.mosaic-window .mosaic-preview h4, .mosaic-preview .mosaic-preview h4': {
     marginBottom: 10,
   },
   '.mosaic:not(.mosaic-blueprint-theme) .mosaic-default-control.close-button:before': {
-    content: '\'Close\'',
+    content: "'Close'",
   },
   '.mosaic:not(.mosaic-blueprint-theme) .mosaic-default-control.split-button:before': {
-    content: '\'Split\'',
+    content: "'Split'",
   },
   '.mosaic:not(.mosaic-blueprint-theme) .mosaic-default-control.replace-button:before': {
-    content: '\'Replace\'',
+    content: "'Replace'",
   },
   '.mosaic:not(.mosaic-blueprint-theme) .mosaic-default-control.expand-button:before': {
-    content: '\'Expand\'',
+    content: "'Expand'",
   },
 };
 

@@ -22,9 +22,6 @@ const mapStateToProps = (state, { canvasId, companionWindowId, windowId }) => ({
   ),
 });
 
-const enhance = compose(
-  connect(mapStateToProps),
-  withPlugins('CanvasInfo'),
-);
+const enhance = compose(connect(mapStateToProps), withPlugins('CanvasInfo'));
 
 export default enhance(CanvasInfo);

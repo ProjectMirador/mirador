@@ -32,12 +32,8 @@ describe('getSearchQuery', () => {
         },
       },
     };
-    expect(
-      getSearchQuery(state, { companionWindowId, windowId: 'a' }),
-    ).toEqual('xyz');
-    expect(
-      getSearchQuery(state, { companionWindowId, windowId: 'b' }),
-    ).toEqual(undefined);
+    expect(getSearchQuery(state, { companionWindowId, windowId: 'a' })).toEqual('xyz');
+    expect(getSearchQuery(state, { companionWindowId, windowId: 'b' })).toEqual(undefined);
   });
 });
 
@@ -66,12 +62,8 @@ describe('getSearchIsFetching', () => {
         },
       },
     };
-    expect(
-      getSearchIsFetching(state, { companionWindowId, windowId: 'a' }),
-    ).toEqual(true);
-    expect(
-      getSearchIsFetching(state, { companionWindowId, windowId: 'b' }),
-    ).toEqual(false);
+    expect(getSearchIsFetching(state, { companionWindowId, windowId: 'a' })).toEqual(true);
+    expect(getSearchIsFetching(state, { companionWindowId, windowId: 'b' })).toEqual(false);
   });
 });
 
@@ -99,12 +91,8 @@ describe('getNextSearchId', () => {
         },
       },
     };
-    expect(
-      getNextSearchId(state, { companionWindowId, windowId: 'a' }),
-    ).toEqual('search?page=3');
-    expect(
-      getSearchQuery(state, { companionWindowId, windowId: 'b' }),
-    ).toEqual(undefined);
+    expect(getNextSearchId(state, { companionWindowId, windowId: 'a' })).toEqual('search?page=3');
+    expect(getSearchQuery(state, { companionWindowId, windowId: 'b' })).toEqual(undefined);
   });
 });
 
@@ -169,9 +157,9 @@ describe('getSortedSearchHitsForCompanionWindow', () => {
     expect(
       getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'b' }),
     ).toEqual([]);
-    expect(
-      getSortedSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' }),
-    ).toEqual([]);
+    expect(getSortedSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' })).toEqual(
+      [],
+    );
   });
 });
 
@@ -199,7 +187,9 @@ describe('getSortedSearchAnnotationsForCompanionWindow', () => {
     };
 
     expect(
-      getSortedSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId: 'a' }).map(r => r.id),
+      getSortedSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId: 'a' }).map(
+        (r) => r.id,
+      ),
     ).toEqual([
       'http://example.com/iiif/canvas1',
       'http://example.com/iiif/canvas2',
@@ -237,24 +227,15 @@ describe('getSearchAnnotationsForWindow', () => {
         },
       },
     };
-    expect(
-      getSearchAnnotationsForWindow(state, { companionWindowId, windowId: 'a' }),
-    ).toEqual([{
-      id: 'yolo',
-      resources: [
-        { resource: { '@id': 'annoId2' } },
-        { resource: { '@id': 'annoId3' } },
-      ],
-    }]);
-    expect(
-      getSearchAnnotationsForWindow(state, { companionWindowId, windowId: 'b' }),
-    ).toEqual([]);
-    expect(
-      getSearchAnnotationsForWindow({}, { companionWindowId, windowId: 'a' }),
-    ).toEqual([]);
-    expect(
-      getSearchAnnotationsForWindow({}, { windowId: 'a' }),
-    ).toEqual([]);
+    expect(getSearchAnnotationsForWindow(state, { companionWindowId, windowId: 'a' })).toEqual([
+      {
+        id: 'yolo',
+        resources: [{ resource: { '@id': 'annoId2' } }, { resource: { '@id': 'annoId3' } }],
+      },
+    ]);
+    expect(getSearchAnnotationsForWindow(state, { companionWindowId, windowId: 'b' })).toEqual([]);
+    expect(getSearchAnnotationsForWindow({}, { companionWindowId, windowId: 'a' })).toEqual([]);
+    expect(getSearchAnnotationsForWindow({}, { windowId: 'a' })).toEqual([]);
   });
 });
 
@@ -277,9 +258,7 @@ describe('getSelectedContentSearchAnnotationIds', () => {
       getSelectedContentSearchAnnotationIds(state, { companionWindowId: 'bar', windowId: 'foo' }),
     ).toEqual(['baz']);
 
-    expect(
-      getSelectedContentSearchAnnotationIds(state, { windowId: 'baz' }),
-    ).toEqual([]);
+    expect(getSelectedContentSearchAnnotationIds(state, { windowId: 'baz' })).toEqual([]);
   });
 });
 
@@ -305,7 +284,11 @@ describe('getResourceAnnotationForSearchHit', () => {
     };
 
     expect(
-      getResourceAnnotationForSearchHit(state, { annotationUri: annoId, companionWindowId, windowId: 'a' }).resource['@id'],
+      getResourceAnnotationForSearchHit(state, {
+        annotationUri: annoId,
+        companionWindowId,
+        windowId: 'a',
+      }).resource['@id'],
     ).toEqual(annoId);
   });
 });
@@ -325,10 +308,12 @@ describe('getResourceAnnotationLabel', () => {
               'search?page=1': {
                 json: {
                   '@id': 'yolo',
-                  resources: [{
-                    '@id': annoId,
-                    label: { '@language': 'en', '@value': 'The Annotation Label' },
-                  }],
+                  resources: [
+                    {
+                      '@id': annoId,
+                      label: { '@language': 'en', '@value': 'The Annotation Label' },
+                    },
+                  ],
                 },
               },
             },
@@ -338,7 +323,11 @@ describe('getResourceAnnotationLabel', () => {
     };
 
     expect(
-      getResourceAnnotationLabel(state, { annotationUri: annoId, companionWindowId, windowId: 'a' }),
+      getResourceAnnotationLabel(state, {
+        annotationUri: annoId,
+        companionWindowId,
+        windowId: 'a',
+      }),
     ).toEqual(['The Annotation Label']);
   });
 
@@ -361,7 +350,11 @@ describe('getResourceAnnotationLabel', () => {
     };
 
     expect(
-      getResourceAnnotationLabel(state, { annotationUri: annoId, companionWindowId, windowId: 'a' }),
+      getResourceAnnotationLabel(state, {
+        annotationUri: annoId,
+        companionWindowId,
+        windowId: 'a',
+      }),
     ).toEqual([]);
   });
 });

@@ -84,7 +84,8 @@ export const searchesReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
           if (key !== action.companionWindowId) {
-            object[key] = state[action.windowId][key]; // eslint-disable-line no-param-reassign
+            // eslint-disable-next-line no-param-reassign
+            object[key] = state[action.windowId][key];
           }
           return object;
         }, {}),
@@ -107,20 +108,23 @@ export const searchesReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: Object.keys(state[action.windowId]).reduce((object, key) => {
           const search = state[action.windowId][key];
-          const searchHasAnnotation = search.data
-            && Object.values(search.data)
-              .filter(resp => resp.json && resp.json.resources)
-              .some(resp => (
-                flatten([resp.json.resources]).some(r => r['@id'] === action.annotationId)
-              ));
+          const searchHasAnnotation =
+            search.data &&
+            Object.values(search.data)
+              .filter((resp) => resp.json && resp.json.resources)
+              .some((resp) =>
+                flatten([resp.json.resources]).some((r) => r['@id'] === action.annotationId),
+              );
 
           if (searchHasAnnotation) {
-            object[key] = { // eslint-disable-line no-param-reassign
+            // eslint-disable-next-line no-param-reassign
+            object[key] = {
               ...search,
               selectedContentSearchAnnotationIds: [action.annotationId],
             };
           } else {
-            object[key] = search; // eslint-disable-line no-param-reassign
+            // eslint-disable-next-line no-param-reassign
+            object[key] = search;
           }
           return object;
         }, {}),
@@ -138,6 +142,7 @@ export const searchesReducer = (state = {}, action) => {
           ...omit(state[action.windowId], action.id),
         },
       };
-    default: return state;
+    default:
+      return state;
   }
 };

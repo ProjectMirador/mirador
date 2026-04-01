@@ -10,25 +10,27 @@ import { useTranslation } from 'react-i18next';
 import BookViewIcon from './icons/BookViewIcon';
 import GalleryViewIcon from './icons/GalleryViewIcon';
 
-const ViewOption = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option' })(({ selected, theme }) => ({
-  '& .MuiFormControlLabel-label': {
-    borderBottom: '2px solid transparent',
-    ...(selected && {
-      borderBottomColor: theme.palette.secondary.main,
-    }),
-    '&.Mui-selected': {
-      backgroundColor: 'transparent !important',
+const ViewOption = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option' })(
+  ({ selected, theme }) => ({
+    '& .MuiFormControlLabel-label': {
+      borderBottom: '2px solid transparent',
+      ...(selected && {
+        borderBottomColor: theme.palette.secondary.main,
+      }),
+      '&.Mui-selected': {
+        backgroundColor: 'transparent !important',
+      },
+      '&.Mui-selected.Mui-focusVisible': {
+        backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
+      },
+      '&:focused': {
+        backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
+      },
+      color: selected ? theme.palette.secondary.main : undefined,
+      display: 'inline-block',
     },
-    '&.Mui-selected.Mui-focusVisible': {
-      backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
-    },
-    '&:focused': {
-      backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
-    },
-    color: selected ? theme.palette.secondary.main : undefined,
-    display: 'inline-block',
-  },
-}));
+  }),
+);
 
 const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'option' })(() => ({
   display: 'inline-flex',
@@ -38,7 +40,11 @@ const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'opt
  *
  */
 export function WindowViewSettings({
-  handleClose = () => {}, windowViewType, viewTypes = [], setWindowViewType, windowId,
+  handleClose = () => {},
+  windowViewType,
+  viewTypes = [],
+  setWindowViewType,
+  windowId,
 }) {
   const { t } = useTranslation();
   /** */
@@ -58,15 +64,21 @@ export function WindowViewSettings({
   const menuItem = ({ value, Icon }) => (
     <ViewOption
       aria-checked={windowViewType === value}
-      autoFocus={windowViewType === value} // eslint-disable-line jsx-a11y/no-autofocus
+      // eslint-disable-next-line jsx-a11y/no-autofocus
+      autoFocus={windowViewType === value}
       key={value}
-      onClick={() => { handleChange(value); handleClose(); }}
+      onClick={() => {
+        handleChange(value);
+        handleClose();
+      }}
       role="menuitemradio"
       selected={windowViewType === value}
     >
       <FormControlLabel
         value={value}
-        control={<Icon fill="currentcolor" color={windowViewType === value ? 'secondary' : undefined} />}
+        control={
+          <Icon fill="currentcolor" color={windowViewType === value ? 'secondary' : undefined} />
+        }
         label={t(value)}
         labelPlacement="bottom"
       />
@@ -76,9 +88,11 @@ export function WindowViewSettings({
   if (viewTypes.length === 0) return null;
   return (
     <>
-      <ListSubheader role="presentation" disableSticky>{t('view')}</ListSubheader>
+      <ListSubheader role="presentation" disableSticky>
+        {t('view')}
+      </ListSubheader>
       <StyledMenuList role="menubar">
-        { viewTypes.map(value => menuItem({ Icon: iconMap[value], value })) }
+        {viewTypes.map((value) => menuItem({ Icon: iconMap[value], value }))}
       </StyledMenuList>
     </>
   );

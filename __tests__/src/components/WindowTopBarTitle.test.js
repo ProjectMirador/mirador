@@ -5,12 +5,7 @@ import { WindowTopBarTitle } from '../../../src/components/WindowTopBarTitle';
 /** create wrapper */
 function createWrapper(props) {
   return render(
-    <WindowTopBarTitle
-      manifestTitle="awesome manifest"
-      windowId="xyz"
-      classes={{}}
-      {...props}
-    />,
+    <WindowTopBarTitle manifestTitle="awesome manifest" windowId="xyz" classes={{}} {...props} />,
   );
 }
 

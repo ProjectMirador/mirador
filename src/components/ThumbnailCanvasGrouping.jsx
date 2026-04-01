@@ -63,9 +63,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
       calculatedWidth = style.width - SPACING;
     }
 
-    const isSelected = currentGroupings
-      .map(canvas => canvas.id)
-      .includes(currentCanvasId);
+    const isSelected = currentGroupings.map((canvas) => canvas.id).includes(currentCanvasId);
 
     return (
       <div
@@ -88,11 +86,9 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           data-canvas-index={currentGroupings[0].index}
           onClick={this.setCanvas}
           tabIndex={-1}
-          sx={theme => ({
+          sx={(theme) => ({
             '&:not(:hover)': {
-              outline: isSelected
-                ? `2px solid ${theme.palette.primary.main}`
-                : 0,
+              outline: isSelected ? `2px solid ${theme.palette.primary.main}` : 0,
               ...(isSelected && {
                 outlineOffset: '3px',
               }),
@@ -107,7 +103,11 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             width: position === 'far-bottom' ? 'auto' : `${style.width}px`,
           })}
           className={classNames(
-            ns(['thumbnail-nav-canvas', `thumbnail-nav-canvas-${itemIndex}`, this.currentCanvasClass( currentGroupings.map(canvas => canvas.index))]),
+            ns([
+              'thumbnail-nav-canvas',
+              `thumbnail-nav-canvas-${itemIndex}`,
+              this.currentCanvasClass(currentGroupings.map((canvas) => canvas.index)),
+            ]),
           )}
         >
           {currentGroupings.map((canvas, i) => (
@@ -115,7 +115,9 @@ export class ThumbnailCanvasGrouping extends PureComponent {
               key={canvas.id}
               resource={canvas}
               labelled={showThumbnailLabels}
-              maxHeight={(position === 'far-right') ? style.height - (1.5 * SPACING) : height - (1.5 * SPACING)}
+              maxHeight={
+                position === 'far-right' ? style.height - 1.5 * SPACING : height - 1.5 * SPACING
+              }
               variant="inside"
             />
           ))}

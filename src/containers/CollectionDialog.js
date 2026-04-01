@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import {
-  getManifest, getManifestoInstance, getSequenceBehaviors, getWindow,
+  getManifest,
+  getManifestoInstance,
+  getSequenceBehaviors,
+  getWindow,
 } from '../state/selectors';
 import { CollectionDialog } from '../components/CollectionDialog';
 
@@ -29,7 +32,8 @@ const mapStateToProps = (state, { windowId }) => {
   const { collectionManifestId: manifestId, dialogCollectionPath } = getWindow(state, { windowId });
   const manifest = getManifest(state, { manifestId });
 
-  const collectionId = dialogCollectionPath && dialogCollectionPath[dialogCollectionPath.length - 1];
+  const collectionId =
+    dialogCollectionPath && dialogCollectionPath[dialogCollectionPath.length - 1];
   const collection = collectionId && getManifest(state, { manifestId: collectionId });
 
   return {

@@ -11,24 +11,40 @@ import { ScrollTo } from './ScrollTo';
 
 /**
  * CanvasAnnotations ~
-*/
+ */
 export function CanvasAnnotations({
-  annotations = [], index, label, selectedAnnotationId = undefined, totalSize,
-  listContainerComponent = 'li', htmlSanitizationRuleSet = 'iiif', hoveredAnnotationIds = [],
-  containerRef = undefined, deselectAnnotation, selectAnnotation, windowId, hoverAnnotation,
+  annotations = [],
+  index,
+  label,
+  selectedAnnotationId = undefined,
+  totalSize,
+  listContainerComponent = 'li',
+  htmlSanitizationRuleSet = 'iiif',
+  hoveredAnnotationIds = [],
+  containerRef = undefined,
+  deselectAnnotation,
+  selectAnnotation,
+  windowId,
+  hoverAnnotation,
 }) {
   const { t } = useTranslation();
-  const handleClick = useCallback((_event, annotation) => {
-    if (selectedAnnotationId === annotation.id) {
-      deselectAnnotation(windowId, annotation.id);
-    } else {
-      selectAnnotation(windowId, annotation.id);
-    }
-  }, [windowId, deselectAnnotation, selectAnnotation, selectedAnnotationId]);
+  const handleClick = useCallback(
+    (_event, annotation) => {
+      if (selectedAnnotationId === annotation.id) {
+        deselectAnnotation(windowId, annotation.id);
+      } else {
+        selectAnnotation(windowId, annotation.id);
+      }
+    },
+    [windowId, deselectAnnotation, selectAnnotation, selectedAnnotationId],
+  );
 
-  const handleAnnotationHover = useCallback((annotation) => {
-    hoverAnnotation(windowId, [annotation.id]);
-  }, [hoverAnnotation, windowId]);
+  const handleAnnotationHover = useCallback(
+    (annotation) => {
+      hoverAnnotation(windowId, [annotation.id]);
+    },
+    [hoverAnnotation, windowId],
+  );
 
   const handleAnnotationBlur = useCallback(() => {
     hoverAnnotation(windowId, []);
@@ -71,13 +87,21 @@ export function CanvasAnnotations({
               <ListItemText
                 primaryTypographyProps={{ variant: 'body2' }}
                 primary={
-                  <SanitizedHtml ruleSet={htmlSanitizationRuleSet} htmlString={annotation.content} />
+                  <SanitizedHtml
+                    ruleSet={htmlSanitizationRuleSet}
+                    htmlString={annotation.content}
+                  />
                 }
-                secondary={
-                  annotation.tags.map((tag) => (
-                    <Chip component="span" size="small" variant="outlined" label={tag} id={tag} key={tag.toString()} />
-                  ))
-                }
+                secondary={annotation.tags.map((tag) => (
+                  <Chip
+                    component="span"
+                    size="small"
+                    variant="outlined"
+                    label={tag}
+                    id={tag}
+                    key={tag.toString()}
+                  />
+                ))}
               />
             </MenuItem>
           </ScrollTo>

@@ -39,9 +39,9 @@ describe('auth actions', () => {
         type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST,
       };
 
-      expect(
-        actions.resolveAuthenticationRequest(authId, tokenServiceId, { ok: false }),
-      ).toEqual(expectedAction);
+      expect(actions.resolveAuthenticationRequest(authId, tokenServiceId, { ok: false })).toEqual(
+        expectedAction,
+      );
     });
   });
 
@@ -100,11 +100,12 @@ describe('auth actions', () => {
       const serviceId = 'abc123';
       const json = { accessToken: 1 };
 
-      expect(actions.resolveAccessTokenRequest(authId, serviceId, json)).toEqual(
-        {
-          authId, json, serviceId, type: ActionTypes.RECEIVE_ACCESS_TOKEN,
-        },
-      );
+      expect(actions.resolveAccessTokenRequest(authId, serviceId, json)).toEqual({
+        authId,
+        json,
+        serviceId,
+        type: ActionTypes.RECEIVE_ACCESS_TOKEN,
+      });
     });
 
     it('without an access token, resolves the auth request unsuccessfully', () => {
@@ -112,11 +113,12 @@ describe('auth actions', () => {
       const serviceId = 'abc123';
       const json = { error: 'xyz' };
 
-      expect(actions.resolveAccessTokenRequest(authId, serviceId, json)).toEqual(
-        {
-          authId, error: json, serviceId, type: ActionTypes.RECEIVE_ACCESS_TOKEN_FAILURE,
-        },
-      );
+      expect(actions.resolveAccessTokenRequest(authId, serviceId, json)).toEqual({
+        authId,
+        error: json,
+        serviceId,
+        type: ActionTypes.RECEIVE_ACCESS_TOKEN_FAILURE,
+      });
     });
   });
 });

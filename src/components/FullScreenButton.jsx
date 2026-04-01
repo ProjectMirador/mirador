@@ -24,11 +24,27 @@ export function FullScreenButton({ className = undefined }) {
   if (!canFullscreenDiv) return null;
 
   if (handle && handle.active) {
-    return <MiradorMenuButton className={className} aria-label={t('exitFullScreen')} onClick={handle.exit}><FullscreenExitIcon /></MiradorMenuButton>;
+    return (
+      <MiradorMenuButton
+        className={className}
+        aria-label={t('exitFullScreen')}
+        onClick={handle.exit}
+      >
+        <FullscreenExitIcon />
+      </MiradorMenuButton>
+    );
   }
 
   if (handle) {
-    return <MiradorMenuButton className={className} aria-label={t('workspaceFullScreen')} onClick={handle.enter}><FullscreenIcon /></MiradorMenuButton>;
+    return (
+      <MiradorMenuButton
+        className={className}
+        aria-label={t('workspaceFullScreen')}
+        onClick={handle.enter}
+      >
+        <FullscreenIcon />
+      </MiradorMenuButton>
+    );
   }
 
   return null;

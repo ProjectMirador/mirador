@@ -14,25 +14,31 @@ describe('AnnotationItem', () => {
 
   describe('isOnlyTag', () => {
     it('when the only motivation is tagging', () => {
-      expect(new AnnotationItem({ motivation: 'tagging' }).isOnlyTag())
-        .toBe(true);
+      expect(new AnnotationItem({ motivation: 'tagging' }).isOnlyTag()).toBe(true);
     });
     it('when there are other motivations besides tagging', () => {
-      expect(new AnnotationItem({ motivation: ['commenting', 'tagging'] }).isOnlyTag())
-        .toBe(false);
+      expect(new AnnotationItem({ motivation: ['commenting', 'tagging'] }).isOnlyTag()).toBe(false);
     });
   });
 
   describe('tags', () => {
     it('when only motivation', () => {
       expect(
-        new AnnotationItem({ body: [{ purpose: 'tagging', value: 'yo' }, { purpose: 'tagging', value: 'lo' }] }).tags,
+        new AnnotationItem({
+          body: [
+            { purpose: 'tagging', value: 'yo' },
+            { purpose: 'tagging', value: 'lo' },
+          ],
+        }).tags,
       ).toEqual(['yo', 'lo']);
     });
     it('when multiple motivations', () => {
       expect(
         new AnnotationItem({
-          body: [{ purpose: 'commenting', value: 'yo' }, { purpose: 'tagging', value: 'lo' }],
+          body: [
+            { purpose: 'commenting', value: 'yo' },
+            { purpose: 'tagging', value: 'lo' },
+          ],
           motivation: ['commenting', 'tagging'],
         }).tags,
       ).toEqual(['lo']);
@@ -51,9 +57,7 @@ describe('AnnotationItem', () => {
     });
 
     it('supports a source id', () => {
-      expect(
-        new AnnotationItem({ target: { source: { id: 'foo' } } }).targetId,
-      ).toEqual('foo');
+      expect(new AnnotationItem({ target: { source: { id: 'foo' } } }).targetId).toEqual('foo');
     });
   });
 
@@ -62,12 +66,13 @@ describe('AnnotationItem', () => {
       expect(new AnnotationItem().motivations).toEqual([]);
     });
     it('with a single motivation', () => {
-      expect(new AnnotationItem({ motivation: 'commenting' })
-        .motivations).toEqual(['commenting']);
+      expect(new AnnotationItem({ motivation: 'commenting' }).motivations).toEqual(['commenting']);
     });
     it('with multiple motivations', () => {
-      expect(new AnnotationItem({ motivation: ['commenting', 'funstuff'] })
-        .motivations).toEqual(['commenting', 'funstuff']);
+      expect(new AnnotationItem({ motivation: ['commenting', 'funstuff'] }).motivations).toEqual([
+        'commenting',
+        'funstuff',
+      ]);
     });
   });
   describe('resources/body', () => {
@@ -76,16 +81,12 @@ describe('AnnotationItem', () => {
       expect(new AnnotationItem().body).toEqual([]);
     });
     it('with a single body', () => {
-      expect(new AnnotationItem({ body: 'foo' })
-        .resources).toEqual(['foo']);
-      expect(new AnnotationItem({ body: 'foo' })
-        .body).toEqual(['foo']);
+      expect(new AnnotationItem({ body: 'foo' }).resources).toEqual(['foo']);
+      expect(new AnnotationItem({ body: 'foo' }).body).toEqual(['foo']);
     });
     it('with multiple bodies', () => {
-      expect(new AnnotationItem({ body: ['foo', 'bar'] })
-        .resources).toEqual(['foo', 'bar']);
-      expect(new AnnotationItem({ body: ['foo', 'bar'] })
-        .body).toEqual(['foo', 'bar']);
+      expect(new AnnotationItem({ body: ['foo', 'bar'] }).resources).toEqual(['foo', 'bar']);
+      expect(new AnnotationItem({ body: ['foo', 'bar'] }).body).toEqual(['foo', 'bar']);
     });
   });
   describe('target', () => {
@@ -93,12 +94,10 @@ describe('AnnotationItem', () => {
       expect(new AnnotationItem().target).toEqual([]);
     });
     it('with a single target', () => {
-      expect(new AnnotationItem({ target: 'foo' })
-        .target).toEqual(['foo']);
+      expect(new AnnotationItem({ target: 'foo' }).target).toEqual(['foo']);
     });
     it('with multiple target', () => {
-      expect(new AnnotationItem({ target: ['foo', 'bar'] })
-        .target).toEqual(['foo', 'bar']);
+      expect(new AnnotationItem({ target: ['foo', 'bar'] }).target).toEqual(['foo', 'bar']);
     });
   });
   describe('selector', () => {
@@ -109,7 +108,10 @@ describe('AnnotationItem', () => {
       expect(new AnnotationItem({ target: { selector: 'yolo' } }).selector).toEqual(['yolo']);
     });
     it('handles multiple selectors', () => {
-      expect(new AnnotationItem({ target: { selector: ['yolo', 'foo'] } }).selector).toEqual(['yolo', 'foo']);
+      expect(new AnnotationItem({ target: { selector: ['yolo', 'foo'] } }).selector).toEqual([
+        'yolo',
+        'foo',
+      ]);
     });
   });
   describe('chars', () => {
@@ -117,42 +119,46 @@ describe('AnnotationItem', () => {
       expect(new AnnotationItem().chars).toEqual('');
     });
     it('with a single body', () => {
-      expect(new AnnotationItem({ body: { value: 'foo' } })
-        .chars).toEqual('foo');
+      expect(new AnnotationItem({ body: { value: 'foo' } }).chars).toEqual('foo');
     });
     it('with multiple bodies', () => {
-      expect(new AnnotationItem({ body: [{ value: 'foo' }, { value: 'bar' }] })
-        .chars).toEqual('foo bar');
+      expect(new AnnotationItem({ body: [{ value: 'foo' }, { value: 'bar' }] }).chars).toEqual(
+        'foo bar',
+      );
     });
   });
   describe('fragmentSelector', () => {
     it('simple string', () => {
-      expect(new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' })
-        .fragmentSelector).toEqual([10, 10, 100, 200]);
+      expect(
+        new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' }).fragmentSelector,
+      ).toEqual([10, 10, 100, 200]);
     });
     it('multiple selectors', () => {
-      expect(new AnnotationItem({ target: { selector: [{ type: 'FragmentSelector', value: '#xywh=10,10,100,200' }] } })
-        .fragmentSelector).toEqual([10, 10, 100, 200]);
+      expect(
+        new AnnotationItem({
+          target: { selector: [{ type: 'FragmentSelector', value: '#xywh=10,10,100,200' }] },
+        }).fragmentSelector,
+      ).toEqual([10, 10, 100, 200]);
     });
     it('url without a fragment', () => {
-      expect(new AnnotationItem({ target: 'www.example.com' })
-        .fragmentSelector).toEqual(null);
+      expect(new AnnotationItem({ target: 'www.example.com' }).fragmentSelector).toEqual(null);
     });
   });
   describe('svgSelector', () => {
     it('simple string', () => {
-      expect(new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' })
-        .svgSelector).toEqual(null);
+      expect(
+        new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' }).svgSelector,
+      ).toEqual(null);
     });
 
     it('specified SvgSelector', () => {
-      expect(new AnnotationItem({ target: { selector: { type: 'SvgSelector' } } })
-        .svgSelector).toEqual({ type: 'SvgSelector' });
+      expect(
+        new AnnotationItem({ target: { selector: { type: 'SvgSelector' } } }).svgSelector,
+      ).toEqual({ type: 'SvgSelector' });
     });
 
     it('without specified type', () => {
-      expect(new AnnotationItem({ target: { selector: { } } })
-        .svgSelector).toEqual(undefined);
+      expect(new AnnotationItem({ target: { selector: {} } }).svgSelector).toEqual(undefined);
     });
   });
 });

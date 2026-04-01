@@ -43,9 +43,7 @@ describe('CanvasInfo', () => {
 
   describe('when metadata is not present', () => {
     beforeEach(() => {
-      render(
-        <CanvasInfo />,
-      );
+      render(<CanvasInfo />);
     });
 
     it('does not render empty elements elements', () => {

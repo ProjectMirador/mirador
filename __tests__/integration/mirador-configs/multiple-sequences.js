@@ -7,5 +7,6 @@ export default {
     {
       manifestId: '/__tests__/fixtures/version-2/multipleSequences.json',
       thumbnailNavigation: 'far-bottom',
-    }],
+    },
+  ],
 };

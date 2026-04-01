@@ -21,19 +21,25 @@ const ThemeIcon = styled(PaletteIcon, { name: 'ThemeIcon', slot: 'icon' })(({ th
  * a simple dialog providing the possibility to switch the theme
  */
 export function ChangeThemeDialog({
-  container = null, handleClose, open = false, selectedTheme, setSelectedTheme, themeIds = [],
+  container = null,
+  handleClose,
+  open = false,
+  selectedTheme,
+  setSelectedTheme,
+  themeIds = [],
 }) {
   const { t } = useTranslation();
-  const handleThemeChange = useCallback((theme) => {
-    setSelectedTheme(theme);
-    handleClose();
-  }, [handleClose, setSelectedTheme]);
+  const handleThemeChange = useCallback(
+    (theme) => {
+      setSelectedTheme(theme);
+      handleClose();
+    },
+    [handleClose, setSelectedTheme],
+  );
 
   return (
     <WorkspaceDialog container={container} onClose={handleClose} open={open} variant="menu">
-      <DialogTitle>
-        {t('changeTheme')}
-      </DialogTitle>
+      <DialogTitle>{t('changeTheme')}</DialogTitle>
       <DialogContent>
         <MenuList autoFocusItem>
           {themeIds.map((value) => (

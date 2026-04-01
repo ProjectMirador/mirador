@@ -23,12 +23,15 @@ export function getExportableState(state) {
 
   return Object.entries(exportConfig).reduce((acc, [stem, value]) => {
     if (value === true) {
-      acc[stem] = state[stem];  // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      acc[stem] = state[stem];
     } else if (value.filter) {
-      acc[stem] = Object.entries(state[stem])  // eslint-disable-line no-param-reassign
+      // eslint-disable-next-line no-param-reassign
+      acc[stem] = Object.entries(state[stem])
         .filter(value.filter)
         .reduce((stemAcc, [k, v]) => {
-          stemAcc[k] = v;  // eslint-disable-line no-param-reassign
+          // eslint-disable-next-line no-param-reassign
+          stemAcc[k] = v;
           return stemAcc;
         }, {});
     }
@@ -37,17 +40,18 @@ export function getExportableState(state) {
 }
 
 /**
-* Return languages from config (in state) and indicate which is currently set.
-* @param {object} state
-* @returns {Array} [ {locale: 'de', label: 'Deutsch', current: true}, ... ]
-*/
+ * Return languages from config (in state) and indicate which is currently set.
+ * @param {object} state
+ * @returns {Array} [ {locale: 'de', label: 'Deutsch', current: true}, ... ]
+ */
 export const getLanguagesFromConfigWithCurrent = createSelector(
   [getConfig],
-  ({ availableLanguages, language }) => Object.keys(availableLanguages).map(key => ({
-    current: key === language,
-    label: availableLanguages[key],
-    locale: key,
-  })),
+  ({ availableLanguages, language }) =>
+    Object.keys(availableLanguages).map((key) => ({
+      current: key === language,
+      label: availableLanguages[key],
+      locale: key,
+    })),
 );
 
 /**
@@ -56,15 +60,11 @@ export const getLanguagesFromConfigWithCurrent = createSelector(
  * @returns {boolean}
  */
 export const getShowZoomControlsConfig = createSelector(
-  [
-    getWorkspace,
-    getConfig,
-  ],
-  (workspace, config) => (
+  [getWorkspace, getConfig],
+  (workspace, config) =>
     workspace.showZoomControls === undefined
-      ? (config.workspace.showZoomControls)
-      : workspace.showZoomControls
-  ),
+      ? config.workspace.showZoomControls
+      : workspace.showZoomControls,
 );
 
 /**
@@ -72,9 +72,8 @@ export const getShowZoomControlsConfig = createSelector(
  * @param {object} state
  * @returns {object} {palette: {...}, typography: {...}, overrides: {...}, ...}
  */
-export const getTheme = createSelector(
-  [getConfig],
-  ({ theme, themes, selectedTheme }) => deepmerge(theme, themes[selectedTheme] || {}),
+export const getTheme = createSelector([getConfig], ({ theme, themes, selectedTheme }) =>
+  deepmerge(theme, themes[selectedTheme] || {}),
 );
 
 /**
@@ -82,16 +81,10 @@ export const getTheme = createSelector(
  * @param {object} state
  * @returns {Array} ['dark', 'light']
  */
-export const getThemeIds = createSelector(
-  [getConfig],
-  ({ themes }) => Object.keys(themes),
-);
+export const getThemeIds = createSelector([getConfig], ({ themes }) => Object.keys(themes));
 
 /* @deprecated */
-export const getContainerId = createSelector(
-  [getConfig],
-  ({ id }) => id,
-);
+export const getContainerId = createSelector([getConfig], ({ id }) => id);
 
 /**
  * Returns the theme direction from the config.

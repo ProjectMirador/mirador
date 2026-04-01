@@ -12,7 +12,13 @@ function createWrapper(props, state) {
       windowId="abc"
       {...props}
     />,
-    { preloadedState: { companionWindows: { xyz: { content: 'annotations' } }, windows: { abc: {} }, ...state } },
+    {
+      preloadedState: {
+        companionWindows: { xyz: { content: 'annotations' } },
+        windows: { abc: {} },
+        ...state,
+      },
+    },
   );
 }
 

@@ -40,9 +40,7 @@ describe('ManifestInfo', () => {
 
   describe('when metadata is not present', () => {
     beforeEach(() => {
-      render(
-        <ManifestInfo />,
-      );
+      render(<ManifestInfo />);
     });
 
     it('does not render empty elements elements', () => {

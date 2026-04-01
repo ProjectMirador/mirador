@@ -33,17 +33,18 @@ function isLevel2ImageProfile(service) {
 function iiifv3ImageServiceType(service) {
   const type = service.getProperty('type') || [];
 
-  return asArray(type).some(v => v.startsWith('ImageService'));
+  return asArray(type).some((v) => v.startsWith('ImageService'));
 }
 
 /** */
 function iiifImageService(resource) {
-  const service = resource
-    && resource.getServices().find(s => (
-      iiifv3ImageServiceType(s) || Utils.isImageProfile(s.getProfile())
-    ));
+  const service =
+    resource &&
+    resource
+      .getServices()
+      .find((s) => iiifv3ImageServiceType(s) || Utils.isImageProfile(s.getProfile()));
 
-  if (!(service)) return undefined;
+  if (!service) return undefined;
 
   return service;
 }
@@ -59,7 +60,11 @@ class ThumbnailFactory {
 
   /** */
   static staticImageUrl(resource) {
-    return { height: resource.getProperty('height'), url: resource.id, width: resource.getProperty('width') };
+    return {
+      height: resource.getProperty('height'),
+      url: resource.id,
+      width: resource.getProperty('width'),
+    };
   }
 
   /**
@@ -95,18 +100,15 @@ class ThumbnailFactory {
 
       if (score < 0) return best;
 
-      return Math.abs(score) < Math.abs(imageFitness(best))
-        ? test
-        : best;
+      return Math.abs(score) < Math.abs(imageFitness(best)) ? test : best;
     }, closestSize);
 
     /** .... but not "too" big; we'd rather scale up an image than download too much */
     if (closestSize.width * closestSize.height > targetArea * 6) {
-      closestSize = sizes.reduce((best, test) => (
-        Math.abs(imageFitness(test)) < Math.abs(imageFitness(best))
-          ? test
-          : best
-      ), closestSize);
+      closestSize = sizes.reduce(
+        (best, test) => (Math.abs(imageFitness(test)) < Math.abs(imageFitness(best)) ? test : best),
+        closestSize,
+      );
     }
 
     if (closestSize.default) return undefined;
@@ -119,7 +121,8 @@ class ThumbnailFactory {
    * @param {Object} resource The Image Resource from which to derive a thumbnail
    * @return {Object} The thumbnail URL and any spatial dimensions that can be determined
    */
-  iiifThumbnailUrl(resource) { // eslint-disable-line complexity
+  // eslint-disable-next-line complexity
+  iiifThumbnailUrl(resource) {
     let size;
     let width;
     let height;
@@ -135,12 +138,12 @@ class ThumbnailFactory {
 
     if (!service) return ThumbnailFactory.staticImageUrl(resource);
 
-    const aspectRatio = resource.getWidth()
-      && resource.getHeight()
-      && (resource.getWidth() / resource.getHeight());
-    const target = (requestedMaxWidth && requestedMaxHeight)
-      ? requestedMaxWidth * requestedMaxHeight
-      : maxHeight * maxWidth;
+    const aspectRatio =
+      resource.getWidth() && resource.getHeight() && resource.getWidth() / resource.getHeight();
+    const target =
+      requestedMaxWidth && requestedMaxHeight
+        ? requestedMaxWidth * requestedMaxHeight
+        : maxHeight * maxWidth;
     const closestSize = ThumbnailFactory.selectBestImageSize(service, target);
 
     if (closestSize) {
@@ -162,7 +165,7 @@ class ThumbnailFactory {
 
         if (aspectRatio && aspectRatio > 1) height = Math.round(maxWidth / aspectRatio);
         if (aspectRatio && aspectRatio < 1) width = Math.round(maxHeight * aspectRatio);
-      } else if ((maxWidth / maxHeight) < aspectRatio) {
+      } else if (maxWidth / maxHeight < aspectRatio) {
         size = `${maxWidth},`;
         width = maxWidth;
         if (aspectRatio) height = Math.round(maxWidth / aspectRatio);
@@ -209,8 +212,8 @@ class ThumbnailFactory {
 
     if (!servicePreferredFormats) return 'jpg';
 
-    const filteredFormats = servicePreferredFormats.filter(
-      value => preferredFormats.includes(value),
+    const filteredFormats = servicePreferredFormats.filter((value) =>
+      preferredFormats.includes(value),
     );
 
     // this is a format found in common between the preferred formats of the service
@@ -248,7 +251,11 @@ class ThumbnailFactory {
       // Prefer an image's ImageService over its image's thumbnail
       // Note that Collection, Manifest, and Canvas don't have `getType()`
       if (!resource.isCollection() && !resource.isManifest() && !resource.isCanvas()) {
-        if (resource.getType() === 'image' && iiifImageService(resource) && !iiifImageService(thumbnail)) {
+        if (
+          resource.getType() === 'image' &&
+          iiifImageService(resource) &&
+          !iiifImageService(thumbnail)
+        ) {
           return resource;
         }
       }
@@ -306,13 +313,10 @@ class ThumbnailFactory {
 
 /** */
 function getBestThumbnail(resource, iiifOpts = {}) {
-  return new ThumbnailFactory(
-    iiifOpts,
-    {
-      getMiradorCanvas: (r) => new MiradorCanvas(r),
-      getMiradorManifest: (r) => new MiradorManifest(r),
-    },
-  ).get(resource);
+  return new ThumbnailFactory(iiifOpts, {
+    getMiradorCanvas: (r) => new MiradorCanvas(r),
+    getMiradorManifest: (r) => new MiradorManifest(r),
+  }).get(resource);
 }
 
 export { ThumbnailFactory };

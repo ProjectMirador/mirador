@@ -4,14 +4,10 @@ import { NestedMenu } from '../../../src/components/NestedMenu';
 
 /**
  * Helper function to wrap creating a NestedMenu component
-*/
+ */
 function createWrapper(props) {
   return render(
-    <NestedMenu
-      icon="GivenIcon"
-      label="GivenLabel"
-      {...props}
-    >
+    <NestedMenu icon="GivenIcon" label="GivenLabel" {...props}>
       GivenChildren
     </NestedMenu>,
   );

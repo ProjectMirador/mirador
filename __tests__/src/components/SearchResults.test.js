@@ -96,7 +96,9 @@ describe('SearchResults', () => {
       });
 
       expect(screen.getByRole('heading', { level: 4, name: 'The Anno Label' })).toBeInTheDocument();
-      expect(screen.getByRole('heading', { level: 4, name: 'Annother Anno Label' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { level: 4, name: 'Annother Anno Label' }),
+      ).toBeInTheDocument();
     });
   });
 

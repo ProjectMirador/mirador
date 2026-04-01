@@ -40,15 +40,12 @@ const mapStateToProps = (state, { id, windowId }) => {
  * @private
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
-  showMultipart: () => dispatch(
-    actions.addOrUpdateCompanionWindow(windowId, { content: 'collection', position: 'right' }),
-  ),
-  updateSequence: sequenceId => dispatch(
-    actions.updateWindow(windowId, { sequenceId }),
-  ),
-  updateVariant: variant => dispatch(
-    actions.updateCompanionWindow(windowId, id, { variant }),
-  ),
+  showMultipart: () =>
+    dispatch(
+      actions.addOrUpdateCompanionWindow(windowId, { content: 'collection', position: 'right' }),
+    ),
+  updateSequence: (sequenceId) => dispatch(actions.updateWindow(windowId, { sequenceId })),
+  updateVariant: (variant) => dispatch(actions.updateCompanionWindow(windowId, id, { variant })),
 });
 
 const enhance = compose(

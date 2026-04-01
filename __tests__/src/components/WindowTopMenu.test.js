@@ -20,7 +20,9 @@ function Subject({ ...props }) {
 /** create anchor element */
 function createAnchor() {
   return render(
-    <button type="button" data-testid="menu-trigger-button">Button</button>,
+    <button type="button" data-testid="menu-trigger-button">
+      Button
+    </button>,
   );
 }
 
@@ -63,12 +65,14 @@ describe('WindowTopMenu', () => {
     const toggleDraggingEnabled = vi.fn();
     const anchorEl = screen.getByTestId('menu-trigger-button');
 
-    render(<Subject
-      anchorEl={anchorEl}
-      handleClose={handleClose}
-      open
-      toggleDraggingEnabled={toggleDraggingEnabled}
-    />);
+    render(
+      <Subject
+        anchorEl={anchorEl}
+        handleClose={handleClose}
+        open
+        toggleDraggingEnabled={toggleDraggingEnabled}
+      />,
+    );
 
     // click a menu item should close the menu
     const menuItems = screen.getAllByRole('menuitemradio');

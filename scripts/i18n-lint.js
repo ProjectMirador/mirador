@@ -13,7 +13,10 @@ const errors = {};
  * Return a new copy of the array lowercased and sorted
  */
 function lowerCaseSortedArray(arr) {
-  return arr.slice().map(v => v.toLowerCase()).sort();
+  return arr
+    .slice()
+    .map((v) => v.toLowerCase())
+    .sort();
 }
 
 /**
@@ -49,22 +52,22 @@ Object.keys(normalizedFiles).forEach((fileName) => {
   if (unsorted.length) {
     errors[fileName] = errors[fileName] || [];
     errors[fileName].push('Keys are not sorted properly');
-    errors[fileName].push(
-      `\tSorting starts to be incorrect around: ${unsorted[0]}`,
-    );
+    errors[fileName].push(`\tSorting starts to be incorrect around: ${unsorted[0]}`);
   }
 
   if (missing.length) {
     errors[fileName] = errors[fileName] || [];
     errors[fileName].push('Some keys from the default locale file are missing');
-    errors[fileName].push(
-      `\tMissing keys: ${missing.join(', ')}`,
-    );
+    errors[fileName].push(`\tMissing keys: ${missing.join(', ')}`);
   }
 });
 
 Object.keys(errors).forEach((errorFileName) => {
-  log(chalk.red(`${chalk.inverse.bold(errorFileName)} has ${chalk.underline.bold('internationalization')} errors`));
+  log(
+    chalk.red(
+      `${chalk.inverse.bold(errorFileName)} has ${chalk.underline.bold('internationalization')} errors`,
+    ),
+  );
   errors[errorFileName].forEach((error) => {
     log(`\t${chalk.yellow(error)}`);
   });

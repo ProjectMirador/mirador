@@ -7,7 +7,8 @@ describe('how plugins relate to state', () => {
   setupIntegrationTestViewer(settings.config, settings.plugins);
 
   it('plugin can read from state', async () => {
-    const text = 'Plugin:https://dms-data.stanford.edu/data/manifests/Parker/nb647fd0133/manifest.json';
+    const text =
+      'Plugin:https://dms-data.stanford.edu/data/manifests/Parker/nb647fd0133/manifest.json';
     const elementWithText = await screen.findByText(text);
     expect(elementWithText).toHaveTextContent(text);
   });

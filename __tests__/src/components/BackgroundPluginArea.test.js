@@ -5,9 +5,7 @@ import { usePlugins } from '../../../src/extend/usePlugins';
 vi.mock('../../../src/extend/usePlugins');
 
 /** */
-const mockComponent = () => (
-  <div data-testid="test" />
-);
+const mockComponent = () => <div data-testid="test" />;
 
 describe('BackgroundPluginArea', () => {
   it('renders the component', () => {

@@ -13,13 +13,13 @@ import { getLanguagesFromConfigWithCurrent } from '../state/selectors/config';
  * Provide a locale picker
  */
 export function LocalePicker({ availableLocales = [], locale = '', setLocale = undefined }) {
-  const languages = useSelector(state => getLanguagesFromConfigWithCurrent(state));
+  const languages = useSelector((state) => getLanguagesFromConfigWithCurrent(state));
   const { t } = useTranslation();
 
   if (!setLocale || availableLocales.length < 2) return null;
 
   const selectedLocale = availableLocales.indexOf(locale) >= 0 ? locale : availableLocales[0];
-  const labels = keyBy(languages, o => o.locale);
+  const labels = keyBy(languages, (o) => o.locale);
 
   return (
     <FormControl variant="standard">
@@ -34,14 +34,16 @@ export function LocalePicker({ availableLocales = [], locale = '', setLocale = u
         autoWidth
         displayEmpty
         value={selectedLocale}
-        onChange={(e) => { setLocale(e.target.value); }}
+        onChange={(e) => {
+          setLocale(e.target.value);
+        }}
         name="locale"
       >
-        {
-          availableLocales.map(l => (
-            <MenuItem key={l} value={l}><Typography variant="body2">{ labels[l]?.label || l }</Typography></MenuItem>
-          ))
-        }
+        {availableLocales.map((l) => (
+          <MenuItem key={l} value={l}>
+            <Typography variant="body2">{labels[l]?.label || l}</Typography>
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );

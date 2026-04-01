@@ -4,7 +4,10 @@ import { styled } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { DndContext } from 'react-dnd';
 import {
-  Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
+  Mosaic,
+  MosaicWindow,
+  getLeaves,
+  createBalancedTreeFromLeaves,
 } from 'react-mosaic-component2';
 import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
@@ -19,7 +22,8 @@ const StyledMosaic = styled(Mosaic)({
     boxShadow: 'none',
   },
   '& .mosaic-tile': {
-    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .2), 0 2px 1px -1px rgba(0, 0, 0, .2)',
+    boxShadow:
+      '0 1px 3px 0 rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .2), 0 2px 1px -1px rgba(0, 0, 0, .2)',
   },
   '& .mosaic-window': {
     boxShadow: 'none',
@@ -41,7 +45,7 @@ RenderPreview.propTypes = {
 };
 
 /** */
-const ZeroStateView = () => (<div />);
+const ZeroStateView = () => <div />;
 
 /**
  * Used to regenerate a new layout when windows are added or removed
@@ -58,7 +62,7 @@ const determineWorkspaceLayout = (currentLayout, windowIds, currentWindowPaths =
 
   // if we have paths for the removed windows, we can gracefully remove them and
   // preserve the existing layout for the remaining windows
-  if (removedWindows.every(e => currentWindowPaths[e])) {
+  if (removedWindows.every((e) => currentWindowPaths[e])) {
     mosaicLayout.removeWindows(removedWindows, currentWindowPaths);
   } else {
     // Windows were removed (perhaps in a different Workspace). We don't have a
@@ -76,7 +80,10 @@ const determineWorkspaceLayout = (currentLayout, windowIds, currentWindowPaths =
  * @private
  */
 export function WorkspaceMosaic({
-  layout = undefined, updateWorkspaceMosaicLayout, windowIds = [], workspaceId,
+  layout = undefined,
+  updateWorkspaceMosaicLayout,
+  windowIds = [],
+  workspaceId,
 }) {
   const toolbarControls = [];
   const additionalControls = [];
@@ -97,7 +104,10 @@ export function WorkspaceMosaic({
     }
 
     // nothing was added or removed, and all the windows are accounted for in the layout
-    if (windowIds.every(e => leaveKeys.includes(e)) && leaveKeys.every(e => windowIds.includes(e))) {
+    if (
+      windowIds.every((e) => leaveKeys.includes(e)) &&
+      leaveKeys.every((e) => windowIds.includes(e))
+    ) {
       return undefined;
     }
 
@@ -123,10 +133,7 @@ export function WorkspaceMosaic({
         windowId={id}
         renderPreview={RenderPreview}
       >
-        <Window
-          key={`${id}-${workspaceId}`}
-          windowId={id}
-        />
+        <Window key={`${id}-${workspaceId}`} windowId={id} />
       </MosaicWindow>
     );
   };
@@ -154,9 +161,7 @@ export function WorkspaceMosaic({
 }
 
 WorkspaceMosaic.propTypes = {
-  layout: PropTypes.oneOfType(
-    [PropTypes.object, PropTypes.string],
-  ),
+  layout: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   updateWorkspaceMosaicLayout: PropTypes.func.isRequired,
   windowIds: PropTypes.arrayOf(PropTypes.string),
   workspaceId: PropTypes.string.isRequired,

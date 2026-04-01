@@ -15,14 +15,10 @@ const Root = styled(ListItem, { name: 'ManifestListItem', slot: 'root' })(
   ({ ownerState, theme }) => ({
     '&:hover,&:focus-within': {
       backgroundColor: theme.palette.action.hover,
-      borderLeftColor: ownerState?.active
-        ? theme.palette.primary.main
-        : theme.palette.action.hover,
+      borderLeftColor: ownerState?.active ? theme.palette.primary.main : theme.palette.action.hover,
     },
     borderLeft: '4px solid',
-    borderLeftColor: ownerState?.active
-      ? theme.palette.primary.main
-      : 'transparent',
+    borderLeftColor: ownerState?.active ? theme.palette.primary.main : 'transparent',
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
@@ -40,25 +36,18 @@ const StyledThumbnail = styled(Img, {
   objectFit: 'contain',
 }));
 
-const StyledLogo = styled(Img, { name: 'ManifestListItem', slot: 'logo' })(
-  ({ theme }) => ({
-    height: '2.5rem',
-    maxWidth: '100%',
-    objectFit: 'contain',
-    paddingRight: 1,
-  }),
-);
+const StyledLogo = styled(Img, { name: 'ManifestListItem', slot: 'logo' })(({ theme }) => ({
+  height: '2.5rem',
+  maxWidth: '100%',
+  objectFit: 'contain',
+  paddingRight: 1,
+}));
 
 /** */
 const Placeholder = () => (
   <Grid container className={ns('manifest-list-item')}>
     <Grid size={{ sm: 2, xs: 3 }}>
-      <Skeleton
-        sx={{ bgcolor: 'grey[300]' }}
-        variant="rectangular"
-        height={80}
-        width={120}
-      />
+      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />
     </Grid>
     <Grid size={{ sm: 6, xs: 9 }}>
       <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
@@ -68,12 +57,7 @@ const Placeholder = () => (
       <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
     </Grid>
     <Grid size={{ sm: 2, xs: 4 }}>
-      <Skeleton
-        sx={{ bgcolor: 'grey[300]' }}
-        variant="rectangular"
-        height={60}
-        width={60}
-      />
+      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={60} width={60} />
     </Grid>
   </Grid>
 );
@@ -106,7 +90,8 @@ export function ManifestListItem({
     if (!ready && !error && !isFetching && provider !== 'file') fetchManifest(manifestId);
   }, [manifestId, provider, fetchManifest, ready, error, isFetching]);
 
-  const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
+  // eslint-disable-next-line prefer-rest-params
+  const ownerState = arguments[0];
 
   /** */
   const handleOpenButtonClick = () => {
@@ -151,14 +136,17 @@ export function ManifestListItem({
               sx={{ alignItems: 'center', justifyContent: 'flex-start', width: '100%' }}
             >
               <Grid container component="div" sx={{ width: '100%' }}>
-                <Grid size={3} sx={{ alignItems: 'center', display: 'flex', justifyContent: 'flex-start' }}>
+                <Grid
+                  size={3}
+                  sx={{ alignItems: 'center', display: 'flex', justifyContent: 'flex-start' }}
+                >
                   {thumbnail ? (
                     <StyledThumbnail
                       className={[ns('manifest-list-item-thumb')]}
                       src={[thumbnail]}
                       alt=""
                       height="80"
-                      unloader={(
+                      unloader={
                         <Skeleton
                           variant="rectangular"
                           animation={false}
@@ -166,7 +154,7 @@ export function ManifestListItem({
                           height={80}
                           width={120}
                         />
-                      )}
+                      }
                     />
                   ) : (
                     <Skeleton
@@ -179,19 +167,11 @@ export function ManifestListItem({
                 </Grid>
                 <Grid size={9} sx={{ alignContent: 'center', paddingLeft: 2 }}>
                   {isCollection && (
-                    <Typography
-                      component="div"
-                      variant="overline"
-                      sx={{ textAlign: 'left' }}
-                    >
+                    <Typography component="div" variant="overline" sx={{ textAlign: 'left' }}>
                       {t(isMultipart ? 'multipartCollection' : 'collection')}
                     </Typography>
                   )}
-                  <Typography
-                    component="div"
-                    variant="h6"
-                    sx={{ textAlign: 'left' }}
-                  >
+                  <Typography component="div" variant="h6" sx={{ textAlign: 'left' }}>
                     {title || manifestId}
                   </Typography>
                 </Grid>
@@ -200,12 +180,8 @@ export function ManifestListItem({
           </Grid>
 
           <Grid size={{ sm: 4, xs: 8 }}>
-            <Typography className={ns('manifest-list-item-provider')}>
-              {provider}
-            </Typography>
-            <Typography>
-              {t('numItems', { count: size, number: size })}
-            </Typography>
+            <Typography className={ns('manifest-list-item-provider')}>{provider}</Typography>
+            <Typography>{t('numItems', { count: size, number: size })}</Typography>
           </Grid>
 
           <Grid size={{ sm: 3, xs: 4 }}>
@@ -214,7 +190,7 @@ export function ManifestListItem({
                 src={[manifestLogo]}
                 alt=""
                 role="presentation"
-                unloader={(
+                unloader={
                   <Skeleton
                     variant="rectangular"
                     animation={false}
@@ -222,7 +198,7 @@ export function ManifestListItem({
                     height={60}
                     width={60}
                   />
-                )}
+                }
               />
             )}
           </Grid>

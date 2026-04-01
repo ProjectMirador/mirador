@@ -9,27 +9,38 @@ import { useTranslation } from 'react-i18next';
 
 /**
  * CollapsableSection ~
-*/
-export function CollapsibleSection({
-  children, id, label,
-}) {
+ */
+export function CollapsibleSection({ children, id, label }) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(true);
 
-  const handleChange = useCallback((_event, isExpanded) => {
-    setOpen(isExpanded);
-  }, [setOpen]);
+  const handleChange = useCallback(
+    (_event, isExpanded) => {
+      setOpen(isExpanded);
+    },
+    [setOpen],
+  );
 
   return (
-    <Accordion slotProps={{ heading: { component: 'h4' } }} id={id} elevation={0} expanded={open} onChange={handleChange} disableGutters square variant="compact">
-      <AccordionSummary id={`${id}-header`} aria-controls={`${id}-content`} aria-label={t(open ? 'collapseSection' : 'expandSection', { section: label })} expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="overline">
-          {label}
-        </Typography>
+    <Accordion
+      slotProps={{ heading: { component: 'h4' } }}
+      id={id}
+      elevation={0}
+      expanded={open}
+      onChange={handleChange}
+      disableGutters
+      square
+      variant="compact"
+    >
+      <AccordionSummary
+        id={`${id}-header`}
+        aria-controls={`${id}-content`}
+        aria-label={t(open ? 'collapseSection' : 'expandSection', { section: label })}
+        expandIcon={<ExpandMoreIcon />}
+      >
+        <Typography variant="overline">{label}</Typography>
       </AccordionSummary>
-      <AccordionDetails>
-        {children}
-      </AccordionDetails>
+      <AccordionDetails>{children}</AccordionDetails>
     </Accordion>
   );
 }

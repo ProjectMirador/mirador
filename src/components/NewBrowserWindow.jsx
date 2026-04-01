@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 
 /** */
 export function NewBrowserWindow({
-  depWindow = undefined, features = undefined, name = undefined, onClose, url,
+  depWindow = undefined,
+  features = undefined,
+  name = undefined,
+  onClose,
+  url,
 }) {
   const released = useRef(false);
 

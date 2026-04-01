@@ -25,14 +25,16 @@ const InlineAccordion = styled(Accordion, { name: 'ErrorContent', slot: 'accordi
 });
 
 /** */
-export function ErrorContent({
-  error, metadata = null, showJsError = true, ...rest
-}) {
+export function ErrorContent({ error, metadata = null, showJsError = true, ...rest }) {
   const { t } = useTranslation();
   if (!showJsError) return null;
 
   const pluginProps = {
-    error, metadata, showJsError, t, ...rest,
+    error,
+    metadata,
+    showJsError,
+    t,
+    ...rest,
   };
 
   return (
@@ -40,7 +42,10 @@ export function ErrorContent({
       {t('errorDialogTitle')}
       {showJsError && (
         <InlineAccordion elevation={2} square>
-          <AccordionSummary sx={{ marginInlineStart: '-1rem' }} expandIcon={<ExpandMoreIcon sx={{ color: '#fff' }} />}>
+          <AccordionSummary
+            sx={{ marginInlineStart: '-1rem' }}
+            expandIcon={<ExpandMoreIcon sx={{ color: '#fff' }} />}
+          >
             {t('jsError', { message: error.message, name: error.name })}
           </AccordionSummary>
           <AccordionDetails>

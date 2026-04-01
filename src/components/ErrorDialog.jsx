@@ -22,9 +22,7 @@ export function ErrorDialog({ error = null, removeError = () => {} }) {
       onClose={() => removeError(error.id)}
       open={hasError}
     >
-      <DialogTitle id="error-dialog-title">
-        {t('errorDialogTitle')}
-      </DialogTitle>
+      <DialogTitle id="error-dialog-title">{t('errorDialogTitle')}</DialogTitle>
       <DialogContent>
         <DialogContentText variant="body2" noWrap color="inherit">
           {`${error.message}`}

@@ -40,7 +40,12 @@ describe('SearchPanelControls', () => {
     await user.click(screen.getByRole('combobox'));
     await user.keyboard('somestring');
     await user.click(await screen.findByText('somestring 12345'));
-    expect(fetchSearch).toHaveBeenCalledWith('window', 'cw', 'http://example.com/search?q=somestring+12345', 'somestring 12345');
+    expect(fetchSearch).toHaveBeenCalledWith(
+      'window',
+      'cw',
+      'http://example.com/search?q=somestring+12345',
+      'somestring 12345',
+    );
     fetch.resetMocks();
   });
   it('should fetch result only once', async () => {
@@ -66,7 +71,8 @@ describe('SearchPanelControls', () => {
   });
   it('endAdornment is a SearchIcon (with no CircularProgress indicator)', () => {
     createWrapper();
-    expect(screen.getByRole('button').querySelector('svg')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(screen.getByRole('button').querySelector('svg')).toBeInTheDocument();
     expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
   });
 
@@ -89,7 +95,12 @@ describe('SearchPanelControls', () => {
     await user.keyboard('yolo');
     await user.click(screen.getByRole('button'));
 
-    expect(fetchSearch).toHaveBeenCalledWith('window', 'cw', 'http://www.example.com/search?q=yolo', 'yolo');
+    expect(fetchSearch).toHaveBeenCalledWith(
+      'window',
+      'cw',
+      'http://www.example.com/search?q=yolo',
+      'yolo',
+    );
   });
 
   it('does not submit an empty search', async () => {

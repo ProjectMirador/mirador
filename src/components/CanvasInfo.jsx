@@ -20,22 +20,13 @@ export function CanvasInfo({
   const { t } = useTranslation();
   const id = useId();
   const titleId = useId();
-  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
+  // eslint-disable-next-line prefer-rest-params
+  const pluginProps = arguments[0];
 
   return (
-    <CollapsibleSection
-      id={id}
-      label={t('currentItem', { context: `${index + 1}/${totalSize}` })}
-    >
+    <CollapsibleSection id={id} label={t('currentItem', { context: `${index + 1}/${totalSize}` })}>
       {canvasLabel && (
-        <Typography
-          aria-labelledby={
-            `${id} ${titleId}`
-          }
-          id={titleId}
-          variant="h4"
-          component="h5"
-        >
+        <Typography aria-labelledby={`${id} ${titleId}`} id={titleId} variant="h4" component="h5">
           {canvasLabel}
         </Typography>
       )}

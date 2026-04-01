@@ -46,30 +46,25 @@ export function SidebarIndexList({
 
   return (
     <MenuList variant="selectedMenu">
-      {
-        canvasesIdAndLabel.map((canvas, canvasIndex) => {
-          const onClick = () => { setCanvas(windowId, canvas.id); };
+      {canvasesIdAndLabel.map((canvas, canvasIndex) => {
+        const onClick = () => {
+          setCanvas(windowId, canvas.id);
+        };
 
-          return (
-            <ScrollTo
-              containerRef={containerRef}
-              key={`${canvas.id}-${variant}`}
-              offsetTop={96} // offset for the height of the form above
-              selected={selectedCanvasIds.includes(canvas.id)}
-              scrollTo={selectedCanvasIds.includes(canvas.id)}
-            >
-              <StyledItem
-                key={canvas.id}
-                divider
-                onClick={onClick}
-                component="li"
-              >
-                <Item label={canvas.label} canvas={canvases[canvasIndex]} />
-              </StyledItem>
-            </ScrollTo>
-          );
-        })
-      }
+        return (
+          <ScrollTo
+            containerRef={containerRef}
+            key={`${canvas.id}-${variant}`}
+            offsetTop={96} // offset for the height of the form above
+            selected={selectedCanvasIds.includes(canvas.id)}
+            scrollTo={selectedCanvasIds.includes(canvas.id)}
+          >
+            <StyledItem key={canvas.id} divider onClick={onClick} component="li">
+              <Item label={canvas.label} canvas={canvases[canvasIndex]} />
+            </StyledItem>
+          </ScrollTo>
+        );
+      })}
     </MenuList>
   );
 }

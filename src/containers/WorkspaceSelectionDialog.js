@@ -19,7 +19,7 @@ const mapDispatchToProps = {
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => ({ workspaceType: getWorkspaceType(state) });
+const mapStateToProps = (state) => ({ workspaceType: getWorkspaceType(state) });
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps),

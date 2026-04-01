@@ -2,12 +2,10 @@ import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { SearchHit } from '../../../src/components/SearchHit';
 
-vi.mock(
-  '../../../src/components/ScrollTo',
-  () => ({
-    ScrollTo: ({ children }) => (<div data-testid="scrollto">{children}</div>), // eslint-disable-line react/prop-types
-  }),
-);
+vi.mock('../../../src/components/ScrollTo', () => ({
+  // eslint-disable-next-line react/prop-types
+  ScrollTo: ({ children }) => <div data-testid="scrollto">{children}</div>,
+}));
 
 /**
  * Helper function to create a shallow wrapper around SearchResults
@@ -38,7 +36,9 @@ describe('SearchHit', () => {
     render(<Subject selectAnnotation={selectAnnotation} />);
 
     expect(screen.getByRole('listitem')).toHaveClass('windowSelected');
-    expect(screen.getByRole('listitem')).toHaveTextContent('1Light up the moose , and start the chai more');
+    expect(screen.getByRole('listitem')).toHaveTextContent(
+      '1Light up the moose , and start the chai more',
+    );
 
     await user.click(screen.getByRole('button'));
     expect(selectAnnotation).toHaveBeenCalledWith('foo');

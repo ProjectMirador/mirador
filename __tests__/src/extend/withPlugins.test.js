@@ -32,8 +32,7 @@ describe('withPlugins', () => {
   });
 
   it('displayName prop of returned function is based on target name argument', () => {
-    expect(withPlugins('Bubu', Target).displayName)
-      .toBe('WithPlugins(Bubu)');
+    expect(withPlugins('Bubu', Target).displayName).toBe('WithPlugins(Bubu)');
   });
 });
 
@@ -48,12 +47,12 @@ describe('PluginHoc: if no plugin exists for the target', () => {
 
 describe('PluginHoc: if wrap plugins exist for target', () => {
   it('renders the first wrap plugin', () => {
-    /** */ const WrapPluginComponentA = props => <div data-testid="plugin">look i am a plugin</div>;
+    /** */ const WrapPluginComponentA = (props) => (
+      <div data-testid="plugin">look i am a plugin</div>
+    );
     const pluginMap = {
       Target: {
-        wrap: [
-          { component: WrapPluginComponentA, mode: 'wrap', target: 'Target' },
-        ],
+        wrap: [{ component: WrapPluginComponentA, mode: 'wrap', target: 'Target' }],
       },
     };
     createPluginHoc(pluginMap);
@@ -63,9 +62,13 @@ describe('PluginHoc: if wrap plugins exist for target', () => {
   });
 
   it('passes the whole wrapped stack to the plugins', () => {
-    /** */ const WrapPluginComponentA = ({ children }) => <div data-testid="pluginA">{children}</div>;
+    /** */ const WrapPluginComponentA = ({ children }) => (
+      <div data-testid="pluginA">{children}</div>
+    );
     WrapPluginComponentA.propTypes = { children: PropTypes.node.isRequired };
-    /** */ const WrapPluginComponentB = props => <div data-testid="pluginB">look i am a plugin</div>;
+    /** */ const WrapPluginComponentB = (props) => (
+      <div data-testid="pluginB">look i am a plugin</div>
+    );
     const pluginMap = {
       Target: {
         wrap: [

@@ -4,7 +4,8 @@ export default {
   state: {
     // slice: 'mirador' // Configure the top-level slice of state for mirador selectors
   },
-  canvasNavigation: { // Set the height and width of canvas thumbnails in the  CanvasNavigation companion window
+  canvasNavigation: {
+    // Set the height and width of canvas thumbnails in the  CanvasNavigation companion window
     height: 50,
     width: 50,
   },
@@ -25,16 +26,17 @@ export default {
           dark: '#000000',
           main: '#424242',
           light: '#616161',
-        }
-      }
+        },
+      },
     },
     light: {
       palette: {
         mode: 'light',
-      }
-    }
+      },
+    },
   },
-  theme: { // Sets up a MaterialUI theme. See https://material-ui.com/customization/default-theme/
+  theme: {
+    // Sets up a MaterialUI theme. See https://material-ui.com/customization/default-theme/
     palette: {
       mode: 'light',
       primary: {
@@ -43,7 +45,8 @@ export default {
       secondary: {
         main: '#1967d2', // Controls the color of Selects and FormControls
       },
-      shades: { // Shades that can be used to offset color areas of the Workspace / Window
+      shades: {
+        // Shades that can be used to offset color areas of the Workspace / Window
         dark: '#eeeeee',
         main: '#ffffff',
         light: '#f5f5f5',
@@ -51,7 +54,8 @@ export default {
       error: {
         main: '#b00020',
       },
-      notification: { // Color used in MUI Badge dots
+      notification: {
+        // Color used in MUI Badge dots
         main: '#ffa224',
         contrastText: '#ffa224',
       },
@@ -74,111 +78,111 @@ export default {
         default: { fillStyle: '#00BFFF', globalAlpha: 0.3 },
         hovered: { fillStyle: '#00FFFF', globalAlpha: 0.3 },
         selected: { fillStyle: '#ffff00', globalAlpha: 0.3 },
-      }
+      },
     },
     typography: {
       body1: {
-        fontSize: "1rem",
-        letterSpacing: "0em",
-        lineHeight: "1.6em",
+        fontSize: '1rem',
+        letterSpacing: '0em',
+        lineHeight: '1.6em',
       },
       body2: {
-        fontSize: "0.878rem",
-        letterSpacing: "0.015em",
-        lineHeight: "1.6em",
+        fontSize: '0.878rem',
+        letterSpacing: '0.015em',
+        lineHeight: '1.6em',
       },
       button: {
-        fontSize: "0.878rem",
-        letterSpacing: "0.09em",
-        lineHeight: "2.25rem",
-        textTransform: "uppercase",
+        fontSize: '0.878rem',
+        letterSpacing: '0.09em',
+        lineHeight: '2.25rem',
+        textTransform: 'uppercase',
       },
       caption: {
-        fontSize: "0.772rem",
-        letterSpacing: "0.033em",
-        lineHeight: "1.6rem",
+        fontSize: '0.772rem',
+        letterSpacing: '0.033em',
+        lineHeight: '1.6rem',
       },
       body1Next: {
-        fontSize: "1rem",
-        letterSpacing: "0em",
-        lineHeight: "1.6em",
+        fontSize: '1rem',
+        letterSpacing: '0em',
+        lineHeight: '1.6em',
       },
       body2Next: {
-        fontSize: "0.878rem",
-        letterSpacing: "0.015em",
-        lineHeight: "1.6em",
+        fontSize: '0.878rem',
+        letterSpacing: '0.015em',
+        lineHeight: '1.6em',
       },
       buttonNext: {
-        fontSize: "0.878rem",
-        letterSpacing: "0.09em",
-        lineHeight: "2.25rem",
+        fontSize: '0.878rem',
+        letterSpacing: '0.09em',
+        lineHeight: '2.25rem',
       },
       captionNext: {
-        fontSize: "0.772rem",
-        letterSpacing: "0.33em",
-        lineHeight: "1.6rem",
+        fontSize: '0.772rem',
+        letterSpacing: '0.33em',
+        lineHeight: '1.6rem',
       },
       overline: {
-        fontSize: "0.678rem",
+        fontSize: '0.678rem',
         fontWeight: 500,
-        letterSpacing: "0.166em",
-        lineHeight: "2em",
-        textTransform: "uppercase",
+        letterSpacing: '0.166em',
+        lineHeight: '2em',
+        textTransform: 'uppercase',
       },
       h1: {
-        fontSize: "2.822rem",
-        letterSpacing: "-0.015em",
-        lineHeight: "1.2em",
+        fontSize: '2.822rem',
+        letterSpacing: '-0.015em',
+        lineHeight: '1.2em',
       },
       h2: {
-        fontSize: "1.575rem",
-        letterSpacing: "0em",
-        lineHeight: "1.33em",
+        fontSize: '1.575rem',
+        letterSpacing: '0em',
+        lineHeight: '1.33em',
       },
       h3: {
-        fontSize: "1.383rem",
+        fontSize: '1.383rem',
         fontWeight: 300,
-        letterSpacing: "0em",
-        lineHeight: "1.33em",
+        letterSpacing: '0em',
+        lineHeight: '1.33em',
       },
       h4: {
-        fontSize: "1.215rem",
-        letterSpacing: "0.007em",
-        lineHeight: "1.45em",
+        fontSize: '1.215rem',
+        letterSpacing: '0.007em',
+        lineHeight: '1.45em',
       },
       h5: {
-        fontSize: "1.138rem",
-        letterSpacing: "0.005em",
-        lineHeight: "1.55em",
+        fontSize: '1.138rem',
+        letterSpacing: '0.005em',
+        lineHeight: '1.55em',
       },
       h6: {
-        fontSize: "1.067rem",
+        fontSize: '1.067rem',
         fontWeight: 400,
-        letterSpacing: "0.01em",
-        lineHeight: "1.6em",
+        letterSpacing: '0.01em',
+        lineHeight: '1.6em',
       },
       subtitle1: {
-        fontSize: "0.937rem",
-        letterSpacing: "0.015em",
-        lineHeight: "1.6em",
+        fontSize: '0.937rem',
+        letterSpacing: '0.015em',
+        lineHeight: '1.6em',
         fontWeight: 300,
       },
       subtitle2: {
-        fontSize: "0.878rem",
+        fontSize: '0.878rem',
         fontWeight: 500,
-        letterSpacing: "0.02em",
-        lineHeight: "1.75em",
+        letterSpacing: '0.02em',
+        lineHeight: '1.75em',
       },
-      useNextVariants: true // set so that console deprecation warning is removed
+      useNextVariants: true, // set so that console deprecation warning is removed
     },
     components: {
       MuiMenuItem: {
         variants: [
           {
             props: { variant: 'multiline' },
-            style: { whiteSpace: 'normal' }
+            style: { whiteSpace: 'normal' },
           },
-        ]
+        ],
       },
       CompanionWindow: {
         styleOverrides: {
@@ -194,9 +198,12 @@ export default {
             display: 'flex',
             flexFlow: 'row wrap',
             flexGrow: 1,
-            justifyContent: (ownerState?.position === 'bottom' || ownerState?.position === 'far-bottom') ? 'flex-end' : 'flex-start',
+            justifyContent:
+              ownerState?.position === 'bottom' || ownerState?.position === 'far-bottom'
+                ? 'flex-end'
+                : 'flex-start',
             minHeight: 48,
-            order: 3
+            order: 3,
           }),
           positionButton: {
             marginLeft: -16,
@@ -207,7 +214,7 @@ export default {
             display: 'flex',
             flexDirection: 'column',
             minHeight: 50,
-            minWidth: (ownerState?.position === 'left') ? 235 : 100,
+            minWidth: ownerState?.position === 'left' ? 235 : 100,
             position: 'relative',
           }),
           root: ({ ownerState }) => ({
@@ -217,20 +224,20 @@ export default {
             flexDirection: 'column',
             minHeight: 0,
             ...(ownerState?.position === 'right' && {
-              borderLeft: '0.5px solid rgba(0, 0, 0, 0.125)'
+              borderLeft: '0.5px solid rgba(0, 0, 0, 0.125)',
             }),
             ...(ownerState?.position === 'left' && {
-              borderRight: '0.5px solid rgba(0, 0, 0, 0.125)'
+              borderRight: '0.5px solid rgba(0, 0, 0, 0.125)',
             }),
             ...(ownerState?.position === 'bottom' && {
-              borderTop: '0.5px solid rgba(0, 0, 0, 0.125)'
+              borderTop: '0.5px solid rgba(0, 0, 0, 0.125)',
             }),
           }),
           title: ({ theme }) => ({
             ...theme.typography.subtitle1,
             alignSelf: 'center',
             flexGrow: 1,
-            width: 160
+            width: 160,
           }),
           toolbar: ({ theme }) => ({
             alignItems: 'flex-start',
@@ -245,7 +252,7 @@ export default {
       CompanionWindowSection: {
         styleOverrides: {
           root: {
-            borderBlockEnd: '.5px solid rgba(0, 0, 0, 0.25)'
+            borderBlockEnd: '.5px solid rgba(0, 0, 0, 0.25)',
           },
         },
       },
@@ -285,7 +292,8 @@ export default {
               WebkitLineClamp: 2,
             }),
             ...(ownerState?.variant === 'inside' && {
-              background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+              background:
+                'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
               bottom: '5px',
               boxSizing: 'border-box',
               left: '0px',
@@ -298,13 +306,13 @@ export default {
             ...(ownerState?.border && {
               border: '1px solid rgba(0, 0, 0, 0.125)',
             }),
-          })
-        }
+          }),
+        },
       },
       ThemeIcon: {
         styleOverrides: {
           icon: ({ ownerState }) => ({
-            color: (ownerState?.value === 'dark' ? '#000000' : undefined)
+            color: ownerState?.value === 'dark' ? '#000000' : undefined,
           }),
         },
       },
@@ -334,12 +342,11 @@ export default {
             padding: 0,
             textAlign: 'inherit',
             textTransform: 'none',
-
           },
           inlineTextSecondary: ({ theme }) => ({
             color: theme.palette.secondary.main,
           }),
-        }
+        },
       },
       MuiButtonBase: {
         defaultProps: {
@@ -353,22 +360,22 @@ export default {
             style: {
               position: 'absolute',
               '& .MuiBackdrop-root': {
-                position: 'absolute'
-              }
+                position: 'absolute',
+              },
             },
-          }
-        ]
+          },
+        ],
       },
       MuiFab: {
         styleOverrides: {
           root: {
             transition: 'none',
-          }
+          },
         },
       },
       MuiLink: {
         defaultProps: {
-          underline: 'always'
+          underline: 'always',
         },
       },
       MuiListSubheader: {
@@ -380,7 +387,8 @@ export default {
           },
         },
       },
-      MuiTooltip: { // Overridden from https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Tooltip/Tooltip.js#L40-L70
+      MuiTooltip: {
+        // Overridden from https://github.com/mui-org/material-ui/blob/master/packages/material-ui/src/Tooltip/Tooltip.js#L40-L70
         styleOverrides: {
           tooltipPlacementLeft: {
             ['@media (min-width:600px)']: {
@@ -417,7 +425,8 @@ export default {
     },
   },
   language: 'en', // The default language set in the application
-  availableLanguages: { // All the languages available in the language switcher
+  availableLanguages: {
+    // All the languages available in the language switcher
     ar: 'العربية',
     de: 'Deutsch',
     en: 'English',
@@ -433,13 +442,13 @@ export default {
     'nb-NO': 'Norwegian Bokmål',
     pl: 'Polski',
     'pt-BR': 'Português do Brasil',
-    vi:'Tiếng Việt',
+    vi: 'Tiếng Việt',
     'zh-CN': '中文(简体)',
     'zh-TW': '中文(繁體)',
-    it: "Italiano",
+    it: 'Italiano',
     sr: 'Српски',
     sv: 'Svenska',
-    bg: 'Български'
+    bg: 'Български',
   },
   annotations: {
     htmlSanitizationRuleSet: 'iiif', // See src/lib/htmlRules.js for acceptable values
@@ -447,25 +456,30 @@ export default {
     // Otherwise, only annotations with motivations listed in the array will be shown.
     filteredMotivations: [],
   },
-  createGenerateClassNameOptions: { // Options passed directly to createGenerateClassName in Material-UI https://material-ui.com/styles/api/#creategenerateclassname-options-class-name-generator
+  createGenerateClassNameOptions: {
+    // Options passed directly to createGenerateClassName in Material-UI https://material-ui.com/styles/api/#creategenerateclassname-options-class-name-generator
     productionPrefix: 'mirador',
   },
   requests: {
-    preprocessors: [ // Functions that receive HTTP requests and manipulate them (e.g. to add headers)
+    preprocessors: [
+      // Functions that receive HTTP requests and manipulate them (e.g. to add headers)
       // (url, options) => (url.match('info.json') && { ...options, myCustomThing: 'blah' })
     ],
-    postprocessors: [ // Functions that receive HTTP responses and manipulates them before adding to store
+    postprocessors: [
+      // Functions that receive HTTP responses and manipulates them before adding to store
       // An example of manipulating the response for an annotation request
       // (url, action) => {
       //   if (action.annotationId) {
       //     action.annotationJson = {};
       //   }
       // }
-    ]
+    ],
   },
-  translations: { // Translations can be added to inject new languages or override existing labels
+  translations: {
+    // Translations can be added to inject new languages or override existing labels
   },
-  window: { //global window defaults
+  window: {
+    //global window defaults
     allowClose: true, // Configure if windows can be closed or not
     allowFullscreen: false, // Configure to show a "fullscreen" button in the WindowTopBar
     allowMaximize: true, // Configure if windows can be maximized or not
@@ -473,16 +487,17 @@ export default {
     allowWindowSideBar: true, // Configure if side bar menu is visible or not
     authNewWindowCenter: 'parent', // Configure how to center a new window created by the authentication flow. Options: parent, screen
     sideBarPanel: 'info', // Configure which sidebar is selected by default. Options: info, attribution, canvas, annotations, search
-    defaultSidebarPanelHeight: 201,  // Configure default sidebar height in pixels
+    defaultSidebarPanelHeight: 201, // Configure default sidebar height in pixels
     defaultSidebarPanelWidth: 235, // Configure default sidebar width in pixels
-    defaultView: 'single',  // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
+    defaultView: 'single', // Configure which viewing mode (e.g. single, book, gallery) for windows to be opened in
     forceDrawAnnotations: false,
     hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
     highlightAllAnnotations: false, // Configure whether to display annotations on the canvas by default
     showLocalePicker: false, // Configure locale picker for multi-lingual metadata
     sideBarOpen: false, // Configure if the sidebar (and its content panel) is open by default
     switchCanvasOnSearch: true, // Configure if Mirador should automatically switch to the canvas of the first search result
-    panels: { // Configure which panels are visible in WindowSideBarButtons
+    panels: {
+      // Configure which panels are visible in WindowSideBarButtons
       info: true,
       attribution: true,
       canvas: true,
@@ -498,10 +513,11 @@ export default {
     ],
     elastic: {
       height: 400,
-      width: 480
-    }
+      width: 480,
+    },
   },
-  windows: [ // Array of windows to be open when mirador initializes (each object should at least provide a manifestId key with the value of the IIIF presentation manifest to load)
+  windows: [
+    // Array of windows to be open when mirador initializes (each object should at least provide a manifestId key with the value of the IIIF presentation manifest to load)
     /**
     Example Window:
     {
@@ -533,7 +549,8 @@ export default {
     isWorkspaceAddVisible: false, // Catalog/Workspace add window feature visible by default
     showZoomControls: true, // Configure if zoom controls should be displayed by default
     type: 'mosaic', // Which workspace type to load by default. Other possible values are "elastic". If "mosaic" or "elastic" are not selected no workspace type will be used.
-    viewportPosition: { // center coordinates for the elastic mode workspace
+    viewportPosition: {
+      // center coordinates for the elastic mode workspace
       x: 0,
       y: 0,
     },
@@ -546,14 +563,15 @@ export default {
     height: 120, // height of gallery view thumbnails
     width: null, // width of gallery view thumbnails (or null, to auto-calculate an aspect-ratio appropriate size)
   },
-  osdConfig: { // Default config used for OpenSeadragon
+  osdConfig: {
+    // Default config used for OpenSeadragon
     alwaysBlend: false,
     blendTime: 0.1,
     preserveImageSizeOnResize: true,
     preserveViewport: false,
     showNavigationControl: false,
     zoomPerClick: 1, // disable zoom-to-click
-    zoomPerDoubleClick: 2.0
+    zoomPerDoubleClick: 2.0,
   },
   export: {
     catalog: true,
@@ -567,11 +585,13 @@ export default {
     windows: true,
     workspace: true,
   },
-  audioOptions: { // Additional props passed to <audio> element
+  audioOptions: {
+    // Additional props passed to <audio> element
     controls: true,
     crossOrigin: 'anonymous',
   },
-  videoOptions: { // Additional props passed to <audio> element
+  videoOptions: {
+    // Additional props passed to <audio> element
     controls: true,
     crossOrigin: 'anonymous',
   },
@@ -584,8 +604,8 @@ export default {
       { profile: 'http://iiif.io/api/auth/0/external', external: true },
       { profile: 'http://iiif.io/api/auth/0/kiosk', kiosk: true },
       { profile: 'http://iiif.io/api/auth/0/clickthrough' },
-      { profile: 'http://iiif.io/api/auth/0/login' }
-    ]
+      { profile: 'http://iiif.io/api/auth/0/login' },
+    ],
   },
-  labelValueJoiner: ', '
+  labelValueJoiner: ', ',
 };

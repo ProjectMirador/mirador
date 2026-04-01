@@ -24,7 +24,11 @@ export function AudioViewer({ audioOptions = {}, audioResources = [], captions =
         ))}
         {captions.map((caption) => (
           <Fragment key={caption.id}>
-            <track src={caption.id} label={caption.getDefaultLabel()} srcLang={caption.getProperty('language')} />
+            <track
+              src={caption.id}
+              label={caption.getDefaultLabel()}
+              srcLang={caption.getProperty('language')}
+            />
           </Fragment>
         ))}
       </StyledAudio>

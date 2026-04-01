@@ -29,9 +29,7 @@ export function ImageFailureMessage() {
 
   return (
     <MessageContainer role="status" aria-live="polite">
-      <Typography variant="body2">
-        {t('imageFailedToLoad')}
-      </Typography>
+      <Typography variant="body2">{t('imageFailedToLoad')}</Typography>
     </MessageContainer>
   );
 }

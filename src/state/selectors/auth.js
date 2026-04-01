@@ -13,9 +13,7 @@ import { getIiifResourceImageService } from '../../lib/iiif';
  * @returns {Array}
  */
 export const getAuthProfiles = createSelector(
-  [
-    getConfig,
-  ],
+  [getConfig],
   ({ auth: { serviceProfiles = [] } = {} }) => serviceProfiles,
 );
 
@@ -24,14 +22,14 @@ export const getAuthProfiles = createSelector(
  * @param {object} state
  * @returns {object}
  */
-export const getAccessTokens = state => miradorSlice(state).accessTokens || EMPTY_OBJECT;
+export const getAccessTokens = (state) => miradorSlice(state).accessTokens || EMPTY_OBJECT;
 
 /**
  * Return the authentification data from the state
  * @param {object} state
  * @returns {object}
  */
-export const getAuth = state => miradorSlice(state).auth || EMPTY_OBJECT;
+export const getAuth = (state) => miradorSlice(state).auth || EMPTY_OBJECT;
 
 /**
  * Returns current authentification services based on state and windowId
@@ -48,38 +46,39 @@ export const selectCurrentAuthServices = createSelector(
     getMiradorCanvasWrapper,
     (state, { iiifResources }) => iiifResources,
   ],
-  (canvases, infoResponses = {}, serviceProfiles, auth, getMiradorCanvas, iiifResources) => { // eslint-disable-line max-params
+  // eslint-disable-next-line max-params
+  (canvases, infoResponses = {}, serviceProfiles, auth, getMiradorCanvas, iiifResources) => {
     let currentAuthResources = iiifResources;
 
     if (!currentAuthResources && canvases) {
-      currentAuthResources = flatten(canvases.map(c => {
-        const miradorCanvas = getMiradorCanvas(c);
-        const images = miradorCanvas.iiifImageResources;
+      currentAuthResources = flatten(
+        canvases.map((c) => {
+          const miradorCanvas = getMiradorCanvas(c);
+          const images = miradorCanvas.iiifImageResources;
 
-        return images.map(i => {
-          const iiifImageService = getIiifResourceImageService(i);
+          return images.map((i) => {
+            const iiifImageService = getIiifResourceImageService(i);
 
-          const infoResponse = infoResponses[iiifImageService.id];
-          if (infoResponse && infoResponse.json) {
-            return { ...infoResponse.json, options: {} };
-          }
+            const infoResponse = infoResponses[iiifImageService.id];
+            if (infoResponse && infoResponse.json) {
+              return { ...infoResponse.json, options: {} };
+            }
 
-          return iiifImageService;
-        });
-      }));
+            return iiifImageService;
+          });
+        }),
+      );
     }
 
     if (!currentAuthResources) return EMPTY_ARRAY;
     if (currentAuthResources.length === 0) return EMPTY_ARRAY;
 
-    const currentAuthServices = currentAuthResources.map(resource => {
+    const currentAuthServices = currentAuthResources.map((resource) => {
       let lastAttemptedService;
       const services = Utils.getServices(resource);
 
       for (const authProfile of serviceProfiles) {
-        const profiledAuthServices = services.filter(
-          p => authProfile.profile === p.getProfile(),
-        );
+        const profiledAuthServices = services.filter((p) => authProfile.profile === p.getProfile());
 
         for (const service of profiledAuthServices) {
           lastAttemptedService = service;
@@ -93,12 +92,15 @@ export const selectCurrentAuthServices = createSelector(
       return lastAttemptedService;
     });
 
-    return Object.values(currentAuthServices.reduce((h, service) => {
-      if (service && !h[service.id]) {
-        h[service.id] = service; // eslint-disable-line no-param-reassign
-      }
+    return Object.values(
+      currentAuthServices.reduce((h, service) => {
+        if (service && !h[service.id]) {
+          // eslint-disable-next-line no-param-reassign
+          h[service.id] = service;
+        }
 
-      return h;
-    }, {}));
+        return h;
+      }, {}),
+    );
   },
 );

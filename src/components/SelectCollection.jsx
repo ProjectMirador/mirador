@@ -25,9 +25,7 @@ export function SelectCollection({
     <Grid container sx={{ alignContent: 'center', justifyContent: 'center', width: '100%' }}>
       <Stack>
         <Typography variant="h4" component="p" sx={{ mb: 2, textAlign: 'center' }}>
-          <em>
-            {t('noItemSelected')}
-          </em>
+          <em>{t('noItemSelected')}</em>
         </Typography>
         <Button
           aria-label="show collection"

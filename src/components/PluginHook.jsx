@@ -8,22 +8,21 @@ export const PluginHook = forwardRef(({ classes = {}, targetName, ...otherProps 
   const { PluginComponents } = usePlugins(targetName);
 
   /* eslint-disable react/no-array-index-key */
-  return PluginComponents ? (
-    PluginComponents.map((PluginComponent, index) => (
-      (isValidElement(PluginComponent) ? cloneElement(PluginComponent, { ...otherProps, ref }) : (
-        <PluginComponent
-          ref={ref}
-          {...otherProps}
-          key={index}
-        />
-      ))
-    ))
-  ) : null;
+  return PluginComponents
+    ? PluginComponents.map((PluginComponent, index) =>
+        isValidElement(PluginComponent) ? (
+          cloneElement(PluginComponent, { ...otherProps, ref })
+        ) : (
+          <PluginComponent ref={ref} {...otherProps} key={index} />
+        ),
+      )
+    : null;
 });
 
 PluginHook.displayName = 'PluginHook';
 
 PluginHook.propTypes = {
-  classes: PropTypes.object, // eslint-disable-line react/require-default-props
+  // eslint-disable-next-line react/require-default-props
+  classes: PropTypes.object,
   targetName: PropTypes.string.isRequired,
 };

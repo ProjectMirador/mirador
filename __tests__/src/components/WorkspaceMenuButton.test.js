@@ -7,9 +7,7 @@ describe('WorkspaceMenuButton', () => {
   let user;
   beforeEach(() => {
     user = userEvent.setup();
-    render(
-      <WorkspaceMenuButton classes={{ ctrlBtnSelected: 'ctrlBtnSelected' }} />,
-    );
+    render(<WorkspaceMenuButton classes={{ ctrlBtnSelected: 'ctrlBtnSelected' }} />);
   });
 
   it('renders the button', () => {

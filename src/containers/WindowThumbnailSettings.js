@@ -17,12 +17,10 @@ const mapDispatchToProps = { setWindowThumbnailPosition: actions.setWindowThumbn
  * @memberof WindowViewer
  * @private
  */
-const mapStateToProps = (state, { windowId }) => (
-  {
-    direction: getThemeDirection(state),
-    thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId }),
-  }
-);
+const mapStateToProps = (state, { windowId }) => ({
+  direction: getThemeDirection(state),
+  thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId }),
+});
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),

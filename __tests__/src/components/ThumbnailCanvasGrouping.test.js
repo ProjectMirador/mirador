@@ -52,10 +52,13 @@ describe('ThumbnailCanvasGrouping', () => {
     wrapper.unmount();
     const user = userEvent.setup();
     wrapper = createWrapper({ index: 0, setCanvas });
-    await user.click(wrapper.container.querySelector('.mirador-thumbnail-nav-canvas-0')); // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    await user.click(wrapper.container.querySelector('.mirador-thumbnail-nav-canvas-0'));
     expect(spyCurrentCanvasClass).toHaveBeenCalledWith([0]);
     expect(spyCurrentCanvasClass).toHaveReturnedWith('current-canvas-grouping');
-    expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
+    expect(setCanvas).toHaveBeenCalledWith(
+      'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+    );
   });
   describe('attributes based off far-bottom position', () => {
     it('in button div', () => {

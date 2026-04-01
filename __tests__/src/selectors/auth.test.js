@@ -1,10 +1,7 @@
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import settings from '../../../src/config/settings';
-import {
-  getAccessTokens,
-  selectCurrentAuthServices,
-} from '../../../src/state/selectors/auth';
+import { getAccessTokens, selectCurrentAuthServices } from '../../../src/state/selectors/auth';
 
 describe('getAccessTokens', () => {
   const state = {
@@ -74,21 +71,22 @@ describe('selectCurrentAuthServices', () => {
       },
       x: {
         manifestId: 'b',
-        visibleCanvases: [
-          'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
-        ],
+        visibleCanvases: ['http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json'],
       },
       y: {
         manifestId: 'b',
-        visibleCanvases: [
-          'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
-        ],
+        visibleCanvases: ['https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'],
       },
     },
   };
 
   it('returns undefined if there is no current canvas', () => {
-    expect(selectCurrentAuthServices({ config: { auth: settings.auth }, manifests: {} }, { windowId: 'noCanvas' })[0]).toBeUndefined();
+    expect(
+      selectCurrentAuthServices(
+        { config: { auth: settings.auth }, manifests: {} },
+        { windowId: 'noCanvas' },
+      )[0],
+    ).toBeUndefined();
   });
 
   it('returns the next auth service to try', () => {
@@ -106,7 +104,9 @@ describe('selectCurrentAuthServices', () => {
       login: { isFetching: false, ok: false },
     };
     expect(selectCurrentAuthServices({ ...state, auth }, { windowId: 'w' })[0].id).toEqual('login');
-    expect(selectCurrentAuthServices({ ...state, auth }, { windowId: 'x' })[0].id).toEqual('external');
+    expect(selectCurrentAuthServices({ ...state, auth }, { windowId: 'x' })[0].id).toEqual(
+      'external',
+    );
     expect(selectCurrentAuthServices({ ...state, auth }, { windowId: 'y' })[0]).toBeUndefined();
   });
 
@@ -159,12 +159,16 @@ describe('selectCurrentAuthServices', () => {
 
     it('returns external first', () => {
       auth = {};
-      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual('external');
+      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual(
+        'external',
+      );
     });
 
     it('returns kiosk next', () => {
       auth = { external: { isFetching: false, ok: false } };
-      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual('kiosk');
+      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual(
+        'kiosk',
+      );
     });
 
     it('returns clickthrough next', () => {
@@ -172,7 +176,9 @@ describe('selectCurrentAuthServices', () => {
         external: { isFetching: false, ok: false },
         kiosk: { isFetching: false, ok: false },
       };
-      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual('clickthrough');
+      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual(
+        'clickthrough',
+      );
     });
 
     it('returns logins last', () => {
@@ -181,7 +187,9 @@ describe('selectCurrentAuthServices', () => {
         external: { isFetching: false, ok: false },
         kiosk: { isFetching: false, ok: false },
       };
-      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual('login');
+      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual(
+        'login',
+      );
     });
 
     it('returns services within a given type using the order from the manifest', () => {
@@ -191,7 +199,9 @@ describe('selectCurrentAuthServices', () => {
         kiosk: { isFetching: false, ok: false },
         login: { isFetching: false, ok: false },
       };
-      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual('login2');
+      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual(
+        'login2',
+      );
     });
   });
 });

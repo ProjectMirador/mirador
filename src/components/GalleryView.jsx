@@ -28,15 +28,9 @@ export function GalleryView({ canvases, viewingDirection = '', windowId }) {
       elevation={0}
       id={`${windowId}-gallery`}
     >
-      {
-        canvases.map(canvas => (
-          <GalleryViewThumbnail
-            key={canvas.id}
-            windowId={windowId}
-            canvas={canvas}
-          />
-        ))
-      }
+      {canvases.map((canvas) => (
+        <GalleryViewThumbnail key={canvas.id} windowId={windowId} canvas={canvas} />
+      ))}
     </Root>
   );
 }

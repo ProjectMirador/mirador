@@ -2,7 +2,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 
 /**
  * WindowMinIcon ~
-*/
+ */
 export default function WindowOptionsIcon(props) {
   return (
     <SvgIcon {...props}>

@@ -31,7 +31,9 @@ const Root = styled(Fab, { name: 'WorkspaceAddButton', slot: 'root' })(({ theme 
 /**
  */
 export function WorkspaceAddButton({
-  setWorkspaceAddVisibility, isWorkspaceAddVisible = false, useExtendedFab,
+  setWorkspaceAddVisibility,
+  isWorkspaceAddVisible = false,
+  useExtendedFab,
 }) {
   const width = useWidth();
   const { t } = useTranslation();
@@ -45,17 +47,15 @@ export function WorkspaceAddButton({
         aria-label={
           isWorkspaceAddVisible
             ? t('closeAddResourceMenu')
-            : (((useExtendedFab && width !== 'xs') && t('startHere')) || t('addResource'))
+            : (useExtendedFab && width !== 'xs' && t('startHere')) || t('addResource')
         }
-        variant={(useExtendedFab && width !== 'xs') ? 'extended' : 'circular'}
-        onClick={() => { setWorkspaceAddVisibility(!isWorkspaceAddVisible); }}
+        variant={useExtendedFab && width !== 'xs' ? 'extended' : 'circular'}
+        onClick={() => {
+          setWorkspaceAddVisibility(!isWorkspaceAddVisible);
+        }}
       >
-        {
-          isWorkspaceAddVisible
-            ? <CloseIcon />
-            : <AddIcon />
-        }
-        { (useExtendedFab && width !== 'xs') && t('startHere') }
+        {isWorkspaceAddVisible ? <CloseIcon /> : <AddIcon />}
+        {useExtendedFab && width !== 'xs' && t('startHere')}
       </Root>
     </Tooltip>
   );

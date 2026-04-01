@@ -7,28 +7,24 @@ import PropTypes from 'prop-types';
 /**
  * LanguageSettings ~ the workspace sub menu to change the language
  * of the application
-*/
+ */
 export function LanguageSettings({ handleClick, languages }) {
   return (
     <>
-      {
-        languages.map(language => (
-          <MenuItem
-            key={language.locale}
-            lang={language.locale}
-            onClick={() => { handleClick(language.locale); }}
-          >
-            <ListItemIcon>
-              {
-                language.current && <CheckIcon />
-              }
-            </ListItemIcon>
-            <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-              {language.label}
-            </ListItemText>
-          </MenuItem>
-        ))
-      }
+      {languages.map((language) => (
+        <MenuItem
+          key={language.locale}
+          lang={language.locale}
+          onClick={() => {
+            handleClick(language.locale);
+          }}
+        >
+          <ListItemIcon>{language.current && <CheckIcon />}</ListItemIcon>
+          <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
+            {language.label}
+          </ListItemText>
+        </MenuItem>
+      ))}
     </>
   );
 }

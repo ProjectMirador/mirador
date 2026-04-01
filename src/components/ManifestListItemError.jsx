@@ -9,21 +9,18 @@ import { useTranslation } from 'react-i18next';
  * ManifestListItemError renders a component displaying a
  * message to the user about a problem loading a manifest
  */
-export function ManifestListItemError({
-  manifestId,
-  onDismissClick,
-  onTryAgainClick,
-}) {
+export function ManifestListItemError({ manifestId, onDismissClick, onTryAgainClick }) {
   const { t } = useTranslation();
   return (
     <Grid container sx={{ alignItems: 'center', width: '100%' }}>
       <Grid container size={{ sm: 5, xs: 12 }} sx={{ alignItems: 'center' }}>
-        <ErrorIcon sx={{
-          color: 'error.main',
-          height: '2rem',
-          marginRight: '0.5rem',
-          width: '2rem',
-        }}
+        <ErrorIcon
+          sx={{
+            color: 'error.main',
+            height: '2rem',
+            marginRight: '0.5rem',
+            width: '2rem',
+          }}
         />
         <Typography>{t('manifestError')}</Typography>
         <Typography sx={{ wordBreak: 'break-all' }}>{manifestId}</Typography>

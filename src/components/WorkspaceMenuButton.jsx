@@ -36,12 +36,7 @@ export function WorkspaceMenuButton() {
       >
         <SettingsIcon />
       </MiradorMenuButton>
-      <WorkspaceMenu
-        anchorEl={anchorEl}
-        id={id}
-        handleClose={handleMenuClose}
-        open={open}
-      />
+      <WorkspaceMenu anchorEl={anchorEl} id={id} handleClose={handleMenuClose} open={open} />
     </>
   );
 }

@@ -17,11 +17,7 @@ export default function PluginProvider({ plugins = [], children = null }) {
     setPluginMap(createTargetToPluginMapping(connectedPlugins));
   }, [plugins]);
 
-  return (
-    <PluginContext.Provider value={pluginMap}>
-      { children }
-    </PluginContext.Provider>
-  );
+  return <PluginContext.Provider value={pluginMap}>{children}</PluginContext.Provider>;
 }
 
 PluginProvider.propTypes = {

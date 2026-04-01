@@ -44,19 +44,22 @@ export default class MiradorCanvas {
    * - Strings being the URIs
    */
   get annotationListUris() {
-    return flatten(
-      new Array(this.canvas.__jsonld.otherContent),
-    )
-      .filter(otherContent => otherContent && (typeof otherContent === 'string' || otherContent['@type'] === 'sc:AnnotationList'))
-      .map(otherContent => (typeof otherContent === 'string' ? otherContent : otherContent['@id']));
+    return flatten(new Array(this.canvas.__jsonld.otherContent))
+      .filter(
+        (otherContent) =>
+          otherContent &&
+          (typeof otherContent === 'string' || otherContent['@type'] === 'sc:AnnotationList'),
+      )
+      .map((otherContent) =>
+        typeof otherContent === 'string' ? otherContent : otherContent['@id'],
+      );
   }
 
   /** */
   get canvasAnnotationPages() {
-    return flatten(
-      new Array(this.canvas.__jsonld.annotations),
-    )
-      .filter(annotations => annotations && annotations.type === 'AnnotationPage');
+    return flatten(new Array(this.canvas.__jsonld.annotations)).filter(
+      (annotations) => annotations && annotations.type === 'AnnotationPage',
+    );
   }
 
   /**
@@ -70,95 +73,103 @@ export default class MiradorCanvas {
   get imageResources() {
     // TODO Clean up the following hack as soon as manifesto.js provides any information if an annotation body is a Choice option, and if so, whether it is the preferred one.
     const resources = flattenDeep([
-      this.canvas.getImages().map(i => i.getResource()),
-      this.canvas.getContent().map(i => (i.__jsonld.body.type === 'Choice' ? i.__jsonld.body : i.getBody())),
+      this.canvas.getImages().map((i) => i.getResource()),
+      this.canvas
+        .getContent()
+        .map((i) => (i.__jsonld.body.type === 'Choice' ? i.__jsonld.body : i.getBody())),
     ]);
 
-    return flatten(resources.map((resource) => {
-      const type = resource.type || resource.getProperty('type');
-      switch (type) {
-        case 'Choice': {
-          return new Canvas({ images: resource.items.map(r => ({ resource: r })) }, this.canvas.options)
-            .getImages().map((img, index) => {
-              const r = img.getResource();
-              if (r) {
-                r.preferred = !index;
-              }
-              return r;
-            });
+    return flatten(
+      resources.map((resource) => {
+        const type = resource.type || resource.getProperty('type');
+        switch (type) {
+          case 'Choice': {
+            return new Canvas(
+              { images: resource.items.map((r) => ({ resource: r })) },
+              this.canvas.options,
+            )
+              .getImages()
+              .map((img, index) => {
+                const r = img.getResource();
+                if (r) {
+                  r.preferred = !index;
+                }
+                return r;
+              });
+          }
+          case 'oa:Choice': {
+            return new Canvas(
+              {
+                images: flattenDeep([
+                  resource.getProperty('default'),
+                  resource.getProperty('item'),
+                ]).map((r) => ({ resource: r })),
+              },
+              this.canvas.options,
+            )
+              .getImages()
+              .map((img, index) => {
+                const r = img.getResource();
+                if (r) {
+                  r.preferred = !index;
+                }
+                return r;
+              });
+          }
+          default: {
+            const r = resource;
+            r.preferred = true;
+            return r;
+          }
         }
-        case 'oa:Choice': {
-          return new Canvas({ images: flattenDeep([resource.getProperty('default'), resource.getProperty('item')]).map(r => ({ resource: r })) }, this.canvas.options).getImages()
-            .map((img, index) => {
-              const r = img.getResource();
-              if (r) {
-                r.preferred = !index;
-              }
-              return r;
-            });
-        }
-        default: {
-          const r = resource;
-          r.preferred = true;
-          return r;
-        }
-      }
-    }));
+      }),
+    );
   }
 
   /** */
   get textResources() {
-    const resources = flattenDeep([
-      this.canvas.getContent().map(i => i.getBody()),
-    ]);
+    const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
     return flatten(resources.filter((resource) => resource.getProperty('type') === 'Text'));
   }
 
   /** */
   get videoResources() {
-    const resources = flattenDeep([
-      this.canvas.getContent().map(i => i.getBody()),
-    ]);
+    const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
     return flatten(resources.filter((resource) => resource.getProperty('type') === 'Video'));
   }
 
   /** */
   get audioResources() {
-    const resources = flattenDeep([
-      this.canvas.getContent().map(i => i.getBody()),
-    ]);
+    const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
 
     return flatten(resources.filter((resource) => resource.getProperty('type') === 'Sound'));
   }
 
   /** */
   get v2VttContent() {
-    const resources = flattenDeep([
-      this.canvas.getContent().map(i => i.getBody()),
-    ]);
+    const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
 
     return flatten(resources.filter((resource) => resource.getProperty('format') === 'text/vtt'));
   }
 
   /** IIIF v3 captions are stored as 'supplementing' Annotations rather than in the resource content itself */
   get v3VttContent() {
-    const resources = flattenDeep(this.canvasAnnotationPages.map(annoPage => {
-      const manifestoAnnoPage = new AnnotationPage(annoPage, this.canvas.options);
-      return manifestoAnnoPage.getItems().map(item => {
-        const manifestoAnnotation = new Annotation(item, this.canvas.options);
-        return manifestoAnnotation.getBody();
-      });
-    }));
+    const resources = flattenDeep(
+      this.canvasAnnotationPages.map((annoPage) => {
+        const manifestoAnnoPage = new AnnotationPage(annoPage, this.canvas.options);
+        return manifestoAnnoPage.getItems().map((item) => {
+          const manifestoAnnotation = new Annotation(item, this.canvas.options);
+          return manifestoAnnotation.getBody();
+        });
+      }),
+    );
 
     return flatten(resources.filter((resource) => resource.getProperty('format') === 'text/vtt'));
   }
 
   /** */
   get resourceAnnotations() {
-    return flattenDeep([
-      this.canvas.getImages(),
-      this.canvas.getContent(),
-    ]);
+    return flattenDeep([this.canvas.getImages(), this.canvas.getContent()]);
   }
 
   /**
@@ -167,9 +178,9 @@ export default class MiradorCanvas {
    */
   resourceAnnotation(id) {
     return this.resourceAnnotations.find(
-      anno => anno.getResource().id === id || flatten(
-        new Array(anno.getBody()),
-      ).some(body => body.id === id),
+      (anno) =>
+        anno.getResource().id === id ||
+        flatten(new Array(anno.getBody())).some((body) => body.id === id),
     );
   }
 
@@ -186,17 +197,17 @@ export default class MiradorCanvas {
     const target = resourceAnnotation.getProperty('target');
     const fragmentMatch = (on || target).match(/xywh=(.*)$/);
     if (!fragmentMatch) return undefined;
-    return fragmentMatch[1].split(',').map(str => parseInt(str, 10));
+    return fragmentMatch[1].split(',').map((str) => parseInt(str, 10));
   }
 
   /** */
   get iiifImageResources() {
-    return this.imageResources.filter(r => r && getIiifResourceImageService(r)?.id);
+    return this.imageResources.filter((r) => r && getIiifResourceImageService(r)?.id);
   }
 
   /** */
   get imageServiceIds() {
-    return this.iiifImageResources.map(r => r && getIiifResourceImageService(r)?.id);
+    return this.iiifImageResources.map((r) => r && getIiifResourceImageService(r)?.id);
   }
 
   /**

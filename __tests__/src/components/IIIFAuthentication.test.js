@@ -65,7 +65,10 @@ describe('IIIFAuthentication', () => {
     it('renders with an error message', async () => {
       const handleAuthInteraction = vi.fn();
       createWrapper({
-        accessTokenServiceId: null, handleAuthInteraction, isInteractive: false, status: 'failed',
+        accessTokenServiceId: null,
+        handleAuthInteraction,
+        isInteractive: false,
+        status: 'failed',
       });
       expect(screen.getByText('Login failed')).toBeInTheDocument();
       expect(screen.getByText('... and this is why.')).toBeInTheDocument();
@@ -74,12 +77,16 @@ describe('IIIFAuthentication', () => {
   describe('in the middle of authenticating', () => {
     it('does the IIIF access cookie behavior', async () => {
       const mockWindow = { close: vi.fn(), closed: false };
-      const mockWindowOpen = vi.fn(() => (mockWindow));
+      const mockWindowOpen = vi.fn(() => mockWindow);
       window.open = mockWindowOpen;
       const resolveCookieMock = vi.fn();
       createWrapper({ resolveAuthenticationRequest: resolveCookieMock, status: 'cookie' });
       expect(screen.getByRole('button', { name: 'Log in' })).toBeInTheDocument();
-      expect(mockWindowOpen).toHaveBeenCalledWith(`http://example.com/auth?origin=${window.origin}`, 'IiifLoginSender', 'centerscreen');
+      expect(mockWindowOpen).toHaveBeenCalledWith(
+        `http://example.com/auth?origin=${window.origin}`,
+        'IiifLoginSender',
+        'centerscreen',
+      );
       mockWindow.closed = true;
       await waitFor(() => expect(resolveCookieMock).toHaveBeenCalledTimes(1));
     });
@@ -87,16 +94,24 @@ describe('IIIFAuthentication', () => {
       const resolveTokenMock = vi.fn();
       createWrapper({ resolveAccessTokenRequest: resolveTokenMock, status: 'token' });
       expect(screen.getByRole('button', { name: 'Log in' })).toBeInTheDocument();
-      window.dispatchEvent(new MessageEvent('message', {
-        data: { messageId: 'http://example.com/token' },
-      }));
-      await waitFor(() => expect(resolveTokenMock).toHaveBeenCalledWith('http://example.com/auth', 'http://example.com/token', { messageId: 'http://example.com/token' }));
+      window.dispatchEvent(
+        new MessageEvent('message', {
+          data: { messageId: 'http://example.com/token' },
+        }),
+      );
+      await waitFor(() =>
+        expect(resolveTokenMock).toHaveBeenCalledWith(
+          'http://example.com/auth',
+          'http://example.com/token',
+          { messageId: 'http://example.com/token' },
+        ),
+      );
     });
   });
   describe('when logged in', () => {
     it('renders a logout button', async () => {
       const mockWindow = { open: vi.fn() };
-      const mockWindowOpen = vi.fn(() => (mockWindow));
+      const mockWindowOpen = vi.fn(() => mockWindow);
       window.open = mockWindowOpen;
       const resetAuthenticationState = vi.fn();
       createWrapper({
@@ -107,9 +122,12 @@ describe('IIIFAuthentication', () => {
       });
       const confirmBtn = await screen.findByRole('button', { name: 'exit' });
       await user.click(confirmBtn);
-      await waitFor(() => expect(resetAuthenticationState).toHaveBeenCalledWith({
-        authServiceId: 'http://example.com/auth', tokenServiceId: 'http://example.com/token',
-      }));
+      await waitFor(() =>
+        expect(resetAuthenticationState).toHaveBeenCalledWith({
+          authServiceId: 'http://example.com/auth',
+          tokenServiceId: 'http://example.com/token',
+        }),
+      );
     });
   });
 });

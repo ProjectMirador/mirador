@@ -8,8 +8,10 @@ import ns from '../config/css-ns';
 /**
  */
 export function ViewerNavigation({
-  hasNextCanvas = false, hasPreviousCanvas = false,
-  setNextCanvas = () => {}, setPreviousCanvas = () => {},
+  hasNextCanvas = false,
+  hasPreviousCanvas = false,
+  setNextCanvas = () => {},
+  setPreviousCanvas = () => {},
   viewingDirection = '',
 }) {
   const { t } = useTranslation();
@@ -36,15 +38,14 @@ export function ViewerNavigation({
   }
 
   return (
-    <div
-      className={classNames(ns('osd-navigation'))}
-      dir={htmlDir}
-    >
+    <div className={classNames(ns('osd-navigation'))} dir={htmlDir}>
       <MiradorMenuButton
         aria-label={t('previousCanvas')}
         className={ns('previous-canvas-button')}
         disabled={!hasPreviousCanvas}
-        onClick={() => { hasPreviousCanvas && setPreviousCanvas(); }}
+        onClick={() => {
+          hasPreviousCanvas && setPreviousCanvas();
+        }}
       >
         <NavigationIcon style={previousIconStyle} />
       </MiradorMenuButton>
@@ -52,7 +53,9 @@ export function ViewerNavigation({
         aria-label={t('nextCanvas')}
         className={ns('next-canvas-button')}
         disabled={!hasNextCanvas}
-        onClick={() => { hasNextCanvas && setNextCanvas(); }}
+        onClick={() => {
+          hasNextCanvas && setNextCanvas();
+        }}
       >
         <NavigationIcon style={nextIconStyle} />
       </MiradorMenuButton>

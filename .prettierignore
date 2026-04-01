@@ -1,6 +1,11 @@
 # Build artifacts
 dist/
 
+# Demo artifacts
+demo/
+
+*.md
+
 .github/
 
 # Test fixtures

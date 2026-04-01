@@ -1,6 +1,10 @@
 import { v4 as uuid } from 'uuid';
 import ActionTypes from './action-types';
-import { getCompanionWindowIdsForPosition, getManuallyExpandedNodeIds, getVisibleNodeIds } from '../selectors';
+import {
+  getCompanionWindowIdsForPosition,
+  getManuallyExpandedNodeIds,
+  getVisibleNodeIds,
+} from '../selectors';
 
 const defaultProps = {
   content: null,
@@ -14,7 +18,10 @@ export function addCompanionWindow(windowId, payload, defaults = defaultProps) {
   return {
     id,
     payload: {
-      ...defaults, ...payload, id, windowId,
+      ...defaults,
+      ...payload,
+      id,
+      windowId,
     },
     type: ActionTypes.ADD_COMPANION_WINDOW,
     windowId,
@@ -27,7 +34,8 @@ export function addOrUpdateCompanionWindow(windowId, payload, defaults = default
     const state = getState();
     const { position } = payload;
 
-    const updatableWindowId = position === 'left' && getCompanionWindowIdsForPosition(state, { position, windowId })[0];
+    const updatableWindowId =
+      position === 'left' && getCompanionWindowIdsForPosition(state, { position, windowId })[0];
 
     if (updatableWindowId) {
       dispatch(updateCompanionWindow(windowId, updatableWindowId, payload));
@@ -63,8 +71,9 @@ export function toggleNode(windowId, id, nodeId) {
     const collapsedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId: id }, false);
     const expandedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId: id }, true);
     const visibleNodeIds = getVisibleNodeIds(state, { id, windowId });
-    const expand = collapsedNodeIds.indexOf(nodeId) !== -1
-      || (expandedNodeIds.indexOf(nodeId) === -1 && visibleNodeIds.indexOf(nodeId) === -1);
+    const expand =
+      collapsedNodeIds.indexOf(nodeId) !== -1 ||
+      (expandedNodeIds.indexOf(nodeId) === -1 && visibleNodeIds.indexOf(nodeId) === -1);
     return dispatch({
       id,
       payload: {
@@ -85,11 +94,11 @@ export function expandNodes(windowId, id, nodeIds) {
     const expandedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId: id }, true);
     const payload = {};
 
-    expandedNodeIds.forEach(nodeId => {
+    expandedNodeIds.forEach((nodeId) => {
       payload[nodeId] = { expanded: false };
     });
 
-    nodeIds.forEach(nodeId => {
+    nodeIds.forEach((nodeId) => {
       payload[nodeId] = { expanded: true };
     });
 

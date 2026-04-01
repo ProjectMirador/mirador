@@ -14,14 +14,20 @@ import WorkspaceContext from '../contexts/WorkspaceContext';
 /**
  */
 export function WorkspaceMenu({
-  handleClose, showThemePicker = false, isWorkspaceAddVisible = false,
-  tReady = false, toggleZoomControls = () => {}, showZoomControls = false, ...menuProps
+  handleClose,
+  showThemePicker = false,
+  isWorkspaceAddVisible = false,
+  tReady = false,
+  toggleZoomControls = () => {},
+  showZoomControls = false,
+  ...menuProps
 }) {
   const { t } = useTranslation();
   const container = useContext(WorkspaceContext);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
+  // eslint-disable-next-line prefer-rest-params
+  const pluginProps = arguments[0];
 
   /** */
   const handleClick = (option, e) => {
@@ -58,16 +64,20 @@ export function WorkspaceMenu({
         <MenuItem
           aria-haspopup="true"
           disabled={isWorkspaceAddVisible}
-          onClick={(e) => { handleZoomToggleClick(e); }}
+          onClick={(e) => {
+            handleZoomToggleClick(e);
+          }}
           aria-owns={selectedOption === 'toggleZoom' ? 'toggle-zoom-menu' : undefined}
         >
           <Typography variant="body1">
-            { showZoomControls ? t('hideZoomControls') : t('showZoomControls') }
+            {showZoomControls ? t('hideZoomControls') : t('showZoomControls')}
           </Typography>
         </MenuItem>
         <MenuItem
           aria-haspopup="true"
-          onClick={(e) => { handleClick('workspaceSelection', e); }}
+          onClick={(e) => {
+            handleClick('workspaceSelection', e);
+          }}
           aria-owns={selectedOption === 'workspaceSelection' ? 'workspace-selection' : undefined}
         >
           <Typography variant="body1">{t('selectWorkspaceMenu')}</Typography>
@@ -76,10 +86,12 @@ export function WorkspaceMenu({
         <NestedMenu label={t('language')}>
           <LanguageSettings afterSelect={handleClose} />
         </NestedMenu>
-        { showThemePicker && (
+        {showThemePicker && (
           <MenuItem
             aria-haspopup="true"
-            onClick={(e) => { handleClick('changeTheme', e); }}
+            onClick={(e) => {
+              handleClick('changeTheme', e);
+            }}
             aria-owns={selectedOption === 'changeTheme' ? 'change-theme' : undefined}
           >
             <Typography variant="body1">{t('changeTheme')}</Typography>

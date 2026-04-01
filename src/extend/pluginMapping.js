@@ -17,23 +17,24 @@ import CompanionWindowRegistry from '../lib/CompanionWindowRegistry';
  *  }
  */
 export function createTargetToPluginMapping(plugins) {
-  return plugins.reduce((map, plugin) => (
-    update(map, [plugin.target, plugin.mode], x => [...(x || []), plugin])
-  ), {});
+  return plugins.reduce(
+    (map, plugin) => update(map, [plugin.target, plugin.mode], (x) => [...(x || []), plugin]),
+    {},
+  );
 }
 
 /** */
 export function connectPluginsToStore(plugins) {
-  return plugins.map(plugin => (
-    { ...plugin, component: connectPluginComponent(plugin) }
-  ));
+  return plugins.map((plugin) => ({ ...plugin, component: connectPluginComponent(plugin) }));
 }
 
 /** */
 export function addPluginsToCompanionWindowsRegistry(plugins) {
-  plugins.filter(p => p.companionWindowKey).forEach((plugin) => {
-    CompanionWindowRegistry[plugin.companionWindowKey] = plugin.component;
-  });
+  plugins
+    .filter((p) => p.companionWindowKey)
+    .forEach((plugin) => {
+      CompanionWindowRegistry[plugin.companionWindowKey] = plugin.component;
+    });
 
   return CompanionWindowRegistry;
 }

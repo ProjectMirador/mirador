@@ -26,9 +26,9 @@ const mapStateToProps = (state, { id, windowId }) => ({
  * @private
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
-  expandNodes: nodeIds => dispatch(actions.expandNodes(windowId, id, nodeIds)),
+  expandNodes: (nodeIds) => dispatch(actions.expandNodes(windowId, id, nodeIds)),
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
-  toggleNode: nodeId => dispatch(actions.toggleNode(windowId, id, nodeId)),
+  toggleNode: (nodeId) => dispatch(actions.toggleNode(windowId, id, nodeId)),
 });
 
 const enhance = compose(

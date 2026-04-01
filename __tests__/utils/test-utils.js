@@ -38,9 +38,7 @@ function renderWithProviders(
     return (
       <I18nextProvider i18n={i18n}>
         <ThemeProvider theme={theme}>
-          <Provider store={store}>
-            {children}
-          </Provider>
+          <Provider store={store}>{children}</Provider>
         </ThemeProvider>
       </I18nextProvider>
     );
@@ -56,7 +54,8 @@ function renderWithProviders(
   return {
     store,
     ...rendered,
-    rerender: (newUi, options) => render(newUi, { container: rendered.container, wrapper: Wrapper, ...options }),
+    rerender: (newUi, options) =>
+      render(newUi, { container: rendered.container, wrapper: Wrapper, ...options }),
   };
 }
 
@@ -68,7 +67,11 @@ const setupMiradorViewer = async (config, plugins) => {
     <div
       data-testid="mirador"
       style={{
-        bottom: 0, left: 0, position: 'absolute', right: 0, top: 0,
+        bottom: 0,
+        left: 0,
+        position: 'absolute',
+        right: 0,
+        top: 0,
       }}
     >
       {viewer.render()}
@@ -83,7 +86,8 @@ const setupMiradorViewer = async (config, plugins) => {
 export const setupIntegrationTestViewer = (config, plugins) => {
   beforeEach(async (context) => {
     const miradorInstance = await setupMiradorViewer(config, plugins);
-    context.miradorInstance = miradorInstance; // eslint-disable-line no-param-reassign
+    // eslint-disable-next-line no-param-reassign
+    context.miradorInstance = miradorInstance;
 
     // Wait for the viewer to render
     expect(await screen.findByTestId('mirador')).toBeInTheDocument();

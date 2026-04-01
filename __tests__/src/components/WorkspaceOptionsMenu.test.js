@@ -6,12 +6,7 @@ import { WorkspaceOptionsMenu } from '../../../src/components/WorkspaceOptionsMe
 function Subject({ ...props }) {
   return (
     <div>
-      <WorkspaceOptionsMenu
-        handleClose={() => {}}
-        {...props}
-      />
-      ,
-      ,
+      <WorkspaceOptionsMenu handleClose={() => {}} {...props} />, ,
     </div>
   );
 }
@@ -19,7 +14,9 @@ function Subject({ ...props }) {
 /** create anchor element */
 function createAnchor() {
   return render(
-    <button type="button" data-testid="menu-trigger-button">Button</button>,
+    <button type="button" data-testid="menu-trigger-button">
+      Button
+    </button>,
   );
 }
 
@@ -64,7 +61,13 @@ describe('WorkspaceOptionsMenu', () => {
 
   it('fires the correct callbacks on menu close', async () => {
     const handleClose = vi.fn();
-    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} handleClose={handleClose} open />);
+    render(
+      <Subject
+        anchorEl={screen.getByTestId('menu-trigger-button')}
+        handleClose={handleClose}
+        open
+      />,
+    );
 
     // click a menu item should close the menu
     const menuItems = screen.getAllByRole('menuitem');

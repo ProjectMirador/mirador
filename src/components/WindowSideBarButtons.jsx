@@ -22,36 +22,38 @@ const Root = styled(Tabs, { name: 'WindowSideBarButtons', slot: 'root' })({
   },
 });
 
-const StyledTabButton = styled(Tab, { name: 'WindowSideBarButtons', slot: 'button' })(({ theme }) => ({
-  '&.Mui-selected': {
-    borderRight: '2px solid',
-    borderRightColor: theme.palette.primary.main,
-  },
-  '&.MuiTab-root': {
-    '&:active': {
-      backgroundColor: theme.palette.action.active,
+const StyledTabButton = styled(Tab, { name: 'WindowSideBarButtons', slot: 'button' })(
+  ({ theme }) => ({
+    '&.Mui-selected': {
+      borderRight: '2px solid',
+      borderRightColor: theme.palette.primary.main,
     },
-    '&:focus': {
-      '@media (hover: none)': {
-        backgroundColor: 'transparent',
+    '&.MuiTab-root': {
+      '&:active': {
+        backgroundColor: theme.palette.action.active,
       },
-      backgroundColor: theme.palette.action.hover,
-      textDecoration: 'none',
-      // Reset on touch devices, it doesn't add specificity
-    },
-    '&:hover': {
-      '@media (hover: none)': {
-        backgroundColor: 'transparent',
+      '&:focus': {
+        '@media (hover: none)': {
+          backgroundColor: 'transparent',
+        },
+        backgroundColor: theme.palette.action.hover,
+        textDecoration: 'none',
+        // Reset on touch devices, it doesn't add specificity
       },
-      backgroundColor: theme.palette.action.hover,
-      textDecoration: 'none',
-      // Reset on touch devices, it doesn't add specificity
+      '&:hover': {
+        '@media (hover: none)': {
+          backgroundColor: 'transparent',
+        },
+        backgroundColor: theme.palette.action.hover,
+        textDecoration: 'none',
+        // Reset on touch devices, it doesn't add specificity
+      },
+      borderRight: '2px solid transparent',
+      minWidth: 'auto',
     },
-    borderRight: '2px solid transparent',
-    minWidth: 'auto',
-  },
-  fill: 'currentcolor',
-}));
+    fill: 'currentcolor',
+  }),
+);
 
 /** */
 function TabButton({ value, ...tabProps }) {
@@ -61,9 +63,7 @@ function TabButton({ value, ...tabProps }) {
       <StyledTabButton
         {...tabProps}
         value={value}
-        aria-label={
-          t('openCompanionWindow', { context: value })
-        }
+        aria-label={t('openCompanionWindow', { context: value })}
         disableRipple
       />
     </Tooltip>
@@ -91,7 +91,9 @@ export function WindowSideBarButtons({
   const { t } = useTranslation();
   const { PluginComponents } = usePlugins('WindowSideBarButtons');
   /** */
-  const handleChange = (event, value) => { addCompanionWindow(value); };
+  const handleChange = (event, value) => {
+    addCompanionWindow(value);
+  };
 
   return (
     <Root
@@ -104,56 +106,56 @@ export function WindowSideBarButtons({
       aria-orientation="vertical"
       aria-label={t('sidebarPanelsNavigation')}
     >
-      { panels.info && (
-        <TabButton
-          value="info"
-          icon={(<InfoIcon />)}
-        />
-      )}
-      { panels.attribution && (
-        <TabButton
-          value="attribution"
-          icon={(<AttributionIcon />)}
-        />
-      )}
-      { panels.canvas && (
-        <TabButton
-          value="canvas"
-          icon={(<CanvasIndexIcon />)}
-        />
-      )}
+      {panels.info && <TabButton value="info" icon={<InfoIcon />} />}
+      {panels.attribution && <TabButton value="attribution" icon={<AttributionIcon />} />}
+      {panels.canvas && <TabButton value="canvas" icon={<CanvasIndexIcon />} />}
       {panels.annotations && (hasAnnotations || hasAnyAnnotations) && (
         <TabButton
           value="annotations"
-          icon={(
-            <Badge overlap="rectangular" color="notification" invisible={!hasAnnotations} variant="dot">
+          icon={
+            <Badge
+              overlap="rectangular"
+              color="notification"
+              invisible={!hasAnnotations}
+              variant="dot"
+            >
               <AnnotationIcon />
             </Badge>
-          )}
+          }
         />
       )}
       {panels.search && hasSearchService && (
         <TabButton
           value="search"
-          icon={(
-            <Badge overlap="rectangular" color="notification" invisible={!hasSearchResults} variant="dot">
+          icon={
+            <Badge
+              overlap="rectangular"
+              color="notification"
+              invisible={!hasSearchResults}
+              variant="dot"
+            >
               <SearchIcon />
             </Badge>
-          )}
+          }
         />
       )}
-      { panels.layers && hasAnyLayers && (
+      {panels.layers && hasAnyLayers && (
         <TabButton
           value="layers"
-          icon={(
-            <Badge overlap="rectangular" color="notification" invisible={!hasCurrentLayers} variant="dot">
+          icon={
+            <Badge
+              overlap="rectangular"
+              color="notification"
+              invisible={!hasCurrentLayers}
+              variant="dot"
+            >
               <LayersIcon />
             </Badge>
-          )}
+          }
         />
       )}
-      { PluginComponents
-        && PluginComponents.map(PluginComponent => (
+      {PluginComponents &&
+        PluginComponents.map((PluginComponent) => (
           <TabButton
             key={PluginComponent.value}
             value={PluginComponent.value}

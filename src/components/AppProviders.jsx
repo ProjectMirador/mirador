@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
-import {
-  ThemeProvider, StyledEngineProvider, createTheme,
-} from '@mui/material/styles';
+import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/styles';
 import { DndContext, DndProvider } from 'react-dnd';
 import { MultiBackend } from 'react-dnd-multi-backend';
 import { HTML5toTouch } from 'rdndmb-html5-to-touch';
@@ -33,20 +31,12 @@ const MaybeDndProvider = ({ dndManager = undefined, children }) => {
     );
   }
 
-  return (
-    <DndContext.Provider value={dndManager}>
-      {children}
-    </DndContext.Provider>
-  );
+  return <DndContext.Provider value={dndManager}>{children}</DndContext.Provider>;
 };
 
 MaybeDndProvider.propTypes = {
   children: PropTypes.node.isRequired,
-  dndManager: PropTypes.oneOf([
-    undefined,
-    false,
-    PropTypes.object,
-  ]),
+  dndManager: PropTypes.oneOf([undefined, false, PropTypes.object]),
 };
 
 /**
@@ -57,9 +47,7 @@ const FullScreenShim = ({ children }) => {
 
   return (
     <FullScreen handle={handle}>
-      <FullScreenContext.Provider value={handle}>
-        {children}
-      </FullScreenContext.Provider>
+      <FullScreenContext.Provider value={handle}>{children}</FullScreenContext.Provider>
     </FullScreen>
   );
 };
@@ -84,7 +72,7 @@ const StoreAwareI18nextProvider = ({ children, language, translations }) => {
     });
   }, [i18n, translations]);
 
-  return (<I18nextProvider i18n={i18n}>{children}</I18nextProvider>);
+  return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 };
 
 StoreAwareI18nextProvider.propTypes = {
@@ -115,7 +103,8 @@ const cacheDefault = createCache({
 export function AppProviders({
   children = null,
   language,
-  theme, translations,
+  theme,
+  translations,
   dndManager = undefined,
 }) {
   return (
@@ -124,11 +113,9 @@ export function AppProviders({
         <LocaleContext.Provider value={language}>
           <StyledEngineProvider injectFirst>
             <CacheProvider value={theme.direction === 'rtl' ? cacheRtl : cacheDefault}>
-              <ThemeProvider theme={createTheme((theme))}>
+              <ThemeProvider theme={createTheme(theme)}>
                 <MaybeDndProvider dndManager={dndManager}>
-                  <FailedImageProvider>
-                    {children}
-                  </FailedImageProvider>
+                  <FailedImageProvider>{children}</FailedImageProvider>
                 </MaybeDndProvider>
               </ThemeProvider>
             </CacheProvider>

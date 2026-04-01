@@ -4,9 +4,11 @@ import { Rnd } from 'react-rnd';
 import Window from '../containers/Window';
 import ns from '../config/css-ns';
 
-const StyledRnd = styled(Rnd, { shouldForwardProp: prop => prop !== 'focused' })(({ focused, theme }) => ({
-  zIndex: focused ? theme.zIndex.modal - 1 : 'auto',
-}));
+const StyledRnd = styled(Rnd, { shouldForwardProp: (prop) => prop !== 'focused' })(
+  ({ focused, theme }) => ({
+    zIndex: focused ? theme.zIndex.modal - 1 : 'auto',
+  }),
+);
 
 /**
  * Represents a work area that contains any number of windows
@@ -21,7 +23,6 @@ function WorkspaceElasticWindow({
   layout,
   workspace,
   updateElasticWindowLayout,
-
 }) {
   const offsetX = workspace.width / 2;
   const offsetY = workspace.height / 2;
@@ -38,10 +39,7 @@ function WorkspaceElasticWindow({
       position={{ x: layout.x + offsetX, y: layout.y + offsetY }}
       bounds="parent"
       onDragStop={(e, d) => {
-        updateElasticWindowLayout(
-          layout.windowId,
-          { x: d.x - offsetX, y: d.y - offsetY },
-        );
+        updateElasticWindowLayout(layout.windowId, { x: d.x - offsetX, y: d.y - offsetY });
       }}
       onDragStart={focusWindow}
       onResize={(e, direction, ref, delta, position) => {
@@ -55,9 +53,7 @@ function WorkspaceElasticWindow({
       dragHandleClassName={ns('window-top-bar')}
       cancel={`.${ns('window-menu-btn')}`}
     >
-      <Window
-        windowId={layout.windowId}
-      />
+      <Window windowId={layout.windowId} />
     </StyledRnd>
   );
 }

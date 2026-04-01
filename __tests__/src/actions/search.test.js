@@ -15,9 +15,9 @@ describe('search actions', () => {
         type: ActionTypes.REQUEST_SEARCH,
         windowId,
       };
-      expect(
-        actions.requestSearch(windowId, companionWindowId, searchId, query),
-      ).toEqual(expectedAction);
+      expect(actions.requestSearch(windowId, companionWindowId, searchId, query)).toEqual(
+        expectedAction,
+      );
     });
   });
   describe('receiveSearch', () => {
@@ -36,9 +36,9 @@ describe('search actions', () => {
         type: ActionTypes.RECEIVE_SEARCH,
         windowId,
       };
-      expect(
-        actions.receiveSearch(windowId, companionWindowId, searchId, json),
-      ).toEqual(expectedAction);
+      expect(actions.receiveSearch(windowId, companionWindowId, searchId, json)).toEqual(
+        expectedAction,
+      );
     });
 
     it('provides the first annotation id and its canvas', () => {
@@ -53,9 +53,7 @@ describe('search actions', () => {
           },
         ],
       };
-      expect(
-        actions.receiveSearch(windowId, companionWindowId, searchId, json),
-      ).toEqual({
+      expect(actions.receiveSearch(windowId, companionWindowId, searchId, json)).toEqual({
         companionWindowId,
         searchId,
         searchJson: json,

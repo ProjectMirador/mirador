@@ -37,7 +37,8 @@ describe('ManifestListItem', () => {
     const { container } = createWrapper({ ready: false });
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
-    expect(container.querySelectorAll('.MuiSkeleton-rectangular').length).toBeGreaterThan(0); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelectorAll('.MuiSkeleton-rectangular').length).toBeGreaterThan(0);
   });
   it('renders an error message if fetching the manifest failed', () => {
     createWrapper({ error: 'This is an error message' });
@@ -71,7 +72,9 @@ describe('ManifestListItem', () => {
 
   it('displays the provider information', () => {
     createWrapper({ provider: 'ACME' });
-    expect(screen.getByText('ACME', { container: '.mirador-manifest-list-item-provider' })).toHaveTextContent('ACME');
+    expect(
+      screen.getByText('ACME', { container: '.mirador-manifest-list-item-provider' }),
+    ).toHaveTextContent('ACME');
   });
 
   it('displays a collection label for collections', () => {

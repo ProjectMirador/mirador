@@ -7,12 +7,7 @@ describe('WorkspaceImport', () => {
   beforeEach(() => {
     handleClose = vi.fn();
 
-    render(
-      <WorkspaceImport
-        open
-        handleClose={handleClose}
-      />,
-    );
+    render(<WorkspaceImport open handleClose={handleClose} />);
   });
 
   it('renders without an error', () => {

@@ -5,11 +5,7 @@ import { CollectionInfo } from '../../../src/components/CollectionInfo';
 /** */
 function createWrapper(props) {
   return render(
-    <CollectionInfo
-      collectionPath={[1, 2]}
-      showCollectionDialog={() => {}}
-      {...props}
-    />,
+    <CollectionInfo collectionPath={[1, 2]} showCollectionDialog={() => {}} {...props} />,
   );
 }
 

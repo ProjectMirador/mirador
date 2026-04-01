@@ -3,12 +3,7 @@ import { ScrollIndicatedDialogContent } from '../../../src/components/ScrollIndi
 
 /** Utility function to wrap  */
 function createWrapper(props) {
-  return render(
-    <ScrollIndicatedDialogContent
-      data-testid="subject"
-      {...props}
-    />,
-  );
+  return render(<ScrollIndicatedDialogContent data-testid="subject" {...props} />);
 }
 
 describe('ScrollIndicatedDialogContent', () => {

@@ -7,8 +7,10 @@ const initialState = {
 
 /** */
 const pluginStateReducer = (state = initialState, action) => {
-  if (action.type === 'mirador/INC_SOME_NUMBER') return { ...state, someNumber: state.someNumber + 1 };
-  if (action.type === 'mirador/SET_CANVAS') return { ...state, canvasChangeCount: state.canvasChangeCount + 1 };
+  if (action.type === 'mirador/INC_SOME_NUMBER')
+    return { ...state, someNumber: state.someNumber + 1 };
+  if (action.type === 'mirador/SET_CANVAS')
+    return { ...state, canvasChangeCount: state.canvasChangeCount + 1 };
   return state;
 };
 

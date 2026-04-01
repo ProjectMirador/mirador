@@ -10,22 +10,25 @@ export default class TruncatedHit {
 
   /** */
   get match() {
-    return this.hit.match
-      || (this.annotation && this.annotation.resource.resource.chars)
-      || '-';
+    return this.hit.match || (this.annotation && this.annotation.resource.resource.chars) || '-';
   }
 
   /** */
   get charsOnSide() {
     const resultingChars = (this.maxChars - this.match.length) / 2;
-    const measured = [(this.hit.before || '').length, (this.hit.after || '').length].filter(length => length > 0);
+    const measured = [(this.hit.before || '').length, (this.hit.after || '').length].filter(
+      (length) => length > 0,
+    );
     return Math.max(Math.min(resultingChars, ...measured), this.minimum);
   }
 
   /** */
   get before() {
     if (!this.hit.before) return '';
-    return this.hit.before.substring(this.hit.before.length - this.charsOnSide, this.hit.before.length);
+    return this.hit.before.substring(
+      this.hit.before.length - this.charsOnSide,
+      this.hit.before.length,
+    );
   }
 
   /** */

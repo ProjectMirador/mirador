@@ -18,9 +18,10 @@ const Root = styled('div', { name: 'GalleryView', slot: 'thumbnail' })(({ ownerS
   ...(ownerState.selected && {
     borderColor: theme.palette.primary.main,
   }),
-  ...(!ownerState.selected && ownerState.searchAnnotationsCount > 0 && {
-    borderColor: theme.palette.action.selected,
-  }),
+  ...(!ownerState.selected &&
+    ownerState.searchAnnotationsCount > 0 && {
+      borderColor: theme.palette.action.selected,
+    }),
   cursor: 'pointer',
   display: 'inline-block',
   margin: theme.spacing(1, 0.5),
@@ -32,14 +33,16 @@ const Root = styled('div', { name: 'GalleryView', slot: 'thumbnail' })(({ ownerS
   width: 'min-content',
 }));
 
-const StyledChipsContainer = styled('div', { name: 'GalleryView', slot: 'chipArea' })(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: theme.spacing(0.25),
-  position: 'absolute',
-  right: 0,
-  top: 0,
-}));
+const StyledChipsContainer = styled('div', { name: 'GalleryView', slot: 'chipArea' })(
+  ({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(0.25),
+    position: 'absolute',
+    right: 0,
+    top: 0,
+  }),
+);
 
 const AnnotationChip = styled(Chip, { name: 'GalleryView', slot: 'chip' })(({ theme }) => ({
   backgroundColor: theme.palette.annotations.chipBackground,
@@ -52,7 +55,12 @@ const AnnotationChip = styled(Chip, { name: 'GalleryView', slot: 'chip' })(({ th
  * OSD and Navigation
  */
 export function GalleryViewThumbnail({
-  canvas, selected = false, setCanvas, focusOnCanvas, annotationsCount = undefined, requestCanvasAnnotations = () => {},
+  canvas,
+  selected = false,
+  setCanvas,
+  focusOnCanvas,
+  annotationsCount = undefined,
+  requestCanvasAnnotations = () => {},
   searchAnnotationsCount = 0,
   config = { height: 100, width: null },
 }) {
@@ -86,12 +94,11 @@ export function GalleryViewThumbnail({
       space: 32,
     };
 
-    const enterOrSpace = (
-      event.key === keys.enter
-      || event.which === chars.enter
-      || event.key === keys.space
-      || event.which === chars.space
-    );
+    const enterOrSpace =
+      event.key === keys.enter ||
+      event.which === chars.enter ||
+      event.key === keys.space ||
+      event.which === chars.space;
 
     if (enterOrSpace) {
       focusOnCanvas();
@@ -103,17 +110,23 @@ export function GalleryViewThumbnail({
   /** */
   const handleIntersection = (_inView, { isIntersecting }) => {
     if (
-      !isIntersecting
-      || annotationsCount === undefined
-      || annotationsCount > 0
-      || requestedAnnotations) return;
+      !isIntersecting ||
+      annotationsCount === undefined ||
+      annotationsCount > 0 ||
+      requestedAnnotations
+    )
+      return;
 
     setRequestedAnnotations(true);
     requestCanvasAnnotations();
   };
 
   const ownerState = {
-    annotationsCount, canvas, config, searchAnnotationsCount, selected,
+    annotationsCount,
+    canvas,
+    config,
+    searchAnnotationsCount,
+    selected,
   };
 
   return (

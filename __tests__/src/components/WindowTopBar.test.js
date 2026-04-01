@@ -32,22 +32,28 @@ describe('WindowTopBar', () => {
     render(<Subject />);
     expect(screen.getByRole('navigation', { name: 'Window navigation' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Toggle sidebar' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Window views & thumbnail display' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Window views & thumbnail display' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Maximize window' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Close window' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Full screen' })).not.toBeInTheDocument();
   });
 
   it('uses allow flags to override defaults', () => {
-    render(<Subject
-      allowWindowSideBar={false}
-      allowClose={false}
-      allowMaximize={false}
-      allowTopMenuButton={false}
-      allowFullscreen
-    />);
+    render(
+      <Subject
+        allowWindowSideBar={false}
+        allowClose={false}
+        allowMaximize={false}
+        allowTopMenuButton={false}
+        allowFullscreen
+      />,
+    );
     expect(screen.queryByRole('button', { name: 'Toggle sidebar' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Window views & thumbnail display' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Window views & thumbnail display' }),
+    ).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Maximize window' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Close window' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Full screen' })).toBeInTheDocument();
@@ -56,7 +62,8 @@ describe('WindowTopBar', () => {
   it('triggers window focus when clicked', () => {
     const focusWindow = vi.fn();
     render(<Subject focusWindow={focusWindow} />);
-    const toolbar = screen.getByRole('navigation', { name: 'Window navigation' }).firstChild; // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    const toolbar = screen.getByRole('navigation', { name: 'Window navigation' }).firstChild;
     expect(toolbar).toBeInTheDocument();
     // we specifically need mouseDown not click for MUI Toolbar here
     fireEvent.mouseDown(toolbar);
@@ -65,10 +72,9 @@ describe('WindowTopBar', () => {
 
   it('passes correct callback to toggleWindowSideBar button', async () => {
     const toggleWindowSideBar = vi.fn();
-    render(
-      <Subject allowWindowSideBar toggleWindowSideBar={toggleWindowSideBar} />,
-      { preloadedState: { windows: { xyz: { sideBarOpen: false } } } },
-    );
+    render(<Subject allowWindowSideBar toggleWindowSideBar={toggleWindowSideBar} />, {
+      preloadedState: { windows: { xyz: { sideBarOpen: false } } },
+    });
     const button = screen.getByRole('button', { name: 'Toggle sidebar' });
     expect(button).toBeInTheDocument();
     await user.click(button);

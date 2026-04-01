@@ -36,7 +36,9 @@ describe('CollectionDialog', () => {
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getAllByRole('menuitem')).toHaveLength(55);
-    expect(screen.getByRole('menuitem', { name: 'Test 1 Manifest: Minimum Required Fields' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('menuitem', { name: 'Test 1 Manifest: Minimum Required Fields' }),
+    ).toBeInTheDocument();
   });
 
   it('when not ready returns placeholder skeleton', () => {
@@ -44,7 +46,8 @@ describe('CollectionDialog', () => {
 
     expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
 
-    expect(screen.getByRole('dialog').querySelectorAll('.MuiSkeleton-root')).toHaveLength(3); // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(screen.getByRole('dialog').querySelectorAll('.MuiSkeleton-root')).toHaveLength(3);
   });
 
   it('clicking the hide button fires hideCollectionDialog', async () => {
@@ -64,10 +67,18 @@ describe('CollectionDialog', () => {
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getAllByRole('menuitem')).toHaveLength(1);
-    expect(screen.getByRole('menuitem', { name: 'Collection of Test Cases - label for parent' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('menuitem', { name: 'Collection of Test Cases - label for parent' }),
+    ).toBeInTheDocument();
 
-    await user.click(screen.getByRole('menuitem', { name: 'Collection of Test Cases - label for parent' }));
-    expect(showCollectionDialog).toHaveBeenCalledWith(collection['@id'], [parentCollection['@id']], 'window');
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Collection of Test Cases - label for parent' }),
+    );
+    expect(showCollectionDialog).toHaveBeenCalledWith(
+      collection['@id'],
+      [parentCollection['@id']],
+      'window',
+    );
   });
 
   it('fires correct showCollectionDialog when the parent collection is clicked', async () => {
@@ -82,7 +93,9 @@ describe('CollectionDialog', () => {
     });
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Parent Collection of Collection' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Parent Collection of Collection' }),
+    ).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Parent Collection of Collection' }));
     expect(showCollectionDialog).toHaveBeenCalledWith(parentCollection['@id'], [], 'window');
@@ -106,11 +119,15 @@ describe('CollectionDialog', () => {
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
 
-    await user.click(screen.getByRole('menuitem', { name: 'Test 1 Manifest: Minimum Required Fields' }));
+    await user.click(
+      screen.getByRole('menuitem', { name: 'Test 1 Manifest: Minimum Required Fields' }),
+    );
     expect(hideCollectionDialog).toHaveBeenCalledWith('window');
     expect(setWorkspaceAddVisibility).toHaveBeenCalledWith(false);
     expect(updateWindow).toHaveBeenCalledWith('window', {
-      canvasId: null, collectionPath: [parentCollection['@id'], collection['@id']], manifestId,
+      canvasId: null,
+      collectionPath: [parentCollection['@id'], collection['@id']],
+      manifestId,
     });
   });
 });

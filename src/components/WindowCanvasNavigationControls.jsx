@@ -15,65 +15,80 @@ import ViewerNavigation from '../containers/ViewerNavigation';
 import ns from '../config/css-ns';
 import { PluginHook } from './PluginHook';
 
-const Root = styled(Paper, { name: 'WindowCanvasNavigationControls', slot: 'root' })(({ theme }) => ({
-  alignItems: 'center',
-  backgroundColor: alpha(theme.palette.background.paper, 0.5),
-  bottom: 0,
-  cursor: 'default',
-  display: 'flex',
-  flexDirection: 'column',
-  flexWrap: 'wrap',
-  justifyContent: 'center',
-  position: 'absolute',
-  textAlign: 'center',
-  width: '100%',
-  zIndex: 50,
-}));
+const Root = styled(Paper, { name: 'WindowCanvasNavigationControls', slot: 'root' })(
+  ({ theme }) => ({
+    alignItems: 'center',
+    backgroundColor: alpha(theme.palette.background.paper, 0.5),
+    bottom: 0,
+    cursor: 'default',
+    display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    position: 'absolute',
+    textAlign: 'center',
+    width: '100%',
+    zIndex: 50,
+  }),
+);
 
 /**
  * Represents the viewer controls in the mirador workspace.
  */
-export const WindowCanvasNavigationControls = forwardRef(({
-  showZoomControls = false, visible = true, windowId, zoomToWorld, ...rest
-}, ref) => {
-  const [sizeRef, size] = useElementSize();
+export const WindowCanvasNavigationControls = forwardRef(
+  ({ showZoomControls = false, visible = true, windowId, zoomToWorld, ...rest }, ref) => {
+    const [sizeRef, size] = useElementSize();
 
-  const pluginProps = {
-    showZoomControls, size, visible, windowId, ...rest,
-  };
-  /**
-   * Determine if canvasNavControls are stacked (based on a hard-coded width)
-  */
-  const canvasNavControlsAreStacked = (size && size.width && size.width <= 253);
+    const pluginProps = {
+      showZoomControls,
+      size,
+      visible,
+      windowId,
+      ...rest,
+    };
+    /**
+     * Determine if canvasNavControls are stacked (based on a hard-coded width)
+     */
+    const canvasNavControlsAreStacked = size && size.width && size.width <= 253;
 
-  if (!visible) return (<Typography style={visuallyHidden} component="div"><ViewerInfo windowId={windowId} /></Typography>);
+    if (!visible)
+      return (
+        <Typography style={visuallyHidden} component="div">
+          <ViewerInfo windowId={windowId} />
+        </Typography>
+      );
 
-  return (
-    <Root
-      square
-      className={
-        classNames(
+    return (
+      <Root
+        square
+        className={classNames(
           ns('canvas-nav'),
           canvasNavControlsAreStacked ? ns('canvas-nav-stacked') : null,
-        )
-      }
-      elevation={0}
-      ref={mergeRefs(ref, sizeRef)}
-    >
-      <Stack
-        direction={canvasNavControlsAreStacked ? 'column' : 'row'}
-        divider={<Divider orientation={canvasNavControlsAreStacked ? 'horizontal' : 'vertical'} variant="middle" flexItem />}
-        spacing={0}
+        )}
+        elevation={0}
+        ref={mergeRefs(ref, sizeRef)}
       >
-        { showZoomControls && <ZoomControls windowId={windowId} zoomToWorld={zoomToWorld} /> }
-        <ViewerNavigation windowId={windowId} />
-      </Stack>
-      <ViewerInfo windowId={windowId} />
+        <Stack
+          direction={canvasNavControlsAreStacked ? 'column' : 'row'}
+          divider={
+            <Divider
+              orientation={canvasNavControlsAreStacked ? 'horizontal' : 'vertical'}
+              variant="middle"
+              flexItem
+            />
+          }
+          spacing={0}
+        >
+          {showZoomControls && <ZoomControls windowId={windowId} zoomToWorld={zoomToWorld} />}
+          <ViewerNavigation windowId={windowId} />
+        </Stack>
+        <ViewerInfo windowId={windowId} />
 
-      <PluginHook targetName="WindowCanvasNavigationControls" {...pluginProps} />
-    </Root>
-  );
-});
+        <PluginHook targetName="WindowCanvasNavigationControls" {...pluginProps} />
+      </Root>
+    );
+  },
+);
 
 WindowCanvasNavigationControls.propTypes = {
   showZoomControls: PropTypes.bool,

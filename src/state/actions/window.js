@@ -24,7 +24,10 @@ export function focusWindow(windowId, pan = false) {
  */
 export function addWindow({ companionWindows, manifest, ...options }) {
   return (dispatch, getState) => {
-    const { config, workspace: { windowIds = [] } } = miradorSlice(getState());
+    const {
+      config,
+      workspace: { windowIds = [] },
+    } = miradorSlice(getState());
     const numWindows = windowIds.length;
 
     const windowId = options.id || `window-${uuid()}`;
@@ -35,36 +38,32 @@ export function addWindow({ companionWindows, manifest, ...options }) {
         content: 'thumbnailNavigation',
         default: true,
         id: cwThumbs,
-        position: options.thumbnailNavigationPosition
-          || config.thumbnailNavigation.defaultPosition,
+        position: options.thumbnailNavigationPosition || config.thumbnailNavigation.defaultPosition,
         windowId,
       },
-      ...(
-        (companionWindows || []).map((cw, i) => ({ ...cw, id: `cw-${uuid()}` }))
-      ),
+      ...(companionWindows || []).map((cw, i) => ({ ...cw, id: `cw-${uuid()}` })),
     ];
 
     if (options.sideBarPanel || config.window.defaultSideBarPanel || config.window.sideBarPanel) {
-      defaultCompanionWindows.unshift(
-        {
-          content: options.sideBarPanel
-            || (options.defaultSearchQuery && 'search')
-            || config.window.defaultSideBarPanel
-            || config.window.sideBarPanel,
+      defaultCompanionWindows.unshift({
+        content:
+          options.sideBarPanel ||
+          (options.defaultSearchQuery && 'search') ||
+          config.window.defaultSideBarPanel ||
+          config.window.sideBarPanel,
 
-          default: true,
-          id: `cw-${uuid()}`,
-          position: 'left',
-          windowId,
-        },
-      );
+        default: true,
+        id: `cw-${uuid()}`,
+        position: 'left',
+        windowId,
+      });
     }
 
     const defaultOptions = {
       canvasId: undefined,
       collectionIndex: 0,
       companionAreaOpen: true,
-      companionWindowIds: defaultCompanionWindows.map(cw => cw.id),
+      companionWindowIds: defaultCompanionWindows.map((cw) => cw.id),
       draggingEnabled: true,
       highlightAllAnnotations: config.window.highlightAllAnnotations || false,
       id: windowId,
@@ -73,18 +72,18 @@ export function addWindow({ companionWindows, manifest, ...options }) {
       rangeId: null,
       rotation: null,
       selectedAnnotations: {},
-      sideBarOpen: config.window.sideBarOpenByDefault !== undefined
-        ? config.window.sideBarOpenByDefault || !!options.defaultSearchQuery
-        : config.window.sideBarOpen || !!options.defaultSearchQuery,
-      sideBarPanel: options.sideBarPanel
-        || config.window.defaultSideBarPanel
-        || config.window.sideBarPanel,
+      sideBarOpen:
+        config.window.sideBarOpenByDefault !== undefined
+          ? config.window.sideBarOpenByDefault || !!options.defaultSearchQuery
+          : config.window.sideBarOpen || !!options.defaultSearchQuery,
+      sideBarPanel:
+        options.sideBarPanel || config.window.defaultSideBarPanel || config.window.sideBarPanel,
       thumbnailNavigationId: cwThumbs,
     };
 
     const elasticLayout = {
       ...(config.window.elastic || { height: 400, width: 480 }),
-      x: 200 + (Math.floor(numWindows / 10) * 50 + (numWindows * 30) % 300),
+      x: 200 + (Math.floor(numWindows / 10) * 50 + ((numWindows * 30) % 300)),
       y: 200 + ((numWindows * 50) % 300),
     };
 

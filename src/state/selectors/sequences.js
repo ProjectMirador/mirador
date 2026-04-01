@@ -1,8 +1,6 @@
 import { createSelector } from 'reselect';
 import { TreeNode } from 'manifesto.js';
-import {
-  getManifestoInstance,
-} from './manifests';
+import { getManifestoInstance } from './manifests';
 import { getWindow } from './getters';
 
 /**
@@ -12,29 +10,26 @@ import { getWindow } from './getters';
  * @param {string} props.windowId
  * @returns {Array}
  */
-export const getSequences = createSelector(
-  [getManifestoInstance],
-  (manifest) => {
-    if (!manifest || !manifest.getTopRanges) return null;
+export const getSequences = createSelector([getManifestoInstance], (manifest) => {
+  if (!manifest || !manifest.getTopRanges) return null;
 
-    const topRangesOrRoot = manifest.getTopRanges();
-    const v2TopRanges = topRangesOrRoot.filter(r => r.getProperty('viewingHint') === 'top');
-    let v3RangeSequences = [];
+  const topRangesOrRoot = manifest.getTopRanges();
+  const v2TopRanges = topRangesOrRoot.filter((r) => r.getProperty('viewingHint') === 'top');
+  let v3RangeSequences = [];
 
-    if (v2TopRanges.length === 0 && topRangesOrRoot.length === 1) {
-      v3RangeSequences = topRangesOrRoot[0].getRanges().filter(r => r.getBehavior() === 'sequence');
-    }
+  if (v2TopRanges.length === 0 && topRangesOrRoot.length === 1) {
+    v3RangeSequences = topRangesOrRoot[0].getRanges().filter((r) => r.getBehavior() === 'sequence');
+  }
 
-    const sequences = [].concat(
-      // v2: multi-sequence manifests, or v3: items
-      manifest.getSequences(),
-      // v3: all top-level ranges with behavior=sequence
-      v3RangeSequences,
-    );
+  const sequences = [].concat(
+    // v2: multi-sequence manifests, or v3: items
+    manifest.getSequences(),
+    // v3: all top-level ranges with behavior=sequence
+    v3RangeSequences,
+  );
 
-    return sequences;
-  },
-);
+  return sequences;
+});
 
 /**
  * Returns the sequence for a given windowId
@@ -44,16 +39,12 @@ export const getSequences = createSelector(
  * @returns {Array}
  */
 export const getSequence = createSelector(
-  [
-    getSequences,
-    getWindow,
-    (state, { sequenceId }) => sequenceId,
-  ],
+  [getSequences, getWindow, (state, { sequenceId }) => sequenceId],
   (sequences, window, sequenceId) => {
     if (!sequences) return null;
 
     if (sequenceId || (window && window.sequenceId)) {
-      const currentSequence = sequences.find(s => s.id === (sequenceId || window.sequenceId));
+      const currentSequence = sequences.find((s) => s.id === (sequenceId || window.sequenceId));
 
       if (currentSequence) return currentSequence;
     }
@@ -69,14 +60,10 @@ export const getSequence = createSelector(
  * @returns {number}
  */
 export const getCanvasIndex = createSelector(
-  [
-    getWindow,
-    getSequence,
-  ],
-  (window, sequence) => (
-    (sequence && window && window.canvasId
-      && sequence.getCanvasById(window.canvasId))
-    || {}).index || 0,
+  [getWindow, getSequence],
+  (window, sequence) =>
+    ((sequence && window && window.canvasId && sequence.getCanvasById(window.canvasId)) || {})
+      .index || 0,
 );
 
 /**
@@ -91,8 +78,7 @@ export const getSequenceViewingHint = createSelector(
   [getSequence, getManifestoInstance],
   (sequence, manifest) => {
     if (!manifest) return null;
-    const viewingHint = (sequence && sequence.getViewingHint())
-      || manifest.getViewingHint();
+    const viewingHint = (sequence && sequence.getViewingHint()) || manifest.getViewingHint();
     if (viewingHint) return viewingHint;
     return null;
   },
@@ -106,9 +92,10 @@ export const getSequenceViewingHint = createSelector(
 export const getSequenceViewingDirection = createSelector(
   [getWindow, getSequence, getManifestoInstance],
   (window, sequence, manifest) => {
-    const viewingDirection = (window && window.viewingDirection)
-      || (sequence && sequence.getViewingDirection())
-      || (manifest && manifest.getViewingDirection());
+    const viewingDirection =
+      (window && window.viewingDirection) ||
+      (sequence && sequence.getViewingDirection()) ||
+      (manifest && manifest.getViewingDirection());
     if (viewingDirection) return viewingDirection;
     return null;
   },
@@ -151,7 +138,8 @@ export const getSequenceBehaviors = createSelector(
 export const getSequenceTreeStructure = createSelector(
   [getSequence, getManifestoInstance],
   (sequence, manifest) => {
-    if (sequence && sequence.getProperty('type') && sequence.isRange()) return sequence.getTree(new TreeNode('root'));
+    if (sequence && sequence.getProperty('type') && sequence.isRange())
+      return sequence.getTree(new TreeNode('root'));
 
     return manifest && manifest.getDefaultTree();
   },

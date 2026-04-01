@@ -1,6 +1,4 @@
-import {
-  render, screen, fireEvent, waitFor,
-} from '@tests/utils/test-utils';
+import { render, screen, fireEvent, waitFor } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -15,15 +13,19 @@ function createWrapper(props) {
     <DndProvider backend={HTML5Backend}>
       <WorkspaceAdd
         setWorkspaceAddVisibility={() => {}}
-        catalog={[
-          { manifestId: 'bar' },
-          { manifestId: 'foo' },
-        ]}
+        catalog={[{ manifestId: 'bar' }, { manifestId: 'foo' }]}
         classes={{}}
         {...props}
       />
     </DndProvider>,
-    { preloadedState: { manifests: { bar: { id: 'bar', isFetching: false, json: manifestFixture001 }, foo: { id: 'foo', isFetching: false, json: manifestFixture002 } } } },
+    {
+      preloadedState: {
+        manifests: {
+          bar: { id: 'bar', isFetching: false, json: manifestFixture001 },
+          foo: { id: 'foo', isFetching: false, json: manifestFixture002 },
+        },
+      },
+    },
   );
 }
 
@@ -37,7 +39,9 @@ describe('WorkspaceAdd', () => {
   it('focuses on the first manifest item', () => {
     createWrapper();
 
-    expect(screen.getByRole('button', { name: 'Bodleian Library Human Freaks 2 (33)' })).toHaveFocus();
+    expect(
+      screen.getByRole('button', { name: 'Bodleian Library Human Freaks 2 (33)' }),
+    ).toHaveFocus();
   });
 
   it('without manifests, renders an empty message', () => {
@@ -92,7 +96,10 @@ describe('WorkspaceAdd', () => {
 
     const scrollTo = vi.fn();
 
-    vi.spyOn(container.querySelector('.mirador-workspace-add'), 'scrollTo').mockImplementation(scrollTo); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+    vi.spyOn(container.querySelector('.mirador-workspace-add'), 'scrollTo').mockImplementation(
+      scrollTo,
+    );
 
     await user.click(screen.getByRole('button', { name: 'Add resource' }));
 
@@ -134,7 +141,13 @@ describe('WorkspaceAdd', () => {
       fireEvent.dragOver(dropTarget, { dataTransfer });
       fireEvent.drop(dropTarget, { dataTransfer });
 
-      await waitFor(() => expect(addResource).toHaveBeenCalledWith(expect.stringMatching(/^[0-9a-f-]+$/), manifestJson, { provider: 'file' }));
+      await waitFor(() =>
+        expect(addResource).toHaveBeenCalledWith(
+          expect.stringMatching(/^[0-9a-f-]+$/),
+          manifestJson,
+          { provider: 'file' },
+        ),
+      );
     });
 
     it('adds a new catalog entry from a IIIF drag and drop icon', () => {

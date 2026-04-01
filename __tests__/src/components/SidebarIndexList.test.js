@@ -41,7 +41,8 @@ describe('SidebarIndexList', () => {
     expect(screen.getByRole('menuitem', { name: 'Image 1' })).toBeInTheDocument();
     expect(screen.getByRole('menuitem', { name: 'Image 2' })).toBeInTheDocument();
 
-    expect(container.querySelectorAll('img').length).toBe(3); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelectorAll('img').length).toBe(3);
 
     expect(screen.getByRole('menuitem', { name: 'Image 1' })).toHaveClass('Mui-selected');
   });
@@ -58,6 +59,9 @@ describe('SidebarIndexList', () => {
     createWrapper({ setCanvas });
     await user.click(screen.getByRole('menuitem', { name: 'Image 2' }));
 
-    expect(setCanvas).toHaveBeenCalledWith('xyz', 'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1');
+    expect(setCanvas).toHaveBeenCalledWith(
+      'xyz',
+      'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
+    );
   });
 });

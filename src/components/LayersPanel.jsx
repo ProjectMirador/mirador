@@ -6,16 +6,10 @@ import CanvasLayers from '../containers/CanvasLayers';
 /**
  * a panel showing the canvases for a given manifest
  */
-export function LayersPanel({
-  canvasIds = [], id, windowId,
-}) {
+export function LayersPanel({ canvasIds = [], id, windowId }) {
   const { t } = useTranslation();
   return (
-    <CompanionWindow
-      title={t('layers')}
-      id={id}
-      windowId={windowId}
-    >
+    <CompanionWindow title={t('layers')} id={id} windowId={windowId}>
       {canvasIds.map((canvasId, index) => (
         <CanvasLayers
           canvasId={canvasId}

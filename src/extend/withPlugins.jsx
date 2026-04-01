@@ -35,7 +35,9 @@ function _withPlugins(targetName, TargetComponent) {
       );
     };
 
-    return plugins.wrap.slice().reverse()
+    return plugins.wrap
+      .slice()
+      .reverse()
       .reduce(pluginWrapper, <TargetComponent {...passDownProps} />);
   }
   const whatever = forwardRef(PluginHoc);

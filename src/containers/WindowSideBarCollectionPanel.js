@@ -22,8 +22,8 @@ const mapStateToProps = (state, { id, windowId }) => {
   const collectionId = collectionPath && collectionPath[collectionPath.length - 1];
   const parentCollectionId = collectionPath && collectionPath[collectionPath.length - 2];
   const collection = collectionId && getManifest(state, { manifestId: collectionId });
-  const parentCollection = parentCollectionId
-    && getManifest(state, { manifestId: parentCollectionId });
+  const parentCollection =
+    parentCollectionId && getManifest(state, { manifestId: parentCollectionId });
   const manifest = getManifest(state, { windowId });
 
   return {
@@ -34,11 +34,10 @@ const mapStateToProps = (state, { id, windowId }) => {
     error: collection && collection.error,
     isFetching: collection && collection.isFetching,
     manifestId: manifest && manifest.id,
-    parentCollection: parentCollection
-      && getManifestoInstance(state, { manifestId: parentCollection.id }),
+    parentCollection:
+      parentCollection && getManifestoInstance(state, { manifestId: parentCollection.id }),
     ready: collection && !!collection.json,
-    variant: companionWindow.variant
-      || getDefaultSidebarVariant(state, { windowId }),
+    variant: companionWindow.variant || getDefaultSidebarVariant(state, { windowId }),
   };
 };
 
@@ -48,9 +47,8 @@ const mapStateToProps = (state, { id, windowId }) => {
  * @private
  */
 const mapDispatchToProps = (dispatch, { id, windowId }) => ({
-  updateCompanionWindow: (...args) => dispatch(
-    actions.updateCompanionWindow(windowId, id, ...args),
-  ),
+  updateCompanionWindow: (...args) =>
+    dispatch(actions.updateCompanionWindow(windowId, id, ...args)),
   updateWindow: (...args) => dispatch(actions.updateWindow(windowId, ...args)),
 });
 

@@ -6,7 +6,7 @@ import WorkspaceOptionsMenu from '../containers/WorkspaceOptionsMenu';
 
 /**
  * WorkspaceOptionsButton ~
-*/
+ */
 export function WorkspaceOptionsButton() {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -33,11 +33,7 @@ export function WorkspaceOptionsButton() {
       >
         <MoreHorizontalIcon />
       </MiradorMenuButton>
-      <WorkspaceOptionsMenu
-        anchorEl={anchorEl}
-        handleClose={handleMenuClose}
-        open={open}
-      />
+      <WorkspaceOptionsMenu anchorEl={anchorEl} handleClose={handleMenuClose} open={open} />
     </>
   );
 }

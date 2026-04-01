@@ -14,10 +14,8 @@ function usePrevious(value) {
 
 /**
  * ScrollTo ~
-*/
-export function ScrollTo({
-  children, containerRef, offsetTop = 0, scrollTo, ...otherProps
-}) {
+ */
+export function ScrollTo({ children, containerRef, offsetTop = 0, scrollTo, ...otherProps }) {
   const scrollToRef = useRef();
   const prevScrollTo = usePrevious(scrollTo);
 
@@ -27,15 +25,18 @@ export function ScrollTo({
     const elementToScrollTo = scrollToRef?.current;
     if (!elementToScrollTo) return;
 
-    const scrollableContainer = containerRef?.current?.querySelector(`.${ns('scrollto-scrollable')}`);
+    const scrollableContainer = containerRef?.current?.querySelector(
+      `.${ns('scrollto-scrollable')}`,
+    );
     if (!scrollableContainer) return;
 
     const containerBoundingRect = containerRef?.current?.getBoundingClientRect() || {};
     const scrollToBoundingRect = elementToScrollTo?.getBoundingClientRect() || {};
     const elementIsVisible = (() => {
-      if (scrollToBoundingRect.top < (containerBoundingRect.top + offsetTop)) {
+      if (scrollToBoundingRect.top < containerBoundingRect.top + offsetTop) {
         return false;
-      } if (scrollToBoundingRect.bottom > containerBoundingRect.bottom) {
+      }
+      if (scrollToBoundingRect.bottom > containerBoundingRect.bottom) {
         return false;
       }
 
@@ -44,7 +45,7 @@ export function ScrollTo({
 
     if (elementIsVisible) return;
 
-    const scrollBy = elementToScrollTo.offsetTop - (containerBoundingRect.height / 2) + offsetTop;
+    const scrollBy = elementToScrollTo.offsetTop - containerBoundingRect.height / 2 + offsetTop;
 
     scrollableContainer.scrollTo(0, scrollBy);
   }, [containerRef, scrollToRef, scrollTo, prevScrollTo, offsetTop]);

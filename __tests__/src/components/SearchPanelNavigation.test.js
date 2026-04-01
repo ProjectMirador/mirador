@@ -7,12 +7,7 @@ import { SearchPanelNavigation } from '../../../src/components/SearchPanelNaviga
  */
 function createWrapper(props) {
   return render(
-    <SearchPanelNavigation
-      companionWindowId="cw"
-      direction="ltr"
-      windowId="window"
-      {...props}
-    />,
+    <SearchPanelNavigation companionWindowId="cw" direction="ltr" windowId="window" {...props} />,
   );
 }
 

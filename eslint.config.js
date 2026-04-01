@@ -66,7 +66,7 @@ export default [
       'consistent-return': 'error',
       'default-case': ['error', { commentPattern: '^no default$' }],
       'dot-notation': ['error', { allowKeywords: true }],
-      'eqeqeq': ['warn', 'smart'],
+      eqeqeq: ['warn', 'smart'],
       'import/extensions': ['error', 'ignorePackages', { js: 'never', jsx: 'never' }],
       'import/first': 'error',
       'import/newline-after-import': ['error', { count: 1 }],
@@ -88,7 +88,7 @@ export default [
       'no-lonely-if': 'error',
       'no-nested-ternary': 'warn',
       'no-new-func': 'error',
-      'no-param-reassign': ['error', { props: true}],
+      'no-param-reassign': ['error', { props: true }],
       'no-restricted-globals': [
         'error',
         { name: 'isFinite', message: 'Use Number.isFinite instead' },
@@ -105,10 +105,16 @@ export default [
       'no-useless-return': 'error',
       'no-var': 'error',
       'prefer-const': 'error',
-      'prefer-destructuring': ['warn', { VariableDeclarator: { array: false, object: true }, AssignmentExpression: { array: false, object: false } }],
+      'prefer-destructuring': [
+        'warn',
+        {
+          VariableDeclarator: { array: false, object: true },
+          AssignmentExpression: { array: false, object: false },
+        },
+      ],
       'prefer-rest-params': 'error',
       'prefer-template': 'warn',
-      'radix': 'error',
+      radix: 'error',
       'react-hooks/exhaustive-deps': 'error',
       'react/function-component-definition': 'off',
       'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
@@ -126,7 +132,10 @@ export default [
       'testing-library/no-await-sync-queries': 'error',
       'testing-library/no-debugging-utils': 'warn',
       'testing-library/no-dom-import': 'off',
-      'testing-library/no-render-in-lifecycle': ['error', { allowTestingFrameworkSetupHook: 'beforeEach' }],
+      'testing-library/no-render-in-lifecycle': [
+        'error',
+        { allowTestingFrameworkSetupHook: 'beforeEach' },
+      ],
       'testing-library/render-result-naming-convention': 'off',
     },
 

@@ -15,22 +15,29 @@ const getOverlayAlpha = (elevation) => {
   return (alphaValue / 100).toFixed(2);
 };
 
-const Root = styled(DialogContent, { name: 'ScrollIndicatedDialogContent', slot: 'root' })(({ ownerState, theme }) => {
+const Root = styled(DialogContent, { name: 'ScrollIndicatedDialogContent', slot: 'root' })(({
+  ownerState,
+  theme,
+}) => {
   // In dark mode, paper has a elevation-dependent background color:
   // https://github.com/mui/material-ui/blob/v5.15.0/packages/mui-material/src/Paper/Paper.js#L55-L60
-  const bgcolor = theme.palette.mode === 'dark' ? {
-    backgroundImage: `linear-gradient(${alpha(
-      '#fff',
-      getOverlayAlpha(ownerState?.elevation || 24),
-    )}, ${alpha('#fff', getOverlayAlpha(ownerState?.elevation || 24))})`,
-  } : theme.palette.background.paper;
+  const bgcolor =
+    theme.palette.mode === 'dark'
+      ? {
+          backgroundImage: `linear-gradient(${alpha(
+            '#fff',
+            getOverlayAlpha(ownerState?.elevation || 24),
+          )}, ${alpha('#fff', getOverlayAlpha(ownerState?.elevation || 24))})`,
+        }
+      : theme.palette.background.paper;
   return {
     /* Shadow covers */
-    background: `linear-gradient(${bgcolor} 30%, rgba(255, 255, 255, 0)), `
-      + `linear-gradient(rgba(255, 255, 255, 0), ${bgcolor} 70%) 0 100%, `
+    background:
+      `linear-gradient(${bgcolor} 30%, rgba(255, 255, 255, 0)), ` +
+      `linear-gradient(rgba(255, 255, 255, 0), ${bgcolor} 70%) 0 100%, ` +
       // Shadows
-      + 'radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), '
-      + 'radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;',
+      'radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)), ' +
+      'radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;',
     backgroundAttachment: 'local, local, scroll, scroll',
     backgroundRepeat: 'no-repeat',
     backgroundSize: '100% 40px, 100% 40px, 100% 14px, 100% 14px',
@@ -41,16 +48,11 @@ const Root = styled(DialogContent, { name: 'ScrollIndicatedDialogContent', slot:
 /**
  * ScrollIndicatedDialogContent ~ Inject a style into the DialogContent component
  *                                to indicate there is scrollable content
-*/
+ */
 export function ScrollIndicatedDialogContent({ classes = {}, className = '', ...otherProps }) {
   const ourClassName = [className, classes.shadowScrollDialog].join(' ');
 
-  return (
-    <Root
-      className={ourClassName}
-      {...otherProps}
-    />
-  );
+  return <Root className={ourClassName} {...otherProps} />;
 }
 
 ScrollIndicatedDialogContent.propTypes = {
