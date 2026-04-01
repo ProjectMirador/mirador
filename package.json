@@ -114,7 +114,7 @@
     "redux-mock-store": "^1.5.1",
     "redux-saga-test-plan": "^4.0.0-rc.3",
     "vite": "^7.3.1",
-    "vitest": "^3.0.5",
+    "vitest": "^4.1.2",
     "vitest-fetch-mock": "^0.4.2"
   },
   "peerDependencies": {
