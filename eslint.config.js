@@ -75,7 +75,7 @@ export default [
       'import/no-duplicates': 'error',
       'import/no-extraneous-dependencies': 'off',
       'import/no-mutable-exports': 'error',
-      'import/no-unresolved': [2, { ignore: ['test-utils', '@vitejs/plugin-react'] }],
+      'import/no-unresolved': [2, { ignore: ['test-utils', '@vitejs/plugin-react', 'vite'] }],
       'import/prefer-default-export': 'off',
       'max-depth': ['warn', 4],
       'max-params': ['warn', 5],
