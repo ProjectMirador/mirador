@@ -1,8 +1,7 @@
 import { useCallback, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@mui/material/Paper';
-import AutoSizer from 'react-virtualized-auto-sizer';
-import { VariableSizeList as List } from 'react-window';
+import { List, Grid } from 'react-window';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useCanvasWorldService } from '../hooks';
@@ -11,12 +10,21 @@ import ns from '../config/css-ns';
 /**
  */
 export function ThumbnailNavigation({
-  canvasGroupings, canvasIndex, hasNextCanvas = false, hasPreviousCanvas = false, position,
-  setNextCanvas = () => {}, setPreviousCanvas = () => {}, thumbnailNavigation, view = undefined, viewingDirection = '', windowId,
+  canvasGroupings,
+  canvasIndex,
+  hasNextCanvas = false,
+  hasPreviousCanvas = false,
+  position,
+  setNextCanvas = () => {},
+  setPreviousCanvas = () => {},
+  thumbnailNavigation,
+  view = undefined,
+  viewingDirection = '',
+  windowId,
 }) {
   const { t } = useTranslation();
   const scrollbarSize = 15;
-  const spacing = 8; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
+  const spacing = 12; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
   const gridRef = useRef();
   const previousView = useRef(view);
   const canvasWorlds = useCanvasWorldService();
@@ -24,15 +32,31 @@ export function ThumbnailNavigation({
   useEffect(() => {
     if (previousView.current !== view && position !== 'off') {
       previousView.current = view;
-      gridRef.current.resetAfterIndex(0);
+      // Note: resetAfterIndex is not available in react-window v2 List API
+      // The list will re-render automatically when rowHeight function changes
     }
   }, [view, position]);
 
   useEffect(() => {
     let index = canvasIndex;
     if (view === 'book') index = Math.ceil(index / 2);
-    gridRef.current?.scrollToItem(index, 'center');
-  }, [canvasIndex, view]);
+    // Only scroll if the index is valid
+    if (gridRef.current && index >= 0 && index < canvasGroupings.length) {
+      // For horizontal Grid, scroll to column; for vertical List, scroll to row
+      if (position === 'far-bottom') {
+        // react-window Grid API in v2
+        gridRef.current.scrollToCell({
+          columnIndex: index,
+          rowIndex: 0,
+          columnAlign: 'center',
+          rowAlign: 'center',
+        });
+      } else {
+        // react-window List API in v2
+        gridRef.current.scrollToRow({ index, align: 'center' });
+      }
+    }
+  }, [canvasIndex, view, canvasGroupings.length, position]);
 
   // Prevent loss of focus when navigating thumbnails
   const paperRef = useRef(null);
@@ -76,7 +100,7 @@ export function ThumbnailNavigation({
     switch (position) {
       case 'far-right': {
         const calc = Math.floor(
-          calculatingWidth(canvases.length) * bounds[3] / bounds[2],
+          calculatingWidth(canvases.length) * bounds[3] / bounds[2]
         );
         if (!Number.isInteger(calc)) return thumbnailNavigation.width + spacing;
         return calc + spacing;
@@ -121,20 +145,6 @@ export function ThumbnailNavigation({
     }
   }, [position, thumbnailNavigation, view]);
 
-  /** */
-  const areaHeight = (height) => {
-    switch (position) {
-      case 'far-right':
-        return height;
-      // Default case bottom
-      default:
-        return thumbnailNavigation.height;
-    }
-  };
-
-  /** */
-  const itemCount = () => canvasGroupings.length;
-
   /**
    */
   const nextCanvas = () => {
@@ -151,7 +161,7 @@ export function ThumbnailNavigation({
     return null;
   }
   const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
-  const itemData = {
+  const rowData = {
     canvasGroupings,
     height: thumbnailNavigation.height - spacing - scrollbarSize,
     position,
@@ -174,31 +184,39 @@ export function ThumbnailNavigation({
       style={style()}
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      role="grid"
       ref={paperRef}
     >
-      <div role="row" style={{ height: '100%', width: '100%' }}>
-        { canvasGroupings.length > 0 && (
-        <AutoSizer
-          defaultHeight={100}
-          defaultWidth={400}
-        >
-          {({ height, width }) => (
-            <List
-              direction={htmlDir}
-              height={areaHeight(height)}
-              itemCount={itemCount()}
-              itemSize={calculateScaledSize}
-              width={width}
-              layout={(position === 'far-bottom') ? 'horizontal' : 'vertical'}
-              itemData={itemData}
-              ref={gridRef}
-              itemKey={(index) => index}
-            >
-              {ThumbnailCanvasGrouping}
-            </List>
-          )}
-        </AutoSizer>
+      <div style={{ height: '100%', width: '100%' }}>
+        {canvasGroupings.length > 0 && position === 'far-bottom' && (
+          <Grid
+            columnCount={canvasGroupings.length}
+            columnWidth={calculateScaledSize}
+            rowCount={1}
+            rowHeight={() => thumbnailNavigation.height - spacing - scrollbarSize}
+            height={thumbnailNavigation.height}
+            width="100%"
+            style={{
+              direction: htmlDir === 'rtl' ? 'rtl' : 'ltr',
+            }}
+            cellProps={rowData}
+            gridRef={gridRef}
+            cellComponent={ThumbnailCanvasGrouping}
+          />
+        )}
+        {canvasGroupings.length > 0 && position === 'far-right' && (
+          <List
+            defaultHeight={100}
+            rowCount={canvasGroupings.length}
+            rowHeight={calculateScaledSize}
+            style={{
+              direction: htmlDir === 'rtl' ? 'rtl' : 'ltr',
+              height: '100%',
+              width: '100%',
+            }}
+            rowProps={rowData}
+            listRef={gridRef}
+            rowComponent={ThumbnailCanvasGrouping}
+          />
         )}
       </div>
     </Paper>

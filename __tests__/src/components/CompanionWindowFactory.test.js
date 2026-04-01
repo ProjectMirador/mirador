@@ -62,7 +62,7 @@ describe('CompanionWindowFactory', () => {
         content: 'thumbnailNavigation',
       });
 
-      expect(screen.getByRole('grid')).toHaveAccessibleName('Thumbnails');
+      expect(screen.getByLabelText('Thumbnails')).toBeInTheDocument();
     });
   });
 
