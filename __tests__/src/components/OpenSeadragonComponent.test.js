@@ -13,26 +13,28 @@ describe('OpenSeadragonComponent', () => {
     fitBoundsWithConstraints = vi.fn();
 
     // Mock methods used in the component
-    OpenSeadragon.mockImplementation(() => ({
-      addHandler: vi.fn(),
-      addOnceHandler,
-      canvas: {},
-      destroy: vi.fn(),
-      innerTracker: {},
-      removeAllHandlers: vi.fn(),
-      viewport: {
-        centerSpringX: { target: { value: 0 } },
-        centerSpringY: { target: { value: 0 } },
-        fitBounds: vi.fn(),
-        fitBoundsWithConstraints,
-        zoomSpring: { target: { value: 1 } },
-      },
-      world: { addOnceHandler },
-    }));
+    OpenSeadragon.mockImplementation(function () {
+      return {
+        addHandler: vi.fn(),
+        addOnceHandler,
+        canvas: {},
+        destroy: vi.fn(),
+        innerTracker: {},
+        removeAllHandlers: vi.fn(),
+        viewport: {
+          centerSpringX: { target: { value: 0 } },
+          centerSpringY: { target: { value: 0 } },
+          fitBounds: vi.fn(),
+          fitBoundsWithConstraints,
+          zoomSpring: { target: { value: 1 } },
+        },
+        world: { addOnceHandler },
+      };
+    });
 
-    OpenSeadragon.Rect = vi.fn((x, y, width, height) => ({
-      height, width, x, y,
-    }));
+    OpenSeadragon.Rect = vi.fn(function (x, y, width, height) {
+      return { height, width, x, y };
+    });
   });
 
   /**
@@ -53,9 +55,7 @@ describe('OpenSeadragonComponent', () => {
    * @returns {object} Render result
    */
   function renderAndInitialize(bounds = [0, 0, 5000, 3000]) {
-    const result = render(
-      <OpenSeadragonComponent windowId="test" viewerConfig={{ bounds }} />,
-    );
+    const result = render(<OpenSeadragonComponent windowId="test" viewerConfig={{ bounds }} />);
 
     // Component registers a 'tile-loaded' handler during mount to set initial viewport
     invokeTileLoadedHandler();
