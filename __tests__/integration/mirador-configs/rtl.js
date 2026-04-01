@@ -10,8 +10,7 @@ export const rtl1 = {
   },
   windows: [
     {
-      manifestId:
-        'https://iiif.bodleian.ox.ac.uk/iiif/manifest/e800b13a-6699-49ae-9bc2-c9b8c35b7a25.json',
+      manifestId: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/e800b13a-6699-49ae-9bc2-c9b8c35b7a25.json',
     },
   ],
 };

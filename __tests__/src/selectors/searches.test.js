@@ -145,21 +145,15 @@ describe('getSortedSearchHitsForCompanionWindow', () => {
         },
       },
     };
-    expect(
-      getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'a' }),
-    ).toEqual([
+    expect(getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'a' })).toEqual([
       { annotations: ['http://example.com/iiif/canvas1'], id: 2 },
       { annotations: ['http://example.com/iiif/canvas1'], id: 5 },
       { annotations: ['http://example.com/iiif/canvas2'], id: 3 },
       { annotations: ['http://example.com/iiif/canvas3'], id: 1 },
       { annotations: ['http://example.com/iiif/canvas3'], id: 4 },
     ]);
-    expect(
-      getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'b' }),
-    ).toEqual([]);
-    expect(getSortedSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' })).toEqual(
-      [],
-    );
+    expect(getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'b' })).toEqual([]);
+    expect(getSortedSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' })).toEqual([]);
   });
 });
 
@@ -186,11 +180,7 @@ describe('getSortedSearchAnnotationsForCompanionWindow', () => {
       },
     };
 
-    expect(
-      getSortedSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId: 'a' }).map(
-        (r) => r.id,
-      ),
-    ).toEqual([
+    expect(getSortedSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId: 'a' }).map((r) => r.id)).toEqual([
       'http://example.com/iiif/canvas1',
       'http://example.com/iiif/canvas2',
       'http://example.com/iiif/canvas3',
@@ -254,9 +244,7 @@ describe('getSelectedContentSearchAnnotationIds', () => {
       },
     };
 
-    expect(
-      getSelectedContentSearchAnnotationIds(state, { companionWindowId: 'bar', windowId: 'foo' }),
-    ).toEqual(['baz']);
+    expect(getSelectedContentSearchAnnotationIds(state, { companionWindowId: 'bar', windowId: 'foo' })).toEqual(['baz']);
 
     expect(getSelectedContentSearchAnnotationIds(state, { windowId: 'baz' })).toEqual([]);
   });

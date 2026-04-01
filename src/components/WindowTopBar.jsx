@@ -20,19 +20,17 @@ const Root = styled(AppBar, { name: 'WindowTopBar', slot: 'root' })(() => ({
   zIndex: 1100,
 }));
 
-const StyledToolbar = styled(Toolbar, { name: 'WindowTopBar', slot: 'toolbar' })(
-  ({ ownerState, theme }) => ({
-    backgroundColor: theme.palette.shades?.main,
-    borderTop: '2px solid',
-    borderTopColor: ownerState?.focused ? theme.palette.primary.main : 'transparent',
-    minHeight: 32,
-    paddingLeft: theme.spacing(0.5),
-    paddingRight: theme.spacing(0.5),
-    ...(ownerState?.windowDraggable && {
-      cursor: 'move',
-    }),
+const StyledToolbar = styled(Toolbar, { name: 'WindowTopBar', slot: 'toolbar' })(({ ownerState, theme }) => ({
+  backgroundColor: theme.palette.shades?.main,
+  borderTop: '2px solid',
+  borderTopColor: ownerState?.focused ? theme.palette.primary.main : 'transparent',
+  minHeight: 32,
+  paddingLeft: theme.spacing(0.5),
+  paddingRight: theme.spacing(0.5),
+  ...(ownerState?.windowDraggable && {
+    cursor: 'move',
   }),
-);
+}));
 
 /**
  * WindowTopBar
@@ -57,13 +55,7 @@ export function WindowTopBar({
   const ownerState = arguments[0];
 
   return (
-    <Root
-      component={component}
-      aria-label={t('windowNavigation')}
-      position="relative"
-      color="default"
-      enableColorOnDark
-    >
+    <Root component={component} aria-label={t('windowNavigation')} position="relative" color="default" enableColorOnDark>
       <StyledToolbar
         disableGutters
         onMouseDown={focusWindow}
@@ -81,9 +73,7 @@ export function WindowTopBar({
           </MiradorMenuButton>
         )}
         <WindowTopBarTitle windowId={windowId} />
-        {allowTopMenuButton && (
-          <WindowTopMenuButton windowId={windowId} className={ns('window-menu-btn')} />
-        )}
+        {allowTopMenuButton && <WindowTopMenuButton windowId={windowId} className={ns('window-menu-btn')} />}
         <WindowTopBarPluginArea windowId={windowId} />
         <WindowTopBarPluginMenu windowId={windowId} />
         {allowMaximize && (

@@ -129,10 +129,7 @@ describe('window-level sagas', () => {
       return expectSaga(setWindowStartingCanvas, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
-          [
-            call(setCanvas, 'x', '1', null, { preserveViewport: false }),
-            { type: 'setCanvasThunk' },
-          ],
+          [call(setCanvas, 'x', '1', null, { preserveViewport: false }), { type: 'setCanvasThunk' }],
         ])
         .put({ type: 'setCanvasThunk' })
         .run();
@@ -196,10 +193,7 @@ describe('window-level sagas', () => {
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
           [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
-          [
-            call(setCanvas, 'x', 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'),
-            { type: 'setCanvasThunk' },
-          ],
+          [call(setCanvas, 'x', 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'), { type: 'setCanvasThunk' }],
         ])
         .put({ type: 'setCanvasThunk' })
         .run();
@@ -408,10 +402,7 @@ describe('window-level sagas', () => {
         .provide([
           [select(getWindowConfig, { windowId }), { switchCanvasOnSearch: true }],
           [select(getSelectedContentSearchAnnotationIds, { companionWindowId, windowId }), []],
-          [
-            select(getSortedSearchAnnotationsForCompanionWindow, { companionWindowId, windowId }),
-            [{ id: 'a' }, { id: 'b' }],
-          ],
+          [select(getSortedSearchAnnotationsForCompanionWindow, { companionWindowId, windowId }), [{ id: 'a' }, { id: 'b' }]],
         ])
         .put({
           annotationId: 'a',
@@ -546,10 +537,7 @@ describe('window-level sagas', () => {
       return expectSaga(fetchInfoResponses, action)
         .provide([
           [select(getCanvases, { windowId: 'foo' }), manifest.getSequences()[0].getCanvases()],
-          [
-            select(selectInfoResponses),
-            { 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44': {} },
-          ],
+          [select(selectInfoResponses), { 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44': {} }],
         ])
         .not.put.like({
           action: {

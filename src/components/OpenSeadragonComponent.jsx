@@ -67,11 +67,7 @@ function OpenSeadragonComponent({
       }
 
       if (viewerConfig.zoom != null) {
-        viewport.zoomTo(
-          viewerConfig.zoom,
-          new Openseadragon.Point(viewerConfig.x, viewerConfig.y),
-          true,
-        );
+        viewport.zoomTo(viewerConfig.zoom, new Openseadragon.Point(viewerConfig.x, viewerConfig.y), true);
       }
 
       if (viewerConfig.rotation != null && viewerConfig.rotation !== viewport.getRotation()) {
@@ -148,11 +144,7 @@ function OpenSeadragonComponent({
 
     // @ts-expect-error
     if (viewerConfig.zoom != null && viewerConfig.zoom !== viewport.zoomSpring.target.value) {
-      viewport.zoomTo(
-        viewerConfig.zoom,
-        new Openseadragon.Point(viewerConfig.x, viewerConfig.y),
-        false,
-      );
+      viewport.zoomTo(viewerConfig.zoom, new Openseadragon.Point(viewerConfig.x, viewerConfig.y), false);
     }
 
     if (viewerConfig.rotation != null && viewerConfig.rotation !== viewport.getRotation()) {
@@ -184,11 +176,7 @@ function OpenSeadragonComponent({
 
       const currentZoom = viewer.viewport.getZoom();
       const zoomRatio = shift ? 1.0 / osdConfig.zoomPerDoubleClick : osdConfig.zoomPerDoubleClick;
-      viewer.viewport.zoomTo(
-        currentZoom * zoomRatio,
-        viewer.viewport.pointFromPixel(position),
-        false,
-      );
+      viewer.viewport.zoomTo(currentZoom * zoomRatio, viewer.viewport.pointFromPixel(position), false);
     });
 
     viewer.addHandler('animation-finish', onViewportChange);
@@ -243,12 +231,7 @@ function OpenSeadragonComponent({
 
   return (
     <OpenSeadragonViewerContext.Provider value={viewerRef}>
-      <Container
-        id={id}
-        ref={ref}
-        style={{ ...style, cursor: grabbing ? 'grabbing' : 'grab' }}
-        {...passThruProps}
-      >
+      <Container id={id} ref={ref} style={{ ...style, cursor: grabbing ? 'grabbing' : 'grab' }} {...passThruProps}>
         {children}
       </Container>
     </OpenSeadragonViewerContext.Provider>

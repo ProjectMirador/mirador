@@ -10,13 +10,7 @@ import { PluginHook } from './PluginHook';
 /**
  * CanvasInfo
  */
-export function CanvasInfo({
-  canvasDescription = null,
-  canvasLabel = null,
-  canvasMetadata = [],
-  index = 1,
-  totalSize = 1,
-}) {
+export function CanvasInfo({ canvasDescription = null, canvasLabel = null, canvasMetadata = [], index = 1, totalSize = 1 }) {
   const { t } = useTranslation();
   const id = useId();
   const titleId = useId();
@@ -37,9 +31,7 @@ export function CanvasInfo({
         </Typography>
       )}
 
-      {canvasMetadata && canvasMetadata.length > 0 && (
-        <LabelValueMetadata labelValuePairs={canvasMetadata} />
-      )}
+      {canvasMetadata && canvasMetadata.length > 0 && <LabelValueMetadata labelValuePairs={canvasMetadata} />}
       <PluginHook targetName="CanvasInfo" {...pluginProps} />
     </CollapsibleSection>
   );

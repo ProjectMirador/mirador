@@ -76,8 +76,7 @@ export function SearchResults({
     setFocused(!focused);
   }, [setFocused, focused]);
 
-  const noResultsState =
-    query && !isFetching && searchHits.length === 0 && searchAnnotations.length === 0;
+  const noResultsState = query && !isFetching && searchHits.length === 0 && searchAnnotations.length === 0;
 
   return (
     <>
@@ -127,10 +126,7 @@ export function SearchResults({
 
 SearchResults.propTypes = {
   companionWindowId: PropTypes.string.isRequired,
-  containerRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]),
+  containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]),
   fetchSearch: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
   nextSearch: PropTypes.string,

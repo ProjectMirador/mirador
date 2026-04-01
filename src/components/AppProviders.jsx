@@ -100,13 +100,7 @@ const cacheDefault = createCache({
  * This component adds viewer-specific providers.
  * @prop {Object} manifests
  */
-export function AppProviders({
-  children = null,
-  language,
-  theme,
-  translations,
-  dndManager = undefined,
-}) {
+export function AppProviders({ children = null, language, theme, translations, dndManager = undefined }) {
   return (
     <FullScreenShim>
       <StoreAwareI18nextProvider language={language} translations={translations}>

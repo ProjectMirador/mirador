@@ -15,10 +15,7 @@ const getOverlayAlpha = (elevation) => {
   return (alphaValue / 100).toFixed(2);
 };
 
-const Root = styled(DialogContent, { name: 'ScrollIndicatedDialogContent', slot: 'root' })(({
-  ownerState,
-  theme,
-}) => {
+const Root = styled(DialogContent, { name: 'ScrollIndicatedDialogContent', slot: 'root' })(({ ownerState, theme }) => {
   // In dark mode, paper has a elevation-dependent background color:
   // https://github.com/mui/material-ui/blob/v5.15.0/packages/mui-material/src/Paper/Paper.js#L55-L60
   const bgcolor =

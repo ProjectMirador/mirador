@@ -12,10 +12,7 @@ import { getIiifResourceImageService } from '../../lib/iiif';
  * @param {object} state
  * @returns {Array}
  */
-export const getAuthProfiles = createSelector(
-  [getConfig],
-  ({ auth: { serviceProfiles = [] } = {} }) => serviceProfiles,
-);
+export const getAuthProfiles = createSelector([getConfig], ({ auth: { serviceProfiles = [] } = {} }) => serviceProfiles);
 
 /**
  * Returns access tokens from the state

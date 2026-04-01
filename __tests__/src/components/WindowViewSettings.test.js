@@ -30,9 +30,7 @@ describe('WindowViewSettings', () => {
   it('single should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ windowViewType: 'single' });
     // eslint-disable-next-line testing-library/no-node-access
-    expect(screen.getByRole('menuitemradio', { name: /Single/ }).querySelector('svg')).toHaveClass(
-      'MuiSvgIcon-colorSecondary',
-    );
+    expect(screen.getByRole('menuitemradio', { name: /Single/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary');
     expect(
       // eslint-disable-next-line testing-library/no-node-access
       screen.getByRole('menuitemradio', { name: /Book/ }).querySelector('svg'),
@@ -41,9 +39,7 @@ describe('WindowViewSettings', () => {
   it('book should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ windowViewType: 'book' });
     // eslint-disable-next-line testing-library/no-node-access
-    expect(screen.getByRole('menuitemradio', { name: /Book/ }).querySelector('svg')).toHaveClass(
-      'MuiSvgIcon-colorSecondary',
-    );
+    expect(screen.getByRole('menuitemradio', { name: /Book/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary');
     expect(
       // eslint-disable-next-line testing-library/no-node-access
       screen.getByRole('menuitemradio', { name: /Single/ }).querySelector('svg'),
@@ -52,9 +48,7 @@ describe('WindowViewSettings', () => {
   it('scroll should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ windowViewType: 'scroll' });
     // eslint-disable-next-line testing-library/no-node-access
-    expect(screen.getByRole('menuitemradio', { name: /Scroll/ }).querySelector('svg')).toHaveClass(
-      'MuiSvgIcon-colorSecondary',
-    );
+    expect(screen.getByRole('menuitemradio', { name: /Scroll/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary');
     expect(
       // eslint-disable-next-line testing-library/no-node-access
       screen.getByRole('menuitemradio', { name: /Single/ }).querySelector('svg'),
@@ -63,9 +57,7 @@ describe('WindowViewSettings', () => {
   it('gallery should set the correct label active (by setting the secondary color)', () => {
     createWrapper({ windowViewType: 'gallery' });
     // eslint-disable-next-line testing-library/no-node-access
-    expect(screen.getByRole('menuitemradio', { name: /Gallery/ }).querySelector('svg')).toHaveClass(
-      'MuiSvgIcon-colorSecondary',
-    );
+    expect(screen.getByRole('menuitemradio', { name: /Gallery/ }).querySelector('svg')).toHaveClass('MuiSvgIcon-colorSecondary');
     expect(
       // eslint-disable-next-line testing-library/no-node-access
       screen.getByRole('menuitemradio', { name: /Single/ }).querySelector('svg'),

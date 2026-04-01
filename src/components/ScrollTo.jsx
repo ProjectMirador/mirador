@@ -25,9 +25,7 @@ export function ScrollTo({ children, containerRef, offsetTop = 0, scrollTo, ...o
     const elementToScrollTo = scrollToRef?.current;
     if (!elementToScrollTo) return;
 
-    const scrollableContainer = containerRef?.current?.querySelector(
-      `.${ns('scrollto-scrollable')}`,
-    );
+    const scrollableContainer = containerRef?.current?.querySelector(`.${ns('scrollto-scrollable')}`);
     if (!scrollableContainer) return;
 
     const containerBoundingRect = containerRef?.current?.getBoundingClientRect() || {};
@@ -57,10 +55,7 @@ export function ScrollTo({ children, containerRef, offsetTop = 0, scrollTo, ...o
 
 ScrollTo.propTypes = {
   children: PropTypes.node.isRequired,
-  containerRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]).isRequired,
+  containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]).isRequired,
   offsetTop: PropTypes.number,
   scrollTo: PropTypes.bool.isRequired,
 };

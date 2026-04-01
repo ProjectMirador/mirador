@@ -45,12 +45,7 @@ export function WindowListButton({ disabled = false, windowCount }) {
       </MiradorMenuButton>
 
       {Boolean(windowListAnchor) && (
-        <WindowList
-          anchorEl={windowListAnchor}
-          id={id}
-          open={Boolean(windowListAnchor)}
-          handleClose={handleClose}
-        />
+        <WindowList anchorEl={windowListAnchor} id={id} open={Boolean(windowListAnchor)} handleClose={handleClose} />
       )}
     </>
   );

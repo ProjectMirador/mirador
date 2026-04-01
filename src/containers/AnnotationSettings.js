@@ -22,9 +22,6 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   },
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('AnnotationSettings'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('AnnotationSettings'));
 
 export default enhance(AnnotationSettings);

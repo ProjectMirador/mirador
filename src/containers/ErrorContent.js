@@ -2,13 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { ErrorContent } from '../components/ErrorContent';
-import {
-  getCompanionWindow,
-  getManifest,
-  getWindow,
-  getViewer,
-  getConfig,
-} from '../state/selectors';
+import { getCompanionWindow, getManifest, getWindow, getViewer, getConfig } from '../state/selectors';
 
 /** mapStateToProps */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({

@@ -87,9 +87,7 @@ export const windowsReducer = (state = {}, action) => {
         [action.windowId]: {
           ...state[action.windowId],
           companionWindowIds: state[action.windowId].companionWindowIds.concat([action.id]),
-          ...(action.payload.position === 'left'
-            ? { companionAreaOpen: true, sideBarPanel: action.payload.content }
-            : {}),
+          ...(action.payload.position === 'left' ? { companionAreaOpen: true, sideBarPanel: action.payload.content } : {}),
         },
       };
     case ActionTypes.UPDATE_COMPANION_WINDOW:
@@ -107,9 +105,7 @@ export const windowsReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          companionWindowIds: state[action.windowId].companionWindowIds.filter(
-            (id) => id !== action.id,
-          ),
+          companionWindowIds: state[action.windowId].companionWindowIds.filter((id) => id !== action.id),
         },
       };
     case ActionTypes.SELECT_ANNOTATION:

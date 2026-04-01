@@ -63,11 +63,7 @@ Object.keys(normalizedFiles).forEach((fileName) => {
 });
 
 Object.keys(errors).forEach((errorFileName) => {
-  log(
-    chalk.red(
-      `${chalk.inverse.bold(errorFileName)} has ${chalk.underline.bold('internationalization')} errors`,
-    ),
-  );
+  log(chalk.red(`${chalk.inverse.bold(errorFileName)} has ${chalk.underline.bold('internationalization')} errors`));
   errors[errorFileName].forEach((error) => {
     log(`\t${chalk.yellow(error)}`);
   });

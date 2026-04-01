@@ -2,12 +2,7 @@ import { all, call, put, select, takeEvery, delay } from 'redux-saga/effects';
 import { Utils } from 'manifesto.js';
 import flatten from 'lodash/flatten';
 import ActionTypes from '../actions/action-types';
-import {
-  addAuthenticationRequest,
-  resolveAuthenticationRequest,
-  requestAccessToken,
-  resetAuthenticationState,
-} from '../actions';
+import { addAuthenticationRequest, resolveAuthenticationRequest, requestAccessToken, resetAuthenticationState } from '../actions';
 import {
   selectInfoResponses,
   getVisibleCanvases,
@@ -36,15 +31,11 @@ export function* refetchInfoResponsesOnLogout({ tokenServiceId }) {
 export function* refetchInfoResponses({ serviceId }) {
   const windows = yield select(getWindows);
 
-  const canvases = yield all(
-    Object.keys(windows).map((windowId) => select(getVisibleCanvases, { windowId })),
-  );
+  const canvases = yield all(Object.keys(windows).map((windowId) => select(getVisibleCanvases, { windowId })));
 
   const getMiradorCanvas = yield select(getMiradorCanvasWrapper);
 
-  const visibleImageApiIds = flatten(
-    flatten(canvases).map((canvas) => getMiradorCanvas(canvas).imageServiceIds),
-  );
+  const visibleImageApiIds = flatten(flatten(canvases).map((canvas) => getMiradorCanvas(canvas).imageServiceIds));
 
   const infoResponses = yield select(selectInfoResponses);
   /** */
@@ -52,15 +43,12 @@ export function* refetchInfoResponses({ serviceId }) {
     const services = Utils.getServices(infoResponse);
     return services.some((e) => {
       const infoTokenService =
-        Utils.getService(e, 'http://iiif.io/api/auth/1/token') ||
-        Utils.getService(e, 'http://iiif.io/api/auth/0/token');
+        Utils.getService(e, 'http://iiif.io/api/auth/1/token') || Utils.getService(e, 'http://iiif.io/api/auth/0/token');
       return infoTokenService && infoTokenService.id === serviceId;
     });
   };
 
-  const obsoleteInfoResponses = Object.values(infoResponses).filter(
-    (i) => i.json && haveThisTokenService(i.json),
-  );
+  const obsoleteInfoResponses = Object.values(infoResponses).filter((i) => i.json && haveThisTokenService(i.json));
 
   yield all(
     obsoleteInfoResponses.map(({ id: infoId }) => {
@@ -84,9 +72,7 @@ export function* doAuthWorkflow({ infoJson, windowId }) {
     .find((e) => nonInteractiveAuthFlowProfiles.some((p) => p.profile === e.getProfile()));
   if (!authService) return;
 
-  const profileConfig = nonInteractiveAuthFlowProfiles.find(
-    (p) => p.profile === authService.getProfile(),
-  );
+  const profileConfig = nonInteractiveAuthFlowProfiles.find((p) => p.profile === authService.getProfile());
 
   if (profileConfig.kiosk) {
     // start the auth

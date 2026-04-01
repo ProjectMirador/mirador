@@ -7,15 +7,9 @@ import values from 'lodash/values';
 
 /** */
 export const validatePlugin = (plugin) =>
-  [
-    checkPlugin,
-    checkName,
-    checkTarget,
-    checkMode,
-    checkMapStateToProps,
-    checkMapDispatchToProps,
-    checkReducers,
-  ].every((check) => check(plugin));
+  [checkPlugin, checkName, checkTarget, checkMode, checkMapStateToProps, checkMapDispatchToProps, checkReducers].every((check) =>
+    check(plugin),
+  );
 
 /** */
 const checkPlugin = (plugin) => isObject(plugin);

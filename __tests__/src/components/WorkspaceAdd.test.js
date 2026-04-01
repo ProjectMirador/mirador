@@ -39,9 +39,7 @@ describe('WorkspaceAdd', () => {
   it('focuses on the first manifest item', () => {
     createWrapper();
 
-    expect(
-      screen.getByRole('button', { name: 'Bodleian Library Human Freaks 2 (33)' }),
-    ).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Bodleian Library Human Freaks 2 (33)' })).toHaveFocus();
   });
 
   it('without manifests, renders an empty message', () => {
@@ -97,9 +95,7 @@ describe('WorkspaceAdd', () => {
     const scrollTo = vi.fn();
 
     // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
-    vi.spyOn(container.querySelector('.mirador-workspace-add'), 'scrollTo').mockImplementation(
-      scrollTo,
-    );
+    vi.spyOn(container.querySelector('.mirador-workspace-add'), 'scrollTo').mockImplementation(scrollTo);
 
     await user.click(screen.getByRole('button', { name: 'Add resource' }));
 
@@ -142,11 +138,7 @@ describe('WorkspaceAdd', () => {
       fireEvent.drop(dropTarget, { dataTransfer });
 
       await waitFor(() =>
-        expect(addResource).toHaveBeenCalledWith(
-          expect.stringMatching(/^[0-9a-f-]+$/),
-          manifestJson,
-          { provider: 'file' },
-        ),
+        expect(addResource).toHaveBeenCalledWith(expect.stringMatching(/^[0-9a-f-]+$/), manifestJson, { provider: 'file' }),
       );
     });
 

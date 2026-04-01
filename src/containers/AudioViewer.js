@@ -2,11 +2,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withPlugins } from '../extend/withPlugins';
 import { AudioViewer } from '../components/AudioViewer';
-import {
-  getConfig,
-  getVisibleCanvasAudioResources,
-  getVisibleCanvasCaptions,
-} from '../state/selectors';
+import { getConfig, getVisibleCanvasAudioResources, getVisibleCanvasCaptions } from '../state/selectors';
 
 /** */
 const mapStateToProps = (state, { windowId }) => ({

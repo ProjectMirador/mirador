@@ -6,9 +6,7 @@ import { WorkspaceMenu } from '../../../src/components/WorkspaceMenu';
 function createShallow(props) {
   render(<div data-testid="container" />);
 
-  return render(
-    <WorkspaceMenu anchorEl={screen.getByTestId('container')} open showThemePicker {...props} />,
-  );
+  return render(<WorkspaceMenu anchorEl={screen.getByTestId('container')} open showThemePicker {...props} />);
 }
 
 describe('Workspace settings', () => {
@@ -42,10 +40,7 @@ describe('Workspace settings', () => {
       toggleZoomControls,
     });
 
-    expect(screen.getByRole('menuitem', { name: 'Show zoom controls' })).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    );
+    expect(screen.getByRole('menuitem', { name: 'Show zoom controls' })).toHaveAttribute('aria-disabled', 'true');
   });
 
   describe('handleZoomToggleClick', () => {

@@ -27,14 +27,8 @@ describe('AttributionPanel', () => {
     createWrapper({ rights: ['http://example.com', 'http://stanford.edu'] });
 
     expect(screen.getByText('License')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'http://example.com' })).toHaveAttribute(
-      'href',
-      'http://example.com',
-    );
-    expect(screen.getByRole('link', { name: 'http://stanford.edu' })).toHaveAttribute(
-      'href',
-      'http://stanford.edu',
-    );
+    expect(screen.getByRole('link', { name: 'http://example.com' })).toHaveAttribute('href', 'http://example.com');
+    expect(screen.getByRole('link', { name: 'http://stanford.edu' })).toHaveAttribute('href', 'http://stanford.edu');
   });
 
   it('does not render the rights statement if it is empty', () => {

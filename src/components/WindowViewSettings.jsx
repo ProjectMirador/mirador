@@ -10,27 +10,25 @@ import { useTranslation } from 'react-i18next';
 import BookViewIcon from './icons/BookViewIcon';
 import GalleryViewIcon from './icons/GalleryViewIcon';
 
-const ViewOption = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option' })(
-  ({ selected, theme }) => ({
-    '& .MuiFormControlLabel-label': {
-      borderBottom: '2px solid transparent',
-      ...(selected && {
-        borderBottomColor: theme.palette.secondary.main,
-      }),
-      '&.Mui-selected': {
-        backgroundColor: 'transparent !important',
-      },
-      '&.Mui-selected.Mui-focusVisible': {
-        backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
-      },
-      '&:focused': {
-        backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
-      },
-      color: selected ? theme.palette.secondary.main : undefined,
-      display: 'inline-block',
+const ViewOption = styled(MenuItem, { name: 'WindowViewSettings', slot: 'option' })(({ selected, theme }) => ({
+  '& .MuiFormControlLabel-label': {
+    borderBottom: '2px solid transparent',
+    ...(selected && {
+      borderBottomColor: theme.palette.secondary.main,
+    }),
+    '&.Mui-selected': {
+      backgroundColor: 'transparent !important',
     },
-  }),
-);
+    '&.Mui-selected.Mui-focusVisible': {
+      backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
+    },
+    '&:focused': {
+      backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
+    },
+    color: selected ? theme.palette.secondary.main : undefined,
+    display: 'inline-block',
+  },
+}));
 
 const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'option' })(() => ({
   display: 'inline-flex',
@@ -39,13 +37,7 @@ const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'opt
 /**
  *
  */
-export function WindowViewSettings({
-  handleClose = () => {},
-  windowViewType,
-  viewTypes = [],
-  setWindowViewType,
-  windowId,
-}) {
+export function WindowViewSettings({ handleClose = () => {}, windowViewType, viewTypes = [], setWindowViewType, windowId }) {
   const { t } = useTranslation();
   /** */
   const handleChange = (value) => {
@@ -76,9 +68,7 @@ export function WindowViewSettings({
     >
       <FormControlLabel
         value={value}
-        control={
-          <Icon fill="currentcolor" color={windowViewType === value ? 'secondary' : undefined} />
-        }
+        control={<Icon fill="currentcolor" color={windowViewType === value ? 'secondary' : undefined} />}
         label={t(value)}
         labelPlacement="bottom"
       />
@@ -91,9 +81,7 @@ export function WindowViewSettings({
       <ListSubheader role="presentation" disableSticky>
         {t('view')}
       </ListSubheader>
-      <StyledMenuList role="menubar">
-        {viewTypes.map((value) => menuItem({ Icon: iconMap[value], value }))}
-      </StyledMenuList>
+      <StyledMenuList role="menubar">{viewTypes.map((value) => menuItem({ Icon: iconMap[value], value }))}</StyledMenuList>
     </>
   );
 }

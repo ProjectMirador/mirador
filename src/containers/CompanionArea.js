@@ -1,12 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
-import {
-  getCompanionWindowIdsForPosition,
-  getCompanionAreaVisibility,
-  getThemeDirection,
-  getWindow,
-} from '../state/selectors';
+import { getCompanionWindowIdsForPosition, getCompanionAreaVisibility, getThemeDirection, getWindow } from '../state/selectors';
 import * as actions from '../state/actions';
 import { CompanionArea } from '../components/CompanionArea';
 

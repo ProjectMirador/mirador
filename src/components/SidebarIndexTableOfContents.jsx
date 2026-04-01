@@ -43,9 +43,7 @@ function deepFind(treeNode, id) {
 }
 
 /** */
-const ScrollToForTreeItem = ({ children, itemId, ...props }) => (
-  <ScrollTo {...props}>{children}</ScrollTo>
-);
+const ScrollToForTreeItem = ({ children, itemId, ...props }) => <ScrollTo {...props}>{children}</ScrollTo>;
 
 ScrollToForTreeItem.propTypes = {
   children: PropTypes.node.isRequired,
@@ -88,11 +86,7 @@ export function SidebarIndexTableOfContents({
     const node = deepFind(treeStructure, itemId);
 
     // Do not select if there are no canvases listed or it has children
-    if (
-      !node.data.getCanvasIds() ||
-      node.data.getCanvasIds().length === 0 ||
-      node.nodes.length > 0
-    ) {
+    if (!node.data.getCanvasIds() || node.data.getCanvasIds().length === 0 || node.nodes.length > 0) {
       return;
     }
     const target = getStartCanvasId(node);
@@ -156,10 +150,7 @@ export function SidebarIndexTableOfContents({
 
 /* eslint-disable react/no-unused-prop-types */
 SidebarIndexTableOfContents.propTypes = {
-  containerRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]).isRequired,
+  containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]).isRequired,
   expandedNodeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   expandNodes: PropTypes.func.isRequired,
   nodeIdToScrollTo: PropTypes.string.isRequired,

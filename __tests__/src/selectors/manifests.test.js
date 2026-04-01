@@ -60,18 +60,13 @@ describe('getManifestoInstance', () => {
   it('creates a manifesto instance', () => {
     const state = { manifests: { x: { json: manifestFixture019 } } };
     const received = getManifestoInstance(state, { manifestId: 'x' });
-    expect(received.id).toEqual(
-      'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
-    );
+    expect(received.id).toEqual('http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json');
   });
 });
 
 describe('getManifestLogo()', () => {
   it('should return manifest logo id', () => {
-    const received = getManifestLogo(
-      { manifests: { x: { json: manifestFixture001 } } },
-      { manifestId: 'x' },
-    );
+    const received = getManifestLogo({ manifests: { x: { json: manifestFixture001 } } }, { manifestId: 'x' });
     expect(received).toEqual(manifestFixture001.logo['@id']);
   });
 
@@ -114,9 +109,7 @@ describe('getManifestThumbnail()', () => {
   it('returns a thumbnail sized image url from the first canvas', () => {
     const state = { manifests: { x: { json: manifestFixture019 } } };
     const received = getManifestThumbnail(state, { manifestId: 'x' });
-    expect(received).toEqual(
-      'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/!120,120/0/default.jpg',
-    );
+    expect(received).toEqual('https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/!120,120/0/default.jpg');
   });
 
   it('should return null if manifest has no thumbnail', () => {
@@ -460,9 +453,7 @@ describe('getRequiredStatement', () => {
   it('gets the attribution data for a IIIF v2 manifest', () => {
     const state = { manifests: { x: { json: manifestFixture001 } } };
     const received = getRequiredStatement(state, { manifestId: 'x' });
-    expect(received).toEqual([
-      { label: null, values: ['http://creativecommons.org/licenses/by-nc-sa/3.0/.'] },
-    ]);
+    expect(received).toEqual([{ label: null, values: ['http://creativecommons.org/licenses/by-nc-sa/3.0/.'] }]);
   });
 
   it('suppresses empty attribution data', () => {

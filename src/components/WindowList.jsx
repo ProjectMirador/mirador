@@ -47,9 +47,7 @@ export function WindowList({
             handleClose(e);
           }}
         >
-          <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-            {titles[windowId] || t('untitled')}
-          </ListItemText>
+          <ListItemText primaryTypographyProps={{ variant: 'body1' }}>{titles[windowId] || t('untitled')}</ListItemText>
         </MenuItem>
       ))}
     </Menu>

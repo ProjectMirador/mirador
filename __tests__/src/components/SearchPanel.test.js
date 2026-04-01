@@ -74,9 +74,7 @@ describe('SearchPanel', () => {
       t,
     });
 
-    expect(
-      screen.getByRole('button', { name: 'Search this document for "abc"' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Search this document for "abc"' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Search this document for "abc"' }));
     expect(fetchSearch).toHaveBeenCalledWith('http://example.com/search?q=abc', 'abc');
   });
@@ -85,8 +83,6 @@ describe('SearchPanel', () => {
     const fetchSearch = vi.fn();
     createWrapper({ fetchSearch, query: 'blah', suggestedSearches: ['abc'] });
 
-    expect(
-      screen.queryByRole('button', { name: 'Search this document for "abc"' }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Search this document for "abc"' })).not.toBeInTheDocument();
   });
 });

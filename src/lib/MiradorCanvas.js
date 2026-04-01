@@ -46,13 +46,9 @@ export default class MiradorCanvas {
   get annotationListUris() {
     return flatten(new Array(this.canvas.__jsonld.otherContent))
       .filter(
-        (otherContent) =>
-          otherContent &&
-          (typeof otherContent === 'string' || otherContent['@type'] === 'sc:AnnotationList'),
+        (otherContent) => otherContent && (typeof otherContent === 'string' || otherContent['@type'] === 'sc:AnnotationList'),
       )
-      .map((otherContent) =>
-        typeof otherContent === 'string' ? otherContent : otherContent['@id'],
-      );
+      .map((otherContent) => (typeof otherContent === 'string' ? otherContent : otherContent['@id']));
   }
 
   /** */
@@ -74,9 +70,7 @@ export default class MiradorCanvas {
     // TODO Clean up the following hack as soon as manifesto.js provides any information if an annotation body is a Choice option, and if so, whether it is the preferred one.
     const resources = flattenDeep([
       this.canvas.getImages().map((i) => i.getResource()),
-      this.canvas
-        .getContent()
-        .map((i) => (i.__jsonld.body.type === 'Choice' ? i.__jsonld.body : i.getBody())),
+      this.canvas.getContent().map((i) => (i.__jsonld.body.type === 'Choice' ? i.__jsonld.body : i.getBody())),
     ]);
 
     return flatten(
@@ -84,10 +78,7 @@ export default class MiradorCanvas {
         const type = resource.type || resource.getProperty('type');
         switch (type) {
           case 'Choice': {
-            return new Canvas(
-              { images: resource.items.map((r) => ({ resource: r })) },
-              this.canvas.options,
-            )
+            return new Canvas({ images: resource.items.map((r) => ({ resource: r })) }, this.canvas.options)
               .getImages()
               .map((img, index) => {
                 const r = img.getResource();
@@ -100,10 +91,9 @@ export default class MiradorCanvas {
           case 'oa:Choice': {
             return new Canvas(
               {
-                images: flattenDeep([
-                  resource.getProperty('default'),
-                  resource.getProperty('item'),
-                ]).map((r) => ({ resource: r })),
+                images: flattenDeep([resource.getProperty('default'), resource.getProperty('item')]).map((r) => ({
+                  resource: r,
+                })),
               },
               this.canvas.options,
             )
@@ -178,9 +168,7 @@ export default class MiradorCanvas {
    */
   resourceAnnotation(id) {
     return this.resourceAnnotations.find(
-      (anno) =>
-        anno.getResource().id === id ||
-        flatten(new Array(anno.getBody())).some((body) => body.id === id),
+      (anno) => anno.getResource().id === id || flatten(new Array(anno.getBody())).some((body) => body.id === id),
     );
   }
 
@@ -221,8 +209,6 @@ export default class MiradorCanvas {
    * Get the canvas label
    */
   getLabel(locale = undefined) {
-    return this.canvas.getLabel().length > 0
-      ? this.canvas.getLabel().getValue(locale)
-      : String(this.canvas.index + 1);
+    return this.canvas.getLabel().length > 0 ? this.canvas.getLabel().getValue(locale) : String(this.canvas.index + 1);
   }
 }

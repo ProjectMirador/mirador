@@ -98,12 +98,7 @@ export function WindowAuthenticationBar({
         })}
       >
         {icon || <LockIcon sx={{ marginInlineEnd: 1.5 }} />}
-        <Typography
-          sx={{ paddingBlockEnd: 1, paddingBlockStart: 1 }}
-          component="h3"
-          variant="body1"
-          color="inherit"
-        >
+        <Typography sx={{ paddingBlockEnd: 1, paddingBlockStart: 1 }} component="h3" variant="body1" color="inherit">
           {ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label}
         </Typography>
         <PluginHook targetName="WindowAuthenticationBar" {...pluginProps} />

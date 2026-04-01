@@ -46,9 +46,7 @@ export const getCompanionWindowLocale = createSelector(
 export const getThumbnailNavigationPosition = createSelector(
   [getWindow, getCompanionWindows],
   (window, companionWindows) =>
-    window &&
-    companionWindows[window.thumbnailNavigationId] &&
-    companionWindows[window.thumbnailNavigationId].position,
+    window && companionWindows[window.thumbnailNavigationId] && companionWindows[window.thumbnailNavigationId].position,
 );
 
 /**
@@ -62,10 +60,7 @@ const getCompanionWindowIndexByWindowAndPosition = createSelector(
     (Object.keys(windows) || []).reduce(
       (obj, id) => ({
         ...obj,
-        [id]: groupBy(
-          windows[id].companionWindowIds,
-          (cwid) => companionWindows[cwid] && companionWindows[cwid].position,
-        ),
+        [id]: groupBy(windows[id].companionWindowIds, (cwid) => companionWindows[cwid] && companionWindows[cwid].position),
       }),
       {},
     ),
@@ -76,19 +71,17 @@ const getCompanionWindowIndexByWindowAndPosition = createSelector(
  * @param {string} windowId
  * @returns {Array}
  */
-const getCompanionWindowsByWindowAndPosition = createSelector(
-  [getWindows, getCompanionWindows],
-  (windows, companionWindows) =>
-    (Object.keys(windows) || []).reduce(
-      (obj, id) => ({
-        ...obj,
-        [id]: groupBy(
-          windows[id].companionWindowIds.map((cwid) => companionWindows[cwid]),
-          (cw) => cw.position,
-        ),
-      }),
-      {},
-    ),
+const getCompanionWindowsByWindowAndPosition = createSelector([getWindows, getCompanionWindows], (windows, companionWindows) =>
+  (Object.keys(windows) || []).reduce(
+    (obj, id) => ({
+      ...obj,
+      [id]: groupBy(
+        windows[id].companionWindowIds.map((cwid) => companionWindows[cwid]),
+        (cw) => cw.position,
+      ),
+    }),
+    {},
+  ),
 );
 
 /**
@@ -134,8 +127,7 @@ export const getCompanionWindowsForPosition = createSelector(
  */
 export const getCompanionWindowsForContent = createSelector(
   [getCompanionWindowsOfWindow, (state, { content }) => content],
-  (companionWindows, content) =>
-    [].concat(...Object.values(companionWindows)).filter((w) => w.content === content),
+  (companionWindows, content) => [].concat(...Object.values(companionWindows)).filter((w) => w.content === content),
 );
 
 /**
@@ -157,15 +149,12 @@ export const getCompanionWindowIdsForPosition = createSelector(
  * @param {string} position
  * @returns {boolean}
  */
-export const getCompanionAreaVisibility = createSelector(
-  [(state, { position }) => position, getWindow],
-  (position, window) => {
-    if (!window) return false;
-    const { companionAreaOpen, sideBarOpen } = window;
-    if (position !== 'left') return true;
-    return !!(companionAreaOpen && sideBarOpen);
-  },
-);
+export const getCompanionAreaVisibility = createSelector([(state, { position }) => position, getWindow], (position, window) => {
+  if (!window) return false;
+  const { companionAreaOpen, sideBarOpen } = window;
+  if (position !== 'left') return true;
+  return !!(companionAreaOpen && sideBarOpen);
+});
 
 /**
  * Returns the dimensions.
@@ -173,21 +162,18 @@ export const getCompanionAreaVisibility = createSelector(
  * @param {string} companionWindowId
  * @returns {object} containing height and width
  */
-export const selectCompanionWindowDimensions = createSelector(
-  [getCompanionWindowsOfWindow],
-  (companionWindows) => {
-    let width = 0;
-    let height = 0;
-    [].concat(...Object.values(companionWindows)).forEach((cw) => {
-      if (cw.position.match(/right/)) {
-        width += 235;
-      }
+export const selectCompanionWindowDimensions = createSelector([getCompanionWindowsOfWindow], (companionWindows) => {
+  let width = 0;
+  let height = 0;
+  [].concat(...Object.values(companionWindows)).forEach((cw) => {
+    if (cw.position.match(/right/)) {
+      width += 235;
+    }
 
-      if (cw.position.match(/bottom/)) {
-        height += 201;
-      }
-    });
+    if (cw.position.match(/bottom/)) {
+      height += 201;
+    }
+  });
 
-    return { height, width };
-  },
-);
+  return { height, width };
+});

@@ -54,8 +54,7 @@ function renderWithProviders(
   return {
     store,
     ...rendered,
-    rerender: (newUi, options) =>
-      render(newUi, { container: rendered.container, wrapper: Wrapper, ...options }),
+    rerender: (newUi, options) => render(newUi, { container: rendered.container, wrapper: Wrapper, ...options }),
   };
 }
 

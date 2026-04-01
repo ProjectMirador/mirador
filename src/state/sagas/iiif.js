@@ -123,8 +123,7 @@ function* fetchIiifResourceWithAuth(url, iiifResource, options, { degraded, fail
 /** */
 export function* fetchManifest({ manifestId }) {
   const callbacks = {
-    failure: ({ error, json, response }) =>
-      receiveManifestFailure(manifestId, typeof error === 'object' ? String(error) : error),
+    failure: ({ error, json, response }) => receiveManifestFailure(manifestId, typeof error === 'object' ? String(error) : error),
     success: ({ json, response }) => receiveManifest(manifestId, json),
   };
   const dispatch = yield call(fetchIiifResource, manifestId, {}, callbacks);
@@ -133,8 +132,7 @@ export function* fetchManifest({ manifestId }) {
 
 /** @private */
 function* getAccessTokenService(resource) {
-  const manifestoCompatibleResource =
-    resource && resource.__jsonld ? resource : { ...resource, options: {} };
+  const manifestoCompatibleResource = resource && resource.__jsonld ? resource : { ...resource, options: {} };
   const services = Utils.getServices(manifestoCompatibleResource).filter((s) =>
     s.getProfile().match(/http:\/\/iiif.io\/api\/auth\//),
   );
@@ -165,26 +163,17 @@ export function* fetchInfoResponse({ imageResource, infoId, windowId }) {
   const callbacks = {
     degraded: ({ json, response, tokenServiceId }) =>
       receiveDegradedInfoResponse(infoId, json, response.ok, tokenServiceId, windowId),
-    failure: ({ error, json, response, tokenServiceId }) =>
-      receiveInfoResponseFailure(infoId, error, tokenServiceId),
-    success: ({ json, response, tokenServiceId }) =>
-      receiveInfoResponse(infoId, json, response.ok, tokenServiceId),
+    failure: ({ error, json, response, tokenServiceId }) => receiveInfoResponseFailure(infoId, error, tokenServiceId),
+    success: ({ json, response, tokenServiceId }) => receiveInfoResponse(infoId, json, response.ok, tokenServiceId),
   };
 
-  yield call(
-    fetchIiifResourceWithAuth,
-    `${infoId.replace(/\/$/, '')}/info.json`,
-    iiifResource,
-    {},
-    callbacks,
-  );
+  yield call(fetchIiifResourceWithAuth, `${infoId.replace(/\/$/, '')}/info.json`, iiifResource, {}, callbacks);
 }
 
 /** @private */
 export function* fetchSearchResponse({ windowId, companionWindowId, query, searchId }) {
   const callbacks = {
-    failure: ({ error, json, response }) =>
-      receiveSearchFailure(windowId, companionWindowId, searchId, error),
+    failure: ({ error, json, response }) => receiveSearchFailure(windowId, companionWindowId, searchId, error),
     success: ({ json, response }) => receiveSearch(windowId, companionWindowId, searchId, json),
   };
   const dispatch = yield call(fetchIiifResource, searchId, {}, callbacks);

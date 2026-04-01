@@ -61,13 +61,7 @@ describe('WorkspaceOptionsMenu', () => {
 
   it('fires the correct callbacks on menu close', async () => {
     const handleClose = vi.fn();
-    render(
-      <Subject
-        anchorEl={screen.getByTestId('menu-trigger-button')}
-        handleClose={handleClose}
-        open
-      />,
-    );
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} handleClose={handleClose} open />);
 
     // click a menu item should close the menu
     const menuItems = screen.getAllByRole('menuitem');

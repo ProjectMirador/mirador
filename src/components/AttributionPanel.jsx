@@ -22,29 +22,16 @@ const StyledPlaceholder = styled(Skeleton)(({ theme }) => ({
 /**
  * WindowSideBarInfoPanel
  */
-export function AttributionPanel({
-  manifestLogo = null,
-  requiredStatement = null,
-  rights = null,
-  windowId,
-  id,
-}) {
+export function AttributionPanel({ manifestLogo = null, requiredStatement = null, rights = null, windowId, id }) {
   const { t } = useTranslation();
 
   // eslint-disable-next-line prefer-rest-params
   const pluginProps = arguments[0];
 
   return (
-    <CompanionWindow
-      title={t('attributionTitle')}
-      paperClassName={ns('attribution-panel')}
-      windowId={windowId}
-      id={id}
-    >
+    <CompanionWindow title={t('attributionTitle')} paperClassName={ns('attribution-panel')} windowId={windowId} id={id}>
       <CompanionWindowSection>
-        {requiredStatement && (
-          <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
-        )}
+        {requiredStatement && <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />}
         {rights && rights.length > 0 && (
           <dl className={ns('label-value-metadata')}>
             <Typography variant="subtitle2" component="dt">

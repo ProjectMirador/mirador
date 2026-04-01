@@ -40,12 +40,7 @@ describe('SearchPanelControls', () => {
     await user.click(screen.getByRole('combobox'));
     await user.keyboard('somestring');
     await user.click(await screen.findByText('somestring 12345'));
-    expect(fetchSearch).toHaveBeenCalledWith(
-      'window',
-      'cw',
-      'http://example.com/search?q=somestring+12345',
-      'somestring 12345',
-    );
+    expect(fetchSearch).toHaveBeenCalledWith('window', 'cw', 'http://example.com/search?q=somestring+12345', 'somestring 12345');
     fetch.resetMocks();
   });
   it('should fetch result only once', async () => {
@@ -95,12 +90,7 @@ describe('SearchPanelControls', () => {
     await user.keyboard('yolo');
     await user.click(screen.getByRole('button'));
 
-    expect(fetchSearch).toHaveBeenCalledWith(
-      'window',
-      'cw',
-      'http://www.example.com/search?q=yolo',
-      'yolo',
-    );
+    expect(fetchSearch).toHaveBeenCalledWith('window', 'cw', 'http://www.example.com/search?q=yolo', 'yolo');
   });
 
   it('does not submit an empty search', async () => {

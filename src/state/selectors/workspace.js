@@ -16,10 +16,7 @@ export function getElasticLayout(state) {
  * @param {object} state
  * @returns {boolean}
  */
-export const getFullScreenEnabled = createSelector(
-  [getWorkspace],
-  (workspace) => workspace.isFullscreenEnabled,
-);
+export const getFullScreenEnabled = createSelector([getWorkspace], (workspace) => workspace.isFullscreenEnabled);
 
 /**
  * Returns the latest error from the state.
@@ -44,10 +41,7 @@ export const getWorkspaceType = createSelector([getWorkspace], ({ type }) => typ
  * @param {object} state
  * @returns {string|undefined}
  */
-export const getFocusedWindowId = createSelector(
-  [getWorkspace],
-  ({ focusedWindowId }) => focusedWindowId,
-);
+export const getFocusedWindowId = createSelector([getWorkspace], ({ focusedWindowId }) => focusedWindowId);
 
 /**
  * Returns if a given window is focused.

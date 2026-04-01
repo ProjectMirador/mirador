@@ -11,22 +11,20 @@ import { Img } from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
 import ns from '../config/css-ns';
 
-const Root = styled(ListItem, { name: 'ManifestListItem', slot: 'root' })(
-  ({ ownerState, theme }) => ({
-    '&:hover,&:focus-within': {
-      backgroundColor: theme.palette.action.hover,
-      borderLeftColor: ownerState?.active ? theme.palette.primary.main : theme.palette.action.hover,
-    },
-    borderLeft: '4px solid',
-    borderLeftColor: ownerState?.active ? theme.palette.primary.main : 'transparent',
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      paddingLeft: theme.spacing(3),
-      paddingRight: theme.spacing(3),
-    },
-  }),
-);
+const Root = styled(ListItem, { name: 'ManifestListItem', slot: 'root' })(({ ownerState, theme }) => ({
+  '&:hover,&:focus-within': {
+    backgroundColor: theme.palette.action.hover,
+    borderLeftColor: ownerState?.active ? theme.palette.primary.main : theme.palette.action.hover,
+  },
+  borderLeft: '4px solid',
+  borderLeftColor: ownerState?.active ? theme.palette.primary.main : 'transparent',
+  paddingLeft: theme.spacing(2),
+  paddingRight: theme.spacing(2),
+  [theme.breakpoints.up('sm')]: {
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+  },
+}));
 
 const StyledThumbnail = styled(Img, {
   name: 'ManifestListItem',
@@ -101,13 +99,7 @@ export function ManifestListItem({
 
   if (error) {
     return (
-      <Root
-        ownerState={ownerState}
-        divider
-        selected={active}
-        className={active ? 'active' : ''}
-        data-manifestid={manifestId}
-      >
+      <Root ownerState={ownerState} divider selected={active} className={active ? 'active' : ''} data-manifestid={manifestId}>
         <ManifestListItemError manifestId={manifestId} />
       </Root>
     );
@@ -123,11 +115,7 @@ export function ManifestListItem({
       sx={{ width: '100%' }}
     >
       {ready ? (
-        <Grid
-          container
-          className={ns('manifest-list-item')}
-          sx={{ alignItems: 'center', width: '100%' }}
-        >
+        <Grid container className={ns('manifest-list-item')} sx={{ alignItems: 'center', width: '100%' }}>
           <Grid size={{ sm: 5, xs: 12 }}>
             <ButtonBase
               ref={buttonRef}
@@ -136,10 +124,7 @@ export function ManifestListItem({
               sx={{ alignItems: 'center', justifyContent: 'flex-start', width: '100%' }}
             >
               <Grid container component="div" sx={{ width: '100%' }}>
-                <Grid
-                  size={3}
-                  sx={{ alignItems: 'center', display: 'flex', justifyContent: 'flex-start' }}
-                >
+                <Grid size={3} sx={{ alignItems: 'center', display: 'flex', justifyContent: 'flex-start' }}>
                   {thumbnail ? (
                     <StyledThumbnail
                       className={[ns('manifest-list-item-thumb')]}
@@ -147,22 +132,11 @@ export function ManifestListItem({
                       alt=""
                       height="80"
                       unloader={
-                        <Skeleton
-                          variant="rectangular"
-                          animation={false}
-                          sx={{ bgcolor: 'grey[300]' }}
-                          height={80}
-                          width={120}
-                        />
+                        <Skeleton variant="rectangular" animation={false} sx={{ bgcolor: 'grey[300]' }} height={80} width={120} />
                       }
                     />
                   ) : (
-                    <Skeleton
-                      sx={{ bgcolor: 'grey[300]' }}
-                      variant="rectangular"
-                      height={80}
-                      width={120}
-                    />
+                    <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />
                   )}
                 </Grid>
                 <Grid size={9} sx={{ alignContent: 'center', paddingLeft: 2 }}>
@@ -191,13 +165,7 @@ export function ManifestListItem({
                 alt=""
                 role="presentation"
                 unloader={
-                  <Skeleton
-                    variant="rectangular"
-                    animation={false}
-                    sx={{ bgcolor: 'grey[300]' }}
-                    height={60}
-                    width={60}
-                  />
+                  <Skeleton variant="rectangular" animation={false} sx={{ bgcolor: 'grey[300]' }} height={60} width={60} />
                 }
               />
             )}

@@ -63,9 +63,7 @@ export function WindowTopMenu({
       role="menu"
     >
       <WindowViewSettings windowId={windowId} handleClose={handleClose} />
-      {showThumbnailNavigationSettings && (
-        <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />
-      )}
+      {showThumbnailNavigationSettings && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}
       <PluginHookWithHeader targetName="WindowTopMenu" {...pluginProps} />
     </Popover>
   );

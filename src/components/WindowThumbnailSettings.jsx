@@ -9,27 +9,25 @@ import { useTranslation } from 'react-i18next';
 import ThumbnailNavigationBottomIcon from './icons/ThumbnailNavigationBottomIcon';
 import ThumbnailNavigationRightIcon from './icons/ThumbnailNavigationRightIcon';
 
-const ThumbnailOption = styled(MenuItem, { name: 'WindowThumbnailSettings', slot: 'option' })(
-  ({ selected, theme }) => ({
-    '& .MuiFormControlLabel-label': {
-      borderBottom: '2px solid transparent',
-      ...(selected && {
-        borderBottomColor: theme.palette.secondary.main,
-      }),
-      '&.Mui-selected': {
-        backgroundColor: 'transparent !important',
-      },
-      '&.Mui-selected.Mui-focusVisible': {
-        backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
-      },
-      '&:focused': {
-        backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
-      },
-      color: selected ? theme.palette.secondary.main : undefined,
-      display: 'inline-flex',
+const ThumbnailOption = styled(MenuItem, { name: 'WindowThumbnailSettings', slot: 'option' })(({ selected, theme }) => ({
+  '& .MuiFormControlLabel-label': {
+    borderBottom: '2px solid transparent',
+    ...(selected && {
+      borderBottomColor: theme.palette.secondary.main,
+    }),
+    '&.Mui-selected': {
+      backgroundColor: 'transparent !important',
     },
-  }),
-);
+    '&.Mui-selected.Mui-focusVisible': {
+      backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
+    },
+    '&:focused': {
+      backgroundColor: `${(theme.vars || theme).palette.action.focus} !important`,
+    },
+    color: selected ? theme.palette.secondary.main : undefined,
+    display: 'inline-flex',
+  },
+}));
 
 const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'option' })(() => ({
   display: 'inline-flex',
@@ -68,10 +66,7 @@ export function WindowThumbnailSettings({
         >
           <FormControlLabel
             control={
-              <ThumbnailsOffIcon
-                color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined}
-                fill="currentcolor"
-              />
+              <ThumbnailsOffIcon color={thumbnailNavigationPosition === 'off' ? 'secondary' : undefined} fill="currentcolor" />
             }
             label={t('off')}
             labelPlacement="bottom"

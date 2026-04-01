@@ -28,20 +28,15 @@ describe('Window Sidebar Sequence Dropdown', () => {
     // eslint-disable-next-line testing-library/no-node-access
     const sequenceInput = sequenceWrapper.querySelector('input[name="sequenceId"]');
 
-    expect(sequenceInput).toHaveValue(
-      'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1740.json',
-    );
+    expect(sequenceInput).toHaveValue('https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1740.json');
 
     // Change the sequence (1741)
     fireEvent.change(sequenceInput, {
       target: {
-        value:
-          'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
+        value: 'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
       },
     });
 
-    expect(sequenceInput).toHaveValue(
-      'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
-    );
+    expect(sequenceInput).toHaveValue('https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json');
   });
 });

@@ -19,36 +19,25 @@ const getMotivations = createSelector(
   (config, motivations) => motivations || config.annotations.filteredMotivations,
 );
 
-const getAnnotationsOnCanvas = createSelector(
-  [getCanvas, getAnnotations],
-  (canvas, annotations) => {
-    if (!annotations || !canvas) return [];
-    if (!annotations[canvas.id]) return [];
+const getAnnotationsOnCanvas = createSelector([getCanvas, getAnnotations], (canvas, annotations) => {
+  if (!annotations || !canvas) return [];
+  if (!annotations[canvas.id]) return [];
 
-    return flatten(Object.values(annotations[canvas.id]));
-  },
-);
+  return flatten(Object.values(annotations[canvas.id]));
+});
 
 const getPresentAnnotationsCanvas = createSelector([getAnnotationsOnCanvas], (annotations) =>
   filter(
-    Object.values(annotations).map(
-      (annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json),
-    ),
+    Object.values(annotations).map((annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json)),
     (annotation) => annotation && annotation.present(),
   ),
 );
 
 const getAnnotationsOnSelectedCanvases = createSelector(
-  [
-    (state, { canvasId, ...otherProps }) =>
-      canvasId ? [canvasId] : getVisibleCanvasIds(state, otherProps),
-    getAnnotations,
-  ],
+  [(state, { canvasId, ...otherProps }) => (canvasId ? [canvasId] : getVisibleCanvasIds(state, otherProps)), getAnnotations],
   (canvasIds, annotations) => {
     if (!annotations || canvasIds.length === 0) return [];
-    return flatten(
-      canvasIds.map((targetId) => annotations[targetId] && Object.values(annotations[targetId])),
-    );
+    return flatten(canvasIds.map((targetId) => annotations[targetId] && Object.values(annotations[targetId])));
   },
 );
 
@@ -58,15 +47,11 @@ const getAnnotationsOnSelectedCanvases = createSelector(
  * @param {string} canvasId canvasId
  * @returns {Array} An array of present annotations
  */
-export const getPresentAnnotationsOnSelectedCanvases = createSelector(
-  [getAnnotationsOnSelectedCanvases],
-  (annotations) =>
-    filter(
-      Object.values(annotations).map(
-        (annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json),
-      ),
-      (annotation) => annotation && annotation.present(),
-    ),
+export const getPresentAnnotationsOnSelectedCanvases = createSelector([getAnnotationsOnSelectedCanvases], (annotations) =>
+  filter(
+    Object.values(annotations).map((annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json)),
+    (annotation) => annotation && annotation.present(),
+  ),
 );
 
 /**
@@ -86,9 +71,7 @@ export const getAnnotationResourcesByMotivationForCanvas = createSelector(
     }
 
     // Otherwise filter by motivations
-    return resources.filter((resource) =>
-      resource.motivations.some((motivation) => motivations.includes(motivation)),
-    );
+    return resources.filter((resource) => resource.motivations.some((motivation) => motivations.includes(motivation)));
   },
 );
 
@@ -109,9 +92,7 @@ export const getAnnotationResourcesByMotivation = createSelector(
     }
 
     // Otherwise filter by motivations
-    return resources.filter((resource) =>
-      resource.motivations.some((motivation) => motivations.includes(motivation)),
-    );
+    return resources.filter((resource) => resource.motivations.some((motivation) => motivations.includes(motivation)));
   },
 );
 
@@ -122,10 +103,7 @@ export const getAnnotationResourcesByMotivation = createSelector(
  * @param {Array} targetIds
  * @returns {Array}
  */
-export const getSelectedAnnotationId = createSelector(
-  [getWindow],
-  ({ selectedAnnotationId }) => selectedAnnotationId,
-);
+export const getSelectedAnnotationId = createSelector([getWindow], ({ selectedAnnotationId }) => selectedAnnotationId);
 
 /**
  * Returns annotations on selected canvases.

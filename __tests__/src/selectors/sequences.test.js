@@ -65,9 +65,7 @@ describe('getSequence', () => {
   it('defaults to the first sequence', () => {
     const state = { manifests: { x: { json: manifestFixtureGau } } };
     const sequence = getSequence(state, { manifestId: 'x' });
-    expect(sequence.id).toEqual(
-      'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1740.json',
-    );
+    expect(sequence.id).toEqual('https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1740.json');
   });
   it('picks the sequence selected by the window', () => {
     const state = {
@@ -75,26 +73,20 @@ describe('getSequence', () => {
       windows: {
         a: {
           manifestId: 'x',
-          sequenceId:
-            'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
+          sequenceId: 'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
         },
       },
     };
     const sequence = getSequence(state, { windowId: 'a' });
-    expect(sequence.id).toEqual(
-      'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
-    );
+    expect(sequence.id).toEqual('https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json');
   });
   it('picks the sequences with an explicit sequenceId', () => {
     const state = { manifests: { x: { json: manifestFixtureGau } } };
     const sequence = getSequence(state, {
       manifestId: 'x',
-      sequenceId:
-        'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
+      sequenceId: 'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
     });
-    expect(sequence.id).toEqual(
-      'https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json',
-    );
+    expect(sequence.id).toEqual('https://www.e-codices.unifr.ch/metadata/iiif/gau-Fragment/sequence/Sequence-1741.json');
   });
 });
 

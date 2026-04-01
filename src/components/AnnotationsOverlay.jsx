@@ -18,9 +18,7 @@ function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, po
   if (resource.svgSelector) {
     const context = osdCanvasOverlay.context2d;
     const { svgPaths } = new CanvasAnnotationDisplay({ resource });
-    return [...svgPaths].some((path) =>
-      context.isPointInPath(new Path2D(path.attributes.d.nodeValue), relativeX, relativeY),
-    );
+    return [...svgPaths].some((path) => context.isPointInPath(new Path2D(path.attributes.d.nodeValue), relativeX, relativeY));
   }
 
   if (resource.fragmentSelector) {
@@ -52,10 +50,7 @@ export function AnnotationsOverlay({
 }) {
   const ref = useRef();
 
-  const osdCanvasOverlay = useMemo(
-    () => new OpenSeadragonCanvasOverlay(viewer, ref),
-    [ref, viewer],
-  );
+  const osdCanvasOverlay = useMemo(() => new OpenSeadragonCanvasOverlay(viewer, ref), [ref, viewer]);
 
   const toggleAnnotation = useCallback(
     (id) => {
@@ -97,14 +92,7 @@ export function AnnotationsOverlay({
         });
       });
     },
-    [
-      osdCanvasOverlay,
-      viewer,
-      canvasWorld,
-      highlightAllAnnotations,
-      hoveredAnnotationIds,
-      selectedAnnotationId,
-    ],
+    [osdCanvasOverlay, viewer, canvasWorld, highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId],
   );
 
   const renderAnnotations = useCallback(() => {
@@ -115,14 +103,7 @@ export function AnnotationsOverlay({
     if (drawAnnotations) {
       annotationsToContext(annotations, palette.annotations);
     }
-  }, [
-    annotations,
-    annotationsToContext,
-    drawAnnotations,
-    drawSearchAnnotations,
-    palette,
-    searchAnnotations,
-  ]);
+  }, [annotations, annotationsToContext, drawAnnotations, drawSearchAnnotations, palette, searchAnnotations]);
 
   const updateCanvas = useCallback(() => {
     if (!osdCanvasOverlay) return;
@@ -156,9 +137,7 @@ export function AnnotationsOverlay({
 
       const canvas = canvasWorld.canvasAtPoint(point);
       if (!canvas) return;
-      const [_canvasX, _canvasY, canvasWidth, canvasHeight] = canvasWorld.canvasToWorldCoordinates(
-        canvas.id,
-      );
+      const [_canvasX, _canvasY, canvasWidth, canvasHeight] = canvasWorld.canvasToWorldCoordinates(canvas.id);
 
       // get all the annotations that contain the click
       const annos = annotationsAtPoint(canvas, point);
@@ -190,8 +169,7 @@ export function AnnotationsOverlay({
               const x = Math.cos(degrees * degreesToRadians) * radius + point.x;
               const y = Math.sin(degrees * degreesToRadians) * radius + point.y;
 
-              if (isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, anno, canvas, { x, y }))
-                score += 1;
+              if (isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, anno, canvas, { x, y })) score += 1;
             }
 
             return { anno, score };
@@ -202,10 +180,7 @@ export function AnnotationsOverlay({
         let radius = 1;
         annosWithScore = sortBy(annos.map(annosWithClickScore(radius)), 'score');
 
-        while (
-          radius < Math.max(canvasWidth, canvasHeight) &&
-          annosWithScore[0].score === annosWithScore[1].score
-        ) {
+        while (radius < Math.max(canvasWidth, canvasHeight) && annosWithScore[0].score === annosWithScore[1].score) {
           radius *= 2;
           annosWithScore = sortBy(annos.map(annosWithClickScore(radius)), 'score');
         }
@@ -244,16 +219,7 @@ export function AnnotationsOverlay({
           );
         }
       },
-      [
-        annotations,
-        annotationsAtPoint,
-        canvasWorld,
-        hoverAnnotation,
-        hoveredAnnotationIds,
-        searchAnnotations,
-        viewer,
-        windowId,
-      ],
+      [annotations, annotationsAtPoint, canvasWorld, hoverAnnotation, hoveredAnnotationIds, searchAnnotations, viewer, windowId],
     ),
     10,
   );

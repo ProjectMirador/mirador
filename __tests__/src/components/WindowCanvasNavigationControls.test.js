@@ -5,15 +5,7 @@ import { WindowCanvasNavigationControls } from '../../../src/components/WindowCa
  * create a simple wrapper for rendering our component
  */
 function Subject({ ...props }) {
-  return (
-    <WindowCanvasNavigationControls
-      canvases={[]}
-      canvasLabel="label"
-      windowId="abc"
-      zoomToWorld={vi.fn()}
-      {...props}
-    />
-  );
+  return <WindowCanvasNavigationControls canvases={[]} canvasLabel="label" windowId="abc" zoomToWorld={vi.fn()} {...props} />;
 }
 
 describe('WindowCanvasNavigationControls', () => {

@@ -56,10 +56,7 @@ export function getWorkspace(state) {
  * @param {object} state
  * @returns {Array}
  */
-export const getWindowIds = createSelector(
-  [getWorkspace],
-  ({ windowIds }) => windowIds || EMPTY_ARRAY,
-);
+export const getWindowIds = createSelector([getWorkspace], ({ windowIds }) => windowIds || EMPTY_ARRAY);
 
 /**
  * Returns all manifests including manifest information.
@@ -80,12 +77,7 @@ export function getManifests(state) {
  */
 export function getManifest(state, { manifestId, windowId }) {
   const manifests = getManifests(state);
-  return (
-    manifests &&
-    manifests[
-      manifestId || (windowId && (getWindow(state, { windowId }) || EMPTY_OBJECT).manifestId)
-    ]
-  );
+  return manifests && manifests[manifestId || (windowId && (getWindow(state, { windowId }) || EMPTY_OBJECT).manifestId)];
 }
 
 /**

@@ -32,9 +32,7 @@ describe('WindowTopBar', () => {
     render(<Subject />);
     expect(screen.getByRole('navigation', { name: 'Window navigation' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Toggle sidebar' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Window views & thumbnail display' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Window views & thumbnail display' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Maximize window' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Close window' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Full screen' })).not.toBeInTheDocument();
@@ -42,18 +40,10 @@ describe('WindowTopBar', () => {
 
   it('uses allow flags to override defaults', () => {
     render(
-      <Subject
-        allowWindowSideBar={false}
-        allowClose={false}
-        allowMaximize={false}
-        allowTopMenuButton={false}
-        allowFullscreen
-      />,
+      <Subject allowWindowSideBar={false} allowClose={false} allowMaximize={false} allowTopMenuButton={false} allowFullscreen />,
     );
     expect(screen.queryByRole('button', { name: 'Toggle sidebar' })).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole('button', { name: 'Window views & thumbnail display' }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Window views & thumbnail display' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Maximize window' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Close window' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Full screen' })).toBeInTheDocument();

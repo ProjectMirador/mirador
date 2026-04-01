@@ -20,9 +20,7 @@ export function LanguageSettings({ handleClick, languages }) {
           }}
         >
           <ListItemIcon>{language.current && <CheckIcon />}</ListItemIcon>
-          <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
-            {language.label}
-          </ListItemText>
+          <ListItemText primaryTypographyProps={{ variant: 'body1' }}>{language.label}</ListItemText>
         </MenuItem>
       ))}
     </>

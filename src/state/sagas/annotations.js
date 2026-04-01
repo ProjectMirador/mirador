@@ -36,9 +36,7 @@ export function* fetchCanvasAnnotations({ canvasId, windowId }) {
  */
 export function* fetchAnnotations({ visibleCanvases = [], windowId }) {
   // this little indirection allows plugins to also handle the request
-  return yield all(
-    visibleCanvases.map((canvasId) => put(requestCanvasAnnotations(windowId, canvasId))),
-  );
+  return yield all(visibleCanvases.map((canvasId) => put(requestCanvasAnnotations(windowId, canvasId))));
 }
 
 /** */

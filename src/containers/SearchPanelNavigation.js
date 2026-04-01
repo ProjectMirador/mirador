@@ -34,9 +34,6 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   selectAnnotation: (...args) => dispatch(actions.selectAnnotation(windowId, ...args)),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('SearchPanelNavigation'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('SearchPanelNavigation'));
 
 export default enhance(SearchPanelNavigation);

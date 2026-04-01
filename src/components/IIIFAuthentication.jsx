@@ -91,10 +91,7 @@ export function IIIFAuthentication({
   const renderLoggingInToken = () => (
     <>
       {renderLogin()}
-      <AccessTokenSender
-        handleAccessTokenMessage={onReceiveAccessTokenMessage}
-        url={accessTokenServiceId}
-      />
+      <AccessTokenSender handleAccessTokenMessage={onReceiveAccessTokenMessage} url={accessTokenServiceId} />
     </>
   );
 

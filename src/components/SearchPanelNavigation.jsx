@@ -42,9 +42,7 @@ export function SearchPanelNavigation({
 
   const iconStyle = direction === 'rtl' ? { transform: 'rotate(180deg)' } : {};
 
-  const currentHitIndex = searchHits.findIndex((val) =>
-    val.annotations.includes(selectedContentSearchAnnotation[0]),
-  );
+  const currentHitIndex = searchHits.findIndex((val) => val.annotations.includes(selectedContentSearchAnnotation[0]));
   let lengthText = searchHits.length;
   if (searchHits.length < numTotal) {
     lengthText += '+';
@@ -61,9 +59,7 @@ export function SearchPanelNavigation({
       >
         <ChevronLeftIcon style={iconStyle} />
       </MiradorMenuButton>
-      <span style={{ unicodeBidi: 'plaintext' }}>
-        {t('pagination', { current: currentHitIndex + 1, total: lengthText })}
-      </span>
+      <span style={{ unicodeBidi: 'plaintext' }}>{t('pagination', { current: currentHitIndex + 1, total: lengthText })}</span>
       <MiradorMenuButton
         aria-label={t('searchNextResult')}
         disabled={!hasNextResult(currentHitIndex)}

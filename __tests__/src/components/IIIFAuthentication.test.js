@@ -100,11 +100,9 @@ describe('IIIFAuthentication', () => {
         }),
       );
       await waitFor(() =>
-        expect(resolveTokenMock).toHaveBeenCalledWith(
-          'http://example.com/auth',
-          'http://example.com/token',
-          { messageId: 'http://example.com/token' },
-        ),
+        expect(resolveTokenMock).toHaveBeenCalledWith('http://example.com/auth', 'http://example.com/token', {
+          messageId: 'http://example.com/token',
+        }),
       );
     });
   });

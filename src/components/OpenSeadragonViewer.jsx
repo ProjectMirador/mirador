@@ -56,10 +56,7 @@ export function OpenSeadragonViewer({
     (immediately = true) => {
       if (!apiRef.current?.viewport) return;
 
-      apiRef.current.viewport.fitBounds(
-        new OpenSeadragon.Rect(...canvasWorld.worldBounds()),
-        immediately,
-      );
+      apiRef.current.viewport.fitBounds(new OpenSeadragon.Rect(...canvasWorld.worldBounds()), immediately);
     },
     [canvasWorld, apiRef],
   );
@@ -97,10 +94,7 @@ export function OpenSeadragonViewer({
       className={classNames(ns('osd-container'))}
       Container={StyledSection}
       osdConfig={osdConfig}
-      viewerConfig={
-        viewerConfig ||
-        (canvasWorld.hasDimensions() ? { bounds: canvasWorld.worldBounds() } : undefined)
-      }
+      viewerConfig={viewerConfig || (canvasWorld.hasDimensions() ? { bounds: canvasWorld.worldBounds() } : undefined)}
       onUpdateViewport={onViewportChange}
       setViewer={setViewer}
       aria-label={t('item', { label })}
@@ -129,21 +123,14 @@ export function OpenSeadragonViewer({
         const type = contentResource.getProperty('type');
         const format = contentResource.getProperty('format') || '';
 
-        if (!(type === 'Image' || type === 'dctypes:Image' || format.startsWith('image/')))
-          return null;
+        if (!(type === 'Image' || type === 'dctypes:Image' || format.startsWith('image/'))) return null;
 
         const fitBounds = canvasWorld.contentResourceToWorldCoordinates(contentResource);
         const index = canvasWorld.layerIndexOfImageResource(contentResource);
         const opacity = canvasWorld.layerOpacityOfImageResource(contentResource);
 
         return (
-          <TileSource
-            key={contentResource.id}
-            url={contentResource.id}
-            fitBounds={fitBounds}
-            index={index}
-            opacity={opacity}
-          />
+          <TileSource key={contentResource.id} url={contentResource.id} fitBounds={fitBounds} index={index} opacity={opacity} />
         );
       })}
       {drawAnnotations && <AnnotationsOverlay viewer={viewer} windowId={windowId} />}

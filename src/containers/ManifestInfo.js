@@ -1,12 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
-import {
-  getManifestDescription,
-  getManifestSummary,
-  getManifestTitle,
-  getManifestMetadata,
-} from '../state/selectors';
+import { getManifestDescription, getManifestSummary, getManifestTitle, getManifestMetadata } from '../state/selectors';
 import { ManifestInfo } from '../components/ManifestInfo';
 
 /**

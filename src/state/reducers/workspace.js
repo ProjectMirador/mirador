@@ -55,9 +55,7 @@ export const workspaceReducer = (state = { ...settings.workspace, windowIds: [] 
       return {
         ...state,
         focusedWindowId:
-          action.windowId === state.focusedWindowId
-            ? newWindowIds[newWindowIds.length - 1]
-            : state.focusedWindowId,
+          action.windowId === state.focusedWindowId ? newWindowIds[newWindowIds.length - 1] : state.focusedWindowId,
         windowIds: newWindowIds,
       };
     case ActionTypes.SET_WORKSPACE_FULLSCREEN:

@@ -39,9 +39,7 @@ describe('auth actions', () => {
         type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST,
       };
 
-      expect(actions.resolveAuthenticationRequest(authId, tokenServiceId, { ok: false })).toEqual(
-        expectedAction,
-      );
+      expect(actions.resolveAuthenticationRequest(authId, tokenServiceId, { ok: false })).toEqual(expectedAction);
     });
   });
 

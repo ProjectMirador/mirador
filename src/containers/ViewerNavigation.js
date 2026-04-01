@@ -2,11 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import {
-  getSequenceViewingDirection,
-  getNextCanvasGrouping,
-  getPreviousCanvasGrouping,
-} from '../state/selectors';
+import { getSequenceViewingDirection, getNextCanvasGrouping, getPreviousCanvasGrouping } from '../state/selectors';
 import { ViewerNavigation } from '../components/ViewerNavigation';
 
 /** */

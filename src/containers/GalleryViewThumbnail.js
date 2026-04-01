@@ -16,22 +16,16 @@ const mapStateToProps = (state, { canvas, windowId }) => {
   const currentCanvas = getCurrentCanvas(state, { windowId });
   const searchAnnotations = getSearchAnnotationsForWindow(state, { windowId });
 
-  const canvasAnnotations = flatten(searchAnnotations.map((a) => a.resources)).filter(
-    (a) => a.targetId === canvas.id,
-  );
+  const canvasAnnotations = flatten(searchAnnotations.map((a) => a.resources)).filter((a) => a.targetId === canvas.id);
 
-  const hasOpenAnnotationsWindow =
-    getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0;
+  const hasOpenAnnotationsWindow = getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0;
 
   return {
     annotationsCount: (() => {
       if (!hasOpenAnnotationsWindow) return undefined;
       const annotations = getPresentAnnotationsOnSelectedCanvases(state, { canvasId: canvas.id });
 
-      return annotations.reduce(
-        (v, a) => v + a.resources.filter((r) => r.targetId === canvas.id).length,
-        0,
-      );
+      return annotations.reduce((v, a) => v + a.resources.filter((r) => r.targetId === canvas.id).length, 0);
     })(),
     config: getConfig(state).galleryView,
     searchAnnotationsCount: canvasAnnotations.length,

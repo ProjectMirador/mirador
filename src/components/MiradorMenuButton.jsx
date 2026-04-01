@@ -6,14 +6,12 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import WorkspaceContext from '../contexts/WorkspaceContext';
 
-const Root = styled(IconButton, { name: 'MiradorMenuButton', slot: 'root' })(
-  ({ selected, theme }) => ({
-    fill: 'currentcolor',
-    ...(selected && {
-      backgroundColor: theme.palette.action.selected,
-    }),
+const Root = styled(IconButton, { name: 'MiradorMenuButton', slot: 'root' })(({ selected, theme }) => ({
+  fill: 'currentcolor',
+  ...(selected && {
+    backgroundColor: theme.palette.action.selected,
   }),
-);
+}));
 
 /**
  * MiradorMenuButton ~ Wrap the given icon prop in an IconButton and a Tooltip.

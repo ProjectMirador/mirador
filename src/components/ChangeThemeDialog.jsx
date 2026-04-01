@@ -1,12 +1,5 @@
 import { useCallback } from 'react';
-import {
-  DialogTitle,
-  ListItemIcon,
-  ListItemText,
-  MenuList,
-  MenuItem,
-  DialogContent,
-} from '@mui/material';
+import { DialogTitle, ListItemIcon, ListItemText, MenuList, MenuItem, DialogContent } from '@mui/material';
 import PaletteIcon from '@mui/icons-material/PaletteSharp';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';

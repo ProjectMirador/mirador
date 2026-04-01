@@ -72,9 +72,7 @@ describe('ManifestListItem', () => {
 
   it('displays the provider information', () => {
     createWrapper({ provider: 'ACME' });
-    expect(
-      screen.getByText('ACME', { container: '.mirador-manifest-list-item-provider' }),
-    ).toHaveTextContent('ACME');
+    expect(screen.getByText('ACME', { container: '.mirador-manifest-list-item-provider' })).toHaveTextContent('ACME');
   });
 
   it('displays a collection label for collections', () => {

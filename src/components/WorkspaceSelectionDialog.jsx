@@ -36,12 +36,7 @@ export function WorkspaceSelectionDialog({
   };
 
   return (
-    <WorkspaceDialog
-      aria-labelledby={dialogTitleId}
-      container={container}
-      onClose={handleClose}
-      open={open}
-    >
+    <WorkspaceDialog aria-labelledby={dialogTitleId} container={container} onClose={handleClose} open={open}>
       <DialogTitle id={dialogTitleId}>{t('workspaceSelectionTitle')}</DialogTitle>
       <ScrollIndicatedDialogContent>
         {children}

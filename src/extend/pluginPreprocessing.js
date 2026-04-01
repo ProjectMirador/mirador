@@ -26,9 +26,7 @@ function splitPluginsByValidation(plugins) {
 
 /** */
 function logInvalidPlugins(plugins) {
-  plugins.forEach((plugin) =>
-    console.log(`Mirador: Plugin ${plugin.name} is not valid and was rejected.`),
-  );
+  plugins.forEach((plugin) => console.log(`Mirador: Plugin ${plugin.name} is not valid and was rejected.`));
 }
 
 /**  */

@@ -20,18 +20,8 @@ export function Branding({ variant = 'default', ...ContainerProps }) {
         </div>
       )}
       <Typography align="center">
-        <IconButton
-          component="a"
-          href="https://projectmirador.org"
-          target="_blank"
-          rel="noopener"
-          size="large"
-        >
-          <MiradorIcon
-            aria-label={t('aboutMirador')}
-            titleAccess={t('aboutMirador')}
-            fontSize="large"
-          />
+        <IconButton component="a" href="https://projectmirador.org" target="_blank" rel="noopener" size="large">
+          <MiradorIcon aria-label={t('aboutMirador')} titleAccess={t('aboutMirador')} fontSize="large" />
         </IconButton>
       </Typography>
     </Stack>

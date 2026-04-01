@@ -26,12 +26,7 @@ const StyledRnd = styled(Rnd)({
  * @memberof Workspace
  * @private
  */
-function WorkspaceElastic({
-  workspace,
-  elasticLayout,
-  setWorkspaceViewportDimensions,
-  setWorkspaceViewportPosition,
-}) {
+function WorkspaceElastic({ workspace, elasticLayout, setWorkspaceViewportDimensions, setWorkspaceViewportPosition }) {
   const { viewportPosition } = workspace;
   const offsetX = workspace.width / 2;
   const offsetY = workspace.height / 2;

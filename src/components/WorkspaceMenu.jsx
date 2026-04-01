@@ -69,9 +69,7 @@ export function WorkspaceMenu({
           }}
           aria-owns={selectedOption === 'toggleZoom' ? 'toggle-zoom-menu' : undefined}
         >
-          <Typography variant="body1">
-            {showZoomControls ? t('hideZoomControls') : t('showZoomControls')}
-          </Typography>
+          <Typography variant="body1">{showZoomControls ? t('hideZoomControls') : t('showZoomControls')}</Typography>
         </MenuItem>
         <MenuItem
           aria-haspopup="true"

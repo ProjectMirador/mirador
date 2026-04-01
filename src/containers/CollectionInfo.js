@@ -24,9 +24,6 @@ const mapDispatchToProps = {
   showCollectionDialog: actions.showCollectionDialog,
 };
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('CollectionInfo'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('CollectionInfo'));
 
 export default enhance(CollectionInfo);

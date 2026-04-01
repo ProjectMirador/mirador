@@ -4,14 +4,7 @@ import { WorkspaceAddButton } from '../../../src/components/WorkspaceAddButton';
 
 /** create wrapper */
 function createWrapper(props) {
-  return render(
-    <WorkspaceAddButton
-      classes={{}}
-      setWorkspaceAddVisibility={() => {}}
-      useExtendedFab
-      {...props}
-    />,
-  );
+  return render(<WorkspaceAddButton classes={{}} setWorkspaceAddVisibility={() => {}} useExtendedFab {...props} />);
 }
 
 vi.mock('@mui/material/useMediaQuery', () => ({ default: vi.fn().mockReturnValue(true) }));

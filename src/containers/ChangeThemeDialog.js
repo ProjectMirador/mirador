@@ -24,9 +24,6 @@ const mapStateToProps = (state) => ({
   themeIds: getThemeIds(state),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('ChangeThemeDialog'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('ChangeThemeDialog'));
 
 export default enhance(ChangeThemeDialog);

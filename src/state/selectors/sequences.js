@@ -61,9 +61,7 @@ export const getSequence = createSelector(
  */
 export const getCanvasIndex = createSelector(
   [getWindow, getSequence],
-  (window, sequence) =>
-    ((sequence && window && window.canvasId && sequence.getCanvasById(window.canvasId)) || {})
-      .index || 0,
+  (window, sequence) => ((sequence && window && window.canvasId && sequence.getCanvasById(window.canvasId)) || {}).index || 0,
 );
 
 /**
@@ -74,15 +72,12 @@ export const getCanvasIndex = createSelector(
  * @param {string} props.windowId
  * @returns {number}
  */
-export const getSequenceViewingHint = createSelector(
-  [getSequence, getManifestoInstance],
-  (sequence, manifest) => {
-    if (!manifest) return null;
-    const viewingHint = (sequence && sequence.getViewingHint()) || manifest.getViewingHint();
-    if (viewingHint) return viewingHint;
-    return null;
-  },
-);
+export const getSequenceViewingHint = createSelector([getSequence, getManifestoInstance], (sequence, manifest) => {
+  if (!manifest) return null;
+  const viewingHint = (sequence && sequence.getViewingHint()) || manifest.getViewingHint();
+  if (viewingHint) return viewingHint;
+  return null;
+});
 
 /**
  * @param {object} state
@@ -109,24 +104,21 @@ export const getSequenceViewingDirection = createSelector(
  * @param {string} props.windowId
  * @return {number}
  */
-export const getSequenceBehaviors = createSelector(
-  [getSequence, getManifestoInstance],
-  (sequence, manifest) => {
-    if (!manifest || !sequence) return [];
-    const sequenceBehaviors = sequence && sequence.getProperty('behavior');
+export const getSequenceBehaviors = createSelector([getSequence, getManifestoInstance], (sequence, manifest) => {
+  if (!manifest || !sequence) return [];
+  const sequenceBehaviors = sequence && sequence.getProperty('behavior');
 
-    if (sequenceBehaviors) {
-      if (Array.isArray(sequenceBehaviors)) return sequenceBehaviors;
-      return [sequenceBehaviors];
-    }
+  if (sequenceBehaviors) {
+    if (Array.isArray(sequenceBehaviors)) return sequenceBehaviors;
+    return [sequenceBehaviors];
+  }
 
-    const behaviors = manifest.getProperty('behavior');
+  const behaviors = manifest.getProperty('behavior');
 
-    if (!behaviors) return [];
-    if (Array.isArray(behaviors)) return behaviors;
-    return [behaviors];
-  },
-);
+  if (!behaviors) return [];
+  if (Array.isArray(behaviors)) return behaviors;
+  return [behaviors];
+});
 
 /**
  * Retruns a sequence tree structure.
@@ -135,12 +127,8 @@ export const getSequenceBehaviors = createSelector(
  * @param {string} props.windowId
  * @returns {object}
  */
-export const getSequenceTreeStructure = createSelector(
-  [getSequence, getManifestoInstance],
-  (sequence, manifest) => {
-    if (sequence && sequence.getProperty('type') && sequence.isRange())
-      return sequence.getTree(new TreeNode('root'));
+export const getSequenceTreeStructure = createSelector([getSequence, getManifestoInstance], (sequence, manifest) => {
+  if (sequence && sequence.getProperty('type') && sequence.isRange()) return sequence.getTree(new TreeNode('root'));
 
-    return manifest && manifest.getDefaultTree();
-  },
-);
+  return manifest && manifest.getDefaultTree();
+});

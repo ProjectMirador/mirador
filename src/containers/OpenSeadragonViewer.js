@@ -34,10 +34,7 @@ const mapStateToProps = (state, { windowId }) => {
     infoResponses: imageServiceIds
       .map((id) => infoResponses[id])
       .filter(
-        (infoResponse) =>
-          infoResponse !== undefined &&
-          infoResponse.isFetching === false &&
-          infoResponse.error === undefined,
+        (infoResponse) => infoResponse !== undefined && infoResponse.isFetching === false && infoResponse.error === undefined,
       ),
     label: getCanvasLabel(state, {
       canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
@@ -58,9 +55,6 @@ const mapDispatchToProps = {
   updateViewport: actions.updateViewport,
 };
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('OpenSeadragonViewer'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('OpenSeadragonViewer'));
 
 export default enhance(OpenSeadragonViewer);

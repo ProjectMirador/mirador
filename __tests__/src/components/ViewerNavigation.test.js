@@ -107,9 +107,7 @@ describe('ViewerNavigation', () => {
         screen.getByRole('button', { name: 'Previous item' }).querySelector('svg'),
       ).not.toHaveStyle('transform: rotate(180deg);');
       // eslint-disable-next-line testing-library/no-node-access
-      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle(
-        'transform: rotate(180deg);',
-      );
+      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(180deg);');
     });
 
     it('sets the dir="rtl"', () => {
@@ -140,9 +138,7 @@ describe('ViewerNavigation', () => {
         screen.getByRole('button', { name: 'Previous item' }).querySelector('svg'),
       ).toHaveStyle('transform: rotate(270deg);');
       // eslint-disable-next-line testing-library/no-node-access
-      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle(
-        'transform: rotate(90deg);',
-      );
+      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(90deg);');
     });
   });
   describe('when viewingDirection is bottom-to-top', () => {
@@ -159,9 +155,7 @@ describe('ViewerNavigation', () => {
         screen.getByRole('button', { name: 'Previous item' }).querySelector('svg'),
       ).toHaveStyle('transform: rotate(90deg);');
       // eslint-disable-next-line testing-library/no-node-access
-      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle(
-        'transform: rotate(270deg);',
-      );
+      expect(screen.getByRole('button', { name: 'Next item' }).querySelector('svg')).toHaveStyle('transform: rotate(270deg);');
     });
   });
 });

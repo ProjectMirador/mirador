@@ -2,12 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { SidebarIndexTableOfContents } from '../components/SidebarIndexTableOfContents';
-import {
-  getSequenceTreeStructure,
-  getVisibleNodeIds,
-  getExpandedNodeIds,
-  getNodeIdToScrollTo,
-} from '../state/selectors';
+import { getSequenceTreeStructure, getVisibleNodeIds, getExpandedNodeIds, getNodeIdToScrollTo } from '../state/selectors';
 import * as actions from '../state/actions';
 
 /**
@@ -31,9 +26,6 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   toggleNode: (nodeId) => dispatch(actions.toggleNode(windowId, id, nodeId)),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('SidebarIndexTableOfContents'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('SidebarIndexTableOfContents'));
 
 export default enhance(SidebarIndexTableOfContents);

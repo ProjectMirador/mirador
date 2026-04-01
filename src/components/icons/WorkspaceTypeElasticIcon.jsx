@@ -8,24 +8,12 @@ export default function WorkspaceTypeElasticIcon(props) {
     <SvgIcon {...props}>
       <svg xmlns="http://www.w3.org/2000/svg" width="120" height="90" viewBox="0 0 300 225">
         <defs>
-          <linearGradient
-            id="linear-gradient"
-            x1="0.5"
-            y1="1"
-            x2="0.5"
-            gradientUnits="objectBoundingBox"
-          >
+          <linearGradient id="linear-gradient" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
             <stop offset="0" />
             <stop offset="0.14" stopOpacity="0.631" />
             <stop offset="1" stopOpacity="0" />
           </linearGradient>
-          <linearGradient
-            id="linear-gradient-2"
-            x1="0.5"
-            y1="1"
-            x2="0.5"
-            gradientUnits="objectBoundingBox"
-          >
+          <linearGradient id="linear-gradient-2" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
             <stop offset="0" stopColor="#fff" stopOpacity="0" />
             <stop offset="0.23" stopColor="#fff" stopOpacity="0.012" />
             <stop offset="0.36" stopColor="#fff" stopOpacity="0.039" />

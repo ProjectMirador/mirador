@@ -44,11 +44,7 @@ describe('ScrollTo', () => {
         ref={containerRef}
         data-mockboundingrect={JSON.stringify({ bottom: 100, height: 100, top: 0 })}
       >
-        <div
-          data-testid="scrollableContainer"
-          style={{ height: 100, overflowY: true }}
-          className="mirador-scrollto-scrollable"
-        >
+        <div data-testid="scrollableContainer" style={{ height: 100, overflowY: true }} className="mirador-scrollto-scrollable">
           <ScrollTo containerRef={containerRef}>
             <div data-testid="a" style={{ height: 75 }} />
           </ScrollTo>
@@ -56,11 +52,7 @@ describe('ScrollTo', () => {
             <div data-testid="b" style={{ height: 75 }} />
           </ScrollTo>
           <ScrollTo containerRef={containerRef} scrollTo>
-            <div
-              data-testid="c"
-              data-mockboundingrect={JSON.stringify({ bottom: 225, top: 150 })}
-              style={{ height: 75 }}
-            />
+            <div data-testid="c" data-mockboundingrect={JSON.stringify({ bottom: 225, top: 150 })} style={{ height: 75 }} />
           </ScrollTo>
         </div>
       </div>,
@@ -78,11 +70,7 @@ describe('ScrollTo', () => {
         ref={containerRef}
         data-mockboundingrect={JSON.stringify({ bottom: 100, height: 100, top: 0 })}
       >
-        <div
-          data-testid="scrollableContainer"
-          style={{ height: 100, overflowY: true }}
-          className="mirador-scrollto-scrollable"
-        >
+        <div data-testid="scrollableContainer" style={{ height: 100, overflowY: true }} className="mirador-scrollto-scrollable">
           <ScrollTo containerRef={containerRef}>
             <div data-testid="a" style={{ height: 75 }} />
           </ScrollTo>
@@ -90,11 +78,7 @@ describe('ScrollTo', () => {
             <div data-testid="b" style={{ height: 75 }} />
           </ScrollTo>
           <ScrollTo containerRef={containerRef} scrollTo>
-            <div
-              data-testid="c"
-              data-mockboundingrect={JSON.stringify({ bottom: 100, top: 25 })}
-              style={{ height: 75 }}
-            />
+            <div data-testid="c" data-mockboundingrect={JSON.stringify({ bottom: 100, top: 25 })} style={{ height: 75 }} />
           </ScrollTo>
         </div>
       </div>,

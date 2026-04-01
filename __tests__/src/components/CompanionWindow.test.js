@@ -6,15 +6,7 @@ import { CompanionWindow } from '../../../src/components/CompanionWindow';
 /** create wrapper */
 function createWrapper(props) {
   return render(
-    <CompanionWindow
-      id="abc123"
-      isDisplayed
-      direction="ltr"
-      windowId="x"
-      companionWindow={{}}
-      position="right"
-      {...props}
-    />,
+    <CompanionWindow id="abc123" isDisplayed direction="ltr" windowId="x" companionWindow={{}} position="right" {...props} />,
   );
 }
 
@@ -74,8 +66,7 @@ describe('CompanionWindow', () => {
       );
 
       Button.propTypes = {
-        parentactions: PropTypes.shape({ closeCompanionWindow: PropTypes.func.isRequired })
-          .isRequired,
+        parentactions: PropTypes.shape({ closeCompanionWindow: PropTypes.func.isRequired }).isRequired,
       };
 
       createWrapper({

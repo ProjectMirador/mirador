@@ -23,7 +23,4 @@ const mapDispatchToProps = (dispatch, { afterSelect }) => ({
   },
 });
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('LanguageSettings'),
-)(LanguageSettings);
+export default compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('LanguageSettings'))(LanguageSettings);

@@ -65,8 +65,7 @@ export function CompanionArea({
 }) {
   const { t } = useTranslation();
   /** */
-  const areaLayoutClass =
-    position === 'bottom' || position === 'far-bottom' ? classes.horizontal : null;
+  const areaLayoutClass = position === 'bottom' || position === 'far-bottom' ? classes.horizontal : null;
 
   /** */
   const collapseIcon = (() => {
@@ -109,24 +108,21 @@ export function CompanionArea({
           ))}
         </Container>
       </Slide>
-      {setCompanionAreaOpen &&
-        position === 'left' &&
-        sideBarOpen &&
-        companionWindowIds.length > 0 && (
-          <StyledToggle>
-            <MiradorMenuButton
-              aria-expanded={companionAreaOpen}
-              aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
-              edge="start"
-              onClick={() => {
-                setCompanionAreaOpen(windowId, !companionAreaOpen);
-              }}
-              TooltipProps={{ placement: 'right' }}
-            >
-              {collapseIcon}
-            </MiradorMenuButton>
-          </StyledToggle>
-        )}
+      {setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindowIds.length > 0 && (
+        <StyledToggle>
+          <MiradorMenuButton
+            aria-expanded={companionAreaOpen}
+            aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
+            edge="start"
+            onClick={() => {
+              setCompanionAreaOpen(windowId, !companionAreaOpen);
+            }}
+            TooltipProps={{ placement: 'right' }}
+          >
+            {collapseIcon}
+          </MiradorMenuButton>
+        </StyledToggle>
+      )}
     </Root>
   );
 }

@@ -36,9 +36,7 @@ describe('SearchHit', () => {
     render(<Subject selectAnnotation={selectAnnotation} />);
 
     expect(screen.getByRole('listitem')).toHaveClass('windowSelected');
-    expect(screen.getByRole('listitem')).toHaveTextContent(
-      '1Light up the moose , and start the chai more',
-    );
+    expect(screen.getByRole('listitem')).toHaveTextContent('1Light up the moose , and start the chai more');
 
     await user.click(screen.getByRole('button'));
     expect(selectAnnotation).toHaveBeenCalledWith('foo');

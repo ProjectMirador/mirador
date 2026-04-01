@@ -18,30 +18,26 @@ function createWrapper({ ...props }) {
 describe('WindowSideBar when closed', () => {
   it('renders without an error', () => {
     createWrapper({});
-    expect(
-      screen.queryByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' })).not.toBeInTheDocument();
   });
 });
 describe('WindowSideBar when open', () => {
   it('renders in an open state', () => {
     createWrapper({ sideBarOpen: true });
-    expect(
-      screen.getByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' })).toBeInTheDocument();
   });
   it('Renders drawer ltr by default', () => {
     createWrapper({ sideBarOpen: true });
     // eslint-disable-next-line testing-library/no-node-access
-    expect(
-      screen.queryByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' }),
-    ).toHaveClass('MuiDrawer-paperAnchorLeft');
+    expect(screen.queryByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' })).toHaveClass(
+      'MuiDrawer-paperAnchorLeft',
+    );
   });
   it('Renders drawer rtl when specified', () => {
     createWrapper({ direction: 'rtl', sideBarOpen: true });
     // eslint-disable-next-line testing-library/no-node-access
-    expect(
-      screen.queryByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' }),
-    ).toHaveClass('MuiDrawer-paperAnchorRight');
+    expect(screen.queryByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' })).toHaveClass(
+      'MuiDrawer-paperAnchorRight',
+    );
   });
 });

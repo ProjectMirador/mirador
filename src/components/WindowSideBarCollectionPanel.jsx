@@ -30,11 +30,7 @@ function Item({ manifest, canvasNavigation, variant, ...otherProps }) {
     >
       {variant === 'thumbnail' && (
         <ListItemIcon>
-          <IIIFThumbnail
-            resource={manifest}
-            maxHeight={canvasNavigation.height}
-            maxWidth={canvasNavigation.width}
-          />
+          <IIIFThumbnail resource={manifest} maxHeight={canvasNavigation.height} maxWidth={canvasNavigation.width} />
         </ListItemIcon>
       )}
       <ListItemText>
@@ -88,11 +84,7 @@ export function WindowSideBarCollectionPanel({
         <>
           {parentCollection && (
             <List>
-              <ListItemButton
-                onClick={() =>
-                  updateCompanionWindow({ collectionPath: collectionPath.slice(0, -1) })
-                }
-              >
+              <ListItemButton onClick={() => updateCompanionWindow({ collectionPath: collectionPath.slice(0, -1) })}>
                 <ListItemIcon>
                   <ArrowUpwardIcon />
                 </ListItemIcon>

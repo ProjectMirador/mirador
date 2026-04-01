@@ -3,13 +3,7 @@ import { TextViewer } from '../../../src/components/TextViewer';
 
 /** create wrapper */
 function createWrapper(props, suspenseFallback) {
-  return render(
-    <TextViewer
-      classes={{}}
-      textOptions={{ crossOrigin: 'anonymous', 'data-testid': 'text' }}
-      {...props}
-    />,
-  );
+  return render(<TextViewer classes={{}} textOptions={{ crossOrigin: 'anonymous', 'data-testid': 'text' }} {...props} />);
 }
 
 describe('TextViewer', () => {
@@ -24,10 +18,7 @@ describe('TextViewer', () => {
       );
       const text = screen.getByTestId('text');
       // eslint-disable-next-line testing-library/no-node-access
-      expect(text.querySelector('source:nth-of-type(1)')).toHaveAttribute(
-        'type',
-        'application/pdf',
-      );
+      expect(text.querySelector('source:nth-of-type(1)')).toHaveAttribute('type', 'application/pdf');
     });
     it('passes through configurable options', () => {
       createWrapper(

@@ -32,13 +32,9 @@ const mapStateToProps = (state, { id, windowId }) => {
  */
 const mapDispatchToProps = (dispatch, { windowId, id }) => ({
   onCloseClick: () => dispatch(actions.removeCompanionWindow(windowId, id)),
-  updateCompanionWindow: (...args) =>
-    dispatch(actions.updateCompanionWindow(windowId, id, ...args)),
+  updateCompanionWindow: (...args) => dispatch(actions.updateCompanionWindow(windowId, id, ...args)),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
-  withPlugins('CompanionWindow'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }), withPlugins('CompanionWindow'));
 
 export default enhance(CompanionWindow);

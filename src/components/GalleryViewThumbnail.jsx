@@ -33,16 +33,14 @@ const Root = styled('div', { name: 'GalleryView', slot: 'thumbnail' })(({ ownerS
   width: 'min-content',
 }));
 
-const StyledChipsContainer = styled('div', { name: 'GalleryView', slot: 'chipArea' })(
-  ({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: theme.spacing(0.25),
-    position: 'absolute',
-    right: 0,
-    top: 0,
-  }),
-);
+const StyledChipsContainer = styled('div', { name: 'GalleryView', slot: 'chipArea' })(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(0.25),
+  position: 'absolute',
+  right: 0,
+  top: 0,
+}));
 
 const AnnotationChip = styled(Chip, { name: 'GalleryView', slot: 'chip' })(({ theme }) => ({
   backgroundColor: theme.palette.annotations.chipBackground,
@@ -95,10 +93,7 @@ export function GalleryViewThumbnail({
     };
 
     const enterOrSpace =
-      event.key === keys.enter ||
-      event.which === chars.enter ||
-      event.key === keys.space ||
-      event.which === chars.space;
+      event.key === keys.enter || event.which === chars.enter || event.key === keys.space || event.which === chars.space;
 
     if (enterOrSpace) {
       focusOnCanvas();
@@ -109,13 +104,7 @@ export function GalleryViewThumbnail({
 
   /** */
   const handleIntersection = (_inView, { isIntersecting }) => {
-    if (
-      !isIntersecting ||
-      annotationsCount === undefined ||
-      annotationsCount > 0 ||
-      requestedAnnotations
-    )
-      return;
+    if (!isIntersecting || annotationsCount === undefined || annotationsCount > 0 || requestedAnnotations) return;
 
     setRequestedAnnotations(true);
     requestCanvasAnnotations();
@@ -141,27 +130,13 @@ export function GalleryViewThumbnail({
         role="button"
         tabIndex={0}
       >
-        <IIIFThumbnail
-          resource={canvas}
-          labelled
-          variant="outside"
-          maxHeight={config.height}
-          maxWidth={config.width}
-        >
+        <IIIFThumbnail resource={canvas} labelled variant="outside" maxHeight={config.height} maxWidth={config.width}>
           <StyledChipsContainer>
             {searchAnnotationsCount > 0 && (
-              <AnnotationChip
-                icon={<SearchIcon fontSize="small" />}
-                label={searchAnnotationsCount}
-                size="small"
-              />
+              <AnnotationChip icon={<SearchIcon fontSize="small" />} label={searchAnnotationsCount} size="small" />
             )}
             {annotationsCount > 0 && (
-              <AnnotationChip
-                icon={<AnnotationIcon fontSize="small" />}
-                label={annotationsCount}
-                size="small"
-              />
+              <AnnotationChip icon={<AnnotationIcon fontSize="small" />} label={annotationsCount} size="small" />
             )}
           </StyledChipsContainer>
         </IIIFThumbnail>

@@ -11,10 +11,10 @@ import { getSequenceViewingHint, getSequenceBehaviors } from './sequences';
  * @param {string} windowId
  * @returns {object}
  */
-export const getWindowConfig = createSelector(
-  [getConfig, getWindow],
-  ({ window: defaultConfig }, windowConfig = {}) => ({ ...defaultConfig, ...windowConfig }),
-);
+export const getWindowConfig = createSelector([getConfig, getWindow], ({ window: defaultConfig }, windowConfig = {}) => ({
+  ...defaultConfig,
+  ...windowConfig,
+}));
 
 /**
  * Returns the manifest titles for all open windows.
@@ -56,9 +56,7 @@ export const getWindowViewType = createSelector(
     if (window && window.view) return window.view;
 
     const config = (views || []).find(
-      (view) =>
-        view.behaviors &&
-        view.behaviors.some((b) => manifestViewingHint === b || manifestBehaviors.includes(b)),
+      (view) => view.behaviors && view.behaviors.some((b) => manifestViewingHint === b || manifestBehaviors.includes(b)),
     );
 
     return (config && config.key) || defaultView;

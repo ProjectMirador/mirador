@@ -22,8 +22,7 @@ import { WindowSideBarButtons } from '../components/WindowSideBarButtons';
  * @private
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
-  addCompanionWindow: (content) =>
-    dispatch(actions.addOrUpdateCompanionWindow(windowId, { content, position: 'left' })),
+  addCompanionWindow: (content) => dispatch(actions.addOrUpdateCompanionWindow(windowId, { content, position: 'left' })),
 });
 
 /** */
@@ -62,25 +61,15 @@ function hasSearchResults(state, { windowId }) {
  */
 const mapStateToProps = (state, { windowId }) => ({
   hasAnnotations: getAnnotationResourcesByMotivation(state, { windowId }).length > 0,
-  hasAnyAnnotations: hasAnnotations(
-    getCanvases(state, { windowId }),
-    getMiradorCanvasWrapper(state),
-  ),
+  hasAnyAnnotations: hasAnnotations(getCanvases(state, { windowId }), getMiradorCanvasWrapper(state)),
   hasAnyLayers: hasLayers(getCanvases(state, { windowId }), getMiradorCanvasWrapper(state)),
-  hasCurrentLayers: hasLayers(
-    getVisibleCanvases(state, { windowId }),
-    getMiradorCanvasWrapper(state),
-  ),
+  hasCurrentLayers: hasLayers(getVisibleCanvases(state, { windowId }), getMiradorCanvasWrapper(state)),
   hasSearchResults: hasSearchResults(state, { windowId }),
   hasSearchService: getManifestSearchService(state, { windowId }) !== null,
   panels: getWindowConfig(state, { windowId }).panels,
-  sideBarPanel: (getCompanionWindowsForPosition(state, { position: 'left', windowId })[0] || {})
-    .content,
+  sideBarPanel: (getCompanionWindowsForPosition(state, { position: 'left', windowId })[0] || {}).content,
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('WindowSideBarButtons'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('WindowSideBarButtons'));
 
 export default enhance(WindowSideBarButtons);

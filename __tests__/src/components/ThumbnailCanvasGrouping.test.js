@@ -8,9 +8,7 @@ import manifestJson from '../../fixtures/version-2/019.json';
 
 /** create wrapper */
 function createWrapper(props) {
-  const canvasGroupings = new CanvasGroupings(
-    Utils.parseManifest(manifestJson).getSequences()[0].getCanvases(),
-  ).groupings();
+  const canvasGroupings = new CanvasGroupings(Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()).groupings();
 
   return render(
     <ThumbnailCanvasGrouping
@@ -56,9 +54,7 @@ describe('ThumbnailCanvasGrouping', () => {
     await user.click(wrapper.container.querySelector('.mirador-thumbnail-nav-canvas-0'));
     expect(spyCurrentCanvasClass).toHaveBeenCalledWith([0]);
     expect(spyCurrentCanvasClass).toHaveReturnedWith('current-canvas-grouping');
-    expect(setCanvas).toHaveBeenCalledWith(
-      'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
-    );
+    expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
   });
   describe('attributes based off far-bottom position', () => {
     it('in button div', () => {

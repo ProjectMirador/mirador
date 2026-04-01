@@ -10,10 +10,7 @@ import { getThumbnailFactory } from './thumbnails';
 function createManifestoInstance(json, locale) {
   if (!json) return undefined;
   // Use structuredClone to create a deep copy and prevent Manifesto from mutating the json
-  const manifestoObject = Utils.parseManifest(
-    structuredClone(json),
-    locale ? { locale } : undefined,
-  );
+  const manifestoObject = Utils.parseManifest(structuredClone(json), locale ? { locale } : undefined);
   if (manifestoObject) {
     // Local patching of Manifesto so that when its a Collection, it behaves similarly
     if (typeof manifestoObject.getSequences != 'function') {
@@ -27,8 +24,7 @@ function createManifestoInstance(json, locale) {
 /** */
 export const getLocale = createSelector(
   [getCompanionWindowLocale, getConfig, (state, { locale }) => locale],
-  (companionWindowLocale, config = {}, locale) =>
-    locale || companionWindowLocale || config.language || config.fallbackLanguages,
+  (companionWindowLocale, config = {}, locale) => locale || companionWindowLocale || config.language || config.fallbackLanguages,
 );
 
 const defaultManifestStatus = Object.freeze({ missing: true });
@@ -40,10 +36,7 @@ const defaultManifestStatus = Object.freeze({ missing: true });
  * @param {string} props.windowId
  * @returns {object} {error: null: id: string, isFetching: boolean, json: {...}}
  */
-export const getManifestStatus = createSelector(
-  [getManifest],
-  (manifest) => manifest || defaultManifestStatus,
-);
+export const getManifestStatus = createSelector([getManifest], (manifest) => manifest || defaultManifestStatus);
 
 /**
  * Convenience selector to get a manifest loading error
@@ -52,10 +45,7 @@ export const getManifestStatus = createSelector(
  * @param {string} props.manifestId
  * @returns {string|null}
  */
-export const getManifestError = createSelector(
-  [getManifest],
-  (manifest) => manifest && manifest.error,
-);
+export const getManifestError = createSelector([getManifest], (manifest) => manifest && manifest.error);
 
 /** Instantiate a manifesto instance */
 const getContextualManifestoInstance = createSelector(
@@ -79,19 +69,12 @@ export const getManifestoInstance = createSelector(
 export const getManifestLocale = createSelector(
   [getManifestoInstance, getLocale],
   (manifest, locale) =>
-    locale ??
-    (manifest &&
-      manifest.options &&
-      manifest.options.locale &&
-      manifest.options.locale.replace(/-.*$/, '')),
+    locale ?? (manifest && manifest.options && manifest.options.locale && manifest.options.locale.replace(/-.*$/, '')),
 );
 
 /** */
 function getProperty(property) {
-  return createSelector(
-    [getManifestoInstance],
-    (manifest) => manifest && manifest.getProperty(property),
-  );
+  return createSelector([getManifestoInstance], (manifest) => manifest && manifest.getProperty(property));
 }
 
 /**
@@ -104,8 +87,7 @@ function getProperty(property) {
  */
 export const getManifestProviderName = createSelector(
   [getProperty('provider'), getManifestLocale],
-  (provider, locale) =>
-    provider && provider[0].label && PropertyValue.parse(provider[0].label).getValue(locale),
+  (provider, locale) => provider && provider[0].label && PropertyValue.parse(provider[0].label).getValue(locale),
 );
 
 const EMPTY_LOGO_OPTS = Object.freeze({});
@@ -328,10 +310,7 @@ export const getManifestSummary = createSelector(
  * @param {string} props.windowId
  * @returns {string}
  */
-export const getManifestUrl = createSelector(
-  [getManifestoInstance],
-  (manifest) => manifest && manifest.id,
-);
+export const getManifestUrl = createSelector([getManifestoInstance], (manifest) => manifest && manifest.id);
 
 /**
  * Return metadata in a label / value structure
@@ -413,9 +392,7 @@ function getLocales(resource) {
   return Object.keys(languages);
 }
 
-export const getMetadataLocales = createSelector([getManifestoInstance], (manifest) =>
-  getLocales(manifest),
-);
+export const getMetadataLocales = createSelector([getManifestoInstance], (manifest) => getLocales(manifest));
 
 /**
  * Returns manifest search service.
@@ -427,8 +404,7 @@ export const getMetadataLocales = createSelector([getManifestoInstance], (manife
 export const getManifestSearchService = createSelector([getManifestoInstance], (manifest) => {
   if (!manifest) return null;
   const searchService =
-    manifest.getService('http://iiif.io/api/search/0/search') ||
-    manifest.getService('http://iiif.io/api/search/1/search');
+    manifest.getService('http://iiif.io/api/search/0/search') || manifest.getService('http://iiif.io/api/search/1/search');
   if (searchService) return searchService;
   return null;
 });
@@ -440,14 +416,11 @@ export const getManifestSearchService = createSelector([getManifestoInstance], (
  * @param {string} props.manifestId
  * @returns {string|null}
  */
-export const getManifestAutocompleteService = createSelector(
-  [getManifestSearchService],
-  (searchService) => {
-    const autocompleteService =
-      searchService &&
-      (searchService.getService('http://iiif.io/api/search/0/autocomplete') ||
-        searchService.getService('http://iiif.io/api/search/1/autocomplete'));
+export const getManifestAutocompleteService = createSelector([getManifestSearchService], (searchService) => {
+  const autocompleteService =
+    searchService &&
+    (searchService.getService('http://iiif.io/api/search/0/autocomplete') ||
+      searchService.getService('http://iiif.io/api/search/1/autocomplete'));
 
-    return autocompleteService && autocompleteService;
-  },
-);
+  return autocompleteService && autocompleteService;
+});

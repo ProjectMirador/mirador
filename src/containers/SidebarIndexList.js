@@ -23,9 +23,6 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('SidebarIndexList'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('SidebarIndexList'));
 
 export default enhance(SidebarIndexList);

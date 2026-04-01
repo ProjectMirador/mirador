@@ -1,10 +1,5 @@
 import ActionTypes from './action-types';
-import {
-  getNextCanvasGrouping,
-  getPreviousCanvasGrouping,
-  getCanvasGrouping,
-  getConfig,
-} from '../selectors';
+import { getNextCanvasGrouping, getPreviousCanvasGrouping, getCanvasGrouping, getConfig } from '../selectors';
 
 /**
  * setCanvas - action creator

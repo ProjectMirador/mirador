@@ -200,10 +200,7 @@ SearchHit.propTypes = {
   announcer: PropTypes.func,
   canvasLabel: PropTypes.string,
   companionWindowId: PropTypes.string,
-  containerRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]),
+  containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]),
   focused: PropTypes.bool,
   hit: PropTypes.shape({
     after: PropTypes.string,

@@ -5,9 +5,7 @@ import flatten from 'lodash/flatten';
  */
 const ns = (classNames) =>
   flatten([classNames])
-    .map((className) =>
-      [settings.createGenerateClassNameOptions.productionPrefix, className].join('-'),
-    )
+    .map((className) => [settings.createGenerateClassNameOptions.productionPrefix, className].join('-'))
     .join(' ');
 
 export default ns;

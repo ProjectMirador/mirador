@@ -86,21 +86,9 @@ export function CanvasAnnotations({
             >
               <ListItemText
                 primaryTypographyProps={{ variant: 'body2' }}
-                primary={
-                  <SanitizedHtml
-                    ruleSet={htmlSanitizationRuleSet}
-                    htmlString={annotation.content}
-                  />
-                }
+                primary={<SanitizedHtml ruleSet={htmlSanitizationRuleSet} htmlString={annotation.content} />}
                 secondary={annotation.tags.map((tag) => (
-                  <Chip
-                    component="span"
-                    size="small"
-                    variant="outlined"
-                    label={tag}
-                    id={tag}
-                    key={tag.toString()}
-                  />
+                  <Chip component="span" size="small" variant="outlined" label={tag} id={tag} key={tag.toString()} />
                 ))}
               />
             </MenuItem>
@@ -118,10 +106,7 @@ CanvasAnnotations.propTypes = {
       id: PropTypes.string.isRequired,
     }),
   ),
-  containerRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]),
+  containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]),
   deselectAnnotation: PropTypes.func.isRequired,
   hoverAnnotation: PropTypes.func.isRequired,
   hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),

@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { DndContext } from 'react-dnd';
-import {
-  Mosaic,
-  MosaicWindow,
-  getLeaves,
-  createBalancedTreeFromLeaves,
-} from 'react-mosaic-component2';
+import { Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves } from 'react-mosaic-component2';
 import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
@@ -22,8 +17,7 @@ const StyledMosaic = styled(Mosaic)({
     boxShadow: 'none',
   },
   '& .mosaic-tile': {
-    boxShadow:
-      '0 1px 3px 0 rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .2), 0 2px 1px -1px rgba(0, 0, 0, .2)',
+    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .2), 0 2px 1px -1px rgba(0, 0, 0, .2)',
   },
   '& .mosaic-window': {
     boxShadow: 'none',
@@ -79,12 +73,7 @@ const determineWorkspaceLayout = (currentLayout, windowIds, currentWindowPaths =
  * @memberof Workspace
  * @private
  */
-export function WorkspaceMosaic({
-  layout = undefined,
-  updateWorkspaceMosaicLayout,
-  windowIds = [],
-  workspaceId,
-}) {
+export function WorkspaceMosaic({ layout = undefined, updateWorkspaceMosaicLayout, windowIds = [], workspaceId }) {
   const toolbarControls = [];
   const additionalControls = [];
 
@@ -104,10 +93,7 @@ export function WorkspaceMosaic({
     }
 
     // nothing was added or removed, and all the windows are accounted for in the layout
-    if (
-      windowIds.every((e) => leaveKeys.includes(e)) &&
-      leaveKeys.every((e) => windowIds.includes(e))
-    ) {
+    if (windowIds.every((e) => leaveKeys.includes(e)) && leaveKeys.every((e) => windowIds.includes(e))) {
       return undefined;
     }
 

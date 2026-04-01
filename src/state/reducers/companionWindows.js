@@ -42,11 +42,7 @@ export function companionWindowsReducer(state = {}, action) {
       return action.state.companionWindows || [];
 
     case ActionTypes.TOGGLE_TOC_NODE:
-      return update(
-        [action.id, 'tocNodes'],
-        (orig) => ({ ...(orig || {}), ...action.payload }),
-        state,
-      );
+      return update([action.id, 'tocNodes'], (orig) => ({ ...(orig || {}), ...action.payload }), state);
     default:
       return state;
   }

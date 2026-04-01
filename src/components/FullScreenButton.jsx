@@ -25,11 +25,7 @@ export function FullScreenButton({ className = undefined }) {
 
   if (handle && handle.active) {
     return (
-      <MiradorMenuButton
-        className={className}
-        aria-label={t('exitFullScreen')}
-        onClick={handle.exit}
-      >
+      <MiradorMenuButton className={className} aria-label={t('exitFullScreen')} onClick={handle.exit}>
         <FullscreenExitIcon />
       </MiradorMenuButton>
     );
@@ -37,11 +33,7 @@ export function FullScreenButton({ className = undefined }) {
 
   if (handle) {
     return (
-      <MiradorMenuButton
-        className={className}
-        aria-label={t('workspaceFullScreen')}
-        onClick={handle.enter}
-      >
+      <MiradorMenuButton className={className} aria-label={t('workspaceFullScreen')} onClick={handle.enter}>
         <FullscreenIcon />
       </MiradorMenuButton>
     );

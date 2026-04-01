@@ -47,9 +47,7 @@ describe('AnnotationItem', () => {
 
   describe('targetId', () => {
     it('removes fragmentSelector coords from string targets', () => {
-      expect(
-        new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' }).targetId,
-      ).toEqual('www.example.com/');
+      expect(new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' }).targetId).toEqual('www.example.com/');
     });
 
     it('returns null when there is no target', () => {
@@ -69,10 +67,7 @@ describe('AnnotationItem', () => {
       expect(new AnnotationItem({ motivation: 'commenting' }).motivations).toEqual(['commenting']);
     });
     it('with multiple motivations', () => {
-      expect(new AnnotationItem({ motivation: ['commenting', 'funstuff'] }).motivations).toEqual([
-        'commenting',
-        'funstuff',
-      ]);
+      expect(new AnnotationItem({ motivation: ['commenting', 'funstuff'] }).motivations).toEqual(['commenting', 'funstuff']);
     });
   });
   describe('resources/body', () => {
@@ -108,10 +103,7 @@ describe('AnnotationItem', () => {
       expect(new AnnotationItem({ target: { selector: 'yolo' } }).selector).toEqual(['yolo']);
     });
     it('handles multiple selectors', () => {
-      expect(new AnnotationItem({ target: { selector: ['yolo', 'foo'] } }).selector).toEqual([
-        'yolo',
-        'foo',
-      ]);
+      expect(new AnnotationItem({ target: { selector: ['yolo', 'foo'] } }).selector).toEqual(['yolo', 'foo']);
     });
   });
   describe('chars', () => {
@@ -122,16 +114,12 @@ describe('AnnotationItem', () => {
       expect(new AnnotationItem({ body: { value: 'foo' } }).chars).toEqual('foo');
     });
     it('with multiple bodies', () => {
-      expect(new AnnotationItem({ body: [{ value: 'foo' }, { value: 'bar' }] }).chars).toEqual(
-        'foo bar',
-      );
+      expect(new AnnotationItem({ body: [{ value: 'foo' }, { value: 'bar' }] }).chars).toEqual('foo bar');
     });
   });
   describe('fragmentSelector', () => {
     it('simple string', () => {
-      expect(
-        new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' }).fragmentSelector,
-      ).toEqual([10, 10, 100, 200]);
+      expect(new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' }).fragmentSelector).toEqual([10, 10, 100, 200]);
     });
     it('multiple selectors', () => {
       expect(
@@ -146,15 +134,11 @@ describe('AnnotationItem', () => {
   });
   describe('svgSelector', () => {
     it('simple string', () => {
-      expect(
-        new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' }).svgSelector,
-      ).toEqual(null);
+      expect(new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' }).svgSelector).toEqual(null);
     });
 
     it('specified SvgSelector', () => {
-      expect(
-        new AnnotationItem({ target: { selector: { type: 'SvgSelector' } } }).svgSelector,
-      ).toEqual({ type: 'SvgSelector' });
+      expect(new AnnotationItem({ target: { selector: { type: 'SvgSelector' } } }).svgSelector).toEqual({ type: 'SvgSelector' });
     });
 
     it('without specified type', () => {

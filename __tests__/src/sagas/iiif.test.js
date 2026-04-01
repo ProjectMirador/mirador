@@ -7,13 +7,7 @@ import {
   fetchInfoResponse,
   fetchResourceManifest,
 } from '../../../src/state/sagas/iiif';
-import {
-  getConfig,
-  getManifests,
-  selectInfoResponse,
-  getAccessTokens,
-  getRequestsConfig,
-} from '../../../src/state/selectors';
+import { getConfig, getManifests, selectInfoResponse, getAccessTokens, getRequestsConfig } from '../../../src/state/selectors';
 
 describe('IIIF sagas', () => {
   describe('fetchManifest', () => {
@@ -46,9 +40,7 @@ describe('IIIF sagas', () => {
     });
 
     it('supports request configuration preprocessors', () => {
-      fetch.once((req) =>
-        Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })),
-      );
+      fetch.once((req) => Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })));
       const action = {
         manifestId: 'manifestId',
       };
@@ -58,9 +50,7 @@ describe('IIIF sagas', () => {
           [
             select(getRequestsConfig),
             {
-              preprocessors: [
-                (url, options) => ({ ...options, headers: { CustomHeader: 'config injected' } }),
-              ],
+              preprocessors: [(url, options) => ({ ...options, headers: { CustomHeader: 'config injected' } })],
             },
           ],
         ])
@@ -73,9 +63,7 @@ describe('IIIF sagas', () => {
     });
 
     it('supports response postprocessors', () => {
-      fetch.once((req) =>
-        Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })),
-      );
+      fetch.once((req) => Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })));
       const action = {
         manifestId: 'manifestId',
       };
@@ -171,9 +159,7 @@ describe('IIIF sagas', () => {
         infoId: 'infoId',
       };
 
-      return expectSaga(fetchInfoResponse, action)
-        .put.actionType('mirador/RECEIVE_INFO_RESPONSE_FAILURE')
-        .run();
+      return expectSaga(fetchInfoResponse, action).put.actionType('mirador/RECEIVE_INFO_RESPONSE_FAILURE').run();
     });
     it('handles degraded requests', () => {
       fetch.mockResponseOnce(JSON.stringify({ id: 'otherInfoId' }));
@@ -269,9 +255,7 @@ describe('IIIF sagas', () => {
         windowId: 'windowId',
       };
 
-      return expectSaga(fetchSearchResponse, action)
-        .put.actionType('mirador/RECEIVE_SEARCH_FAILURE')
-        .run();
+      return expectSaga(fetchSearchResponse, action).put.actionType('mirador/RECEIVE_SEARCH_FAILURE').run();
     });
   });
 
@@ -300,9 +284,7 @@ describe('IIIF sagas', () => {
         targetId: 'targetId',
       };
 
-      return expectSaga(fetchAnnotation, action)
-        .put.actionType('mirador/RECEIVE_ANNOTATION_FAILURE')
-        .run();
+      return expectSaga(fetchAnnotation, action).put.actionType('mirador/RECEIVE_ANNOTATION_FAILURE').run();
     });
   });
 

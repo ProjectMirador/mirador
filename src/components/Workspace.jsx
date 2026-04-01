@@ -88,9 +88,7 @@ export function Workspace({
       case 'mosaic':
         return <WorkspaceMosaic />;
       default:
-        return windowIds.map((windowId) => (
-          <Window key={`${windowId}-${workspaceId}`} windowId={windowId} />
-        ));
+        return windowIds.map((windowId) => <Window key={`${windowId}-${workspaceId}`} windowId={windowId} />);
     }
   };
 

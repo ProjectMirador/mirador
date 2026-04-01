@@ -25,14 +25,7 @@ function getIdAndLabelOfCanvases(canvases) {
 }
 
 /** */
-export function SidebarIndexList({
-  canvases,
-  containerRef,
-  selectedCanvasIds = [],
-  setCanvas,
-  variant = 'item',
-  windowId,
-}) {
+export function SidebarIndexList({ canvases, containerRef, selectedCanvasIds = [], setCanvas, variant = 'item', windowId }) {
   const canvasesIdAndLabel = useMemo(() => getIdAndLabelOfCanvases(canvases), [canvases]);
   let Item;
 
@@ -71,10 +64,7 @@ export function SidebarIndexList({
 
 SidebarIndexList.propTypes = {
   canvases: PropTypes.array.isRequired,
-  containerRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]).isRequired,
+  containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]).isRequired,
   selectedCanvasIds: PropTypes.arrayOf(PropTypes.string),
   setCanvas: PropTypes.func.isRequired,
   variant: PropTypes.oneOf(['item', 'thumbnail']),

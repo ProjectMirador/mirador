@@ -85,9 +85,7 @@ export function ManifestRelatedLinks({
                 <Link target="_blank" rel="noopener noreferrer" href={relatedItem.value}>
                   {relatedItem.label || relatedItem.value}
                 </Link>
-                {relatedItem.format && (
-                  <Typography component="span">{` (${relatedItem.format})`}</Typography>
-                )}
+                {relatedItem.format && <Typography component="span">{` (${relatedItem.format})`}</Typography>}
               </Typography>
             ))}
           </>
@@ -102,9 +100,7 @@ export function ManifestRelatedLinks({
                 <Link target="_blank" rel="noopener noreferrer" href={seeAlsoItem.value}>
                   {seeAlsoItem.label || seeAlsoItem.value}
                 </Link>
-                {seeAlsoItem.format && (
-                  <Typography component="span">{` (${seeAlsoItem.format})`}</Typography>
-                )}
+                {seeAlsoItem.format && <Typography component="span">{` (${seeAlsoItem.format})`}</Typography>}
               </Typography>
             ))}
           </>

@@ -9,12 +9,7 @@ import { useTranslation } from 'react-i18next';
  * Provides a form for user input of a manifest url
  * @prop {Function} fetchManifest
  */
-export function ManifestForm({
-  addResourcesOpen,
-  addResource,
-  onSubmit = () => {},
-  onCancel = null,
-}) {
+export function ManifestForm({ addResourcesOpen, addResource, onSubmit = () => {}, onCancel = null }) {
   const { t } = useTranslation();
   const [formValue, setFormValue] = useState('');
 

@@ -39,10 +39,7 @@ function iiifv3ImageServiceType(service) {
 /** */
 function iiifImageService(resource) {
   const service =
-    resource &&
-    resource
-      .getServices()
-      .find((s) => iiifv3ImageServiceType(s) || Utils.isImageProfile(s.getProfile()));
+    resource && resource.getServices().find((s) => iiifv3ImageServiceType(s) || Utils.isImageProfile(s.getProfile()));
 
   if (!service) return undefined;
 
@@ -138,12 +135,8 @@ class ThumbnailFactory {
 
     if (!service) return ThumbnailFactory.staticImageUrl(resource);
 
-    const aspectRatio =
-      resource.getWidth() && resource.getHeight() && resource.getWidth() / resource.getHeight();
-    const target =
-      requestedMaxWidth && requestedMaxHeight
-        ? requestedMaxWidth * requestedMaxHeight
-        : maxHeight * maxWidth;
+    const aspectRatio = resource.getWidth() && resource.getHeight() && resource.getWidth() / resource.getHeight();
+    const target = requestedMaxWidth && requestedMaxHeight ? requestedMaxWidth * requestedMaxHeight : maxHeight * maxWidth;
     const closestSize = ThumbnailFactory.selectBestImageSize(service, target);
 
     if (closestSize) {
@@ -212,9 +205,7 @@ class ThumbnailFactory {
 
     if (!servicePreferredFormats) return 'jpg';
 
-    const filteredFormats = servicePreferredFormats.filter((value) =>
-      preferredFormats.includes(value),
-    );
+    const filteredFormats = servicePreferredFormats.filter((value) => preferredFormats.includes(value));
 
     // this is a format found in common between the preferred formats of the service
     // and the application
@@ -251,11 +242,7 @@ class ThumbnailFactory {
       // Prefer an image's ImageService over its image's thumbnail
       // Note that Collection, Manifest, and Canvas don't have `getType()`
       if (!resource.isCollection() && !resource.isManifest() && !resource.isCanvas()) {
-        if (
-          resource.getType() === 'image' &&
-          iiifImageService(resource) &&
-          !iiifImageService(thumbnail)
-        ) {
+        if (resource.getType() === 'image' && iiifImageService(resource) && !iiifImageService(thumbnail)) {
           return resource;
         }
       }

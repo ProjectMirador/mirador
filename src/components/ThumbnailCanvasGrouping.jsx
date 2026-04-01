@@ -38,16 +38,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
 
   /** */
   render() {
-    const {
-      index,
-      columnIndex,
-      style,
-      canvasGroupings,
-      position,
-      height,
-      currentCanvasId,
-      showThumbnailLabels,
-    } = this.props;
+    const { index, columnIndex, style, canvasGroupings, position, height, currentCanvasId, showThumbnailLabels } = this.props;
     // For Grid (horizontal), use columnIndex; for List (vertical), use index
     const itemIndex = columnIndex !== undefined ? columnIndex : index;
     const currentGroupings = canvasGroupings[itemIndex];
@@ -94,9 +85,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
               }),
             },
             '&:hover': {
-              outline: isSelected
-                ? `2px solid ${theme.palette.primary.main}`
-                : `2px solid ${theme.palette.action.hover}`,
+              outline: isSelected ? `2px solid ${theme.palette.primary.main}` : `2px solid ${theme.palette.action.hover}`,
               outlineOffset: isSelected ? '3px' : '-2px',
             },
             height: position === 'far-right' ? 'auto' : `${height - SPACING}px`,
@@ -115,9 +104,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
               key={canvas.id}
               resource={canvas}
               labelled={showThumbnailLabels}
-              maxHeight={
-                position === 'far-right' ? style.height - 1.5 * SPACING : height - 1.5 * SPACING
-              }
+              maxHeight={position === 'far-right' ? style.height - 1.5 * SPACING : height - 1.5 * SPACING}
               variant="inside"
             />
           ))}

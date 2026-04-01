@@ -47,9 +47,6 @@ const mapDispatchToProps = {
   fetchManifest: actions.fetchManifest,
 };
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('ManifestListItem'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('ManifestListItem'));
 
 export default enhance(ManifestListItem);

@@ -30,11 +30,7 @@ const Root = styled(Fab, { name: 'WorkspaceAddButton', slot: 'root' })(({ theme 
 
 /**
  */
-export function WorkspaceAddButton({
-  setWorkspaceAddVisibility,
-  isWorkspaceAddVisible = false,
-  useExtendedFab,
-}) {
+export function WorkspaceAddButton({ setWorkspaceAddVisibility, isWorkspaceAddVisible = false, useExtendedFab }) {
   const width = useWidth();
   const { t } = useTranslation();
 

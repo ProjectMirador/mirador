@@ -53,11 +53,7 @@ export function SearchPanel({
         query === '' &&
         suggestedSearches.map((search) => (
           <Typography component="p" key={search} variant="body1" sx={{ margin: 2 }}>
-            <Button
-              variant="inlineText"
-              color="secondary"
-              onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}
-            >
+            <Button variant="inlineText" color="secondary" onClick={() => fetchSearch(`${searchService.id}?q=${search}`, search)}>
               {t('suggestSearch', { query: search })}
             </Button>
           </Typography>

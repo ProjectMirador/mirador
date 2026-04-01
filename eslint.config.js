@@ -10,14 +10,7 @@ import jestDomPlugin from 'eslint-plugin-jest-dom';
 export default [
   // Ignore patterns
   {
-    ignores: [
-      '**/dist/**',
-      '**/node_modules/**',
-      '**/coverage/**',
-      '**/config/**',
-      '**/styles/**',
-      '**/packages/**',
-    ],
+    ignores: ['**/dist/**', '**/node_modules/**', '**/coverage/**', '**/config/**', '**/styles/**', '**/packages/**'],
   },
 
   // Base ESLint recommended rules
@@ -132,10 +125,7 @@ export default [
       'testing-library/no-await-sync-queries': 'error',
       'testing-library/no-debugging-utils': 'warn',
       'testing-library/no-dom-import': 'off',
-      'testing-library/no-render-in-lifecycle': [
-        'error',
-        { allowTestingFrameworkSetupHook: 'beforeEach' },
-      ],
+      'testing-library/no-render-in-lifecycle': ['error', { allowTestingFrameworkSetupHook: 'beforeEach' }],
       'testing-library/render-result-naming-convention': 'off',
     },
 

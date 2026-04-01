@@ -47,13 +47,9 @@ describe('WorkspaceArea', () => {
     it('should render WorkspaceAdd when isWorkspaceAddVisible is true', () => {
       createWrapper({ isWorkspaceAddVisible: true });
 
-      expect(
-        screen.queryByRole('heading', { level: 1, name: 'Mirador viewer' }),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole('heading', { level: 1, name: 'Mirador viewer' })).not.toBeInTheDocument();
       expect(screen.getByRole('main')).toHaveTextContent('Your resource list is empty');
-      expect(
-        within(screen.getByRole('main')).getByRole('button', { name: 'Add resource' }),
-      ).toBeInTheDocument();
+      expect(within(screen.getByRole('main')).getByRole('button', { name: 'Add resource' })).toBeInTheDocument();
     });
   });
 });

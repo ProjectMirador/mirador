@@ -62,10 +62,7 @@ describe('PrimaryWindow', () => {
     });
     await waitFor(() => {
       // eslint-disable-next-line testing-library/no-node-access
-      expect(document.querySelector('source:nth-of-type(1)')).toHaveAttribute(
-        'type',
-        'application/pdf',
-      );
+      expect(document.querySelector('source:nth-of-type(1)')).toHaveAttribute('type', 'application/pdf');
     });
   });
 });

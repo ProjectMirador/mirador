@@ -15,9 +15,7 @@ describe('add plugins for companion windows', () => {
     // Open sidebar where our custom plugin button will be
     await waitFor(async () => {
       // eslint-disable-next-line testing-library/no-node-access
-      const companionWindowLeft = document.querySelector(
-        '.mirador-companion-window-left.mirador-window-sidebar-info-panel',
-      );
+      const companionWindowLeft = document.querySelector('.mirador-companion-window-left.mirador-window-sidebar-info-panel');
       expect(companionWindowLeft).toBeInTheDocument();
     });
 

@@ -39,10 +39,7 @@ describe('ManifestForm', () => {
     const addResource = vi.fn();
     const onSubmit = vi.fn();
     createWrapper({ addResource, addResourcesOpen: true, onSubmit });
-    await user.type(
-      screen.getByRole('textbox', { name: 'Resource location' }),
-      'http://example.com/iiif',
-    );
+    await user.type(screen.getByRole('textbox', { name: 'Resource location' }), 'http://example.com/iiif');
     await user.click(screen.getByRole('button', { name: 'Add' }));
 
     expect(addResource).toHaveBeenCalledWith('http://example.com/iiif');

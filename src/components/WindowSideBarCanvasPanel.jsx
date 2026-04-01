@@ -56,9 +56,7 @@ export function WindowSideBarCanvasPanel({
   let listComponent;
 
   if (variant === 'tableOfContents') {
-    listComponent = (
-      <SidebarIndexTableOfContents id={id} containerRef={containerRef} windowId={windowId} />
-    );
+    listComponent = <SidebarIndexTableOfContents id={id} containerRef={containerRef} windowId={windowId} />;
   } else {
     listComponent = <SidebarIndexList id={id} containerRef={containerRef} windowId={windowId} />;
   }
@@ -105,13 +103,7 @@ export function WindowSideBarCanvasPanel({
             </FormControl>
           )}
           <StyledBreak />
-          <Tabs
-            value={variant}
-            onChange={handleVariantChange}
-            variant="fullWidth"
-            indicatorColor="primary"
-            textColor="primary"
-          >
+          <Tabs value={variant} onChange={handleVariantChange} variant="fullWidth" indicatorColor="primary" textColor="primary">
             {showToc && (
               <Tooltip title={t('tableOfContentsList')} value="tableOfContents">
                 <Tab

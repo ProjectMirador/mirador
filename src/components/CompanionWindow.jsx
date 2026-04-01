@@ -56,10 +56,7 @@ export const CompanionWindow = forwardRef((props, innerRef) => {
   } = props;
   const [sizeRef, size] = useElementSize();
   const { t } = useTranslation();
-  const locale = useSelector(
-    (state) => getCompanionWindowLocale(state, { companionWindowId: id }),
-    [id],
-  );
+  const locale = useSelector((state) => getCompanionWindowLocale(state, { companionWindowId: id }), [id]);
 
   /** */
   const openInNewStyle = direction === 'rtl' ? { transform: 'scale(-1, 1)' } : {};
@@ -165,11 +162,7 @@ export const CompanionWindow = forwardRef((props, innerRef) => {
               <>
                 {updateCompanionWindow && (
                   <StyledPositionButton
-                    aria-label={
-                      position === 'bottom'
-                        ? t('moveCompanionWindowToRight')
-                        : t('moveCompanionWindowToBottom')
-                    }
+                    aria-label={position === 'bottom' ? t('moveCompanionWindowToRight') : t('moveCompanionWindowToBottom')}
                     onClick={() => {
                       updateCompanionWindow({
                         position: position === 'bottom' ? 'right' : 'bottom',

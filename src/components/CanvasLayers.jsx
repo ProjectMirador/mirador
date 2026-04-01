@@ -43,15 +43,7 @@ const reorder = (list, startIndex, endIndex) => {
 };
 
 /** @private */
-function Layer({
-  resource,
-  layerMetadata = {},
-  index,
-  handleOpacityChange,
-  setLayerVisibility,
-  moveToBackground,
-  moveToFront,
-}) {
+function Layer({ resource, layerMetadata = {}, index, handleOpacityChange, setLayerVisibility, moveToBackground, moveToFront }) {
   const { t } = useTranslation();
   const { width, height } = { height: undefined, width: 40 };
 
@@ -111,11 +103,7 @@ function Layer({
       </div>
       <div style={{ alignItems: 'center', display: 'flex' }}>
         <Tooltip title={t('layer_opacity')}>
-          <OpacityIcon
-            sx={{ marginRight: 0.5 }}
-            color={layer.visibility ? 'inherit' : 'disabled'}
-            fontSize="small"
-          />
+          <OpacityIcon sx={{ marginRight: 0.5 }} color={layer.visibility ? 'inherit' : 'disabled'} fontSize="small" />
         </Tooltip>
         <Input
           sx={{
@@ -226,16 +214,7 @@ DraggableLayer.propTypes = {
 };
 
 /** */
-export function CanvasLayers({
-  canvasId,
-  index,
-  label,
-  layers,
-  layerMetadata = {},
-  totalSize,
-  updateLayers,
-  windowId,
-}) {
+export function CanvasLayers({ canvasId, index, label, layers, layerMetadata = {}, totalSize, updateLayers, windowId }) {
   const { t } = useTranslation();
   const droppableId = useId();
 

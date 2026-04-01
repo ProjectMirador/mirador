@@ -4,11 +4,9 @@ import { Rnd } from 'react-rnd';
 import Window from '../containers/Window';
 import ns from '../config/css-ns';
 
-const StyledRnd = styled(Rnd, { shouldForwardProp: (prop) => prop !== 'focused' })(
-  ({ focused, theme }) => ({
-    zIndex: focused ? theme.zIndex.modal - 1 : 'auto',
-  }),
-);
+const StyledRnd = styled(Rnd, { shouldForwardProp: (prop) => prop !== 'focused' })(({ focused, theme }) => ({
+  zIndex: focused ? theme.zIndex.modal - 1 : 'auto',
+}));
 
 /**
  * Represents a work area that contains any number of windows

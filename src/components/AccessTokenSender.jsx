@@ -24,11 +24,7 @@ export function AccessTokenSender({ handleAccessTokenMessage, url = undefined })
   external, no-op
   */
   return (
-    <IIIFIFrameCommunication
-      src={src.toString()}
-      title="AccessTokenSender"
-      handleReceiveMessage={onReceiveAccessTokenMessage}
-    />
+    <IIIFIFrameCommunication src={src.toString()} title="AccessTokenSender" handleReceiveMessage={onReceiveAccessTokenMessage} />
   );
 }
 

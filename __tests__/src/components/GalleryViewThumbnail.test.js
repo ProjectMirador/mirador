@@ -32,9 +32,7 @@ describe('GalleryView', () => {
     createWrapper({ setCanvas });
     const user = userEvent.setup();
     await user.click(screen.getByRole('button'));
-    expect(setCanvas).toHaveBeenCalledWith(
-      'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
-    );
+    expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
   });
 
   it('sets the window mode if the selected canvas is clicked', async () => {
@@ -69,9 +67,7 @@ describe('GalleryView', () => {
     const button = screen.getByRole('button');
     button.focus();
     fireEvent.keyUp(button, { code: 'd', key: 'd' });
-    expect(setCanvas).toHaveBeenCalledWith(
-      'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
-    );
+    expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
   });
 
   it('scrolls into view when selected prop changes to true', () => {

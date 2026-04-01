@@ -2,13 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { Workspace } from '../components/Workspace';
-import {
-  getMaximizedWindowsIds,
-  getWindowIds,
-  getWorkspaceType,
-  getConfig,
-  getWorkspace,
-} from '../state/selectors';
+import { getMaximizedWindowsIds, getWindowIds, getWorkspaceType, getConfig, getWorkspace } from '../state/selectors';
 import * as actions from '../state/actions';
 
 /**

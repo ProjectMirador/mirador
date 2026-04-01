@@ -6,9 +6,7 @@ import { SearchPanelNavigation } from '../../../src/components/SearchPanelNaviga
  * Helper function to create a shallow wrapper around SearchPanelNavigation
  */
 function createWrapper(props) {
-  return render(
-    <SearchPanelNavigation companionWindowId="cw" direction="ltr" windowId="window" {...props} />,
-  );
+  return render(<SearchPanelNavigation companionWindowId="cw" direction="ltr" windowId="window" {...props} />);
 }
 
 describe('SearchPanelNavigation', () => {

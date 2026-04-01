@@ -20,14 +20,7 @@ const Root = styled(Paper, { name: 'GalleryView', slot: 'root' })(({ theme }) =>
 export function GalleryView({ canvases, viewingDirection = '', windowId }) {
   const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
   return (
-    <Root
-      component="section"
-      aria-label="gallery section"
-      dir={htmlDir}
-      square
-      elevation={0}
-      id={`${windowId}-gallery`}
-    >
+    <Root component="section" aria-label="gallery section" dir={htmlDir} square elevation={0} id={`${windowId}-gallery`}>
       {canvases.map((canvas) => (
         <GalleryViewThumbnail key={canvas.id} windowId={windowId} canvas={canvas} />
       ))}

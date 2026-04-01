@@ -6,18 +6,15 @@ export default {
     { manifestId: 'https://prtd.app/fv/manifest.json' },
     { manifestId: 'https://dvp.prtd.app/hamilton/manifest.json' },
     {
-      manifestId:
-        'https://iiif.io/api/cookbook/recipe/0036-composition-from-multiple-images/manifest.json',
+      manifestId: 'https://iiif.io/api/cookbook/recipe/0036-composition-from-multiple-images/manifest.json',
     },
     { manifestId: 'https://iiif.io/api/cookbook/recipe/0033-choice/manifest.json' },
     {
-      manifestId:
-        'https://iiif.bodleian.ox.ac.uk/iiif/manifest/1fc3f35d-bbb5-4524-8fbe-a5bcb5468be2.json',
+      manifestId: 'https://iiif.bodleian.ox.ac.uk/iiif/manifest/1fc3f35d-bbb5-4524-8fbe-a5bcb5468be2.json',
     },
     { manifestId: 'https://data.getty.edu/media/manifest/bayard-custom' },
     {
-      manifestId:
-        'https://heritage.tudelft.nl/iiif/manifests/ejection-seat-front-side/manifest.json',
+      manifestId: 'https://heritage.tudelft.nl/iiif/manifests/ejection-seat-front-side/manifest.json',
     },
     { manifestId: 'https://iiif.ub.uni-leipzig.de/exp/manifests/layers2/manifest.json' },
   ],
@@ -50,8 +47,7 @@ export default {
   windows: [
     { manifestId: 'https://dvp.prtd.app/hamilton/manifest.json' },
     {
-      manifestId:
-        'https://iiif.io/api/cookbook/recipe/0036-composition-from-multiple-images/manifest.json',
+      manifestId: 'https://iiif.io/api/cookbook/recipe/0036-composition-from-multiple-images/manifest.json',
     },
   ],
 };

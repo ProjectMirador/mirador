@@ -4,14 +4,7 @@ import { WindowTopMenuButton } from '../../../src/components/WindowTopMenuButton
 
 /** create wrapper */
 function Subject({ ...props }) {
-  return (
-    <WindowTopMenuButton
-      windowId="xyz"
-      data-testid="test"
-      classes={{ ctrlBtnSelected: 'ctrlBtnSelected' }}
-      {...props}
-    />
-  );
+  return <WindowTopMenuButton windowId="xyz" data-testid="test" classes={{ ctrlBtnSelected: 'ctrlBtnSelected' }} {...props} />;
 }
 
 describe('WindowTopMenuButton', () => {
@@ -41,9 +34,7 @@ describe('WindowTopMenuButton', () => {
     render(<Subject />);
     // without a click, the button is not open and therefore doesn't have aria-owns attr
     // eslint-disable-next-line testing-library/no-node-access
-    expect(screen.getByLabelText('Window views & thumbnail display')).not.toHaveAttribute(
-      'aria-owns',
-    );
+    expect(screen.getByLabelText('Window views & thumbnail display')).not.toHaveAttribute('aria-owns');
   });
 
   it('the open attribute of the button is applied once it is clicked', async () => {

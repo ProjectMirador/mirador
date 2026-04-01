@@ -28,9 +28,7 @@ describe('Window', () => {
   });
   it('should render <WindowTopBar>', () => {
     createWrapper();
-    expect(
-      screen.getByRole('navigation', { accessibleName: 'Window navigation' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { accessibleName: 'Window navigation' })).toBeInTheDocument();
   });
   it('should render <PrimaryWindow>', () => {
     createWrapper();
@@ -47,13 +45,7 @@ describe('Window', () => {
       const connectDragSource = vi.fn((component) => component);
       render(
         <MosaicWindowContext.Provider value={{ mosaicWindowActions: { connectDragSource } }}>
-          <Window
-            windowId="xyz"
-            manifestId="foo"
-            classes={{}}
-            windowDraggable
-            workspaceType="mosaic"
-          />
+          <Window windowId="xyz" manifestId="foo" classes={{}} windowDraggable workspaceType="mosaic" />
         </MosaicWindowContext.Provider>,
         {
           preloadedState: {
@@ -72,13 +64,7 @@ describe('Window', () => {
       const connectDragSource = vi.fn((component) => component);
       render(
         <MosaicWindowContext.Provider value={{ mosaicWindowActions: { connectDragSource } }}>
-          <Window
-            windowId="xyz"
-            manifestId="foo"
-            classes={{}}
-            windowDraggable={false}
-            workspaceType="mosaic"
-          />
+          <Window windowId="xyz" manifestId="foo" classes={{}} windowDraggable={false} workspaceType="mosaic" />
         </MosaicWindowContext.Provider>,
         {
           preloadedState: {

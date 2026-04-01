@@ -65,9 +65,7 @@ describe('selectCurrentAuthServices', () => {
       },
       w: {
         manifestId: 'a',
-        visibleCanvases: [
-          'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
-        ],
+        visibleCanvases: ['https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json'],
       },
       x: {
         manifestId: 'b',
@@ -82,10 +80,7 @@ describe('selectCurrentAuthServices', () => {
 
   it('returns undefined if there is no current canvas', () => {
     expect(
-      selectCurrentAuthServices(
-        { config: { auth: settings.auth }, manifests: {} },
-        { windowId: 'noCanvas' },
-      )[0],
+      selectCurrentAuthServices({ config: { auth: settings.auth }, manifests: {} }, { windowId: 'noCanvas' })[0],
     ).toBeUndefined();
   });
 
@@ -104,9 +99,7 @@ describe('selectCurrentAuthServices', () => {
       login: { isFetching: false, ok: false },
     };
     expect(selectCurrentAuthServices({ ...state, auth }, { windowId: 'w' })[0].id).toEqual('login');
-    expect(selectCurrentAuthServices({ ...state, auth }, { windowId: 'x' })[0].id).toEqual(
-      'external',
-    );
+    expect(selectCurrentAuthServices({ ...state, auth }, { windowId: 'x' })[0].id).toEqual('external');
     expect(selectCurrentAuthServices({ ...state, auth }, { windowId: 'y' })[0]).toBeUndefined();
   });
 
@@ -150,25 +143,19 @@ describe('selectCurrentAuthServices', () => {
       windows: {
         w: {
           manifestId: 'a',
-          visibleCanvases: [
-            'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
-          ],
+          visibleCanvases: ['https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json'],
         },
       },
     };
 
     it('returns external first', () => {
       auth = {};
-      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual(
-        'external',
-      );
+      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual('external');
     });
 
     it('returns kiosk next', () => {
       auth = { external: { isFetching: false, ok: false } };
-      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual(
-        'kiosk',
-      );
+      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual('kiosk');
     });
 
     it('returns clickthrough next', () => {
@@ -176,9 +163,7 @@ describe('selectCurrentAuthServices', () => {
         external: { isFetching: false, ok: false },
         kiosk: { isFetching: false, ok: false },
       };
-      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual(
-        'clickthrough',
-      );
+      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual('clickthrough');
     });
 
     it('returns logins last', () => {
@@ -187,9 +172,7 @@ describe('selectCurrentAuthServices', () => {
         external: { isFetching: false, ok: false },
         kiosk: { isFetching: false, ok: false },
       };
-      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual(
-        'login',
-      );
+      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual('login');
     });
 
     it('returns services within a given type using the order from the manifest', () => {
@@ -199,9 +182,7 @@ describe('selectCurrentAuthServices', () => {
         kiosk: { isFetching: false, ok: false },
         login: { isFetching: false, ok: false },
       };
-      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual(
-        'login2',
-      );
+      expect(selectCurrentAuthServices({ ...orderedState, auth }, { windowId: 'w' })[0].id).toEqual('login2');
     });
   });
 });

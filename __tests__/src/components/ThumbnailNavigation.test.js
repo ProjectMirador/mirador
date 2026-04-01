@@ -13,9 +13,7 @@ import zeroWidthFixture from '../../fixtures/version-2/zeroWidthCanvas.json';
 function Subject({ fixture = manifestJson, ...props }) {
   return (
     <ThumbnailNavigation
-      canvasGroupings={new CanvasGroupings(
-        Utils.parseManifest(fixture).getSequences()[0].getCanvases(),
-      ).groupings()}
+      canvasGroupings={new CanvasGroupings(Utils.parseManifest(fixture).getSequences()[0].getCanvases()).groupings()}
       canvasIndex={1}
       classes={{}}
       windowId="foobar"
@@ -122,14 +120,7 @@ describe('ThumbnailNavigation', () => {
         expect(setNextCanvas).toHaveBeenCalled();
       });
       it('handles down arrow by advancing the current canvas when the canvas is on the right', () => {
-        render(
-          <Subject
-            canvasIndex={1}
-            hasNextCanvas
-            position="far-right"
-            setNextCanvas={setNextCanvas}
-          />,
-        );
+        render(<Subject canvasIndex={1} hasNextCanvas position="far-right" setNextCanvas={setNextCanvas} />);
 
         screen.getByLabelText('Thumbnails').focus();
         fireEvent.keyDown(screen.getByLabelText('Thumbnails'), {
@@ -149,14 +140,7 @@ describe('ThumbnailNavigation', () => {
         expect(setPreviousCanvas).toHaveBeenCalled();
       });
       it('handles up arrow by selecting the previous canvas when the canvas is on the right', () => {
-        render(
-          <Subject
-            canvasIndex={2}
-            hasPreviousCanvas
-            position="far-right"
-            setPreviousCanvas={setPreviousCanvas}
-          />,
-        );
+        render(<Subject canvasIndex={2} hasPreviousCanvas position="far-right" setPreviousCanvas={setPreviousCanvas} />);
 
         screen.getByLabelText('Thumbnails').focus();
         fireEvent.keyDown(screen.getByLabelText('Thumbnails'), { code: 'ArrowUp', key: 'ArrowUp' });

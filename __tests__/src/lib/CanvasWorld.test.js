@@ -60,9 +60,7 @@ describe('CanvasWorld', () => {
       ).toEqual([0, 0, 2848, 4288]);
     });
     it('when placed by a fragment contains the offset', () => {
-      const subject = new CanvasWorld(
-        [Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0]].map(wrapCanvas),
-      );
+      const subject = new CanvasWorld([Utils.parseManifest(fragmentFixture).getSequences()[0].getCanvases()[0]].map(wrapCanvas));
       expect(
         subject.contentResourceToWorldCoordinates({
           id: 'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg',
@@ -78,9 +76,7 @@ describe('CanvasWorld', () => {
         ),
       ).toEqual([0, 0, 6501, 4421]);
       expect(
-        new CanvasWorld(canvasSubset).canvasToWorldCoordinates(
-          'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
-        ),
+        new CanvasWorld(canvasSubset).canvasToWorldCoordinates('https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1'),
       ).toEqual([6305, 0, 2848, 4288]);
     });
     it('supports RTL orientations', () => {
@@ -94,14 +90,10 @@ describe('CanvasWorld', () => {
   describe('offsetByCanvas', () => {
     it('calculates an offset that can be used to translate annotations', () => {
       expect(
-        new CanvasWorld(canvasSubset).offsetByCanvas(
-          'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
-        ),
+        new CanvasWorld(canvasSubset).offsetByCanvas('https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'),
       ).toEqual({ x: 0, y: 0 });
       expect(
-        new CanvasWorld(canvasSubset).offsetByCanvas(
-          'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
-        ),
+        new CanvasWorld(canvasSubset).offsetByCanvas('https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1'),
       ).toEqual({ x: 6305, y: 0 });
     });
   });
@@ -113,10 +105,9 @@ describe('CanvasWorld', () => {
     it('returns 0 if the layer is currently hidden', () => {
       const layers = {
         'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1': {
-          'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/full/full/0/default.jpg':
-            {
-              visibility: false,
-            },
+          'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/full/full/0/default.jpg': {
+            visibility: false,
+          },
         },
       };
 
@@ -138,16 +129,13 @@ describe('CanvasWorld', () => {
     it('returns the configured opacity value for the layer', () => {
       const layers = {
         'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1': {
-          'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/full/full/0/default.jpg':
-            {
-              opacity: 0.5,
-            },
+          'https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/full/full/0/default.jpg': {
+            opacity: 0.5,
+          },
         },
       };
 
-      expect(new CanvasWorld(canvases, layers).layerOpacityOfImageResource(tileSource1)).toEqual(
-        0.5,
-      );
+      expect(new CanvasWorld(canvases, layers).layerOpacityOfImageResource(tileSource1)).toEqual(0.5);
     });
   });
 
@@ -162,10 +150,9 @@ describe('CanvasWorld', () => {
     it('returns the inverse of the configured index', () => {
       const layers = {
         'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json': {
-          'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/full/0/default.jpg':
-            {
-              index: 0,
-            },
+          'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/full/0/default.jpg': {
+            index: 0,
+          },
         },
       };
 

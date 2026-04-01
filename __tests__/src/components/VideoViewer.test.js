@@ -3,13 +3,7 @@ import { VideoViewer } from '../../../src/components/VideoViewer';
 
 /** create wrapper */
 function createWrapper(props, suspenseFallback) {
-  return render(
-    <VideoViewer
-      classes={{}}
-      videoOptions={{ crossOrigin: 'anonymous', 'data-testid': 'video' }}
-      {...props}
-    />,
-  );
+  return render(<VideoViewer classes={{}} videoOptions={{ crossOrigin: 'anonymous', 'data-testid': 'video' }} {...props} />);
 }
 
 describe('VideoViewer', () => {

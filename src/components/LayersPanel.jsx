@@ -11,13 +11,7 @@ export function LayersPanel({ canvasIds = [], id, windowId }) {
   return (
     <CompanionWindow title={t('layers')} id={id} windowId={windowId}>
       {canvasIds.map((canvasId, index) => (
-        <CanvasLayers
-          canvasId={canvasId}
-          index={index}
-          key={canvasId}
-          totalSize={canvasIds.length}
-          windowId={windowId}
-        />
+        <CanvasLayers canvasId={canvasId} index={index} key={canvasId} totalSize={canvasIds.length} windowId={windowId} />
       ))}
     </CompanionWindow>
   );

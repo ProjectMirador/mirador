@@ -17,9 +17,6 @@ const mapStateToProps = (_state) => ({});
  */
 const mapDispatchToProps = {};
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('FullScreenButton'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('FullScreenButton'));
 
 export default enhance(FullScreenButton);

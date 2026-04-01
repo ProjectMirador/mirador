@@ -51,17 +51,14 @@ describe('getThumbnail', () => {
       describe('with a thumbnail', () => {
         it('return the thumbnail and metadata', () => {
           expect(
-            createSubject(
-              { '@id': 'xyz', '@type': type, thumbnail: { '@id': url, height: 70, width: 50 } },
-              type,
-            ),
+            createSubject({ '@id': 'xyz', '@type': type, thumbnail: { '@id': url, height: 70, width: 50 } }, type),
           ).toMatchObject({ height: 70, url, width: 50 });
         });
 
         it('return the IIIF service of the thumbnail', () => {
-          expect(
-            createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel1Service }, type),
-          ).toMatchObject({ url: `${url}/full/,120/0/default.jpg` });
+          expect(createSubject({ '@id': 'xyz', '@type': type, thumbnail: iiifLevel1Service }, type)).toMatchObject({
+            url: `${url}/full/,120/0/default.jpg`,
+          });
         });
 
         describe('with image size constraints', () => {
@@ -175,9 +172,9 @@ describe('getThumbnail', () => {
 
   describe('with a canvas', () => {
     it('uses the thumbnail', () => {
-      expect(
-        createSubject({ ...canvas.__jsonld, thumbnail: { ...iiifLevel1Service } }, 'Canvas'),
-      ).toMatchObject({ url: `${url}/full/,120/0/default.jpg` });
+      expect(createSubject({ ...canvas.__jsonld, thumbnail: { ...iiifLevel1Service } }, 'Canvas')).toMatchObject({
+        url: `${url}/full/,120/0/default.jpg`,
+      });
     });
 
     it('uses the first image resource', () => {
@@ -399,9 +396,7 @@ describe('selectBestImageSize', () => {
       type: 'ImageService3',
     });
 
-    expect(ThumbnailFactory.selectBestImageSize(service, targetWidth * targetHeight)).toEqual(
-      sizes[1],
-    );
+    expect(ThumbnailFactory.selectBestImageSize(service, targetWidth * targetHeight)).toEqual(sizes[1]);
   });
 
   it('selects the largest size smaller than the target, if none larger are available', () => {
@@ -417,8 +412,6 @@ describe('selectBestImageSize', () => {
       type: 'ImageService3',
     });
 
-    expect(ThumbnailFactory.selectBestImageSize(service, targetWidth * targetHeight)).toEqual(
-      sizes[2],
-    );
+    expect(ThumbnailFactory.selectBestImageSize(service, targetWidth * targetHeight)).toEqual(sizes[2]);
   });
 });

@@ -38,12 +38,7 @@ const StyledMiradorMenuButton = styled(MiradorMenuButton)(() => ({
  * @memberof Workspace
  * @private
  */
-export function WorkspaceAdd({
-  addResource = () => {},
-  catalog = [],
-  setWorkspaceAddVisibility,
-  ...rest
-}) {
+export function WorkspaceAdd({ addResource = () => {}, catalog = [], setWorkspaceAddVisibility, ...rest }) {
   const { t } = useTranslation();
   const [addResourcesOpen, setAddResourcesVisibility] = useState(false);
   const ref = useRef();
@@ -183,12 +178,7 @@ export function WorkspaceAdd({
               right: '0',
             }}
           >
-            <AppBar
-              position="absolute"
-              color="primary"
-              enableColorOnDark
-              onClick={() => setAddResourcesVisibility(false)}
-            >
+            <AppBar position="absolute" color="primary" enableColorOnDark onClick={() => setAddResourcesVisibility(false)}>
               <Toolbar variant="dense">
                 <StyledMiradorMenuButton aria-label={t('closeAddResourceForm')} color="inherit">
                   <ExpandMoreIcon />

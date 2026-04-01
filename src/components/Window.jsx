@@ -121,12 +121,7 @@ export function Window({
         {manifestError && <ErrorContent error={{ stack: manifestError }} windowId={windowId} />}
         <ContentRow>
           <ContentColumn>
-            <StyledPrimaryWindow
-              view={view}
-              windowId={windowId}
-              isFetching={isFetching}
-              sideBarOpen={sideBarOpen}
-            />
+            <StyledPrimaryWindow view={view} windowId={windowId} isFetching={isFetching} sideBarOpen={sideBarOpen} />
             <StyledCompanionAreaBottom windowId={windowId} position="bottom" />
           </ContentColumn>
           <StyledCompanionAreaRight>

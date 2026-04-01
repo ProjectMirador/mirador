@@ -31,16 +31,8 @@ describe('handleDrop', () => {
     const props = { onDrop };
 
     handleDrop(item, monitor, props);
-    expect(onDrop).toHaveBeenCalledWith(
-      { canvasId: null, manifestId: 'http://example.com/iiif/1.json' },
-      props,
-      monitor,
-    );
-    expect(onDrop).toHaveBeenCalledWith(
-      { canvasId: 'url', manifestId: 'http://example.com/iiif/2.json' },
-      props,
-      monitor,
-    );
+    expect(onDrop).toHaveBeenCalledWith({ canvasId: null, manifestId: 'http://example.com/iiif/1.json' }, props, monitor);
+    expect(onDrop).toHaveBeenCalledWith({ canvasId: 'url', manifestId: 'http://example.com/iiif/2.json' }, props, monitor);
   });
 
   it('handles manifests', () => {
@@ -54,11 +46,7 @@ describe('handleDrop', () => {
     const promise = handleDrop(item, monitor, props);
 
     return promise.then(() => {
-      expect(onDrop).toHaveBeenCalledWith(
-        expect.objectContaining({ manifestJson: '{ "data": 123 }' }),
-        props,
-        monitor,
-      );
+      expect(onDrop).toHaveBeenCalledWith(expect.objectContaining({ manifestJson: '{ "data": 123 }' }), props, monitor);
     });
   });
 
@@ -127,10 +115,8 @@ describe('handleDrop', () => {
 
     expect(onDrop).toHaveBeenCalledWith(
       {
-        canvasId:
-          'https://digitalcollections.universiteitleiden.nl/iiif_manifest/item:1607203/canvas/default',
-        manifestId:
-          'https://digitalcollections.universiteitleiden.nl/iiif_manifest/item%3A1607191/manifest',
+        canvasId: 'https://digitalcollections.universiteitleiden.nl/iiif_manifest/item:1607203/canvas/default',
+        manifestId: 'https://digitalcollections.universiteitleiden.nl/iiif_manifest/item%3A1607191/manifest',
       },
       props,
       monitor,

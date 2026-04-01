@@ -46,9 +46,6 @@ const mapDispatchToProps = {
   selectAnnotation: actions.selectAnnotation,
 };
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('AnnotationsOverlay'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('AnnotationsOverlay'));
 
 export default enhance(AnnotationsOverlay);

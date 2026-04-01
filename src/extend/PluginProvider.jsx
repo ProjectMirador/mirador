@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import PluginContext from './PluginContext';
-import {
-  connectPluginsToStore,
-  createTargetToPluginMapping,
-  addPluginsToCompanionWindowsRegistry,
-} from './pluginMapping';
+import { connectPluginsToStore, createTargetToPluginMapping, addPluginsToCompanionWindowsRegistry } from './pluginMapping';
 
 /**  */
 export default function PluginProvider({ plugins = [], children = null }) {

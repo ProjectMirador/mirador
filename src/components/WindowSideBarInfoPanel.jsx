@@ -30,20 +30,12 @@ export function WindowSideBarInfoPanel({
       windowId={windowId}
       id={id}
       titleControls={
-        showLocalePicker && (
-          <LocalePicker locale={locale} setLocale={setLocale} availableLocales={availableLocales} />
-        )
+        showLocalePicker && <LocalePicker locale={locale} setLocale={setLocale} availableLocales={availableLocales} />
       }
     >
       {canvasIds.map((canvasId, index) => (
         <CompanionWindowSection key={canvasId}>
-          <CanvasInfo
-            canvasId={canvasId}
-            companionWindowId={id}
-            index={index}
-            totalSize={canvasIds.length}
-            windowId={windowId}
-          />
+          <CanvasInfo canvasId={canvasId} companionWindowId={id} index={index} totalSize={canvasIds.length} windowId={windowId} />
         </CompanionWindowSection>
       ))}
       {collectionPath.length > 0 && (

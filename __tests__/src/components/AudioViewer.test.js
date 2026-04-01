@@ -3,13 +3,7 @@ import { AudioViewer } from '../../../src/components/AudioViewer';
 
 /** create wrapper */
 function createWrapper(props, suspenseFallback) {
-  return render(
-    <AudioViewer
-      classes={{}}
-      audioOptions={{ crossOrigin: 'anonymous', 'data-testid': 'audio' }}
-      {...props}
-    />,
-  );
+  return render(<AudioViewer classes={{}} audioOptions={{ crossOrigin: 'anonymous', 'data-testid': 'audio' }} {...props} />);
 }
 
 /* eslint-disable testing-library/no-node-access */

@@ -7,13 +7,7 @@ import MinimalWindow from '../containers/MinimalWindow';
  */
 export function MosaicRenderPreview({ title = '', windowId }) {
   const { t } = useTranslation();
-  return (
-    <MinimalWindow
-      windowId={`${windowId}-preview`}
-      label={t('previewWindowTitle', { title })}
-      ariaLabel={false}
-    />
-  );
+  return <MinimalWindow windowId={`${windowId}-preview`} label={t('previewWindowTitle', { title })} ariaLabel={false} />;
 }
 
 MosaicRenderPreview.propTypes = {

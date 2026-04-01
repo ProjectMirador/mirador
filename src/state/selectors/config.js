@@ -44,14 +44,12 @@ export function getExportableState(state) {
  * @param {object} state
  * @returns {Array} [ {locale: 'de', label: 'Deutsch', current: true}, ... ]
  */
-export const getLanguagesFromConfigWithCurrent = createSelector(
-  [getConfig],
-  ({ availableLanguages, language }) =>
-    Object.keys(availableLanguages).map((key) => ({
-      current: key === language,
-      label: availableLanguages[key],
-      locale: key,
-    })),
+export const getLanguagesFromConfigWithCurrent = createSelector([getConfig], ({ availableLanguages, language }) =>
+  Object.keys(availableLanguages).map((key) => ({
+    current: key === language,
+    label: availableLanguages[key],
+    locale: key,
+  })),
 );
 
 /**
@@ -59,12 +57,8 @@ export const getLanguagesFromConfigWithCurrent = createSelector(
  * @param {object} state
  * @returns {boolean}
  */
-export const getShowZoomControlsConfig = createSelector(
-  [getWorkspace, getConfig],
-  (workspace, config) =>
-    workspace.showZoomControls === undefined
-      ? config.workspace.showZoomControls
-      : workspace.showZoomControls,
+export const getShowZoomControlsConfig = createSelector([getWorkspace, getConfig], (workspace, config) =>
+  workspace.showZoomControls === undefined ? config.workspace.showZoomControls : workspace.showZoomControls,
 );
 
 /**
@@ -91,25 +85,16 @@ export const getContainerId = createSelector([getConfig], ({ id }) => id);
  * @param {object} state
  * @returns {string}
  */
-export const getThemeDirection = createSelector(
-  [getConfig],
-  ({ theme }) => theme.direction || 'ltr',
-);
+export const getThemeDirection = createSelector([getConfig], ({ theme }) => theme.direction || 'ltr');
 /**
  * Returns the requests configurations from the config.
  * @param {object} state
  * @returns {object} {preprocessor: [...], postprocessor: [...]}
  */
-export const getRequestsConfig = createSelector(
-  [getConfig],
-  ({ requests }) => requests || EMPTY_OBJECT,
-);
+export const getRequestsConfig = createSelector([getConfig], ({ requests }) => requests || EMPTY_OBJECT);
 /**
  * Returns the thumbnails configurations from the config.
  * @param {object} state
  * @returns {object} {preprocessor: [...], postprocessor: [...]}
  */
-export const getThumbnailsConfig = createSelector(
-  [getConfig],
-  ({ thumbnails }) => thumbnails || EMPTY_OBJECT,
-);
+export const getThumbnailsConfig = createSelector([getConfig], ({ thumbnails }) => thumbnails || EMPTY_OBJECT);

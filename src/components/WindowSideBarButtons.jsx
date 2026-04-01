@@ -22,50 +22,43 @@ const Root = styled(Tabs, { name: 'WindowSideBarButtons', slot: 'root' })({
   },
 });
 
-const StyledTabButton = styled(Tab, { name: 'WindowSideBarButtons', slot: 'button' })(
-  ({ theme }) => ({
-    '&.Mui-selected': {
-      borderRight: '2px solid',
-      borderRightColor: theme.palette.primary.main,
+const StyledTabButton = styled(Tab, { name: 'WindowSideBarButtons', slot: 'button' })(({ theme }) => ({
+  '&.Mui-selected': {
+    borderRight: '2px solid',
+    borderRightColor: theme.palette.primary.main,
+  },
+  '&.MuiTab-root': {
+    '&:active': {
+      backgroundColor: theme.palette.action.active,
     },
-    '&.MuiTab-root': {
-      '&:active': {
-        backgroundColor: theme.palette.action.active,
+    '&:focus': {
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
       },
-      '&:focus': {
-        '@media (hover: none)': {
-          backgroundColor: 'transparent',
-        },
-        backgroundColor: theme.palette.action.hover,
-        textDecoration: 'none',
-        // Reset on touch devices, it doesn't add specificity
-      },
-      '&:hover': {
-        '@media (hover: none)': {
-          backgroundColor: 'transparent',
-        },
-        backgroundColor: theme.palette.action.hover,
-        textDecoration: 'none',
-        // Reset on touch devices, it doesn't add specificity
-      },
-      borderRight: '2px solid transparent',
-      minWidth: 'auto',
+      backgroundColor: theme.palette.action.hover,
+      textDecoration: 'none',
+      // Reset on touch devices, it doesn't add specificity
     },
-    fill: 'currentcolor',
-  }),
-);
+    '&:hover': {
+      '@media (hover: none)': {
+        backgroundColor: 'transparent',
+      },
+      backgroundColor: theme.palette.action.hover,
+      textDecoration: 'none',
+      // Reset on touch devices, it doesn't add specificity
+    },
+    borderRight: '2px solid transparent',
+    minWidth: 'auto',
+  },
+  fill: 'currentcolor',
+}));
 
 /** */
 function TabButton({ value, ...tabProps }) {
   const { t } = useTranslation();
   return (
     <Tooltip title={t('openCompanionWindow', { context: value })}>
-      <StyledTabButton
-        {...tabProps}
-        value={value}
-        aria-label={t('openCompanionWindow', { context: value })}
-        disableRipple
-      />
+      <StyledTabButton {...tabProps} value={value} aria-label={t('openCompanionWindow', { context: value })} disableRipple />
     </Tooltip>
   );
 }
@@ -113,12 +106,7 @@ export function WindowSideBarButtons({
         <TabButton
           value="annotations"
           icon={
-            <Badge
-              overlap="rectangular"
-              color="notification"
-              invisible={!hasAnnotations}
-              variant="dot"
-            >
+            <Badge overlap="rectangular" color="notification" invisible={!hasAnnotations} variant="dot">
               <AnnotationIcon />
             </Badge>
           }
@@ -128,12 +116,7 @@ export function WindowSideBarButtons({
         <TabButton
           value="search"
           icon={
-            <Badge
-              overlap="rectangular"
-              color="notification"
-              invisible={!hasSearchResults}
-              variant="dot"
-            >
+            <Badge overlap="rectangular" color="notification" invisible={!hasSearchResults} variant="dot">
               <SearchIcon />
             </Badge>
           }
@@ -143,12 +126,7 @@ export function WindowSideBarButtons({
         <TabButton
           value="layers"
           icon={
-            <Badge
-              overlap="rectangular"
-              color="notification"
-              invisible={!hasCurrentLayers}
-              variant="dot"
-            >
+            <Badge overlap="rectangular" color="notification" invisible={!hasCurrentLayers} variant="dot">
               <LayersIcon />
             </Badge>
           }
@@ -156,11 +134,7 @@ export function WindowSideBarButtons({
       )}
       {PluginComponents &&
         PluginComponents.map((PluginComponent) => (
-          <TabButton
-            key={PluginComponent.value}
-            value={PluginComponent.value}
-            icon={<PluginComponent />}
-          />
+          <TabButton key={PluginComponent.value} value={PluginComponent.value} icon={<PluginComponent />} />
         ))}
     </Root>
   );

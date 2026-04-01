@@ -44,8 +44,7 @@ describe('MiradorViewer', () => {
           ],
           windows: [
             {
-              canvasId:
-                'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
+              canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
               loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
               thumbnailNavigationPosition: 'far-bottom',
             },
@@ -87,12 +86,8 @@ describe('MiradorViewer', () => {
       expect(windows[windowIds[1]].view).toBe('book');
 
       expect(catalog.length).toBe(2);
-      expect(catalog[0].manifestId).toBe(
-        'https://iiif.harvardartmuseums.org/manifests/object/299843',
-      );
-      expect(catalog[1].manifestId).toBe(
-        'http://media.nga.gov/public/manifests/nga_highlights.json',
-      );
+      expect(catalog[0].manifestId).toBe('https://iiif.harvardartmuseums.org/manifests/object/299843');
+      expect(catalog[1].manifestId).toBe('http://media.nga.gov/public/manifests/nga_highlights.json');
       expect(catalog[1].provider).toBe('National Gallery of Art');
       expect(config.foo).toBe('bar');
     });

@@ -29,10 +29,7 @@ describe('IIIF Authentication sagas', () => {
       const provideDelay = ({ fn }, next) => (fn.name === 'delayP' ? null : next());
 
       return expectSaga(refetchInfoResponsesOnLogout, { tokenServiceId })
-        .provide([
-          { call: provideDelay },
-          [call(refetchInfoResponses, { serviceId: tokenServiceId }), {}],
-        ])
+        .provide([{ call: provideDelay }, [call(refetchInfoResponses, { serviceId: tokenServiceId }), {}]])
         .call(refetchInfoResponses, { serviceId: tokenServiceId })
         .run();
     });

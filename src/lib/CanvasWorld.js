@@ -29,9 +29,7 @@ export default class CanvasWorld {
 
     const [dirX, dirY] = this.canvasDirection;
     const scale =
-      dirY === 0
-        ? Math.min(...this.canvases.map((c) => c.getHeight()))
-        : Math.min(...this.canvases.map((c) => c.getWidth()));
+      dirY === 0 ? Math.min(...this.canvases.map((c) => c.getHeight())) : Math.min(...this.canvases.map((c) => c.getWidth()));
     let incX = 0;
     let incY = 0;
 
@@ -85,9 +83,7 @@ export default class CanvasWorld {
    * respective to the world.
    */
   contentResourceToWorldCoordinates(contentResource) {
-    const miradorCanvasIndex = this.canvases.findIndex((c) =>
-      c.imageResources.find((r) => r.id === contentResource.id),
-    );
+    const miradorCanvasIndex = this.canvases.findIndex((c) => c.imageResources.find((r) => r.id === contentResource.id));
     const canvas = this.canvases[miradorCanvasIndex];
     if (!canvas) return [];
 
@@ -104,12 +100,7 @@ export default class CanvasWorld {
   canvasToWorldCoordinates(canvasId) {
     const canvasDimensions = this.canvasDimensions.find((c) => c.canvas.id === canvasId);
 
-    return [
-      canvasDimensions.x,
-      canvasDimensions.y,
-      canvasDimensions.width,
-      canvasDimensions.height,
-    ];
+    return [canvasDimensions.x, canvasDimensions.y, canvasDimensions.width, canvasDimensions.height];
   }
 
   /** */
@@ -135,8 +126,7 @@ export default class CanvasWorld {
         (id) =>
           id &&
           infoResponseId &&
-          normalizeUrl(id, { stripAuthentication: false }) ===
-            normalizeUrl(infoResponseId, { stripAuthentication: false }),
+          normalizeUrl(id, { stripAuthentication: false }) === normalizeUrl(infoResponseId, { stripAuthentication: false }),
       ),
     );
     if (!miradorCanvas) return undefined;
@@ -149,15 +139,11 @@ export default class CanvasWorld {
 
   /** @private */
   getLayerMetadata(contentResource) {
-    const miradorCanvas = this.canvases.find((c) =>
-      c.imageResources.find((r) => r.id === contentResource.id),
-    );
+    const miradorCanvas = this.canvases.find((c) => c.imageResources.find((r) => r.id === contentResource.id));
 
     if (!miradorCanvas) return undefined;
 
-    const resourceIndex = miradorCanvas.imageResources.findIndex(
-      (r) => r.id === contentResource.id,
-    );
+    const resourceIndex = miradorCanvas.imageResources.findIndex((r) => r.id === contentResource.id);
     const resource = miradorCanvas.imageResources.find((r) => r.id === contentResource.id);
 
     const layer = this.layers && this.layers[miradorCanvas.canvas.id];
@@ -220,8 +206,7 @@ export default class CanvasWorld {
   /** */
   canvasAtPoint(point) {
     const canvasDimensions = this.canvasDimensions.find(
-      (c) =>
-        c.x <= point.x && point.x <= c.x + c.width && c.y <= point.y && point.y <= c.y + c.height,
+      (c) => c.x <= point.x && point.x <= c.x + c.width && c.y <= point.y && point.y <= c.y + c.height,
     );
 
     return canvasDimensions && canvasDimensions.canvas;

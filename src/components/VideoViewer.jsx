@@ -21,12 +21,7 @@ export function VideoViewer({ captions = [], videoOptions = {}, videoResources =
           <source key={video.io} src={video.id} type={video.getFormat()} />
         ))}
         {captions.map((caption) => (
-          <track
-            key={caption.id}
-            src={caption.id}
-            label={caption.getDefaultLabel()}
-            srcLang={caption.getProperty('language')}
-          />
+          <track key={caption.id} src={caption.id} label={caption.getDefaultLabel()} srcLang={caption.getProperty('language')} />
         ))}
       </StyledVideo>
     </StyledContainer>

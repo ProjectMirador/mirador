@@ -59,9 +59,6 @@ describe('SidebarIndexList', () => {
     createWrapper({ setCanvas });
     await user.click(screen.getByRole('menuitem', { name: 'Image 2' }));
 
-    expect(setCanvas).toHaveBeenCalledWith(
-      'xyz',
-      'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1',
-    );
+    expect(setCanvas).toHaveBeenCalledWith('xyz', 'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1');
   });
 });

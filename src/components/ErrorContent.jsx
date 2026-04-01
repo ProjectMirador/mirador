@@ -42,10 +42,7 @@ export function ErrorContent({ error, metadata = null, showJsError = true, ...re
       {t('errorDialogTitle')}
       {showJsError && (
         <InlineAccordion elevation={2} square>
-          <AccordionSummary
-            sx={{ marginInlineStart: '-1rem' }}
-            expandIcon={<ExpandMoreIcon sx={{ color: '#fff' }} />}
-          >
+          <AccordionSummary sx={{ marginInlineStart: '-1rem' }} expandIcon={<ExpandMoreIcon sx={{ color: '#fff' }} />}>
             {t('jsError', { message: error.message, name: error.name })}
           </AccordionSummary>
           <AccordionDetails>

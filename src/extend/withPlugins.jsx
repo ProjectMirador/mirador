@@ -25,11 +25,7 @@ function _withPlugins(targetName, TargetComponent) {
       const WrapPluginComponent = plugin.component;
 
       return (
-        <WrapPluginComponent
-          targetProps={passDownProps}
-          {...passDownProps}
-          TargetComponent={TargetComponent}
-        >
+        <WrapPluginComponent targetProps={passDownProps} {...passDownProps} TargetComponent={TargetComponent}>
           {children}
         </WrapPluginComponent>
       );

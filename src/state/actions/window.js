@@ -76,8 +76,7 @@ export function addWindow({ companionWindows, manifest, ...options }) {
         config.window.sideBarOpenByDefault !== undefined
           ? config.window.sideBarOpenByDefault || !!options.defaultSearchQuery
           : config.window.sideBarOpen || !!options.defaultSearchQuery,
-      sideBarPanel:
-        options.sideBarPanel || config.window.defaultSideBarPanel || config.window.sideBarPanel,
+      sideBarPanel: options.sideBarPanel || config.window.defaultSideBarPanel || config.window.sideBarPanel,
       thumbnailNavigationId: cwThumbs,
     };
 

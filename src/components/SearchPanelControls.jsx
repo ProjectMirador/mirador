@@ -46,12 +46,7 @@ export function SearchPanelControls({
 
   useEffect(() => {
     if (search && search !== '' && searchService) {
-      fetchSearch(
-        windowId,
-        companionWindowId,
-        `${searchService.id}?${new URLSearchParams({ q: search })}`,
-        search,
-      );
+      fetchSearch(windowId, companionWindowId, `${searchService.id}?${new URLSearchParams({ q: search })}`, search);
     }
   }, [search, searchService, companionWindowId, fetchSearch, windowId]);
 
@@ -116,8 +111,7 @@ export function SearchPanelControls({
           options={suggestions}
           getOptionLabel={getMatch}
           isOptionEqualToValue={(option, value) =>
-            deburr(getMatch(option).trim()).toLowerCase() ===
-            deburr(getMatch(value).trim()).toLowerCase()
+            deburr(getMatch(option).trim()).toLowerCase() === deburr(getMatch(value).trim()).toLowerCase()
           }
           noOptionsText=""
           onChange={selectItem}

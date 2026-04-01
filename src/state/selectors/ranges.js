@@ -37,8 +37,7 @@ function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
       (acc, canvasId) => acc || rangeContainsCanvasId(node.data, canvasId),
       false,
     );
-    const subTreeVisibleNodeIds =
-      node.nodes.length > 0 ? getVisibleNodeIdsInSubTree(node.nodes, canvasIds) : [];
+    const subTreeVisibleNodeIds = node.nodes.length > 0 ? getVisibleNodeIdsInSubTree(node.nodes, canvasIds) : [];
     result.push(...subTreeVisibleNodeIds);
     if (nodeContainsVisibleCanvas || subTreeVisibleNodeIds.length > 0) {
       result.push({
@@ -54,13 +53,10 @@ function getVisibleNodeIdsInSubTree(nodes, canvasIds) {
 }
 
 /** */
-const getVisibleLeafAndBranchNodeIds = createSelector(
-  [getSequenceTreeStructure, getVisibleCanvasIds],
-  (tree, canvasIds) => {
-    if (canvasIds.length === 0 || !tree) return [];
-    return getVisibleNodeIdsInSubTree(tree.nodes, canvasIds);
-  },
-);
+const getVisibleLeafAndBranchNodeIds = createSelector([getSequenceTreeStructure, getVisibleCanvasIds], (tree, canvasIds) => {
+  if (canvasIds.length === 0 || !tree) return [];
+  return getVisibleNodeIdsInSubTree(tree.nodes, canvasIds);
+});
 
 /**
  * Returns visible node ids.
@@ -69,27 +65,19 @@ const getVisibleLeafAndBranchNodeIds = createSelector(
  * @param {string} props.windowId
  * @returns {Array}
  */
-export const getVisibleNodeIds = createSelector(
-  [getVisibleLeafAndBranchNodeIds],
-  (visibleLeafAndBranchNodeIds) => visibleLeafAndBranchNodeIds.map((item) => item.id),
+export const getVisibleNodeIds = createSelector([getVisibleLeafAndBranchNodeIds], (visibleLeafAndBranchNodeIds) =>
+  visibleLeafAndBranchNodeIds.map((item) => item.id),
 );
 
-const getVisibleBranchNodeIds = createSelector(
-  [getVisibleLeafAndBranchNodeIds],
-  (visibleLeafAndBranchNodeIds) =>
-    visibleLeafAndBranchNodeIds.reduce(
-      (acc, item) => (item.leaf || !item.descendantsContainVisibleCanvas ? acc : [...acc, item.id]),
-      [],
-    ),
+const getVisibleBranchNodeIds = createSelector([getVisibleLeafAndBranchNodeIds], (visibleLeafAndBranchNodeIds) =>
+  visibleLeafAndBranchNodeIds.reduce(
+    (acc, item) => (item.leaf || !item.descendantsContainVisibleCanvas ? acc : [...acc, item.id]),
+    [],
+  ),
 );
 
-const getCanvasContainingNodeIds = createSelector(
-  [getVisibleLeafAndBranchNodeIds],
-  (visibleLeafAndBranchNodeIds) =>
-    visibleLeafAndBranchNodeIds.reduce(
-      (acc, item) => (item.containsVisibleCanvas ? [...acc, item] : acc),
-      [],
-    ),
+const getCanvasContainingNodeIds = createSelector([getVisibleLeafAndBranchNodeIds], (visibleLeafAndBranchNodeIds) =>
+  visibleLeafAndBranchNodeIds.reduce((acc, item) => (item.containsVisibleCanvas ? [...acc, item] : acc), []),
 );
 
 /**
@@ -104,8 +92,7 @@ export function getManuallyExpandedNodeIds(state, { companionWindowId }, expande
   const companionWindow = getCompanionWindow(state, { companionWindowId });
   return companionWindow.tocNodes
     ? Object.keys(companionWindow.tocNodes).reduce(
-        (acc, nodeId) =>
-          companionWindow.tocNodes[nodeId].expanded === expanded ? [...acc, nodeId] : acc,
+        (acc, nodeId) => (companionWindow.tocNodes[nodeId].expanded === expanded ? [...acc, nodeId] : acc),
         [],
       )
     : [];

@@ -55,10 +55,7 @@ describe('CompanionArea', () => {
       sideBarOpen: true,
     });
 
-    expect(screen.getByRole('button', { name: 'Expand sidebar' })).toHaveAttribute(
-      'aria-expanded',
-      'false',
-    );
+    expect(screen.getByRole('button', { name: 'Expand sidebar' })).toHaveAttribute('aria-expanded', 'false');
     expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Expand sidebar' }));
@@ -77,10 +74,7 @@ describe('CompanionArea', () => {
       sideBarOpen: true,
     });
 
-    expect(screen.getByRole('button', { name: 'Collapse sidebar' })).toHaveAttribute(
-      'aria-expanded',
-      'true',
-    );
+    expect(screen.getByRole('button', { name: 'Collapse sidebar' })).toHaveAttribute('aria-expanded', 'true');
     await user.click(screen.getByRole('button', { name: 'Collapse sidebar' }));
 
     expect(setCompanionAreaOpen).toHaveBeenCalledWith('abc123', false);

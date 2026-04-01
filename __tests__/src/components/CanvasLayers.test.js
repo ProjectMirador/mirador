@@ -27,9 +27,7 @@ describe('CanvasLayers', () => {
     it('displays the canvas label', () => {
       createWrapper({ totalSize: 2 });
 
-      expect(
-        screen.getByText('Left: [A Canvas Label]', { container: '.MuiTypography-overline' }),
-      ).toBeInTheDocument();
+      expect(screen.getByText('Left: [A Canvas Label]', { container: '.MuiTypography-overline' })).toBeInTheDocument();
     });
   });
 
@@ -129,10 +127,9 @@ describe('CanvasLayers', () => {
         'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg': {
           index: 1,
         },
-        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png':
-          {
-            index: 0,
-          },
+        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png': {
+          index: 0,
+        },
       });
     });
 
@@ -143,10 +140,9 @@ describe('CanvasLayers', () => {
         'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg': {
           index: 1,
         },
-        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png':
-          {
-            index: 0,
-          },
+        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png': {
+          index: 0,
+        },
       });
     });
 
@@ -154,10 +150,9 @@ describe('CanvasLayers', () => {
       await user.click(screen.getAllByLabelText('Hide layer')[1]);
 
       expect(updateLayers).toHaveBeenCalledWith('abc', 'https://prtd.app/hamilton/canvas/p1.json', {
-        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png':
-          {
-            visibility: false,
-          },
+        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png': {
+          visibility: false,
+        },
       });
     });
 
@@ -168,10 +163,9 @@ describe('CanvasLayers', () => {
       await user.type(target, '{ArrowLeft}');
 
       expect(updateLayers).toHaveBeenCalledWith('abc', 'https://prtd.app/hamilton/canvas/p1.json', {
-        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png':
-          {
-            opacity: 0.5,
-          },
+        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png': {
+          opacity: 0.5,
+        },
       });
     });
 
@@ -179,10 +173,9 @@ describe('CanvasLayers', () => {
       fireEvent.change(screen.getAllByRole('spinbutton')[1], { target: { value: '90' } });
 
       expect(updateLayers).toHaveBeenCalledWith('abc', 'https://prtd.app/hamilton/canvas/p1.json', {
-        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png':
-          {
-            opacity: 0.9,
-          },
+        'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_TS_Blue/full/862,1024/0/default.png': {
+          opacity: 0.9,
+        },
       });
     });
   });

@@ -74,9 +74,7 @@ export default class MosaicLayout {
    * @param  {Object} windowPaths - a lookup table for window paths
    */
   removeWindows(removedWindowIds, windowPaths) {
-    const removeUpdates = removedWindowIds.map((windowId) =>
-      createRemoveUpdate(this.layout, windowPaths[windowId]),
-    );
+    const removeUpdates = removedWindowIds.map((windowId) => createRemoveUpdate(this.layout, windowPaths[windowId]));
     this.layout = updateTree(this.layout, removeUpdates);
   }
 }

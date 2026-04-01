@@ -6,9 +6,7 @@ import { LocalePicker } from '../../../src/components/LocalePicker';
  * Helper function to create a shallow wrapper around LocalePicker
  */
 function createWrapper(props) {
-  return render(
-    <LocalePicker availableLocales={[]} locale={undefined} setLocale={() => {}} {...props} />,
-  );
+  return render(<LocalePicker availableLocales={[]} locale={undefined} setLocale={() => {}} {...props} />);
 }
 
 describe('LocalePicker', () => {

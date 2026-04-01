@@ -60,47 +60,27 @@ describe('getVisibleNodeIds', () => {
     expect(visibleNodeIds).toEqual(expect.arrayContaining(['0-1', '0-1-1', '0-1-1-0', '0-1-1-1']));
     expect(visibleNodeIds.length).toBe(4);
 
-    const prezi3StateForCanvas2 = set(
-      ['windows', 'w1', 'visibleCanvases'],
-      ['http://foo.test/1/canvas/c2'],
-      prezi3State,
-    );
+    const prezi3StateForCanvas2 = set(['windows', 'w1', 'visibleCanvases'], ['http://foo.test/1/canvas/c2'], prezi3State);
     const prezi3visibleNodeIds = getVisibleNodeIds(prezi3StateForCanvas2, { windowId: 'w1' });
     expect(prezi3visibleNodeIds).toEqual(expect.arrayContaining(['0-0', '0-0-0']));
     expect(prezi3visibleNodeIds.length).toBe(2);
   });
 
   it('contains node ids for ranges with currently visible canvas fragments', () => {
-    const prezi2XYWHFragmentBookState = set(
-      ['windows', 'w1', 'visibleCanvases'],
-      ['http://foo.test/1/canvas/c3'],
-      state,
-    );
-    const prezi2XYWHFragmentState = set(
-      ['windows', 'w1', 'view'],
-      'single',
-      prezi2XYWHFragmentBookState,
-    );
+    const prezi2XYWHFragmentBookState = set(['windows', 'w1', 'visibleCanvases'], ['http://foo.test/1/canvas/c3'], state);
+    const prezi2XYWHFragmentState = set(['windows', 'w1', 'view'], 'single', prezi2XYWHFragmentBookState);
     const visibleNodeIdsForPrezi2 = getVisibleNodeIds(prezi2XYWHFragmentState, { windowId: 'w1' });
     expect(visibleNodeIdsForPrezi2).toEqual(expect.arrayContaining(['0-0', '0-0-1']));
     expect(visibleNodeIdsForPrezi2.length).toBe(2);
 
-    const prezi3XYWHFragmentState = set(
-      ['windows', 'w1', 'visibleCanvases'],
-      ['http://foo.test/1/canvas/c3'],
-      prezi3State,
-    );
+    const prezi3XYWHFragmentState = set(['windows', 'w1', 'visibleCanvases'], ['http://foo.test/1/canvas/c3'], prezi3State);
     const visibleNodeIdsForXYWHFragment = getVisibleNodeIds(prezi3XYWHFragmentState, {
       windowId: 'w1',
     });
     expect(visibleNodeIdsForXYWHFragment).toEqual(expect.arrayContaining(['0-0', '0-0-0']));
     expect(visibleNodeIdsForXYWHFragment.length).toBe(2);
 
-    const prezi3TemporalFragmentState = set(
-      ['windows', 'w1', 'visibleCanvases'],
-      ['http://foo.test/1/canvas/c4'],
-      prezi3State,
-    );
+    const prezi3TemporalFragmentState = set(['windows', 'w1', 'visibleCanvases'], ['http://foo.test/1/canvas/c4'], prezi3State);
     const visibleNodeIdsForTemporalFragment = getVisibleNodeIds(prezi3TemporalFragmentState, {
       windowId: 'w1',
     });
@@ -110,11 +90,7 @@ describe('getVisibleNodeIds', () => {
 
   // This test fails as there is no support for SpecificResource in manifesto yet
   it.skip('contains node ids for ranges that contain a SpecificResource based on a current canvas', () => {
-    const specificResourceState = set(
-      ['windows', 'w1', 'visibleCanvases'],
-      ['http://foo.test/1/canvas/c5'],
-      prezi3State,
-    );
+    const specificResourceState = set(['windows', 'w1', 'visibleCanvases'], ['http://foo.test/1/canvas/c5'], prezi3State);
     const visibleNodeIds = getVisibleNodeIds(specificResourceState, { windowId: 'w1' });
     expect(visibleNodeIds).toEqual(expect.arrayContaining(['0-0', '0-0-0']));
     expect(visibleNodeIds.length).toBe(2);
@@ -123,21 +99,13 @@ describe('getVisibleNodeIds', () => {
 
 describe('getManuallyExpandedNodeIds', () => {
   it('returns empty array if there are no manually opened or closed nodes', () => {
-    expect(
-      getManuallyExpandedNodeIds(state, { companionWindowId: 'cw123', windowId: 'w1' }, true),
-    ).toEqual([]);
-    expect(
-      getManuallyExpandedNodeIds(state, { companionWindowId: 'cw123', windowId: 'w1' }, false),
-    ).toEqual([]);
+    expect(getManuallyExpandedNodeIds(state, { companionWindowId: 'cw123', windowId: 'w1' }, true)).toEqual([]);
+    expect(getManuallyExpandedNodeIds(state, { companionWindowId: 'cw123', windowId: 'w1' }, false)).toEqual([]);
   });
 
   it('returns manually opened and closed node ids correctly', () => {
-    expect(
-      getManuallyExpandedNodeIds(expandedNodesState, { companionWindowId: 'cw123' }, true),
-    ).toEqual(['0-1', '0-1-1']);
-    expect(
-      getManuallyExpandedNodeIds(expandedNodesState, { companionWindowId: 'cw123' }, false),
-    ).toEqual(['0-0', '0-1-2']);
+    expect(getManuallyExpandedNodeIds(expandedNodesState, { companionWindowId: 'cw123' }, true)).toEqual(['0-1', '0-1-1']);
+    expect(getManuallyExpandedNodeIds(expandedNodesState, { companionWindowId: 'cw123' }, false)).toEqual(['0-0', '0-1-2']);
   });
 });
 
@@ -152,9 +120,7 @@ describe('getExpandedNodeIds', () => {
       companionWindowId: 'cw123',
       windowId: 'w1',
     });
-    expect(canvas8BookViewVisibleNodeIds).toEqual(
-      expect.arrayContaining(['0-1', '0-1-1', '0-2', '0-2-1', '0-2-2']),
-    );
+    expect(canvas8BookViewVisibleNodeIds).toEqual(expect.arrayContaining(['0-1', '0-1-1', '0-2', '0-2-1', '0-2-2']));
     expect(canvas8BookViewVisibleNodeIds.length).toBe(5);
 
     const canvas8SingleViewState = set(
@@ -171,27 +137,17 @@ describe('getExpandedNodeIds', () => {
   });
 
   it('returns a combination of manually opened and current canvas containing node ids', () => {
-    const canvas9State = set(
-      ['windows', 'w1', 'visibleCanvases'],
-      ['http://foo.test/1/canvas/c9'],
-      expandedNodesState,
-    );
+    const canvas9State = set(['windows', 'w1', 'visibleCanvases'], ['http://foo.test/1/canvas/c9'], expandedNodesState);
     const expandedNodeIds = getExpandedNodeIds(canvas9State, {
       companionWindowId: 'cw123',
       windowId: 'w1',
     });
-    expect(expandedNodeIds).toEqual(
-      expect.arrayContaining(['0-1', '0-1-1', '0-2', '0-2-1', '0-2-2']),
-    );
+    expect(expandedNodeIds).toEqual(expect.arrayContaining(['0-1', '0-1-1', '0-2', '0-2-1', '0-2-2']));
     expect(expandedNodeIds.length).toBe(5);
   });
 
   it('does not contain ids of nodes whos descendants do not contain currently visible canvases', () => {
-    const canvas13State = set(
-      ['windows', 'w1', 'visibleCanvases'],
-      ['http://foo.test/1/canvas/c13'],
-      state,
-    );
+    const canvas13State = set(['windows', 'w1', 'visibleCanvases'], ['http://foo.test/1/canvas/c13'], state);
     const expandedNodeIds = getExpandedNodeIds(canvas13State, {
       companionWindowId: 'cw123',
       windowId: 'w1',
@@ -202,31 +158,17 @@ describe('getExpandedNodeIds', () => {
 
 describe('getNodeIdToScrollTo', () => {
   it('returns first leaf node with visible canvas', () => {
-    expect(getNodeIdToScrollTo(state, { companionWindowId: 'cw123', windowId: 'w1' })).toBe(
-      '0-1-1-0',
-    );
+    expect(getNodeIdToScrollTo(state, { companionWindowId: 'cw123', windowId: 'w1' })).toBe('0-1-1-0');
   });
 
   it('returns branch node with visible canvas if it is the deepest in the tree to contain a canvas', () => {
-    const canvas10State = set(
-      ['windows', 'w1', 'visibleCanvases'],
-      ['http://foo.test/1/canvas/c10'],
-      expandedNodesState,
-    );
-    expect(getNodeIdToScrollTo(canvas10State, { companionWindowId: 'cw123', windowId: 'w1' })).toBe(
-      '0-2-1',
-    );
+    const canvas10State = set(['windows', 'w1', 'visibleCanvases'], ['http://foo.test/1/canvas/c10'], expandedNodesState);
+    expect(getNodeIdToScrollTo(canvas10State, { companionWindowId: 'cw123', windowId: 'w1' })).toBe('0-2-1');
   });
 
   it('returns the deepest non hidden branch node if leaf node or its parent node are collapsed', () => {
-    const closedParentState1 = set(
-      ['companionWindows', 'cw123', 'tocNodes'],
-      { '0-1-1': { expanded: false } },
-      state,
-    );
-    expect(
-      getNodeIdToScrollTo(closedParentState1, { companionWindowId: 'cw123', windowId: 'w1' }),
-    ).toBe('0-1-1');
+    const closedParentState1 = set(['companionWindows', 'cw123', 'tocNodes'], { '0-1-1': { expanded: false } }, state);
+    expect(getNodeIdToScrollTo(closedParentState1, { companionWindowId: 'cw123', windowId: 'w1' })).toBe('0-1-1');
     const closedParentState2 = set(
       ['companionWindows', 'cw123', 'tocNodes'],
       {
@@ -235,21 +177,13 @@ describe('getNodeIdToScrollTo', () => {
       },
       state,
     );
-    expect(
-      getNodeIdToScrollTo(closedParentState2, { companionWindowId: 'cw123', windowId: 'w1' }),
-    ).toBe('0-1');
+    expect(getNodeIdToScrollTo(closedParentState2, { companionWindowId: 'cw123', windowId: 'w1' })).toBe('0-1');
   });
 
   it('returns no node id if current canvas is not contained in any range', () => {
     const singleViewState = set(['windows', 'w1', 'view'], 'single', expandedNodesState);
-    const rangeFreeCanvasState = set(
-      ['windows', 'w1', 'visibleCanvases'],
-      ['http://foo.test/1/canvas/c12'],
-      singleViewState,
-    );
-    expect(
-      getNodeIdToScrollTo(rangeFreeCanvasState, { companionWindowId: 'cw123', windowId: 'w1' }),
-    ).toBe(null);
+    const rangeFreeCanvasState = set(['windows', 'w1', 'visibleCanvases'], ['http://foo.test/1/canvas/c12'], singleViewState);
+    expect(getNodeIdToScrollTo(rangeFreeCanvasState, { companionWindowId: 'cw123', windowId: 'w1' })).toBe(null);
   });
 });
 

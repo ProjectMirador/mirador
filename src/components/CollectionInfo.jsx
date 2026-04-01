@@ -9,12 +9,7 @@ import CollapsibleSection from '../containers/CollapsibleSection';
 /**
  * CollectionInfo
  */
-export function CollectionInfo({
-  collectionLabel = null,
-  collectionPath = [],
-  showCollectionDialog,
-  windowId = null,
-}) {
+export function CollectionInfo({ collectionLabel = null, collectionPath = [], showCollectionDialog, windowId = null }) {
   const { t } = useTranslation();
   const id = useId();
   const titleId = useId();

@@ -1,16 +1,6 @@
 import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Chip,
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  Link,
-  MenuList,
-  MenuItem,
-  Typography,
-} from '@mui/material';
+import { Button, Chip, Dialog, DialogActions, DialogTitle, Link, MenuList, MenuItem, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackSharp';
 import Skeleton from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
@@ -92,11 +82,7 @@ export function CollectionDialog({
 
   /** */
   const goToPreviousCollection = () => {
-    showCollectionDialog(
-      dialogCollectionPath[dialogCollectionPath.length - 1],
-      dialogCollectionPath.slice(0, -1),
-      windowId,
-    );
+    showCollectionDialog(dialogCollectionPath[dialogCollectionPath.length - 1], dialogCollectionPath.slice(0, -1), windowId);
   };
 
   /** */
@@ -125,8 +111,7 @@ export function CollectionDialog({
 
   if (!ready) return <Placeholder container={dialogContainer} onClose={hideDialog} />;
 
-  const rights =
-    manifest && asArray(manifest.getProperty('rights') || manifest.getProperty('license'));
+  const rights = manifest && asArray(manifest.getProperty('rights') || manifest.getProperty('license'));
 
   const requiredStatement =
     manifest &&
@@ -161,12 +146,7 @@ export function CollectionDialog({
         <StyledCollectionMetadata>
           <ManifestInfo manifestId={manifest.id} />
           <CollapsibleSection id="select-collection-rights" label={t('attributionTitle')}>
-            {requiredStatement && (
-              <LabelValueMetadata
-                labelValuePairs={requiredStatement}
-                defaultLabel={t('attribution')}
-              />
-            )}
+            {requiredStatement && <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />}
             {rights && rights.length > 0 && (
               <>
                 <Typography variant="subtitle2" component="dt">

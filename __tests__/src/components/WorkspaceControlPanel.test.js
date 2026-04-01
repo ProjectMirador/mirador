@@ -17,9 +17,6 @@ describe('WorkspaceControlPanel', () => {
     expect(screen.getByRole('button', { name: 'Jump to window' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Workspace settings' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Workspace options' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'About Project Mirador' })).toHaveAttribute(
-      'href',
-      'https://projectmirador.org',
-    );
+    expect(screen.getByRole('link', { name: 'About Project Mirador' })).toHaveAttribute('href', 'https://projectmirador.org');
   });
 });

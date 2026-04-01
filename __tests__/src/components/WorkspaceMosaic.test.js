@@ -7,13 +7,7 @@ import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
 /** create wrapper */
 function createWrapper(props) {
   return render(
-    <WorkspaceMosaic
-      classes={{}}
-      windowIds={[]}
-      workspaceId="foo"
-      updateWorkspaceMosaicLayout={() => {}}
-      {...props}
-    />,
+    <WorkspaceMosaic classes={{}} windowIds={[]} workspaceId="foo" updateWorkspaceMosaicLayout={() => {}} {...props} />,
     {
       preloadedState: {
         windows: {
@@ -126,22 +120,13 @@ describe('WorkspaceMosaic', () => {
     it('when window is available', () => {
       wrapper = createWrapper({ windowIds });
 
-      expect(screen.getAllByLabelText('Window:', { container: 'section' })[0]).toHaveAttribute(
-        'id',
-        '1',
-      );
-      expect(screen.getAllByLabelText('Window:', { container: 'section' })[1]).toHaveAttribute(
-        'id',
-        '2',
-      );
+      expect(screen.getAllByLabelText('Window:', { container: 'section' })[0]).toHaveAttribute('id', '1');
+      expect(screen.getAllByLabelText('Window:', { container: 'section' })[1]).toHaveAttribute('id', '2');
 
       expect(wrapper.container.querySelector('.mosaic-window-title')).toBeEmptyDOMElement();
       expect(wrapper.container.querySelector('.mosaic-window-controls')).toBeEmptyDOMElement();
       expect(wrapper.container.querySelectorAll('.mosaic-preview')).toHaveLength(2);
-      expect(wrapper.container.querySelector('.mosaic-preview')).toHaveAttribute(
-        'aria-hidden',
-        'true',
-      );
+      expect(wrapper.container.querySelector('.mosaic-preview')).toHaveAttribute('aria-hidden', 'true');
     });
   });
   describe('mosaicChange', () => {
@@ -173,9 +158,7 @@ describe('WorkspaceMosaic', () => {
 
       const dragTarget = screen.getAllByLabelText('Window navigation')[0];
       // eslint-disable-next-line testing-library/no-container
-      const dropTarget = container.querySelector(
-        '.mirador-mosaic > .drop-target-container > .drop-target.top',
-      );
+      const dropTarget = container.querySelector('.mirador-mosaic > .drop-target-container > .drop-target.top');
 
       fireEvent.dragStart(dragTarget);
       fireEvent.drag(dragTarget);

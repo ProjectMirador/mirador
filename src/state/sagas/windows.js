@@ -107,9 +107,7 @@ export function* setWindowStartingCanvas(action) {
       // set the startCanvas
       const miradorManifest = getMiradorManifest(manifestoInstance);
       const startCanvas =
-        miradorManifest.startCanvas ||
-        miradorManifest.canvasAt(canvasIndex || 0) ||
-        miradorManifest.canvasAt(0);
+        miradorManifest.startCanvas || miradorManifest.canvasAt(canvasIndex || 0) || miradorManifest.canvasAt(0);
       if (startCanvas) {
         const preserveViewport = !!action.payload || !!action.window?.initialViewerConfig;
         // When canvas is calculated, only pass preserveViewport when true
@@ -175,13 +173,7 @@ export function* setCurrentAnnotationsOnCurrentCanvas({ annotationId, windowId, 
 
   yield all(
     Object.keys(annotationBySearch).map((companionWindowId) =>
-      put(
-        setContentSearchCurrentAnnotation(
-          windowId,
-          companionWindowId,
-          annotationBySearch[companionWindowId],
-        ),
-      ),
+      put(setContentSearchCurrentAnnotation(windowId, companionWindowId, annotationBySearch[companionWindowId])),
     ),
   );
 

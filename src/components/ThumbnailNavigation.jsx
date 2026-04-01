@@ -106,9 +106,7 @@ export function ThumbnailNavigation({
       // Default case bottom
       default: {
         if (bounds[3] === 0) return thumbnailNavigation.width + spacing;
-        const calc = Math.ceil(
-          ((thumbnailNavigation.height - scrollbarSize - spacing - 4) * bounds[2]) / bounds[3],
-        );
+        const calc = Math.ceil(((thumbnailNavigation.height - scrollbarSize - spacing - 4) * bounds[2]) / bounds[3]);
         return calc;
       }
     }

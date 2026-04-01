@@ -2,11 +2,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withPlugins } from '../extend/withPlugins';
 import { VideoViewer } from '../components/VideoViewer';
-import {
-  getConfig,
-  getVisibleCanvasCaptions,
-  getVisibleCanvasVideoResources,
-} from '../state/selectors';
+import { getConfig, getVisibleCanvasCaptions, getVisibleCanvasVideoResources } from '../state/selectors';
 
 /** */
 const mapStateToProps = (state, { windowId }) => ({

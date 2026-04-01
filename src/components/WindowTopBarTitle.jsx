@@ -31,12 +31,7 @@ TitleTypography.propTypes = {
 /**
  * WindowTopBarTitle
  */
-export function WindowTopBarTitle({
-  error = null,
-  hideWindowTitle = false,
-  isFetching = false,
-  manifestTitle = '',
-}) {
+export function WindowTopBarTitle({ error = null, hideWindowTitle = false, isFetching = false, manifestTitle = '' }) {
   let title = null;
   if (isFetching) {
     title = (

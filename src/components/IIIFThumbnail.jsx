@@ -188,9 +188,7 @@ export function IIIFThumbnail({
         border={border}
       />
 
-      {labelled && (
-        <Label ownerState={ownerState}>{label || <IIIFResourceLabel resource={resource} />}</Label>
-      )}
+      {labelled && <Label ownerState={ownerState}>{label || <IIIFResourceLabel resource={resource} />}</Label>}
       {children}
     </Root>
   );
