@@ -1,0 +1,16 @@
+# Build artifacts
+dist/
+
+.github/
+
+# Test fixtures
+__tests__/fixtures/
+
+# Dependencies
+node_modules/
+
+# Test coverage
+coverage/
+
+# Package manager files
+package-lock.json

@@ -20,12 +20,14 @@
   "scripts": {
     "build": "vite build --config vite.config.js && vite build --config vite-umd.config.js",
     "clean": "rm -rf ./dist",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "node_modules/.bin/eslint ./ && npm run lint:translations && npm run lint:containers",
     "lint:containers": "node ./scripts/container-lint.js",
     "lint:translations": "node ./scripts/i18n-lint.js",
     "size": "bundlewatch --config bundlewatch.config.json",
     "start": "vite",
-    "test": "npm run build && npm run lint && npm run size && vitest run"
+    "test": "npm run build && npm run lint && npm run format:check && npm run size && vitest run"
   },
   "license": "Apache-2.0",
   "contributors": [
@@ -106,6 +108,7 @@
     "glob": "^13.0.6",
     "globals": "^15.15.0",
     "happy-dom": "^20.0",
+    "prettier": "^3.8.1",
     "react": "^19.0.0",
     "react-dnd-test-backend": "^16.0.1",
     "react-dom": "^19.0.0",
