@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 /**
  * Provides a form for user input of a manifest url
- * @prop {Function} fetchManifest
+ * @prop {Function} addResource
  */
 export function ManifestForm({
   addResourcesOpen, addResource, onSubmit = () => {}, onCancel = null,
