@@ -1,5 +1,5 @@
 import {
-  useRef, Children, cloneElement, useCallback, useState, useEffect,
+  useRef, Children, cloneElement, useCallback, useState, useEffect, useMemo,
 } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
@@ -85,6 +85,11 @@ export function OpenSeadragonViewer({
     ...rest,
   };
 
+  const imageUrls = useMemo(() => [
+    ...infoResponses.map(info => info.id),
+    ...nonTiledImages.map(img => img.id),
+  ], [infoResponses, nonTiledImages]);
+
   return (
     <OpenSeadragonComponent
       className={classNames(ns('osd-container'))}
@@ -138,7 +143,7 @@ export function OpenSeadragonViewer({
       { drawAnnotations
           && <AnnotationsOverlay viewer={viewer} windowId={windowId} /> }
       { enhancedChildren }
-      <ImageFailureMessage />
+      <ImageFailureMessage imageUrls={imageUrls} />
       <PluginHook targetName="OpenSeadragonViewer" viewer={viewer} {...pluginProps} />
     </OpenSeadragonComponent>
   );

@@ -62,7 +62,8 @@ export default function OpenSeadragonTileSource({
         success: (event) => resolve(event),
 
         error: (event) => {
-          notifyFailure();
+          const imageUrl = url || (typeof tileSource === 'string' ? tileSource : tileSource?.['@id']);
+          if (imageUrl) notifyFailure(imageUrl);
           loadFallback();
 
           reject(event);

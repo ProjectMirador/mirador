@@ -130,7 +130,7 @@ const LazyLoadedImage = ({
       style={imageStyles}
       onError={() => {
         setFailed(true);
-        notifyFailure();
+        if (finalSrc) notifyFailure(finalSrc);
       }}
       {...props}
     />
