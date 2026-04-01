@@ -10,36 +10,38 @@ describe('OpenSeadragonCanvasOverlay', () => {
     document.body.innerHTML = '<div id="canvas"><canvas></div>';
     ref.current = document.getElementById('canvas');
     OpenSeadragon.mockClear();
-    OpenSeadragon.mockImplementation(() => ({
-      canvas: ref,
-      container: {
-        clientHeight: 100,
-        clientWidth: 200,
-      },
-      viewport: {
-        getBoundsNoRotateWithMargins: vi.fn(() => ({
-          height: 300,
-          width: 200,
-          x: 40,
-          y: 80,
-        })),
-        getCenter: () => ({ x: 0, y: 0 }),
-        getFlip: () => false,
-        getRotation: () => 0,
-        getZoom: vi.fn(() => (0.75)),
-      },
-      world: {
-        getItemAt: vi.fn(() => ({
-          source: {
-            dimensions: {
-              x: 1000,
-              y: 2000,
+    OpenSeadragon.mockImplementation(function () {
+      return {
+        canvas: ref,
+        container: {
+          clientHeight: 100,
+          clientWidth: 200,
+        },
+        viewport: {
+          getBoundsNoRotateWithMargins: vi.fn(() => ({
+            height: 300,
+            width: 200,
+            x: 40,
+            y: 80,
+          })),
+          getCenter: () => ({ x: 0, y: 0 }),
+          getFlip: () => false,
+          getRotation: () => 0,
+          getZoom: vi.fn(() => 0.75),
+        },
+        world: {
+          getItemAt: vi.fn(() => ({
+            source: {
+              dimensions: {
+                x: 1000,
+                y: 2000,
+              },
             },
-          },
-          viewportToImageZoom: vi.fn(() => (0.075)),
-        })),
-      },
-    }));
+            viewportToImageZoom: vi.fn(() => 0.075),
+          })),
+        },
+      };
+    });
     canvasOverlay = new OpenSeadragonCanvasOverlay(new OpenSeadragon(), ref);
   });
   describe('constructor', () => {
@@ -85,19 +87,21 @@ describe('OpenSeadragonCanvasOverlay', () => {
     });
     it('when image is undefined returns early', () => {
       OpenSeadragon.mockClear();
-      OpenSeadragon.mockImplementation(() => ({
-        canvas: document.getElementById('canvas'),
-        container: {
-          clientHeight: 100,
-          clientWidth: 200,
-        },
-        viewport: {
-          getBoundsNoRotateWithMargins: vi.fn(() => (new OpenSeadragon.Rect(0, 0, 200, 200))),
-        },
-        world: {
-          getItemAt: vi.fn(),
-        },
-      }));
+      OpenSeadragon.mockImplementation(function () {
+        return {
+          canvas: document.getElementById('canvas'),
+          container: {
+            clientHeight: 100,
+            clientWidth: 200,
+          },
+          viewport: {
+            getBoundsNoRotateWithMargins: vi.fn(() => new OpenSeadragon.Rect(0, 0, 200, 200)),
+          },
+          world: {
+            getItemAt: vi.fn(),
+          },
+        };
+      });
       canvasOverlay = new OpenSeadragonCanvasOverlay(new OpenSeadragon(), ref);
       canvasOverlay.resize();
       expect(canvasOverlay.imgHeight).toEqual(undefined);

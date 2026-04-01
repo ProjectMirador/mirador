@@ -19,13 +19,7 @@ describe('WorkspaceExport', () => {
       workspace: {},
     };
 
-    render(
-      <WorkspaceExport
-        open
-        handleClose={handleClose}
-        exportableState={mockState}
-      />,
-    );
+    render(<WorkspaceExport open handleClose={handleClose} exportableState={mockState} />);
   });
 
   it('renders without an error', () => {
@@ -44,10 +38,15 @@ describe('WorkspaceExport', () => {
   it('reveals a snackbar on copy', async () => {
     // jsdom doesn't support the clipboard API or prompt (used as a fallback)
     // so we mock the prompt at least to avoid a warning in the test output
-    vi.spyOn(window, 'prompt').mockImplementation(() => true);
+    vi.stubGlobal(
+      'prompt',
+      vi.fn(() => true),
+    );
 
     await user.click(screen.getByRole('button', { name: 'Copy' }));
-    expect(screen.getByRole('alert')).toHaveTextContent('The workspace configuration was copied to your clipboard');
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'The workspace configuration was copied to your clipboard',
+    );
 
     await user.click(screen.getByRole('button', { name: 'Dismiss' }));
     expect(handleClose).toHaveBeenCalled();
@@ -55,7 +54,8 @@ describe('WorkspaceExport', () => {
 
   it('renders an exportable version of state', async () => {
     await user.click(screen.getByRole('button', { name: 'View workspace configuration' }));
-    expect(screen.getByRole('region').querySelector('pre')).toHaveTextContent( // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(screen.getByRole('region').querySelector('pre')).toHaveTextContent(
       '{ "companionWindows": {}, "config": {}, "elasticLayout": {}, "viewers": {}, "windows": {}, "workspace": {} }',
     );
   });
