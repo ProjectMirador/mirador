@@ -31,9 +31,7 @@ export function MinimalWindow({
       component="section"
       elevation={1}
       id={windowId}
-      className={
-        cn(ns('placeholder-window'))
-      }
+      className={cn(ns('placeholder-window'))}
       sx={{
         backgroundColor: 'shades.dark',
         borderRadius: 0,
@@ -60,10 +58,7 @@ export function MinimalWindow({
           variant="dense"
         >
           {allowWindowSideBar && (
-            <MiradorMenuButton
-              aria-label={t('toggleWindowSideBar')}
-              disabled
-            >
+            <MiradorMenuButton aria-label={t('toggleWindowSideBar')} disabled>
               <MenuIcon />
             </MiradorMenuButton>
           )}

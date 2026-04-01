@@ -4,14 +4,11 @@ import { WorkspaceControlPanel } from '../../../src/components/WorkspaceControlP
 
 describe('WorkspaceControlPanel', () => {
   beforeEach(() => {
-    render(
-      <WorkspaceControlPanel />,
-      {
-        preloadedState: {
-          workspace: { windowIds: ['xyz'] },
-        },
+    render(<WorkspaceControlPanel />, {
+      preloadedState: {
+        workspace: { windowIds: ['xyz'] },
       },
-    );
+    });
   });
 
   it('renders without an error', () => {

@@ -26,7 +26,9 @@ describe('OpenSeadragonTileSource', () => {
   it('updates the opacity when the prop changes', async () => {
     const mockOsdItem = { setOpacity: vi.fn() };
     const viewer = {
-      addTiledImage: vi.fn().mockImplementation(({ success }) => { success({ item: mockOsdItem }); }),
+      addTiledImage: vi.fn().mockImplementation(({ success }) => {
+        success({ item: mockOsdItem });
+      }),
       world: {
         removeItem: vi.fn(),
       },
@@ -58,7 +60,9 @@ describe('OpenSeadragonTileSource', () => {
   it('updates the index when the prop changes', async () => {
     const mockOsdItem = vi.fn();
     const viewer = {
-      addTiledImage: vi.fn().mockImplementation(({ success }) => { success({ item: mockOsdItem }); }),
+      addTiledImage: vi.fn().mockImplementation(({ success }) => {
+        success({ item: mockOsdItem });
+      }),
       world: {
         removeItem: vi.fn(),
         setItemIndex: vi.fn(),
@@ -92,7 +96,9 @@ describe('OpenSeadragonTileSource', () => {
   it('updates the rendered bounds when the prop changes', async () => {
     const mockOsdItem = { fitBounds: vi.fn() };
     const viewer = {
-      addTiledImage: vi.fn().mockImplementation(({ success }) => { success({ item: mockOsdItem }); }),
+      addTiledImage: vi.fn().mockImplementation(({ success }) => {
+        success({ item: mockOsdItem });
+      }),
       world: {
         removeItem: vi.fn(),
         setItemIndex: vi.fn(),
@@ -126,7 +132,9 @@ describe('OpenSeadragonTileSource', () => {
   it('deletes the item from the world when the item is unmounted', async () => {
     const mockOsdItem = vi.fn();
     const viewer = {
-      addTiledImage: ({ success }) => { success({ item: mockOsdItem }); },
+      addTiledImage: ({ success }) => {
+        success({ item: mockOsdItem });
+      },
       world: {
         removeItem: vi.fn(),
       },

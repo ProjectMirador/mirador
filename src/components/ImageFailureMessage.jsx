@@ -26,15 +26,13 @@ export function ImageFailureMessage({ imageUrls = [] }) {
   const { failedImages } = useContext(FailedImageContext);
   const { t } = useTranslation();
 
-  const hasFailedImage = imageUrls.some(url => failedImages.has(url));
+  const hasFailedImage = imageUrls.some((url) => failedImages.has(url));
 
   if (!hasFailedImage) return null;
 
   return (
     <MessageContainer role="status" aria-live="polite">
-      <Typography variant="body2">
-        {t('imageFailedToLoad')}
-      </Typography>
+      <Typography variant="body2">{t('imageFailedToLoad')}</Typography>
     </MessageContainer>
   );
 }

@@ -4,7 +4,7 @@ import { ManifestListItemError } from '../../../src/components/ManifestListItemE
 
 /**
  * Helper function to wrap creating a ManifestListItemError component
-*/
+ */
 function createWrapper(props) {
   return render(
     <ManifestListItemError

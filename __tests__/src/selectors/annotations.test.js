@@ -6,10 +6,7 @@ import {
 
 describe('getAnnotationResourcesByMotivationForCanvas', () => {
   it('returns an array of annotation resources on a given canvas (filtered by the passed in array of motiviations)', () => {
-    const expected = [
-      ['oa:commenting'],
-      ['sc:something-else', 'oa:commenting'],
-    ];
+    const expected = [['oa:commenting'], ['sc:something-else', 'oa:commenting']];
 
     const state = {
       annotations: {
@@ -42,10 +39,7 @@ describe('getAnnotationResourcesByMotivationForCanvas', () => {
             '@type': 'sc:Manifest',
             sequences: [
               {
-                canvases: [
-                  { '@id': 'cid1' },
-                  { '@id': 'cid2' },
-                ],
+                canvases: [{ '@id': 'cid1' }, { '@id': 'cid2' }],
               },
             ],
           },
@@ -59,17 +53,18 @@ describe('getAnnotationResourcesByMotivationForCanvas', () => {
     };
 
     expect(
-      getAnnotationResourcesByMotivationForCanvas(state, { canvasId: 'cid2', motivations: ['something', 'oa:commenting'], windowId: 'abc123' }).map(r => r.motivations),
+      getAnnotationResourcesByMotivationForCanvas(state, {
+        canvasId: 'cid2',
+        motivations: ['something', 'oa:commenting'],
+        windowId: 'abc123',
+      }).map((r) => r.motivations),
     ).toEqual(expected);
   });
 });
 
 describe('getAnnotationResourcesByMotivation', () => {
   it('returns an array of annotation resources (filtered by the passed in array of motiviations)', () => {
-    const expected = [
-      ['oa:commenting'],
-      ['sc:something-else', 'oa:commenting'],
-    ];
+    const expected = [['oa:commenting'], ['sc:something-else', 'oa:commenting']];
 
     const state = {
       annotations: {
@@ -90,8 +85,7 @@ describe('getAnnotationResourcesByMotivation', () => {
         mid: {
           json: {
             '@context': 'http://iiif.io/api/presentation/2/context.json',
-            '@id':
-             'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+            '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
             '@type': 'sc:Manifest',
             sequences: [
               {
@@ -114,7 +108,10 @@ describe('getAnnotationResourcesByMotivation', () => {
     };
 
     expect(
-      getAnnotationResourcesByMotivation(state, { motivations: ['something', 'oa:commenting'], windowId: 'abc123' }).map(r => r.motivations),
+      getAnnotationResourcesByMotivation(state, {
+        motivations: ['something', 'oa:commenting'],
+        windowId: 'abc123',
+      }).map((r) => r.motivations),
     ).toEqual(expected);
   });
 });
@@ -125,8 +122,7 @@ it('getSelectedAnnotationId returns the selected annotation ID from state', () =
       mid: {
         json: {
           '@context': 'http://iiif.io/api/presentation/2/context.json',
-          '@id':
-           'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+          '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
           '@type': 'sc:Manifest',
           sequences: [
             {
@@ -150,9 +146,7 @@ it('getSelectedAnnotationId returns the selected annotation ID from state', () =
     },
   };
 
-  expect(getSelectedAnnotationId(state, { windowId: 'wid' })).toEqual(
-    'aid1',
-  );
+  expect(getSelectedAnnotationId(state, { windowId: 'wid' })).toEqual('aid1');
 });
 
 it('returns all annotation resources when no motivations are passed and config.filteredMotivations is empty', () => {
@@ -204,6 +198,6 @@ it('returns all annotation resources when no motivations are passed and config.f
 
   // Returns all three resources
   expect(result).toHaveLength(3);
-  const resourceIds = result.map(r => r.resource['@id']);
+  const resourceIds = result.map((r) => r.resource['@id']);
   expect(resourceIds).toEqual(['annoId1', 'annoId2', 'annoId3']);
 });

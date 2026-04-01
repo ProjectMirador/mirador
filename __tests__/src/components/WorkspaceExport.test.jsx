@@ -44,9 +44,7 @@ describe('WorkspaceExport', () => {
     );
 
     await user.click(screen.getByRole('button', { name: 'Copy' }));
-    expect(screen.getByRole('alert')).toHaveTextContent(
-      'The workspace configuration was copied to your clipboard',
-    );
+    expect(screen.getByRole('alert')).toHaveTextContent('The workspace configuration was copied to your clipboard');
 
     await user.click(screen.getByRole('button', { name: 'Dismiss' }));
     expect(handleClose).toHaveBeenCalled();

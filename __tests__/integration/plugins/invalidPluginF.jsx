@@ -1,5 +1,5 @@
 export default {
-  component: props => (<div data-testid="invalid-plugin-f" />),
+  component: (props) => <div data-testid="invalid-plugin-f" />,
   mode: 'add',
   name: 'invalidPluginF',
   reducers: {

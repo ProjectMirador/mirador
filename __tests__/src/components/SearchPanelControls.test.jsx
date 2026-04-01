@@ -66,7 +66,8 @@ describe('SearchPanelControls', () => {
   });
   it('endAdornment is a SearchIcon (with no CircularProgress indicator)', () => {
     createWrapper();
-    expect(screen.getByRole('button').querySelector('svg')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(screen.getByRole('button').querySelector('svg')).toBeInTheDocument();
     expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
   });
 

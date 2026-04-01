@@ -7,12 +7,7 @@ import { CollapsibleSection } from '../../../src/components/CollapsibleSection';
  */
 function createWrapper(props) {
   return render(
-    <CollapsibleSection
-      classes={{}}
-      id="abc123"
-      label="The Section Label"
-      {...props}
-    >
+    <CollapsibleSection classes={{}} id="abc123" label="The Section Label" {...props}>
       <span data-testid="child">Child content</span>
     </CollapsibleSection>,
   );

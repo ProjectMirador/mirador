@@ -7,12 +7,7 @@ import FailedImageContext from '../../../src/contexts/FailedImageContext';
  * Helper function to create a shallow wrapper around IIIFThumbnail
  */
 function createWrapper(props) {
-  return render(
-    <IIIFThumbnail
-      resource={{}}
-      {...props}
-    />,
-  );
+  return render(<IIIFThumbnail resource={{}} {...props} />);
 }
 
 /* eslint-disable testing-library/no-node-access, testing-library/no-container */
@@ -74,7 +69,10 @@ describe('IIIFThumbnail', () => {
 
   it('renders a provided label', () => {
     createWrapper({
-      classes: { label: 'label' }, label: 'Some label', labelled: true, thumbnail,
+      classes: { label: 'label' },
+      label: 'Some label',
+      labelled: true,
+      thumbnail,
     });
 
     expect(screen.getByText('Some label')).toBeInTheDocument();
@@ -86,7 +84,7 @@ describe('IIIFThumbnail', () => {
     expect(screen.getByTestId('hi')).toBeInTheDocument();
   });
 
-  it('handles image load failure correctly', () => {  
+  it('handles image load failure correctly', () => {
     const notifyFailure = vi.fn();
     const fallbackImage = 'data:image/svg+xml,fallback';
     const mockContext = {

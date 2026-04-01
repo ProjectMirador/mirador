@@ -12,18 +12,16 @@ import { CompanionWindow } from '../components/CompanionWindow';
  */
 const mapStateToProps = (state, { id, windowId }) => {
   const companionWindow = getCompanionWindow(state, { companionWindowId: id });
-  const {
-    defaultSidebarPanelHeight, defaultSidebarPanelWidth,
-  } = getWindowConfig(state, { windowId });
+  const { defaultSidebarPanelHeight, defaultSidebarPanelWidth } = getWindowConfig(state, {
+    windowId,
+  });
 
   return {
     ...companionWindow,
     defaultSidebarPanelHeight,
     defaultSidebarPanelWidth,
     direction: getThemeDirection(state),
-    isDisplayed: (companionWindow
-                  && companionWindow.content
-                  && companionWindow.content.length > 0),
+    isDisplayed: companionWindow && companionWindow.content && companionWindow.content.length > 0,
   };
 };
 
@@ -33,17 +31,10 @@ const mapStateToProps = (state, { id, windowId }) => {
  * @private
  */
 const mapDispatchToProps = (dispatch, { windowId, id }) => ({
-  onCloseClick: () => dispatch(
-    actions.removeCompanionWindow(windowId, id),
-  ),
-  updateCompanionWindow: (...args) => dispatch(
-    actions.updateCompanionWindow(windowId, id, ...args),
-  ),
+  onCloseClick: () => dispatch(actions.removeCompanionWindow(windowId, id)),
+  updateCompanionWindow: (...args) => dispatch(actions.updateCompanionWindow(windowId, id, ...args)),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),
-  withPlugins('CompanionWindow'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }), withPlugins('CompanionWindow'));
 
 export default enhance(CompanionWindow);

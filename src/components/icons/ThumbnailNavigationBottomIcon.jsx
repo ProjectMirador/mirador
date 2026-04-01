@@ -2,7 +2,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 
 /**
  * ThumbnailNavigationBottomIcon ~
-*/
+ */
 export default function ThumbnailNavigationBottomIcon(props) {
   return (
     <SvgIcon {...props}>

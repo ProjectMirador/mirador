@@ -69,9 +69,7 @@ export function WorkspaceControlPanel({ variant = 'default', ...rest }) {
       component="nav"
       aria-label={t('workspaceNavigation')}
     >
-      <StyledToolbar
-        disableGutters
-      >
+      <StyledToolbar disableGutters>
         <WorkspaceAddButton />
         <StyledWorkspaceButtons>
           <WorkspaceControlPanelButtons />

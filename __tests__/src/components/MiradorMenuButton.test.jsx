@@ -4,7 +4,7 @@ import { MiradorMenuButton } from '../../../src/components/MiradorMenuButton';
 
 /**
  * Helper function to wrap creating a MiradorMenuButton component
-*/
+ */
 function createWrapper(props) {
   return render(
     <MiradorMenuButton aria-label="The Label" {...props}>

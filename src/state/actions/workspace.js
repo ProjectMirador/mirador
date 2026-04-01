@@ -13,7 +13,7 @@ export function updateWorkspace(config) {
  * toggleZoomControls - action creator
  * @param {Boolean} showZoomControls
  * @memberof ActionCreators
-*/
+ */
 export function toggleZoomControls(showZoomControls) {
   return { showZoomControls, type: ActionTypes.TOGGLE_ZOOM_CONTROLS };
 }

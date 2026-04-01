@@ -7,10 +7,8 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
 /**
  * AnnotationSettings is a component to handle various annotation
  * display settings in the Annotation companion window
-*/
-export function AnnotationSettings({
-  displayAll, displayAllDisabled, toggleAnnotationDisplay,
-}) {
+ */
+export function AnnotationSettings({ displayAll, displayAllDisabled, toggleAnnotationDisplay }) {
   const { t } = useTranslation();
   return (
     <MiradorMenuButton
@@ -19,7 +17,7 @@ export function AnnotationSettings({
       disabled={displayAllDisabled}
       size="small"
     >
-      { displayAll ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+      {displayAll ? <VisibilityIcon /> : <VisibilityOffIcon />}
     </MiradorMenuButton>
   );
 }
@@ -28,5 +26,6 @@ AnnotationSettings.propTypes = {
   displayAll: PropTypes.bool.isRequired,
   displayAllDisabled: PropTypes.bool.isRequired,
   toggleAnnotationDisplay: PropTypes.func.isRequired,
-  windowId: PropTypes.string.isRequired, // eslint-disable-line react/no-unused-prop-types
+  // eslint-disable-next-line react/no-unused-prop-types
+  windowId: PropTypes.string.isRequired,
 };

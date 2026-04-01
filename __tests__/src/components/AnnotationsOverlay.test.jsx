@@ -169,10 +169,7 @@ describe('AnnotationsOverlay', () => {
         position: new OpenSeadragon.Point(101, 101),
       });
 
-      expect(selectAnnotation).toHaveBeenCalledWith(
-        'base',
-        'http://example.org/identifier/annotation/anno-line',
-      );
+      expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
     });
 
     it('triggers a deselectAnnotation for an already-selected annotation', () => {
@@ -201,10 +198,7 @@ describe('AnnotationsOverlay', () => {
         position: new OpenSeadragon.Point(101, 101),
       });
 
-      expect(deselectAnnotation).toHaveBeenCalledWith(
-        'base',
-        'http://example.org/identifier/annotation/anno-line',
-      );
+      expect(deselectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
     });
 
     it('selects the closest annotation', () => {
@@ -244,10 +238,7 @@ describe('AnnotationsOverlay', () => {
         position: new OpenSeadragon.Point(101, 101),
       });
 
-      expect(selectAnnotation).toHaveBeenCalledWith(
-        'base',
-        'http://example.org/identifier/annotation/anno-line',
-      );
+      expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
     });
   });
 

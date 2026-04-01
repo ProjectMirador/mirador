@@ -1,6 +1,4 @@
-import {
-  render, screen, waitFor,
-} from '@tests/utils/test-utils';
+import { render, screen, waitFor } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WorkspaceSelectionDialog } from '../../../src/components/WorkspaceSelectionDialog';
 

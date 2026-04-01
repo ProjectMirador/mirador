@@ -12,9 +12,6 @@ const mapStateToProps = (state, { windowId }) => ({
   manifestTitle: getManifestTitle(state, { windowId }),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, null),
-  withPlugins('WindowTopBarTitle'),
-);
+const enhance = compose(connect(mapStateToProps, null), withPlugins('WindowTopBarTitle'));
 
 export default enhance(WindowTopBarTitle);

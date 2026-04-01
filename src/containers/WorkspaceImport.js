@@ -14,9 +14,6 @@ const mapDispatchToProps = {
   importConfig: actions.importMiradorState,
 };
 
-const enhance = compose(
-  connect(null, mapDispatchToProps),
-  withPlugins('WorkspaceImport'),
-);
+const enhance = compose(connect(null, mapDispatchToProps), withPlugins('WorkspaceImport'));
 
 export default enhance(WorkspaceImport);

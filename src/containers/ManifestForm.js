@@ -11,9 +11,6 @@ import { ManifestForm } from '../components/ManifestForm';
  */
 const mapDispatchToProps = { addResource: actions.addResource };
 
-const enhance = compose(
-  connect(null, mapDispatchToProps),
-  withPlugins('ManifestForm'),
-);
+const enhance = compose(connect(null, mapDispatchToProps), withPlugins('ManifestForm'));
 
 export default enhance(ManifestForm);

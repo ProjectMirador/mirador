@@ -12,15 +12,13 @@ export function filterValidPlugins(plugins) {
 function splitPluginsByValidation(plugins) {
   const invalidPlugins = [];
   const validPlugins = [];
-  plugins.forEach(plugin => {
+  plugins.forEach((plugin) => {
     if (Array.isArray(plugin)) {
-      const allValid = plugin.every(p => validatePlugin(p));
+      const allValid = plugin.every((p) => validatePlugin(p));
 
       allValid ? validPlugins.push(...plugin) : invalidPlugins.push(...plugin);
     } else {
-      validatePlugin(plugin)
-        ? validPlugins.push(plugin)
-        : invalidPlugins.push(plugin);
+      validatePlugin(plugin) ? validPlugins.push(plugin) : invalidPlugins.push(plugin);
     }
   });
   return { invalidPlugins, validPlugins };
@@ -28,9 +26,7 @@ function splitPluginsByValidation(plugins) {
 
 /** */
 function logInvalidPlugins(plugins) {
-  plugins.forEach(plugin => (
-    console.log(`Mirador: Plugin ${plugin.name} is not valid and was rejected.`)
-  ));
+  plugins.forEach((plugin) => console.log(`Mirador: Plugin ${plugin.name} is not valid and was rejected.`));
 }
 
 /**  */
@@ -40,10 +36,10 @@ export function getReducersFromPlugins(plugins) {
 
 /**  */
 export function getConfigFromPlugins(plugins) {
-  return plugins && plugins.reduce((acc, plugin) => (deepmerge(acc, plugin.config || {})), {});
+  return plugins && plugins.reduce((acc, plugin) => deepmerge(acc, plugin.config || {}), {});
 }
 
 /**  */
 export function getSagasFromPlugins(plugins) {
-  return plugins && plugins.filter(plugin => plugin.saga).map(plugin => plugin.saga);
+  return plugins && plugins.filter((plugin) => plugin.saga).map((plugin) => plugin.saga);
 }

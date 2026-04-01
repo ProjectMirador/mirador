@@ -7,13 +7,9 @@ import { WindowListButton } from '../../../src/components/WindowListButton';
  * Helper function to create a shallow wrapper around WindowListButton
  */
 function createWrapper(props) {
-  return render(
-    <WindowListButton
-      windowCount={3}
-      {...props}
-    />,
-    { preloadedState: { workspace: { windowIds: ['abc123'] } } },
-  );
+  return render(<WindowListButton windowCount={3} {...props} />, {
+    preloadedState: { workspace: { windowIds: ['abc123'] } },
+  });
 }
 
 describe('WindowListButton', () => {

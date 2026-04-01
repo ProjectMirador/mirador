@@ -2,11 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import {
-  getCompanionWindow,
-  getCanvases,
-  getVisibleCanvasIds,
-} from '../state/selectors';
+import { getCompanionWindow, getCanvases, getVisibleCanvasIds } from '../state/selectors';
 import { SidebarIndexList } from '../components/SidebarIndexList';
 
 /**
@@ -27,9 +23,6 @@ const mapDispatchToProps = (dispatch, { id, windowId }) => ({
   setCanvas: (...args) => dispatch(actions.setCanvas(...args)),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('SidebarIndexList'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('SidebarIndexList'));
 
 export default enhance(SidebarIndexList);

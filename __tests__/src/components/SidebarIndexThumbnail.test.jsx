@@ -27,6 +27,7 @@ describe('SidebarIndexThumbnail', () => {
   it('contains a IIIFThumbnail', () => {
     const { container } = createWrapper();
 
-    expect(container.querySelector('img')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('img')).toBeInTheDocument();
   });
 });

@@ -18,7 +18,11 @@ const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases();
  */
 function createWrapper(props) {
   /** Stub child component for testing child props passing */
-  const Child = ({ testId, zoomToWorld }) => <button type="button" data-testid={testId} onClick={zoomToWorld}>Child</button>;
+  const Child = ({ testId, zoomToWorld }) => (
+    <button type="button" data-testid={testId} onClick={zoomToWorld}>
+      Child
+    </button>
+  );
   Child.propTypes = {
     testId: PropTypes.string.isRequired,
     zoomToWorld: PropTypes.func.isRequired,
@@ -71,9 +75,16 @@ describe('OpenSeadragonViewer', () => {
       vi.spyOn(viewer, 'viewport', 'get').mockReturnValue({ fitBounds });
 
       await user.click(screen.getByTestId('foo'));
-      expect(fitBounds).toHaveBeenCalledWith({
-        degrees: 0, height: 1800, width: 5041, x: 0, y: 0,
-      }, expect.anything());
+      expect(fitBounds).toHaveBeenCalledWith(
+        {
+          degrees: 0,
+          height: 1800,
+          width: 5041,
+          x: 0,
+          y: 0,
+        },
+        expect.anything(),
+      );
     });
   });
 
@@ -93,12 +104,13 @@ describe('OpenSeadragonViewer', () => {
 
       viewer.raiseEvent('animation-finish');
 
-      expect(updateViewport).toHaveBeenCalledWith(
-        'base',
-        {
-          flip: false, rotation: 90, x: 1, y: 0, zoom: 0.5,
-        },
-      );
+      expect(updateViewport).toHaveBeenCalledWith('base', {
+        flip: false,
+        rotation: 90,
+        x: 1,
+        y: 0,
+        zoom: 0.5,
+      });
     });
   });
 
@@ -123,24 +135,18 @@ describe('OpenSeadragonViewer', () => {
   describe('ImageFailureMessage', () => {
     it('passes imageUrls from infoResponses and nonTiledImages', async () => {
       const { ImageFailureMessage } = await import('../../../src/components/ImageFailureMessage');
-      
+
       const infoResponses = [
         { id: 'http://example.com/image1', json: {} },
         { id: 'http://example.com/image2', json: {} },
       ];
-      const nonTiledImages = [
-        { id: 'http://example.com/image3', getProperty: () => 'Image' },
-      ];
+      const nonTiledImages = [{ id: 'http://example.com/image3', getProperty: () => 'Image' }];
 
       createWrapper({ infoResponses, nonTiledImages });
-      
+
       // lastCall[0] returns props object
       expect(ImageFailureMessage.mock.lastCall[0]).toMatchObject({
-        imageUrls: [
-          'http://example.com/image1',
-          'http://example.com/image2',
-          'http://example.com/image3',
-        ],
+        imageUrls: ['http://example.com/image1', 'http://example.com/image2', 'http://example.com/image3'],
       });
     });
   });

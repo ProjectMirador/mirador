@@ -33,7 +33,7 @@ export default class CanvasGroupings {
       return [this.canvases];
     }
     if (this.viewType !== 'book') {
-      return this.canvases.map(canvas => [canvas]);
+      return this.canvases.map((canvas) => [canvas]);
     }
     const groupings = [];
     this.canvases.forEach((canvas, i) => {

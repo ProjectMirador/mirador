@@ -9,13 +9,7 @@ describe('CanvasInfo', () => {
   describe('when metadata is present', () => {
     beforeEach(() => {
       user = userEvent.setup();
-      render(
-        <CanvasInfo
-          canvasLabel="The Canvas Label"
-          canvasDescription="The Canvas Description"
-          canvasMetadata={metadata}
-        />,
-      );
+      render(<CanvasInfo canvasLabel="The Canvas Label" canvasDescription="The Canvas Description" canvasMetadata={metadata} />);
     });
 
     it('renders the content in a CollapsibleSection', async () => {
@@ -43,9 +37,7 @@ describe('CanvasInfo', () => {
 
   describe('when metadata is not present', () => {
     beforeEach(() => {
-      render(
-        <CanvasInfo />,
-      );
+      render(<CanvasInfo />);
     });
 
     it('does not render empty elements elements', () => {

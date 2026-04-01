@@ -25,14 +25,16 @@ const InlineAccordion = styled(Accordion, { name: 'ErrorContent', slot: 'accordi
 });
 
 /** */
-export function ErrorContent({
-  error, metadata = null, showJsError = true, ...rest
-}) {
+export function ErrorContent({ error, metadata = null, showJsError = true, ...rest }) {
   const { t } = useTranslation();
   if (!showJsError) return null;
 
   const pluginProps = {
-    error, metadata, showJsError, t, ...rest,
+    error,
+    metadata,
+    showJsError,
+    t,
+    ...rest,
   };
 
   return (

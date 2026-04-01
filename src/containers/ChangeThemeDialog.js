@@ -11,7 +11,7 @@ import { ChangeThemeDialog } from '../components/ChangeThemeDialog';
  * @private
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
-  setSelectedTheme: theme => dispatch(actions.updateConfig({ selectedTheme: theme })),
+  setSelectedTheme: (theme) => dispatch(actions.updateConfig({ selectedTheme: theme })),
 });
 
 /**
@@ -19,14 +19,11 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
  * @memberof ChangeThemeDialog
  * @private
  */
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   selectedTheme: getConfig(state).selectedTheme,
   themeIds: getThemeIds(state),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('ChangeThemeDialog'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('ChangeThemeDialog'));
 
 export default enhance(ChangeThemeDialog);

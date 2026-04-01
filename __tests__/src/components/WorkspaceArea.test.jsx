@@ -8,12 +8,7 @@ import { WorkspaceArea } from '../../../src/components/WorkspaceArea';
 function createWrapper(props) {
   return render(
     <DndProvider backend={TestBackend}>
-      <WorkspaceArea
-        isWorkspaceControlPanelVisible
-        classes={{}}
-        lang="en"
-        {...props}
-      />
+      <WorkspaceArea isWorkspaceControlPanelVisible classes={{}} lang="en" {...props} />
     </DndProvider>,
   );
 }
@@ -36,7 +31,8 @@ describe('WorkspaceArea', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Mirador viewer');
     expect(screen.getByRole('main')).toHaveTextContent('Welcome to Mirador');
 
-    expect(container.querySelector('.mirador-background-plugin-area')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('.mirador-background-plugin-area')).toBeInTheDocument();
   });
 
   it('should not render WorkspaceControlPanel when isWorkspaceControlPanelVisible is false', () => {

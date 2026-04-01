@@ -1,6 +1,4 @@
-import {
-  all, call, put, select, takeEvery,
-} from 'redux-saga/effects';
+import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import ActionTypes from '../actions/action-types';
 import {
   setContentSearchCurrentAnnotation,
@@ -14,9 +12,13 @@ import {
   showCollectionDialog,
 } from '../actions';
 import {
-  getSearchForWindow, getSearchAnnotationsForCompanionWindow,
-  getCanvasGrouping, getWindow, getManifestoInstance,
-  getCompanionWindowIdsForPosition, getManifestSearchService,
+  getSearchForWindow,
+  getSearchAnnotationsForCompanionWindow,
+  getCanvasGrouping,
+  getWindow,
+  getManifestoInstance,
+  getCompanionWindowIdsForPosition,
+  getManifestSearchService,
   getCanvasForAnnotation,
   getSelectedContentSearchAnnotationIds,
   getSortedSearchAnnotationsForCompanionWindow,
@@ -34,9 +36,7 @@ import { getIiifResourceImageService } from '../../lib/iiif';
 
 /** */
 export function* fetchWindowManifest(action) {
-  const {
-    collectionPath, id, manifestId,
-  } = action.payload || action.window;
+  const { collectionPath, id, manifestId } = action.payload || action.window;
 
   if (!manifestId) return;
 
@@ -96,7 +96,7 @@ export function* setWindowStartingCanvas(action) {
 
   if (canvasId) {
     // Preserve viewport when initialViewerConfig exists, event if the preserveViewport OSD setting is set to false
-    const preserveViewport = !!action.payload || !!(action.window?.initialViewerConfig);
+    const preserveViewport = !!action.payload || !!action.window?.initialViewerConfig;
     // When canvasId is explicitly provided, always pass preserveViewport flag
     const thunk = yield call(setCanvas, windowId, canvasId, null, { preserveViewport });
     yield put(thunk);
@@ -106,11 +106,10 @@ export function* setWindowStartingCanvas(action) {
     if (manifestoInstance) {
       // set the startCanvas
       const miradorManifest = getMiradorManifest(manifestoInstance);
-      const startCanvas = miradorManifest.startCanvas
-        || miradorManifest.canvasAt(canvasIndex || 0)
-        || miradorManifest.canvasAt(0);
+      const startCanvas =
+        miradorManifest.startCanvas || miradorManifest.canvasAt(canvasIndex || 0) || miradorManifest.canvasAt(0);
       if (startCanvas) {
-        const preserveViewport = !!action.payload || !!(action.window?.initialViewerConfig);
+        const preserveViewport = !!action.payload || !!action.window?.initialViewerConfig;
         // When canvas is calculated, only pass preserveViewport when true
         const thunk = preserveViewport
           ? yield call(setCanvas, windowId, startCanvas.id, null, { preserveViewport })
@@ -128,7 +127,10 @@ export function* setWindowDefaultSearchQuery(action) {
 
   const { id: windowId, defaultSearchQuery } = action.window;
   const searchService = yield select(getManifestSearchService, { windowId });
-  const companionWindowIds = yield select(getCompanionWindowIdsForPosition, { position: 'left', windowId });
+  const companionWindowIds = yield select(getCompanionWindowIdsForPosition, {
+    position: 'left',
+    windowId,
+  });
   const companionWindowId = companionWindowIds[0];
 
   if (searchService && companionWindowId) {
@@ -141,13 +143,15 @@ export function* setWindowDefaultSearchQuery(action) {
 export function getAnnotationsBySearch(state, { canvasIds, companionWindowIds, windowId }) {
   const annotationBySearch = companionWindowIds.reduce((accumulator, companionWindowId) => {
     const annotations = getSearchAnnotationsForCompanionWindow(state, {
-      companionWindowId, windowId,
+      companionWindowId,
+      windowId,
     });
 
     const resourceAnnotations = annotations.resources;
-    const hitAnnotation = resourceAnnotations.find(r => canvasIds.includes(r.targetId));
+    const hitAnnotation = resourceAnnotations.find((r) => canvasIds.includes(r.targetId));
 
-    if (hitAnnotation) accumulator[companionWindowId] = [hitAnnotation.id];  // eslint-disable-line no-param-reassign
+    // eslint-disable-next-line no-param-reassign
+    if (hitAnnotation) accumulator[companionWindowId] = [hitAnnotation.id];
 
     return accumulator;
   }, {});
@@ -156,30 +160,21 @@ export function getAnnotationsBySearch(state, { canvasIds, companionWindowIds, w
 }
 
 /** @private */
-export function* setCurrentAnnotationsOnCurrentCanvas({
-  annotationId, windowId, visibleCanvases,
-}) {
+export function* setCurrentAnnotationsOnCurrentCanvas({ annotationId, windowId, visibleCanvases }) {
   const searches = yield select(getSearchForWindow, { windowId });
   const companionWindowIds = Object.keys(searches || {});
   if (companionWindowIds.length === 0) return;
 
-  const annotationBySearch = yield select(
-    getAnnotationsBySearch,
-    {
-      canvasIds: visibleCanvases,
-      companionWindowIds,
-      windowId,
-    },
-  );
+  const annotationBySearch = yield select(getAnnotationsBySearch, {
+    canvasIds: visibleCanvases,
+    companionWindowIds,
+    windowId,
+  });
 
   yield all(
-    Object.keys(annotationBySearch)
-      .map(companionWindowId => (
-        put(setContentSearchCurrentAnnotation(
-          windowId,
-          companionWindowId,
-          annotationBySearch[companionWindowId],
-        )))),
+    Object.keys(annotationBySearch).map((companionWindowId) =>
+      put(setContentSearchCurrentAnnotation(windowId, companionWindowId, annotationBySearch[companionWindowId])),
+    ),
   );
 
   if (Object.values(annotationBySearch).length > 0) {
@@ -192,25 +187,25 @@ export function* setCurrentAnnotationsOnCurrentCanvas({
 export function* panToFocusedWindow({ pan, windowId }) {
   if (!pan) return;
   const elasticLayout = yield select(getElasticLayout);
-  const {
-    x, y, width, height,
-  } = elasticLayout[windowId] || {};
+  const { x, y, width, height } = elasticLayout[windowId] || {};
 
   const {
     viewportPosition: { width: viewWidth, height: viewHeight },
   } = yield select(getWorkspace);
 
-  yield put(setWorkspaceViewportPosition({
-    x: (x + width / 2) - viewWidth / 2,
-    y: (y + height / 2) - viewHeight / 2,
-  }));
+  yield put(
+    setWorkspaceViewportPosition({
+      x: x + width / 2 - viewWidth / 2,
+      y: y + height / 2 - viewHeight / 2,
+    }),
+  );
 }
 
 /** @private */
 export function* updateVisibleCanvases({ windowId }) {
   const { canvasId } = yield select(getWindow, { windowId });
   const visibleCanvases = yield select(getCanvasGrouping, { canvasId, windowId });
-  yield put(updateWindow(windowId, { visibleCanvases: (visibleCanvases || []).map(c => c.id) }));
+  yield put(updateWindow(windowId, { visibleCanvases: (visibleCanvases || []).map((c) => c.id) }));
 }
 
 /** @private */
@@ -220,12 +215,16 @@ export function* setCanvasOfFirstSearchResult({ companionWindowId, windowId }) {
     return;
   }
   const selectedIds = yield select(getSelectedContentSearchAnnotationIds, {
-    companionWindowId, windowId,
+    companionWindowId,
+    windowId,
   });
 
   if (selectedIds.length !== 0) return;
 
-  const annotations = yield select(getSortedSearchAnnotationsForCompanionWindow, { companionWindowId, windowId });
+  const annotations = yield select(getSortedSearchAnnotationsForCompanionWindow, {
+    companionWindowId,
+    windowId,
+  });
   if (!annotations || annotations.length === 0) return;
 
   yield put(selectAnnotation(windowId, annotations[0].id));
@@ -235,7 +234,8 @@ export function* setCanvasOfFirstSearchResult({ companionWindowId, windowId }) {
 export function* setCanvasforSelectedAnnotation({ annotationId, windowId }) {
   const canvasIds = yield select(getVisibleCanvasIds, { windowId });
   const canvas = yield select(getCanvasForAnnotation, {
-    annotationId, windowId,
+    annotationId,
+    windowId,
   });
 
   if (!canvas || canvasIds.includes(canvas.id)) return;
@@ -248,16 +248,23 @@ export function* setCanvasforSelectedAnnotation({ annotationId, windowId }) {
 export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowId }) {
   const canvases = yield select(getCanvases, { windowId });
   const infoResponses = yield select(selectInfoResponses);
-  const visibleCanvases = (canvases || []).filter(c => visibleCanvasIds.includes(c.id));
+  const visibleCanvases = (canvases || []).filter((c) => visibleCanvasIds.includes(c.id));
   const getMiradorCanvas = yield select(getMiradorCanvasWrapper);
 
-  yield all(visibleCanvases.map((canvas) => {
-    const miradorCanvas = getMiradorCanvas(canvas);
-    return all(miradorCanvas.iiifImageResources.map(imageResource => (
-      !infoResponses[getIiifResourceImageService(imageResource)?.id]
-        && put(fetchInfoResponse({ imageResource, windowId }))
-    )).filter(Boolean));
-  }));
+  yield all(
+    visibleCanvases.map((canvas) => {
+      const miradorCanvas = getMiradorCanvas(canvas);
+      return all(
+        miradorCanvas.iiifImageResources
+          .map(
+            (imageResource) =>
+              !infoResponses[getIiifResourceImageService(imageResource)?.id] &&
+              put(fetchInfoResponse({ imageResource, windowId })),
+          )
+          .filter(Boolean),
+      );
+    }),
+  );
 }
 
 /** */

@@ -4,11 +4,7 @@ import { App } from '../../../src/components/App';
 
 /** */
 function createWrapper(props) {
-  return render(
-    <App
-      {...props}
-    />,
-  );
+  return render(<App {...props} />);
 }
 
 describe('App', () => {

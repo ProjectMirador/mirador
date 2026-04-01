@@ -5,13 +5,7 @@ import { NewBrowserWindow } from '../../../src/components/NewBrowserWindow';
  * Helper function to create a shallow wrapper around ErrorDialog
  */
 function createWrapper(props) {
-  return render(
-    <NewBrowserWindow
-      url="http://example.com/"
-      onClose={() => {}}
-      {...props}
-    />,
-  );
+  return render(<NewBrowserWindow url="http://example.com/" onClose={() => {}} {...props} />);
 }
 
 describe('NewBrowserWindow', () => {
