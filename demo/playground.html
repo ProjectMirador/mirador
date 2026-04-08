@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Mirador Playground</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #fafafa;
+    }
+    #editor {
+      width: 40%;
+      padding: 20px;
+      box-sizing: border-box;
+      border-right: 1px solid #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      background: white;
+    }
+    #editor h3 {
+      font-weight: 400;
+      color: rgba(0, 0, 0, 0.87);
+      margin-top: 0;
+    }
+    #editor #config {
+      flex: 1;
+      width: 100%;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 13px;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      resize: none;
+    }
+    #editor #config:focus {
+      outline: none;
+      border-color: #1976d2;
+    }
+    #viewer {
+      width: 60%;
+      position: relative;
+    }
+    #editor button {
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      line-height: 1.75;
+      letter-spacing: 0.02857em;
+      text-transform: uppercase;
+      min-width: 64px;
+      padding: 6px 16px;
+      border-radius: 4px;
+      border: none;
+      background-color: #1976d2;
+      color: white;
+      cursor: pointer;
+      transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 
+                  0px 2px 2px 0px rgba(0,0,0,0.14), 
+                  0px 1px 5px 0px rgba(0,0,0,0.12);
+    }
+    #editor button:hover {
+      background-color: #1565c0;
+      box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),
+                  0px 4px 5px 0px rgba(0,0,0,0.14),
+                  0px 1px 10px 0px rgba(0,0,0,0.12);
+    }
+    #editor button:active {
+      box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2),
+                  0px 8px 10px 1px rgba(0,0,0,0.14),
+                  0px 3px 14px 2px rgba(0,0,0,0.12);
+    }
+    #editor button:last-child {
+      background-color: transparent;
+      color: #1976d2;
+      box-shadow: none;
+    }
+    #editor button:last-child:hover {
+      background-color: rgba(25, 118, 210, 0.04);
+    }
+    #editor button:last-child:active {
+      background-color: rgba(25, 118, 210, 0.12);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="editor">
+    <h3>Mirador Config</h3>
+    <textarea id="config"></textarea>
+    <div style="display: flex; gap: 10px; padding-top: 20px;">
+      <button onclick="loadViewer()">Apply Config</button>
+      <button onclick="resetConfig()">Reset to Default</button>
+    </div>
+    <div id="error" style="color: red; margin-top: 10px; display: none;"></div>
+  </div>
+
+  <div id="viewer"></div>
+
+  <script type="module">
+    import Mirador from '../src';
+    import settings from '../src/config/settings';
+
+    let currentInstance = null;
+
+    // exclude complicated/internal settings
+    const { theme, auth, availableLanguages, requests, translations, state, createGenerateClassNameOptions, ...prunedSettings } = settings;
+    
+    // Use settings from config file as base, add minimal required config
+    const defaultConfig = {
+      id: "viewer",
+      ...prunedSettings,
+      manifests: {
+        "https://iiif.harvardartmuseums.org/manifests/object/299843": {
+          "provider": "Harvard Art Museums"
+        }
+      },
+      windows: [
+        {
+          "manifestId": "https://iiif.harvardartmuseums.org/manifests/object/299843",
+        }
+      ],
+    };
+
+    function showError(message) {
+      const errorDiv = document.getElementById("error");
+      errorDiv.textContent = message;
+      errorDiv.style.display = "block";
+    }
+
+    window.loadViewer = function() {
+      const configText = document.getElementById("config").value;
+
+      try {
+        const config = JSON.parse(configText);
+
+        // Properly unmount previous instance
+        if (currentInstance) {
+          currentInstance.unmount();
+          currentInstance = null;
+        }
+        
+        // Clear the container
+        document.getElementById("viewer").innerHTML = "";
+        
+        // Create new instance with config
+        currentInstance = Mirador.viewer(config);
+        document.getElementById("error").style.display = "none";
+      } catch (e) {
+        showError("Invalid JSON: " + e.message);
+      }
+    }
+
+    window.resetConfig = function() {
+      document.getElementById("config").value = JSON.stringify(defaultConfig, null, 2);
+      window.loadViewer();
+    }
+
+    // Initialize with default config
+    document.getElementById("config").value = JSON.stringify(defaultConfig, null, 2);
+    
+    // Load default on start
+    window.loadViewer();
+  </script>
+</body>
+</html>
