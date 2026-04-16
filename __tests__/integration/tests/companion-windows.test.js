@@ -7,7 +7,7 @@ describe('Basic end to end Mirador', () => {
   setupIntegrationTestViewer(config);
 
   it('allows the sidebar panel to be popped out into a companion window and closed', async () => {
-    const toggleButtons = await screen.findAllByLabelText(/toggle sidebar/i);
+    const toggleButtons = await screen.findAllByLabelText(/show sidebar/i);
     fireEvent.click(toggleButtons[0]);
 
     // Companion window is on the left

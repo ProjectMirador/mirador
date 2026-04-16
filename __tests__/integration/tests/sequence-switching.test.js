@@ -15,7 +15,7 @@ describe('Window Sidebar Sequence Dropdown', () => {
     expect(element).toBeInTheDocument();
 
     // Open the index tab
-    const toggleButtons = await screen.findAllByLabelText(/toggle sidebar/i);
+    const toggleButtons = await screen.findAllByLabelText(/show sidebar/i);
     fireEvent.click(toggleButtons[0]);
 
     const indexButton = await screen.findByRole('tab', { name: /Index/i });

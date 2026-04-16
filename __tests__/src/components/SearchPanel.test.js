@@ -31,7 +31,7 @@ describe('SearchPanel', () => {
     createWrapper({ query: 'Wolpertinger' });
 
     expect(screen.getByRole('heading', { name: /Search/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'clear' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reset search' })).toBeInTheDocument();
   });
 
   it('the Clear chip calls the removeSearch prop', async () => {
@@ -40,7 +40,7 @@ describe('SearchPanel', () => {
 
     createWrapper({ query: 'Wolpertinger', removeSearch });
 
-    await user.click(screen.getByRole('button', { name: 'clear' }));
+    await user.click(screen.getByRole('button', { name: 'Reset search' }));
 
     expect(removeSearch).toHaveBeenCalled();
   });
@@ -48,14 +48,14 @@ describe('SearchPanel', () => {
   it('does not render a Clear chip if there is no search query to be cleared', () => {
     createWrapper();
 
-    expect(screen.queryByRole('button', { name: 'clear' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Reset search' })).not.toBeInTheDocument();
   });
 
   it('has the SearchPanelControls component', () => {
     createWrapper();
 
     expect(screen.getByRole('combobox', { name: 'search terms' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Submit search' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Search in the document' })).toBeInTheDocument();
   });
 
   it('has the SearchResults list', () => {

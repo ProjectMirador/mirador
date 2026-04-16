@@ -31,7 +31,7 @@ describe('WindowTopBar', () => {
   it('renders all default components', () => {
     render(<Subject />);
     expect(screen.getByRole('navigation', { name: 'Window navigation' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Toggle sidebar' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Show sidebar' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Window views & thumbnail display' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Maximize window' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Close window' })).toBeInTheDocument();
@@ -46,7 +46,7 @@ describe('WindowTopBar', () => {
       allowTopMenuButton={false}
       allowFullscreen
     />);
-    expect(screen.queryByRole('button', { name: 'Toggle sidebar' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Show sidebar' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Window views & thumbnail display' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Maximize window' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Close window' })).not.toBeInTheDocument();
@@ -69,7 +69,7 @@ describe('WindowTopBar', () => {
       <Subject allowWindowSideBar toggleWindowSideBar={toggleWindowSideBar} />,
       { preloadedState: { windows: { xyz: { sideBarOpen: false } } } },
     );
-    const button = screen.getByRole('button', { name: 'Toggle sidebar' });
+    const button = screen.getByRole('button', { name: 'Show sidebar' });
     expect(button).toBeInTheDocument();
     await user.click(button);
     expect(toggleWindowSideBar).toHaveBeenCalledTimes(1);
