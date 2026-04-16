@@ -56,7 +56,7 @@ export function SearchPanelNavigation({
       >
         <ChevronLeftIcon style={iconStyle} />
       </MiradorMenuButton>
-      <span style={{ unicodeBidi: 'plaintext' }}>
+      <span style={{ unicodeBidi: 'plaintext' }} role="status">
         {t('pagination', { current: currentHitIndex + 1, total: lengthText })}
       </span>
       <MiradorMenuButton

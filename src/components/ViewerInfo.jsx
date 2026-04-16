@@ -25,10 +25,10 @@ export function ViewerInfo({
   const { t } = useTranslation();
   return (
     <StyledOsdInfo className={classNames(ns('osd-info'))}>
-      <Typography display="inline" variant="caption" className={ns('canvas-count')}>
+      <Typography display="inline" variant="caption" className={ns('canvas-count')} role="status">
         { t('pagination', { current: canvasIndex + 1, total: canvasCount }) }
       </Typography>
-      <Typography display="inline" variant="caption" className={ns('canvas-label')}>
+      <Typography display="inline" variant="caption" className={ns('canvas-label')} role="status">
         {canvasLabel && ` • ${canvasLabel}`}
       </Typography>
     </StyledOsdInfo>
