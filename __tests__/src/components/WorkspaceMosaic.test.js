@@ -61,7 +61,7 @@ describe('WorkspaceMosaic', () => {
       const updateWorkspaceMosaicLayout = vi.fn();
       const props = {
         classes: {},
-        layout: { direction: 'row', first: '1', second: '2' },
+        layout: { type: 'split', direction: 'row', children: ['1', '2'] },
         updateWorkspaceMosaicLayout,
         windowIds,
         workspaceId: 'foo',
@@ -89,13 +89,13 @@ describe('WorkspaceMosaic', () => {
     it('when the new and old layouts are the same', () => {
       const updateWorkspaceMosaicLayout = vi.fn();
       wrapper = createWrapper({
-        layout: { direction: 'row', first: '1', second: '2' },
+        layout: { type: 'split', direction: 'row', children: ['1', '2'] },
         updateWorkspaceMosaicLayout,
         windowIds,
       });
 
       wrapper.rerender(
-        <WorkspaceMosaic classes={{}} windowIds={windowIds} layout={{ direction: 'row', first: '1', second: '2' }} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
+        <WorkspaceMosaic classes={{}} windowIds={windowIds} layout={{ type: 'split', direction: 'row', children: ['1', '2'] }} workspaceId="foo" updateWorkspaceMosaicLayout={updateWorkspaceMosaicLayout} />,
       );
 
       expect(updateWorkspaceMosaicLayout).toHaveBeenCalledTimes(0);
