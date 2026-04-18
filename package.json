@@ -61,7 +61,6 @@
     "react-dnd-touch-backend": "^16.0.0",
     "react-error-boundary": "^5.0.0",
     "react-full-screen": "^1.1.1",
-    "react-image": "^4.0.1",
     "react-intersection-observer": "^10.0.0",
     "react-mosaic-component2": "^7.0.0",
     "react-redux": "^8.0.0 || ^9.0.0",
