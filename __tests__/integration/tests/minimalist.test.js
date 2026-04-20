@@ -15,7 +15,7 @@ describe('Minimalist configuration to Mirador', () => {
     expect(rightsButton).toBeInTheDocument();
 
     expect(screen.queryByRole('', { name: /Close window/i })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /Toggle sidebar/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Show sidebar/i })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Add resource/i })).not.toBeInTheDocument();
   });
 });

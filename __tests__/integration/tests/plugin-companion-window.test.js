@@ -7,7 +7,7 @@ describe('add plugins for companion windows', () => {
   setupIntegrationTestViewer(settings.config, settings.plugins);
 
   it('added a plugin to the window sidebar and companion window', async () => {
-    const toggleButtons = await screen.findAllByLabelText(/toggle sidebar/i);
+    const toggleButtons = await screen.findAllByLabelText(/show sidebar/i);
 
     // Click the first toggle button (ignore a weird mui clone that is also in the DOM?)
     fireEvent.click(toggleButtons[0]);

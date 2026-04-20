@@ -103,7 +103,7 @@ describe('SearchPanelControls', () => {
     createWrapper({ fetchSearch, query: '', searchService });
 
     await user.clear(screen.getByRole('combobox'));
-    await user.click(screen.getByRole('button', { name: 'Submit search' }));
+    await user.click(screen.getByRole('button', { name: 'Search in the document' }));
     expect(fetchSearch).not.toHaveBeenCalled();
   });
 

@@ -24,6 +24,7 @@ export function SearchPanel({
           {
             query && query !== '' && (
               <Chip
+                aria-label={t('clearSearchAria')}
                 role="button"
                 sx={{ marginLeft: 1 }}
                 color="secondary"

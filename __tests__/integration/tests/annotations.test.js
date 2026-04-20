@@ -14,7 +14,7 @@ describe('Annotations in Mirador', () => {
 
   it('stores annotations in state by canvasId', async (context) => {
     // Open the sidebar
-    const toggleButtons = await screen.findAllByLabelText(/toggle sidebar/i);
+    const toggleButtons = await screen.findAllByLabelText(/show sidebar/i);
     fireEvent.click(toggleButtons[0]);
 
     // Go to annotations tab
@@ -28,7 +28,7 @@ describe('Annotations in Mirador', () => {
   // Note that this test is tied to a specific record showing up by default (299843.json)
   it('renders annotation in a companion window/sidebar panel', async () => {
     // Open the sidebar
-    const toggleButtons = await screen.findAllByLabelText(/toggle sidebar/i);
+    const toggleButtons = await screen.findAllByLabelText(/show sidebar/i);
     fireEvent.click(toggleButtons[0]);
 
     // Go to annotations tab
