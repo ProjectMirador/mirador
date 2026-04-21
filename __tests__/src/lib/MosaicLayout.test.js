@@ -15,36 +15,36 @@ describe('MosaicLayout', () => {
       expect(instance.layout).toEqual('foo');
       instance.addWindows(['bar']);
       expect(instance.layout).toEqual({
+        type: 'split',
         direction: 'row',
-        first: 'foo',
-        second: 'bar',
+        children: ['foo', 'bar'],
       });
     });
     it('case 3 windows: adds to the top right', () => {
       expect(instance.layout).toEqual('foo');
       instance.addWindows(['bar', 'bat', 'bark']);
       expect(instance.layout).toEqual({
+        type: 'split',
         direction: 'row',
-        first: 'foo',
-        second: {
+        children: ['foo', {
+          type: 'split',
           direction: 'column',
-          first: {
+          children: [{
+            type: 'split',
             direction: 'row',
-            first: 'bat',
-            second: 'bark',
-          },
-          second: 'bar',
-        },
+            children: ['bat', 'bark'],
+          }, 'bar'],
+        }],
       });
     });
   });
   describe('removeWindows', () => {
     let instance;
     beforeEach(() => {
-      instance = new MosaicLayout({ first: 'foo', second: 'bar' });
+      instance = new MosaicLayout({ type: 'split', direction: 'row', children: ['foo', 'bar'] });
     });
     it('case 1 window: returns a single window', () => {
-      instance.removeWindows(['bar'], { bar: ['second'] });
+      instance.removeWindows(['bar'], { bar: [1] });
       expect(instance.layout).toEqual('foo');
     });
   });
