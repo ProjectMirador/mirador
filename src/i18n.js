@@ -22,6 +22,8 @@ import vi from './locales/vi/translation.json';
 import bg from './locales/bg/translation.json';
 import nbNo from './locales/nbNo/translation.json';
 import hu from './locales/hu/translation.json';
+import ta from './locales/ta/translation.json';
+
 
 /**
  * Load translations for each language
@@ -50,6 +52,7 @@ function createI18nInstance(i18nConfig = {}) {
     vi,
     'zh-CN': zhCn,
     'zh-TW': zhTw,
+    ta,
   };
 
   const instance = createInstance();
