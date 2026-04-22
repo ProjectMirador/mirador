@@ -24,7 +24,6 @@ import nbNo from './locales/nbNo/translation.json';
 import hu from './locales/hu/translation.json';
 import ta from './locales/ta/translation.json';
 
-
 /**
  * Load translations for each language
  */
