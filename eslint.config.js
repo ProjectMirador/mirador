@@ -132,9 +132,7 @@ export default [
 
     settings: {
       'import/resolver': {
-        node: {
-          extensions: ['.js', '.jsx', '.json'],
-        },
+	oxc: {},
       },
       react: {
         version: 'detect',
