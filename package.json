@@ -84,7 +84,7 @@
     "@emotion/styled": "^11.10.6",
     "@eslint/compat": "^2.0.3",
     "@eslint/eslintrc": "^3.3.5",
-    "@eslint/js": "^9.39.4",
+    "@eslint/js": "^10.0.1",
     "@mui/material": "^7.x",
     "@mui/system": "^7.x",
     "@testing-library/dom": "^10.4.0",
