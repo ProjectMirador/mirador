@@ -159,9 +159,8 @@ export function AnnotationsOverlay({
         };
       };
 
-      let annosWithScore = [];
       let radius = 1;
-      annosWithScore = sortBy(annos.map(annosWithClickScore(radius)), 'score');
+      let annosWithScore = sortBy(annos.map(annosWithClickScore(radius)), 'score');
 
       while (radius < Math.max(canvasWidth, canvasHeight)
         && annosWithScore[0].score === annosWithScore[1].score) {

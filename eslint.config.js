@@ -1,5 +1,6 @@
 import js from '@eslint/js';
 import globals from 'globals';
+import { fixupPluginRules } from '@eslint/compat';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
@@ -46,10 +47,14 @@ export default [
     },
 
     plugins: {
-      import: importPlugin,
-      'jest-dom': jestDomPlugin,
-      'jsx-a11y': jsxA11yPlugin,
-      react: reactPlugin,
+      // eslint-plugin-import, react, jsx-a11y, and jest-dom still declare ESLint
+      // peer deps up to ^9; wrap them with fixupPluginRules so their internal use
+      // of removed context APIs (e.g. getFilename, getSourceCode) keeps working.
+      import: fixupPluginRules(importPlugin),
+      'jest-dom': fixupPluginRules(jestDomPlugin),
+      'jsx-a11y': fixupPluginRules(jsxA11yPlugin),
+      react: fixupPluginRules(reactPlugin),
+      // react-hooks and testing-library already declare ESLint 10 support
       'react-hooks': reactHooksPlugin,
       'testing-library': testingLibraryPlugin,
     },
