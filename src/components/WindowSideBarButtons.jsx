@@ -101,8 +101,6 @@ export function WindowSideBarButtons({
       indicatorColor="primary"
       textColor="primary"
       orientation="vertical"
-      aria-orientation="vertical"
-      aria-label={t('sidebarPanelsNavigation')}
     >
       { panels.info && (
         <TabButton
