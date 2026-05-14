@@ -4,8 +4,8 @@ import { styled } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { DndContext } from 'react-dnd';
 import {
-  Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves,
-} from 'react-mosaic-component2';
+  Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves, convertLegacyToNary
+} from 'react-mosaic-component';
 import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
@@ -78,19 +78,20 @@ const determineWorkspaceLayout = (currentLayout, windowIds, currentWindowPaths =
 export function WorkspaceMosaic({
   layout = undefined, updateWorkspaceMosaicLayout, windowIds = [], workspaceId,
 }) {
-  const toolbarControls = [];
-  const additionalControls = [];
 
   const windowPaths = useRef({});
   const dndContext = useContext(DndContext);
 
+  // Convert legacy layout format to new format if needed
+  const normalizedLayout = layout ? convertLegacyToNary(layout) : layout;
+
   useEffect(() => {
-    const leaveKeys = getLeaves(layout);
+    const leaveKeys = getLeaves(normalizedLayout);
     // Handle some trivial layout cases:
     // 1. No layout
     // 2. No windows
     // 3. Not enough windows to create a layout
-    if (!layout || windowIds.length === 0 || leaveKeys.length < 2) {
+    if (!normalizedLayout || windowIds.length === 0 || leaveKeys.length < 2) {
       updateWorkspaceMosaicLayout(createBalancedTreeFromLeaves(windowIds));
 
       return undefined;
@@ -101,12 +102,14 @@ export function WorkspaceMosaic({
       return undefined;
     }
 
-    const newLayout = determineWorkspaceLayout(layout, windowIds, windowPaths.current);
+    const newLayout = determineWorkspaceLayout(normalizedLayout, windowIds, windowPaths.current);
 
-    if (!isEqual(newLayout, layout)) updateWorkspaceMosaicLayout(newLayout);
+    if (!isEqual(newLayout, normalizedLayout)) updateWorkspaceMosaicLayout(newLayout);
 
     return undefined;
-  }, [layout, windowIds, windowPaths, updateWorkspaceMosaicLayout]);
+  }, [normalizedLayout, windowIds, windowPaths, updateWorkspaceMosaicLayout]);
+
+  const toolbarControls = [];
 
   /**
    * Render a tile (Window) in the Mosaic.
@@ -118,7 +121,6 @@ export function WorkspaceMosaic({
     return (
       <MosaicWindow
         toolbarControls={toolbarControls}
-        additionalControls={additionalControls}
         path={path}
         windowId={id}
         renderPreview={RenderPreview}
@@ -144,7 +146,7 @@ export function WorkspaceMosaic({
       <StyledMosaic
         dragAndDropManager={dndContext.dragDropManager}
         renderTile={tileRenderer}
-        initialValue={layout || createBalancedTreeFromLeaves(windowIds)}
+        initialValue={normalizedLayout || createBalancedTreeFromLeaves(windowIds)}
         onChange={mosaicChange}
         className={classNames('mirador-mosaic')}
         zeroStateView={<ZeroStateView />}
