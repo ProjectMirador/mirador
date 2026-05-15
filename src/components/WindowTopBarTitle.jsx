@@ -34,7 +34,7 @@ TitleTypography.propTypes = {
 export function WindowTopBarTitle({
   error = null, hideWindowTitle = false, isFetching = false, manifestTitle = '',
 }) {
-  let title = null;
+  let title;
   if (isFetching) {
     title = (
       <StyledTitleTypography>
