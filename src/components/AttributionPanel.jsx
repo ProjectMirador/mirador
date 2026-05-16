@@ -1,18 +1,18 @@
-import PropTypes from 'prop-types';
-import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import Skeleton from '@mui/material/Skeleton';
-import { useTranslation } from 'react-i18next';
-import { Img } from 'react-image';
-import CompanionWindow from '../containers/CompanionWindow';
-import { CompanionWindowSection } from './CompanionWindowSection';
-import LabelValueMetadata from '../containers/LabelValueMetadata';
-import ns from '../config/css-ns';
-import { PluginHook } from './PluginHook';
+import PropTypes from "prop-types";
+import { styled } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import Skeleton from "@mui/material/Skeleton";
+import { useTranslation } from "react-i18next";
+import CompanionWindow from "../containers/CompanionWindow";
+import { CompanionWindowSection } from "./CompanionWindowSection";
+import LabelValueMetadata from "../containers/LabelValueMetadata";
+import ns from "../config/css-ns";
+import { PluginHook } from "./PluginHook";
+import { ImageWithFallback } from "./ImageWithFallback";
 
-const StyledLogo = styled(Img)(() => ({
-  maxWidth: '100%',
+const StyledLogo = styled(ImageWithFallback)(() => ({
+  maxWidth: "100%",
 }));
 
 const StyledPlaceholder = styled(Skeleton)(({ theme }) => ({
@@ -35,42 +35,45 @@ export function AttributionPanel({
 
   return (
     <CompanionWindow
-      title={t('attributionTitle')}
-      paperClassName={ns('attribution-panel')}
+      title={t("attributionTitle")}
+      paperClassName={ns("attribution-panel")}
       windowId={windowId}
       id={id}
     >
       <CompanionWindowSection>
-        { requiredStatement && (
-        <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
+        {requiredStatement && (
+          <LabelValueMetadata
+            labelValuePairs={requiredStatement}
+            defaultLabel={t("attribution")}
+          />
         )}
-        {
-            rights && rights.length > 0 && (
-              <dl className={ns('label-value-metadata')}>
-                <Typography variant="subtitle2" component="dt">{t('rights')}</Typography>
-                { rights.map(v => (
-                  <Typography variant="body1" component="dd" key={v.toString()}>
-                    <Link target="_blank" rel="noopener noreferrer" href={v}>
-                      {v}
-                    </Link>
-                  </Typography>
-                )) }
-              </dl>
-            )
-          }
+        {rights && rights.length > 0 && (
+          <dl className={ns("label-value-metadata")}>
+            <Typography variant="subtitle2" component="dt">
+              {t("rights")}
+            </Typography>
+            {rights.map((v) => (
+              <Typography variant="body1" component="dd" key={v.toString()}>
+                <Link target="_blank" rel="noopener noreferrer" href={v}>
+                  {v}
+                </Link>
+              </Typography>
+            ))}
+          </dl>
+        )}
       </CompanionWindowSection>
 
-      { manifestLogo && (
-      <CompanionWindowSection>
-        <StyledLogo
-          src={[manifestLogo]}
-          alt=""
-          role="presentation"
-          unloader={
-            <StyledPlaceholder variant="rectangular" height={60} width={60} />
-              }
-        />
-      </CompanionWindowSection>
+      {manifestLogo && (
+        <CompanionWindowSection>
+          <StyledLogo
+            src={manifestLogo}
+            alt=""
+            role="presentation"
+            fallback={
+              <StyledPlaceholder variant="rectangular" height={60} width={60} />
+            }
+          />
+        </CompanionWindowSection>
       )}
 
       <PluginHook targetName="AttributionPanel" {...pluginProps} />
@@ -81,10 +84,12 @@ export function AttributionPanel({
 AttributionPanel.propTypes = {
   id: PropTypes.string.isRequired,
   manifestLogo: PropTypes.string,
-  requiredStatement: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string,
-  })),
+  requiredStatement: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ),
   rights: PropTypes.arrayOf(PropTypes.string),
   windowId: PropTypes.string.isRequired,
 };
