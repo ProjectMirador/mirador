@@ -13,7 +13,7 @@ export default defineConfig({
   ...(
     process.env.NETLIFY ? {
       build: {
-        rollupOptions: {
+        rolldownOptions: {
           external: ['__tests__/*', '__mocks__/*'],
           input: Object.fromEntries(
             globSync('./demo/*.html').map((file) => [
@@ -39,11 +39,11 @@ export default defineConfig({
           formats: ['es'],
           name: 'Mirador',
         },
-        rollupOptions: {
-          external: (id, parentId) => {
+        rolldownOptions: {
+          external: (id) => {
             const peers = Object.keys(packageJson.peerDependencies);
             return peers.indexOf(id) > -1
-              || peers.find((peer) => id.startsWith(`${peer}/`))
+              || peers.some((peer) => id.startsWith(`${peer}/`))
               || id.startsWith('__tests__/')
               || id.startsWith('__mocks__/');
           },
