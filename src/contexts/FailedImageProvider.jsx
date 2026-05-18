@@ -9,16 +9,16 @@ const defaultFallback = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000
 
 export default function FailedImageProvider({ children }) {
   const fallbackImage = config.fallbackImage || defaultFallback;
-  const [hasFailed, setHasFailed] = useState(false);
+  const [failedImages, setFailedImages] = useState(new Set());
 
-  const notifyFailure = useCallback(() => {
-    setHasFailed(true);
+  const notifyFailure = useCallback((imageId) => {
+    setFailedImages((prev) => new Set(prev).add(imageId));
   }, []);
 
   return (
     <FailedImageContext.Provider value={{
+      failedImages,
       fallbackImage,
-      hasFailed,
       notifyFailure,
     }}
     >
