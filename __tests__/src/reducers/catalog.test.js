@@ -2,7 +2,7 @@ import { catalogReducer } from '../../../src/state/reducers/catalog';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('catalog reducer', () => {
-  describe('ADD_MANIFEST', () => {
+  describe('ADD_RESOURCE', () => {
     it('adds new manifests to the state', () => {
       expect(catalogReducer([], {
         manifestId: '1',
