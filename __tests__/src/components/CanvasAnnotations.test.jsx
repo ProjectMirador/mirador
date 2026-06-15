@@ -159,6 +159,30 @@ describe('CanvasAnnotations', () => {
       expect(hoverAnnotation).toHaveBeenCalledWith('abc', ['annoId2']);
     });
 
+    it('does not toggle annotation selection when the user has highlighted text', async () => {
+      const selectAnnotation = vi.fn();
+      const deselectAnnotation = vi.fn();
+      const user = userEvent.setup();
+
+      const getSelectionSpy = vi.spyOn(window, 'getSelection').mockReturnValue({
+        toString: () => 'highlighted text',
+      });
+
+      wrapper = createWrapper({
+        annotations,
+        deselectAnnotation,
+        selectAnnotation,
+        selectedAnnotationId: 'abc123',
+      });
+
+      await user.click(screen.getByRole('menuitem', { name: /First Annotation/ }));
+
+      expect(selectAnnotation).not.toHaveBeenCalled();
+      expect(deselectAnnotation).not.toHaveBeenCalled();
+
+      getSelectionSpy.mockRestore();
+    });
+
     it('sets the highlighted annotation to null on mouse leave', async () => {
       const hoverAnnotation = vi.fn();
       const user = userEvent.setup();
