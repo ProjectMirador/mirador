@@ -57,7 +57,6 @@ const CollapseIcon = (props) => <ExpandMoreIcon {...props} color="action" />;
 /** */
 const ExpandIcon = (props) => <ChevronRightIcon {...props} color="action" />;
 /** */
-// eslint-disable-next-line max-params
 export function SidebarIndexTableOfContents({
   toggleNode,
   expandNodes,
@@ -154,7 +153,6 @@ export function SidebarIndexTableOfContents({
   );
 }
 
-/* eslint-disable react/no-unused-prop-types */
 SidebarIndexTableOfContents.propTypes = {
   containerRef: PropTypes.oneOfType([
     PropTypes.func,
@@ -179,4 +177,3 @@ SidebarIndexTableOfContents.propTypes = {
   visibleNodeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   windowId: PropTypes.string.isRequired,
 };
-/* eslint-enable react/no-unused-prop-types */

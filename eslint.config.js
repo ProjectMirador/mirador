@@ -144,6 +144,7 @@ export default [
       react: {
         version: 'detect',
       },
+      'testing-library/utils-module': '@tests/utils/test-utils',
     },
   },
 
