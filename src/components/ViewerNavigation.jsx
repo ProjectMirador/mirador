@@ -14,8 +14,8 @@ export function ViewerNavigation({
 }) {
   const { t } = useTranslation();
   let htmlDir = 'ltr';
-  let previousIconStyle = {};
-  let nextIconStyle = {};
+  let previousIconStyle;
+  let nextIconStyle;
   switch (viewingDirection) {
     case 'top-to-bottom':
       previousIconStyle = { transform: 'rotate(270deg)' };
