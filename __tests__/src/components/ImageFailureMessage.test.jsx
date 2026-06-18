@@ -47,7 +47,7 @@ describe('ImageFailureMessage', () => {
     );
 
     const message = screen.getByText(/Problem loading image/i);
-    const container = message.closest('[role="status"]');
+    const container = message.closest('[role="status"]'); // eslint-disable-line testing-library/no-node-access
 
     expect(container).toHaveAttribute('aria-live', 'polite');
   });

@@ -27,7 +27,7 @@ function Subject({ fixture = manifestJson, ...props }) {
 }
 
 Subject.propTypes = {
-  fixture: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  fixture: PropTypes.object,
 };
 
 describe('ThumbnailNavigation', () => {
@@ -46,7 +46,7 @@ describe('ThumbnailNavigation', () => {
     render(<Subject position="far-bottom" />);
     // Grid component renders with role="grid" inside the Thumbnails wrapper
     const thumbnailWrapper = screen.getByLabelText('Thumbnails');
-    const grid = thumbnailWrapper.querySelector('[role="grid"]');
+    const grid = thumbnailWrapper.querySelector('[role="grid"]'); // eslint-disable-line testing-library/no-node-access
     expect(grid).toBeInTheDocument();
     // Grid should have 3 gridcells (all in one row)
     expect(screen.getAllByRole('gridcell')).toHaveLength(3);
@@ -56,7 +56,7 @@ describe('ThumbnailNavigation', () => {
     render(<Subject position="far-right" />);
     // List component renders with role="list" inside the Thumbnails wrapper
     const thumbnailWrapper = screen.getByLabelText('Thumbnails');
-    const list = thumbnailWrapper.querySelector('[role="list"]');
+    const list = thumbnailWrapper.querySelector('[role="list"]'); // eslint-disable-line testing-library/no-node-access
     expect(list).toBeInTheDocument();
     // List should have 3 gridcells (each as a separate item)
     expect(screen.getAllByRole('gridcell')).toHaveLength(3);
@@ -144,7 +144,7 @@ describe('ThumbnailNavigation', () => {
     it('sets up react-window to be rtl', () => {
       render(<Subject viewingDirection="right-to-left" />);
 
-      expect(screen.getByRole('row').children[0]).toHaveStyle({ direction: 'rtl' }); // eslint-disable-line testing-library/no-node-access
+      expect(screen.getByRole('row').children[0]).toHaveStyle({ direction: 'rtl' });
     });
   });
 });
