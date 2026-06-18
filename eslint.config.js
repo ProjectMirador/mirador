@@ -105,7 +105,7 @@ export default [
       'no-shadow': ['error', { builtinGlobals: false, hoist: 'functions' }],
       'no-undef': 'error',
       'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
-      'no-unused-vars': 'warn',
+      'no-unused-vars': 'off',
       'no-use-before-define': ['warn', { functions: false, classes: false, variables: false }],
       'no-useless-return': 'error',
       'no-var': 'error',
