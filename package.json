@@ -27,7 +27,7 @@
     "lint:translations": "node ./scripts/i18n-lint.js",
     "size": "bundlewatch --config bundlewatch.config.json",
     "start": "vite",
-    "test": "npm run build && npm run lint && npm run format:check && npm run size && vitest run"
+    "test": "npm run build && npm run lint && npm run size && vitest run"
   },
   "license": "Apache-2.0",
   "contributors": [
@@ -98,9 +98,11 @@
     "bundlewatch": "^0.4.0",
     "chalk": "^5.3.0",
     "eslint": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jest-dom": "^5.5.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-testing-library": "^7.16.2",

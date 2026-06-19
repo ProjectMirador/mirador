@@ -7,6 +7,7 @@ import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import importPlugin from 'eslint-plugin-import';
 import testingLibraryPlugin from 'eslint-plugin-testing-library';
 import jestDomPlugin from 'eslint-plugin-jest-dom';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
 
 export default [
   // Ignore patterns
@@ -16,6 +17,8 @@ export default [
 
   // Base ESLint recommended rules
   js.configs.recommended,
+  // Pretter recommended rules
+  prettierRecommended,
 
   // Main configuration
   {
