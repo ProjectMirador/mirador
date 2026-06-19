@@ -1,6 +1,7 @@
 import compact from 'lodash/compact';
 import flatten from 'lodash/flatten';
 import { v4 as uuid } from 'uuid';
+import parseFragmentSelector from './parseFragmentSelector';
 
 /**
  * A modeled WebAnnotation item
@@ -97,25 +98,34 @@ export default class AnnotationItem {
     }
   }
 
-  /** */
-  get fragmentSelector() {
+  /** @private */
+  get fragmentSelectorValue() {
     const { selector } = this;
-
-    let match;
-    let fragmentSelector;
 
     switch (typeof selector) {
       case 'string':
-        match = selector.match(/xywh=(.*)$/);
-        break;
-      case 'object':
-        fragmentSelector = selector.find(s => s.type && s.type === 'FragmentSelector');
-        match = fragmentSelector && fragmentSelector.value.match(/xywh=(.*)$/);
-        break;
+        return selector;
+      case 'object': {
+        const fragmentSelector = selector.find(s => s.type && s.type === 'FragmentSelector');
+        return fragmentSelector && fragmentSelector.value;
+      }
       default:
         return null;
     }
+  }
 
-    return match && match[1].split(',').map(str => parseInt(str, 10));
+  /** */
+  get fragmentSelector() {
+    const parsed = parseFragmentSelector(this.fragmentSelectorValue);
+    return parsed && parsed.dimensions;
+  }
+
+  /**
+   * The unit (`pixel` or `percent`) of the fragment selector, per the W3C Media
+   * Fragments spec. `percent` values need scaling against the canvas dimensions.
+   */
+  get fragmentUnit() {
+    const parsed = parseFragmentSelector(this.fragmentSelectorValue);
+    return parsed && parsed.unit;
   }
 }

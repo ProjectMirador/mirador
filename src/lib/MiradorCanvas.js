@@ -2,6 +2,7 @@ import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
 import { Canvas, AnnotationPage, Annotation } from 'manifesto.js';
 import { getIiifResourceImageService } from './iiif';
+import parseFragmentSelector from './parseFragmentSelector';
 
 /**
  * MiradorCanvas - adds additional, testable logic around Manifesto's Canvas
@@ -184,9 +185,19 @@ export default class MiradorCanvas {
     const on = resourceAnnotation.getProperty('on');
     // IIIF v3
     const target = resourceAnnotation.getProperty('target');
-    const fragmentMatch = (on || target).match(/xywh=(.*)$/);
-    if (!fragmentMatch) return undefined;
-    return fragmentMatch[1].split(',').map(str => parseInt(str, 10));
+    const parsed = parseFragmentSelector(on || target);
+    if (!parsed) return undefined;
+    const { dimensions, unit } = parsed;
+    if (unit === 'percent') {
+      const [x, y, w, h] = dimensions;
+      return [
+        (x / 100) * this.getWidth(),
+        (y / 100) * this.getHeight(),
+        (w / 100) * this.getWidth(),
+        (h / 100) * this.getHeight(),
+      ];
+    }
+    return dimensions;
   }
 
   /** */

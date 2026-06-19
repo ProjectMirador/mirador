@@ -103,6 +103,14 @@ describe('MiradorCanvas', () => {
         instance.onFragment('https://images.prtd.app/iiif/2/hamilton%2fHL_524_1r_00_PC17/full/739,521/0/default.jpg'),
       ).toEqual([552, 1584, 3360, 2368]);
     });
+    it('scales percent-based fragment selectors against the canvas dimensions', () => {
+      instance.resourceAnnotation = () => ({
+        getProperty: prop => (prop === 'on' ? 'www.example.com/#xywh=percent:25,25,50,50' : undefined),
+      });
+      instance.getWidth = () => 4000;
+      instance.getHeight = () => 3000;
+      expect(instance.onFragment('foo')).toEqual([1000, 750, 2000, 1500]);
+    });
   });
   describe('videoResources', () => {
     it('returns video', () => {

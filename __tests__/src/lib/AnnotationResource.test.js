@@ -156,6 +156,21 @@ describe('AnnotationResource', () => {
       expect(new AnnotationResource({ on: { selector: { value: 'www.example.com' } } })
         .fragmentSelector).toEqual(null);
     });
+
+    it('percent-based fragment', () => {
+      expect(new AnnotationResource({ on: 'www.example.com/#xywh=percent:25,25,50,50' })
+        .fragmentSelector).toEqual([25, 25, 50, 50]);
+    });
+  });
+  describe('fragmentUnit', () => {
+    it('defaults to pixel', () => {
+      expect(new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' })
+        .fragmentUnit).toEqual('pixel');
+    });
+    it('detects percent', () => {
+      expect(new AnnotationResource({ on: 'www.example.com/#xywh=percent:25,25,50,50' })
+        .fragmentUnit).toEqual('percent');
+    });
   });
   describe('svgSelector', () => {
     it('simple string', () => {
