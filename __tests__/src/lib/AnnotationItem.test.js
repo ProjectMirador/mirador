@@ -138,6 +138,23 @@ describe('AnnotationItem', () => {
       expect(new AnnotationItem({ target: 'www.example.com' })
         .fragmentSelector).toEqual(null);
     });
+    it('percent-based fragment', () => {
+      expect(new AnnotationItem({ target: 'www.example.com/#xywh=percent:25,25,50,50' })
+        .fragmentSelector).toEqual([25, 25, 50, 50]);
+    });
+  });
+  describe('fragmentUnit', () => {
+    it('defaults to pixel', () => {
+      expect(new AnnotationItem({ target: 'www.example.com/#xywh=10,10,100,200' })
+        .fragmentUnit).toEqual('pixel');
+    });
+    it('detects percent', () => {
+      expect(new AnnotationItem({ target: 'www.example.com/#xywh=percent:25,25,50,50' })
+        .fragmentUnit).toEqual('percent');
+    });
+    it('is null without a fragment', () => {
+      expect(new AnnotationItem({ target: 'www.example.com' }).fragmentUnit).toEqual(null);
+    });
   });
   describe('svgSelector', () => {
     it('simple string', () => {
