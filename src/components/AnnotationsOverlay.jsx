@@ -11,7 +11,8 @@ import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
 
 /** @private */
 function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point) {
-  const [canvasX, canvasY] = canvasWorld.canvasToWorldCoordinates(canvas.id);
+  const [canvasX, canvasY, canvasWidth, canvasHeight] = canvasWorld
+    .canvasToWorldCoordinates(canvas.id);
   const relativeX = point.x - canvasX;
   const relativeY = point.y - canvasY;
 
@@ -22,8 +23,15 @@ function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, po
   }
 
   if (resource.fragmentSelector) {
-    const [x, y, w, h] = resource.fragmentSelector;
-    return x <= relativeX && relativeX <= x + w && y <= relativeY && relativeY <= y + h;
+    let [x, y, w, h] = resource.fragmentSelector;
+    if (resource.fragmentUnit === 'percent') {
+      x = (x / 100) * canvasWidth;
+      y = (y / 100) * canvasHeight;
+      w = (w / 100) * canvasWidth;
+      h = (h / 100) * canvasHeight;
+    }
+    return x <= relativeX && relativeX <= (x + w)
+      && y <= relativeY && relativeY <= (y + h);
   }
   return false;
 }
@@ -66,23 +74,25 @@ export function AnnotationsOverlay({
   /**
    * annotationsToContext - converts anontations to a canvas context
    */
-  const annotationsToContext = useCallback(
-    (renderedAnnotations, currentPalette) => {
-      const context = osdCanvasOverlay.context2d;
-      const zoomRatio = viewer.viewport.getZoom(true) / viewer.viewport.getMaxZoom();
-      renderedAnnotations.forEach((annotation) => {
-        annotation.resources.forEach((resource) => {
-          if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
-          const offset = canvasWorld.offsetByCanvas(resource.targetId);
-          const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
-            hovered: hoveredAnnotationIds.includes(resource.id),
-            offset,
-            palette: {
-              ...currentPalette,
-              default: {
-                ...currentPalette.default,
-                ...(!highlightAllAnnotations && currentPalette.hidden),
-              },
+  const annotationsToContext = useCallback((renderedAnnotations, currentPalette) => {
+    const context = osdCanvasOverlay.context2d;
+    const zoomRatio = viewer.viewport.getZoom(true) / viewer.viewport.getMaxZoom();
+    renderedAnnotations.forEach((annotation) => {
+      annotation.resources.forEach((resource) => {
+        if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
+        const offset = canvasWorld.offsetByCanvas(resource.targetId);
+        const [, , canvasWidth, canvasHeight] = canvasWorld
+          .canvasToWorldCoordinates(resource.targetId);
+        const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
+          canvasHeight,
+          canvasWidth,
+          hovered: hoveredAnnotationIds.includes(resource.id),
+          offset,
+          palette: {
+            ...currentPalette,
+            default: {
+              ...currentPalette.default,
+              ...(!highlightAllAnnotations && currentPalette.hidden),
             },
             resource,
             selected: selectedAnnotationId === resource.id,
