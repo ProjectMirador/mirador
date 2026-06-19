@@ -1,3 +1,6 @@
+// Use jsdom for this unit test because happy-dom and dompurify do not work together
+// See https://github.com/capricorn86/happy-dom/issues/2182
+// @vitest-environment jsdom
 import { render, screen } from '@tests/utils/test-utils';
 import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
 
