@@ -6,13 +6,7 @@ import { LanguageSettings } from '../../../src/components/LanguageSettings';
  * Helper function to create a shallow wrapper around LanguageSettings
  */
 function createWrapper(props) {
-  return render(
-    <LanguageSettings
-      handleClick={() => {}}
-      languages={{}}
-      {...props}
-    />,
-  );
+  return render(<LanguageSettings handleClick={() => {}} languages={{}} {...props} />);
 }
 
 describe('LanguageSettings', () => {
@@ -38,8 +32,14 @@ describe('LanguageSettings', () => {
   it('renders the check icon when the active prop returns true', () => {
     createWrapper({ languages });
 
-    expect(screen.getByRole('menuitem', { name: 'Deutsch' }).querySelector('svg')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access
-    expect(screen.getByRole('menuitem', { name: 'English' }).querySelector('svg')).not.toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/prefer-presence-queries
+    expect(
+      // eslint-disable-next-line testing-library/no-node-access
+      screen.getByRole('menuitem', { name: 'Deutsch' }).querySelector('svg'),
+    ).toBeInTheDocument();
+    expect(
+      // eslint-disable-next-line testing-library/no-node-access, testing-library/prefer-presence-queries
+      screen.getByRole('menuitem', { name: 'English' }).querySelector('svg'),
+    ).not.toBeInTheDocument();
   });
 
   it('renders the language value in an Typography element wrapped in a ListItemText', () => {

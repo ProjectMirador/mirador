@@ -10,12 +10,14 @@ export default {
     sideBarOpen: true,
     sideBarPanel: '',
   },
-  windows: [{
-    allowClose: false,
-    canvasId: PRIMARY_CANVAS_FIXTURE_URL,
-    manifestId: PRIMARY_MANIFEST_FIXTURE_URL,
-    thumbnailNavigationPosition: 'far-bottom',
-  }],
+  windows: [
+    {
+      allowClose: false,
+      canvasId: PRIMARY_CANVAS_FIXTURE_URL,
+      manifestId: PRIMARY_MANIFEST_FIXTURE_URL,
+      thumbnailNavigationPosition: 'far-bottom',
+    },
+  ],
   workspace: {
     type: 'not-mosaic-or-elastic',
   },

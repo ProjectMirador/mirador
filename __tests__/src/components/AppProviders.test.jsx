@@ -42,7 +42,9 @@ function createWrapper(props = {}) {
       }}
       {...props}
     >
-      <Button color="primary" data-testid="test-button">Test</Button>
+      <Button color="primary" data-testid="test-button">
+        Test
+      </Button>
       <MockTranslationComponent />
       <MockDnDComponent />
     </AppProviders>,

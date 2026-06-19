@@ -6,12 +6,17 @@ describe('layers reducer', () => {
   const canvasId = 'bar';
   describe('UPDATE_LAYERS', () => {
     it('should handle UPDATE_LAYERS', () => {
-      expect(layersReducer({}, {
-        canvasId,
-        payload: { some: 'data' },
-        type: ActionTypes.UPDATE_LAYERS,
-        windowId,
-      })).toEqual({
+      expect(
+        layersReducer(
+          {},
+          {
+            canvasId,
+            payload: { some: 'data' },
+            type: ActionTypes.UPDATE_LAYERS,
+            windowId,
+          },
+        ),
+      ).toEqual({
         foo: {
           bar: {
             some: 'data',
@@ -30,12 +35,14 @@ describe('layers reducer', () => {
         },
       };
 
-      expect(layersReducer(originalState, {
-        canvasId,
-        payload: { some: 'data' },
-        type: ActionTypes.UPDATE_LAYERS,
-        windowId,
-      })).toEqual({
+      expect(
+        layersReducer(originalState, {
+          canvasId,
+          payload: { some: 'data' },
+          type: ActionTypes.UPDATE_LAYERS,
+          windowId,
+        }),
+      ).toEqual({
         baz: {
           whatever: {},
         },

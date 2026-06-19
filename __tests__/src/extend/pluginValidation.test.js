@@ -1,15 +1,15 @@
 import { validatePlugin } from '../../../src/extend/pluginValidation';
 
 /** */
-const createPlugin = props => ({
-  component: x => x,
-  mapDispatchToProps: x => x,
-  mapStateToProps: x => x,
+const createPlugin = (props) => ({
+  component: (x) => x,
+  mapDispatchToProps: (x) => x,
+  mapStateToProps: (x) => x,
   mode: 'add',
   name: 'test',
   reducers: {
-    bar: x => x,
-    foo: x => x,
+    bar: (x) => x,
+    foo: (x) => x,
   },
   target: 'Window',
   ...props,
@@ -58,7 +58,7 @@ describe('validatePlugin', () => {
   it('mapStateToProps must be undefined, null or function', () => {
     let plugin = createPlugin({ mapStateToProps: undefined });
     expect(validatePlugin(plugin)).toBe(true);
-    plugin = createPlugin({ mapStateToProps: x => x });
+    plugin = createPlugin({ mapStateToProps: (x) => x });
     expect(validatePlugin(plugin)).toBe(true);
     plugin = createPlugin({ mapStateToProps: null });
     expect(validatePlugin(plugin)).toBe(true);
@@ -69,7 +69,7 @@ describe('validatePlugin', () => {
   it('mapDispatchToProps must be undefined, null, function or object', () => {
     let plugin = createPlugin({ mapDispatchToProps: undefined });
     expect(validatePlugin(plugin)).toBe(true);
-    plugin = createPlugin({ mapDispatchToProps: x => x });
+    plugin = createPlugin({ mapDispatchToProps: (x) => x });
     expect(validatePlugin(plugin)).toBe(true);
     plugin = createPlugin({ mapDispatchToProps: {} });
     expect(validatePlugin(plugin)).toBe(true);
@@ -89,10 +89,10 @@ describe('validatePlugin', () => {
   });
 
   it('each reducer must be a function', () => {
-    let reducers = { bar: x => x, foo: x => x };
+    let reducers = { bar: (x) => x, foo: (x) => x };
     let plugin = createPlugin({ reducers });
     expect(validatePlugin(plugin)).toBe(true);
-    reducers = { bar: x => x, foo: undefined };
+    reducers = { bar: (x) => x, foo: undefined };
     plugin = createPlugin({ reducers });
     expect(validatePlugin(plugin)).toBe(false);
   });

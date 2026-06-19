@@ -4,14 +4,9 @@ import { WindowSideBarInfoPanel } from '../../../src/components/WindowSideBarInf
 
 /** create wrapper */
 function createWrapper(props) {
-  return render(
-    <WindowSideBarInfoPanel
-      id="asdf"
-      windowId="zxcv"
-      {...props}
-    />,
-    { preloadedState: { companionWindows: { asdf: { content: 'info' } } } },
-  );
+  return render(<WindowSideBarInfoPanel id="asdf" windowId="zxcv" {...props} />, {
+    preloadedState: { companionWindows: { asdf: { content: 'info' } } },
+  });
 }
 describe('WindowSideBarInfoPanel', () => {
   describe('when metadata is present', () => {

@@ -18,9 +18,7 @@ describe('companionWindow actions', () => {
       const action = actions.addCompanionWindow('abc123', payload);
 
       expect(action.type).toBe(ActionTypes.ADD_COMPANION_WINDOW);
-      expect(action.id).toEqual(
-        expect.stringMatching(/^cw-\w+-\w+/),
-      );
+      expect(action.id).toEqual(expect.stringMatching(/^cw-\w+-\w+/));
       expect(action.windowId).toEqual('abc123');
       expect(action.payload).toMatchObject(payload);
       expect(action.payload.id).toEqual(action.id);
@@ -76,7 +74,11 @@ describe('companionWindow actions', () => {
       expect(action.id).toBe('cw1');
       expect(action.windowId).toBe('window1');
       expect(action.type).toBe(ActionTypes.TOGGLE_TOC_NODE);
-      expect(action.payload).toMatchObject({ a: { expanded: true }, b: { expanded: true }, c: { expanded: true } });
+      expect(action.payload).toMatchObject({
+        a: { expanded: true },
+        b: { expanded: true },
+        c: { expanded: true },
+      });
     });
 
     it('marks currently expanded nodes as collapsed', () => {
@@ -97,7 +99,11 @@ describe('companionWindow actions', () => {
       expect(action.id).toBe('cw1');
       expect(action.windowId).toBe('window1');
       expect(action.type).toBe(ActionTypes.TOGGLE_TOC_NODE);
-      expect(action.payload).toMatchObject({ a: { expanded: true }, b: { expanded: false }, c: { expanded: false } });
+      expect(action.payload).toMatchObject({
+        a: { expanded: true },
+        b: { expanded: false },
+        c: { expanded: false },
+      });
     });
   });
 

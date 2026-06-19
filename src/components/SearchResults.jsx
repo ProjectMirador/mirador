@@ -76,13 +76,11 @@ export function SearchResults({
     setFocused(!focused);
   }, [setFocused, focused]);
 
-  const noResultsState = (
-    query && !isFetching && searchHits.length === 0 && searchAnnotations.length === 0
-  );
+  const noResultsState = query && !isFetching && searchHits.length === 0 && searchAnnotations.length === 0;
 
   return (
     <>
-      { focused && (
+      {focused && (
         <ScrollTo containerRef={containerRef} offsetTop={96} scrollTo>
           <Button onClick={toggleFocus} sx={{ textTransform: 'none' }} size="small">
             <BackIcon />
@@ -91,10 +89,11 @@ export function SearchResults({
         </ScrollTo>
       )}
       {noResultsState && (
-        <Typography sx={{
-          padding: 2,
-          typography: 'h6',
-        }}
+        <Typography
+          sx={{
+            padding: 2,
+            typography: 'h6',
+          }}
         >
           {t('searchNoResults')}
         </Typography>
@@ -110,7 +109,7 @@ export function SearchResults({
           toggleFocus={toggleFocus}
         />
       </List>
-      { nextSearch && (
+      {nextSearch && (
         <Button
           sx={{ width: '100%' }}
           color="secondary"
@@ -127,10 +126,7 @@ export function SearchResults({
 
 SearchResults.propTypes = {
   companionWindowId: PropTypes.string.isRequired,
-  containerRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]),
+  containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]),
   fetchSearch: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
   nextSearch: PropTypes.string,

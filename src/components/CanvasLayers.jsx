@@ -43,9 +43,7 @@ const reorder = (list, startIndex, endIndex) => {
 };
 
 /** @private */
-function Layer({
-  resource, layerMetadata = {}, index, handleOpacityChange, setLayerVisibility, moveToBackground, moveToFront,
-}) {
+function Layer({ resource, layerMetadata = {}, index, handleOpacityChange, setLayerVisibility, moveToBackground, moveToFront }) {
   const { t } = useTranslation();
   const { width, height } = { height: undefined, width: 40 };
 
@@ -58,12 +56,7 @@ function Layer({
   return (
     <div style={{ flex: 1 }}>
       <div style={{ alignItems: 'flex-start', display: 'flex' }}>
-        <IIIFThumbnail
-          maxHeight={height}
-          maxWidth={width}
-          resource={resource}
-          border
-        />
+        <IIIFThumbnail maxHeight={height} maxWidth={width} resource={resource} border />
         <Typography
           sx={{
             paddingLeft: 1,
@@ -73,16 +66,35 @@ function Layer({
         >
           <IIIFResourceLabel resource={resource} fallback={index + 1} />
           <div>
-            <MiradorMenuButton aria-label={t(layer.visibility ? 'layer_hide' : 'layer_show')} edge="start" size="small" onClick={() => { setLayerVisibility(resource.id, !layer.visibility); }}>
-              { layer.visibility ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+            <MiradorMenuButton
+              aria-label={t(layer.visibility ? 'layer_hide' : 'layer_show')}
+              edge="start"
+              size="small"
+              onClick={() => {
+                setLayerVisibility(resource.id, !layer.visibility);
+              }}
+            >
+              {layer.visibility ? <VisibilityIcon /> : <VisibilityOffIcon />}
             </MiradorMenuButton>
-            { layer.index !== 0 && (
-              <MiradorMenuButton aria-label={t('layer_moveToBackground')} size="small" onClick={() => { moveToBackground(resource.id); }}>
+            {layer.index !== 0 && (
+              <MiradorMenuButton
+                aria-label={t('layer_moveToBackground')}
+                size="small"
+                onClick={() => {
+                  moveToBackground(resource.id);
+                }}
+              >
                 <VerticalAlignTopSharp />
               </MiradorMenuButton>
             )}
-            { layer.index !== layerMetadata && (
-              <MiradorMenuButton aria-label={t('layer_moveToFront')} size="small" onClick={() => { moveToFront(resource.id); }}>
+            {layer.index !== layerMetadata && (
+              <MiradorMenuButton
+                aria-label={t('layer_moveToFront')}
+                size="small"
+                onClick={() => {
+                  moveToFront(resource.id);
+                }}
+              >
                 <VerticalAlignBottomSharp />
               </MiradorMenuButton>
             )}
@@ -111,8 +123,12 @@ function Layer({
           type="number"
           min={0}
           max={100}
-          onChange={e => handleOpacityChange(resource.id, e.target.value)}
-          endAdornment={<InputAdornment disableTypography position="end"><Typography variant="caption">%</Typography></InputAdornment>}
+          onChange={(e) => handleOpacityChange(resource.id, e.target.value)}
+          endAdornment={
+            <InputAdornment disableTypography position="end">
+              <Typography variant="caption">%</Typography>
+            </InputAdornment>
+          }
           inputProps={{
             'aria-label': t('layer_opacity'),
           }}
@@ -135,10 +151,12 @@ function Layer({
 Layer.propTypes = {
   handleOpacityChange: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
-  layerMetadata: PropTypes.objectOf(PropTypes.shape({
-    opacity: PropTypes.number,
-    visibility: PropTypes.bool,
-  })),
+  layerMetadata: PropTypes.objectOf(
+    PropTypes.shape({
+      opacity: PropTypes.number,
+      visibility: PropTypes.bool,
+    }),
+  ),
   moveToBackground: PropTypes.func.isRequired,
   moveToFront: PropTypes.func.isRequired,
   resource: PropTypes.object.isRequired,
@@ -146,9 +164,7 @@ Layer.propTypes = {
 };
 
 /** @private */
-function DraggableLayer({
-  children, resource, index,
-}) {
+function DraggableLayer({ children, resource, index }) {
   const { t } = useTranslation();
   return (
     <Draggable draggableId={resource.id} index={index}>
@@ -184,7 +200,7 @@ function DraggableLayer({
               <DragHandleIcon />
             </Tooltip>
           </StyledDragHandle>
-          { children }
+          {children}
         </ListItem>
       )}
     </Draggable>
@@ -198,75 +214,99 @@ DraggableLayer.propTypes = {
 };
 
 /** */
-export function CanvasLayers({
-  canvasId, index, label, layers, layerMetadata = {}, totalSize, updateLayers, windowId,
-}) {
+export function CanvasLayers({ canvasId, index, label, layers, layerMetadata = {}, totalSize, updateLayers, windowId }) {
   const { t } = useTranslation();
   const droppableId = useId();
 
-  const handleOpacityChange = useCallback((layerId, value) => {
-    const payload = {
-      [layerId]: { opacity: value / 100.0 },
-    };
+  const handleOpacityChange = useCallback(
+    (layerId, value) => {
+      const payload = {
+        [layerId]: { opacity: value / 100.0 },
+      };
 
-    updateLayers(windowId, canvasId, payload);
-  }, [canvasId, updateLayers, windowId]);
-
-  /** */
-  const onDragEnd = useCallback((result) => {
-    if (!result.destination) return;
-    if (result.destination.droppableId !== droppableId) return;
-    if (result.source.droppableId !== droppableId) return;
-
-    const sortedLayers = reorder(
-      layers.map(l => l.id),
-      result.source.index,
-      result.destination.index,
-    );
-
-    const payload = layers.reduce((acc, layer) => {
-      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) }; // eslint-disable-line no-param-reassign
-      return acc;
-    }, {});
-
-    updateLayers(windowId, canvasId, payload);
-  }, [canvasId, droppableId, layers, updateLayers, windowId]);
+      updateLayers(windowId, canvasId, payload);
+    },
+    [canvasId, updateLayers, windowId],
+  );
 
   /** */
-  const setLayerVisibility = useCallback((layerId, value) => {
-    const payload = {
-      [layerId]: { visibility: value },
-    };
+  const onDragEnd = useCallback(
+    (result) => {
+      if (!result.destination) return;
+      if (result.destination.droppableId !== droppableId) return;
+      if (result.source.droppableId !== droppableId) return;
 
-    updateLayers(windowId, canvasId, payload);
-  }, [canvasId, updateLayers, windowId]);
+      const sortedLayers = reorder(
+        layers.map((l) => l.id),
+        result.source.index,
+        result.destination.index,
+      );
+
+      const payload = layers.reduce((acc, layer) => {
+        // eslint-disable-next-line no-param-reassign
+        acc[layer.id] = { index: sortedLayers.indexOf(layer.id) };
+        return acc;
+      }, {});
+
+      updateLayers(windowId, canvasId, payload);
+    },
+    [canvasId, droppableId, layers, updateLayers, windowId],
+  );
 
   /** */
-  const moveToBackground = useCallback((layerId) => {
-    const sortedLayers = reorder(layers.map(l => l.id), layers.findIndex(l => l.id === layerId), 0);
+  const setLayerVisibility = useCallback(
+    (layerId, value) => {
+      const payload = {
+        [layerId]: { visibility: value },
+      };
 
-    const payload = layers.reduce((acc, layer) => {
-      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) }; // eslint-disable-line no-param-reassign
-      return acc;
-    }, {});
+      updateLayers(windowId, canvasId, payload);
+    },
+    [canvasId, updateLayers, windowId],
+  );
 
-    updateLayers(windowId, canvasId, payload);
-  }, [canvasId, layers, updateLayers, windowId]);
+  /** */
+  const moveToBackground = useCallback(
+    (layerId) => {
+      const sortedLayers = reorder(
+        layers.map((l) => l.id),
+        layers.findIndex((l) => l.id === layerId),
+        0,
+      );
 
-  const moveToFront = useCallback((layerId) => {
-    const sortedLayers = reorder(layers.map(l => l.id), layers.findIndex(l => l.id === layerId), layers.length - 1);
+      const payload = layers.reduce((acc, layer) => {
+        // eslint-disable-next-line no-param-reassign
+        acc[layer.id] = { index: sortedLayers.indexOf(layer.id) };
+        return acc;
+      }, {});
 
-    const payload = layers.reduce((acc, layer) => {
-      acc[layer.id] = { index: sortedLayers.indexOf(layer.id) }; // eslint-disable-line no-param-reassign
-      return acc;
-    }, {});
+      updateLayers(windowId, canvasId, payload);
+    },
+    [canvasId, layers, updateLayers, windowId],
+  );
 
-    updateLayers(windowId, canvasId, payload);
-  }, [canvasId, layers, updateLayers, windowId]);
+  const moveToFront = useCallback(
+    (layerId) => {
+      const sortedLayers = reorder(
+        layers.map((l) => l.id),
+        layers.findIndex((l) => l.id === layerId),
+        layers.length - 1,
+      );
+
+      const payload = layers.reduce((acc, layer) => {
+        // eslint-disable-next-line no-param-reassign
+        acc[layer.id] = { index: sortedLayers.indexOf(layer.id) };
+        return acc;
+      }, {});
+
+      updateLayers(windowId, canvasId, payload);
+    },
+    [canvasId, layers, updateLayers, windowId],
+  );
 
   return (
     <>
-      { totalSize > 1 && (
+      {totalSize > 1 && (
         <Typography
           sx={{
             paddingLeft: 1,
@@ -288,8 +328,8 @@ export function CanvasLayers({
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {
-                layers && layers.map((r, i) => (
+              {layers &&
+                layers.map((r, i) => (
                   <DraggableLayer key={r.id} resource={r} index={i}>
                     <Layer
                       resource={r}
@@ -301,8 +341,7 @@ export function CanvasLayers({
                       moveToFront={moveToFront}
                     />
                   </DraggableLayer>
-                ))
-              }
+                ))}
               {provided.placeholder}
             </List>
           )}
@@ -316,11 +355,12 @@ CanvasLayers.propTypes = {
   canvasId: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
-  layerMetadata: PropTypes.objectOf(PropTypes.shape({
-    opacity: PropTypes.number,
-  })),
-  layers: PropTypes.arrayOf(PropTypes.shape({
-  })).isRequired,
+  layerMetadata: PropTypes.objectOf(
+    PropTypes.shape({
+      opacity: PropTypes.number,
+    }),
+  ),
+  layers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   totalSize: PropTypes.number.isRequired,
   updateLayers: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,

@@ -33,30 +33,23 @@ function createWrapper(props) {
  * write a reasonable test for it)
  */
 function createInteractiveWrapper({ manifest = manifestVersion3, ...props }) {
-  return render(
-    <ConnectedSidebarIndexTableOfContents
-      id="something"
-      windowId="a"
-      {...props}
-    />,
-    {
-      preloadedState: {
-        companionWindows: {
-          something: {
-            id: 'something',
-          },
-        },
-        manifests: {
-          'http://example.com/manifest.json': {
-            json: manifest,
-          },
-        },
-        windows: {
-          a: { manifestId: 'http://example.com/manifest.json' },
+  return render(<ConnectedSidebarIndexTableOfContents id="something" windowId="a" {...props} />, {
+    preloadedState: {
+      companionWindows: {
+        something: {
+          id: 'something',
         },
       },
+      manifests: {
+        'http://example.com/manifest.json': {
+          json: manifest,
+        },
+      },
+      windows: {
+        a: { manifestId: 'http://example.com/manifest.json' },
+      },
     },
-  );
+  });
 }
 
 describe('SidebarIndexTableOfContents', () => {
@@ -122,10 +115,12 @@ describe('SidebarIndexTableOfContents', () => {
     expect(screen.getByRole('treeitem')).toBeInTheDocument();
     const root = screen.getByRole('treeitem');
 
-    await user.click(root.querySelector('.MuiTreeItem-iconContainer')); // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    await user.click(root.querySelector('.MuiTreeItem-iconContainer'));
     expect(screen.getAllByRole('treeitem')).toHaveLength(5);
 
-    await user.click(root.querySelector('.MuiTreeItem-iconContainer')); // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    await user.click(root.querySelector('.MuiTreeItem-iconContainer'));
 
     await waitFor(() => {
       expect(screen.getByRole('treeitem')).toBeInTheDocument();
@@ -198,7 +193,7 @@ describe('SidebarIndexTableOfContents', () => {
   it('sets the canvas to a start canvas if present (IIIF v2)', async () => {
     const user = userEvent.setup();
     createWrapper({
-      expandItems: () => { },
+      expandItems: () => {},
       manifest: manifestVersion2,
       setCanvas,
       windowId: 'a',

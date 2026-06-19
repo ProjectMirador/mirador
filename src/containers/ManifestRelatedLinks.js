@@ -23,9 +23,6 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   seeAlso: getManifestSeeAlso(state, { windowId }),
 });
 
-const enhance = compose(
-  connect(mapStateToProps),
-  withPlugins('ManifestRelatedLinks'),
-);
+const enhance = compose(connect(mapStateToProps), withPlugins('ManifestRelatedLinks'));
 
 export default enhance(ManifestRelatedLinks);

@@ -48,20 +48,21 @@ export const handleDrop = (item, monitor, props) => {
   }
 
   if (item.files) {
-    const manifestFiles = item.files.filter(f => f.type === 'application/json');
-    const manifestPromises = manifestFiles.map(file => (
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-          const manifestJson = reader.result;
-          const manifestId = uuid();
+    const manifestFiles = item.files.filter((f) => f.type === 'application/json');
+    const manifestPromises = manifestFiles.map(
+      (file) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.addEventListener('load', () => {
+            const manifestJson = reader.result;
+            const manifestId = uuid();
 
-          if (manifestJson) onDrop({ manifestId, manifestJson }, props, monitor);
-          resolve();
-        });
-        reader.readAsText(file);
-      })
-    ));
+            if (manifestJson) onDrop({ manifestId, manifestJson }, props, monitor);
+            resolve();
+          });
+          reader.readAsText(file);
+        }),
+    );
 
     const imageFiles = item.files.filter(({ type }) => type.startsWith('image/'));
 
@@ -69,33 +70,33 @@ export const handleDrop = (item, monitor, props) => {
 
     if (imageFiles.length > 0) {
       const id = uuid();
-      const imageData = imageFiles.map(file => readImageMetadata(file));
+      const imageData = imageFiles.map((file) => readImageMetadata(file));
 
       imagePromise = Promise.all(imageData).then((images) => {
         const manifestJson = {
           '@context': 'http://iiif.io/api/presentation/3/context.json',
           id,
-          items: images.map(({
-            name, type, width, height, url,
-          }, index) => ({
+          items: images.map(({ name, type, width, height, url }, index) => ({
             height,
             id: `${id}/canvas/${index}`,
             items: [
               {
                 id: `${id}/canvas/${index}/1`,
-                items: [{
-                  body: {
-                    format: type,
-                    id: url,
-                    type: 'Image',
+                items: [
+                  {
+                    body: {
+                      format: type,
+                      id: url,
+                      type: 'Image',
+                    },
+                    height,
+                    id: `${id}/canvas/${index}/1/image`,
+                    motivation: 'painting',
+                    target: `${id}/canvas/${index}/1`,
+                    type: 'Annotation',
+                    width,
                   },
-                  height,
-                  id: `${id}/canvas/${index}/1/image`,
-                  motivation: 'painting',
-                  target: `${id}/canvas/${index}/1`,
-                  type: 'Annotation',
-                  width,
-                }],
+                ],
                 type: 'AnnotationPage',
               },
             ],
@@ -123,7 +124,7 @@ export const IIIFDropTarget = (props) => {
   const { children, onDrop } = props;
   const [{ canDrop, isOver }, drop] = useDrop({
     accept: [NativeTypes.URL, NativeTypes.FILE, NativeTypes.HTML],
-    collect: monitor => ({
+    collect: (monitor) => ({
       canDrop: monitor.canDrop(),
       isOver: monitor.isOver(),
     }),
@@ -141,8 +142,7 @@ export const IIIFDropTarget = (props) => {
   const hackForSafari = (e) => {
     if (!window.safari || !onDrop || !e.dataTransfer) return;
 
-    if (e.dataTransfer.types.includes('Files')
-      && e.dataTransfer.types.includes('text/uri-list')) {
+    if (e.dataTransfer.types.includes('Files') && e.dataTransfer.types.includes('text/uri-list')) {
       const url = e.dataTransfer.getData('text/uri-list');
 
       if (!url) return;

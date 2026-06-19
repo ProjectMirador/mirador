@@ -5,15 +5,10 @@ import { getManifestTitle } from '../state/selectors';
 import { MosaicRenderPreview } from '../components/MosaicRenderPreview';
 
 /** */
-const mapStateToProps = (state, { windowId }) => (
-  {
-    title: getManifestTitle(state, { windowId }),
-  }
-);
+const mapStateToProps = (state, { windowId }) => ({
+  title: getManifestTitle(state, { windowId }),
+});
 
-const enhance = compose(
-  connect(mapStateToProps, null),
-  withPlugins('MosaicRenderPreview'),
-);
+const enhance = compose(connect(mapStateToProps, null), withPlugins('MosaicRenderPreview'));
 
 export default enhance(MosaicRenderPreview);

@@ -6,7 +6,7 @@ import WorkspaceOptionsMenu from '../containers/WorkspaceOptionsMenu';
 
 /**
  * WorkspaceOptionsButton ~
-*/
+ */
 export function WorkspaceOptionsButton() {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -26,18 +26,10 @@ export function WorkspaceOptionsButton() {
 
   return (
     <>
-      <MiradorMenuButton
-        aria-label={t('workspaceOptions')}
-        onClick={handleMenuClick}
-        selected={open}
-      >
+      <MiradorMenuButton aria-label={t('workspaceOptions')} onClick={handleMenuClick} selected={open}>
         <MoreHorizontalIcon />
       </MiradorMenuButton>
-      <WorkspaceOptionsMenu
-        anchorEl={anchorEl}
-        handleClose={handleMenuClose}
-        open={open}
-      />
+      <WorkspaceOptionsMenu anchorEl={anchorEl} handleClose={handleMenuClose} open={open} />
     </>
   );
 }

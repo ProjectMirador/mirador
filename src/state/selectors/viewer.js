@@ -13,13 +13,7 @@ import { getMiradorCanvasWrapper } from './wrappers';
  * @return {object}
  */
 export const getCurrentCanvasWorld = createSelector(
-  [
-    getVisibleCanvases, getLayersForVisibleCanvases, getSequenceViewingDirection,
-    getMiradorCanvasWrapper,
-  ],
-  (canvases, layers, viewingDirection, getMiradorCanvas) => new CanvasWorld(
-    canvases.map(getMiradorCanvas),
-    layers,
-    viewingDirection,
-  ),
+  [getVisibleCanvases, getLayersForVisibleCanvases, getSequenceViewingDirection, getMiradorCanvasWrapper],
+  (canvases, layers, viewingDirection, getMiradorCanvas) =>
+    new CanvasWorld(canvases.map(getMiradorCanvas), layers, viewingDirection),
 );

@@ -8,9 +8,7 @@ import manifestJson from '../../fixtures/version-2/019.json';
 
 /** create wrapper */
 function createWrapper(props) {
-  const canvasGroupings = new CanvasGroupings(
-    Utils.parseManifest(manifestJson).getSequences()[0].getCanvases(),
-  ).groupings();
+  const canvasGroupings = new CanvasGroupings(Utils.parseManifest(manifestJson).getSequences()[0].getCanvases()).groupings();
 
   return render(
     <ThumbnailCanvasGrouping
@@ -52,7 +50,8 @@ describe('ThumbnailCanvasGrouping', () => {
     wrapper.unmount();
     const user = userEvent.setup();
     wrapper = createWrapper({ index: 0, setCanvas });
-    await user.click(wrapper.container.querySelector('.mirador-thumbnail-nav-canvas-0')); // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    await user.click(wrapper.container.querySelector('.mirador-thumbnail-nav-canvas-0'));
     expect(spyCurrentCanvasClass).toHaveBeenCalledWith([0]);
     expect(spyCurrentCanvasClass).toHaveReturnedWith('current-canvas-grouping');
     expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');

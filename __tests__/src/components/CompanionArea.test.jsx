@@ -15,7 +15,11 @@ function createWrapper(props) {
       companionWindowIds={['foo', 'baz']}
       {...props}
     />,
-    { preloadedState: { companionWindows: { baz: { content: 'attribution' }, foo: { content: 'info' } } } },
+    {
+      preloadedState: {
+        companionWindows: { baz: { content: 'attribution' }, foo: { content: 'info' } },
+      },
+    },
   );
 }
 
@@ -29,7 +33,8 @@ describe('CompanionArea', () => {
   it('should add the appropriate classes when the companion area fills the full width', () => {
     const { container } = createWrapper({ position: 'bottom' });
 
-    expect(container.querySelector('.mirador-companion-area-bottom')).toBeInTheDocument(); // eslint-disable-line testing-library/no-node-access, testing-library/no-container
+    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
+    expect(container.querySelector('.mirador-companion-area-bottom')).toBeInTheDocument();
   });
 
   it('renders the appropriate <CompanionWindow> components', () => {

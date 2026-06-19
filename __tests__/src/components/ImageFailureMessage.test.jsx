@@ -32,7 +32,6 @@ describe('ImageFailureMessage', () => {
     expect(screen.getByText(/See console for details/i)).toBeInTheDocument();
   });
 
-
   it('isolates failures per window', () => {
     const mockContext = {
       failedImages: new Set(['https://example.com/manifest-a/canvas-1/image.jpg']),

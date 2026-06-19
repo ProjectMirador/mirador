@@ -68,7 +68,10 @@ describe('SearchPanel', () => {
     const user = userEvent.setup();
     const fetchSearch = vi.fn();
     createWrapper({
-      fetchSearch, query: '', suggestedSearches: ['abc'], t,
+      fetchSearch,
+      query: '',
+      suggestedSearches: ['abc'],
+      t,
     });
 
     expect(screen.getByRole('button', { name: 'Search this document for "abc"' })).toBeInTheDocument();

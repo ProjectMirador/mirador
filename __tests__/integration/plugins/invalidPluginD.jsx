@@ -1,5 +1,5 @@
 export default {
-  component: props => (<div data-testid="invalid-plugin-d" />),
+  component: (props) => <div data-testid="invalid-plugin-d" />,
   mapDispatchToProps: 'foo', // invalid
   mode: 'add',
   name: 'invalidPluginD',

@@ -19,17 +19,12 @@ const mapDispatchToProps = {
  * @memberof WorkspaceControlPanel
  * @private
  */
-const mapStateToProps = state => (
-  {
-    focusedWindowId: getFocusedWindowId(state),
-    titles: getWindowTitles(state),
-    windowIds: getWindowIds(state),
-  }
-);
+const mapStateToProps = (state) => ({
+  focusedWindowId: getFocusedWindowId(state),
+  titles: getWindowTitles(state),
+  windowIds: getWindowIds(state),
+});
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('WindowList'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('WindowList'));
 
 export default enhance(WindowList);

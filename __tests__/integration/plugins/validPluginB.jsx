@@ -1,5 +1,5 @@
 export default {
-  component: props => (<div data-testid="valid-plugin-b" />),
+  component: (props) => <div data-testid="valid-plugin-b" />,
   mapDispatchToProps: {},
   mapStateToProps: () => ({}),
   mode: 'add',

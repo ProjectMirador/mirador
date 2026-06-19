@@ -26,9 +26,11 @@ const Container = styled('div', { name: 'CompanionArea', slot: 'container' })(({
     flexDirection: 'column',
     width: '100%',
   }),
-  ...((ownerState?.position === 'left' && (ownerState?.companionWindowIds && ownerState.companionWindowIds.length > 0)) && {
-    minWidth: '235px',
-  }),
+  ...(ownerState?.position === 'left' &&
+    ownerState?.companionWindowIds &&
+    ownerState.companionWindowIds.length > 0 && {
+      minWidth: '235px',
+    }),
 }));
 
 const StyledToggle = styled('div', { name: 'CompanionArea', slot: 'toggle' })(({ theme }) => ({
@@ -51,13 +53,19 @@ const StyledToggle = styled('div', { name: 'CompanionArea', slot: 'toggle' })(({
 
 /** */
 export function CompanionArea({
-  classes = {}, className = undefined, direction,
-  companionWindowIds, companionAreaOpen, setCompanionAreaOpen = () => {},
-  position, sideBarOpen = false, windowId,
+  classes = {},
+  className = undefined,
+  direction,
+  companionWindowIds,
+  companionAreaOpen,
+  setCompanionAreaOpen = () => {},
+  position,
+  sideBarOpen = false,
+  windowId,
 }) {
   const { t } = useTranslation();
   /** */
-  const areaLayoutClass = (position === 'bottom' || position === 'far-bottom') ? classes.horizontal : null;
+  const areaLayoutClass = position === 'bottom' || position === 'far-bottom' ? classes.horizontal : null;
 
   /** */
   const collapseIcon = (() => {
@@ -88,32 +96,32 @@ export function CompanionArea({
   })();
 
   const rootClasses = classNames(areaLayoutClass, ns(`companion-area-${position}`), className);
-  const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
+  // eslint-disable-next-line prefer-rest-params
+  const ownerState = arguments[0];
 
   return (
     <Root ownerState={ownerState} className={rootClasses}>
       <Slide in={companionAreaOpen} direction={slideDirection}>
-        <Container
-          ownerState={ownerState}
-          className={`${ns('companion-windows')}`}
-        >
+        <Container ownerState={ownerState} className={`${ns('companion-windows')}`}>
           {companionWindowIds.map((id) => (
             <CompanionWindowFactory id={id} key={id} windowId={windowId} />
           ))}
         </Container>
       </Slide>
       {setCompanionAreaOpen && position === 'left' && sideBarOpen && companionWindowIds.length > 0 && (
-      <StyledToggle>
-        <MiradorMenuButton
-          aria-expanded={companionAreaOpen}
-          aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
-          edge="start"
-          onClick={() => { setCompanionAreaOpen(windowId, !companionAreaOpen); }}
-          TooltipProps={{ placement: 'right' }}
-        >
-          {collapseIcon}
-        </MiradorMenuButton>
-      </StyledToggle>
+        <StyledToggle>
+          <MiradorMenuButton
+            aria-expanded={companionAreaOpen}
+            aria-label={companionAreaOpen ? t('collapseSidePanel') : t('expandSidePanel')}
+            edge="start"
+            onClick={() => {
+              setCompanionAreaOpen(windowId, !companionAreaOpen);
+            }}
+            TooltipProps={{ placement: 'right' }}
+          >
+            {collapseIcon}
+          </MiradorMenuButton>
+        </StyledToggle>
       )}
     </Root>
   );

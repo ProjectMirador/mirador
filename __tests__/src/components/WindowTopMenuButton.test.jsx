@@ -4,14 +4,7 @@ import { WindowTopMenuButton } from '../../../src/components/WindowTopMenuButton
 
 /** create wrapper */
 function Subject({ ...props }) {
-  return (
-    <WindowTopMenuButton
-      windowId="xyz"
-      data-testid="test"
-      classes={{ ctrlBtnSelected: 'ctrlBtnSelected' }}
-      {...props}
-    />
-  );
+  return <WindowTopMenuButton windowId="xyz" data-testid="test" classes={{ ctrlBtnSelected: 'ctrlBtnSelected' }} {...props} />;
 }
 
 describe('WindowTopMenuButton', () => {

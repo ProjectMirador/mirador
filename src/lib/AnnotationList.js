@@ -15,17 +15,18 @@ export default class AnnotationList {
 
   /** */
   present() {
-    return (this.resources
-      && this.resources.length > 0);
+    return this.resources && this.resources.length > 0;
   }
 
   /** */
   get resources() {
-    this._resources = this._resources || (() => {
-      if (!this.json || !this.json.resources) return [];
+    this._resources =
+      this._resources ||
+      (() => {
+        if (!this.json || !this.json.resources) return [];
 
-      return flatten([this.json.resources]).map(resource => new AnnotationResource(resource));
-    })();
+        return flatten([this.json.resources]).map((resource) => new AnnotationResource(resource));
+      })();
     return this._resources;
   }
 }

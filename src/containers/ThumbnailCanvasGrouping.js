@@ -24,9 +24,6 @@ const mapStateToProps = (state, { windowId }) => ({
   showThumbnailLabels: getConfig(state).thumbnailNavigation.showThumbnailLabels,
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('ThumbnailCanvasGrouping'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('ThumbnailCanvasGrouping'));
 
 export default enhance(ThumbnailCanvasGrouping);

@@ -1,11 +1,6 @@
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import manifestFixtureHamilton from '../../fixtures/version-2/hamilton.json';
-import {
-  getCanvasLayers,
-  getLayers,
-  getSortedLayers,
-  getLayersForVisibleCanvases,
-} from '../../../src/state/selectors/layers';
+import { getCanvasLayers, getLayers, getSortedLayers, getLayersForVisibleCanvases } from '../../../src/state/selectors/layers';
 
 describe('getCanvasLayers', () => {
   const state = {
@@ -18,7 +13,10 @@ describe('getCanvasLayers', () => {
   };
 
   it('returns the image resources for a canvas', () => {
-    const actual = getCanvasLayers(state, { canvasId: 'https://prtd.app/hamilton/canvas/p1.json', manifestId: 'x' });
+    const actual = getCanvasLayers(state, {
+      canvasId: 'https://prtd.app/hamilton/canvas/p1.json',
+      manifestId: 'x',
+    });
     expect(actual.length).toEqual(23);
     expect(actual[0].id).toEqual('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg');
   });
@@ -46,8 +44,7 @@ describe('getSortedLayers', () => {
 
   beforeEach(() => {
     state = {
-      layers: {
-      },
+      layers: {},
       manifests: {
         hamilton: {
           id: 'hamilton',
@@ -63,10 +60,15 @@ describe('getSortedLayers', () => {
   });
 
   it('returns the image resources in the manifest order when there is no configuration', () => {
-    const actual = getSortedLayers(state, { canvasId: 'https://prtd.app/hamilton/canvas/p1.json', windowId: 'x' });
-    const imageIds = actual.map(i => i.id);
+    const actual = getSortedLayers(state, {
+      canvasId: 'https://prtd.app/hamilton/canvas/p1.json',
+      windowId: 'x',
+    });
+    const imageIds = actual.map((i) => i.id);
     expect(imageIds[0]).toEqual('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PSC/full/862,1024/0/default.jpg');
-    expect(imageIds[22]).toEqual('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PCA_RGB-1-3-5_gradi/full/739,521/0/default.jpg');
+    expect(imageIds[22]).toEqual(
+      'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PCA_RGB-1-3-5_gradi/full/739,521/0/default.jpg',
+    );
   });
 
   it('uses the layers configuration to sort the image resources', () => {
@@ -79,9 +81,14 @@ describe('getSortedLayers', () => {
         },
       },
     };
-    const actual = getSortedLayers(state, { canvasId: 'https://prtd.app/hamilton/canvas/p1.json', windowId: 'x' });
-    const imageIds = actual.map(i => i.id);
-    expect(imageIds[0]).toEqual('https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PCA_RGB-1-3-5_gradi/full/739,521/0/default.jpg');
+    const actual = getSortedLayers(state, {
+      canvasId: 'https://prtd.app/hamilton/canvas/p1.json',
+      windowId: 'x',
+    });
+    const imageIds = actual.map((i) => i.id);
+    expect(imageIds[0]).toEqual(
+      'https://prtd.app/image/iiif/2/hamilton%2fHL_524_1r_00_PCA_RGB-1-3-5_gradi/full/739,521/0/default.jpg',
+    );
   });
 });
 

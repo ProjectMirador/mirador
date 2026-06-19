@@ -1,6 +1,4 @@
-import {
-  createRef, lazy, Suspense,
-} from 'react';
+import { createRef, lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import PluginProvider from '../extend/PluginProvider';
 import AppProviders from '../containers/AppProviders';
@@ -19,9 +17,7 @@ export function App({ dndManager = undefined, plugins = [] }) {
     <PluginProvider plugins={plugins}>
       <AppProviders dndManager={dndManager}>
         <WorkspaceContext.Provider value={areaRef}>
-          <Suspense
-            fallback={<div />}
-          >
+          <Suspense fallback={<div />}>
             <WorkspaceArea areaRef={areaRef} />
           </Suspense>
         </WorkspaceContext.Provider>

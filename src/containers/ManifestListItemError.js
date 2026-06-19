@@ -10,9 +10,6 @@ const mapDispatchToProps = {
   onTryAgainClick: fetchManifest,
 };
 
-const enhance = compose(
-  connect(null, mapDispatchToProps),
-  withPlugins('ManifestListItemError'),
-);
+const enhance = compose(connect(null, mapDispatchToProps), withPlugins('ManifestListItemError'));
 
 export default enhance(ManifestListItemError);
