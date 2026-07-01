@@ -1,5 +1,9 @@
 import DialogTitle from '@mui/material/DialogTitle';
-import { Card, CardContent, MenuList, MenuItem, Typography } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';

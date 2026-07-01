@@ -1,7 +1,8 @@
 import { useId, useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import PropTypes from 'prop-types';
-import { DialogActions, TextField } from '@mui/material';
+import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useTranslation } from 'react-i18next';
 import { WorkspaceDialog } from './WorkspaceDialog';

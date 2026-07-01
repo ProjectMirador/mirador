@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { visuallyHidden } from '@mui/utils';
+import { visuallyHidden } from '@mui/utils'; // eslint-disable-line
 import { useTranslation } from 'react-i18next';
 import Window from '../containers/Window';
 import WorkspaceMosaic from '../containers/WorkspaceMosaic';
