@@ -1,4 +1,4 @@
-import { Dialog } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/material/styles';
 
 export const WorkspaceDialog = styled(Dialog, { name: 'WorkspaceDialog', slot: 'root' })(({ theme, variant }) => ({

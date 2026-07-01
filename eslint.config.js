@@ -95,6 +95,12 @@ export default [
         { name: 'isFinite', message: 'Use Number.isFinite instead' },
         { name: 'isNaN', message: 'Use Number.isNaN instead' },
       ],
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [{ regex: '^@mui/[^/]+$' }],
+        },
+      ],
       'no-restricted-syntax': ['warn', 'WithStatement'],
       'no-return-assign': ['error', 'always'],
       'no-script-url': 'error',

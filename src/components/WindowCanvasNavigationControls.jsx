@@ -6,7 +6,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import { visuallyHidden } from '@mui/utils';
+import { visuallyHidden } from '@mui/utils'; // eslint-disable-line
 import { useElementSize } from '@custom-react-hooks/use-element-size';
 import mergeRefs from 'merge-refs';
 import ZoomControls from '../containers/ZoomControls';

@@ -19,7 +19,6 @@ export const PluginHook = forwardRef(({ classes = {}, targetName, ...otherProps 
              * Currently disabling react/no-array-index-key is causing a warning: "Unused eslint-disable directive"
              * This should resolve when eslint-plugin-react upgrades to support ESLint 10.
              */
-            // eslint-disable-next-line react/no-array-index-key -- here index is the only viable key
             key={index}
           />
         ),

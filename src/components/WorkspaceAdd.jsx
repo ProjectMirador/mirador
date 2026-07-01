@@ -12,7 +12,7 @@ import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { visuallyHidden } from '@mui/utils';
+import { visuallyHidden } from '@mui/utils'; // eslint-disable-line
 import { useTranslation } from 'react-i18next';
 import ns from '../config/css-ns';
 import ManifestForm from '../containers/ManifestForm';
