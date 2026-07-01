@@ -17,7 +17,7 @@ jobs:
         node-version: [22.x, 24.x, 26.x]
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
@@ -25,6 +25,6 @@ jobs:
       - run: npm ci
       - run: npm test -- --coverage
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
