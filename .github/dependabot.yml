@@ -17,5 +17,9 @@ updates:
   # Keep npm dependencies up to date
   - package-ecosystem: "npm"
     directory: "/"
+    cooldown:
+      semver-major-days: 30
+      semver-minor-days: 14
+      semver-patch-days: 7
     schedule:
       interval: "monthly"
