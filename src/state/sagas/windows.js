@@ -134,7 +134,7 @@ export function* setWindowDefaultSearchQuery(action) {
   const companionWindowId = companionWindowIds[0];
 
   if (searchService && companionWindowId) {
-    const searchId = searchService && `${searchService.id}?q=${defaultSearchQuery}`;
+    const searchId = searchService && `${searchService.id}?${new URLSearchParams({ q: defaultSearchQuery })}`;
     yield put(fetchSearch(windowId, companionWindowId, searchId, defaultSearchQuery));
   }
 }
