@@ -69,6 +69,7 @@ export function OpenSeadragonViewer({
     apiRef.current = viewer;
   }, [apiRef, viewer]);
 
+  // eslint-disable-next-line react-hooks/refs
   const enhancedChildren = Children.map(children, (child) =>
     cloneElement(child, {
       zoomToWorld,
