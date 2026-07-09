@@ -9,6 +9,13 @@ import testingLibraryPlugin from 'eslint-plugin-testing-library';
 import jestDomPlugin from 'eslint-plugin-jest-dom';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
 
+const reactHooksRecommendedLatestRules = reactHooksPlugin.configs.flat['recommended-latest'].rules;
+const reactHooksCompilerWarningRules = Object.fromEntries(
+  Object.keys(reactHooksRecommendedLatestRules)
+    .filter((rule) => !['react-hooks/exhaustive-deps', 'react-hooks/rules-of-hooks'].includes(rule))
+    .map((rule) => [rule, 'warn']),
+);
+
 export default [
   // Ignore patterns
   {
@@ -57,7 +64,9 @@ export default [
 
     rules: {
       ...reactPlugin.configs.recommended.rules,
-      ...reactHooksPlugin.configs.recommended.rules,
+      ...reactHooksRecommendedLatestRules,
+      // Keep compiler diagnostics visible during incremental adoption without failing CI.
+      ...reactHooksCompilerWarningRules,
       ...jsxA11yPlugin.configs.recommended.rules,
       ...jestDomPlugin.configs['flat/recommended'].rules,
       ...testingLibraryPlugin.configs['flat/react'].rules,

@@ -6,6 +6,11 @@ import { fileURLToPath } from 'url';
 import { globSync } from 'glob';
 import * as packageJson from './package.json';
 
+const reactCompilerConfig = {
+  compilationMode: 'annotation',
+  target: '18',
+};
+
 /**
  * Vite configuration
  */
@@ -63,7 +68,11 @@ export default defineConfig({
     'process.env': {},
   },
   plugins: [
-    react(),
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler', reactCompilerConfig]],
+      },
+    }),
     // Copy fixtures to dist for Netlify
     process.env.NETLIFY && {
       closeBundle: async () => {

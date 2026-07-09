@@ -18,6 +18,8 @@ const Root = styled(Paper, { name: 'GalleryView', slot: 'root' })(({ theme }) =>
  * Renders a GalleryView overview of the manifest.
  */
 export function GalleryView({ canvases, viewingDirection = '', windowId }) {
+  'use memo';
+
   const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
   return (
     <Root component="section" aria-label="gallery section" dir={htmlDir} square elevation={0} id={`${windowId}-gallery`}>

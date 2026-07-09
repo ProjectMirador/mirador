@@ -26,6 +26,8 @@ function getIdAndLabelOfCanvases(canvases) {
 
 /** */
 export function SidebarIndexList({ canvases, containerRef, selectedCanvasIds = [], setCanvas, variant = 'item', windowId }) {
+  'use memo';
+
   const canvasesIdAndLabel = useMemo(() => getIdAndLabelOfCanvases(canvases), [canvases]);
   let Item;
 

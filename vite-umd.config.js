@@ -2,6 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import fs from 'fs/promises';
 
+const reactCompilerConfig = {
+  compilationMode: 'annotation',
+  target: '18',
+};
+
 /**
  * Vite configuration
  */
@@ -26,5 +31,11 @@ export default defineConfig({
   define: {
     'process.env': {},
   },
-  plugins: [react()],
+  plugins: [
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler', reactCompilerConfig]],
+      },
+    }),
+  ],
 });
