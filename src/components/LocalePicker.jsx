@@ -21,6 +21,16 @@ export function LocalePicker({ availableLocales = [], locale = '', setLocale = u
   const selectedLocale = availableLocales.indexOf(locale) >= 0 ? locale : availableLocales[0];
   const labels = keyBy(languages, (o) => o.locale);
 
+  /** Resolve an RFC 5646 language code to a human-readable name using the browser's
+   * Intl.DisplayNames API, displayed in the current manifest locale. */
+  const getDisplayName = (code) => {
+    try {
+      return new Intl.DisplayNames([selectedLocale], { type: 'language' }).of(code);
+    } catch (e) {
+      return undefined;
+    }
+  };
+
   return (
     <FormControl variant="standard">
       <InputLabel>{t('language')}</InputLabel>
@@ -41,7 +51,7 @@ export function LocalePicker({ availableLocales = [], locale = '', setLocale = u
       >
         {availableLocales.map((l) => (
           <MenuItem key={l} value={l}>
-            <Typography variant="body2">{labels[l]?.label || l}</Typography>
+            <Typography variant="body2">{labels[l]?.label || getDisplayName(l) || l}</Typography>
           </MenuItem>
         ))}
       </Select>
