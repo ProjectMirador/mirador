@@ -9,6 +9,8 @@ import MiradorIcon from './icons/MiradorIcon';
  * Display a branding icon
  */
 export function Branding({ variant = 'default', ...ContainerProps }) {
+  'use memo';
+
   const { t } = useTranslation();
   return (
     <Stack alignItems="center" {...ContainerProps}>
