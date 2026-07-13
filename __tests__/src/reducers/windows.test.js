@@ -165,6 +165,22 @@ describe('windows reducer', () => {
       };
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
     });
+
+    it('does not re-create a window that no longer exists', () => {
+      const action = {
+        id: 'gone',
+        payload: {
+          foo: 11,
+        },
+        type: ActionTypes.UPDATE_WINDOW,
+      };
+      const beforeState = {
+        abc123: {
+          bar: 2,
+        },
+      };
+      expect(windowsReducer(beforeState, action)).toBe(beforeState);
+    });
   });
 
   it('should handle SET_WINDOW_SIZE', () => {
