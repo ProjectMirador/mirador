@@ -42,25 +42,14 @@ export function WorkspaceArea({
   lang = undefined,
 }) {
   const { t } = useTranslation();
-  const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
+  // eslint-disable-next-line prefer-rest-params
+  const ownerState = arguments[0];
 
   return (
     <Root ownerState={ownerState}>
-      {
-        isWorkspaceControlPanelVisible
-          && <WorkspaceControlPanel variant={controlPanelVariant} />
-      }
-      <ViewerArea
-        className={ns('viewer')}
-        lang={lang}
-        aria-label={t('workspace')}
-        {...(areaRef ? { ref: areaRef } : {})}
-      >
-        {
-          isWorkspaceAddVisible
-            ? <WorkspaceAdd />
-            : <Workspace />
-        }
+      {isWorkspaceControlPanelVisible && <WorkspaceControlPanel variant={controlPanelVariant} />}
+      <ViewerArea className={ns('viewer')} lang={lang} aria-label={t('workspace')} {...(areaRef ? { ref: areaRef } : {})}>
+        {isWorkspaceAddVisible ? <WorkspaceAdd /> : <Workspace />}
         <ErrorDialog />
         <BackgroundPluginArea />
       </ViewerArea>

@@ -13,7 +13,6 @@ describe('ADD_ERROR', () => {
     const ret = errorsReducer(undefined, {
       type: ActionTypes.ADD_ERROR,
       ...error,
-
     });
     expect(ret.items).toEqual([error.id]);
     expect(ret).toHaveProperty(error.id);
@@ -28,7 +27,6 @@ describe('ADD_ERROR', () => {
     const ret = errorsReducer(undefined, {
       type: ActionTypes.RECEIVE_INFO_RESPONSE_FAILURE,
       ...error,
-
     });
     expect(ret.items).toEqual([error.infoId]);
     expect(ret).toHaveProperty(error.infoId);
@@ -46,7 +44,6 @@ describe('ADD_ERROR', () => {
     const ret = errorsReducer(undefined, {
       type: ActionTypes.RECEIVE_SEARCH_FAILURE,
       ...error,
-
     });
     expect(ret.items).toEqual([error.searchId]);
     expect(ret).toHaveProperty(error.searchId);
@@ -69,15 +66,22 @@ describe('ADD_ERROR', () => {
       Only the id is removed from the 'items' array. The error itself remains part of the state,
       so we are able to provide an error history or some kind of logs later on
     */
-    expect(errorsReducer(stateBefore, {
-      id: errorId,
-      type: ActionTypes.REMOVE_ERROR,
-    })).toHaveProperty('items', []);
+    expect(
+      errorsReducer(stateBefore, {
+        id: errorId,
+        type: ActionTypes.REMOVE_ERROR,
+      }),
+    ).toHaveProperty('items', []);
   });
   it('should handle IMPORT_MIRADOR_STATE setting default state', () => {
-    expect(errorsReducer({}, {
-      state: { errors: { new: 'stuff' } },
-      type: ActionTypes.IMPORT_MIRADOR_STATE,
-    })).toEqual({ items: [] });
+    expect(
+      errorsReducer(
+        {},
+        {
+          state: { errors: { new: 'stuff' } },
+          type: ActionTypes.IMPORT_MIRADOR_STATE,
+        },
+      ),
+    ).toEqual({ items: [] });
   });
 });

@@ -37,6 +37,7 @@ export const authReducer = (state = {}, action) => {
       };
     case ActionTypes.RESET_AUTHENTICATION_STATE:
       return omit(state, action.id);
-    default: return state;
+    default:
+      return state;
   }
 };

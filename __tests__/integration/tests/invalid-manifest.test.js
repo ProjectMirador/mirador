@@ -25,7 +25,8 @@ describe('Invalid response while adding manifest', () => {
     await addManifest(invalidUrl);
 
     await waitFor(() => {
-      const listItem = document.querySelector(`[data-manifestid="${invalidUrl}"]`); // eslint-disable-line testing-library/no-node-access
+      // eslint-disable-next-line testing-library/no-node-access
+      const listItem = document.querySelector(`[data-manifestid="${invalidUrl}"]`);
       expect(listItem).toBeInTheDocument();
     });
   }, 2000); // Wait 2 seconds
@@ -36,7 +37,8 @@ describe('Invalid response while adding manifest', () => {
     await addManifest('http://localhost:4444/__tests__/fixtures/version-2/broken.json');
 
     // Try the added manifest item
-    const listItem = document.querySelector(`[data-manifestid="${uri}"]`); // eslint-disable-line testing-library/no-node-access
+    // eslint-disable-next-line testing-library/no-node-access
+    const listItem = document.querySelector(`[data-manifestid="${uri}"]`);
     expect(listItem).toBeInTheDocument();
 
     const errorMessage = await screen.findByText('The resource cannot be added');

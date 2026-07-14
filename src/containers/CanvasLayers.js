@@ -1,11 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../state/actions';
-import {
-  getCanvasLabel,
-  getLayers,
-  getSortedLayers,
-} from '../state/selectors';
+import { getCanvasLabel, getLayers, getSortedLayers } from '../state/selectors';
 import { CanvasLayers } from '../components/CanvasLayers';
 
 /** For connect */
@@ -24,8 +20,6 @@ const mapDispatchToProps = {
   updateLayers: actions.updateLayers,
 };
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps));
 
 export default enhance(CanvasLayers);

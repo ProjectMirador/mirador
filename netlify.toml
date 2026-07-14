@@ -5,10 +5,10 @@
   publish = "dist/"
 
 [context.main.environment]
-  NODE_VERSION = "20.18.1"
+  NODE_VERSION = "22.12.0"
 
 [context.deploy-preview.environment]
-  NODE_VERSION = "20.18.1"
+  NODE_VERSION = "22.12.0"
 
 [[redirects]]
   from = "/"

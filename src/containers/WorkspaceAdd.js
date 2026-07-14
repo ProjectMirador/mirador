@@ -10,7 +10,7 @@ import { getCatalog } from '../state/selectors';
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => ({ catalog: getCatalog(state) });
+const mapStateToProps = (state) => ({ catalog: getCatalog(state) });
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -22,9 +22,6 @@ const mapDispatchToProps = {
   setWorkspaceAddVisibility: actions.setWorkspaceAddVisibility,
 };
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('WorkspaceAdd'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('WorkspaceAdd'));
 
 export default enhance(WorkspaceAdd);

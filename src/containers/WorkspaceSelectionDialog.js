@@ -19,11 +19,8 @@ const mapDispatchToProps = {
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => ({ workspaceType: getWorkspaceType(state) });
+const mapStateToProps = (state) => ({ workspaceType: getWorkspaceType(state) });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('WorkspaceSelectionDialog'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('WorkspaceSelectionDialog'));
 
 export default enhance(WorkspaceSelectionDialog);

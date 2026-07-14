@@ -12,23 +12,14 @@ import { miradorSlice, EMPTY_ARRAY } from './utils';
  * @param {string} props.companionWindowId
  * @returns {Array}
  */
-export const getCanvasLayers = createSelector(
-  [
-    getCanvas,
-    getMiradorCanvasWrapper,
-  ],
-  (canvas, getMiradorCanvas) => {
-    if (!canvas) return [];
-    return getMiradorCanvas(canvas).imageResources;
-  },
-);
+export const getCanvasLayers = createSelector([getCanvas, getMiradorCanvasWrapper], (canvas, getMiradorCanvas) => {
+  if (!canvas) return [];
+  return getMiradorCanvas(canvas).imageResources;
+});
 
 export const getLayersForWindow = createSelector(
-  [
-    state => miradorSlice(state).layers,
-    (state, { windowId }) => windowId,
-  ],
-  (layers, windowId) => (layers ? (layers[windowId] || EMPTY_ARRAY) : EMPTY_ARRAY),
+  [(state) => miradorSlice(state).layers, (state, { windowId }) => windowId],
+  (layers, windowId) => (layers ? layers[windowId] || EMPTY_ARRAY : EMPTY_ARRAY),
 );
 
 /**
@@ -38,10 +29,7 @@ export const getLayersForWindow = createSelector(
  * @returns {object}
  */
 export const getLayers = createSelector(
-  [
-    getLayersForWindow,
-    (state, { canvasId }) => canvasId,
-  ],
+  [getLayersForWindow, (state, { canvasId }) => canvasId],
   (layers, canvasId) => layers[canvasId],
 );
 
@@ -52,30 +40,28 @@ export const getLayers = createSelector(
  * @param {string} props.companionWindowId
  * @returns {Array}
  */
-export const getSortedLayers = createSelector(
-  [
-    getCanvasLayers,
-    getLayers,
-  ],
-  (canvasLayers, layerConfig) => {
-    if (!layerConfig) return canvasLayers;
+export const getSortedLayers = createSelector([getCanvasLayers, getLayers], (canvasLayers, layerConfig) => {
+  if (!layerConfig) return canvasLayers;
 
-    const sorted = canvasLayers.sort((a, b) => {
-      if (layerConfig[a.id] && layerConfig[a.id].index !== undefined
-        && layerConfig[b.id] && layerConfig[b.id].index !== undefined) {
-        return layerConfig[a.id].index - layerConfig[b.id].index;
-      }
+  const sorted = canvasLayers.sort((a, b) => {
+    if (
+      layerConfig[a.id] &&
+      layerConfig[a.id].index !== undefined &&
+      layerConfig[b.id] &&
+      layerConfig[b.id].index !== undefined
+    ) {
+      return layerConfig[a.id].index - layerConfig[b.id].index;
+    }
 
-      // sort a layer with index data above layers without
-      if (layerConfig[a.id] && layerConfig[a.id].index !== undefined) return -1;
-      if (layerConfig[b.id] && layerConfig[b.id].index !== undefined) return 1;
+    // sort a layer with index data above layers without
+    if (layerConfig[a.id] && layerConfig[a.id].index !== undefined) return -1;
+    if (layerConfig[b.id] && layerConfig[b.id].index !== undefined) return 1;
 
-      return 0;
-    });
+    return 0;
+  });
 
-    return sorted;
-  },
-);
+  return sorted;
+});
 
 /**
  * Get all the layer configuration for visible canvases.
@@ -84,15 +70,10 @@ export const getSortedLayers = createSelector(
  * @param {string} props.windowId
  * @returns {object}
  */
-export const getLayersForVisibleCanvases = createSelector(
-  [
-    getVisibleCanvasIds,
-    getLayersForWindow,
-  ],
-  (canvasIds, layers) => (
-    canvasIds.reduce((acc, canvasId) => {
-      acc[canvasId] = layers[canvasId];  // eslint-disable-line no-param-reassign
-      return acc;
-    }, {})
-  ),
+export const getLayersForVisibleCanvases = createSelector([getVisibleCanvasIds, getLayersForWindow], (canvasIds, layers) =>
+  canvasIds.reduce((acc, canvasId) => {
+    // eslint-disable-next-line no-param-reassign
+    acc[canvasId] = layers[canvasId];
+    return acc;
+  }, {}),
 );

@@ -1,16 +1,6 @@
 import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Chip,
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  Link,
-  MenuList,
-  MenuItem,
-  Typography,
-} from '@mui/material';
+import { Button, Chip, Dialog, DialogActions, DialogTitle, Link, MenuList, MenuItem, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackSharp';
 import Skeleton from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
@@ -41,12 +31,7 @@ const StyledCollectionFilter = styled('div')(() => ({
 
 /** */
 const Placeholder = ({ onClose, container }) => (
-  <Dialog
-    variant="contained"
-    onClose={onClose}
-    open
-    container={container}
-  >
+  <Dialog variant="contained" onClose={onClose} open container={container}>
     <DialogTitle id="select-collection">
       <Skeleton variant="text" />
     </DialogTitle>
@@ -65,7 +50,8 @@ Placeholder.propTypes = {
 /**
  * a dialog providing the possibility to select the collection
  */
-export function CollectionDialog({ // eslint-disable-line complexity
+// eslint-disable-next-line complexity
+export function CollectionDialog({
   addWindow,
   collection = null,
   dialogCollectionPath = [],
@@ -96,18 +82,16 @@ export function CollectionDialog({ // eslint-disable-line complexity
 
   /** */
   const goToPreviousCollection = () => {
-    showCollectionDialog(
-      dialogCollectionPath[dialogCollectionPath.length - 1],
-      dialogCollectionPath.slice(0, -1),
-      windowId,
-    );
+    showCollectionDialog(dialogCollectionPath[dialogCollectionPath.length - 1], dialogCollectionPath.slice(0, -1), windowId);
   };
 
   /** */
   const selectManifest = (m) => {
     if (windowId) {
       updateWindow(windowId, {
-        canvasId: null, collectionPath: [...dialogCollectionPath, manifestId], manifestId: m.id,
+        canvasId: null,
+        collectionPath: [...dialogCollectionPath, manifestId],
+        manifestId: m.id,
       });
     } else {
       addWindow({ collectionPath: [...dialogCollectionPath, manifestId], manifestId: m.id });
@@ -127,111 +111,109 @@ export function CollectionDialog({ // eslint-disable-line complexity
 
   if (!ready) return <Placeholder container={dialogContainer} onClose={hideDialog} />;
 
-  const rights = manifest && (asArray(manifest.getProperty('rights') || manifest.getProperty('license')));
+  const rights = manifest && asArray(manifest.getProperty('rights') || manifest.getProperty('license'));
 
-  const requiredStatement = manifest
-    && asArray(manifest.getRequiredStatement()).filter(l => l && l.getValue()).map(labelValuePair => ({
-      label: null,
-      values: labelValuePair.getValues(),
-    }));
+  const requiredStatement =
+    manifest &&
+    asArray(manifest.getRequiredStatement())
+      .filter((l) => l && l.getValue())
+      .map((labelValuePair) => ({
+        label: null,
+        values: labelValuePair.getValues(),
+      }));
 
   const collections = manifest.getCollections();
 
   const currentFilter = filter || (collections.length > 0 ? 'collections' : 'manifests');
 
   return (
-    <Dialog
-      variant="contained"
-      onClose={hideDialog}
-      container={dialogContainer}
-      open
-    >
+    <Dialog variant="contained" onClose={hideDialog} container={dialogContainer} open>
       <DialogTitle id="select-collection">
         <Typography component="div" variant="overline">
-          { t(isMultipart ? 'multipartCollection' : 'collection') }
+          {t(isMultipart ? 'multipartCollection' : 'collection')}
         </Typography>
         <Typography component="div" variant="h3">
           <IIIFResourceLabel resource={manifest} />
         </Typography>
       </DialogTitle>
       <StyledScrollIndicatedDialogContent>
-        { collection && (
-          <Button
-            startIcon={<ArrowBackIcon />}
-            onClick={() => goToPreviousCollection()}
-          >
+        {collection && (
+          <Button startIcon={<ArrowBackIcon />} onClick={() => goToPreviousCollection()}>
             <IIIFResourceLabel resource={collection} />
           </Button>
         )}
 
         <StyledCollectionMetadata>
           <ManifestInfo manifestId={manifest.id} />
-          <CollapsibleSection
-            id="select-collection-rights"
-            label={t('attributionTitle')}
-          >
-            { requiredStatement && (
-              <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
+          <CollapsibleSection id="select-collection-rights" label={t('attributionTitle')}>
+            {requiredStatement && <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />}
+            {rights && rights.length > 0 && (
+              <>
+                <Typography variant="subtitle2" component="dt">
+                  {t('rights')}
+                </Typography>
+                {rights.map((v) => (
+                  <Typography variant="body1" component="dd" key={v}>
+                    <Link target="_blank" rel="noopener noreferrer" href={v}>
+                      {v}
+                    </Link>
+                  </Typography>
+                ))}
+              </>
             )}
-            {
-              rights && rights.length > 0 && (
-                <>
-                  <Typography variant="subtitle2" component="dt">{t('rights')}</Typography>
-                  { rights.map(v => (
-                    <Typography variant="body1" component="dd" key={v}>
-                      <Link target="_blank" rel="noopener noreferrer" href={v}>
-                        {v}
-                      </Link>
-                    </Typography>
-                  )) }
-                </>
-              )
-            }
           </CollapsibleSection>
         </StyledCollectionMetadata>
         <StyledCollectionFilter>
           {manifest.getTotalCollections() > 0 && (
-            <Chip clickable color={currentFilter === 'collections' ? 'primary' : 'default'} onClick={() => setFilter('collections')} label={t('totalCollections', { count: manifest.getTotalCollections() })} />
+            <Chip
+              clickable
+              color={currentFilter === 'collections' ? 'primary' : 'default'}
+              onClick={() => setFilter('collections')}
+              label={t('totalCollections', { count: manifest.getTotalCollections() })}
+            />
           )}
           {manifest.getTotalManifests() > 0 && (
-            <Chip clickable color={currentFilter === 'manifests' ? 'primary' : 'default'} onClick={() => setFilter('manifests')} label={t('totalManifests', { count: manifest.getTotalManifests() })} />
+            <Chip
+              clickable
+              color={currentFilter === 'manifests' ? 'primary' : 'default'}
+              onClick={() => setFilter('manifests')}
+              label={t('totalManifests', { count: manifest.getTotalManifests() })}
+            />
           )}
         </StyledCollectionFilter>
-        { currentFilter === 'collections' && (
+        {currentFilter === 'collections' && (
           <MenuList>
-            {
-              collections.map(c => (
-                <MenuItem
-                  key={c.id}
-                  onClick={() => { selectCollection(c); }}
-                  variant="multiline"
-                >
-                  <IIIFResourceLabel resource={c} />
-                </MenuItem>
-              ))
-            }
+            {collections.map((c) => (
+              <MenuItem
+                key={c.id}
+                onClick={() => {
+                  selectCollection(c);
+                }}
+                variant="multiline"
+              >
+                <IIIFResourceLabel resource={c} />
+              </MenuItem>
+            ))}
           </MenuList>
         )}
-        { currentFilter === 'manifests' && (
+        {currentFilter === 'manifests' && (
           <MenuList>
-            {
-              manifest.getManifests().map(m => (
-                <MenuItem
-                  key={m.id}
-                  onClick={() => { selectManifest(m); }}
-                  variant="multiline"
-                >
-                  <IIIFResourceLabel resource={m} />
-                </MenuItem>
-              ))
-            }
+            {manifest.getManifests().map((m) => (
+              <MenuItem
+                key={m.id}
+                onClick={() => {
+                  selectManifest(m);
+                }}
+                variant="multiline"
+              >
+                <IIIFResourceLabel resource={m} />
+              </MenuItem>
+            ))}
           </MenuList>
         )}
       </StyledScrollIndicatedDialogContent>
       <DialogActions>
-        <Button onClick={hideDialog}>
-          {t('close')}
-        </Button>
+        <Button onClick={hideDialog}>{t('close')}</Button>
       </DialogActions>
     </Dialog>
   );

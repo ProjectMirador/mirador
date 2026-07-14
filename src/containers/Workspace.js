@@ -2,10 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { Workspace } from '../components/Workspace';
-import {
-  getMaximizedWindowsIds, getWindowIds, getWorkspaceType,
-  getConfig, getWorkspace,
-} from '../state/selectors';
+import { getMaximizedWindowsIds, getWindowIds, getWorkspaceType, getConfig, getWorkspace } from '../state/selectors';
 import * as actions from '../state/actions';
 
 /**
@@ -13,15 +10,13 @@ import * as actions from '../state/actions';
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = state => (
-  {
-    allowNewWindows: getConfig(state).workspace.allowNewWindows,
-    maximizedWindowIds: getMaximizedWindowsIds(state),
-    windowIds: getWindowIds(state),
-    workspaceId: getWorkspace(state).id,
-    workspaceType: getWorkspaceType(state),
-  }
-);
+const mapStateToProps = (state) => ({
+  allowNewWindows: getConfig(state).workspace.allowNewWindows,
+  maximizedWindowIds: getMaximizedWindowsIds(state),
+  windowIds: getWindowIds(state),
+  workspaceId: getWorkspace(state).id,
+  workspaceType: getWorkspaceType(state),
+});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

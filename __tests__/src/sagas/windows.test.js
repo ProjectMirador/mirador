@@ -5,15 +5,21 @@ import { Utils } from 'manifesto.js';
 import ActionTypes from '../../../src/state/actions/action-types';
 import { setCanvas } from '../../../src/state/actions';
 import {
-  getManifests, getManifestoInstance,
-  getManifestSearchService, getCompanionWindowIdsForPosition,
+  getManifests,
+  getManifestoInstance,
+  getManifestSearchService,
+  getCompanionWindowIdsForPosition,
   getSearchForWindow,
-  getWorkspace, getElasticLayout,
-  getWindow, getCanvasGrouping,
+  getWorkspace,
+  getElasticLayout,
+  getWindow,
+  getCanvasGrouping,
   getSelectedContentSearchAnnotationIds,
   getSortedSearchAnnotationsForCompanionWindow,
-  getVisibleCanvasIds, getCanvasForAnnotation,
-  getCanvases, selectInfoResponses,
+  getVisibleCanvasIds,
+  getCanvasForAnnotation,
+  getCanvases,
+  selectInfoResponses,
   getWindowConfig,
 } from '../../../src/state/selectors';
 import { fetchManifests } from '../../../src/state/sagas/iiif';
@@ -104,8 +110,7 @@ describe('window-level sagas', () => {
       };
 
       return expectSaga(setCanvasOnNewSequence, action)
-        .provide([
-        ])
+        .provide([])
         .run()
         .then(({ allEffects }) => allEffects.length === 0);
     });
@@ -179,7 +184,10 @@ describe('window-level sagas', () => {
         },
       };
 
-      const manifest = Utils.parseManifest({ ...fixture, start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' } });
+      const manifest = Utils.parseManifest({
+        ...fixture,
+        start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' },
+      });
 
       return expectSaga(fetchWindowManifest, action)
         .provide([
@@ -202,7 +210,8 @@ describe('window-level sagas', () => {
       };
 
       return expectSaga(setWindowDefaultSearchQuery, action)
-        .run().then(({ allEffects }) => allEffects.length === 0);
+        .run()
+        .then(({ allEffects }) => allEffects.length === 0);
     });
 
     it('initiates a search', () => {
@@ -240,12 +249,7 @@ describe('window-level sagas', () => {
       };
 
       return expectSaga(setCurrentAnnotationsOnCurrentCanvas, action)
-        .provide([
-          [select(
-            getSearchForWindow,
-            { windowId: 'abc123' },
-          ), {}],
-        ])
+        .provide([[select(getSearchForWindow, { windowId: 'abc123' }), {}]])
         .run()
         .then(({ allEffects }) => allEffects.length === 0);
     });
@@ -257,21 +261,26 @@ describe('window-level sagas', () => {
         windowId: 'abc123',
       };
 
-      return expectSaga(setCurrentAnnotationsOnCurrentCanvas, action)
-        .provide([
-          [select(
-            getSearchForWindow,
-            { windowId: 'abc123' },
-          ), { cwid: { } }],
-          [select(getAnnotationsBySearch, { canvasIds: ['a', 'b'], companionWindowIds: ['cwid'], windowId: 'abc123' }),
-            { }],
-        ])
-        .run()
-        // Assert that nothing did happen, see https://github.com/jfairbank/redux-saga-test-plan/issues/137
-        .then(({ effects }) => {
-          expect(effects.select.length).toEqual(2);
-          expect(effects.put).toBeUndefined();
-        });
+      return (
+        expectSaga(setCurrentAnnotationsOnCurrentCanvas, action)
+          .provide([
+            [select(getSearchForWindow, { windowId: 'abc123' }), { cwid: {} }],
+            [
+              select(getAnnotationsBySearch, {
+                canvasIds: ['a', 'b'],
+                companionWindowIds: ['cwid'],
+                windowId: 'abc123',
+              }),
+              {},
+            ],
+          ])
+          .run()
+          // Assert that nothing did happen, see https://github.com/jfairbank/redux-saga-test-plan/issues/137
+          .then(({ effects }) => {
+            expect(effects.select.length).toEqual(2);
+            expect(effects.put).toBeUndefined();
+          })
+      );
     });
 
     it('selects content search annotations for the current searches', () => {
@@ -283,18 +292,26 @@ describe('window-level sagas', () => {
 
       return expectSaga(setCurrentAnnotationsOnCurrentCanvas, action)
         .provide([
-          [select(
-            getSearchForWindow,
-            { windowId: 'abc123' },
-          ), { cwid: { } }],
-          [select(getAnnotationsBySearch, { canvasIds: ['a', 'b'], companionWindowIds: ['cwid'], windowId: 'abc123' }),
-            { cwid: ['annoId'] }],
+          [select(getSearchForWindow, { windowId: 'abc123' }), { cwid: {} }],
+          [
+            select(getAnnotationsBySearch, {
+              canvasIds: ['a', 'b'],
+              companionWindowIds: ['cwid'],
+              windowId: 'abc123',
+            }),
+            { cwid: ['annoId'] },
+          ],
         ])
         .put({
-          annotationIds: ['annoId'], companionWindowId: 'cwid', type: ActionTypes.SET_CONTENT_SEARCH_CURRENT_ANNOTATIONS, windowId: 'abc123',
+          annotationIds: ['annoId'],
+          companionWindowId: 'cwid',
+          type: ActionTypes.SET_CONTENT_SEARCH_CURRENT_ANNOTATIONS,
+          windowId: 'abc123',
         })
         .put({
-          annotationId: 'annoId', type: ActionTypes.SELECT_ANNOTATION, windowId: 'abc123',
+          annotationId: 'annoId',
+          type: ActionTypes.SELECT_ANNOTATION,
+          windowId: 'abc123',
         })
         .run();
     });
@@ -308,7 +325,8 @@ describe('window-level sagas', () => {
       };
 
       return expectSaga(panToFocusedWindow, action)
-        .run().then(({ allEffects }) => allEffects.length === 0);
+        .run()
+        .then(({ allEffects }) => allEffects.length === 0);
     });
 
     it('sets the viewport position to the newly focused window', () => {
@@ -318,14 +336,23 @@ describe('window-level sagas', () => {
       };
       return expectSaga(panToFocusedWindow, action)
         .provide([
-          [select(getWorkspace), {
-            viewportPosition: { height: 100, width: 100 },
-          }],
-          [select(getElasticLayout), {
-            x: {
-              height: 50, width: 50, x: 50, y: 12,
+          [
+            select(getWorkspace),
+            {
+              viewportPosition: { height: 100, width: 100 },
             },
-          }],
+          ],
+          [
+            select(getElasticLayout),
+            {
+              x: {
+                height: 50,
+                width: 50,
+                x: 50,
+                y: 12,
+              },
+            },
+          ],
         ])
         .put({
           payload: {
@@ -399,7 +426,8 @@ describe('window-level sagas', () => {
           [select(getWindowConfig, { windowId }), { switchCanvasOnSearch: true }],
           [select(getSelectedContentSearchAnnotationIds, { companionWindowId, windowId }), ['y']],
         ])
-        .run().then(({ allEffects }) => allEffects.length === 0);
+        .run()
+        .then(({ allEffects }) => allEffects.length === 0);
     });
 
     it('does nothing if canvas switching for searches is disabled', () => {
@@ -412,10 +440,9 @@ describe('window-level sagas', () => {
       };
 
       return expectSaga(setCanvasOfFirstSearchResult, action)
-        .provide([
-          [select(getWindowConfig, { windowId }), { switchCanvasOnSearch: false }],
-        ])
-        .run().then(({ allEffects }) => allEffects.length === 0);
+        .provide([[select(getWindowConfig, { windowId }), { switchCanvasOnSearch: false }]])
+        .run()
+        .then(({ allEffects }) => allEffects.length === 0);
     });
   });
 
@@ -453,7 +480,8 @@ describe('window-level sagas', () => {
           [select(getVisibleCanvasIds, { windowId }), ['z']],
           [select(getCanvasForAnnotation, { annotationId, windowId }), { id: 'z' }],
         ])
-        .run().then(({ allEffects }) => allEffects.length === 0);
+        .run()
+        .then(({ allEffects }) => allEffects.length === 0);
     });
 
     it('does nothing if the annotation is not on one of our canvases', () => {
@@ -470,7 +498,8 @@ describe('window-level sagas', () => {
           [select(getVisibleCanvasIds, { windowId }), ['z']],
           [select(getCanvasForAnnotation, { annotationId, windowId }), null],
         ])
-        .run().then(({ allEffects }) => allEffects.length === 0);
+        .run()
+        .then(({ allEffects }) => allEffects.length === 0);
     });
   });
 
@@ -525,9 +554,7 @@ describe('window-level sagas', () => {
       const manifest = Utils.parseManifest(collectionFixture);
 
       return expectSaga(determineAndShowCollectionDialog, 'manifest.json', 'x')
-        .provide([
-          [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
-        ])
+        .provide([[select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest]])
         .put.like({
           action: {
             dialogCollectionPath: [],
@@ -543,9 +570,7 @@ describe('window-level sagas', () => {
       const manifest = Utils.parseManifest(fixture);
 
       return expectSaga(determineAndShowCollectionDialog, 'manifest.json', 'x')
-        .provide([
-          [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
-        ])
+        .provide([[select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest]])
         .not.put.like({
           action: {
             dialogCollectionPath: [],

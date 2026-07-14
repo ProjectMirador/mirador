@@ -18,9 +18,7 @@ const Nav = styled('nav', { name: 'WindowSideBar', slot: 'nav' })({
 /**
  * WindowSideBar
  */
-export function WindowSideBar({
-  classes = {}, direction, windowId, sideBarOpen = false,
-}) {
+export function WindowSideBar({ classes = {}, direction, windowId, sideBarOpen = false }) {
   const { t } = useTranslation();
   return (
     <Root
@@ -32,7 +30,11 @@ export function WindowSideBar({
         component: Nav,
         variant: 'outlined',
       }}
-      SlideProps={{ direction: direction === 'rtl' ? 'left' : 'right', mountOnEnter: true, unmountOnExit: true }}
+      SlideProps={{
+        direction: direction === 'rtl' ? 'left' : 'right',
+        mountOnEnter: true,
+        unmountOnExit: true,
+      }}
       open={sideBarOpen}
     >
       <WindowSideBarButtons windowId={windowId} />

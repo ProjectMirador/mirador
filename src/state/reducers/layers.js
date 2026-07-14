@@ -12,10 +12,7 @@ export const layersReducer = (state = {}, action) => {
         ...state,
         [action.windowId]: {
           ...state[action.windowId],
-          [action.canvasId]: deepmerge(
-            (state[action.windowId] || {})[action.canvasId] || {},
-            action.payload,
-          ),
+          [action.canvasId]: deepmerge((state[action.windowId] || {})[action.canvasId] || {}, action.payload),
         },
       };
     case ActionTypes.REMOVE_WINDOW:

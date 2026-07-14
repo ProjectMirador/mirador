@@ -3,22 +3,13 @@ import Typography from '@mui/material/Typography';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
 
 /** */
-export function SidebarIndexThumbnail({
-  canvas, height = undefined, label, width = undefined,
-}) {
+export function SidebarIndexThumbnail({ canvas, height = undefined, label, width = undefined }) {
   return (
     <>
       <div style={{ minWidth: 50 }}>
-        <IIIFThumbnail
-          label={label}
-          resource={canvas}
-          maxHeight={height}
-          maxWidth={width}
-        />
+        <IIIFThumbnail label={label} resource={canvas} maxHeight={height} maxWidth={width} />
       </div>
-      <Typography>
-        {label}
-      </Typography>
+      <Typography>{label}</Typography>
     </>
   );
 }

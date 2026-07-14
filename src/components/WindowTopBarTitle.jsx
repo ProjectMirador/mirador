@@ -31,10 +31,8 @@ TitleTypography.propTypes = {
 /**
  * WindowTopBarTitle
  */
-export function WindowTopBarTitle({
-  error = null, hideWindowTitle = false, isFetching = false, manifestTitle = '',
-}) {
-  let title = null;
+export function WindowTopBarTitle({ error = null, hideWindowTitle = false, isFetching = false, manifestTitle = '' }) {
+  let title;
   if (isFetching) {
     title = (
       <StyledTitleTypography>
@@ -45,19 +43,13 @@ export function WindowTopBarTitle({
     title = (
       <>
         <ErrorIcon color="error" />
-        <StyledTitleTypography color="textSecondary">
-          {error}
-        </StyledTitleTypography>
+        <StyledTitleTypography color="textSecondary">{error}</StyledTitleTypography>
       </>
     );
   } else if (hideWindowTitle) {
-    title = (<StyledTitle />);
+    title = <StyledTitle />;
   } else {
-    title = (
-      <StyledTitleTypography>
-        {manifestTitle}
-      </StyledTitleTypography>
-    );
+    title = <StyledTitleTypography>{manifestTitle}</StyledTitleTypography>;
   }
   return title;
 }

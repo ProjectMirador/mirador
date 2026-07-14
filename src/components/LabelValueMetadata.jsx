@@ -18,12 +18,18 @@ export function LabelValueMetadata({ defaultLabel = undefined, labelValuePairs, 
   // need to be re-rendered internally in any meaningful way
   return (
     <dl className={ns('label-value-metadata')}>
-      {labelValuePairs.reduce((acc, labelValuePair, i) => acc.concat([
-        <Typography component="dt" key={`label-${i}`} variant="subtitle2">{labelValuePair.label || defaultLabel}</Typography>,
-        <Typography style={{ marginBottom: '.5em', marginLeft: '0px' }} component="dd" key={`value-${i}`} variant="body1">
-          <SanitizedHtml htmlString={labelValuePair.values.join(labelValueJoiner)} ruleSet="iiif" />
-        </Typography>,
-      ]), [])}
+      {labelValuePairs.reduce(
+        (acc, labelValuePair, i) =>
+          acc.concat([
+            <Typography component="dt" key={`label-${i}`} variant="subtitle2">
+              {labelValuePair.label || defaultLabel}
+            </Typography>,
+            <Typography style={{ marginBottom: '.5em', marginLeft: '0px' }} component="dd" key={`value-${i}`} variant="body1">
+              <SanitizedHtml htmlString={labelValuePair.values.join(labelValueJoiner)} ruleSet="iiif" />
+            </Typography>,
+          ]),
+        [],
+      )}
     </dl>
   );
 }
@@ -31,8 +37,10 @@ export function LabelValueMetadata({ defaultLabel = undefined, labelValuePairs, 
 LabelValueMetadata.propTypes = {
   defaultLabel: PropTypes.string,
   labelValueJoiner: PropTypes.string,
-  labelValuePairs: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    values: PropTypes.arrayOf(PropTypes.string),
-  })).isRequired,
+  labelValuePairs: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      values: PropTypes.arrayOf(PropTypes.string),
+    }),
+  ).isRequired,
 };

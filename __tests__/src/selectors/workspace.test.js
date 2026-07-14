@@ -1,8 +1,4 @@
-import {
-  getFullScreenEnabled,
-  getWorkspaceType,
-  isFocused,
-} from '../../../src/state/selectors';
+import { getFullScreenEnabled, getWorkspaceType, isFocused } from '../../../src/state/selectors';
 
 describe('getFullScreenEnabled', () => {
   it('returns the workspace configuration for full screen', () => {

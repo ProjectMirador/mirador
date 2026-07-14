@@ -26,15 +26,21 @@ describe('MosaicLayout', () => {
       expect(instance.layout).toEqual({
         type: 'split',
         direction: 'row',
-        children: ['foo', {
-          type: 'split',
-          direction: 'column',
-          children: [{
+        children: [
+          'foo',
+          {
             type: 'split',
-            direction: 'row',
-            children: ['bat', 'bark'],
-          }, 'bar'],
-        }],
+            direction: 'column',
+            children: [
+              {
+                type: 'split',
+                direction: 'row',
+                children: ['bat', 'bark'],
+              },
+              'bar',
+            ],
+          },
+        ],
       });
     });
   });

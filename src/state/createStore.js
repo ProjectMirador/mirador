@@ -17,19 +17,12 @@ import settings from '../config/settings';
 function configureStore(pluginReducers, pluginSagas = []) {
   const miradorReducer = createRootReducer(pluginReducers);
 
-  const rootReducer = settings.state.slice
-    ? combineReducers({ [settings.state.slice]: miradorReducer })
-    : miradorReducer;
+  const rootReducer = settings.state.slice ? combineReducers({ [settings.state.slice]: miradorReducer }) : miradorReducer;
 
   // create the saga middleware
   const sagaMiddleware = createSagaMiddleware();
 
-  const store = createStore(
-    rootReducer,
-    composeWithDevTools(
-      applyMiddleware(thunk, sagaMiddleware),
-    ),
-  );
+  const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk, sagaMiddleware)));
 
   // then run the saga
   sagaMiddleware.run(getRootSaga(pluginSagas));

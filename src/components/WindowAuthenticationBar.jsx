@@ -38,7 +38,8 @@ export function WindowAuthenticationBar({
   onConfirm,
 }) {
   const { t } = useTranslation();
-  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
+  // eslint-disable-next-line prefer-rest-params
+  const pluginProps = arguments[0];
   const [open, setOpen] = useState(false);
 
   /** */
@@ -53,7 +54,7 @@ export function WindowAuthenticationBar({
     <Button
       onClick={onSubmit}
       color="secondary"
-      sx={theme => ({
+      sx={(theme) => ({
         backgroundColor: theme.palette.secondary.contrastText,
         lineHeight: '1.5rem',
       })}
@@ -69,11 +70,7 @@ export function WindowAuthenticationBar({
         <StyledTopBar>
           {icon || <LockIcon sx={{ marginInlineEnd: 5 }} />}
           <Typography component="h3" variant="body1" color="inherit">
-            {ruleSet ? (
-              <SanitizedHtml htmlString={label} ruleSet={ruleSet} />
-            ) : (
-              label
-            )}
+            {ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label}
           </Typography>
           <PluginHook targetName="WindowAuthenticationBar" {...pluginProps} />
           {button}
@@ -89,7 +86,7 @@ export function WindowAuthenticationBar({
         onClick={() => setOpen(true)}
         component="div"
         color="inherit"
-        sx={theme => ({
+        sx={(theme) => ({
           '&:hover': {
             backgroundColor: theme.palette.secondary.main,
           },
@@ -101,17 +98,8 @@ export function WindowAuthenticationBar({
         })}
       >
         {icon || <LockIcon sx={{ marginInlineEnd: 1.5 }} />}
-        <Typography
-          sx={{ paddingBlockEnd: 1, paddingBlockStart: 1 }}
-          component="h3"
-          variant="body1"
-          color="inherit"
-        >
-          {ruleSet ? (
-            <SanitizedHtml htmlString={label} ruleSet={ruleSet} />
-          ) : (
-            label
-          )}
+        <Typography sx={{ paddingBlockEnd: 1, paddingBlockStart: 1 }} component="h3" variant="body1" color="inherit">
+          {ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label}
         </Typography>
         <PluginHook targetName="WindowAuthenticationBar" {...pluginProps} />
         <StyledFauxButton>
@@ -123,7 +111,7 @@ export function WindowAuthenticationBar({
         </StyledFauxButton>
       </Button>
       <Collapse
-        sx={theme => ({
+        sx={(theme) => ({
           backgroundColor: theme.palette.secondary.main,
           color: theme.palette.secondary.contrastText,
           paddingInlineEnd: theme.spacing(1),
@@ -133,17 +121,9 @@ export function WindowAuthenticationBar({
         onClose={() => setOpen(false)}
       >
         <Typography variant="body1" color="inherit">
-          {ruleSet ? (
-            <SanitizedHtml htmlString={header} ruleSet={ruleSet} />
-          ) : (
-            header
-          )}
+          {ruleSet ? <SanitizedHtml htmlString={header} ruleSet={ruleSet} /> : header}
           {header && description ? ': ' : ''}
-          {ruleSet ? (
-            <SanitizedHtml htmlString={description} ruleSet={ruleSet} />
-          ) : (
-            description
-          )}
+          {ruleSet ? <SanitizedHtml htmlString={description} ruleSet={ruleSet} /> : description}
         </Typography>
         <DialogActions>
           <Button onClick={() => setOpen(false)} color="inherit">

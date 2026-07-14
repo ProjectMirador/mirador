@@ -11,20 +11,24 @@ import { PluginHook } from './PluginHook';
  * ManifestInfo
  */
 export function ManifestInfo({
-  manifestDescription = null, manifestLabel = null, manifestMetadata = [], manifestSummary = null,
+  manifestDescription = null,
+  manifestLabel = null,
+  manifestMetadata = [],
+  manifestSummary = null,
   ...rest
 }) {
   const { t } = useTranslation();
   const id = useId();
   const pluginProps = {
-    manifestDescription, manifestLabel, manifestMetadata, manifestSummary, ...rest,
+    manifestDescription,
+    manifestLabel,
+    manifestMetadata,
+    manifestSummary,
+    ...rest,
   };
 
   return (
-    <CollapsibleSection
-      id={`${id}-resource`}
-      label={t('resource')}
-    >
+    <CollapsibleSection id={`${id}-resource`} label={t('resource')}>
       {manifestLabel && (
         <Typography
           aria-labelledby={`${id}-resource ${id}-resource-heading`}
@@ -48,9 +52,7 @@ export function ManifestInfo({
         </Typography>
       )}
 
-      {manifestMetadata.length > 0 && (
-        <LabelValueMetadata labelValuePairs={manifestMetadata} />
-      )}
+      {manifestMetadata.length > 0 && <LabelValueMetadata labelValuePairs={manifestMetadata} />}
 
       <PluginHook targetName="ManifestInfo" {...pluginProps} />
     </CollapsibleSection>

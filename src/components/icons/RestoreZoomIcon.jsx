@@ -2,7 +2,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 
 /**
  * RestoreZoomIcon ~
-*/
+ */
 export default function RestoreZoomIcon(props) {
   return (
     <SvgIcon {...props}>

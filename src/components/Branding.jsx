@@ -12,19 +12,15 @@ export function Branding({ variant = 'default', ...ContainerProps }) {
   const { t } = useTranslation();
   return (
     <Stack alignItems="center" {...ContainerProps}>
-      { variant === 'wide' && (
-      <div>
-        <Typography align="center" component="p" variant="h3">{t('mirador')}</Typography>
-      </div>
+      {variant === 'wide' && (
+        <div>
+          <Typography align="center" component="p" variant="h3">
+            {t('mirador')}
+          </Typography>
+        </div>
       )}
       <Typography align="center">
-        <IconButton
-          component="a"
-          href="https://projectmirador.org"
-          target="_blank"
-          rel="noopener"
-          size="large"
-        >
+        <IconButton component="a" href="https://projectmirador.org" target="_blank" rel="noopener" size="large">
           <MiradorIcon aria-label={t('aboutMirador')} titleAccess={t('aboutMirador')} fontSize="large" />
         </IconButton>
       </Typography>

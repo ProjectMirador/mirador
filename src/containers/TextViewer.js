@@ -5,12 +5,10 @@ import { getConfig, getVisibleCanvasTextResources } from '../state/selectors';
 import { TextViewer } from '../components/TextViewer';
 
 /** */
-const mapStateToProps = (state, { windowId }) => (
-  {
-    textOptions: getConfig(state).textOptions,
-    textResources: getVisibleCanvasTextResources(state, { windowId }) || [],
-  }
-);
+const mapStateToProps = (state, { windowId }) => ({
+  textOptions: getConfig(state).textOptions,
+  textResources: getVisibleCanvasTextResources(state, { windowId }) || [],
+});
 
 const enhance = compose(
   connect(mapStateToProps, null),

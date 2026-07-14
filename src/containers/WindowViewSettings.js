@@ -17,12 +17,10 @@ const mapDispatchToProps = { setWindowViewType: actions.setWindowViewType };
  * @memberof WindowViewer
  * @private
  */
-const mapStateToProps = (state, { windowId }) => (
-  {
-    viewTypes: getAllowedWindowViewTypes(state, { windowId }),
-    windowViewType: getWindowViewType(state, { windowId }),
-  }
-);
+const mapStateToProps = (state, { windowId }) => ({
+  viewTypes: getAllowedWindowViewTypes(state, { windowId }),
+  windowViewType: getWindowViewType(state, { windowId }),
+});
 
 const enhance = compose(
   connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true }),

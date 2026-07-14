@@ -4,10 +4,15 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { ThumbnailNavigation } from '../components/ThumbnailNavigation';
 import {
-  getCompanionWindow, getWindow,
-  getNextCanvasGrouping, getPreviousCanvasGrouping,
-  getCanvasGroupings, getCanvasIndex, getWindowViewType,
-  getSequenceViewingDirection, getConfig,
+  getCompanionWindow,
+  getWindow,
+  getNextCanvasGrouping,
+  getPreviousCanvasGrouping,
+  getCanvasGroupings,
+  getCanvasIndex,
+  getWindowViewType,
+  getSequenceViewingDirection,
+  getConfig,
 } from '../state/selectors';
 
 /**
@@ -38,9 +43,6 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   setPreviousCanvas: (...args) => dispatch(actions.setPreviousCanvas(windowId)),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('ThumbnailNavigation'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('ThumbnailNavigation'));
 
 export default enhance(ThumbnailNavigation);

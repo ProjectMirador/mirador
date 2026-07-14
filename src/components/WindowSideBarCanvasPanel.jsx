@@ -56,21 +56,9 @@ export function WindowSideBarCanvasPanel({
   let listComponent;
 
   if (variant === 'tableOfContents') {
-    listComponent = (
-      <SidebarIndexTableOfContents
-        id={id}
-        containerRef={containerRef}
-        windowId={windowId}
-      />
-    );
+    listComponent = <SidebarIndexTableOfContents id={id} containerRef={containerRef} windowId={windowId} />;
   } else {
-    listComponent = (
-      <SidebarIndexList
-        id={id}
-        containerRef={containerRef}
-        windowId={windowId}
-      />
-    );
+    listComponent = <SidebarIndexList id={id} containerRef={containerRef} windowId={windowId} />;
   }
 
   return (
@@ -79,61 +67,79 @@ export function WindowSideBarCanvasPanel({
       id={id}
       windowId={windowId}
       ref={containerRef}
-      titleControls={(
+      titleControls={
         <>
-          {
-            sequences && sequences.length > 1 && (
-              <FormControl>
-                <Select
-                  MenuProps={{
-                    anchorOrigin: {
-                      horizontal: 'left',
-                      vertical: 'bottom',
+          {sequences && sequences.length > 1 && (
+            <FormControl>
+              <Select
+                MenuProps={{
+                  anchorOrigin: {
+                    horizontal: 'left',
+                    vertical: 'bottom',
+                  },
+                }}
+                displayEmpty
+                value={sequenceId}
+                onChange={handleSequenceChange}
+                name="sequenceId"
+                sx={{
+                  '&.MuiSelect-select': {
+                    '&:focus': {
+                      backgroundColor: 'background.paper',
                     },
-                  }}
-                  displayEmpty
-                  value={sequenceId}
-                  onChange={handleSequenceChange}
-                  name="sequenceId"
-                  sx={{
-                    '&.MuiSelect-select': {
-                      '&:focus': {
-                        backgroundColor: 'background.paper',
-                      },
-                    },
-                    backgroundColor: 'background.paper',
-                  }}
-                  data-testid="sequence-select"
-                >
-                  { sequences.map((s, i) => <MenuItem value={s.id} key={s.id}><Typography variant="body2"><IIIFResourceLabel resource={s} /></Typography></MenuItem>) }
-                </Select>
-              </FormControl>
-            )
-          }
+                  },
+                  backgroundColor: 'background.paper',
+                }}
+                data-testid="sequence-select"
+              >
+                {sequences.map((s, i) => (
+                  <MenuItem value={s.id} key={s.id}>
+                    <Typography variant="body2">
+                      <IIIFResourceLabel resource={s} />
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
           <StyledBreak />
-          <Tabs
-            value={variant}
-            onChange={handleVariantChange}
-            variant="fullWidth"
-            indicatorColor="primary"
-            textColor="primary"
-          >
+          <Tabs value={variant} onChange={handleVariantChange} variant="fullWidth" indicatorColor="primary" textColor="primary">
             {showToc && (
-              <Tooltip title={t('tableOfContentsList')} value="tableOfContents"><Tab sx={{ minWidth: 'auto' }} value="tableOfContents" aria-label={t('tableOfContentsList')} aria-controls={tabPanelId} icon={<TocIcon style={{ transform: 'scale(-1, 1)' }} />} /></Tooltip>
+              <Tooltip title={t('tableOfContentsList')} value="tableOfContents">
+                <Tab
+                  sx={{ minWidth: 'auto' }}
+                  value="tableOfContents"
+                  aria-label={t('tableOfContentsList')}
+                  aria-controls={tabPanelId}
+                  icon={<TocIcon style={{ transform: 'scale(-1, 1)' }} />}
+                />
+              </Tooltip>
             )}
-            <Tooltip title={t('itemList')} value="item"><Tab sx={{ minWidth: 'auto' }} value="item" aria-label={t('itemList')} aria-controls={tabPanelId} icon={<ItemListIcon />} /></Tooltip>
-            <Tooltip title={t('thumbnailList')} value="thumbnail"><Tab sx={{ minWidth: 'auto' }} value="thumbnail" aria-label={t('thumbnailList')} aria-controls={tabPanelId} icon={<ThumbnailListIcon />} /></Tooltip>
+            <Tooltip title={t('itemList')} value="item">
+              <Tab
+                sx={{ minWidth: 'auto' }}
+                value="item"
+                aria-label={t('itemList')}
+                aria-controls={tabPanelId}
+                icon={<ItemListIcon />}
+              />
+            </Tooltip>
+            <Tooltip title={t('thumbnailList')} value="thumbnail">
+              <Tab
+                sx={{ minWidth: 'auto' }}
+                value="thumbnail"
+                aria-label={t('thumbnailList')}
+                aria-controls={tabPanelId}
+                icon={<ThumbnailListIcon />}
+              />
+            </Tooltip>
           </Tabs>
         </>
-      )}
+      }
     >
       <div id={tabPanelId}>
-        { collection && (
-          <Button
-            fullWidth
-            onClick={showMultipart}
-            endIcon={<ArrowForwardIcon />}
-          >
+        {collection && (
+          <Button fullWidth onClick={showMultipart} endIcon={<ArrowForwardIcon />}>
             <Typography sx={{ textTransform: 'none' }}>
               <IIIFResourceLabel resource={collection} />
             </Typography>

@@ -14,12 +14,9 @@ import { getManifestLocale } from './manifests';
  * @param {object} state
  * @returns {object}
  */
-export const selectInfoResponses = state => miradorSlice(state).infoResponses;
+export const selectInfoResponses = (state) => miradorSlice(state).infoResponses;
 
-export const getCanvases = createSelector(
-  [getSequence],
-  sequence => (sequence && sequence.getCanvases()) || EMPTY_ARRAY,
-);
+export const getCanvases = createSelector([getSequence], (sequence) => (sequence && sequence.getCanvases()) || EMPTY_ARRAY);
 
 /**
  * Return the canvas selected by an id
@@ -28,17 +25,11 @@ export const getCanvases = createSelector(
  * @param {string} props.canvasId
  * @returns {object}
  */
-export const getCanvas = createSelector(
-  [
-    getSequence,
-    (state, { canvasId }) => canvasId,
-  ],
-  (sequence, canvasId) => {
-    if (!sequence || !canvasId) return undefined;
+export const getCanvas = createSelector([getSequence, (state, { canvasId }) => canvasId], (sequence, canvasId) => {
+  if (!sequence || !canvasId) return undefined;
 
-    return sequence.getCanvasById(canvasId);
-  },
-);
+  return sequence.getCanvasById(canvasId);
+});
 
 /**
  * Returns the current canvas.
@@ -47,19 +38,13 @@ export const getCanvas = createSelector(
  * @param {string} props.windowId
  * @returns {object|undefined}
  */
-export const getCurrentCanvas = createSelector(
-  [
-    getSequence,
-    getWindow,
-  ],
-  (sequence, window) => {
-    if (!sequence || !window) return undefined;
+export const getCurrentCanvas = createSelector([getSequence, getWindow], (sequence, window) => {
+  if (!sequence || !window) return undefined;
 
-    if (!window.canvasId) return sequence.getCanvasByIndex(0);
+  if (!window.canvasId) return sequence.getCanvasByIndex(0);
 
-    return sequence.getCanvasById(window.canvasId);
-  },
-);
+  return sequence.getCanvasById(window.canvasId);
+});
 
 /**
  * Returns the visible canvas ids.
@@ -70,7 +55,7 @@ export const getCurrentCanvas = createSelector(
  */
 export const getVisibleCanvasIds = createSelector(
   [getWindow],
-  window => (window && (window.visibleCanvases || (window.canvasId && [window.canvasId]))) || EMPTY_ARRAY,
+  (window) => (window && (window.visibleCanvases || (window.canvasId && [window.canvasId]))) || EMPTY_ARRAY,
 );
 
 /**
@@ -80,9 +65,8 @@ export const getVisibleCanvasIds = createSelector(
  * @param {string} props.windowId
  * @returns {Array}
  */
-export const getVisibleCanvases = createSelector(
-  [getVisibleCanvasIds, getCanvases],
-  (canvasIds, canvases) => (canvases || []).filter(c => canvasIds.includes(c.id)),
+export const getVisibleCanvases = createSelector([getVisibleCanvasIds, getCanvases], (canvasIds, canvases) =>
+  (canvases || []).filter((c) => canvasIds.includes(c.id)),
 );
 
 /**
@@ -95,15 +79,8 @@ export const getVisibleCanvases = createSelector(
  * @returns {Array}
  */
 export const getCanvasGroupings = createSelector(
-  [
-    getCanvases,
-    getWindowViewType,
-  ],
-  (canvases, view) => (canvases
-      && new CanvasGroupings(
-        canvases,
-        view,
-      ).groupings()),
+  [getCanvases, getWindowViewType],
+  (canvases, view) => canvases && new CanvasGroupings(canvases, view).groupings(),
 );
 
 /**
@@ -117,12 +94,8 @@ export const getCanvasGroupings = createSelector(
  * @returns {Array}
  */
 export const getCanvasGrouping = createSelector(
-  [
-    getCanvasGroupings,
-    (state, { canvasId }) => canvasId,
-  ],
-  (groupings, canvasId) => (groupings
-      && groupings.find(group => group.some(c => c.id === canvasId))) || EMPTY_ARRAY,
+  [getCanvasGroupings, (state, { canvasId }) => canvasId],
+  (groupings, canvasId) => (groupings && groupings.find((group) => group.some((c) => c.id === canvasId))) || EMPTY_ARRAY,
 );
 
 /**
@@ -134,21 +107,15 @@ export const getCanvasGrouping = createSelector(
  * @param {string} props.windowId
  * @returns {Array}
  */
-export const getNextCanvasGrouping = createSelector(
-  [
-    getCanvasGroupings,
-    getCurrentCanvas,
-  ],
-  (groupings, canvas, view) => {
-    if (!groupings || !canvas) return undefined;
-    const currentGroupIndex = groupings.findIndex(group => group.some(c => c.id === canvas.id));
+export const getNextCanvasGrouping = createSelector([getCanvasGroupings, getCurrentCanvas], (groupings, canvas, view) => {
+  if (!groupings || !canvas) return undefined;
+  const currentGroupIndex = groupings.findIndex((group) => group.some((c) => c.id === canvas.id));
 
-    if (currentGroupIndex < 0 || currentGroupIndex + 1 >= groupings.length) return undefined;
-    const newGroup = groupings[currentGroupIndex + 1];
+  if (currentGroupIndex < 0 || currentGroupIndex + 1 >= groupings.length) return undefined;
+  const newGroup = groupings[currentGroupIndex + 1];
 
-    return newGroup;
-  },
-);
+  return newGroup;
+});
 
 /**
  * Return the previous canvas(es) for a window.
@@ -159,22 +126,16 @@ export const getNextCanvasGrouping = createSelector(
  * @param {string} props.windowId
  * @returns {Array}
  */
-export const getPreviousCanvasGrouping = createSelector(
-  [
-    getCanvasGroupings,
-    getCurrentCanvas,
-  ],
-  (groupings, canvas, view) => {
-    if (!groupings || !canvas) return undefined;
+export const getPreviousCanvasGrouping = createSelector([getCanvasGroupings, getCurrentCanvas], (groupings, canvas, view) => {
+  if (!groupings || !canvas) return undefined;
 
-    const currentGroupIndex = groupings.findIndex(group => group.some(c => c.id === canvas.id));
+  const currentGroupIndex = groupings.findIndex((group) => group.some((c) => c.id === canvas.id));
 
-    if (currentGroupIndex < 1) return undefined;
-    const newGroup = groupings[currentGroupIndex - 1];
+  if (currentGroupIndex < 1) return undefined;
+  const newGroup = groupings[currentGroupIndex - 1];
 
-    return newGroup;
-  },
-);
+  return newGroup;
+});
 
 /**
  * Return canvas label, or alternatively return the given index + 1 to be displayed.
@@ -186,11 +147,7 @@ export const getPreviousCanvasGrouping = createSelector(
  */
 export const getCanvasLabel = createSelector(
   [getCanvas, getManifestLocale],
-  (canvas, locale) => (canvas && (
-    canvas.getLabel().length > 0
-      ? canvas.getLabel().getValue(locale)
-      : String(canvas.index + 1)
-  )),
+  (canvas, locale) => canvas && (canvas.getLabel().length > 0 ? canvas.getLabel().getValue(locale) : String(canvas.index + 1)),
 );
 
 /**
@@ -198,10 +155,7 @@ export const getCanvasLabel = createSelector(
  * @param {object} canvas
  * @param {string} companionWindowId
  */
-export const getCanvasDescription = createSelector(
-  [getCanvas],
-  canvas => canvas && canvas.getProperty('description'),
-);
+export const getCanvasDescription = createSelector([getCanvas], (canvas) => canvas && canvas.getProperty('description'));
 
 /**
  * Return visible non tiled canvas resources.
@@ -210,13 +164,11 @@ export const getCanvasDescription = createSelector(
  * @returns {Array}
  */
 export const getVisibleCanvasNonTiledResources = createSelector(
-  [
-    getVisibleCanvases,
-    getMiradorCanvasWrapper,
-  ],
-  (canvases, getMiradorCanvas) => flatten(canvases
-    .map(canvas => getMiradorCanvas(canvas).imageResources))
-    .filter(resource => !getIiifResourceImageService(resource)),
+  [getVisibleCanvases, getMiradorCanvasWrapper],
+  (canvases, getMiradorCanvas) =>
+    flatten(canvases.map((canvas) => getMiradorCanvas(canvas).imageResources)).filter(
+      (resource) => !getIiifResourceImageService(resource),
+    ),
 );
 
 /**
@@ -226,12 +178,8 @@ export const getVisibleCanvasNonTiledResources = createSelector(
  * @return {Array}
  */
 export const getVisibleCanvasTextResources = createSelector(
-  [
-    getVisibleCanvases,
-    getMiradorCanvasWrapper,
-  ],
-  (canvases, getMiradorCanvas) => flatten(canvases
-    .map(canvas => getMiradorCanvas(canvas).textResources)),
+  [getVisibleCanvases, getMiradorCanvasWrapper],
+  (canvases, getMiradorCanvas) => flatten(canvases.map((canvas) => getMiradorCanvas(canvas).textResources)),
 );
 
 /**
@@ -241,12 +189,8 @@ export const getVisibleCanvasTextResources = createSelector(
  * @return {Array}
  */
 export const getVisibleCanvasVideoResources = createSelector(
-  [
-    getVisibleCanvases,
-    getMiradorCanvasWrapper,
-  ],
-  (canvases, getMiradorCanvas) => flatten(canvases
-    .map(canvas => getMiradorCanvas(canvas).videoResources)),
+  [getVisibleCanvases, getMiradorCanvasWrapper],
+  (canvases, getMiradorCanvas) => flatten(canvases.map((canvas) => getMiradorCanvas(canvas).videoResources)),
 );
 
 /**
@@ -256,16 +200,16 @@ export const getVisibleCanvasVideoResources = createSelector(
  * @return {Array}
  */
 export const getVisibleCanvasCaptions = createSelector(
-  [
-    getVisibleCanvases,
-    getMiradorCanvasWrapper,
-  ],
-  (canvases, getMiradorCanvas) => flatten(canvases.map(canvas => {
-    const miradorCanvas = getMiradorCanvas(canvas);
-    // prefer v3, fallback to v2, which can also be an empty array if no captions exist.
-    if (miradorCanvas.v3VttContent.length) return miradorCanvas.v3VttContent;
-    return miradorCanvas.v2VttContent;
-  })),
+  [getVisibleCanvases, getMiradorCanvasWrapper],
+  (canvases, getMiradorCanvas) =>
+    flatten(
+      canvases.map((canvas) => {
+        const miradorCanvas = getMiradorCanvas(canvas);
+        // prefer v3, fallback to v2, which can also be an empty array if no captions exist.
+        if (miradorCanvas.v3VttContent.length) return miradorCanvas.v3VttContent;
+        return miradorCanvas.v2VttContent;
+      }),
+    ),
 );
 
 /**
@@ -275,12 +219,8 @@ export const getVisibleCanvasCaptions = createSelector(
  * @return {Array}
  */
 export const getVisibleCanvasAudioResources = createSelector(
-  [
-    getVisibleCanvases,
-    getMiradorCanvasWrapper,
-  ],
-  (canvases, getMiradorCanvas) => flatten(canvases
-    .map(canvas => getMiradorCanvas(canvas).audioResources)),
+  [getVisibleCanvases, getMiradorCanvasWrapper],
+  (canvases, getMiradorCanvas) => flatten(canvases.map((canvas) => getMiradorCanvas(canvas).audioResources)),
 );
 
 /**
@@ -293,12 +233,7 @@ export const getVisibleCanvasAudioResources = createSelector(
  * @returns {object|undefined}
  */
 export const selectInfoResponse = createSelector(
-  [
-    (state, { infoId }) => infoId,
-    getCanvas,
-    getMiradorCanvasWrapper,
-    selectInfoResponses,
-  ],
+  [(state, { infoId }) => infoId, getCanvas, getMiradorCanvasWrapper, selectInfoResponses],
   (infoId, canvas, getMiradorCanvas, infoResponses) => {
     let iiifServiceId = infoId;
 
@@ -308,8 +243,8 @@ export const selectInfoResponse = createSelector(
       iiifServiceId = image && getIiifResourceImageService(image)?.id;
     }
 
-    return iiifServiceId && infoResponses[iiifServiceId]
-    && !infoResponses[iiifServiceId].isFetching
-    && infoResponses[iiifServiceId];
+    return (
+      iiifServiceId && infoResponses[iiifServiceId] && !infoResponses[iiifServiceId].isFetching && infoResponses[iiifServiceId]
+    );
   },
 );

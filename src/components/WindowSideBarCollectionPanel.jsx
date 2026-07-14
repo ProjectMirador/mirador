@@ -15,9 +15,7 @@ import IIIFThumbnail from '../containers/IIIFThumbnail';
 import { IIIFResourceLabel } from './IIIFResourceLabel';
 
 /** */
-function Item({
-  manifest, canvasNavigation, variant, ...otherProps
-}) {
+function Item({ manifest, canvasNavigation, variant, ...otherProps }) {
   return (
     <MenuItem
       alignItems="flex-start"
@@ -30,16 +28,14 @@ function Item({
       }}
       {...otherProps}
     >
-      { variant === 'thumbnail' && (
+      {variant === 'thumbnail' && (
         <ListItemIcon>
-          <IIIFThumbnail
-            resource={manifest}
-            maxHeight={canvasNavigation.height}
-            maxWidth={canvasNavigation.width}
-          />
+          <IIIFThumbnail resource={manifest} maxHeight={canvasNavigation.height} maxWidth={canvasNavigation.width} />
         </ListItemIcon>
       )}
-      <ListItemText><IIIFResourceLabel resource={manifest} /></ListItemText>
+      <ListItemText>
+        <IIIFResourceLabel resource={manifest} />
+      </ListItemText>
     </MenuItem>
   );
 }
@@ -84,15 +80,11 @@ export function WindowSideBarCollectionPanel({
       title={t(isMultipart ? 'multipartCollection' : 'collection')}
       windowId={windowId}
       id={id}
-      titleControls={(
+      titleControls={
         <>
-          { parentCollection && (
+          {parentCollection && (
             <List>
-              <ListItemButton
-                onClick={
-                  () => updateCompanionWindow({ collectionPath: collectionPath.slice(0, -1) })
-                }
-              >
+              <ListItemButton onClick={() => updateCompanionWindow({ collectionPath: collectionPath.slice(0, -1) })}>
                 <ListItemIcon>
                   <ArrowUpwardIcon />
                 </ListItemIcon>
@@ -103,14 +95,14 @@ export function WindowSideBarCollectionPanel({
             </List>
           )}
           <Typography variant="h6">
-            { collection && <IIIFResourceLabel resource={collection} />}
-            { isFetching && <Skeleton variant="text" />}
+            {collection && <IIIFResourceLabel resource={collection} />}
+            {isFetching && <Skeleton variant="text" />}
           </Typography>
         </>
-      )}
+      }
     >
       <MenuList>
-        { isFetching && (
+        {isFetching && (
           <MenuItem>
             <ListItemText>
               <Skeleton variant="text" />
@@ -119,8 +111,8 @@ export function WindowSideBarCollectionPanel({
             </ListItemText>
           </MenuItem>
         )}
-        {
-          collection && collection.getCollections().map((manifest) => {
+        {collection &&
+          collection.getCollections().map((manifest) => {
             /** select the new manifest and go back to the normal index */
             const onClick = () => {
               // close collection
@@ -137,10 +129,9 @@ export function WindowSideBarCollectionPanel({
                 selected={manifestId === manifest.id}
               />
             );
-          })
-        }
-        {
-          collection && collection.getManifests().map((manifest) => {
+          })}
+        {collection &&
+          collection.getManifests().map((manifest) => {
             /** select the new manifest and go back to the normal index */
             const onClick = () => {
               // select new manifest
@@ -159,8 +150,7 @@ export function WindowSideBarCollectionPanel({
                 selected={manifestId === manifest.id}
               />
             );
-          })
-        }
+          })}
       </MenuList>
     </CompanionWindow>
   );

@@ -8,7 +8,7 @@ import { FullScreenButton } from '../components/FullScreenButton';
  * @memberof FullScreenButton
  * @private
  */
-const mapStateToProps = _state => ({});
+const mapStateToProps = (_state) => ({});
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -17,9 +17,6 @@ const mapStateToProps = _state => ({});
  */
 const mapDispatchToProps = {};
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('FullScreenButton'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('FullScreenButton'));
 
 export default enhance(FullScreenButton);

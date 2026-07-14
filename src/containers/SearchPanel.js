@@ -14,15 +14,10 @@ const mapStateToProps = (state, { id, windowId }) => ({
 
 /** */
 const mapDispatchToProps = (dispatch, props) => ({
-  fetchSearch: (searchId, query) => dispatch(
-    actions.fetchSearch(props.windowId, props.id, searchId, query),
-  ),
+  fetchSearch: (searchId, query) => dispatch(actions.fetchSearch(props.windowId, props.id, searchId, query)),
   removeSearch: () => dispatch(actions.removeSearch(props.windowId, props.id)),
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withPlugins('SearchPanel'),
-);
+const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('SearchPanel'));
 
 export default enhance(SearchPanel);

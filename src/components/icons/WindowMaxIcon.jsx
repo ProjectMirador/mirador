@@ -2,7 +2,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 
 /**
  * WindowMaxIcon ~
-*/
+ */
 export default function WindowMaxIcon(props) {
   return (
     <SvgIcon {...props}>

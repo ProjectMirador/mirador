@@ -21,7 +21,7 @@ export function TextViewer({ textOptions = {}, textResources = [], windowId }) {
   return (
     <StyledContainer>
       <StyledText {...textOptions}>
-        {textResources.map(text => (
+        {textResources.map((text) => (
           <source key={text.id} src={text.id} type={text.getFormat()} />
         ))}
         <WindowCanvasNavigationControls windowId={windowId} />

@@ -10,32 +10,17 @@ import { PluginHook } from './PluginHook';
 /**
  * CanvasInfo
  */
-export function CanvasInfo({
-  canvasDescription = null,
-  canvasLabel = null,
-  canvasMetadata = [],
-  index = 1,
-  totalSize = 1,
-}) {
+export function CanvasInfo({ canvasDescription = null, canvasLabel = null, canvasMetadata = [], index = 1, totalSize = 1 }) {
   const { t } = useTranslation();
   const id = useId();
   const titleId = useId();
-  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
+  // eslint-disable-next-line prefer-rest-params
+  const pluginProps = arguments[0];
 
   return (
-    <CollapsibleSection
-      id={id}
-      label={t('currentItem', { context: `${index + 1}/${totalSize}` })}
-    >
+    <CollapsibleSection id={id} label={t('currentItem', { context: `${index + 1}/${totalSize}` })}>
       {canvasLabel && (
-        <Typography
-          aria-labelledby={
-            `${id} ${titleId}`
-          }
-          id={titleId}
-          variant="h4"
-          component="h5"
-        >
+        <Typography aria-labelledby={`${id} ${titleId}`} id={titleId} variant="h4" component="h5">
           {canvasLabel}
         </Typography>
       )}
@@ -46,9 +31,7 @@ export function CanvasInfo({
         </Typography>
       )}
 
-      {canvasMetadata && canvasMetadata.length > 0 && (
-        <LabelValueMetadata labelValuePairs={canvasMetadata} />
-      )}
+      {canvasMetadata && canvasMetadata.length > 0 && <LabelValueMetadata labelValuePairs={canvasMetadata} />}
       <PluginHook targetName="CanvasInfo" {...pluginProps} />
     </CollapsibleSection>
   );

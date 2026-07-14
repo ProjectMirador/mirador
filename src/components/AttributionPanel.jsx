@@ -22,55 +22,41 @@ const StyledPlaceholder = styled(Skeleton)(({ theme }) => ({
 /**
  * WindowSideBarInfoPanel
  */
-export function AttributionPanel({
-  manifestLogo = null,
-  requiredStatement = null,
-  rights = null,
-  windowId,
-  id,
-}) {
+export function AttributionPanel({ manifestLogo = null, requiredStatement = null, rights = null, windowId, id }) {
   const { t } = useTranslation();
 
-  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
+  // eslint-disable-next-line prefer-rest-params
+  const pluginProps = arguments[0];
 
   return (
-    <CompanionWindow
-      title={t('attributionTitle')}
-      paperClassName={ns('attribution-panel')}
-      windowId={windowId}
-      id={id}
-    >
+    <CompanionWindow title={t('attributionTitle')} paperClassName={ns('attribution-panel')} windowId={windowId} id={id}>
       <CompanionWindowSection>
-        { requiredStatement && (
-        <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />
+        {requiredStatement && <LabelValueMetadata labelValuePairs={requiredStatement} defaultLabel={t('attribution')} />}
+        {rights && rights.length > 0 && (
+          <dl className={ns('label-value-metadata')}>
+            <Typography variant="subtitle2" component="dt">
+              {t('rights')}
+            </Typography>
+            {rights.map((v) => (
+              <Typography variant="body1" component="dd" key={v.toString()}>
+                <Link target="_blank" rel="noopener noreferrer" href={v}>
+                  {v}
+                </Link>
+              </Typography>
+            ))}
+          </dl>
         )}
-        {
-            rights && rights.length > 0 && (
-              <dl className={ns('label-value-metadata')}>
-                <Typography variant="subtitle2" component="dt">{t('rights')}</Typography>
-                { rights.map(v => (
-                  <Typography variant="body1" component="dd" key={v.toString()}>
-                    <Link target="_blank" rel="noopener noreferrer" href={v}>
-                      {v}
-                    </Link>
-                  </Typography>
-                )) }
-              </dl>
-            )
-          }
       </CompanionWindowSection>
 
-      { manifestLogo && (
-      <CompanionWindowSection>
-        <StyledLogo
-          src={[manifestLogo]}
-          alt=""
-          role="presentation"
-          unloader={
-            <StyledPlaceholder variant="rectangular" height={60} width={60} />
-              }
-        />
-      </CompanionWindowSection>
+      {manifestLogo && (
+        <CompanionWindowSection>
+          <StyledLogo
+            src={[manifestLogo]}
+            alt=""
+            role="presentation"
+            unloader={<StyledPlaceholder variant="rectangular" height={60} width={60} />}
+          />
+        </CompanionWindowSection>
       )}
 
       <PluginHook targetName="AttributionPanel" {...pluginProps} />
@@ -81,10 +67,12 @@ export function AttributionPanel({
 AttributionPanel.propTypes = {
   id: PropTypes.string.isRequired,
   manifestLogo: PropTypes.string,
-  requiredStatement: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string,
-  })),
+  requiredStatement: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ),
   rights: PropTypes.arrayOf(PropTypes.string),
   windowId: PropTypes.string.isRequired,
 };

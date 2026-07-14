@@ -2,7 +2,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 
 /**
  * BookViewIcon ~
-*/
+ */
 export default function BookViewIcon(props) {
   return (
     <SvgIcon {...props}>

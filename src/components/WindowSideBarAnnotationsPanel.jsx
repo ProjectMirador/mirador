@@ -10,10 +10,8 @@ import ns from '../config/css-ns';
 
 /**
  * WindowSideBarAnnotationsPanel ~
-*/
-export function WindowSideBarAnnotationsPanel({
-  annotationCount, canvasIds = [], windowId, id,
-}) {
+ */
+export function WindowSideBarAnnotationsPanel({ annotationCount, canvasIds = [], windowId, id }) {
   const { t } = useTranslation();
   const containerRef = createRef();
   return (
@@ -26,7 +24,9 @@ export function WindowSideBarAnnotationsPanel({
       titleControls={<AnnotationSettings windowId={windowId} />}
     >
       <CompanionWindowSection>
-        <Typography component="p" variant="subtitle2">{t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}</Typography>
+        <Typography component="p" variant="subtitle2">
+          {t('showingNumAnnotations', { count: annotationCount, number: annotationCount })}
+        </Typography>
       </CompanionWindowSection>
 
       {canvasIds.map((canvasId, index) => (

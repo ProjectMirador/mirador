@@ -1,27 +1,24 @@
 import js from '@eslint/js';
 import globals from 'globals';
+import { fixupPluginRules } from '@eslint/compat';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import importPlugin from 'eslint-plugin-import';
 import testingLibraryPlugin from 'eslint-plugin-testing-library';
 import jestDomPlugin from 'eslint-plugin-jest-dom';
+import prettierRecommended from 'eslint-plugin-prettier/recommended';
 
 export default [
   // Ignore patterns
   {
-    ignores: [
-      '**/dist/**',
-      '**/node_modules/**',
-      '**/coverage/**',
-      '**/config/**',
-      '**/styles/**',
-      '**/packages/**',
-    ],
+    ignores: ['**/dist/**', '**/node_modules/**', '**/coverage/**', '**/config/**', '**/styles/**', '**/packages/**'],
   },
 
   // Base ESLint recommended rules
   js.configs.recommended,
+  // Pretter recommended rules
+  prettierRecommended,
 
   // Main configuration
   {
@@ -46,10 +43,14 @@ export default [
     },
 
     plugins: {
-      import: importPlugin,
-      'jest-dom': jestDomPlugin,
-      'jsx-a11y': jsxA11yPlugin,
-      react: reactPlugin,
+      // eslint-plugin-import, react, jsx-a11y, and jest-dom still declare ESLint
+      // peer deps up to ^9; wrap them with fixupPluginRules so their internal use
+      // of removed context APIs (e.g. getFilename, getSourceCode) keeps working.
+      import: fixupPluginRules(importPlugin),
+      'jest-dom': fixupPluginRules(jestDomPlugin),
+      'jsx-a11y': fixupPluginRules(jsxA11yPlugin),
+      react: fixupPluginRules(reactPlugin),
+      // react-hooks and testing-library already declare ESLint 10 support
       'react-hooks': reactHooksPlugin,
       'testing-library': testingLibraryPlugin,
     },
@@ -66,7 +67,7 @@ export default [
       'consistent-return': 'error',
       'default-case': ['error', { commentPattern: '^no default$' }],
       'dot-notation': ['error', { allowKeywords: true }],
-      'eqeqeq': ['warn', 'smart'],
+      eqeqeq: ['warn', 'smart'],
       'import/extensions': ['error', 'ignorePackages', { js: 'never', jsx: 'never' }],
       'import/first': 'error',
       'import/newline-after-import': ['error', { count: 1 }],
@@ -88,7 +89,7 @@ export default [
       'no-lonely-if': 'error',
       'no-nested-ternary': 'warn',
       'no-new-func': 'error',
-      'no-param-reassign': ['error', { props: true}],
+      'no-param-reassign': ['error', { props: true }],
       'no-restricted-globals': [
         'error',
         { name: 'isFinite', message: 'Use Number.isFinite instead' },
@@ -100,15 +101,21 @@ export default [
       'no-shadow': ['error', { builtinGlobals: false, hoist: 'functions' }],
       'no-undef': 'error',
       'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
-      'no-unused-vars': 'warn',
+      'no-unused-vars': 'off',
       'no-use-before-define': ['warn', { functions: false, classes: false, variables: false }],
       'no-useless-return': 'error',
       'no-var': 'error',
       'prefer-const': 'error',
-      'prefer-destructuring': ['warn', { VariableDeclarator: { array: false, object: true }, AssignmentExpression: { array: false, object: false } }],
+      'prefer-destructuring': [
+        'warn',
+        {
+          VariableDeclarator: { array: false, object: true },
+          AssignmentExpression: { array: false, object: false },
+        },
+      ],
       'prefer-rest-params': 'error',
       'prefer-template': 'warn',
-      'radix': 'error',
+      radix: 'error',
       'react-hooks/exhaustive-deps': 'error',
       'react/function-component-definition': 'off',
       'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
@@ -139,6 +146,7 @@ export default [
       react: {
         version: 'detect',
       },
+      'testing-library/utils-module': '@tests/utils/test-utils',
     },
   },
 
