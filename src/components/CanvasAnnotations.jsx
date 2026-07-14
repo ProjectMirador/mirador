@@ -30,6 +30,7 @@ export function CanvasAnnotations({
   const { t } = useTranslation();
   const handleClick = useCallback(
     (_event, annotation) => {
+      if (window.getSelection()?.toString()) return;
       if (selectedAnnotationId === annotation.id) {
         deselectAnnotation(windowId, annotation.id);
       } else {
@@ -75,6 +76,7 @@ export function CanvasAnnotations({
                   backgroundColor: 'action.hover',
                 },
                 backgroundColor: hoveredAnnotationIds.includes(annotation.id) ? 'action.hover' : '',
+                userSelect: 'text',
               }}
               key={annotation.id}
               annotationid={annotation.id}
