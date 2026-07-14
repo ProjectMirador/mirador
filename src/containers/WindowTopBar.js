@@ -34,6 +34,9 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   toggleWindowSideBar: () => dispatch(actions.toggleWindowSideBar(windowId)),
 });
 
-const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('WindowTopBar'));
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('WindowTopBar'),
+);
 
 export default enhance(WindowTopBar);

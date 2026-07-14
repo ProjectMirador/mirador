@@ -1,7 +1,9 @@
 import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getLocale } from '../state/selectors';
+import {
+  getLocale,
+} from '../state/selectors';
 import LocaleContext from '../contexts/LocaleContext';
 
 /**
@@ -9,7 +11,7 @@ import LocaleContext from '../contexts/LocaleContext';
  */
 export function IIIFResourceLabel({ fallback, resource }) {
   const contextLocale = useContext(LocaleContext);
-  const fallbackLocale = useSelector((state) => getLocale(state, {}));
+  const fallbackLocale = useSelector(state => getLocale(state, {}));
 
   if (!resource) return fallback;
 

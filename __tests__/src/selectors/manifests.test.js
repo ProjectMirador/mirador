@@ -80,15 +80,14 @@ describe('getManifestThumbnail()', () => {
   it('should return manifest-level thumbnail', () => {
     const state = { manifests: { x: { json: manifestFixture001 } } };
     const received = getManifestThumbnail(state, { manifestId: 'x' });
-    expect(received).toEqual(
-      'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d/full/,120/0/default.jpg',
-    );
+    expect(received).toEqual('https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d/full/,120/0/default.jpg');
   });
 
   it('returns the first canvas thumbnail id', () => {
     const manifest = {
       '@context': 'http://iiif.io/api/presentation/2/context.json',
-      '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+      '@id':
+       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
       '@type': 'sc:Manifest',
       sequences: [
         {
@@ -323,12 +322,10 @@ describe('getDestructuredMetadata', () => {
   it('should return the first value of label/value attributes for each object in the array ', () => {
     const iiifResource = Utils.parseManifest(manifestFixture002);
     const received = getDestructuredMetadata(iiifResource);
-    const expected = [
-      {
-        label: 'date',
-        values: ['some date'],
-      },
-    ];
+    const expected = [{
+      label: 'date',
+      values: ['some date'],
+    }];
 
     expect(received).toEqual(expected);
   });
@@ -345,12 +342,10 @@ describe('getManifestMetadata', () => {
   it('should return the first value of label/value attributes for each object in the array ', () => {
     const state = { manifests: { x: { json: manifestFixture002 } } };
     const received = getManifestMetadata(state, { manifestId: 'x' });
-    const expected = [
-      {
-        label: 'date',
-        values: ['some date'],
-      },
-    ];
+    const expected = [{
+      label: 'date',
+      values: ['some date'],
+    }];
 
     expect(received).toEqual(expected);
   });
@@ -375,7 +370,8 @@ describe('getMetadataLocales', () => {
   it('gets the locales preseent in the IIIF v2 manifest metadata', () => {
     const manifest = {
       '@context': 'http://iiif.io/api/presentation/2/context.json',
-      '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+      '@id':
+       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
       '@type': 'sc:Manifest',
       metadata: [
         {
@@ -388,16 +384,8 @@ describe('getMetadataLocales', () => {
         {
           label: 'Digitization Project',
           value: [
-            {
-              '@language': 'en-value',
-              '@value':
-                'Manuscripts from German-Speaking Lands - A Polonsky Foundation Digitization Project - A collaboration between the Bodleian Libraries and the Herzog August Bibliothek.',
-            },
-            {
-              '@language': 'de-value',
-              '@value':
-                'Handschriften aus dem deutschen Sprachraum. Ein Digitalisierungsprojekt der Polonsky Stiftung. Eine Zusammenarbeit zwischen der Universit\u00e4t Oxford und der Herzog August Bibliothek Wolfenb\u00fcttel',
-            },
+            { '@language': 'en-value', '@value': 'Manuscripts from German-Speaking Lands - A Polonsky Foundation Digitization Project - A collaboration between the Bodleian Libraries and the Herzog August Bibliothek.' },
+            { '@language': 'de-value', '@value': 'Handschriften aus dem deutschen Sprachraum. Ein Digitalisierungsprojekt der Polonsky Stiftung. Eine Zusammenarbeit zwischen der Universit\u00e4t Oxford und der Herzog August Bibliothek Wolfenb\u00fcttel' },
           ],
         },
         {
@@ -417,27 +405,45 @@ describe('getMetadataLocales', () => {
       '@context': 'http://iiif.io/api/presentation/3/context.json',
       id: 'https://iiif.io/api/cookbook/recipe/0006-text-language/manifest.json',
       label: {
-        en: ["Whistler's Mother"],
-        fr: ['La Mère de Whistler'],
+        en: [
+          "Whistler's Mother",
+        ],
+        fr: [
+          'La Mère de Whistler',
+        ],
       },
       metadata: [
         {
           label: {
-            en: ['Creator'],
-            fr: ['Auteur'],
+            en: [
+              'Creator',
+            ],
+            fr: [
+              'Auteur',
+            ],
           },
           value: {
-            none: ['Whistler, James Abbott McNeill'],
+            none: [
+              'Whistler, James Abbott McNeill',
+            ],
           },
         },
         {
           label: {
-            en: ['Subject'],
-            fr: ['Sujet'],
+            en: [
+              'Subject',
+            ],
+            fr: [
+              'Sujet',
+            ],
           },
           value: {
-            en: ['McNeill Anna Matilda, mother of Whistler (1804-1881)'],
-            fr: ['McNeill Anna Matilda, mère de Whistler (1804-1881)'],
+            en: [
+              'McNeill Anna Matilda, mother of Whistler (1804-1881)',
+            ],
+            fr: [
+              'McNeill Anna Matilda, mère de Whistler (1804-1881)',
+            ],
           },
         },
       ],
@@ -473,7 +479,8 @@ describe('getRights', () => {
   it('gets the license data for a IIIF v2 manifest', () => {
     const manifest = {
       '@context': 'http://iiif.io/api/presentation/2/context.json',
-      '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+      '@id':
+       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
       '@type': 'sc:Manifest',
       license: 'http://example.com',
     };
@@ -484,7 +491,8 @@ describe('getRights', () => {
   it('gets the rights data for a IIIF v3 manifest', () => {
     const manifest = {
       '@context': 'http://iiif.io/api/presentation/2/context.json',
-      '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+      '@id':
+       'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
       '@type': 'sc:Manifest',
       license: 'http://example.com',
     };
@@ -497,18 +505,14 @@ describe('getRights', () => {
 describe('getManifestSearchService', () => {
   it('gets from the manifest', () => {
     const state = { manifests: { x: { json: manifestFixtureFg165hz3589 } } };
-    expect(getManifestSearchService(state, { manifestId: 'x' }).id).toEqual(
-      'https://contentsearch.stanford.edu/fg165hz3589/search',
-    );
+    expect(getManifestSearchService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/search');
   });
 
   it('supports v1 of the search spec', () => {
     const v1 = structuredClone(manifestFixtureFg165hz3589);
     v1.service[0].profile = 'http://iiif.io/api/search/1/search';
     const state = { manifests: { x: { json: v1 } } };
-    expect(getManifestSearchService(state, { manifestId: 'x' }).id).toEqual(
-      'https://contentsearch.stanford.edu/fg165hz3589/search',
-    );
+    expect(getManifestSearchService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/search');
   });
 
   it('is null if no search service is specified', () => {
@@ -520,9 +524,7 @@ describe('getManifestSearchService', () => {
 describe('getManifestAutocompleteService', () => {
   it('gets from the manifest', () => {
     const state = { manifests: { x: { json: manifestFixtureFg165hz3589 } } };
-    expect(getManifestAutocompleteService(state, { manifestId: 'x' }).id).toEqual(
-      'https://contentsearch.stanford.edu/fg165hz3589/autocomplete',
-    );
+    expect(getManifestAutocompleteService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/autocomplete');
   });
 
   it('supports v1 of the search spec', () => {
@@ -530,9 +532,7 @@ describe('getManifestAutocompleteService', () => {
     v1.service[0].profile = 'http://iiif.io/api/search/1/search';
     v1.service[0].service.profile = 'http://iiif.io/api/search/1/autocomplete';
     const state = { manifests: { x: { json: v1 } } };
-    expect(getManifestAutocompleteService(state, { manifestId: 'x' }).id).toEqual(
-      'https://contentsearch.stanford.edu/fg165hz3589/autocomplete',
-    );
+    expect(getManifestAutocompleteService(state, { manifestId: 'x' }).id).toEqual('https://contentsearch.stanford.edu/fg165hz3589/autocomplete');
   });
 
   it('is null if no search service is specified', () => {

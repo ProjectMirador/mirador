@@ -1,6 +1,10 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { getManifestLogo, getRequiredStatement, getRights } from '../state/selectors';
+import {
+  getManifestLogo,
+  getRequiredStatement,
+  getRights,
+} from '../state/selectors';
 import { withPlugins } from '../extend/withPlugins';
 import { AttributionPanel } from '../components/AttributionPanel';
 
@@ -15,6 +19,9 @@ const mapStateToProps = (state, { id, windowId }) => ({
   rights: getRights(state, { windowId }),
 });
 
-const enhance = compose(connect(mapStateToProps), withPlugins('AttributionPanel'));
+const enhance = compose(
+  connect(mapStateToProps),
+  withPlugins('AttributionPanel'),
+);
 
 export default enhance(AttributionPanel);

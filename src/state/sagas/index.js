@@ -1,4 +1,6 @@
-import { all, call, spawn } from 'redux-saga/effects';
+import {
+  all, call, spawn,
+} from 'redux-saga/effects';
 
 import appSaga from './app';
 import iiifSaga from './iiif';
@@ -21,9 +23,16 @@ function* launchSaga(saga) {
 /** */
 function getRootSaga(pluginSagas = []) {
   return function* rootSaga() {
-    const sagas = [annotationsSaga, appSaga, iiifSaga, windowSaga, authSaga, ...pluginSagas];
+    const sagas = [
+      annotationsSaga,
+      appSaga,
+      iiifSaga,
+      windowSaga,
+      authSaga,
+      ...pluginSagas,
+    ];
 
-    yield all(sagas.map((saga) => spawn(launchSaga, saga)));
+    yield all(sagas.map(saga => spawn(launchSaga, saga)));
   };
 }
 

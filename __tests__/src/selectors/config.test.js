@@ -27,12 +27,9 @@ describe('getExportableState', () => {
 
   it('filters out parts of stems', () => {
     const f = {
-      a: 1,
-      b: 2,
-      c: 3,
-      d: 4,
+      a: 1, b: 2, c: 3, d: 4,
     };
-    const state = { config: { export: { f: { filter: ([k, v]) => v % 2 === 0 } } }, f };
+    const state = { config: { export: { f: { filter: ([k, v]) => (v % 2) === 0 } } }, f };
     expect(getExportableState(state)).toEqual({ f: { b: 2, d: 4 } });
   });
 });
@@ -133,7 +130,7 @@ describe('getThemeDirection', () => {
     expect(getThemeDirection(state)).toBe('rtl');
   });
   it('returns ltr as default', () => {
-    const state = { config: { theme: {} } };
+    const state = { config: { theme: { } } };
     expect(getThemeDirection(state)).toBe('ltr');
   });
 });

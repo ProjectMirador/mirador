@@ -2,11 +2,8 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import {
-  getManifestoInstance,
-  getVisibleCanvasAudioResources,
-  getVisibleCanvasTextResources,
-  getVisibleCanvasVideoResources,
-  getWindow,
+  getManifestoInstance, getVisibleCanvasAudioResources, getVisibleCanvasTextResources,
+  getVisibleCanvasVideoResources, getWindow,
 } from '../state/selectors';
 import { PrimaryWindow } from '../components/PrimaryWindow';
 
@@ -22,6 +19,9 @@ const mapStateToProps = (state, { windowId }) => {
   };
 };
 
-const enhance = compose(connect(mapStateToProps, null), withPlugins('PrimaryWindow'));
+const enhance = compose(
+  connect(mapStateToProps, null),
+  withPlugins('PrimaryWindow'),
+);
 
 export default enhance(PrimaryWindow);

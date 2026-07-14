@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import PluginContext from './PluginContext';
-import { connectPluginsToStore, createTargetToPluginMapping, addPluginsToCompanionWindowsRegistry } from './pluginMapping';
+import {
+  connectPluginsToStore,
+  createTargetToPluginMapping,
+  addPluginsToCompanionWindowsRegistry,
+} from './pluginMapping';
 
 /**  */
 export default function PluginProvider({ plugins = [], children = null }) {
@@ -13,7 +17,11 @@ export default function PluginProvider({ plugins = [], children = null }) {
     setPluginMap(createTargetToPluginMapping(connectedPlugins));
   }, [plugins]);
 
-  return <PluginContext.Provider value={pluginMap}>{children}</PluginContext.Provider>;
+  return (
+    <PluginContext.Provider value={pluginMap}>
+      { children }
+    </PluginContext.Provider>
+  );
 }
 
 PluginProvider.propTypes = {

@@ -9,6 +9,9 @@ const mapStateToProps = (state) => ({
   labelValueJoiner: getConfig(state).labelValueJoiner,
 });
 
-const enhance = compose(connect(mapStateToProps), withPlugins('LabelValueMetadata'));
+const enhance = compose(
+  connect(mapStateToProps),
+  withPlugins('LabelValueMetadata'),
+);
 
 export default enhance(LabelValueMetadata);

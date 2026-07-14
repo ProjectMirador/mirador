@@ -14,7 +14,9 @@ const StyledZoomControlsWrapper = styled('div')({
 
 /**
  */
-export function ZoomControls({ windowId = '', updateViewport = () => {}, viewer = {}, zoomToWorld }) {
+export function ZoomControls({
+  windowId = '', updateViewport = () => {}, viewer = {}, zoomToWorld,
+}) {
   const { t } = useTranslation();
   /** */
   const handleZoomInClick = () => {

@@ -13,7 +13,9 @@ export function WindowViewer({ windowId }) {
   return (
     <ErrorBoundary fallback={null}>
       <Suspense fallback={<div />}>
-        <OSDViewer windowId={windowId}>
+        <OSDViewer
+          windowId={windowId}
+        >
           <WindowCanvasNavigationControls windowId={windowId} />
         </OSDViewer>
       </Suspense>

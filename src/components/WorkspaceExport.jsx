@@ -1,4 +1,6 @@
-import { useCallback, useId, useMemo, useState } from 'react';
+import {
+  useCallback, useId, useMemo, useState,
+} from 'react';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -19,12 +21,7 @@ import { WorkspaceDialog } from './WorkspaceDialog';
 /**
  */
 export function WorkspaceExport({
-  children = null,
-  container = null,
-  id = undefined,
-  open = false,
-  handleClose,
-  exportableState,
+  children = null, container = null, id = undefined, open = false, handleClose, exportableState,
 }) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
@@ -46,11 +43,11 @@ export function WorkspaceExport({
         autoHideDuration={6000}
         onClose={handleClose}
         message={t('exportCopied')}
-        action={
+        action={(
           <IconButton size="small" aria-label={t('dismiss')} color="inherit" onClick={handleClose}>
             <CloseIcon fontSize="small" />
           </IconButton>
-        }
+        )}
       />
     );
   }
@@ -65,25 +62,29 @@ export function WorkspaceExport({
       fullWidth
       maxWidth="sm"
     >
-      <DialogTitle id={titleId}>{t('downloadExport')}</DialogTitle>
+      <DialogTitle id={titleId}>
+        {t('downloadExport')}
+      </DialogTitle>
 
       <DialogContent>
         <Accordion slotProps={{ heading: { component: 'h4' } }} elevation={2}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+          >
             <Typography>{t('viewWorkspaceConfiguration')}</Typography>
           </AccordionSummary>
           <AccordionDetails sx={{ overflow: 'scroll' }}>
             {children}
-            <pre>{exportedState}</pre>
+            <pre>
+              {exportedState}
+            </pre>
           </AccordionDetails>
         </Accordion>
       </DialogContent>
 
       <DialogActions>
         <Button onClick={handleClose}>{t('cancel')}</Button>
-        <Button onClick={onCopyClick} variant="contained" color="primary">
-          {t('copy')}
-        </Button>
+        <Button onClick={onCopyClick} variant="contained" color="primary">{t('copy')}</Button>
       </DialogActions>
     </WorkspaceDialog>
   );

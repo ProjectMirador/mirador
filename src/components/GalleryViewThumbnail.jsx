@@ -18,10 +18,9 @@ const Root = styled('div', { name: 'GalleryView', slot: 'thumbnail' })(({ ownerS
   ...(ownerState.selected && {
     borderColor: theme.palette.primary.main,
   }),
-  ...(!ownerState.selected &&
-    ownerState.searchAnnotationsCount > 0 && {
-      borderColor: theme.palette.action.selected,
-    }),
+  ...(!ownerState.selected && ownerState.searchAnnotationsCount > 0 && {
+    borderColor: theme.palette.action.selected,
+  }),
   cursor: 'pointer',
   display: 'inline-block',
   margin: theme.spacing(1, 0.5),
@@ -53,12 +52,7 @@ const AnnotationChip = styled(Chip, { name: 'GalleryView', slot: 'chip' })(({ th
  * OSD and Navigation
  */
 export function GalleryViewThumbnail({
-  canvas,
-  selected = false,
-  setCanvas,
-  focusOnCanvas,
-  annotationsCount = undefined,
-  requestCanvasAnnotations = () => {},
+  canvas, selected = false, setCanvas, focusOnCanvas, annotationsCount = undefined, requestCanvasAnnotations = () => {},
   searchAnnotationsCount = 0,
   config = { height: 100, width: null },
 }) {
@@ -92,8 +86,12 @@ export function GalleryViewThumbnail({
       space: 32,
     };
 
-    const enterOrSpace =
-      event.key === keys.enter || event.which === chars.enter || event.key === keys.space || event.which === chars.space;
+    const enterOrSpace = (
+      event.key === keys.enter
+      || event.which === chars.enter
+      || event.key === keys.space
+      || event.which === chars.space
+    );
 
     if (enterOrSpace) {
       focusOnCanvas();
@@ -104,18 +102,18 @@ export function GalleryViewThumbnail({
 
   /** */
   const handleIntersection = (_inView, { isIntersecting }) => {
-    if (!isIntersecting || annotationsCount === undefined || annotationsCount > 0 || requestedAnnotations) return;
+    if (
+      !isIntersecting
+      || annotationsCount === undefined
+      || annotationsCount > 0
+      || requestedAnnotations) return;
 
     setRequestedAnnotations(true);
     requestCanvasAnnotations();
   };
 
   const ownerState = {
-    annotationsCount,
-    canvas,
-    config,
-    searchAnnotationsCount,
-    selected,
+    annotationsCount, canvas, config, searchAnnotationsCount, selected,
   };
 
   return (
@@ -130,13 +128,27 @@ export function GalleryViewThumbnail({
         role="button"
         tabIndex={0}
       >
-        <IIIFThumbnail resource={canvas} labelled variant="outside" maxHeight={config.height} maxWidth={config.width}>
+        <IIIFThumbnail
+          resource={canvas}
+          labelled
+          variant="outside"
+          maxHeight={config.height}
+          maxWidth={config.width}
+        >
           <StyledChipsContainer>
             {searchAnnotationsCount > 0 && (
-              <AnnotationChip icon={<SearchIcon fontSize="small" />} label={searchAnnotationsCount} size="small" />
+              <AnnotationChip
+                icon={<SearchIcon fontSize="small" />}
+                label={searchAnnotationsCount}
+                size="small"
+              />
             )}
             {annotationsCount > 0 && (
-              <AnnotationChip icon={<AnnotationIcon fontSize="small" />} label={annotationsCount} size="small" />
+              <AnnotationChip
+                icon={<AnnotationIcon fontSize="small" />}
+                label={annotationsCount}
+                size="small"
+              />
             )}
           </StyledChipsContainer>
         </IIIFThumbnail>

@@ -31,6 +31,9 @@ const mapDispatchToProps = {
   fetchSearch: actions.fetchSearch,
 };
 
-const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('SearchPanelControls'));
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('SearchPanelControls'),
+);
 
 export default enhance(SearchPanelControls);

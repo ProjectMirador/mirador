@@ -23,18 +23,15 @@ describe('companionWindowsReducer', () => {
   describe('ADD_WINDOW', () => {
     it('adds default companion window(s)', () => {
       const action = {
-        companionWindows: [
-          {
-            content: 'info',
-            id: 'banana',
-            position: 'left',
-          },
-          {
-            content: 'canvas',
-            id: 'Banane',
-            position: 'right',
-          },
-        ],
+        companionWindows: [{
+          content: 'info',
+          id: 'banana',
+          position: 'left',
+        }, {
+          content: 'canvas',
+          id: 'Banane',
+          position: 'right',
+        }],
         type: ActionTypes.ADD_WINDOW,
       };
       const beforeState = {};
@@ -199,14 +196,9 @@ describe('companionWindowsReducer', () => {
   });
 
   it('should handle IMPORT_MIRADOR_STATE', () => {
-    expect(
-      companionWindowsReducer(
-        {},
-        {
-          state: { companionWindows: { new: 'stuff' } },
-          type: ActionTypes.IMPORT_MIRADOR_STATE,
-        },
-      ),
-    ).toEqual({ new: 'stuff' });
+    expect(companionWindowsReducer({}, {
+      state: { companionWindows: { new: 'stuff' } },
+      type: ActionTypes.IMPORT_MIRADOR_STATE,
+    })).toEqual({ new: 'stuff' });
   });
 });

@@ -10,6 +10,9 @@ const mapStateToProps = (state, { windowId }) => ({
   visible: getWorkspace(state).focusedWindowId === windowId,
 });
 
-const enhance = compose(connect(mapStateToProps), withPlugins('WindowCanvasNavigationControls'));
+const enhance = compose(
+  connect(mapStateToProps),
+  withPlugins('WindowCanvasNavigationControls'),
+);
 
 export default enhance(WindowCanvasNavigationControls);

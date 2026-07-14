@@ -10,6 +10,9 @@ const mapStateToProps = (state) => ({
   windowCount: getWindowIds(state).length,
 });
 
-const enhance = compose(connect(mapStateToProps, null), withPlugins('WindowListButton'));
+const enhance = compose(
+  connect(mapStateToProps, null),
+  withPlugins('WindowListButton'),
+);
 
 export default enhance(WindowListButton);

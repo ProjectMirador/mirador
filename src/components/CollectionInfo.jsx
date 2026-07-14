@@ -9,7 +9,9 @@ import CollapsibleSection from '../containers/CollapsibleSection';
 /**
  * CollectionInfo
  */
-export function CollectionInfo({ collectionLabel = null, collectionPath = [], showCollectionDialog, windowId = null }) {
+export function CollectionInfo({
+  collectionLabel = null, collectionPath = [], showCollectionDialog, windowId = null,
+}) {
   const { t } = useTranslation();
   const id = useId();
   const titleId = useId();
@@ -26,14 +28,25 @@ export function CollectionInfo({ collectionLabel = null, collectionPath = [], sh
   if (collectionPath.length === 0) return null;
 
   return (
-    <CollapsibleSection id={id} label={t('collection')}>
+    <CollapsibleSection
+      id={id}
+      label={t('collection')}
+    >
       {collectionLabel && (
-        <Typography aria-labelledby={`${id} ${titleId}`} id={titleId} variant="h4">
+        <Typography
+          aria-labelledby={`${id} ${titleId}`}
+          id={titleId}
+          variant="h4"
+        >
           {collectionLabel}
         </Typography>
       )}
 
-      <Button color="primary" onClick={openCollectionDialog} startIcon={<ViewListIcon />}>
+      <Button
+        color="primary"
+        onClick={openCollectionDialog}
+        startIcon={<ViewListIcon />}
+      >
         {t('showCollection')}
       </Button>
     </CollapsibleSection>

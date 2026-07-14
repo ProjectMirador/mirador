@@ -3,17 +3,22 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import WorkspaceElastic from '../components/WorkspaceElastic';
-import { getElasticLayout, getWorkspace } from '../state/selectors';
+import {
+  getElasticLayout,
+  getWorkspace,
+} from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = (state) => ({
-  elasticLayout: getElasticLayout(state),
-  workspace: getWorkspace(state),
-});
+const mapStateToProps = state => (
+  {
+    elasticLayout: getElasticLayout(state),
+    workspace: getWorkspace(state),
+  }
+);
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators
@@ -22,13 +27,19 @@ const mapStateToProps = (state) => ({
  */
 const mapDispatchToProps = (dispatch, props) => ({
   setWorkspaceViewportDimensions: (position) => {
-    dispatch(actions.setWorkspaceViewportDimensions(position));
+    dispatch(
+      actions.setWorkspaceViewportDimensions(position),
+    );
   },
   setWorkspaceViewportPosition: (position) => {
-    dispatch(actions.setWorkspaceViewportPosition(position));
+    dispatch(
+      actions.setWorkspaceViewportPosition(position),
+    );
   },
   updateElasticWindowLayout: (windowId, position) => {
-    dispatch(actions.updateElasticWindowLayout(windowId, position));
+    dispatch(
+      actions.updateElasticWindowLayout(windowId, position),
+    );
   },
 });
 

@@ -25,13 +25,8 @@ const getMatch = (option) => (isObject(option) ? option.match : option);
 
 /** */
 export function SearchPanelControls({
-  autocompleteService = undefined,
-  companionWindowId,
-  fetchSearch,
-  query = '',
-  searchIsFetching = false,
-  searchService,
-  windowId,
+  autocompleteService = undefined, companionWindowId, fetchSearch, query = '',
+  searchIsFetching = false, searchService, windowId,
 }) {
   const { t } = useTranslation();
   const [input, setInput] = useState(query);
@@ -66,17 +61,14 @@ export function SearchPanelControls({
   };
 
   /** */
-  const fetchAutocomplete = useDebouncedCallback(
-    useCallback(() => {
-      if (!autocompleteService) return;
-      if (!input) return;
+  const fetchAutocomplete = useDebouncedCallback(useCallback(() => {
+    if (!autocompleteService) return;
+    if (!input) return;
 
-      fetch(`${autocompleteService.id}?${new URLSearchParams({ q: input })}`)
-        .then((response) => response.json())
-        .then(receiveAutocomplete);
-    }, [autocompleteService, input]),
-    500,
-  );
+    fetch(`${autocompleteService.id}?${new URLSearchParams({ q: input })}`)
+      .then(response => response.json())
+      .then(receiveAutocomplete);
+  }, [autocompleteService, input]), 500);
 
   /** */
   const receiveAutocomplete = (json) => {
@@ -104,21 +96,25 @@ export function SearchPanelControls({
   const id = `search-${companionWindowId}`;
   return (
     <>
-      <StyledForm aria-label={t('searchTitle')} onSubmit={submitSearch}>
+      <StyledForm
+        aria-label={t('searchTitle')}
+        onSubmit={submitSearch}
+      >
         <Autocomplete
           id={id}
           inputValue={input}
           options={suggestions}
           getOptionLabel={getMatch}
-          isOptionEqualToValue={(option, value) =>
-            deburr(getMatch(option).trim()).toLowerCase() === deburr(getMatch(value).trim()).toLowerCase()
-          }
+          isOptionEqualToValue={(option, value) => (
+            deburr(getMatch(option).trim()).toLowerCase()
+            === deburr(getMatch(value).trim()).toLowerCase()
+          )}
           noOptionsText=""
           onChange={selectItem}
           onInputChange={handleChange}
           freeSolo
           disableClearable
-          renderInput={(params) => (
+          renderInput={params => (
             <TextField
               {...params}
               label={t('searchInputLabel')}
@@ -131,16 +127,16 @@ export function SearchPanelControls({
                       <SearchIcon />
                     </MiradorMenuButton>
                     {Boolean(searchIsFetching) && (
-                      <CircularProgress
-                        sx={{
-                          left: '50%',
-                          marginLeft: '-25px',
-                          marginTop: '-25px',
-                          position: 'absolute',
-                          top: '50%',
-                        }}
-                        size={50}
-                      />
+                    <CircularProgress
+                      sx={{
+                        left: '50%',
+                        marginLeft: '-25px',
+                        marginTop: '-25px',
+                        position: 'absolute',
+                        top: '50%',
+                      }}
+                      size={50}
+                    />
                     )}
                   </InputAdornment>
                 ),

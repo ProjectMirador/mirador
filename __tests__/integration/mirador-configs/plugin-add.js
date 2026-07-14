@@ -1,4 +1,6 @@
-import { addPluginA, addPluginB, addPluginC, addPluginD, wrapIconPlugin } from '../plugins/index';
+import {
+  addPluginA, addPluginB, addPluginC, addPluginD, wrapIconPlugin,
+} from '../plugins/index';
 
 export default {
   config: {

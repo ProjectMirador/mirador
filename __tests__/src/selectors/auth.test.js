@@ -1,7 +1,10 @@
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import settings from '../../../src/config/settings';
-import { getAccessTokens, selectCurrentAuthServices } from '../../../src/state/selectors/auth';
+import {
+  getAccessTokens,
+  selectCurrentAuthServices,
+} from '../../../src/state/selectors/auth';
 
 describe('getAccessTokens', () => {
   const state = {
@@ -65,23 +68,27 @@ describe('selectCurrentAuthServices', () => {
       },
       w: {
         manifestId: 'a',
-        visibleCanvases: ['https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json'],
+        visibleCanvases: [
+          'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
+        ],
       },
       x: {
         manifestId: 'b',
-        visibleCanvases: ['http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json'],
+        visibleCanvases: [
+          'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+        ],
       },
       y: {
         manifestId: 'b',
-        visibleCanvases: ['https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'],
+        visibleCanvases: [
+          'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
+        ],
       },
     },
   };
 
   it('returns undefined if there is no current canvas', () => {
-    expect(
-      selectCurrentAuthServices({ config: { auth: settings.auth }, manifests: {} }, { windowId: 'noCanvas' })[0],
-    ).toBeUndefined();
+    expect(selectCurrentAuthServices({ config: { auth: settings.auth }, manifests: {} }, { windowId: 'noCanvas' })[0]).toBeUndefined();
   });
 
   it('returns the next auth service to try', () => {
@@ -143,7 +150,9 @@ describe('selectCurrentAuthServices', () => {
       windows: {
         w: {
           manifestId: 'a',
-          visibleCanvases: ['https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json'],
+          visibleCanvases: [
+            'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
+          ],
         },
       },
     };

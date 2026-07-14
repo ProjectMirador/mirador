@@ -1,7 +1,10 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
-import { getVisibleCanvasIds, getAnnotationResourcesByMotivation } from '../state/selectors';
+import {
+  getVisibleCanvasIds,
+  getAnnotationResourcesByMotivation,
+} from '../state/selectors';
 import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnotationsPanel';
 
 /**
@@ -10,7 +13,10 @@ import { WindowSideBarAnnotationsPanel } from '../components/WindowSideBarAnnota
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
-  annotationCount: getAnnotationResourcesByMotivation(state, { windowId }).length,
+  annotationCount: getAnnotationResourcesByMotivation(
+    state,
+    { windowId },
+  ).length,
   canvasIds: getVisibleCanvasIds(state, { windowId }),
 });
 

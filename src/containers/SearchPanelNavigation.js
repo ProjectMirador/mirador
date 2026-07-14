@@ -20,8 +20,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   numTotal: getSearchNumTotal(state, { companionWindowId, windowId }),
   searchHits: getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
   selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, {
-    companionWindowId,
-    windowId,
+    companionWindowId, windowId,
   }),
 });
 
@@ -31,9 +30,14 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
  * @private
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
-  selectAnnotation: (...args) => dispatch(actions.selectAnnotation(windowId, ...args)),
+  selectAnnotation: (...args) => dispatch(
+    actions.selectAnnotation(windowId, ...args),
+  ),
 });
 
-const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('SearchPanelNavigation'));
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('SearchPanelNavigation'),
+);
 
 export default enhance(SearchPanelNavigation);

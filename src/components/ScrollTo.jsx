@@ -14,8 +14,10 @@ function usePrevious(value) {
 
 /**
  * ScrollTo ~
- */
-export function ScrollTo({ children, containerRef, offsetTop = 0, scrollTo, ...otherProps }) {
+*/
+export function ScrollTo({
+  children, containerRef, offsetTop = 0, scrollTo, ...otherProps
+}) {
   const scrollToRef = useRef();
   const prevScrollTo = usePrevious(scrollTo);
 
@@ -31,10 +33,9 @@ export function ScrollTo({ children, containerRef, offsetTop = 0, scrollTo, ...o
     const containerBoundingRect = containerRef?.current?.getBoundingClientRect() || {};
     const scrollToBoundingRect = elementToScrollTo?.getBoundingClientRect() || {};
     const elementIsVisible = (() => {
-      if (scrollToBoundingRect.top < containerBoundingRect.top + offsetTop) {
+      if (scrollToBoundingRect.top < (containerBoundingRect.top + offsetTop)) {
         return false;
-      }
-      if (scrollToBoundingRect.bottom > containerBoundingRect.bottom) {
+      } if (scrollToBoundingRect.bottom > containerBoundingRect.bottom) {
         return false;
       }
 
@@ -43,7 +44,7 @@ export function ScrollTo({ children, containerRef, offsetTop = 0, scrollTo, ...o
 
     if (elementIsVisible) return;
 
-    const scrollBy = elementToScrollTo.offsetTop - containerBoundingRect.height / 2 + offsetTop;
+    const scrollBy = elementToScrollTo.offsetTop - (containerBoundingRect.height / 2) + offsetTop;
 
     scrollableContainer.scrollTo(0, scrollBy);
   }, [containerRef, scrollToRef, scrollTo, prevScrollTo, offsetTop]);
@@ -55,7 +56,10 @@ export function ScrollTo({ children, containerRef, offsetTop = 0, scrollTo, ...o
 
 ScrollTo.propTypes = {
   children: PropTypes.node.isRequired,
-  containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]).isRequired,
+  containerRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]).isRequired,
   offsetTop: PropTypes.number,
   scrollTo: PropTypes.bool.isRequired,
 };

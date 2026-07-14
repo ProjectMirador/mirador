@@ -25,7 +25,9 @@ function getIdAndContentOfResources(resources) {
 
 /** For connect */
 const mapStateToProps = (state, { canvasId, windowId }) => ({
-  annotations: getIdAndContentOfResources(getAnnotationResourcesByMotivationForCanvas(state, { canvasId, windowId })),
+  annotations: getIdAndContentOfResources(
+    getAnnotationResourcesByMotivationForCanvas(state, { canvasId, windowId }),
+  ),
   htmlSanitizationRuleSet: getConfig(state).annotations.htmlSanitizationRuleSet,
   label: getCanvasLabel(state, {
     canvasId,
@@ -45,6 +47,9 @@ const mapDispatchToProps = {
   selectAnnotation: actions.selectAnnotation,
 };
 
-const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('CanvasAnnotations'));
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('CanvasAnnotations'),
+);
 
 export default enhance(CanvasAnnotations);

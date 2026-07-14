@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import PropTypes from 'prop-types';
 import FailedImageContext from '../contexts/FailedImageContext';
 
 const MessageContainer = styled(Box)(({ theme }) => ({
@@ -22,21 +21,17 @@ const MessageContainer = styled(Box)(({ theme }) => ({
 /**
  * Displays an accessible message when images fail to load in the OSD viewer
  */
-export function ImageFailureMessage({ imageUrls = [] }) {
-  const { failedImages } = useContext(FailedImageContext);
+export function ImageFailureMessage() {
+  const { hasFailed } = useContext(FailedImageContext);
   const { t } = useTranslation();
 
-  const hasFailedImage = imageUrls.some((url) => failedImages.has(url));
-
-  if (!hasFailedImage) return null;
+  if (!hasFailed) return null;
 
   return (
     <MessageContainer role="status" aria-live="polite">
-      <Typography variant="body2">{t('imageFailedToLoad')}</Typography>
+      <Typography variant="body2">
+        {t('imageFailedToLoad')}
+      </Typography>
     </MessageContainer>
   );
 }
-
-ImageFailureMessage.propTypes = {
-  imageUrls: PropTypes.arrayOf(PropTypes.string),
-};

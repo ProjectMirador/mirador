@@ -3,7 +3,12 @@ import { compose } from 'redux';
 import { Utils } from 'manifesto.js';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getAuth, getAuthProfiles, selectCurrentAuthServices, getAccessTokens } from '../state/selectors';
+import {
+  getAuth,
+  getAuthProfiles,
+  selectCurrentAuthServices,
+  getAccessTokens,
+} from '../state/selectors';
 import { IIIFAuthentication } from '../components/IIIFAuthentication';
 
 /**
@@ -11,21 +16,20 @@ import { IIIFAuthentication } from '../components/IIIFAuthentication';
  * @memberof FullScreenButton
  * @private
  */
-// eslint-disable-next-line complexity
-const mapStateToProps = (state, { windowId }) => {
+const mapStateToProps = (state, { windowId }) => { // eslint-disable-line complexity
   const services = selectCurrentAuthServices(state, { windowId });
 
   // TODO: get the most actionable auth service...
   const service = services[0];
 
-  const accessTokenService =
-    service &&
-    (Utils.getService(service, 'http://iiif.io/api/auth/1/token') ||
-      Utils.getService(service, 'http://iiif.io/api/auth/0/token'));
-  const logoutService =
-    service &&
-    (Utils.getService(service, 'http://iiif.io/api/auth/1/logout') ||
-      Utils.getService(service, 'http://iiif.io/api/auth/0/logout'));
+  const accessTokenService = service && (
+    Utils.getService(service, 'http://iiif.io/api/auth/1/token')
+    || Utils.getService(service, 'http://iiif.io/api/auth/0/token')
+  );
+  const logoutService = service && (
+    Utils.getService(service, 'http://iiif.io/api/auth/1/logout')
+    || Utils.getService(service, 'http://iiif.io/api/auth/0/logout')
+  );
 
   const authStatuses = getAuth(state);
   const authStatus = service && authStatuses[service.id];
@@ -50,7 +54,9 @@ const mapStateToProps = (state, { windowId }) => {
 
   const profile = service && service.getProfile();
 
-  const isInteractive = authProfiles.some((config) => config.profile === profile && !(config.external || config.kiosk));
+  const isInteractive = authProfiles.some(
+    config => config.profile === profile && !(config.external || config.kiosk),
+  );
 
   return {
     accessTokenServiceId: accessTokenService && accessTokenService.id,
@@ -62,7 +68,9 @@ const mapStateToProps = (state, { windowId }) => {
     header: service && service.getHeader(),
     isInteractive,
     label: service && service.getLabel()[0].value,
-    logoutConfirm: logoutService && logoutService.getLabel()[0] && logoutService.getLabel()[0].value,
+    logoutConfirm: logoutService
+      && logoutService.getLabel()[0]
+      && logoutService.getLabel()[0].value,
     logoutServiceId: logoutService && logoutService.id,
     profile,
     status,
@@ -81,6 +89,9 @@ const mapDispatchToProps = {
   resolveAuthenticationRequest: actions.resolveAuthenticationRequest,
 };
 
-const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('IIIFAuthentication'));
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('IIIFAuthentication'),
+);
 
 export default enhance(IIIFAuthentication);

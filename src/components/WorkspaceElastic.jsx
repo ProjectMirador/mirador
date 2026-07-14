@@ -26,7 +26,12 @@ const StyledRnd = styled(Rnd)({
  * @memberof Workspace
  * @private
  */
-function WorkspaceElastic({ workspace, elasticLayout, setWorkspaceViewportDimensions, setWorkspaceViewportPosition }) {
+function WorkspaceElastic({
+  workspace,
+  elasticLayout,
+  setWorkspaceViewportDimensions,
+  setWorkspaceViewportPosition,
+}) {
   const { viewportPosition } = workspace;
   const offsetX = workspace.width / 2;
   const offsetY = workspace.height / 2;
@@ -35,9 +40,7 @@ function WorkspaceElastic({ workspace, elasticLayout, setWorkspaceViewportDimens
     <Root>
       <ResizeObserver
         onReflow={() => {}}
-        onResize={(rect) => {
-          setWorkspaceViewportDimensions(rect);
-        }}
+        onResize={(rect) => { setWorkspaceViewportDimensions(rect); }}
       />
 
       <StyledRnd
@@ -46,8 +49,7 @@ function WorkspaceElastic({ workspace, elasticLayout, setWorkspaceViewportDimens
           width: workspace.width,
         }}
         position={{
-          x: -1 * viewportPosition.x - offsetX,
-          y: -1 * viewportPosition.y - offsetY,
+          x: -1 * viewportPosition.x - offsetX, y: -1 * viewportPosition.y - offsetY,
         }}
         enableResizing={{
           bottom: false,
@@ -66,9 +68,14 @@ function WorkspaceElastic({ workspace, elasticLayout, setWorkspaceViewportDimens
         className={ns('workspace')}
         disableDragging={!workspace.draggingEnabled}
       >
-        {Object.keys(elasticLayout).map((windowId) => (
-          <WorkspaceElasticWindow key={windowId} windowId={windowId} />
-        ))}
+        {
+          Object.keys(elasticLayout).map(windowId => (
+            <WorkspaceElasticWindow
+              key={windowId}
+              windowId={windowId}
+            />
+          ))
+        }
       </StyledRnd>
     </Root>
   );

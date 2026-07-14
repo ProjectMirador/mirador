@@ -1,4 +1,6 @@
-import { useMemo, useEffect, useState, useContext } from 'react';
+import {
+  useMemo, useEffect, useState, useContext,
+} from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { useInView } from 'react-intersection-observer';
@@ -22,14 +24,8 @@ const Image = styled('img', { name: 'IIIFThumbnail', slot: 'image' })(() => ({
  * try to load the image (or even calculate that the image url/height/width are)
  */
 const LazyLoadedImage = ({
-  border = false,
-  placeholder,
-  style = {},
-  thumbnail = null,
-  resource,
-  maxHeight = null,
-  maxWidth = null,
-  ...props
+  border = false, placeholder, style = {}, thumbnail = null,
+  resource, maxHeight = null, maxWidth = null, ...props
 }) => {
   const { ref, inView } = useInView();
   const [loaded, setLoaded] = useState(false);
@@ -80,11 +76,11 @@ const LazyLoadedImage = ({
 
     const { height: thumbHeight, width: thumbWidth } = image;
     if (thumbHeight && thumbWidth) {
-      if ((maxHeight && thumbHeight > maxHeight) || (maxWidth && thumbWidth > maxWidth)) {
+      if ((maxHeight && (thumbHeight > maxHeight)) || (maxWidth && (thumbWidth > maxWidth))) {
         const aspectRatio = thumbWidth / thumbHeight;
 
         if (maxHeight && maxWidth) {
-          if (maxWidth / maxHeight < aspectRatio) {
+          if ((maxWidth / maxHeight) < aspectRatio) {
             styleProps.height = Math.round(maxWidth / aspectRatio);
             styleProps.width = maxWidth;
           } else {
@@ -134,7 +130,7 @@ const LazyLoadedImage = ({
       style={imageStyles}
       onError={() => {
         setFailed(true);
-        if (finalSrc) notifyFailure(finalSrc);
+        notifyFailure();
       }}
       {...props}
     />
@@ -155,8 +151,7 @@ LazyLoadedImage.propTypes = {
   }),
 };
 
-const defaultPlaceholder =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
+const defaultPlaceholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mMMDQmtBwADgwF/Op8FmAAAAABJRU5ErkJggg==';
 
 /**
  * Uses InteractionObserver to "lazy" load canvas thumbnails that are in view.
@@ -173,8 +168,7 @@ export function IIIFThumbnail({
   style = {},
   thumbnail = null,
 }) {
-  // eslint-disable-next-line prefer-rest-params
-  const ownerState = arguments[0];
+  const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
 
   return (
     <Root ownerState={ownerState}>
@@ -188,7 +182,11 @@ export function IIIFThumbnail({
         border={border}
       />
 
-      {labelled && <Label ownerState={ownerState}>{label || <IIIFResourceLabel resource={resource} />}</Label>}
+      { labelled && (
+        <Label ownerState={ownerState}>
+          {label || <IIIFResourceLabel resource={resource} />}
+        </Label>
+      )}
       {children}
     </Root>
   );
@@ -209,6 +207,5 @@ IIIFThumbnail.propTypes = {
     url: PropTypes.string.isRequired,
     width: PropTypes.number,
   }),
-  // eslint-disable-next-line react/no-unused-prop-types
-  variant: PropTypes.oneOf(['inside', 'outside']),
+  variant: PropTypes.oneOf(['inside', 'outside']), // eslint-disable-line react/no-unused-prop-types
 };

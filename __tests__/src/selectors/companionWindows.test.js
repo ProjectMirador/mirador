@@ -191,6 +191,8 @@ describe('getCompanionWindowsForContent', () => {
 
     const props = { content: 'search', windowId: 'a' };
 
-    expect(getCompanionWindowsForContent(state, props).map((cw) => cw.id)).toEqual(['abc', 'def']);
+    expect(getCompanionWindowsForContent(state, props).map(cw => cw.id)).toEqual([
+      'abc', 'def',
+    ]);
   });
 });

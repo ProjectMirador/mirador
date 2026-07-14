@@ -10,11 +10,12 @@ import { usePlugins } from '../extend/usePlugins';
 /**
  *
  */
-export function WindowTopBarPluginMenu({ windowId, menuIcon = <MoreVertIcon />, pluginTarget = 'WindowTopBarPluginMenu' }) {
+export function WindowTopBarPluginMenu({
+  windowId, menuIcon = <MoreVertIcon />, pluginTarget = 'WindowTopBarPluginMenu',
+}) {
   const { t } = useTranslation();
   const container = useContext(WorkspaceContext);
-  // eslint-disable-next-line prefer-rest-params
-  const pluginProps = arguments[0];
+  const pluginProps = arguments[0]; // eslint-disable-line prefer-rest-params
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
   const windowPluginMenuId = useId();

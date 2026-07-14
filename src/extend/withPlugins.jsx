@@ -25,15 +25,17 @@ function _withPlugins(targetName, TargetComponent) {
       const WrapPluginComponent = plugin.component;
 
       return (
-        <WrapPluginComponent targetProps={passDownProps} {...passDownProps} TargetComponent={TargetComponent}>
+        <WrapPluginComponent
+          targetProps={passDownProps}
+          {...passDownProps}
+          TargetComponent={TargetComponent}
+        >
           {children}
         </WrapPluginComponent>
       );
     };
 
-    return plugins.wrap
-      .slice()
-      .reverse()
+    return plugins.wrap.slice().reverse()
       .reduce(pluginWrapper, <TargetComponent {...passDownProps} />);
   }
   const whatever = forwardRef(PluginHoc);

@@ -22,7 +22,9 @@ beforeEach((context) => {
 });
 
 /** */
-class Path2D {}
+class Path2D {
+
+}
 
 global.Path2D = Path2D;
 

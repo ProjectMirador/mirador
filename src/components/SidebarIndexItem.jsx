@@ -3,7 +3,13 @@ import Typography from '@mui/material/Typography';
 
 /** */
 export function SidebarIndexItem({ label }) {
-  return <Typography variant="body1">{label}</Typography>;
+  return (
+    <Typography
+      variant="body1"
+    >
+      {label}
+    </Typography>
+  );
 }
 
 SidebarIndexItem.propTypes = {

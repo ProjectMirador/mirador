@@ -10,13 +10,8 @@ import WorkspaceContext from '../contexts/WorkspaceContext';
 /**
  */
 export function WindowList({
-  handleClose,
-  windowIds,
-  focusWindow,
-  focusedWindowId = null,
-  titles = {},
-  tReady = false,
-  ...menuProps
+  handleClose, windowIds, focusWindow, focusedWindowId = null,
+  titles = {}, tReady = false, ...menuProps
 }) {
   const { t } = useTranslation();
   const container = useContext(WorkspaceContext);
@@ -38,18 +33,21 @@ export function WindowList({
       <ListSubheader role="presentation" selected={false} disabled tabIndex="-1">
         {t('openWindows')}
       </ListSubheader>
-      {windowIds.map((windowId, i) => (
-        <MenuItem
-          key={windowId}
-          selected={windowId === focusedWindowId}
-          onClick={(e) => {
-            focusWindow(windowId, true);
-            handleClose(e);
-          }}
-        >
-          <ListItemText primaryTypographyProps={{ variant: 'body1' }}>{titles[windowId] || t('untitled')}</ListItemText>
-        </MenuItem>
-      ))}
+      {
+        windowIds.map((windowId, i) => (
+          <MenuItem
+            key={windowId}
+            selected={windowId === focusedWindowId}
+            onClick={(e) => { focusWindow(windowId, true); handleClose(e); }}
+          >
+            <ListItemText primaryTypographyProps={{ variant: 'body1' }}>
+              {
+                titles[windowId] || t('untitled')
+              }
+            </ListItemText>
+          </MenuItem>
+        ))
+      }
     </Menu>
   );
 }

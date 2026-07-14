@@ -36,31 +36,20 @@ const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'opt
  *
  */
 export function WindowThumbnailSettings({
-  handleClose = () => {},
-  thumbnailNavigationPosition,
-  direction,
-  windowId,
-  setWindowThumbnailPosition,
+  handleClose = () => {}, thumbnailNavigationPosition, direction, windowId, setWindowThumbnailPosition,
 }) {
   const { t } = useTranslation();
   /** */
-  const handleChange = (value) => {
-    setWindowThumbnailPosition(windowId, value);
-    handleClose();
-  };
+  const handleChange = (value) => { setWindowThumbnailPosition(windowId, value); handleClose(); };
 
   return (
     <>
-      <ListSubheader role="presentation" disableSticky>
-        {t('thumbnails')}
-      </ListSubheader>
+      <ListSubheader role="presentation" disableSticky>{t('thumbnails')}</ListSubheader>
       <StyledMenuList role="menubar">
         <ThumbnailOption
           aria-checked={thumbnailNavigationPosition === 'off'}
           key="off"
-          onClick={() => {
-            handleChange('off');
-          }}
+          onClick={() => { handleChange('off'); }}
           role="menuitemradio"
           selected={thumbnailNavigationPosition === 'off'}
         >
@@ -76,18 +65,13 @@ export function WindowThumbnailSettings({
         <ThumbnailOption
           aria-checked={thumbnailNavigationPosition === 'far-bottom'}
           key="far-bottom"
-          onClick={() => {
-            handleChange('far-bottom');
-          }}
+          onClick={() => { handleChange('far-bottom'); }}
           role="menuitemradio"
           selected={thumbnailNavigationPosition === 'far-bottom'}
         >
           <FormControlLabel
             control={
-              <ThumbnailNavigationBottomIcon
-                color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined}
-                fill="currentcolor"
-              />
+              <ThumbnailNavigationBottomIcon color={thumbnailNavigationPosition === 'far-bottom' ? 'secondary' : undefined} fill="currentcolor" />
             }
             label={t('bottom')}
             labelPlacement="bottom"
@@ -97,20 +81,18 @@ export function WindowThumbnailSettings({
         <ThumbnailOption
           aria-checked={thumbnailNavigationPosition === 'far-right'}
           key="far-right"
-          onClick={() => {
-            handleChange('far-right');
-          }}
+          onClick={() => { handleChange('far-right'); }}
           role="menuitemradio"
           selected={thumbnailNavigationPosition === 'far-right'}
         >
           <FormControlLabel
-            control={
+            control={(
               <ThumbnailNavigationRightIcon
                 color={thumbnailNavigationPosition === 'far-right' ? 'secondary' : undefined}
                 fill="currentcolor"
                 style={direction === 'rtl' ? { transform: 'rotate(180deg)' } : {}}
               />
-            }
+            )}
             label={t('right')}
             labelPlacement="bottom"
             value="far-right"
@@ -118,6 +100,7 @@ export function WindowThumbnailSettings({
         </ThumbnailOption>
       </StyledMenuList>
     </>
+
   );
 }
 

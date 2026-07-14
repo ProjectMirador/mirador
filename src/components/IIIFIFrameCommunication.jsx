@@ -26,9 +26,14 @@ export function IIIFIFrameCommunication({ handleReceiveMessage = undefined, ...p
   }, [handleReceiveMessage]);
 
   return (
-    // iframe "title" attribute is passed in via props for accessibility
-    /* eslint-disable jsx-a11y/iframe-has-title */
-    <iframe {...IIIFIFrameCommunicationDefaultProps} {...props} />
+  // iframe "title" attribute is passed in via props for accessibility
+  /* eslint-disable jsx-a11y/iframe-has-title */
+    (
+      <iframe
+        {...IIIFIFrameCommunicationDefaultProps}
+        {...props}
+      />
+    )
   );
 }
 

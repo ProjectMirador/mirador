@@ -71,7 +71,9 @@ const StyledCompanionAreaRight = styled('div', { name: 'Window', slot: 'right' }
 /** Window title bar wrapper for drag controls in the mosaic view */
 const DraggableNavBar = ({ children, ...props }) => {
   const { mosaicWindowActions } = useContext(MosaicWindowContext);
-  return mosaicWindowActions.connectDragSource(<nav {...props}>{children}</nav>);
+  return mosaicWindowActions.connectDragSource(
+    <nav {...props}>{children}</nav>,
+  );
 };
 
 /**
@@ -79,27 +81,17 @@ const DraggableNavBar = ({ children, ...props }) => {
  * @param {object} window
  */
 export function Window({
-  focusWindow = () => {},
-  label = null,
-  isFetching = false,
-  sideBarOpen = false,
-  view = undefined,
-  windowDraggable = null,
-  windowId,
-  workspaceType = null,
+  focusWindow = () => {}, label = null, isFetching = false, sideBarOpen = false,
+  view = undefined, windowDraggable = null, windowId, workspaceType = null,
   manifestError = null,
 }) {
   const { t } = useTranslation();
-  // eslint-disable-next-line prefer-rest-params
-  const ownerState = arguments[0];
-  const ErrorWindow = useCallback(
-    ({ error }) => (
-      <MinimalWindow windowId={windowId}>
-        <ErrorContent error={error} windowId={windowId} />
-      </MinimalWindow>
-    ),
-    [windowId],
-  );
+  const ownerState = arguments[0]; // eslint-disable-line prefer-rest-params
+  const ErrorWindow = useCallback(({ error }) => (
+    <MinimalWindow windowId={windowId}>
+      <ErrorContent error={error} windowId={windowId} />
+    </MinimalWindow>
+  ), [windowId]);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorWindow}>
@@ -118,10 +110,15 @@ export function Window({
           windowDraggable={windowDraggable}
         />
         <IIIFAuthentication windowId={windowId} />
-        {manifestError && <ErrorContent error={{ stack: manifestError }} windowId={windowId} />}
+        { manifestError && <ErrorContent error={{ stack: manifestError }} windowId={windowId} /> }
         <ContentRow>
           <ContentColumn>
-            <StyledPrimaryWindow view={view} windowId={windowId} isFetching={isFetching} sideBarOpen={sideBarOpen} />
+            <StyledPrimaryWindow
+              view={view}
+              windowId={windowId}
+              isFetching={isFetching}
+              sideBarOpen={sideBarOpen}
+            />
             <StyledCompanionAreaBottom windowId={windowId} position="bottom" />
           </ContentColumn>
           <StyledCompanionAreaRight>

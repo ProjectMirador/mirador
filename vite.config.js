@@ -7,58 +7,59 @@ import { globSync } from 'glob';
 import * as packageJson from './package.json';
 
 /**
- * Vite configuration
- */
+* Vite configuration
+*/
 export default defineConfig({
-  ...(process.env.NETLIFY
-    ? {
-        build: {
-          rollupOptions: {
-            external: ['__tests__/*', '__mocks__/*'],
-            input: Object.fromEntries(
-              globSync('./demo/*.html').map((file) => [
-                // This remove `src/` as well as the file extension from each
-                // file, so e.g. src/nested/foo.js becomes nested/foo
-                path.relative('demo', file.slice(0, file.length - path.extname(file).length)),
-                // This expands the relative paths to absolute paths, so e.g.
-                // src/nested/foo becomes /project/src/nested/foo.js
-                fileURLToPath(new URL(file, import.meta.url)),
-              ]),
-            ),
-          },
-          sourcemap: true,
+  ...(
+    process.env.NETLIFY ? {
+      build: {
+        rollupOptions: {
+          external: ['__tests__/*', '__mocks__/*'],
+          input: Object.fromEntries(
+            globSync('./demo/*.html').map((file) => [
+              // This remove `src/` as well as the file extension from each
+              // file, so e.g. src/nested/foo.js becomes nested/foo
+              path.relative(
+                'demo',
+                file.slice(0, file.length - path.extname(file).length),
+              ),
+              // This expands the relative paths to absolute paths, so e.g.
+              // src/nested/foo becomes /project/src/nested/foo.js
+              fileURLToPath(new URL(file, import.meta.url)),
+            ]),
+          ),
         },
-      }
-    : {
-        build: {
-          lib: {
-            entry: './src/index.js',
-            fileName: (format) => (format === 'es' ? 'mirador.es.js' : undefined),
-            formats: ['es'],
-            name: 'Mirador',
-          },
-          rollupOptions: {
-            external: (id, parentId) => {
-              const peers = Object.keys(packageJson.peerDependencies);
-              return (
-                peers.indexOf(id) > -1 ||
-                peers.find((peer) => id.startsWith(`${peer}/`)) ||
-                id.startsWith('__tests__/') ||
-                id.startsWith('__mocks__/')
-              );
-            },
-            output: {
-              assetFileNames: 'mirador.[ext]',
-              exports: 'named',
-              globals: {
-                react: 'React',
-                'react-dom': 'ReactDOM',
-              },
-            },
-          },
-          sourcemap: true,
+        sourcemap: true,
+      },
+    } : {
+      build: {
+        lib: {
+          entry: './src/index.js',
+          fileName: (format) => (format === 'es' ? 'mirador.es.js' : undefined),
+          formats: ['es'],
+          name: 'Mirador',
         },
-      }),
+        rollupOptions: {
+          external: (id, parentId) => {
+            const peers = Object.keys(packageJson.peerDependencies);
+            return peers.indexOf(id) > -1
+              || peers.find((peer) => id.startsWith(`${peer}/`))
+              || id.startsWith('__tests__/')
+              || id.startsWith('__mocks__/');
+          },
+          output: {
+            assetFileNames: 'mirador.[ext]',
+            exports: 'named',
+            globals: {
+              react: 'React',
+              'react-dom': 'ReactDOM',
+            },
+          },
+        },
+        sourcemap: true,
+      },
+    }
+  ),
   define: {
     'process.env': {},
   },
@@ -76,7 +77,7 @@ export default defineConfig({
     },
     {
       /**
-       * Middleware to rewrite HTML URLs to point to the deep path
+        * Middleware to rewrite HTML URLs to point to the deep path
        */
       configureServer(server) {
         server.middlewares.use(async (req, res, next) => {
@@ -85,7 +86,7 @@ export default defineConfig({
 
           // Handle root URL directly
           if (originalUrl === '/') {
-            req.url = '/demo/index.html'; // eslint-disable-line no-param-reassign
+            req.url = '/demo/index.html';  // eslint-disable-line no-param-reassign
             return next();
           }
 
@@ -94,14 +95,19 @@ export default defineConfig({
           if (path.extname(originalUrl) && path.extname(originalUrl) !== '.html') return next();
 
           // Add .html extension if needed
-          const pathWithExtension = path.extname(originalUrl) ? originalUrl : `${originalUrl}.html`;
+          const pathWithExtension = path.extname(originalUrl)
+            ? originalUrl
+            : `${originalUrl}.html`;
 
-          const deepPath = path.join('demo', decodeURIComponent(pathWithExtension));
+          const deepPath = path.join(
+            'demo',
+            decodeURIComponent(pathWithExtension),
+          );
 
           try {
             // Check if this is a file we own (not HMR-related vite files, for example)
             await fs.access(deepPath);
-            req.url = `/demo${pathWithExtension}`; // eslint-disable-line no-param-reassign
+            req.url = `/demo${pathWithExtension}`;  // eslint-disable-line no-param-reassign
           } catch {
             // Not ours / does not exist — skip rewrite
           }

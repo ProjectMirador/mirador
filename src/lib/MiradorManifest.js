@@ -26,7 +26,8 @@ export default class MiradorManifest {
 
     if (!canvasId) {
       // IIIF v3
-      const start = this.manifest.getProperty('start') || sequence.getProperty('start');
+      const start = this.manifest.getProperty('start')
+      || sequence.getProperty('start');
 
       canvasId = start && (start.id || start.source);
     }

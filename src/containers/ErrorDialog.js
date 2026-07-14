@@ -10,7 +10,7 @@ import { getLatestError } from '../state/selectors';
  * @memberof ErrorDialog
  * @private
  */
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   error: getLatestError(state),
 });
 
@@ -23,6 +23,9 @@ const mapDispatchToProps = {
   removeError: actions.removeError,
 };
 
-const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('ErrorDialog'));
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('ErrorDialog'),
+);
 
 export default enhance(ErrorDialog);

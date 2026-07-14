@@ -1,4 +1,10 @@
-import { getManifest, getViewer, getWindowManifests, getWindows, getCatalog } from '../../../src/state/selectors/getters';
+import {
+  getManifest,
+  getViewer,
+  getWindowManifests,
+  getWindows,
+  getCatalog,
+} from '../../../src/state/selectors/getters';
 
 describe('getManifest()', () => {
   const state = {

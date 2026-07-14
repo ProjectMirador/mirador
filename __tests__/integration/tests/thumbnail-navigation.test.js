@@ -10,17 +10,14 @@ describe('Canvas navigation by clicking thumbnails', () => {
 
   it.skip('navigates a manifest using thumbnail navigation', async (context) => {
     // Make sure we have the manifest
-    const windowElement = await screen.findByRole('region', {
-      name: /Window: Bodleian Library MS. Ind. Inst. Misc. 22/i,
-    });
+    const windowElement = await screen.findByRole('region', { name: /Window: Bodleian Library MS. Ind. Inst. Misc. 22/i });
     expect(windowElement).toBeInTheDocument();
 
     const windowId = windowElement.getAttribute('id');
     const storedCanvasId = context.miradorInstance.store.getState().windows[windowId].canvasId;
 
     const thumbnailsContainer = await screen.findByLabelText('Thumbnails');
-    // eslint-disable-next-line testing-library/no-node-access
-    const thumbnailButtons = thumbnailsContainer.querySelectorAll('.mirador-thumbnail-nav-canvas');
+    const thumbnailButtons = thumbnailsContainer.querySelectorAll('.mirador-thumbnail-nav-canvas'); // eslint-disable-line testing-library/no-node-access
     fireEvent.click(thumbnailButtons[4]);
   });
 });

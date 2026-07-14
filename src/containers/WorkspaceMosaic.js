@@ -10,11 +10,13 @@ import { WorkspaceMosaic } from '../components/WorkspaceMosaic';
  * @memberof Workspace
  * @private
  */
-const mapStateToProps = (state) => ({
-  layout: getWorkspace(state).layout,
-  windowIds: getWorkspace(state).windowIds,
-  workspaceId: getWorkspace(state).id,
-});
+const mapStateToProps = state => (
+  {
+    layout: getWorkspace(state).layout,
+    windowIds: getWorkspace(state).windowIds,
+    workspaceId: getWorkspace(state).id,
+  }
+);
 
 /**
  * mapDispatchToProps - used to hook up connect to action creators

@@ -13,6 +13,9 @@ const mapStateToProps = (state, { data }) => ({
   ...(getConfig(state).canvasNavigation || {}),
 });
 
-const enhance = compose(connect(mapStateToProps, null), withPlugins('SidebarIndexThumbnail'));
+const enhance = compose(
+  connect(mapStateToProps, null),
+  withPlugins('SidebarIndexThumbnail'),
+);
 
 export default enhance(SidebarIndexThumbnail);

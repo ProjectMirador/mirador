@@ -42,7 +42,6 @@ export const annotationsReducer = (state = {}, action) => {
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};
-    default:
-      return state;
+    default: return state;
   }
 };

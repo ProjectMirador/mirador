@@ -37,7 +37,9 @@ const StyledMenuList = styled(MenuList, { name: 'WindowViewSettings', slot: 'opt
 /**
  *
  */
-export function WindowViewSettings({ handleClose = () => {}, windowViewType, viewTypes = [], setWindowViewType, windowId }) {
+export function WindowViewSettings({
+  handleClose = () => {}, windowViewType, viewTypes = [], setWindowViewType, windowId,
+}) {
   const { t } = useTranslation();
   /** */
   const handleChange = (value) => {
@@ -56,13 +58,9 @@ export function WindowViewSettings({ handleClose = () => {}, windowViewType, vie
   const menuItem = ({ value, Icon }) => (
     <ViewOption
       aria-checked={windowViewType === value}
-      // eslint-disable-next-line jsx-a11y/no-autofocus
-      autoFocus={windowViewType === value}
+      autoFocus={windowViewType === value} // eslint-disable-line jsx-a11y/no-autofocus
       key={value}
-      onClick={() => {
-        handleChange(value);
-        handleClose();
-      }}
+      onClick={() => { handleChange(value); handleClose(); }}
       role="menuitemradio"
       selected={windowViewType === value}
     >
@@ -78,10 +76,10 @@ export function WindowViewSettings({ handleClose = () => {}, windowViewType, vie
   if (viewTypes.length === 0) return null;
   return (
     <>
-      <ListSubheader role="presentation" disableSticky>
-        {t('view')}
-      </ListSubheader>
-      <StyledMenuList role="menubar">{viewTypes.map((value) => menuItem({ Icon: iconMap[value], value }))}</StyledMenuList>
+      <ListSubheader role="presentation" disableSticky>{t('view')}</ListSubheader>
+      <StyledMenuList role="menubar">
+        { viewTypes.map(value => menuItem({ Icon: iconMap[value], value })) }
+      </StyledMenuList>
     </>
   );
 }

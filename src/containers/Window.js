@@ -4,14 +4,8 @@ import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
 import { Window } from '../components/Window';
 import {
-  getManifestStatus,
-  getManifestTitle,
-  getThumbnailNavigationPosition,
-  getWindow,
-  getWorkspaceType,
-  getWindowDraggability,
-  getWindowViewType,
-  getManifestError,
+  getManifestStatus, getManifestTitle, getThumbnailNavigationPosition, getWindow,
+  getWorkspaceType, getWindowDraggability, getWindowViewType, getManifestError,
 } from '../state/selectors';
 
 /**
@@ -40,6 +34,9 @@ const mapDispatchToProps = (dispatch, { windowId }) => ({
   focusWindow: () => dispatch(actions.focusWindow(windowId)),
 });
 
-const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('Window'));
+const enhance = compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withPlugins('Window'),
+);
 
 export default enhance(Window);

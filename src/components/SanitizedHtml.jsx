@@ -17,8 +17,10 @@ DOMPurify.addHook('afterSanitizeAttributes', (node) => {
 });
 
 /**
- */
-export function SanitizedHtml({ classes = {}, htmlString, ruleSet, ...rest }) {
+*/
+export function SanitizedHtml({
+  classes = {}, htmlString, ruleSet, ...rest
+}) {
   return (
     <Root
       className={[ns('third-party-html'), classes.root].join(' ')}

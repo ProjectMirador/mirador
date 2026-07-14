@@ -14,8 +14,10 @@ import { PluginHook } from './PluginHook';
 
 /**
  * WorkspaceOptionsMenu ~ the menu for workspace options such as import/export
- */
-export function WorkspaceOptionsMenu({ anchorEl = null, handleClose, open = false, ...rest }) {
+*/
+export function WorkspaceOptionsMenu({
+  anchorEl = null, handleClose, open = false, ...rest
+}) {
   const { t } = useTranslation();
   const container = useContext(WorkspaceContext);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -23,12 +25,7 @@ export function WorkspaceOptionsMenu({ anchorEl = null, handleClose, open = fals
   const importId = useId();
 
   const pluginProps = {
-    anchorEl,
-    container,
-    handleClose,
-    open,
-    t,
-    ...rest,
+    anchorEl, container, handleClose, open, t, ...rest,
   };
 
   /** */
@@ -61,9 +58,7 @@ export function WorkspaceOptionsMenu({ anchorEl = null, handleClose, open = fals
       >
         <MenuItem
           aria-haspopup="true"
-          onClick={() => {
-            handleClick('exportWorkspace');
-          }}
+          onClick={() => { handleClick('exportWorkspace'); }}
           aria-owns={selectedOption === 'exportWorkspace' ? exportId : undefined}
         >
           <ListItemIcon>
@@ -73,9 +68,7 @@ export function WorkspaceOptionsMenu({ anchorEl = null, handleClose, open = fals
         </MenuItem>
         <MenuItem
           aria-haspopup="true"
-          onClick={() => {
-            handleClick('importWorkspace');
-          }}
+          onClick={() => { handleClick('importWorkspace'); }}
           aria-owns={selectedOption === 'importWorkspace' ? importId : undefined}
         >
           <ListItemIcon>

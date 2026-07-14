@@ -1,4 +1,6 @@
-import { filterValidPlugins } from '../../../src/extend/pluginPreprocessing';
+import {
+  filterValidPlugins,
+} from '../../../src/extend/pluginPreprocessing';
 
 describe('filterValidPlugins', () => {
   it('returns empty array if plugin array is empty', () => {
@@ -8,13 +10,13 @@ describe('filterValidPlugins', () => {
   it('returns only valid plugins', () => {
     const plugins = [
       {
-        component: (props) => null,
+        component: props => null,
         mode: 'add',
         name: 'valid plugin 1',
         target: 'Window',
       },
       {
-        component: (props) => null,
+        component: props => null,
         mode: 'wrap',
         name: 'valid plugin 2',
         target: 'Window',
@@ -29,7 +31,7 @@ describe('filterValidPlugins', () => {
           target: 'missing-mode',
         },
         {
-          component: (props) => null,
+          component: props => null,
           mode: 'wrap',
           name: 'valid plugin, grouped with an invalid one',
           target: 'WindowTopBar',
@@ -37,6 +39,6 @@ describe('filterValidPlugins', () => {
       ],
     ];
     const result = filterValidPlugins(plugins);
-    expect(result.map((r) => r.name)).toEqual(['valid plugin 1', 'valid plugin 2']);
+    expect(result.map(r => r.name)).toEqual(['valid plugin 1', 'valid plugin 2']);
   });
 });

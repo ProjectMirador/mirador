@@ -2,7 +2,9 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { ViewerInfo } from '../components/ViewerInfo';
-import { getCanvasLabel, getCanvases, getCanvasIndex, getCurrentCanvas } from '../state/selectors';
+import {
+  getCanvasLabel, getCanvases, getCanvasIndex, getCurrentCanvas,
+} from '../state/selectors';
 
 /**
  * mapStateToProps - to hook up connect
@@ -25,6 +27,9 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const enhance = compose(connect(mapStateToProps, null), withPlugins('ViewerInfo'));
+const enhance = compose(
+  connect(mapStateToProps, null),
+  withPlugins('ViewerInfo'),
+);
 
 export default enhance(ViewerInfo);

@@ -36,7 +36,9 @@ describe('app-level sagas', () => {
 
       testSaga(importState, action)
         .next()
-        .all([call(fetchManifests, 'x')]);
+        .all([
+          call(fetchManifests, 'x'),
+        ]);
     });
     it('does not fetchManifest if the manifest json was provided', () => {
       const action = {
@@ -46,7 +48,9 @@ describe('app-level sagas', () => {
         },
       };
 
-      testSaga(importState, action).next().all([]);
+      testSaga(importState, action)
+        .next()
+        .all([]);
     });
   });
 
@@ -64,22 +68,12 @@ describe('app-level sagas', () => {
 
       return expectSaga(importConfig, action)
         .provide([
-          [
-            call(addWindow, {
-              id: 'x',
-              manifestId: 'a',
-              thumbnailNavigationPosition: undefined,
-            }),
-            { type: 'thunk1' },
-          ],
-          [
-            call(addWindow, {
-              id: 'y',
-              manifestId: 'b',
-              thumbnailNavigationPosition: undefined,
-            }),
-            { type: 'thunk2' },
-          ],
+          [call(addWindow, {
+            id: 'x', manifestId: 'a', thumbnailNavigationPosition: undefined,
+          }), { type: 'thunk1' }],
+          [call(addWindow, {
+            id: 'y', manifestId: 'b', thumbnailNavigationPosition: undefined,
+          }), { type: 'thunk2' }],
         ])
         .put({ type: 'thunk1' })
         .put({ type: 'thunk2' })

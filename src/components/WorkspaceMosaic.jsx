@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { DndContext } from 'react-dnd';
-import { Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves, convertLegacyToNary } from 'react-mosaic-component';
+import {
+  Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves, convertLegacyToNary
+} from 'react-mosaic-component';
 import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
@@ -39,7 +41,7 @@ RenderPreview.propTypes = {
 };
 
 /** */
-const ZeroStateView = () => <div />;
+const ZeroStateView = () => (<div />);
 
 /**
  * Used to regenerate a new layout when windows are added or removed
@@ -56,7 +58,7 @@ const determineWorkspaceLayout = (currentLayout, windowIds, currentWindowPaths =
 
   // if we have paths for the removed windows, we can gracefully remove them and
   // preserve the existing layout for the remaining windows
-  if (removedWindows.every((e) => currentWindowPaths[e])) {
+  if (removedWindows.every(e => currentWindowPaths[e])) {
     mosaicLayout.removeWindows(removedWindows, currentWindowPaths);
   } else {
     // Windows were removed (perhaps in a different Workspace). We don't have a
@@ -73,7 +75,10 @@ const determineWorkspaceLayout = (currentLayout, windowIds, currentWindowPaths =
  * @memberof Workspace
  * @private
  */
-export function WorkspaceMosaic({ layout = undefined, updateWorkspaceMosaicLayout, windowIds = [], workspaceId }) {
+export function WorkspaceMosaic({
+  layout = undefined, updateWorkspaceMosaicLayout, windowIds = [], workspaceId,
+}) {
+
   const windowPaths = useRef({});
   const dndContext = useContext(DndContext);
 
@@ -93,7 +98,7 @@ export function WorkspaceMosaic({ layout = undefined, updateWorkspaceMosaicLayou
     }
 
     // nothing was added or removed, and all the windows are accounted for in the layout
-    if (windowIds.every((e) => leaveKeys.includes(e)) && leaveKeys.every((e) => windowIds.includes(e))) {
+    if (windowIds.every(e => leaveKeys.includes(e)) && leaveKeys.every(e => windowIds.includes(e))) {
       return undefined;
     }
 
@@ -114,8 +119,16 @@ export function WorkspaceMosaic({ layout = undefined, updateWorkspaceMosaicLayou
     windowPaths.current[id] = path;
 
     return (
-      <MosaicWindow toolbarControls={toolbarControls} path={path} windowId={id} renderPreview={RenderPreview}>
-        <Window key={`${id}-${workspaceId}`} windowId={id} />
+      <MosaicWindow
+        toolbarControls={toolbarControls}
+        path={path}
+        windowId={id}
+        renderPreview={RenderPreview}
+      >
+        <Window
+          key={`${id}-${workspaceId}`}
+          windowId={id}
+        />
       </MosaicWindow>
     );
   };
@@ -143,7 +156,9 @@ export function WorkspaceMosaic({ layout = undefined, updateWorkspaceMosaicLayou
 }
 
 WorkspaceMosaic.propTypes = {
-  layout: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
+  layout: PropTypes.oneOfType(
+    [PropTypes.object, PropTypes.string],
+  ),
   updateWorkspaceMosaicLayout: PropTypes.func.isRequired,
   windowIds: PropTypes.arrayOf(PropTypes.string),
   workspaceId: PropTypes.string.isRequired,
