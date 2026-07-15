@@ -70,6 +70,8 @@ export function WindowSideBarCollectionPanel({
 
     const behaviors = collection.getProperty('behavior');
 
+    if (!behaviors) return false;
+
     if (Array.isArray(behaviors)) return behaviors.includes('multi-part');
 
     return behaviors === 'multi-part';
