@@ -1,6 +1,14 @@
 import { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Chip, Dialog, DialogActions, DialogTitle, Link, MenuList, MenuItem, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import Link from '@mui/material/Link';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackSharp';
 import Skeleton from '@mui/material/Skeleton';
 import { styled } from '@mui/material/styles';
