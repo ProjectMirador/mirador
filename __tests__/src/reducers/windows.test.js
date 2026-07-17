@@ -166,7 +166,7 @@ describe('windows reducer', () => {
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
     });
 
-    it('does not re-create a window that no longer exists', () => {
+     it('does not re-create a window that no longer exists', () => {
       const action = {
         id: 'gone',
         payload: {
@@ -180,6 +180,24 @@ describe('windows reducer', () => {
         },
       };
       expect(windowsReducer(beforeState, action)).toBe(beforeState);
+    });
+
+    // https://github.com/ProjectMirador/mirador/issues/3930
+    it('does not let an explicit undefined value in the payload clobber existing state', () => {
+      const action = {
+        id: 'abc123',
+        payload: {
+          companionWindowIds: undefined,
+        },
+        type: ActionTypes.UPDATE_WINDOW,
+      };
+      const beforeState = {
+        abc123: {
+          companionWindowIds: ['cw1', 'cw2'],
+        },
+      };
+
+      expect(windowsReducer(beforeState, action)).toEqual(beforeState);
     });
   });
 
