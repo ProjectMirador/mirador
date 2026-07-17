@@ -1,43 +1,35 @@
-import {
-  useCallback,
-  useState,
-  useEffect,
-  useMemo,
-} from 'react';
+import { useCallback, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import fscreen from 'fscreen';
 
 /**
- * Used to request or exit fullscreen using the Fullscreen API, normalized
- * using fscreen.
+ * Used to request or exit fullscreen using the native Fullscreen API.
  */
 export function useFullScreenHandle() {
   const [active, setActive] = useState(false);
 
   /**  */
   const handleFullScreenChange = () => {
-    setActive(fscreen.fullscreenElement === document.body);
+    setActive(document.fullscreenElement === document.body);
   };
 
   useEffect(() => {
-    fscreen.addEventListener('fullscreenchange', handleFullScreenChange);
-    return () => fscreen.removeEventListener('fullscreenchange', handleFullScreenChange);
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullScreenChange);
   }, []);
 
   /**  */
-  const requestFullscreen = () => fscreen.requestFullscreen(document.body);
+  const requestFullscreen = () => document.body.requestFullscreen();
 
   const enter = useCallback(() => {
-    if (fscreen.fullscreenElement) {
-      return fscreen.exitFullscreen()
-        .then(() => requestFullscreen());
+    if (document.fullscreenElement) {
+      return document.exitFullscreen().then(() => requestFullscreen());
     }
     return requestFullscreen();
   }, []);
 
   const exit = useCallback(() => {
-    if (fscreen.fullscreenElement !== document.body) return Promise.resolve();
-    return fscreen.exitFullscreen();
+    if (document.fullscreenElement !== document.body) return Promise.resolve();
+    return document.exitFullscreen();
   }, []);
 
   return useMemo(
@@ -53,12 +45,7 @@ export function useFullScreenHandle() {
 /**
  * Used to set its children to fullscreen.
  */
-export const FullScreen = ({
-  handle,
-  onChange,
-  children,
-  className = '',
-}) => {
+export const FullScreen = ({ handle, onChange, children, className = '' }) => {
   const fullScreenClasses = ['fullscreen', className, handle.active ? 'fullscreen-enabled' : ''].filter(Boolean);
 
   useEffect(() => {
@@ -67,10 +54,12 @@ export const FullScreen = ({
     }
   }, [handle, handle.active, onChange]);
 
-  const styles = handle.active ? {
-    height: '100%',
-    width: '100%',
-  } : {};
+  const styles = handle.active
+    ? {
+        height: '100%',
+        width: '100%',
+      }
+    : {};
 
   return (
     <div className={fullScreenClasses.join(' ')} style={styles}>
