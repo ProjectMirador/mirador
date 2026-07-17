@@ -80,15 +80,12 @@ export const WindowCanvasNavigationControls = forwardRef(
 );
 
 WindowCanvasNavigationControls.propTypes = {
+  // eslint-disable-next-line react/require-default-props -- this rule doesn't detect default args through forwardRef's inner callback (see the default arg on line 37); https://github.com/jsx-eslint/eslint-plugin-react/issues/2856
   showZoomControls: PropTypes.bool,
+  // eslint-disable-next-line react/require-default-props -- same forwardRef detection gap as above
   visible: PropTypes.bool,
   windowId: PropTypes.string.isRequired,
   zoomToWorld: PropTypes.func.isRequired,
-};
-
-WindowCanvasNavigationControls.defaultProps = {
-  showZoomControls: false,
-  visible: true,
 };
 
 WindowCanvasNavigationControls.displayName = 'WindowCanvasNavigationControls';
