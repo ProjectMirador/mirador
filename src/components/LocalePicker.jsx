@@ -31,6 +31,9 @@ export function LocalePicker({ availableLocales = [], locale = '', setLocale = u
     }
   };
 
+  // Resolve the label shown for a locale: manifest-provided label, then Intl.DisplayNames, then raw code
+  const getLocaleLabel = (code) => labels[code]?.label || getDisplayName(code) || code;
+
   return (
     <FormControl variant="standard">
       <InputLabel>{t('language')}</InputLabel>
@@ -51,7 +54,7 @@ export function LocalePicker({ availableLocales = [], locale = '', setLocale = u
       >
         {availableLocales.map((l) => (
           <MenuItem key={l} value={l}>
-            <Typography variant="body2">{labels[l]?.label || getDisplayName(l) || l}</Typography>
+            <Typography variant="body2">{getLocaleLabel(l)}</Typography>
           </MenuItem>
         ))}
       </Select>
