@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 import { I18nextProvider } from 'react-i18next';
 import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/styles';
 import { DndContext, DndProvider } from 'react-dnd';
@@ -12,6 +11,7 @@ import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import createI18nInstance from '../i18n';
 import FailedImageProvider from '../contexts/FailedImageProvider';
+import { FullScreen, useFullScreenHandle } from '../lib/FullScreenHandle';
 import FullScreenContext from '../contexts/FullScreenContext';
 import LocaleContext from '../contexts/LocaleContext';
 
