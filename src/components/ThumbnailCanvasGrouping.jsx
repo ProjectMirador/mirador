@@ -69,6 +69,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
         }}
         className={ns('thumbnail-nav-container')}
         role="gridcell"
+        aria-selected={isSelected}
         aria-colindex={itemIndex + 1}
       >
         <StyledCanvas

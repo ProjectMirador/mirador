@@ -63,6 +63,7 @@ export function WorkspaceMenu({
       >
         <MenuItem
           aria-haspopup="true"
+          aria-expanded={selectedOption === 'workspaceSelection'}
           disabled={isWorkspaceAddVisible}
           onClick={(e) => {
             handleZoomToggleClick(e);

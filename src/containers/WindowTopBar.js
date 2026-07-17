@@ -2,7 +2,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getWindow, getWindowConfig, isFocused } from '../state/selectors';
+import { getWindowConfig, isFocused, getWindow } from '../state/selectors';
 import { WindowTopBar } from '../components/WindowTopBar';
 
 /** mapStateToProps */
