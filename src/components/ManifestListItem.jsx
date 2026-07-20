@@ -7,8 +7,8 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 import { useTranslation } from 'react-i18next';
-import { Img } from 'react-image';
 import ManifestListItemError from '../containers/ManifestListItemError';
+import { ImageWithFallback } from './ImageWithFallback';
 import ns from '../config/css-ns';
 
 const Root = styled(ListItem, { name: 'ManifestListItem', slot: 'root' })(({ ownerState, theme }) => ({
@@ -26,15 +26,18 @@ const Root = styled(ListItem, { name: 'ManifestListItem', slot: 'root' })(({ own
   },
 }));
 
-const StyledThumbnail = styled(Img, {
+const StyledThumbnail = styled(ImageWithFallback, {
   name: 'ManifestListItem',
   slot: 'thumbnail',
-})(({ theme }) => ({
+})(() => ({
   maxWidth: '100%',
   objectFit: 'contain',
 }));
 
-const StyledLogo = styled(Img, { name: 'ManifestListItem', slot: 'logo' })(({ theme }) => ({
+const StyledLogo = styled(ImageWithFallback, {
+  name: 'ManifestListItem',
+  slot: 'logo',
+})(() => ({
   height: '2.5rem',
   maxWidth: '100%',
   objectFit: 'contain',
@@ -121,17 +124,28 @@ export function ManifestListItem({
               ref={buttonRef}
               className={ns('manifest-list-item-title')}
               onClick={handleOpenButtonClick}
-              sx={{ alignItems: 'center', justifyContent: 'flex-start', width: '100%' }}
+              sx={{
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                width: '100%',
+              }}
             >
               <Grid container component="div" sx={{ width: '100%' }}>
-                <Grid size={3} sx={{ alignItems: 'center', display: 'flex', justifyContent: 'flex-start' }}>
+                <Grid
+                  size={3}
+                  sx={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                  }}
+                >
                   {thumbnail ? (
                     <StyledThumbnail
-                      className={[ns('manifest-list-item-thumb')]}
-                      src={[thumbnail]}
+                      className={ns('manifest-list-item-thumb')}
+                      src={thumbnail}
                       alt=""
                       height="80"
-                      unloader={
+                      fallback={
                         <Skeleton variant="rectangular" animation={false} sx={{ bgcolor: 'grey[300]' }} height={80} width={120} />
                       }
                     />
@@ -161,10 +175,10 @@ export function ManifestListItem({
           <Grid size={{ sm: 3, xs: 4 }}>
             {manifestLogo && (
               <StyledLogo
-                src={[manifestLogo]}
+                src={manifestLogo}
                 alt=""
                 role="presentation"
-                unloader={
+                fallback={
                   <Skeleton variant="rectangular" animation={false} sx={{ bgcolor: 'grey[300]' }} height={60} width={60} />
                 }
               />
