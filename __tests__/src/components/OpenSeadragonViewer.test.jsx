@@ -59,6 +59,16 @@ describe('OpenSeadragonViewer', () => {
     expect(screen.getByLabelText('Item:')).toHaveClass('mirador-osd-container');
   });
 
+  it('registers itself with OSDReferences on mount and removes itself on unmount', () => {
+    const { unmount } = createWrapper({});
+
+    expect(OSDReferences.get('base')).toBeDefined();
+
+    unmount();
+
+    expect(OSDReferences.get('base')).toBeUndefined();
+  });
+
   it('renders child components enhanced with additional props', async () => {
     const { viewer } = createWrapper({});
     const fitBounds = vi.fn();

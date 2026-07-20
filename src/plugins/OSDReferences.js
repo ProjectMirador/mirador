@@ -3,6 +3,10 @@ export const OSDReferences = {
   get(windowId) {
     return this.refs[windowId];
   },
+  /** */
+  remove(windowId) {
+    delete this.refs[windowId];
+  },
   refs: {},
   /** */
   set(windowId, ref) {
