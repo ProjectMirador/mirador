@@ -214,6 +214,31 @@ describe('window-level sagas', () => {
         .then(({ allEffects }) => allEffects.length === 0);
     });
 
+    it('encodes special characters in the default search query', () => {
+      const action = {
+        window: {
+          defaultSearchQuery: 'hel^lo',
+          id: 'x',
+          manifestId: 'manifest.json',
+        },
+      };
+
+      return expectSaga(setWindowDefaultSearchQuery, action)
+        .provide([
+          [select(getManifestSearchService, { windowId: 'x' }), { id: 'http://search/' }],
+          [select(getCompanionWindowIdsForPosition, { position: 'left', windowId: 'x' }), ['left']],
+        ])
+        .put({
+          companionWindowId: 'left',
+          query: 'hel^lo',
+          searchId: 'http://search/?q=hel%5Elo',
+          type: ActionTypes.REQUEST_SEARCH,
+          windowId: 'x',
+        })
+        .run()
+        .then(({ allEffects }) => allEffects.length === 1);
+    });
+
     it('initiates a search', () => {
       const action = {
         window: {
