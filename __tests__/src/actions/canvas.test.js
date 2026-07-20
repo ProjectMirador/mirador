@@ -1,11 +1,8 @@
-import configureMockStore from 'redux-mock-store';
+import { createStore, applyMiddleware } from 'redux';
 import { thunk } from 'redux-thunk';
 
 import * as actions from '../../../src/state/actions';
 import ActionTypes from '../../../src/state/actions/action-types';
-
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
 
 vi.mock('../../../src/state/selectors', () => ({
   getCanvasGrouping: (state, { canvasId }) => [{ id: canvasId }],
@@ -17,11 +14,28 @@ vi.mock('../../../src/state/selectors', () => ({
   getPreviousCanvasGrouping: () => [{ id: 'canvasIndex-0' }],
 }));
 
+/**
+ * Builds a real redux store (with thunk support) that records every dispatched
+ * action, in place of the deprecated redux-mock-store package. createStore()
+ * requires a reducer, so `(state = {}) => state`is no-op here since state is never
+ * read — the selectors these thunks call are mocked above.
+ */
+function createRecordingStore() {
+  const recordedActions = [];
+  const recordAction = () => (next) => (action) => {
+    recordedActions.push(action);
+    return next(action);
+  };
+  const store = createStore((state = {}) => state, applyMiddleware(thunk, recordAction));
+
+  return { ...store, getActions: () => recordedActions };
+}
+
 describe('canvas actions', () => {
   describe('setCanvas', () => {
     let store = null;
     beforeEach(() => {
-      store = mockStore({});
+      store = createRecordingStore();
     });
 
     it('sets to a defined canvas', () => {
@@ -40,7 +54,7 @@ describe('canvas actions', () => {
   describe('setPreviousCanvas', () => {
     let store = null;
     beforeEach(() => {
-      store = mockStore({});
+      store = createRecordingStore();
     });
 
     it('sets to a defined canvas', () => {
@@ -59,7 +73,7 @@ describe('canvas actions', () => {
   describe('setNextCanvas', () => {
     let store = null;
     beforeEach(() => {
-      store = mockStore({});
+      store = createRecordingStore();
     });
 
     it('sets to a defined canvas', () => {
