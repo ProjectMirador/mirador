@@ -4,7 +4,6 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import { MosaicWindowContext } from 'react-mosaic-component';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useTranslation } from 'react-i18next';
 import ns from '../config/css-ns';
 import WindowTopBar from '../containers/WindowTopBar';
 import PrimaryWindow from '../containers/PrimaryWindow';
@@ -89,7 +88,6 @@ export function Window({
   workspaceType = null,
   manifestError = null,
 }) {
-  const { t } = useTranslation();
   // eslint-disable-next-line prefer-rest-params
   const ownerState = arguments[0];
   const ErrorWindow = useCallback(
@@ -110,7 +108,6 @@ export function Window({
         elevation={1}
         id={windowId}
         className={ns('window')}
-        aria-label={t('window', { label })}
       >
         <WindowTopBar
           component={workspaceType === 'mosaic' && windowDraggable ? DraggableNavBar : undefined}

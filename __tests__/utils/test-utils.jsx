@@ -95,7 +95,7 @@ export const setupIntegrationTestViewer = (config, plugins) => {
     await failIfErrorDialogPresent({ waitForRole: 'main' });
 
     if ((config.windows || []).length > 0) {
-      await safeFindAllByRole('region', { name: /Window:/i });
+      await safeFindAllByRole('navigation', { name: 'Window navigation' });
     }
   });
 };

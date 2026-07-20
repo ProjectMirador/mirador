@@ -55,8 +55,8 @@ describe('WorkspaceElastic', () => {
   };
 
   it('should render properly with an initialValue', () => {
-    createWrapper({ elasticLayout });
-    expect(screen.getAllByLabelText('Window:')).toHaveLength(2);
+    const { container } = createWrapper({ elasticLayout });
+    expect(container.querySelectorAll('.mirador-window')).toHaveLength(2);
   });
   describe('workspace behaviour', () => {
     it('when workspace itself is dragged', async () => {
