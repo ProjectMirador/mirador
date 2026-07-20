@@ -26,6 +26,14 @@ function useWidth() {
 
 const Root = styled(Fab, { name: 'WorkspaceAddButton', slot: 'root' })(({ theme }) => ({
   marginBottom: theme.spacing(1),
+  '&:hover, &.Mui-focusVisible': {
+    backgroundColor: (theme.vars || theme).palette.primary.dark,
+  },
+  ...theme.applyStyles('dark', {
+    '&:hover, &.Mui-focusVisible': {
+      backgroundColor: (theme.vars || theme).palette.primary.light,
+    },
+  }),
 }));
 
 /**
@@ -40,6 +48,7 @@ export function WorkspaceAddButton({ setWorkspaceAddVisibility, isWorkspaceAddVi
         size="medium"
         color="primary"
         id="addBtn"
+        focusRipple={false}
         aria-label={
           isWorkspaceAddVisible
             ? t('closeAddResourceMenu')
