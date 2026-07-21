@@ -63,6 +63,7 @@ export function OpenSeadragonViewer({
 
   useEffect(() => {
     OSDReferences.set(windowId, apiRef);
+    return () => OSDReferences.remove(windowId);
   }, [apiRef, windowId]);
 
   useEffect(() => {
