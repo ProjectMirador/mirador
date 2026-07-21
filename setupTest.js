@@ -33,7 +33,7 @@ i18next.init({
   resources: {
     en,
   },
-  showSupportNotice: false
+  showSupportNotice: false,
 });
 
 // --- Fullscreen mocking ---
