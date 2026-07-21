@@ -13,6 +13,7 @@ export function LanguageSettings({ handleClick, languages }) {
     <>
       {languages.map((language) => (
         <MenuItem
+          aria-selected={language.current}
           key={language.locale}
           lang={language.locale}
           onClick={() => {

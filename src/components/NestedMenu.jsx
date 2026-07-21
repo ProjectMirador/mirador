@@ -19,7 +19,7 @@ export function NestedMenu({ children, icon = null, label, ...otherProps }) {
 
   return (
     <>
-      <MenuItem onClick={handleMenuClick} divider={nestedMenuIsOpen} {...otherProps}>
+      <MenuItem aria-expanded={nestedMenuIsOpen} onClick={handleMenuClick} divider={nestedMenuIsOpen} {...otherProps}>
         {icon && <ListItemIcon>{icon}</ListItemIcon>}
         <ListItemText primaryTypographyProps={{ variant: 'body1' }}>{label}</ListItemText>
         {nestedMenuIsOpen ? <ExpandLess /> : <ExpandMore />}
