@@ -121,6 +121,9 @@
     "vitest": "^4.1.2",
     "vitest-fetch-mock": "^0.4.2"
   },
+  "overrides": {
+    "brace-expansion@1": "^1.1.16"
+  },
   "peerDependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
