@@ -1,8 +1,10 @@
 import settings from '../../config/settings';
 
 /**
- * Returns a slice of the mirador redux state based on settings.
- * Otherwise the entire Redux state is returned.
+ * Returns Mirador's portion of the global Redux state.
+ * If settings.state.slice is set (e.g. 'mirador'), Mirador's state is read from state[slice],
+ * allowing Mirador to coexist in a shared Redux store.
+ * Otherwise, Mirador is assumed to own the entire Redux state.
  * @param {object} state
  * @returns {object}
  */
