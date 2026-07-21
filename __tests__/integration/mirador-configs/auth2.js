@@ -1,6 +1,6 @@
 // Import the Auth2 test fixtures as JSON modules
-import auth2KioskManifest from '../../../fixtures/version-3/auth2-kiosk.json' with { type: 'json' };
-import auth2ActiveManifest from '../../../fixtures/version-3/auth2-active.json' with { type: 'json' };
+import auth2KioskManifest from '/__tests__/fixtures/version-3/auth2-kiosk.json' with { type: 'json' };
+import auth2ActiveManifest from '/__tests__/fixtures/version-3/auth2-active.json' with { type: 'json' };
 
 export default {
   id: 'mirador',
