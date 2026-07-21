@@ -50,7 +50,7 @@ export function* refetchInfoResponses({ serviceId }) {
   /** */
   const haveThisTokenService = (infoResponse) => {
     const services = Utils.getServices(infoResponse);
-    return services.some(e => {
+    return services.some((e) => {
       const infoTokenService = getTokenService(e);
       return infoTokenService && infoTokenService.id === serviceId;
     });
@@ -85,35 +85,35 @@ export function* refetchProbeResponsesOnLogout({ tokenServiceId }) {
 export function* refetchProbeResponses({ serviceId }) {
   const windows = yield select(getWindows);
 
-  const canvases = yield all(
-    Object.keys(windows).map(windowId => select(getVisibleCanvases, { windowId })),
-  );
+  const canvases = yield all(Object.keys(windows).map((windowId) => select(getVisibleCanvases, { windowId })));
 
-  const visibleProbeServiceIds = flatten(flatten(canvases).map((canvas) => {
-    const miradorCanvas = new MiradorCanvas(canvas);
-    return miradorCanvas.imageResources.filter((r) => getProbeService(r)).map((r) => getProbeService(r));
-  }));
+  const visibleProbeServiceIds = flatten(
+    flatten(canvases).map((canvas) => {
+      const miradorCanvas = new MiradorCanvas(canvas);
+      return miradorCanvas.imageResources.filter((r) => getProbeService(r)).map((r) => getProbeService(r));
+    }),
+  );
 
   const probeResponses = yield select(selectProbeResponses);
   /** */
-  const haveThisTokenService = probeResponse => {
+  const haveThisTokenService = (probeResponse) => {
     const services = Utils.getServices(probeResponse);
-    return services.some(e => {
+    return services.some((e) => {
       const probeTokenService = getTokenService(e);
       return probeTokenService && probeTokenService.id === serviceId;
     });
   };
 
-  const obsoleteProbeResponses = Object.values(probeResponses).filter(
-    i => i.json && haveThisTokenService(i.json),
-  );
+  const obsoleteProbeResponses = Object.values(probeResponses).filter((i) => i.json && haveThisTokenService(i.json));
 
-  yield all(obsoleteProbeResponses.map(({ id: probeId }) => {
-    if (visibleProbeServiceIds.includes(probeId)) {
-      return call(fetchProbeResponse, { probeId });
-    }
-    return put({ probeId, type: ActionTypes.REMOVE_PROBE_RESPONSE });
-  }));
+  yield all(
+    obsoleteProbeResponses.map(({ id: probeId }) => {
+      if (visibleProbeServiceIds.includes(probeId)) {
+        return call(fetchProbeResponse, { probeId });
+      }
+      return put({ probeId, type: ActionTypes.REMOVE_PROBE_RESPONSE });
+    }),
+  );
 }
 
 /** try to start any non-interactive auth flows */
@@ -126,45 +126,39 @@ export function* doAuthWorkflow({ infoJson, windowId }) {
 
   const auths = yield select(getAuth);
   const { auth: { serviceProfiles = [] } = {} } = yield select(getConfig);
-  
+
   console.log('[doAuthWorkflow] Starting auth workflow for infoJson:', infoJson);
   console.log('[doAuthWorkflow] Services found:', Utils.getServices(infoJson));
-  
+
   // For Auth 2.0, check for probe services first (per IIIF spec)
-  const probeServices = Utils.getServices(infoJson).filter(s => 
-    s.getProperty && s.getProperty('type') === 'AuthProbeService2'
-  );
-  
+  const probeServices = Utils.getServices(infoJson).filter((s) => s.getProperty && s.getProperty('type') === 'AuthProbeService2');
+
   console.log('[doAuthWorkflow] Found probe services:', probeServices);
-  
+
   // If we have Auth 2.0 probe services, handle them
   if (probeServices.length > 0) {
     for (const probeService of probeServices) {
       console.log('[doAuthWorkflow] Requesting probe response for:', probeService.id);
-      
+
       // Only request probe response if not already requested or fetching
       const probeResponses = yield select(selectProbeResponses);
       const existingProbeResponse = probeResponses[probeService.id];
-      
+
       if (!existingProbeResponse || (!existingProbeResponse.isFetching && !existingProbeResponse.json)) {
         console.log('[doAuthWorkflow] Requesting new probe response');
-        yield put(requestProbeResponse(
-          probeService.id,
-          infoJson,
-          windowId
-        ));
+        yield put(requestProbeResponse(probeService.id, infoJson, windowId));
       } else {
         console.log('[doAuthWorkflow] Probe response already exists or fetching:', existingProbeResponse);
       }
       // Also check for nested access services in the probe service
-      const nestedAccessServices = Utils.getServices(probeService).filter(s => 
-        s.getProperty && s.getProperty('type') === 'AuthAccessService2'
+      const nestedAccessServices = Utils.getServices(probeService).filter(
+        (s) => s.getProperty && s.getProperty('type') === 'AuthAccessService2',
       );
-      
+
       for (const accessService of nestedAccessServices) {
         const profile = accessService.getProperty('profile');
         console.log('[doAuthWorkflow] Found nested access service with profile:', profile);
-        
+
         // Only add auth request if not already in progress
         if (!auths[accessService.id] || (!auths[accessService.id].isFetching && auths[accessService.id].ok === undefined)) {
           console.log('[doAuthWorkflow] Adding new auth request for:', accessService.id);
@@ -176,24 +170,24 @@ export function* doAuthWorkflow({ infoJson, windowId }) {
     }
     return;
   }
-  
+
   // Fallback to Auth 1.0 detection for access services directly in info.json
-  const authServices = Utils.getServices(infoJson).filter(s => !auths[s.id]);
-  
+  const authServices = Utils.getServices(infoJson).filter((s) => !auths[s.id]);
+
   for (const authService of authServices) {
     const profile = authService.getProfile();
-    
+
     // Handle Auth 2.0 services (identified by type) - but these should be nested in probe services
     if (authService.getProperty && authService.getProperty('type') === 'AuthAccessService2') {
       console.log('[doAuthWorkflow] Found standalone Auth2 access service (unusual):', authService.id);
       yield put(addAuthenticationRequest(windowId, authService.id, profile));
       continue;
     }
-    
+
     // Handle Auth 1.0 non-interactive services (original logic)
-    const nonInteractiveAuthFlowProfiles = serviceProfiles.filter(p => p.external || p.kiosk);
-    const profileConfig = nonInteractiveAuthFlowProfiles.find(p => p.profile === profile);
-    
+    const nonInteractiveAuthFlowProfiles = serviceProfiles.filter((p) => p.external || p.kiosk);
+    const profileConfig = nonInteractiveAuthFlowProfiles.find((p) => p.profile === profile);
+
     if (profileConfig) {
       if (profileConfig.kiosk) {
         yield put(addAuthenticationRequest(windowId, authService.id, profile));
@@ -214,7 +208,7 @@ export function* rerequestOnAccessTokenFailure({ infoJson, windowId, tokenServic
   if (!tokenServiceId) return;
 
   // make sure we have an auth service to try
-  const authService = Utils.getServices(infoJson).find(service => {
+  const authService = Utils.getServices(infoJson).find((service) => {
     const tokenService = getTokenService(service);
 
     return tokenService && tokenService.id === tokenServiceId;
@@ -277,10 +271,14 @@ export default function* authSaga() {
     takeEvery(ActionTypes.RECEIVE_INFO_RESPONSE, function* (action) {
       console.log('[authSaga] RECEIVE_INFO_RESPONSE (regular success) - checking for auth services:', action);
       // Check if successful response has auth services that should trigger workflow
-      if (action.infoJson && Utils.getServices(action.infoJson).some(s => 
-        (s.getProperty && s.getProperty('type') === 'AuthProbeService2') ||
-        (s.getProperty && s.getProperty('type') === 'AuthAccessService2')
-      )) {
+      if (
+        action.infoJson &&
+        Utils.getServices(action.infoJson).some(
+          (s) =>
+            (s.getProperty && s.getProperty('type') === 'AuthProbeService2') ||
+            (s.getProperty && s.getProperty('type') === 'AuthAccessService2'),
+        )
+      ) {
         console.log('[authSaga] SUCCESS response has auth services - triggering workflow');
         yield call(doAuthWorkflow, { infoJson: action.infoJson, windowId: action.windowId });
       }

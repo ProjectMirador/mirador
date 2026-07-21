@@ -75,7 +75,7 @@ export function receiveProbeResponseFailure(probeId, error, tokenServiceId) {
  */
 export function fetchProbeResponse({ resource, resourceId, windowId }) {
   const probeService = resource && getProbeService(resource);
-  const probeId = (resourceId || probeService.id);
+  const probeId = resourceId || probeService.id;
   return requestProbeResponse(probeId, resource, windowId);
 }
 

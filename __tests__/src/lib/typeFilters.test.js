@@ -1,8 +1,13 @@
 import { JSONLDResource } from 'manifesto.js';
 import { v4 as uuid } from 'uuid';
 import {
-  filterByTypes, audioResourcesFrom, anyImageServices, hasImageService,
-  iiifImageResourcesFrom, textResourcesFrom, videoResourcesFrom,
+  filterByTypes,
+  audioResourcesFrom,
+  anyImageServices,
+  hasImageService,
+  iiifImageResourcesFrom,
+  textResourcesFrom,
+  videoResourcesFrom,
 } from '../../../src/lib/typeFilters';
 
 /**

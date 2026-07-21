@@ -195,8 +195,8 @@ export default class MiradorCanvas {
   /** */
   get imageServiceIds() {
     /** filter services by profile for IIIF images services */
-    const imageServiceFilter = s => canvasTypes.imageServiceProfiles.includes(s.getProfile());
-    return this.iiifImageResources.map(r => r.getServices().filter(imageServiceFilter)[0].id);
+    const imageServiceFilter = (s) => canvasTypes.imageServiceProfiles.includes(s.getProfile());
+    return this.iiifImageResources.map((r) => r.getServices().filter(imageServiceFilter)[0].id);
   }
 
   /**

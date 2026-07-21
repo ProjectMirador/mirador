@@ -14,34 +14,34 @@ import { IIIFAuthentication } from '../components/IIIFAuthentication';
  */
 // eslint-disable-next-line complexity
 const mapStateToProps = (state, { windowId }) => {
-    // Debug: log all current auth services and probe responses
-    const services = selectCurrentAuthServices(state, { windowId });
-    console.log('[IIIFAuthentication] Auth services for window', windowId, services);
+  // Debug: log all current auth services and probe responses
+  const services = selectCurrentAuthServices(state, { windowId });
+  console.log('[IIIFAuthentication] Auth services for window', windowId, services);
 
-    const probeResponses = state.mirador?.probeResponses || {};
-    console.log('[IIIFAuthentication] All probe responses:', Object.keys(probeResponses));
-    
-    if (services && services.length) {
-      services.forEach(svc => {
-        // Look for probe response that corresponds to this auth service
-        // Probe responses are keyed by probe service ID, not auth service ID
-        let probeResponse = null;
-        
-        // Find probe response by checking if any probe service contains this auth service
-        for (const [probeId, response] of Object.entries(probeResponses)) {
-          if (response?.json) {
-            // Check if this probe service contains our auth service
-            const probeServices = Utils.getServices(response.json) || [];
-            if (probeServices.some(s => s.id === svc.id)) {
-              probeResponse = response;
-              break;
-            }
+  const probeResponses = state.mirador?.probeResponses || {};
+  console.log('[IIIFAuthentication] All probe responses:', Object.keys(probeResponses));
+
+  if (services && services.length) {
+    services.forEach((svc) => {
+      // Look for probe response that corresponds to this auth service
+      // Probe responses are keyed by probe service ID, not auth service ID
+      let probeResponse = null;
+
+      // Find probe response by checking if any probe service contains this auth service
+      for (const [probeId, response] of Object.entries(probeResponses)) {
+        if (response?.json) {
+          // Check if this probe service contains our auth service
+          const probeServices = Utils.getServices(response.json) || [];
+          if (probeServices.some((s) => s.id === svc.id)) {
+            probeResponse = response;
+            break;
           }
         }
-        
-        console.log('[IIIFAuthentication] Service:', svc.id, 'Type:', svc.getProfile && svc.getProfile(), 'Probe:', probeResponse);
-      });
-    }
+      }
+
+      console.log('[IIIFAuthentication] Service:', svc.id, 'Type:', svc.getProfile && svc.getProfile(), 'Probe:', probeResponse);
+    });
+  }
   // const services = selectCurrentAuthServices(state, { windowId });
 
   // TODO: get the most actionable auth service...
@@ -116,9 +116,7 @@ const mapStateToProps = (state, { windowId }) => {
     header: getI18nValue(service && service.getHeader && service.getHeader()),
     isInteractive,
     label: getI18nValue(service && service.getLabel && service.getLabel()),
-    logoutConfirm: getI18nValue(logoutService
-      && logoutService.getLabel
-      && logoutService.getLabel()),
+    logoutConfirm: getI18nValue(logoutService && logoutService.getLabel && logoutService.getLabel()),
     logoutServiceId: logoutService && logoutService.id,
     profile,
     status,

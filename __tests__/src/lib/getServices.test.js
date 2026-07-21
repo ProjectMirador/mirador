@@ -1,16 +1,12 @@
 import { v4 as uuid } from 'uuid';
-import {
-  anyAuthServices, getLogoutService, getProbeService, getTokenService,
-} from '../../../src/lib/getServices';
+import { anyAuthServices, getLogoutService, getProbeService, getTokenService } from '../../../src/lib/getServices';
 
 /**
  */
 function resourceFixtureWithService(props) {
   return {
     id: uuid(),
-    services: [
-      { ...props },
-    ],
+    services: [{ ...props }],
     type: 'Dataset',
   };
 }
@@ -19,24 +15,21 @@ function resourceFixtureWithService(props) {
  */
 function actualLogoutServiceId(resource) {
   const service = getLogoutService(resource);
-  return service
-  && service.id;
+  return service && service.id;
 }
 
 /**
  */
 function actualTokenServiceId(resource) {
   const service = getTokenService(resource);
-  return service
-  && service.id;
+  return service && service.id;
 }
 
 /**
  */
 function actualProbeServiceId(resource) {
   const service = getProbeService(resource);
-  return service
-  && service.id;
+  return service && service.id;
 }
 
 describe('anyAuthServices', () => {

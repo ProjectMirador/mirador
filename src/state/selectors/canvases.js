@@ -20,12 +20,9 @@ import { anyImageServices } from '../../lib/typeFilters';
 export const selectInfoResponses = (state) => miradorSlice(state).infoResponses;
 
 /** */
-export const selectProbeResponses = state => miradorSlice(state).probeResponses;
+export const selectProbeResponses = (state) => miradorSlice(state).probeResponses;
 
-export const getCanvases = createSelector(
-  [getSequence],
-  sequence => (sequence && sequence.getCanvases()) || EMPTY_ARRAY,
-);
+export const getCanvases = createSelector([getSequence], (sequence) => (sequence && sequence.getCanvases()) || EMPTY_ARRAY);
 
 /**
  * Return the canvas selected by an id
@@ -187,13 +184,11 @@ const probeReplacements = (resources, probeResponses) => {
 };
 
 export const getVisibleCanvasNonTiledResources = createSelector(
-  [
-    getVisibleCanvases,
-    getMiradorCanvasWrapper,
-  ],
-  (canvases, getMiradorCanvas) => flatten(canvases
-    .map(canvas => getMiradorCanvas(canvas).imageResources))
-    .filter(resource => anyImageServices(resource).length < 1),
+  [getVisibleCanvases, getMiradorCanvasWrapper],
+  (canvases, getMiradorCanvas) =>
+    flatten(canvases.map((canvas) => getMiradorCanvas(canvas).imageResources)).filter(
+      (resource) => anyImageServices(resource).length < 1,
+    ),
 );
 
 /**
@@ -214,13 +209,9 @@ export const getVisibleCanvasTextResources = createSelector(
  * @return {Array}
  */
 export const getVisibleCanvasVideoResources = createSelector(
-  [
-    getVisibleCanvases,
-    getMiradorCanvasWrapper,
-    selectProbeResponses,
-  ],
-  (canvases, getMiradorCanvas, probeResponses) => flatten(canvases
-    .map(canvas => probeReplacements(getMiradorCanvas(canvas).videoResources, probeResponses))),
+  [getVisibleCanvases, getMiradorCanvasWrapper, selectProbeResponses],
+  (canvases, getMiradorCanvas, probeResponses) =>
+    flatten(canvases.map((canvas) => probeReplacements(getMiradorCanvas(canvas).videoResources, probeResponses))),
 );
 
 /**
@@ -249,18 +240,14 @@ export const getVisibleCanvasCaptions = createSelector(
  * @return {Array}
  */
 export const getVisibleCanvasAudioResources = createSelector(
-  [
-    getVisibleCanvases,
-    getMiradorCanvasWrapper,
-    selectProbeResponses,
-  ],
-  (canvases, getMiradorCanvas, probeResponses) => flatten(canvases
-    .map(canvas => probeReplacements(getMiradorCanvas(canvas).audioResources, probeResponses))),
+  [getVisibleCanvases, getMiradorCanvasWrapper, selectProbeResponses],
+  (canvases, getMiradorCanvas, probeResponses) =>
+    flatten(canvases.map((canvas) => probeReplacements(getMiradorCanvas(canvas).audioResources, probeResponses))),
 );
 
 /**
  * Returns info response.
-* @param {object} state
+ * @param {object} state
  * @param {object} props
  * @param {string} props.windowId
  * @param {string} props.canvasId
@@ -285,11 +272,7 @@ export const selectInfoResponse = createSelector(
 );
 
 export const selectProbeResponse = createSelector(
-  [
-    (state, { probeId }) => probeId,
-    getCanvas,
-    selectProbeResponses,
-  ],
+  [(state, { probeId }) => probeId, getCanvas, selectProbeResponses],
   (probeId, canvas, probeResponses) => {
     let probeServiceId = probeId;
 
@@ -301,8 +284,11 @@ export const selectProbeResponse = createSelector(
       probeServiceId = probeService && probeService.id;
     }
 
-    return probeServiceId && probeResponses[probeServiceId]
-    && !probeResponses[probeServiceId].isFetching
-    && probeResponses[probeServiceId];
+    return (
+      probeServiceId &&
+      probeResponses[probeServiceId] &&
+      !probeResponses[probeServiceId].isFetching &&
+      probeResponses[probeServiceId]
+    );
   },
 );

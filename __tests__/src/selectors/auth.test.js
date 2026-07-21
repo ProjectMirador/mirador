@@ -81,9 +81,7 @@ describe('selectCurrentAuthServices', () => {
       },
       z: {
         manifestId: 'c',
-        visibleCanvases: [
-          'https://auth.example.org/my-video1',
-        ],
+        visibleCanvases: ['https://auth.example.org/my-video1'],
       },
     },
   };

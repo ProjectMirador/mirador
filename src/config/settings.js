@@ -604,8 +604,8 @@ export default {
       { profile: 'http://iiif.io/api/auth/0/login' },
       { profile: 'external', external: true },
       { profile: 'kiosk', kiosk: true },
-      { profile: 'active' }
-    ]
+      { profile: 'active' },
+    ],
   },
   labelValueJoiner: ', ',
 };

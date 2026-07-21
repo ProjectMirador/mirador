@@ -3,10 +3,15 @@ import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('probe response reducer', () => {
   it('should handle REQUEST_PROBE_RESPONSE', () => {
-    expect(probeResponsesReducer({}, {
-      probeId: 'abc123',
-      type: ActionTypes.REQUEST_PROBE_RESPONSE,
-    })).toEqual({
+    expect(
+      probeResponsesReducer(
+        {},
+        {
+          probeId: 'abc123',
+          type: ActionTypes.REQUEST_PROBE_RESPONSE,
+        },
+      ),
+    ).toEqual({
       abc123: {
         id: 'abc123',
         isFetching: true,
@@ -14,24 +19,26 @@ describe('probe response reducer', () => {
     });
   });
   it('should handle RECEIVE_PROBE_RESPONSE', () => {
-    expect(probeResponsesReducer(
-      {
-        abc123: {
-          id: 'abc123',
-          isFetching: true,
+    expect(
+      probeResponsesReducer(
+        {
+          abc123: {
+            id: 'abc123',
+            isFetching: true,
+          },
         },
-      },
-      {
-        probeId: 'abc123',
-        probeJson: {
-          '@type': 'sc:Manifest',
-          content: 'lots of canvases and metadata and such',
-          id: 'abc123',
+        {
+          probeId: 'abc123',
+          probeJson: {
+            '@type': 'sc:Manifest',
+            content: 'lots of canvases and metadata and such',
+            id: 'abc123',
+          },
+          tokenServiceId: 'efg456',
+          type: ActionTypes.RECEIVE_PROBE_RESPONSE,
         },
-        tokenServiceId: 'efg456',
-        type: ActionTypes.RECEIVE_PROBE_RESPONSE,
-      },
-    )).toMatchObject({
+      ),
+    ).toMatchObject({
       abc123: {
         id: 'abc123',
         isFetching: false,
@@ -41,20 +48,22 @@ describe('probe response reducer', () => {
     });
   });
   it('should handle RECEIVE_PROBE_RESPONSE_FAILURE', () => {
-    expect(probeResponsesReducer(
-      {
-        abc123: {
-          id: 'abc123',
-          isFetching: true,
+    expect(
+      probeResponsesReducer(
+        {
+          abc123: {
+            id: 'abc123',
+            isFetching: true,
+          },
         },
-      },
-      {
-        error: "This institution didn't enable CORS.",
-        probeId: 'abc123',
-        tokenServiceId: 'efg456',
-        type: ActionTypes.RECEIVE_PROBE_RESPONSE_FAILURE,
-      },
-    )).toEqual({
+        {
+          error: "This institution didn't enable CORS.",
+          probeId: 'abc123',
+          tokenServiceId: 'efg456',
+          type: ActionTypes.RECEIVE_PROBE_RESPONSE_FAILURE,
+        },
+      ),
+    ).toEqual({
       abc123: {
         error: "This institution didn't enable CORS.",
         id: 'abc123',
@@ -64,22 +73,24 @@ describe('probe response reducer', () => {
     });
   });
   it('should handle REMOVE_PROBE_RESPONSE', () => {
-    expect(probeResponsesReducer(
-      {
-        abc123: {
-          id: 'abc123',
-          stuff: 'foo',
+    expect(
+      probeResponsesReducer(
+        {
+          abc123: {
+            id: 'abc123',
+            stuff: 'foo',
+          },
+          def456: {
+            id: 'def456',
+            stuff: 'foo',
+          },
         },
-        def456: {
-          id: 'def456',
-          stuff: 'foo',
+        {
+          probeId: 'abc123',
+          type: ActionTypes.REMOVE_PROBE_RESPONSE,
         },
-      },
-      {
-        probeId: 'abc123',
-        type: ActionTypes.REMOVE_PROBE_RESPONSE,
-      },
-    )).toEqual({
+      ),
+    ).toEqual({
       def456: {
         id: 'def456',
         stuff: 'foo',
@@ -87,9 +98,14 @@ describe('probe response reducer', () => {
     });
   });
   it('should handle IMPORT_MIRADOR_STATE setting to clean state', () => {
-    expect(probeResponsesReducer({}, {
-      state: { probeResponses: { new: 'stuff' } },
-      type: ActionTypes.IMPORT_MIRADOR_STATE,
-    })).toEqual({});
+    expect(
+      probeResponsesReducer(
+        {},
+        {
+          state: { probeResponses: { new: 'stuff' } },
+          type: ActionTypes.IMPORT_MIRADOR_STATE,
+        },
+      ),
+    ).toEqual({});
   });
 });

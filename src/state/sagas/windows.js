@@ -276,15 +276,19 @@ export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowI
 export function* fetchProbeResponses({ visibleCanvases: visibleCanvasIds, windowId }) {
   const canvases = yield select(getCanvases, { windowId });
   const probeResponses = yield select(selectProbeResponses);
-  const visibleCanvases = (canvases || []).filter(c => visibleCanvasIds.includes(c.id));
+  const visibleCanvases = (canvases || []).filter((c) => visibleCanvasIds.includes(c.id));
 
-  yield all(visibleCanvases.map((canvas) => {
-    const miradorCanvas = new MiradorCanvas(canvas);
-    return all(miradorCanvas.imageResources.filter((r) => getProbeService(r)).map(resource => (
-      !probeResponses[getProbeService(resource).id]
-        && put(fetchProbeResponse({ resource, windowId }))
-    )).filter(Boolean));
-  }));
+  yield all(
+    visibleCanvases.map((canvas) => {
+      const miradorCanvas = new MiradorCanvas(canvas);
+      return all(
+        miradorCanvas.imageResources
+          .filter((r) => getProbeService(r))
+          .map((resource) => !probeResponses[getProbeService(resource).id] && put(fetchProbeResponse({ resource, windowId })))
+          .filter(Boolean),
+      );
+    }),
+  );
 }
 
 /** */
