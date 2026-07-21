@@ -15,6 +15,7 @@ import {
   searchesReducer,
   layersReducer,
   catalogReducer,
+  probeResponsesReducer,
 } from '.';
 
 /**
@@ -35,6 +36,7 @@ export default function createRootReducer(pluginReducers) {
     infoResponses: infoResponsesReducer,
     layers: layersReducer,
     manifests: manifestsReducer,
+    probeResponses: probeResponsesReducer,
     searches: searchesReducer,
     viewers: viewersReducer,
     windows: windowsReducer,

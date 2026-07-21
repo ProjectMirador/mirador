@@ -12,6 +12,7 @@ import {
   getConfig,
   getCompanionWindowsForContent,
   selectInfoResponses,
+  selectProbeResponses,
   getCurrentCanvasWorld,
 } from '../state/selectors';
 
@@ -23,6 +24,7 @@ import {
 const mapStateToProps = (state, { windowId }) => {
   const canvasWorld = getCurrentCanvasWorld(state, { windowId });
   const infoResponses = selectInfoResponses(state);
+  const probeResponses = selectProbeResponses(state); // Force re-render when probe responses change
   const imageServiceIds = flatten(canvasWorld.canvases.map((c) => c.imageServiceIds));
 
   return {
@@ -36,6 +38,7 @@ const mapStateToProps = (state, { windowId }) => {
       .filter(
         (infoResponse) => infoResponse !== undefined && infoResponse.isFetching === false && infoResponse.error === undefined,
       ),
+    probeResponseCount: Object.keys(probeResponses).length, // Include for re-rendering trigger
     label: getCanvasLabel(state, {
       canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,
       windowId,

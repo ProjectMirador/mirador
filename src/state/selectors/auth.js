@@ -1,11 +1,13 @@
 import { createSelector } from 'reselect';
 import flatten from 'lodash/flatten';
 import { Utils } from 'manifesto.js';
-import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
+import { anyProbeServices } from '../../lib/getServices';
+import { audioResourcesFrom, iiifImageResourcesFrom, textResourcesFrom, videoResourcesFrom } from '../../lib/typeFilters';
+import MiradorCanvas from '../../lib/MiradorCanvas';
+import { miradorSlice, EMPTY_OBJECT } from './utils';
 import { getConfig } from './config';
-import { getVisibleCanvases, selectInfoResponses } from './canvases';
+import { getVisibleCanvases, selectInfoResponses, selectProbeResponses } from './canvases';
 import { getMiradorCanvasWrapper } from './wrappers';
-import { getIiifResourceImageService } from '../../lib/iiif';
 
 /**
  * Returns the authentification profile from the configuration
@@ -38,44 +40,66 @@ export const selectCurrentAuthServices = createSelector(
   [
     getVisibleCanvases,
     selectInfoResponses,
+    selectProbeResponses,
     getAuthProfiles,
     getAuth,
     getMiradorCanvasWrapper,
     (state, { iiifResources }) => iiifResources,
   ],
-  // eslint-disable-next-line max-params
-  (canvases, infoResponses = {}, serviceProfiles, auth, getMiradorCanvas, iiifResources) => {
+  (canvases, infoResponses = {}, probeResponses = {}, serviceProfiles, auth, getMiradorCanvas, iiifResources) => {
     let currentAuthResources = iiifResources;
+
+    // Debug: log canvases and iiifResources
+    console.log('[selectCurrentAuthServices] canvases:', canvases);
+    console.log('[selectCurrentAuthServices] iiifResources:', iiifResources);
 
     if (!currentAuthResources && canvases) {
       currentAuthResources = flatten(
         canvases.map((c) => {
-          const miradorCanvas = getMiradorCanvas(c);
-          const images = miradorCanvas.iiifImageResources;
-
-          return images.map((i) => {
-            const iiifImageService = getIiifResourceImageService(i);
-
-            const infoResponse = infoResponses[iiifImageService.id];
+          console.log('in the flatten');
+          const miradorCanvas = new MiradorCanvas(c);
+          const canvasResources = miradorCanvas.imageResources;
+          // Debug: log canvasResources
+          // console.log('[selectCurrentAuthServices] canvasResources:', canvasResources);
+          const authResources = iiifImageResourcesFrom(canvasResources).map((i) => {
+            const iiifImageService = i.getServices()[0];
+            // Debug: log iiifImageService
+            // console.log('[selectCurrentAuthServices] iiifImageService:', iiifImageService);
+            const infoResponse = infoResponses[iiifImageService?.id];
             if (infoResponse && infoResponse.json) {
+              // Debug: log infoResponse
+              // console.log('[selectCurrentAuthServices] infoResponse:', infoResponse);
               return { ...infoResponse.json, options: {} };
             }
-
             return iiifImageService;
           });
+          return authResources
+            .concat(videoResourcesFrom(canvasResources))
+            .concat(audioResourcesFrom(canvasResources))
+            .concat(textResourcesFrom(canvasResources));
         }),
       );
     }
 
-    if (!currentAuthResources) return EMPTY_ARRAY;
-    if (currentAuthResources.length === 0) return EMPTY_ARRAY;
+    // Debug: log currentAuthResources
+    console.log('[selectCurrentAuthServices] currentAuthResources:', currentAuthResources);
+
+    if (!currentAuthResources) return [];
+    if (currentAuthResources.length === 0) return [];
 
     const currentAuthServices = currentAuthResources.map((resource) => {
       let lastAttemptedService;
-      const services = Utils.getServices(resource);
+      const resourceServices = Utils.getServices(resource);
+      const probeServices = anyProbeServices(resource);
+      const probeServiceServices = flatten(probeServices.map((p) => Utils.getServices(p)));
+
+      // Check for probe responses for this resource
+      const resourceProbeResponse = probeResponses[resource.id];
 
       for (const authProfile of serviceProfiles) {
-        const profiledAuthServices = services.filter((p) => authProfile.profile === p.getProfile());
+        const profiledAuthServices = resourceServices
+          .concat(probeServiceServices)
+          .filter((p) => authProfile.profile === p.getProfile());
 
         for (const service of profiledAuthServices) {
           lastAttemptedService = service;
@@ -92,10 +116,8 @@ export const selectCurrentAuthServices = createSelector(
     return Object.values(
       currentAuthServices.reduce((h, service) => {
         if (service && !h[service.id]) {
-          // eslint-disable-next-line no-param-reassign
-          h[service.id] = service;
+          h[service.id] = service; // eslint-disable-line no-param-reassign
         }
-
         return h;
       }, {}),
     );

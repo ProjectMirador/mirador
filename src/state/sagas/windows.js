@@ -1,5 +1,8 @@
 import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import ActionTypes from '../actions/action-types';
+import MiradorManifest from '../../lib/MiradorManifest';
+import MiradorCanvas from '../../lib/MiradorCanvas';
+import { getProbeService } from '../../lib/getServices';
 import {
   setContentSearchCurrentAnnotation,
   selectAnnotation,
@@ -9,6 +12,7 @@ import {
   fetchSearch,
   receiveManifest,
   fetchInfoResponse,
+  fetchProbeResponse,
   showCollectionDialog,
 } from '../actions';
 import {
@@ -27,6 +31,7 @@ import {
   getElasticLayout,
   getCanvases,
   selectInfoResponses,
+  selectProbeResponses,
   getWindowConfig,
   getMiradorCanvasWrapper,
   getMiradorManifestWrapper,
@@ -267,6 +272,25 @@ export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowI
   );
 }
 
+/** Fetch probe responses for the visible canvases */
+export function* fetchProbeResponses({ visibleCanvases: visibleCanvasIds, windowId }) {
+  const canvases = yield select(getCanvases, { windowId });
+  const probeResponses = yield select(selectProbeResponses);
+  const visibleCanvases = (canvases || []).filter((c) => visibleCanvasIds.includes(c.id));
+
+  yield all(
+    visibleCanvases.map((canvas) => {
+      const miradorCanvas = new MiradorCanvas(canvas);
+      return all(
+        miradorCanvas.imageResources
+          .filter((r) => getProbeService(r))
+          .map((resource) => !probeResponses[getProbeService(resource).id] && put(fetchProbeResponse({ resource, windowId })))
+          .filter(Boolean),
+      );
+    }),
+  );
+}
+
 /** */
 export function* determineAndShowCollectionDialog(manifestId, windowId) {
   const manifestoInstance = yield select(getManifestoInstance, { manifestId });
@@ -284,6 +308,7 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchCollectionManifests),
     takeEvery(ActionTypes.SET_CANVAS, setCurrentAnnotationsOnCurrentCanvas),
     takeEvery(ActionTypes.SET_CANVAS, fetchInfoResponses),
+    takeEvery(ActionTypes.SET_CANVAS, fetchProbeResponses),
     takeEvery(ActionTypes.UPDATE_COMPANION_WINDOW, fetchCollectionManifests),
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
     takeEvery(ActionTypes.RECEIVE_SEARCH, setCanvasOfFirstSearchResult),

@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { Utils } from 'manifesto.js';
+import { PropertyValue, Utils } from 'manifesto.js';
 import { withPlugins } from '../extend/withPlugins';
+import { getLogoutService, getTokenService } from '../lib/getServices';
 import * as actions from '../state/actions';
 import { getAuth, getAuthProfiles, selectCurrentAuthServices, getAccessTokens } from '../state/selectors';
 import { IIIFAuthentication } from '../components/IIIFAuthentication';
@@ -13,38 +14,78 @@ import { IIIFAuthentication } from '../components/IIIFAuthentication';
  */
 // eslint-disable-next-line complexity
 const mapStateToProps = (state, { windowId }) => {
+  // Debug: log all current auth services and probe responses
   const services = selectCurrentAuthServices(state, { windowId });
+  console.log('[IIIFAuthentication] Auth services for window', windowId, services);
+
+  const probeResponses = state.mirador?.probeResponses || {};
+  console.log('[IIIFAuthentication] All probe responses:', Object.keys(probeResponses));
+
+  if (services && services.length) {
+    services.forEach((svc) => {
+      // Look for probe response that corresponds to this auth service
+      // Probe responses are keyed by probe service ID, not auth service ID
+      let probeResponse = null;
+
+      // Find probe response by checking if any probe service contains this auth service
+      for (const [probeId, response] of Object.entries(probeResponses)) {
+        if (response?.json) {
+          // Check if this probe service contains our auth service
+          const probeServices = Utils.getServices(response.json) || [];
+          if (probeServices.some((s) => s.id === svc.id)) {
+            probeResponse = response;
+            break;
+          }
+        }
+      }
+
+      console.log('[IIIFAuthentication] Service:', svc.id, 'Type:', svc.getProfile && svc.getProfile(), 'Probe:', probeResponse);
+    });
+  }
+  // const services = selectCurrentAuthServices(state, { windowId });
 
   // TODO: get the most actionable auth service...
   const service = services[0];
 
-  const accessTokenService =
-    service &&
-    (Utils.getService(service, 'http://iiif.io/api/auth/1/token') ||
-      Utils.getService(service, 'http://iiif.io/api/auth/0/token'));
-  const logoutService =
-    service &&
-    (Utils.getService(service, 'http://iiif.io/api/auth/1/logout') ||
-      Utils.getService(service, 'http://iiif.io/api/auth/0/logout'));
+  const accessTokenService = getTokenService(service);
+  const logoutService = getLogoutService(service);
 
   const authStatuses = getAuth(state);
   const authStatus = service && authStatuses[service.id];
   const accessTokens = getAccessTokens(state);
   const accessTokenStatus = accessTokenService && accessTokens[accessTokenService.id];
 
+  console.log('[IIIFAuthentication] Auth calculation for service:', service?.id);
+  console.log('[IIIFAuthentication] authStatus:', authStatus);
+  console.log('[IIIFAuthentication] accessTokenStatus:', accessTokenStatus);
+
   let status = null;
 
   if (!authStatus) {
+    console.log('[IIIFAuthentication] No auth status - setting to null');
     status = null;
   } else if (authStatus.isFetching) {
+    console.log('[IIIFAuthentication] Auth is fetching');
     if (authStatus.windowId === windowId) status = 'cookie';
   } else if (accessTokenStatus && accessTokenStatus.isFetching) {
+    console.log('[IIIFAuthentication] Access token is fetching');
     if (authStatus.windowId === windowId) status = 'token';
   } else if (authStatus.ok) {
+    console.log('[IIIFAuthentication] Auth status OK');
     status = 'ok';
   } else if (authStatus.ok === false) {
-    status = 'failed';
+    // Only show retry if we've actually attempted authentication and have a token response
+    // Otherwise show login to initiate the auth flow
+    if (accessTokenStatus && (accessTokenStatus.success !== undefined || accessTokenStatus.error)) {
+      console.log('[IIIFAuthentication] Auth status FAILED with token attempt - showing retry');
+      status = 'failed';
+    } else {
+      console.log('[IIIFAuthentication] Auth status failed but no token attempt - showing login');
+      status = null;
+    }
   }
+
+  console.log('[IIIFAuthentication] Final status:', status);
 
   const authProfiles = getAuthProfiles(state);
 
@@ -52,17 +93,30 @@ const mapStateToProps = (state, { windowId }) => {
 
   const isInteractive = authProfiles.some((config) => config.profile === profile && !(config.external || config.kiosk));
 
+  // Helper to convert IIIF i18n values to strings
+  const getI18nValue = (value) => {
+    if (!value) return undefined;
+    if (typeof value === 'string') return value;
+    if (value.getValue) return value.getValue();
+    // Handle Auth2 probe response i18n format {en: ["text"]}
+    if (typeof value === 'object' && !Array.isArray(value)) {
+      const propertyValue = new PropertyValue(value);
+      return propertyValue.getValue();
+    }
+    return undefined;
+  };
+
   return {
     accessTokenServiceId: accessTokenService && accessTokenService.id,
     authServiceId: service && service.id,
-    confirm: service && service.getConfirmLabel(),
-    description: service && service.getDescription(),
-    failureDescription: service && service.getFailureDescription(),
-    failureHeader: service && service.getFailureHeader(),
-    header: service && service.getHeader(),
+    confirm: getI18nValue(service && service.getConfirmLabel && service.getConfirmLabel()),
+    description: getI18nValue(service && service.getDescription && service.getDescription()),
+    failureDescription: getI18nValue(service && service.getFailureDescription && service.getFailureDescription()),
+    failureHeader: getI18nValue(service && service.getFailureHeader && service.getFailureHeader()),
+    header: getI18nValue(service && service.getHeader && service.getHeader()),
     isInteractive,
-    label: service && service.getLabel()[0].value,
-    logoutConfirm: logoutService && logoutService.getLabel()[0] && logoutService.getLabel()[0].value,
+    label: getI18nValue(service && service.getLabel && service.getLabel()),
+    logoutConfirm: getI18nValue(logoutService && logoutService.getLabel && logoutService.getLabel()),
     logoutServiceId: logoutService && logoutService.id,
     profile,
     status,

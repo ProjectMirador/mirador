@@ -1,5 +1,6 @@
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
+import manifestFixtureAuth2ActiveVideo from '../../fixtures/version-3/auth2-active.json';
 import settings from '../../../src/config/settings';
 import { getAccessTokens, selectCurrentAuthServices } from '../../../src/state/selectors/auth';
 
@@ -58,6 +59,9 @@ describe('selectCurrentAuthServices', () => {
       b: {
         json: manifestFixture019,
       },
+      c: {
+        json: manifestFixtureAuth2ActiveVideo,
+      },
     },
     windows: {
       noCanvas: {
@@ -75,6 +79,10 @@ describe('selectCurrentAuthServices', () => {
         manifestId: 'b',
         visibleCanvases: ['https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'],
       },
+      z: {
+        manifestId: 'c',
+        visibleCanvases: ['https://auth.example.org/my-video1'],
+      },
     },
   };
 
@@ -86,6 +94,7 @@ describe('selectCurrentAuthServices', () => {
 
   it('returns the next auth service to try', () => {
     expect(selectCurrentAuthServices(state, { windowId: 'w' })[0].id).toEqual('external');
+    expect(selectCurrentAuthServices(state, { windowId: 'z' })[0].id).toEqual('https://auth.example.org/login');
   });
 
   it('returns the service if the next auth service is interactive', () => {
