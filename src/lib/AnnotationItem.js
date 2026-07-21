@@ -109,7 +109,7 @@ export default class AnnotationItem {
       case 'string':
         return selector;
       case 'object': {
-        const fragmentSelector = selector.find(s => s.type && s.type === 'FragmentSelector');
+        const fragmentSelector = selector.find((s) => s.type && s.type === 'FragmentSelector');
         return fragmentSelector && fragmentSelector.value;
       }
       default:

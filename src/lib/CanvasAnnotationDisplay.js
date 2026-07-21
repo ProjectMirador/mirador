@@ -4,9 +4,7 @@
  */
 export default class CanvasAnnotationDisplay {
   /** */
-  constructor({
-    resource, palette, zoomRatio, offset, selected, hovered, canvasWidth, canvasHeight,
-  }) {
+  constructor({ resource, palette, zoomRatio, offset, selected, hovered, canvasWidth, canvasHeight }) {
     this.resource = resource;
     this.palette = palette;
     this.zoomRatio = zoomRatio;

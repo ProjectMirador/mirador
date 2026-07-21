@@ -23,8 +23,7 @@ describe('parseFragmentSelector', () => {
   });
 
   it('supports fractional values', () => {
-    expect(parseFragmentSelector('#xywh=percent:12.5,0,75,50').dimensions)
-      .toEqual([12.5, 0, 75, 50]);
+    expect(parseFragmentSelector('#xywh=percent:12.5,0,75,50').dimensions).toEqual([12.5, 0, 75, 50]);
   });
 
   it('returns null when there is no fragment', () => {

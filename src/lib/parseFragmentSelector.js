@@ -19,7 +19,7 @@ export default function parseFragmentSelector(fragmentString) {
   if (!match) return null;
 
   return {
-    dimensions: match[2].split(',').map(str => parseFloat(str)),
+    dimensions: match[2].split(',').map((str) => parseFloat(str)),
     unit: match[1] === 'percent' ? 'percent' : 'pixel',
   };
 }

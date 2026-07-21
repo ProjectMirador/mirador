@@ -93,7 +93,7 @@ describe('MiradorCanvas', () => {
     });
     it('scales percent-based fragment selectors against the canvas dimensions', () => {
       instance.resourceAnnotation = () => ({
-        getProperty: prop => (prop === 'on' ? 'www.example.com/#xywh=percent:25,25,50,50' : undefined),
+        getProperty: (prop) => (prop === 'on' ? 'www.example.com/#xywh=percent:25,25,50,50' : undefined),
       });
       instance.getWidth = () => 4000;
       instance.getHeight = () => 3000;
