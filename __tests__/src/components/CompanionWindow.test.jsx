@@ -15,12 +15,12 @@ describe('CompanionWindow', () => {
     it('has an aria-label for the landmark derived from the title', () => {
       createWrapper({ title: 'some title' });
 
-      expect(screen.getByRole('complementary')).toHaveAccessibleName('some title');
+      expect(screen.getByRole('region')).toHaveAccessibleName('some title');
     });
     it('can be overridden with an explicit ariaLabel prop', () => {
       createWrapper({ ariaLabel: 'some label', title: 'some title' });
 
-      expect(screen.getByRole('complementary')).toHaveAccessibleName('some label');
+      expect(screen.getByRole('region')).toHaveAccessibleName('some label');
     });
   });
 
@@ -89,7 +89,7 @@ describe('CompanionWindow', () => {
         updateCompanionWindow,
       });
 
-      expect(screen.getByRole('complementary')).toHaveClass('mirador-companion-window-right');
+      expect(screen.getByRole('region')).toHaveClass('mirador-companion-window-right');
 
       await user.click(screen.getByRole('button', { name: 'Move to bottom' }));
 
@@ -107,7 +107,7 @@ describe('CompanionWindow', () => {
         updateCompanionWindow,
       });
 
-      expect(screen.getByRole('complementary')).toHaveClass('mirador-companion-window-bottom ');
+      expect(screen.getByRole('region')).toHaveClass('mirador-companion-window-bottom ');
 
       await user.click(screen.getByRole('button', { name: 'Move to right' }));
 
