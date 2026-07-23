@@ -7,7 +7,7 @@ import { miradorSlice, EMPTY_ARRAY } from './utils';
 import { getWindow } from './getters';
 import { getSequence } from './sequences';
 import { getWindowViewType } from './windows';
-import { getManifestLocale } from './manifests';
+import { getManifestLocale, getDestructuredMetadata } from './manifests';
 
 /**
  * Returns the info response.
@@ -148,6 +148,19 @@ export const getPreviousCanvasGrouping = createSelector([getCanvasGroupings, get
 export const getCanvasLabel = createSelector(
   [getCanvas, getManifestLocale],
   (canvas, locale) => canvas && (canvas.getLabel().length > 0 ? canvas.getLabel().getValue(locale) : String(canvas.index + 1)),
+);
+
+/**
+ * Return canvas metadata in a label / value structure
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.canvasId
+ * @param {string} props.windowId
+ * @returns {Array[Object]}
+ */
+export const getCanvasMetadata = createSelector(
+  [getCanvas, getManifestLocale],
+  (canvas, locale) => canvas && getDestructuredMetadata(canvas, locale),
 );
 
 /**
