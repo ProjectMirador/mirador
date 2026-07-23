@@ -76,6 +76,23 @@ export const getAnnotationResourcesByMotivationForCanvas = createSelector(
 );
 
 /**
+ * Returns annotation resources for a canvas destructured into their id/content/tags/targetId.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.canvasId
+ * @param {string} props.windowId
+ * @returns {Array} [{ id: 'abc123', content: 'Annotation Content' }, ...]
+ */
+export const getAnnotationResourcesDataForCanvas = createSelector([getAnnotationResourcesByMotivationForCanvas], (resources) =>
+  resources.map((resource) => ({
+    content: resource.chars,
+    id: resource.id,
+    tags: resource.tags,
+    targetId: resource.targetId,
+  })),
+);
+
+/**
  * Returns an array of annotation resources filtered by the given motivation.
  * @param {Array} annotations
  * @param {Array} motivations
