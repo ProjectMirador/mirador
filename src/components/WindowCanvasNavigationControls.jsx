@@ -68,8 +68,8 @@ export const WindowCanvasNavigationControls = forwardRef(
           divider={<Divider orientation={canvasNavControlsAreStacked ? 'horizontal' : 'vertical'} variant="middle" flexItem />}
           spacing={0}
         >
-          {showZoomControls && <ZoomControls windowId={windowId} zoomToWorld={zoomToWorld} />}
           <ViewerNavigation windowId={windowId} />
+          {showZoomControls && <ZoomControls windowId={windowId} zoomToWorld={zoomToWorld} />}
         </Stack>
         <ViewerInfo windowId={windowId} />
 
