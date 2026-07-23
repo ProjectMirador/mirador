@@ -129,6 +129,18 @@ export function AnnotationsOverlay({
 
   const onCanvasClick = useCallback(
     (event) => {
+      // OpenSeadragon fires canvas-click at the end of touch/pen gestures
+      // too (pinch-zoom, pan, press-and-hold), not just quick taps.
+      // event.quick === false means the pointer was down for a "slow"
+      // gesture rather than a tap, so treat that as a non-click -- otherwise
+      // panning or pinch-zooming over an annotation toggles its selection
+      // the moment the finger lifts. See:
+      // https://openseadragon.github.io/docs/OpenSeadragon.Viewer.html#.event:canvas-click
+      const pointerType = event.originalEvent?.pointerType;
+      if ((event.isTouchEvent || pointerType === 'touch' || pointerType === 'pen') && event.quick === false) {
+        return;
+      }
+
       const {
         position: webPosition,
         eventSource: { viewport },
