@@ -36,10 +36,6 @@ describe('ThumbnailCanvasGrouping', () => {
     setCanvas = vi.fn();
     wrapper = createWrapper({ setCanvas });
   });
-  const spyCurrentCanvasClass = vi.spyOn(ThumbnailCanvasGrouping.prototype, 'currentCanvasClass');
-  afterEach(() => {
-    spyCurrentCanvasClass.mockClear();
-  });
   it('renders', () => {
     expect(screen.getByRole('gridcell')).toBeInTheDocument();
   });
@@ -51,9 +47,9 @@ describe('ThumbnailCanvasGrouping', () => {
     const user = userEvent.setup();
     wrapper = createWrapper({ index: 0, setCanvas });
     // eslint-disable-next-line testing-library/no-node-access
-    await user.click(wrapper.container.querySelector('.mirador-thumbnail-nav-canvas-0'));
-    expect(spyCurrentCanvasClass).toHaveBeenCalledWith([0]);
-    expect(spyCurrentCanvasClass).toHaveReturnedWith('current-canvas-grouping');
+    const canvasButton = wrapper.container.querySelector('.mirador-thumbnail-nav-canvas-0');
+    expect(canvasButton).toHaveClass('mirador-current-canvas-grouping');
+    await user.click(canvasButton);
     expect(setCanvas).toHaveBeenCalledWith('http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json');
   });
   describe('attributes based off far-bottom position', () => {
