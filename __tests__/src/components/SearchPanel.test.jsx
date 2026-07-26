@@ -23,7 +23,7 @@ function createWrapper(props) {
 describe('SearchPanel', () => {
   it('renders a CompanionWindow', () => {
     createWrapper();
-    expect(screen.getByRole('complementary')).toBeInTheDocument();
+    expect(screen.getByRole('region')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Search' })).toBeInTheDocument();
   });
 

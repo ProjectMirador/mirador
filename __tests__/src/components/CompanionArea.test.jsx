@@ -27,7 +27,11 @@ describe('CompanionArea', () => {
   it('should render all <CompanionWindow>', () => {
     createWrapper();
 
-    expect(screen.getAllByRole('complementary')).toHaveLength(2);
+    // Scoped to <aside> specifically: MUI's Accordion also renders its own
+    // (unrelated) role="region" divs internally, so an unscoped role query
+    // would overcount -- CompanionWindow's own landmark is always an <aside>.
+    const regions = screen.getAllByRole('region').filter((el) => el.tagName === 'ASIDE');
+    expect(regions).toHaveLength(2);
   });
 
   it('should add the appropriate classes when the companion area fills the full width', () => {
@@ -56,7 +60,7 @@ describe('CompanionArea', () => {
     });
 
     expect(screen.getByRole('button', { name: 'Expand sidebar' })).toHaveAttribute('aria-expanded', 'false');
-    expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
+    expect(screen.queryByRole('region')).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Expand sidebar' }));
 
