@@ -1,6 +1,9 @@
 import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { WindowTopMenu } from '../../../src/components/WindowTopMenu';
+import { usePlugins } from '../../../src/extend/usePlugins';
+
+vi.mock('../../../src/extend/usePlugins');
 
 /** create wrapper */
 function Subject({ ...props }) {
@@ -20,7 +23,16 @@ function createAnchor() {
   );
 }
 
+/** stand-in for a plugin's registered component */
+function MockPluginComponent() {
+  return <div data-testid="plugin-component" />;
+}
+
 describe('WindowTopMenu', () => {
+  beforeEach(() => {
+    vi.mocked(usePlugins).mockReturnValue({ PluginComponents: [] });
+  });
+
   it('renders all needed elements when open', () => {
     createAnchor();
     render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
@@ -66,5 +78,16 @@ describe('WindowTopMenu', () => {
     await user.click(menuItems[0]);
     expect(handleClose).toHaveBeenCalledTimes(1);
     expect(toggleDraggingEnabled).toHaveBeenCalledTimes(1);
+  });
+
+  describe('when a plugin is registered for the WindowTopMenu target', () => {
+    it('renders the plugin section header and the plugin component', () => {
+      vi.mocked(usePlugins).mockReturnValue({ PluginComponents: [MockPluginComponent] });
+      createAnchor();
+      render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
+
+      expect(screen.getByText('Options')).toBeInTheDocument();
+      expect(screen.getByTestId('plugin-component')).toBeInTheDocument();
+    });
   });
 });

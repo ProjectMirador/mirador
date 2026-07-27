@@ -11,7 +11,7 @@ import { usePlugins } from '../extend/usePlugins';
 
 /** Renders plugins */
 function PluginHookWithHeader({ targetName, ...props }) {
-  const PluginComponents = usePlugins(targetName);
+  const { PluginComponents } = usePlugins(targetName);
   const { t } = useTranslation();
   return PluginComponents?.length > 0 ? (
     <>
