@@ -107,6 +107,7 @@ export function ManifestListItem({
 
   return (
     <Root
+      ownerState={ownerState}
       divider
       selected={active}
       className={active ? 'active' : ''}
