@@ -540,7 +540,6 @@ export default {
   workspace: {
     allowNewWindows: true,
     draggingEnabled: true,
-    exposeModeOn: false, // unused?
     height: 5000, // height of the elastic mode's virtual canvas
     id: uuid(),
     isWorkspaceAddVisible: false, // Catalog/Workspace add window feature visible by default
