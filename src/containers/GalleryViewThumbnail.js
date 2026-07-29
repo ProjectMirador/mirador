@@ -1,6 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import flatten from 'lodash/flatten';
+import { flatten } from '../lib/utils';
 import * as actions from '../state/actions';
 import { GalleryViewThumbnail } from '../components/GalleryViewThumbnail';
 import {

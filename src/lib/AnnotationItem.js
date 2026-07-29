@@ -1,5 +1,4 @@
-import compact from 'lodash/compact';
-import flatten from 'lodash/flatten';
+import { compact, flatten } from './utils';
 import { v4 as uuid } from 'uuid';
 
 /**

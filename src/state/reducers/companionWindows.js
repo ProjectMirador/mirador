@@ -1,6 +1,4 @@
-import omit from 'lodash/omit';
-import set from 'lodash/fp/set';
-import update from 'lodash/fp/update';
+import { omit, setPath as set, updatePath as update } from '../../lib/utils';
 import ActionTypes from '../actions/action-types';
 
 /** */

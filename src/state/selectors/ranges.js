@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
-import union from 'lodash/union';
-import without from 'lodash/without';
+import { union, without } from '../../lib/utils';
 import { Utils } from 'manifesto.js';
 import { getVisibleCanvasIds } from './canvases';
 import { getCompanionWindow } from './companionWindows';

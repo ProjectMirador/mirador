@@ -1,6 +1,4 @@
-import _set from 'lodash/fp/set';
-import _update from 'lodash/fp/update';
-import _unset from 'lodash/fp/unset';
+import { setPath, unsetPath, updatePath } from '../../lib/utils';
 
 /**
  * Sets the value at path of object.
@@ -12,7 +10,7 @@ import _unset from 'lodash/fp/unset';
  * @return {Object}
  */
 export function set(object, path, value) {
-  return _set(path, value, object);
+  return setPath(path, value, object);
 }
 
 /**
@@ -29,8 +27,8 @@ export function set(object, path, value) {
  */
 export function update(object, path, value) {
   return typeof value === 'function'
-    ? _update(path, value, object)
-    : _update(path, (current) => ({ ...current, ...value }), object);
+    ? updatePath(path, value, object)
+    : updatePath(path, (current) => ({ ...current, ...value }), object);
 }
 
 /**
@@ -41,5 +39,5 @@ export function update(object, path, value) {
  * @param {Object}
  */
 export function unset(object, path) {
-  return _unset(path, object);
+  return unsetPath(path, object);
 }

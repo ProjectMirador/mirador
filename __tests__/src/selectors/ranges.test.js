@@ -1,4 +1,4 @@
-import set from 'lodash/fp/set';
+import { setPath as set } from '../../../src/lib/utils';
 
 import noRangesJson from '../../fixtures/version-2/001.json';
 import manifestJson from '../../fixtures/version-2/structures.json';

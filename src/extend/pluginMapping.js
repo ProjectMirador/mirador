@@ -1,6 +1,6 @@
-import update from 'lodash/update';
 import { connect } from 'react-redux';
 import CompanionWindowRegistry from '../lib/CompanionWindowRegistry';
+import { updatePath } from '../lib/utils';
 
 /**
  * Returns a mapping from targets to plugins and modes
@@ -17,7 +17,10 @@ import CompanionWindowRegistry from '../lib/CompanionWindowRegistry';
  *  }
  */
 export function createTargetToPluginMapping(plugins) {
-  return plugins.reduce((map, plugin) => update(map, [plugin.target, plugin.mode], (x) => [...(x || []), plugin]), {});
+  return plugins.reduce(
+    (map, plugin) => updatePath([plugin.target, plugin.mode], (current) => [...(current || []), plugin], map),
+    {},
+  );
 }
 
 /** */

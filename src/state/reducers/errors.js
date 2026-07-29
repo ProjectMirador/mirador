@@ -1,4 +1,4 @@
-import without from 'lodash/without';
+import { without } from '../../lib/utils';
 import ActionTypes from '../actions/action-types';
 
 const defaultState = { items: [] };
