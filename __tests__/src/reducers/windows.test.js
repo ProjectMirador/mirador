@@ -166,7 +166,7 @@ describe('windows reducer', () => {
       expect(windowsReducer(beforeState, action)).toEqual(expectedState);
     });
 
-     it('does not re-create a window that no longer exists', () => {
+    it('does not re-create a window that no longer exists', () => {
       const action = {
         id: 'gone',
         payload: {
