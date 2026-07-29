@@ -29,6 +29,8 @@ export const windowsReducer = (state = {}, action) => {
       };
 
     case ActionTypes.UPDATE_WINDOW:
+      if (!state[action.id]) return state;
+
       return update([action.id], (orig) => ({ ...(orig || {}), ...action.payload }), state);
 
     case ActionTypes.REMOVE_WINDOW:
