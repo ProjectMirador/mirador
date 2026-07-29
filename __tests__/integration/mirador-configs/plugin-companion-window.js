@@ -3,7 +3,7 @@ import { companionWindowButtonPlugin, companionWindowPlugin } from '../plugins/i
 export default {
   config: {
     id: 'mirador',
-    windows: [{ manifestId: 'https://purl.stanford.edu/hg676jb4964/iiif/manifest' }],
+    windows: [{}],
   },
   plugins: [companionWindowButtonPlugin, companionWindowPlugin],
 };
