@@ -267,10 +267,13 @@ export default {
       IIIFThumbnail: {
         styleOverrides: {
           root: ({ ownerState }) => ({
-            ...(ownerState?.variant === 'inside' && {
-              display: 'inline-block',
-              height: 'inherit',
-              position: 'relative',
+            ...(ownerState?.variant === 'navigation' && {
+              /* shrink-to-fit: the card is exactly as wide as the *rendered* image */
+              display: 'grid',
+              gridTemplateRows: 'minmax(0, 1fr) auto',  /* image grows, label content-sized */
+              gap: '0.25rem',
+              justifyItems: 'start',   /* don't stretch the image across the column */
+              width: 'fit-content'
             }),
           }),
           label: ({ ownerState }) => ({
@@ -278,28 +281,30 @@ export default {
             textOverflow: 'ellipsis',
             lineHeight: '1.5em',
             wordBreak: 'break-word',
-            ...(ownerState?.variant === 'inside' && {
-              color: '#ffffff',
-              WebkitLineClamp: 1,
-              whiteSpace: 'nowrap',
-            }),
-            ...(ownerState?.variant === 'outside' && {
+            ...(ownerState?.variant === 'gallery' && {
               display: '-webkit-box',
               maxHeight: '3em',
               MozBoxOrient: 'vertical',
               WebkitLineClamp: 2,
             }),
-            ...(ownerState?.variant === 'inside' && {
-              background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-              bottom: '5px',
-              boxSizing: 'border-box',
-              left: '0px',
-              padding: '4px',
-              position: 'absolute',
-              width: '100%',
+            ...(ownerState?.variant === 'navigation' && {
+              /* width:0 makes the label contribute nothing to the container's
+                intrinsic width (so long text can't stretch the container), while
+                min-width:100% renders it at the containers's resolved width 
+                — i.e. the image's width. */
+              width: 0,
+              lineHeight: '1.5em',
+              minWidth: '100%',
+              whiteSpace: 'nowrap',
             }),
           }),
           image: ({ ownerState }) => ({
+              width: 'auto',
+              height: 'auto',
+            ...(ownerState?.variant === 'navigation' && {
+              width: 'auto',
+              height: '100%',
+            }),
             ...(ownerState?.border && {
               border: '1px solid rgba(0, 0, 0, 0.125)',
             }),

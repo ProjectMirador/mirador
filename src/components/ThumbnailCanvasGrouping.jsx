@@ -7,7 +7,6 @@ import ns from '../config/css-ns';
 
 const StyledCanvas = styled('div')(({ theme }) => ({
   boxSizing: 'border-box',
-  color: theme.palette.common.white,
   cursor: 'pointer',
   display: 'inline-block',
   whiteSpace: 'nowrap',
@@ -106,7 +105,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
               resource={canvas}
               labelled={showThumbnailLabels}
               maxHeight={position === 'far-right' ? style.height - 1.5 * SPACING : height - 1.5 * SPACING}
-              variant="inside"
+              variant="navigation"
             />
           ))}
         </StyledCanvas>
