@@ -1,5 +1,6 @@
 import {
   getLanguagesFromConfigWithCurrent,
+  getShowThumbnailLabelsConfig,
   getShowZoomControlsConfig,
   getTheme,
   getThemeIds,
@@ -81,6 +82,24 @@ describe('getShowZoomControlsConfig', () => {
       workspace: { showZoomControls: false },
     };
     expect(getShowZoomControlsConfig(state)).toEqual(false);
+  });
+});
+
+describe('getShowThumbnailLabelsConfig', () => {
+  it('returns the settings config if it has not been set on the workspace', () => {
+    const state = {
+      config: { thumbnailNavigation: { showThumbnailLabels: true } },
+      workspace: {},
+    };
+    expect(getShowThumbnailLabelsConfig(state)).toEqual(true);
+  });
+
+  it('returns the workspace configuration for showing thumbnail labels', () => {
+    const state = {
+      config: { thumbnailNavigation: { showThumbnailLabels: true } },
+      workspace: { showThumbnailLabels: false },
+    };
+    expect(getShowThumbnailLabelsConfig(state)).toEqual(false);
   });
 });
 
