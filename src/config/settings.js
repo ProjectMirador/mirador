@@ -271,7 +271,6 @@ export default {
               /* shrink-to-fit: the card is exactly as wide as the *rendered* image */
               display: 'grid',
               gridTemplateRows: 'minmax(0, 1fr) auto',  /* image grows, label content-sized */
-              gap: '0.25rem',
               justifyItems: 'start',   /* don't stretch the image across the column */
               width: 'fit-content'
             }),
