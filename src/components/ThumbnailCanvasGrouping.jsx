@@ -104,7 +104,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
               key={canvas.id}
               resource={canvas}
               labelled={showThumbnailLabels}
-              maxHeight={position === 'far-right' ? style.height - 1.5 * SPACING : height - 1.5 * SPACING}
+              maxHeight={(position === 'far-right' ? style.height : height) - SPACING}
               variant="navigation"
             />
           ))}
