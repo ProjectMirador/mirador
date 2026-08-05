@@ -4,12 +4,22 @@ import deepmerge from 'deepmerge';
 import ActionTypes from '../actions/action-types';
 
 /**
- * layersSlice - does a deep merge of the config
+ * updateLayers - action creator
  *
- * Reacts to legacy action types (rather than generating its own) so that the
- * existing `updateLayers` action creator and any other code dispatching
- * `ActionTypes.UPDATE_LAYERS`/`REMOVE_WINDOW` keeps working unchanged.
+ * Kept as a plain object literal (not slice-generated) so the action retains
+ * its historic `mirador/UPDATE_LAYERS` type and flat shape — both are public
+ * surface via the exported `ActionTypes`, and plugin sagas may pattern-match
+ * or destructure fields directly off this action.
  */
+export function updateLayers(windowId, canvasId, payload) {
+  return {
+    canvasId,
+    payload,
+    type: ActionTypes.UPDATE_LAYERS,
+    windowId,
+  };
+}
+
 const layersSlice = createSlice({
   extraReducers: (builder) => {
     builder
