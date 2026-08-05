@@ -44,7 +44,7 @@ describe('Annotations in Mirador', () => {
 
     // use safeFindByRole here. This specific test is consistently hard to interpret on failure,
     // since another async operation has happened after setupIntegrationTestViewer
-    const annotationPanel = await safeFindByRole('complementary', { name: /annotations/i });
+    const annotationPanel = await safeFindByRole('region', { name: /annotations/i });
     expect(annotationPanel).toBeInTheDocument();
 
     const listItems = await within(annotationPanel).findAllByRole('menuitem');
