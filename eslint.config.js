@@ -162,7 +162,7 @@ export default [
   // the state param is the documented, intended way to write them. Every
   // other file keeps the unmodified rule (props: true, no exemption).
   {
-    files: ['**/reducers/*.js', '**/*Slice.js'],
+    files: ['**/*Slice.js'],
     rules: {
       'no-param-reassign': ['error', { props: true, ignorePropertyModificationsFor: ['state'] }],
     },
