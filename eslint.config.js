@@ -157,4 +157,14 @@ export default [
       'no-undef': 'off', // Test globals (describe, it, expect, etc.) provided by vitest
     },
   },
+
+  // RTK slice overrides — createSlice case reducers use Immer, so "mutating"
+  // the state param is the documented, intended way to write them. Every
+  // other file keeps the unmodified rule (props: true, no exemption).
+  {
+    files: ['**/reducers/*.js', '**/*Slice.js'],
+    rules: {
+      'no-param-reassign': ['error', { props: true, ignorePropertyModificationsFor: ['state'] }],
+    },
+  },
 ];
