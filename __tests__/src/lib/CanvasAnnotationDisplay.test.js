@@ -127,5 +127,23 @@ describe('CanvasAnnotationDisplay', () => {
       expect(context.strokeStyle).toEqual('blue');
       expect(context.lineWidth).toEqual(2);
     });
+
+    it('scales percent-based fragment selectors against the canvas dimensions', () => {
+      const context = {
+        restore: vi.fn(),
+        save: vi.fn(),
+        strokeRect: vi.fn(),
+      };
+      const subject = createSubject({
+        canvasHeight: 3000,
+        canvasWidth: 4000,
+        hovered: true,
+        resource: new AnnotationResource({ on: 'www.example.com/#xywh=percent:25,25,50,50' }),
+      });
+      subject.context = context;
+      subject.fragmentContext();
+      // 25% of 4000 = 1000, plus the -100 offset = 900; 25% of 3000 = 750
+      expect(context.strokeRect).toHaveBeenCalledWith(900, 750, 2000, 1500);
+    });
   });
 });

@@ -4,13 +4,15 @@
  */
 export default class CanvasAnnotationDisplay {
   /** */
-  constructor({ resource, palette, zoomRatio, offset, selected, hovered }) {
+  constructor({ resource, palette, zoomRatio, offset, selected, hovered, canvasWidth, canvasHeight }) {
     this.resource = resource;
     this.palette = palette;
     this.zoomRatio = zoomRatio;
     this.offset = offset;
     this.selected = selected;
     this.hovered = hovered;
+    this.canvasWidth = canvasWidth;
+    this.canvasHeight = canvasHeight;
   }
 
   /** */
@@ -100,9 +102,25 @@ export default class CanvasAnnotationDisplay {
     });
   }
 
+  /**
+   * The fragment selector dimensions in canvas pixels, scaling `percent:` based
+   * selectors against the canvas dimensions.
+   */
+  get fragmentDimensions() {
+    const fragment = this.resource.fragmentSelector;
+    if (this.resource.fragmentUnit !== 'percent') return [...fragment];
+
+    return [
+      (fragment[0] / 100) * this.canvasWidth,
+      (fragment[1] / 100) * this.canvasHeight,
+      (fragment[2] / 100) * this.canvasWidth,
+      (fragment[3] / 100) * this.canvasHeight,
+    ];
+  }
+
   /** */
   fragmentContext() {
-    const fragment = this.resource.fragmentSelector;
+    const fragment = this.fragmentDimensions;
     fragment[0] += this.offset.x;
     fragment[1] += this.offset.y;
 
