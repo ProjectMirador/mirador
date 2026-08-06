@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
@@ -12,107 +12,107 @@ const StyledCanvas = styled('div')(({ theme }) => ({
   display: 'inline-block',
   whiteSpace: 'nowrap',
 }));
+
+/**
+ * Determines whether the current index is the rendered canvas, providing
+ * a useful class.
+ * @private
+ */
+function currentCanvasClass(index, canvasIndices) {
+  if (canvasIndices.includes(index)) return 'current-canvas-grouping';
+  return '';
+}
+
 /** */
-export class ThumbnailCanvasGrouping extends PureComponent {
-  /** */
-  constructor(props) {
-    super(props);
-    this.setCanvas = this.setCanvas.bind(this);
+export function ThumbnailCanvasGrouping({
+  index = undefined,
+  columnIndex = undefined,
+  style,
+  canvasGroupings,
+  position,
+  height,
+  currentCanvasId,
+  showThumbnailLabels,
+  setCanvas,
+}) {
+  const handleSetCanvas = useCallback((e) => setCanvas(e.currentTarget.dataset.canvasId), [setCanvas]);
+
+  // For Grid (horizontal), use columnIndex; for List (vertical), use index
+  const itemIndex = columnIndex !== undefined ? columnIndex : index;
+  const currentGroupings = canvasGroupings[itemIndex];
+  const SPACING = 12;
+
+  // In react-window v2 Grid (horizontal layout), columnWidth is passed as style.height
+  // For List (vertical layout), rowHeight is passed as style.height
+  const isHorizontal = position === 'far-bottom';
+  let calculatedWidth = null;
+  if (isHorizontal && style.height) {
+    calculatedWidth = style.height - SPACING;
+  } else if (Number.isInteger(style.width)) {
+    calculatedWidth = style.width - SPACING;
   }
 
-  /** */
-  setCanvas(e) {
-    const { setCanvas } = this.props;
-    setCanvas(e.currentTarget.dataset.canvasId);
-  }
+  const isSelected = currentGroupings.map((canvas) => canvas.id).includes(currentCanvasId);
 
-  /**
-   * Determines whether the current index is the rendered canvas, providing
-   * a useful class.
-   */
-  currentCanvasClass(canvasIndices) {
-    const { index } = this.props;
-    if (canvasIndices.includes(index)) return 'current-canvas-grouping';
-    return '';
-  }
-
-  /** */
-  render() {
-    const { index, columnIndex, style, canvasGroupings, position, height, currentCanvasId, showThumbnailLabels } = this.props;
-    // For Grid (horizontal), use columnIndex; for List (vertical), use index
-    const itemIndex = columnIndex !== undefined ? columnIndex : index;
-    const currentGroupings = canvasGroupings[itemIndex];
-    const SPACING = 12;
-
-    // In react-window v2 Grid (horizontal layout), columnWidth is passed as style.height
-    // For List (vertical layout), rowHeight is passed as style.height
-    const isHorizontal = position === 'far-bottom';
-    let calculatedWidth = null;
-    if (isHorizontal && style.height) {
-      calculatedWidth = style.height - SPACING;
-    } else if (Number.isInteger(style.width)) {
-      calculatedWidth = style.width - SPACING;
-    }
-
-    const isSelected = currentGroupings.map((canvas) => canvas.id).includes(currentCanvasId);
-
-    return (
-      <div
-        style={{
-          ...style,
-          boxSizing: 'content-box',
-          height: Number.isInteger(style.height) ? style.height - SPACING : null,
-          left: Number.isInteger(style.left) ? style.left + SPACING / 2 : null,
-          padding: SPACING / 2,
-          top: Number.isInteger(style.top) ? style.top + SPACING / 2 : null,
-          width: calculatedWidth,
-        }}
-        className={ns('thumbnail-nav-container')}
-        role="gridcell"
-        aria-selected={isSelected}
-        aria-colindex={itemIndex + 1}
+  return (
+    <div
+      style={{
+        ...style,
+        boxSizing: 'content-box',
+        height: Number.isInteger(style.height) ? style.height - SPACING : null,
+        left: Number.isInteger(style.left) ? style.left + SPACING / 2 : null,
+        padding: SPACING / 2,
+        top: Number.isInteger(style.top) ? style.top + SPACING / 2 : null,
+        width: calculatedWidth,
+      }}
+      className={ns('thumbnail-nav-container')}
+      role="gridcell"
+      aria-selected={isSelected}
+      aria-colindex={itemIndex + 1}
+    >
+      <StyledCanvas
+        role="button"
+        data-canvas-id={currentGroupings[0].id}
+        data-canvas-index={currentGroupings[0].index}
+        onClick={handleSetCanvas}
+        tabIndex={-1}
+        sx={(theme) => ({
+          '&:not(:hover)': {
+            outline: isSelected ? `2px solid ${theme.palette.primary.main}` : 0,
+            ...(isSelected && {
+              outlineOffset: '3px',
+            }),
+          },
+          '&:hover': {
+            outline: isSelected ? `2px solid ${theme.palette.primary.main}` : `2px solid ${theme.palette.action.hover}`,
+            outlineOffset: isSelected ? '3px' : '-2px',
+          },
+          height: position === 'far-right' ? 'auto' : `${height - SPACING}px`,
+          width: position === 'far-bottom' ? 'auto' : `${style.width}px`,
+        })}
+        className={classNames(
+          ns([
+            'thumbnail-nav-canvas',
+            `thumbnail-nav-canvas-${itemIndex}`,
+            currentCanvasClass(
+              index,
+              currentGroupings.map((canvas) => canvas.index),
+            ),
+          ]),
+        )}
       >
-        <StyledCanvas
-          role="button"
-          data-canvas-id={currentGroupings[0].id}
-          data-canvas-index={currentGroupings[0].index}
-          onClick={this.setCanvas}
-          tabIndex={-1}
-          sx={(theme) => ({
-            '&:not(:hover)': {
-              outline: isSelected ? `2px solid ${theme.palette.primary.main}` : 0,
-              ...(isSelected && {
-                outlineOffset: '3px',
-              }),
-            },
-            '&:hover': {
-              outline: isSelected ? `2px solid ${theme.palette.primary.main}` : `2px solid ${theme.palette.action.hover}`,
-              outlineOffset: isSelected ? '3px' : '-2px',
-            },
-            height: position === 'far-right' ? 'auto' : `${height - SPACING}px`,
-            width: position === 'far-bottom' ? 'auto' : `${style.width}px`,
-          })}
-          className={classNames(
-            ns([
-              'thumbnail-nav-canvas',
-              `thumbnail-nav-canvas-${itemIndex}`,
-              this.currentCanvasClass(currentGroupings.map((canvas) => canvas.index)),
-            ]),
-          )}
-        >
-          {currentGroupings.map((canvas, i) => (
-            <IIIFThumbnail
-              key={canvas.id}
-              resource={canvas}
-              labelled={showThumbnailLabels}
-              maxHeight={position === 'far-right' ? style.height - 1.5 * SPACING : height - 1.5 * SPACING}
-              variant="inside"
-            />
-          ))}
-        </StyledCanvas>
-      </div>
-    );
-  }
+        {currentGroupings.map((canvas) => (
+          <IIIFThumbnail
+            key={canvas.id}
+            resource={canvas}
+            labelled={showThumbnailLabels}
+            maxHeight={position === 'far-right' ? style.height - 1.5 * SPACING : height - 1.5 * SPACING}
+            variant="inside"
+          />
+        ))}
+      </StyledCanvas>
+    </div>
+  );
 }
 
 ThumbnailCanvasGrouping.propTypes = {
@@ -125,9 +125,4 @@ ThumbnailCanvasGrouping.propTypes = {
   setCanvas: PropTypes.func.isRequired,
   showThumbnailLabels: PropTypes.bool.isRequired,
   style: PropTypes.object.isRequired,
-};
-
-ThumbnailCanvasGrouping.defaultProps = {
-  columnIndex: undefined,
-  index: undefined,
 };
