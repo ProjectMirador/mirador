@@ -79,15 +79,7 @@ export default class CanvasAnnotationDisplay {
         this.context.strokeStyle = currentPalette.strokeStyle || currentPalette.fillStyle;
       }
 
-      if (element.attributes['stroke-opacity']) {
-        this.context.globalAlpha = currentPalette.globalAlpha * element.attributes['stroke-opacity'].nodeValue;
-      } else {
-        this.context.globalAlpha = currentPalette.globalAlpha;
-      }
-
-      this.context.stroke(p);
-
-      // Wait to set the fill, so we can adjust the globalAlpha value if we need to
+      // Draw the fill first so it does not cover the inner half of the stroke.
       if (element.attributes.fill && element.attributes.fill.nodeValue !== 'none') {
         if (element.attributes['fill-opacity']) {
           this.context.globalAlpha = currentPalette.globalAlpha * element.attributes['fill-opacity'].nodeValue;
@@ -96,6 +88,14 @@ export default class CanvasAnnotationDisplay {
         }
         this.context.fill(p);
       }
+
+      if (element.attributes['stroke-opacity']) {
+        this.context.globalAlpha = currentPalette.globalAlpha * element.attributes['stroke-opacity'].nodeValue;
+      } else {
+        this.context.globalAlpha = currentPalette.globalAlpha;
+      }
+
+      this.context.stroke(p);
       this.context.restore();
     });
   }

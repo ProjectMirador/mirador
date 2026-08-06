@@ -110,6 +110,74 @@ describe('CanvasAnnotationDisplay', () => {
       expect(subject.context.strokeStyle).toBe('yellow');
     });
   });
+  describe('svgContext paint order', () => {
+    it('draws the fill before the stroke with their respective opacity', () => {
+      const operations = [];
+      const context = {
+        fill: vi.fn(() => operations.push(['fill', context.globalAlpha])),
+        restore: vi.fn(),
+        save: vi.fn(),
+        setLineDash: vi.fn(),
+        stroke: vi.fn(() => operations.push(['stroke', context.globalAlpha])),
+        translate: vi.fn(),
+      };
+      const subject = createSubject({
+        resource: {
+          svgSelector: { value: '<svg />' },
+        },
+      });
+      vi.spyOn(subject, 'svgPaths', 'get').mockReturnValue([
+        {
+          attributes: {
+            d: { nodeValue: 'M0,0 L10,0 L10,10 Z' },
+            fill: { nodeValue: 'green' },
+            'fill-opacity': { nodeValue: 0.25 },
+            stroke: { nodeValue: 'yellow' },
+            'stroke-opacity': { nodeValue: 0.75 },
+          },
+        },
+      ]);
+      subject.context = context;
+
+      subject.svgContext();
+
+      expect(operations).toEqual([
+        ['fill', 0.25],
+        ['stroke', 0.75],
+      ]);
+    });
+
+    it('does not fill a path whose fill is none', () => {
+      const context = {
+        fill: vi.fn(),
+        restore: vi.fn(),
+        save: vi.fn(),
+        setLineDash: vi.fn(),
+        stroke: vi.fn(),
+        translate: vi.fn(),
+      };
+      const subject = createSubject({
+        resource: {
+          svgSelector: { value: '<svg />' },
+        },
+      });
+      vi.spyOn(subject, 'svgPaths', 'get').mockReturnValue([
+        {
+          attributes: {
+            d: { nodeValue: 'M0,0 L10,0 L10,10 Z' },
+            fill: { nodeValue: 'none' },
+            stroke: { nodeValue: 'yellow' },
+          },
+        },
+      ]);
+      subject.context = context;
+
+      subject.svgContext();
+
+      expect(context.fill).not.toHaveBeenCalled();
+      expect(context.stroke).toHaveBeenCalledOnce();
+    });
+  });
   describe('fragmentContext', () => {
     it('draws the fragment with selected arguments', () => {
       const context = {
