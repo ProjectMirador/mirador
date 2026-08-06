@@ -100,6 +100,16 @@ describe('workspace reducer', () => {
       showZoomControls: true,
     });
   });
+  it('should handle TOGGLE_THUMBNAIL_LABELS', () => {
+    expect(
+      workspaceReducer([], {
+        showThumbnailLabels: false,
+        type: ActionTypes.TOGGLE_THUMBNAIL_LABELS,
+      }),
+    ).toEqual({
+      showThumbnailLabels: false,
+    });
+  });
   it('should handle UPDATE_WORKSPACE_MOSAIC_LAYOUT', () => {
     expect(
       workspaceReducer([], {

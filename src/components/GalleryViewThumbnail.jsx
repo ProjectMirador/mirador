@@ -130,7 +130,7 @@ export function GalleryViewThumbnail({
         role="button"
         tabIndex={0}
       >
-        <IIIFThumbnail resource={canvas} labelled variant="outside" maxHeight={config.height} maxWidth={config.width}>
+        <IIIFThumbnail resource={canvas} labelled variant="gallery" maxHeight={config.height} maxWidth={config.width}>
           <StyledChipsContainer>
             {searchAnnotationsCount > 0 && (
               <AnnotationChip icon={<SearchIcon fontSize="small" />} label={searchAnnotationsCount} size="small" />
