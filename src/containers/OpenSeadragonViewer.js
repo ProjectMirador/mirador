@@ -1,6 +1,6 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import flatten from 'lodash/flatten';
+import { flatten } from '../lib/utils';
 import { withPlugins } from '../extend/withPlugins';
 import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';

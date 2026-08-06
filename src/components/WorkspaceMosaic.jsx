@@ -4,13 +4,12 @@ import { styled } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { DndContext } from 'react-dnd';
 import { Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves, convertLegacyToNary } from 'react-mosaic-component';
-import difference from 'lodash/difference';
-import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';
 import Window from '../containers/Window';
 import MosaicLayout from '../lib/MosaicLayout';
 import globalReactMosaicStyles from '../styles/react-mosaic-component';
+import { difference, isEqual } from '../lib/utils';
 
 const StyledMosaic = styled(Mosaic)({
   '& .mosaic-preview': {

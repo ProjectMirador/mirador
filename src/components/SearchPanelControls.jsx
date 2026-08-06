@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
-import deburr from 'lodash/deburr';
-import isObject from 'lodash/isObject';
 import { useDebouncedCallback } from 'use-debounce';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -21,7 +19,10 @@ const StyledForm = styled('form', { name: 'SearchPanelControls', slot: 'form' })
 
 /** Sometimes an autocomplete match can be a simple string, other times an object
     with a `match` property, this function abstracts that away */
-const getMatch = (option) => (isObject(option) ? option.match : option);
+const getMatch = (option) => (typeof option === 'object' ? option.match : option);
+
+/** Remove diacritical marks when comparing autocomplete values. */
+const deburr = (value) => value.normalize('NFD').replace(/\p{Diacritic}/gu, '');
 
 /** */
 export function SearchPanelControls({

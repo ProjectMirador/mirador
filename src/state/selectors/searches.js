@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { PropertyValue } from 'manifesto.js';
-import flatten from 'lodash/flatten';
+import { flatten } from '../../lib/utils';
 import AnnotationList from '../../lib/AnnotationList';
 import { getCanvas, getCanvases } from './canvases';
 import { getWindow } from './getters';

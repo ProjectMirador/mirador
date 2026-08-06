@@ -1,5 +1,4 @@
-import flatten from 'lodash/flatten';
-import flattenDeep from 'lodash/flattenDeep';
+import { flatten, flattenDeep } from './utils';
 import { Canvas, AnnotationPage, Annotation } from 'manifesto.js';
 import { getIiifResourceImageService } from './iiif';
 

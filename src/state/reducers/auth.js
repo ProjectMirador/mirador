@@ -1,4 +1,4 @@
-import omit from 'lodash/omit';
+import { omit } from '../../lib/utils';
 import ActionTypes from '../actions/action-types';
 
 /**

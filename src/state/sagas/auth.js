@@ -1,6 +1,6 @@
 import { all, call, put, select, takeEvery, delay } from 'redux-saga/effects';
 import { Utils } from 'manifesto.js';
-import flatten from 'lodash/flatten';
+import { flatten } from '../../lib/utils';
 import ActionTypes from '../actions/action-types';
 import { addAuthenticationRequest, resolveAuthenticationRequest, requestAccessToken, resetAuthenticationState } from '../actions';
 import {

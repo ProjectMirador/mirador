@@ -2,9 +2,7 @@ import { useRef, useEffect, useCallback, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { useDebouncedCallback } from 'use-debounce';
-import flatten from 'lodash/flatten';
-import sortBy from 'lodash/sortBy';
-import xor from 'lodash/xor';
+import { difference, flatten } from '../lib/utils';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
@@ -176,11 +174,11 @@ export function AnnotationsOverlay({
         };
 
         let radius = 1;
-        let annosWithScore = sortBy(annos.map(annosWithClickScore(radius)), 'score');
+        let annosWithScore = annos.map(annosWithClickScore(radius)).sort((a, b) => a.score - b.score);
 
         while (radius < Math.max(canvasWidth, canvasHeight) && annosWithScore[0].score === annosWithScore[1].score) {
           radius *= 2;
-          annosWithScore = sortBy(annos.map(annosWithClickScore(radius)), 'score');
+          annosWithScore = annos.map(annosWithClickScore(radius)).sort((a, b) => a.score - b.score);
         }
 
         toggleAnnotation(annosWithScore[0].anno.id);
@@ -206,9 +204,13 @@ export function AnnotationsOverlay({
         const annos = annotationsAtPoint(canvas, point);
 
         if (
-          xor(
+          difference(
             hoveredAnnotationIds,
             annos.map((a) => a.id),
+          ).length > 0 ||
+          difference(
+            annos.map((a) => a.id),
+            hoveredAnnotationIds,
           ).length > 0
         ) {
           hoverAnnotation(

@@ -1,5 +1,4 @@
-import set from 'lodash/fp/set';
-import omit from 'lodash/omit';
+import { omit, setPath as set } from '../../lib/utils';
 import ActionTypes from '../actions/action-types';
 
 /**

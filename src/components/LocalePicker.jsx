@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import keyBy from 'lodash/keyBy';
+import { keyBy } from '../lib/utils';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';

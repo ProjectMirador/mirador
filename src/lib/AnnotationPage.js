@@ -1,4 +1,4 @@
-import flatten from 'lodash/flatten';
+import { flatten } from './utils';
 import AnnotationItem from './AnnotationItem';
 /**
  * Annotation representation for IIIF Presentation v3

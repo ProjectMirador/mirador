@@ -1,6 +1,4 @@
 import { forwardRef, useContext } from 'react';
-import curry from 'lodash/curry';
-import isEmpty from 'lodash/isEmpty';
 import PluginContext from './PluginContext';
 
 /** withPlugins should be the innermost HOC */
@@ -16,7 +14,7 @@ function _withPlugins(targetName, TargetComponent) {
 
     const plugins = (pluginMap || {})[targetName];
 
-    if (isEmpty(plugins) || isEmpty(plugins.wrap)) {
+    if (!plugins || Object.keys(plugins).length === 0 || !plugins.wrap || plugins.wrap.length === 0) {
       return <TargetComponent {...passDownProps} />;
     }
 
@@ -43,4 +41,5 @@ function _withPlugins(targetName, TargetComponent) {
 }
 
 /** withPlugins('MyComponent')(MyComponent) */
-export const withPlugins = curry(_withPlugins);
+export const withPlugins = (targetName, TargetComponent) =>
+  TargetComponent === undefined ? (component) => _withPlugins(targetName, component) : _withPlugins(targetName, TargetComponent);
