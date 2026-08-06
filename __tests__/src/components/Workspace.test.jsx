@@ -59,18 +59,18 @@ describe('Workspace', () => {
   });
   describe('if workspace type is unknown', () => {
     it('should render <Window/> components as list', () => {
-      createWrapper({ workspaceType: 'bubu' });
+      const { container } = createWrapper({ workspaceType: 'bubu' });
 
       expect(screen.getByRole('heading', { name: 'Mirador viewer' })).toBeInTheDocument();
-      expect(screen.getAllByLabelText('Window:')).toHaveLength(2);
+      expect(container.querySelectorAll('.mirador-window')).toHaveLength(2);
     });
   });
   describe('if any windows are maximized', () => {
     it('should render only maximized <Window/> components', () => {
-      createWrapper({ maximizedWindowIds: ['1'] });
+      const { container } = createWrapper({ maximizedWindowIds: ['1'] });
 
       expect(screen.getByRole('heading', { name: 'Mirador viewer' })).toBeInTheDocument();
-      expect(screen.getByLabelText('Window:')).toHaveAttribute('id', '1');
+      expect(container.querySelector('.mirador-window')).toHaveAttribute('id', '1');
     });
   });
 

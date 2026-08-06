@@ -10,11 +10,14 @@ describe('Canvas navigation by clicking thumbnails', () => {
 
   it.skip('navigates a manifest using thumbnail navigation', async (context) => {
     // Make sure we have the manifest
-    const windowElement = await screen.findByRole('region', {
-      name: /Window: Bodleian Library MS. Ind. Inst. Misc. 22/i,
+    const windowTitle = await screen.findByRole('heading', {
+      level: 2,
+      name: /Bodleian Library MS. Ind. Inst. Misc. 22/i,
     });
-    expect(windowElement).toBeInTheDocument();
+    expect(windowTitle).toBeInTheDocument();
 
+    // eslint-disable-next-line testing-library/no-node-access
+    const windowElement = windowTitle.closest('section');
     const windowId = windowElement.getAttribute('id');
     const storedCanvasId = context.miradorInstance.store.getState().windows[windowId].canvasId;
 

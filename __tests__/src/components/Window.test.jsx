@@ -1,5 +1,6 @@
 import { MosaicWindowContext } from 'react-mosaic-component';
 import { render, screen } from '@tests/utils/test-utils';
+import textManifest from '../../fixtures/version-3/text-pdf.json';
 
 import { Window } from '../../../src/components/Window';
 
@@ -9,10 +10,13 @@ function createWrapper(props, state, renderOptions) {
     <Window windowId="xyz" manifestId="foo" classes={{}} {...props} />,
     {
       preloadedState: {
+        ...state,
         windows: {
+          ...state?.windows,
           xyz: {
             collectionDialogOn: false,
             companionWindowIds: [],
+            ...state?.windows?.xyz,
           },
         },
       },
@@ -22,9 +26,25 @@ function createWrapper(props, state, renderOptions) {
 }
 
 describe('Window', () => {
-  it('should render outer element', () => {
-    createWrapper();
-    expect(screen.getByLabelText('Window:')).toHaveClass('mirador-window');
+  it('renders the outer section without repeating the window title as its accessible name', () => {
+    const manifestId = textManifest.id;
+    const { container } = createWrapper(
+      {},
+      {
+        manifests: {
+          [manifestId]: {
+            id: manifestId,
+            json: textManifest,
+          },
+        },
+        windows: { xyz: { manifestId } },
+      },
+    );
+    // eslint-disable-next-line testing-library/no-container, testing-library/no-node-access
+    const windowElement = container.querySelector('section.mirador-window');
+
+    expect(windowElement).not.toHaveAttribute('aria-label');
+    expect(screen.getByRole('heading', { level: 2, name: 'Simplest Text Example 1' })).toBeInTheDocument();
   });
   it('should render <WindowTopBar>', () => {
     createWrapper();

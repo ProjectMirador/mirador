@@ -8,21 +8,23 @@ describe('Window actions', () => {
 
   it('Closes a Mirador window', async () => {
     expect(
-      await screen.findByRole('region', {
-        name: /Window: Cambridge, Corpus Christi College, MS 640: Antiphoner Leaf/i,
+      await screen.findByRole('heading', {
+        level: 2,
+        name: /Cambridge, Corpus Christi College, MS 640: Antiphoner Leaf/i,
       }),
     ).toBeInTheDocument();
     const closeButton = screen.getByRole('button', { name: /Close window/i });
     fireEvent.click(closeButton);
     await waitFor(() =>
       expect(
-        screen.queryByRole('region', {
-          name: /Window: Cambridge, Corpus Christi College, MS 640: Antiphoner Leaf/i,
+        screen.queryByRole('heading', {
+          level: 2,
+          name: /Cambridge, Corpus Christi College, MS 640: Antiphoner Leaf/i,
         }),
       ).not.toBeInTheDocument(),
     );
 
     // No windows should be present
-    expect(screen.queryByRole('region')).not.toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: 'Window navigation' })).not.toBeInTheDocument();
   });
 });

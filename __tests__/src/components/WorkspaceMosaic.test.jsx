@@ -119,9 +119,10 @@ describe('WorkspaceMosaic', () => {
   describe('tile rendering', () => {
     it('when window is available', () => {
       wrapper = createWrapper({ windowIds });
+      const windows = wrapper.container.querySelectorAll('.mirador-window');
 
-      expect(screen.getAllByLabelText('Window:', { container: 'section' })[0]).toHaveAttribute('id', '1');
-      expect(screen.getAllByLabelText('Window:', { container: 'section' })[1]).toHaveAttribute('id', '2');
+      expect(windows[0]).toHaveAttribute('id', '1');
+      expect(windows[1]).toHaveAttribute('id', '2');
 
       expect(wrapper.container.querySelector('.mosaic-window-title')).toBeEmptyDOMElement();
       expect(wrapper.container.querySelector('.mosaic-window-controls')).toBeEmptyDOMElement();
