@@ -40,4 +40,10 @@ describe('WindowCanvasNavigationControls', () => {
     expect(screen.getByRole('button', { name: 'Zoom out' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Reset zoom' })).toBeInTheDocument();
   });
+
+  it('orders the nav controls before the zoom controls (issue #3190)', () => {
+    render(<Subject showZoomControls />);
+    const labels = screen.getAllByRole('button').map((button) => button.getAttribute('aria-label'));
+    expect(labels).toEqual(['Previous item', 'Next item', 'Zoom in', 'Zoom out', 'Reset zoom']);
+  });
 });
