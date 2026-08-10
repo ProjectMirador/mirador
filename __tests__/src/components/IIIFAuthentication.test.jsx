@@ -127,5 +127,13 @@ describe('IIIFAuthentication', () => {
         }),
       );
     });
+    it('renders a logout button for a non-interactive service with a logout service', () => {
+      createWrapper({ isInteractive: false, logoutConfirm: 'exit', status: 'ok' });
+      expect(screen.getByRole('button', { name: 'exit' })).toBeInTheDocument();
+    });
+    it('renders nothing for a non-interactive service without a logout service', () => {
+      createWrapper({ isInteractive: false, logoutServiceId: null, status: 'ok' });
+      expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    });
   });
 });

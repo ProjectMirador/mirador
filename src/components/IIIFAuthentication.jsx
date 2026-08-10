@@ -52,7 +52,7 @@ export function IIIFAuthentication({
 
   /** Render the auth bar for logged in users */
   const renderLoggedIn = () => {
-    if (!isInteractive) return null;
+    if (!isInteractive && !logoutServiceId) return null;
 
     return (
       <WindowAuthenticationBar
