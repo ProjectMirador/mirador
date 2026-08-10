@@ -1,0 +1,136 @@
+{
+  "id": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1/page/p1",
+  "type": "AnnotationPage",
+  "items": [
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1/058f22b4-f7d5-43e2-a9bb-12985338aae8",
+      "type": "Annotation",
+      "motivation": "commenting",
+      "body": [
+        {
+          "created": "2025-01-15T06:12:07.539Z",
+          "creator": "Rainer Simon",
+          "purpose": "commenting",
+          "type": "TextualBody",
+          "format": "text/html",
+          "value": "<p>Test (svg with 2 elements (polygon and red line))</p>"
+        }
+      ],
+      "target": {
+        "type": "SpecificResource",
+        "source": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1",
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g><line x1='242' y1='633' x2='400' y2='900' stroke='red' /><polygon points='242,633 340,552 948,1173 859,1249' /></g></svg>"
+        }
+      }
+    },
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1/0654ce3a-f0a1-4f01-9a6e-531bb62d1e3e",
+      "type": "Annotation",
+      "motivation": "commenting",
+      "body": [
+        {
+          "created": "2025-01-15T06:12:16.154Z",
+          "creator": "Rainer Simon",
+          "purpose": "commenting",
+          "type": "TextualBody",
+          "format": "text/html",
+          "value": "<p>Test (path)</p>"
+        }
+      ],
+      "target": {
+        "type": "SpecificResource",
+        "source": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1",
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g><path d='M270.000000,1900.000000 L1530.000000,1900.000000 L1530.000000,1610.000000 L1315.000000,1300.000000 L1200.000000,986.000000 L904.000000,661.000000 L600.000000,986.000000 L500.000000,1300.000000 L270,1630 L270.000000,1900.000000' /></g></svg>"
+        }
+      }
+    },
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1/anno-circle",
+      "type": "Annotation",
+      "motivation": "commenting",
+      "body": [
+        {
+          "type": "TextualBody",
+          "format": "text/html",
+          "purpose": "commenting",
+          "value": "<p>Test (circle)</p>"
+        }
+      ],
+      "target": {
+        "type": "SpecificResource",
+        "source": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1",
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg xmlns='http://www.w3.org/2000/svg'><circle cx='1050' cy='250' r='90'></circle></svg>"
+        }
+      }
+    },
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1/anno-ellipse",
+      "type": "Annotation",
+      "motivation": "commenting",
+      "body": [
+        {
+          "type": "TextualBody",
+          "format": "text/html",
+          "purpose": "commenting",
+          "value": "<p>Test (ellipse)</p>"
+        }
+      ],
+      "target": {
+        "type": "SpecificResource",
+        "source": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1",
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg xmlns='http://www.w3.org/2000/svg'><ellipse cx='1050' cy='1650' rx='130' ry='80'></ellipse></svg>"
+        }
+      }
+    },
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1/anno-rect",
+      "type": "Annotation",
+      "motivation": "commenting",
+      "body": [
+        {
+          "type": "TextualBody",
+          "format": "text/html",
+          "purpose": "commenting",
+          "value": "<p>Test (rect)</p>"
+        }
+      ],
+      "target": {
+        "type": "SpecificResource",
+        "source": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1",
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg xmlns='http://www.w3.org/2000/svg'><rect x='50' y='1500' width='180' height='120'></rect></svg>"
+        }
+      }
+    },
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1/anno-polyline",
+      "type": "Annotation",
+      "motivation": "commenting",
+      "body": [
+        {
+          "type": "TextualBody",
+          "format": "text/html",
+          "purpose": "commenting",
+          "value": "<p>Test (polyline, open path)</p>"
+        }
+      ],
+      "target": {
+        "type": "SpecificResource",
+        "source": "https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1",
+        "selector": {
+          "type": "SvgSelector",
+          "value": "<svg xmlns='http://www.w3.org/2000/svg'><polyline points='60,300 200,220 340,340 480,260'></polyline></svg>"
+        }
+      }
+    }
+  ]
+}
