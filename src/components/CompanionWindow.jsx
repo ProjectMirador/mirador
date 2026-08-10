@@ -126,6 +126,7 @@ export const CompanionWindow = forwardRef((props, innerRef) => {
       ].join(' ')}
       square
       component="aside"
+      role="region"
       aria-label={ariaLabel || title}
     >
       <LocaleContext.Provider value={locale}>
