@@ -83,8 +83,10 @@ export function* doAuthWorkflow({ infoJson, windowId }) {
       Utils.getService(authService, 'http://iiif.io/api/auth/0/token');
 
     if (!tokenService) return;
+    // start the auth
+    yield put(addAuthenticationRequest(windowId, authService.id, authService.getProfile()));
     // resolve the auth
-    yield put(resolveAuthenticationRequest(authService.id, tokenService.id));
+    yield put(resolveAuthenticationRequest(authService.id, tokenService.id, { ok: true }));
     // start access tokens
     yield put(requestAccessToken(tokenService.id, authService.id));
   }
