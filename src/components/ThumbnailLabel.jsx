@@ -16,4 +16,5 @@ export function ThumbnailLabel({ label = undefined, resource, variant = undefine
 ThumbnailLabel.propTypes = {
   label: PropTypes.string,
   resource: PropTypes.object.isRequired,
+  variant: PropTypes.oneOf(['gallery', 'navigation']),
 };
