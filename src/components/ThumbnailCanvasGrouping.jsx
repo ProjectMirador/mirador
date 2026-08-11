@@ -21,9 +21,9 @@ const Label = styled('span', { name: 'ThumbnailCanvasGrouping', slot: 'label' })
   ...theme.typography.caption,
 }));
 
-// Width of the selected-state border, and the gap between it and the thumbnail (replaces the
-// previous outline/outlineOffset, since outline can't be restricted to individual sides)
+// Width of the selected-state border,
 const FRAME_BORDER = 2;
+// The gap between it and the thumbnail
 const FRAME_OFFSET = 3;
 const FRAME_INSET = FRAME_BORDER + FRAME_OFFSET;
 
@@ -37,11 +37,13 @@ const ThumbnailFrame = styled('div', { name: 'ThumbnailCanvasGrouping', slot: 't
   const calcBorder = (selected, correctSide) => {
     if (!correctSide) {
       return 'none';
-    } else if (!selected) {
-      return `${FRAME_BORDER}px solid transparent`;
-    } else {
-      return `${FRAME_BORDER}px solid ${theme.palette.primary.main}`;
     }
+
+    if (!selected) {
+      return `${FRAME_BORDER}px solid transparent`;
+    }
+
+    return `${FRAME_BORDER}px solid ${theme.palette.primary.main}`;
   };
 
   return {
@@ -57,6 +59,7 @@ const ThumbnailFrame = styled('div', { name: 'ThumbnailCanvasGrouping', slot: 't
     paddingRight: ownerState.isLast ? FRAME_OFFSET : 0,
   };
 });
+
 /** */
 export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
@@ -83,7 +86,8 @@ export class ThumbnailCanvasGrouping extends PureComponent {
 
   /** */
   render() {
-    const { index, columnIndex, style, canvasGroupings, position, height, currentCanvasId, showThumbnailLabels, textHeight } = this.props;
+    const { index, columnIndex, style, canvasGroupings, position, height, currentCanvasId, showThumbnailLabels, textHeight } =
+      this.props;
     // For Grid (horizontal), use columnIndex; for List (vertical), use index
     const itemIndex = columnIndex !== undefined ? columnIndex : index;
     const currentGroupings = canvasGroupings[itemIndex];
@@ -100,10 +104,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
     }
 
     const thumbnailMaxHeight =
-      (position === 'far-right' ? style.height : height) -
-      (showThumbnailLabels ? textHeight : 0) -
-      1.5 * SPACING -
-      2 * FRAME_INSET;
+      (position === 'far-right' ? style.height : height) - (showThumbnailLabels ? textHeight : 0) - 1.5 * SPACING;
 
     const isSelected = currentGroupings.map((canvas) => canvas.id).includes(currentCanvasId);
 
@@ -114,7 +115,6 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           boxSizing: 'content-box',
           height: Number.isInteger(style.height) ? style.height - SPACING : null,
           left: Number.isInteger(style.left) ? style.left + SPACING / 2 : null,
-          padding: SPACING / 2,
           top: Number.isInteger(style.top) ? style.top + SPACING / 2 : null,
           width: calculatedWidth,
         }}
@@ -132,7 +132,6 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           sx={(theme) => ({
             '&:hover': {
               outline: isSelected ? 0 : `2px solid ${theme.palette.action.hover}`,
-              outlineOffset: '-2px',
             },
             height: position === 'far-right' ? 'auto' : `${height - SPACING}px`,
             width: position === 'far-bottom' ? 'auto' : `${style.width}px`,
@@ -181,9 +180,11 @@ ThumbnailCanvasGrouping.propTypes = {
   setCanvas: PropTypes.func.isRequired,
   showThumbnailLabels: PropTypes.bool.isRequired,
   style: PropTypes.object.isRequired,
+  textHeight: PropTypes.number,
 };
 
 ThumbnailCanvasGrouping.defaultProps = {
   columnIndex: undefined,
   index: undefined,
+  textHeight: 0,
 };

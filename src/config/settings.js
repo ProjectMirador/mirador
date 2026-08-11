@@ -294,8 +294,8 @@ export default {
           }),
           label: ({ theme }) => ({
             ...theme.typography.caption,
-            height: '1rem',
             minWidth: '100%',
+            lineHeight: `1.25rem`,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
@@ -530,8 +530,8 @@ export default {
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     displaySettings: true, // Display the settings for this in WindowTopMenu
-    height: 130, // height of entire ThumbnailNavigation area when position is "far-bottom"
-    textHeight: 20, // height of the text area for thumbnail labels when position is "far-bottom"
+    height: 140, // height of entire ThumbnailNavigation area when position is "far-bottom"
+    textHeight: 15, // height of the text area for thumbnail labels when position is "far-bottom"
     showThumbnailLabels: true, // Configure if thumbnail labels should be displayed
     width: 100, // width of one canvas (doubled for book view) in ThumbnailNavigation area when position is "far-right"
   },

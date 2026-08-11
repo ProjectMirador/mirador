@@ -87,7 +87,8 @@ export function ThumbnailNavigation({
     }
   };
 
-  const groupHeight = thumbnailNavigation.height + (thumbnailNavigation.showThumbnailLabels ? thumbnailNavigation.textHeight : 0);
+  // The height of the text below the thumbnail
+  const thumbnailTextOffset = thumbnailNavigation.showThumbnailLabels ? thumbnailNavigation.textHeight : 0;
 
   /**
    * When on right, row height
@@ -103,12 +104,14 @@ export function ThumbnailNavigation({
       case 'far-right': {
         const calc = Math.floor((calculatingWidth(canvases.length) * bounds[3]) / bounds[2]);
         if (!Number.isInteger(calc)) return thumbnailNavigation.width + spacing;
-        return calc + spacing;
+        return calc + spacing + thumbnailTextOffset;
       }
       // Default case bottom
       default: {
         if (bounds[3] === 0) return thumbnailNavigation.width + spacing;
-        const calc = Math.ceil(((thumbnailNavigation.height - scrollbarSize - spacing - 4) * bounds[2]) / bounds[3]);
+        const calc = Math.ceil(
+          ((thumbnailNavigation.height - thumbnailTextOffset - scrollbarSize - spacing - 4) * bounds[2]) / bounds[3],
+        );
         return calc;
       }
     }
@@ -136,7 +139,7 @@ export function ThumbnailNavigation({
       // Default case bottom
       default:
         return {
-          height: `${groupHeight}px`,
+          height: `${thumbnailNavigation.height}px`,
           width: '100%',
         };
     }
@@ -160,7 +163,7 @@ export function ThumbnailNavigation({
   const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
   const rowData = {
     canvasGroupings,
-    height: groupHeight - spacing - scrollbarSize,
+    height: thumbnailNavigation.height - spacing - scrollbarSize,
     position,
     windowId,
     textHeight: thumbnailNavigation.textHeight,
@@ -188,8 +191,8 @@ export function ThumbnailNavigation({
             columnCount={canvasGroupings.length}
             columnWidth={calculateScaledSize}
             rowCount={1}
-            rowHeight={() => groupHeight - spacing - scrollbarSize}
-            height={groupHeight}
+            rowHeight={() => thumbnailNavigation.height - spacing - scrollbarSize}
+            height={thumbnailNavigation.height}
             width="100%"
             style={{
               direction: htmlDir === 'rtl' ? 'rtl' : 'ltr',
