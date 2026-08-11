@@ -20,6 +20,43 @@ const Grid = styled('div', { name: 'ThumbnailCanvasGrouping', slot: 'grid' })(({
 const Label = styled('span', { name: 'ThumbnailCanvasGrouping', slot: 'label' })(({ theme }) => ({
   ...theme.typography.caption,
 }));
+
+// Width of the selected-state border, and the gap between it and the thumbnail (replaces the
+// previous outline/outlineOffset, since outline can't be restricted to individual sides)
+const FRAME_BORDER = 2;
+const FRAME_OFFSET = 3;
+const FRAME_INSET = FRAME_BORDER + FRAME_OFFSET;
+
+const ThumbnailFrame = styled('div', { name: 'ThumbnailCanvasGrouping', slot: 'thumbnailFrame' })(({ theme, ownerState }) => {
+  /**
+   * Returns the border style for a given side of the thumbnail frame, based on whether the thumbnail is selected and whether it is on the correct side of the grouping.
+   * @param {boolean} selected - Whether the thumbnail is selected.
+   * @param {boolean} correctSide - Whether the thumbnail is on the correct side of the grouping.
+   * @returns {string} The border style for the given side of the thumbnail frame.
+   */
+  const calcBorder = (selected, correctSide) => {
+    if (!correctSide) {
+      return 'none';
+    } else if (!selected) {
+      return `${FRAME_BORDER}px solid transparent`;
+    } else {
+      return `${FRAME_BORDER}px solid ${theme.palette.primary.main}`;
+    }
+  };
+
+  return {
+    borderTop: calcBorder(ownerState.selected, true),
+    borderBottom: calcBorder(ownerState.selected, true),
+    borderLeft: calcBorder(ownerState.selected, ownerState.isFirst),
+    borderRight: calcBorder(ownerState.selected, ownerState.isLast),
+    boxSizing: 'border-box',
+    display: 'inline-block',
+    paddingTop: FRAME_OFFSET,
+    paddingBottom: FRAME_OFFSET,
+    paddingLeft: ownerState.isFirst ? FRAME_OFFSET : 0,
+    paddingRight: ownerState.isLast ? FRAME_OFFSET : 0,
+  };
+});
 /** */
 export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
@@ -46,7 +83,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
 
   /** */
   render() {
-    const { index, columnIndex, style, canvasGroupings, position, height, currentCanvasId, showThumbnailLabels } = this.props;
+    const { index, columnIndex, style, canvasGroupings, position, height, currentCanvasId, showThumbnailLabels, textHeight } = this.props;
     // For Grid (horizontal), use columnIndex; for List (vertical), use index
     const itemIndex = columnIndex !== undefined ? columnIndex : index;
     const currentGroupings = canvasGroupings[itemIndex];
@@ -63,7 +100,10 @@ export class ThumbnailCanvasGrouping extends PureComponent {
     }
 
     const thumbnailMaxHeight =
-      (position === 'far-right' ? style.height : height) - 1.5 * SPACING;
+      (position === 'far-right' ? style.height : height) -
+      (showThumbnailLabels ? textHeight : 0) -
+      1.5 * SPACING -
+      2 * FRAME_INSET;
 
     const isSelected = currentGroupings.map((canvas) => canvas.id).includes(currentCanvasId);
 
@@ -90,15 +130,9 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           onClick={this.setCanvas}
           tabIndex={-1}
           sx={(theme) => ({
-            '&:not(:hover)': {
-              outline: isSelected ? `2px solid ${theme.palette.primary.main}` : 0,
-              ...(isSelected && {
-                outlineOffset: '3px',
-              }),
-            },
             '&:hover': {
-              outline: isSelected ? `2px solid ${theme.palette.primary.main}` : `2px solid ${theme.palette.action.hover}`,
-              outlineOffset: isSelected ? '3px' : '-2px',
+              outline: isSelected ? 0 : `2px solid ${theme.palette.action.hover}`,
+              outlineOffset: '-2px',
             },
             height: position === 'far-right' ? 'auto' : `${height - SPACING}px`,
             width: position === 'far-bottom' ? 'auto' : `${style.width}px`,
@@ -112,8 +146,17 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           )}
         >
           <Grid ownerState={{ columns: currentGroupings.length }}>
-            {currentGroupings.map((canvas) => (
-              <IIIFThumbnail key={canvas.id} resource={canvas} maxHeight={thumbnailMaxHeight} variant="navigation" />
+            {currentGroupings.map((canvas, i) => (
+              <ThumbnailFrame
+                key={canvas.id}
+                ownerState={{
+                  isFirst: i === 0,
+                  isLast: i === currentGroupings.length - 1,
+                  selected: isSelected,
+                }}
+              >
+                <IIIFThumbnail resource={canvas} maxHeight={thumbnailMaxHeight} />
+              </ThumbnailFrame>
             ))}
             {showThumbnailLabels &&
               currentGroupings.map((canvas) => (

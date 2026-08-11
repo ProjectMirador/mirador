@@ -209,6 +209,4 @@ IIIFThumbnail.propTypes = {
     url: PropTypes.string.isRequired,
     width: PropTypes.number,
   }),
-  // eslint-disable-next-line react/no-unused-prop-types
-  variant: PropTypes.oneOf(['navigation', 'gallery']),
 };

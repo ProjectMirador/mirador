@@ -7,16 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { useCanvasWorldService } from '../hooks';
 import ThumbnailCanvasGrouping from '../containers/ThumbnailCanvasGrouping';
 import ns from '../config/css-ns';
-
-/**
- * Calculates the height for the thumbnail navigation based on its position and settings.
- * @param {settings.thumbnailNavigation} thumbnailNavigation 
- * @returns {number} The calculated height for the thumbnail navigation.
- */
-function calcHeight(thumbnailNavigation) {
-  return thumbnailNavigation.height + (thumbnailNavigation.showThumbnailLabels ? thumbnailNavigation.textHeight : 0);
-}
-
 /**
  */
 export function ThumbnailNavigation({
@@ -97,6 +87,8 @@ export function ThumbnailNavigation({
     }
   };
 
+  const groupHeight = thumbnailNavigation.height + (thumbnailNavigation.showThumbnailLabels ? thumbnailNavigation.textHeight : 0);
+
   /**
    * When on right, row height
    * When on bottom, column width
@@ -144,7 +136,7 @@ export function ThumbnailNavigation({
       // Default case bottom
       default:
         return {
-          height: `${calcHeight(thumbnailNavigation)}px`,
+          height: `${groupHeight}px`,
           width: '100%',
         };
     }
@@ -168,9 +160,10 @@ export function ThumbnailNavigation({
   const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
   const rowData = {
     canvasGroupings,
-    height: thumbnailNavigation.height - spacing - scrollbarSize,
+    height: groupHeight - spacing - scrollbarSize,
     position,
     windowId,
+    textHeight: thumbnailNavigation.textHeight,
   };
   return (
     <Paper
@@ -195,8 +188,8 @@ export function ThumbnailNavigation({
             columnCount={canvasGroupings.length}
             columnWidth={calculateScaledSize}
             rowCount={1}
-            rowHeight={() => calcHeight(thumbnailNavigation) - spacing - scrollbarSize}
-            height={calcHeight(thumbnailNavigation)}
+            rowHeight={() => groupHeight - spacing - scrollbarSize}
+            height={groupHeight}
             width="100%"
             style={{
               direction: htmlDir === 'rtl' ? 'rtl' : 'ltr',
