@@ -266,17 +266,6 @@ export default {
       },
       IIIFThumbnail: {
         styleOverrides: {
-          label: ({ ownerState }) => ({
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            lineHeight: '1.5em',
-            wordBreak: 'break-word',
-
-            display: '-webkit-box',
-            maxHeight: '3em',
-            MozBoxOrient: 'vertical',
-            WebkitLineClamp: 2,
-          }),
           image: ({ ownerState }) => ({
             ...(ownerState?.border && {
               border: '1px solid rgba(0, 0, 0, 0.125)',
@@ -292,14 +281,29 @@ export default {
             overflow: 'hidden',
             width: 'fit-content',
           }),
-          label: ({ theme }) => ({
-            ...theme.typography.caption,
-            minWidth: '100%',
-            lineHeight: `1.25rem`,
+        },
+      },
+      // Shared by IIIFThumbnail (gallery view, 2-line clamp) and ThumbnailCanvasGrouping
+      // (navigation strip, single-line truncation) via the ThumbnailLabel component.
+      ThumbnailLabel: {
+        styleOverrides: {
+          root: ({ ownerState }) => ({
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-            width: 0,
+            wordBreak: 'break-word',
+            ...(ownerState?.variant === 'gallery' && {
+              display: '-webkit-box',
+              lineHeight: '1.5em',
+              maxHeight: '3em',
+              MozBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+            }),
+            ...(ownerState?.variant === 'navigation' && {
+              lineHeight: '1.25rem',
+              minWidth: '100%',
+              whiteSpace: 'nowrap',
+              width: 0,
+            }),
           }),
         },
       },
@@ -530,8 +534,8 @@ export default {
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     displaySettings: true, // Display the settings for this in WindowTopMenu
-    height: 140, // height of entire ThumbnailNavigation area when position is "far-bottom"
-    textHeight: 15, // height of the text area for thumbnail labels when position is "far-bottom"
+    height: 150, // height of entire ThumbnailNavigation area when position is "far-bottom"
+    textHeight: 20, // height of the text area for thumbnail labels when position is "far-bottom"
     showThumbnailLabels: true, // Configure if thumbnail labels should be displayed
     width: 100, // width of one canvas (doubled for book view) in ThumbnailNavigation area when position is "far-right"
   },

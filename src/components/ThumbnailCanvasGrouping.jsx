@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
-import { IIIFResourceLabel } from './IIIFResourceLabel';
+import { ThumbnailLabel } from './ThumbnailLabel';
 import ns from '../config/css-ns';
 
 const StyledCanvas = styled('div')(({ theme }) => ({
@@ -17,15 +17,10 @@ const Grid = styled('div', { name: 'ThumbnailCanvasGrouping', slot: 'grid' })(({
   gridTemplateColumns: `repeat(${ownerState.columns}, auto)`,
 }));
 
-const Label = styled('span', { name: 'ThumbnailCanvasGrouping', slot: 'label' })(({ theme }) => ({
-  ...theme.typography.caption,
-}));
-
 // Width of the selected-state border,
 const FRAME_BORDER = 2;
 // The gap between it and the thumbnail
 const FRAME_OFFSET = 3;
-const FRAME_INSET = FRAME_BORDER + FRAME_OFFSET;
 
 const ThumbnailFrame = styled('div', { name: 'ThumbnailCanvasGrouping', slot: 'thumbnailFrame' })(({ theme, ownerState }) => {
   /**
@@ -49,14 +44,15 @@ const ThumbnailFrame = styled('div', { name: 'ThumbnailCanvasGrouping', slot: 't
   return {
     borderTop: calcBorder(ownerState.selected, true),
     borderBottom: calcBorder(ownerState.selected, true),
-    borderLeft: calcBorder(ownerState.selected, ownerState.isFirst),
-    borderRight: calcBorder(ownerState.selected, ownerState.isLast),
+    // Use start and end for RTL direction
+    borderInlineStart: calcBorder(ownerState.selected, ownerState.isFirst),
+    borderInlineEnd: calcBorder(ownerState.selected, ownerState.isLast),
     boxSizing: 'border-box',
     display: 'inline-block',
     paddingTop: FRAME_OFFSET,
     paddingBottom: FRAME_OFFSET,
-    paddingLeft: ownerState.isFirst ? FRAME_OFFSET : 0,
-    paddingRight: ownerState.isLast ? FRAME_OFFSET : 0,
+    paddingInlineStart: ownerState.isFirst ? FRAME_OFFSET : 0,
+    paddingInlineEnd: ownerState.isLast ? FRAME_OFFSET : 0,
   };
 });
 
@@ -158,11 +154,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
               </ThumbnailFrame>
             ))}
             {showThumbnailLabels &&
-              currentGroupings.map((canvas) => (
-                <Label key={canvas.id}>
-                  <IIIFResourceLabel resource={canvas} />
-                </Label>
-              ))}
+              currentGroupings.map((canvas) => <ThumbnailLabel key={canvas.id} resource={canvas} variant="navigation" />)}
           </Grid>
         </StyledCanvas>
       </div>

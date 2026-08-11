@@ -111,17 +111,22 @@ describe('ThumbnailCanvasGrouping', () => {
     });
   });
   describe('ThumbnailFrame border/padding for a selected grouping', () => {
-    const present = { color: '#1967d2', padding: '3px', style: 'solid', width: '2px' };
-    const absent = { padding: '0px', style: 'none' };
+    const present = { border: '2px solid #1967d2', padding: '3px' };
+    const absent = { border: 'none', padding: '0' };
 
-    /** build a toHaveStyle style object for one border side (and its matching padding side) */
-    function side(name, { color, padding, style, width }) {
-      return {
-        [`border${name}Style`]: style,
-        [`padding${name}`]: padding,
-        ...(width && { [`border${name}Width`]: width }),
-        ...(color && { [`border${name}Color`]: color }),
-      };
+    // jsdom's CSSOM doesn't resolve logical border/padding properties through jest-dom's
+    // toHaveStyle (it can't set them via the inline style API it uses internally), but it does
+    // resolve them correctly when read straight off getComputedStyle, so assert directly.
+    /** */
+    function expectFrame(frame, { inlineEnd, inlineStart }) {
+      expect(frame).toHaveStyle({ borderBottom: present.border, paddingBottom: present.padding });
+      expect(frame).toHaveStyle({ borderTop: present.border, paddingTop: present.padding });
+
+      const cs = getComputedStyle(frame);
+      expect(cs.borderInlineStart).toBe(inlineStart.border);
+      expect(cs.paddingInlineStart).toBe(inlineStart.padding);
+      expect(cs.borderInlineEnd).toBe(inlineEnd.border);
+      expect(cs.paddingInlineEnd).toBe(inlineEnd.padding);
     }
 
     it('shows top, left, and bottom (not right) for the first item in a multi-canvas grouping', () => {
@@ -129,12 +134,7 @@ describe('ThumbnailCanvasGrouping', () => {
       wrapper = createBookWrapper({ setCanvas });
       const [firstFrame] = getThumbnailFrames();
 
-      expect(firstFrame).toHaveStyle({
-        ...side('Top', present),
-        ...side('Bottom', present),
-        ...side('Left', present),
-        ...side('Right', absent),
-      });
+      expectFrame(firstFrame, { inlineEnd: absent, inlineStart: present });
     });
 
     it('shows top, right, and bottom (not left) for the last item in a multi-canvas grouping', () => {
@@ -142,23 +142,13 @@ describe('ThumbnailCanvasGrouping', () => {
       wrapper = createBookWrapper({ setCanvas });
       const [, lastFrame] = getThumbnailFrames();
 
-      expect(lastFrame).toHaveStyle({
-        ...side('Top', present),
-        ...side('Bottom', present),
-        ...side('Left', absent),
-        ...side('Right', present),
-      });
+      expectFrame(lastFrame, { inlineEnd: present, inlineStart: absent });
     });
 
     it('shows all four sides for a single-canvas grouping (both first and last)', () => {
       const [onlyFrame] = getThumbnailFrames();
 
-      expect(onlyFrame).toHaveStyle({
-        ...side('Top', present),
-        ...side('Bottom', present),
-        ...side('Left', present),
-        ...side('Right', present),
-      });
+      expectFrame(onlyFrame, { inlineEnd: present, inlineStart: present });
     });
   });
 });
