@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
+import { IIIFResourceLabel } from './IIIFResourceLabel';
 import ns from '../config/css-ns';
 
 const StyledCanvas = styled('div')(({ theme }) => ({
@@ -10,6 +11,14 @@ const StyledCanvas = styled('div')(({ theme }) => ({
   cursor: 'pointer',
   display: 'inline-block',
   whiteSpace: 'nowrap',
+}));
+
+const Grid = styled('div', { name: 'ThumbnailCanvasGrouping', slot: 'grid' })(({ ownerState }) => ({
+  gridTemplateColumns: `repeat(${ownerState.columns}, auto)`,
+}));
+
+const Label = styled('span', { name: 'ThumbnailCanvasGrouping', slot: 'label' })(({ theme }) => ({
+  ...theme.typography.caption,
 }));
 /** */
 export class ThumbnailCanvasGrouping extends PureComponent {
@@ -52,6 +61,9 @@ export class ThumbnailCanvasGrouping extends PureComponent {
     } else if (Number.isInteger(style.width)) {
       calculatedWidth = style.width - SPACING;
     }
+
+    const thumbnailMaxHeight =
+      (position === 'far-right' ? style.height : height) - 1.5 * SPACING;
 
     const isSelected = currentGroupings.map((canvas) => canvas.id).includes(currentCanvasId);
 
@@ -99,15 +111,17 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             ]),
           )}
         >
-          {currentGroupings.map((canvas, i) => (
-            <IIIFThumbnail
-              key={canvas.id}
-              resource={canvas}
-              labelled={showThumbnailLabels}
-              maxHeight={position === 'far-right' ? style.height - 1.5 * SPACING : height - 1.5 * SPACING}
-              variant="navigation"
-            />
-          ))}
+          <Grid ownerState={{ columns: currentGroupings.length }}>
+            {currentGroupings.map((canvas) => (
+              <IIIFThumbnail key={canvas.id} resource={canvas} maxHeight={thumbnailMaxHeight} variant="navigation" />
+            ))}
+            {showThumbnailLabels &&
+              currentGroupings.map((canvas) => (
+                <Label key={canvas.id}>
+                  <IIIFResourceLabel resource={canvas} />
+                </Label>
+              ))}
+          </Grid>
         </StyledCanvas>
       </div>
     );

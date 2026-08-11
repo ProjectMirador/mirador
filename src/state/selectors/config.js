@@ -62,15 +62,6 @@ export const getShowZoomControlsConfig = createSelector([getWorkspace, getConfig
 );
 
 /**
- * Returns if showThumbnailLabels is set in the config.
- * @param {object} state
- * @returns {boolean}
- */
-export const getShowThumbnailLabelsConfig = createSelector([getWorkspace, getConfig], (workspace, config) =>
-  workspace.showThumbnailLabels === undefined ? config.thumbnailNavigation.showThumbnailLabels : workspace.showThumbnailLabels,
-);
-
-/**
  * Returns the theme from the config.
  * @param {object} state
  * @returns {object} {palette: {...}, typography: {...}, overrides: {...}, ...}

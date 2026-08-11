@@ -27,14 +27,6 @@ describe('GalleryView', () => {
     expect(screen.getByRole('presentation')).toBeInTheDocument();
     expect(screen.getByRole('presentation')).toHaveStyle('height: 55px');
   });
-
-  it('clamps the label to two lines rather than the single-line ellipsis treatment used by thumbnail navigation', () => {
-    createWrapper({ config: { height: 55 } });
-    const label = screen.getByText('Test 19 Canvas: 1');
-
-    expect(label).toHaveStyle({ maxHeight: '48px', overflow: 'hidden', textOverflow: 'ellipsis' });
-    expect(getComputedStyle(label).whiteSpace).not.toBe('nowrap');
-  });
   it('sets the selected canvas on click', async () => {
     const setCanvas = vi.fn();
     createWrapper({ setCanvas });

@@ -13,12 +13,10 @@ describe('Workspace settings', () => {
   let handleClose;
   const showZoomControls = false;
   let toggleZoomControls;
-  let toggleThumbnailLabels;
 
   beforeEach(() => {
     handleClose = vi.fn();
     toggleZoomControls = vi.fn();
-    toggleThumbnailLabels = vi.fn();
   });
 
   it('renders without an error', () => {
@@ -54,41 +52,6 @@ describe('Workspace settings', () => {
       await user.click(screen.getByRole('menuitem', { name: 'Show zoom controls' }));
 
       expect(toggleZoomControls).toBeCalledWith(true);
-    });
-  });
-
-  describe('thumbnail label toggle', () => {
-    it('renders "Show thumbnail labels" when labels are currently hidden', () => {
-      createShallow({ handleClose, showThumbnailLabels: false, toggleThumbnailLabels });
-      expect(screen.getByRole('menuitem', { name: 'Show thumbnail labels' })).toBeInTheDocument();
-    });
-
-    it('renders "Hide thumbnail labels" when labels are currently shown', () => {
-      createShallow({ handleClose, showThumbnailLabels: true, toggleThumbnailLabels });
-      expect(screen.getByRole('menuitem', { name: 'Hide thumbnail labels' })).toBeInTheDocument();
-    });
-
-    describe('handleThumbnailLabelsToggleClick', () => {
-      it('shows thumbnail labels and closes the menu when they were hidden', async () => {
-        const user = userEvent.setup();
-
-        createShallow({ handleClose, showThumbnailLabels: false, toggleThumbnailLabels });
-
-        await user.click(screen.getByRole('menuitem', { name: 'Show thumbnail labels' }));
-
-        expect(toggleThumbnailLabels).toBeCalledWith(true);
-        expect(handleClose).toBeCalled();
-      });
-
-      it('hides thumbnail labels when they were shown', async () => {
-        const user = userEvent.setup();
-
-        createShallow({ handleClose, showThumbnailLabels: true, toggleThumbnailLabels });
-
-        await user.click(screen.getByRole('menuitem', { name: 'Hide thumbnail labels' }));
-
-        expect(toggleThumbnailLabels).toBeCalledWith(false);
-      });
     });
   });
 });

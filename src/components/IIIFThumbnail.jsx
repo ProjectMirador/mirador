@@ -12,7 +12,10 @@ const Label = styled('span', { name: 'IIIFThumbnail', slot: 'label' })(({ theme 
   ...theme.typography.caption,
 }));
 
-const Image = styled('img', { name: 'IIIFThumbnail', slot: 'image' })(() => ({}));
+const Image = styled('img', { name: 'IIIFThumbnail', slot: 'image' })(() => ({
+  height: 'auto',
+  width: 'auto',
+}));
 
 /**
  * A lazy-loaded image that uses IntersectionObserver to determine when to
@@ -26,7 +29,6 @@ const LazyLoadedImage = ({
   resource,
   maxHeight = null,
   maxWidth = null,
-  variant = null,
   ...props
 }) => {
   const { ref, inView } = useInView();
@@ -62,10 +64,6 @@ const LazyLoadedImage = ({
       maxWidth: undefined,
       width: undefined,
     };
-
-    if (variant === 'navigation') {
-      return { objectFit: 'contain' };
-    }
 
     // If we're using a fallback image due to failure, use object-fit to preserve aspect ratio
     if (failed && fallbackImage) {
@@ -120,7 +118,7 @@ const LazyLoadedImage = ({
       ...styleProps,
       ...style,
     };
-  }, [image, maxWidth, maxHeight, style, failed, fallbackImage, variant]);
+  }, [image, maxWidth, maxHeight, style, failed, fallbackImage]);
 
   const { url: src = placeholder } = (loaded && (thumbnail || image)) || {};
   // Decide final image source: normal, failed fallback, or placeholder
@@ -155,7 +153,6 @@ LazyLoadedImage.propTypes = {
     url: PropTypes.string.isRequired,
     width: PropTypes.number,
   }),
-  variant: PropTypes.oneOf(['navigation', 'gallery']),
 };
 
 const defaultPlaceholder =
@@ -179,13 +176,9 @@ export function IIIFThumbnail({
   // eslint-disable-next-line prefer-rest-params
   const ownerState = arguments[0];
 
-  const rootStyles = ownerState.variant === 'navigation' ? { height: maxHeight } : {};
-
   return (
-    <Root ownerState={ownerState} style={rootStyles}>
+    <Root ownerState={ownerState}>
       <LazyLoadedImage
-        ownerState={ownerState}
-        variant={ownerState.variant}
         placeholder={imagePlaceholder}
         thumbnail={thumbnail}
         resource={resource}

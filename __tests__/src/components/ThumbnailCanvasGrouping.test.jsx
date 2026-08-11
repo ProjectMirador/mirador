@@ -79,42 +79,4 @@ describe('ThumbnailCanvasGrouping', () => {
       });
     });
   });
-
-  describe('thumbnail label toggle', () => {
-    it.each(['far-bottom', 'far-right'])('shows the label when showThumbnailLabels is true (%s)', (position) => {
-      wrapper.unmount();
-      createWrapper({ position, setCanvas, showThumbnailLabels: true });
-      expect(screen.getByText('Image 1')).toBeInTheDocument();
-    });
-
-    it.each(['far-bottom', 'far-right'])('hides the label when showThumbnailLabels is false (%s)', (position) => {
-      wrapper.unmount();
-      createWrapper({ position, setCanvas, showThumbnailLabels: false });
-      expect(screen.queryByText('Image 1')).not.toBeInTheDocument();
-    });
-  });
-
-  describe('image formatting when the label is shown', () => {
-    it.each(['far-bottom', 'far-right'])(
-      'lays the label out below the image without overlap, and keeps the image within its bounds (%s)',
-      (position) => {
-        wrapper.unmount();
-        createWrapper({ position, setCanvas, showThumbnailLabels: true });
-
-        const button = screen.getByRole('button', { name: 'Image 1' });
-        // eslint-disable-next-line testing-library/no-node-access
-        const img = button.querySelector('img');
-
-        // The image is constrained to its own grid row (object-fit: contain within a
-        // fixed-height row), so it can't grow past maxHeight/maxWidth when a label is shown.
-        expect(img).toHaveStyle({ height: '100%', objectFit: 'contain', width: 'auto' });
-
-        // The label lives in its own grid row below the image rather than an absolutely
-        // positioned overlay, so it can't overlap the image.
-        // eslint-disable-next-line testing-library/no-node-access
-        expect(getComputedStyle(img.parentElement)).toHaveProperty('display', 'grid');
-        expect(getComputedStyle(screen.getByText('Image 1')).position).not.toBe('absolute');
-      },
-    );
-  });
 });

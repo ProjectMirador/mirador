@@ -268,11 +268,9 @@ export default {
         styleOverrides: {
           root: ({ ownerState }) => ({
             ...(ownerState?.variant === 'navigation' && {
-              /* shrink-to-fit: the card is exactly as wide as the *rendered* image */
-              display: 'grid',
-              gridTemplateRows: 'minmax(0, 1fr) auto',  /* image grows, label content-sized */
-              justifyItems: 'start',   /* don't stretch the image across the column */
-              width: 'fit-content'
+              display: 'inline-block',
+              height: 'inherit',
+              position: 'relative',
             }),
           }),
           label: ({ ownerState }) => ({
@@ -280,6 +278,11 @@ export default {
             textOverflow: 'ellipsis',
             lineHeight: '1.5em',
             wordBreak: 'break-word',
+            ...(ownerState?.variant === 'navigation' && {
+              color: '#ffffff',
+              WebkitLineClamp: 1,
+              whiteSpace: 'nowrap',
+            }),
             ...(ownerState?.variant === 'gallery' && {
               display: '-webkit-box',
               maxHeight: '3em',
@@ -287,26 +290,39 @@ export default {
               WebkitLineClamp: 2,
             }),
             ...(ownerState?.variant === 'navigation' && {
-              /* width:0 makes the label contribute nothing to the container's
-                intrinsic width (so long text can't stretch the container), while
-                min-width:100% renders it at the containers's resolved width 
-                — i.e. the image's width. */
-              width: 0,
-              lineHeight: '1.5em',
-              minWidth: '100%',
-              whiteSpace: 'nowrap',
+              background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+              bottom: '5px',
+              boxSizing: 'border-box',
+              left: '0px',
+              padding: '4px',
+              position: 'absolute',
+              width: '100%',
             }),
           }),
           image: ({ ownerState }) => ({
-              width: 'auto',
-              height: 'auto',
-            ...(ownerState?.variant === 'navigation' && {
-              width: 'auto',
-              height: '100%',
-            }),
             ...(ownerState?.border && {
               border: '1px solid rgba(0, 0, 0, 0.125)',
             }),
+          }),
+        },
+      },
+      ThumbnailCanvasGrouping: {
+        styleOverrides: {
+          grid: ({ ownerState }) => ({
+            display: 'grid',
+            gridTemplateRows: 'auto auto',
+            overflow: 'hidden',
+            width: 'fit-content',
+          }),
+          label: ({ theme }) => ({
+            ...theme.typography.caption,
+            height: '1rem',
+            marginTop: '0.25rem',
+            minWidth: '100%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            width: 0,
           }),
         },
       },
@@ -537,7 +553,8 @@ export default {
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     displaySettings: true, // Display the settings for this in WindowTopMenu
-    height: 130, // height of entire ThumbnailNavigation area when position is "far-bottom"
+    height: 145, // height of entire ThumbnailNavigation area when position is "far-bottom"
+    textHeight: 25, // height of the text area for thumbnail labels when position is "far-bottom"
     showThumbnailLabels: true, // Configure if thumbnail labels should be displayed
     width: 100, // width of one canvas (doubled for book view) in ThumbnailNavigation area when position is "far-right"
   },

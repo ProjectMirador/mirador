@@ -20,8 +20,6 @@ export function WorkspaceMenu({
   tReady = false,
   toggleZoomControls = () => {},
   showZoomControls = false,
-  toggleThumbnailLabels = () => {},
-  showThumbnailLabels = false,
   ...menuProps
 }) {
   const { t } = useTranslation();
@@ -45,12 +43,6 @@ export function WorkspaceMenu({
   /** */
   const handleZoomToggleClick = (e) => {
     toggleZoomControls(!showZoomControls);
-    handleClose(e);
-  };
-
-  /** */
-  const handleThumbnailLabelsToggleClick = (e) => {
-    toggleThumbnailLabels(!showThumbnailLabels);
     handleClose(e);
   };
 
@@ -104,14 +96,6 @@ export function WorkspaceMenu({
             <Typography variant="body1">{t('changeTheme')}</Typography>
           </MenuItem>
         )}
-        <MenuItem
-          aria-haspopup="true"
-          onClick={(e) => {
-            handleThumbnailLabelsToggleClick(e);
-          }}
-        >
-          <Typography variant="body1">{showThumbnailLabels ? t('hideThumbnailLabels') : t('showThumbnailLabels')}</Typography>
-        </MenuItem>
         <PluginHook targetName="WorkspaceMenu" {...pluginProps} />
       </Menu>
       {selectedOption === 'changeTheme' && (
@@ -136,9 +120,7 @@ WorkspaceMenu.propTypes = {
   handleClose: PropTypes.func.isRequired,
   isWorkspaceAddVisible: PropTypes.bool,
   showThemePicker: PropTypes.bool,
-  showThumbnailLabels: PropTypes.bool,
   showZoomControls: PropTypes.bool,
-  toggleThumbnailLabels: PropTypes.func,
   toggleZoomControls: PropTypes.func,
   tReady: PropTypes.bool,
 };

@@ -19,15 +19,6 @@ export function toggleZoomControls(showZoomControls) {
 }
 
 /**
- * toggleThumbnailLabels - action creator
- * @param {Boolean} showThumbnailLabels
- * @memberof ActionCreators
- */
-export function toggleThumbnailLabels(showThumbnailLabels) {
-  return { showThumbnailLabels, type: ActionTypes.TOGGLE_THUMBNAIL_LABELS };
-}
-
-/**
  * updateWorkspaceMosaicLayout - action creator
  *
  * @param  {Object} layout

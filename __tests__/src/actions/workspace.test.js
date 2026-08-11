@@ -33,15 +33,6 @@ describe('workspace actions', () => {
       expect(actions.toggleZoomControls(true)).toEqual(expectedAction);
     });
   });
-  describe('toggleThumbnailLabels', () => {
-    it('should set the thumbnail label visibility', () => {
-      const expectedAction = {
-        showThumbnailLabels: true,
-        type: ActionTypes.TOGGLE_THUMBNAIL_LABELS,
-      };
-      expect(actions.toggleThumbnailLabels(true)).toEqual(expectedAction);
-    });
-  });
   describe('setWorkspaceAddVisibility', () => {
     it('should set the workspace add visibility', () => {
       const expectedAction = {

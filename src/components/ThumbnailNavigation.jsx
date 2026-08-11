@@ -7,6 +7,16 @@ import { useTranslation } from 'react-i18next';
 import { useCanvasWorldService } from '../hooks';
 import ThumbnailCanvasGrouping from '../containers/ThumbnailCanvasGrouping';
 import ns from '../config/css-ns';
+
+/**
+ * Calculates the height for the thumbnail navigation based on its position and settings.
+ * @param {settings.thumbnailNavigation} thumbnailNavigation 
+ * @returns {number} The calculated height for the thumbnail navigation.
+ */
+function calcHeight(thumbnailNavigation) {
+  return thumbnailNavigation.height + (thumbnailNavigation.showThumbnailLabels ? thumbnailNavigation.textHeight : 0);
+}
+
 /**
  */
 export function ThumbnailNavigation({
@@ -134,7 +144,7 @@ export function ThumbnailNavigation({
       // Default case bottom
       default:
         return {
-          height: `${thumbnailNavigation.height}px`,
+          height: `${calcHeight(thumbnailNavigation)}px`,
           width: '100%',
         };
     }
@@ -185,8 +195,8 @@ export function ThumbnailNavigation({
             columnCount={canvasGroupings.length}
             columnWidth={calculateScaledSize}
             rowCount={1}
-            rowHeight={() => thumbnailNavigation.height - spacing - scrollbarSize}
-            height={thumbnailNavigation.height}
+            rowHeight={() => calcHeight(thumbnailNavigation) - spacing - scrollbarSize}
+            height={calcHeight(thumbnailNavigation)}
             width="100%"
             style={{
               direction: htmlDir === 'rtl' ? 'rtl' : 'ltr',

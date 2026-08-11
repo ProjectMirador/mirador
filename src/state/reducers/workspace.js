@@ -62,8 +62,6 @@ export const workspaceReducer = (state = { ...settings.workspace, windowIds: [] 
       return { ...state, isFullscreenEnabled: action.isFullscreenEnabled };
     case ActionTypes.TOGGLE_ZOOM_CONTROLS:
       return { ...state, showZoomControls: action.showZoomControls };
-    case ActionTypes.TOGGLE_THUMBNAIL_LABELS:
-      return { ...state, showThumbnailLabels: action.showThumbnailLabels };
     case ActionTypes.UPDATE_WORKSPACE_MOSAIC_LAYOUT:
       return { ...state, layout: action.layout };
     case ActionTypes.SET_WORKSPACE_ADD_VISIBILITY:
