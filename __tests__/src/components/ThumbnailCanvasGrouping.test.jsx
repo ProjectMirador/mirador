@@ -29,6 +29,37 @@ function createWrapper(props) {
   );
 }
 
+/** create wrapper backed by "book" view groupings, so a single grouping can contain 2 canvases */
+function createBookWrapper(props) {
+  const canvasGroupings = new CanvasGroupings(
+    Utils.parseManifest(manifestJson).getSequences()[0].getCanvases(),
+    'book',
+  ).groupings();
+
+  return render(
+    <ThumbnailCanvasGrouping
+      index={1}
+      currentCanvasId="https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1"
+      classes={{}}
+      style={{
+        height: 90,
+        top: 0,
+        width: 100,
+      }}
+      showThumbnailLabels
+      canvasGroupings={canvasGroupings}
+      height={131}
+      position="far-bottom"
+      {...props}
+    />,
+  );
+}
+
+/** the ThumbnailFrame wrapping each rendered thumbnail image, in canvas order */
+function getThumbnailFrames() {
+  return screen.getAllByRole('presentation').map((img) => img.parentElement.parentElement);
+}
+
 describe('ThumbnailCanvasGrouping', () => {
   let wrapper;
   let setCanvas;
@@ -76,6 +107,57 @@ describe('ThumbnailCanvasGrouping', () => {
       expect(screen.getByRole('button', { name: 'Image 1' })).toHaveStyle({
         height: 'auto',
         width: '100px',
+      });
+    });
+  });
+  describe('ThumbnailFrame border/padding for a selected grouping', () => {
+    const present = { color: '#1967d2', padding: '3px', style: 'solid', width: '2px' };
+    const absent = { padding: '0px', style: 'none' };
+
+    /** build a toHaveStyle style object for one border side (and its matching padding side) */
+    function side(name, { color, padding, style, width }) {
+      return {
+        [`border${name}Style`]: style,
+        [`padding${name}`]: padding,
+        ...(width && { [`border${name}Width`]: width }),
+        ...(color && { [`border${name}Color`]: color }),
+      };
+    }
+
+    it('shows top, left, and bottom (not right) for the first item in a multi-canvas grouping', () => {
+      wrapper.unmount();
+      wrapper = createBookWrapper({ setCanvas });
+      const [firstFrame] = getThumbnailFrames();
+
+      expect(firstFrame).toHaveStyle({
+        ...side('Top', present),
+        ...side('Bottom', present),
+        ...side('Left', present),
+        ...side('Right', absent),
+      });
+    });
+
+    it('shows top, right, and bottom (not left) for the last item in a multi-canvas grouping', () => {
+      wrapper.unmount();
+      wrapper = createBookWrapper({ setCanvas });
+      const [, lastFrame] = getThumbnailFrames();
+
+      expect(lastFrame).toHaveStyle({
+        ...side('Top', present),
+        ...side('Bottom', present),
+        ...side('Left', absent),
+        ...side('Right', present),
+      });
+    });
+
+    it('shows all four sides for a single-canvas grouping (both first and last)', () => {
+      const [onlyFrame] = getThumbnailFrames();
+
+      expect(onlyFrame).toHaveStyle({
+        ...side('Top', present),
+        ...side('Bottom', present),
+        ...side('Left', present),
+        ...side('Right', present),
       });
     });
   });
