@@ -9,7 +9,9 @@
     "dist",
     "src"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "./demo/**"
+  ],
   "exports": {
     "./src": "./src/index.js",
     ".": {
