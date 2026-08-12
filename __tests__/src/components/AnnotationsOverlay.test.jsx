@@ -114,7 +114,9 @@ describe('AnnotationsOverlay', () => {
         viewer: null,
       });
 
-      vi.spyOn(viewer.viewport, 'getMaxZoom').mockImplementation(() => 1);
+      const getItemAt = vi
+        .spyOn(viewer.world, 'getItemAt')
+        .mockImplementation((index) => (index === 0 ? { viewportToImageZoom: vi.fn(() => 0.05) } : undefined));
       vi.spyOn(viewer.viewport, 'getZoom').mockImplementation(() => 0.05);
 
       rerender(

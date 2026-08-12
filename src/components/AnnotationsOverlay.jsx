@@ -70,11 +70,14 @@ export function AnnotationsOverlay({
   const annotationsToContext = useCallback(
     (renderedAnnotations, currentPalette) => {
       const context = osdCanvasOverlay.context2d;
-      const zoomRatio = viewer.viewport.getZoom(true) / viewer.viewport.getMaxZoom();
       renderedAnnotations.forEach((annotation) => {
         annotation.resources.forEach((resource) => {
-          if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
+          const osdCanvasIndex = canvasWorld.canvases.findIndex((canvas) => canvas.id === resource.targetId);
+          if (osdCanvasIndex === -1) return;
+          const viewportCanvas = viewer.world.getItemAt(osdCanvasIndex);
+          if (!viewportCanvas) return;
           const offset = canvasWorld.offsetByCanvas(resource.targetId);
+          const zoomRatio = viewportCanvas.viewportToImageZoom(viewer.viewport.getZoom(true));
           const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
             hovered: hoveredAnnotationIds.includes(resource.id),
             offset,
