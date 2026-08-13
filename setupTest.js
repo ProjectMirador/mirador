@@ -27,7 +27,25 @@ beforeEach((context) => {
 });
 
 /** */
-class Path2D {}
+class Path2D {
+  constructor(path) {
+    this.path = path;
+  }
+
+  arc() {}
+
+  ellipse() {}
+
+  rect() {}
+
+  moveTo() {}
+
+  lineTo() {}
+
+  closePath() {}
+
+  addPath() {}
+}
 
 global.Path2D = Path2D;
 

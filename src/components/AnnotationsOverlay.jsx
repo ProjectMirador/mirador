@@ -8,6 +8,7 @@ import xor from 'lodash/xor';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
+import { buildPath2D } from '../lib/svgShapesToPath';
 
 /** @private */
 function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point) {
@@ -18,7 +19,7 @@ function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, po
   if (resource.svgSelector) {
     const context = osdCanvasOverlay.context2d;
     const { svgPaths } = new CanvasAnnotationDisplay({ resource });
-    return [...svgPaths].some((path) => context.isPointInPath(new Path2D(path.attributes.d.nodeValue), relativeX, relativeY));
+    return [...svgPaths].some((path) => context.isPointInPath(buildPath2D(path), relativeX, relativeY));
   }
 
   if (resource.fragmentSelector) {

@@ -34,6 +34,49 @@ describe('CanvasAnnotationDisplay', () => {
       expect(subject.svgContext).toHaveBeenCalled();
       expect(subject.fragmentContext).not.toHaveBeenCalled();
     });
+
+    it('draws every shape and sets all 6 svg shapes', () => {
+      const context = {
+        fill: vi.fn(),
+        restore: vi.fn(),
+        save: vi.fn(),
+        setLineDash: vi.fn(),
+        stroke: vi.fn(),
+        translate: vi.fn(),
+      };
+      const subject = createSubject({
+        resource: new AnnotationResource({
+          motivation: ['oa:commenting'],
+          on: {
+            selector: {
+              item: {
+                '@type': 'oa:SvgSelector',
+                value: `<svg xmlns='http://www.w3.org/2000/svg'>
+                <g>
+                  <line x1='0' y1='0' x2='300' y2='200' stroke='red' />
+                  <polygon points='242,633 340,552 948,1173 859,1249' />
+                </g>
+                <circle cx='1050' cy='250' r='90' />
+                <ellipse cx='1050' cy='1650' rx='130' ry='80' />
+                <rect x='50' y='1500' width='180' height='120' />
+                <polyline points='60,300 200,220 340,340 480,260' />
+              </svg>`,
+              },
+            },
+          },
+        }),
+      });
+      subject.context = context;
+
+      const tags = [...subject.svgPaths].map((el) => el.tagName.toLowerCase());
+      expect(tags).toEqual(['line', 'polygon', 'circle', 'ellipse', 'rect', 'polyline']);
+
+      subject.svgContext = vi.fn();
+      subject.fragmentContext = vi.fn();
+      subject.toContext(context);
+      expect(subject.svgContext).toHaveBeenCalled(6);
+      expect(subject.fragmentContext).not.toHaveBeenCalled();
+    });
     it('selects fragmentSelector if present and if no svg is present', () => {
       const context = {
         stroke: vi.fn(),

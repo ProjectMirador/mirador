@@ -2,6 +2,8 @@
  * CanvasAnnotationDisplay - class used to display a SVG and fragment based
  * annotations.
  */
+import { buildPath2D } from '../lib/svgShapesToPath';
+
 export default class CanvasAnnotationDisplay {
   /** */
   constructor({ resource, palette, zoomRatio, offset, selected, hovered }) {
@@ -49,7 +51,7 @@ export default class CanvasAnnotationDisplay {
        */
       this.context.save();
       this.context.translate(this.offset.x, this.offset.y);
-      const p = new Path2D(element.attributes.d.nodeValue);
+      const p = buildPath2D(element);
 
       // Setup styling from SVG -> Canvas
       this.context.strokeStyle = this.color;
@@ -136,6 +138,6 @@ export default class CanvasAnnotationDisplay {
   get svgPaths() {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(this.svgString, 'text/xml');
-    return xmlDoc.getElementsByTagName('path');
+    return Array.from(xmlDoc.querySelectorAll('circle, ellipse, rect, line, polygon, polyline, path'));
   }
 }
