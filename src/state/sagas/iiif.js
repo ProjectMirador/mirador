@@ -26,7 +26,15 @@ function fetchWrapper(url, options, { success, degraded, failure }) {
           if (response.ok) return success({ json, response });
           return failure({ error: response.statusText, json, response });
         })
-        .catch((error) => failure({ error, response })),
+        .catch((error) => {
+          // Error responses (4xx/5xx) often have a body that isn't valid JSON
+          // only surface the raw parse error when the response was otherwise ok,
+          // where it points to an actual unexpected JSON body bug.
+          if (!response.ok) {
+            return failure({ error: `${response.status} ${response.statusText}: ${url}`, response });
+          }
+          return failure({ error, response });
+        }),
     )
     .catch((error) => failure({ error }));
 }

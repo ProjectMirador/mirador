@@ -39,6 +39,26 @@ describe('IIIF sagas', () => {
         .run();
     });
 
+    it('uses the HTTP status instead of a JSON parsing error for a non-JSON error response body', () => {
+      // e.g. a Cantaloupe 404 page, which is plain text, not JSON
+      fetch.mockResponseOnce('404 Not Found\n\nFailed to resolve jpeg/333026 to /jp2/jpeg/333026.jp2', {
+        status: 404,
+        statusText: 'Not Found',
+      });
+      const action = {
+        manifestId: 'https://example.org/manifestId',
+      };
+
+      return expectSaga(fetchManifest, action)
+        .provide([[select(getConfig), {}]])
+        .put({
+          error: '404 Not Found: https://example.org/manifestId',
+          manifestId: 'https://example.org/manifestId',
+          type: 'mirador/RECEIVE_MANIFEST_FAILURE',
+        })
+        .run();
+    });
+
     it('supports request configuration preprocessors', () => {
       fetch.once((req) => Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })));
       const action = {
