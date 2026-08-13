@@ -23,8 +23,8 @@ export function ThumbnailNavigation({
   windowId,
 }) {
   const { t } = useTranslation();
-  const scrollbarSize = 15;
-  const spacing = 12; // 2 * (2px margin + 2px border + 2px padding + 2px padding)
+  const scrollbarSize = 6;
+  const spacing = 12; // 2 * (2px margin + 2px border + 2px padding)
   const gridRef = useRef();
   const previousView = useRef(view);
   const canvasWorlds = useCanvasWorldService();
@@ -88,36 +88,38 @@ export function ThumbnailNavigation({
   };
 
   /**
-   * When on right, row height
    * When on bottom, column width
    */
-  const calculateScaledSize = (index) => {
+  const calculateScaledWidth = (index) => {
     const canvases = canvasGroupings[index];
     if (!canvases) return thumbnailNavigation.width + spacing;
 
     const world = canvasWorlds.get(canvases);
     const bounds = world.worldBounds();
-    switch (position) {
-      case 'far-right': {
-        const calc = Math.floor((calculatingWidth(canvases.length) * bounds[3]) / bounds[2]);
-        if (!Number.isInteger(calc)) return thumbnailNavigation.width + spacing;
-        return calc + spacing;
-      }
-      // Default case bottom
-      default: {
-        if (bounds[3] === 0) return thumbnailNavigation.width + spacing;
-        const calc = Math.ceil(((thumbnailNavigation.height - scrollbarSize - spacing - 4) * bounds[2]) / bounds[3]);
-        return calc;
-      }
-    }
+    // calculate the correct canvas width based on the height + aspect ratio.
+    const availableHeight = thumbnailNavigation.height - spacing - scrollbarSize;
+    const calc = Math.ceil((availableHeight * bounds[2]) / bounds[3]);
+
+    if (!Number.isInteger(calc)) return thumbnailNavigation.width + spacing;
+    return calc + spacing;
   };
 
-  /** */
-  const calculatingWidth = (canvasesLength) => {
-    if (canvasesLength === 1) {
-      return thumbnailNavigation.width;
-    }
-    return thumbnailNavigation.width * 2;
+  /**
+   * When on right, row height
+   */
+  const calculateScaledHeight = (index) => {
+    const canvases = canvasGroupings[index];
+    if (!canvases) return thumbnailNavigation.height + spacing;
+
+    const world = canvasWorlds.get(canvases);
+    const bounds = world.worldBounds();
+
+    // calculate the correct canvas height based on the aspect ratio + width.
+    const availableWidth = thumbnailNavigation.width - spacing - scrollbarSize;
+    const calc = Math.ceil((availableWidth * canvases.length * bounds[3]) / bounds[2]);
+
+    if (!Number.isInteger(calc)) return thumbnailNavigation.height + spacing;
+    return calc + spacing;
   };
 
   /** */
@@ -127,14 +129,11 @@ export function ThumbnailNavigation({
     switch (position) {
       case 'far-right':
         return {
-          height: '100%',
-          minHeight: 0,
-          width: `${width + scrollbarSize + spacing}px`,
+          width: `${width}px`,
         };
       // Default case bottom
       default:
         return {
-          height: `${thumbnailNavigation.height}px`,
           width: '100%',
         };
     }
@@ -156,12 +155,12 @@ export function ThumbnailNavigation({
     return null;
   }
   const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
-  const rowData = {
+  const itemData = {
     canvasGroupings,
-    height: thumbnailNavigation.height - spacing - scrollbarSize,
     position,
     windowId,
   };
+
   return (
     <Paper
       className={classNames(ns('thumb-navigation'))}
@@ -170,6 +169,7 @@ export function ThumbnailNavigation({
           boxShadow: 0,
           outline: 0,
         },
+        scrollbarGutter: 'stable',
       }}
       aria-label={t('thumbnailNavigation')}
       square
@@ -179,39 +179,35 @@ export function ThumbnailNavigation({
       onKeyDown={handleKeyDown}
       ref={paperRef}
     >
-      <div style={{ height: '100%', width: '100%' }}>
-        {canvasGroupings.length > 0 && position === 'far-bottom' && (
-          <Grid
-            columnCount={canvasGroupings.length}
-            columnWidth={calculateScaledSize}
-            rowCount={1}
-            rowHeight={() => thumbnailNavigation.height - spacing - scrollbarSize}
-            height={thumbnailNavigation.height}
-            width="100%"
-            style={{
-              direction: htmlDir === 'rtl' ? 'rtl' : 'ltr',
-            }}
-            cellProps={rowData}
-            gridRef={gridRef}
-            cellComponent={ThumbnailCanvasGrouping}
-          />
-        )}
-        {canvasGroupings.length > 0 && position === 'far-right' && (
-          <List
-            defaultHeight={100}
-            rowCount={canvasGroupings.length}
-            rowHeight={calculateScaledSize}
-            style={{
-              direction: htmlDir === 'rtl' ? 'rtl' : 'ltr',
-              height: '100%',
-              width: '100%',
-            }}
-            rowProps={rowData}
-            listRef={gridRef}
-            rowComponent={ThumbnailCanvasGrouping}
-          />
-        )}
-      </div>
+      {canvasGroupings.length > 0 && position === 'far-bottom' && (
+        <Grid
+          columnCount={canvasGroupings.length}
+          columnWidth={calculateScaledWidth}
+          rowCount={1}
+          rowHeight={thumbnailNavigation.height - spacing - scrollbarSize}
+          style={{
+            direction: htmlDir === 'rtl' ? 'rtl' : 'ltr',
+            height: thumbnailNavigation.height,
+          }}
+          cellProps={itemData}
+          gridRef={gridRef}
+          cellComponent={ThumbnailCanvasGrouping}
+        />
+      )}
+      {canvasGroupings.length > 0 && position === 'far-right' && (
+        <List
+          defaultHeight={100}
+          rowCount={canvasGroupings.length}
+          rowHeight={calculateScaledHeight}
+          style={{
+            paddingBottom: spacing,
+            direction: htmlDir === 'rtl' ? 'rtl' : 'ltr',
+          }}
+          rowProps={itemData}
+          listRef={gridRef}
+          rowComponent={ThumbnailCanvasGrouping}
+        />
+      )}
     </Paper>
   );
 }
