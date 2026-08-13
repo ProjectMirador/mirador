@@ -1,5 +1,4 @@
-import update from 'lodash/fp/update';
-import omit from 'lodash/omit';
+import { omit, updatePath as update } from '../../lib/utils';
 import ActionTypes from '../actions/action-types';
 
 /**

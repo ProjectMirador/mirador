@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import flatten from 'lodash/flatten';
+import { flatten } from '../../lib/utils';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import { getIiifResourceImageService } from '../../lib/iiif';
 import { getMiradorCanvasWrapper } from './wrappers';

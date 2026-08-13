@@ -1,5 +1,4 @@
-import omit from 'lodash/omit';
-import flatten from 'lodash/flatten';
+import { flatten, omit } from '../../lib/utils';
 import ActionTypes from '../actions/action-types';
 
 /**

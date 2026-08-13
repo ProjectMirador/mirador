@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import flatten from 'lodash/flatten';
+import { flatten } from '../../lib/utils';
 import { Utils } from 'manifesto.js';
 import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
 import { getConfig } from './config';

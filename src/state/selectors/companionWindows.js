@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import groupBy from 'lodash/groupBy';
+import { groupBy } from '../../lib/utils';
 import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
 import { getWindow, getWindows } from './getters';
 

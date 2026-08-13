@@ -48,6 +48,17 @@ describe('createTargetToPluginMapping', () => {
       },
     });
   });
+
+  it('preserves targeted plugins when a registry-only plugin is also present', () => {
+    const targetedPlugin = { component: () => null, mode: 'add', target: 'WindowSideBarButtons' };
+    const registryPlugin = { companionWindowKey: 'custom', component: () => null };
+
+    expect(createTargetToPluginMapping([targetedPlugin, registryPlugin])).toMatchObject({
+      WindowSideBarButtons: {
+        add: [targetedPlugin],
+      },
+    });
+  });
 });
 
 describe('connectPluginsToStore', () => {

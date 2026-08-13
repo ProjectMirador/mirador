@@ -1,5 +1,5 @@
 import settings from './settings';
-import flatten from 'lodash/flatten';
+import { flatten } from '../lib/utils';
 /**
  * export ns - sets up css namespacing for everything to be `mirador-`
  */
