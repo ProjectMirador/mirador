@@ -403,12 +403,14 @@ describe('window-level sagas', () => {
         .provide([
           [select(getWindow, { windowId }), { canvasId: 'y' }],
           [select(getCanvasGrouping, { canvasId: 'y', windowId }), [{ id: 'y' }, { id: 'z' }]],
+          [call(fetchInfoResponses, { visibleCanvases: ['y', 'z'], windowId })],
         ])
         .put({
           id: windowId,
           payload: { visibleCanvases: ['y', 'z'] },
           type: ActionTypes.UPDATE_WINDOW,
         })
+        .call(fetchInfoResponses, { visibleCanvases: ['y', 'z'], windowId })
         .run();
     });
   });
