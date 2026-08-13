@@ -172,6 +172,7 @@ export function ThumbnailNavigation({
         },
       }}
       aria-label={t('thumbnailNavigation')}
+      component="nav"
       square
       elevation={0}
       style={style()}
