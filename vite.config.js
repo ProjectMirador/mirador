@@ -1,10 +1,13 @@
-import { defineConfig } from 'vite';
+import { defineConfig, esmExternalRequirePlugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import fs from 'fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import { globSync } from 'glob';
 import * as packageJson from './package.json';
+
+const peers = Object.keys(packageJson.peerDependencies);
+const peerPatterns = [...peers, ...peers.map((peer) => new RegExp(`^${peer}/`))];
 
 /**
  * Vite configuration
@@ -13,7 +16,7 @@ export default defineConfig({
   ...(process.env.NETLIFY
     ? {
         build: {
-          rollupOptions: {
+          rolldownOptions: {
             external: ['__tests__/*', '__mocks__/*'],
             input: Object.fromEntries(
               globSync('./demo/*.html').map((file) => [
@@ -37,16 +40,8 @@ export default defineConfig({
             formats: ['es'],
             name: 'Mirador',
           },
-          rollupOptions: {
-            external: (id, parentId) => {
-              const peers = Object.keys(packageJson.peerDependencies);
-              return (
-                peers.indexOf(id) > -1 ||
-                peers.find((peer) => id.startsWith(`${peer}/`)) ||
-                id.startsWith('__tests__/') ||
-                id.startsWith('__mocks__/')
-              );
-            },
+          rolldownOptions: {
+            external: (id) => id.startsWith('__tests__/') || id.startsWith('__mocks__/'),
             output: {
               assetFileNames: 'mirador.[ext]',
               exports: 'named',
@@ -60,10 +55,12 @@ export default defineConfig({
         },
       }),
   define: {
-    'process.env': {},
+    'process.env': '{}',
+    'process.env.NODE_ENV': JSON.stringify('production'),
   },
   plugins: [
     react(),
+    !process.env.NETLIFY && esmExternalRequirePlugin({ external: peerPatterns }),
     // Copy fixtures to dist for Netlify
     process.env.NETLIFY && {
       closeBundle: async () => {
