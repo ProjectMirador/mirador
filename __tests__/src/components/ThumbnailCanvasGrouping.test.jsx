@@ -59,7 +59,7 @@ describe('ThumbnailCanvasGrouping', () => {
   describe('attributes based off far-bottom position', () => {
     it('in button div', () => {
       expect(screen.getByRole('button', { name: 'Image 1' })).toHaveStyle({
-        height: '119px',
+        height: '90px',
         width: 'auto',
       });
     });

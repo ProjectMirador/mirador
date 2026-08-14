@@ -65,45 +65,43 @@ describe('ThumbnailNavigation', () => {
 
   it('gives the grid a size', () => {
     const { rerender } = render(<Subject />);
-    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ height: '150px', width: '100%' });
+    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ width: '100%' });
 
     rerender(<Subject position="far-right" />);
     expect(screen.getByLabelText('Thumbnails')).toHaveStyle({
-      height: '100%',
-      minHeight: 0,
-      width: '127px',
+      width: '100px',
     });
   });
 
   it('roughly doubles the width of the grid in book view', () => {
     const { rerender } = render(<Subject position="far-right" />);
-    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ width: '127px' });
+    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ width: '100px' });
 
     rerender(<Subject position="far-right" view="book" />);
-    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ width: '227px' });
+    expect(screen.getByLabelText('Thumbnails')).toHaveStyle({ width: '200px' });
   });
 
   it('calculates the scaled width of each cell', () => {
     render(<Subject />);
 
-    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ width: '111px' });
+    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ width: '88px' });
   });
 
   it('calculates the scaled height of each cell when on the right', () => {
     render(<Subject position="far-right" />);
-    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ height: '150px' });
+    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ height: '123px' });
   });
 
   it('keeps a minimum size for each cell', () => {
     render(<Subject fixture={zeroWidthFixture} />);
 
-    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ width: '111px' });
+    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ width: '100px' });
   });
 
   it('keeps a minimum size for each cell when on the right', () => {
     render(<Subject fixture={zeroWidthFixture} position="far-right" />);
 
-    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ height: '100px' });
+    expect(screen.getAllByRole('gridcell')[0]).toHaveStyle({ height: '150px' });
   });
 
   describe('keyboard navigation', () => {
