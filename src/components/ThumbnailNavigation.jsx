@@ -119,7 +119,8 @@ export function ThumbnailNavigation({
     const calc = Math.ceil((availableWidth * canvases.length * bounds[3]) / bounds[2]);
 
     if (!Number.isInteger(calc)) return thumbnailNavigation.height + spacing;
-    return calc + spacing;
+    // Guard against incredibly small thumbnails
+    return Math.max(calc, Math.round(thumbnailNavigation.height / 3)) + spacing;
   };
 
   /** */
