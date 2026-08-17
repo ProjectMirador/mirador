@@ -5,6 +5,7 @@ import GalleryViewThumbnail from '../containers/GalleryViewThumbnail';
 
 const Root = styled(Paper, { name: 'GalleryView', slot: 'root' })(({ theme }) => ({
   alignItems: 'flex-start',
+  alignContent: 'flex-start',
   display: 'flex',
   flexDirection: 'row',
   flexWrap: 'wrap',
