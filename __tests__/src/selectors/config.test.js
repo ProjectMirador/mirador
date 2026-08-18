@@ -64,6 +64,64 @@ describe('getLanguagesFromConfigWithCurrent', () => {
 
     expect(getLanguagesFromConfigWithCurrent(state)).toEqual(expected);
   });
+
+  it('returns a filtered array of objects with locale, label, and current properties', () => {
+    const state = {
+      config: {
+        availableLanguages: {
+          epo: 'Esparanto',
+          tlh: 'Klingon',
+          en: 'English',
+          ja: '日本語',
+        },
+        enabledLanguages: ['epo', 'tlh'],
+        language: 'epo',
+      },
+    };
+
+    const expected = [
+      {
+        current: true,
+        label: 'Esparanto',
+        locale: 'epo',
+      },
+      {
+        current: false,
+        label: 'Klingon',
+        locale: 'tlh',
+      },
+    ];
+
+    expect(getLanguagesFromConfigWithCurrent(state)).toEqual(expected);
+  });
+
+  it('returns all availableLanguages as array of objects with locale, label, and current properties', () => {
+    const state = {
+      config: {
+        availableLanguages: {
+          epo: 'Esparanto',
+          tlh: 'Klingon',
+        },
+        enabledLanguages: [],
+        language: 'epo',
+      },
+    };
+
+    const expected = [
+      {
+        current: true,
+        label: 'Esparanto',
+        locale: 'epo',
+      },
+      {
+        current: false,
+        label: 'Klingon',
+        locale: 'tlh',
+      },
+    ];
+
+    expect(getLanguagesFromConfigWithCurrent(state)).toEqual(expected);
+  });
 });
 
 describe('getShowZoomControlsConfig', () => {
