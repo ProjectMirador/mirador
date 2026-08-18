@@ -172,6 +172,35 @@ describe('AnnotationsOverlay', () => {
       expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
     });
 
+    it('triggers a selectAnnotation for a percent-based fragment selector', () => {
+      const selectAnnotation = vi.fn();
+
+      const { viewer } = createWrapper({
+        annotations: [
+          new AnnotationList({
+            '@id': 'foo',
+            resources: [
+              {
+                '@id': 'http://example.org/identifier/annotation/anno-percent',
+                '@type': 'oa:Annotation',
+                motivation: 'sc:painting',
+                // canvas c1 is 1200x1800, so this covers x:[120,360] y:[180,540]
+                on: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=percent:10,10,20,20',
+              },
+            ],
+          }),
+        ],
+        selectAnnotation,
+      });
+
+      viewer.raiseEvent('canvas-click', {
+        eventSource: { viewport: viewer.viewport },
+        position: new OpenSeadragon.Point(150, 200),
+      });
+
+      expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-percent');
+    });
+
     it('triggers a deselectAnnotation for an already-selected annotation', () => {
       const deselectAnnotation = vi.fn();
 
