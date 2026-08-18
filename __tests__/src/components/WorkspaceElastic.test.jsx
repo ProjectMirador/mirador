@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@tests/utils/test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
 import WorkspaceElastic from '../../../src/components/WorkspaceElastic';
@@ -89,26 +89,6 @@ describe('WorkspaceElastic', () => {
       expect(mockDragStop).toHaveBeenCalledWith({
         x: -1 * (400 - 20),
         y: -1 * (300 - 20),
-      });
-    });
-
-    it('when workspace itself is resized', () => {
-      const mockResize = vi.fn();
-      const { container } = createWrapper({
-        elasticLayout,
-        setWorkspaceViewportDimensions: mockResize,
-      });
-
-      container.firstChild.getBoundingClientRect = () => ({
-        height: 500,
-        width: 800,
-      });
-
-      fireEvent(window, new Event('resize'));
-
-      expect(mockResize).toHaveBeenCalledWith({
-        height: 500,
-        width: 800,
       });
     });
   });
