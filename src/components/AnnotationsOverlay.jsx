@@ -2,7 +2,6 @@ import { useRef, useEffect, useCallback, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { useDebouncedCallback } from 'use-debounce';
-import flatten from 'lodash/flatten';
 import sortBy from 'lodash/sortBy';
 import xor from 'lodash/xor';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
@@ -117,11 +116,13 @@ export function AnnotationsOverlay({
   const annotationsAtPoint = useCallback(
     (canvas, point) => {
       const lists = [...annotations, ...searchAnnotations];
-      const annos = flatten(lists.map((l) => l.resources)).filter((resource) => {
-        if (canvas.id !== resource.targetId) return false;
+      const annos = lists
+        .flatMap((l) => l.resources)
+        .filter((resource) => {
+          if (canvas.id !== resource.targetId) return false;
 
-        return isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point);
-      });
+          return isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point);
+        });
 
       return annos;
     },

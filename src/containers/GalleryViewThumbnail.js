@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import flatten from 'lodash/flatten';
 import * as actions from '../state/actions';
 import { GalleryViewThumbnail } from '../components/GalleryViewThumbnail';
 import {
@@ -16,7 +15,7 @@ const mapStateToProps = (state, { canvas, windowId }) => {
   const currentCanvas = getCurrentCanvas(state, { windowId });
   const searchAnnotations = getSearchAnnotationsForWindow(state, { windowId });
 
-  const canvasAnnotations = flatten(searchAnnotations.map((a) => a.resources)).filter((a) => a.targetId === canvas.id);
+  const canvasAnnotations = searchAnnotations.flatMap((a) => a.resources).filter((a) => a.targetId === canvas.id);
 
   const hasOpenAnnotationsWindow = getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0;
 

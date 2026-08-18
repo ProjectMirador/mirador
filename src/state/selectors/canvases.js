@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import flatten from 'lodash/flatten';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import { getIiifResourceImageService } from '../../lib/iiif';
 import { getMiradorCanvasWrapper } from './wrappers';
@@ -179,9 +178,9 @@ export const getCanvasDescription = createSelector([getCanvas], (canvas) => canv
 export const getVisibleCanvasNonTiledResources = createSelector(
   [getVisibleCanvases, getMiradorCanvasWrapper],
   (canvases, getMiradorCanvas) =>
-    flatten(canvases.map((canvas) => getMiradorCanvas(canvas).imageResources)).filter(
-      (resource) => !getIiifResourceImageService(resource),
-    ),
+    canvases
+      .flatMap((canvas) => getMiradorCanvas(canvas).imageResources)
+      .filter((resource) => !getIiifResourceImageService(resource)),
 );
 
 /**
@@ -192,7 +191,7 @@ export const getVisibleCanvasNonTiledResources = createSelector(
  */
 export const getVisibleCanvasTextResources = createSelector(
   [getVisibleCanvases, getMiradorCanvasWrapper],
-  (canvases, getMiradorCanvas) => flatten(canvases.map((canvas) => getMiradorCanvas(canvas).textResources)),
+  (canvases, getMiradorCanvas) => canvases.flatMap((canvas) => getMiradorCanvas(canvas).textResources),
 );
 
 /**
@@ -203,7 +202,7 @@ export const getVisibleCanvasTextResources = createSelector(
  */
 export const getVisibleCanvasVideoResources = createSelector(
   [getVisibleCanvases, getMiradorCanvasWrapper],
-  (canvases, getMiradorCanvas) => flatten(canvases.map((canvas) => getMiradorCanvas(canvas).videoResources)),
+  (canvases, getMiradorCanvas) => canvases.flatMap((canvas) => getMiradorCanvas(canvas).videoResources),
 );
 
 /**
@@ -215,14 +214,12 @@ export const getVisibleCanvasVideoResources = createSelector(
 export const getVisibleCanvasCaptions = createSelector(
   [getVisibleCanvases, getMiradorCanvasWrapper],
   (canvases, getMiradorCanvas) =>
-    flatten(
-      canvases.map((canvas) => {
-        const miradorCanvas = getMiradorCanvas(canvas);
-        // prefer v3, fallback to v2, which can also be an empty array if no captions exist.
-        if (miradorCanvas.v3VttContent.length) return miradorCanvas.v3VttContent;
-        return miradorCanvas.v2VttContent;
-      }),
-    ),
+    canvases.flatMap((canvas) => {
+      const miradorCanvas = getMiradorCanvas(canvas);
+      // prefer v3, fallback to v2, which can also be an empty array if no captions exist.
+      if (miradorCanvas.v3VttContent.length) return miradorCanvas.v3VttContent;
+      return miradorCanvas.v2VttContent;
+    }),
 );
 
 /**
@@ -233,7 +230,7 @@ export const getVisibleCanvasCaptions = createSelector(
  */
 export const getVisibleCanvasAudioResources = createSelector(
   [getVisibleCanvases, getMiradorCanvasWrapper],
-  (canvases, getMiradorCanvas) => flatten(canvases.map((canvas) => getMiradorCanvas(canvas).audioResources)),
+  (canvases, getMiradorCanvas) => canvases.flatMap((canvas) => getMiradorCanvas(canvas).audioResources),
 );
 
 /**

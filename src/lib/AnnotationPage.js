@@ -1,4 +1,3 @@
-import flatten from 'lodash/flatten';
 import AnnotationItem from './AnnotationItem';
 /**
  * Annotation representation for IIIF Presentation v3
@@ -28,7 +27,7 @@ export default class AnnotationPage {
       (() => {
         if (!this.json || !this.json.items) return [];
 
-        return flatten([this.json.items]).map((resource) => new AnnotationItem(resource));
+        return [this.json.items].flat().map((resource) => new AnnotationItem(resource));
       })();
     return this._items;
   }

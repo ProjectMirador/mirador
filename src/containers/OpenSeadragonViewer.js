@@ -1,6 +1,5 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import flatten from 'lodash/flatten';
 import { withPlugins } from '../extend/withPlugins';
 import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
@@ -23,7 +22,7 @@ import {
 const mapStateToProps = (state, { windowId }) => {
   const canvasWorld = getCurrentCanvasWorld(state, { windowId });
   const infoResponses = selectInfoResponses(state);
-  const imageServiceIds = flatten(canvasWorld.canvases.map((c) => c.imageServiceIds));
+  const imageServiceIds = canvasWorld.canvases.flatMap((c) => c.imageServiceIds);
 
   return {
     canvasWorld,
