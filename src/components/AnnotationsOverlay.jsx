@@ -29,6 +29,19 @@ function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, po
 }
 
 /**
+ * See: https://openseadragon.github.io/docs/OpenSeadragon.Viewer.html#.event:canvas-click
+ * Gestures returned from this method are likely viewer interactions such as pan and zoom,
+ * not taps and clicks targeted to an annotation.
+ * In deciding whether to change the display of the annotation overlay,
+ * we want to ignore these irrelevant gestures.
+ * @private
+ */
+function isIgnoredGesture(event) {
+  const pointerType = event.originalEvent?.pointerType;
+  return (pointerType === 'touch' || pointerType === 'pen') && event.quick === false;
+}
+
+/**
  * Represents a OpenSeadragonViewer in the mirador workspace. Responsible for mounting
  * and rendering OSD.
  */
@@ -131,6 +144,8 @@ export function AnnotationsOverlay({
 
   const onCanvasClick = useCallback(
     (event) => {
+      if (isIgnoredGesture(event)) return;
+
       const {
         position: webPosition,
         eventSource: { viewport },
