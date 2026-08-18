@@ -19,31 +19,33 @@ function createSubject(args) {
   });
 }
 
+function createMockContext(onFill = '') {
+  return {
+    fill: vi.fn(onFill),
+    restore: vi.fn(),
+    save: vi.fn(),
+    setLineDash: vi.fn(),
+    stroke: vi.fn(),
+    strokeRect: vi.fn(),
+    translate: vi.fn(),
+  };
+}
+
 describe('CanvasAnnotationDisplay', () => {
   describe('toContext', () => {
     it('selects svgSelector if present in a dual anno', () => {
-      const context = {
-        stroke: vi.fn(),
-      };
       const subject = createSubject({
         resource: new AnnotationResource(dualStrategyAnno),
       });
       subject.svgContext = vi.fn();
       subject.fragmentContext = vi.fn();
-      subject.toContext(context);
+      subject.toContext(createMockContext());
       expect(subject.svgContext).toHaveBeenCalled();
       expect(subject.fragmentContext).not.toHaveBeenCalled();
     });
 
     it('draws every shape and sets all 6 svg shapes', () => {
-      const context = {
-        fill: vi.fn(),
-        restore: vi.fn(),
-        save: vi.fn(),
-        setLineDash: vi.fn(),
-        stroke: vi.fn(),
-        translate: vi.fn(),
-      };
+      const context = createMockContext();
       const subject = createSubject({
         resource: new AnnotationResource({
           motivation: ['oa:commenting'],
@@ -78,28 +80,22 @@ describe('CanvasAnnotationDisplay', () => {
       expect(subject.fragmentContext).not.toHaveBeenCalled();
     });
     it('selects fragmentSelector if present and if no svg is present', () => {
-      const context = {
-        stroke: vi.fn(),
-      };
       const subject = createSubject({
         resource: new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }),
       });
       subject.svgContext = vi.fn();
       subject.fragmentContext = vi.fn();
-      subject.toContext(context);
+      subject.toContext(createMockContext());
       expect(subject.svgContext).not.toHaveBeenCalled();
       expect(subject.fragmentContext).toHaveBeenCalled();
     });
     it('ignores annotations without selectors', () => {
-      const context = {
-        stroke: vi.fn(),
-      };
       const subject = createSubject({
         resource: new AnnotationResource({ on: 'www.example.com' }),
       });
       subject.svgContext = vi.fn();
       subject.fragmentContext = vi.fn();
-      subject.toContext(context);
+      subject.toContext(createMockContext());
       expect(subject.svgContext).not.toHaveBeenCalled();
       expect(subject.fragmentContext).not.toHaveBeenCalled();
     });
@@ -112,54 +108,106 @@ describe('CanvasAnnotationDisplay', () => {
       expect(subject.svgString).toMatch(/<svg/);
     });
   });
-  describe.skip('svgContext', () => {
+
+  describe('svgString', () => {
+    it('converts percentage strings to float decimal', () => {
+      const subject = createSubject({});
+      expect(subject.parseOpacity('30%')).toEqual(0.3);
+    });
+
+    it('converts decimals strings to float', () => {
+      const subject = createSubject({});
+      expect(subject.parseOpacity('.2')).toEqual(0.2);
+    });
+    it('parses numeric input directly', () => {
+      const subject = createSubject({});
+      expect(subject.parseOpacity(0.5)).toEqual(0.5);
+    });
+  });
+  describe('svgContext', () => {
     it('draws the paths with selected arguments', () => {
-      const context = {
-        fill: vi.fn(),
-        restore: vi.fn(),
-        save: vi.fn(),
-        setLineDash: vi.fn(),
-        stroke: vi.fn(),
-        translate: vi.fn(),
-      };
+      let alphaAtFill;
+      const context = createMockContext(() => {
+        alphaAtFill = context.globalAlpha;
+      });
+
       const subject = createSubject({
         resource: new AnnotationResource(dualStrategyAnno),
       });
       subject.context = context;
       subject.svgContext();
-      expect(context.stroke).toHaveBeenCalledWith({});
       expect(context.save).toHaveBeenCalledWith();
       expect(context.restore).toHaveBeenCalledWith();
       expect(context.translate).toHaveBeenCalledWith(-100, 0);
       expect(context.strokeStyle).toEqual('#00bfff');
       expect(context.lineWidth).toEqual(61.74334);
+      expect(context.setLineDash).toHaveBeenCalledWith(['4 1 2']);
       expect(context.fill).toHaveBeenCalled();
+      expect(alphaAtFill).toEqual(0.2);
+      expect(context.globalAlpha).toEqual(0.3);
+    });
+
+    it('skips dasharray, fill, and opacity overrides when attributes are absent', () => {
+      const context = createMockContext();
+      const subject = createSubject({
+        resource: new AnnotationResource({
+          motivation: ['oa:commenting'],
+          on: {
+            selector: {
+              item: {
+                '@type': 'oa:SvgSelector',
+                value: "<svg xmlns='http://www.w3.org/2000/svg'><path d='M0,0 L10,10' stroke='#00bfff' stroke-width='2' /></svg>",
+              },
+            },
+          },
+        }),
+      });
+      subject.context = context;
+      subject.svgContext();
+      expect(context.setLineDash).not.toHaveBeenCalled();
+      expect(context.fill).not.toHaveBeenCalled();
+      expect(context.globalAlpha).toEqual(1);
+    });
+
+    it('uses default globalAlpha for fill when fill-opacity is not set', () => {
+      let alphaAtFill;
+      const context = createMockContext(() => {
+        alphaAtFill = context.globalAlpha;
+      });
+      const subject = createSubject({
+        resource: new AnnotationResource({
+          motivation: ['oa:commenting'],
+          on: {
+            selector: {
+              item: {
+                '@type': 'oa:SvgSelector',
+                value:
+                  "<svg xmlns='http://www.w3.org/2000/svg'><path d='M0,0 L10,10' fill='#00bfff' stroke='#00bfff' stroke-width='2' /></svg>",
+              },
+            },
+          },
+        }),
+      });
+      subject.context = context;
+      subject.svgContext();
+      expect(alphaAtFill).toEqual(1);
     });
     it('resets the color if selected rather than using the SVG color', () => {
-      const context = {
-        fill: vi.fn(),
-        restore: vi.fn(),
-        save: vi.fn(),
-        setLineDash: vi.fn(),
-        stroke: vi.fn(),
-        translate: vi.fn(),
-      };
       const subject = createSubject({
         resource: new AnnotationResource(dualStrategyAnno),
         selected: true,
       });
-      subject.context = context;
+      subject.context = createMockContext();
       subject.svgContext();
       expect(subject.context.strokeStyle).toBe('yellow');
     });
   });
   describe('fragmentContext', () => {
     it('draws the fragment with selected arguments', () => {
-      const context = {
-        restore: vi.fn(),
-        save: vi.fn(),
-        strokeRect: vi.fn(),
-      };
+      let alphaAtFill;
+      const context = createMockContext(() => {
+        alphaAtFill = context.globalAlpha;
+      });
       const subject = createSubject({
         hovered: true,
         resource: new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }),
@@ -169,6 +217,9 @@ describe('CanvasAnnotationDisplay', () => {
       expect(context.strokeRect).toHaveBeenCalledWith(-90, 10, 100, 200);
       expect(context.strokeStyle).toEqual('blue');
       expect(context.lineWidth).toEqual(2);
+      expect(context.setLineDash).not.toHaveBeenCalled();
+      expect(alphaAtFill).toEqual(undefined);
+      expect(context.globalAlpha).toEqual(1);
     });
   });
 });

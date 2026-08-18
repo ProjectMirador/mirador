@@ -30,6 +30,13 @@ export default class CanvasAnnotationDisplay {
     return this.resource.svgSelector.value;
   }
 
+  parseOpacity(value) {
+    if (typeof value === 'string' && value.trim().endsWith('%')) {
+      return parseFloat(value) / 100;
+    }
+    return parseFloat(value);
+  }
+
   /** */
   svgContext() {
     let currentPalette;
@@ -55,8 +62,8 @@ export default class CanvasAnnotationDisplay {
 
       // Setup styling from SVG -> Canvas
       this.context.strokeStyle = this.color;
-      if (element.attributes['stroke-dasharray']) {
-        this.context.setLineDash(element.attributes['stroke-dasharray'].nodeValue.split(','));
+      if (element.getAttribute('stroke-dasharray')) {
+        this.context.setLineDash(element.getAttribute('stroke-dasharray').split(','));
       }
       const svgToCanvasMap = {
         fill: 'fillStyle',
@@ -68,8 +75,8 @@ export default class CanvasAnnotationDisplay {
         'stroke-width': 'lineWidth',
       };
       Object.keys(svgToCanvasMap).forEach((key) => {
-        if (element.attributes[key]) {
-          this.context[svgToCanvasMap[key]] = element.attributes[key].nodeValue;
+        if (element.getAttribute(key)) {
+          this.context[svgToCanvasMap[key]] = element.getAttribute(key);
         }
       });
 
@@ -81,22 +88,20 @@ export default class CanvasAnnotationDisplay {
         this.context.strokeStyle = currentPalette.strokeStyle || currentPalette.fillStyle;
       }
 
-      if (element.attributes['stroke-opacity']) {
-        this.context.globalAlpha = currentPalette.globalAlpha * element.attributes['stroke-opacity'].nodeValue;
-      } else {
-        this.context.globalAlpha = currentPalette.globalAlpha;
-      }
-
-      // Wait to set the fill, so we can adjust the globalAlpha value if we need to
-      if (element.attributes.fill && element.attributes.fill.nodeValue !== 'none') {
-        if (element.attributes['fill-opacity']) {
-          this.context.globalAlpha = currentPalette.globalAlpha * element.attributes['fill-opacity'].nodeValue;
-        } else {
-          this.context.globalAlpha = currentPalette.globalAlpha;
+      this.context.globalAlpha = currentPalette.globalAlpha;
+      // Set the globalAlpha for fill, draw the fill and then update the globalAlpha for stroke
+      if (element.getAttribute('fill') && element.getAttribute('fill') !== 'none') {
+        if (element.getAttribute('fill-opacity')) {
+          this.context.globalAlpha = currentPalette.globalAlpha * this.parseOpacity(element.getAttribute('fill-opacity'));
         }
         this.context.fill(p);
       }
 
+      if (element.getAttribute('stroke-opacity')) {
+        this.context.globalAlpha = currentPalette.globalAlpha * this.parseOpacity(element.getAttribute('stroke-opacity'));
+      } else {
+        this.context.globalAlpha = currentPalette.globalAlpha;
+      }
       this.context.stroke(p);
       this.context.restore();
     });
