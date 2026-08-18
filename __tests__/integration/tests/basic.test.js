@@ -36,5 +36,16 @@ describe('Basic end to end Mirador', () => {
       name: /Picture of Göttingen taken during the 2019 IIIF Conference/i,
     });
     expect(element).toBeInTheDocument();
+
+    // Switching to elastic mode should keep the loaded manifest visible
+    fireEvent.click(screen.getByRole('button', { name: 'Workspace settings' }));
+    fireEvent.click(await screen.findByRole('menuitem', { name: /Select workspace type/i }));
+    fireEvent.click(await screen.findByRole('menuitem', { name: /^Elastic/i }));
+
+    expect(
+      await screen.findByRole('heading', {
+        name: /Picture of Göttingen taken during the 2019 IIIF Conference/i,
+      }),
+    ).toBeInTheDocument();
   });
 });
