@@ -1,4 +1,3 @@
-import compact from 'lodash/compact';
 import { v4 as uuid } from 'uuid';
 
 /**
@@ -38,12 +37,12 @@ export default class AnnotationItem {
    * @return {[Array]}
    */
   get motivations() {
-    return compact(new Array(this.resource.motivation)).flat();
+    return new Array(this.resource.motivation).filter(Boolean).flat();
   }
 
   /** */
   get body() {
-    return compact(new Array(this.resource.body)).flat();
+    return new Array(this.resource.body).filter(Boolean).flat();
   }
 
   /** */
@@ -61,7 +60,7 @@ export default class AnnotationItem {
 
   /** */
   get target() {
-    return compact(new Array(this.resource.target)).flat();
+    return new Array(this.resource.target).filter(Boolean).flat();
   }
 
   /** */
@@ -80,7 +79,7 @@ export default class AnnotationItem {
       case 'string':
         return target;
       case 'object':
-        return compact(new Array(target.selector)).flat();
+        return new Array(target.selector).filter(Boolean).flat();
       default:
         return null;
     }

@@ -1,4 +1,3 @@
-import compact from 'lodash/compact';
 import { v4 as uuid } from 'uuid';
 
 /** */
@@ -36,17 +35,17 @@ export default class AnnotationResource {
    * @return {[Array]}
    */
   get motivations() {
-    return compact(new Array(this.resource.motivation)).flat();
+    return new Array(this.resource.motivation).filter(Boolean).flat();
   }
 
   /** */
   get resources() {
-    return compact(new Array(this.resource.resource)).flat();
+    return new Array(this.resource.resource).filter(Boolean).flat();
   }
 
   /** */
   get on() {
-    return compact(new Array(this.resource.on)).flat();
+    return new Array(this.resource.on).filter(Boolean).flat();
   }
 
   /** */
