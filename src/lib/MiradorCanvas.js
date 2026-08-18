@@ -1,4 +1,3 @@
-import flattenDeep from 'lodash/flattenDeep';
 import { Canvas, AnnotationPage, Annotation } from 'manifesto.js';
 import { getIiifResourceImageService } from './iiif';
 
@@ -68,10 +67,10 @@ export default class MiradorCanvas {
   /** */
   get imageResources() {
     // TODO Clean up the following hack as soon as manifesto.js provides any information if an annotation body is a Choice option, and if so, whether it is the preferred one.
-    const resources = flattenDeep([
+    const resources = [
       this.canvas.getImages().map((i) => i.getResource()),
       this.canvas.getContent().map((i) => (i.__jsonld.body.type === 'Choice' ? i.__jsonld.body : i.getBody())),
-    ]);
+    ].flat(Infinity);
 
     return resources.flatMap((resource) => {
       const type = resource.type || resource.getProperty('type');
@@ -90,7 +89,7 @@ export default class MiradorCanvas {
         case 'oa:Choice': {
           return new Canvas(
             {
-              images: flattenDeep([resource.getProperty('default'), resource.getProperty('item')]).map((r) => ({
+              images: [resource.getProperty('default'), resource.getProperty('item')].flat(Infinity).map((r) => ({
                 resource: r,
               })),
             },
@@ -116,48 +115,48 @@ export default class MiradorCanvas {
 
   /** */
   get textResources() {
-    const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
+    const resources = [this.canvas.getContent().map((i) => i.getBody())].flat(Infinity);
     return resources.filter((resource) => resource.getProperty('type') === 'Text').flat();
   }
 
   /** */
   get videoResources() {
-    const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
+    const resources = [this.canvas.getContent().map((i) => i.getBody())].flat(Infinity);
     return resources.filter((resource) => resource.getProperty('type') === 'Video').flat();
   }
 
   /** */
   get audioResources() {
-    const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
+    const resources = [this.canvas.getContent().map((i) => i.getBody())].flat(Infinity);
 
     return resources.filter((resource) => resource.getProperty('type') === 'Sound').flat();
   }
 
   /** */
   get v2VttContent() {
-    const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
+    const resources = [this.canvas.getContent().map((i) => i.getBody())].flat(Infinity);
 
     return resources.filter((resource) => resource.getProperty('format') === 'text/vtt').flat();
   }
 
   /** IIIF v3 captions are stored as 'supplementing' Annotations rather than in the resource content itself */
   get v3VttContent() {
-    const resources = flattenDeep(
-      this.canvasAnnotationPages.map((annoPage) => {
+    const resources = this.canvasAnnotationPages
+      .map((annoPage) => {
         const manifestoAnnoPage = new AnnotationPage(annoPage, this.canvas.options);
         return manifestoAnnoPage.getItems().map((item) => {
           const manifestoAnnotation = new Annotation(item, this.canvas.options);
           return manifestoAnnotation.getBody();
         });
-      }),
-    );
+      })
+      .flat(Infinity);
 
     return resources.filter((resource) => resource.getProperty('format') === 'text/vtt').flat();
   }
 
   /** */
   get resourceAnnotations() {
-    return flattenDeep([this.canvas.getImages(), this.canvas.getContent()]);
+    return [this.canvas.getImages(), this.canvas.getContent()].flat(Infinity);
   }
 
   /**
