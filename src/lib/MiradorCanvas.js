@@ -1,4 +1,3 @@
-import flatten from 'lodash/flatten';
 import flattenDeep from 'lodash/flattenDeep';
 import { Canvas, AnnotationPage, Annotation } from 'manifesto.js';
 import { getIiifResourceImageService } from './iiif';
@@ -44,7 +43,8 @@ export default class MiradorCanvas {
    * - Strings being the URIs
    */
   get annotationListUris() {
-    return flatten(new Array(this.canvas.__jsonld.otherContent))
+    return new Array(this.canvas.__jsonld.otherContent)
+      .flat()
       .filter(
         (otherContent) => otherContent && (typeof otherContent === 'string' || otherContent['@type'] === 'sc:AnnotationList'),
       )
@@ -53,9 +53,9 @@ export default class MiradorCanvas {
 
   /** */
   get canvasAnnotationPages() {
-    return flatten(new Array(this.canvas.__jsonld.annotations)).filter(
-      (annotations) => annotations && annotations.type === 'AnnotationPage',
-    );
+    return new Array(this.canvas.__jsonld.annotations)
+      .flat()
+      .filter((annotations) => annotations && annotations.type === 'AnnotationPage');
   }
 
   /**
@@ -73,73 +73,71 @@ export default class MiradorCanvas {
       this.canvas.getContent().map((i) => (i.__jsonld.body.type === 'Choice' ? i.__jsonld.body : i.getBody())),
     ]);
 
-    return flatten(
-      resources.map((resource) => {
-        const type = resource.type || resource.getProperty('type');
-        switch (type) {
-          case 'Choice': {
-            return new Canvas({ images: resource.items.map((r) => ({ resource: r })) }, this.canvas.options)
-              .getImages()
-              .map((img, index) => {
-                const r = img.getResource();
-                if (r) {
-                  r.preferred = !index;
-                }
-                return r;
-              });
-          }
-          case 'oa:Choice': {
-            return new Canvas(
-              {
-                images: flattenDeep([resource.getProperty('default'), resource.getProperty('item')]).map((r) => ({
-                  resource: r,
-                })),
-              },
-              this.canvas.options,
-            )
-              .getImages()
-              .map((img, index) => {
-                const r = img.getResource();
-                if (r) {
-                  r.preferred = !index;
-                }
-                return r;
-              });
-          }
-          default: {
-            const r = resource;
-            r.preferred = true;
-            return r;
-          }
+    return resources.flatMap((resource) => {
+      const type = resource.type || resource.getProperty('type');
+      switch (type) {
+        case 'Choice': {
+          return new Canvas({ images: resource.items.map((r) => ({ resource: r })) }, this.canvas.options)
+            .getImages()
+            .map((img, index) => {
+              const r = img.getResource();
+              if (r) {
+                r.preferred = !index;
+              }
+              return r;
+            });
         }
-      }),
-    );
+        case 'oa:Choice': {
+          return new Canvas(
+            {
+              images: flattenDeep([resource.getProperty('default'), resource.getProperty('item')]).map((r) => ({
+                resource: r,
+              })),
+            },
+            this.canvas.options,
+          )
+            .getImages()
+            .map((img, index) => {
+              const r = img.getResource();
+              if (r) {
+                r.preferred = !index;
+              }
+              return r;
+            });
+        }
+        default: {
+          const r = resource;
+          r.preferred = true;
+          return r;
+        }
+      }
+    });
   }
 
   /** */
   get textResources() {
     const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
-    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Text'));
+    return resources.filter((resource) => resource.getProperty('type') === 'Text').flat();
   }
 
   /** */
   get videoResources() {
     const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
-    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Video'));
+    return resources.filter((resource) => resource.getProperty('type') === 'Video').flat();
   }
 
   /** */
   get audioResources() {
     const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
 
-    return flatten(resources.filter((resource) => resource.getProperty('type') === 'Sound'));
+    return resources.filter((resource) => resource.getProperty('type') === 'Sound').flat();
   }
 
   /** */
   get v2VttContent() {
     const resources = flattenDeep([this.canvas.getContent().map((i) => i.getBody())]);
 
-    return flatten(resources.filter((resource) => resource.getProperty('format') === 'text/vtt'));
+    return resources.filter((resource) => resource.getProperty('format') === 'text/vtt').flat();
   }
 
   /** IIIF v3 captions are stored as 'supplementing' Annotations rather than in the resource content itself */
@@ -154,7 +152,7 @@ export default class MiradorCanvas {
       }),
     );
 
-    return flatten(resources.filter((resource) => resource.getProperty('format') === 'text/vtt'));
+    return resources.filter((resource) => resource.getProperty('format') === 'text/vtt').flat();
   }
 
   /** */
@@ -168,7 +166,7 @@ export default class MiradorCanvas {
    */
   resourceAnnotation(id) {
     return this.resourceAnnotations.find(
-      (anno) => anno.getResource().id === id || flatten(new Array(anno.getBody())).some((body) => body.id === id),
+      (anno) => anno.getResource().id === id || new Array(anno.getBody()).flat().some((body) => body.id === id),
     );
   }
 

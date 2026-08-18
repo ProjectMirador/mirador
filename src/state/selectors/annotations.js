@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
 import filter from 'lodash/filter';
-import flatten from 'lodash/flatten';
 import AnnotationFactory from '../../lib/AnnotationFactory';
 import { miradorSlice } from './utils';
 import { getCanvas, getVisibleCanvasIds } from './canvases';
@@ -23,7 +22,7 @@ const getAnnotationsOnCanvas = createSelector([getCanvas, getAnnotations], (canv
   if (!annotations || !canvas) return [];
   if (!annotations[canvas.id]) return [];
 
-  return flatten(Object.values(annotations[canvas.id]));
+  return Object.values(annotations[canvas.id]).flat();
 });
 
 const getPresentAnnotationsCanvas = createSelector([getAnnotationsOnCanvas], (annotations) =>
@@ -37,7 +36,7 @@ const getAnnotationsOnSelectedCanvases = createSelector(
   [(state, { canvasId, ...otherProps }) => (canvasId ? [canvasId] : getVisibleCanvasIds(state, otherProps)), getAnnotations],
   (canvasIds, annotations) => {
     if (!annotations || canvasIds.length === 0) return [];
-    return flatten(canvasIds.map((targetId) => annotations[targetId] && Object.values(annotations[targetId])));
+    return canvasIds.flatMap((targetId) => annotations[targetId] && Object.values(annotations[targetId]));
   },
 );
 
@@ -63,7 +62,7 @@ export const getPresentAnnotationsOnSelectedCanvases = createSelector([getAnnota
 export const getAnnotationResourcesByMotivationForCanvas = createSelector(
   [getPresentAnnotationsCanvas, getMotivations],
   (annotations, motivations) => {
-    const resources = flatten(annotations.map((annotation) => annotation.resources));
+    const resources = annotations.flatMap((annotation) => annotation.resources);
 
     // If motivations is empty, null, or undefined, return everything
     if (!motivations || motivations.length === 0) {
@@ -101,7 +100,7 @@ export const getAnnotationResourcesDataForCanvas = createSelector([getAnnotation
 export const getAnnotationResourcesByMotivation = createSelector(
   [getPresentAnnotationsOnSelectedCanvases, getMotivations],
   (annotations, motivations) => {
-    const resources = flatten(annotations.map((annotation) => annotation.resources));
+    const resources = annotations.flatMap((annotation) => annotation.resources);
 
     // If motivations is empty, null, or undefined, return everything
     if (!motivations || motivations.length === 0) {
