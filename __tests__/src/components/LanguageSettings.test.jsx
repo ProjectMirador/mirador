@@ -1,12 +1,17 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
+import MenuList from '@mui/material/MenuList';
 import { LanguageSettings } from '../../../src/components/LanguageSettings';
 
 /**
  * Helper function to create a shallow wrapper around LanguageSettings
  */
 function createWrapper(props) {
-  return render(<LanguageSettings handleClick={() => {}} languages={{}} {...props} />);
+  return render(
+    <MenuList>
+      <LanguageSettings handleClick={() => {}} languages={{}} {...props} />
+    </MenuList>,
+  );
 }
 
 describe('LanguageSettings', () => {

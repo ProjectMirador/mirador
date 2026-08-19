@@ -1,5 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
+import MenuList from '@mui/material/MenuList';
 import { NestedMenu } from '../../../src/components/NestedMenu';
 
 /**
@@ -7,9 +8,11 @@ import { NestedMenu } from '../../../src/components/NestedMenu';
  */
 function createWrapper(props) {
   return render(
-    <NestedMenu icon="GivenIcon" label="GivenLabel" {...props}>
-      GivenChildren
-    </NestedMenu>,
+    <MenuList>
+      <NestedMenu icon="GivenIcon" label="GivenLabel" {...props}>
+        GivenChildren
+      </NestedMenu>
+    </MenuList>,
   );
 }
 
