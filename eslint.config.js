@@ -25,7 +25,7 @@ export default [
     files: ['**/*.js', '**/*.jsx', '**/*.mjs', '**/*.cjs'],
 
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 2025,
       globals: {
         ...globals.browser,
         ...globals.node,
