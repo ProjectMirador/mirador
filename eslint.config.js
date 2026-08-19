@@ -29,7 +29,7 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.es2022,
+        ...globals.es2025,
         document: true,
         page: true,
         vi: true,
