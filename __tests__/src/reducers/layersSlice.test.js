@@ -1,4 +1,4 @@
-import { layersReducer } from '../../../src/state/reducers/layers';
+import { layersReducer } from '../../../src/state/reducers/layersSlice';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('layers reducer', () => {
@@ -10,10 +10,8 @@ describe('layers reducer', () => {
         layersReducer(
           {},
           {
-            canvasId,
-            payload: { some: 'data' },
+            payload: { canvasId, layerData: { some: 'data' }, windowId },
             type: ActionTypes.UPDATE_LAYERS,
-            windowId,
           },
         ),
       ).toEqual({
@@ -37,10 +35,8 @@ describe('layers reducer', () => {
 
       expect(
         layersReducer(originalState, {
-          canvasId,
-          payload: { some: 'data' },
+          payload: { canvasId, layerData: { some: 'data' }, windowId },
           type: ActionTypes.UPDATE_LAYERS,
-          windowId,
         }),
       ).toEqual({
         baz: {
@@ -51,6 +47,25 @@ describe('layers reducer', () => {
           oof: {},
         },
       });
+    });
+    it('throws a useable error for a hand-constructed action using the old flat shape', () => {
+      expect(() =>
+        layersReducer(
+          {},
+          {
+            canvasId,
+            payload: { some: 'data' },
+            type: ActionTypes.UPDATE_LAYERS,
+            windowId,
+          },
+        ),
+      ).toThrow(/updateLayers expects action.payload/);
+    });
+  });
+
+  describe('REMOVE_WINDOW', () => {
+    it('removes the layers state for that window', () => {
+      expect(layersReducer({ foo: { bar: { some: 'data' } } }, { type: ActionTypes.REMOVE_WINDOW, windowId })).toEqual({});
     });
   });
 });
