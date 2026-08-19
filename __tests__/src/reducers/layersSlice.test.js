@@ -10,7 +10,7 @@ describe('layers reducer', () => {
         layersReducer(
           {},
           {
-            payload: { canvasId, layerData: { some: 'data' }, windowId },
+            payload: { canvasId, some: 'data', windowId },
             type: ActionTypes.UPDATE_LAYERS,
           },
         ),
@@ -35,7 +35,7 @@ describe('layers reducer', () => {
 
       expect(
         layersReducer(originalState, {
-          payload: { canvasId, layerData: { some: 'data' }, windowId },
+          payload: { canvasId, some: 'data', windowId },
           type: ActionTypes.UPDATE_LAYERS,
         }),
       ).toEqual({
