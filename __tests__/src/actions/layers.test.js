@@ -7,7 +7,7 @@ describe('layers actions', () => {
       const windowId = 'foo';
       const canvasId = 'bar';
       const expectedAction = {
-        payload: { canvasId, layerData: { some: 'data' }, windowId },
+        payload: { canvasId, some: 'data', windowId },
         type: ActionTypes.UPDATE_LAYERS,
       };
       expect(actions.updateLayers(windowId, canvasId, { some: 'data' })).toEqual(expectedAction);

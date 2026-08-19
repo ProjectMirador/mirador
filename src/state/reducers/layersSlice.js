@@ -8,19 +8,20 @@ const layersSlice = createSlice({
   reducers: {
     updateLayers: {
       reducer(state, action) {
-        const { windowId, canvasId, layerData } = action.payload;
-        if (windowId === undefined || canvasId === undefined || layerData === undefined) {
+        if (action.payload.windowId === undefined || action.payload.canvasId === undefined) {
           throw new Error(
-            'updateLayers expects action.payload to be { windowId, canvasId, layerData } — ' +
-              'dispatch the updateLayers(windowId, canvasId, layerData) action creator rather than constructing the action by hand.',
+            'updateLayers expects action.payload to include { windowId, canvasId } — ' +
+              'dispatch the updateLayers(windowId, canvasId, payload) action creator rather than constructing the action by hand.',
           );
         }
+
+        const { windowId, canvasId, ...payload } = action.payload;
         state[windowId] = {
           ...state[windowId],
-          [canvasId]: deepmerge((state[windowId] || {})[canvasId] || {}, layerData),
+          [canvasId]: deepmerge((state[windowId] || {})[canvasId] || {}, payload),
         };
       },
-      prepare: (windowId, canvasId, layerData) => ({ payload: { windowId, canvasId, layerData } }),
+      prepare: (payloadOrLegacyWindowId, canvasId, payload) => ({ payload: (payloadOrLegacyWindowId.windowId !== undefined ? payloadOrLegacyWindowId : { ...payload, windowId: payloadOrLegacyWindowId, canvasId }) }),
     },
   },
   extraReducers: (builder) => {
