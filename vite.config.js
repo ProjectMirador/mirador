@@ -4,7 +4,7 @@ import fs from 'fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import { globSync } from 'glob';
-import * as packageJson from './package.json';
+import * as packageJson from './package.json' with { type: 'json' };
 
 const peers = Object.keys(packageJson.peerDependencies);
 const peerPatterns = [...peers, ...peers.map((peer) => new RegExp(`^${peer}/`))];
@@ -64,8 +64,8 @@ export default defineConfig({
     // Copy fixtures to dist for Netlify
     process.env.NETLIFY && {
       closeBundle: async () => {
-        const fixturesSource = path.resolve(__dirname, '__tests__/fixtures');
-        const fixturesDest = path.resolve(__dirname, 'dist/__tests__/fixtures');
+        const fixturesSource = path.resolve(import.meta.dirname, '__tests__/fixtures');
+        const fixturesDest = path.resolve(import.meta.dirname, 'dist/__tests__/fixtures');
         await fs.cp(fixturesSource, fixturesDest, { recursive: true });
         console.log('[copy] Copied fixtures to dist');
       },
@@ -117,10 +117,10 @@ export default defineConfig({
   server: {
     fs: {
       allow: [
-        path.resolve(__dirname, 'src'),
-        path.resolve(__dirname, 'demo'),
-        path.resolve(__dirname, '__tests__/integration/'),
-        path.resolve(__dirname, '__tests__/fixtures'),
+        path.resolve(import.meta.dirname, 'src'),
+        path.resolve(import.meta.dirname, 'demo'),
+        path.resolve(import.meta.dirname, '__tests__/integration/'),
+        path.resolve(import.meta.dirname, '__tests__/fixtures'),
       ], // allow serving from here
     },
     middlewareMode: false,
