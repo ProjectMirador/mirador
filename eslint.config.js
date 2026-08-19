@@ -25,11 +25,11 @@ export default [
     files: ['**/*.js', '**/*.jsx', '**/*.mjs', '**/*.cjs'],
 
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 2025,
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.es2022,
+        ...globals.es2025,
         document: true,
         page: true,
         vi: true,
