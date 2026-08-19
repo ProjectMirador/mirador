@@ -65,8 +65,8 @@ export function MinimalWindow({
           <Typography
             variant="h2"
             noWrap
-            color="inherit"
             sx={{
+              color: 'inherit',
               flexGrow: 1,
               paddingLeft: 0.5,
               typography: 'h6',

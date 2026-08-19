@@ -69,7 +69,13 @@ export function WindowAuthenticationBar({
       <Paper square elevation={4} color="secondary">
         <StyledTopBar>
           {icon || <LockIcon sx={{ marginInlineEnd: 5 }} />}
-          <Typography component="h3" variant="body1" color="inherit">
+          <Typography
+            component="h3"
+            variant="body1"
+            sx={{
+              color: 'inherit',
+            }}
+          >
             {ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label}
           </Typography>
           <PluginHook targetName="WindowAuthenticationBar" {...pluginProps} />
@@ -98,13 +104,26 @@ export function WindowAuthenticationBar({
         })}
       >
         {icon || <LockIcon sx={{ marginInlineEnd: 1.5 }} />}
-        <Typography sx={{ paddingBlockEnd: 1, paddingBlockStart: 1 }} component="h3" variant="body1" color="inherit">
+        <Typography
+          component="h3"
+          variant="body1"
+          sx={{
+            color: 'inherit',
+            paddingBlockEnd: 1,
+            paddingBlockStart: 1,
+          }}
+        >
           {ruleSet ? <SanitizedHtml htmlString={label} ruleSet={ruleSet} /> : label}
         </Typography>
         <PluginHook targetName="WindowAuthenticationBar" {...pluginProps} />
         <StyledFauxButton>
           {!open && (
-            <Typography variant="button" color="inherit">
+            <Typography
+              variant="button"
+              sx={{
+                color: 'inherit',
+              }}
+            >
               {continueLabel || t('continue')}
             </Typography>
           )}
@@ -120,7 +139,12 @@ export function WindowAuthenticationBar({
         in={open}
         onClose={() => setOpen(false)}
       >
-        <Typography variant="body1" color="inherit">
+        <Typography
+          variant="body1"
+          sx={{
+            color: 'inherit',
+          }}
+        >
           {ruleSet ? <SanitizedHtml htmlString={header} ruleSet={ruleSet} /> : header}
           {header && description ? ': ' : ''}
           {ruleSet ? <SanitizedHtml htmlString={description} ruleSet={ruleSet} /> : description}

@@ -18,7 +18,17 @@ const StyledTitle = styled('div')(({ theme }) => ({
 /** */
 function TitleTypography({ children, ...props }) {
   return (
-    <Typography variant="h2" noWrap color="inherit" {...props}>
+    <Typography
+      variant="h2"
+      noWrap
+      {...props}
+      sx={[
+        {
+          color: 'inherit',
+        },
+        ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
+      ]}
+    >
       {children}
     </Typography>
   );
@@ -26,6 +36,7 @@ function TitleTypography({ children, ...props }) {
 
 TitleTypography.propTypes = {
   children: PropTypes.node.isRequired,
+  sx: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.object), PropTypes.object]),
 };
 
 /**

@@ -18,11 +18,11 @@ import { IIIFResourceLabel } from './IIIFResourceLabel';
 function Item({ manifest, canvasNavigation, variant, ...otherProps }) {
   return (
     <MenuItem
-      alignItems="flex-start"
       divider
       component="li"
       variant="multiline"
       sx={{
+        alignItems: 'flex-start',
         paddingRight: 1,
       }}
       {...otherProps}

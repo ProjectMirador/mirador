@@ -109,10 +109,12 @@ export function WorkspaceAdd({ addResource = () => {}, catalog = [], setWorkspac
       <StyledWorkspaceAdd className={classNames(ns('workspace-add'))} ref={ref}>
         {catalog.length < 1 ? (
           <Grid
-            alignItems="center"
             container
             style={{
               height: '100%',
+            }}
+            sx={{
+              alignItems: 'center',
             }}
           >
             <Grid size={12}>
@@ -183,7 +185,14 @@ export function WorkspaceAdd({ addResource = () => {}, catalog = [], setWorkspac
                 <StyledMiradorMenuButton aria-label={t('closeAddResourceForm')} color="inherit">
                   <ExpandMoreIcon />
                 </StyledMiradorMenuButton>
-                <Typography variant="h2" noWrap color="inherit" sx={{ flexGrow: 1 }}>
+                <Typography
+                  variant="h2"
+                  noWrap
+                  sx={{
+                    color: 'inherit',
+                    flexGrow: 1,
+                  }}
+                >
                   {t('addResource')}
                 </Typography>
               </Toolbar>
