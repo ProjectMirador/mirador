@@ -21,7 +21,7 @@ const layersSlice = createSlice({
           [canvasId]: deepmerge((state[windowId] || {})[canvasId] || {}, payload),
         };
       },
-      prepare: (windowId, canvasId, payload) => ({ payload: { ...payload, windowId, canvasId } }),
+      prepare: (payloadOrLegacyWindowId, canvasId, payload) => ({ payload: (payloadOrLegacyWindowId.windowId !== undefined ? payloadOrLegacyWindowId : { ...payload, windowId: payloadOrLegacyWindowId, canvasId }) }),
     },
   },
   extraReducers: (builder) => {
