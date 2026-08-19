@@ -205,7 +205,14 @@ export function* panToFocusedWindow({ pan, windowId }) {
 export function* updateVisibleCanvases({ windowId }) {
   const { canvasId } = yield select(getWindow, { windowId });
   const visibleCanvases = yield select(getCanvasGrouping, { canvasId, windowId });
-  yield put(updateWindow(windowId, { visibleCanvases: (visibleCanvases || []).map((c) => c.id) }));
+
+  const thunk = yield call(
+    setCanvas,
+    windowId,
+    canvasId,
+    (visibleCanvases || []).map((c) => c.id),
+  );
+  yield put(thunk);
 }
 
 /** @private */
