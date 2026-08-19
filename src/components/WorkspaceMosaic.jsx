@@ -4,7 +4,6 @@ import { styled } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { DndContext } from 'react-dnd';
 import { Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves, convertLegacyToNary } from 'react-mosaic-component';
-import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';
@@ -49,10 +48,10 @@ const determineWorkspaceLayout = (currentLayout, windowIds, currentWindowPaths =
   const mosaicLayout = new MosaicLayout(currentLayout);
 
   // Add new windows to layout
-  const addedWindows = difference(windowIds, leaveKeys);
+  const addedWindows = windowIds.filter((windowId) => !leaveKeys.includes(windowId));
   if (addedWindows.length > 0) mosaicLayout.addWindows(addedWindows);
 
-  const removedWindows = difference(leaveKeys, windowIds);
+  const removedWindows = leaveKeys.filter((leaveKey) => !windowIds.includes(leaveKey));
 
   // if we have paths for the removed windows, we can gracefully remove them and
   // preserve the existing layout for the remaining windows
