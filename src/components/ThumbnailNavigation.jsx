@@ -173,6 +173,7 @@ export function ThumbnailNavigation({
         scrollbarGutter: 'stable',
       }}
       aria-label={t('thumbnailNavigation')}
+      component="nav"
       square
       elevation={0}
       style={style()}
