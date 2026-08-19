@@ -2,7 +2,7 @@ import * as actions from './actions';
 import * as reducers from './reducers';
 import * as sagas from './sagas';
 import * as selectors from './selectors';
-import createStore from './createStore';
+import createStore from './store';
 
 export default {
   actions,
@@ -17,5 +17,5 @@ export * from './reducers';
 export { default as rootReducer } from './reducers/rootReducer';
 export { default as rootSaga } from './sagas';
 export * from './selectors';
-export { default as createStore } from './createStore';
-export { default as createPluggableStore } from './createPluggableStore';
+export { default as createStore } from './store';
+export { default as createPluggableStore } from './pluggableStore';
