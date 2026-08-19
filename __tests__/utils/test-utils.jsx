@@ -1,8 +1,7 @@
 import { Provider } from 'react-redux';
 import { render, screen } from '@testing-library/react';
 import PropTypes from 'prop-types';
-import { createStore, applyMiddleware } from 'redux';
-import { thunk } from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { I18nextProvider } from 'react-i18next';
 import createRootReducer from '../../src/state/reducers/rootReducer';
@@ -29,7 +28,18 @@ function renderWithProviders(
   {
     preloadedState = {},
     // Automatically create a store instance if no store was passed in
-    store = createStore(rootReducer, preloadedState, applyMiddleware(thunk)),
+    store = configureStore({
+      middleware: (getDefaultMiddleware) =>
+        // Mirrors src/state/store.js's serializableCheck exemptions
+        getDefaultMiddleware({
+          serializableCheck: {
+            ignoredActionPaths: ['imageResource', /(^|\.)config$/],
+            ignoredPaths: [/(^|\.)config$/],
+          },
+        }),
+      preloadedState,
+      reducer: rootReducer,
+    }),
     ...renderOptions
   } = {},
 ) {
