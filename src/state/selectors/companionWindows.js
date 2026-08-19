@@ -76,7 +76,7 @@ const getCompanionWindowsByWindowAndPosition = createSelector([getWindows, getCo
     (obj, id) => ({
       ...obj,
       [id]: groupBy(
-        windows[id].companionWindowIds.map((cwid) => companionWindows[cwid]),
+        (windows[id].companionWindowIds || []).map((cwid) => companionWindows[cwid]),
         (cw) => cw.position,
       ),
     }),
