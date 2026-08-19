@@ -46,11 +46,13 @@ export function MiradorMenuButton({
 
   return (
     <Tooltip
-      PopperProps={{
-        container: container?.current,
-      }}
       title={ariaLabel}
       {...TooltipProps}
+      slotProps={{
+        popper: {
+          container: container?.current,
+        },
+      }}
     >
       {button}
     </Tooltip>

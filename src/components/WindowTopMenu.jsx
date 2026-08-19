@@ -53,14 +53,16 @@ export function WindowTopMenu({
         vertical: 'top',
       }}
       onClose={handleClose}
-      TransitionProps={{
-        onEntering: toggleDraggingEnabled,
-        onExit: toggleDraggingEnabled,
-      }}
       orientation="horizontal"
       anchorEl={anchorEl}
       open={open}
       role="menu"
+      slotProps={{
+        transition: {
+          onEntering: toggleDraggingEnabled,
+          onExit: toggleDraggingEnabled,
+        },
+      }}
     >
       <WindowViewSettings windowId={windowId} handleClose={handleClose} />
       {showThumbnailNavigationSettings && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}

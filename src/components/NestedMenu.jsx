@@ -21,7 +21,13 @@ export function NestedMenu({ children, icon = null, label, ...otherProps }) {
     <>
       <MenuItem aria-expanded={nestedMenuIsOpen} onClick={handleMenuClick} divider={nestedMenuIsOpen} {...otherProps}>
         {icon && <ListItemIcon>{icon}</ListItemIcon>}
-        <ListItemText primaryTypographyProps={{ variant: 'body1' }}>{label}</ListItemText>
+        <ListItemText
+          slotProps={{
+            primary: { variant: 'body1' },
+          }}
+        >
+          {label}
+        </ListItemText>
         {nestedMenuIsOpen ? <ExpandLess /> : <ExpandMore />}
       </MenuItem>
       {nestedMenuIsOpen && children}
