@@ -200,7 +200,7 @@
           "@type": "sc:Canvas",
           "label": "Page 5",
           "height": 3281,
-          "width": 2536,
+          "width": 2527,
           "images": [
             {
               "@id": "https://purl.stanford.edu/fg165hz3589/iiif/annotation/fg165hz3589_5",
@@ -211,7 +211,7 @@
                 "@type": "dctypes:Image",
                 "format": "image/jpeg",
                 "height": 3281,
-                "width": 2536,
+                "width": 2527,
                 "service": {
                   "@context": "http://iiif.io/api/image/2/context.json",
                   "@id": "https://stacks.stanford.edu/image/iiif/fg165hz3589%2Ffg165hz3589_5",

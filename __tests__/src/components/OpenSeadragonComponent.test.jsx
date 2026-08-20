@@ -100,4 +100,28 @@ describe('OpenSeadragonComponent', () => {
     // Should not call fitBoundsWithConstraints
     expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
   });
+
+  // Regression test: `boundsChanged` compares the pixel bounds, not
+  // which canvases are being viewed. Two different canvas pairs can round to
+  // the exact same worldBounds() via Math.floor() — see
+  // __tests__/fixtures/version-2/fg165hz3589.json canvases 2-3 vs 4-5
+  // This currently fails, since `OpenSeadragonComponent` has no way to
+  // tell "still the same canvases" apart from "coincidentally the same shape".
+  it('still re-fits when navigating to a different canvas pair whose bounds coincidentally match', () => {
+    const { rerender } = renderAndInitialize([0, 0, 5059, 3279]);
+
+    // Navigate to a different canvas pair with numerically identical worldBounds
+    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5059, 3279] }} />);
+    invokeTileLoadedHandler();
+
+    expect(fitBoundsWithConstraints).toHaveBeenCalledWith(
+      expect.objectContaining({
+        height: 3279,
+        width: 5059,
+        x: 0,
+        y: 0,
+      }),
+      true,
+    );
+  });
 });
