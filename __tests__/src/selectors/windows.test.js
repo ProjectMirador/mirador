@@ -4,6 +4,7 @@ import manifestFixture015 from '../../fixtures/version-2/015.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import {
   getWindowConfig,
+  getWindowPosition,
   getWindowTitles,
   getWindowViewType,
   getWindowDraggability,
@@ -35,6 +36,21 @@ describe('getWindowConfig', () => {
     };
 
     expect(getWindowConfig(state, { windowId: 'c' })).toEqual({ a: '1', b: '2' });
+  });
+});
+
+describe('getWindowPosition', () => {
+  it('returns the 1-based position of a window among all open windows', () => {
+    const state = { workspace: { windowIds: ['a', 'b', 'c'] } };
+
+    expect(getWindowPosition(state, { windowId: 'a' })).toEqual(1);
+    expect(getWindowPosition(state, { windowId: 'b' })).toEqual(2);
+    expect(getWindowPosition(state, { windowId: 'c' })).toEqual(3);
+  });
+  it('returns 0 for a window that is not currently open', () => {
+    const state = { workspace: { windowIds: ['a'] } };
+
+    expect(getWindowPosition(state, { windowId: 'nope' })).toEqual(0);
   });
 });
 
