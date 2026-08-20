@@ -6,16 +6,20 @@ vi.mock('openseadragon');
 
 describe('OpenSeadragonComponent', () => {
   let addOnceHandler;
+  let addHandler;
   let fitBoundsWithConstraints;
+  let goHome;
 
   beforeEach(() => {
     addOnceHandler = vi.fn();
+    addHandler = vi.fn();
     fitBoundsWithConstraints = vi.fn();
+    goHome = vi.fn();
 
     // Mock methods used in the component
     OpenSeadragon.mockImplementation(function () {
       return {
-        addHandler: vi.fn(),
+        addHandler,
         addOnceHandler,
         canvas: {},
         destroy: vi.fn(),
@@ -27,8 +31,9 @@ describe('OpenSeadragonComponent', () => {
           fitBounds: vi.fn(),
           fitBoundsWithConstraints,
           zoomSpring: { target: { value: 1 } },
+          goHome,
         },
-        world: { addOnceHandler },
+        world: { addOnceHandler, addHandler },
       };
     });
 
@@ -49,16 +54,22 @@ describe('OpenSeadragonComponent', () => {
     if (tileLoadedHandler) tileLoadedHandler();
   }
 
+  function invokeItemAddedHandler() {
+    const { lastCall } = addHandler.mock;
+    const [_eventName, itemAddedHandler] = lastCall || [];
+    if (itemAddedHandler) itemAddedHandler();
+  }
+
   /**
    * Render component and complete initial tile loading
    * @param {Array} bounds - Initial bounds
    * @returns {object} Render result
    */
-  function renderAndInitialize(bounds = [0, 0, 5000, 3000]) {
-    const result = render(<OpenSeadragonComponent viewerConfig={{ bounds }} />);
+  function renderAndInitialize(viewerConfig = { bounds: [0, 0, 5000, 3000] }) {
+    const result = render(<OpenSeadragonComponent viewerConfig={viewerConfig} />);
 
-    // Component registers a 'tile-loaded' handler during mount to set initial viewport
-    invokeTileLoadedHandler();
+    // Component registers a 'item-added' handler during mount to set initial viewport
+    invokeItemAddedHandler();
 
     // Clear mocks after initialization
     fitBoundsWithConstraints.mockClear();
@@ -96,6 +107,22 @@ describe('OpenSeadragonComponent', () => {
 
     // Should not register a new tile-loaded handler
     expect(addOnceHandler).not.toHaveBeenCalled();
+
+    // Should not call fitBoundsWithConstraints
+    expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
+  });
+
+  it('sets the zoom when there are now bounds', () => {
+    const { rerender } = renderAndInitialize({});
+
+    // Should not register a new tile-loaded handler
+    expect(addOnceHandler).not.toHaveBeenCalled();
+
+    // expect add-item handler to be called
+    expect(addHandler).toHaveBeenCalled(1);
+
+    // expect there to be no bounds and viewer should center
+    expect(goHome).toHaveBeenCalled(1);
 
     // Should not call fitBoundsWithConstraints
     expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
