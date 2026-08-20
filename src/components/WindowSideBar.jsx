@@ -27,7 +27,7 @@ export function WindowSideBar({ classes = {}, direction, windowId, sideBarOpen =
           component: 'nav',
           sx: { width: sideBarOpen ? 48 : 0, position: 'relative' },
         },
-        slide: {
+        transition: {
           direction: direction === 'rtl' ? 'left' : 'right',
           mountOnEnter: true,
           unmountOnExit: true,
