@@ -19,7 +19,6 @@ function Item({ manifest, canvasNavigation, variant, ...otherProps }) {
   return (
     <MenuItem
       alignItems="flex-start"
-      button
       divider
       component="li"
       variant="multiline"

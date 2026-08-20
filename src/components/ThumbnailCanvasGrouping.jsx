@@ -82,7 +82,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
 
   /** */
   render() {
-    const { index, columnIndex, style, canvasGroupings, position, height, currentCanvasId, showThumbnailLabels, textHeight } =
+    const { index, columnIndex, style, canvasGroupings, position, currentCanvasId, showThumbnailLabels, textHeight } =
       this.props;
     // For Grid (horizontal), use columnIndex; for List (vertical), use index
     const itemIndex = columnIndex !== undefined ? columnIndex : index;
@@ -99,8 +99,9 @@ export class ThumbnailCanvasGrouping extends PureComponent {
       calculatedWidth = style.width - SPACING;
     }
 
-    const thumbnailMaxHeight =
-      (position === 'far-right' ? style.height : height) - (showThumbnailLabels ? textHeight : 0) - 1.5 * SPACING;
+    const thumbnailMaxHeight = style.height
+      -  (position === 'far-right' ? SPACING : 0)
+      -  (showThumbnailLabels ? textHeight : 0);
 
     const isSelected = currentGroupings.map((canvas) => canvas.id).includes(currentCanvasId);
 
@@ -108,11 +109,11 @@ export class ThumbnailCanvasGrouping extends PureComponent {
       <div
         style={{
           ...style,
-          boxSizing: 'content-box',
+          boxSizing: 'border-box',
           height: Number.isInteger(style.height) ? style.height - SPACING : null,
           left: Number.isInteger(style.left) ? style.left + SPACING / 2 : null,
           top: Number.isInteger(style.top) ? style.top + SPACING / 2 : null,
-          width: calculatedWidth,
+          width: Number.isInteger(style.width) ? style.width - SPACING : null,
         }}
         className={ns('thumbnail-nav-container')}
         role="gridcell"
@@ -129,7 +130,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             '&:hover': {
               outline: isSelected ? 0 : `2px solid ${theme.palette.action.hover}`,
             },
-            height: position === 'far-right' ? 'auto' : `${height - SPACING}px`,
+            height: position === 'far-right' ? 'auto' : `${style.height}px`,
             width: position === 'far-bottom' ? 'auto' : `${style.width}px`,
           })}
           className={classNames(
@@ -166,7 +167,6 @@ ThumbnailCanvasGrouping.propTypes = {
   canvasGroupings: PropTypes.array.isRequired,
   columnIndex: PropTypes.number,
   currentCanvasId: PropTypes.string.isRequired,
-  height: PropTypes.number.isRequired,
   index: PropTypes.number,
   position: PropTypes.string.isRequired,
   setCanvas: PropTypes.func.isRequired,

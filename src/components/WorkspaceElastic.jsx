@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types';
+import { useState, useRef, useLayoutEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Rnd } from 'react-rnd';
-import ResizeObserver from 'react-resize-observer';
+import useResizeObserver from '@react-hook/resize-observer';
 import WorkspaceElasticWindow from '../containers/WorkspaceElasticWindow';
 import ns from '../config/css-ns';
 
 const Root = styled('div', { name: 'WorkspaceElastic', slot: 'root' })({
   height: '100%',
+  overflow: 'hidden',
   position: 'relative',
   width: '100%',
 });
@@ -30,16 +32,18 @@ function WorkspaceElastic({ workspace, elasticLayout, setWorkspaceViewportDimens
   const { viewportPosition } = workspace;
   const offsetX = workspace.width / 2;
   const offsetY = workspace.height / 2;
+  const target = useRef(null);
+
+  useLayoutEffect(() => {
+    if (target.current) setWorkspaceViewportDimensions(target.current.getBoundingClientRect());
+  }, [target, setWorkspaceViewportDimensions]);
+
+  useResizeObserver(target, (entry) => {
+    setWorkspaceViewportDimensions(entry.contentRect);
+  });
 
   return (
-    <Root>
-      <ResizeObserver
-        onReflow={() => {}}
-        onResize={(rect) => {
-          setWorkspaceViewportDimensions(rect);
-        }}
-      />
-
+    <Root ref={target}>
       <StyledRnd
         size={{
           height: workspace.height,

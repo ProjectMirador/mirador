@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import flatten from 'lodash/flatten';
 import { Utils } from 'manifesto.js';
 import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
 import { getConfig } from './config';
@@ -48,23 +47,21 @@ export const selectCurrentAuthServices = createSelector(
     let currentAuthResources = iiifResources;
 
     if (!currentAuthResources && canvases) {
-      currentAuthResources = flatten(
-        canvases.map((c) => {
-          const miradorCanvas = getMiradorCanvas(c);
-          const images = miradorCanvas.iiifImageResources;
+      currentAuthResources = canvases.flatMap((c) => {
+        const miradorCanvas = getMiradorCanvas(c);
+        const images = miradorCanvas.iiifImageResources;
 
-          return images.map((i) => {
-            const iiifImageService = getIiifResourceImageService(i);
+        return images.map((i) => {
+          const iiifImageService = getIiifResourceImageService(i);
 
-            const infoResponse = infoResponses[iiifImageService.id];
-            if (infoResponse && infoResponse.json) {
-              return { ...infoResponse.json, options: {} };
-            }
+          const infoResponse = infoResponses[iiifImageService.id];
+          if (infoResponse && infoResponse.json) {
+            return { ...infoResponse.json, options: {} };
+          }
 
-            return iiifImageService;
-          });
-        }),
-      );
+          return iiifImageService;
+        });
+      });
     }
 
     if (!currentAuthResources) return EMPTY_ARRAY;

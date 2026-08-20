@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
 import { PropertyValue } from 'manifesto.js';
-import flatten from 'lodash/flatten';
 import AnnotationList from '../../lib/AnnotationList';
 import { getCanvas, getCanvases } from './canvases';
 import { getWindow } from './getters';
@@ -95,13 +94,11 @@ export const getNextSearchId = createSelector([getSearchForCompanionWindow], (re
 });
 
 const getSearchHitsForCompanionWindow = createSelector([getSearchResponsesForCompanionWindow], (results) =>
-  flatten(
-    results.map((result) => {
-      if (!result || !result.json || result.isFetching || !result.json.hits) return EMPTY_ARRAY;
+  results.flatMap((result) => {
+    if (!result || !result.json || result.isFetching || !result.json.hits) return EMPTY_ARRAY;
 
-      return result.json.hits;
-    }),
-  ),
+    return result.json.hits;
+  }),
 );
 
 export const getSearchAnnotationsForCompanionWindow = createSelector(
@@ -145,7 +142,7 @@ const searchResultsToAnnotation = (results) => {
 
   return {
     id: (annotations.find((a) => a.id) || {}).id,
-    resources: flatten(annotations.map((a) => a.resources)),
+    resources: annotations.flatMap((a) => a.resources),
   };
 };
 
@@ -227,7 +224,7 @@ export const getResourceAnnotationLabel = createSelector(
 const getAnnotationById = createSelector(
   [getSearchAnnotationsForWindow, (state, { annotationId }) => annotationId],
   (annotations, annotationId) => {
-    const resourceAnnotations = flatten(annotations.map((a) => a.resources));
+    const resourceAnnotations = annotations.flatMap((a) => a.resources);
     return resourceAnnotations.find((r) => r.id === annotationId);
   },
 );

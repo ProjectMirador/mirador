@@ -196,6 +196,13 @@ describe('IIIF Authentication sagas', () => {
         ])
         .put({
           id: 'https://authentication.example.com/external',
+          profile: 'http://iiif.io/api/auth/1/external',
+          type: ActionTypes.ADD_AUTHENTICATION_REQUEST,
+          windowId,
+        })
+        .put({
+          id: 'https://authentication.example.com/external',
+          ok: true,
           tokenServiceId: 'https://authentication.example.com/token',
           type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST,
         })

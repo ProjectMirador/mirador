@@ -55,7 +55,7 @@ describe('OpenSeadragonComponent', () => {
    * @returns {object} Render result
    */
   function renderAndInitialize(bounds = [0, 0, 5000, 3000]) {
-    const result = render(<OpenSeadragonComponent windowId="test" viewerConfig={{ bounds }} />);
+    const result = render(<OpenSeadragonComponent viewerConfig={{ bounds }} />);
 
     // Component registers a 'tile-loaded' handler during mount to set initial viewport
     invokeTileLoadedHandler();
@@ -71,7 +71,7 @@ describe('OpenSeadragonComponent', () => {
     const { rerender } = renderAndInitialize();
 
     // Change bounds to different dimensions
-    rerender(<OpenSeadragonComponent windowId="test" viewerConfig={{ bounds: [0, 0, 3000, 2000] }} />);
+    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 3000, 2000] }} />);
 
     // Component registered a 'tile-loaded' handler when bounds change
     invokeTileLoadedHandler();
@@ -92,7 +92,7 @@ describe('OpenSeadragonComponent', () => {
     const { rerender } = renderAndInitialize();
 
     // Rerender with same bounds
-    rerender(<OpenSeadragonComponent windowId="test" viewerConfig={{ bounds: [0, 0, 5000, 3000] }} />);
+    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} />);
 
     // Should not register a new tile-loaded handler
     expect(addOnceHandler).not.toHaveBeenCalled();

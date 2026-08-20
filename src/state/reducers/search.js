@@ -1,5 +1,4 @@
 import omit from 'lodash/omit';
-import flatten from 'lodash/flatten';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -112,7 +111,7 @@ export const searchesReducer = (state = {}, action) => {
             search.data &&
             Object.values(search.data)
               .filter((resp) => resp.json && resp.json.resources)
-              .some((resp) => flatten([resp.json.resources]).some((r) => r['@id'] === action.annotationId));
+              .some((resp) => [resp.json.resources].flat().some((r) => r['@id'] === action.annotationId));
 
           if (searchHasAnnotation) {
             // eslint-disable-next-line no-param-reassign

@@ -1,5 +1,4 @@
 import compact from 'lodash/compact';
-import flatten from 'lodash/flatten';
 import { v4 as uuid } from 'uuid';
 
 /**
@@ -39,12 +38,12 @@ export default class AnnotationItem {
    * @return {[Array]}
    */
   get motivations() {
-    return flatten(compact(new Array(this.resource.motivation)));
+    return compact(new Array(this.resource.motivation)).flat();
   }
 
   /** */
   get body() {
-    return flatten(compact(new Array(this.resource.body)));
+    return compact(new Array(this.resource.body)).flat();
   }
 
   /** */
@@ -62,7 +61,7 @@ export default class AnnotationItem {
 
   /** */
   get target() {
-    return flatten(compact(new Array(this.resource.target)));
+    return compact(new Array(this.resource.target)).flat();
   }
 
   /** */
@@ -81,7 +80,7 @@ export default class AnnotationItem {
       case 'string':
         return target;
       case 'object':
-        return flatten(compact(new Array(target.selector)));
+        return compact(new Array(target.selector)).flat();
       default:
         return null;
     }

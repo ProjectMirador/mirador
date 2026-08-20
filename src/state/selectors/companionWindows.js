@@ -60,7 +60,10 @@ const getCompanionWindowIndexByWindowAndPosition = createSelector(
     (Object.keys(windows) || []).reduce(
       (obj, id) => ({
         ...obj,
-        [id]: groupBy(windows[id].companionWindowIds, (cwid) => companionWindows[cwid] && companionWindows[cwid].position),
+        [id]: groupBy(
+          windows[id].companionWindowIds || EMPTY_ARRAY,
+          (cwid) => companionWindows[cwid] && companionWindows[cwid].position,
+        ),
       }),
       {},
     ),
@@ -76,7 +79,7 @@ const getCompanionWindowsByWindowAndPosition = createSelector([getWindows, getCo
     (obj, id) => ({
       ...obj,
       [id]: groupBy(
-        windows[id].companionWindowIds.map((cwid) => companionWindows[cwid]),
+        (windows[id].companionWindowIds || EMPTY_ARRAY).map((cwid) => companionWindows[cwid]),
         (cw) => cw.position,
       ),
     }),

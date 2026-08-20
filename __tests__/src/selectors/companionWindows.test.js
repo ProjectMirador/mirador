@@ -91,6 +91,27 @@ describe('getCompanionWindowsForPosition', () => {
 
     expect(received).toBe(expected);
   });
+
+  // https://github.com/ProjectMirador/mirador/issues/3930
+  it('does not throw for any window when a different, unrelated window has a corrupted companionWindowIds', () => {
+    const corruptedState = {
+      companionWindows: {
+        abc: { id: 'abc', position: 'right' },
+      },
+      windows: {
+        a: { companionWindowIds: ['abc'] },
+        // simulates a plugin dispatch clobbering this window's companionWindowIds with undefined
+        b: { companionWindowIds: undefined },
+      },
+    };
+
+    expect(() =>
+      getCompanionWindowsForPosition(corruptedState, {
+        position: 'right',
+        windowId: 'a',
+      }),
+    ).not.toThrow();
+  });
 });
 
 describe('getCompanionWindow', () => {

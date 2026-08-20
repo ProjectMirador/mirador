@@ -305,6 +305,11 @@ export default {
               width: 0,
             }),
           }),
+          image: ({ ownerState }) => ({
+            ...(ownerState?.border && {
+              border: '1px solid rgba(0, 0, 0, 0.125)',
+            }),
+          }),
         },
       },
       ThemeIcon: {

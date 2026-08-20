@@ -43,18 +43,24 @@ const StyledLogo = styled(Img, { name: 'ManifestListItem', slot: 'logo' })(({ th
 
 /** */
 const Placeholder = () => (
-  <Grid container className={ns('manifest-list-item')}>
-    <Grid size={{ sm: 2, xs: 3 }}>
-      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={80} width={120} />
+  <Grid container className={ns('manifest-list-item')} sx={{ alignItems: 'center', display: 'flex', width: '100%' }}>
+    <Grid size={{ sm: 5, xs: 12 }} sx={{ display: 'flex', justifyContent: 'flex-start', width: '100%', alignItems: 'center' }}>
+      <Grid container component="div" sx={{ width: '100%' }}>
+        <Grid size={3} sx={{ alignItems: 'center', display: 'flex', justifyContent: 'flex-start' }}>
+          <Skeleton variant="rectangular" sx={{ bgcolor: 'grey[300]' }} height={80} width={120} />
+        </Grid>
+        <Grid size={9} sx={{ alignContent: 'center', paddingLeft: 2 }}>
+          <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" width={300} />
+        </Grid>
+      </Grid>
     </Grid>
-    <Grid size={{ sm: 6, xs: 9 }}>
-      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
+
+    <Grid size={{ sm: 4, xs: 8 }}>
+      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" width={150} />
+      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" width={70} />
     </Grid>
-    <Grid size={{ sm: 2, xs: 8 }}>
-      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
-      <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="text" />
-    </Grid>
-    <Grid size={{ sm: 2, xs: 4 }}>
+
+    <Grid size={{ sm: 3, xs: 4 }}>
       <Skeleton sx={{ bgcolor: 'grey[300]' }} variant="rectangular" height={60} width={60} />
     </Grid>
   </Grid>

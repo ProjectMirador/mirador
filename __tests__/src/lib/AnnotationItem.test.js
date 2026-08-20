@@ -1,4 +1,5 @@
 import AnnotationItem from '../../../src/lib/AnnotationItem';
+import svgAnnotations from '../../fixtures/version-3/svg-annotations.json';
 
 describe('AnnotationItem', () => {
   describe('id', () => {
@@ -139,6 +140,12 @@ describe('AnnotationItem', () => {
 
     it('specified SvgSelector', () => {
       expect(new AnnotationItem({ target: { selector: { type: 'SvgSelector' } } }).svgSelector).toEqual({ type: 'SvgSelector' });
+    });
+
+    it('svg shape SvgSelector', () => {
+      svgAnnotations.items.forEach((annotation) => {
+        expect(new AnnotationItem(annotation).svgSelector.value).toContain('<svg ');
+      });
     });
 
     it('without specified type', () => {

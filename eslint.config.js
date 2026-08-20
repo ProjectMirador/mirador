@@ -25,11 +25,11 @@ export default [
     files: ['**/*.js', '**/*.jsx', '**/*.mjs', '**/*.cjs'],
 
     languageOptions: {
-      ecmaVersion: 2022,
+      ecmaVersion: 2025,
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.es2022,
+        ...globals.es2025,
         document: true,
         page: true,
         vi: true,
@@ -76,7 +76,7 @@ export default [
       'import/no-duplicates': 'error',
       'import/no-extraneous-dependencies': 'off',
       'import/no-mutable-exports': 'error',
-      'import/no-unresolved': [2, { ignore: ['test-utils', '@vitejs/plugin-react'] }],
+      'import/no-unresolved': [2, { ignore: ['test-utils', '@vitejs/plugin-react', 'vite'] }],
       'import/prefer-default-export': 'off',
       'max-depth': ['warn', 4],
       'max-params': ['warn', 5],

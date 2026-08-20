@@ -10,6 +10,7 @@ import SidebarIndexThumbnail from '../containers/SidebarIndexThumbnail';
 
 const StyledItem = styled(MenuItem, { name: 'SidebarIndexList', slot: 'item' })(({ theme }) => ({
   alignItems: 'flex-start',
+  gap: theme.spacing(1),
   paddingLeft: theme.spacing(2),
   paddingRight: theme.spacing(1),
   position: 'initial',

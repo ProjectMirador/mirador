@@ -1,6 +1,5 @@
 import { all, call, put, select, takeEvery, delay } from 'redux-saga/effects';
 import { Utils } from 'manifesto.js';
-import flatten from 'lodash/flatten';
 import ActionTypes from '../actions/action-types';
 import { addAuthenticationRequest, resolveAuthenticationRequest, requestAccessToken, resetAuthenticationState } from '../actions';
 import {
@@ -35,7 +34,7 @@ export function* refetchInfoResponses({ serviceId }) {
 
   const getMiradorCanvas = yield select(getMiradorCanvasWrapper);
 
-  const visibleImageApiIds = flatten(flatten(canvases).map((canvas) => getMiradorCanvas(canvas).imageServiceIds));
+  const visibleImageApiIds = canvases.flat().flatMap((canvas) => getMiradorCanvas(canvas).imageServiceIds);
 
   const infoResponses = yield select(selectInfoResponses);
   /** */
@@ -83,8 +82,10 @@ export function* doAuthWorkflow({ infoJson, windowId }) {
       Utils.getService(authService, 'http://iiif.io/api/auth/0/token');
 
     if (!tokenService) return;
+    // start the auth
+    yield put(addAuthenticationRequest(windowId, authService.id, authService.getProfile()));
     // resolve the auth
-    yield put(resolveAuthenticationRequest(authService.id, tokenService.id));
+    yield put(resolveAuthenticationRequest(authService.id, tokenService.id, { ok: true }));
     // start access tokens
     yield put(requestAccessToken(tokenService.id, authService.id));
   }

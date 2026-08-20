@@ -2,12 +2,12 @@ import { useRef, useEffect, useCallback, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { useDebouncedCallback } from 'use-debounce';
-import flatten from 'lodash/flatten';
 import sortBy from 'lodash/sortBy';
 import xor from 'lodash/xor';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
+import { buildPath2D } from '../lib/svgShapesToPath';
 
 /** @private */
 function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point) {
@@ -18,7 +18,7 @@ function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, po
   if (resource.svgSelector) {
     const context = osdCanvasOverlay.context2d;
     const { svgPaths } = new CanvasAnnotationDisplay({ resource });
-    return [...svgPaths].some((path) => context.isPointInPath(new Path2D(path.attributes.d.nodeValue), relativeX, relativeY));
+    return [...svgPaths].some((path) => context.isPointInPath(buildPath2D(path), relativeX, relativeY));
   }
 
   if (resource.fragmentSelector) {
@@ -26,6 +26,19 @@ function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, po
     return x <= relativeX && relativeX <= x + w && y <= relativeY && relativeY <= y + h;
   }
   return false;
+}
+
+/**
+ * See: https://openseadragon.github.io/docs/OpenSeadragon.Viewer.html#.event:canvas-click
+ * Gestures returned from this method are likely viewer interactions such as pan and zoom,
+ * not taps and clicks targeted to an annotation.
+ * In deciding whether to change the display of the annotation overlay,
+ * we want to ignore these irrelevant gestures.
+ * @private
+ */
+function isIgnoredGesture(event) {
+  const pointerType = event.originalEvent?.pointerType;
+  return (pointerType === 'touch' || pointerType === 'pen') && event.quick === false;
 }
 
 /**
@@ -116,11 +129,13 @@ export function AnnotationsOverlay({
   const annotationsAtPoint = useCallback(
     (canvas, point) => {
       const lists = [...annotations, ...searchAnnotations];
-      const annos = flatten(lists.map((l) => l.resources)).filter((resource) => {
-        if (canvas.id !== resource.targetId) return false;
+      const annos = lists
+        .flatMap((l) => l.resources)
+        .filter((resource) => {
+          if (canvas.id !== resource.targetId) return false;
 
-        return isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point);
-      });
+          return isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point);
+        });
 
       return annos;
     },
@@ -129,6 +144,8 @@ export function AnnotationsOverlay({
 
   const onCanvasClick = useCallback(
     (event) => {
+      if (isIgnoredGesture(event)) return;
+
       const {
         position: webPosition,
         eventSource: { viewport },

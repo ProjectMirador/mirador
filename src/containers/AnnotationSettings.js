@@ -10,7 +10,7 @@ import { AnnotationSettings } from '../components/AnnotationSettings';
  */
 const mapStateToProps = (state, { windowId }) => ({
   displayAll: getWindow(state, { windowId }).highlightAllAnnotations,
-  displayAllDisabled: getAnnotationResourcesByMotivation(state, { windowId }).length < 2,
+  displayAllDisabled: getAnnotationResourcesByMotivation(state, { windowId }).length < 1,
 });
 
 /**

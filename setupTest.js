@@ -8,6 +8,11 @@ import en from './src/locales/en/translation.json';
 // vitest doesn't set a default
 window.origin = 'http://localhost';
 
+// happy-dom's synthetic document has no real parsed <!doctype html> (it's not
+// loading real HTML source), so @hello-pangea/dnd's dev-only doctype check
+// always warns here. See https://github.com/hello-pangea/dnd/blob/main/docs/guides/setup-problem-detection-and-error-recovery.md
+window['__@hello-pangea/dnd-disable-dev-warnings'] = true;
+
 vi.setConfig({ testTimeout: 10_000 });
 const fetchMocker = createFetchMock(vi);
 
@@ -22,7 +27,25 @@ beforeEach((context) => {
 });
 
 /** */
-class Path2D {}
+class Path2D {
+  constructor(path) {
+    this.path = path;
+  }
+
+  arc() {}
+
+  ellipse() {}
+
+  rect() {}
+
+  moveTo() {}
+
+  lineTo() {}
+
+  closePath() {}
+
+  addPath() {}
+}
 
 global.Path2D = Path2D;
 

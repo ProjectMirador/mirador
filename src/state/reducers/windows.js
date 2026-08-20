@@ -31,7 +31,15 @@ export const windowsReducer = (state = {}, action) => {
     case ActionTypes.UPDATE_WINDOW:
       if (!state[action.id]) return state;
 
-      return update([action.id], (orig) => ({ ...(orig || {}), ...action.payload }), state);
+      return update(
+        [action.id],
+        (orig) => ({
+          ...(orig || {}),
+          // drop explicit `undefined` values so they can't clobber existing keys on spread (#3930)
+          ...Object.fromEntries(Object.entries(action.payload).filter(([, value]) => value !== undefined)),
+        }),
+        state,
+      );
 
     case ActionTypes.REMOVE_WINDOW:
       return omit(state, [action.windowId]);
