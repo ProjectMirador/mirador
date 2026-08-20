@@ -82,8 +82,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
 
   /** */
   render() {
-    const { index, columnIndex, style, canvasGroupings, position, currentCanvasId, showThumbnailLabels, textHeight } =
-      this.props;
+    const { index, columnIndex, style, canvasGroupings, position, currentCanvasId, showThumbnailLabels, textHeight } = this.props;
     // For Grid (horizontal), use columnIndex; for List (vertical), use index
     const itemIndex = columnIndex !== undefined ? columnIndex : index;
     const currentGroupings = canvasGroupings[itemIndex];
@@ -99,9 +98,7 @@ export class ThumbnailCanvasGrouping extends PureComponent {
       calculatedWidth = style.width - SPACING;
     }
 
-    const thumbnailMaxHeight = style.height
-      -  (position === 'far-right' ? SPACING : 0)
-      -  (showThumbnailLabels ? textHeight : 0);
+    const thumbnailMaxHeight = style.height - (position === 'far-right' ? SPACING : 0) - (showThumbnailLabels ? textHeight : 0);
 
     const isSelected = currentGroupings.map((canvas) => canvas.id).includes(currentCanvasId);
 
