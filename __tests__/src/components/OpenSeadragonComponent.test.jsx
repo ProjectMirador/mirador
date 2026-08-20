@@ -52,10 +52,11 @@ describe('OpenSeadragonComponent', () => {
   /**
    * Render component and complete initial tile loading
    * @param {Array} bounds - Initial bounds
+   * @param {Array} canvasIds - Initial canvas ids
    * @returns {object} Render result
    */
-  function renderAndInitialize(bounds = [0, 0, 5000, 3000]) {
-    const result = render(<OpenSeadragonComponent viewerConfig={{ bounds }} />);
+  function renderAndInitialize(bounds = [0, 0, 5000, 3000], canvasIds = undefined) {
+    const result = render(<OpenSeadragonComponent viewerConfig={{ bounds }} canvasIds={canvasIds} />);
 
     // Component registers a 'tile-loaded' handler during mount to set initial viewport
     invokeTileLoadedHandler();
@@ -101,17 +102,15 @@ describe('OpenSeadragonComponent', () => {
     expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
   });
 
-  // Regression test: `boundsChanged` compares the pixel bounds, not
-  // which canvases are being viewed. Two different canvas pairs can round to
-  // the exact same worldBounds() via Math.floor() — see
-  // __tests__/fixtures/version-2/fg165hz3589.json canvases 2-3 vs 4-5
-  // This currently fails, since `OpenSeadragonComponent` has no way to
-  // tell "still the same canvases" apart from "coincidentally the same shape".
+  // Regression test: `boundsChanged` compares the pixel bounds, not which
+  // canvases are being viewed. Two different canvas pairs can round to the
+  // exact same worldBounds() via Math.floor()
+  // see __tests__/fixtures/version-2/fg165hz3589.json canvases 2-3 vs 4-5
   it('still re-fits when navigating to a different canvas pair whose bounds coincidentally match', () => {
-    const { rerender } = renderAndInitialize([0, 0, 5059, 3279]);
+    const { rerender } = renderAndInitialize([0, 0, 5059, 3279], ['canvas-2', 'canvas-3']);
 
     // Navigate to a different canvas pair with numerically identical worldBounds
-    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5059, 3279] }} />);
+    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5059, 3279] }} canvasIds={['canvas-4', 'canvas-5']} />);
     invokeTileLoadedHandler();
 
     expect(fitBoundsWithConstraints).toHaveBeenCalledWith(
@@ -123,5 +122,14 @@ describe('OpenSeadragonComponent', () => {
       }),
       true,
     );
+  });
+
+  it('does not reset zoom when neither bounds nor canvas selection change', () => {
+    const { rerender } = renderAndInitialize([0, 0, 5000, 3000], ['canvas-1']);
+
+    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} canvasIds={['canvas-1']} />);
+
+    expect(addOnceHandler).not.toHaveBeenCalled();
+    expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
   });
 });

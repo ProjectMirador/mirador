@@ -11,6 +11,7 @@ function OpenSeadragonComponent({
   Container = 'div',
   osdConfig = {},
   viewerConfig = {},
+  canvasIds = undefined,
   onUpdateViewport = () => {},
   setViewer = () => {},
   style = {},
@@ -22,6 +23,7 @@ function OpenSeadragonComponent({
   const viewerRef = useRef(undefined);
   const initialViewportSet = useRef(false);
   const lastAppliedBounds = useRef(null);
+  const lastCanvasIds = useRef(null);
   const isResettingViewport = useRef(false);
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
@@ -82,12 +84,13 @@ function OpenSeadragonComponent({
         if (viewerConfig.bounds) {
           viewport.fitBounds(new Openseadragon.Rect(...viewerConfig.bounds), true);
           lastAppliedBounds.current = viewerConfig.bounds;
+          lastCanvasIds.current = canvasIds;
         } else {
           viewport.goHome(true);
         }
       }
     },
-    [initialViewportSet, viewerConfig],
+    [initialViewportSet, viewerConfig, canvasIds],
   );
 
   useEffect(() => {
@@ -108,10 +111,19 @@ function OpenSeadragonComponent({
         viewerConfig.bounds.length !== lastAppliedBounds.current.length ||
         viewerConfig.bounds.some((val, idx) => val !== lastAppliedBounds.current[idx]);
 
-      // Bounds changed - recenter regardless of whether x/y/zoom exist
-      if (boundsChanged) {
+      // Different canvases can coincidentally round to identical bounds,
+      // so also recenter whenever the canvas selection itself changed
+      const canvasIdsChanged =
+        canvasIds !== undefined &&
+        (!lastCanvasIds.current ||
+          canvasIds.length !== lastCanvasIds.current.length ||
+          canvasIds.some((canvasId, idx) => canvasId !== lastCanvasIds.current[idx]));
+
+      // Bounds (or canvas selection) changed - recenter regardless of whether x/y/zoom exist
+      if (boundsChanged || canvasIdsChanged) {
         isResettingViewport.current = true;
         lastAppliedBounds.current = viewerConfig.bounds;
+        lastCanvasIds.current = canvasIds;
 
         // Wait for the tiles to be fully loaded before recentering
         const handleTilesLoaded = () => {
@@ -154,7 +166,7 @@ function OpenSeadragonComponent({
     if (viewerConfig.flip != null && (viewerConfig.flip || false) !== viewport.getFlip()) {
       viewport.setFlip(viewerConfig.flip);
     }
-  }, [initialViewportSet, setInitialBounds, viewerConfig, viewerRef]);
+  }, [initialViewportSet, setInitialBounds, viewerConfig, viewerRef, canvasIds]);
 
   // initialize OSD stuff when this component is mounted
   useEffect(() => {
@@ -239,6 +251,7 @@ function OpenSeadragonComponent({
 }
 
 OpenSeadragonComponent.propTypes = {
+  canvasIds: PropTypes.arrayOf(PropTypes.string),
   children: PropTypes.node,
   Container: PropTypes.elementType,
   onUpdateViewport: PropTypes.func,

@@ -101,6 +101,7 @@ export function OpenSeadragonViewer({
       Container={StyledSection}
       osdConfig={osdConfig}
       viewerConfig={viewerConfig || (canvasWorld.hasDimensions() ? { bounds: canvasWorld.worldBounds() } : undefined)}
+      canvasIds={canvasWorld.canvasIds}
       onUpdateViewport={onViewportChange}
       setViewer={setViewer}
       aria-label={t('item', { label })}
