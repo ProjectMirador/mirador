@@ -24,11 +24,13 @@ const ZeroWindows = () => {
   return (
     <Root>
       <Grid
-        alignItems="center"
         container
         style={{
           height: '100%',
           justifyContent: 'center',
+        }}
+        sx={{
+          alignItems: 'center',
         }}
       >
         <Grid size={12}>

@@ -11,7 +11,7 @@ import MiradorIcon from './icons/MiradorIcon';
 export function Branding({ variant = 'default', ...ContainerProps }) {
   const { t } = useTranslation();
   return (
-    <Stack alignItems="center" {...ContainerProps}>
+    <Stack sx={{ alignItems: 'center' }} {...ContainerProps}>
       {variant === 'wide' && (
         <div>
           <Typography align="center" component="p" variant="h3">

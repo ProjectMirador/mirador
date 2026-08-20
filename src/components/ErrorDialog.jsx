@@ -19,7 +19,13 @@ export function ErrorDialog({ error = null, removeError = () => {} }) {
     <Dialog aria-labelledby="error-dialog-title" id="error-dialog" onClose={() => removeError(error.id)} open={hasError}>
       <DialogTitle id="error-dialog-title">{t('errorDialogTitle')}</DialogTitle>
       <DialogContent>
-        <DialogContentText variant="body2" noWrap color="inherit">
+        <DialogContentText
+          variant="body2"
+          noWrap
+          sx={{
+            color: 'inherit',
+          }}
+        >
           {`${error.message}`}
         </DialogContentText>
         <DialogActions>
