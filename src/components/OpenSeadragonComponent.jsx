@@ -120,7 +120,7 @@ function OpenSeadragonComponent({
           isResettingViewport.current = false;
         };
 
-        viewer.addOnceHandler('tile-loaded', handleTilesLoaded);
+        viewer.addHandler('tile-loaded', handleTilesLoaded);
         return;
       }
     }
@@ -186,7 +186,7 @@ function OpenSeadragonComponent({
     viewerRef.current = viewer;
     setViewer(viewer);
 
-    viewer.addOnceHandler('tile-loaded', () => {
+    viewer.addHandler('tile-loaded', () => {
       initialViewportSet.current = false;
       setInitialBounds(viewer);
     });

@@ -5,18 +5,17 @@ import OpenSeadragonComponent from '../../../src/components/OpenSeadragonCompone
 vi.mock('openseadragon');
 
 describe('OpenSeadragonComponent', () => {
-  let addOnceHandler;
+  let addHandler;
   let fitBoundsWithConstraints;
 
   beforeEach(() => {
-    addOnceHandler = vi.fn();
+    addHandler = vi.fn();
     fitBoundsWithConstraints = vi.fn();
 
     // Mock methods used in the component
     OpenSeadragon.mockImplementation(function () {
       return {
-        addHandler: vi.fn(),
-        addOnceHandler,
+        addHandler,
         canvas: {},
         destroy: vi.fn(),
         innerTracker: {},
@@ -28,7 +27,7 @@ describe('OpenSeadragonComponent', () => {
           fitBoundsWithConstraints,
           zoomSpring: { target: { value: 1 } },
         },
-        world: { addOnceHandler },
+        world: { addHandler },
       };
     });
 
@@ -43,8 +42,8 @@ describe('OpenSeadragonComponent', () => {
   function invokeTileLoadedHandler() {
     // Extract and invoke the most recently registered 'tile-loaded' handler
     // to simulate OSD firing the event when tiles finish loading
-    // OSD provides addOnceHandler to register events on viewer
-    const { lastCall } = addOnceHandler.mock; // Vitest's lastCall
+    // OSD provides addHandler to register events on viewer
+    const { lastCall } = addHandler.mock; // Vitest's lastCall
     const [_eventName, tileLoadedHandler] = lastCall || [];
     if (tileLoadedHandler) tileLoadedHandler();
   }
@@ -62,7 +61,7 @@ describe('OpenSeadragonComponent', () => {
 
     // Clear mocks after initialization
     fitBoundsWithConstraints.mockClear();
-    addOnceHandler.mockClear();
+    addHandler.mockClear();
 
     return result;
   }
@@ -95,7 +94,7 @@ describe('OpenSeadragonComponent', () => {
     rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} />);
 
     // Should not register a new tile-loaded handler
-    expect(addOnceHandler).not.toHaveBeenCalled();
+    expect(addHandler).not.toHaveBeenCalled();
 
     // Should not call fitBoundsWithConstraints
     expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
