@@ -8,19 +8,29 @@ const layersSlice = createSlice({
   reducers: {
     updateLayers: {
       reducer(state, action) {
-        const { windowId, canvasId, layerData } = action.payload;
-        if (windowId === undefined || canvasId === undefined || layerData === undefined) {
+        const { windowId, canvasId, ...payload } = action.payload || {};
+        if (windowId === undefined || canvasId === undefined) {
           throw new Error(
-            'updateLayers expects action.payload to be { windowId, canvasId, layerData } — ' +
-              'dispatch the updateLayers(windowId, canvasId, layerData) action creator rather than constructing the action by hand.',
+            'updateLayers expects action.payload to include { windowId, canvasId } — ' +
+              'dispatch the updateLayers(windowId, canvasId, payload) action creator, or ' +
+              'updateLayers({ windowId, canvasId, ...payload }), rather than constructing the action by hand.',
           );
         }
+
         state[windowId] = {
           ...state[windowId],
-          [canvasId]: deepmerge((state[windowId] || {})[canvasId] || {}, layerData),
+          [canvasId]: deepmerge((state[windowId] || {})[canvasId] || {}, payload),
         };
       },
-      prepare: (windowId, canvasId, layerData) => ({ payload: { windowId, canvasId, layerData } }),
+      // Supports both the legacy positional call (windowId, canvasId, payload) and
+      // the RTK single payload object call ({ windowId, canvasId, ...payload }).
+      prepare: (windowIdOrPayload, legacyCanvasId, legacyPayload) => {
+        if (typeof windowIdOrPayload === 'object' && windowIdOrPayload !== null) {
+          return { payload: windowIdOrPayload };
+        }
+
+        return { payload: { ...legacyPayload, windowId: windowIdOrPayload, canvasId: legacyCanvasId } };
+      },
     },
   },
   extraReducers: (builder) => {
