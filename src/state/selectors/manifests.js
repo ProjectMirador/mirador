@@ -220,15 +220,15 @@ export const getManifestRelated = createSelector(
  * @returns {string|null}
  */
 export const getRequiredStatement = createSelector(
-  [getManifestoInstance],
-  (manifest) =>
+  [getLocale, getManifestoInstance],
+  (locale, manifest) =>
     manifest &&
     asArray(manifest.getRequiredStatement()).flatMap((labelValuePair) => {
-      const values = labelValuePair?.getValues() ?? [];
+      const values = labelValuePair?.getValues(locale) ?? [];
       if (!values.length) {
         return [];
       }
-      const labels = labelValuePair?.getLabels() ?? [];
+      const labels = labelValuePair?.getLabels(locale) ?? [];
       return Array.from({ length: Math.max(labels.length, values.length) }, (_, idx) => idx)
         .filter((idx) => values[idx])
         .map((idx) => ({
