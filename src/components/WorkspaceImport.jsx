@@ -62,8 +62,10 @@ export function WorkspaceImport({
             '& .MuiInputBase-input': { fontFamily: 'monospace' },
             width: '100%',
           }}
-          inputProps={{ autoFocus: 'autofocus' }}
           helperText={t('importWorkspaceHint')}
+          slotProps={{
+            htmlInput: { autoFocus: 'autofocus' },
+          }}
         />
       </ScrollIndicatedDialogContent>
       <DialogActions>

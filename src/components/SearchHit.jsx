@@ -145,12 +145,6 @@ export function SearchHit({
       >
         <ListItemText
           primary={header}
-          primaryTypographyProps={{
-            component: 'div',
-            sx: { marginBottom: 1 },
-            variant: 'subtitle2',
-          }}
-          secondaryTypographyProps={{ variant: 'body1' }}
           secondary={
             <>
               {hit && (
@@ -183,6 +177,15 @@ export function SearchHit({
               {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
             </>
           }
+          slotProps={{
+            primary: {
+              component: 'div',
+              sx: { marginBottom: 1 },
+              variant: 'subtitle2',
+            },
+
+            secondary: { variant: 'body1' },
+          }}
         />
       </Root>
     </ScrollTo>

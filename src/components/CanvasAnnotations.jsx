@@ -87,11 +87,13 @@ export function CanvasAnnotations({
               onMouseLeave={handleAnnotationBlur}
             >
               <ListItemText
-                primaryTypographyProps={{ variant: 'body2' }}
                 primary={<SanitizedHtml ruleSet={htmlSanitizationRuleSet} htmlString={annotation.content} />}
                 secondary={annotation.tags.map((tag) => (
                   <Chip component="span" size="small" variant="outlined" label={tag} id={tag} key={tag.toString()} />
                 ))}
+                slotProps={{
+                  primary: { variant: 'body2' },
+                }}
               />
             </MenuItem>
           </ScrollTo>
