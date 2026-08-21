@@ -10,7 +10,7 @@ describe('layers reducer', () => {
         layersReducer(
           {},
           {
-            payload: { canvasId, layerData: { some: 'data' }, windowId },
+            payload: { canvasId, some: 'data', windowId },
             type: ActionTypes.UPDATE_LAYERS,
           },
         ),
@@ -22,6 +22,7 @@ describe('layers reducer', () => {
         },
       });
     });
+
     it('does a deep merge', () => {
       const originalState = {
         baz: {
@@ -35,7 +36,7 @@ describe('layers reducer', () => {
 
       expect(
         layersReducer(originalState, {
-          payload: { canvasId, layerData: { some: 'data' }, windowId },
+          payload: { canvasId, some: 'data', windowId },
           type: ActionTypes.UPDATE_LAYERS,
         }),
       ).toEqual({
@@ -48,7 +49,8 @@ describe('layers reducer', () => {
         },
       });
     });
-    it('throws a useable error for a hand-constructed action using the old flat shape', () => {
+
+    it('throws a useable error for the pre-migration flat action shape', () => {
       expect(() =>
         layersReducer(
           {},
@@ -60,6 +62,10 @@ describe('layers reducer', () => {
           },
         ),
       ).toThrow(/updateLayers expects action.payload/);
+    });
+
+    it('throws a useable error when action.payload is missing entirely', () => {
+      expect(() => layersReducer({}, { type: ActionTypes.UPDATE_LAYERS })).toThrow(/updateLayers expects action.payload/);
     });
   });
 
