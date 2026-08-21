@@ -65,6 +65,7 @@ export function SidebarIndexTableOfContents({
   expandedNodeIds,
   containerRef,
   nodeIdToScrollTo,
+  currentLanguage = '',
 }) {
   /** */
   const handleNodeSelect = (event, itemId) => {
@@ -73,6 +74,13 @@ export function SidebarIndexTableOfContents({
     }
 
     selectTreeItem(itemId);
+  };
+
+  /** Get the correct label for the TOC item */
+  const tocIndexLabel = (node) => {
+    let label;
+    if (currentLanguage && node.data.getLabel) label = node.data.getLabel().getValue(currentLanguage);
+    return label || node.label;
   };
 
   /** */
@@ -117,7 +125,7 @@ export function SidebarIndexTableOfContents({
               display: visibleNodeIds.indexOf(node.id) !== -1 && 'inline',
             })}
           >
-            {node.label}
+            {tocIndexLabel(node)}
           </StyledVisibleNode>
         }
       >
@@ -149,6 +157,7 @@ export function SidebarIndexTableOfContents({
 
 SidebarIndexTableOfContents.propTypes = {
   containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]).isRequired,
+  currentLanguage: PropTypes.string,
   expandedNodeIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   expandNodes: PropTypes.func.isRequired,
   nodeIdToScrollTo: PropTypes.string.isRequired,
