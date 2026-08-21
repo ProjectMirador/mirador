@@ -1,7 +1,7 @@
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
-import { getManifestDescription, getManifestSummary, getManifestTitle, getManifestMetadata } from '../state/selectors';
+import { getManifestSummary, getManifestTitle, getManifestMetadata } from '../state/selectors';
 import { ManifestInfo } from '../components/ManifestInfo';
 
 /**
@@ -10,11 +10,6 @@ import { ManifestInfo } from '../components/ManifestInfo';
  * @private
  */
 const mapStateToProps = (state, { companionWindowId, manifestId, windowId }) => ({
-  manifestDescription: getManifestDescription(state, {
-    companionWindowId,
-    manifestId,
-    windowId,
-  }),
   manifestLabel: getManifestTitle(state, { companionWindowId, manifestId, windowId }),
   manifestMetadata: getManifestMetadata(state, { companionWindowId, manifestId, windowId }),
   manifestSummary: getManifestSummary(state, {
