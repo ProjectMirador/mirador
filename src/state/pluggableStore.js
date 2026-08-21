@@ -1,5 +1,5 @@
 import deepmerge from 'deepmerge';
-import createStore from './createStore';
+import createStore from './store';
 import { importConfig } from './actions/config';
 import {
   filterValidPlugins,
