@@ -34,6 +34,16 @@ describe('ThumbnailNavigation', () => {
 
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
+
+  it('restores focus without scrolling the page into view', () => {
+    const focusSpy = vi.spyOn(HTMLElement.prototype, 'focus');
+
+    render(<Subject />);
+
+    expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+
+    focusSpy.mockRestore();
+  });
   it('renders containers based off of number of canvases', () => {
     render(<Subject />);
 

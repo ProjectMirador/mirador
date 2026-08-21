@@ -63,7 +63,10 @@ export function ThumbnailNavigation({
 
   useEffect(() => {
     if (paperRef.current && document.activeElement !== paperRef.current) {
-      paperRef.current.focus();
+      // This effect runs on mount too (not just keyboard navigation)
+      // Without preventScroll, the browser scrolls this element into view
+      // Inside an iframe embed, that scrolls the whole outer page down to the viewer
+      paperRef.current.focus({ preventScroll: true });
     }
   }, [canvasIndex]);
 
