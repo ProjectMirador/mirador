@@ -11,5 +11,5 @@ export * from './annotations';
 export * from './auth';
 export * from './elasticLayout';
 export * from './search';
-export * from './layersSlice';
 export * from './catalog';
+export { layersReducer } from '../slices';
