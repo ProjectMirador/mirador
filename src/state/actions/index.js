@@ -15,5 +15,8 @@ export * from './auth';
 export * from './elasticLayout';
 export * from './search';
 export * from './catalog';
-export { updateLayers } from '../reducers/layersSlice';
+
+// migrated to slices
+export * from './layers';
+
 export { default as ActionTypes } from './action-types';
