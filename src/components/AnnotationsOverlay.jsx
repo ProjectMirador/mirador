@@ -89,6 +89,7 @@ export function AnnotationsOverlay({
           const viewportCanvas = viewer.world.getItemAt(osdCanvasIndex);
           if (!viewportCanvas) return;
           const offset = canvasWorld.offsetByCanvas(resource.targetId);
+          console.log('annotationstocontext')
           const zoomRatio = viewportCanvas.viewportToImageZoom(viewer.viewport.getZoom(true));
           const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
             hovered: hoveredAnnotationIds.includes(resource.id),
@@ -103,6 +104,7 @@ export function AnnotationsOverlay({
             resource,
             selected: selectedAnnotationId === resource.id,
             zoomRatio,
+            canvasId: resource?.targetId,
           });
           canvasAnnotationDisplay.toContext(context);
         });

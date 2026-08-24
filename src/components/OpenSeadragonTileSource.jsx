@@ -6,6 +6,7 @@ import FailedImageContext from '../contexts/FailedImageContext';
 
 /** OSD tile source shim that adds + updates its tile source data */
 export default function OpenSeadragonTileSource({
+  canvasId = '',
   index = undefined,
   opacity = undefined,
   fitBounds = undefined,
@@ -65,7 +66,11 @@ export default function OpenSeadragonTileSource({
         opacity,
         fitBounds: fitBounds ? new Openseadragon.Rect(...fitBounds) : undefined,
 
-        success: (event) => resolve(event),
+        success: (event) => {
+          var tiledImage = event.item;
+          tiledImage.canvasId = canvasId;
+          resolve(event)
+        },
 
         error: (event) => {
           const imageUrl = url || (typeof tileSource === 'string' ? tileSource : tileSource?.['@id']);
@@ -97,6 +102,7 @@ export default function OpenSeadragonTileSource({
 }
 
 OpenSeadragonTileSource.propTypes = {
+  canvasId: PropTypes.string,
   fitBounds: PropTypes.arrayOf(PropTypes.number),
   index: PropTypes.number,
   opacity: PropTypes.number,

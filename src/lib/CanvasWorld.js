@@ -83,8 +83,7 @@ export default class CanvasWorld {
    * respective to the world.
    */
   contentResourceToWorldCoordinates(contentResource) {
-    const miradorCanvasIndex = this.canvases.findIndex((c) => c.imageResources.find((r) => r.id === contentResource.id));
-    const canvas = this.canvases[miradorCanvasIndex];
+    const canvas = this.contentResourceToCanvas(contentResource);
     if (!canvas) return [];
 
     const [x, y, w, h] = this.canvasToWorldCoordinates(canvas.id);
@@ -94,6 +93,22 @@ export default class CanvasWorld {
       return [x + fragmentOffset[0], y + fragmentOffset[1], fragmentOffset[2], fragmentOffset[3]];
     }
     return [x, y, w, h];
+  }
+
+  /**
+   * contentResourceToCanvasId - returns the canvasId for an Image
+   */
+
+  contentResourceToCanvasId(contentResource) {
+    return this.contentResourceToCanvas(contentResource).id;
+  }
+
+  /**
+   * contentResourceToCanvas - returns the canvas for an Image
+   */
+  contentResourceToCanvas(contentResource) {
+    const miradorCanvasIndex = this.canvases.findIndex((c) => c.imageResources.find((r) => r.id === contentResource.id));
+    return this.canvases[miradorCanvasIndex];
   }
 
   /** */

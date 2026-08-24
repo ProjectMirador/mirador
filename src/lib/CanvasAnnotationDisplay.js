@@ -6,18 +6,22 @@ import { buildPath2D } from '../lib/svgShapesToPath';
 
 export default class CanvasAnnotationDisplay {
   /** */
-  constructor({ resource, palette, zoomRatio, offset, selected, hovered }) {
+  constructor({ resource, palette, zoomRatio, offset, selected, hovered, canvasId }) {
     this.resource = resource;
     this.palette = palette;
     this.zoomRatio = zoomRatio;
     this.offset = offset;
     this.selected = selected;
     this.hovered = hovered;
+    this.canvasId = canvasId;
   }
 
   /** */
   toContext(context) {
     this.context = context;
+    console.log('this.canvasId', this.canvasId)
+    this.context.canvasId = this.canvasId;
+    console.log(this.context)
     if (this.resource.svgSelector) {
       this.svgContext();
     } else if (this.resource.fragmentSelector) {
