@@ -81,7 +81,6 @@ export function AnnotationsOverlay({
    */
   const annotationsToContext = useCallback(
     (renderedAnnotations, currentPalette) => {
-      const context = osdCanvasOverlay.context2d;
       renderedAnnotations.forEach((annotation) => {
         annotation.resources.forEach((resource) => {
           let viewportCanvas;
@@ -111,7 +110,7 @@ export function AnnotationsOverlay({
             zoomRatio,
             viewportCanvas,
           });
-          canvasAnnotationDisplay.toContext(context);
+          canvasAnnotationDisplay.toContext();
         });
       });
     },
