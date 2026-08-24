@@ -118,6 +118,7 @@ export function OpenSeadragonViewer({
         return (
           <TileSource
             key={infoResponse.id}
+            canvasId={canvasWorld.contentResourceToCanvasId(contentResource)}
             tileSource={infoResponse.json}
             fitBounds={fitBounds}
             index={index}

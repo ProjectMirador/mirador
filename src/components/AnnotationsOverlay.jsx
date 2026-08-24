@@ -103,6 +103,7 @@ export function AnnotationsOverlay({
             resource,
             selected: selectedAnnotationId === resource.id,
             zoomRatio,
+            canvasId: resource?.targetId,
           });
           canvasAnnotationDisplay.toContext(context);
         });

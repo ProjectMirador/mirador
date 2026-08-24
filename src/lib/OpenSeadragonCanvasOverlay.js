@@ -1,5 +1,4 @@
 import OpenSeadragon from 'openseadragon';
-
 /**
  * OpenSeadragonCanvasOverlay - adapted from https://github.com/altert/OpenSeadragonCanvasOverlay
  * used rather than an "onRedraw" function we tap into our own method. Existing
@@ -80,14 +79,26 @@ export default class OpenSeadragonCanvasOverlay {
    */
   canvasUpdate(update) {
     if (!this.context2d) return;
+    update(); // if you don't run update this.context2d.canvasId is undefined.
+    let image;
+    // get the correct image from the OSD viewer
+    const count = this.viewer.world.getItemCount();
+    for (let i = 0; i < count; i++) {
+      const item = this.viewer.world.getItemAt(i);
+      if (item.canvasId === this.context2d.canvasId) {
+        image = item;
+        break;
+      }
+    }
 
+    if (!image) return;
     const viewportZoom = this.viewer.viewport.getZoom(true);
-    const image1 = this.viewer.world.getItemAt(0);
-    if (!image1) return;
-    const zoom = image1.viewportToImageZoom(viewportZoom);
+    const zoom = image.viewportToImageZoom(viewportZoom);
 
-    const x = ((this.viewportOrigin.x / this.imgWidth - this.viewportOrigin.x) / this.viewportWidth) * this.containerWidth;
-    const y = ((this.viewportOrigin.y / this.imgHeight - this.viewportOrigin.y) / this.viewportHeight) * this.containerHeight;
+    // Mostly used for scroll and book, we need to know where the start point for an image is.
+    // i.e. in a book view the start point for page 2 == width of page 1. OSD will get that with information with getBounds()
+    const imageBounds = image.getBounds();
+    const { x, y } = image.imageToViewerElementCoordinates(new OpenSeadragon.Point(-imageBounds.x, 0));
 
     if (this.clearBeforeRedraw) this.clear();
     this.context2d.translate(x, y);
