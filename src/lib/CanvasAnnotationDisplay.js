@@ -2,27 +2,34 @@
  * CanvasAnnotationDisplay - class used to display a SVG and fragment based
  * annotations.
  */
-import { buildPath2D } from '../lib/svgShapesToPath';
+import OpenSeadragon from 'openseadragon';
+
+export function updateSVGPalette(currentPalette, svgElement, svgVisible = false, override = true) {
+  svgElement.style.opacity = svgVisible ? '1' : '0';
+  Object.keys(currentPalette).forEach((key) => {
+    svgElement.querySelectorAll('*').forEach((element) => {
+      if ((!element.style[key] && !element.getAttribute(key)) || override) {
+        element.setAttribute(key, currentPalette[key]);
+      }
+    });
+  });
+}
 
 export default class CanvasAnnotationDisplay {
   /** */
-  constructor({ resource, palette, zoomRatio, offset, selected, hovered, viewportCanvas }) {
+  constructor({ resource, palette, viewportCanvas, viewer }) {
     this.resource = resource;
     this.palette = palette;
-    this.zoomRatio = zoomRatio;
-    this.offset = offset;
-    this.selected = selected;
-    this.hovered = hovered;
     this.viewportCanvas = viewportCanvas;
+    this.viewer = viewer;
   }
 
   /** */
-  toContext(context) {
-    this.context = context;
+  toContext() {
     if (this.resource.svgSelector) {
-      this.svgContext();
+      return this.svgContext();
     } else if (this.resource.fragmentSelector) {
-      this.fragmentContext();
+      return this.fragmentContext();
     }
   }
 
@@ -31,118 +38,71 @@ export default class CanvasAnnotationDisplay {
     return this.resource.svgSelector.value;
   }
 
-  parseOpacity(value) {
-    if (typeof value === 'string' && value.trim().endsWith('%')) {
-      return parseFloat(value) / 100;
+  svgOverlay(element) {
+    const svgElement = element.cloneNode(true);
+    const overlayId = this.resource.resource.id;
+    const existing = this.viewer.getOverlayById(overlayId);
+    if (existing) {
+      return;
     }
-    return parseFloat(value);
-  }
+    
+    updateSVGPalette(this.palette.default, svgElement, false);
+    svgElement.id = overlayId;
 
+    const imageLocation = this.fragmentLocation(svgElement);
+    svgElement.setAttribute('viewBox', imageLocation.join(' '));
+    
+    const { x, y, width, height } = this.viewportCanvas.imageToViewportRectangle(...imageLocation);
+
+    const overlay = this.viewer.addOverlay({
+      element: svgElement,
+      id: overlayId,
+      location: new OpenSeadragon.Rect(x, y, width, height),
+    });
+
+    return svgElement;
+  }
   /** */
   svgContext() {
-    let currentPalette;
-    if (this.hovered) {
-      currentPalette = this.palette.hovered;
-    } else if (this.selected) {
-      currentPalette = this.palette.selected;
-    } else {
-      currentPalette = this.palette.default;
+    return this.svgOverlay(this.svgElement);
+  }
+
+  svgBBox(originalSVG) {
+    const svg = originalSVG.cloneNode(true);
+    svg.style.position = 'absolute';
+    svg.style.visibility = 'hidden'; // or opacity: 0
+    svg.id = 'getBounds';
+    document.body.appendChild(svg);
+
+    const { x, y, width, height } = document.querySelector('#getBounds').getBBox();
+
+    document.body.removeChild(svg);
+    return [x, y, width, height];
+  }
+
+  fragmentLocation(svgpath = undefined) {
+    const fragment = this.resource.fragmentSelector;
+    if (fragment) {
+      return fragment;
     }
-
-    if (currentPalette.globalAlpha === 0) return;
-
-    [...this.svgPaths].forEach((element) => {
-      /**
-       *  Note: Path2D is not supported in IE11.
-       *  TODO: Support multi canvas offset
-       *  One example: https://developer.mozilla.org/en-US/docs/Web/API/Path2D/addPath
-       */
-      this.context.save();
-      this.context.translate(this.offset.x, this.offset.y);
-      const p = buildPath2D(element);
-
-      // Setup styling from SVG -> Canvas
-      this.context.strokeStyle = this.color;
-      if (element.getAttribute('stroke-dasharray')) {
-        this.context.setLineDash(element.getAttribute('stroke-dasharray').split(','));
-      }
-      const svgToCanvasMap = {
-        fill: 'fillStyle',
-        stroke: 'strokeStyle',
-        'stroke-dashoffset': 'lineDashOffset',
-        'stroke-linecap': 'lineCap',
-        'stroke-linejoin': 'lineJoin',
-        'stroke-miterlimit': 'miterlimit',
-        'stroke-width': 'lineWidth',
-      };
-      Object.keys(svgToCanvasMap).forEach((key) => {
-        if (element.getAttribute(key)) {
-          this.context[svgToCanvasMap[key]] = element.getAttribute(key);
-        }
-      });
-
-      // Resize the stroke based off of the zoomRatio (currentZoom / maxZoom)
-      this.context.lineWidth /= this.zoomRatio;
-
-      // Reset the color if it is selected or hovered on
-      if (this.selected || this.hovered) {
-        this.context.strokeStyle = currentPalette.strokeStyle || currentPalette.fillStyle;
-      }
-
-      this.context.globalAlpha = currentPalette.globalAlpha;
-      // Set the globalAlpha for fill, draw the fill and then update the globalAlpha for stroke
-      if (element.getAttribute('fill') && element.getAttribute('fill') !== 'none') {
-        if (element.getAttribute('fill-opacity')) {
-          this.context.globalAlpha = currentPalette.globalAlpha * this.parseOpacity(element.getAttribute('fill-opacity'));
-        }
-        this.context.fill(p);
-      }
-
-      if (element.getAttribute('stroke-opacity')) {
-        this.context.globalAlpha = currentPalette.globalAlpha * this.parseOpacity(element.getAttribute('stroke-opacity'));
-      } else {
-        this.context.globalAlpha = currentPalette.globalAlpha;
-      }
-      this.context.stroke(p);
-      this.context.restore();
-    });
+    if (svgpath) {
+      return this.svgBBox(svgpath);
+    }
+    return [0, 0, 0, 0];
   }
 
   /** */
   fragmentContext() {
     const fragment = this.resource.fragmentSelector;
-    const { x, y, width, height } = this.viewportCanvas.imageToViewportRectangle(...fragment);
-
-    let currentPalette;
-    if (this.selected) {
-      currentPalette = this.palette.selected;
-    } else if (this.hovered) {
-      currentPalette = this.palette.hovered;
-    } else {
-      currentPalette = this.palette.default;
-    }
-
-    this.context.save();
-    Object.keys(currentPalette).forEach((key) => {
-      this.context[key] = currentPalette[key];
-    });
-
-    if (currentPalette.globalAlpha === 0) return;
-
-    if (currentPalette.fillStyle) {
-      this.context.fillRect(x, y, width, height);
-    } else {
-      this.context.lineWidth = 1 / this.zoomRatio;
-      this.context.strokeRect(x, y, width, height);
-    }
-
-    this.context.restore();
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.innerHTML = `<rect x="${fragment[0]}" y="${fragment[1]}" width=${fragment[2]}" height="${fragment[3]}"/>`;
+    return this.svgOverlay(svg);
   }
 
   /** */
-  get svgPaths() {
+  get svgElement() {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(this.svgString, 'text/xml');
-    return Array.from(xmlDoc.querySelectorAll('circle, ellipse, rect, line, polygon, polyline, path'));
+    return xmlDoc.querySelector('svg');
   }
 }
