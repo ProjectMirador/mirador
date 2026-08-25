@@ -291,10 +291,17 @@ export const getManifestTitle = createSelector(
  * @param {string} props.windowId
  * @return {string|null}
  */
-export const getManifestSummary = createSelector(
+const getManifestSummary = createSelector(
   [getLocale, getManifestoInstance],
   (locale, manifest) => manifest && manifest.getSummary().getValue(locale),
 );
+
+export { getManifestSummary };
+
+/**
+ * @deprecated Use `getManifestSummary` instead
+ */
+export const getManifestDescription = getManifestSummary;
 
 /**
  * Return manifest title.
