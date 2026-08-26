@@ -30,6 +30,7 @@ describe('OpenSeadragonCanvasOverlay', () => {
           getZoom: vi.fn(() => 0.75),
         },
         world: {
+          getItemCount: vi.fn().mockReturnValue(1),
           getItemAt: vi.fn(() => ({
             source: {
               dimensions: {
@@ -37,7 +38,6 @@ describe('OpenSeadragonCanvasOverlay', () => {
                 y: 2000,
               },
             },
-            viewportToImageZoom: vi.fn(() => 0.075),
           })),
         },
       };
@@ -131,8 +131,8 @@ describe('OpenSeadragonCanvasOverlay', () => {
       canvasOverlay.resize();
       canvasOverlay.canvasUpdate(update);
       expect(update).toHaveBeenCalledTimes(1);
-      expect(scale).toHaveBeenCalledWith(0.075, 0.075);
-      expect(translate).toHaveBeenCalledWith(-39.96, -26.65333333333333);
+      expect(scale).toHaveBeenCalledWith(1, 1);
+      expect(translate).toHaveBeenCalledWith(-40, -80);
       expect(setTransform).toHaveBeenCalledWith(1, 0, 0, 1, 0, 0);
     });
   });
