@@ -15,7 +15,6 @@ export { default as MiradorCanvas } from './MiradorCanvas';
 export { default as MiradorManifest } from './MiradorManifest';
 export { default as MiradorViewer } from './MiradorViewer';
 export { default as MosaicLayout } from './MosaicLayout';
-export { default as OpenSeadragonCanvasOverlay } from './OpenSeadragonCanvasOverlay';
 
 export { default as TruncatedHit } from './TruncatedHit';
 export { default as asArray } from './asArray';

@@ -70,14 +70,14 @@ export default {
       annotations: {
         chipBackground: '#e0e0e0',
         hidden: { globalAlpha: 0 },
-        default: { strokeStyle: '#00BFFF', globalAlpha: 1 },
-        hovered: { strokeStyle: '#BF00FF', globalAlpha: 1 },
-        selected: { strokeStyle: '#ffff00', globalAlpha: 1 },
+        default: { stroke: '#00BFFF', 'stroke-width': 2, fill: 'none', 'stroke-opacity': 1 },
+        hovered: { stroke: '#BF00FF', 'stroke-width': 2, fill: 'none', 'stroke-opacity': 1 },
+        selected: { stroke: '#ffff00', 'stroke-width': 2, fill: 'none', 'stroke-opacity': 1 },
       },
       search: {
-        default: { fillStyle: '#00BFFF', globalAlpha: 0.3 },
-        hovered: { fillStyle: '#00FFFF', globalAlpha: 0.3 },
-        selected: { fillStyle: '#ffff00', globalAlpha: 0.3 },
+        default: { fill: '#00BFFF', stroke: 'none', 'fill-opacity': 0.3 },
+        hovered: { fill: '#00FFFF', stroke: 'none', 'fill-opacity': 0.3 },
+        selected: { fill: '#ffff00', 'fill-opacity': 0.3 },
       },
     },
     typography: {
