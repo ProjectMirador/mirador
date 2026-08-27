@@ -81,7 +81,7 @@ export function* setCollectionPath({ manifestId, windowId }) {
 }
 
 /** */
-export function* fetchCollectionManifests(action) {
+export function* fetchCollectionManifestsOnWindowUpdate(action) {
   const { collectionPath } = action.payload;
   if (!collectionPath) return;
 
@@ -281,10 +281,10 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.ADD_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchWindowManifest),
     takeEvery(ActionTypes.UPDATE_WINDOW, setCanvasOnNewSequence),
-    takeEvery(ActionTypes.UPDATE_WINDOW, fetchCollectionManifests),
+    takeEvery(ActionTypes.UPDATE_WINDOW, fetchCollectionManifestsOnWindowUpdate),
     takeEvery(ActionTypes.SET_CANVAS, setCurrentAnnotationsOnCurrentCanvas),
     takeEvery(ActionTypes.SET_CANVAS, fetchInfoResponses),
-    takeEvery(ActionTypes.UPDATE_COMPANION_WINDOW, fetchCollectionManifests),
+    takeEvery(ActionTypes.UPDATE_COMPANION_WINDOW, fetchCollectionManifestsOnWindowUpdate),
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
     takeEvery(ActionTypes.RECEIVE_SEARCH, setCanvasOfFirstSearchResult),
     takeEvery(ActionTypes.SELECT_ANNOTATION, setCanvasforSelectedAnnotation),

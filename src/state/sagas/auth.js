@@ -11,7 +11,7 @@ import {
   getAccessTokens,
   getMiradorCanvasWrapper,
 } from '../selectors';
-import { fetchInfoResponse } from './iiif';
+import { fetchInfoResponseSaga } from './iiif';
 
 /** */
 export function* refetchInfoResponsesOnLogout({ tokenServiceId }) {
@@ -52,7 +52,7 @@ export function* refetchInfoResponses({ serviceId }) {
   yield all(
     obsoleteInfoResponses.map(({ id: infoId }) => {
       if (visibleImageApiIds.includes(infoId)) {
-        return call(fetchInfoResponse, { infoId });
+        return call(fetchInfoResponseSaga, { infoId });
       }
       return put({ infoId, type: ActionTypes.REMOVE_INFO_RESPONSE });
     }),
