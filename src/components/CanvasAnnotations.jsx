@@ -14,6 +14,7 @@ import { ScrollTo } from './ScrollTo';
  */
 export function CanvasAnnotations({
   annotations = [],
+  currentLanguage = '',
   index,
   label,
   selectedAnnotationId = undefined,
@@ -50,6 +51,29 @@ export function CanvasAnnotations({
   const handleAnnotationBlur = useCallback(() => {
     hoverAnnotation(windowId, []);
   }, [hoverAnnotation, windowId]);
+
+  const annotationTags = useCallback(
+    (tagList) => {
+      return tagList.flatMap((tag) => tagData(tag, currentLanguage));
+    },
+    [currentLanguage],
+  );
+
+  const tagData = (originalTag, language) => {
+    const tag = originalTag[language] || originalTag;
+    const allTags = [];
+    if (typeof tag === 'object') {
+      Object.keys(tag).forEach((tagKey) => {
+        const rawValue = tag[tagKey];
+        const value =
+          typeof rawValue === 'object' && rawValue !== null ? (rawValue[language] ?? Object.values(rawValue)[0]) : rawValue;
+        allTags.push({ label: value, id: tagKey, key: tagKey });
+      });
+    } else {
+      allTags.push({ label: tag, id: tag, key: tag });
+    }
+    return allTags;
+  };
 
   if (annotations.length === 0) return null;
 
@@ -88,8 +112,15 @@ export function CanvasAnnotations({
             >
               <ListItemText
                 primary={<SanitizedHtml ruleSet={htmlSanitizationRuleSet} htmlString={annotation.content} />}
-                secondary={annotation.tags.map((tag) => (
-                  <Chip component="span" size="small" variant="outlined" label={tag} id={tag} key={tag.toString()} />
+                secondary={annotationTags(annotation.tags).map((tag) => (
+                  <Chip
+                    component="span"
+                    size="small"
+                    variant="outlined"
+                    label={tag.label}
+                    id={tag.id}
+                    key={tag.key?.toString()}
+                  />
                 ))}
                 slotProps={{
                   primary: { variant: 'body2' },
@@ -111,6 +142,7 @@ CanvasAnnotations.propTypes = {
     }),
   ),
   containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]),
+  currentLanguage: PropTypes.string,
   deselectAnnotation: PropTypes.func.isRequired,
   hoverAnnotation: PropTypes.func.isRequired,
   hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),

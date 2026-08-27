@@ -51,12 +51,16 @@ export default class AnnotationItem {
     return this.body;
   }
 
+  bodyValue(tag) {
+    return tag.properties || tag.value || tag;
+  }
+
   /** */
   get tags() {
     if (this.isOnlyTag()) {
-      return this.body.map((r) => r.value);
+      return this.body.map((r) => this.bodyValue(r));
     }
-    return this.body.filter((r) => r.purpose === 'tagging').map((r) => r.value);
+    return this.body.filter((r) => r.purpose === 'tagging').map((r) => this.bodyValue(r));
   }
 
   /** */
@@ -69,7 +73,7 @@ export default class AnnotationItem {
     if (this.isOnlyTag()) return null;
     return this.body
       .filter((r) => r.purpose !== 'tagging')
-      .map((r) => r.value)
+      .map((r) => this.bodyValue(r))
       .join(' ');
   }
 

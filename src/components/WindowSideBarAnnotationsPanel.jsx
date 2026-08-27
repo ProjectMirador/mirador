@@ -32,6 +32,7 @@ export function WindowSideBarAnnotationsPanel({ annotationCount, canvasIds = [],
       {canvasIds.map((canvasId, index) => (
         <CanvasAnnotations
           canvasId={canvasId}
+          companionWindowId={id}
           containerRef={containerRef}
           key={canvasId}
           index={index}
