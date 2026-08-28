@@ -71,9 +71,9 @@ export function SearchHit({
   const { t } = useTranslation();
   useEffect(() => {
     if (selected) {
+      // eslint-disable-next-line react-hooks/immutability
       announceHit();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
   /** */

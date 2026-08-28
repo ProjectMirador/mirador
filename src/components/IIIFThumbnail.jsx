@@ -44,6 +44,7 @@ const LazyLoadedImage = ({
   useEffect(() => {
     if (loaded || !inView) return;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoaded(true);
   }, [inView, loaded]);
 
