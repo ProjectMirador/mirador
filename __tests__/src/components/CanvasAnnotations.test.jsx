@@ -44,6 +44,23 @@ describe('CanvasAnnotations', () => {
     expect(screen.getByText('Item: [A Canvas Label]')).toBeInTheDocument();
   });
 
+  it('renders without crashing when a tag is undefined', () => {
+    expect(() =>
+      createWrapper({
+        annotations: [
+          {
+            content: 'First Annotation',
+            id: 'abc123',
+            tags: ['abc123', undefined],
+            targetId: 'example.com/iiif/12345',
+          },
+        ],
+      }),
+    ).not.toThrow();
+
+    expect(screen.getByText('abc123', { container: 'span.MuiChip-label' })).toBeInTheDocument();
+  });
+
   it('renders a heading with the appropriate context based on index and totalSize', () => {
     wrapper = createWrapper({ annotations, index: 1, totalSize: 2 });
     expect(screen.getByText('Right: [A Canvas Label]')).toBeInTheDocument();
