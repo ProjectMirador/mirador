@@ -1,5 +1,6 @@
 import AnnotationItem from '../../../src/lib/AnnotationItem';
 import svgAnnotations from '../../fixtures/version-3/svg-annotations.json';
+import { Utils } from 'manifesto.js';
 
 describe('AnnotationItem', () => {
   describe('id', () => {
@@ -139,6 +140,44 @@ describe('AnnotationItem', () => {
           target: { selector: [{ type: 'FragmentSelector', value: '#xywh=10,10,100,200' }] },
         }).fragmentSelector,
       ).toEqual([10, 10, 100, 200]);
+    });
+    it('percentage selector', () => {
+      const canvas = Utils.parseManifest({
+        '@context': 'http://iiif.io/api/presentation/3/context.json',
+        id: 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/manifest.json',
+        type: 'Manifest',
+        label: {
+          en: ['Simplest Image Example (IIIF Presentation v3)'],
+        },
+        items: [
+          {
+            id: 'https://iiif.io/api/cookbook/recipe/0001-mvm-image/canvas/p1',
+            type: 'Canvas',
+            height: 1800,
+            width: 1200,
+            items: [
+              {
+                id: 'http://iiif.io/api/presentation/3.0/example/fixtures/canvas/24/c1.json',
+                type: 'AnnotationPage',
+                items: [
+                  {
+                    body: {
+                      height: 10,
+                      width: 20,
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+      expect(
+        new AnnotationItem(
+          { target: 'http://iiif.io/api/presentation/3.0/example/fixtures/canvas/24/c1.json#xywh=percent:10,10,100,200' },
+          canvas.getSequences()[0].getCanvases()[0],
+        ).fragmentSelector,
+      ).toEqual([120, 180, 1200, 3600]);
     });
     it('url without a fragment', () => {
       expect(new AnnotationItem({ target: 'www.example.com' }).fragmentSelector).toEqual(null);
