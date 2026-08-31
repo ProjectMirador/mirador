@@ -18,7 +18,7 @@ export function* importState(action) {
 }
 
 /** Add windows from the imported config */
-export function* importConfig({ config: { thumbnailNavigation, windows } }) {
+export function* importConfigSaga({ config: { thumbnailNavigation, windows } }) {
   if (!windows || windows.length === 0) return;
 
   const thunks = yield all(
@@ -41,7 +41,7 @@ export function* importConfig({ config: { thumbnailNavigation, windows } }) {
 }
 
 /** */
-export function* fetchCollectionManifests(action) {
+export function* fetchCollectionManifestsForDialog(action) {
   const { dialogCollectionPath, manifestId } = action;
   yield call(fetchManifests, manifestId, ...dialogCollectionPath);
 }
@@ -50,7 +50,7 @@ export function* fetchCollectionManifests(action) {
 export default function* appSaga() {
   yield all([
     takeEvery(ActionTypes.IMPORT_MIRADOR_STATE, importState),
-    takeEvery(ActionTypes.IMPORT_CONFIG, importConfig),
-    takeEvery(ActionTypes.SHOW_COLLECTION_DIALOG, fetchCollectionManifests),
+    takeEvery(ActionTypes.IMPORT_CONFIG, importConfigSaga),
+    takeEvery(ActionTypes.SHOW_COLLECTION_DIALOG, fetchCollectionManifestsForDialog),
   ]);
 }

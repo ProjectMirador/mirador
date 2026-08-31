@@ -129,7 +129,7 @@ function* fetchIiifResourceWithAuth(url, iiifResource, options, { degraded, fail
 }
 
 /** */
-export function* fetchManifest({ manifestId }) {
+export function* fetchManifestSaga({ manifestId }) {
   const callbacks = {
     failure: ({ error, json, response }) => receiveManifestFailure(manifestId, typeof error === 'object' ? String(error) : error),
     success: ({ json, response }) => receiveManifest(manifestId, json),
@@ -162,7 +162,7 @@ function* getAccessTokenService(resource) {
 }
 
 /** @private */
-export function* fetchInfoResponse({ imageResource, infoId, windowId }) {
+export function* fetchInfoResponseSaga({ imageResource, infoId, windowId }) {
   let iiifResource = imageResource;
   if (!iiifResource) {
     iiifResource = yield select(selectInfoResponse, { infoId });
@@ -208,7 +208,7 @@ export function* fetchResourceManifest({ manifestId, manifestJson }) {
   if (!manifestId) return;
 
   const manifests = yield select(getManifests) || {};
-  if (!manifests[manifestId]) yield* fetchManifest({ manifestId });
+  if (!manifests[manifestId]) yield* fetchManifestSaga({ manifestId });
 }
 
 /** */
@@ -217,15 +217,15 @@ export function* fetchManifests(...manifestIds) {
 
   for (let i = 0; i < manifestIds.length; i += 1) {
     const manifestId = manifestIds[i];
-    if (!manifests[manifestId]) yield call(fetchManifest, { manifestId });
+    if (!manifests[manifestId]) yield call(fetchManifestSaga, { manifestId });
   }
 }
 
 /** */
 export default function* iiifSaga() {
   yield all([
-    takeEvery(ActionTypes.REQUEST_MANIFEST, fetchManifest),
-    takeEvery(ActionTypes.REQUEST_INFO_RESPONSE, fetchInfoResponse),
+    takeEvery(ActionTypes.REQUEST_MANIFEST, fetchManifestSaga),
+    takeEvery(ActionTypes.REQUEST_INFO_RESPONSE, fetchInfoResponseSaga),
     takeEvery(ActionTypes.REQUEST_SEARCH, fetchSearchResponse),
     takeEvery(ActionTypes.REQUEST_ANNOTATION, fetchAnnotation),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),

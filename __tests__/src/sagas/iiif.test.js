@@ -2,22 +2,22 @@ import { select } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import {
   fetchAnnotation,
-  fetchManifest,
+  fetchManifestSaga,
   fetchSearchResponse,
-  fetchInfoResponse,
+  fetchInfoResponseSaga,
   fetchResourceManifest,
 } from '../../../src/state/sagas/iiif';
 import { getConfig, getManifests, selectInfoResponse, getAccessTokens, getRequestsConfig } from '../../../src/state/selectors';
 
 describe('IIIF sagas', () => {
-  describe('fetchManifest', () => {
+  describe('fetchManifestSaga', () => {
     it('fetches a IIIF manifest', () => {
       fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
       const action = {
         manifestId: 'manifestId',
       };
 
-      return expectSaga(fetchManifest, action)
+      return expectSaga(fetchManifestSaga, action)
         .provide([[select(getConfig), {}]])
         .put({
           manifestId: 'manifestId',
@@ -33,7 +33,7 @@ describe('IIIF sagas', () => {
         manifestId: 'manifestId',
       };
 
-      return expectSaga(fetchManifest, action)
+      return expectSaga(fetchManifestSaga, action)
         .provide([[select(getConfig), {}]])
         .put.actionType('mirador/RECEIVE_MANIFEST_FAILURE')
         .run();
@@ -49,7 +49,7 @@ describe('IIIF sagas', () => {
         manifestId: 'https://example.org/manifestId',
       };
 
-      return expectSaga(fetchManifest, action)
+      return expectSaga(fetchManifestSaga, action)
         .provide([[select(getConfig), {}]])
         .put({
           error: '404 Not Found: https://example.org/manifestId',
@@ -65,7 +65,7 @@ describe('IIIF sagas', () => {
         manifestId: 'manifestId',
       };
 
-      return expectSaga(fetchManifest, action)
+      return expectSaga(fetchManifestSaga, action)
         .provide([
           [
             select(getRequestsConfig),
@@ -88,7 +88,7 @@ describe('IIIF sagas', () => {
         manifestId: 'manifestId',
       };
 
-      return expectSaga(fetchManifest, action)
+      return expectSaga(fetchManifestSaga, action)
         .provide([
           [
             select(getRequestsConfig),
@@ -111,7 +111,7 @@ describe('IIIF sagas', () => {
     });
   });
 
-  describe('fetchInfoResponse', () => {
+  describe('fetchInfoResponseSaga', () => {
     it('fetches a IIIF info response', () => {
       fetch.mockResponseOnce(JSON.stringify({ id: 'http://server/prefix/infoId' }));
       const action = {
@@ -119,7 +119,7 @@ describe('IIIF sagas', () => {
         infoId: 'http://server/prefix/infoId',
       };
 
-      return expectSaga(fetchInfoResponse, action)
+      return expectSaga(fetchInfoResponseSaga, action)
         .put({
           infoId: 'http://server/prefix/infoId',
           infoJson: { id: 'http://server/prefix/infoId' },
@@ -152,7 +152,7 @@ describe('IIIF sagas', () => {
         ],
       };
 
-      return expectSaga(fetchInfoResponse, action)
+      return expectSaga(fetchInfoResponseSaga, action)
         .provide([
           [select(selectInfoResponse, { infoId: 'infoId' }), infoResponse],
           [
@@ -179,7 +179,7 @@ describe('IIIF sagas', () => {
         infoId: 'infoId',
       };
 
-      return expectSaga(fetchInfoResponse, action).put.actionType('mirador/RECEIVE_INFO_RESPONSE_FAILURE').run();
+      return expectSaga(fetchInfoResponseSaga, action).put.actionType('mirador/RECEIVE_INFO_RESPONSE_FAILURE').run();
     });
     it('handles degraded requests', () => {
       fetch.mockResponseOnce(JSON.stringify({ id: 'otherInfoId' }));
@@ -189,7 +189,7 @@ describe('IIIF sagas', () => {
         windowId: 'window',
       };
 
-      return expectSaga(fetchInfoResponse, action)
+      return expectSaga(fetchInfoResponseSaga, action)
         .put({
           infoId: 'infoId',
           infoJson: { id: 'otherInfoId' },
@@ -224,7 +224,7 @@ describe('IIIF sagas', () => {
         infoId: 'infoId',
       };
 
-      return expectSaga(fetchInfoResponse, action)
+      return expectSaga(fetchInfoResponseSaga, action)
         .provide([
           [select(selectInfoResponse, { infoId: 'infoId' }), undefined],
           [
