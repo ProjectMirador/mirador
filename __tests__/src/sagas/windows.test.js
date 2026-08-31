@@ -403,12 +403,9 @@ describe('window-level sagas', () => {
         .provide([
           [select(getWindow, { windowId }), { canvasId: 'y' }],
           [select(getCanvasGrouping, { canvasId: 'y', windowId }), [{ id: 'y' }, { id: 'z' }]],
+          [call(setCanvas, windowId, 'y', ['y', 'z']), { type: 'expectedThunk' }],
         ])
-        .put({
-          id: windowId,
-          payload: { visibleCanvases: ['y', 'z'] },
-          type: ActionTypes.UPDATE_WINDOW,
-        })
+        .put({ type: 'expectedThunk' })
         .run();
     });
   });
