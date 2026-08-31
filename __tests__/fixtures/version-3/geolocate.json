@@ -1,0 +1,115 @@
+{
+  "@context": [
+    "http://geojson.org/geojson-ld/geojson-context.jsonld",
+    "http://iiif.io/api/presentation/3/context.json"
+  ],
+  "id": "https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "Recipe Manifest for #139"
+    ]
+  },
+  "summary": {
+    "en": [
+      "A IIIF Presentation API 3.0 Manifest containing a GeoJSON-LD Web Annotation which targets a Canvas fragment."
+    ]
+  },
+  "items": [
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/canvas.json",
+      "type": "Canvas",
+      "label": {
+        "en": [
+          "Chesapeake and Ohio Canal Pamphlet"
+        ]
+      },
+      "width": 5212,
+      "height": 7072,
+      "items": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/contentPage.json",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/content.json",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.io/api/image/3.0/example/reference/43153e2ec7531f14dd1c9b2fc401678a-88695674/full/max/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "id": "https://iiif.io/api/image/3.0/example/reference/43153e2ec7531f14dd1c9b2fc401678a-88695674",
+                    "type": "ImageService3",
+                    "profile": "level1"
+                  }
+                ],
+                "width": 5212,
+                "height": 7072
+              },
+              "target": "https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/canvas.json"
+            }
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/supplementingPage.json",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/geoAnno.json",
+              "type": "Annotation",
+              "motivation": "tagging",
+              "body": {
+                "id": "https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/geo.json",
+                "type": "Feature",
+                "properties": {
+                  "label": {
+                    "en": [
+                      "Targeted Map from Chesapeake and Ohio Canal Pamphlet"
+                    ]
+                  },
+                  "data": {
+                    "en": [
+                      "Data about"
+                    ],
+                    "de": [
+                      "Test for Deutsch"
+                    ]
+                  }
+                },
+                "geometry": {
+                  "type": "Polygon",
+                  "coordinates": [
+                    [
+                      [
+                        -77.019853,
+                        38.913101
+                      ],
+                      [
+                        -77.110013,
+                        38.843254
+                      ],
+                      [
+                        -77.284698,
+                        38.997574
+                      ],
+                      [
+                        -77.188911,
+                        39.062648
+                      ]
+                    ]
+                  ]
+                }
+              },
+              "target": "https://iiif.io/api/cookbook/recipe/0139-geolocate-canvas-fragment/canvas.json#xywh=920,3600,1510,3000"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

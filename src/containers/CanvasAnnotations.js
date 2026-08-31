@@ -2,11 +2,17 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import * as actions from '../state/actions';
-import { getAnnotationResourcesDataForCanvas, getCanvasLabel, getSelectedAnnotationId, getConfig } from '../state/selectors';
+import {
+  getAnnotationResourcesDataForCanvas,
+  getCanvasLabel,
+  getSelectedAnnotationId,
+  getConfig,
+  getLocale,
+} from '../state/selectors';
 import { CanvasAnnotations } from '../components/CanvasAnnotations';
 
 /** For connect */
-const mapStateToProps = (state, { canvasId, windowId }) => ({
+const mapStateToProps = (state, { canvasId, windowId, companionWindowId }) => ({
   annotations: getAnnotationResourcesDataForCanvas(state, { canvasId, windowId }),
   htmlSanitizationRuleSet: getConfig(state).annotations.htmlSanitizationRuleSet,
   label: getCanvasLabel(state, {
@@ -14,6 +20,7 @@ const mapStateToProps = (state, { canvasId, windowId }) => ({
     windowId,
   }),
   selectedAnnotationId: getSelectedAnnotationId(state, { windowId }),
+  currentLanguage: getLocale(state, { companionWindowId, windowId }),
 });
 
 /**
