@@ -10,17 +10,10 @@ import { PluginHook } from './PluginHook';
 /**
  * ManifestInfo
  */
-export function ManifestInfo({
-  manifestDescription = null,
-  manifestLabel = null,
-  manifestMetadata = [],
-  manifestSummary = null,
-  ...rest
-}) {
+export function ManifestInfo({ manifestLabel = null, manifestMetadata = [], manifestSummary = null, ...rest }) {
   const { t } = useTranslation();
   const id = useId();
   const pluginProps = {
-    manifestDescription,
     manifestLabel,
     manifestMetadata,
     manifestSummary,
@@ -40,12 +33,6 @@ export function ManifestInfo({
         </Typography>
       )}
 
-      {manifestDescription && (
-        <Typography variant="body1">
-          <SanitizedHtml htmlString={manifestDescription} ruleSet="iiif" />
-        </Typography>
-      )}
-
       {manifestSummary && (
         <Typography variant="body1">
           <SanitizedHtml htmlString={manifestSummary} ruleSet="iiif" />
@@ -60,7 +47,6 @@ export function ManifestInfo({
 }
 
 ManifestInfo.propTypes = {
-  manifestDescription: PropTypes.string,
   manifestLabel: PropTypes.string,
   manifestMetadata: PropTypes.array,
   manifestSummary: PropTypes.string,

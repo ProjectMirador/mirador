@@ -7,12 +7,7 @@ describe('ManifestInfo', () => {
   describe('when metadata is present', () => {
     beforeEach(() => {
       render(
-        <ManifestInfo
-          manifestLabel="The Manifest Label"
-          manifestDescription="The Manifest Description"
-          manifestMetadata={metadata}
-          manifestSummary="The Manifest Summary"
-        />,
+        <ManifestInfo manifestLabel="The Manifest Label" manifestMetadata={metadata} manifestSummary="The Manifest Summary" />,
       );
     });
 
@@ -22,10 +17,6 @@ describe('ManifestInfo', () => {
 
     it('renders manifest label', () => {
       expect(screen.getByRole('heading', { level: 5 })).toHaveTextContent('The Manifest Label');
-    });
-
-    it('renders manifest description in SanitizedHtml component', () => {
-      expect(screen.getByText('The Manifest Description')).toBeInTheDocument();
     });
 
     it('renders manifest summary in SanitizedHtml component', () => {

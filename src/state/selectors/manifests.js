@@ -284,30 +284,24 @@ export const getManifestTitle = createSelector(
 );
 
 /**
- * Return manifest description (IIIF v2) -- distinct from any description field nested under metadata.
- * @param {object} state
- * @param {object} props
- * @param {string} props.manifestId
- * @param {string} props.windowId
- * @returns {string|null}
- */
-export const getManifestDescription = createSelector(
-  [getLocale, getManifestoInstance],
-  (locale, manifest) => manifest && manifest.getDescription().getValue(locale),
-);
-
-/**
- * Return manifest summary (IIIF v3).
+ * manifesto.js getSummary method handles fallback for presentation 3 and 2
  * @param {object} state
  * @param {object} props
  * @param {string} props.manifestId
  * @param {string} props.windowId
  * @return {string|null}
  */
-export const getManifestSummary = createSelector(
-  [getProperty('summary'), getManifestLocale],
-  (summary, locale) => summary && PropertyValue.parse(summary).getValue(locale),
+const getManifestSummary = createSelector(
+  [getLocale, getManifestoInstance],
+  (locale, manifest) => manifest && manifest.getSummary().getValue(locale),
 );
+
+export { getManifestSummary };
+
+/**
+ * @deprecated Use `getManifestSummary` instead
+ */
+export const getManifestDescription = getManifestSummary;
 
 /**
  * Return manifest title.
