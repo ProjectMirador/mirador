@@ -266,37 +266,43 @@ export default {
       },
       IIIFThumbnail: {
         styleOverrides: {
-          root: ({ ownerState }) => ({
-            ...(ownerState?.variant === 'inside' && {
-              display: 'inline-block',
-              height: 'inherit',
-              position: 'relative',
+          image: ({ ownerState }) => ({
+            ...(ownerState?.border && {
+              border: '1px solid rgba(0, 0, 0, 0.125)',
             }),
           }),
-          label: ({ ownerState }) => ({
+        },
+      },
+      ThumbnailCanvasGrouping: {
+        styleOverrides: {
+          grid: ({ ownerState }) => ({
+            display: 'grid',
+            gridTemplateRows: 'auto auto',
+            overflow: 'hidden',
+            width: 'fit-content',
+          }),
+        },
+      },
+      // Shared by IIIFThumbnail (gallery view, 2-line clamp) and ThumbnailCanvasGrouping
+      // (navigation strip, single-line truncation) via the ThumbnailLabel component.
+      ThumbnailLabel: {
+        styleOverrides: {
+          root: ({ ownerState }) => ({
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            lineHeight: '1.5em',
             wordBreak: 'break-word',
-            ...(ownerState?.variant === 'inside' && {
-              color: '#ffffff',
-              WebkitLineClamp: 1,
-              whiteSpace: 'nowrap',
-            }),
-            ...(ownerState?.variant === 'outside' && {
+            ...(ownerState?.variant === 'gallery' && {
               display: '-webkit-box',
+              lineHeight: '1.5em',
               maxHeight: '3em',
               MozBoxOrient: 'vertical',
               WebkitLineClamp: 2,
             }),
-            ...(ownerState?.variant === 'inside' && {
-              background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-              bottom: '0px',
-              boxSizing: 'border-box',
-              left: '0px',
-              padding: '4px',
-              position: 'absolute',
-              width: '100%',
+            ...(ownerState?.variant === 'navigation' && {
+              lineHeight: '1.25rem',
+              minWidth: '100%',
+              whiteSpace: 'nowrap',
+              width: 0,
             }),
           }),
           image: ({ ownerState }) => ({
@@ -536,7 +542,8 @@ export default {
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
     displaySettings: true, // Display the settings for this in WindowTopMenu
-    height: 130, // height of entire ThumbnailNavigation area when position is "far-bottom"
+    height: 150, // height of entire ThumbnailNavigation area when position is "far-bottom"
+    textHeight: 20, // height of the text area for thumbnail labels when position is "far-bottom"
     showThumbnailLabels: true, // Configure if thumbnail labels should be displayed
     width: 100, // width of one canvas (doubled for book view) in ThumbnailNavigation area when position is "far-right"
   },

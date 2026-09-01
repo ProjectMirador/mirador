@@ -90,6 +90,9 @@ export function ThumbnailNavigation({
     }
   };
 
+  // The height of the text below the thumbnail
+  const thumbnailTextOffset = thumbnailNavigation.showThumbnailLabels ? thumbnailNavigation.textHeight : 0;
+
   /**
    * When on bottom, column width
    */
@@ -100,7 +103,7 @@ export function ThumbnailNavigation({
     const world = canvasWorlds.get(canvases);
     const bounds = world.worldBounds();
     // calculate the correct canvas width based on the height + aspect ratio.
-    const availableHeight = thumbnailNavigation.height - spacing - scrollbarSize;
+    const availableHeight = thumbnailNavigation.height - spacing - scrollbarSize - thumbnailTextOffset;
     const calc = Math.ceil((availableHeight * bounds[2]) / bounds[3]);
 
     if (!Number.isInteger(calc)) return thumbnailNavigation.width + spacing;
@@ -163,6 +166,7 @@ export function ThumbnailNavigation({
     canvasGroupings,
     position,
     windowId,
+    textHeight: thumbnailTextOffset,
   };
 
   return (
