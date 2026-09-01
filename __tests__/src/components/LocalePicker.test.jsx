@@ -41,6 +41,33 @@ describe('LocalePicker', () => {
     expect(screen.getByRole('option', { name: 'English' })).toBeInTheDocument();
   });
 
+  it('renders a human-readable label for locale codes not in the configured language list', async () => {
+    const user = userEvent.setup();
+    // 'fi' (Finnish) is not in Mirador's availableLanguages config
+    createWrapper({ availableLocales: ['en', 'fi'], locale: 'en' });
+    const dropdownTitle = screen.getByRole('combobox');
+    await user.click(dropdownTitle);
+    const menu = screen.getByRole('listbox');
+    // 'fi' should be resolved to a display name (e.g. "Finnish"), not shown as the raw code
+    expect(menu).not.toHaveTextContent('fi');
+    expect(screen.getByRole('option', { name: /finnish/i })).toBeInTheDocument();
+  });
+
+  it('falls back to the raw locale code when Intl.DisplayNames is unavailable', async () => {
+    const user = userEvent.setup();
+    // Intl.DisplayNames could error in older browser environments
+    // Fallback to the raw locale code in those cases.
+    vi.spyOn(Intl, 'DisplayNames').mockImplementation(() => {
+      throw new Error('not supported');
+    });
+    // 'fi' is not in availableLanguages; DisplayNames unavailable, so raw code is shown
+    createWrapper({ availableLocales: ['en', 'fi'], locale: 'en' });
+    const dropdownTitle = screen.getByRole('combobox');
+    await user.click(dropdownTitle);
+    expect(screen.getByRole('option', { name: 'fi' })).toBeInTheDocument();
+    vi.restoreAllMocks();
+  });
+
   it('triggers setLocale prop when clicking a list item', async () => {
     const user = userEvent.setup();
     const setLocale = vi.fn();
