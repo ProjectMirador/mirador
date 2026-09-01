@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import GalleryViewThumbnail from '../containers/GalleryViewThumbnail';
+import ns from '../config/css-ns';
 
 const Root = styled(Paper, { name: 'GalleryView', slot: 'root' })(({ theme }) => ({
   alignItems: 'flex-start',
@@ -21,7 +22,15 @@ const Root = styled(Paper, { name: 'GalleryView', slot: 'root' })(({ theme }) =>
 export function GalleryView({ canvases, viewingDirection = '', windowId }) {
   const htmlDir = viewingDirection === 'right-to-left' ? 'rtl' : 'ltr';
   return (
-    <Root component="section" aria-label="gallery section" dir={htmlDir} square elevation={0} id={`${windowId}-gallery`}>
+    <Root
+      component="section"
+      aria-label="gallery section"
+      dir={htmlDir}
+      square
+      elevation={0}
+      id={`${windowId}-gallery`}
+      className={ns('gallery-view')}
+    >
       {canvases.map((canvas) => (
         <GalleryViewThumbnail key={canvas.id} windowId={windowId} canvas={canvas} />
       ))}

@@ -8,6 +8,7 @@ import WindowViewSettings from '../containers/WindowViewSettings';
 import { PluginHook } from './PluginHook';
 import WorkspaceContext from '../contexts/WorkspaceContext';
 import { usePlugins } from '../extend/usePlugins';
+import ns from '../config/css-ns';
 
 /** Renders plugins */
 function PluginHookWithHeader({ targetName, ...props }) {
@@ -61,6 +62,9 @@ export function WindowTopMenu({
         transition: {
           onEntering: toggleDraggingEnabled,
           onExit: toggleDraggingEnabled,
+        },
+        paper: {
+          className: ns('window-top-menu'),
         },
       }}
     >
