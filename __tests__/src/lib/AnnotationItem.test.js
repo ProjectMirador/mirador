@@ -44,6 +44,14 @@ describe('AnnotationItem', () => {
         }).tags,
       ).toEqual(['lo']);
     });
+    it('has mixed body types', () => {
+      expect(
+        new AnnotationItem({
+          body: [{ purpose: 'tagging', value: 'yo' }, 'String body value'],
+          motivation: 'tagging',
+        }).tags,
+      ).toEqual(['yo', 'String body value']);
+    });
   });
 
   describe('targetId', () => {
@@ -113,6 +121,9 @@ describe('AnnotationItem', () => {
     });
     it('with a single body', () => {
       expect(new AnnotationItem({ body: { value: 'foo' } }).chars).toEqual('foo');
+    });
+    it('with a string body', () => {
+      expect(new AnnotationItem({ body: 'foo' }).chars).toEqual('foo');
     });
     it('with multiple bodies', () => {
       expect(new AnnotationItem({ body: [{ value: 'foo' }, { value: 'bar' }] }).chars).toEqual('foo bar');
