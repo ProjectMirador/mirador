@@ -44,12 +44,16 @@ export function getExportableState(state) {
  * @param {object} state
  * @returns {Array} [ {locale: 'de', label: 'Deutsch', current: true}, ... ]
  */
-export const getLanguagesFromConfigWithCurrent = createSelector([getConfig], ({ availableLanguages, language }) =>
-  Object.keys(availableLanguages).map((key) => ({
-    current: key === language,
-    label: availableLanguages[key],
-    locale: key,
-  })),
+export const getLanguagesFromConfigWithCurrent = createSelector(
+  [getConfig],
+  ({ availableLanguages, enabledLanguages, language }) =>
+    Object.keys(availableLanguages)
+      .filter((key) => !enabledLanguages?.length || enabledLanguages.includes(key))
+      .map((key) => ({
+        current: key === language,
+        label: availableLanguages[key],
+        locale: key,
+      })),
 );
 
 /**

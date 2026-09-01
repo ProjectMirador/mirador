@@ -422,6 +422,9 @@ export default {
     },
   },
   language: 'en', // The default language set in the application
+  // defaults as empty to all availableLanguages.
+  // If language code values are provided (such as ['ja', 'en']), *only* these languages will appear as options in the UI.
+  enabledLanguages: [],
   availableLanguages: {
     // All the languages available in the language switcher
     ar: 'العربية',
