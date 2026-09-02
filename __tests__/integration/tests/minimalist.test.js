@@ -9,7 +9,14 @@ describe('Minimalist configuration to Mirador', () => {
   it('Loads a manifest and displays it without some of the default controls', async () => {
     expect(
       await screen.findByRole('region', {
-        name: /Window: Cambridge, Corpus Christi College, MS 640: Antiphoner Leaf/i,
+        name: /Item window 1/i,
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      await screen.findByRole('heading', {
+        level: 2,
+        name: /Cambridge, Corpus Christi College, MS 640: Antiphoner Leaf/i,
       }),
     ).toBeInTheDocument();
 
