@@ -9,12 +9,14 @@ describe('OpenSeadragonComponent', () => {
   let addHandler;
   let fitBoundsWithConstraints;
   let goHome;
+  let checkVisibility;
 
   beforeEach(() => {
     addOnceHandler = vi.fn();
     addHandler = vi.fn();
     fitBoundsWithConstraints = vi.fn();
     goHome = vi.fn();
+    checkVisibility = vi.fn(() => true);
 
     // Mock methods used in the component
     OpenSeadragon.mockImplementation(function () {
@@ -22,6 +24,7 @@ describe('OpenSeadragonComponent', () => {
         addHandler,
         addOnceHandler,
         canvas: {},
+        element: { checkVisibility },
         destroy: vi.fn(),
         innerTracker: {},
         removeAllHandlers: vi.fn(),
@@ -126,5 +129,32 @@ describe('OpenSeadragonComponent', () => {
 
     // Should not call fitBoundsWithConstraints
     expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
+  });
+
+  it('does not setInitialBounds when viewer is not visible, will setInitialBounds when viewer becomes visible', () => {
+    checkVisibility.mockReturnValue(false);
+    const disconnect = vi.fn();
+    const observe = vi.fn();
+    let intersectionCallback;
+    vi.stubGlobal(
+      'IntersectionObserver',
+      vi.fn(function IntersectionObserverMock(callback) {
+        intersectionCallback = callback;
+        return { disconnect, observe };
+      }),
+    );
+
+    const { rerender } = renderAndInitialize({});
+
+    expect(checkVisibility).toHaveBeenCalled();
+    expect(addHandler).toHaveBeenCalled(1);
+    expect(observe).toHaveBeenCalled();
+    expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
+    expect(goHome).not.toHaveBeenCalled();
+
+    // makes viewer visible
+    intersectionCallback([{ isIntersecting: true }]);
+    expect(goHome).toHaveBeenCalled();
+    expect(disconnect).toHaveBeenCalled();
   });
 });

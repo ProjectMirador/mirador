@@ -187,6 +187,17 @@ function OpenSeadragonComponent({
     setViewer(viewer);
 
     viewer.world.addHandler('add-item', () => {
+      if (!viewer.element.checkVisibility()) {
+        const observer = new IntersectionObserver(([entry]) => {
+          if (entry.isIntersecting) {
+            initialViewportSet.current = false;
+            setInitialBounds(viewer);
+            observer.disconnect();
+          }
+        });
+        observer.observe(viewer.element);
+        return;
+      }
       initialViewportSet.current = false;
       setInitialBounds(viewer);
     });
