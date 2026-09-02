@@ -38,10 +38,14 @@ Mirador should be well-tested at several different levels. A component or class 
 Added or modified code should be appropriately documented using JSDoc comments and established project conventions.
 
 ### Plugin architecture
-Mirador 3 shifted to a plugin architecture to better support the wide array of uses of Mirador. This allows for the design to accommodate plugins in a more focused way. It also allows the community to maintain the core components while giving developers the freedom to develop new and innovative plugins. Your contribution might fit nicely as a Mirador plugin. For more on plugins, please see [Mirador 4 Plugins](https://github.com/ProjectMirador/mirador/wiki/Creating-a-Mirador-4-Plugin) and [Mirador 3 Plugins](https://github.com/ProjectMirador/mirador/wiki/Mirador-3-plugins) in the wiki.
+Mirador 3 shifted to a plugin architecture to better support the wide array of uses of Mirador. This remains the architecture in Mirador 4. This allows for the design to accommodate plugins in a more focused way. It also allows the community to maintain the core components while giving developers the freedom to develop new and innovative plugins. Your contribution might fit nicely as a Mirador plugin. For more on plugins, please see [Mirador 4 Plugins](https://github.com/ProjectMirador/mirador/wiki/Creating-a-Mirador-4-Plugin) and [Mirador 3 Plugins](https://github.com/ProjectMirador/mirador/wiki/Mirador-3-plugins) in the wiki.
+
+### AI Policy
+The principles that guide our AI policy apply to all contributions regardless of AI involvement:
+1. You are responsible and accountable for your contribution.
+2. Respect the time of the maintainers and the community.
+
+When submitting an issue or PR with AI-assistance, you must fully understand and own your contribution. This includes thoroughly vetting the code, understanding the changes you propose, and taking the time to respond to feedback and questions in your own words.
 
 ### Support
 If you have questions, please check the [wiki](https://github.com/ProjectMirador/mirador/wiki), add a [discussion](https://github.com/ProjectMirador/mirador/discussions) question, post on the #mirador channel of the [IIIF Slack workspace](http://iiif.slack.com/), or join a Mirador community call (see #mirador for call details). Slack and community calls are also both great places to meet users and maintainers.
-
-### Plugin architecture
-Mirador 3 shifted to a plugin architecture to better support the wide array of uses of Mirador. This remains the architecture in Mirador 4. This allows for the design to accommodate plugins in more focused way. It also allows the community to maintain the core components while giving developers the freedom to develop new and innovative plugins. Your contribution might fit nicely as a Mirador plugin.
