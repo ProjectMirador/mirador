@@ -40,7 +40,7 @@ export const handleDrop = (item, monitor, props) => {
       const url = safeParseURL(str);
       if (!url) return;
 
-      const manifestId = url.searchParams.get('manifest');
+      const manifestId = url.searchParams.get('manifest') || url.searchParams.get('iiif-content');
       const canvasId = url.searchParams.get('canvas');
 
       if (manifestId) onDrop({ canvasId, manifestId }, props, monitor);
