@@ -7,9 +7,10 @@ import { parsedFragment } from './AnnotationSharedMethods';
  */
 export default class AnnotationItem {
   /** */
-  constructor(resource = {}, canvas) {
+  constructor(resource = {}, canvas, language) {
     this.resource = resource;
     this.canvas = canvas;
+    this.language = language;
   }
 
   /** */
@@ -39,7 +40,9 @@ export default class AnnotationItem {
   /** */
   bodyValue(body) {
     if (typeof body === 'string') return body;
-    return body.value;
+    if (!body.items) return body.value;
+    const itemInSelectedLanguage = body.items.find((item) => item.language === this.language);
+    return itemInSelectedLanguage?.value || body.items[0].value;
   }
 
   /**
