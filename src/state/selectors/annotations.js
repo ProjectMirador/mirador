@@ -25,9 +25,9 @@ const getAnnotationsOnCanvas = createSelector([getCanvas, getAnnotations], (canv
   return Object.values(annotations[canvas.id]).flat();
 });
 
-const getPresentAnnotationsCanvas = createSelector([getAnnotationsOnCanvas], (annotations) =>
+const getPresentAnnotationsCanvas = createSelector([getAnnotationsOnCanvas, getCanvas], (annotations, canvas) =>
   filter(
-    Object.values(annotations).map((annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json)),
+    Object.values(annotations).map((annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json, canvas)),
     (annotation) => annotation && annotation.present(),
   ),
 );
@@ -46,11 +46,15 @@ const getAnnotationsOnSelectedCanvases = createSelector(
  * @param {string} canvasId canvasId
  * @returns {Array} An array of present annotations
  */
-export const getPresentAnnotationsOnSelectedCanvases = createSelector([getAnnotationsOnSelectedCanvases], (annotations) =>
-  filter(
-    Object.values(annotations).map((annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json)),
-    (annotation) => annotation && annotation.present(),
-  ),
+export const getPresentAnnotationsOnSelectedCanvases = createSelector(
+  [getAnnotationsOnSelectedCanvases, getCanvas],
+  (annotations, canvas) =>
+    filter(
+      Object.values(annotations).map(
+        (annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json, canvas),
+      ),
+      (annotation) => annotation && annotation.present(),
+    ),
 );
 
 /**
