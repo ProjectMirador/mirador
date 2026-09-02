@@ -31,10 +31,6 @@ export default {
       provider: 'Bibliothèque nationale de France',
     },
     {
-      manifestId: 'https://manifests.britishart.yale.edu/Osbornfa1',
-      provider: 'Beinecke Rare Book and Manuscript Library, Yale University',
-    },
-    {
       manifestId: 'https://iiif.biblissima.fr/chateauroux/B360446201_MS0005/manifest.json',
       provider: 'Biblissima',
     },
