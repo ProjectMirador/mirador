@@ -49,6 +49,12 @@ class Path2D {
 
 global.Path2D = Path2D;
 
+if (!Element.prototype.checkVisibility) {
+  Element.prototype.checkVisibility = function checkVisibility() {
+    return true;
+  };
+}
+
 setupIntersectionMocking(vi.fn);
 
 i18next.init({
