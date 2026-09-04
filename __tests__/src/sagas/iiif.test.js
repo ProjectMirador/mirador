@@ -7,7 +7,14 @@ import {
   fetchInfoResponse,
   fetchResourceManifest,
 } from '../../../src/state/sagas/iiif';
-import { getConfig, getManifests, selectInfoResponse, getAccessTokens, getRequestsConfig } from '../../../src/state/selectors';
+import {
+  getConfig,
+  getManifests,
+  selectInfoResponse,
+  getAccessTokens,
+  getRequestsConfig,
+  getWindows,
+} from '../../../src/state/selectors';
 
 describe('IIIF sagas', () => {
   describe('fetchManifest', () => {
@@ -36,6 +43,84 @@ describe('IIIF sagas', () => {
       return expectSaga(fetchManifest, action)
         .provide([[select(getConfig), {}]])
         .put.actionType('mirador/RECEIVE_MANIFEST_FAILURE')
+        .run();
+    });
+
+    it('detects contentState response and updates the config to manifest, canvas and bound region', () => {
+      fetch.mockResponseOnce(
+        JSON.stringify({
+          motivation: 'contentState',
+          target: {
+            id: 'https://example.org/iiif/canvas2#xywh=10,20,30,40',
+            partOf: { id: 'https://example.org/iiif/manifest1' },
+          },
+        }),
+      );
+
+      return expectSaga(fetchManifest, { manifestId: 'https://example.org/content-state-1' })
+        .provide([
+          [select(getConfig), {}],
+          [
+            select(getWindows),
+            {
+              'window-abc': { manifestId: 'https://example.org/content-state-1' },
+              'window-other': { manifestId: 'https://example.org/some-other-manifest' },
+            },
+          ],
+        ])
+        .put({
+          type: 'mirador/REMOVE_WINDOW',
+          windowId: 'window-abc',
+        })
+        .put({
+          config: {
+            windows: [
+              {
+                canvasId: 'https://example.org/iiif/canvas2',
+                initialViewerConfig: { bounds: [10, 20, 30, 40] },
+                manifestId: 'https://example.org/iiif/manifest1',
+              },
+            ],
+          },
+          type: 'mirador/IMPORT_CONFIG',
+        })
+        .run();
+    });
+
+    it('correctly imports multiple contentState targets', () => {
+      fetch.mockResponseOnce(
+        JSON.stringify({
+          motivation: 'contentState',
+          target: [
+            { id: 'https://example.org/iiif/canvas4', partOf: { id: 'https://example.org/iiif/manifest1' } },
+            { id: 'https://example.org/iiif/canvas2#xywh=10,10,10,10', partOf: [{ id: 'https://example.org/iiif/manifest2' }] },
+          ],
+        }),
+      );
+      const action = { manifestId: 'https://example.org/content-state-2' };
+
+      return expectSaga(fetchManifest, action)
+        .provide([
+          [select(getConfig), {}],
+          [select(getWindows), { 'window-xyz': { manifestId: 'https://example.org/content-state-2' } }],
+        ])
+        .put({
+          type: 'mirador/REMOVE_WINDOW',
+          windowId: 'window-xyz',
+        })
+        .put({
+          config: {
+            windows: [
+              { canvasId: 'https://example.org/iiif/canvas4', manifestId: 'https://example.org/iiif/manifest1' },
+              {
+                canvasId: 'https://example.org/iiif/canvas2',
+                manifestId: 'https://example.org/iiif/manifest2',
+                initialViewerConfig: { bounds: [10, 10, 10, 10] },
+              },
+            ],
+          },
+          type: 'mirador/IMPORT_CONFIG',
+        })
         .run();
     });
 

@@ -12,8 +12,10 @@ import {
   receiveSearchFailure,
   receiveAnnotation,
   receiveAnnotationFailure,
+  importConfig,
+  removeWindow,
 } from '../actions';
-import { getManifests, getRequestsConfig, getAccessTokens, selectInfoResponse } from '../selectors';
+import { getManifests, getRequestsConfig, getAccessTokens, selectInfoResponse, getWindows } from '../selectors';
 
 /** */
 function fetchWrapper(url, options, { success, degraded, failure }) {
@@ -135,7 +137,27 @@ export function* fetchManifest({ manifestId }) {
     success: ({ json, response }) => receiveManifest(manifestId, json),
   };
   const dispatch = yield call(fetchIiifResource, manifestId, {}, callbacks);
-  yield put(dispatch);
+  if (dispatch.manifestJson && dispatch.manifestJson.motivation?.includes('contentState')) {
+    const windows = [dispatch.manifestJson.target].flat().map(({ id, partOf, source, selector }) => {
+      const [canvasId, xywh] = (id || source.id).split('#xywh=');
+      const bounds = xywh ? xywh.split(',').map(Number) : undefined;
+      //const startTime = parseFloat(selector?.t);
+
+      return {
+        manifestId: [partOf || source.partOf].flat()[0].id,
+        canvasId,
+        ...(bounds && { initialViewerConfig: { bounds } }),
+      };
+    });
+    if (windows.length > 0) {
+      const allWindows = yield select(getWindows);
+      const contentStateWindow = Object.keys(allWindows).find((wid) => allWindows[wid].manifestId === manifestId);
+      yield put(removeWindow(contentStateWindow));
+      yield put(importConfig({ windows }));
+    }
+  } else {
+    yield put(dispatch);
+  }
 }
 
 /** @private */
