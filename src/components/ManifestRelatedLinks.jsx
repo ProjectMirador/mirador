@@ -43,7 +43,13 @@ export function ManifestRelatedLinks({
 
   return (
     <CollapsibleSection aria-labelledby={titleId} id={id} label={t('related')}>
-      <Typography aria-labelledby={`${id} ${titleId}`} id={titleId} variant="h4" component="h5">
+      <Typography
+        aria-labelledby={`${id} ${titleId}`}
+        id={titleId}
+        className={ns('related-links-label')}
+        variant="h4"
+        component="h5"
+      >
         {t('links')}
       </Typography>
       <StyledDl className={classNames(ns('label-value-metadata'))}>
