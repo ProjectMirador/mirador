@@ -21,6 +21,7 @@ import {
   getCanvases,
   selectInfoResponses,
   getWindowConfig,
+  getCurrentCanvasWorld,
 } from '../../../src/state/selectors';
 import { fetchManifests } from '../../../src/state/sagas/iiif';
 import {
@@ -37,6 +38,7 @@ import {
   fetchInfoResponses,
   setCanvasOnNewSequence,
   setCollectionPath,
+  setWindowInitialViewerRegion,
 } from '../../../src/state/sagas/windows';
 import fixture from '../../fixtures/version-2/019.json';
 import collectionFixture from '../../fixtures/version-2/collection.json';
@@ -129,7 +131,10 @@ describe('window-level sagas', () => {
       return expectSaga(setWindowStartingCanvas, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
-          [call(setCanvas, 'x', '1', null, { preserveViewport: false }), { type: 'setCanvasThunk' }],
+          [
+            call(setCanvas, 'x', '1', null, { initialViewerConfig: undefined, preserveViewport: false }),
+            { type: 'setCanvasThunk' },
+          ],
         ])
         .put({ type: 'setCanvasThunk' })
         .run();
@@ -147,22 +152,26 @@ describe('window-level sagas', () => {
       return expectSaga(setWindowStartingCanvas, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
-          [call(setCanvas, 'x', '1', null, { preserveViewport: true }), { type: 'setCanvasThunk' }],
+          [
+            call(setCanvas, 'x', '1', null, { initialViewerConfig: undefined, preserveViewport: true }),
+            { type: 'setCanvasThunk' },
+          ],
         ])
         .put({ type: 'setCanvasThunk' })
         .run();
     });
 
     it('overrides default preserveViewport: false when initialViewerConfig is set', () => {
+      const initialViewerConfig = {
+        x: 934,
+        y: 782,
+        zoom: 0.0007,
+      };
       const action = {
         window: {
           canvasId: '1',
           id: 'x',
-          initialViewerConfig: {
-            x: 934,
-            y: 782,
-            zoom: 0.0007,
-          },
+          initialViewerConfig,
           manifestId: 'manifest.json',
         },
       };
@@ -170,7 +179,7 @@ describe('window-level sagas', () => {
       return expectSaga(setWindowStartingCanvas, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
-          [call(setCanvas, 'x', '1', null, { preserveViewport: true }), { type: 'setCanvasThunk' }],
+          [call(setCanvas, 'x', '1', null, { initialViewerConfig, preserveViewport: true }), { type: 'setCanvasThunk' }],
         ])
         .put({ type: 'setCanvasThunk' })
         .run();
@@ -193,7 +202,46 @@ describe('window-level sagas', () => {
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
           [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
-          [call(setCanvas, 'x', 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'), { type: 'setCanvasThunk' }],
+          [
+            call(setCanvas, 'x', 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1', null, {
+              initialViewerConfig: undefined,
+            }),
+            { type: 'setCanvasThunk' },
+          ],
+        ])
+        .put({ type: 'setCanvasThunk' })
+        .run();
+    });
+
+    it('forwards the initialViewerConfig when the starting canvas is calculated', () => {
+      const initialViewerConfig = {
+        bounds: [10, 20, 30, 40],
+        canvasId: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1',
+      };
+      const action = {
+        window: {
+          id: 'x',
+          initialViewerConfig,
+          manifestId: 'manifest.json',
+        },
+      };
+
+      const manifest = Utils.parseManifest({
+        ...fixture,
+        start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' },
+      });
+
+      return expectSaga(setWindowStartingCanvas, action)
+        .provide([
+          [select(getManifests), { 'manifest.json': {} }],
+          [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
+          [
+            call(setCanvas, 'x', 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1', null, {
+              initialViewerConfig,
+              preserveViewport: true,
+            }),
+            { type: 'setCanvasThunk' },
+          ],
         ])
         .put({ type: 'setCanvasThunk' })
         .run();
@@ -340,6 +388,58 @@ describe('window-level sagas', () => {
         })
         .run();
     });
+  });
+
+  describe('setWindowInitialViewerRegion', () => {
+    it('does nothing if there is no initialViewerConfig', () =>
+      expectSaga(setWindowInitialViewerRegion, { windowId: 'x' })
+        .run()
+        .then(({ allEffects }) => expect(allEffects).toHaveLength(0)));
+
+    it('does nothing if the initialViewerConfig is missing bounds or a canvasId', () =>
+      expectSaga(setWindowInitialViewerRegion, { initialViewerConfig: { canvasId: 'canvas-1' }, windowId: 'x' })
+        .run()
+        .then(({ allEffects }) => expect(allEffects).toHaveLength(0)));
+
+    it('translates the bounds into world coordinates and updates the viewport', () => {
+      const canvasWorld = { boundsToCanvasCoordinates: vi.fn().mockReturnValue([6315, 20, 30, 40]) };
+
+      return expectSaga(setWindowInitialViewerRegion, {
+        initialViewerConfig: { bounds: [10, 20, 30, 40], canvasId: 'canvas-2' },
+        windowId: 'x',
+      })
+        .provide([[select(getCurrentCanvasWorld, { windowId: 'x' }), canvasWorld]])
+        .put({
+          payload: { bounds: [6315, 20, 30, 40] },
+          type: ActionTypes.UPDATE_VIEWPORT,
+          windowId: 'x',
+        })
+        .run()
+        .then(() => {
+          expect(canvasWorld.boundsToCanvasCoordinates).toHaveBeenCalledWith('canvas-2', [10, 20, 30, 40]);
+        });
+    });
+
+    it('does not update the viewport if the canvas is not part of the canvas world', () => {
+      const canvasWorld = { boundsToCanvasCoordinates: vi.fn().mockReturnValue(undefined) };
+
+      return expectSaga(setWindowInitialViewerRegion, {
+        initialViewerConfig: { bounds: [10, 20, 30, 40], canvasId: 'canvas-2' },
+        windowId: 'x',
+      })
+        .provide([[select(getCurrentCanvasWorld, { windowId: 'x' }), canvasWorld]])
+        .not.put.actionType(ActionTypes.UPDATE_VIEWPORT)
+        .run();
+    });
+
+    it('does not update the viewport if there is no canvas world yet', () =>
+      expectSaga(setWindowInitialViewerRegion, {
+        initialViewerConfig: { bounds: [10, 20, 30, 40], canvasId: 'canvas-2' },
+        windowId: 'x',
+      })
+        .provide([[select(getCurrentCanvasWorld, { windowId: 'x' }), undefined]])
+        .not.put.actionType(ActionTypes.UPDATE_VIEWPORT)
+        .run());
   });
 
   describe('panToFocusedWindow', () => {

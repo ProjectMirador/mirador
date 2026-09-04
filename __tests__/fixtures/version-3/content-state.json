@@ -1,0 +1,49 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://example.org/import/1",
+  "type": "Annotation",
+  "motivation": ["contentState"],
+  "target": [{
+     "id": "https://iiif.io/api/cookbook/recipe/0009-book-1/canvas/p5#xywh=476,567,2231,1813",
+     "type": "Canvas",
+     "partOf": [{
+        "id": "https://iiif.io/api/cookbook/recipe/0009-book-1/manifest.json",
+        "type": "Manifest"
+     }]
+   },{
+     "id": "https://iiif.io/api/cookbook/recipe/0009-book-1/canvas/p1#xywh=100,100,300,300",
+     "type": "Canvas",
+     "partOf": {
+        "id": "https://iiif.io/api/cookbook/recipe/0009-book-1/manifest.json",
+        "type": "Manifest"
+     }
+   },{
+     "id": "https://iiif.io/api/cookbook/recipe/0009-book-1/canvas/p2#xywh=1520,3048,356,327",
+     "type": "Canvas",
+     "partOf": [{
+        "id": "https://iiif.io/api/cookbook/recipe/0009-book-1/manifest.json",
+        "type": "Manifest"
+     }]
+   },{
+     "partOf": [{
+        "id": "https://iiif.io/api/cookbook/recipe/0009-book-1/manifest.json",
+        "type": "Manifest"
+     }]
+   },
+     {
+    "type": "SpecificResource",
+    "source": {
+        "id": "https://iiif.io/api/cookbook/recipe/0002-mvm-audio/canvas",
+        "type": "Canvas",
+        "partOf": [{
+            "id": "https://iiif.io/api/cookbook/recipe/0002-mvm-audio/manifest.json",
+            "type": "Manifest"
+        }]
+    },
+    "selector": {
+        "type": "PointSelector",
+        "t": 14.5
+	  }
+  }
+   ]
+}
