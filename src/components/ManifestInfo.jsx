@@ -6,6 +6,7 @@ import CollapsibleSection from '../containers/CollapsibleSection';
 import SanitizedHtml from '../containers/SanitizedHtml';
 import LabelValueMetadata from '../containers/LabelValueMetadata';
 import { PluginHook } from './PluginHook';
+import ns from '../config/css-ns';
 
 /**
  * ManifestInfo
@@ -26,6 +27,7 @@ export function ManifestInfo({ manifestLabel = null, manifestMetadata = [], mani
         <Typography
           aria-labelledby={`${id}-resource ${id}-resource-heading`}
           id={`${id}-resource-heading`}
+          className={ns('manifest-label')}
           variant="h4"
           component="h5"
         >
