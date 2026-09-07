@@ -157,6 +157,35 @@ describe('getProviderLogo', () => {
     expect(received).toBe('https://example.org/images/logo.png');
   });
 
+  it('should return a valid image request when the logo has a IIIF image service', () => {
+    // use the fixture but overwrite the logo with the one from the IIIF Presentation 3 spec,
+    // which offers an image service rather than a plain image
+    const provider = [
+      {
+        ...manifestFixtureWithAProvider.provider[0],
+        logo: [
+          {
+            format: 'image/png',
+            height: 100,
+            id: 'https://example.org/images/logo.png/full/max/0/default.png',
+            service: [
+              {
+                id: 'https://example.org/images/logo.png',
+                profile: 'level2',
+                type: 'ImageService3',
+              },
+            ],
+            type: 'Image',
+            width: 120,
+          },
+        ],
+      },
+    ];
+    const state = { manifests: { x: { json: { ...manifestFixtureWithAProvider, provider } } } };
+    const received = getProviderLogo(state, { manifestId: 'x' });
+    expect(received).toBe('https://example.org/images/logo.png/full/,120/0/default.jpg');
+  });
+
   it('should return null if no logo', () => {
     // use the fixture but overwrite the 'provider' property to be empty/not include logo
     const state = { manifests: { x: { json: { ...manifestFixtureWithAProvider, provider: [] } } } };
