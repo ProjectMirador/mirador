@@ -9,12 +9,16 @@ describe('OpenSeadragonComponent', () => {
   let addHandler;
   let fitBoundsWithConstraints;
   let goHome;
+  let checkVisibility;
+  let element;
 
   beforeEach(() => {
     addOnceHandler = vi.fn();
     addHandler = vi.fn();
     fitBoundsWithConstraints = vi.fn();
     goHome = vi.fn();
+    checkVisibility = vi.fn(() => true);
+    element = { checkVisibility };
 
     // Mock methods used in the component
     OpenSeadragon.mockImplementation(function () {
@@ -23,6 +27,7 @@ describe('OpenSeadragonComponent', () => {
         addOnceHandler,
         canvas: {},
         destroy: vi.fn(),
+        element,
         innerTracker: {},
         removeAllHandlers: vi.fn(),
         viewport: {
@@ -54,10 +59,16 @@ describe('OpenSeadragonComponent', () => {
     if (tileLoadedHandler) tileLoadedHandler();
   }
 
+  /**
+   * Invoke the handler registered (via addHandler) for a specific event name.
+   */
+  function invokeHandlerFor(eventName) {
+    const call = addHandler.mock.calls.findLast(([name]) => name === eventName);
+    if (call) call[1]();
+  }
+
   function invokeItemAddedHandler() {
-    const { lastCall } = addHandler.mock;
-    const [_eventName, itemAddedHandler] = lastCall || [];
-    if (itemAddedHandler) itemAddedHandler();
+    invokeHandlerFor('add-item');
   }
 
   /**
@@ -68,7 +79,7 @@ describe('OpenSeadragonComponent', () => {
   function renderAndInitialize(viewerConfig = { bounds: [0, 0, 5000, 3000] }) {
     const result = render(<OpenSeadragonComponent viewerConfig={viewerConfig} />);
 
-    // Component registers a 'item-added' handler during mount to set initial viewport
+    // Component registers an 'add-item' handler during mount to set initial viewport
     invokeItemAddedHandler();
 
     // Clear mocks after initialization
@@ -126,5 +137,28 @@ describe('OpenSeadragonComponent', () => {
 
     // Should not call fitBoundsWithConstraints
     expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
+  });
+
+  // Confirms OpenSeadragonComponent wires add-item/remove-item through IntersectionObserver
+  it('does not set bounds while hidden, and does once the element becomes visible (#3540)', () => {
+    let intersectionCallback;
+    vi.stubGlobal(
+      'IntersectionObserver',
+      vi.fn(function IntersectionObserverMock(callback) {
+        intersectionCallback = callback;
+        return { disconnect: vi.fn(), observe: vi.fn() };
+      }),
+    );
+    checkVisibility.mockReturnValue(false);
+
+    render(<OpenSeadragonComponent viewerConfig={{}} />);
+    invokeItemAddedHandler();
+
+    expect(checkVisibility).toHaveBeenCalled();
+    expect(goHome).not.toHaveBeenCalled();
+
+    intersectionCallback([{ isIntersecting: true }]);
+
+    expect(goHome).toHaveBeenCalledTimes(1);
   });
 });
