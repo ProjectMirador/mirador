@@ -217,10 +217,21 @@ export function* updateVisibleCanvases({ windowId }) {
 
 /** @private */
 export function* setCanvasOfFirstSearchResult({ companionWindowId, windowId }) {
-  const { switchCanvasOnSearch } = yield select(getWindowConfig, { windowId });
+  const { switchCanvasOnSearch, preserveInitialCanvasOnSearch } = yield select(getWindowConfig, { windowId });
   if (!switchCanvasOnSearch) {
     return;
   }
+
+  // Protect an explicitly-requested starting canvas from being overridden by
+  // the very first search (e.g. one fired automatically by defaultSearchQuery)
+  // -- but only once. Consuming the flag here means every later search (a
+  // new query the user actually typed) still jumps to its first hit normally.
+  const { explicitInitialCanvasId } = yield select(getWindow, { windowId });
+  if (explicitInitialCanvasId) {
+    yield put(updateWindow(windowId, { explicitInitialCanvasId: false }));
+    if (preserveInitialCanvasOnSearch) return;
+  }
+
   const selectedIds = yield select(getSelectedContentSearchAnnotationIds, {
     companionWindowId,
     windowId,
