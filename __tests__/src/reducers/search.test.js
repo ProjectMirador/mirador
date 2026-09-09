@@ -23,7 +23,7 @@ describe('search reducer', () => {
             },
           },
           query: 'search terms',
-          selectedContentSearchAnnotation: [],
+          selectedContentSearchAnnotationIds: [],
         },
       },
     });
@@ -60,10 +60,62 @@ describe('search reducer', () => {
             },
           },
           query: 'search terms',
-          selectedContentSearchAnnotation: [],
+          selectedContentSearchAnnotationIds: [],
         },
       },
     });
+  });
+  it('should clear the selected annotation for a new query with REQUEST_SEARCH', () => {
+    expect(
+      searchesReducer(
+        {
+          foo: {
+            abc123: {
+              data: {
+                'search?page=xyz': {
+                  json: {},
+                },
+              },
+              query: 'initial search terms',
+              selectedContentSearchAnnotationIds: ['annotationFromThePreviousQuery'],
+            },
+          },
+        },
+        {
+          companionWindowId: 'abc123',
+          query: 'search terms',
+          searchId: 'search?page=1',
+          type: ActionTypes.REQUEST_SEARCH,
+          windowId: 'foo',
+        },
+      ).foo.abc123.selectedContentSearchAnnotationIds,
+    ).toEqual([]);
+  });
+  it('should preserve the selected annotation when paginating through a query with REQUEST_SEARCH', () => {
+    expect(
+      searchesReducer(
+        {
+          foo: {
+            abc123: {
+              data: {
+                'search?page=1': {
+                  json: {},
+                },
+              },
+              query: 'search terms',
+              selectedContentSearchAnnotationIds: ['annotationFromPageOne'],
+            },
+          },
+        },
+        {
+          companionWindowId: 'abc123',
+          query: 'search terms',
+          searchId: 'search?page=2',
+          type: ActionTypes.REQUEST_SEARCH,
+          windowId: 'foo',
+        },
+      ).foo.abc123.selectedContentSearchAnnotationIds,
+    ).toEqual(['annotationFromPageOne']);
   });
   it('should handle RECEIVE_SEARCH', () => {
     expect(

@@ -22,7 +22,7 @@ export const searchesReducer = (state = {}, action) => {
                 },
               },
               query: action.query,
-              selectedContentSearchAnnotation: [],
+              selectedContentSearchAnnotationIds: [],
             },
           },
         };
