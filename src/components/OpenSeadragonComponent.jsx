@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useReducer, useState, useCallback } from 'rea
 import { useDebouncedCallback } from 'use-debounce';
 import { useTranslation } from 'react-i18next';
 import OpenSeadragonViewerContext from '../contexts/OpenSeadragonViewerContext';
+import { useDeferUntilVisible } from '../hooks';
 
 /**
  * Applies x/y/zoom/rotation/flip to viewport. `immediately` snaps
@@ -114,6 +115,8 @@ function OpenSeadragonComponent({
   const setInitialBoundsRef = useRef(setInitialBounds);
   setInitialBoundsRef.current = setInitialBounds;
 
+  const runOnceVisible = useDeferUntilVisible();
+
   useEffect(() => {
     const viewer = viewerRef.current;
     if (!viewer) return;
@@ -188,15 +191,17 @@ function OpenSeadragonComponent({
     viewerRef.current = viewer;
     setViewer(viewer);
 
-    viewer.world.addHandler('add-item', () => {
-      initialViewportSet.current = false;
-      setInitialBoundsRef.current(viewer);
-    });
-
-    viewer.world.addHandler('remove-item', () => {
-      initialViewportSet.current = false;
-      setInitialBoundsRef.current(viewer);
-    });
+    // add-item/remove-item can fire while the viewer's element has no
+    // rendered box at all (e.g. an inactive Bootstrap/tab panel, see #3540)
+    // Defer fit until it's visible.
+    const onWorldChanged = () => {
+      runOnceVisible(viewer.element, () => {
+        initialViewportSet.current = false;
+        setInitialBoundsRef.current(viewer);
+      });
+    };
+    viewer.world.addHandler('add-item', onWorldChanged);
+    viewer.world.addHandler('remove-item', onWorldChanged);
 
     forceUpdate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
