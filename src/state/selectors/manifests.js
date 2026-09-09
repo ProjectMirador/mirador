@@ -90,8 +90,6 @@ export const getManifestProviderName = createSelector(
   (provider, locale) => provider && provider[0].label && PropertyValue.parse(provider[0].label).getValue(locale),
 );
 
-const EMPTY_LOGO_OPTS = Object.freeze({});
-
 /**
  * Return the IIIF v3 provider logo.
  * @param {object} state
@@ -99,7 +97,9 @@ const EMPTY_LOGO_OPTS = Object.freeze({});
  * @returns {string|null}
  */
 export const getProviderLogo = createSelector(
-  [getProperty('provider'), (state) => getThumbnailFactory(state, EMPTY_LOGO_OPTS)],
+  // getThumbnailFactory takes (state, maxHeight, maxWidth); the provider logo is
+  // rendered at its natural size, so no dimensions are requested here.
+  [getProperty('provider'), (state) => getThumbnailFactory(state)],
   (provider, thumbnailFactory) => {
     const logo = provider && provider[0] && provider[0].logo && provider[0].logo[0];
     if (!logo) return null;
