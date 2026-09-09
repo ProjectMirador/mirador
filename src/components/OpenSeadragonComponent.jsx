@@ -197,6 +197,11 @@ function OpenSeadragonComponent({
       setInitialBoundsRef.current(viewer);
     });
 
+    viewer.world.addHandler('remove-item', () => {
+      initialViewportSet.current = false;
+      setInitialBoundsRef.current(viewer);
+    });
+
     forceUpdate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref]);
