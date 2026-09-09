@@ -2,7 +2,13 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { SidebarIndexTableOfContents } from '../components/SidebarIndexTableOfContents';
-import { getSequenceTreeStructure, getVisibleNodeIds, getExpandedNodeIds, getNodeIdToScrollTo } from '../state/selectors';
+import {
+  getSequenceTreeStructure,
+  getVisibleNodeIds,
+  getExpandedNodeIds,
+  getNodeIdToScrollTo,
+  getLocale,
+} from '../state/selectors';
 import * as actions from '../state/actions';
 
 /**
@@ -13,6 +19,7 @@ const mapStateToProps = (state, { id, windowId }) => ({
   nodeIdToScrollTo: getNodeIdToScrollTo(state, { companionWindowId: id, windowId }),
   treeStructure: getSequenceTreeStructure(state, { windowId }),
   visibleNodeIds: getVisibleNodeIds(state, { companionWindowId: id, windowId }),
+  currentLanguage: getLocale(state, { companionWindowId: id, windowId }),
 });
 
 /**

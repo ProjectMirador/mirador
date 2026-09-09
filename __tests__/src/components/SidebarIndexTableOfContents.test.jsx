@@ -6,6 +6,7 @@ import { SidebarIndexTableOfContents } from '../../../src/components/SidebarInde
 import ConnectedSidebarIndexTableOfContents from '../../../src/containers/SidebarIndexTableOfContents';
 import manifestVersion2 from '../../fixtures/version-2/structures.json';
 import manifestVersion3 from '../../fixtures/version-3/structures.json';
+import multiLanguageLabels from '../../fixtures/version-2/multi-language-labels.json';
 
 /**
  * Create wrapper for SidebarIndexTableOfContents component
@@ -107,6 +108,29 @@ describe('SidebarIndexTableOfContents', () => {
       },
     });
     expect(screen.getByRole('treeitem')).toBeInTheDocument();
+  });
+
+  it('gets the correct language label', async () => {
+    const user = userEvent.setup();
+    createWrapper({
+      manifest: multiLanguageLabels,
+      setCanvas,
+      windowId: 'a',
+      currentLanguage: 'de',
+    });
+
+    expect(screen.getByText('Vorderdeckel')).toBeInTheDocument();
+  });
+
+  it('gets the default label when currentLanguage not set', async () => {
+    const user = userEvent.setup();
+    createWrapper({
+      manifest: multiLanguageLabels,
+      setCanvas,
+      windowId: 'a',
+    });
+
+    expect(screen.getByText('front cover')).toBeInTheDocument();
   });
 
   it('toggles branch nodes on click', async () => {
