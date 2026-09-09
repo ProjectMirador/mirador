@@ -90,6 +90,12 @@ function OpenSeadragonComponent({
     [initialViewportSet, viewerConfig],
   );
 
+  // Route through a ref, updated every render, so add-item handler
+  // always calls the current setInitialBounds -- and therefore reads the
+  // current viewerConfig -- instead of whatever it was on the very first render.
+  const setInitialBoundsRef = useRef(setInitialBounds);
+  setInitialBoundsRef.current = setInitialBounds;
+
   useEffect(() => {
     const viewer = viewerRef.current;
     if (!viewer) return;
@@ -188,7 +194,7 @@ function OpenSeadragonComponent({
 
     viewer.world.addHandler('add-item', () => {
       initialViewportSet.current = false;
-      setInitialBounds(viewer);
+      setInitialBoundsRef.current(viewer);
     });
 
     forceUpdate();
