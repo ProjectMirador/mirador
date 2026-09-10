@@ -94,7 +94,9 @@ describe('AnnotationsOverlay', () => {
       const context2d = {
         restore: () => {},
         save: () => {},
+        scale: vi.fn(),
         strokeRect,
+        translate: vi.fn(),
       };
 
       OpenSeadragonCanvasOverlay.mockImplementation(function () {
@@ -103,6 +105,7 @@ describe('AnnotationsOverlay', () => {
           clear: vi.fn(),
           context2d,
           resize: vi.fn(),
+          scale: 0.05,
         };
       });
 
@@ -114,10 +117,10 @@ describe('AnnotationsOverlay', () => {
         viewer: null,
       });
 
-      const getItemAt = vi
-        .spyOn(viewer.world, 'getItemAt')
-        .mockImplementation((index) => (index === 0 ? { viewportToImageZoom: vi.fn(() => 0.05) } : undefined));
-      vi.spyOn(viewer.viewport, 'getZoom').mockImplementation(() => 0.05);
+      // the annotation is drawn in the canvas coordinate space, so the pixel
+      // dimensions of the images loaded into the world are never consulted
+      const getItemAt = vi.spyOn(viewer.world, 'getItemAt');
+      vi.spyOn(viewer.world, 'getItemCount').mockImplementation(() => 1);
 
       rerender(
         cloneElement(component, {
@@ -142,6 +145,7 @@ describe('AnnotationsOverlay', () => {
       expect(context.strokeStyle).toEqual('yellow');
       expect(context.lineWidth).toEqual(20);
       expect(strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
+      expect(getItemAt).not.toHaveBeenCalled();
     });
   });
 

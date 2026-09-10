@@ -1,5 +1,3 @@
-import OpenSeadragon from 'openseadragon';
-
 /**
  * OpenSeadragonCanvasOverlay - adapted from https://github.com/altert/OpenSeadragonCanvasOverlay
  * used rather than an "onRedraw" function we tap into our own method. Existing
@@ -18,7 +16,9 @@ export default class OpenSeadragonCanvasOverlay {
 
     this.containerWidth = 0;
     this.containerHeight = 0;
-    this.imgAspectRatio = 1;
+    this.viewportOrigin = { x: 0, y: 0 };
+    this.viewportWidth = 0;
+    this.viewportHeight = 0;
   }
 
   /** */
@@ -34,6 +34,19 @@ export default class OpenSeadragonCanvasOverlay {
   /** */
   get context2d() {
     return this.canvas.getContext('2d');
+  }
+
+  /**
+   * The number of container (screen) pixels per unit of the OpenSeadragon
+   * viewport coordinate space. Mirador lays its world out in IIIF canvas
+   * coordinates, so this is also the ratio between canvas pixels and screen
+   * pixels; it is deliberately independent of the pixel dimensions of whatever
+   * image happens to be painting the canvas.
+   */
+  get scale() {
+    if (!this.viewportWidth) return 1;
+
+    return this.containerWidth / this.viewportWidth;
   }
 
   /** */
@@ -59,39 +72,28 @@ export default class OpenSeadragonCanvasOverlay {
       this.canvas.setAttribute('height', this.containerHeight);
     }
 
-    this.viewportOrigin = new OpenSeadragon.Point(0, 0);
+    // The margin-inclusive bounds map exactly onto the full container, so they
+    // give us the mapping between the viewport coordinate space and the screen.
     const boundsRect = this.viewer.viewport.getBoundsNoRotateWithMargins(true);
-    this.viewportOrigin.x = boundsRect.x;
-    this.viewportOrigin.y = boundsRect.y * this.imgAspectRatio;
-
+    this.viewportOrigin = { x: boundsRect.x, y: boundsRect.y };
     this.viewportWidth = boundsRect.width;
-    this.viewportHeight = boundsRect.height * this.imgAspectRatio;
-    const image1 = this.viewer.world.getItemAt(0);
-    if (!image1) return;
-    this.imgWidth = image1.source.dimensions.x;
-    this.imgHeight = image1.source.dimensions.y;
-    this.imgAspectRatio = this.imgWidth / this.imgHeight;
+    this.viewportHeight = boundsRect.height;
   }
 
   /**
-   * canvasUpdate - sets up the dimensions for the canvas update to mimick image
-   * 0 dimensions. Then call provided update function.
+   * canvasUpdate - transforms the overlay context so that drawing happens in
+   * the viewport (IIIF canvas) coordinate space. Then call provided update
+   * function.
    * @param {Function} update
    */
   canvasUpdate(update) {
     if (!this.context2d) return;
 
-    const viewportZoom = this.viewer.viewport.getZoom(true);
-    const image1 = this.viewer.world.getItemAt(0);
-    if (!image1) return;
-    const zoom = image1.viewportToImageZoom(viewportZoom);
-
-    const x = ((this.viewportOrigin.x / this.imgWidth - this.viewportOrigin.x) / this.viewportWidth) * this.containerWidth;
-    const y = ((this.viewportOrigin.y / this.imgHeight - this.viewportOrigin.y) / this.viewportHeight) * this.containerHeight;
+    const { scale } = this;
 
     if (this.clearBeforeRedraw) this.clear();
-    this.context2d.translate(x, y);
-    this.context2d.scale(zoom, zoom);
+    this.context2d.translate(-this.viewportOrigin.x * scale, -this.viewportOrigin.y * scale);
+    this.context2d.scale(scale, scale);
 
     const center = this.viewer.viewport.getCenter();
 

@@ -18,26 +18,30 @@ describe('OpenSeadragonCanvasOverlay', () => {
           clientWidth: 200,
         },
         viewport: {
+          // the container is 200x100, so the margin-inclusive bounds have a
+          // matching 2:1 aspect ratio
           getBoundsNoRotateWithMargins: vi.fn(() => ({
-            height: 300,
-            width: 200,
+            height: 200,
+            width: 400,
             x: 40,
             y: 80,
           })),
           getCenter: () => ({ x: 0, y: 0 }),
           getFlip: () => false,
           getRotation: () => 0,
-          getZoom: vi.fn(() => 0.75),
+          getZoom: vi.fn(() => 0.5),
         },
         world: {
+          // a canvas painted by a much smaller image; the overlay should ignore
+          // these pixel dimensions entirely
           getItemAt: vi.fn(() => ({
             source: {
               dimensions: {
-                x: 1000,
-                y: 2000,
+                x: 100,
+                y: 50,
               },
             },
-            viewportToImageZoom: vi.fn(() => 0.075),
+            viewportToImageZoom: vi.fn(() => 2),
           })),
         },
       };
@@ -80,37 +84,27 @@ describe('OpenSeadragonCanvasOverlay', () => {
     });
   });
   describe('resize', () => {
-    it('sets various values based off of image and container sizes', () => {
+    it('sets various values based off of the container and viewport bounds', () => {
       canvasOverlay.resize();
       expect(canvasOverlay.containerHeight).toEqual(100);
       expect(canvasOverlay.containerWidth).toEqual(200);
-      expect(canvasOverlay.imgAspectRatio).toEqual(0.5);
+      expect(canvasOverlay.viewportOrigin).toEqual({ x: 40, y: 80 });
+      expect(canvasOverlay.viewportWidth).toEqual(400);
+      expect(canvasOverlay.viewportHeight).toEqual(200);
     });
-    it('when image is undefined returns early', () => {
-      OpenSeadragon.mockClear();
-      OpenSeadragon.mockImplementation(function () {
-        return {
-          canvas: document.getElementById('canvas'),
-          container: {
-            clientHeight: 100,
-            clientWidth: 200,
-          },
-          viewport: {
-            getBoundsNoRotateWithMargins: vi.fn(() => new OpenSeadragon.Rect(0, 0, 200, 200)),
-          },
-          world: {
-            getItemAt: vi.fn(),
-          },
-        };
-      });
-      canvasOverlay = new OpenSeadragonCanvasOverlay(new OpenSeadragon(), ref);
+  });
+  describe('scale', () => {
+    it('is the ratio of container pixels to viewport (IIIF canvas) coordinates', () => {
       canvasOverlay.resize();
-      expect(canvasOverlay.imgHeight).toEqual(undefined);
-      expect(canvasOverlay.imgWidth).toEqual(undefined);
+      expect(canvasOverlay.scale).toEqual(0.5);
+    });
+    it('is 1 before the overlay has been sized', () => {
+      expect(canvasOverlay.scale).toEqual(1);
     });
   });
   describe('canvasUpdate', () => {
-    it('sets appropriate sizes and calls update argument', () => {
+    /** set up a stubbed 2d context and return its spies */
+    const setupContext = () => {
       const scale = vi.fn();
       const setAttribute = vi.fn();
       const setTransform = vi.fn();
@@ -127,13 +121,32 @@ describe('OpenSeadragonCanvasOverlay', () => {
         },
         setAttribute,
       };
+
+      return { scale, setTransform, translate };
+    };
+
+    it('sets appropriate sizes and calls update argument', () => {
+      const { scale, setTransform, translate } = setupContext();
       const update = vi.fn();
       canvasOverlay.resize();
       canvasOverlay.canvasUpdate(update);
       expect(update).toHaveBeenCalledTimes(1);
-      expect(scale).toHaveBeenCalledWith(0.075, 0.075);
-      expect(translate).toHaveBeenCalledWith(-39.96, -26.65333333333333);
+      expect(scale).toHaveBeenCalledWith(0.5, 0.5);
+      expect(translate).toHaveBeenCalledWith(-20, -40);
       expect(setTransform).toHaveBeenCalledWith(1, 0, 0, 1, 0, 0);
+    });
+
+    it('scales by the canvas coordinate space rather than the image pixel size', () => {
+      const { scale } = setupContext();
+      const getItemAt = vi.spyOn(canvasOverlay.viewer.world, 'getItemAt');
+
+      canvasOverlay.resize();
+      canvasOverlay.canvasUpdate(vi.fn());
+
+      // the image painting the canvas is 100px wide where the canvas is 400
+      // units wide; the overlay must not pick up that 4x factor
+      expect(scale).toHaveBeenCalledWith(0.5, 0.5);
+      expect(getItemAt).not.toHaveBeenCalled();
     });
   });
 });

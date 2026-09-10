@@ -103,6 +103,23 @@ export default class CanvasWorld {
     return [canvasDimensions.x, canvasDimensions.y, canvasDimensions.width, canvasDimensions.height];
   }
 
+  /**
+   * canvasScaleFactor - the ratio between the space a canvas occupies in the
+   * world and its own IIIF coordinate space. Canvases are laid out at a common
+   * height, so a canvas that is taller than its neighbors is shrunk to fit and
+   * anything expressed in its own coordinates (e.g. an annotation target) has
+   * to be scaled to match.
+   */
+  canvasScaleFactor(canvasId) {
+    const canvasDimensions = this.canvasDimensions.find((c) => c.canvas.id === canvasId);
+    if (!canvasDimensions) return 1;
+
+    const canvasWidth = canvasDimensions.canvas.getWidth();
+    if (!canvasWidth || !canvasDimensions.width) return 1;
+
+    return canvasDimensions.width / canvasWidth;
+  }
+
   /** */
   get canvasDirection() {
     switch (this.viewingDirection) {

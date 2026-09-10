@@ -12,8 +12,11 @@ import { buildPath2D } from '../lib/svgShapesToPath';
 /** @private */
 function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point) {
   const [canvasX, canvasY] = canvasWorld.canvasToWorldCoordinates(canvas.id);
-  const relativeX = point.x - canvasX;
-  const relativeY = point.y - canvasY;
+  // annotation targets are in the canvas's own coordinate space, which may be
+  // scaled down when the canvas is laid out in the world
+  const scale = canvasWorld.canvasScaleFactor(canvas.id);
+  const relativeX = (point.x - canvasX) / scale;
+  const relativeY = (point.y - canvasY) / scale;
 
   if (resource.svgSelector) {
     const context = osdCanvasOverlay.context2d;
@@ -81,15 +84,21 @@ export function AnnotationsOverlay({
    */
   const annotationsToContext = useCallback(
     (renderedAnnotations, currentPalette) => {
+      // While the canvases are (re)loading the OSD world is empty and the viewport
+      // has not yet been fitted to the new canvas world, so anything drawn now would
+      // be placed against stale bounds.
+      if (viewer.world.getItemCount() === 0) return;
+
       const context = osdCanvasOverlay.context2d;
+      // Annotation coordinates are in the IIIF canvas coordinate space, which is
+      // also the space the overlay draws in, so stroke widths only need to be
+      // scaled back out by the current screen-pixels-per-canvas-pixel ratio.
+      const zoomRatio = osdCanvasOverlay.scale;
+      const canvasIds = new Set(canvasWorld.canvasIds);
       renderedAnnotations.forEach((annotation) => {
         annotation.resources.forEach((resource) => {
-          const osdCanvasIndex = canvasWorld.canvases.findIndex((canvas) => canvas.id === resource.targetId);
-          if (osdCanvasIndex === -1) return;
-          const viewportCanvas = viewer.world.getItemAt(osdCanvasIndex);
-          if (!viewportCanvas) return;
+          if (!canvasIds.has(resource.targetId)) return;
           const offset = canvasWorld.offsetByCanvas(resource.targetId);
-          const zoomRatio = viewportCanvas.viewportToImageZoom(viewer.viewport.getZoom(true));
           const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
             hovered: hoveredAnnotationIds.includes(resource.id),
             offset,
@@ -101,6 +110,7 @@ export function AnnotationsOverlay({
               },
             },
             resource,
+            scale: canvasWorld.canvasScaleFactor(resource.targetId),
             selected: selectedAnnotationId === resource.id,
             zoomRatio,
           });

@@ -22,8 +22,10 @@ function createSubject(args) {
 function createMockContext(onFill = '') {
   return {
     fill: vi.fn(onFill),
+    fillRect: vi.fn(),
     restore: vi.fn(),
     save: vi.fn(),
+    scale: vi.fn(),
     setLineDash: vi.fn(),
     stroke: vi.fn(),
     strokeRect: vi.fn(),
@@ -214,12 +216,42 @@ describe('CanvasAnnotationDisplay', () => {
       });
       subject.context = context;
       subject.fragmentContext();
-      expect(context.strokeRect).toHaveBeenCalledWith(-90, 10, 100, 200);
+      expect(context.translate).toHaveBeenCalledWith(-100, 0);
+      expect(context.scale).toHaveBeenCalledWith(1, 1);
+      expect(context.strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
       expect(context.strokeStyle).toEqual('blue');
       expect(context.lineWidth).toEqual(2);
       expect(context.setLineDash).not.toHaveBeenCalled();
       expect(alphaAtFill).toEqual(undefined);
       expect(context.globalAlpha).toEqual(1);
+    });
+
+    it('scales the fragment into the space the canvas occupies in the world', () => {
+      const context = createMockContext();
+      const subject = createSubject({
+        resource: new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }),
+        scale: 0.5,
+      });
+      subject.context = context;
+      subject.fragmentContext();
+      expect(context.scale).toHaveBeenCalledWith(0.5, 0.5);
+      // the fragment stays in the canvas' own coordinate space
+      expect(context.strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
+      // ...so the stroke has to be widened to stay 1px on screen
+      expect(context.lineWidth).toEqual(4);
+    });
+
+    it('does not draw fully transparent annotations, and leaves the context untouched', () => {
+      const context = createMockContext();
+      const subject = createSubject({
+        palette: { default: { globalAlpha: 0 } },
+        resource: new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }),
+      });
+      subject.context = context;
+      subject.fragmentContext();
+      expect(context.save).not.toHaveBeenCalled();
+      expect(context.translate).not.toHaveBeenCalled();
+      expect(context.strokeRect).not.toHaveBeenCalled();
     });
   });
 });

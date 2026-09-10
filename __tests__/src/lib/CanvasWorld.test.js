@@ -68,6 +68,22 @@ describe('CanvasWorld', () => {
       ).toEqual([552, 1584, 3360, 2368]);
     });
   });
+  describe('canvasScaleFactor', () => {
+    it('is 1 when the canvas is laid out at its own size', () => {
+      expect(
+        new CanvasWorld([canvases[1]]).canvasScaleFactor('https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'),
+      ).toEqual(1);
+    });
+    it('is the ratio the canvas was shrunk by to match its neighbours', () => {
+      const subject = new CanvasWorld(canvasSubset);
+      // 6501x4421 is scaled down to 6305x4288 to match the shorter canvas
+      expect(subject.canvasScaleFactor('https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1')).toEqual(6305 / 6501);
+      expect(subject.canvasScaleFactor('https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1')).toEqual(1);
+    });
+    it('is 1 for a canvas that is not in the world', () => {
+      expect(new CanvasWorld(canvasSubset).canvasScaleFactor('https://example.com/canvas/1')).toEqual(1);
+    });
+  });
   describe('canvasToWorldCoordinates', () => {
     it('converts canvas coordinates to world offset by location', () => {
       expect(

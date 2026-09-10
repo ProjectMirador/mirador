@@ -6,13 +6,22 @@ import { buildPath2D } from '../lib/svgShapesToPath';
 
 export default class CanvasAnnotationDisplay {
   /** */
-  constructor({ resource, palette, zoomRatio, offset, selected, hovered }) {
+  constructor({ resource, palette, zoomRatio, offset, scale = 1, selected, hovered }) {
     this.resource = resource;
     this.palette = palette;
     this.zoomRatio = zoomRatio;
     this.offset = offset;
+    this.scale = scale;
     this.selected = selected;
     this.hovered = hovered;
+  }
+
+  /**
+   * The number of screen pixels a single unit of the annotation's own (IIIF
+   * canvas) coordinate space occupies, used to keep stroke widths constant.
+   */
+  get screenRatio() {
+    return this.zoomRatio * this.scale;
   }
 
   /** */
@@ -58,6 +67,7 @@ export default class CanvasAnnotationDisplay {
        */
       this.context.save();
       this.context.translate(this.offset.x, this.offset.y);
+      this.context.scale(this.scale, this.scale);
       const p = buildPath2D(element);
 
       // Setup styling from SVG -> Canvas
@@ -80,8 +90,8 @@ export default class CanvasAnnotationDisplay {
         }
       });
 
-      // Resize the stroke based off of the zoomRatio (currentZoom / maxZoom)
-      this.context.lineWidth /= this.zoomRatio;
+      // Resize the stroke so that it stays a constant width on screen
+      this.context.lineWidth /= this.screenRatio;
 
       // Reset the color if it is selected or hovered on
       if (this.selected || this.hovered) {
@@ -110,8 +120,6 @@ export default class CanvasAnnotationDisplay {
   /** */
   fragmentContext() {
     const fragment = this.resource.fragmentSelector;
-    fragment[0] += this.offset.x;
-    fragment[1] += this.offset.y;
 
     let currentPalette;
     if (this.selected) {
@@ -122,17 +130,20 @@ export default class CanvasAnnotationDisplay {
       currentPalette = this.palette.default;
     }
 
+    if (currentPalette.globalAlpha === 0) return;
+
     this.context.save();
     Object.keys(currentPalette).forEach((key) => {
       this.context[key] = currentPalette[key];
     });
 
-    if (currentPalette.globalAlpha === 0) return;
+    this.context.translate(this.offset.x, this.offset.y);
+    this.context.scale(this.scale, this.scale);
 
     if (currentPalette.fillStyle) {
       this.context.fillRect(...fragment);
     } else {
-      this.context.lineWidth = 1 / this.zoomRatio;
+      this.context.lineWidth = 1 / this.screenRatio;
       this.context.strokeRect(...fragment);
     }
 
