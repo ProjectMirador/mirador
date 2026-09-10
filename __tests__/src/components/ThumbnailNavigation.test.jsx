@@ -44,6 +44,12 @@ describe('ThumbnailNavigation', () => {
 
     focusSpy.mockRestore();
   });
+
+  it('renders as a nav landmark with an accessible name', () => {
+    render(<Subject />);
+
+    expect(screen.getByRole('navigation')).toHaveAccessibleName('Thumbnails');
+  });
   it('renders containers based off of number of canvases', () => {
     render(<Subject />);
 
