@@ -5,9 +5,10 @@ import AnnotationItem from './AnnotationItem';
  */
 export default class AnnotationPage {
   /** */
-  constructor(json, target) {
+  constructor(json, target, language) {
     this.json = json;
     this.target = target;
+    this.language = language;
   }
 
   /** */
@@ -26,7 +27,7 @@ export default class AnnotationPage {
       this._items ||
       (() => {
         if (!this.json || !this.json.items) return [];
-        return [this.json.items].flat().map((resource) => new AnnotationItem(resource, this.target));
+        return [this.json.items].flat().map((resource) => new AnnotationItem(resource, this.target, this.language));
       })();
     return this._items;
   }

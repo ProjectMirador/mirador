@@ -129,6 +129,34 @@ describe('AnnotationItem', () => {
     it('with multiple bodies', () => {
       expect(new AnnotationItem({ body: [{ value: 'foo' }, { value: 'bar' }] }).chars).toEqual('foo bar');
     });
+    it('with choice bodies with no language set', () => {
+      expect(
+        new AnnotationItem({
+          body: {
+            items: [
+              { language: 'en', value: 'foo' },
+              { language: 'ja', value: 'bar' },
+            ],
+          },
+        }).chars,
+      ).toEqual('foo');
+    });
+    it('with choice bodies and language set', () => {
+      expect(
+        new AnnotationItem(
+          {
+            body: {
+              items: [
+                { language: 'en', value: 'foo' },
+                { language: 'ja', value: 'bar' },
+              ],
+            },
+          },
+          '',
+          'ja',
+        ).chars,
+      ).toEqual('bar');
+    });
   });
   describe('fragmentSelector', () => {
     it('simple string', () => {

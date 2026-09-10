@@ -7,14 +7,14 @@ import AnnotationPage from './AnnotationPage';
  */
 export default class AnnotationFactory {
   /** */
-  static determineAnnotation(json, target) {
+  static determineAnnotation(json, target, language) {
     if (!json) {
       return null;
     }
 
     // IIIF Presentation API v3. AnnotationPage
     if (json.type === 'AnnotationPage') {
-      return new AnnotationPage(json, target);
+      return new AnnotationPage(json, target, language);
     }
 
     // IIIF Presentation API v2. OpenAnnotation and SharedCanvas models
