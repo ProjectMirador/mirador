@@ -29,6 +29,7 @@ describe('OpenSeadragonTileSource', () => {
       addTiledImage: vi.fn().mockImplementation(({ success }) => {
         success({ item: mockOsdItem });
       }),
+      raiseEvent: vi.fn(),
       world: {
         removeItem: vi.fn(),
       },
@@ -63,6 +64,7 @@ describe('OpenSeadragonTileSource', () => {
       addTiledImage: vi.fn().mockImplementation(({ success }) => {
         success({ item: mockOsdItem });
       }),
+      raiseEvent: vi.fn(),
       world: {
         removeItem: vi.fn(),
         setItemIndex: vi.fn(),
@@ -99,6 +101,7 @@ describe('OpenSeadragonTileSource', () => {
       addTiledImage: vi.fn().mockImplementation(({ success }) => {
         success({ item: mockOsdItem });
       }),
+      raiseEvent: vi.fn(),
       world: {
         removeItem: vi.fn(),
         setItemIndex: vi.fn(),
@@ -135,6 +138,7 @@ describe('OpenSeadragonTileSource', () => {
       addTiledImage: ({ success }) => {
         success({ item: mockOsdItem });
       },
+      raiseEvent: vi.fn(),
       world: {
         removeItem: vi.fn(),
       },
@@ -170,6 +174,7 @@ describe('OpenSeadragonTileSource', () => {
 
     const viewer = {
       addTiledImage,
+      raiseEvent: vi.fn(),
       world: { removeItem: vi.fn() },
     };
     const ref = { current: viewer };
