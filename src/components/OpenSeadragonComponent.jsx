@@ -20,7 +20,7 @@ function OpenSeadragonComponent({
   const ref = useRef();
   const [grabbing, setGrabbing] = useState(false);
   const viewerRef = useRef(undefined);
-  const initialViewportSet = useRef(false);
+  const viewportApplied = useRef(false);
   const lastAppliedBounds = useRef(null);
   const isResettingViewport = useRef(false);
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
@@ -40,7 +40,7 @@ function OpenSeadragonComponent({
     (event) => {
       const { viewport } = event.eventSource;
 
-      if (!initialViewportSet.current) return;
+      if (!viewportApplied.current) return;
 
       // Don't save viewport changes during automatic recentering
       if (isResettingViewport.current) return;
@@ -54,13 +54,13 @@ function OpenSeadragonComponent({
         zoom: viewport.zoomSpring.target.value,
       });
     },
-    [onUpdateViewport, initialViewportSet],
+    [onUpdateViewport, viewportApplied],
   );
 
-  const setInitialBounds = useCallback(
+  const applyViewport = useCallback(
     ({ viewport }) => {
-      if (initialViewportSet.current) return;
-      initialViewportSet.current = true;
+      if (viewportApplied.current) return;
+      viewportApplied.current = true;
 
       if (viewerConfig.x != null && viewerConfig.y != null) {
         viewport.panTo(new Openseadragon.Point(viewerConfig.x, viewerConfig.y), true);
@@ -87,14 +87,14 @@ function OpenSeadragonComponent({
         }
       }
     },
-    [initialViewportSet, viewerConfig],
+    [viewportApplied, viewerConfig],
   );
 
   // Route through a ref, updated every render, so add-item handler
-  // always calls the current setInitialBounds -- and therefore reads the
+  // always calls the current applyViewport -- and therefore reads the
   // current viewerConfig -- instead of whatever it was on the very first render.
-  const setInitialBoundsRef = useRef(setInitialBounds);
-  setInitialBoundsRef.current = setInitialBounds;
+  const applyViewportRef = useRef(applyViewport);
+  applyViewportRef.current = applyViewport;
 
   useEffect(() => {
     const viewer = viewerRef.current;
@@ -102,8 +102,8 @@ function OpenSeadragonComponent({
 
     const { viewport } = viewer;
 
-    if (!initialViewportSet.current) {
-      setInitialBounds(viewer);
+    if (!viewportApplied.current) {
+      applyViewport(viewer);
       return;
     }
 
@@ -160,7 +160,7 @@ function OpenSeadragonComponent({
     if (viewerConfig.flip != null && (viewerConfig.flip || false) !== viewport.getFlip()) {
       viewport.setFlip(viewerConfig.flip);
     }
-  }, [initialViewportSet, setInitialBounds, viewerConfig, viewerRef]);
+  }, [viewportApplied, applyViewport, viewerConfig, viewerRef]);
 
   // initialize OSD stuff when this component is mounted
   useEffect(() => {
@@ -193,13 +193,13 @@ function OpenSeadragonComponent({
     setViewer(viewer);
 
     viewer.world.addHandler('add-item', () => {
-      initialViewportSet.current = false;
-      setInitialBoundsRef.current(viewer);
+      viewportApplied.current = false;
+      applyViewportRef.current(viewer);
     });
 
     viewer.world.addHandler('remove-item', () => {
-      initialViewportSet.current = false;
-      setInitialBoundsRef.current(viewer);
+      viewportApplied.current = false;
+      applyViewportRef.current(viewer);
     });
 
     forceUpdate();
