@@ -1,6 +1,7 @@
 import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { config } from 'react-transition-group';
+import { waitFor } from '@testing-library/react';
 import { WindowAuthenticationBar } from '../../../src/components/WindowAuthenticationBar';
 
 /**
@@ -58,12 +59,16 @@ describe('AuthenticationControl', () => {
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeVisible();
     expect(screen.getByRole('button', { name: 'Login' })).toBeVisible();
     expect(within(collapseEl).getByText('long description')).toBeVisible();
-    expect(collapseEl).toHaveClass('MuiCollapse-entered');
+    expect(collapseEl).not.toHaveClass('MuiCollapse-hidden');
 
     // click the cancel button to collapse
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
+    await waitFor(() => {
+      expect(collapseEl).toHaveClass('MuiCollapse-hidden');
+    });
     // collapsed state: Presence of continue button text. Hidden cancelBtn, loginBtn, and description
     expect(screen.getByText('Continue')).toBeInTheDocument();
+    expect(collapseEl).toHaveClass('MuiCollapse-hidden');
     expect(screen.queryByRole('button', { name: 'Cancel' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Login' })).not.toBeInTheDocument();
     expect(within(collapseEl).getByText('long description')).not.toBeVisible();
