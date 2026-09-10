@@ -86,6 +86,35 @@ describe('AnnotationsOverlay', () => {
       expect(canvasUpdate).toHaveBeenCalled();
       expect(forceRedraw).toHaveBeenCalled();
     });
+
+    // Regression test for https://github.com/ProjectMirador/mirador/issues/4525
+    it('stops responding to update-viewport once unmounted', () => {
+      const clear = vi.fn();
+      const resize = vi.fn();
+      const canvasUpdate = vi.fn();
+
+      OpenSeadragonCanvasOverlay.mockImplementation(function () {
+        return {
+          canvasUpdate,
+          clear,
+          resize,
+        };
+      });
+
+      const { component, rerender, viewer, unmount } = createWrapper({ viewer: null });
+
+      rerender(cloneElement(component, { viewer }));
+
+      unmount();
+
+      // OSD doesn't know the component unmounted -- simulate its animation
+      // loop still firing after the fact.
+      viewer.raiseEvent('update-viewport');
+
+      expect(clear).not.toHaveBeenCalled();
+      expect(resize).not.toHaveBeenCalled();
+      expect(canvasUpdate).not.toHaveBeenCalled();
+    });
   });
 
   describe('annotationsToContext', () => {
