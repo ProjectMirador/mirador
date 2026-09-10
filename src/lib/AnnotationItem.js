@@ -1,13 +1,15 @@
 import compact from 'lodash/compact';
 import { v4 as uuid } from 'uuid';
+import { parsedFragment } from './AnnotationSharedMethods';
 
 /**
  * A modeled WebAnnotation item
  */
 export default class AnnotationItem {
   /** */
-  constructor(resource = {}) {
+  constructor(resource = {}, canvas) {
     this.resource = resource;
+    this.canvas = canvas;
   }
 
   /** */
@@ -123,7 +125,6 @@ export default class AnnotationItem {
       default:
         return null;
     }
-
-    return match && match[1].split(',').map((str) => parseInt(str, 10));
+    return parsedFragment(match, this.canvas);
   }
 }

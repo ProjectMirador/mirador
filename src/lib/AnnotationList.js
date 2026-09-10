@@ -24,7 +24,7 @@ export default class AnnotationList {
       (() => {
         if (!this.json || !this.json.resources) return [];
 
-        return [this.json.resources].flat().map((resource) => new AnnotationResource(resource));
+        return [this.json.resources].flat().map((resource) => new AnnotationResource(resource, this.target));
       })();
     return this._resources;
   }

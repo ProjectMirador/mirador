@@ -26,8 +26,7 @@ export default class AnnotationPage {
       this._items ||
       (() => {
         if (!this.json || !this.json.items) return [];
-
-        return [this.json.items].flat().map((resource) => new AnnotationItem(resource));
+        return [this.json.items].flat().map((resource) => new AnnotationItem(resource, this.target));
       })();
     return this._items;
   }
