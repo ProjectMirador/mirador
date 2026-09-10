@@ -114,9 +114,16 @@ describe('AnnotationsOverlay', () => {
         viewer: null,
       });
 
-      const getItemAt = vi
-        .spyOn(viewer.world, 'getItemAt')
-        .mockImplementation((index) => (index === 0 ? { viewportToImageZoom: vi.fn(() => 0.05) } : undefined));
+      const getItemCount = vi.spyOn(viewer.world, 'getItemCount').mockReturnValue(1);
+      const getItemAt = vi.spyOn(viewer.world, 'getItemAt').mockImplementation((index) =>
+        index === 0
+          ? {
+              canvasId: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+              imageToViewportRectangle: vi.fn().mockReturnValue({ x: 10, y: 10, width: 100, height: 200 }),
+              viewportToImageZoom: vi.fn(() => 0.05),
+            }
+          : undefined,
+      );
       vi.spyOn(viewer.viewport, 'getZoom').mockImplementation(() => 0.05);
 
       rerender(

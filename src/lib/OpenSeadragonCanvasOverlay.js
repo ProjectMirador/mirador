@@ -81,17 +81,14 @@ export default class OpenSeadragonCanvasOverlay {
   canvasUpdate(update) {
     if (!this.context2d) return;
 
-    const viewportZoom = this.viewer.viewport.getZoom(true);
-    const image1 = this.viewer.world.getItemAt(0);
-    if (!image1) return;
-    const zoom = image1.viewportToImageZoom(viewportZoom);
+    if (this.viewer.world.getItemCount() === 0) return;
 
-    const x = ((this.viewportOrigin.x / this.imgWidth - this.viewportOrigin.x) / this.viewportWidth) * this.containerWidth;
-    const y = ((this.viewportOrigin.y / this.imgHeight - this.viewportOrigin.y) / this.viewportHeight) * this.containerHeight;
+    const bounds = this.viewer.viewport.getBoundsNoRotateWithMargins(true);
+    const scale = this.containerWidth / bounds.width;
 
     if (this.clearBeforeRedraw) this.clear();
-    this.context2d.translate(x, y);
-    this.context2d.scale(zoom, zoom);
+    this.context2d.translate(-bounds.x * scale, -bounds.y * scale);
+    this.context2d.scale(scale, scale);
 
     const center = this.viewer.viewport.getCenter();
 

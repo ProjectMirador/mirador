@@ -211,6 +211,9 @@ describe('CanvasAnnotationDisplay', () => {
       const subject = createSubject({
         hovered: true,
         resource: new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }),
+        viewportCanvas: {
+          imageToViewportRectangle: vi.fn().mockReturnValue({ x: -90, y: 10, width: 100, height: 200 }),
+        },
       });
       subject.context = context;
       subject.fragmentContext();

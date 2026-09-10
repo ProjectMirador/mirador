@@ -6,13 +6,14 @@ import { buildPath2D } from '../lib/svgShapesToPath';
 
 export default class CanvasAnnotationDisplay {
   /** */
-  constructor({ resource, palette, zoomRatio, offset, selected, hovered }) {
+  constructor({ resource, palette, zoomRatio, offset, selected, hovered, viewportCanvas }) {
     this.resource = resource;
     this.palette = palette;
     this.zoomRatio = zoomRatio;
     this.offset = offset;
     this.selected = selected;
     this.hovered = hovered;
+    this.viewportCanvas = viewportCanvas;
   }
 
   /** */
@@ -110,8 +111,7 @@ export default class CanvasAnnotationDisplay {
   /** */
   fragmentContext() {
     const fragment = this.resource.fragmentSelector;
-    fragment[0] += this.offset.x;
-    fragment[1] += this.offset.y;
+    const { x, y, width, height } = this.viewportCanvas.imageToViewportRectangle(...fragment);
 
     let currentPalette;
     if (this.selected) {
@@ -130,10 +130,10 @@ export default class CanvasAnnotationDisplay {
     if (currentPalette.globalAlpha === 0) return;
 
     if (currentPalette.fillStyle) {
-      this.context.fillRect(...fragment);
+      this.context.fillRect(x, y, width, height);
     } else {
       this.context.lineWidth = 1 / this.zoomRatio;
-      this.context.strokeRect(...fragment);
+      this.context.strokeRect(x, y, width, height);
     }
 
     this.context.restore();
