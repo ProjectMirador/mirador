@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback, useMemo } from 'react';
+import { useRef, useEffect, useLayoutEffect, useCallback, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { useDebouncedCallback } from 'use-debounce';
@@ -252,7 +252,9 @@ export function AnnotationsOverlay({
     updateCanvas();
   }, [updateCanvas]);
 
-  useEffect(() => {
+  // useLayoutEffect lets us remove handlers at the same time that
+  // React tears down the ref to our own portaled canvas
+  useLayoutEffect(() => {
     if (!viewer) return undefined;
 
     viewer.addHandler('canvas-click', onCanvasClick);
