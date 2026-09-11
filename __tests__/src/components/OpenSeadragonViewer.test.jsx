@@ -28,13 +28,16 @@ function createWrapper(props) {
     zoomToWorld: PropTypes.func.isRequired,
   };
 
+  const canvasWorld = getCanvasWorld(canvases);
+
   const component = (
     <OpenSeadragonViewer
       classes={{}}
       windowId="base"
       config={{}}
       updateViewport={vi.fn()}
-      canvasWorld={getCanvasWorld(canvases)}
+      canvasWorld={canvasWorld}
+      viewerConfig={{ bounds: canvasWorld.worldBounds(), canvasKey: 'base' }}
       {...props}
     >
       <Child testId="foo" />
@@ -100,8 +103,15 @@ describe('OpenSeadragonViewer', () => {
 
   describe('onViewportChange', () => {
     it('translates the OSD viewport data into an update to the component state', () => {
+      vi.useFakeTimers();
       const updateViewport = vi.fn();
       const { viewer } = createWrapper({ updateViewport });
+
+      // Let the initial mount's own apply settle (bounded by useApplyViewport's
+      // settle timeout) before simulating a user's own gesture -- otherwise
+      // this report would be discarded as mid-transition noise from our own
+      // applied position, not treated as a real gesture.
+      vi.advanceTimersByTime(2000);
 
       vi.spyOn(viewer, 'viewport', 'get').mockReturnValue({
         centerSpringX: { target: { value: 1 } },
@@ -121,6 +131,8 @@ describe('OpenSeadragonViewer', () => {
         y: 0,
         zoom: 0.5,
       });
+
+      vi.useRealTimers();
     });
   });
 

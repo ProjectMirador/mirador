@@ -16,7 +16,6 @@ function withLegacyPreserveViewportFallback(state, preserveMiradorViewport) {
   const legacyPreserveViewport = getConfig(state).osdConfig?.preserveViewport;
   if (legacyPreserveViewport === undefined) return preserveMiradorViewport;
 
-  // eslint-disable-next-line no-console
   console.warn(
     '[Mirador] osdConfig.preserveViewport is deprecated and no longer controls OpenSeadragon directly. ' +
       'Set window.preserveMiradorViewport instead -- this fallback will be removed in a future release.',

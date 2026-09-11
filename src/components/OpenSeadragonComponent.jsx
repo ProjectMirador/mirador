@@ -4,7 +4,7 @@ import { useEffect, useId, useRef, useReducer, useState, useCallback } from 'rea
 import { useDebouncedCallback } from 'use-debounce';
 import { useTranslation } from 'react-i18next';
 import OpenSeadragonViewerContext from '../contexts/OpenSeadragonViewerContext';
-import { useDeferUntilVisible } from '../hooks';
+import { useApplyViewport } from '../hooks';
 
 /**
  * Applies x/y/zoom/rotation/flip to viewport. `immediately` snaps
@@ -53,10 +53,9 @@ function OpenSeadragonComponent({
   const ref = useRef();
   const [grabbing, setGrabbing] = useState(false);
   const viewerRef = useRef(undefined);
-  const initialViewportSet = useRef(false);
-  const lastAppliedBounds = useRef(null);
-  const isResettingViewport = useRef(false);
   const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  const applyState = useApplyViewport(viewerRef.current, viewerConfig);
 
   const moveHandler = useDebouncedCallback(
     useCallback(
@@ -69,25 +68,52 @@ function OpenSeadragonComponent({
     10,
   );
 
+  // Reports the viewport back to Redux (preserveMiradorViewport) after the
+  // user's own gesture -- gated on useApplyViewport's state so this never
+  // reports (a) before anything's been applied yet, or (b) a position
+  // change that Mirador's own applyViewport call just caused, not the user.
+  //
+  // A multi-canvas transition can trigger several animation-finish events
+  // that have nothing to do with the user -- each canvas's own <TileSource>
+  // settles its own placement independently, and any one of those can
+  // raise animation-finish reporting whatever the viewport happens to be
+  // at that moment, not the position we just correctly fit to. So while
+  // isApplying, a report is only treated as "settled" (and reporting
+  // resumed) once it actually matches what we told OSD to do; anything
+  // else in between is discarded as mid-transition noise, not a gesture.
+  //
+  // Tagged with canvasKey so a late-arriving report can be identified as
+  // stale by whoever reads it back, instead of being trusted just because
+  // it landed after a Redux write.
   const onViewportChange = useCallback(
     (event) => {
       const { viewport } = event.eventSource;
 
-      if (!initialViewportSet.current) return;
+      if (!applyState.current.hasApplied) return;
 
-      // Don't save viewport changes during automatic recentering
-      if (isResettingViewport.current) return;
+      const x = Math.round(viewport.centerSpringX.target.value);
+      const y = Math.round(viewport.centerSpringY.target.value);
+      const zoom = viewport.zoomSpring.target.value;
+
+      if (applyState.current.isApplying) {
+        const { expected } = applyState.current;
+        const settled = expected && Math.round(expected.x) === x && Math.round(expected.y) === y && expected.zoom === zoom;
+
+        if (settled) applyState.current.isApplying = false;
+        return;
+      }
 
       onUpdateViewport({
         bounds: viewport.getBounds(),
+        canvasKey: applyState.current.canvasKey,
         flip: viewport.getFlip(),
         rotation: viewport.getRotation(),
-        x: Math.round(viewport.centerSpringX.target.value),
-        y: Math.round(viewport.centerSpringY.target.value),
-        zoom: viewport.zoomSpring.target.value,
+        x,
+        y,
+        zoom,
       });
     },
-    [onUpdateViewport, initialViewportSet],
+    [onUpdateViewport, applyState],
   );
 
   const setInitialBounds = useCallback(
@@ -166,6 +192,16 @@ function OpenSeadragonComponent({
     const viewer = Openseadragon({
       element: ref.current,
       ...osdConfig,
+      // OSD's own preserveViewport option (unrelated to Mirador's own
+      // preserveMiradorViewport feature -- see settings.js) governs an
+      // internal, undocumented auto-goHome() whenever world.getItemCount()
+      // === 1, which can fire on whichever single canvas happens to be
+      // momentarily alone in the world mid-transition (each canvas's own
+      // <TileSource> mounts independently), racing against our own
+      // useApplyViewport fit. Since this architecture fully owns camera
+      // positioning, that internal auto-recenter must always be disabled --
+      // never a pass-through of any Mirador config value.
+      preserveViewport: true,
     });
 
     viewer.addHandler('canvas-drag', () => {
@@ -190,18 +226,6 @@ function OpenSeadragonComponent({
 
     viewerRef.current = viewer;
     setViewer(viewer);
-
-    // add-item/remove-item can fire while the viewer's element has no
-    // rendered box at all (e.g. an inactive Bootstrap/tab panel, see #3540)
-    // Defer fit until it's visible.
-    const onWorldChanged = () => {
-      runOnceVisible(viewer.element, () => {
-        initialViewportSet.current = false;
-        setInitialBoundsRef.current(viewer);
-      });
-    };
-    viewer.world.addHandler('add-item', onWorldChanged);
-    viewer.world.addHandler('remove-item', onWorldChanged);
 
     forceUpdate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -232,6 +256,7 @@ function OpenSeadragonComponent({
 
   const { t } = useTranslation();
 
+  // TODO: add clarifying comment
   useEffect(() => {
     const canvas = viewerRef?.current?.canvas?.firstElementChild;
     if (canvas) {

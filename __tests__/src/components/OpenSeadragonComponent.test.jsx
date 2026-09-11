@@ -5,31 +5,49 @@ import OpenSeadragonComponent from '../../../src/components/OpenSeadragonCompone
 vi.mock('openseadragon');
 
 describe('OpenSeadragonComponent', () => {
-  let addOnceHandler;
   let addHandler;
   let applyConstraints;
   let fitBoundsWithConstraints;
   let goHome;
+  let panTo;
+  let zoomTo;
   let checkVisibility;
   let element;
+  let viewport;
 
   beforeEach(() => {
-    addOnceHandler = vi.fn();
     addHandler = vi.fn();
     applyConstraints = vi.fn();
     fitBoundsWithConstraints = vi.fn();
     goHome = vi.fn();
+    panTo = vi.fn();
+    zoomTo = vi.fn();
     checkVisibility = vi.fn(() => true);
     element = { checkVisibility };
+
+    viewport = {
+      centerSpringX: { target: { value: 0 } },
+      centerSpringY: { target: { value: 0 } },
+      fitBounds,
+      getFlip: vi.fn(() => false),
+      getRotation: vi.fn(() => 0),
+      goHome,
+      panTo,
+      setFlip: vi.fn(),
+      setRotation: vi.fn(),
+      zoomSpring: { target: { value: 1 } },
+      zoomTo,
+    };
 
     // Mock methods used in the component
     OpenSeadragon.mockImplementation(function () {
       return {
         addHandler,
-        addOnceHandler,
+        animationTime: 1.2,
         canvas: {},
         destroy: vi.fn(),
         element,
+        forceRedraw: vi.fn(),
         innerTracker: {},
         removeAllHandlers: vi.fn(),
         viewport: {
@@ -59,105 +77,63 @@ describe('OpenSeadragonComponent', () => {
     });
   });
 
-  /**
-   * Invoke the most recently registered tile-loaded handler
-   */
-  function invokeTileLoadedHandler() {
-    // Extract and invoke the most recently registered 'tile-loaded' handler
-    // to simulate OSD firing the event when tiles finish loading
-    // OSD provides addOnceHandler to register events on viewer
-    const { lastCall } = addOnceHandler.mock; // Vitest's lastCall
-    const [_eventName, tileLoadedHandler] = lastCall || [];
-    if (tileLoadedHandler) tileLoadedHandler();
-  }
+  it('fits to bounds immediately on first render', () => {
+    render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} />);
 
-  /**
-   * Invoke the handler registered (via addHandler) for a specific event name.
-   */
-  function invokeHandlerFor(eventName) {
-    const call = addHandler.mock.calls.findLast(([name]) => name === eventName);
-    if (call) call[1]();
-  }
+    expect(fitBounds).toHaveBeenCalledWith(expect.objectContaining({ height: 3000, width: 5000, x: 0, y: 0 }), true);
+  });
 
-  function invokeItemAddedHandler() {
-    invokeHandlerFor('add-item');
-  }
+  it('goes home when there are no bounds/x/y/zoom', () => {
+    render(<OpenSeadragonComponent viewerConfig={{}} />);
 
-  /**
-   * Invoke the registered 'animation-finish' handler, simulating OSD
-   * reporting the viewport has settled.
-   */
-  function invokeAnimationFinishHandler(viewport) {
-    const call = addHandler.mock.calls.find(([eventName]) => eventName === 'animation-finish');
-    if (call) call[1]({ eventSource: { viewport } });
-  }
+    /**
+     * Invoke the registered 'animation-finish' handler, simulating OSD
+     * reporting the viewport has settled.
+     */
+    function invokeAnimationFinishHandler(viewport) {
+      const call = addHandler.mock.calls.find(([eventName]) => eventName === 'animation-finish');
+      if (call) call[1]({ eventSource: { viewport } });
+    }
 
-  /**
-   * Render component and complete initial tile loading
-   * @param {Array} bounds - Initial bounds
-   * @returns {object} Render result
-   */
-  function renderAndInitialize(viewerConfig = { bounds: [0, 0, 5000, 3000] }) {
-    const result = render(<OpenSeadragonComponent viewerConfig={viewerConfig} />);
+    /**
+     * Render component and complete initial tile loading
+     * @param {Array} bounds - Initial bounds
+     * @returns {object} Render result
+     */
+    function renderAndInitialize(viewerConfig = { bounds: [0, 0, 5000, 3000] }) {
+      const result = render(<OpenSeadragonComponent viewerConfig={viewerConfig} />);
+      expect(goHome).toHaveBeenCalledWith(true);
+      expect(fitBounds).not.toHaveBeenCalled();
+    });
 
-    // Component registers an 'add-item' handler during mount to set initial viewport
-    invokeItemAddedHandler();
+  it('resets zoom and center immediately when bounds change -- no more waiting on tile-loaded', () => {
+    const { rerender } = render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000], canvasKey: 'a' }} />);
+    fitBounds.mockClear();
 
-    // Clear mocks after initialization
-    fitBoundsWithConstraints.mockClear();
-    addOnceHandler.mockClear();
+    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 3000, 2000], canvasKey: 'b' }} />);
 
-    return result;
-  }
-
-  it('resets zoom and center when bounds change', () => {
-    const { rerender } = renderAndInitialize();
-
-    // Change bounds to different dimensions
-    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 3000, 2000] }} />);
-
-    // Component registered a 'tile-loaded' handler when bounds change
-    invokeTileLoadedHandler();
-
-    // Should call fitBoundsWithConstraints with the new bounds to reset zoom and center
-    expect(fitBoundsWithConstraints).toHaveBeenCalledWith(
-      expect.objectContaining({
-        height: 2000,
-        width: 3000,
-        x: 0,
-        y: 0,
-      }),
-      true,
-    );
+    expect(fitBounds).toHaveBeenCalledWith(expect.objectContaining({ height: 2000, width: 3000, x: 0, y: 0 }), true);
   });
 
   it('does not reset zoom when bounds remain the same', () => {
-    const { rerender } = renderAndInitialize();
+    const { rerender } = render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} />);
+    fitBounds.mockClear();
 
-    // Rerender with same bounds
     rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} />);
 
-    // Should not register a new tile-loaded handler
-    expect(addOnceHandler).not.toHaveBeenCalled();
-
-    // Should not call fitBoundsWithConstraints
-    expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
+    expect(fitBounds).not.toHaveBeenCalled();
   });
 
-  it('sets the zoom when there are now bounds', () => {
-    const { rerender } = renderAndInitialize({});
+  it('does not reset zoom when an unrelated prop changes but bounds/x/y/zoom stay the same', () => {
+    const { rerender } = render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} />);
+    fitBounds.mockClear();
 
-    // Should not register a new tile-loaded handler
-    expect(addOnceHandler).not.toHaveBeenCalled();
+    // A fresh object with identical content, mirroring how viewerConfig is
+    // recomputed on every render in the real app.
+    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} osdConfig={{}} />);
 
-    // expect add-item handler to be called
-    expect(addHandler).toHaveBeenCalled(1);
-
-    // expect there to be no bounds and viewer should center
-    expect(goHome).toHaveBeenCalled(1);
-
-    // Should not call fitBoundsWithConstraints
-    expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
+    expect(fitBounds).not.toHaveBeenCalled();
+    expect(goHome).not.toHaveBeenCalled();
   });
 
   // Regression tests: zoomTo (like OSD's own zoomBy) never clamps to
@@ -301,27 +277,31 @@ describe('OpenSeadragonComponent', () => {
       expect(zoomTo).not.toHaveBeenCalled();
     });
   });
-  
+
   // Confirms OpenSeadragonComponent wires add-item/remove-item through IntersectionObserver
   it('does not set bounds while hidden, and does once the element becomes visible (#3540)', () => {
-    let intersectionCallback;
-    vi.stubGlobal(
-      'IntersectionObserver',
-      vi.fn(function IntersectionObserverMock(callback) {
-        intersectionCallback = callback;
-        return { disconnect: vi.fn(), observe: vi.fn() };
-      }),
-    );
-    checkVisibility.mockReturnValue(false);
+    // Confirms OpenSeadragonComponent still defers applying the viewport
+    // until the element is visible (#3540) -- now via useApplyViewport,
+    // triggered by viewerConfig rather than add-item/remove-item.
+    it('does not apply the viewport while hidden, and does once the element becomes visible (#3540)', () => {
+      let intersectionCallback;
+      vi.stubGlobal(
+        'IntersectionObserver',
+        vi.fn(function IntersectionObserverMock(callback) {
+          intersectionCallback = callback;
+          return { disconnect: vi.fn(), observe: vi.fn() };
+        }),
+      );
+      checkVisibility.mockReturnValue(false);
 
-    render(<OpenSeadragonComponent viewerConfig={{}} />);
-    invokeItemAddedHandler();
+      render(<OpenSeadragonComponent viewerConfig={{}} />);
 
-    expect(checkVisibility).toHaveBeenCalled();
-    expect(goHome).not.toHaveBeenCalled();
+      expect(checkVisibility).toHaveBeenCalled();
+      expect(goHome).not.toHaveBeenCalled();
 
-    intersectionCallback([{ isIntersecting: true }]);
+      intersectionCallback([{ isIntersecting: true }]);
 
-    expect(goHome).toHaveBeenCalledTimes(1);
+      expect(goHome).toHaveBeenCalledTimes(1);
+    });
   });
 });

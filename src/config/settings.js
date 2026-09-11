@@ -568,11 +568,12 @@ export default {
     width: null, // width of gallery view thumbnails (or null, to auto-calculate an aspect-ratio appropriate size)
   },
   osdConfig: {
-    // Default config used for OpenSeadragon. Note that OpenSeadragon has its
-    // own, unrelated `preserveViewport` option (see its docs) -- Mirador's
-    // own "remember pan/zoom across page turns" feature previously
-    // (confusingly) shared this same field, but now lives at
-    // window.preserveMiradorViewport instead.
+    // Default config used for OpenSeadragon. Mirador always overrides
+    // OpenSeadragon's own `preserveViewport` option internally (see
+    // OpenSeadragonComponent.jsx) -- Mirador's own, unrelated
+    // "remember pan/zoom across page turns" feature lives at
+    // window.preserveMiradorViewport instead; setting it here would do
+    // nothing.
     alwaysBlend: false,
     blendTime: 0.1,
     preserveImageSizeOnResize: true,

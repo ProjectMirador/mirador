@@ -25,7 +25,11 @@ export default function OpenSeadragonTileSource({
   useEffect(() => {
     if (!fitBounds) return;
 
-    tiledImage.current?.fitBounds(new Openseadragon.Rect(...fitBounds));
+    // immediately: true -- without it this animates into position, which
+    // can leave the shared viewport "animating" well after the camera's
+    // own fit has already (correctly) settled, for as long as this
+    // specific canvas takes to spring into place.
+    tiledImage.current?.fitBounds(new Openseadragon.Rect(...fitBounds), undefined, true);
   }, [fitBounds]);
 
   useEffect(() => {
