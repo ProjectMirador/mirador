@@ -129,7 +129,7 @@ describe('window-level sagas', () => {
       return expectSaga(setWindowStartingCanvas, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
-          [call(setCanvas, 'x', '1', null, { preserveViewport: false }), { type: 'setCanvasThunk' }],
+          [call(setCanvas, 'x', '1', null, { preserveMiradorViewport: false }), { type: 'setCanvasThunk' }],
         ])
         .put({ type: 'setCanvasThunk' })
         .run();
@@ -147,13 +147,13 @@ describe('window-level sagas', () => {
       return expectSaga(setWindowStartingCanvas, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
-          [call(setCanvas, 'x', '1', null, { preserveViewport: true }), { type: 'setCanvasThunk' }],
+          [call(setCanvas, 'x', '1', null, { preserveMiradorViewport: true }), { type: 'setCanvasThunk' }],
         ])
         .put({ type: 'setCanvasThunk' })
         .run();
     });
 
-    it('overrides default preserveViewport: false when initialViewerConfig is set', () => {
+    it('overrides default preserveMiradorViewport: false when initialViewerConfig is set', () => {
       const action = {
         window: {
           canvasId: '1',
@@ -170,7 +170,7 @@ describe('window-level sagas', () => {
       return expectSaga(setWindowStartingCanvas, action)
         .provide([
           [select(getManifests), { 'manifest.json': {} }],
-          [call(setCanvas, 'x', '1', null, { preserveViewport: true }), { type: 'setCanvasThunk' }],
+          [call(setCanvas, 'x', '1', null, { preserveMiradorViewport: true }), { type: 'setCanvasThunk' }],
         ])
         .put({ type: 'setCanvasThunk' })
         .run();

@@ -1,5 +1,29 @@
 import ActionTypes from './action-types';
-import { getNextCanvasGrouping, getPreviousCanvasGrouping, getCanvasGrouping, getConfig } from '../selectors';
+import { getNextCanvasGrouping, getPreviousCanvasGrouping, getCanvasGrouping, getWindowConfig, getConfig } from '../selectors';
+
+/**
+ * Pre-#4536, Mirador's "remember pan/zoom across page turns" feature lived at
+ * osdConfig.preserveViewport, entangled with OpenSeadragon's own same-named
+ * (and unrelated) option. Deployments that set osdConfig.preserveViewport
+ * explicitly would otherwise have that setting silently dropped by the
+ * window.preserveMiradorViewport rename. Warn and fall back to it until this
+ * legacy support is removed in a future major version.
+ * @param {object} state
+ * @param {boolean} preserveMiradorViewport
+ * @returns {boolean}
+ */
+function withLegacyPreserveViewportFallback(state, preserveMiradorViewport) {
+  const legacyPreserveViewport = getConfig(state).osdConfig?.preserveViewport;
+  if (legacyPreserveViewport === undefined) return preserveMiradorViewport;
+
+  // eslint-disable-next-line no-console
+  console.warn(
+    '[Mirador] osdConfig.preserveViewport is deprecated and no longer controls OpenSeadragon directly. ' +
+      'Set window.preserveMiradorViewport instead -- this fallback will be removed in a future release.',
+  );
+
+  return preserveMiradorViewport || legacyPreserveViewport;
+}
 
 /**
  * setCanvas - action creator
@@ -11,7 +35,7 @@ import { getNextCanvasGrouping, getPreviousCanvasGrouping, getCanvasGrouping, ge
 export function setCanvas(windowId, canvasId, newGroup = undefined, options = {}) {
   return (dispatch, getState) => {
     const state = getState();
-    const { preserveViewport } = getConfig(state).osdConfig;
+    const { preserveMiradorViewport } = getWindowConfig(state, { windowId });
     let visibleCanvases = newGroup;
 
     if (!visibleCanvases) {
@@ -21,7 +45,8 @@ export function setCanvas(windowId, canvasId, newGroup = undefined, options = {}
 
     dispatch({
       canvasId,
-      preserveViewport: options?.preserveViewport ?? preserveViewport,
+      preserveMiradorViewport:
+        options?.preserveMiradorViewport ?? withLegacyPreserveViewportFallback(state, preserveMiradorViewport),
       type: ActionTypes.SET_CANVAS,
       visibleCanvases,
       windowId,
