@@ -7,7 +7,7 @@ import {
   getVisibleCanvasNonTiledResources,
   getCurrentCanvas,
   getCanvasLabel,
-  getViewer,
+  getDesiredViewport,
   getConfig,
   getCompanionWindowsForContent,
   selectInfoResponses,
@@ -41,7 +41,7 @@ const mapStateToProps = (state, { windowId }) => {
     }),
     nonTiledImages: getVisibleCanvasNonTiledResources(state, { windowId }),
     osdConfig: getConfig(state).osdConfig,
-    viewerConfig: getViewer(state, { windowId }),
+    viewerConfig: getDesiredViewport(state, { windowId }),
   };
 };
 
