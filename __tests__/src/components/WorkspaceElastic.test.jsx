@@ -29,7 +29,7 @@ function createWrapper({ elasticLayout = {}, ...props }) {
         companionWindows: {},
         elasticLayout,
         windows: { 1: { companionWindowIds: [] }, 2: { companionWindowIds: [] } },
-        workspace: { draggingEnabled: true },
+        workspace: { draggingEnabled: true, windowIds: ['1', '2'] },
       },
     },
   );
@@ -56,7 +56,7 @@ describe('WorkspaceElastic', () => {
 
   it('should render properly with an initialValue', () => {
     createWrapper({ elasticLayout });
-    expect(screen.getAllByLabelText('Window:')).toHaveLength(2);
+    expect(screen.getAllByRole('region', { name: /Item window/i })).toHaveLength(2);
   });
   describe('workspace behaviour', () => {
     it('when workspace itself is dragged', async () => {
