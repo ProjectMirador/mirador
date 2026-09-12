@@ -2,15 +2,11 @@ import { useMemo, useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { useInView } from 'react-intersection-observer';
-import { IIIFResourceLabel } from './IIIFResourceLabel';
+import { ThumbnailLabel } from './ThumbnailLabel';
 import { useThumbnailService } from '../hooks';
 import FailedImageContext from '../contexts/FailedImageContext';
 
 const Root = styled('div', { name: 'IIIFThumbnail', slot: 'root' })({});
-
-const Label = styled('span', { name: 'IIIFThumbnail', slot: 'label' })(({ theme }) => ({
-  ...theme.typography.caption,
-}));
 
 const Image = styled('img', { name: 'IIIFThumbnail', slot: 'image' })(() => ({
   height: 'auto',
@@ -188,7 +184,7 @@ export function IIIFThumbnail({
         border={border}
       />
 
-      {labelled && <Label ownerState={ownerState}>{label || <IIIFResourceLabel resource={resource} />}</Label>}
+      {labelled && <ThumbnailLabel label={label} resource={resource} variant="gallery" />}
       {children}
     </Root>
   );
@@ -209,6 +205,4 @@ IIIFThumbnail.propTypes = {
     url: PropTypes.string.isRequired,
     width: PropTypes.number,
   }),
-  // eslint-disable-next-line react/no-unused-prop-types
-  variant: PropTypes.oneOf(['inside', 'outside']),
 };
