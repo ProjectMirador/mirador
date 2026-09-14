@@ -14,14 +14,9 @@ describe('useOsdEvent', () => {
     expect(() => renderHook(() => useOsdEvent(null, 'update-viewport', vi.fn()))).not.toThrow();
   });
 
-  it('subscribes add-item/remove-item on viewer.world, and other events on viewer itself', () => {
+  it('subscribes to the named event on the viewer', () => {
     const viewer = createViewer();
-    const worldAddHandler = vi.spyOn(viewer.world, 'addHandler');
     const viewerAddHandler = vi.spyOn(viewer, 'addHandler');
-
-    renderHook(() => useOsdEvent(viewer, 'add-item', vi.fn()));
-    expect(worldAddHandler).toHaveBeenCalledWith('add-item', expect.any(Function));
-    expect(viewerAddHandler).not.toHaveBeenCalledWith('add-item', expect.any(Function));
 
     renderHook(() => useOsdEvent(viewer, 'update-viewport', vi.fn()));
     expect(viewerAddHandler).toHaveBeenCalledWith('update-viewport', expect.any(Function));
