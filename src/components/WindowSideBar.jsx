@@ -24,6 +24,7 @@ export function WindowSideBar({ classes = {}, direction, windowId, sideBarOpen =
       anchor={direction === 'rtl' ? 'right' : 'left'}
       slotProps={{
         paper: {
+          'aria-label': t('sidebarPanelsNavigation'),
           component: 'nav',
           sx: { width: sideBarOpen ? 48 : 0, position: 'relative' },
         },
