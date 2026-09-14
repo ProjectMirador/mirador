@@ -94,7 +94,9 @@ describe('AnnotationsOverlay', () => {
       const context2d = {
         restore: () => {},
         save: () => {},
+        scale: () => {},
         strokeRect,
+        translate: () => {},
       };
 
       OpenSeadragonCanvasOverlay.mockImplementation(function () {
@@ -103,6 +105,7 @@ describe('AnnotationsOverlay', () => {
           clear: vi.fn(),
           context2d,
           resize: vi.fn(),
+          scale: 0.05,
         };
       });
 
@@ -113,11 +116,6 @@ describe('AnnotationsOverlay', () => {
         palette: { annotations: palette },
         viewer: null,
       });
-
-      const getItemAt = vi
-        .spyOn(viewer.world, 'getItemAt')
-        .mockImplementation((index) => (index === 0 ? { viewportToImageZoom: vi.fn(() => 0.05) } : undefined));
-      vi.spyOn(viewer.viewport, 'getZoom').mockImplementation(() => 0.05);
 
       rerender(
         cloneElement(component, {

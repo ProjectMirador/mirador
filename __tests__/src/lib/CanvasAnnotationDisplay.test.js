@@ -14,6 +14,11 @@ function createSubject(args) {
       hovered: { globalAlpha: 1, strokeStyle: 'blue' },
       selected: { globalAlpha: 1, strokeStyle: 'yellow' },
     },
+    canvasWorld: {
+      canvasScale: vi.fn(() => 1),
+      offsetByCanvas: vi.fn(() => ({ x: 0, y: 0 })),
+    },
+    overlayScale: 0.5,
     zoomRatio: 0.5,
     ...args,
   });
@@ -22,8 +27,10 @@ function createSubject(args) {
 function createMockContext(onFill = '') {
   return {
     fill: vi.fn(onFill),
+    fillRect: vi.fn(),
     restore: vi.fn(),
     save: vi.fn(),
+    scale: vi.fn(),
     setLineDash: vi.fn(),
     stroke: vi.fn(),
     strokeRect: vi.fn(),
@@ -50,6 +57,7 @@ describe('CanvasAnnotationDisplay', () => {
         resource: new AnnotationResource({
           motivation: ['oa:commenting'],
           on: {
+            full: 'www.example.com',
             selector: {
               item: {
                 '@type': 'oa:SvgSelector',
@@ -153,6 +161,7 @@ describe('CanvasAnnotationDisplay', () => {
         resource: new AnnotationResource({
           motivation: ['oa:commenting'],
           on: {
+            full: 'www.example.com',
             selector: {
               item: {
                 '@type': 'oa:SvgSelector',
@@ -178,6 +187,7 @@ describe('CanvasAnnotationDisplay', () => {
         resource: new AnnotationResource({
           motivation: ['oa:commenting'],
           on: {
+            full: 'www.example.com',
             selector: {
               item: {
                 '@type': 'oa:SvgSelector',
@@ -214,12 +224,34 @@ describe('CanvasAnnotationDisplay', () => {
       });
       subject.context = context;
       subject.fragmentContext();
-      expect(context.strokeRect).toHaveBeenCalledWith(-90, 10, 100, 200);
+      expect(context.translate).toHaveBeenCalledWith(-100, 0);
+      expect(context.scale).toHaveBeenCalledWith(1, 1);
+      expect(context.strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
       expect(context.strokeStyle).toEqual('blue');
       expect(context.lineWidth).toEqual(2);
       expect(context.setLineDash).not.toHaveBeenCalled();
       expect(alphaAtFill).toEqual(undefined);
       expect(context.globalAlpha).toEqual(1);
+    });
+
+    it('with a canvas scale of .5 and no offset', () => {
+      const context = createMockContext();
+      const subject = createSubject({
+        resource: new AnnotationResource({ on: 'www.example.com/#xywh=10,10,100,200' }),
+        canvasWorld: {
+          canvasScale: vi.fn(() => 0.5),
+        },
+        offset: {
+          x: 0,
+          y: 0,
+        },
+      });
+      subject.context = context;
+      subject.fragmentContext();
+      expect(context.scale).toHaveBeenCalledWith(0.5, 0.5);
+      expect(context.translate).toHaveBeenCalledWith(0, 0);
+      expect(context.strokeRect).toHaveBeenCalledWith(10, 10, 100, 200);
+      expect(context.lineWidth).toEqual(4);
     });
   });
 });

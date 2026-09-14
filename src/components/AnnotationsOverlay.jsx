@@ -12,12 +12,13 @@ import { buildPath2D } from '../lib/svgShapesToPath';
 /** @private */
 function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point) {
   const [canvasX, canvasY] = canvasWorld.canvasToWorldCoordinates(canvas.id);
-  const relativeX = point.x - canvasX;
-  const relativeY = point.y - canvasY;
+  const scale = canvasWorld.canvasScale(canvas.id);
+  const relativeX = (point.x - canvasX) / scale;
+  const relativeY = (point.y - canvasY) / scale;
 
   if (resource.svgSelector) {
     const context = osdCanvasOverlay.context2d;
-    const { svgPaths } = new CanvasAnnotationDisplay({ resource });
+    const { svgPaths } = new CanvasAnnotationDisplay({ resource, canvasWorld });
     return [...svgPaths].some((path) => context.isPointInPath(buildPath2D(path), relativeX, relativeY));
   }
 
@@ -82,17 +83,13 @@ export function AnnotationsOverlay({
   const annotationsToContext = useCallback(
     (renderedAnnotations, currentPalette) => {
       const context = osdCanvasOverlay.context2d;
+      const overlayScale = osdCanvasOverlay.scale;
       renderedAnnotations.forEach((annotation) => {
         annotation.resources.forEach((resource) => {
-          const osdCanvasIndex = canvasWorld.canvases.findIndex((canvas) => canvas.id === resource.targetId);
-          if (osdCanvasIndex === -1) return;
-          const viewportCanvas = viewer.world.getItemAt(osdCanvasIndex);
-          if (!viewportCanvas) return;
-          const offset = canvasWorld.offsetByCanvas(resource.targetId);
-          const zoomRatio = viewportCanvas.viewportToImageZoom(viewer.viewport.getZoom(true));
+          const canvas = canvasWorld.canvases.find((cwc) => cwc.id === resource.targetId);
+          if (!canvas) return;
           const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
             hovered: hoveredAnnotationIds.includes(resource.id),
-            offset,
             palette: {
               ...currentPalette,
               default: {
@@ -100,15 +97,16 @@ export function AnnotationsOverlay({
                 ...(!highlightAllAnnotations && currentPalette.hidden),
               },
             },
+            overlayScale,
             resource,
+            canvasWorld,
             selected: selectedAnnotationId === resource.id,
-            zoomRatio,
           });
           canvasAnnotationDisplay.toContext(context);
         });
       });
     },
-    [osdCanvasOverlay, viewer, canvasWorld, highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId],
+    [osdCanvasOverlay, canvasWorld, highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId],
   );
 
   const renderAnnotations = useCallback(() => {
