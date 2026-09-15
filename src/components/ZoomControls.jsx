@@ -16,17 +16,24 @@ const StyledZoomControlsWrapper = styled('div')({
  */
 export function ZoomControls({ windowId = '', updateViewport = () => {}, viewer = {}, zoomToWorld }) {
   const { t } = useTranslation();
+  // viewers[windowId] in Redux is null until the camera's own position has
+  // been reported at least once (e.g. before an image has finished
+  // settling) -- a real, expected state, not an edge case -- so
+  // `viewer = {}` (which only guards a missing prop, not an explicit null)
+  // isn't enough on its own.
+  const { zoom = 1 } = viewer || {};
+
   /** */
   const handleZoomInClick = () => {
     updateViewport(windowId, {
-      zoom: viewer.zoom * 2,
+      zoom: zoom * 2,
     });
   };
 
   /** */
   const handleZoomOutClick = () => {
     updateViewport(windowId, {
-      zoom: viewer.zoom / 2,
+      zoom: zoom / 2,
     });
   };
 
