@@ -1,5 +1,6 @@
 import compact from 'lodash/compact';
 import { v4 as uuid } from 'uuid';
+import { isPercentFragment, parsedFragment } from './AnnotationSharedMethods';
 
 /** */
 export default class AnnotationResource {
@@ -100,23 +101,27 @@ export default class AnnotationResource {
     }
   }
 
-  /** */
-  get fragmentSelector() {
+  /** Regex match for this annotation's xywh fragment, if any */
+  get fragmentMatch() {
     const { selector } = this;
-
-    let match;
 
     switch (typeof selector) {
       case 'string':
-        match = selector.match(/xywh=(.*)$/);
-        break;
+        return selector.match(/xywh=(.*)$/);
       case 'object':
-        match = selector.value.match(/xywh=(.*)$/);
-        break;
+        return selector.value.match(/xywh=(.*)$/);
       default:
         return null;
     }
+  }
 
-    return match && match[1].split(',').map((str) => parseInt(str, 10));
+  /** */
+  get fragmentSelector() {
+    return parsedFragment(this.fragmentMatch);
+  }
+
+  /** Whether fragmentSelector's coordinates are percentages of the canvas, not absolute pixels */
+  get fragmentSelectorIsPercent() {
+    return isPercentFragment(this.fragmentMatch);
   }
 }

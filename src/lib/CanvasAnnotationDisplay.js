@@ -3,16 +3,18 @@
  * annotations.
  */
 import { buildPath2D } from '../lib/svgShapesToPath';
+import { resolveFragment } from './AnnotationSharedMethods';
 
 export default class CanvasAnnotationDisplay {
   /** */
-  constructor({ resource, palette, zoomRatio, offset, selected, hovered }) {
+  constructor({ resource, palette, zoomRatio, offset, selected, hovered, canvas }) {
     this.resource = resource;
     this.palette = palette;
     this.zoomRatio = zoomRatio;
     this.offset = offset;
     this.selected = selected;
     this.hovered = hovered;
+    this.canvas = canvas;
   }
 
   /** */
@@ -109,7 +111,7 @@ export default class CanvasAnnotationDisplay {
 
   /** */
   fragmentContext() {
-    const fragment = this.resource.fragmentSelector;
+    const fragment = resolveFragment(this.resource.fragmentSelector, this.resource.fragmentSelectorIsPercent, this.canvas);
     fragment[0] += this.offset.x;
     fragment[1] += this.offset.y;
 
