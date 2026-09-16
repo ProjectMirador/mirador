@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { TreeNode } from 'manifesto.js';
-import { getManifestoInstance } from './manifests';
+import { getManifestoInstance, getManifestLocale } from './manifests';
 import { getWindow } from './getters';
 
 /**
@@ -132,3 +132,32 @@ export const getSequenceTreeStructure = createSelector([getSequence, getManifest
 
   return manifest && manifest.getDefaultTree();
 });
+
+/**
+ * Re-derives a tree node's label for a given locale from its own data
+ * Similar to getCanvasLabel for a single canvas.
+ */
+function relabelTreeNode(node, locale) {
+  if (!node) return node;
+
+  const label = (node.data && typeof node.data.getLabel === 'function' && node.data.getLabel().getValue(locale)) || node.label;
+
+  return {
+    ...node,
+    label,
+    nodes: node.nodes && node.nodes.map((child) => relabelTreeNode(child, locale)),
+  };
+}
+
+/**
+ * Returns the sequence tree structure with each node's label resolved for
+ * the current locale. Kept separate from getSequenceTreeStructure
+ *
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.windowId
+ * @returns {object}
+ */
+export const getLocalizedSequenceTreeStructure = createSelector([getSequenceTreeStructure, getManifestLocale], (tree, locale) =>
+  relabelTreeNode(tree, locale),
+);

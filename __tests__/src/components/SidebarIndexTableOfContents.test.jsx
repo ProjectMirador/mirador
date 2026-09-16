@@ -6,6 +6,8 @@ import { SidebarIndexTableOfContents } from '../../../src/components/SidebarInde
 import ConnectedSidebarIndexTableOfContents from '../../../src/containers/SidebarIndexTableOfContents';
 import manifestVersion2 from '../../fixtures/version-2/structures.json';
 import manifestVersion3 from '../../fixtures/version-3/structures.json';
+import multiLanguageLabels from '../../fixtures/version-2/multi-language-labels.json';
+import { getLocalizedSequenceTreeStructure } from '../../../src/state/selectors/sequences';
 
 /**
  * Create wrapper for SidebarIndexTableOfContents component
@@ -107,6 +109,26 @@ describe('SidebarIndexTableOfContents', () => {
       },
     });
     expect(screen.getByRole('treeitem')).toBeInTheDocument();
+  });
+
+  // These test that the real getLocalizedSequenceTreeStructure selector
+  // is what's responsible for picking the right language.
+  it('gets the correct language label', () => {
+    const state = { manifests: { x: { json: multiLanguageLabels } } };
+    const treeStructure = getLocalizedSequenceTreeStructure(state, { manifestId: 'x', locale: 'de' });
+
+    createWrapper({ treeStructure });
+
+    expect(screen.getByText('Vorderdeckel')).toBeInTheDocument();
+  });
+
+  it('gets the default label when no locale is set', () => {
+    const state = { manifests: { x: { json: multiLanguageLabels } } };
+    const treeStructure = getLocalizedSequenceTreeStructure(state, { manifestId: 'x' });
+
+    createWrapper({ treeStructure });
+
+    expect(screen.getByText('front cover')).toBeInTheDocument();
   });
 
   it('toggles branch nodes on click', async () => {
