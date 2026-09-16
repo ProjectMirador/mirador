@@ -3,10 +3,11 @@
  * annotations.
  */
 import { buildPath2D } from '../lib/svgShapesToPath';
+import { resolveFragment } from './AnnotationSharedMethods';
 
 export default class CanvasAnnotationDisplay {
   /** */
-  constructor({ resource, palette, canvasWorld, overlayScale, selected, hovered, zoomRatio, offset }) {
+  constructor({ resource, palette, canvasWorld, overlayScale, selected, hovered, zoomRatio, offset, canvas }) {
     this.resource = resource;
     this.palette = palette;
     this.canvasWorld = canvasWorld;
@@ -16,6 +17,7 @@ export default class CanvasAnnotationDisplay {
     // these variables have to be kept for plugins
     this.zoomRatio = zoomRatio;
     this.offset = offset || this.canvasWorld.offsetByCanvas(this.resource.targetId);
+    this.canvas = canvas;
   }
 
   /** */

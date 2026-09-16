@@ -7,6 +7,7 @@ import xor from 'lodash/xor';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
+import { resolveFragment } from '../lib/AnnotationSharedMethods';
 import { buildPath2D } from '../lib/svgShapesToPath';
 
 /** @private */
@@ -23,7 +24,7 @@ function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, po
   }
 
   if (resource.fragmentSelector) {
-    const [x, y, w, h] = resource.fragmentSelector;
+    const [x, y, w, h] = resolveFragment(resource.fragmentSelector, resource.fragmentSelectorIsPercent, canvas);
     return x <= relativeX && relativeX <= x + w && y <= relativeY && relativeY <= y + h;
   }
   return false;
@@ -89,6 +90,7 @@ export function AnnotationsOverlay({
           const canvas = canvasWorld.canvases.find((cwc) => cwc.id === resource.targetId);
           if (!canvas) return;
           const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
+            canvas,
             hovered: hoveredAnnotationIds.includes(resource.id),
             palette: {
               ...currentPalette,
