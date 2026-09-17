@@ -77,6 +77,15 @@ describe('OpenSeadragonComponent', () => {
   }
 
   /**
+   * Invoke the registered 'animation-finish' handler, simulating OSD
+   * reporting the viewport has settled.
+   */
+  function invokeAnimationFinishHandler(viewport) {
+    const call = addHandler.mock.calls.find(([eventName]) => eventName === 'animation-finish');
+    if (call) call[1]({ eventSource: { viewport } });
+  }
+
+  /**
    * Render component and complete initial tile loading
    * @param {Array} bounds - Initial bounds
    * @returns {object} Render result
@@ -178,6 +187,111 @@ describe('OpenSeadragonComponent', () => {
 
       expect(zoomTo).toHaveBeenCalledWith(4, expect.objectContaining({ x: 10, y: 10 }), false);
       expect(applyConstraints).toHaveBeenCalled();
+    });
+
+    // The mocked spring targets are pinned at 0, so x alone differing (the
+    // common case above) always short-circuits the pan condition's OR --
+    // y's own comparison only ever runs when x already matches. x/y use
+    // 0.4 rather than 0 so they round to the mocked target (0) without
+    // being falsy themselves -- the main effect's own guard treats a
+    // literal 0 as "missing" and returns before reaching this logic.
+    it('pans on a live update when only y differs from the current position', () => {
+      const { rerender } = renderAndInitialize({ x: 0.4, y: 0.4, zoom: 2 });
+      panTo.mockClear();
+
+      rerender(<OpenSeadragonComponent viewerConfig={{ x: 0.4, y: 5, zoom: 2 }} />);
+
+      expect(panTo).toHaveBeenCalledWith(expect.objectContaining({ x: 0.4, y: 5 }), false);
+    });
+
+    // zoom uses 1 to match the mocked zoomSpring's static target, so the
+    // zoom comparison also reports "already matches" rather than firing.
+    it('does not pan on a live update when x and y both already match the current position', () => {
+      const { rerender } = renderAndInitialize({ x: 0.4, y: 0.4, zoom: 1 });
+      panTo.mockClear();
+      zoomTo.mockClear();
+
+      rerender(<OpenSeadragonComponent viewerConfig={{ x: 0.4, y: 0.4, zoom: 1 }} />);
+
+      expect(panTo).not.toHaveBeenCalled();
+      expect(zoomTo).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onViewportChange', () => {
+    it('does not report a viewport change before the initial viewport has been applied', () => {
+      const updateViewport = vi.fn();
+      render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} onUpdateViewport={updateViewport} />);
+
+      // Fired before invokeItemAddedHandler -- initialViewportSet.current is still false.
+      invokeAnimationFinishHandler({
+        centerSpringX: { target: { value: 0 } },
+        centerSpringY: { target: { value: 0 } },
+        getBounds: () => [0, 0, 100, 100],
+        getFlip: () => false,
+        getRotation: () => 0,
+        zoomSpring: { target: { value: 1 } },
+      });
+
+      expect(updateViewport).not.toHaveBeenCalled();
+    });
+
+    it('does not report a viewport change while automatically recentering for changed bounds', () => {
+      const updateViewport = vi.fn();
+      const { rerender } = renderAndInitialize({ bounds: [0, 0, 5000, 3000] });
+      rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 3000, 2000] }} onUpdateViewport={updateViewport} />);
+
+      // isResettingViewport.current is true until the tile-loaded handler
+      // (not yet invoked) resets it.
+      invokeAnimationFinishHandler({
+        centerSpringX: { target: { value: 0 } },
+        centerSpringY: { target: { value: 0 } },
+        getBounds: () => [0, 0, 100, 100],
+        getFlip: () => false,
+        getRotation: () => 0,
+        zoomSpring: { target: { value: 1 } },
+      });
+
+      expect(updateViewport).not.toHaveBeenCalled();
+    });
+
+    it('reports the settled viewport back once initialized and not resetting', () => {
+      const updateViewport = vi.fn();
+      render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} onUpdateViewport={updateViewport} />);
+      invokeItemAddedHandler();
+
+      invokeAnimationFinishHandler({
+        centerSpringX: { target: { value: 12.4 } },
+        centerSpringY: { target: { value: 7.6 } },
+        getBounds: () => [0, 0, 100, 100],
+        getFlip: () => true,
+        getRotation: () => 90,
+        zoomSpring: { target: { value: 3 } },
+      });
+
+      expect(updateViewport).toHaveBeenCalledWith({
+        bounds: [0, 0, 100, 100],
+        flip: true,
+        rotation: 90,
+        x: 12,
+        y: 8,
+        zoom: 3,
+      });
+    });
+  });
+
+  describe('applying a live update with incomplete x/y/zoom', () => {
+    it('does not apply anything when bounds are unchanged and x/y/zoom are incomplete', () => {
+      const { rerender } = renderAndInitialize({ bounds: [0, 0, 5000, 3000], x: 10 });
+      panTo.mockClear();
+      zoomTo.mockClear();
+
+      // Same bounds, still-incomplete position (only x) -- relies on
+      // bounds instead, so this update should be a no-op.
+      rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000], x: 20 }} />);
+
+      expect(panTo).not.toHaveBeenCalled();
+      expect(zoomTo).not.toHaveBeenCalled();
     });
   });
 });
