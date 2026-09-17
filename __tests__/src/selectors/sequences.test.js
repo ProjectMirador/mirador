@@ -4,6 +4,7 @@ import manifestFixture2017498721 from '../../fixtures/version-2/2017498721.json'
 import manifestFixturev3001 from '../../fixtures/version-3/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import manifestFixtureGau from '../../fixtures/version-2/gau.json';
+import multiLanguageLabels from '../../fixtures/version-2/multi-language-labels.json';
 import {
   getCanvasIndex,
   getSequences,
@@ -11,6 +12,7 @@ import {
   getSequenceViewingHint,
   getSequenceViewingDirection,
   getSequenceBehaviors,
+  getLocalizedSequenceTreeStructure,
 } from '../../../src/state/selectors/sequences';
 
 describe('getSequences', () => {
@@ -154,5 +156,30 @@ describe('getSequenceBehaviors', () => {
   it('gets from the manifest', () => {
     const state = { manifests: { x: { json: manifestFixturev3001 } } };
     expect(getSequenceBehaviors(state, { manifestId: 'x' })).toEqual(['individuals']);
+  });
+});
+
+describe('getLocalizedSequenceTreeStructure', () => {
+  // This one (tree.nodes[0]) is the range with a multi-language label.
+  it('resolves each node label for the given locale', () => {
+    const state = { manifests: { x: { json: multiLanguageLabels } } };
+    const tree = getLocalizedSequenceTreeStructure(state, { manifestId: 'x', locale: 'de' });
+    expect(tree.nodes[0].label).toEqual('Vorderdeckel');
+  });
+
+  it('falls back to the default label when no locale is given', () => {
+    const state = { manifests: { x: { json: multiLanguageLabels } } };
+    const tree = getLocalizedSequenceTreeStructure(state, { manifestId: 'x' });
+    expect(tree.nodes[0].label).toEqual('front cover');
+  });
+
+  it('does not re-parse the manifest when only the locale changes', () => {
+    const state = { manifests: { x: { json: multiLanguageLabels } } };
+    const treeDe = getLocalizedSequenceTreeStructure(state, { manifestId: 'x', locale: 'de' });
+    const treeEn = getLocalizedSequenceTreeStructure(state, { manifestId: 'x', locale: 'en' });
+
+    // Same underlying tree node objects (same manifesto Range instances) --
+    // only the derived label strings differ.
+    expect(treeDe.nodes[0].data).toBe(treeEn.nodes[0].data);
   });
 });
