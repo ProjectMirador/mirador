@@ -7,14 +7,20 @@ vi.mock('openseadragon');
 describe('OpenSeadragonComponent', () => {
   let addOnceHandler;
   let addHandler;
+  let applyConstraints;
   let fitBoundsWithConstraints;
   let goHome;
+  let panTo;
+  let zoomTo;
 
   beforeEach(() => {
     addOnceHandler = vi.fn();
     addHandler = vi.fn();
+    applyConstraints = vi.fn();
     fitBoundsWithConstraints = vi.fn();
     goHome = vi.fn();
+    panTo = vi.fn();
+    zoomTo = vi.fn();
 
     // Mock methods used in the component
     OpenSeadragon.mockImplementation(function () {
@@ -26,11 +32,18 @@ describe('OpenSeadragonComponent', () => {
         innerTracker: {},
         removeAllHandlers: vi.fn(),
         viewport: {
+          applyConstraints,
           centerSpringX: { target: { value: 0 } },
           centerSpringY: { target: { value: 0 } },
           fitBounds: vi.fn(),
           fitBoundsWithConstraints,
+          getRotation: vi.fn(() => 0),
+          getFlip: vi.fn(() => false),
+          getZoom: vi.fn(() => 1),
+          panTo,
+          pointFromPixel: vi.fn(),
           zoomSpring: { target: { value: 1 } },
+          zoomTo,
           goHome,
         },
         world: { addOnceHandler, addHandler },
@@ -39,6 +52,9 @@ describe('OpenSeadragonComponent', () => {
 
     OpenSeadragon.Rect = vi.fn(function (x, y, width, height) {
       return { height, width, x, y };
+    });
+    OpenSeadragon.Point = vi.fn(function (x, y) {
+      return { x, y };
     });
   });
 
@@ -126,5 +142,42 @@ describe('OpenSeadragonComponent', () => {
 
     // Should not call fitBoundsWithConstraints
     expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
+  });
+
+  // Regression tests: zoomTo (like OSD's own zoomBy) never clamps to
+  // min/max zoom on its own -- without a paired applyConstraints() call,
+  // an explicit zoom value (e.g. from ZoomControls' zoom-in/out buttons,
+  // which compute the next zoom themselves) could zoom in or out
+  // arbitrarily far.
+  describe('zoom constraints', () => {
+    it('applies constraints when restoring an initial saved x/y/zoom', () => {
+      render(<OpenSeadragonComponent viewerConfig={{ x: 10, y: 10, zoom: 2 }} />);
+      invokeItemAddedHandler();
+
+      expect(zoomTo).toHaveBeenCalledWith(2, expect.objectContaining({ x: 10, y: 10 }), true);
+      expect(applyConstraints).toHaveBeenCalled();
+    });
+
+    // zoom is independent of x/y -- it should still apply (and still be
+    // constrained) even when there's no pan position to restore alongside it.
+    it('applies zoom (and constraints) even when x/y are not set', () => {
+      render(<OpenSeadragonComponent viewerConfig={{ zoom: 2 }} />);
+      invokeItemAddedHandler();
+
+      expect(zoomTo).toHaveBeenCalledWith(2, expect.anything(), true);
+      expect(applyConstraints).toHaveBeenCalled();
+      expect(panTo).not.toHaveBeenCalled();
+    });
+
+    it('applies constraints when zoom changes on an already-initialized viewer', () => {
+      const { rerender } = renderAndInitialize({ x: 10, y: 10, zoom: 2 });
+      applyConstraints.mockClear();
+      zoomTo.mockClear();
+
+      rerender(<OpenSeadragonComponent viewerConfig={{ x: 10, y: 10, zoom: 4 }} />);
+
+      expect(zoomTo).toHaveBeenCalledWith(4, expect.objectContaining({ x: 10, y: 10 }), false);
+      expect(applyConstraints).toHaveBeenCalled();
+    });
   });
 });

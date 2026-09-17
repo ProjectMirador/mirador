@@ -68,6 +68,9 @@ function OpenSeadragonComponent({
 
       if (viewerConfig.zoom != null) {
         viewport.zoomTo(viewerConfig.zoom, new Openseadragon.Point(viewerConfig.x, viewerConfig.y), true);
+        // OSD's own zoom buttons always pair a zoom call with applyConstraints
+        // With custom buttons we must apply here ourselves to enforce min/max zooms
+        viewport.applyConstraints();
       }
 
       if (viewerConfig.rotation != null && viewerConfig.rotation !== viewport.getRotation()) {
@@ -151,6 +154,9 @@ function OpenSeadragonComponent({
     // @ts-expect-error
     if (viewerConfig.zoom != null && viewerConfig.zoom !== viewport.zoomSpring.target.value) {
       viewport.zoomTo(viewerConfig.zoom, new Openseadragon.Point(viewerConfig.x, viewerConfig.y), false);
+      // OSD's own zoom buttons always pair a zoom call with applyConstraints
+      // With custom buttons we must apply here ourselves to enforce min/max zooms
+      viewport.applyConstraints();
     }
 
     if (viewerConfig.rotation != null && viewerConfig.rotation !== viewport.getRotation()) {
