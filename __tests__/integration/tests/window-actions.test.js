@@ -9,7 +9,7 @@ describe('Window actions', () => {
   it('Closes a Mirador window', async () => {
     expect(
       await screen.findByRole('region', {
-        name: /Window: Cambridge, Corpus Christi College, MS 640: Antiphoner Leaf/i,
+        name: /Item window 1/i,
       }),
     ).toBeInTheDocument();
     const closeButton = screen.getByRole('button', { name: /Close window/i });
@@ -17,7 +17,7 @@ describe('Window actions', () => {
     await waitFor(() =>
       expect(
         screen.queryByRole('region', {
-          name: /Window: Cambridge, Corpus Christi College, MS 640: Antiphoner Leaf/i,
+          name: /Item window 1/i,
         }),
       ).not.toBeInTheDocument(),
     );

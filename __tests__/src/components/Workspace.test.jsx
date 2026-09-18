@@ -30,6 +30,7 @@ function createWrapper(props) {
             x: 0,
             y: 0,
           },
+          windowIds: ['1', '2'],
         },
       },
     },
@@ -62,7 +63,7 @@ describe('Workspace', () => {
       createWrapper({ workspaceType: 'bubu' });
 
       expect(screen.getByRole('heading', { name: 'Mirador viewer' })).toBeInTheDocument();
-      expect(screen.getAllByLabelText('Window:')).toHaveLength(2);
+      expect(screen.getAllByRole('region', { name: /Item window/i })).toHaveLength(2);
     });
   });
   describe('if any windows are maximized', () => {
@@ -70,7 +71,7 @@ describe('Workspace', () => {
       createWrapper({ maximizedWindowIds: ['1'] });
 
       expect(screen.getByRole('heading', { name: 'Mirador viewer' })).toBeInTheDocument();
-      expect(screen.getByLabelText('Window:')).toHaveAttribute('id', '1');
+      expect(screen.getByRole('region', { name: 'Item window 1' })).toHaveAttribute('id', '1');
     });
   });
 
