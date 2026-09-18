@@ -146,11 +146,11 @@ describe('getSortedSearchHitsForCompanionWindow', () => {
       },
     };
     expect(getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'a' })).toEqual([
-      { annotations: ['http://example.com/iiif/canvas1'], id: 2 },
-      { annotations: ['http://example.com/iiif/canvas1'], id: 5 },
-      { annotations: ['http://example.com/iiif/canvas2'], id: 3 },
-      { annotations: ['http://example.com/iiif/canvas3'], id: 1 },
-      { annotations: ['http://example.com/iiif/canvas3'], id: 4 },
+      { annotationId: 'http://example.com/iiif/canvas1', annotations: ['http://example.com/iiif/canvas1'], id: 2 },
+      { annotationId: 'http://example.com/iiif/canvas1', annotations: ['http://example.com/iiif/canvas1'], id: 5 },
+      { annotationId: 'http://example.com/iiif/canvas2', annotations: ['http://example.com/iiif/canvas2'], id: 3 },
+      { annotationId: 'http://example.com/iiif/canvas3', annotations: ['http://example.com/iiif/canvas3'], id: 1 },
+      { annotationId: 'http://example.com/iiif/canvas3', annotations: ['http://example.com/iiif/canvas3'], id: 4 },
     ]);
     expect(getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'b' })).toEqual([]);
     expect(getSortedSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' })).toEqual([]);

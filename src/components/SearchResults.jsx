@@ -44,7 +44,7 @@ function SearchHitsAndAnnotations({
       announcer={announce}
       containerRef={containerRef}
       companionWindowId={companionWindowId}
-      key={hit.annotations[0]}
+      key={hit?.annotationId}
       focused={focused}
       hit={hit}
       index={index}
