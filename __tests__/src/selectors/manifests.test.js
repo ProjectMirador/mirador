@@ -183,7 +183,7 @@ describe('getProviderLogo', () => {
     ];
     const state = { manifests: { x: { json: { ...manifestFixtureWithAProvider, provider } } } };
     const received = getProviderLogo(state, { manifestId: 'x' });
-    expect(received).toBe('https://example.org/images/logo.png/full/,120/0/default.jpg');
+    expect(received).toBe('https://example.org/images/logo.png/full/,100/0/default.jpg');
   });
 
   it('should return null if no logo', () => {
