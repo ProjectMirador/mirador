@@ -14,6 +14,6 @@ export * from './annotation';
 export * from './auth';
 export * from './elasticLayout';
 export * from './search';
-export * from './layers';
 export * from './catalog';
+export { updateLayers } from '../reducers/layersSlice';
 export { default as ActionTypes } from './action-types';

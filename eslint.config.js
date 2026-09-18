@@ -150,6 +150,14 @@ export default [
     },
   },
 
+  // createSlice reducers use Immer, so mutating `state` is intentional
+  {
+    files: ['**/*Slice.js'],
+    rules: {
+      'no-param-reassign': 'off',
+    },
+  },
+
   // Test file overrides
   {
     files: ['**/__tests__/**', '**/*.test.js', '**/*.test.jsx', 'setupTest.js'],
