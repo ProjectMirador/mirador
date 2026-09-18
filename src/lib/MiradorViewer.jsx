@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import HotApp from '../components/App';
 import { filterValidPlugins } from '../extend/pluginPreprocessing';
-import createPluggableStore from '../state/createPluggableStore';
+import createPluggableStore from '../state/pluggableStore';
 
 /**
  * Default Mirador instantiation
