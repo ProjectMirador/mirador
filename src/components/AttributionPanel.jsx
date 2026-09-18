@@ -4,14 +4,14 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Skeleton from '@mui/material/Skeleton';
 import { useTranslation } from 'react-i18next';
-import { Img } from 'react-image';
 import CompanionWindow from '../containers/CompanionWindow';
 import { CompanionWindowSection } from './CompanionWindowSection';
 import LabelValueMetadata from '../containers/LabelValueMetadata';
 import ns from '../config/css-ns';
 import { PluginHook } from './PluginHook';
+import { ImageWithFallback } from './ImageWithFallback';
 
-const StyledLogo = styled(Img)(() => ({
+const StyledLogo = styled(ImageWithFallback)(() => ({
   maxWidth: '100%',
 }));
 
@@ -51,10 +51,10 @@ export function AttributionPanel({ manifestLogo = null, requiredStatement = null
       {manifestLogo && (
         <CompanionWindowSection>
           <StyledLogo
-            src={[manifestLogo]}
+            src={manifestLogo}
             alt=""
             role="presentation"
-            unloader={<StyledPlaceholder variant="rectangular" height={60} width={60} />}
+            fallback={<StyledPlaceholder variant="rectangular" height={60} width={60} />}
           />
         </CompanionWindowSection>
       )}
