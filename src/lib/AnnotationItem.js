@@ -28,7 +28,7 @@ export default class AnnotationItem {
       case 'string':
         return target.replace(/#?xywh=(.*)$/, '');
       case 'object':
-        return (target.source && target.source.id) || target.source || target.id;
+        return ((target.source && target.source.id) || target.source || target.id)?.replace(/#?xywh=(.*)$/, '');
       default:
         return null;
     }
@@ -86,7 +86,7 @@ export default class AnnotationItem {
       case 'string':
         return target;
       case 'object':
-        return compact(new Array(target.selector)).flat();
+        return target.selector ? compact(new Array(target.selector)).flat() : target.id;
       default:
         return null;
     }
@@ -123,7 +123,6 @@ export default class AnnotationItem {
       default:
         return null;
     }
-
     return match && match[1].split(',').map((str) => parseInt(str, 10));
   }
 }

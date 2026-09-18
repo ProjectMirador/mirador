@@ -110,8 +110,10 @@ export const searchesReducer = (state = {}, action) => {
           const searchHasAnnotation =
             search.data &&
             Object.values(search.data)
-              .filter((resp) => resp.json && resp.json.resources)
-              .some((resp) => [resp.json.resources].flat().some((r) => r['@id'] === action.annotationId));
+              .filter((resp) => resp.json && (resp.json.resources || resp.json.items))
+              .some((resp) =>
+                [resp.json.resources || [], resp.json.items || []].flat().some((r) => (r['@id'] || r.id) === action.annotationId),
+              );
 
           if (searchHasAnnotation) {
             // eslint-disable-next-line no-param-reassign

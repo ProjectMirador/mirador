@@ -503,6 +503,27 @@ describe('getManifestSearchService', () => {
     );
   });
 
+  it('supports v2 of the search spec', () => {
+    const state = {
+      manifests: {
+        x: {
+          json: {
+            '@context': 'http://iiif.io/api/presentation/2/context.json',
+            '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+            '@type': 'sc:Manifest',
+            service: [
+              {
+                id: 'https://example.org/searchservice2',
+                type: 'SearchService2',
+              },
+            ],
+          },
+        },
+      },
+    };
+    expect(getManifestSearchService(state, { manifestId: 'x' }).id).toEqual('https://example.org/searchservice2');
+  });
+
   it('is null if no search service is specified', () => {
     const state = { manifests: { x: { json: manifestFixture019 } } };
     expect(getManifestSearchService(state, { manifestId: 'x' })).toBeNull();
@@ -524,6 +545,35 @@ describe('getManifestAutocompleteService', () => {
     const state = { manifests: { x: { json: v1 } } };
     expect(getManifestAutocompleteService(state, { manifestId: 'x' }).id).toEqual(
       'https://contentsearch.stanford.edu/fg165hz3589/autocomplete',
+    );
+  });
+
+  it('supports v2 of the search spec', () => {
+    const state = {
+      manifests: {
+        x: {
+          json: {
+            '@context': 'http://iiif.io/api/presentation/2/context.json',
+            '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+            '@type': 'sc:Manifest',
+            service: [
+              {
+                id: 'https://example.org/searchservice2',
+                type: 'SearchService2',
+                service: [
+                  {
+                    id: 'https://example.org/services/identifier/autocomplete',
+                    type: 'AutoCompleteService2',
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    };
+    expect(getManifestAutocompleteService(state, { manifestId: 'x' }).id).toEqual(
+      'https://example.org/services/identifier/autocomplete',
     );
   });
 

@@ -146,11 +146,11 @@ describe('getSortedSearchHitsForCompanionWindow', () => {
       },
     };
     expect(getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'a' })).toEqual([
-      { annotations: ['http://example.com/iiif/canvas1'], id: 2 },
-      { annotations: ['http://example.com/iiif/canvas1'], id: 5 },
-      { annotations: ['http://example.com/iiif/canvas2'], id: 3 },
-      { annotations: ['http://example.com/iiif/canvas3'], id: 1 },
-      { annotations: ['http://example.com/iiif/canvas3'], id: 4 },
+      { annotationId: 'http://example.com/iiif/canvas1', annotations: ['http://example.com/iiif/canvas1'], id: 2 },
+      { annotationId: 'http://example.com/iiif/canvas1', annotations: ['http://example.com/iiif/canvas1'], id: 5 },
+      { annotationId: 'http://example.com/iiif/canvas2', annotations: ['http://example.com/iiif/canvas2'], id: 3 },
+      { annotationId: 'http://example.com/iiif/canvas3', annotations: ['http://example.com/iiif/canvas3'], id: 1 },
+      { annotationId: 'http://example.com/iiif/canvas3', annotations: ['http://example.com/iiif/canvas3'], id: 4 },
     ]);
     expect(getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'b' })).toEqual([]);
     expect(getSortedSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' })).toEqual([]);
@@ -184,6 +184,50 @@ describe('getSortedSearchAnnotationsForCompanionWindow', () => {
       'http://example.com/iiif/canvas1',
       'http://example.com/iiif/canvas2',
       'http://example.com/iiif/canvas3',
+    ]);
+  });
+
+  it('sorts content search v2 annotation page items based on the target source', () => {
+    const companionWindowId = 'cwid';
+    /** build a v2 content search annotation targeting a canvas */
+    const annotation = (canvasId) => ({
+      id: `${canvasId}/annotation`,
+      target: {
+        selector: [{ type: 'FragmentSelector', value: 'xywh=10,10,100,20' }],
+        source: canvasId,
+        type: 'SpecificResource',
+      },
+      type: 'Annotation',
+    });
+    const state = {
+      companionWindows: {
+        [companionWindowId]: { position: 'left' },
+      },
+      searches: {
+        a: {
+          [companionWindowId]: {
+            data: {
+              'search?page=1': {
+                json: {
+                  id: 'http://example.com/search?q=xyz',
+                  items: [
+                    annotation('http://example.com/iiif/canvas3'),
+                    annotation('http://example.com/iiif/canvas1'),
+                    annotation('http://example.com/iiif/canvas2'),
+                  ],
+                  type: 'AnnotationPage',
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    expect(getSortedSearchAnnotationsForCompanionWindow(state, { companionWindowId, windowId: 'a' }).map((r) => r.id)).toEqual([
+      'http://example.com/iiif/canvas1/annotation',
+      'http://example.com/iiif/canvas2/annotation',
+      'http://example.com/iiif/canvas3/annotation',
     ]);
   });
 });
