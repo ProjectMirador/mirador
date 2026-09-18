@@ -1,7 +1,7 @@
 import { call } from 'redux-saga/effects';
 import { expectSaga, testSaga } from 'redux-saga-test-plan';
 
-import { fetchCollectionManifests, importConfig, importState } from '../../../src/state/sagas/app';
+import { fetchCollectionManifestsForDialog, importConfigSaga, importState } from '../../../src/state/sagas/app';
 import { fetchManifests } from '../../../src/state/sagas/iiif';
 import { fetchWindowManifest } from '../../../src/state/sagas/windows';
 import { addWindow } from '../../../src/state/actions';
@@ -50,7 +50,7 @@ describe('app-level sagas', () => {
     });
   });
 
-  describe('importConfig', () => {
+  describe('importConfigSaga', () => {
     it('adds windows from the provided config', () => {
       const action = {
         config: {
@@ -62,7 +62,7 @@ describe('app-level sagas', () => {
         },
       };
 
-      return expectSaga(importConfig, action)
+      return expectSaga(importConfigSaga, action)
         .provide([
           [
             call(addWindow, {
@@ -87,14 +87,14 @@ describe('app-level sagas', () => {
     });
   });
 
-  describe('fetchCollectionManifests', () => {
+  describe('fetchCollectionManifestsForDialog', () => {
     it('fetches ressources for manifestId and all collection path ids', () => {
       const action = {
         dialogCollectionPath: ['a', 'b'],
         manifestId: 'c',
         windowId: 'w',
       };
-      testSaga(fetchCollectionManifests, action).next().call(fetchManifests, 'c', 'a', 'b');
+      testSaga(fetchCollectionManifestsForDialog, action).next().call(fetchManifests, 'c', 'a', 'b');
     });
   });
 });
