@@ -84,10 +84,16 @@ export function AnnotationsOverlay({
       const context = osdCanvasOverlay.context2d;
       renderedAnnotations.forEach((annotation) => {
         annotation.resources.forEach((resource) => {
-          const osdCanvasIndex = canvasWorld.canvases.findIndex((canvas) => canvas.id === resource.targetId);
-          if (osdCanvasIndex === -1) return;
-          const viewportCanvas = viewer.world.getItemAt(osdCanvasIndex);
-          if (!viewportCanvas) return;
+          let viewportCanvas;
+          const count = viewer.world.getItemCount();
+          for (let i = 0; i < count; i++) {
+            const item = viewer.world.getItemAt(i);
+            if (item.canvasId === resource.targetId) {
+              viewportCanvas = item;
+              break;
+            }
+          }
+          if (!viewportCanvas || !canvasWorld.canvasIds.includes(resource.targetId)) return;
           const offset = canvasWorld.offsetByCanvas(resource.targetId);
           const zoomRatio = viewportCanvas.viewportToImageZoom(viewer.viewport.getZoom(true));
           const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
@@ -103,6 +109,7 @@ export function AnnotationsOverlay({
             resource,
             selected: selectedAnnotationId === resource.id,
             zoomRatio,
+            viewportCanvas,
           });
           canvasAnnotationDisplay.toContext(context);
         });
