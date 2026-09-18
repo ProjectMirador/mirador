@@ -96,6 +96,18 @@ export default class CanvasWorld {
     return [x, y, w, h];
   }
 
+  /**
+   * Used to calculate initialViewerConfig bounds position on the canvas
+   * This is really used for scroll and book view.
+   * If a bound is on page 2 of a canvas the bounds need to be recalculated to account for the full canvas (page 1 and 2)
+   */
+  boundsToCanvasCoordinates(canvasId, [x, y, w, h]) {
+    const canvasDimensions = this.canvasDimensions.find((c) => c.canvas.id === canvasId);
+    if (!canvasDimensions) return undefined;
+
+    return [canvasDimensions.x + x, canvasDimensions.y + y, w, h];
+  }
+
   /** */
   canvasToWorldCoordinates(canvasId) {
     const canvasDimensions = this.canvasDimensions.find((c) => c.canvas.id === canvasId);

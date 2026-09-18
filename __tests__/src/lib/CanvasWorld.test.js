@@ -87,6 +87,21 @@ describe('CanvasWorld', () => {
       ).toEqual([0, 0, 2848, 4288]);
     });
   });
+  describe('boundsToCanvasCoordinates', () => {
+    it('offsets the bounds by the position of the canvas in the world', () => {
+      const canvasWorld = new CanvasWorld(canvasSubset);
+
+      // First canvas is at position 0,0 (x,y). No need to offset
+      expect(canvasWorld.boundsToCanvasCoordinates(canvasWorld.canvases[0].id, [10, 20, 30, 40])).toEqual([10, 20, 30, 40]);
+
+      // Second canvas is at position 6305,0 (x,y). That needs to be offset properly
+      expect(canvasWorld.boundsToCanvasCoordinates(canvasWorld.canvases[1].id, [10, 20, 30, 40])).toEqual([6315, 20, 30, 40]);
+    });
+
+    it('returns undefined when canvas is not visible', () => {
+      expect(new CanvasWorld(canvasSubset).boundsToCanvasCoordinates('canvas-id', [10, 20, 30, 40])).toBe(undefined);
+    });
+  });
   describe('offsetByCanvas', () => {
     it('calculates an offset that can be used to translate annotations', () => {
       expect(
