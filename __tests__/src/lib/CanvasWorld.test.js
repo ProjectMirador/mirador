@@ -172,4 +172,25 @@ describe('CanvasWorld', () => {
       expect(canvasWorld.canvasAtPoint({ x: -1, y: -1 })).toEqual(undefined);
     });
   });
+
+  describe('worldBounds with a mismatched sibling', () => {
+    // A canvas sharing a row with a much-shorter sibling (e.g. a manifest's
+    // own 1x1 placeholder for a blank page) previously had its scaled width
+    // floored to 0 by the shared constant-height scale, producing invalid
+    // (zero) content bounds that OpenSeadragon's Viewport rejects.
+    const realPage = wrapCanvas({ getHeight: () => 3972, getWidth: () => 2982 });
+    const tinyPage = wrapCanvas({ getHeight: () => 1, getWidth: () => 1 });
+
+    it('never floors a canvas to zero width when paired with a much-shorter sibling', () => {
+      const world = new CanvasWorld([realPage, tinyPage]);
+
+      const [realDims] = world.canvasDimensions;
+      expect(realDims.width).toBeGreaterThan(0);
+      expect(realDims.height).toBeGreaterThan(0);
+
+      const [, , worldWidth, worldHeight] = world.worldBounds();
+      expect(worldWidth).toBeGreaterThan(0);
+      expect(worldHeight).toBeGreaterThan(0);
+    });
+  });
 });
