@@ -42,8 +42,8 @@ MaybeDndProvider.propTypes = {
 /**
  * Shim to inject the full screen handle into a context
  */
-const FullScreenShim = ({ children }) => {
-  const handle = useFullScreenHandle();
+const FullScreenShim = ({ children, containerId }) => {
+  const handle = useFullScreenHandle(containerId);
 
   return (
     <FullScreen handle={handle}>
@@ -54,6 +54,7 @@ const FullScreenShim = ({ children }) => {
 
 FullScreenShim.propTypes = {
   children: PropTypes.node.isRequired,
+  containerId: PropTypes.string.isRequired,
 };
 
 /**
@@ -100,9 +101,9 @@ const cacheDefault = createCache({
  * This component adds viewer-specific providers.
  * @prop {Object} manifests
  */
-export function AppProviders({ children = null, language, theme, translations, dndManager = undefined }) {
+export function AppProviders({ children = null, language, theme, translations, containerId, dndManager = undefined }) {
   return (
-    <FullScreenShim>
+    <FullScreenShim containerId={containerId}>
       <StoreAwareI18nextProvider language={language} translations={translations}>
         <LocaleContext.Provider value={language}>
           <StyledEngineProvider injectFirst>
@@ -126,4 +127,5 @@ AppProviders.propTypes = {
   language: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired,
   translations: PropTypes.object.isRequired,
+  containerId: PropTypes.string.isRequired,
 };

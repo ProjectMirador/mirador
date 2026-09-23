@@ -9,11 +9,15 @@ import { AppProviders } from '../components/AppProviders';
  * @memberof App
  * @private
  */
-const mapStateToProps = (state) => ({
-  language: getConfig(state).language,
-  theme: getTheme(state),
-  translations: getConfig(state).translations,
-});
+const mapStateToProps = (state) => {
+  const { language, translations, id: containerId } = getConfig(state);
+  return {
+    language,
+    theme: getTheme(state),
+    translations,
+    containerId,
+  };
+};
 
 const enhance = compose(connect(mapStateToProps), withPlugins('AppProviders'));
 
