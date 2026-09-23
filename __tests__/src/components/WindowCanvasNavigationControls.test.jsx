@@ -46,4 +46,11 @@ describe('WindowCanvasNavigationControls', () => {
     const labels = screen.getAllByRole('button').map((button) => button.getAttribute('aria-label'));
     expect(labels).toEqual(['Previous item', 'Next item', 'Zoom in', 'Zoom out', 'Reset zoom']);
   });
+
+  it('forwards getZoomBounds through to the zoom controls', () => {
+    render(<Subject showZoomControls getZoomBounds={() => ({ maxZoom: 0.5, minZoom: 0.1, zoom: 0.5 })} />);
+
+    expect(screen.getByRole('button', { name: 'Zoom in' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Zoom out' })).toBeEnabled();
+  });
 });

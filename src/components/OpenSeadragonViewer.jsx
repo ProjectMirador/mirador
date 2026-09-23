@@ -61,6 +61,22 @@ export function OpenSeadragonViewer({
     [canvasWorld, apiRef],
   );
 
+  // Live zoom + min/max, read from the viewport itself rather than from
+  // redux -- the redux-tracked viewer.zoom only updates after OSD's
+  // animation-finish round-trip, which lags behind rapid clicks and would
+  // let a naive doubling/halving of that stale value run away past the
+  // actual constraint.
+  const getZoomBounds = useCallback(() => {
+    const { viewport } = apiRef.current || {};
+    if (!viewport) return {};
+
+    return {
+      maxZoom: viewport.getMaxZoom(),
+      minZoom: viewport.getMinZoom(),
+      zoom: viewport.getZoom(),
+    };
+  }, [apiRef]);
+
   useEffect(() => {
     OSDReferences.set(windowId, apiRef);
     return () => OSDReferences.remove(windowId);
@@ -72,6 +88,7 @@ export function OpenSeadragonViewer({
 
   const enhancedChildren = Children.map(children, (child) =>
     cloneElement(child, {
+      getZoomBounds,
       zoomToWorld,
     }),
   );

@@ -34,7 +34,7 @@ const Root = styled(Paper, { name: 'WindowCanvasNavigationControls', slot: 'root
  * Represents the viewer controls in the mirador workspace.
  */
 export const WindowCanvasNavigationControls = forwardRef(
-  ({ showZoomControls = false, visible = true, windowId, zoomToWorld, ...rest }, ref) => {
+  ({ showZoomControls = false, visible = true, windowId, zoomToWorld, getZoomBounds = () => ({}), ...rest }, ref) => {
     const [sizeRef, size] = useElementSize();
 
     const pluginProps = {
@@ -69,7 +69,7 @@ export const WindowCanvasNavigationControls = forwardRef(
           spacing={0}
         >
           <ViewerNavigation windowId={windowId} />
-          {showZoomControls && <ZoomControls windowId={windowId} zoomToWorld={zoomToWorld} />}
+          {showZoomControls && <ZoomControls windowId={windowId} zoomToWorld={zoomToWorld} getZoomBounds={getZoomBounds} />}
         </Stack>
         <ViewerInfo windowId={windowId} />
 
@@ -81,6 +81,8 @@ export const WindowCanvasNavigationControls = forwardRef(
 
 WindowCanvasNavigationControls.propTypes = {
   // eslint-disable-next-line react/require-default-props -- this rule doesn't detect default args through forwardRef's inner callback (see the default arg on line 37); https://github.com/jsx-eslint/eslint-plugin-react/issues/2856
+  getZoomBounds: PropTypes.func,
+  // eslint-disable-next-line react/require-default-props -- same forwardRef detection gap as above
   showZoomControls: PropTypes.bool,
   // eslint-disable-next-line react/require-default-props -- same forwardRef detection gap as above
   visible: PropTypes.bool,
