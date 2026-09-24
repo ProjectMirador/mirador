@@ -19,8 +19,8 @@ describe('OpenSeadragonCanvasOverlay', () => {
         },
         viewport: {
           getBoundsNoRotateWithMargins: vi.fn(() => ({
-            height: 300,
-            width: 200,
+            height: 200,
+            width: 400,
             x: 40,
             y: 80,
           })),
@@ -84,7 +84,6 @@ describe('OpenSeadragonCanvasOverlay', () => {
       canvasOverlay.resize();
       expect(canvasOverlay.containerHeight).toEqual(100);
       expect(canvasOverlay.containerWidth).toEqual(200);
-      expect(canvasOverlay.imgAspectRatio).toEqual(0.5);
     });
     it('when image is undefined returns early', () => {
       OpenSeadragon.mockClear();
@@ -105,8 +104,6 @@ describe('OpenSeadragonCanvasOverlay', () => {
       });
       canvasOverlay = new OpenSeadragonCanvasOverlay(new OpenSeadragon(), ref);
       canvasOverlay.resize();
-      expect(canvasOverlay.imgHeight).toEqual(undefined);
-      expect(canvasOverlay.imgWidth).toEqual(undefined);
     });
   });
   describe('canvasUpdate', () => {
@@ -131,8 +128,8 @@ describe('OpenSeadragonCanvasOverlay', () => {
       canvasOverlay.resize();
       canvasOverlay.canvasUpdate(update);
       expect(update).toHaveBeenCalledTimes(1);
-      expect(scale).toHaveBeenCalledWith(0.075, 0.075);
-      expect(translate).toHaveBeenCalledWith(-39.96, -26.65333333333333);
+      expect(scale).toHaveBeenCalledWith(0.5, 0.5);
+      expect(translate).toHaveBeenCalledWith(-20, -40);
       expect(setTransform).toHaveBeenCalledWith(1, 0, 0, 1, 0, 0);
     });
   });

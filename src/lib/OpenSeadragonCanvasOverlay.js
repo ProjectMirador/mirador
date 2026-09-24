@@ -1,5 +1,3 @@
-import OpenSeadragon from 'openseadragon';
-
 /**
  * OpenSeadragonCanvasOverlay - adapted from https://github.com/altert/OpenSeadragonCanvasOverlay
  * used rather than an "onRedraw" function we tap into our own method. Existing
@@ -18,7 +16,14 @@ export default class OpenSeadragonCanvasOverlay {
 
     this.containerWidth = 0;
     this.containerHeight = 0;
-    this.imgAspectRatio = 1;
+    this.viewportOrigin = { x: 0, y: 0 };
+  }
+
+  /** get scale of the canvas based on the OSD container vs OSD viewport width */
+  get scale() {
+    if (!this.viewportWidth) return 1;
+
+    return this.containerWidth / this.viewportWidth;
   }
 
   /** */
@@ -59,39 +64,27 @@ export default class OpenSeadragonCanvasOverlay {
       this.canvas.setAttribute('height', this.containerHeight);
     }
 
-    this.viewportOrigin = new OpenSeadragon.Point(0, 0);
     const boundsRect = this.viewer.viewport.getBoundsNoRotateWithMargins(true);
-    this.viewportOrigin.x = boundsRect.x;
-    this.viewportOrigin.y = boundsRect.y * this.imgAspectRatio;
+    this.viewportOrigin.x = boundsRect.x || 0;
+    this.viewportOrigin.y = boundsRect.y || 0;
 
     this.viewportWidth = boundsRect.width;
-    this.viewportHeight = boundsRect.height * this.imgAspectRatio;
-    const image1 = this.viewer.world.getItemAt(0);
-    if (!image1) return;
-    this.imgWidth = image1.source.dimensions.x;
-    this.imgHeight = image1.source.dimensions.y;
-    this.imgAspectRatio = this.imgWidth / this.imgHeight;
+    this.viewportHeight = boundsRect.height;
   }
 
   /**
-   * canvasUpdate - sets up the dimensions for the canvas update to mimick image
+   * canvasUpdate - sets up the dimensions for the canvas update to mimick IIIF canvas
    * 0 dimensions. Then call provided update function.
    * @param {Function} update
    */
   canvasUpdate(update) {
     if (!this.context2d) return;
 
-    const viewportZoom = this.viewer.viewport.getZoom(true);
-    const image1 = this.viewer.world.getItemAt(0);
-    if (!image1) return;
-    const zoom = image1.viewportToImageZoom(viewportZoom);
-
-    const x = ((this.viewportOrigin.x / this.imgWidth - this.viewportOrigin.x) / this.viewportWidth) * this.containerWidth;
-    const y = ((this.viewportOrigin.y / this.imgHeight - this.viewportOrigin.y) / this.viewportHeight) * this.containerHeight;
-
     if (this.clearBeforeRedraw) this.clear();
-    this.context2d.translate(x, y);
-    this.context2d.scale(zoom, zoom);
+    const { scale } = this;
+
+    this.context2d.translate(-this.viewportOrigin.x * scale, -this.viewportOrigin.y * scale);
+    this.context2d.scale(scale, scale);
 
     const center = this.viewer.viewport.getCenter();
 

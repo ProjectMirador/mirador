@@ -107,6 +107,17 @@ export default class CanvasWorld {
   }
 
   /** */
+  canvasScale(canvasId) {
+    const canvasDimensions = this.canvasDimensions.find((c) => c.canvas.id === canvasId);
+    if (!canvasDimensions) return 1;
+
+    const canvasWidth = canvasDimensions.canvas.getWidth();
+    if (!canvasWidth || !canvasDimensions.width) return 1;
+
+    return canvasDimensions.width / canvasWidth;
+  }
+
+  /** */
   get canvasDirection() {
     switch (this.viewingDirection) {
       case 'left-to-right':
