@@ -9,6 +9,7 @@ function usePrevious(value) {
   useEffect(() => {
     ref.current = value;
   }, [value]);
+  // eslint-disable-next-line react-hooks/refs
   return ref.current;
 }
 
@@ -50,6 +51,7 @@ export function ScrollTo({ children, containerRef, offsetTop = 0, scrollTo, ...o
 
   if (!scrollTo && isEmpty(otherProps)) return children;
 
+  // eslint-disable-next-line react-hooks/refs
   return cloneElement(children, { ref: scrollToRef, ...otherProps });
 }
 

@@ -39,9 +39,11 @@ export function SearchPanelControls({
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     setInput(query);
     setSearch(query);
     setSuggestions([]);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [query]);
 
   useEffect(() => {
@@ -73,6 +75,7 @@ export function SearchPanelControls({
 
       fetch(`${autocompleteService.id}?${new URLSearchParams({ q: input })}`)
         .then((response) => response.json())
+        // eslint-disable-next-line react-hooks/immutability
         .then(receiveAutocomplete);
     }, [autocompleteService, input]),
     500,
