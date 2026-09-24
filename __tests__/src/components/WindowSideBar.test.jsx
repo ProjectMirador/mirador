@@ -28,14 +28,12 @@ describe('WindowSideBar when open', () => {
   });
   it('Renders drawer ltr by default', () => {
     createWrapper({ sideBarOpen: true });
-    expect(screen.queryByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' })).toHaveClass(
-      'MuiDrawer-paperAnchorLeft',
-    );
+    const drawer = screen.queryByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' }).parentElement; // eslint-disable-line testing-library/no-node-access
+    expect(drawer).toHaveClass('MuiDrawer-anchorLeft');
   });
   it('Renders drawer rtl when specified', () => {
     createWrapper({ direction: 'rtl', sideBarOpen: true });
-    expect(screen.queryByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' })).toHaveClass(
-      'MuiDrawer-paperAnchorRight',
-    );
+    const drawer = screen.queryByRole('navigation', { accessibleName: 'sidebarPanelsNavigation' }).parentElement; // eslint-disable-line testing-library/no-node-access
+    expect(drawer).toHaveClass('MuiDrawer-anchorRight');
   });
 });
