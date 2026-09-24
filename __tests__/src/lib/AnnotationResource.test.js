@@ -1,4 +1,5 @@
 import AnnotationResource from '../../../src/lib/AnnotationResource';
+import { Utils } from 'manifesto.js';
 
 describe('AnnotationResource', () => {
   describe('id', () => {
@@ -128,6 +129,40 @@ describe('AnnotationResource', () => {
           on: { selector: { value: 'www.example.com/#xywh=10,10,100,200' } },
         }).selector,
       ).toEqual({ value: 'www.example.com/#xywh=10,10,100,200' });
+    });
+    it('percentage selector', () => {
+      const canvas = Utils.parseManifest({
+        '@context': 'http://iiif.io/api/presentation/2/context.json',
+        '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+        '@type': 'sc:Manifest',
+        sequences: [
+          {
+            canvases: [
+              {
+                '@id': 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+                height: 1800,
+                width: 1200,
+                images: [
+                  {
+                    resource: {
+                      height: 3820,
+                      width: 5426,
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+      expect(
+        new AnnotationResource(
+          {
+            on: { selector: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json#xywh=percent:10,10,100,200' },
+          },
+          canvas.getSequences()[0].getCanvases()[0],
+        ).fragmentSelector,
+      ).toEqual([120, 180, 1200, 3600]);
     });
   });
   describe('chars', () => {

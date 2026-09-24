@@ -12,6 +12,7 @@ import {
   getPresentAnnotationsOnSelectedCanvases,
   getSelectedAnnotationId,
   getCurrentCanvasWorld,
+  getCurrentCanvas,
 } from '../state/selectors';
 
 /**
@@ -20,7 +21,7 @@ import {
  * @private
  */
 const mapStateToProps = (state, { windowId }) => ({
-  annotations: getPresentAnnotationsOnSelectedCanvases(state, { windowId }),
+  annotations: getPresentAnnotationsOnSelectedCanvases(state, { windowId, canvasId: getCurrentCanvas(state, { windowId }).id }),
   canvasWorld: getCurrentCanvasWorld(state, { windowId }),
   drawAnnotations:
     getConfig(state).window.forceDrawAnnotations ||
