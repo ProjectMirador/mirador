@@ -262,6 +262,55 @@ describe('getThumbnail', () => {
     });
   });
 
+  describe('with an image smaller than the requested thumbnail size', () => {
+    const smallImage = (props = {}) => ({
+      ...iiifService(url, { height: 1, width: 1 }, { profile: 'level2' }),
+      id: 'xyz',
+      type: 'Image',
+      ...props,
+    });
+
+    it('requests the image height instead of upscaling when only a max height is given', () => {
+      expect(createImageSubject(smallImage(), { maxHeight: 120 })).toMatchObject({
+        height: 120,
+        url: `${url}/full/,1/0/default.jpg`,
+        width: 120,
+      });
+    });
+
+    it('requests the image width instead of upscaling when only a max width is given', () => {
+      expect(createImageSubject(smallImage(), { maxWidth: 120 })).toMatchObject({
+        url: `${url}/full/1,/0/default.jpg`,
+      });
+    });
+
+    it('clamps a constrained box to the image dimensions', () => {
+      expect(createImageSubject(smallImage(), { maxHeight: 120, maxWidth: 120 })).toMatchObject({
+        url: `${url}/full/!1,1/0/default.jpg`,
+      });
+    });
+
+    it('falls back to the image service dimensions when the resource does not specify them', () => {
+      const resource = {
+        ...iiifService(url, {}, { height: 1, profile: 'level2', width: 1 }),
+        id: 'xyz',
+        type: 'Image',
+      };
+
+      expect(createImageSubject(resource, { maxHeight: 120 })).toMatchObject({
+        url: `${url}/full/,1/0/default.jpg`,
+      });
+    });
+
+    it('leaves larger images alone', () => {
+      expect(
+        createImageSubject({ ...iiifLevel2Service, id: 'xyz', type: 'Image' }, { maxHeight: 120, maxWidth: 120 }),
+      ).toMatchObject({
+        url: `${url}/full/!120,120/0/default.jpg`,
+      });
+    });
+  });
+
   describe('with a collection', () => {
     it('uses the thumbnail', () => {
       const collection = Utils.parseManifest({
@@ -330,7 +379,7 @@ describe('picking the best format', () => {
       },
     };
     expect(createSubject(myCanvas, 'Canvas')).toMatchObject({
-      url: `${url}/full/,120/0/default.jpg`,
+      url: `${url}/full/,100/0/default.jpg`,
     });
   });
 
@@ -352,7 +401,7 @@ describe('picking the best format', () => {
       },
     };
     expect(createSubject(myCanvas, 'Canvas')).toMatchObject({
-      url: `${url}/full/,120/0/default.webp`,
+      url: `${url}/full/,100/0/default.webp`,
     });
   });
 
@@ -374,7 +423,7 @@ describe('picking the best format', () => {
       },
     };
     expect(createSubject(myCanvas, 'Canvas', { preferredFormats: ['png', 'jpg'] })).toMatchObject({
-      url: `${url}/full/,120/0/default.png`,
+      url: `${url}/full/,100/0/default.png`,
     });
   });
 });
