@@ -7,18 +7,22 @@ import xor from 'lodash/xor';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
-import { buildPath2D } from '../lib/svgShapesToPath';
+import { buildPath2D, svgShapeElements } from '../lib/svgShapesToPath';
 
 /** @private */
 function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point) {
   const [canvasX, canvasY] = canvasWorld.canvasToWorldCoordinates(canvas.id);
+  // point is already in OSD viewport/world units (see onCanvasClick's use of
+  // viewport.pointFromPixel), so only the world -> native-pixel conversion
+  // is needed here -- unlike CanvasAnnotationDisplay's drawing code, there's
+  // no separate screen-pixel step (overlayScale) left to undo.
   const scale = canvasWorld.canvasScale(canvas.id);
   const relativeX = (point.x - canvasX) / scale;
   const relativeY = (point.y - canvasY) / scale;
 
   if (resource.svgSelector) {
     const context = osdCanvasOverlay.context2d;
-    const { svgPaths } = new CanvasAnnotationDisplay({ resource, canvasWorld });
+    const svgPaths = svgShapeElements(resource);
     return [...svgPaths].some((path) => context.isPointInPath(buildPath2D(path), relativeX, relativeY));
   }
 

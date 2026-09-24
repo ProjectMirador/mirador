@@ -1,3 +1,13 @@
+/**
+ * Parses an annotation resource's svgSelector value into its shape
+ * elements (circle, ellipse, rect, line, polygon, polyline, path).
+ */
+export function svgShapeElements(resource) {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(resource.svgSelector.value, 'text/xml');
+  return Array.from(xmlDoc.querySelectorAll('circle, ellipse, rect, line, polygon, polyline, path'));
+}
+
 export function buildPath2D(element) {
   const tag = element.tagName.toLowerCase();
   const num = (attr) => parseFloat(element.getAttribute(attr)) || 0;

@@ -2,7 +2,7 @@
  * CanvasAnnotationDisplay - class used to display a SVG and fragment based
  * annotations.
  */
-import { buildPath2D } from '../lib/svgShapesToPath';
+import { buildPath2D, svgShapeElements } from '../lib/svgShapesToPath';
 
 export default class CanvasAnnotationDisplay {
   /** */
@@ -163,8 +163,6 @@ export default class CanvasAnnotationDisplay {
 
   /** */
   get svgPaths() {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(this.svgString, 'text/xml');
-    return Array.from(xmlDoc.querySelectorAll('circle, ellipse, rect, line, polygon, polyline, path'));
+    return svgShapeElements(this.resource);
   }
 }
