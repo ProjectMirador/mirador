@@ -6,7 +6,7 @@ import sortBy from 'lodash/sortBy';
 import xor from 'lodash/xor';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
-import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
+import { drawAnnotationsToContext } from '../lib/drawAnnotationsToContext';
 import { buildPath2D, svgShapeElements } from '../lib/svgShapesToPath';
 
 /** @private */
@@ -86,28 +86,12 @@ export function AnnotationsOverlay({
    */
   const annotationsToContext = useCallback(
     (renderedAnnotations, currentPalette) => {
-      const context = osdCanvasOverlay.context2d;
-      const overlayScale = osdCanvasOverlay.scale;
-      renderedAnnotations.forEach((annotation) => {
-        annotation.resources.forEach((resource) => {
-          const canvas = canvasWorld.canvases.find((cwc) => cwc.id === resource.targetId);
-          if (!canvas) return;
-          const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
-            hovered: hoveredAnnotationIds.includes(resource.id),
-            palette: {
-              ...currentPalette,
-              default: {
-                ...currentPalette.default,
-                ...(!highlightAllAnnotations && currentPalette.hidden),
-              },
-            },
-            overlayScale,
-            resource,
-            canvasWorld,
-            selected: selectedAnnotationId === resource.id,
-          });
-          canvasAnnotationDisplay.toContext(context);
-        });
+      drawAnnotationsToContext(renderedAnnotations, currentPalette, {
+        canvasWorld,
+        highlightAllAnnotations,
+        hoveredAnnotationIds,
+        osdCanvasOverlay,
+        selectedAnnotationId,
       });
     },
     [osdCanvasOverlay, canvasWorld, highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId],
