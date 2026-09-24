@@ -8,29 +8,29 @@ export function useFullScreenHandle(containerId) {
   const [active, setActive] = useState(false);
 
   /**  */
-  const handleFullScreenChange = () => {
+  const handleFullScreenChange = useCallback(() => {
     setActive(document.fullscreenElement === document.getElementById(containerId));
-  };
+  }, [containerId]);
 
   useEffect(() => {
     document.addEventListener('fullscreenchange', handleFullScreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullScreenChange);
-  }, []);
+  }, [handleFullScreenChange]);
 
   /**  */
-  const requestFullscreen = () => document.getElementById(containerId).requestFullscreen();
+  const requestFullscreen = useCallback(() => document.getElementById(containerId).requestFullscreen(), [containerId]);
 
   const enter = useCallback(() => {
     if (document.fullscreenElement) {
       return document.exitFullscreen().then(() => requestFullscreen());
     }
     return requestFullscreen();
-  }, []);
+  }, [requestFullscreen]);
 
   const exit = useCallback(() => {
     if (document.fullscreenElement !== document.getElementById(containerId)) return Promise.resolve();
     return document.exitFullscreen();
-  }, []);
+  }, [containerId]);
 
   return useMemo(
     () => ({
