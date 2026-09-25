@@ -104,10 +104,13 @@ export function* setWindowStartingCanvas(action) {
     const getMiradorManifest = yield select(getMiradorManifestWrapper);
     const manifestoInstance = yield select(getManifestoInstance, { manifestId });
     if (manifestoInstance) {
-      // set the startCanvas
+      // set the startCanvas; an explicitly configured canvasIndex takes precedence
+      // over the manifest's own start canvas
       const miradorManifest = getMiradorManifest(manifestoInstance);
       const startCanvas =
-        miradorManifest.startCanvas || miradorManifest.canvasAt(canvasIndex || 0) || miradorManifest.canvasAt(0);
+        (canvasIndex != null && miradorManifest.canvasAt(canvasIndex)) ||
+        miradorManifest.startCanvas ||
+        miradorManifest.canvasAt(0);
       if (startCanvas) {
         const preserveViewport = !!action.payload || !!action.window?.initialViewerConfig;
         // When canvas is calculated, only pass preserveViewport when true

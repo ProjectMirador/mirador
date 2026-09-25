@@ -198,6 +198,81 @@ describe('window-level sagas', () => {
         .put({ type: 'setCanvasThunk' })
         .run();
     });
+
+    it('prefers an explicitly configured canvasIndex over the manifest start canvas', () => {
+      const action = {
+        window: {
+          canvasIndex: 2,
+          id: 'x',
+          manifestId: 'manifest.json',
+        },
+      };
+
+      const manifest = Utils.parseManifest({
+        ...fixture,
+        start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' },
+      });
+
+      return expectSaga(fetchWindowManifest, action)
+        .provide([
+          [select(getManifests), { 'manifest.json': {} }],
+          [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
+          [call(setCanvas, 'x', 'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1'), { type: 'setCanvasThunk' }],
+        ])
+        .put({ type: 'setCanvasThunk' })
+        .run();
+    });
+
+    it('treats a canvasIndex of 0 as an explicit override of the manifest start canvas', () => {
+      const action = {
+        window: {
+          canvasIndex: 0,
+          id: 'x',
+          manifestId: 'manifest.json',
+        },
+      };
+
+      const manifest = Utils.parseManifest({
+        ...fixture,
+        start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' },
+      });
+
+      return expectSaga(fetchWindowManifest, action)
+        .provide([
+          [select(getManifests), { 'manifest.json': {} }],
+          [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
+          [
+            call(setCanvas, 'x', 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json'),
+            { type: 'setCanvasThunk' },
+          ],
+        ])
+        .put({ type: 'setCanvasThunk' })
+        .run();
+    });
+
+    it('falls back to the manifest start canvas when canvasIndex is out of range', () => {
+      const action = {
+        window: {
+          canvasIndex: 99,
+          id: 'x',
+          manifestId: 'manifest.json',
+        },
+      };
+
+      const manifest = Utils.parseManifest({
+        ...fixture,
+        start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' },
+      });
+
+      return expectSaga(fetchWindowManifest, action)
+        .provide([
+          [select(getManifests), { 'manifest.json': {} }],
+          [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
+          [call(setCanvas, 'x', 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'), { type: 'setCanvasThunk' }],
+        ])
+        .put({ type: 'setCanvasThunk' })
+        .run();
+    });
   });
 
   describe('setWindowDefaultSearchQuery', () => {
