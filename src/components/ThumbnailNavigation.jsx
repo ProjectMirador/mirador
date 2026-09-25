@@ -4,7 +4,6 @@ import Paper from '@mui/material/Paper';
 import { List, Grid } from 'react-window';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useCanvasWorldService } from '../hooks';
 import ThumbnailCanvasGrouping from '../containers/ThumbnailCanvasGrouping';
 import ns from '../config/css-ns';
 /**
@@ -27,7 +26,6 @@ export function ThumbnailNavigation({
   const spacing = 12; // 2 * (2px margin + 2px border + 2px padding)
   const gridRef = useRef();
   const previousView = useRef(view);
-  const canvasWorlds = useCanvasWorldService();
 
   useEffect(() => {
     if (previousView.current !== view && position !== 'off') {
@@ -91,35 +89,50 @@ export function ThumbnailNavigation({
   };
 
   /**
-   * When on bottom, column width
+   * A canvas's own width/height ratio, independent of any sibling in its
+   * grouping. Matches MiradorCanvas#aspectRatio's own definition (these
+   * canvases aren't MiradorCanvas-wrapped here) -- NaN for missing/zero
+   * dimensions, so it poisons the sum below and falls through to
+   * calculateScaledWidth/Height's own minimum-size guard, rather than
+   * silently assuming a square canvas.
+   */
+  const canvasAspectRatio = (canvas) => canvas.getWidth() / canvas.getHeight();
+
+  /**
+   * When on bottom, column width.
+   *
+   * Computed as the sum of each canvas's own width when independently
+   * scaled to the shared target height, matching how ThumbnailCanvasGrouping
+   * actually renders facing-page groupings (each canvas as its own
+   * IIIFThumbnail at that height, side by side) -- rather than from
+   * CanvasWorld's combined bounds, which normalizes every canvas in the
+   * grouping to their shared *minimum* height/width.
    */
   const calculateScaledWidth = (index) => {
     const canvases = canvasGroupings[index];
     if (!canvases) return thumbnailNavigation.width + spacing;
 
-    const world = canvasWorlds.get(canvases);
-    const bounds = world.worldBounds();
-    // calculate the correct canvas width based on the height + aspect ratio.
     const availableHeight = thumbnailNavigation.height - spacing - scrollbarSize;
-    const calc = Math.ceil((availableHeight * bounds[2]) / bounds[3]);
+    const calc = Math.ceil(canvases.reduce((total, canvas) => total + availableHeight * canvasAspectRatio(canvas), 0));
 
     if (!Number.isInteger(calc)) return thumbnailNavigation.width + spacing;
     return calc + spacing;
   };
 
   /**
-   * When on right, row height
+   * When on right, row height.
+   *
+   * The inverse of calculateScaledWidth: solves for the shared height at
+   * which the sum of each canvas's independently-scaled width fills the
+   * available (fixed) width
    */
   const calculateScaledHeight = (index) => {
     const canvases = canvasGroupings[index];
     if (!canvases) return thumbnailNavigation.height + spacing;
 
-    const world = canvasWorlds.get(canvases);
-    const bounds = world.worldBounds();
-
-    // calculate the correct canvas height based on the aspect ratio + width.
     const availableWidth = thumbnailNavigation.width - spacing - scrollbarSize;
-    const calc = Math.ceil((availableWidth * canvases.length * bounds[3]) / bounds[2]);
+    const totalAspectRatio = canvases.reduce((total, canvas) => total + canvasAspectRatio(canvas), 0);
+    const calc = Math.ceil((availableWidth * canvases.length) / totalAspectRatio);
 
     if (!Number.isInteger(calc)) return thumbnailNavigation.height + spacing;
     // Guard against incredibly small thumbnails
