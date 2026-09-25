@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircleOutlineSharp';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircleOutlineSharp';
 import { styled } from '@mui/material/styles';
@@ -5,6 +6,7 @@ import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import RestoreZoomIcon from './icons/RestoreZoomIcon';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import OpenSeadragonViewerContext from '../contexts/OpenSeadragonViewerContext';
 
 const StyledZoomControlsWrapper = styled('div')({
   display: 'flex',
@@ -14,9 +16,24 @@ const StyledZoomControlsWrapper = styled('div')({
 
 /**
  */
-export function ZoomControls({ windowId = '', updateViewport = () => {}, viewer = {}, zoomToWorld, getZoomBounds = () => ({}) }) {
+export function ZoomControls({ windowId = '', updateViewport = () => {}, viewer = {}, zoomToWorld }) {
   const { t } = useTranslation();
-  const { zoom: liveZoom, minZoom, maxZoom } = getZoomBounds();
+  const osdViewer = useContext(OpenSeadragonViewerContext);
+  // Read live zoom + min/max straight off the viewport rather than redux --
+  // the redux-tracked viewer.zoom only updates after OSD's animation-finish
+  // round-trip
+  const { viewport } = osdViewer?.current || {};
+  const {
+    zoom: liveZoom,
+    minZoom,
+    maxZoom,
+  } = viewport
+    ? {
+        maxZoom: viewport.getMaxZoom(),
+        minZoom: viewport.getMinZoom(),
+        zoom: viewport.zoomSpring.target.value,
+      }
+    : {};
   // Fall back to the redux-tracked zoom if the viewport isn't available yet.
   // viewer can be explicitly null (not just absent), which the default
   // parameter above doesn't catch.
@@ -62,7 +79,6 @@ export function ZoomControls({ windowId = '', updateViewport = () => {}, viewer 
 }
 
 ZoomControls.propTypes = {
-  getZoomBounds: PropTypes.func,
   updateViewport: PropTypes.func,
   viewer: PropTypes.shape({
     x: PropTypes.number,
