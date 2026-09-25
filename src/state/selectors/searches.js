@@ -1,9 +1,11 @@
 import { createSelector } from 'reselect';
 import { PropertyValue } from 'manifesto.js';
 import AnnotationList from '../../lib/AnnotationList';
+import AnnotationPage from '../../lib/AnnotationPage';
+import { getManifestLocale } from './manifests';
 import { getCanvas, getCanvases } from './canvases';
 import { getWindow } from './getters';
-import { getManifestLocale } from './manifests';
+import { responseToHits } from '../../lib/ContentSearch';
 import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
 
 /**
@@ -95,9 +97,7 @@ export const getNextSearchId = createSelector([getSearchForCompanionWindow], (re
 
 const getSearchHitsForCompanionWindow = createSelector([getSearchResponsesForCompanionWindow], (results) =>
   results.flatMap((result) => {
-    if (!result || !result.json || result.isFetching || !result.json.hits) return EMPTY_ARRAY;
-
-    return result.json.hits;
+    return responseToHits(result?.json);
   }),
 );
 
@@ -120,8 +120,8 @@ export const getSortedSearchHitsForCompanionWindow = createSelector(
     const canvasIds = canvases.map((canvas) => canvas.id);
 
     return [].concat(searchHits).sort((a, b) => {
-      const hitA = annotation.resources.find((r) => r.id === a.annotations[0]);
-      const hitB = annotation.resources.find((r) => r.id === b.annotations[0]);
+      const hitA = annotation.resources.find((r) => r.id === a.annotationId);
+      const hitB = annotation.resources.find((r) => r.id === b.annotationId);
       return canvasIds.indexOf(hitA.targetId) - canvasIds.indexOf(hitB.targetId);
     });
   },
@@ -131,8 +131,8 @@ export const getSortedSearchHitsForCompanionWindow = createSelector(
 const searchResultsToAnnotation = (results) => {
   const annotations = results
     .map((result) => {
-      if (!result || !result.json || result.isFetching || !result.json.resources) return undefined;
-      const anno = new AnnotationList(result.json);
+      if (!result || !result.json || result.isFetching || (!result.json.resources && !result.json.items)) return undefined;
+      const anno = result.json.resources ? new AnnotationList(result.json, null) : new AnnotationPage(result.json, null);
       return {
         id: anno.id,
         resources: anno.resources,

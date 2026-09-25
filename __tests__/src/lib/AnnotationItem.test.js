@@ -66,6 +66,16 @@ describe('AnnotationItem', () => {
     it('supports a source id', () => {
       expect(new AnnotationItem({ target: { source: { id: 'foo' } } }).targetId).toEqual('foo');
     });
+
+    it('supports a string source, removing fragmentSelector coords', () => {
+      expect(new AnnotationItem({ target: { source: 'www.example.com/#xywh=10,10,100,200' } }).targetId).toEqual(
+        'www.example.com/',
+      );
+    });
+
+    it('falls back to the target id, removing fragmentSelector coords', () => {
+      expect(new AnnotationItem({ target: { id: 'www.example.com/#xywh=10,10,100,200' } }).targetId).toEqual('www.example.com/');
+    });
   });
 
   describe('motivations', () => {
@@ -113,6 +123,11 @@ describe('AnnotationItem', () => {
     });
     it('handles multiple selectors', () => {
       expect(new AnnotationItem({ target: { selector: ['yolo', 'foo'] } }).selector).toEqual(['yolo', 'foo']);
+    });
+    it('returns the target id when the target has no selector', () => {
+      expect(new AnnotationItem({ target: { id: 'www.example.com/annotation/1' } }).selector).toEqual(
+        'www.example.com/annotation/1',
+      );
     });
   });
   describe('chars', () => {
