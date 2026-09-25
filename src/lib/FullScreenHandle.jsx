@@ -4,33 +4,33 @@ import PropTypes from 'prop-types';
 /**
  * Used to request or exit fullscreen using the native Fullscreen API.
  */
-export function useFullScreenHandle() {
+export function useFullScreenHandle(containerId) {
   const [active, setActive] = useState(false);
 
   /**  */
-  const handleFullScreenChange = () => {
-    setActive(document.fullscreenElement === document.body);
-  };
+  const handleFullScreenChange = useCallback(() => {
+    setActive(document.fullscreenElement === document.getElementById(containerId));
+  }, [containerId]);
 
   useEffect(() => {
     document.addEventListener('fullscreenchange', handleFullScreenChange);
     return () => document.removeEventListener('fullscreenchange', handleFullScreenChange);
-  }, []);
+  }, [handleFullScreenChange]);
 
   /**  */
-  const requestFullscreen = () => document.body.requestFullscreen();
+  const requestFullscreen = useCallback(() => document.getElementById(containerId).requestFullscreen(), [containerId]);
 
   const enter = useCallback(() => {
     if (document.fullscreenElement) {
       return document.exitFullscreen().then(() => requestFullscreen());
     }
     return requestFullscreen();
-  }, []);
+  }, [requestFullscreen]);
 
   const exit = useCallback(() => {
-    if (document.fullscreenElement !== document.body) return Promise.resolve();
+    if (document.fullscreenElement !== document.getElementById(containerId)) return Promise.resolve();
     return document.exitFullscreen();
-  }, []);
+  }, [containerId]);
 
   return useMemo(
     () => ({
@@ -54,18 +54,7 @@ export const FullScreen = ({ handle, onChange = undefined, children = null, clas
     }
   }, [handle, handle.active, onChange]);
 
-  const styles = handle.active
-    ? {
-        height: '100%',
-        width: '100%',
-      }
-    : {};
-
-  return (
-    <div className={fullScreenClasses.join(' ')} style={styles}>
-      {children}
-    </div>
-  );
+  return <div className={fullScreenClasses.join(' ')}>{children}</div>;
 };
 
 FullScreen.propTypes = {
