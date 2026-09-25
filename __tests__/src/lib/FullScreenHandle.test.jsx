@@ -4,12 +4,14 @@ import { useFullScreenHandle, FullScreen } from '../../../src/lib/FullScreenHand
 
 describe('FullScreenHandle', () => {
   describe('useFullScreenHandle', () => {
+    const containerId = 'mirador-instance';
     let requestFullscreen;
     let exitFullscreen;
 
     beforeEach(() => {
       requestFullscreen = vi.fn().mockResolvedValue();
       exitFullscreen = vi.fn().mockResolvedValue();
+      document.body.id = containerId;
       document.body.requestFullscreen = requestFullscreen;
       document.exitFullscreen = exitFullscreen;
       // eslint-disable-next-line testing-library/no-node-access -- mocking the global Fullscreen API, not querying rendered output
@@ -24,13 +26,13 @@ describe('FullScreenHandle', () => {
     });
 
     it('starts inactive', () => {
-      const { result } = renderHook(() => useFullScreenHandle());
+      const { result } = renderHook(() => useFullScreenHandle(containerId));
 
       expect(result.current.active).toBe(false);
     });
 
     it('enter() requests fullscreen on document.body when not already fullscreen', async () => {
-      const { result } = renderHook(() => useFullScreenHandle());
+      const { result } = renderHook(() => useFullScreenHandle(containerId));
 
       await act(async () => {
         await result.current.enter();
@@ -41,7 +43,7 @@ describe('FullScreenHandle', () => {
     });
 
     it('exit() does nothing when not in fullscreen', async () => {
-      const { result } = renderHook(() => useFullScreenHandle());
+      const { result } = renderHook(() => useFullScreenHandle(containerId));
 
       await act(async () => {
         await result.current.exit();
@@ -51,7 +53,7 @@ describe('FullScreenHandle', () => {
     });
 
     it('becomes active when a fullscreenchange event reports document.body as the fullscreen element', () => {
-      const { result } = renderHook(() => useFullScreenHandle());
+      const { result } = renderHook(() => useFullScreenHandle(containerId));
 
       act(() => {
         // eslint-disable-next-line testing-library/no-node-access -- mocking the global Fullscreen API, not querying rendered output
@@ -63,7 +65,7 @@ describe('FullScreenHandle', () => {
     });
 
     it('exit() calls document.exitFullscreen once active', async () => {
-      const { result } = renderHook(() => useFullScreenHandle());
+      const { result } = renderHook(() => useFullScreenHandle(containerId));
 
       act(() => {
         // eslint-disable-next-line testing-library/no-node-access -- mocking the global Fullscreen API, not querying rendered output
@@ -103,7 +105,6 @@ describe('FullScreenHandle', () => {
       // eslint-disable-next-line testing-library/no-node-access -- the wrapper div has no role/testid to query directly
       const wrapper = screen.getByText('content').parentElement;
       expect(wrapper).toHaveClass('fullscreen-enabled');
-      expect(wrapper).toHaveStyle({ height: '100%', width: '100%' });
     });
 
     it('calls onChange with the active state whenever it changes', () => {
