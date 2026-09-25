@@ -2,7 +2,7 @@
  * CanvasAnnotationDisplay - class used to display a SVG and fragment based
  * annotations.
  */
-import { buildPath2D } from '../lib/svgShapesToPath';
+import { buildPath2D, svgShapeElements } from '../lib/svgShapesToPath';
 
 export default class CanvasAnnotationDisplay {
   /** */
@@ -33,10 +33,20 @@ export default class CanvasAnnotationDisplay {
     return this.resource.svgSelector.value;
   }
 
+  /**
+   * Two scale factors compose here: `overlayScale` (screen pixels per OSD
+   * viewport unit -- already applied to the context by
+   * OpenSeadragonCanvasOverlay before toContext() runs) and `scale`
+   * (native image pixels per CanvasWorld unit -- applied explicitly below
+   * via context.scale()). Both apply automatically to drawn geometry, but
+   * not to a plain lineWidth number -- lineWidthScale pre-divides that
+   * back out so strokes render at their native width.
+   */
   get lineWidthScale() {
     return this.scale * this.overlayScale;
   }
 
+  /** Native image pixels -> CanvasWorld world units, for this canvas. */
   get scale() {
     return this.canvasWorld.canvasScale(this.resource.targetId);
   }
@@ -153,8 +163,6 @@ export default class CanvasAnnotationDisplay {
 
   /** */
   get svgPaths() {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(this.svgString, 'text/xml');
-    return Array.from(xmlDoc.querySelectorAll('circle, ellipse, rect, line, polygon, polyline, path'));
+    return svgShapeElements(this.resource);
   }
 }
