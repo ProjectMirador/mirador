@@ -48,6 +48,11 @@ const AnnotationChip = styled(Chip, { name: 'GalleryView', slot: 'chip' })(({ th
   textAlign: 'right',
 }));
 
+// A canvas with a huge aspect ratio (e.g. a scroll digitized as one
+// continuous strip) would otherwise render at an unconstrained width when
+// only maxHeight is given, blowing out the gallery grid.
+const MAX_ASPECT_RATIO = 3;
+
 /**
  * Represents a WindowViewer in the mirador workspace. Responsible for mounting
  * OSD and Navigation
@@ -118,6 +123,8 @@ export function GalleryViewThumbnail({
     selected,
   };
 
+  const maxWidth = config.width ?? config.height * MAX_ASPECT_RATIO;
+
   return (
     <InView onChange={handleIntersection}>
       <Root
@@ -130,7 +137,7 @@ export function GalleryViewThumbnail({
         role="button"
         tabIndex={0}
       >
-        <IIIFThumbnail resource={canvas} labelled variant="outside" maxHeight={config.height} maxWidth={config.width}>
+        <IIIFThumbnail resource={canvas} labelled variant="outside" maxHeight={config.height} maxWidth={maxWidth}>
           <StyledChipsContainer>
             {searchAnnotationsCount > 0 && (
               <AnnotationChip icon={<SearchIcon fontSize="small" />} label={searchAnnotationsCount} size="small" />
