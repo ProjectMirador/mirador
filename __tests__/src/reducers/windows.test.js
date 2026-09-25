@@ -13,6 +13,24 @@ describe('windows reducer', () => {
       ),
     ).toEqual({
       abc123: {
+        explicitInitialCanvasId: false,
+        id: 'abc123',
+      },
+    });
+  });
+  it('should handle ADD_WINDOW with an explicit canvasId', () => {
+    expect(
+      windowsReducer(
+        {},
+        {
+          type: ActionTypes.ADD_WINDOW,
+          window: { canvasId: 'canvas-1', id: 'abc123' },
+        },
+      ),
+    ).toEqual({
+      abc123: {
+        canvasId: 'canvas-1',
+        explicitInitialCanvasId: true,
         id: 'abc123',
       },
     });
