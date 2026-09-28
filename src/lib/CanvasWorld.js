@@ -21,7 +21,10 @@ export default class CanvasWorld {
     return this.canvases.map((canvas) => canvas.id);
   }
 
-  /** */
+  /**
+   * Returns an array [{ canvas, x, y, width, height }]
+   * with one entry per input canvas, in world coordinates.
+   */
   get canvasDimensions() {
     if (this._canvasDimensions) {
       return this._canvasDimensions;

@@ -6,19 +6,23 @@ import sortBy from 'lodash/sortBy';
 import xor from 'lodash/xor';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
-import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
-import { buildPath2D } from '../lib/svgShapesToPath';
+import { drawAnnotationsToContext } from '../lib/drawAnnotationsToContext';
+import { buildPath2D, svgShapeElements } from '../lib/svgShapesToPath';
 
 /** @private */
 function isAnnotationAtPoint(canvasWorld, osdCanvasOverlay, resource, canvas, point) {
   const [canvasX, canvasY] = canvasWorld.canvasToWorldCoordinates(canvas.id);
+  // point is already in OSD viewport/world units (see onCanvasClick's use of
+  // viewport.pointFromPixel), so only the world -> native-pixel conversion
+  // is needed here -- unlike CanvasAnnotationDisplay's drawing code, there's
+  // no separate screen-pixel step (overlayScale) left to undo.
   const scale = canvasWorld.canvasScale(canvas.id);
   const relativeX = (point.x - canvasX) / scale;
   const relativeY = (point.y - canvasY) / scale;
 
   if (resource.svgSelector) {
     const context = osdCanvasOverlay.context2d;
-    const { svgPaths } = new CanvasAnnotationDisplay({ resource, canvasWorld });
+    const svgPaths = svgShapeElements(resource);
     return [...svgPaths].some((path) => context.isPointInPath(buildPath2D(path), relativeX, relativeY));
   }
 
@@ -82,28 +86,12 @@ export function AnnotationsOverlay({
    */
   const annotationsToContext = useCallback(
     (renderedAnnotations, currentPalette) => {
-      const context = osdCanvasOverlay.context2d;
-      const overlayScale = osdCanvasOverlay.scale;
-      renderedAnnotations.forEach((annotation) => {
-        annotation.resources.forEach((resource) => {
-          const canvas = canvasWorld.canvases.find((cwc) => cwc.id === resource.targetId);
-          if (!canvas) return;
-          const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
-            hovered: hoveredAnnotationIds.includes(resource.id),
-            palette: {
-              ...currentPalette,
-              default: {
-                ...currentPalette.default,
-                ...(!highlightAllAnnotations && currentPalette.hidden),
-              },
-            },
-            overlayScale,
-            resource,
-            canvasWorld,
-            selected: selectedAnnotationId === resource.id,
-          });
-          canvasAnnotationDisplay.toContext(context);
-        });
+      drawAnnotationsToContext(renderedAnnotations, currentPalette, {
+        canvasWorld,
+        highlightAllAnnotations,
+        hoveredAnnotationIds,
+        osdCanvasOverlay,
+        selectedAnnotationId,
       });
     },
     [osdCanvasOverlay, canvasWorld, highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId],

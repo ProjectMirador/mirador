@@ -201,6 +201,49 @@ describe('AnnotationsOverlay', () => {
       expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-line');
     });
 
+    it('triggers a selectAnnotation for a clicked-on svgSelector annotation', () => {
+      const selectAnnotation = vi.fn();
+
+      // isAnnotationAtPoint's svgSelector branch hit-tests via
+      // context2d.isPointInPath, unlike the fragmentSelector branch used by
+      // the other onCanvasClick tests, which never touches osdCanvasOverlay.
+      OpenSeadragonCanvasOverlay.mockImplementation(function () {
+        return { context2d: { isPointInPath: () => true } };
+      });
+
+      const { viewer } = createWrapper({
+        annotations: [
+          new AnnotationList({
+            '@id': 'foo',
+            resources: [
+              {
+                '@id': 'http://example.org/identifier/annotation/anno-svg',
+                '@type': 'oa:Annotation',
+                motivation: 'sc:painting',
+                on: {
+                  full: 'http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json',
+                  selector: {
+                    item: {
+                      '@type': 'oa:SvgSelector',
+                      value: '<svg xmlns="http://www.w3.org/2000/svg"><rect x="90" y="90" width="300" height="40" /></svg>',
+                    },
+                  },
+                },
+              },
+            ],
+          }),
+        ],
+        selectAnnotation,
+      });
+
+      viewer.raiseEvent('canvas-click', {
+        eventSource: { viewport: viewer.viewport },
+        position: new OpenSeadragon.Point(101, 101),
+      });
+
+      expect(selectAnnotation).toHaveBeenCalledWith('base', 'http://example.org/identifier/annotation/anno-svg');
+    });
+
     it('triggers a deselectAnnotation for an already-selected annotation', () => {
       const deselectAnnotation = vi.fn();
 
