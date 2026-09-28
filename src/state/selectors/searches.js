@@ -120,8 +120,8 @@ export const getSortedSearchHitsForCompanionWindow = createSelector(
     const canvasIds = canvases.map((canvas) => canvas.id);
 
     return [].concat(searchHits).sort((a, b) => {
-      const hitA = annotation.resources.find((r) => r.id === a.annotationId);
-      const hitB = annotation.resources.find((r) => r.id === b.annotationId);
+      const hitA = annotation.resources.find((r) => r.id === a.firstAnnotationId);
+      const hitB = annotation.resources.find((r) => r.id === b.firstAnnotationId);
       return canvasIds.indexOf(hitA.targetId) - canvasIds.indexOf(hitB.targetId);
     });
   },

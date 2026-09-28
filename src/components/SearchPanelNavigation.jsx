@@ -18,12 +18,12 @@ export function SearchPanelNavigation({
   const { t } = useTranslation();
   /** */
   const nextSearchResult = (currentHitIndex) => {
-    selectAnnotation(searchHits[currentHitIndex + 1].annotationId);
+    selectAnnotation(searchHits[currentHitIndex + 1].firstAnnotationId);
   };
 
   /** */
   const previousSearchResult = (currentHitIndex) => {
-    selectAnnotation(searchHits[currentHitIndex - 1].annotationId);
+    selectAnnotation(searchHits[currentHitIndex - 1].firstAnnotationId);
   };
 
   /** */
@@ -42,7 +42,7 @@ export function SearchPanelNavigation({
 
   const iconStyle = direction === 'rtl' ? { transform: 'rotate(180deg)' } : {};
 
-  const currentHitIndex = searchHits.findIndex((val) => val?.annotationId.includes(selectedContentSearchAnnotation[0]));
+  const currentHitIndex = searchHits.findIndex((val) => val?.annotationIds.includes(selectedContentSearchAnnotation[0]));
   let lengthText = searchHits.length;
   if (searchHits.length < numTotal) {
     lengthText += '+';

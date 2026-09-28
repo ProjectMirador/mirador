@@ -58,16 +58,27 @@ describe('ContentSearch', () => {
     });
 
     describe('with a Content Search 1 response', () => {
-      it('adds an annotationId from the first annotation of each hit', () => {
+      it('normalizes a hit, keeping every referenced annotation', () => {
         expect(responseToHits({ hits: [v1Hit()] })).toEqual([
           {
-            '@type': 'search:Hit',
             after: ' flew away',
-            annotationId: 'http://example.com/search/anno/1',
-            annotations: ['http://example.com/search/anno/1'],
+            annotationIds: ['http://example.com/search/anno/1'],
             before: 'a ',
+            firstAnnotationId: 'http://example.com/search/anno/1',
             match: 'bird',
           },
+        ]);
+      });
+
+      // A hit can reference more than one annotation (e.g. a match spanning
+      // adjacent annotated regions) -- keep all of them, don't collapse to
+      // just the first.
+      it('keeps every annotation a hit references, not just the first', () => {
+        const hit = v1Hit({ annotations: ['http://example.com/search/anno/1', 'http://example.com/search/anno/2'] });
+
+        expect(responseToHits({ hits: [hit] })[0].annotationIds).toEqual([
+          'http://example.com/search/anno/1',
+          'http://example.com/search/anno/2',
         ]);
       });
 
@@ -76,7 +87,7 @@ describe('ContentSearch', () => {
           hits: [v1Hit(), v1Hit({ annotations: ['http://example.com/search/anno/2'], match: 'birds' })],
         });
 
-        expect(hits.map((hit) => hit.annotationId)).toEqual([
+        expect(hits.map((hit) => hit.firstAnnotationId)).toEqual([
           'http://example.com/search/anno/1',
           'http://example.com/search/anno/2',
         ]);
@@ -92,8 +103,9 @@ describe('ContentSearch', () => {
         expect(responseToHits({ annotations: [{ items: [v2Hit()] }] })).toEqual([
           {
             after: ' flew away',
-            annotationId: 'http://example.com/anno/1',
+            annotationIds: ['http://example.com/anno/1'],
             before: 'a ',
+            firstAnnotationId: 'http://example.com/anno/1',
             match: 'bird',
           },
         ]);
@@ -107,18 +119,24 @@ describe('ContentSearch', () => {
           ],
         });
 
-        expect(hits.map((hit) => hit.annotationId)).toEqual([
+        expect(hits.map((hit) => hit.firstAnnotationId)).toEqual([
           'http://example.com/anno/1',
           'http://example.com/anno/2',
           'http://example.com/anno/3',
         ]);
       });
 
-      it('uses the first selector when a target has several', () => {
+      // An annotation can have more than one selector (e.g. it matches the
+      // query in more than one place) -- produce one hit per selector
+      // rather than only the first.
+      it('produces one hit per selector when a target has several', () => {
         const hit = v2Hit();
-        hit.target.selector.push({ exact: 'ignored', type: 'TextQuoteSelector' });
+        hit.target.selector.push({ exact: 'ignored bird', type: 'TextQuoteSelector' });
 
-        expect(responseToHits({ annotations: [{ items: [hit] }] })[0].match).toEqual('bird');
+        const hits = responseToHits({ annotations: [{ items: [hit] }] });
+
+        expect(hits.map((h) => h.match)).toEqual(['bird', 'ignored bird']);
+        expect(hits.every((h) => h.firstAnnotationId === 'http://example.com/anno/1')).toBe(true);
       });
 
       it('leaves before/after undefined when the selector has no prefix/suffix', () => {
@@ -129,11 +147,39 @@ describe('ContentSearch', () => {
         expect(responseToHits({ annotations: [{ items: [hit] }] })).toEqual([
           {
             after: undefined,
-            annotationId: 'http://example.com/anno/1',
+            annotationIds: ['http://example.com/anno/1'],
             before: undefined,
+            firstAnnotationId: 'http://example.com/anno/1',
             match: 'bird',
           },
         ]);
+      });
+
+      // A selector that isn't a TextQuoteSelector (e.g. a region-based
+      // FragmentSelector) has no text preview to show -- that's a fact
+      // about the data, not an error.
+      it('leaves match/before/after undefined for a non-text selector', () => {
+        const hit = v2Hit({ type: 'FragmentSelector', value: 'xywh=0,0,100,100' });
+        delete hit.target.selector[0].exact;
+        delete hit.target.selector[0].prefix;
+        delete hit.target.selector[0].suffix;
+
+        expect(responseToHits({ annotations: [{ items: [hit] }] })).toEqual([
+          {
+            after: undefined,
+            annotationIds: ['http://example.com/anno/1'],
+            before: undefined,
+            firstAnnotationId: 'http://example.com/anno/1',
+            match: undefined,
+          },
+        ]);
+      });
+
+      it('returns no hits for a target with no selector at all', () => {
+        const hit = v2Hit();
+        delete hit.target.selector;
+
+        expect(responseToHits({ annotations: [{ items: [hit] }] })).toEqual([]);
       });
 
       it('returns an empty array for a response with no annotations', () => {
