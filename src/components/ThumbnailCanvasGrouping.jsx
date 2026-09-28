@@ -3,15 +3,59 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import classNames from 'classnames';
 import IIIFThumbnail from '../containers/IIIFThumbnail';
+import { ThumbnailLabel } from './ThumbnailLabel';
 import ns from '../config/css-ns';
 
 const StyledCanvas = styled('div')(({ theme }) => ({
   boxSizing: 'border-box',
-  color: theme.palette.common.white,
   cursor: 'pointer',
   display: 'inline-block',
   whiteSpace: 'nowrap',
 }));
+
+const Grid = styled('div', { name: 'ThumbnailCanvasGrouping', slot: 'grid' })(({ ownerState }) => ({
+  gridTemplateColumns: `repeat(${ownerState.columns}, auto)`,
+}));
+
+// Width of the selected-state border,
+const FRAME_BORDER = 2;
+// The gap between it and the thumbnail
+const FRAME_OFFSET = 3;
+
+const ThumbnailFrame = styled('div', { name: 'ThumbnailCanvasGrouping', slot: 'thumbnailFrame' })(({ theme, ownerState }) => {
+  /**
+   * Returns the border style for a given side of the thumbnail frame, based on whether the thumbnail is selected and whether it is on the correct side of the grouping.
+   * @param {boolean} selected - Whether the thumbnail is selected.
+   * @param {boolean} correctSide - Whether the thumbnail is on the correct side of the grouping.
+   * @returns {string} The border style for the given side of the thumbnail frame.
+   */
+  const calcBorder = (selected, correctSide) => {
+    if (!correctSide) {
+      return 'none';
+    }
+
+    if (!selected) {
+      return `${FRAME_BORDER}px solid transparent`;
+    }
+
+    return `${FRAME_BORDER}px solid ${theme.palette.primary.main}`;
+  };
+
+  return {
+    borderTop: calcBorder(ownerState.selected, true),
+    borderBottom: calcBorder(ownerState.selected, true),
+    // Use start and end for RTL direction
+    borderInlineStart: calcBorder(ownerState.selected, ownerState.isFirst),
+    borderInlineEnd: calcBorder(ownerState.selected, ownerState.isLast),
+    boxSizing: 'border-box',
+    display: 'inline-block',
+    paddingTop: FRAME_OFFSET,
+    paddingBottom: FRAME_OFFSET,
+    paddingInlineStart: ownerState.isFirst ? FRAME_OFFSET : 0,
+    paddingInlineEnd: ownerState.isLast ? FRAME_OFFSET : 0,
+  };
+});
+
 /** */
 export class ThumbnailCanvasGrouping extends PureComponent {
   /** */
@@ -38,11 +82,23 @@ export class ThumbnailCanvasGrouping extends PureComponent {
 
   /** */
   render() {
-    const { index, columnIndex, style, canvasGroupings, position, currentCanvasId, showThumbnailLabels } = this.props;
+    const { index, columnIndex, style, canvasGroupings, position, currentCanvasId, showThumbnailLabels, textHeight } = this.props;
     // For Grid (horizontal), use columnIndex; for List (vertical), use index
     const itemIndex = columnIndex !== undefined ? columnIndex : index;
     const currentGroupings = canvasGroupings[itemIndex];
     const SPACING = 12;
+
+    // In react-window v2 Grid (horizontal layout), columnWidth is passed as style.height
+    // For List (vertical layout), rowHeight is passed as style.height
+    const isHorizontal = position === 'far-bottom';
+    let calculatedWidth = null;
+    if (isHorizontal && style.height) {
+      calculatedWidth = style.height - SPACING;
+    } else if (Number.isInteger(style.width)) {
+      calculatedWidth = style.width - SPACING;
+    }
+
+    const thumbnailMaxHeight = style.height - (position === 'far-right' ? SPACING : 0) - (showThumbnailLabels ? textHeight : 0);
 
     const isSelected = currentGroupings.map((canvas) => canvas.id).includes(currentCanvasId);
 
@@ -53,7 +109,6 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           boxSizing: 'border-box',
           height: Number.isInteger(style.height) ? style.height - SPACING : null,
           left: Number.isInteger(style.left) ? style.left + SPACING / 2 : null,
-          padding: SPACING / 2,
           top: Number.isInteger(style.top) ? style.top + SPACING / 2 : null,
           width: Number.isInteger(style.width) ? style.width - SPACING : null,
         }}
@@ -69,15 +124,8 @@ export class ThumbnailCanvasGrouping extends PureComponent {
           onClick={this.setCanvas}
           tabIndex={-1}
           sx={(theme) => ({
-            '&:not(:hover)': {
-              outline: isSelected ? `2px solid ${theme.palette.primary.main}` : 0,
-              ...(isSelected && {
-                outlineOffset: '3px',
-              }),
-            },
             '&:hover': {
-              outline: isSelected ? `2px solid ${theme.palette.primary.main}` : `2px solid ${theme.palette.action.hover}`,
-              outlineOffset: isSelected ? '3px' : '-2px',
+              outline: isSelected ? 0 : `2px solid ${theme.palette.action.hover}`,
             },
             height: position === 'far-right' ? 'auto' : `${style.height}px`,
             width: position === 'far-bottom' ? 'auto' : `${style.width}px`,
@@ -90,15 +138,22 @@ export class ThumbnailCanvasGrouping extends PureComponent {
             ]),
           )}
         >
-          {currentGroupings.map((canvas, i) => (
-            <IIIFThumbnail
-              key={canvas.id}
-              resource={canvas}
-              labelled={showThumbnailLabels}
-              maxHeight={position === 'far-right' ? style.height - SPACING : style.height}
-              variant="inside"
-            />
-          ))}
+          <Grid ownerState={{ columns: currentGroupings.length }}>
+            {currentGroupings.map((canvas, i) => (
+              <ThumbnailFrame
+                key={canvas.id}
+                ownerState={{
+                  isFirst: i === 0,
+                  isLast: i === currentGroupings.length - 1,
+                  selected: isSelected,
+                }}
+              >
+                <IIIFThumbnail resource={canvas} maxHeight={thumbnailMaxHeight} />
+              </ThumbnailFrame>
+            ))}
+            {showThumbnailLabels &&
+              currentGroupings.map((canvas) => <ThumbnailLabel key={canvas.id} resource={canvas} variant="navigation" />)}
+          </Grid>
         </StyledCanvas>
       </div>
     );
@@ -114,9 +169,11 @@ ThumbnailCanvasGrouping.propTypes = {
   setCanvas: PropTypes.func.isRequired,
   showThumbnailLabels: PropTypes.bool.isRequired,
   style: PropTypes.object.isRequired,
+  textHeight: PropTypes.number,
 };
 
 ThumbnailCanvasGrouping.defaultProps = {
   columnIndex: undefined,
   index: undefined,
+  textHeight: 0,
 };
