@@ -17,7 +17,25 @@ export function responseToHits(response) {
   return response.annotations.flatMap((page) => page.items.flatMap(contentSearchV2Hits));
 }
 
-/** A Content Search 1 hit maps to exactly one normalized hit. */
+/**
+ * Whether `hit` corresponds to `annotationId` -- checking annotationIds
+ * (not just firstAnnotationId) matters because a Content Search 1 hit can
+ * reference more than one annotation, and the currently-selected id could
+ * be any of them, not necessarily the first. A Content Search 2 hit always
+ * has exactly one, so this only ever has multiple ids to check against for
+ * v1. If v1 support is ever dropped, every hit will always have exactly
+ * one annotation id, and this can collapse to a plain equality check.
+ */
+export function hitMatchesAnnotation(hit, annotationId) {
+  return !!hit?.annotationIds?.includes(annotationId);
+}
+
+/**
+ * A Content Search 1 hit maps to exactly one normalized hit.
+ * annotationIds can have more than one entry only here -- a v1 hit can
+ * reference more than one annotation (e.g. a match spanning adjacent
+ * annotated regions).
+ */
 function contentSearchV1Hits(hit) {
   return [
     {

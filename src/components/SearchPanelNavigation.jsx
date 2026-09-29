@@ -4,6 +4,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRightSharp';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import { hitMatchesAnnotation } from '../lib/ContentSearch';
 
 /**
  * SearchPanelNavigation ~
@@ -42,7 +43,7 @@ export function SearchPanelNavigation({
 
   const iconStyle = direction === 'rtl' ? { transform: 'rotate(180deg)' } : {};
 
-  const currentHitIndex = searchHits.findIndex((val) => val?.annotationIds.includes(selectedContentSearchAnnotation[0]));
+  const currentHitIndex = searchHits.findIndex((val) => hitMatchesAnnotation(val, selectedContentSearchAnnotation[0]));
   let lengthText = searchHits.length;
   if (searchHits.length < numTotal) {
     lengthText += '+';
