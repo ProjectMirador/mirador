@@ -112,6 +112,7 @@ function OpenSeadragonComponent({
   // always calls the current setInitialBounds -- and therefore reads the
   // current viewerConfig -- instead of whatever it was on the very first render.
   const setInitialBoundsRef = useRef(setInitialBounds);
+  // eslint-disable-next-line react-hooks/refs
   setInitialBoundsRef.current = setInitialBounds;
 
   useEffect(() => {
