@@ -5,48 +5,55 @@ import OpenSeadragonComponent from '../../../src/components/OpenSeadragonCompone
 vi.mock('openseadragon');
 
 describe('OpenSeadragonComponent', () => {
-  let addOnceHandler;
   let addHandler;
   let applyConstraints;
+  let fitBounds;
   let fitBoundsWithConstraints;
   let goHome;
   let panTo;
   let zoomTo;
+  let checkVisibility;
+  let element;
 
   beforeEach(() => {
-    addOnceHandler = vi.fn();
     addHandler = vi.fn();
     applyConstraints = vi.fn();
+    fitBounds = vi.fn();
     fitBoundsWithConstraints = vi.fn();
     goHome = vi.fn();
     panTo = vi.fn();
     zoomTo = vi.fn();
+    checkVisibility = vi.fn(() => true);
+    element = { checkVisibility };
 
     // Mock methods used in the component
     OpenSeadragon.mockImplementation(function () {
       return {
         addHandler,
-        addOnceHandler,
+        animationTime: 1.2,
         canvas: {},
         destroy: vi.fn(),
+        element,
+        forceRedraw: vi.fn(),
         innerTracker: {},
         removeAllHandlers: vi.fn(),
         viewport: {
           applyConstraints,
           centerSpringX: { target: { value: 0 } },
           centerSpringY: { target: { value: 0 } },
-          fitBounds: vi.fn(),
+          fitBounds,
           fitBoundsWithConstraints,
-          getRotation: vi.fn(() => 0),
           getFlip: vi.fn(() => false),
+          getRotation: vi.fn(() => 0),
           getZoom: vi.fn(() => 1),
+          goHome,
           panTo,
           pointFromPixel: vi.fn(),
+          setFlip: vi.fn(),
+          setRotation: vi.fn(),
           zoomSpring: { target: { value: 1 } },
           zoomTo,
-          goHome,
         },
-        world: { addOnceHandler, addHandler },
       };
     });
 
@@ -59,24 +66,6 @@ describe('OpenSeadragonComponent', () => {
   });
 
   /**
-   * Invoke the most recently registered tile-loaded handler
-   */
-  function invokeTileLoadedHandler() {
-    // Extract and invoke the most recently registered 'tile-loaded' handler
-    // to simulate OSD firing the event when tiles finish loading
-    // OSD provides addOnceHandler to register events on viewer
-    const { lastCall } = addOnceHandler.mock; // Vitest's lastCall
-    const [_eventName, tileLoadedHandler] = lastCall || [];
-    if (tileLoadedHandler) tileLoadedHandler();
-  }
-
-  function invokeItemAddedHandler() {
-    const { lastCall } = addHandler.mock;
-    const [_eventName, itemAddedHandler] = lastCall || [];
-    if (itemAddedHandler) itemAddedHandler();
-  }
-
-  /**
    * Invoke the registered 'animation-finish' handler, simulating OSD
    * reporting the viewport has settled.
    */
@@ -86,71 +75,56 @@ describe('OpenSeadragonComponent', () => {
   }
 
   /**
-   * Render component and complete initial tile loading
-   * @param {Array} bounds - Initial bounds
+   * Render component and complete initial application of the viewport
+   * @param {object} viewerConfig - Initial viewer config
    * @returns {object} Render result
    */
   function renderAndInitialize(viewerConfig = { bounds: [0, 0, 5000, 3000] }) {
     const result = render(<OpenSeadragonComponent viewerConfig={viewerConfig} />);
-
-    // Component registers a 'item-added' handler during mount to set initial viewport
-    invokeItemAddedHandler();
-
-    // Clear mocks after initialization
-    fitBoundsWithConstraints.mockClear();
-    addOnceHandler.mockClear();
-
     return result;
   }
 
-  it('resets zoom and center when bounds change', () => {
-    const { rerender } = renderAndInitialize();
+  it('fits to bounds immediately on first render', () => {
+    render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} />);
 
-    // Change bounds to different dimensions
-    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 3000, 2000] }} />);
+    expect(fitBounds).toHaveBeenCalledWith(expect.objectContaining({ height: 3000, width: 5000, x: 0, y: 0 }), true);
+  });
 
-    // Component registered a 'tile-loaded' handler when bounds change
-    invokeTileLoadedHandler();
+  it('goes home when there are no bounds/x/y/zoom', () => {
+    render(<OpenSeadragonComponent viewerConfig={{}} />);
 
-    // Should call fitBoundsWithConstraints with the new bounds to reset zoom and center
-    expect(fitBoundsWithConstraints).toHaveBeenCalledWith(
-      expect.objectContaining({
-        height: 2000,
-        width: 3000,
-        x: 0,
-        y: 0,
-      }),
-      true,
-    );
+    expect(goHome).toHaveBeenCalledWith(true);
+    expect(fitBounds).not.toHaveBeenCalled();
+  });
+
+  it('resets zoom and center immediately when bounds change -- no more waiting on tile-loaded', () => {
+    const { rerender } = render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000], canvasKey: 'a' }} />);
+    fitBounds.mockClear();
+
+    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 3000, 2000], canvasKey: 'b' }} />);
+
+    expect(fitBounds).toHaveBeenCalledWith(expect.objectContaining({ height: 2000, width: 3000, x: 0, y: 0 }), true);
   });
 
   it('does not reset zoom when bounds remain the same', () => {
-    const { rerender } = renderAndInitialize();
+    const { rerender } = render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} />);
+    fitBounds.mockClear();
 
-    // Rerender with same bounds
     rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} />);
 
-    // Should not register a new tile-loaded handler
-    expect(addOnceHandler).not.toHaveBeenCalled();
-
-    // Should not call fitBoundsWithConstraints
-    expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
+    expect(fitBounds).not.toHaveBeenCalled();
   });
 
-  it('sets the zoom when there are now bounds', () => {
-    const { rerender } = renderAndInitialize({});
+  it('does not reset zoom when an unrelated prop changes but bounds/x/y/zoom stay the same', () => {
+    const { rerender } = render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} />);
+    fitBounds.mockClear();
 
-    // Should not register a new tile-loaded handler
-    expect(addOnceHandler).not.toHaveBeenCalled();
+    // A fresh object with identical content, mirroring how viewerConfig is
+    // recomputed on every render in the real app.
+    rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} osdConfig={{}} />);
 
-    // expect add-item handler to be called
-    expect(addHandler).toHaveBeenCalled(1);
-
-    // expect there to be no bounds and viewer should center
-    expect(goHome).toHaveBeenCalled(1);
-
-    // Should not call fitBoundsWithConstraints
-    expect(fitBoundsWithConstraints).not.toHaveBeenCalled();
+    expect(fitBounds).not.toHaveBeenCalled();
+    expect(goHome).not.toHaveBeenCalled();
   });
 
   // Regression tests: zoomTo (like OSD's own zoomBy) never clamps to
@@ -161,7 +135,6 @@ describe('OpenSeadragonComponent', () => {
   describe('zoom constraints', () => {
     it('applies constraints when restoring an initial saved x/y/zoom', () => {
       render(<OpenSeadragonComponent viewerConfig={{ x: 10, y: 10, zoom: 2 }} />);
-      invokeItemAddedHandler();
 
       expect(zoomTo).toHaveBeenCalledWith(2, expect.objectContaining({ x: 10, y: 10 }), true);
       expect(applyConstraints).toHaveBeenCalled();
@@ -171,7 +144,6 @@ describe('OpenSeadragonComponent', () => {
     // constrained) even when there's no pan position to restore alongside it.
     it('applies zoom (and constraints) even when x/y are not set', () => {
       render(<OpenSeadragonComponent viewerConfig={{ zoom: 2 }} />);
-      invokeItemAddedHandler();
 
       expect(zoomTo).toHaveBeenCalledWith(2, expect.anything(), true);
       expect(applyConstraints).toHaveBeenCalled();
@@ -221,9 +193,9 @@ describe('OpenSeadragonComponent', () => {
   describe('onViewportChange', () => {
     it('does not report a viewport change before the initial viewport has been applied', () => {
       const updateViewport = vi.fn();
-      render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} onUpdateViewport={updateViewport} />);
 
-      // Fired before invokeItemAddedHandler -- initialViewportSet.current is still false.
+      // Rendering with no viewer yet applied -- animation-finish fires
+      // before useApplyViewport has ever successfully applied anything.
       invokeAnimationFinishHandler({
         centerSpringX: { target: { value: 0 } },
         centerSpringY: { target: { value: 0 } },
@@ -233,16 +205,23 @@ describe('OpenSeadragonComponent', () => {
         zoomSpring: { target: { value: 1 } },
       });
 
+      render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} onUpdateViewport={updateViewport} />);
+
       expect(updateViewport).not.toHaveBeenCalled();
     });
 
     it('does not report a viewport change while automatically recentering for changed bounds', () => {
       const updateViewport = vi.fn();
-      const { rerender } = renderAndInitialize({ bounds: [0, 0, 5000, 3000] });
-      rerender(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 3000, 2000] }} onUpdateViewport={updateViewport} />);
+      const { rerender } = renderAndInitialize({ bounds: [0, 0, 5000, 3000], canvasKey: 'a' });
+      rerender(
+        <OpenSeadragonComponent
+          viewerConfig={{ bounds: [0, 0, 3000, 2000], canvasKey: 'a' }}
+          onUpdateViewport={updateViewport}
+        />,
+      );
 
-      // isResettingViewport.current is true until the tile-loaded handler
-      // (not yet invoked) resets it.
+      // isApplying is true until a settled report matching what was just
+      // applied comes back.
       invokeAnimationFinishHandler({
         centerSpringX: { target: { value: 0 } },
         centerSpringY: { target: { value: 0 } },
@@ -258,7 +237,6 @@ describe('OpenSeadragonComponent', () => {
     it('reports the settled viewport back once initialized and not resetting', () => {
       const updateViewport = vi.fn();
       render(<OpenSeadragonComponent viewerConfig={{ bounds: [0, 0, 5000, 3000] }} onUpdateViewport={updateViewport} />);
-      invokeItemAddedHandler();
 
       invokeAnimationFinishHandler({
         centerSpringX: { target: { value: 12.4 } },
@@ -271,6 +249,7 @@ describe('OpenSeadragonComponent', () => {
 
       expect(updateViewport).toHaveBeenCalledWith({
         bounds: [0, 0, 100, 100],
+        canvasKey: undefined,
         flip: true,
         rotation: 90,
         x: 12,
@@ -293,5 +272,29 @@ describe('OpenSeadragonComponent', () => {
       expect(panTo).not.toHaveBeenCalled();
       expect(zoomTo).not.toHaveBeenCalled();
     });
+  });
+
+  // Confirms OpenSeadragonComponent still defers applying the viewport
+  // until the element is visible (#3540) -- now via useApplyViewport,
+  // triggered by viewerConfig rather than add-item/remove-item.
+  it('does not apply the viewport while hidden, and does once the element becomes visible (#3540)', () => {
+    let intersectionCallback;
+    vi.stubGlobal(
+      'IntersectionObserver',
+      vi.fn(function IntersectionObserverMock(callback) {
+        intersectionCallback = callback;
+        return { disconnect: vi.fn(), observe: vi.fn() };
+      }),
+    );
+    checkVisibility.mockReturnValue(false);
+
+    render(<OpenSeadragonComponent viewerConfig={{}} />);
+
+    expect(checkVisibility).toHaveBeenCalled();
+    expect(goHome).not.toHaveBeenCalled();
+
+    intersectionCallback([{ isIntersecting: true }]);
+
+    expect(goHome).toHaveBeenCalledTimes(1);
   });
 });
