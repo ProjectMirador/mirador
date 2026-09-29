@@ -30,7 +30,7 @@ export const viewersReducer = (state = {}, action) => {
     case ActionTypes.SET_WINDOW_VIEW_TYPE:
       return set([action.windowId], null, state);
     case ActionTypes.SET_CANVAS:
-      if (!action.preserveViewport) {
+      if (!action.preserveMiradorViewport) {
         return set([action.windowId], null, state);
       }
       return state;

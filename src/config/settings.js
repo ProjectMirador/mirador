@@ -494,6 +494,11 @@ export default {
     hideWindowTitle: false, // Configure if the window title is shown in the window title bar or not
     highlightAllAnnotations: false, // Configure whether to display annotations on the canvas by default
     showLocalePicker: false, // Configure locale picker for multi-lingual metadata
+    // Configure if Mirador should remember the pan/zoom position across page turns,
+    // instead of resetting to fit each new page. BREAKING CHANGE (#4536): replaces
+    // the old osdConfig.preserveViewport (deprecated -- still honored as a fallback,
+    // with a console warning, until removed in a future major version).
+    preserveMiradorViewport: false,
     sideBarOpen: false, // Configure if the sidebar (and its content panel) is open by default
     switchCanvasOnSearch: true, // Configure if Mirador should automatically switch to the canvas of the first search result
     panels: {
@@ -563,11 +568,14 @@ export default {
     width: null, // width of gallery view thumbnails (or null, to auto-calculate an aspect-ratio appropriate size)
   },
   osdConfig: {
-    // Default config used for OpenSeadragon
+    // Default config used for OpenSeadragon. Note that OpenSeadragon has its
+    // own, unrelated `preserveViewport` option (see its docs) -- Mirador's
+    // own "remember pan/zoom across page turns" feature previously
+    // (confusingly) shared this same field, but now lives at
+    // window.preserveMiradorViewport instead.
     alwaysBlend: false,
     blendTime: 0.1,
     preserveImageSizeOnResize: true,
-    preserveViewport: false,
     showNavigationControl: false,
     zoomPerClick: 1, // disable zoom-to-click
     zoomPerDoubleClick: 2.0,

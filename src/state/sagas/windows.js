@@ -95,10 +95,10 @@ export function* setWindowStartingCanvas(action) {
   const windowId = action.id || action.window.id;
 
   if (canvasId) {
-    // Preserve viewport when initialViewerConfig exists, event if the preserveViewport OSD setting is set to false
-    const preserveViewport = !!action.payload || !!action.window?.initialViewerConfig;
-    // When canvasId is explicitly provided, always pass preserveViewport flag
-    const thunk = yield call(setCanvas, windowId, canvasId, null, { preserveViewport });
+    // Preserve viewport when initialViewerConfig exists, even if the preserveMiradorViewport setting is false
+    const preserveMiradorViewport = !!action.payload || !!action.window?.initialViewerConfig;
+    // When canvasId is explicitly provided, always pass preserveMiradorViewport flag
+    const thunk = yield call(setCanvas, windowId, canvasId, null, { preserveMiradorViewport });
     yield put(thunk);
   } else {
     const getMiradorManifest = yield select(getMiradorManifestWrapper);
@@ -109,10 +109,10 @@ export function* setWindowStartingCanvas(action) {
       const startCanvas =
         miradorManifest.startCanvas || miradorManifest.canvasAt(canvasIndex || 0) || miradorManifest.canvasAt(0);
       if (startCanvas) {
-        const preserveViewport = !!action.payload || !!action.window?.initialViewerConfig;
-        // When canvas is calculated, only pass preserveViewport when true
-        const thunk = preserveViewport
-          ? yield call(setCanvas, windowId, startCanvas.id, null, { preserveViewport })
+        const preserveMiradorViewport = !!action.payload || !!action.window?.initialViewerConfig;
+        // When canvas is calculated, only pass preserveMiradorViewport when true
+        const thunk = preserveMiradorViewport
+          ? yield call(setCanvas, windowId, startCanvas.id, null, { preserveMiradorViewport })
           : yield call(setCanvas, windowId, startCanvas.id);
         yield put(thunk);
       }

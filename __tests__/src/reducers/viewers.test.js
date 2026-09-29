@@ -77,7 +77,7 @@ describe('viewers reducer', () => {
       },
     });
   });
-  it('should handle SET_CANVAS and throwaway if !preserveViewport', () => {
+  it('should handle SET_CANVAS and throwaway if !preserveMiradorViewport', () => {
     expect(
       viewersReducer(
         {
@@ -100,7 +100,7 @@ describe('viewers reducer', () => {
       },
     });
   });
-  it('should handle SET_CANVAS and not throwaway viewports if preserveViewport', () => {
+  it('should handle SET_CANVAS and not throwaway viewports if preserveMiradorViewport', () => {
     expect(
       viewersReducer(
         {
@@ -112,7 +112,7 @@ describe('viewers reducer', () => {
           },
         },
         {
-          preserveViewport: true,
+          preserveMiradorViewport: true,
           type: ActionTypes.SET_CANVAS,
           windowId: 'abc123',
         },
