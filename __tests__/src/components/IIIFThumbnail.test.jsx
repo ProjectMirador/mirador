@@ -142,10 +142,14 @@ describe('IIIFThumbnail', () => {
       img.dispatchEvent(new Event('error'));
     });
 
-    // Should apply objectFit: contain with max dimensions
+    // Should fill the same box a successful thumbnail would have (matching
+    // the resource's own 100x120 thumbnail metadata constrained to
+    // maxWidth/maxHeight), with object-fit: contain so the fallback icon
+    // doesn't distort within it -- not left as an unconstrained axis sized
+    // by the fallback SVG's own intrinsic aspect ratio.
     expect(img).toHaveStyle({
-      maxHeight: '90px',
-      maxWidth: '80px',
+      height: '90px',
+      width: '75px',
       objectFit: 'contain',
     });
   });

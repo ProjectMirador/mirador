@@ -58,6 +58,22 @@ const LazyLoadedImage = ({
   }, [resource, thumbnail, thumbnailService]);
 
   const imageStyles = useMemo(() => {
+    // Resolves the computed box into a final style object. After a failure,
+    // when using the fallback image, ensure the fallback icon
+    // fills the same box a successful thumbnail would have,
+    // instead of being sized by its own intrinsic aspect ratio.
+    const buildStyles = (box) => {
+      if (failed && fallbackImage) {
+        return {
+          ...style,
+          height: box.height ?? box.maxHeight,
+          width: box.width ?? box.maxWidth,
+          objectFit: 'contain',
+        };
+      }
+      return { ...box, ...style };
+    };
+
     const styleProps = {
       height: undefined,
       maxHeight: undefined,
@@ -65,18 +81,11 @@ const LazyLoadedImage = ({
       width: undefined,
     };
 
-    // If we're using a fallback image due to failure, use object-fit to preserve aspect ratio
-    if (failed && fallbackImage) {
-      return {
-        ...styleProps,
-        ...style,
-        maxWidth,
-        maxHeight,
-        objectFit: 'contain',
-      };
+    if (!image) {
+      styleProps.height = maxHeight;
+      styleProps.width = maxWidth;
+      return buildStyles(styleProps);
     }
-
-    if (!image) return { ...style, height: maxHeight, width: maxWidth };
 
     const { height: thumbHeight, width: thumbWidth } = image;
     if (thumbHeight && thumbWidth) {
@@ -114,10 +123,7 @@ const LazyLoadedImage = ({
       styleProps.height = maxHeight;
     }
 
-    return {
-      ...styleProps,
-      ...style,
-    };
+    return buildStyles(styleProps);
   }, [image, maxWidth, maxHeight, style, failed, fallbackImage]);
 
   const { url: src = placeholder } = (loaded && (thumbnail || image)) || {};
