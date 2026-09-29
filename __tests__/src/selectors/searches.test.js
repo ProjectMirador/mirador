@@ -115,9 +115,9 @@ describe('getSortedSearchHitsForCompanionWindow', () => {
               'search?page=1': {
                 json: {
                   hits: [
-                    { annotations: ['http://example.com/iiif/canvas3'], id: 1 },
-                    { annotations: ['http://example.com/iiif/canvas1'], id: 2 },
-                    { annotations: ['http://example.com/iiif/canvas2'], id: 3 },
+                    { annotations: ['http://example.com/iiif/canvas3'], match: 'hit 1' },
+                    { annotations: ['http://example.com/iiif/canvas1'], match: 'hit 2' },
+                    { annotations: ['http://example.com/iiif/canvas2'], match: 'hit 3' },
                   ],
                   resources,
                 },
@@ -125,8 +125,8 @@ describe('getSortedSearchHitsForCompanionWindow', () => {
               'search?page=2': {
                 json: {
                   hits: [
-                    { annotations: ['http://example.com/iiif/canvas3'], id: 4 },
-                    { annotations: ['http://example.com/iiif/canvas1'], id: 5 },
+                    { annotations: ['http://example.com/iiif/canvas3'], match: 'hit 4' },
+                    { annotations: ['http://example.com/iiif/canvas1'], match: 'hit 5' },
                   ],
                   resources,
                 },
@@ -145,12 +145,12 @@ describe('getSortedSearchHitsForCompanionWindow', () => {
         },
       },
     };
-    expect(getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'a' })).toEqual([
-      { annotationId: 'http://example.com/iiif/canvas1', annotations: ['http://example.com/iiif/canvas1'], id: 2 },
-      { annotationId: 'http://example.com/iiif/canvas1', annotations: ['http://example.com/iiif/canvas1'], id: 5 },
-      { annotationId: 'http://example.com/iiif/canvas2', annotations: ['http://example.com/iiif/canvas2'], id: 3 },
-      { annotationId: 'http://example.com/iiif/canvas3', annotations: ['http://example.com/iiif/canvas3'], id: 1 },
-      { annotationId: 'http://example.com/iiif/canvas3', annotations: ['http://example.com/iiif/canvas3'], id: 4 },
+    expect(getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'a' }).map((hit) => hit.match)).toEqual([
+      'hit 2', // canvas1
+      'hit 5', // canvas1, stable relative order preserved
+      'hit 3', // canvas2
+      'hit 1', // canvas3
+      'hit 4', // canvas3, stable relative order preserved
     ]);
     expect(getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId: 'b' })).toEqual([]);
     expect(getSortedSearchHitsForCompanionWindow({}, { companionWindowId, windowId: 'a' })).toEqual([]);

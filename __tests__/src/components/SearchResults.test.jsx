@@ -16,8 +16,9 @@ function createWrapper(props) {
       searchHits={[
         {
           after: ', and start the chainsaw',
-          annotationId: 'foo',
+          annotationIds: ['foo'],
           before: 'Light up the',
+          firstAnnotationId: 'foo',
           match: 'moose',
         },
       ]}

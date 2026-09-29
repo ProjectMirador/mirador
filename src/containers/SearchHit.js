@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchHit } from '../components/SearchHit';
 import * as actions from '../state/actions';
+import { hitMatchesAnnotation } from '../lib/ContentSearch';
 import {
   getCanvasLabel,
   getVisibleCanvasIds,
@@ -17,8 +18,11 @@ import {
  * @memberof SearchHit
  * @private
  */
-const mapStateToProps = (state, { annotationId, hit = { annotationId: '' }, companionWindowId, windowId }) => {
-  const realAnnoId = annotationId || hit.annotationId;
+const mapStateToProps = (
+  state,
+  { annotationId, hit = { annotationIds: [], firstAnnotationId: '' }, companionWindowId, windowId },
+) => {
+  const realAnnoId = annotationId || hit.firstAnnotationId;
   const hitAnnotation = getResourceAnnotationForSearchHit(state, {
     annotationUri: realAnnoId,
     companionWindowId,
@@ -39,7 +43,9 @@ const mapStateToProps = (state, { annotationId, hit = { annotationId: '' }, comp
 
   const windowSelectedAnnotationId = getSelectedAnnotationId(state, { windowId });
 
-  const allAnnoIds = [annotationId, hit.annotationId];
+  // Only a Content Search 1 hit can reference more than one annotation
+  // (a Content Search 2 hit always has exactly one -- see ContentSearch.js),
+  const matches = (id) => id === annotationId || hitMatchesAnnotation(hit, id);
 
   return {
     adjacent: selectedCanvasIds.includes(hitAnnotation?.targetId),
@@ -52,8 +58,8 @@ const mapStateToProps = (state, { annotationId, hit = { annotationId: '' }, comp
         canvasId: hitAnnotation.targetId,
         windowId,
       }),
-    selected: selectedContentSearchAnnotationsIds[0] && allAnnoIds.includes(selectedContentSearchAnnotationsIds[0]),
-    windowSelected: windowSelectedAnnotationId && allAnnoIds.includes(windowSelectedAnnotationId),
+    selected: selectedContentSearchAnnotationsIds[0] && matches(selectedContentSearchAnnotationsIds[0]),
+    windowSelected: windowSelectedAnnotationId && matches(windowSelectedAnnotationId),
   };
 };
 

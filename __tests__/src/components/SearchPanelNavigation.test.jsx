@@ -15,7 +15,11 @@ describe('SearchPanelNavigation', () => {
       const selectAnnotation = vi.fn();
       const user = userEvent.setup();
       createWrapper({
-        searchHits: [{ annotationId: '1' }, { annotationId: '2' }, { annotationId: '3' }],
+        searchHits: [
+          { annotationIds: ['1'], firstAnnotationId: '1' },
+          { annotationIds: ['2'], firstAnnotationId: '2' },
+          { annotationIds: ['3'], firstAnnotationId: '3' },
+        ],
         selectAnnotation,
         selectedContentSearchAnnotation: ['2'],
       });
@@ -28,7 +32,7 @@ describe('SearchPanelNavigation', () => {
     });
     it('buttons disabled when no next/prev', () => {
       createWrapper({
-        searchHits: [{ annotationId: '1' }],
+        searchHits: [{ annotationIds: ['1'], firstAnnotationId: '1' }],
         selectedContentSearchAnnotation: ['1'],
       });
       expect(screen.getByRole('button', { name: 'Previous result' })).toBeDisabled();
