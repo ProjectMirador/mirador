@@ -103,6 +103,17 @@ describe('getThumbnail', () => {
               }),
             ).toMatchObject({ height: 120, url: `${url}/full/!120,120/0/default.jpg`, width: 60 });
           });
+
+          it('with default settings values, caps width for an extremely wide/panoramic image', () => {
+            const panoramicService = iiifService(url, { height: 5331, width: 109165 }, { profile: 'level2' });
+
+            expect(
+              createSubject({ '@id': 'xyz', '@type': type, thumbnail: panoramicService }, type, {
+                maxHeight: 120,
+                maxWidth: 600,
+              }),
+            ).toMatchObject({ height: 29, url: `${url}/full/!600,120/0/default.jpg`, width: 600 });
+          });
         });
       });
     }
