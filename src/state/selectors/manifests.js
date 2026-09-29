@@ -405,7 +405,9 @@ export const getMetadataLocales = createSelector([getManifestoInstance], (manife
 export const getManifestSearchService = createSelector([getManifestoInstance], (manifest) => {
   if (!manifest) return null;
   const searchService =
-    manifest.getService('http://iiif.io/api/search/0/search') || manifest.getService('http://iiif.io/api/search/1/search');
+    manifest.getService('http://iiif.io/api/search/0/search') ||
+    manifest.getService('http://iiif.io/api/search/1/search') ||
+    manifest.getServices().find((service) => service.getIIIFResourceType() === 'searchservice2');
   if (searchService) return searchService;
   return null;
 });
@@ -421,7 +423,8 @@ export const getManifestAutocompleteService = createSelector([getManifestSearchS
   const autocompleteService =
     searchService &&
     (searchService.getService('http://iiif.io/api/search/0/autocomplete') ||
-      searchService.getService('http://iiif.io/api/search/1/autocomplete'));
+      searchService.getService('http://iiif.io/api/search/1/autocomplete') ||
+      searchService.getServices().find((service) => service.getIIIFResourceType() === 'autocompleteservice2'));
 
   return autocompleteService && autocompleteService;
 });

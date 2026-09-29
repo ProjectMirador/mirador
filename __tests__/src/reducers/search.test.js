@@ -324,4 +324,51 @@ describe('search reducer', () => {
       },
     });
   });
+  it('handles SELECT_ANNOTATION for content search v2 responses', () => {
+    const irrelevantSearch = {
+      data: {
+        blah: { json: { items: [{ id: 'not the id' }] } },
+      },
+      selectedContentSearchAnnotationIds: ['not the id'],
+    };
+
+    expect(
+      searchesReducer(
+        {
+          foo: {
+            abc123: {
+              data: {
+                'search?page=xyz': {
+                  json: {
+                    items: [{ id: 'someAnnotationId' }],
+                  },
+                },
+              },
+              selectedContentSearchAnnotationIds: ['whatever'],
+            },
+            irrelevantSearch,
+          },
+        },
+        {
+          annotationId: 'someAnnotationId',
+          type: ActionTypes.SELECT_ANNOTATION,
+          windowId: 'foo',
+        },
+      ),
+    ).toEqual({
+      foo: {
+        abc123: {
+          data: {
+            'search?page=xyz': {
+              json: {
+                items: [{ id: 'someAnnotationId' }],
+              },
+            },
+          },
+          selectedContentSearchAnnotationIds: ['someAnnotationId'],
+        },
+        irrelevantSearch,
+      },
+    });
+  });
 });
