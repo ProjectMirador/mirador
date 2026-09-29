@@ -6,38 +6,6 @@ import { useTranslation } from 'react-i18next';
 import OpenSeadragonViewerContext from '../contexts/OpenSeadragonViewerContext';
 import { useApplyViewport } from '../hooks';
 
-/**
- * Applies x/y/zoom/rotation/flip to viewport. `immediately` snaps
- * unconditionally (there's nothing yet to compare against the first time
- * this runs). Otherwise each value is only touched if it differs from
- * where the camera is already headed, to avoid restarting an animation
- * that's already correct.
- */
-function applyExplicitViewport(viewport, { x, y, zoom, rotation, flip }, immediately) {
-  const point = new Openseadragon.Point(x, y);
-
-  if (
-    x != null &&
-    y != null &&
-    (immediately ||
-      Math.round(x) !== Math.round(viewport.centerSpringX.target.value) ||
-      Math.round(y) !== Math.round(viewport.centerSpringY.target.value))
-  ) {
-    viewport.panTo(point, immediately);
-  }
-
-  // Independent of x/y -- zoom can be applied on its own.
-  if (zoom != null && (immediately || zoom !== viewport.zoomSpring.target.value)) {
-    viewport.zoomTo(zoom, point, immediately);
-    // OSD's own zoom buttons always pair a zoom call with applyConstraints.
-    // Because we have custom buttons, we must apply it here to enforce min/max zoom.
-    viewport.applyConstraints();
-  }
-
-  if (rotation != null && rotation !== viewport.getRotation()) viewport.setRotation(rotation);
-  if (flip != null && (flip || false) !== viewport.getFlip()) viewport.setFlip(flip);
-}
-
 /** Handle setting up OSD for use in mirador + react */
 function OpenSeadragonComponent({
   children = undefined,
@@ -115,77 +83,6 @@ function OpenSeadragonComponent({
     },
     [onUpdateViewport, applyState],
   );
-
-  const setInitialBounds = useCallback(
-    ({ viewport }) => {
-      if (initialViewportSet.current) return;
-      initialViewportSet.current = true;
-
-      applyExplicitViewport(viewport, viewerConfig, true);
-
-      if (!viewerConfig.x && !viewerConfig.y && !viewerConfig.zoom) {
-        if (viewerConfig.bounds) {
-          viewport.fitBounds(new Openseadragon.Rect(...viewerConfig.bounds), true);
-          lastAppliedBounds.current = viewerConfig.bounds;
-        } else {
-          viewport.goHome(true);
-        }
-      }
-    },
-    [initialViewportSet, viewerConfig],
-  );
-
-  // Route through a ref, updated every render, so add-item handler
-  // always calls the current setInitialBounds -- and therefore reads the
-  // current viewerConfig -- instead of whatever it was on the very first render.
-  const setInitialBoundsRef = useRef(setInitialBounds);
-  setInitialBoundsRef.current = setInitialBounds;
-
-  const runOnceVisible = useDeferUntilVisible();
-
-  useEffect(() => {
-    const viewer = viewerRef.current;
-    if (!viewer) return;
-
-    const { viewport } = viewer;
-
-    if (!initialViewportSet.current) {
-      setInitialBounds(viewer);
-      return;
-    }
-
-    // Check if bounds changed - always recenter when bounds change)
-    if (viewerConfig.bounds) {
-      const boundsChanged =
-        !lastAppliedBounds.current ||
-        viewerConfig.bounds.length !== lastAppliedBounds.current.length ||
-        viewerConfig.bounds.some((val, idx) => val !== lastAppliedBounds.current[idx]);
-
-      // Bounds changed - recenter regardless of whether x/y/zoom exist
-      if (boundsChanged) {
-        isResettingViewport.current = true;
-        lastAppliedBounds.current = viewerConfig.bounds;
-
-        // Wait for the tiles to be fully loaded before recentering
-        const handleTilesLoaded = () => {
-          const rect = new Openseadragon.Rect(...viewerConfig.bounds);
-          viewport.fitBoundsWithConstraints(rect, true);
-          isResettingViewport.current = false;
-        };
-
-        viewer.addOnceHandler('tile-loaded', handleTilesLoaded);
-        return;
-      }
-    }
-
-    // Apply preserved viewport only if bounds haven't changed
-    // Don't apply x/y/zoom if we don't have them (rely on bounds instead)
-    if (!viewerConfig.x || !viewerConfig.y || !viewerConfig.zoom) {
-      return;
-    }
-
-    applyExplicitViewport(viewport, viewerConfig, false);
-  }, [initialViewportSet, setInitialBounds, viewerConfig, viewerRef]);
 
   // initialize OSD stuff when this component is mounted
   useEffect(() => {

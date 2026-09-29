@@ -48,6 +48,7 @@ describe('applyViewport', () => {
 
   beforeEach(() => {
     viewport = {
+      applyConstraints: vi.fn(),
       centerSpringX: { target: { value: 0 } },
       centerSpringY: { target: { value: 0 } },
       fitBounds: vi.fn(),
@@ -81,6 +82,9 @@ describe('applyViewport', () => {
     expect(viewport.panTo).toHaveBeenCalledWith(expect.objectContaining({ x: 10, y: 20 }), true);
     expect(viewport.zoomTo).toHaveBeenCalledWith(2, expect.objectContaining({ x: 10, y: 20 }), true);
     expect(viewport.fitBounds).not.toHaveBeenCalled();
+    // OSD's zoomTo never clamps to min/max on its own -- only its own zoom
+    // buttons pair a zoom call with applyConstraints automatically.
+    expect(viewport.applyConstraints).toHaveBeenCalled();
   });
 
   it('animates to an updated explicit position when not immediate', () => {
@@ -88,6 +92,7 @@ describe('applyViewport', () => {
 
     expect(viewport.panTo).toHaveBeenCalledWith(expect.objectContaining({ x: 10, y: 20 }), false);
     expect(viewport.zoomTo).toHaveBeenCalledWith(2, expect.objectContaining({ x: 10, y: 20 }), false);
+    expect(viewport.applyConstraints).toHaveBeenCalled();
   });
 
   it('does nothing when not immediate and any of x/y/zoom is missing', () => {

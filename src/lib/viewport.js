@@ -60,7 +60,12 @@ export function isSameViewport(a, b) {
 export function applyViewport(viewport, { x, y, zoom, rotation, flip, bounds }, { immediately }) {
   if (immediately) {
     if (x != null && y != null) viewport.panTo(new Openseadragon.Point(x, y), true);
-    if (zoom != null) viewport.zoomTo(zoom, new Openseadragon.Point(x, y), true);
+    if (zoom != null) {
+      viewport.zoomTo(zoom, new Openseadragon.Point(x, y), true);
+      // OSD's own zoom buttons always pair a zoom call with applyConstraints.
+      // Because we have custom buttons, we must apply it here to enforce min/max zoom.
+      viewport.applyConstraints();
+    }
     if (rotation != null && rotation !== viewport.getRotation()) viewport.setRotation(rotation);
     if (flip != null && (flip || false) !== viewport.getFlip()) viewport.setFlip(flip);
 
@@ -85,6 +90,7 @@ export function applyViewport(viewport, { x, y, zoom, rotation, flip, bounds }, 
 
   if (zoom !== viewport.zoomSpring.target.value) {
     viewport.zoomTo(zoom, new Openseadragon.Point(x, y), false);
+    viewport.applyConstraints();
   }
 
   if (rotation != null && rotation !== viewport.getRotation()) viewport.setRotation(rotation);
