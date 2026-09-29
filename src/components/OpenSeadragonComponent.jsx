@@ -234,6 +234,9 @@ function OpenSeadragonComponent({
       canvas.setAttribute('aria-label', t('digitizedView'));
       canvas.setAttribute('aria-describedby', id);
     }
+    // viewerRef.current is read here in the deps array rather than in the
+    // effect body necause there's no other signal for the OSD canvas element now existing.
+    // eslint-disable-next-line react-hooks/refs
   }, [viewerRef?.current?.canvas?.firstElementChild, id, t]);
 
   return (
