@@ -13,10 +13,10 @@ const StyledAudio = styled('audio')({
 });
 
 /** */
-export function AudioViewer({ audioOptions = {}, audioResources = [], captions = [] }) {
+export function AudioViewer({ audioOptions = {}, audioResources = [], canvasId = '', captions = [] }) {
   return (
     <StyledContainer>
-      <StyledAudio {...audioOptions}>
+      <StyledAudio {...audioOptions} key={canvasId}>
         {audioResources.map((audio) => (
           <Fragment key={audio.id}>
             <source src={audio.id} type={audio.getFormat()} />
@@ -35,5 +35,6 @@ export function AudioViewer({ audioOptions = {}, audioResources = [], captions =
 AudioViewer.propTypes = {
   audioOptions: PropTypes.object,
   audioResources: PropTypes.arrayOf(PropTypes.object),
+  canvasId: PropTypes.string,
   captions: PropTypes.arrayOf(PropTypes.object),
 };
