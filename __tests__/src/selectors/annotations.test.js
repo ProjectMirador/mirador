@@ -138,7 +138,7 @@ it('getSelectedAnnotationId returns the selected annotation ID from state', () =
     },
     windows: {
       wid: {
-        canvasIndex: 0,
+        canvasId: 'canvas1',
         manifestId: 'mid',
         selectedAnnotationId: 'aid1',
         visibleCanvases: ['tid1'],
