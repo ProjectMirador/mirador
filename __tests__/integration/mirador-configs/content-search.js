@@ -11,7 +11,7 @@ export default {
   id: 'mirador',
   windows: [
     {
-      loadedManifest: 'https://purl.stanford.edu/fg165hz3589/iiif/manifest',
+      manifestId: 'https://purl.stanford.edu/fg165hz3589/iiif/manifest',
       // defaultSearchQuery: 'NSF',
       suggestedSearches: ['NSF'],
     },
