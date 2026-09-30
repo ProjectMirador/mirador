@@ -423,6 +423,7 @@ describe('window-level sagas', () => {
       return expectSaga(setCanvasOfFirstSearchResult, action)
         .provide([
           [select(getWindowConfig, { windowId }), { switchCanvasOnSearch: true }],
+          [select(getWindow, { windowId }), { explicitInitialCanvasId: false }],
           [select(getSelectedContentSearchAnnotationIds, { companionWindowId, windowId }), []],
           [select(getSortedSearchAnnotationsForCompanionWindow, { companionWindowId, windowId }), [{ id: 'a' }, { id: 'b' }]],
         ])
@@ -446,6 +447,7 @@ describe('window-level sagas', () => {
       return expectSaga(setCanvasOfFirstSearchResult, action)
         .provide([
           [select(getWindowConfig, { windowId }), { switchCanvasOnSearch: true }],
+          [select(getWindow, { windowId }), { explicitInitialCanvasId: false }],
           [select(getSelectedContentSearchAnnotationIds, { companionWindowId, windowId }), ['y']],
         ])
         .run()
@@ -465,6 +467,82 @@ describe('window-level sagas', () => {
         .provide([[select(getWindowConfig, { windowId }), { switchCanvasOnSearch: false }]])
         .run()
         .then(({ allEffects }) => allEffects.length === 0);
+    });
+
+    it('consumes explicitInitialCanvasId but still switches when preserveInitialCanvasOnSearch is off (default)', () => {
+      const companionWindowId = 'x';
+      const windowId = 'y';
+      const action = {
+        companionWindowId,
+        type: ActionTypes.RECEIVE_SEARCH,
+        windowId,
+      };
+
+      return expectSaga(setCanvasOfFirstSearchResult, action)
+        .provide([
+          [select(getWindowConfig, { windowId }), { switchCanvasOnSearch: true, preserveInitialCanvasOnSearch: false }],
+          [select(getWindow, { windowId }), { explicitInitialCanvasId: true }],
+          [select(getSelectedContentSearchAnnotationIds, { companionWindowId, windowId }), []],
+          [select(getSortedSearchAnnotationsForCompanionWindow, { companionWindowId, windowId }), [{ id: 'a' }]],
+        ])
+        .put({
+          payload: { explicitInitialCanvasId: false },
+          id: 'y',
+          type: 'mirador/UPDATE_WINDOW',
+        })
+        .put({
+          annotationId: 'a',
+          type: 'mirador/SELECT_ANNOTATION',
+          windowId: 'y',
+        })
+        .run();
+    });
+
+    it('consumes explicitInitialCanvasId and skips switching when preserveInitialCanvasOnSearch is on', () => {
+      const companionWindowId = 'x';
+      const windowId = 'y';
+      const action = {
+        companionWindowId,
+        type: ActionTypes.RECEIVE_SEARCH,
+        windowId,
+      };
+
+      return expectSaga(setCanvasOfFirstSearchResult, action)
+        .provide([
+          [select(getWindowConfig, { windowId }), { switchCanvasOnSearch: true, preserveInitialCanvasOnSearch: true }],
+          [select(getWindow, { windowId }), { explicitInitialCanvasId: true }],
+        ])
+        .put({
+          payload: { explicitInitialCanvasId: false },
+          id: 'y',
+          type: 'mirador/UPDATE_WINDOW',
+        })
+        .run()
+        .then(({ allEffects }) => expect(allEffects.length).toBe(3)); // 2 selects + the one put, nothing else
+    });
+
+    it('a subsequent search still switches normally once explicitInitialCanvasId has been consumed', () => {
+      const companionWindowId = 'x';
+      const windowId = 'y';
+      const action = {
+        companionWindowId,
+        type: ActionTypes.RECEIVE_SEARCH,
+        windowId,
+      };
+
+      return expectSaga(setCanvasOfFirstSearchResult, action)
+        .provide([
+          [select(getWindowConfig, { windowId }), { switchCanvasOnSearch: true, preserveInitialCanvasOnSearch: true }],
+          [select(getWindow, { windowId }), { explicitInitialCanvasId: false }],
+          [select(getSelectedContentSearchAnnotationIds, { companionWindowId, windowId }), []],
+          [select(getSortedSearchAnnotationsForCompanionWindow, { companionWindowId, windowId }), [{ id: 'b' }]],
+        ])
+        .put({
+          annotationId: 'b',
+          type: 'mirador/SELECT_ANNOTATION',
+          windowId: 'y',
+        })
+        .run();
     });
   });
 

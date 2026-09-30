@@ -9,7 +9,17 @@ import ActionTypes from '../actions/action-types';
 export const windowsReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.ADD_WINDOW:
-      return { ...state, [action.window.id]: action.window };
+      return {
+        ...state,
+        [action.window.id]: {
+          ...action.window,
+          // Tracks whether the caller explicitly requested a starting canvas
+          // (as opposed to one computed later, e.g. the manifest's first
+          // canvas) -- consumed once by setCanvasOfFirstSearchResult so a
+          // defaultSearchQuery can't silently override it on the first search.
+          explicitInitialCanvasId: action.window.canvasId !== undefined,
+        },
+      };
 
     case ActionTypes.MAXIMIZE_WINDOW:
       return {
