@@ -13,10 +13,10 @@ const StyledVideo = styled('video')(() => ({
 }));
 
 /** */
-export function VideoViewer({ captions = [], videoOptions = {}, videoResources = [] }) {
+export function VideoViewer({ captions = [], videoOptions = {}, videoResources = [], canvasId = '' }) {
   return (
     <StyledContainer>
-      <StyledVideo {...videoOptions}>
+      <StyledVideo {...videoOptions} key={canvasId}>
         {videoResources.map((video) => (
           <source key={video.io} src={video.id} type={video.getFormat()} />
         ))}
@@ -30,6 +30,7 @@ export function VideoViewer({ captions = [], videoOptions = {}, videoResources =
 
 VideoViewer.propTypes = {
   captions: PropTypes.arrayOf(PropTypes.object),
+  canvasId: PropTypes.string,
   videoOptions: PropTypes.object,
   videoResources: PropTypes.arrayOf(PropTypes.object),
 };
