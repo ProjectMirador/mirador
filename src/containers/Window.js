@@ -10,6 +10,7 @@ import {
   getWindow,
   getWorkspaceType,
   getWindowDraggability,
+  getWindowPosition,
   getWindowViewType,
   getManifestError,
 } from '../state/selectors';
@@ -28,6 +29,7 @@ const mapStateToProps = (state, { windowId }) => ({
   thumbnailNavigationPosition: getThumbnailNavigationPosition(state, { windowId }),
   view: getWindowViewType(state, { windowId }),
   windowDraggable: getWindowDraggability(state, { windowId }),
+  windowPosition: getWindowPosition(state, { windowId }),
   workspaceType: getWorkspaceType(state),
 });
 

@@ -5,9 +5,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
 
 /** create wrapper */
-function createWrapper(props) {
+function createWrapper({ windowIds = [], ...props } = {}) {
   return render(
-    <WorkspaceMosaic classes={{}} windowIds={[]} workspaceId="foo" updateWorkspaceMosaicLayout={() => {}} {...props} />,
+    <WorkspaceMosaic classes={{}} windowIds={windowIds} workspaceId="foo" updateWorkspaceMosaicLayout={() => {}} {...props} />,
     {
       preloadedState: {
         windows: {
@@ -15,6 +15,7 @@ function createWrapper(props) {
           2: { companionWindowIds: [] },
           3: { companionWindowIds: [] },
         },
+        workspace: { windowIds },
       },
     },
   );
@@ -120,8 +121,8 @@ describe('WorkspaceMosaic', () => {
     it('when window is available', () => {
       wrapper = createWrapper({ windowIds });
 
-      expect(screen.getAllByLabelText('Window:', { container: 'section' })[0]).toHaveAttribute('id', '1');
-      expect(screen.getAllByLabelText('Window:', { container: 'section' })[1]).toHaveAttribute('id', '2');
+      expect(screen.getByRole('region', { name: 'Item window 1' })).toHaveAttribute('id', '1');
+      expect(screen.getByRole('region', { name: 'Item window 2' })).toHaveAttribute('id', '2');
 
       expect(wrapper.container.querySelector('.mosaic-window-title')).toBeEmptyDOMElement();
       expect(wrapper.container.querySelector('.mosaic-window-controls')).toBeEmptyDOMElement();
