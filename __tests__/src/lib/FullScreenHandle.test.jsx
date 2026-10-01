@@ -6,18 +6,26 @@ describe('FullScreenHandle', () => {
   describe('useFullScreenHandle', () => {
     let requestFullscreen;
     let exitFullscreen;
+    let element;
+
+    /** Renders the hook and attaches its ref to a mock element, as <FullScreen> would */
+    const renderHandle = () => {
+      const hook = renderHook(() => useFullScreenHandle());
+      hook.result.current.fullscreenRef.current = element;
+      return hook;
+    };
 
     beforeEach(() => {
       requestFullscreen = vi.fn().mockResolvedValue();
       exitFullscreen = vi.fn().mockResolvedValue();
-      document.body.requestFullscreen = requestFullscreen;
+      element = document.createElement('div');
+      element.requestFullscreen = requestFullscreen;
       document.exitFullscreen = exitFullscreen;
       // eslint-disable-next-line testing-library/no-node-access -- mocking the global Fullscreen API, not querying rendered output
       document.fullscreenElement = null;
     });
 
     afterEach(() => {
-      delete document.body.requestFullscreen;
       delete document.exitFullscreen;
       // eslint-disable-next-line testing-library/no-node-access -- mocking the global Fullscreen API, not querying rendered output
       delete document.fullscreenElement;
@@ -29,8 +37,8 @@ describe('FullScreenHandle', () => {
       expect(result.current.active).toBe(false);
     });
 
-    it('enter() requests fullscreen on document.body when not already fullscreen', async () => {
-      const { result } = renderHook(() => useFullScreenHandle());
+    it('enter() requests fullscreen on the ref element when not already fullscreen', async () => {
+      const { result } = renderHandle();
 
       await act(async () => {
         await result.current.enter();
@@ -41,7 +49,7 @@ describe('FullScreenHandle', () => {
     });
 
     it('exit() does nothing when not in fullscreen', async () => {
-      const { result } = renderHook(() => useFullScreenHandle());
+      const { result } = renderHandle();
 
       await act(async () => {
         await result.current.exit();
@@ -50,12 +58,12 @@ describe('FullScreenHandle', () => {
       expect(exitFullscreen).not.toHaveBeenCalled();
     });
 
-    it('becomes active when a fullscreenchange event reports document.body as the fullscreen element', () => {
-      const { result } = renderHook(() => useFullScreenHandle());
+    it('becomes active when a fullscreenchange event reports the ref element as the fullscreen element', () => {
+      const { result } = renderHandle();
 
       act(() => {
         // eslint-disable-next-line testing-library/no-node-access -- mocking the global Fullscreen API, not querying rendered output
-        document.fullscreenElement = document.body;
+        document.fullscreenElement = element;
         document.dispatchEvent(new Event('fullscreenchange'));
       });
 
@@ -63,11 +71,11 @@ describe('FullScreenHandle', () => {
     });
 
     it('exit() calls document.exitFullscreen once active', async () => {
-      const { result } = renderHook(() => useFullScreenHandle());
+      const { result } = renderHandle();
 
       act(() => {
         // eslint-disable-next-line testing-library/no-node-access -- mocking the global Fullscreen API, not querying rendered output
-        document.fullscreenElement = document.body;
+        document.fullscreenElement = element;
         document.dispatchEvent(new Event('fullscreenchange'));
       });
 
@@ -104,6 +112,18 @@ describe('FullScreenHandle', () => {
       const wrapper = screen.getByText('content').parentElement;
       expect(wrapper).toHaveClass('fullscreen-enabled');
       expect(wrapper).toHaveStyle({ height: '100%', width: '100%' });
+    });
+
+    it('attaches the handle ref to the wrapper element', () => {
+      const handle = { active: false, fullscreenRef: { current: null } };
+      render(
+        <FullScreen handle={handle}>
+          <span>content</span>
+        </FullScreen>,
+      );
+
+      // eslint-disable-next-line testing-library/no-node-access -- the wrapper div has no role/testid to query directly
+      expect(handle.fullscreenRef.current).toBe(screen.getByText('content').parentElement);
     });
 
     it('calls onChange with the active state whenever it changes', () => {
