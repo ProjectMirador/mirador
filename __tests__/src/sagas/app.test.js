@@ -85,6 +85,32 @@ describe('app-level sagas', () => {
         .put({ type: 'thunk2' })
         .run();
     });
+
+    // loadedManifest is not an officially documented/supported window setting --
+    // this only exists to keep older configs working.
+    it('falls back to loadedManifest when manifestId is not provided', () => {
+      const action = {
+        config: {
+          thumbnailNavigation: {},
+          windows: [{ id: 'x', loadedManifest: 'a' }],
+        },
+      };
+
+      return expectSaga(importConfig, action)
+        .provide([
+          [
+            call(addWindow, {
+              id: 'x',
+              loadedManifest: 'a',
+              manifestId: 'a',
+              thumbnailNavigationPosition: undefined,
+            }),
+            { type: 'thunk1' },
+          ],
+        ])
+        .put({ type: 'thunk1' })
+        .run();
+    });
   });
 
   describe('fetchCollectionManifests', () => {

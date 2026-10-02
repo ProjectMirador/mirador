@@ -16,10 +16,10 @@ export default function createConfig(id) {
     windows: [
       {
         canvasIndex: 2,
-        loadedManifest: PRIMARY_MANIFEST_FIXTURE_URL,
+        manifestId: PRIMARY_MANIFEST_FIXTURE_URL,
       },
       {
-        loadedManifest: 'https://media.nga.gov/public/manifests/nga_highlights.json',
+        manifestId: 'https://media.nga.gov/public/manifests/nga_highlights.json',
         thumbnailNavigationPosition: 'off',
       },
     ],

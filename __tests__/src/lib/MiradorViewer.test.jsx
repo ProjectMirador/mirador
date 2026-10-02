@@ -43,11 +43,11 @@ describe('MiradorViewer', () => {
           windows: [
             {
               canvasId: 'https://iiif.harvardartmuseums.org/manifests/object/299843/canvas/canvas-47174892',
-              loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+              manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
               thumbnailNavigationPosition: 'far-bottom',
             },
             {
-              loadedManifest: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+              manifestId: 'https://iiif.harvardartmuseums.org/manifests/object/299843',
               view: 'book',
             },
           ],
