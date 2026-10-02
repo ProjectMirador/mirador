@@ -70,6 +70,8 @@ export function OpenSeadragonViewer({
     apiRef.current = viewer;
   }, [apiRef, viewer]);
 
+  // zoomToWorld only reads apiRef.current when invoked later, never during a child's render.
+  // eslint-disable-next-line react-hooks/refs
   const enhancedChildren = Children.map(children, (child) =>
     cloneElement(child, {
       zoomToWorld,

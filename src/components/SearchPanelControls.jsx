@@ -39,6 +39,9 @@ export function SearchPanelControls({
   const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
+    // query changing is an external signal (e.g. navigating to a saved
+    // search), not something derived from this component's own render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setInput(query);
     setSearch(query);
     setSuggestions([]);
@@ -66,6 +69,11 @@ export function SearchPanelControls({
   };
 
   /** */
+  const receiveAutocomplete = (json) => {
+    setSuggestions(json.terms);
+  };
+
+  /** */
   const fetchAutocomplete = useDebouncedCallback(
     useCallback(() => {
       if (!autocompleteService) return;
@@ -77,11 +85,6 @@ export function SearchPanelControls({
     }, [autocompleteService, input]),
     500,
   );
-
-  /** */
-  const receiveAutocomplete = (json) => {
-    setSuggestions(json.terms);
-  };
 
   /** */
   const submitSearch = (event) => {
