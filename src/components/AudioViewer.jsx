@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
+import useMediaStartTime from '../hooks/useMediaStartTime';
 
 const StyledContainer = styled('div')({
   alignItems: 'center',
@@ -13,10 +14,12 @@ const StyledAudio = styled('audio')({
 });
 
 /** */
-export function AudioViewer({ audioOptions = {}, audioResources = [], canvasId = '', captions = [] }) {
+export function AudioViewer({ audioOptions = {}, audioResources = [], canvasId = '', captions = [], startTime = undefined }) {
+  const mediaRef = useMediaStartTime(startTime, canvasId);
+
   return (
     <StyledContainer>
-      <StyledAudio {...audioOptions} key={canvasId}>
+      <StyledAudio {...audioOptions} key={canvasId} ref={mediaRef}>
         {audioResources.map((audio) => (
           <Fragment key={audio.id}>
             <source src={audio.id} type={audio.getFormat()} />
@@ -37,4 +40,5 @@ AudioViewer.propTypes = {
   audioResources: PropTypes.arrayOf(PropTypes.object),
   canvasId: PropTypes.string,
   captions: PropTypes.arrayOf(PropTypes.object),
+  startTime: PropTypes.number,
 };
