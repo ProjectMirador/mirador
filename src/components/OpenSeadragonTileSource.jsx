@@ -48,6 +48,7 @@ export default function OpenSeadragonTileSource({
         opacity,
         fitBounds: fitBounds ? new Openseadragon.Rect(...fitBounds) : undefined,
         success: (ev) => {
+          viewer.current.raiseEvent('open', { item: ev.item });
           tiledImage.current = ev.item;
         },
       });
@@ -65,7 +66,10 @@ export default function OpenSeadragonTileSource({
         opacity,
         fitBounds: fitBounds ? new Openseadragon.Rect(...fitBounds) : undefined,
 
-        success: (event) => resolve(event),
+        success: (event) => {
+          viewer.current.raiseEvent('open', { item: event.item });
+          resolve(event);
+        },
 
         error: (event) => {
           const imageUrl = url || (typeof tileSource === 'string' ? tileSource : tileSource?.['@id']);

@@ -188,7 +188,7 @@ function OpenSeadragonComponent({
     viewerRef.current = viewer;
     setViewer(viewer);
 
-    viewer.world.addHandler('add-item', () => {
+    viewer.addHandler('open', () => {
       initialViewportSet.current = false;
       setInitialBoundsRef.current(viewer);
     });
