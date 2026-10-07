@@ -13,12 +13,15 @@ function MockTranslationComponent() {
 
 /** */
 function MockDnDComponent() {
+  // useDrop() itself throws synchronously when called outside a DndProvider
+  // -- this test asserts on that behavior (see the opt-out test below)
   try {
     const drop = useDrop(() => ({
       accept: 'box',
       drop: () => ({ name: 'Mirador Test' }),
     }))[1]; // the drop ref is the 2nd arg of returned array
     return (
+      // eslint-disable-next-line react-hooks/error-boundaries, react-hooks/refs
       <div ref={drop} data-testid="test-dnd">
         Test DnD
       </div>

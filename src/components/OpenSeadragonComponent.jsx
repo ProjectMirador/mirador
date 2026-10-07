@@ -112,6 +112,7 @@ function OpenSeadragonComponent({
   // always calls the current setInitialBounds -- and therefore reads the
   // current viewerConfig -- instead of whatever it was on the very first render.
   const setInitialBoundsRef = useRef(setInitialBounds);
+  // eslint-disable-next-line react-hooks/refs
   setInitialBoundsRef.current = setInitialBounds;
 
   useEffect(() => {
@@ -234,6 +235,9 @@ function OpenSeadragonComponent({
       canvas.setAttribute('aria-label', t('digitizedView'));
       canvas.setAttribute('aria-describedby', id);
     }
+    // viewerRef.current is read here in the deps array rather than in the
+    // effect body necause there's no other signal for the OSD canvas element now existing.
+    // eslint-disable-next-line react-hooks/refs
   }, [viewerRef?.current?.canvas?.firstElementChild, id, t]);
 
   return (
