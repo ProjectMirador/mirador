@@ -20,4 +20,5 @@ export { default as OpenSeadragonCanvasOverlay } from './OpenSeadragonCanvasOver
 export { default as TruncatedHit } from './TruncatedHit';
 export { default as asArray } from './asArray';
 export { default as htmlRules } from './htmlRules';
+export * from './imageFormatSupport';
 export * from './readImageMetadata';
