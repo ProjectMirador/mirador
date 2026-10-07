@@ -38,16 +38,17 @@ describe('canvas actions', () => {
       store = createRecordingStore();
     });
 
-    it('sets to a defined canvas', () => {
+    it('sets to a defined canvas and start time', () => {
       const id = 'abc123';
       const expectedAction = {
         canvasId: 'a',
         preserveViewport: true,
+        startTime: 30,
         type: ActionTypes.SET_CANVAS,
         visibleCanvases: ['a'],
         windowId: id,
       };
-      store.dispatch(actions.setCanvas(id, 'a'));
+      store.dispatch(actions.setCanvas(id, 'a', undefined, { startTime: 30 }));
       expect(store.getActions()[0]).toEqual(expectedAction);
     });
   });
