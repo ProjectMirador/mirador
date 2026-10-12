@@ -16,14 +16,26 @@ window['__@hello-pangea/dnd-disable-dev-warnings'] = true;
 vi.setConfig({ testTimeout: 10_000 });
 const fetchMocker = createFetchMock(vi);
 
+let usesRealNetwork = false;
+
 // changes default behavior of fetchMock to use the real 'fetch' implementation and not mock responses
 beforeEach((context) => {
-  if (context.task.file.name.includes('/integration')) {
+  usesRealNetwork = context.task.file.name.includes('/integration');
+
+  if (usesRealNetwork) {
     fetchMocker.disableMocks();
   } else {
     // sets globalThis.fetch and globalThis.fetchMock to our mocked version
     fetchMocker.enableMocks();
   }
+});
+
+// integration tests use the real network; let in-flight requests settle before
+// happy-dom tears down the window, otherwise it aborts them and logs AbortErrors
+afterAll(async () => {
+  if (!usesRealNetwork) return;
+
+  await Promise.race([window.happyDOM.waitUntilComplete(), new Promise((resolve) => setTimeout(resolve, 5_000))]);
 });
 
 /** */
