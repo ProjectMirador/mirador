@@ -18,8 +18,8 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     cooldown:
-      semver-major-days: 30
-      semver-minor-days: 14
-      semver-patch-days: 7
+      semver-major-days: 7
+      semver-minor-days: 3
+      semver-patch-days: 1
     schedule:
-      interval: "monthly"
+      interval: "weekly"
