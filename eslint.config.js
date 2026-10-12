@@ -141,8 +141,11 @@ export default [
       'import/resolver': {
         node: {
           extensions: ['.js', '.jsx', '.json'],
+          moduleDirectory: ['node_modules', 'src'],
         },
       },
+      // eyeroll. https://github.com/import-js/eslint-plugin-import/issues/2703
+      'import/core-modules': ['@redux-devtools/extension'],
       react: {
         version: 'detect',
       },
