@@ -1,13 +1,11 @@
-import omit from 'lodash/omit';
-import set from 'lodash/fp/set';
-import update from 'lodash/fp/update';
+import { set, unset, update } from './utils';
 import ActionTypes from '../actions/action-types';
 
 /** */
 export function companionWindowsReducer(state = {}, action) {
   switch (action.type) {
     case ActionTypes.ADD_COMPANION_WINDOW:
-      return set([action.id], action.payload, state);
+      return set(state, action.id, action.payload);
 
     case ActionTypes.ADD_WINDOW:
       return {
@@ -33,16 +31,16 @@ export function companionWindowsReducer(state = {}, action) {
       }, {});
 
     case ActionTypes.UPDATE_COMPANION_WINDOW:
-      return update([action.id], (orig) => ({ ...(orig || {}), ...action.payload }), state);
+      return update(state, action.id, (orig) => ({ ...(orig || {}), ...action.payload }));
 
     case ActionTypes.REMOVE_COMPANION_WINDOW:
-      return omit(state, action.id);
+      return unset(state, action.id);
 
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.companionWindows || [];
 
     case ActionTypes.TOGGLE_TOC_NODE:
-      return update([action.id, 'tocNodes'], (orig) => ({ ...(orig || {}), ...action.payload }), state);
+      return update(state, [action.id, 'tocNodes'], (orig) => ({ ...(orig || {}), ...action.payload }));
     default:
       return state;
   }

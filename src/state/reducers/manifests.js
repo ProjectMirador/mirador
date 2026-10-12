@@ -1,4 +1,4 @@
-import omit from 'lodash/omit';
+import { unset } from './utils';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -13,7 +13,7 @@ export const manifestsReducer = (state = {}, action) => {
           ...action.properties,
           id: action.manifestId,
         },
-        ...omit(state, action.manifestId),
+        ...unset(state, action.manifestId),
       };
     case ActionTypes.RECEIVE_MANIFEST:
       return {

@@ -1,5 +1,4 @@
-import update from 'lodash/fp/update';
-import omit from 'lodash/omit';
+import { unset, update } from './utils';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -31,18 +30,14 @@ export const windowsReducer = (state = {}, action) => {
     case ActionTypes.UPDATE_WINDOW:
       if (!state[action.id]) return state;
 
-      return update(
-        [action.id],
-        (orig) => ({
-          ...(orig || {}),
-          // drop explicit `undefined` values so they can't clobber existing keys on spread (#3930)
-          ...Object.fromEntries(Object.entries(action.payload).filter(([, value]) => value !== undefined)),
-        }),
-        state,
-      );
+      return update(state, action.id, (orig) => ({
+        ...(orig || {}),
+        // drop explicit `undefined` values so they can't clobber existing keys on spread (#3930)
+        ...Object.fromEntries(Object.entries(action.payload).filter(([, value]) => value !== undefined)),
+      }));
 
     case ActionTypes.REMOVE_WINDOW:
-      return omit(state, [action.windowId]);
+      return unset(state, action.windowId);
     case ActionTypes.TOGGLE_WINDOW_SIDE_BAR:
       return {
         ...state,
@@ -82,15 +77,11 @@ export const windowsReducer = (state = {}, action) => {
     case ActionTypes.SET_CANVAS:
       if (!state[action.windowId]) return state;
 
-      return update(
-        [action.windowId],
-        (orig) => ({
-          ...(orig || {}),
-          canvasId: action.canvasId,
-          visibleCanvases: action.visibleCanvases || [],
-        }),
-        state,
-      );
+      return update(state, action.windowId, (orig) => ({
+        ...(orig || {}),
+        canvasId: action.canvasId,
+        visibleCanvases: action.visibleCanvases || [],
+      }));
     case ActionTypes.ADD_COMPANION_WINDOW:
       return {
         ...state,

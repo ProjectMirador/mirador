@@ -6,7 +6,6 @@ import {
   getPathToCorner,
   Corner,
 } from 'react-mosaic-component';
-import dropRight from 'lodash/dropRight';
 
 /** */
 export default class MosaicLayout {
@@ -22,7 +21,7 @@ export default class MosaicLayout {
 
   /** */
   pathToParent(path) {
-    return getNodeAtPath(this.layout, dropRight(path));
+    return getNodeAtPath(this.layout, path.slice(0, -1));
   }
 
   /** */

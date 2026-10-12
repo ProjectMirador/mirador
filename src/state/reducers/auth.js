@@ -1,4 +1,4 @@
-import omit from 'lodash/omit';
+import { unset } from './utils';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -36,7 +36,7 @@ export const authReducer = (state = {}, action) => {
         },
       };
     case ActionTypes.RESET_AUTHENTICATION_STATE:
-      return omit(state, action.id);
+      return unset(state, action.id);
     default:
       return state;
   }
