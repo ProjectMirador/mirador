@@ -1,3 +1,4 @@
+import useOsdEvent from './useOsdEvent';
 import useThumbnailService from './useThumbnailService';
 
-export { useThumbnailService };
+export { useOsdEvent, useThumbnailService };

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useDebouncedCallback } from 'use-debounce';
 import sortBy from 'lodash/sortBy';
 import xor from 'lodash/xor';
+import { useOsdEvent } from '../hooks';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
 import { drawAnnotationsToContext } from '../lib/drawAnnotationsToContext';
@@ -238,23 +239,10 @@ export function AnnotationsOverlay({
     updateCanvas();
   }, [updateCanvas]);
 
-  // useLayoutEffect lets us remove handlers at the same time that
-  // React tears down the ref to our own portaled canvas
-  useLayoutEffect(() => {
-    if (!viewer) return undefined;
-
-    viewer.addHandler('canvas-click', onCanvasClick);
-    viewer.addHandler('canvas-exit', onCanvasExit);
-    viewer.addHandler('mouse-move', onCanvasMouseMove);
-    viewer.addHandler('update-viewport', onUpdateViewport);
-
-    return () => {
-      viewer.removeHandler('canvas-click', onCanvasClick);
-      viewer.removeHandler('canvas-exit', onCanvasExit);
-      viewer.removeHandler('mouse-move', onCanvasMouseMove);
-      viewer.removeHandler('update-viewport', onUpdateViewport);
-    };
-  }, [onCanvasClick, onCanvasExit, onCanvasMouseMove, onUpdateViewport, viewer]);
+  useOsdEvent(viewer, 'canvas-click', onCanvasClick);
+  useOsdEvent(viewer, 'canvas-exit', onCanvasExit);
+  useOsdEvent(viewer, 'mouse-move', onCanvasMouseMove);
+  useOsdEvent(viewer, 'update-viewport', onUpdateViewport);
 
   useEffect(() => {
     if (viewer) viewer.forceRedraw();
