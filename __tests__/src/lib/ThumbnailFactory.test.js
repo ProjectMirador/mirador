@@ -437,6 +437,50 @@ describe('picking the best format', () => {
       url: `${url}/full/,100/0/default.png`,
     });
   });
+
+  it('skips formats the browser cannot decode', () => {
+    const myCanvas = {
+      ...canvas.__jsonld,
+      thumbnail: {
+        height: 100,
+        id: 'arbitrary-url',
+        service: [
+          {
+            id: url,
+            preferredFormats: ['jxl', 'webp'],
+            profile: 'level2',
+            type: 'ImageService3',
+          },
+        ],
+        width: 100,
+      },
+    };
+    expect(createSubject(myCanvas, 'Canvas', { preferredFormats: ['jxl', 'webp', 'jpg'] })).toMatchObject({
+      url: `${url}/full/,100/0/default.webp`,
+    });
+  });
+
+  it('falls back to jpg when none of the advertised formats can be decoded', () => {
+    const myCanvas = {
+      ...canvas.__jsonld,
+      thumbnail: {
+        height: 100,
+        id: 'arbitrary-url',
+        service: [
+          {
+            id: url,
+            preferredFormats: ['jxl'],
+            profile: 'level2',
+            type: 'ImageService3',
+          },
+        ],
+        width: 100,
+      },
+    };
+    expect(createSubject(myCanvas, 'Canvas')).toMatchObject({
+      url: `${url}/full/,100/0/default.jpg`,
+    });
+  });
 });
 
 describe('selectBestImageSize', () => {

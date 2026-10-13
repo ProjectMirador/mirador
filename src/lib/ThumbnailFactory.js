@@ -2,6 +2,7 @@ import { Utils } from 'manifesto.js';
 import MiradorManifest from './MiradorManifest';
 import MiradorCanvas from './MiradorCanvas';
 import asArray from './asArray';
+import { isImageFormatSupported } from './imageFormatSupport';
 
 /** */
 function isLevel0ImageProfile(service) {
@@ -207,13 +208,18 @@ class ThumbnailFactory {
    * on offer, and selecting a format shared in common with the application's
    * preferred format list.
    *
+   * Formats the browser can't decode are ignored.
+   *
    * Fall back to jpg, which is required to work for all IIIF services.
    */
   getFormat(service) {
     const { preferredFormats = [] } = this.iiifOpts;
-    const servicePreferredFormats = service.getProperty('preferredFormats');
 
-    if (!servicePreferredFormats) return 'jpg';
+    const advertisedFormats = service.getProperty('preferredFormats');
+
+    if (!advertisedFormats) return 'jpg';
+
+    const servicePreferredFormats = asArray(advertisedFormats).filter(isImageFormatSupported);
 
     const filteredFormats = servicePreferredFormats.filter((value) => preferredFormats.includes(value));
 

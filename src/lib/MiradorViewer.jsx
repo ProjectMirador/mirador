@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import HotApp from '../components/App';
 import { filterValidPlugins } from '../extend/pluginPreprocessing';
 import createPluggableStore from '../state/createPluggableStore';
+import { detectImageFormats } from './imageFormatSupport';
 
 /**
  * Default Mirador instantiation
@@ -11,6 +12,7 @@ class MiradorViewer {
   /**
    */
   constructor(config, viewerConfig = {}) {
+    detectImageFormats();
     this.plugins = filterValidPlugins(viewerConfig.plugins || []);
     this.config = config;
     this.store = viewerConfig.store || createPluggableStore(this.config, this.plugins);

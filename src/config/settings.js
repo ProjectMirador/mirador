@@ -531,7 +531,7 @@ export default {
     */
   ],
   thumbnails: {
-    preferredFormats: ['jpg', 'png', 'webp', 'tif'],
+    preferredFormats: ['jpg', 'png', 'webp', 'avif', 'jxl', 'tif'],
   },
   thumbnailNavigation: {
     defaultPosition: 'off', // Which position for the thumbnail navigation to be be displayed. Other possible values are "far-bottom" or "far-right"
