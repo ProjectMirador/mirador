@@ -24,6 +24,10 @@ export function* importConfig({ config: { thumbnailNavigation, windows } }) {
   const thunks = yield all(
     windows.map((miradorWindow) => {
       const windowId = `window-${uuid()}`;
+      // loadedManifest is not an officially documented/supported window setting --
+      // prefer manifestId (see the example window config in config/settings.js).
+      // It's only read here for backwards compatibility with older configs that
+      // may already set it.
       const manifestId = miradorWindow.manifestId || miradorWindow.loadedManifest;
 
       return call(addWindow, {

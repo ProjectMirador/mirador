@@ -7,7 +7,7 @@ export default {
     windows: [
       {
         canvasId: PRIMARY_CANVAS_FIXTURE_URL,
-        loadedManifest: PRIMARY_MANIFEST_FIXTURE_URL,
+        manifestId: PRIMARY_MANIFEST_FIXTURE_URL,
         thumbnailNavigationPosition: 'far-bottom',
       },
     ],
