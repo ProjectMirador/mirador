@@ -10,6 +10,7 @@ export default function PluginProvider({ plugins = [], children = null }) {
   useEffect(() => {
     const connectedPlugins = connectPluginsToStore(plugins);
     addPluginsToCompanionWindowsRegistry(connectedPlugins);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPluginMap(createTargetToPluginMapping(connectedPlugins));
   }, [plugins]);
 

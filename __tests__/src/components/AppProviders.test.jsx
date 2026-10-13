@@ -11,7 +11,7 @@ function MockTranslationComponent() {
   return <div data-testid="test-translation">{t('aboutMirador')}</div>;
 }
 
-/** */
+/* eslint-disable react-hooks/error-boundaries, react-hooks/refs */
 function MockDnDComponent() {
   try {
     const drop = useDrop(() => ({
@@ -29,6 +29,7 @@ function MockDnDComponent() {
   // We have to return something to render; can't throw an error in catch
   return <div data-testid="failed-dnd" />;
 }
+/* eslint-enable react-hooks/error-boundaries, react-hooks/refs */
 
 /** */
 function createWrapper(props = {}) {

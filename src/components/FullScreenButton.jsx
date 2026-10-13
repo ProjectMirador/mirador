@@ -18,6 +18,7 @@ export function FullScreenButton({ className = undefined }) {
 
   useEffect(() => {
     const div = document.createElement('div');
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCanFullscreenDiv(typeof div.requestFullscreen === 'function');
   }, []);
 
