@@ -6,7 +6,7 @@ import { Window } from '../../../src/components/Window';
 /** create wrapper */
 function createWrapper(props, state, renderOptions) {
   return render(
-    <Window windowId="xyz" manifestId="foo" classes={{}} {...props} />,
+    <Window windowId="xyz" manifestId="foo" classes={{}} windowPosition={1} {...props} />,
     {
       preloadedState: {
         windows: {
@@ -15,6 +15,9 @@ function createWrapper(props, state, renderOptions) {
             companionWindowIds: [],
           },
         },
+        workspace: {
+          windowIds: ['xyz'],
+        },
       },
     },
     { renderOptions },
@@ -22,9 +25,9 @@ function createWrapper(props, state, renderOptions) {
 }
 
 describe('Window', () => {
-  it('should render outer element', () => {
+  it('should render outer element with a numbered, non-duplicative accessible name', () => {
     createWrapper();
-    expect(screen.getByLabelText('Window:')).toHaveClass('mirador-window');
+    expect(screen.getByLabelText('Item window 1')).toHaveClass('mirador-window');
   });
   it('should render <WindowTopBar>', () => {
     createWrapper();

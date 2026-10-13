@@ -86,6 +86,7 @@ export function Window({
   view = undefined,
   windowDraggable = null,
   windowId,
+  windowPosition = null,
   workspaceType = null,
   manifestError = null,
 }) {
@@ -110,7 +111,7 @@ export function Window({
         elevation={1}
         id={windowId}
         className={ns('window')}
-        aria-label={t('window', { label })}
+        aria-label={t('windowRegion', { position: windowPosition })}
       >
         <WindowTopBar
           component={workspaceType === 'mosaic' && windowDraggable ? DraggableNavBar : undefined}
@@ -146,5 +147,6 @@ Window.propTypes = {
   view: PropTypes.string,
   windowDraggable: PropTypes.bool,
   windowId: PropTypes.string.isRequired,
+  windowPosition: PropTypes.number,
   workspaceType: PropTypes.string,
 };

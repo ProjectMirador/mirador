@@ -17,6 +17,19 @@ export const getWindowConfig = createSelector([getConfig, getWindow], ({ window:
 }));
 
 /**
+ * Returns the 1-based position of a window among all currently open windows,
+ * for use in an accessible name that doesn't just repeat the manifest title
+ * (e.g. "Item window 2")
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {number}
+ */
+export const getWindowPosition = createSelector(
+  [getWindowIds, (state, { windowId }) => windowId],
+  (windowIds, windowId) => windowIds.indexOf(windowId) + 1,
+);
+
+/**
  * Returns the manifest titles for all open windows.
  * @param {object} state
  * @returns {object}
