@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect, useMemo } from 'react';
+import { useCallback, useState, useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -6,10 +6,11 @@ import PropTypes from 'prop-types';
  */
 export function useFullScreenHandle() {
   const [active, setActive] = useState(false);
+  const fullscreenRef = useRef();
 
   /**  */
   const handleFullScreenChange = () => {
-    setActive(document.fullscreenElement === document.body);
+    setActive(document.fullscreenElement === fullscreenRef.current);
   };
 
   useEffect(() => {
@@ -18,7 +19,7 @@ export function useFullScreenHandle() {
   }, []);
 
   /**  */
-  const requestFullscreen = () => document.body.requestFullscreen();
+  const requestFullscreen = () => fullscreenRef.current.requestFullscreen();
 
   const enter = useCallback(() => {
     if (document.fullscreenElement) {
@@ -28,7 +29,7 @@ export function useFullScreenHandle() {
   }, []);
 
   const exit = useCallback(() => {
-    if (document.fullscreenElement !== document.body) return Promise.resolve();
+    if (document.fullscreenElement !== fullscreenRef.current) return Promise.resolve();
     return document.exitFullscreen();
   }, []);
 
@@ -37,8 +38,9 @@ export function useFullScreenHandle() {
       active,
       enter,
       exit,
+      fullscreenRef,
     }),
-    [active, enter, exit],
+    [active, enter, exit, fullscreenRef],
   );
 }
 
@@ -62,7 +64,7 @@ export const FullScreen = ({ handle, onChange = undefined, children = null, clas
     : {};
 
   return (
-    <div className={fullScreenClasses.join(' ')} style={styles}>
+    <div ref={handle.fullscreenRef} className={fullScreenClasses.join(' ')} style={styles}>
       {children}
     </div>
   );

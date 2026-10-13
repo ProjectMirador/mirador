@@ -116,7 +116,8 @@ class ThumbnailFactory {
   /**
    * Determines the appropriate thumbnail to use to represent an Image Resource.
    * @param {Object} resource The Image Resource from which to derive a thumbnail
-   * @return {Object} The thumbnail URL and any spatial dimensions that can be determined
+   * @return {Object} The thumbnail URL and the dimensions the image should be displayed at
+   *   (which may exceed the dimensions of the fetched image if it is smaller)
    */
   // eslint-disable-next-line complexity
   iiifThumbnailUrl(resource) {
@@ -135,6 +136,15 @@ class ThumbnailFactory {
 
     if (!service) return ThumbnailFactory.staticImageUrl(resource);
 
+    // The image's actual dimensions. Upscaling is optional in the IIIF Image API (and
+    // requires an explicit `^` prefix in v3), so we must not ask for a size larger than
+    // the image itself; the (possibly larger) thumbnail dimensions below are used to
+    // display the image and let the browser scale it up client-side.
+    const imageWidth = resource.getWidth() || service.getProperty('width');
+    const imageHeight = resource.getHeight() || service.getProperty('height');
+    const withinImageWidth = (value) => (imageWidth ? Math.min(value, imageWidth) : value);
+    const withinImageHeight = (value) => (imageHeight ? Math.min(value, imageHeight) : value);
+
     const aspectRatio = resource.getWidth() && resource.getHeight() && resource.getWidth() / resource.getHeight();
     const target = requestedMaxWidth && requestedMaxHeight ? requestedMaxWidth * requestedMaxHeight : maxHeight * maxWidth;
     const closestSize = ThumbnailFactory.selectBestImageSize(service, target);
@@ -152,31 +162,31 @@ class ThumbnailFactory {
     } else if (requestedMaxHeight && requestedMaxWidth) {
       // IIIF level 2, no problem.
       if (isLevel2ImageProfile(service)) {
-        size = `!${maxWidth},${maxHeight}`;
+        size = `!${withinImageWidth(maxWidth)},${withinImageHeight(maxHeight)}`;
         width = maxWidth;
         height = maxHeight;
 
         if (aspectRatio && aspectRatio > 1) height = Math.round(maxWidth / aspectRatio);
         if (aspectRatio && aspectRatio < 1) width = Math.round(maxHeight * aspectRatio);
       } else if (maxWidth / maxHeight < aspectRatio) {
-        size = `${maxWidth},`;
+        size = `${withinImageWidth(maxWidth)},`;
         width = maxWidth;
         if (aspectRatio) height = Math.round(maxWidth / aspectRatio);
       } else {
-        size = `,${maxHeight}`;
+        size = `,${withinImageHeight(maxHeight)}`;
         height = maxHeight;
         if (aspectRatio) width = Math.round(maxHeight * aspectRatio);
       }
     } else if (requestedMaxHeight && !requestedMaxWidth) {
-      size = `,${maxHeight}`;
+      size = `,${withinImageHeight(maxHeight)}`;
       height = maxHeight;
       if (aspectRatio) width = Math.round(maxHeight * aspectRatio);
     } else if (!requestedMaxHeight && requestedMaxWidth) {
-      size = `${maxWidth},`;
+      size = `${withinImageWidth(maxWidth)},`;
       width = maxWidth;
       if (aspectRatio) height = Math.round(maxWidth / aspectRatio);
     } else {
-      size = `,${minDimension}`;
+      size = `,${withinImageHeight(minDimension)}`;
       height = minDimension;
       if (aspectRatio) width = Math.round(height * aspectRatio);
     }

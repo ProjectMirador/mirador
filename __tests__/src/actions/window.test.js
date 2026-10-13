@@ -26,7 +26,7 @@ describe('window actions', () => {
   describe('addWindow', () => {
     it('should create a new window with merged defaults', () => {
       const options = {
-        canvasIndex: 1,
+        canvasId: 'hellocanvas1',
         id: 'helloworld',
       };
 
@@ -51,7 +51,7 @@ describe('window actions', () => {
         },
         type: ActionTypes.ADD_WINDOW,
         window: {
-          canvasIndex: 1,
+          canvasId: 'hellocanvas1',
           collectionIndex: 0,
           id: 'helloworld',
           manifestId: null,
@@ -91,7 +91,7 @@ describe('window actions', () => {
     });
     it('creates a new window with additional companion windows', () => {
       const options = {
-        canvasIndex: 1,
+        canvasId: 'hellocanvas1',
         companionWindows: [
           {
             content: 'attribution',
@@ -129,7 +129,7 @@ describe('window actions', () => {
     });
     it('creates a new window without a default sidebar', () => {
       const options = {
-        canvasIndex: 1,
+        canvasId: 'hellocanvas1',
         companionWindows: [],
         id: 'helloworld',
       };
@@ -184,7 +184,7 @@ describe('window actions', () => {
 
     it('pulls a provided manifest out', () => {
       const options = {
-        canvasIndex: 1,
+        canvasId: 'hellocanvas1',
         companionWindows: [],
         id: 'helloworld',
         manifest: { data: '123' },
