@@ -1,4 +1,4 @@
-import { PRIMARY_MANIFEST_FIXTURE_URL } from './constants';
+import { PRIMARY_MANIFEST_FIXTURE_URL, PRIMARY_CANVAS_FIXTURE_URL } from './constants';
 
 /**
  * Creates a Mirador config object with two windows:
@@ -15,7 +15,7 @@ export default function createConfig(id) {
     id: id || 'mirador',
     windows: [
       {
-        canvasIndex: 2,
+        canvasId: PRIMARY_CANVAS_FIXTURE_URL,
         loadedManifest: PRIMARY_MANIFEST_FIXTURE_URL,
       },
       {

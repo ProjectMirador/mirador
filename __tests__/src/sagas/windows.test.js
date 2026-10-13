@@ -198,6 +198,53 @@ describe('window-level sagas', () => {
         .put({ type: 'setCanvasThunk' })
         .run();
     });
+
+    // canvasIndex is not an officially documented/supported window setting --
+    // this only exists to keep older configs/exported state working (see #4071).
+    it('honors a legacy canvasIndex when the manifest has no start canvas', () => {
+      const action = {
+        window: {
+          canvasIndex: 2,
+          id: 'x',
+          manifestId: 'manifest.json',
+        },
+      };
+
+      const manifest = Utils.parseManifest(fixture);
+
+      return expectSaga(fetchWindowManifest, action)
+        .provide([
+          [select(getManifests), { 'manifest.json': {} }],
+          [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
+          [call(setCanvas, 'x', 'https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1'), { type: 'setCanvasThunk' }],
+        ])
+        .put({ type: 'setCanvasThunk' })
+        .run();
+    });
+
+    it('lets the manifest start canvas override a legacy canvasIndex', () => {
+      const action = {
+        window: {
+          canvasIndex: 2,
+          id: 'x',
+          manifestId: 'manifest.json',
+        },
+      };
+
+      const manifest = Utils.parseManifest({
+        ...fixture,
+        start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' },
+      });
+
+      return expectSaga(fetchWindowManifest, action)
+        .provide([
+          [select(getManifests), { 'manifest.json': {} }],
+          [select(getManifestoInstance, { manifestId: 'manifest.json' }), manifest],
+          [call(setCanvas, 'x', 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'), { type: 'setCanvasThunk' }],
+        ])
+        .put({ type: 'setCanvasThunk' })
+        .run();
+    });
   });
 
   describe('setWindowDefaultSearchQuery', () => {
