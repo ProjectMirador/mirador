@@ -117,6 +117,7 @@ export function SearchPanelControls({
           onChange={selectItem}
           onInputChange={handleChange}
           freeSolo
+          slotProps={{ popper: { disablePortal: true } }}
           disableClearable
           renderInput={(params) => (
             <TextField
