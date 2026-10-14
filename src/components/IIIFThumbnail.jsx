@@ -44,6 +44,8 @@ const LazyLoadedImage = ({
   useEffect(() => {
     if (loaded || !inView) return;
 
+    // inView is driven by IntersectionObserver, an external system this component subscribes to
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoaded(true);
   }, [inView, loaded]);
 

@@ -9,6 +9,8 @@ function usePrevious(value) {
   useEffect(() => {
     ref.current = value;
   }, [value]);
+  // Reading ref.current here during render always returns the previous, already-committed value.
+  // eslint-disable-next-line react-hooks/refs
   return ref.current;
 }
 
@@ -50,6 +52,8 @@ export function ScrollTo({ children, containerRef, offsetTop = 0, scrollTo, ...o
 
   if (!scrollTo && isEmpty(otherProps)) return children;
 
+  // Plain ref-forwarding onto the cloned child, not a render-time ref read.
+  // eslint-disable-next-line react-hooks/refs
   return cloneElement(children, { ref: scrollToRef, ...otherProps });
 }
 

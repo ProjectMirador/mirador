@@ -11,8 +11,10 @@ export function ImageWithFallback({ alt, fallback, src, ...props }) {
   const [hasError, setHasError] = useState(false);
   const { notifyFailure } = useContext(FailedImageContext);
 
-  // A later src may succeed even if an earlier one failed.
   useEffect(() => {
+    // src changing is an external prop signal, not something derivable from
+    // this component's own render
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHasError(false);
   }, [src]);
 

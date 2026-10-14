@@ -71,17 +71,6 @@ export function SearchHit({
   windowSelected = false,
 }) {
   const { t } = useTranslation();
-  useEffect(() => {
-    if (selected) {
-      announceHit();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
-
-  /** */
-  const handleClick = () => {
-    if (annotation && annotationId) selectAnnotation(annotationId);
-  };
 
   const truncatedHit = useMemo(() => hit && new TruncatedHit(hit, annotation), [hit, annotation]);
 
@@ -103,6 +92,17 @@ export function SearchHit({
       'polite',
     );
   });
+
+  useEffect(() => {
+    if (selected) {
+      announceHit();
+    }
+  }, [selected]);
+
+  /** */
+  const handleClick = () => {
+    if (annotation && annotationId) selectAnnotation(annotationId);
+  };
 
   const canvasLabelHtmlId = useId();
 
