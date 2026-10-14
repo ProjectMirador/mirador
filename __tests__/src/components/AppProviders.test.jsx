@@ -13,21 +13,28 @@ function MockTranslationComponent() {
 
 /** */
 function MockDnDComponent() {
+  let drop = null;
+
   try {
-    const drop = useDrop(() => ({
+    const [_props, dropRef] = useDrop(() => ({
       accept: 'box',
       drop: () => ({ name: 'Mirador Test' }),
-    }))[1]; // the drop ref is the 2nd arg of returned array
-    return (
-      <div ref={drop} data-testid="test-dnd">
-        Test DnD
-      </div>
-    );
+    }));
+
+    drop = dropRef;
   } catch (e) {
     // do nothing
   }
-  // We have to return something to render; can't throw an error in catch
-  return <div data-testid="failed-dnd" />;
+
+  if (!drop) {
+    return <div data-testid="failed-dnd" />;
+  }
+
+  return (
+    <div ref={drop} data-testid="test-dnd">
+      Test DnD
+    </div>
+  );
 }
 
 /** */
