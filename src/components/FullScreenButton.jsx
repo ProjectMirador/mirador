@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import FullscreenIcon from '@mui/icons-material/FullscreenSharp';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExitSharp';
 import PropTypes from 'prop-types';
