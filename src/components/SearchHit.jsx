@@ -71,12 +71,6 @@ export function SearchHit({
   windowSelected = false,
 }) {
   const { t } = useTranslation();
-  useEffect(() => {
-    if (selected) {
-      announceHit();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
 
   /** */
   const handleClick = () => {
@@ -103,6 +97,13 @@ export function SearchHit({
       'polite',
     );
   });
+
+  useEffect(() => {
+    if (selected) {
+      announceHit();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
 
   const canvasLabelHtmlId = useId();
 
