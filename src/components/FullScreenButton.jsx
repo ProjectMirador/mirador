@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import FullscreenIcon from '@mui/icons-material/FullscreenSharp';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExitSharp';
 import PropTypes from 'prop-types';
@@ -13,12 +13,10 @@ export function FullScreenButton({ className = undefined }) {
   const handle = useContext(FullScreenContext);
 
   // iPhone Safari does not support full screen on divs,
-  // Don't render the button if not supported
-  const [canFullscreenDiv, setCanFullscreenDiv] = useState(false);
-
-  useEffect(() => {
+  // Don't render the button if not supporte
+  const canFullscreenDiv = useMemo(() => {
     const div = document.createElement('div');
-    setCanFullscreenDiv(typeof div.requestFullscreen === 'function');
+    return typeof div.requestFullscreen === 'function';
   }, []);
 
   if (!canFullscreenDiv) return null;
