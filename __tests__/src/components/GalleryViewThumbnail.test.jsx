@@ -82,7 +82,7 @@ describe('GalleryView', () => {
         selected
       />,
     );
-    expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
+    expect(window.HTMLElement.prototype.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest', container: 'nearest' });
   });
 
   describe('on-demand annotation fetching', () => {
