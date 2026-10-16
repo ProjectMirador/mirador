@@ -1,4 +1,4 @@
-import set from 'lodash/fp/set';
+import { set as setIn } from '../../../src/state/reducers/utils';
 
 import noRangesJson from '../../fixtures/version-2/001.json';
 import manifestJson from '../../fixtures/version-2/structures.json';
@@ -10,6 +10,9 @@ import {
   getNodeIdToScrollTo,
   getDefaultSidebarVariant,
 } from '../../../src/state/selectors';
+
+/** set(path, value, object), argument order matching the calls below */
+const set = (path, value, object) => setIn(object, path, value);
 
 const state = {
   companionWindows: {

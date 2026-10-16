@@ -1,4 +1,4 @@
-import omit from 'lodash/omit';
+import { unset } from './utils';
 import ActionTypes from '../actions/action-types';
 
 /** */
@@ -41,7 +41,7 @@ export function accessTokensReducer(state = {}, action) {
         },
       };
     case ActionTypes.RESET_AUTHENTICATION_STATE:
-      return omit(state, action.tokenServiceId);
+      return unset(state, action.tokenServiceId);
     case ActionTypes.RECEIVE_INFO_RESPONSE:
       if (!action.tokenServiceId) return state;
       if (state[action.tokenServiceId].success) return state;

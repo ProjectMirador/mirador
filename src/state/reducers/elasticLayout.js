@@ -1,5 +1,4 @@
-import update from 'lodash/fp/update';
-import omit from 'lodash/omit';
+import { unset, update } from './utils';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -17,10 +16,10 @@ export const elasticLayoutReducer = (state = {}, action) => {
       };
 
     case ActionTypes.UPDATE_ELASTIC_WINDOW_LAYOUT:
-      return update([action.windowId], (orig) => ({ ...(orig || {}), ...action.payload }), state);
+      return update(state, action.windowId, (orig) => ({ ...(orig || {}), ...action.payload }));
 
     case ActionTypes.REMOVE_WINDOW:
-      return omit(state, action.windowId);
+      return unset(state, action.windowId);
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.elasticLayout || {};
     default:

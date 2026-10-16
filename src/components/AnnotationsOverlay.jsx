@@ -2,8 +2,6 @@ import { useRef, useEffect, useLayoutEffect, useCallback, useMemo } from 'react'
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { useDebouncedCallback } from 'use-debounce';
-import sortBy from 'lodash/sortBy';
-import xor from 'lodash/xor';
 import { useOsdEvent } from '../hooks';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
@@ -183,11 +181,11 @@ export function AnnotationsOverlay({
         };
 
         let radius = 1;
-        let annosWithScore = sortBy(annos.map(annosWithClickScore(radius)), 'score');
+        let annosWithScore = annos.map(annosWithClickScore(radius)).sort((a, b) => a.score - b.score);
 
         while (radius < Math.max(canvasWidth, canvasHeight) && annosWithScore[0].score === annosWithScore[1].score) {
           radius *= 2;
-          annosWithScore = sortBy(annos.map(annosWithClickScore(radius)), 'score');
+          annosWithScore = annos.map(annosWithClickScore(radius)).sort((a, b) => a.score - b.score);
         }
 
         toggleAnnotation(annosWithScore[0].anno.id);
@@ -210,18 +208,13 @@ export function AnnotationsOverlay({
           return;
         }
 
-        const annos = annotationsAtPoint(canvas, point);
+        const annoIds = annotationsAtPoint(canvas, point).map((a) => a.id);
 
         if (
-          xor(
-            hoveredAnnotationIds,
-            annos.map((a) => a.id),
-          ).length > 0
+          annoIds.some((id) => !hoveredAnnotationIds.includes(id)) ||
+          hoveredAnnotationIds.some((id) => !annoIds.includes(id))
         ) {
-          hoverAnnotation(
-            windowId,
-            annos.map((a) => a.id),
-          );
+          hoverAnnotation(windowId, annoIds);
         }
       },
       [annotations, annotationsAtPoint, canvasWorld, hoverAnnotation, hoveredAnnotationIds, searchAnnotations, viewer, windowId],

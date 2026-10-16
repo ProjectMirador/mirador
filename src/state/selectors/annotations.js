@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import filter from 'lodash/filter';
 import AnnotationFactory from '../../lib/AnnotationFactory';
 import { miradorSlice } from './utils';
 import { getCanvas, getVisibleCanvasIds } from './canvases';
@@ -26,10 +25,9 @@ const getAnnotationsOnCanvas = createSelector([getCanvas, getAnnotations], (canv
 });
 
 const getPresentAnnotationsCanvas = createSelector([getAnnotationsOnCanvas], (annotations) =>
-  filter(
-    Object.values(annotations).map((annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json)),
-    (annotation) => annotation && annotation.present(),
-  ),
+  Object.values(annotations)
+    .map((annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json))
+    .filter((annotation) => annotation && annotation.present()),
 );
 
 const getAnnotationsOnSelectedCanvases = createSelector(
@@ -47,10 +45,9 @@ const getAnnotationsOnSelectedCanvases = createSelector(
  * @returns {Array} An array of present annotations
  */
 export const getPresentAnnotationsOnSelectedCanvases = createSelector([getAnnotationsOnSelectedCanvases], (annotations) =>
-  filter(
-    Object.values(annotations).map((annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json)),
-    (annotation) => annotation && annotation.present(),
-  ),
+  Object.values(annotations)
+    .map((annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json))
+    .filter((annotation) => annotation && annotation.present()),
 );
 
 /**

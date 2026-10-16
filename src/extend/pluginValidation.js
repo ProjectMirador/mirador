@@ -1,9 +1,8 @@
-import isString from 'lodash/isString';
-import isUndefined from 'lodash/isUndefined';
-import isFunction from 'lodash/isFunction';
-import isObject from 'lodash/isObject';
-import isNull from 'lodash/isNull';
-import values from 'lodash/values';
+const isString = (value) => typeof value === 'string';
+const isUndefined = (value) => value === undefined;
+const isFunction = (value) => typeof value === 'function';
+const isObject = (value) => value !== null && (typeof value === 'object' || typeof value === 'function');
+const isNull = (value) => value === null;
 
 /** */
 export const validatePlugin = (plugin) =>
@@ -54,5 +53,5 @@ const checkMapDispatchToProps = (plugin) => {
 /** */
 const checkReducers = (plugin) => {
   const { reducers } = plugin;
-  return isUndefined(reducers) || (isObject(reducers) && values(reducers).every(isFunction));
+  return isUndefined(reducers) || (isObject(reducers) && Object.values(reducers).every(isFunction));
 };

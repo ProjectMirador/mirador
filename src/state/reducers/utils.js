@@ -1,6 +1,11 @@
-import _set from 'lodash/fp/set';
-import _update from 'lodash/fp/update';
-import _unset from 'lodash/fp/unset';
+/** Normalizes a path into an array of keys; a string is a single key (ids are often URLs containing dots) */
+const toPath = (path) => (Array.isArray(path) ? path : [path]);
+
+/** Returns true if value can hold properties */
+const isObjectLike = (value) => value !== null && typeof value === 'object';
+
+/** Gets the value at path of object */
+const get = (object, path) => toPath(path).reduce((current, key) => (isObjectLike(current) ? current[key] : undefined), object);
 
 /**
  * Sets the value at path of object.
@@ -12,7 +17,10 @@ import _unset from 'lodash/fp/unset';
  * @return {Object}
  */
 export function set(object, path, value) {
-  return _set(path, value, object);
+  const [key, ...rest] = toPath(path);
+  const current = isObjectLike(object) ? object : {};
+
+  return { ...current, [key]: rest.length > 0 ? set(current[key], rest, value) : value };
 }
 
 /**
@@ -28,9 +36,9 @@ export function set(object, path, value) {
  * @return {Object}
  */
 export function update(object, path, value) {
-  return typeof value === 'function'
-    ? _update(path, value, object)
-    : _update(path, (current) => ({ ...current, ...value }), object);
+  const updater = typeof value === 'function' ? value : (current) => ({ ...current, ...value });
+
+  return set(object, path, updater(get(object, path)));
 }
 
 /**
@@ -41,5 +49,12 @@ export function update(object, path, value) {
  * @param {Object}
  */
 export function unset(object, path) {
-  return _unset(path, object);
+  const [key, ...rest] = toPath(path);
+
+  if (!isObjectLike(object) || !(key in object)) return object;
+  if (rest.length > 0) return { ...object, [key]: unset(object[key], rest) };
+
+  const remaining = { ...object };
+  delete remaining[key];
+  return remaining;
 }

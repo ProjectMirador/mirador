@@ -1,4 +1,3 @@
-import without from 'lodash/without';
 import ActionTypes from '../actions/action-types';
 
 const defaultState = { items: [] };
@@ -41,7 +40,7 @@ export const errorsReducer = (state = defaultState, action) => {
         }
         return object;
       }, {});
-      ret.items = without(ret.items, action.id);
+      ret.items = ret.items.filter((id) => id !== action.id);
       return ret;
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return defaultState;
