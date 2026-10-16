@@ -32,20 +32,13 @@ const LazyLoadedImage = ({
   ...props
 }) => {
   const { ref, inView } = useInView();
-  const [loaded, setLoaded] = useState(false);
+  const [loadImage, setLoadImage] = useState(inView);
   const [failed, setFailed] = useState(false);
   const thumbnailService = useThumbnailService(maxHeight, maxWidth);
   const { notifyFailure, fallbackImage } = useContext(FailedImageContext);
 
-  /**
-   * Handles the intersection (visibility) of a given thumbnail, by requesting
-   * the image and then updating the state.
-   */
-  useEffect(() => {
-    if (loaded || !inView) return;
-
-    setLoaded(true);
-  }, [inView, loaded]);
+  // Defer loading the image until it is visible (but, once visible, don't remove it)
+  if (inView && !loadImage) setLoadImage(true);
 
   const image = useMemo(() => {
     if (thumbnail) return thumbnail;
@@ -126,7 +119,7 @@ const LazyLoadedImage = ({
     return buildStyles(styleProps);
   }, [image, maxWidth, maxHeight, style, failed, fallbackImage]);
 
-  const { url: src = placeholder } = (loaded && (thumbnail || image)) || {};
+  const { url: src = placeholder } = (loadImage && (thumbnail || image)) || {};
   // Decide final image source: normal, failed fallback, or placeholder
   const finalSrc = failed ? fallbackImage || placeholder : src;
 
