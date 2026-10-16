@@ -54,5 +54,14 @@ describe('VideoViewer', () => {
       // eslint-disable-next-line testing-library/no-node-access
       expect(video.querySelector('track:nth-of-type(2)')).toHaveAttribute('label', 'French');
     });
+
+    it('seeks to startTime once the metadata loads', () => {
+      createWrapper({ canvasId: 'c1', videoResources: [{ getFormat: () => 'video/mp4', id: 1 }], startTime: 30 }, true);
+      const video = screen.getByTestId('video');
+
+      video.dispatchEvent(new Event('loadedmetadata'));
+
+      expect(video.currentTime).toEqual(30);
+    });
   });
 });

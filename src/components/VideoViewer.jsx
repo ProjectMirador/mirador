@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
+import useMediaStartTime from '../hooks/useMediaStartTime';
 
 const StyledContainer = styled('div')(() => ({
   alignItems: 'center',
@@ -13,10 +14,12 @@ const StyledVideo = styled('video')(() => ({
 }));
 
 /** */
-export function VideoViewer({ captions = [], videoOptions = {}, videoResources = [], canvasId = '' }) {
+export function VideoViewer({ captions = [], videoOptions = {}, videoResources = [], canvasId = '', startTime = undefined }) {
+  const mediaRef = useMediaStartTime(startTime, canvasId);
+
   return (
     <StyledContainer>
-      <StyledVideo {...videoOptions} key={canvasId}>
+      <StyledVideo {...videoOptions} key={canvasId} ref={mediaRef}>
         {videoResources.map((video) => (
           <source key={video.io} src={video.id} type={video.getFormat()} />
         ))}
@@ -31,6 +34,7 @@ export function VideoViewer({ captions = [], videoOptions = {}, videoResources =
 VideoViewer.propTypes = {
   captions: PropTypes.arrayOf(PropTypes.object),
   canvasId: PropTypes.string,
+  startTime: PropTypes.number,
   videoOptions: PropTypes.object,
   videoResources: PropTypes.arrayOf(PropTypes.object),
 };

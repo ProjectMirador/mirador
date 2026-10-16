@@ -89,8 +89,10 @@ export function SidebarIndexTableOfContents({
       return;
     }
     const target = getStartCanvasId(node);
-    const canvasId = target.indexOf('#') === -1 ? target : target.substr(0, target.indexOf('#'));
-    setCanvas(windowId, canvasId);
+    const [canvasId, fragment = ''] = target.split('#');
+    const timeMatch = fragment.match(/(?:^|&)t=([\d.]+)/);
+    const startTime = timeMatch ? parseFloat(timeMatch[1]) : undefined;
+    setCanvas(windowId, canvasId, null, { startTime });
   };
 
   if (!treeStructure) {
