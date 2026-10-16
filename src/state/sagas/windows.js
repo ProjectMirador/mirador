@@ -10,6 +10,7 @@ import {
   receiveManifest,
   fetchInfoResponse,
   showCollectionDialog,
+  updateViewport,
 } from '../actions';
 import {
   getSearchForWindow,
@@ -30,6 +31,7 @@ import {
   getWindowConfig,
   getMiradorCanvasWrapper,
   getMiradorManifestWrapper,
+  getCurrentCanvasWorld,
 } from '../selectors';
 import { fetchManifests } from './iiif';
 import { getIiifResourceImageService } from '../../lib/iiif';
@@ -96,7 +98,7 @@ export function* fetchCollectionManifests(action) {
  * state that may already set it.
  */
 export function* setWindowStartingCanvas(action) {
-  const { canvasId, canvasIndex, manifestId } = action.payload || action.window;
+  const { canvasId, canvasIndex, manifestId, initialViewerConfig } = action.payload || action.window;
 
   const windowId = action.id || action.window.id;
 
@@ -104,7 +106,7 @@ export function* setWindowStartingCanvas(action) {
     // Preserve viewport when initialViewerConfig exists, event if the preserveViewport OSD setting is set to false
     const preserveViewport = !!action.payload || !!action.window?.initialViewerConfig;
     // When canvasId is explicitly provided, always pass preserveViewport flag
-    const thunk = yield call(setCanvas, windowId, canvasId, null, { preserveViewport });
+    const thunk = yield call(setCanvas, windowId, canvasId, null, { preserveViewport, initialViewerConfig });
     yield put(thunk);
   } else {
     const getMiradorManifest = yield select(getMiradorManifestWrapper);
@@ -118,8 +120,8 @@ export function* setWindowStartingCanvas(action) {
         const preserveViewport = !!action.payload || !!action.window?.initialViewerConfig;
         // When canvas is calculated, only pass preserveViewport when true
         const thunk = preserveViewport
-          ? yield call(setCanvas, windowId, startCanvas.id, null, { preserveViewport })
-          : yield call(setCanvas, windowId, startCanvas.id);
+          ? yield call(setCanvas, windowId, startCanvas.id, null, { preserveViewport, initialViewerConfig })
+          : yield call(setCanvas, windowId, startCanvas.id, null, { initialViewerConfig });
         yield put(thunk);
       }
     }
@@ -288,6 +290,20 @@ export function* determineAndShowCollectionDialog(manifestId, windowId) {
   }
 }
 
+/**  */
+export function* setWindowInitialViewerRegion({ initialViewerConfig, windowId }) {
+  const { bounds, canvasId } = initialViewerConfig || {};
+
+  if (!bounds || !canvasId) return;
+
+  const canvasWorld = yield select(getCurrentCanvasWorld, { windowId });
+  const worldBounds = canvasWorld?.boundsToCanvasCoordinates(canvasId, bounds);
+
+  if (!worldBounds) return;
+
+  yield put(updateViewport(windowId, { bounds: worldBounds }));
+}
+
 /** */
 export default function* windowsSaga() {
   yield all([
@@ -297,6 +313,7 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchCollectionManifests),
     takeEvery(ActionTypes.SET_CANVAS, setCurrentAnnotationsOnCurrentCanvas),
     takeEvery(ActionTypes.SET_CANVAS, fetchInfoResponses),
+    takeEvery(ActionTypes.SET_CANVAS, setWindowInitialViewerRegion),
     takeEvery(ActionTypes.UPDATE_COMPANION_WINDOW, fetchCollectionManifests),
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
     takeEvery(ActionTypes.RECEIVE_SEARCH, setCanvasOfFirstSearchResult),
