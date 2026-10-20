@@ -5,8 +5,9 @@ import { v4 as uuid } from 'uuid';
  */
 export default class AnnotationItem {
   /** */
-  constructor(resource = {}) {
+  constructor(resource = {}, language) {
     this.resource = resource;
+    this.language = language;
   }
 
   /** */
@@ -36,7 +37,9 @@ export default class AnnotationItem {
   /** */
   bodyValue(body) {
     if (typeof body === 'string') return body;
-    return body.value;
+    if (body.type !== 'Choice') return body.value;
+    const itemInSelectedLanguage = body.items.find((item) => item.language === this.language);
+    return itemInSelectedLanguage?.value || body.items[0]?.value;
   }
 
   /**

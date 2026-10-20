@@ -5,7 +5,7 @@ import { miradorSlice } from './utils';
 import { getCanvas, getVisibleCanvasIds } from './canvases';
 import { getConfig } from './config';
 import { getWindow } from './getters';
-
+import { getLocale } from './manifests';
 /**
  * Returns the annotation object from the mirador slice.
  * @param {object} state redux state
@@ -25,11 +25,15 @@ const getAnnotationsOnCanvas = createSelector([getCanvas, getAnnotations], (canv
   return Object.values(annotations[canvas.id]).flat();
 });
 
-const getPresentAnnotationsCanvas = createSelector([getAnnotationsOnCanvas], (annotations) =>
-  filter(
-    Object.values(annotations).map((annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json)),
-    (annotation) => annotation && annotation.present(),
-  ),
+const getPresentAnnotationsCanvas = createSelector(
+  [getAnnotationsOnCanvas, getCanvas, getLocale],
+  (annotations, canvas, language) =>
+    filter(
+      Object.values(annotations).map(
+        (annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json, canvas, language),
+      ),
+      (annotation) => annotation && annotation.present(),
+    ),
 );
 
 const getAnnotationsOnSelectedCanvases = createSelector(
@@ -46,11 +50,15 @@ const getAnnotationsOnSelectedCanvases = createSelector(
  * @param {string} canvasId canvasId
  * @returns {Array} An array of present annotations
  */
-export const getPresentAnnotationsOnSelectedCanvases = createSelector([getAnnotationsOnSelectedCanvases], (annotations) =>
-  filter(
-    Object.values(annotations).map((annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json)),
-    (annotation) => annotation && annotation.present(),
-  ),
+export const getPresentAnnotationsOnSelectedCanvases = createSelector(
+  [getAnnotationsOnSelectedCanvases, getCanvas, getLocale],
+  (annotations, canvas, language) =>
+    filter(
+      Object.values(annotations).map(
+        (annotation) => annotation && AnnotationFactory.determineAnnotation(annotation.json, canvas, language),
+      ),
+      (annotation) => annotation && annotation.present(),
+    ),
 );
 
 /**
