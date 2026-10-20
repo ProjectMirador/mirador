@@ -24,6 +24,7 @@ export function setCanvas(windowId, canvasId, newGroup = undefined, options = {}
       preserveViewport: options?.preserveViewport ?? preserveViewport,
       type: ActionTypes.SET_CANVAS,
       visibleCanvases,
+      initialViewerConfig: options?.initialViewerConfig,
       windowId,
     });
   };
