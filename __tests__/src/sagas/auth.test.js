@@ -11,7 +11,7 @@ import {
   rerequestOnAccessTokenFailure,
   invalidateInvalidAuth,
 } from '../../../src/state/sagas/auth';
-import { fetchInfoResponse } from '../../../src/state/sagas/iiif';
+import { fetchInfoResponseSaga } from '../../../src/state/sagas/iiif';
 import {
   getAccessTokens,
   getWindows,
@@ -165,9 +165,9 @@ describe('IIIF Authentication sagas', () => {
           [select(getWindows), { window }],
           [select(getVisibleCanvases, { windowId: 'window' }), canvases],
           [select(selectInfoResponses), { [iiifInfoId]: infoResponse }],
-          [call(fetchInfoResponse, { infoId: iiifInfoId }), {}],
+          [call(fetchInfoResponseSaga, { infoId: iiifInfoId }), {}],
         ])
-        .call(fetchInfoResponse, { infoId: iiifInfoId })
+        .call(fetchInfoResponseSaga, { infoId: iiifInfoId })
         .run();
     });
   });
