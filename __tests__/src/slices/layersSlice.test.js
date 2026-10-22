@@ -1,4 +1,4 @@
-import { layersReducer } from '../../../src/state/reducers/layersSlice';
+import { layersReducer } from '../../../src/state/slices/layersSlice';
 import ActionTypes from '../../../src/state/actions/action-types';
 
 describe('layers reducer', () => {

@@ -10,6 +10,14 @@ const layersSlice = createSlice({
       reducer(state, action) {
         const { windowId, canvasId, ...payload } = action.payload || {};
 
+        if (windowId === undefined || canvasId === undefined) {
+          throw new Error(
+            'updateLayers expects action.payload to include { windowId, canvasId } — ' +
+              'dispatch the updateLayers(windowId, canvasId, payload) action creator, or ' +
+              'updateLayers({ windowId, canvasId, ...payload }), rather than constructing the action by hand.',
+          );
+        }
+
         state[windowId] = {
           ...state[windowId],
           [canvasId]: deepmerge((state[windowId] || {})[canvasId] || {}, payload),
