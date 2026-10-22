@@ -87,6 +87,7 @@ export const windowsReducer = (state = {}, action) => {
         (orig) => ({
           ...(orig || {}),
           canvasId: action.canvasId,
+          startTime: action.startTime,
           visibleCanvases: action.visibleCanvases || [],
         }),
         state,
