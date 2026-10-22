@@ -27,6 +27,7 @@
     "lint": "node_modules/.bin/eslint ./ && npm run lint:translations && npm run lint:containers",
     "lint:containers": "node ./scripts/container-lint.js",
     "lint:translations": "node ./scripts/i18n-lint.js",
+    "prepublishOnly": "npm run build",
     "size": "size-limit",
     "start": "vite",
     "test": "npm run build && npm run lint && npm run size && vitest run"
