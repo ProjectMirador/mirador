@@ -1,6 +1,5 @@
 import { cloneElement, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import isEmpty from 'lodash/isEmpty';
 import ns from '../config/css-ns';
 
 /**  */
@@ -48,7 +47,7 @@ export function ScrollTo({ children, containerRef, offsetTop = 0, scrollTo, ...o
     scrollableContainer.scrollTo(0, scrollBy);
   }, [containerRef, scrollToRef, scrollTo, prevScrollTo, offsetTop]);
 
-  if (!scrollTo && isEmpty(otherProps)) return children;
+  if (!scrollTo && Object.keys(otherProps).length === 0) return children;
 
   return cloneElement(children, { ref: scrollToRef, ...otherProps });
 }

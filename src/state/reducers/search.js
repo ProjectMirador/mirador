@@ -1,4 +1,4 @@
-import omit from 'lodash/omit';
+import { unset } from './utils';
 import ActionTypes from '../actions/action-types';
 
 /**
@@ -129,14 +129,14 @@ export const searchesReducer = (state = {}, action) => {
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return {};
     case ActionTypes.REMOVE_WINDOW:
-      return omit(state, action.windowId);
+      return unset(state, action.windowId);
     case ActionTypes.REMOVE_COMPANION_WINDOW:
       if (!state[action.windowId]) return state;
 
       return {
         ...state,
         [action.windowId]: {
-          ...omit(state[action.windowId], action.id),
+          ...unset(state[action.windowId], action.id),
         },
       };
     default:

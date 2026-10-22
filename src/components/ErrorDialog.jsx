@@ -5,13 +5,12 @@ import PropTypes from 'prop-types';
 import { DialogActions, DialogContentText } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useTranslation } from 'react-i18next';
-import isUndefined from 'lodash/isUndefined';
 
 /**
  */
 export function ErrorDialog({ error = null, removeError = () => {} }) {
   const { t } = useTranslation();
-  const hasError = !isUndefined(error);
+  const hasError = error !== undefined;
 
   if (!error) return null;
 

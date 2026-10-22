@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import keyBy from 'lodash/keyBy';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -19,7 +18,7 @@ export function LocalePicker({ availableLocales = [], locale = '', setLocale = u
   if (!setLocale || availableLocales.length < 2) return null;
 
   const selectedLocale = availableLocales.indexOf(locale) >= 0 ? locale : availableLocales[0];
-  const labels = keyBy(languages, (o) => o.locale);
+  const labels = Object.fromEntries(languages.map((o) => [o.locale, o]));
 
   /** Resolve an RFC 5646 language code to a human-readable name using the browser's
    * Intl.DisplayNames API, displayed in the current manifest locale. */

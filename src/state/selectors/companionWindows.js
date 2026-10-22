@@ -1,7 +1,17 @@
 import { createSelector } from 'reselect';
-import groupBy from 'lodash/groupBy';
 import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
 import { getWindow, getWindows } from './getters';
+
+/** Groups items into an object keyed by the result of fn */
+const groupBy = (items, fn) => {
+  const groups = {};
+
+  items.forEach((item) => {
+    (groups[fn(item)] ||= []).push(item);
+  });
+
+  return groups;
+};
 
 /**
  * Returns companion windows.

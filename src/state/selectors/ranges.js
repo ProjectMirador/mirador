@@ -1,6 +1,4 @@
 import { createSelector } from 'reselect';
-import union from 'lodash/union';
-import without from 'lodash/without';
 import { Utils } from 'manifesto.js';
 import { getVisibleCanvasIds } from './canvases';
 import { getCompanionWindow } from './companionWindows';
@@ -110,7 +108,7 @@ export function getExpandedNodeIds(state, { companionWindowId, windowId }) {
   const visibleBranchNodeIds = getVisibleBranchNodeIds(state, { companionWindowId, windowId });
   const manuallyExpandedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId }, true);
   const manuallyClosedNodeIds = getManuallyExpandedNodeIds(state, { companionWindowId }, false);
-  return without(union(manuallyExpandedNodeIds, visibleBranchNodeIds), ...manuallyClosedNodeIds);
+  return [...new Set([...manuallyExpandedNodeIds, ...visibleBranchNodeIds])].filter((id) => !manuallyClosedNodeIds.includes(id));
 }
 
 /**

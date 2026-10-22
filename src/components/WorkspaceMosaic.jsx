@@ -4,12 +4,21 @@ import { styled } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { DndContext } from 'react-dnd';
 import { Mosaic, MosaicWindow, getLeaves, createBalancedTreeFromLeaves, convertLegacyToNary } from 'react-mosaic-component';
-import isEqual from 'lodash/isEqual';
 import classNames from 'classnames';
 import MosaicRenderPreview from '../containers/MosaicRenderPreview';
 import Window from '../containers/Window';
 import MosaicLayout from '../lib/MosaicLayout';
 import globalReactMosaicStyles from '../styles/react-mosaic-component';
+
+/** Deep equality for mosaic layout trees (plain objects, arrays and primitives) */
+const isEqual = (a, b) => {
+  if (a === b) return true;
+  if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;
+  if (Array.isArray(a) !== Array.isArray(b)) return false;
+
+  const keys = Object.keys(a);
+  return keys.length === Object.keys(b).length && keys.every((key) => Object.hasOwn(b, key) && isEqual(a[key], b[key]));
+};
 
 const StyledMosaic = styled(Mosaic)({
   '& .mosaic-preview': {
