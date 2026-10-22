@@ -1,4 +1,10 @@
 import ActionTypes from './action-types';
+import convertToSliceAction from './convertToSliceAction';
+import {
+  requestAnnotation as requestAnnotationSliceAction,
+  receiveAnnotation as receiveAnnotationSliceAction,
+  receiveAnnotationFailure as receiveAnnotationFailureSliceAction,
+} from '../slices';
 
 /**
  * Request annotations on a canvas
@@ -21,13 +27,7 @@ export function requestCanvasAnnotations(windowId, canvasId) {
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function requestAnnotation(targetId, annotationId) {
-  return {
-    annotationId,
-    targetId,
-    type: ActionTypes.REQUEST_ANNOTATION,
-  };
-}
+export const requestAnnotation = convertToSliceAction(requestAnnotationSliceAction, ['targetId', 'annotationId']);
 
 /**
  * receiveAnnotation - action creator
@@ -37,14 +37,11 @@ export function requestAnnotation(targetId, annotationId) {
  * @param  {Object} annotationJson
  * @memberof ActionCreators
  */
-export function receiveAnnotation(targetId, annotationId, annotationJson) {
-  return {
-    annotationId,
-    annotationJson,
-    targetId,
-    type: ActionTypes.RECEIVE_ANNOTATION,
-  };
-}
+export const receiveAnnotation = convertToSliceAction(receiveAnnotationSliceAction, [
+  'targetId',
+  'annotationId',
+  'annotationJson',
+]);
 
 /**
  * receiveAnnotationFailure - action creator
@@ -54,14 +51,11 @@ export function receiveAnnotation(targetId, annotationId, annotationJson) {
  * @param  {String} error
  * @memberof ActionCreators
  */
-export function receiveAnnotationFailure(targetId, annotationId, error) {
-  return {
-    annotationId,
-    error,
-    targetId,
-    type: ActionTypes.RECEIVE_ANNOTATION_FAILURE,
-  };
-}
+export const receiveAnnotationFailure = convertToSliceAction(receiveAnnotationFailureSliceAction, [
+  'targetId',
+  'annotationId',
+  'error',
+]);
 
 /**
  * selectAnnotation - action creator
