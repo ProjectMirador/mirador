@@ -3,7 +3,6 @@ import ActionTypes from '../actions/action-types';
 import {
   setContentSearchCurrentAnnotation,
   selectAnnotation,
-  setWorkspaceViewportPosition,
   updateWindow,
   setCanvas,
   fetchSearch,
@@ -23,8 +22,6 @@ import {
   getSelectedContentSearchAnnotationIds,
   getSortedSearchAnnotationsForCompanionWindow,
   getVisibleCanvasIds,
-  getWorkspace,
-  getElasticLayout,
   getCanvases,
   selectInfoResponses,
   getWindowConfig,
@@ -190,24 +187,6 @@ export function* setCurrentAnnotationsOnCurrentCanvas({ annotationId, windowId, 
 }
 
 /** @private */
-export function* panToFocusedWindow({ pan, windowId }) {
-  if (!pan) return;
-  const elasticLayout = yield select(getElasticLayout);
-  const { x, y, width, height } = elasticLayout[windowId] || {};
-
-  const {
-    viewportPosition: { width: viewWidth, height: viewHeight },
-  } = yield select(getWorkspace);
-
-  yield put(
-    setWorkspaceViewportPosition({
-      x: x + width / 2 - viewWidth / 2,
-      y: y + height / 2 - viewHeight / 2,
-    }),
-  );
-}
-
-/** @private */
 export function* updateVisibleCanvases({ windowId }) {
   const { canvasId } = yield select(getWindow, { windowId });
   const visibleCanvases = yield select(getCanvasGrouping, { canvasId, windowId });
@@ -301,6 +280,5 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
     takeEvery(ActionTypes.RECEIVE_SEARCH, setCanvasOfFirstSearchResult),
     takeEvery(ActionTypes.SELECT_ANNOTATION, setCanvasforSelectedAnnotation),
-    takeEvery(ActionTypes.FOCUS_WINDOW, panToFocusedWindow),
   ]);
 }

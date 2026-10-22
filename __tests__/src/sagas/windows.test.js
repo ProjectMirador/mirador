@@ -10,8 +10,6 @@ import {
   getManifestSearchService,
   getCompanionWindowIdsForPosition,
   getSearchForWindow,
-  getWorkspace,
-  getElasticLayout,
   getWindow,
   getCanvasGrouping,
   getSelectedContentSearchAnnotationIds,
@@ -32,7 +30,6 @@ import {
   updateVisibleCanvases,
   setCanvasOfFirstSearchResult,
   setCanvasforSelectedAnnotation,
-  panToFocusedWindow,
   setCurrentAnnotationsOnCurrentCanvas,
   fetchInfoResponses,
   setCanvasOnNewSequence,
@@ -384,56 +381,6 @@ describe('window-level sagas', () => {
           annotationId: 'annoId',
           type: ActionTypes.SELECT_ANNOTATION,
           windowId: 'abc123',
-        })
-        .run();
-    });
-  });
-
-  describe('panToFocusedWindow', () => {
-    it('does nothing if pan was disabled', () => {
-      const action = {
-        pan: false,
-        windowId: 'x',
-      };
-
-      return expectSaga(panToFocusedWindow, action)
-        .run()
-        .then(({ allEffects }) => allEffects.length === 0);
-    });
-
-    it('sets the viewport position to the newly focused window', () => {
-      const action = {
-        pan: true,
-        windowId: 'x',
-      };
-      return expectSaga(panToFocusedWindow, action)
-        .provide([
-          [
-            select(getWorkspace),
-            {
-              viewportPosition: { height: 100, width: 100 },
-            },
-          ],
-          [
-            select(getElasticLayout),
-            {
-              x: {
-                height: 50,
-                width: 50,
-                x: 50,
-                y: 12,
-              },
-            },
-          ],
-        ])
-        .put({
-          payload: {
-            position: {
-              x: 25,
-              y: -13,
-            },
-          },
-          type: ActionTypes.SET_WORKSPACE_VIEWPORT_POSITION,
         })
         .run();
     });
