@@ -496,6 +496,7 @@ export default {
     showLocalePicker: false, // Configure locale picker for multi-lingual metadata
     sideBarOpen: false, // Configure if the sidebar (and its content panel) is open by default
     switchCanvasOnSearch: true, // Configure if Mirador should automatically switch to the canvas of the first search result
+    preserveInitialCanvasOnSearch: false, // Configure if an explicitly-requested starting canvasId should survive the window's first search (e.g. one fired by defaultSearchQuery) instead of being overridden by switchCanvasOnSearch
     panels: {
       // Configure which panels are visible in WindowSideBarButtons
       info: true,
