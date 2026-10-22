@@ -8,6 +8,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import createRootReducer from './reducers/rootReducer';
 import getRootSaga from './sagas';
 import settings from '../config/settings';
+import { iiifApi } from './api/iiifApi';
+import { annotationsListenerMiddleware } from './listeners/annotations';
 
 /**
  * Configure Mirador Store
@@ -41,7 +43,7 @@ function createStore(pluginReducers, pluginSagas = []) {
           // everything under an extra top-level key.
           ignoredPaths: [/(^|\.)config$/],
         },
-      }).concat(sagaMiddleware),
+      }).concat(sagaMiddleware, iiifApi.middleware, annotationsListenerMiddleware.middleware),
     reducer,
   });
 
