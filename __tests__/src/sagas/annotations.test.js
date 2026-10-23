@@ -2,42 +2,32 @@ import { select } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 
 import { fetchCanvasAnnotations, fetchAnnotations } from '../../../src/state/sagas/annotations';
-import { getAnnotations, getCanvas } from '../../../src/state/selectors';
+import { getCanvas } from '../../../src/state/selectors';
+import { iiifApi } from '../../../src/state/api/iiifApi';
 
 describe('annotation sagas', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe('fetchCanvasAnnotations', () => {
     it('requests IIIF v2-style annotations', () => {
+      const initiateSpy = vi.spyOn(iiifApi.endpoints.getAnnotation, 'initiate').mockReturnValue(() => {});
       const action = {
         canvasId: 'a',
         windowId: 'foo',
       };
 
       return expectSaga(fetchCanvasAnnotations, action)
-        .provide([
-          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }), { __jsonld: { otherContent: 'annoId' }, id: 'a' }],
-          [select(getAnnotations), { a: {} }],
-        ])
-        .put({
-          annotationId: 'annoId',
-          targetId: 'a',
-          type: 'mirador/REQUEST_ANNOTATION',
-        })
-        .run();
+        .provide([[select(getCanvas, { canvasId: 'a', windowId: 'foo' }), { __jsonld: { otherContent: 'annoId' }, id: 'a' }]])
+        .run()
+        .then(() => {
+          expect(initiateSpy).toHaveBeenCalledWith({ annotationId: 'annoId', targetId: 'a' });
+        });
     });
-    it('does not refetch annotations', () => {
-      const action = {
-        canvasId: 'a',
-        windowId: 'foo',
-      };
 
-      return expectSaga(fetchCanvasAnnotations, action)
-        .provide([
-          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }), { __jsonld: { otherContent: ['annoId'] }, id: 'a' }],
-          [select(getAnnotations), { a: { annoId: {} } }],
-        ])
-        .run();
-    });
     it('requests IIIF v3-style annotations', () => {
+      const initiateSpy = vi.spyOn(iiifApi.endpoints.getAnnotation, 'initiate').mockReturnValue(() => {});
       const action = {
         canvasId: 'a',
         windowId: 'foo',
@@ -49,16 +39,15 @@ describe('annotation sagas', () => {
             select(getCanvas, { canvasId: 'a', windowId: 'foo' }),
             { __jsonld: { annotations: { id: 'annoId', type: 'AnnotationPage' } }, id: 'a' },
           ],
-          [select(getAnnotations), { a: {} }],
         ])
-        .put({
-          annotationId: 'annoId',
-          targetId: 'a',
-          type: 'mirador/REQUEST_ANNOTATION',
-        })
-        .run();
+        .run()
+        .then(() => {
+          expect(initiateSpy).toHaveBeenCalledWith({ annotationId: 'annoId', targetId: 'a' });
+        });
     });
+
     it('handles embedded IIIF v3-style annotations', () => {
+      const upsertSpy = vi.spyOn(iiifApi.util, 'upsertQueryData').mockReturnValue(() => {});
       const action = {
         canvasId: 'a',
         windowId: 'foo',
@@ -67,19 +56,14 @@ describe('annotation sagas', () => {
       const annotations = { id: 'annoId', items: [], type: 'AnnotationPage' };
 
       return expectSaga(fetchCanvasAnnotations, action)
-        .provide([
-          [select(getCanvas, { canvasId: 'a', windowId: 'foo' }), { __jsonld: { annotations }, id: 'a' }],
-          [select(getAnnotations), { a: {} }],
-        ])
-        .put({
-          annotationId: 'annoId',
-          annotationJson: annotations,
-          targetId: 'a',
-          type: 'mirador/RECEIVE_ANNOTATION',
-        })
-        .run();
+        .provide([[select(getCanvas, { canvasId: 'a', windowId: 'foo' }), { __jsonld: { annotations }, id: 'a' }]])
+        .run()
+        .then(() => {
+          expect(upsertSpy).toHaveBeenCalledWith('getAnnotation', { annotationId: 'annoId', targetId: 'a' }, annotations);
+        });
     });
   });
+
   describe('fetchAnnotations', () => {
     it('requests annotations for each visible canvas', () => {
       const action = {

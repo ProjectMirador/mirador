@@ -5,13 +5,38 @@ import { miradorSlice } from './utils';
 import { getCanvas, getVisibleCanvasIds } from './canvases';
 import { getConfig } from './config';
 import { getWindow } from './getters';
+import { iiifApi } from '../api/iiifApi';
 
 /**
- * Returns the annotation object from the mirador slice.
+ * Rebuilds the { targetId: { annotationId: { id, isFetching, json|error } } }
+ * shape every selector below already expects, from iiifApi's own cache --
+ * no dedicated annotations reducer anymore. This is the only selector that
+ * needs to know iiifApi exists; everything downstream of it is unchanged.
  * @param {object} state redux state
  * @returns {object} Annotations from the state
  */
-export const getAnnotations = (state) => miradorSlice(state).annotations;
+export const getAnnotations = (state) => {
+  const rootState = miradorSlice(state);
+  if (!rootState[iiifApi.reducerPath]) return {};
+
+  const cachedArgs = iiifApi.util.selectCachedArgsForQuery(rootState, 'getAnnotation');
+
+  const annotations = {};
+  cachedArgs.forEach(({ targetId, annotationId }) => {
+    const { data, isLoading, isError, error } = iiifApi.endpoints.getAnnotation.select({ annotationId, targetId })(rootState);
+
+    annotations[targetId] = {
+      ...annotations[targetId],
+      [annotationId]: {
+        id: annotationId,
+        isFetching: isLoading,
+        ...(isError ? { error: error?.data ?? error } : { json: data }),
+      },
+    };
+  });
+
+  return annotations;
+};
 
 const getMotivations = createSelector(
   [getConfig, (state, { motivations }) => motivations],
