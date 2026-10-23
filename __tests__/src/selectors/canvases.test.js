@@ -14,6 +14,7 @@ import {
   getPreviousCanvasGrouping,
   getCanvas,
   getCanvasLabel,
+  getCanvasDescription,
   selectInfoResponse,
   getVisibleCanvasNonTiledResources,
   getVisibleCanvasTextResources,
@@ -255,6 +256,67 @@ describe('getCanvasLabel', () => {
       manifestId: 'a',
     });
     expect(received).toBe('1');
+  });
+});
+
+describe('getCanvasDescription', () => {
+  it('returns the summary of a IIIF v3 canvas', () => {
+    const manifest = {
+      '@context': 'http://iiif.io/api/presentation/3/context.json',
+      id: 'https://example.org/iiif/manifest',
+      items: [
+        {
+          id: 'https://example.org/iiif/canvas/1',
+          summary: { en: ['A summary of the canvas'] },
+          type: 'Canvas',
+        },
+      ],
+      type: 'Manifest',
+    };
+
+    const state = { manifests: { a: { json: manifest } } };
+    const received = getCanvasDescription(state, { canvasId: 'https://example.org/iiif/canvas/1', manifestId: 'a' });
+    expect(received).toBe('A summary of the canvas');
+  });
+
+  it('returns the description of a IIIF v2 canvas in the current locale', () => {
+    const manifest = {
+      '@context': 'http://iiif.io/api/presentation/2/context.json',
+      '@id': 'https://example.org/iiif/manifest',
+      '@type': 'sc:Manifest',
+      sequences: [
+        {
+          canvases: [
+            {
+              '@id': 'https://example.org/iiif/canvas/1',
+              description: [
+                { '@language': 'en', '@value': 'A description of the canvas' },
+                { '@language': 'fr', '@value': 'Une description du canevas' },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+
+    const state = { config: { language: 'fr' }, manifests: { a: { json: manifest } } };
+    const received = getCanvasDescription(state, { canvasId: 'https://example.org/iiif/canvas/1', manifestId: 'a' });
+    expect(received).toBe('Une description du canevas');
+  });
+
+  it('returns undefined if the canvas has no summary or description', () => {
+    const state = { manifests: { a: { json: manifestFixture001 } } };
+    const received = getCanvasDescription(state, {
+      canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
+      manifestId: 'a',
+    });
+    expect(received).toBeUndefined();
+  });
+
+  it('returns undefined if the canvas is undefined', () => {
+    const state = { manifests: {} };
+    const received = getCanvasDescription(state, { canvasId: 'https://example.org/iiif/canvas/1', manifestId: 'b' });
+    expect(received).toBeUndefined();
   });
 });
 
