@@ -14,36 +14,6 @@ describe('annotation actions', () => {
       expect(actions.requestCanvasAnnotations(windowId, canvasId)).toEqual(expectedAction);
     });
   });
-  describe('requestAnnotation', () => {
-    it('requests an annotation from given a url', () => {
-      const targetId = 'foo';
-      const annotationId = 'abc123';
-      const expectedAction = {
-        annotationId,
-        targetId,
-        type: ActionTypes.REQUEST_ANNOTATION,
-      };
-      expect(actions.requestAnnotation(targetId, annotationId)).toEqual(expectedAction);
-    });
-  });
-  describe('receiveAnnotation', () => {
-    it('recieves an annotation', () => {
-      const targetId = 'foo';
-      const annotationId = 'abc123';
-      const json = {
-        annotationId,
-        content: 'annotation request',
-      };
-      const expectedAction = {
-        annotationId,
-        annotationJson: json,
-        targetId,
-        type: ActionTypes.RECEIVE_ANNOTATION,
-      };
-      expect(actions.receiveAnnotation(targetId, annotationId, json)).toEqual(expectedAction);
-    });
-  });
-
   it('handles the selectAnnotation action', () => {
     const windowId = 'wId1';
     const annotationId = 'aId1';
