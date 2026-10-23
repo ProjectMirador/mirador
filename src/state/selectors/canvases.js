@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { PropertyValue } from 'manifesto.js';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import { getIiifResourceImageService } from '../../lib/iiif';
 import { getMiradorCanvasWrapper } from './wrappers';
@@ -163,11 +164,18 @@ export const getCanvasMetadata = createSelector(
 );
 
 /**
- * Return canvas description.
- * @param {object} canvas
- * @param {string} companionWindowId
+ * Return the canvas summary (IIIF v3) or description (IIIF v2) in the current locale.
+ * @param {object} state
+ * @param {object} props
+ * @param {string} props.canvasId
+ * @param {string} props.windowId
+ * @returns {string|null|undefined}
  */
-export const getCanvasDescription = createSelector([getCanvas], (canvas) => canvas && canvas.getProperty('description'));
+export const getCanvasDescription = createSelector([getCanvas, getManifestLocale], (canvas, locale) => {
+  const summary = canvas && (canvas.getProperty('summary') || canvas.getProperty('description'));
+
+  return summary && PropertyValue.parse(summary, locale).getValue(locale);
+});
 
 /**
  * Return visible non tiled canvas resources.
