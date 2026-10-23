@@ -27,6 +27,7 @@ export function accessTokensReducer(state = {}, action) {
         ...state,
         [action.serviceId]: {
           ...state[action.serviceId],
+          ...(action.expiresAt ? { expiresAt: action.expiresAt } : {}),
           isFetching: false,
           json: action.json,
         },

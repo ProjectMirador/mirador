@@ -1,6 +1,7 @@
 import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import { Utils } from 'manifesto.js';
 import normalizeUrl from 'normalize-url';
+import { getAuth2Probes, getAuth2RelatedService } from '../../lib/auth2';
 import ActionTypes from '../actions/action-types';
 import {
   receiveManifest,
@@ -59,6 +60,53 @@ function* fetchIiifResource(url, options, { success, degraded, failure }) {
   }
 }
 
+/** Auth 2 tokens are scoped to their probe and must not be sent to image services. */
+export function* probeAuth2Resource(resource) {
+  const probes = getAuth2Probes(resource);
+  if (!probes.length) return undefined;
+
+  const tokens = (yield select(getAccessTokens)) || {};
+  let rejectedTokenServiceId;
+  let deniedResult;
+  for (const probe of probes) {
+    const accessServices = Utils.getServices(probe).filter((s) => s.__jsonld.type === 'AuthAccessService2');
+    const tokenServices = accessServices.map((s) => getAuth2RelatedService(s, 'AuthAccessTokenService2')).filter(Boolean);
+    const expiredToken = tokenServices
+      .map((service) => tokens[service.id])
+      .find((token) => token?.expiresAt && token.expiresAt <= Date.now());
+    if (expiredToken) rejectedTokenServiceId = expiredToken.id;
+    const availableTokens = tokenServices
+      .map((service) => tokens[service.id])
+      .filter((token) => token?.json?.accessToken && (!token.expiresAt || token.expiresAt > Date.now()));
+
+    for (const token of [undefined, ...availableTokens]) {
+      const headers = token ? { Authorization: `Bearer ${token.json.accessToken}` } : undefined;
+      const result = yield call(
+        fetchIiifResource,
+        probe.id,
+        { headers },
+        {
+          failure: (arg) => arg,
+          success: (arg) => arg,
+        },
+      );
+      if (result.error || result.json?.type !== 'AuthProbeResult2') {
+        return { error: result.error || 'Invalid Auth 2 probe response' };
+      }
+      if (result.json.status === 200 || (result.json.status >= 300 && result.json.status < 400 && result.json.location)) {
+        return { allowed: true, probeResult: result.json, tokenServiceId: token?.id };
+      }
+      deniedResult = result.json;
+      if (token) {
+        rejectedTokenServiceId = token.id;
+        // A rejected token should not be treated as proof of access.
+        continue;
+      }
+    }
+  }
+  return { allowed: false, probeResult: deniedResult, tokenServiceId: rejectedTokenServiceId };
+}
+
 /** */
 function* fetchIiifResourceWithAuth(url, iiifResource, options, { degraded, failure, success }) {
   const urlOptions = { ...options };
@@ -99,6 +147,18 @@ function* fetchIiifResourceWithAuth(url, iiifResource, options, { degraded, fail
   }
 
   const id = json['@id'] || json.id;
+  if (response.ok && getAuth2Probes(json).length) {
+    const probe = yield call(probeAuth2Resource, json);
+    if (probe.error) {
+      yield put(failure({ error: probe.error, json, response }));
+      return;
+    }
+    if (!probe.allowed) {
+      yield put((degraded || success)({ json, probeResult: probe.probeResult, response, tokenServiceId: probe.tokenServiceId }));
+      return;
+    }
+    tokenServiceId = probe.tokenServiceId;
+  }
   if (response.ok) {
     if (
       normalizeUrl(id, { stripAuthentication: false }) ===
@@ -147,7 +207,7 @@ export function* fetchManifest({ manifestId }) {
 function* getAccessTokenService(resource) {
   const manifestoCompatibleResource = resource && resource.__jsonld ? resource : { ...resource, options: {} };
   const services = Utils.getServices(manifestoCompatibleResource).filter((s) =>
-    s.getProfile().match(/http:\/\/iiif.io\/api\/auth\//),
+    s.getProfile()?.match(/http:\/\/iiif.io\/api\/auth\/[01]\//),
   );
   if (services.length === 0) return undefined;
 
@@ -174,8 +234,10 @@ export function* fetchInfoResponse({ imageResource, infoId, windowId }) {
   }
 
   const callbacks = {
-    degraded: ({ json, response, tokenServiceId }) =>
-      receiveDegradedInfoResponse(infoId, json, response.ok, tokenServiceId, windowId),
+    degraded: ({ json, probeResult, response, tokenServiceId }) => ({
+      ...receiveDegradedInfoResponse(infoId, json, response.ok, tokenServiceId, windowId),
+      ...(probeResult ? { probeResult } : {}),
+    }),
     failure: ({ error, json, response, tokenServiceId }) =>
       receiveInfoResponseFailure(infoId, stringifyError(error), tokenServiceId),
     success: ({ json, response, tokenServiceId }) => receiveInfoResponse(infoId, json, response.ok, tokenServiceId),

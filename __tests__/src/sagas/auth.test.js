@@ -172,6 +172,44 @@ describe('IIIF Authentication sagas', () => {
     });
   });
   describe('doAuthWorkflow', () => {
+    it('starts an Auth 2 external service without an access-service id', () => {
+      const infoJson = {
+        service: [
+          {
+            id: 'https://example.org/probe',
+            type: 'AuthProbeService2',
+            service: [
+              {
+                type: 'AuthAccessService2',
+                profile: 'external',
+                service: [{ id: 'https://example.org/token', type: 'AuthAccessTokenService2' }],
+              },
+            ],
+          },
+        ],
+      };
+      const authId = 'https://example.org/probe#external-0';
+      return expectSaga(doAuthWorkflow, { infoJson, windowId: 'w' })
+        .provide([
+          [select(getAuth), {}],
+          [select(getConfig), { auth: settings.auth }],
+        ])
+        .put({
+          id: authId,
+          profile: 'http://iiif.io/api/auth/2/external',
+          type: ActionTypes.ADD_AUTHENTICATION_REQUEST,
+          windowId: 'w',
+        })
+        .put({
+          id: authId,
+          ok: true,
+          tokenServiceId: 'https://example.org/token',
+          type: ActionTypes.RESOLVE_AUTHENTICATION_REQUEST,
+        })
+        .put({ authId, serviceId: 'https://example.org/token', type: ActionTypes.REQUEST_ACCESS_TOKEN })
+        .run();
+    });
+
     it('kicks off the first external auth from the info.json', () => {
       const infoJson = {
         service: [

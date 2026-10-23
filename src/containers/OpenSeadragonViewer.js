@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
 import * as actions from '../state/actions';
+import { getAuth2Probes } from '../lib/auth2';
 import {
   getVisibleCanvasNonTiledResources,
   getCurrentCanvas,
@@ -33,7 +34,11 @@ const mapStateToProps = (state, { windowId }) => {
     infoResponses: imageServiceIds
       .map((id) => infoResponses[id])
       .filter(
-        (infoResponse) => infoResponse !== undefined && infoResponse.isFetching === false && infoResponse.error === undefined,
+        (infoResponse) =>
+          infoResponse !== undefined &&
+          infoResponse.isFetching === false &&
+          infoResponse.error === undefined &&
+          !(infoResponse.degraded && getAuth2Probes(infoResponse.json).length),
       ),
     label: getCanvasLabel(state, {
       canvasId: (getCurrentCanvas(state, { windowId }) || {}).id,

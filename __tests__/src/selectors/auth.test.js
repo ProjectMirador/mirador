@@ -88,6 +88,44 @@ describe('selectCurrentAuthServices', () => {
     expect(selectCurrentAuthServices(state, { windowId: 'w' })[0].id).toEqual('external');
   });
 
+  it('selects Auth 2 access services only after a denied probe', () => {
+    const id = 'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d';
+    const auth2State = {
+      ...state,
+      infoResponses: {
+        [id]: {
+          degraded: true,
+          json: {
+            service: [
+              {
+                id: 'https://example.org/probe',
+                type: 'AuthProbeService2',
+                service: [
+                  {
+                    id: 'https://example.org/login',
+                    type: 'AuthAccessService2',
+                    profile: 'active',
+                    label: { en: ['Log in'] },
+                    service: [{ id: 'https://example.org/token', type: 'AuthAccessTokenService2' }],
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    };
+    expect(selectCurrentAuthServices(auth2State, { windowId: 'w' })[0].id).toBe('https://example.org/login');
+    auth2State.infoResponses[id].degraded = false;
+    expect(
+      selectCurrentAuthServices({ ...auth2State, infoResponses: { ...auth2State.infoResponses } }, { windowId: 'w' }),
+    ).toEqual([]);
+    auth2State.infoResponses[id].tokenServiceId = 'https://example.org/token';
+    expect(
+      selectCurrentAuthServices({ ...auth2State, infoResponses: { ...auth2State.infoResponses } }, { windowId: 'w' })[0].id,
+    ).toBe('https://example.org/login');
+  });
+
   it('returns the service if the next auth service is interactive', () => {
     const auth = { external: { isFetching: false, ok: false } };
     expect(selectCurrentAuthServices({ ...state, auth }, { windowId: 'w' })[0].id).toEqual('login');

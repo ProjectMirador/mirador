@@ -90,6 +90,17 @@ describe('IIIFAuthentication', () => {
       mockWindow.closed = true;
       await waitFor(() => expect(resolveCookieMock).toHaveBeenCalledTimes(1));
     });
+    it('uses the Auth 2 access URL and preserves its query parameters', async () => {
+      const mockWindow = { close: vi.fn(), closed: false };
+      const mockWindowOpen = vi.fn(() => mockWindow);
+      window.open = mockWindowOpen;
+      createWrapper({ loginServiceId: 'https://example.org/login?mode=active', status: 'cookie' });
+      expect(mockWindowOpen).toHaveBeenCalledWith(
+        `https://example.org/login?mode=active&origin=${encodeURIComponent(window.origin)}`,
+        'IiifLoginSender',
+        'centerscreen',
+      );
+    });
     it('does the IIIF access token behavior', async () => {
       const resolveTokenMock = vi.fn();
       createWrapper({ resolveAccessTokenRequest: resolveTokenMock, status: 'token' });
@@ -97,6 +108,7 @@ describe('IIIFAuthentication', () => {
       window.dispatchEvent(
         new MessageEvent('message', {
           data: { messageId: 'http://example.com/token' },
+          origin: 'http://example.com',
         }),
       );
       await waitFor(() =>

@@ -27,14 +27,27 @@ describe('AccessTokenSender', () => {
   it('triggers an action when the iframe sends a message', () => {
     const handleAccessTokenMessage = vi.fn();
     createWrapper({ handleAccessTokenMessage, url: 'http://example.com' });
-    window.dispatchEvent(new MessageEvent('message', { data: { messageId: 'http://example.com' } }));
+    window.dispatchEvent(
+      new MessageEvent('message', { data: { messageId: 'http://example.com' }, origin: 'http://example.com' }),
+    );
     expect(handleAccessTokenMessage).toHaveBeenCalledWith({ messageId: 'http://example.com' });
   });
 
   it('ignores iframe messages with the wrong messageId', () => {
     const handleAccessTokenMessage = vi.fn();
     createWrapper({ handleAccessTokenMessage, url: 'http://example.com' });
-    window.dispatchEvent(new MessageEvent('message', { data: { messageId: 'http://example.com/123' } }));
+    window.dispatchEvent(
+      new MessageEvent('message', { data: { messageId: 'http://example.com/123' }, origin: 'http://example.com' }),
+    );
+    expect(handleAccessTokenMessage).not.toHaveBeenCalled();
+  });
+
+  it('ignores messages from another origin', () => {
+    const handleAccessTokenMessage = vi.fn();
+    createWrapper({ handleAccessTokenMessage, url: 'http://example.com' });
+    window.dispatchEvent(
+      new MessageEvent('message', { data: { messageId: 'http://example.com' }, origin: 'http://attacker.example' }),
+    );
     expect(handleAccessTokenMessage).not.toHaveBeenCalled();
   });
 });

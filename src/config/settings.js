@@ -600,6 +600,9 @@ export default {
   },
   auth: {
     serviceProfiles: [
+      { profile: 'http://iiif.io/api/auth/2/external', external: true },
+      { profile: 'http://iiif.io/api/auth/2/kiosk', kiosk: true },
+      { profile: 'http://iiif.io/api/auth/2/active' },
       { profile: 'http://iiif.io/api/auth/1/external', external: true },
       { profile: 'http://iiif.io/api/auth/1/kiosk', kiosk: true },
       { profile: 'http://iiif.io/api/auth/1/clickthrough' },

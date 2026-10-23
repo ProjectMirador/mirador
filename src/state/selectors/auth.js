@@ -5,6 +5,7 @@ import { getConfig } from './config';
 import { getVisibleCanvases, selectInfoResponses } from './canvases';
 import { getMiradorCanvasWrapper } from './wrappers';
 import { getIiifResourceImageService } from '../../lib/iiif';
+import { getAuth2AccessServices, getAuth2RelatedService } from '../../lib/auth2';
 
 /**
  * Returns the authentification profile from the configuration
@@ -56,7 +57,13 @@ export const selectCurrentAuthServices = createSelector(
 
           const infoResponse = infoResponses[iiifImageService.id];
           if (infoResponse && infoResponse.json) {
-            return { ...infoResponse.json, options: {} };
+            return {
+              ...infoResponse.json,
+              auth2Degraded: infoResponse.degraded,
+              auth2TokenServiceId: infoResponse.tokenServiceId,
+              auth2ProbeResult: infoResponse.probeResult,
+              options: {},
+            };
           }
 
           return iiifImageService;
@@ -70,6 +77,24 @@ export const selectCurrentAuthServices = createSelector(
     const currentAuthServices = currentAuthResources.map((resource) => {
       let lastAttemptedService;
       const services = Utils.getServices(resource);
+      if (resource.auth2Degraded || resource.auth2TokenServiceId) {
+        services.push(
+          ...getAuth2AccessServices(resource)
+            .filter(
+              ({ service }) =>
+                resource.auth2Degraded ||
+                getAuth2RelatedService(service, 'AuthAccessTokenService2')?.id === resource.auth2TokenServiceId,
+            )
+            .map(({ id, probeId, service }) => ({
+              auth2: true,
+              auth2ProbeId: probeId,
+              auth2ProbeResult: resource.auth2ProbeResult,
+              auth2Service: service,
+              getProfile: () => `http://iiif.io/api/auth/2/${service.getProfile()}`,
+              id,
+            })),
+        );
+      }
 
       for (const authProfile of serviceProfiles) {
         const profiledAuthServices = services.filter((p) => authProfile.profile === p.getProfile());

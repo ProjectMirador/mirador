@@ -60,6 +60,9 @@ export function requestAccessToken(serviceId, authId) {
 export function receiveAccessToken(authId, serviceId, json) {
   return {
     authId,
+    ...(json.type === 'AuthAccessToken2' && Number.isFinite(json.expiresIn)
+      ? { expiresAt: Date.now() + json.expiresIn * 1000 }
+      : {}),
     json,
     serviceId,
     type: ActionTypes.RECEIVE_ACCESS_TOKEN,

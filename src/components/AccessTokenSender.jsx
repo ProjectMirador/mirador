@@ -8,7 +8,7 @@ import { IIIFIFrameCommunication } from './IIIFIFrameCommunication';
 export function AccessTokenSender({ handleAccessTokenMessage, url = undefined }) {
   const onReceiveAccessTokenMessage = useCallback(
     (e) => {
-      if (e.data && e.data.messageId && e.data.messageId === url) handleAccessTokenMessage(e.data);
+      if (e.origin === new URL(url).origin && e.data?.messageId === url) handleAccessTokenMessage(e.data);
     },
     [handleAccessTokenMessage, url],
   );

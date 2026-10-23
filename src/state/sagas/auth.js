@@ -12,6 +12,7 @@ import {
   getMiradorCanvasWrapper,
 } from '../selectors';
 import { fetchInfoResponse } from './iiif';
+import { getAuth2AccessServices, getAuth2RelatedService, getAuth2Probes } from '../../lib/auth2';
 
 /** */
 export function* refetchInfoResponsesOnLogout({ tokenServiceId }) {
@@ -39,6 +40,13 @@ export function* refetchInfoResponses({ serviceId }) {
   const infoResponses = yield select(selectInfoResponses);
   /** */
   const haveThisTokenService = (infoResponse) => {
+    if (
+      getAuth2Probes(infoResponse).some((probe) =>
+        Utils.getServices(probe).some((access) => getAuth2RelatedService(access, 'AuthAccessTokenService2')?.id === serviceId),
+      )
+    ) {
+      return true;
+    }
     const services = Utils.getServices(infoResponse);
     return services.some((e) => {
       const infoTokenService =
@@ -66,7 +74,12 @@ export function* doAuthWorkflow({ infoJson, windowId }) {
   const nonInteractiveAuthFlowProfiles = serviceProfiles.filter((p) => p.external || p.kiosk);
 
   // try to get an untried, non-interactive auth service
-  const authService = Utils.getServices(infoJson)
+  const auth2Services = getAuth2AccessServices(infoJson).map(({ id, service }) => ({
+    auth2Service: service,
+    getProfile: () => `http://iiif.io/api/auth/2/${service.getProfile()}`,
+    id,
+  }));
+  const authService = [...auth2Services, ...Utils.getServices(infoJson)]
     .filter((s) => !auths[s.id])
     .find((e) => nonInteractiveAuthFlowProfiles.some((p) => p.profile === e.getProfile()));
   if (!authService) return;
@@ -78,6 +91,7 @@ export function* doAuthWorkflow({ infoJson, windowId }) {
     yield put(addAuthenticationRequest(windowId, authService.id, authService.getProfile()));
   } else if (profileConfig.external) {
     const tokenService =
+      (authService.auth2Service && getAuth2RelatedService(authService.auth2Service, 'AuthAccessTokenService2')) ||
       Utils.getService(authService, 'http://iiif.io/api/auth/1/token') ||
       Utils.getService(authService, 'http://iiif.io/api/auth/0/token');
 
@@ -114,6 +128,20 @@ export function* rerequestOnAccessTokenFailure({ infoJson, windowId, tokenServic
   yield put(requestAccessToken(tokenServiceId, authService.id));
 }
 
+/** A token is accepted only after its probe grants access. */
+export function* rejectAuth2TokenOnProbeFailure({ infoJson, tokenServiceId, windowId }) {
+  if (!tokenServiceId || !getAuth2Probes(infoJson).length) return;
+  const accessTokens = yield select(getAccessTokens);
+  const token = accessTokens[tokenServiceId];
+  if (!token) return;
+  if (token.success) {
+    yield put(resetAuthenticationState({ authServiceId: token.authId, tokenServiceId }));
+  } else {
+    yield put(resolveAuthenticationRequest(token.authId, tokenServiceId, { ok: false }));
+  }
+  yield call(doAuthWorkflow, { infoJson, windowId });
+}
+
 /** */
 export function* invalidateInvalidAuth({ serviceId }) {
   const accessTokenServices = yield select(getAccessTokens);
@@ -143,6 +171,7 @@ export function* invalidateInvalidAuth({ serviceId }) {
 export default function* authSaga() {
   yield all([
     takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, rerequestOnAccessTokenFailure),
+    takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, rejectAuth2TokenOnProbeFailure),
     takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN_FAILURE, invalidateInvalidAuth),
     takeEvery(ActionTypes.RECEIVE_DEGRADED_INFO_RESPONSE, doAuthWorkflow),
     takeEvery(ActionTypes.RECEIVE_ACCESS_TOKEN, refetchInfoResponses),

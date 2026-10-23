@@ -112,6 +112,71 @@ describe('IIIF sagas', () => {
   });
 
   describe('fetchInfoResponse', () => {
+    const auth2Info = {
+      id: 'https://example.org/image',
+      service: [
+        {
+          id: 'https://example.org/probe',
+          type: 'AuthProbeService2',
+          service: [
+            {
+              id: 'https://example.org/login',
+              type: 'AuthAccessService2',
+              profile: 'active',
+              service: [{ id: 'https://example.org/token', type: 'AuthAccessTokenService2' }],
+            },
+          ],
+        },
+      ],
+    };
+
+    it('probes Auth 2 image services before exposing the image', () => {
+      fetch.mockResponseOnce(JSON.stringify(auth2Info));
+      fetch.mockResponseOnce(JSON.stringify({ type: 'AuthProbeResult2', status: 401 }));
+
+      return expectSaga(fetchInfoResponse, { imageResource: auth2Info, infoId: auth2Info.id, windowId: 'w' })
+        .withState({})
+        .put({
+          infoId: auth2Info.id,
+          infoJson: auth2Info,
+          ok: true,
+          probeResult: { type: 'AuthProbeResult2', status: 401 },
+          tokenServiceId: undefined,
+          type: 'mirador/RECEIVE_DEGRADED_INFO_RESPONSE',
+          windowId: 'w',
+        })
+        .run()
+        .then(() => {
+          expect(fetch.mock.calls.map(([url]) => url)).toEqual([
+            'https://example.org/image/info.json',
+            'https://example.org/probe',
+          ]);
+        });
+    });
+
+    it('sends Auth 2 bearer tokens to the probe only', () => {
+      fetch.mockResponseOnce(JSON.stringify(auth2Info));
+      fetch.mockResponseOnce(JSON.stringify({ type: 'AuthProbeResult2', status: 401 }));
+      fetch.mockResponseOnce(JSON.stringify({ type: 'AuthProbeResult2', status: 200 }));
+
+      return expectSaga(fetchInfoResponse, { imageResource: auth2Info, infoId: auth2Info.id })
+        .withState({
+          accessTokens: {
+            'https://example.org/token': {
+              id: 'https://example.org/token',
+              json: { accessToken: 'secret' },
+            },
+          },
+        })
+        .put.actionType('mirador/RECEIVE_INFO_RESPONSE')
+        .run()
+        .then(() => {
+          expect(fetch.mock.calls[0][1]?.headers?.Authorization).toBeUndefined();
+          expect(fetch.mock.calls[1][1]?.headers?.Authorization).toBeUndefined();
+          expect(fetch.mock.calls[2][1]?.headers?.Authorization).toBe('Bearer secret');
+        });
+    });
+
     it('fetches a IIIF info response', () => {
       fetch.mockResponseOnce(JSON.stringify({ id: 'http://server/prefix/infoId' }));
       const action = {

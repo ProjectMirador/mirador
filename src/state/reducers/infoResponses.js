@@ -32,6 +32,7 @@ export const infoResponsesReducer = (state = {}, action) => {
           id: action.infoId,
           isFetching: false,
           json: action.infoJson,
+          ...(action.probeResult ? { probeResult: action.probeResult } : {}),
           tokenServiceId: action.tokenServiceId,
         },
       };

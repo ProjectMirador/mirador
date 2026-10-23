@@ -19,6 +19,7 @@ export function IIIFAuthentication({
   header = undefined,
   isInteractive = true,
   label = undefined,
+  loginServiceId = undefined,
   logoutConfirm = undefined,
   logoutServiceId = undefined,
   openWindow = window.open,
@@ -80,7 +81,11 @@ export function IIIFAuthentication({
       {renderLogin()}
       <NewBrowserWindow
         name="IiifLoginSender"
-        url={`${authServiceId}?origin=${window.origin}`}
+        url={
+          loginServiceId
+            ? `${loginServiceId}${loginServiceId.includes('?') ? '&' : '?'}origin=${encodeURIComponent(window.origin)}`
+            : `${authServiceId}?origin=${window.origin}`
+        }
         features={features}
         onClose={() => resolveAuthenticationRequest(authServiceId, accessTokenServiceId)}
       />
@@ -133,6 +138,7 @@ IIIFAuthentication.propTypes = {
   header: PropTypes.string,
   isInteractive: PropTypes.bool,
   label: PropTypes.string,
+  loginServiceId: PropTypes.string,
   logoutConfirm: PropTypes.string,
   logoutServiceId: PropTypes.string,
   openWindow: PropTypes.func,
