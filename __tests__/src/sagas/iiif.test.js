@@ -283,16 +283,20 @@ describe('IIIF sagas', () => {
     it('fetches a IIIF annotation page', () => {
       fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
       const action = {
-        annotationId: 'annotationId',
-        targetId: 'targetId',
+        payload: {
+          annotationId: 'annotationId',
+          targetId: 'targetId',
+        },
       };
 
       return expectSaga(fetchAnnotation, action)
         .put({
-          annotationId: 'annotationId',
-          annotationJson: { data: '12345' },
-          targetId: 'targetId',
-          type: 'mirador/RECEIVE_ANNOTATION',
+          payload: {
+            annotationId: 'annotationId',
+            annotationJson: { data: '12345' },
+            targetId: 'targetId',
+          },
+          type: 'annotations/receiveAnnotation',
         })
         .run();
     });
@@ -300,11 +304,13 @@ describe('IIIF sagas', () => {
     it('handles failures', () => {
       fetch.mockResponseOnce('<h1>Not Json</h1>');
       const action = {
-        annotationId: 'annotationId',
-        targetId: 'targetId',
+        payload: {
+          annotationId: 'annotationId',
+          targetId: 'targetId',
+        },
       };
 
-      return expectSaga(fetchAnnotation, action).put.actionType('mirador/RECEIVE_ANNOTATION_FAILURE').run();
+      return expectSaga(fetchAnnotation, action).put.actionType('annotations/receiveAnnotationFailure').run();
     });
   });
 
