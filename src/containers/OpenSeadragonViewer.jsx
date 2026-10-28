@@ -2,8 +2,8 @@ import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { OpenSeadragonViewer } from '../components/OpenSeadragonViewer';
+import InfoResponseTileSource from './InfoResponseTileSource';
 import * as actions from '../state/actions';
-import { iiifApi, useGetInfoResponseQuery } from '../state/api/iiifApi';
 import { getIiifResourceImageService } from '../lib/iiif';
 import {
   getVisibleCanvasNonTiledResources,
@@ -16,26 +16,10 @@ import {
 } from '../state/selectors';
 
 /**
- * Holds one getInfoResponse subscription open for exactly as long as it's
- * rendered. The parent mounts/unmounts one of these per currently-visible
- * image resource, so RTK Query's own subscriber-count lifecycle (refetch
- * while mounted, GC once nothing needs it) does the right thing with no
- * manual bookkeeping -- React hooks can't be called in a loop/map, but a
- * variable number of these as siblings is fine.
- */
-function InfoResponseSubscription({ imageResource, infoId }) {
-  useGetInfoResponseQuery({ imageResource, infoId });
-  return null;
-}
-
-InfoResponseSubscription.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  imageResource: PropTypes.object.isRequired,
-  infoId: PropTypes.string.isRequired,
-};
-
-/**
  * Hooks-based replacement for the old connect()/compose(withPlugins()) container.
+ * Builds the InfoResponseTileSource elements here (one per image resource)
+ * and hands them down as a prop, so the presentational OpenSeadragonViewer
+ * never has to import a container itself -- it just renders what it's given.
  */
 function OpenSeadragonViewerContainer({ windowId, ...rest }) {
   const dispatch = useDispatch();
@@ -59,36 +43,26 @@ function OpenSeadragonViewerContainer({ windowId, ...rest }) {
 
   const imageResources = canvasWorld.canvases.flatMap((c) => c.iiifImageResources);
 
-  // Read straight from iiifApi's cache -- the InfoResponseSubscription
-  // siblings below are what keep it populated/fresh; this is just a read.
-  const infoResponses = useSelector((state) =>
-    imageResources
-      .map((imageResource) => {
-        const infoId = getIiifResourceImageService(imageResource).id;
-        return { ...iiifApi.endpoints.getInfoResponse.select({ infoId })(state), id: infoId };
-      })
-      .filter((infoResponse) => infoResponse.isSuccess),
-  );
-
   return (
-    <>
-      {imageResources.map((imageResource) => {
-        const infoId = getIiifResourceImageService(imageResource).id;
-        return <InfoResponseSubscription key={infoId} imageResource={imageResource} infoId={infoId} />;
-      })}
-      <OpenSeadragonViewer
-        {...rest}
-        windowId={windowId}
-        canvasWorld={canvasWorld}
-        drawAnnotations={config.window.forceDrawAnnotations || hasAnnotationsCompanionWindow || hasSearchCompanionWindow}
-        infoResponses={infoResponses}
-        label={label}
-        nonTiledImages={nonTiledImages}
-        osdConfig={config.osdConfig}
-        viewerConfig={viewerConfig}
-        updateViewport={(...args) => dispatch(actions.updateViewport(...args))}
-      />
-    </>
+    <OpenSeadragonViewer
+      {...rest}
+      windowId={windowId}
+      canvasWorld={canvasWorld}
+      drawAnnotations={config.window.forceDrawAnnotations || hasAnnotationsCompanionWindow || hasSearchCompanionWindow}
+      imageResources={imageResources}
+      tileSources={imageResources.map((imageResource) => (
+        <InfoResponseTileSource
+          key={getIiifResourceImageService(imageResource).id}
+          canvasWorld={canvasWorld}
+          imageResource={imageResource}
+        />
+      ))}
+      label={label}
+      nonTiledImages={nonTiledImages}
+      osdConfig={config.osdConfig}
+      viewerConfig={viewerConfig}
+      updateViewport={(...args) => dispatch(actions.updateViewport(...args))}
+    />
   );
 }
 
