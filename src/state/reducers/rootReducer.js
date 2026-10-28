@@ -16,6 +16,7 @@ import {
   layersReducer,
   catalogReducer,
 } from '.';
+import { iiifApi } from '../api/iiifApi';
 
 /**
  * Function to create root reducer
@@ -32,6 +33,7 @@ export default function createRootReducer(pluginReducers) {
     config: configReducer,
     elasticLayout: elasticLayoutReducer,
     errors: errorsReducer,
+    [iiifApi.reducerPath]: iiifApi.reducer,
     infoResponses: infoResponsesReducer,
     layers: layersReducer,
     manifests: manifestsReducer,
