@@ -2,18 +2,32 @@ import { createSelector } from 'reselect';
 import CanvasGroupings from '../../lib/CanvasGroupings';
 import { getIiifResourceImageService } from '../../lib/iiif';
 import { getMiradorCanvasWrapper } from './wrappers';
-import { miradorSlice, EMPTY_ARRAY } from './utils';
+import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
 import { getWindow } from './getters';
 import { getSequence } from './sequences';
 import { getWindowViewType } from './windows';
 import { getManifestLocale, getDestructuredMetadata } from './manifests';
+import { iiifApi } from '../api/iiifApi';
 
 /**
- * Returns the info response.
+ * Returns every currently-cached info response, keyed by infoId, read
+ * directly from iiifApi's own cache -- native RTK Query shape
+ * ({data, isLoading, isSuccess, isError, ...}), no translation back to the
+ * old reducer's {json, isFetching, error} shape.
  * @param {object} state
  * @returns {object}
  */
-export const selectInfoResponses = (state) => miradorSlice(state).infoResponses;
+export const selectInfoResponses = (state) => {
+  const rootState = miradorSlice(state);
+  if (!rootState[iiifApi.reducerPath]) return EMPTY_OBJECT;
+
+  const cachedArgs = iiifApi.util.selectCachedArgsForQuery(rootState, 'getInfoResponse');
+  const infoResponses = {};
+  cachedArgs.forEach(({ infoId }) => {
+    infoResponses[infoId] = iiifApi.endpoints.getInfoResponse.select({ infoId })(rootState);
+  });
+  return infoResponses;
+};
 
 export const getCanvases = createSelector([getSequence], (sequence) => (sequence && sequence.getCanvases()) || EMPTY_ARRAY);
 
@@ -254,7 +268,7 @@ export const selectInfoResponse = createSelector(
     }
 
     return (
-      iiifServiceId && infoResponses[iiifServiceId] && !infoResponses[iiifServiceId].isFetching && infoResponses[iiifServiceId]
+      iiifServiceId && infoResponses[iiifServiceId] && !infoResponses[iiifServiceId].isLoading && infoResponses[iiifServiceId]
     );
   },
 );
