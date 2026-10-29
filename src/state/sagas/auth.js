@@ -2,16 +2,8 @@ import { all, call, put, select, takeEvery, delay } from 'redux-saga/effects';
 import { Utils } from 'manifesto.js';
 import ActionTypes from '../actions/action-types';
 import { addAuthenticationRequest, resolveAuthenticationRequest, requestAccessToken, resetAuthenticationState } from '../actions';
-import {
-  selectInfoResponses,
-  getVisibleCanvases,
-  getWindows,
-  getConfig,
-  getAuth,
-  getAccessTokens,
-  getMiradorCanvasWrapper,
-} from '../selectors';
-import { fetchInfoResponse } from './iiif';
+import { getConfig, getAuth, getAccessTokens } from '../selectors';
+import { iiifApi } from '../api/iiifApi';
 
 /** */
 export function* refetchInfoResponsesOnLogout({ tokenServiceId }) {
@@ -23,40 +15,16 @@ export function* refetchInfoResponsesOnLogout({ tokenServiceId }) {
 }
 
 /**
- * Figure out what info responses could have used the access token service and:
- *   - refetch, if they are currently visible
- *   - throw them out (and lazy re-fetch) otherwise
+ * Refetch every info response that named this token service, now that it
+ * has a (new/refreshed) token. getInfoResponse's providesTags already tags
+ * each cached response by every token service it names (success) or the
+ * degraded service it hit (error), so this is the one-line replacement for
+ * the old manual walk-every-window/every-canvas/every-cached-response logic
+ * -- the old version also relied on fetchInfoResponse/selectInfoResponses'
+ * legacy shape, both gone now.
  */
 export function* refetchInfoResponses({ serviceId }) {
-  const windows = yield select(getWindows);
-
-  const canvases = yield all(Object.keys(windows).map((windowId) => select(getVisibleCanvases, { windowId })));
-
-  const getMiradorCanvas = yield select(getMiradorCanvasWrapper);
-
-  const visibleImageApiIds = canvases.flat().flatMap((canvas) => getMiradorCanvas(canvas).imageServiceIds);
-
-  const infoResponses = yield select(selectInfoResponses);
-  /** */
-  const haveThisTokenService = (infoResponse) => {
-    const services = Utils.getServices(infoResponse);
-    return services.some((e) => {
-      const infoTokenService =
-        Utils.getService(e, 'http://iiif.io/api/auth/1/token') || Utils.getService(e, 'http://iiif.io/api/auth/0/token');
-      return infoTokenService && infoTokenService.id === serviceId;
-    });
-  };
-
-  const obsoleteInfoResponses = Object.values(infoResponses).filter((i) => i.json && haveThisTokenService(i.json));
-
-  yield all(
-    obsoleteInfoResponses.map(({ id: infoId }) => {
-      if (visibleImageApiIds.includes(infoId)) {
-        return call(fetchInfoResponse, { infoId });
-      }
-      return put({ infoId, type: ActionTypes.REMOVE_INFO_RESPONSE });
-    }),
-  );
+  yield put(iiifApi.util.invalidateTags([{ id: serviceId, type: 'TokenService' }]));
 }
 
 /** try to start any non-interactive auth flows */

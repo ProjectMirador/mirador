@@ -19,7 +19,6 @@ import {
   getVisibleCanvasIds,
   getCanvasForAnnotation,
   getCanvases,
-  selectInfoResponses,
   getWindowConfig,
 } from '../../../src/state/selectors';
 import { fetchManifests } from '../../../src/state/sagas/iiif';
@@ -34,7 +33,6 @@ import {
   setCanvasforSelectedAnnotation,
   panToFocusedWindow,
   setCurrentAnnotationsOnCurrentCanvas,
-  fetchInfoResponses,
   setCanvasOnNewSequence,
   setCollectionPath,
 } from '../../../src/state/sagas/windows';
@@ -572,51 +570,6 @@ describe('window-level sagas', () => {
     });
   });
 
-  describe('fetchInfoResponses', () => {
-    it('requests info responses for each visible canvas', () => {
-      const action = {
-        visibleCanvases: ['http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json'],
-        windowId: 'foo',
-      };
-
-      const manifest = Utils.parseManifest(fixture);
-
-      return expectSaga(fetchInfoResponses, action)
-        .provide([
-          [select(getCanvases, { windowId: 'foo' }), manifest.getSequences()[0].getCanvases()],
-          [select(selectInfoResponses), {}],
-        ])
-        .put.like({
-          action: {
-            infoId: 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44',
-            type: 'mirador/REQUEST_INFO_RESPONSE',
-          },
-        })
-        .run();
-    });
-
-    it('requests nothing if the response is  already in the store', () => {
-      const action = {
-        visibleCanvases: ['http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json'],
-        windowId: 'foo',
-      };
-
-      const manifest = Utils.parseManifest(fixture);
-
-      return expectSaga(fetchInfoResponses, action)
-        .provide([
-          [select(getCanvases, { windowId: 'foo' }), manifest.getSequences()[0].getCanvases()],
-          [select(selectInfoResponses), { 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44': {} }],
-        ])
-        .not.put.like({
-          action: {
-            infoId: 'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44',
-            type: 'mirador/REQUEST_INFO_RESPONSE',
-          },
-        })
-        .run();
-    });
-  });
 
   describe('determineAndShowCollectionDialog', () => {
     it('shows the collection dialog if it is a collection', () => {
