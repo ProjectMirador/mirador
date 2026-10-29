@@ -1,7 +1,28 @@
+import { configureStore } from '@reduxjs/toolkit';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import settings from '../../../src/config/settings';
 import { getAccessTokens, selectCurrentAuthServices } from '../../../src/state/selectors/auth';
+import { iiifApi } from '../../../src/state/api/iiifApi';
+
+/**
+ * selectInfoResponses (which selectCurrentAuthServices depends on) reads
+ * iiifApi's cache now, so seed the cache
+ */
+async function iiifApiStateWithInfoResponses(infoResponsesByInfoId) {
+  const store = configureStore({
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(iiifApi.middleware),
+    reducer: { [iiifApi.reducerPath]: iiifApi.reducer },
+  });
+
+  await Promise.all(
+    Object.entries(infoResponsesByInfoId).map(([infoId, data]) =>
+      store.dispatch(iiifApi.util.upsertQueryData('getInfoResponse', { infoId }, data)),
+    ),
+  );
+
+  return store.getState().iiifApi;
+}
 
 describe('getAccessTokens', () => {
   const state = {
@@ -40,43 +61,43 @@ describe('selectCurrentAuthServices', () => {
     ],
   };
 
-  const state = {
-    auth: {},
-    config: { auth: settings.auth },
-    infoResponses: {
-      'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
-        json: resource,
+  let state;
+
+  beforeAll(async () => {
+    state = {
+      auth: {},
+      config: { auth: settings.auth },
+      iiifApi: await iiifApiStateWithInfoResponses({
+        'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': resource,
+        'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44': externalOnly,
+      }),
+      manifests: {
+        a: {
+          json: manifestFixture001,
+        },
+        b: {
+          json: manifestFixture019,
+        },
       },
-      'https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44': {
-        json: externalOnly,
+      windows: {
+        noCanvas: {
+          manifestId: 'a',
+        },
+        w: {
+          manifestId: 'a',
+          visibleCanvases: ['https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json'],
+        },
+        x: {
+          manifestId: 'b',
+          visibleCanvases: ['http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json'],
+        },
+        y: {
+          manifestId: 'b',
+          visibleCanvases: ['https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'],
+        },
       },
-    },
-    manifests: {
-      a: {
-        json: manifestFixture001,
-      },
-      b: {
-        json: manifestFixture019,
-      },
-    },
-    windows: {
-      noCanvas: {
-        manifestId: 'a',
-      },
-      w: {
-        manifestId: 'a',
-        visibleCanvases: ['https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json'],
-      },
-      x: {
-        manifestId: 'b',
-        visibleCanvases: ['http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json'],
-      },
-      y: {
-        manifestId: 'b',
-        visibleCanvases: ['https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1'],
-      },
-    },
-  };
+    };
+  });
 
   it('returns undefined if there is no current canvas', () => {
     expect(
@@ -105,11 +126,13 @@ describe('selectCurrentAuthServices', () => {
 
   describe('proscribed order', () => {
     let auth = {};
-    const orderedState = {
-      config: { auth: settings.auth },
-      infoResponses: {
-        'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
-          json: {
+    let orderedState;
+
+    beforeAll(async () => {
+      orderedState = {
+        config: { auth: settings.auth },
+        iiifApi: await iiifApiStateWithInfoResponses({
+          'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
             service: [
               {
                 '@id': 'external',
@@ -133,20 +156,20 @@ describe('selectCurrentAuthServices', () => {
               },
             ],
           },
+        }),
+        manifests: {
+          a: {
+            json: manifestFixture001,
+          },
         },
-      },
-      manifests: {
-        a: {
-          json: manifestFixture001,
+        windows: {
+          w: {
+            manifestId: 'a',
+            visibleCanvases: ['https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json'],
+          },
         },
-      },
-      windows: {
-        w: {
-          manifestId: 'a',
-          visibleCanvases: ['https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json'],
-        },
-      },
-    };
+      };
+    });
 
     it('returns external first', () => {
       auth = {};

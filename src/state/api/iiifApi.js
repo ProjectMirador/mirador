@@ -9,7 +9,7 @@ import fetchWithReauth from './fetchInfoResponseWithReauth';
  * This was causing a conflict in development (NODE_ENV=production does not have this behavior).
  * This method creates a fresh clone of the whole thing.
  */
-function toMutableIiifResource(resource) {
+export function toMutableIiifResource(resource) {
   if (resource.__jsonld) {
     const parentResource = resource.options && resource.options.resource;
     const options =

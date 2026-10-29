@@ -5,6 +5,7 @@ import { getConfig } from './config';
 import { getVisibleCanvases, selectInfoResponses } from './canvases';
 import { getMiradorCanvasWrapper } from './wrappers';
 import { getIiifResourceImageService } from '../../lib/iiif';
+import { toMutableIiifResource } from '../api/iiifApi';
 
 /**
  * Returns the authentification profile from the configuration
@@ -55,8 +56,8 @@ export const selectCurrentAuthServices = createSelector(
           const iiifImageService = getIiifResourceImageService(i);
 
           const infoResponse = infoResponses[iiifImageService.id];
-          if (infoResponse && infoResponse.json) {
-            return { ...infoResponse.json, options: {} };
+          if (infoResponse && infoResponse.data) {
+            return { ...infoResponse.data, options: {} };
           }
 
           return iiifImageService;
@@ -69,7 +70,11 @@ export const selectCurrentAuthServices = createSelector(
 
     const currentAuthServices = currentAuthResources.map((resource) => {
       let lastAttemptedService;
-      const services = Utils.getServices(resource);
+      // toMutableIiifResource: Utils.getServices mutates resource.service in
+      // place, but RTK Query's Immer-backed slice deep-freezes anything
+      // reachable from iiifApi's cache in development -- same issue iiifApi.js
+      // itself works around for tokenServiceIds/findAccessToken.
+      const services = Utils.getServices(toMutableIiifResource(resource));
 
       for (const authProfile of serviceProfiles) {
         const profiledAuthServices = services.filter((p) => authProfile.profile === p.getProfile());
