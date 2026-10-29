@@ -570,7 +570,6 @@ describe('window-level sagas', () => {
     });
   });
 
-
   describe('determineAndShowCollectionDialog', () => {
     it('shows the collection dialog if it is a collection', () => {
       const manifest = Utils.parseManifest(collectionFixture);
