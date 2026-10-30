@@ -172,6 +172,66 @@ describe('IIIF sagas', () => {
         .run();
     });
 
+    it('ignores IIIF Auth 2.0 services (which may lack a profile) and uses the v1 access token', () => {
+      fetch.mockResponseOnce(JSON.stringify({ id: 'infoId' }));
+      const action = {
+        infoId: 'infoId',
+      };
+      const infoResponse = {
+        id: 'degradedInfoId',
+        service: [
+          {
+            '@context': 'http://iiif.io/api/auth/1/context.json',
+            '@id': 'https://authentication.example.org/login',
+            profile: 'http://iiif.io/api/auth/1/login',
+            service: [
+              {
+                '@id': 'https://authentication.example.org/token',
+                profile: 'http://iiif.io/api/auth/1/token',
+              },
+            ],
+          },
+          {
+            '@context': 'http://iiif.io/api/auth/2/context.json',
+            id: 'https://authentication.example.org/probe',
+            type: 'AuthProbeService2',
+            service: [
+              {
+                id: 'https://authentication.example.org/login',
+                type: 'AuthAccessService2',
+                profile: 'active',
+                service: [
+                  {
+                    id: 'https://authentication.example.org/v2/token',
+                    type: 'AuthAccessTokenService2',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      return expectSaga(fetchInfoResponse, action)
+        .provide([
+          [select(selectInfoResponse, { infoId: 'infoId' }), infoResponse],
+          [
+            select(getAccessTokens),
+            {
+              'https://authentication.example.org/token': { id: 'x', json: { accessToken: '123' } },
+            },
+          ],
+        ])
+        .put({
+          infoId: 'infoId',
+          infoJson: { id: 'infoId' },
+          ok: true,
+          tokenServiceId: 'x',
+          type: 'mirador/RECEIVE_INFO_RESPONSE',
+        })
+        .run();
+    });
+
     it('handles failed requests', () => {
       fetch.mockResponseOnce('<h1>Not Found</h1>');
       const action = {

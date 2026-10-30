@@ -147,7 +147,7 @@ export function* fetchManifest({ manifestId }) {
 function* getAccessTokenService(resource) {
   const manifestoCompatibleResource = resource && resource.__jsonld ? resource : { ...resource, options: {} };
   const services = Utils.getServices(manifestoCompatibleResource).filter((s) =>
-    s.getProfile().match(/http:\/\/iiif.io\/api\/auth\//),
+    (s.getProfile() || '').match(/http:\/\/iiif.io\/api\/auth\//),
   );
   if (services.length === 0) return undefined;
 
