@@ -8,7 +8,6 @@ import {
   setCanvas,
   fetchSearch,
   receiveManifest,
-  fetchInfoResponse,
   showCollectionDialog,
 } from '../actions';
 import {
@@ -26,13 +25,10 @@ import {
   getWorkspace,
   getElasticLayout,
   getCanvases,
-  selectInfoResponses,
   getWindowConfig,
-  getMiradorCanvasWrapper,
   getMiradorManifestWrapper,
 } from '../selectors';
 import { fetchManifests } from './iiif';
-import { getIiifResourceImageService } from '../../lib/iiif';
 
 /** */
 export function* fetchWindowManifest(action) {
@@ -257,29 +253,6 @@ export function* setCanvasforSelectedAnnotation({ annotationId, windowId }) {
   yield put(thunk);
 }
 
-/** Fetch info responses for the visible canvases */
-export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowId }) {
-  const canvases = yield select(getCanvases, { windowId });
-  const infoResponses = yield select(selectInfoResponses);
-  const visibleCanvases = (canvases || []).filter((c) => visibleCanvasIds.includes(c.id));
-  const getMiradorCanvas = yield select(getMiradorCanvasWrapper);
-
-  yield all(
-    visibleCanvases.map((canvas) => {
-      const miradorCanvas = getMiradorCanvas(canvas);
-      return all(
-        miradorCanvas.iiifImageResources
-          .map(
-            (imageResource) =>
-              !infoResponses[getIiifResourceImageService(imageResource)?.id] &&
-              put(fetchInfoResponse({ imageResource, windowId })),
-          )
-          .filter(Boolean),
-      );
-    }),
-  );
-}
-
 /** */
 export function* determineAndShowCollectionDialog(manifestId, windowId) {
   const manifestoInstance = yield select(getManifestoInstance, { manifestId });
@@ -296,7 +269,6 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.UPDATE_WINDOW, setCanvasOnNewSequence),
     takeEvery(ActionTypes.UPDATE_WINDOW, fetchCollectionManifests),
     takeEvery(ActionTypes.SET_CANVAS, setCurrentAnnotationsOnCurrentCanvas),
-    takeEvery(ActionTypes.SET_CANVAS, fetchInfoResponses),
     takeEvery(ActionTypes.UPDATE_COMPANION_WINDOW, fetchCollectionManifests),
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
     takeEvery(ActionTypes.RECEIVE_SEARCH, setCanvasOfFirstSearchResult),

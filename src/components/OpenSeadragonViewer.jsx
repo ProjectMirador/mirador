@@ -12,6 +12,7 @@ import { OSDReferences } from '../plugins/OSDReferences';
 import OpenSeadragonComponent from './OpenSeadragonComponent';
 import TileSource from './OpenSeadragonTileSource';
 import { ImageFailureMessage } from './ImageFailureMessage';
+import { getIiifResourceImageService } from '../lib/iiif';
 
 const StyledSection = styled('section')({
   cursor: 'grab',
@@ -30,7 +31,8 @@ export function OpenSeadragonViewer({
   osdConfig = {},
   viewerConfig = null,
   drawAnnotations = false,
-  infoResponses = [],
+  imageResources = [],
+  tileSources = [],
   canvasWorld,
   nonTiledImages = [],
   updateViewport,
@@ -79,7 +81,7 @@ export function OpenSeadragonViewer({
   const pluginProps = {
     canvasWorld,
     drawAnnotations,
-    infoResponses,
+    imageResources,
     label,
     nonTiledImages,
     osdConfig,
@@ -91,8 +93,11 @@ export function OpenSeadragonViewer({
   };
 
   const imageUrls = useMemo(
-    () => [...infoResponses.map((info) => info.id), ...nonTiledImages.map((img) => img.id)],
-    [infoResponses, nonTiledImages],
+    () => [
+      ...imageResources.map((imageResource) => getIiifResourceImageService(imageResource).id),
+      ...nonTiledImages.map((img) => img.id),
+    ],
+    [imageResources, nonTiledImages],
   );
 
   return (
@@ -106,25 +111,7 @@ export function OpenSeadragonViewer({
       aria-label={t('item', { label })}
       aria-live="polite"
     >
-      {infoResponses.map((infoResponse) => {
-        const contentResource = canvasWorld.contentResource(infoResponse.id);
-
-        if (!contentResource) return null;
-
-        const fitBounds = canvasWorld.contentResourceToWorldCoordinates(contentResource);
-        const index = canvasWorld.layerIndexOfImageResource(contentResource);
-        const opacity = canvasWorld.layerOpacityOfImageResource(contentResource);
-
-        return (
-          <TileSource
-            key={infoResponse.id}
-            tileSource={infoResponse.json}
-            fitBounds={fitBounds}
-            index={index}
-            opacity={opacity}
-          />
-        );
-      })}
+      {tileSources}
       {nonTiledImages.map((contentResource) => {
         const type = contentResource.getProperty('type');
         const format = contentResource.getProperty('format') || '';
@@ -151,10 +138,11 @@ OpenSeadragonViewer.propTypes = {
   canvasWorld: PropTypes.instanceOf(CanvasWorld).isRequired,
   children: PropTypes.node,
   drawAnnotations: PropTypes.bool,
-  infoResponses: PropTypes.arrayOf(PropTypes.object),
+  imageResources: PropTypes.arrayOf(PropTypes.object),
   label: PropTypes.string,
   nonTiledImages: PropTypes.array,
   osdConfig: PropTypes.object,
+  tileSources: PropTypes.node,
   updateViewport: PropTypes.func.isRequired,
   viewerConfig: PropTypes.object,
   windowId: PropTypes.string.isRequired,

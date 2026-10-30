@@ -7,6 +7,8 @@ import textFixture from '../../fixtures/version-3/text-pdf.json';
 import videoFixture from '../../fixtures/version-3/0015-start.json';
 import videoWithAnnoCaptions from '../../fixtures/version-3/video_with_annotation_captions.json';
 import settings from '../../../src/config/settings';
+import { configureStore } from '@reduxjs/toolkit';
+import { iiifApi } from '../../../src/state/api/iiifApi';
 
 import {
   getVisibleCanvases,
@@ -259,17 +261,23 @@ describe('getCanvasLabel', () => {
 });
 
 describe('selectInfoResponse', () => {
-  it('returns in the info response for the first canvas resource', () => {
+  it('returns in the info response for the first canvas resource', async () => {
     const resource = { some: 'resource' };
+    const infoId = 'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d';
+
+    // selectInfoResponses reads iiifApi's own cache now, not a plain
+    // reducer -- seed it for real via a throwaway store rather than
+    // hand-crafting RTK Query's internal cache-entry shape.
+    const store = configureStore({
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(iiifApi.middleware),
+      reducer: { [iiifApi.reducerPath]: iiifApi.reducer },
+    });
+    await store.dispatch(iiifApi.util.upsertQueryData('getInfoResponse', { infoId }, resource));
 
     const state = {
       auth: {},
       config: { auth: settings.auth },
-      infoResponses: {
-        'https://iiif.bodleian.ox.ac.uk/iiif/image/9cca8fdd-4a61-4429-8ac1-f648764b4d6d': {
-          json: resource,
-        },
-      },
+      iiifApi: store.getState().iiifApi,
       manifests: {
         a: {
           json: manifestFixture001,
@@ -281,7 +289,7 @@ describe('selectInfoResponse', () => {
       selectInfoResponse(state, {
         canvasId: 'https://iiif.bodleian.ox.ac.uk/iiif/canvas/9cca8fdd-4a61-4429-8ac1-f648764b4d6d.json',
         manifestId: 'a',
-      }).json,
+      }).data,
     ).toBe(resource);
   });
 

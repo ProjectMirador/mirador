@@ -146,13 +146,21 @@ describe('OpenSeadragonViewer', () => {
     it('passes imageUrls from infoResponses and nonTiledImages', async () => {
       const { ImageFailureMessage } = await import('../../../src/components/ImageFailureMessage');
 
-      const infoResponses = [
-        { id: 'http://example.com/image1', json: {} },
-        { id: 'http://example.com/image2', json: {} },
+      const imageResources = [
+        {
+          getServices: () => [
+            { getIIIFResourceType: () => 'ImageService2', getProfile: () => '', id: 'http://example.com/image1' },
+          ],
+        },
+        {
+          getServices: () => [
+            { getIIIFResourceType: () => 'ImageService2', getProfile: () => '', id: 'http://example.com/image2' },
+          ],
+        },
       ];
       const nonTiledImages = [{ id: 'http://example.com/image3', getProperty: () => 'Image' }];
 
-      createWrapper({ infoResponses, nonTiledImages });
+      createWrapper({ imageResources, nonTiledImages });
 
       // lastCall[0] returns props object
       expect(ImageFailureMessage.mock.lastCall[0]).toMatchObject({
