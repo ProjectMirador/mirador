@@ -1,33 +1,35 @@
 import { all, put, select, takeEvery } from 'redux-saga/effects';
-import { requestCanvasAnnotations, receiveAnnotation, requestAnnotation } from '../actions';
-import { getAnnotations, getCanvas, getMiradorCanvasWrapper } from '../selectors';
+import { requestCanvasAnnotations } from '../actions';
+import { getCanvas, getMiradorCanvasWrapper } from '../selectors';
 import ActionTypes from '../actions/action-types';
 import MiradorCanvas from '../../lib/MiradorCanvas';
+import { iiifApi } from '../api/iiifApi';
 
-/** Fetch annotations for a given canvas */
+/**
+ * Fetch annotations for a given canvas.
+ * iiifApi.getAnnotation dedupes/caches identical requests.
+ */
 export function* fetchCanvasAnnotations({ canvasId, windowId }) {
   const canvas = yield select(getCanvas, { canvasId, windowId });
-  const annotations = yield select(getAnnotations);
   const getMiradorCanvas = yield select(getMiradorCanvasWrapper);
   const miradorCanvas = getMiradorCanvas(canvas);
 
   return yield all([
     // IIIF v2
-    ...miradorCanvas.annotationListUris
-      .filter((uri) => !(annotations[canvas.id] && annotations[canvas.id][uri]))
-      .map((uri) => put(requestAnnotation(canvas.id, uri))),
+    ...miradorCanvas.annotationListUris.map((uri) =>
+      put(iiifApi.endpoints.getAnnotation.initiate({ annotationId: uri, targetId: canvas.id })),
+    ),
     // IIIF v3
-    ...miradorCanvas.canvasAnnotationPages
-      .filter((annotation) => !(annotations[canvas.id] && annotations[canvas.id][annotation.id]))
-      .map((annotation) => {
-        // If there are no items, try to retrieve the referenced resource.
-        // otherwise the resource should be embedded and just add to the store.
-        if (!annotation.items) {
-          return put(requestAnnotation(canvas.id, annotation.id));
-        }
+    ...miradorCanvas.canvasAnnotationPages.map((annotation) => {
+      // If there are no items, try to retrieve the referenced resource.
+      // otherwise the resource is already embedded -- seed the cache
+      // directly rather than triggering a pointless fetch.
+      if (!annotation.items) {
+        return put(iiifApi.endpoints.getAnnotation.initiate({ annotationId: annotation.id, targetId: canvas.id }));
+      }
 
-        return put(receiveAnnotation(canvas.id, annotation.id, annotation));
-      }),
+      return put(iiifApi.util.upsertQueryData('getAnnotation', { annotationId: annotation.id, targetId: canvas.id }, annotation));
+    }),
   ]);
 }
 

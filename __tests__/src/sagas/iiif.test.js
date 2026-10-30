@@ -1,12 +1,6 @@
 import { select } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
-import {
-  fetchAnnotation,
-  fetchManifest,
-  fetchSearchResponse,
-  fetchInfoResponse,
-  fetchResourceManifest,
-} from '../../../src/state/sagas/iiif';
+import { fetchManifest, fetchSearchResponse, fetchInfoResponse, fetchResourceManifest } from '../../../src/state/sagas/iiif';
 import { getConfig, getManifests, selectInfoResponse, getAccessTokens, getRequestsConfig } from '../../../src/state/selectors';
 
 describe('IIIF sagas', () => {
@@ -336,35 +330,6 @@ describe('IIIF sagas', () => {
       };
 
       return expectSaga(fetchSearchResponse, action).put.actionType('mirador/RECEIVE_SEARCH_FAILURE').run();
-    });
-  });
-
-  describe('fetchAnnotation', () => {
-    it('fetches a IIIF annotation page', () => {
-      fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
-      const action = {
-        annotationId: 'annotationId',
-        targetId: 'targetId',
-      };
-
-      return expectSaga(fetchAnnotation, action)
-        .put({
-          annotationId: 'annotationId',
-          annotationJson: { data: '12345' },
-          targetId: 'targetId',
-          type: 'mirador/RECEIVE_ANNOTATION',
-        })
-        .run();
-    });
-
-    it('handles failures', () => {
-      fetch.mockResponseOnce('<h1>Not Json</h1>');
-      const action = {
-        annotationId: 'annotationId',
-        targetId: 'targetId',
-      };
-
-      return expectSaga(fetchAnnotation, action).put.actionType('mirador/RECEIVE_ANNOTATION_FAILURE').run();
     });
   });
 

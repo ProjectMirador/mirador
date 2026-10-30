@@ -2,6 +2,7 @@ import { expect, it } from 'vitest';
 import { screen, fireEvent, within } from '@testing-library/react';
 import { setupIntegrationTestViewer, safeFindByRole } from '@tests/utils/test-utils';
 import config from '../mirador-configs/single-van-gogh';
+import { getAnnotations } from '../../../src/state/selectors';
 
 // TODO: sometimes this is failing with
 // TypeError: Cannot read properties of null (reading 'translate')
@@ -21,7 +22,7 @@ describe('Annotations in Mirador', () => {
     const annotationButtons = await screen.findAllByLabelText(/annotations/i);
     fireEvent.click(annotationButtons[0]);
 
-    const { annotations } = context.miradorInstance.store.getState();
+    const annotations = getAnnotations(context.miradorInstance.store.getState());
     expect(Object.keys(annotations).length).toEqual(1);
   });
 
