@@ -7,43 +7,6 @@ import ActionTypes from '../actions/action-types';
 export const searchesReducer = (state = {}, action) => {
   const searchStruct = (state[action.windowId] || {})[action.companionWindowId] || {};
   switch (action.type) {
-    case ActionTypes.REQUEST_SEARCH:
-      if (searchStruct.query !== action.query) {
-        // new query
-        return {
-          ...state,
-          [action.windowId]: {
-            ...state[action.windowId],
-            [action.companionWindowId]: {
-              ...searchStruct,
-              data: {
-                [action.searchId]: {
-                  isFetching: true,
-                },
-              },
-              query: action.query,
-              selectedContentSearchAnnotationIds: [],
-            },
-          },
-        };
-      }
-
-      // paginating through a query
-      return {
-        ...state,
-        [action.windowId]: {
-          ...state[action.windowId],
-          [action.companionWindowId]: {
-            ...searchStruct,
-            data: {
-              ...searchStruct.data,
-              [action.searchId]: {
-                isFetching: true,
-              },
-            },
-          },
-        },
-      };
     case ActionTypes.RECEIVE_SEARCH:
       return {
         ...state,

@@ -15,5 +15,8 @@ export const iiifApi = createApi({
     getAnnotation: builder.query({
       query: ({ annotationId }) => annotationId,
     }),
+    getSearchResponse: builder.query({
+      query: ({searchId}) => searchId
+    })
   }),
 });

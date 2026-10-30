@@ -12,7 +12,7 @@ import {
   showCollectionDialog,
 } from '../actions';
 import {
-  getSearchForWindow,
+  getSearchResponeForWindow,
   getSearchAnnotationsForCompanionWindow,
   getCanvasGrouping,
   getWindow,
@@ -166,8 +166,8 @@ export function getAnnotationsBySearch(state, { canvasIds, companionWindowIds, w
 }
 
 /** @private */
-export function* setCurrentAnnotationsOnCurrentCanvas({ annotationId, windowId, visibleCanvases }) {
-  const searches = yield select(getSearchForWindow, { windowId });
+export function* setCurrentAnnotationsOnCurrentCanvas({ annotationId, windowId, companionWindowId, query, visibleCanvases }) {
+  const searches = yield select(getSearchResponeForWindow, { windowId });
   const companionWindowIds = Object.keys(searches || {});
   if (companionWindowIds.length === 0) return;
 
@@ -257,6 +257,18 @@ export function* setCanvasforSelectedAnnotation({ annotationId, windowId }) {
   yield put(thunk);
 }
 
+/** Record the selected annotation on each search that contains it */
+export function* setSelectedContentSearchAnnotation({ annotationId, windowId }) {
+  const searches = yield select(getSearchResponeForWindow, { windowId });
+
+  for (const companionWindowId of Object.keys(searches)) {
+    const annotations = yield select(getSearchAnnotationsForCompanionWindow, { companionWindowId, windowId });
+    if (annotations.resources.some((r) => r.id === annotationId)) {
+      yield put(setContentSearchCurrentAnnotation(windowId, companionWindowId, [annotationId]));
+    }
+  }
+}
+
 /** Fetch info responses for the visible canvases */
 export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowId }) {
   const canvases = yield select(getCanvases, { windowId });
@@ -301,6 +313,7 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
     takeEvery(ActionTypes.RECEIVE_SEARCH, setCanvasOfFirstSearchResult),
     takeEvery(ActionTypes.SELECT_ANNOTATION, setCanvasforSelectedAnnotation),
+    takeEvery(ActionTypes.SELECT_ANNOTATION, setSelectedContentSearchAnnotation),
     takeEvery(ActionTypes.FOCUS_WINDOW, panToFocusedWindow),
   ]);
 }

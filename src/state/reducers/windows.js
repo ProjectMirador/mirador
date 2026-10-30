@@ -154,14 +154,6 @@ export const windowsReducer = (state = {}, action) => {
       };
     case ActionTypes.IMPORT_MIRADOR_STATE:
       return action.state.windows || [];
-    case ActionTypes.REQUEST_SEARCH:
-      return {
-        ...state,
-        [action.windowId]: {
-          ...state[action.windowId],
-          suggestedSearches: undefined,
-        },
-      };
     case ActionTypes.SHOW_COLLECTION_DIALOG:
       return {
         ...state,

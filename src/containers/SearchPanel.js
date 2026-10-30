@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import * as actions from '../state/actions';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchPanel } from '../components/SearchPanel';
-import { getManifestSearchService, getSearchQuery, getWindow } from '../state/selectors';
+import { getManifestSearchService, getCompanionWindow, getWindow } from '../state/selectors';
 
 /** */
 const mapStateToProps = (state, { id, windowId }) => ({
-  query: getSearchQuery(state, { companionWindowId: id, windowId }),
+  query: getCompanionWindow(state, { companionWindowId: id })?.query,
   searchService: getManifestSearchService(state, { windowId }),
   suggestedSearches: getWindow(state, { windowId }).suggestedSearches,
 });

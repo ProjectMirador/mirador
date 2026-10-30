@@ -182,16 +182,6 @@ export function* fetchInfoResponse({ imageResource, infoId, windowId }) {
   yield call(fetchIiifResourceWithAuth, `${infoId.replace(/\/$/, '')}/info.json`, iiifResource, {}, callbacks);
 }
 
-/** @private */
-export function* fetchSearchResponse({ windowId, companionWindowId, query, searchId }) {
-  const callbacks = {
-    failure: ({ error, json, response }) => receiveSearchFailure(windowId, companionWindowId, searchId, stringifyError(error)),
-    success: ({ json, response }) => receiveSearch(windowId, companionWindowId, searchId, json),
-  };
-  const dispatch = yield call(fetchIiifResource, searchId, {}, callbacks);
-  yield put(dispatch);
-}
-
 /** */
 export function* fetchResourceManifest({ manifestId, manifestJson }) {
   if (manifestJson) {
@@ -220,7 +210,6 @@ export default function* iiifSaga() {
   yield all([
     takeEvery(ActionTypes.REQUEST_MANIFEST, fetchManifest),
     takeEvery(ActionTypes.REQUEST_INFO_RESPONSE, fetchInfoResponse),
-    takeEvery(ActionTypes.REQUEST_SEARCH, fetchSearchResponse),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),
   ]);
 }

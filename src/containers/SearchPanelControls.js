@@ -17,7 +17,6 @@ import {
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   autocompleteService: getManifestAutocompleteService(state, { windowId }),
-  query: getSearchQuery(state, { companionWindowId, windowId }),
   searchIsFetching: getSearchIsFetching(state, { companionWindowId, windowId }),
   searchService: getManifestSearchService(state, { windowId }),
 });
