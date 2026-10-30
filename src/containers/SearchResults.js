@@ -20,7 +20,6 @@ import {
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
   isFetching: getSearchIsFetching(state, { companionWindowId, windowId }),
   nextSearch: getNextSearchId(state, { companionWindowId, windowId }),
-  query: getSearchQuery(state, { companionWindowId, windowId }),
   searchAnnotations: getSortedSearchAnnotationsForCompanionWindow(state, {
     companionWindowId,
     windowId,

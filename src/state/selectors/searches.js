@@ -5,6 +5,8 @@ import { getCanvas, getCanvases } from './canvases';
 import { getWindow } from './getters';
 import { getManifestLocale } from './manifests';
 import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
+import { iiifApi } from '../api/iiifApi';
+import { getCompanionWindow, getCompanionWindowsForContent } from '../selectors';
 
 /**
  *  Get searches from state.
@@ -24,6 +26,24 @@ export const getSearchForWindow = createSelector([(state, { windowId }) => windo
 });
 
 /**
+ * Returns the search result for a specific window.
+ * @param {object} state
+ * @param {string} windowId
+ * @returns {object}
+ */
+export const getSearchResponeForWindow = (state, { windowId }) => {
+  const searchCompanionWindows = getCompanionWindowsForContent(state, { content: 'search', windowId });
+  const searches = (searchCompanionWindows || [])
+    .map((companionWindow) => [
+      companionWindow.id,
+      getSearchResponseForCompanionWindow(state, { windowId, companionWindowId: companionWindow.id }),
+    ])
+    .filter(([, search]) => search !== undefined);
+
+  return Object.fromEntries(searches);
+}
+
+/**
  * Returns the search result for a specific companion window.
  * @param {object} state
  * @param {string} companionWindowId
@@ -38,11 +58,38 @@ const getSearchForCompanionWindow = createSelector(
 );
 
 /**
+ * Returns the search result for a specific companion window.
+ * @param {object} state
+ * @param {string} companionWindowId
+ * @returns {object|undefined}
+ */
+export const getSearchResponseForCompanionWindow = (state, { windowId, companionWindowId }) => {
+  const query = getCompanionWindow(state, { companionWindowId })?.query;
+  if (!windowId || !companionWindowId || !query) return undefined;
+  const rootState = miradorSlice(state);
+  if (!rootState[iiifApi.reducerPath]) return undefined;
+  const args = iiifApi.util
+  .selectCachedArgsForQuery(rootState, 'getSearchResponse')
+  .filter((arg) => arg.windowId === windowId && arg.companionWindowId === companionWindowId && arg.query === query);
+  if (args.length === 0) return undefined;
+  return {
+    data: Object.fromEntries(
+      args.map((arg) => {
+        const { data, isLoading, isError, error } = iiifApi.endpoints.getSearchResponse.select(arg)(rootState);
+        return [arg.searchId, { isFetching: isLoading, ...(isError ? { error: error?.data ?? error } : { json: data }) }];
+      }),
+    ),
+    query,
+  };
+};
+
+
+/**
  * Returns an array of search responses for a specific companion window.
  * @param {object} state
  * @returns {Array}
  */
-const getSearchResponsesForCompanionWindow = createSelector([getSearchForCompanionWindow], (results) => {
+const getSearchResponsesForCompanionWindow = createSelector([getSearchResponseForCompanionWindow], (results) => {
   if (!results) return EMPTY_ARRAY;
   return Object.values(results.data);
 });
@@ -53,7 +100,7 @@ const getSearchResponsesForCompanionWindow = createSelector([getSearchForCompani
  * @param {string} windowId
  * @returns {string|undefined}
  */
-export const getSearchQuery = createSelector([getSearchForCompanionWindow], (results) => results && results.query);
+export const getSearchQuery = createSelector([getSearchResponseForCompanionWindow], (results) => results && results.query);
 
 /**
  * Returns if search response for a companion window is fetching.
@@ -61,7 +108,7 @@ export const getSearchQuery = createSelector([getSearchForCompanionWindow], (res
  * @returns {boolean}
  */
 export const getSearchIsFetching = createSelector([getSearchResponsesForCompanionWindow], (results) =>
-  results.some((result) => result.isFetching),
+  results.some((result) => result.isFetching)
 );
 
 /**
@@ -70,7 +117,7 @@ export const getSearchIsFetching = createSelector([getSearchResponsesForCompanio
  * @param {string} windowId
  * @returns {number|undefined}
  */
-export const getSearchNumTotal = createSelector([getSearchForCompanionWindow], (results) => {
+export const getSearchNumTotal = createSelector([getSearchResponseForCompanionWindow], (results) => {
   if (!results || !results.data) return undefined;
 
   const resultWithWithin = Object.values(results.data).find((result) => !result.isFetching && result.json && result.json.within);
@@ -83,7 +130,7 @@ export const getSearchNumTotal = createSelector([getSearchForCompanionWindow], (
  * @param {string} windowId
  * @returns {number|undefined}
  */
-export const getNextSearchId = createSelector([getSearchForCompanionWindow], (results) => {
+export const getNextSearchId = createSelector([getSearchResponseForCompanionWindow], (results) => {
   if (!results || !results.data) return undefined;
 
   const resultWithAnUnresolvedNext = Object.values(results.data).find(
@@ -94,11 +141,7 @@ export const getNextSearchId = createSelector([getSearchForCompanionWindow], (re
 });
 
 const getSearchHitsForCompanionWindow = createSelector([getSearchResponsesForCompanionWindow], (results) =>
-  results.flatMap((result) => {
-    if (!result || !result.json || result.isFetching || !result.json.hits) return EMPTY_ARRAY;
-
-    return result.json.hits;
-  }),
+  results.flatMap((result) => (result?.json && !result.isFetching && result.json.hits) || EMPTY_ARRAY),
 );
 
 export const getSearchAnnotationsForCompanionWindow = createSelector(
@@ -177,8 +220,8 @@ export const getSortedSearchAnnotationsForCompanionWindow = createSelector(
  * @param {string} windowId
  * @returns {Array}
  */
-export const getSearchAnnotationsForWindow = createSelector([getSearchForWindow], (results) => {
-  if (!results) return EMPTY_ARRAY;
+export const getSearchAnnotationsForWindow = createSelector([getSearchResponeForWindow], (results) => {
+  if (!results) return EMPTY_OBJECT;
   const data = Object.values(results).map((r) => Object.values(r.data));
 
   return data.map((d) => searchResultsToAnnotation(d)).filter((a) => a.resources.length > 0);

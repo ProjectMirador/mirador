@@ -1,22 +1,8 @@
 import ActionTypes from './action-types';
-
-/**
- * requestSearch - action creator
- *
- * @param  {String} windowId
- * @param  {String} searchId
- * @param  {String} query
- * @memberof ActionCreators
- */
-export function requestSearch(windowId, companionWindowId, searchId, query) {
-  return {
-    companionWindowId,
-    query,
-    searchId,
-    type: ActionTypes.REQUEST_SEARCH,
-    windowId,
-  };
-}
+import { iiifApi } from '../api/iiifApi';
+import { getCompanionWindow } from '../selectors';
+import { updateWindow } from './window';
+import { updateCompanionWindow } from './companionWindow';
 
 /**
  * receiveSearch - action creator
@@ -77,7 +63,15 @@ export function removeSearch(windowId, companionWindowId) {
  * @memberof ActionCreators
  */
 export function fetchSearch(windowId, companionWindowId, searchId, query) {
-  return requestSearch(windowId, companionWindowId, searchId, query);
+  return (dispatch, getState) => {
+    const previousQuery = getCompanionWindow(getState(), { companionWindowId })?.query;
+
+    dispatch(updateWindow(windowId, { query, suggestedSearches: undefined }));
+    dispatch(updateCompanionWindow(windowId, companionWindowId, { query }));
+    // a new query clears the selection; paginating through the same query keeps it
+    if (previousQuery !== query) dispatch(setContentSearchCurrentAnnotation(windowId, companionWindowId, []));
+    return dispatch(iiifApi.endpoints.getSearchResponse.initiate({ windowId, companionWindowId, searchId, query }));
+  };
 }
 
 /**
