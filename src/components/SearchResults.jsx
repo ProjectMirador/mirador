@@ -26,6 +26,7 @@ function SearchHitsAndAnnotations({
     return searchAnnotations.map((anno, index) => (
       <SearchHit
         announcer={announce}
+        annotation={anno}
         annotationId={anno.id}
         companionWindowId={companionWindowId}
         containerRef={containerRef}
@@ -42,6 +43,7 @@ function SearchHitsAndAnnotations({
   return searchHits.map((hit, index) => (
     <SearchHit
       announcer={announce}
+      annotation={searchAnnotations.find((anno) => anno.id === hit.annotations[0])}
       annotationId={hit.annotations[0]}
       containerRef={containerRef}
       companionWindowId={companionWindowId}

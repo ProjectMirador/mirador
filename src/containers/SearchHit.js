@@ -17,13 +17,7 @@ import {
  * @memberof SearchHit
  * @private
  */
-const mapStateToProps = (state, { annotationId, hit = { annotations: [] }, companionWindowId, windowId }) => {
-  const hitAnnotation = getResourceAnnotationForSearchHit(state, {
-    annotationUri: annotationId,
-    companionWindowId,
-    windowId,
-  });
-
+const mapStateToProps = (state, { annotation, annotationId, hit = { annotations: [] }, companionWindowId, windowId }) => {
   const annotationLabel = getResourceAnnotationLabel(state, {
     annotationUri: annotationId,
     companionWindowId,
@@ -41,14 +35,14 @@ const mapStateToProps = (state, { annotationId, hit = { annotations: [] }, compa
   const allAnnoIds = [annotationId, ...hit.annotations];
 
   return {
-    adjacent: selectedCanvasIds.includes(hitAnnotation?.targetId),
-    annotation: hitAnnotation,
+    adjacent: selectedCanvasIds.includes(annotation?.targetId),
+    annotation: annotation,
     annotationId: annotationId,
     annotationLabel: annotationLabel[0],
     canvasLabel:
-      hitAnnotation &&
+      annotation &&
       getCanvasLabel(state, {
-        canvasId: hitAnnotation.targetId,
+        canvasId: annotation.targetId,
         windowId,
       }),
     selected: selectedContentSearchAnnotationsIds[0] && allAnnoIds.includes(selectedContentSearchAnnotationsIds[0]),
