@@ -22,38 +22,37 @@ function SearchHitsAndAnnotations({
   focused,
   toggleFocus,
 }) {
+  const commonProps = {
+    announcer: announce,
+    companionWindowId,
+    containerRef,
+    focused,
+    windowId,
+    showDetails: toggleFocus,
+  };
+
   if (searchHits.length === 0 && searchAnnotations.length > 0) {
     return searchAnnotations.map((anno, index) => (
       <SearchHit
-        announcer={announce}
+        {...commonProps}
         annotation={anno}
         annotationId={anno.id}
-        companionWindowId={companionWindowId}
-        containerRef={containerRef}
         key={anno.id}
-        focused={focused}
         index={index}
         total={searchAnnotations.length}
-        windowId={windowId}
-        showDetails={toggleFocus}
       />
     ));
   }
 
   return searchHits.map((hit, index) => (
     <SearchHit
-      announcer={announce}
+      {...commonProps}
       annotation={searchAnnotations.find((anno) => anno.id === hit.annotations[0])}
       annotationId={hit.annotations[0]}
-      containerRef={containerRef}
-      companionWindowId={companionWindowId}
       key={hit.annotations[0]}
-      focused={focused}
       hit={hit}
       index={index}
       total={searchHits.length}
-      windowId={windowId}
-      showDetails={toggleFocus}
     />
   ));
 }
