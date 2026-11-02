@@ -221,6 +221,15 @@ export const getResourceAnnotationLabel = createSelector(
   },
 );
 
+export const getResourceValueLabelForLocale = createSelector(
+  [getManifestLocale, (state, { resource }) => resource],
+  (locale, resource) => {
+    if (!(resource && resource.label)) return EMPTY_ARRAY;
+
+    return PropertyValue.parse(resource.label).getValues(locale);
+  },
+);
+
 const getAnnotationById = createSelector(
   [getSearchAnnotationsForWindow, (state, { annotationId }) => annotationId],
   (annotations, annotationId) => {

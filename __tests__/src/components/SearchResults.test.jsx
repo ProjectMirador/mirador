@@ -13,6 +13,7 @@ function createWrapper(props) {
       windowId="window"
       query="query"
       selectedContentSearchAnnotation={['foo']}
+      searchAnnotations={[{ id: 'foo', '@type': 'oa:Annotation', motivation: 'sc:painting' }]}
       searchHits={[
         {
           after: ', and start the chainsaw',
@@ -91,7 +92,7 @@ describe('SearchResults', () => {
   describe('annotation-only search results', () => {
     it('renders a SearchHit for each annotation', () => {
       createWrapper({
-        searchAnnotations: [{ id: 'x' }, { id: 'y' }],
+        searchAnnotations: [{ id: 'x', resource: { label: 'The Anno Label' } }, { id: 'y', resource: { label: 'Annother Anno Label' } }],
         searchHits: [],
       });
 
@@ -106,6 +107,7 @@ describe('SearchResults', () => {
         isFetching: false,
         query: 'nope',
         searchHits: [],
+        searchAnnotations: [],
       });
 
       expect(screen.getByText('No results found')).toHaveClass('MuiTypography-body1');
@@ -116,6 +118,7 @@ describe('SearchResults', () => {
         isFetching: true,
         query: 'nope',
         searchHits: [],
+        searchAnnotations: [],
       });
 
       expect(screen.queryByText('No results found')).not.toBeInTheDocument();

@@ -6,8 +6,7 @@ import * as actions from '../state/actions';
 import {
   getCanvasLabel,
   getVisibleCanvasIds,
-  getResourceAnnotationForSearchHit,
-  getResourceAnnotationLabel,
+  getResourceValueLabelForLocale,
   getSelectedContentSearchAnnotationIds,
   getSelectedAnnotationId,
 } from '../state/selectors';
@@ -18,11 +17,8 @@ import {
  * @private
  */
 const mapStateToProps = (state, { annotation, annotationId, hit = { annotations: [] }, companionWindowId, windowId }) => {
-  const annotationLabel = getResourceAnnotationLabel(state, {
-    annotationUri: annotationId,
-    companionWindowId,
-    windowId,
-  });
+  const annotationLabel = getResourceValueLabelForLocale(state, { resource: annotation?.resource });
+
   const selectedCanvasIds = getVisibleCanvasIds(state, { windowId });
 
   const selectedContentSearchAnnotationsIds = getSelectedContentSearchAnnotationIds(state, {
