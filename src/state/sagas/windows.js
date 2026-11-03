@@ -168,6 +168,15 @@ export function* fetchInfoResponses({ visibleCanvases: visibleCanvasIds, windowI
   );
 }
 
+export function* setCanvasforSelectedAnnotation({ canvasId, windowId }) {
+  if (!canvasId) return;
+  const window = yield select(getWindow, { windowId });
+  if (window?.canvasId === canvasId) return;
+
+  const thunk = yield call(setCanvas, windowId, canvasId);
+  yield put(thunk);
+}
+
 /** */
 export function* determineAndShowCollectionDialog(manifestId, windowId) {
   const manifestoInstance = yield select(getManifestoInstance, { manifestId });
@@ -186,6 +195,7 @@ export default function* windowsSaga() {
     takeEvery(ActionTypes.SET_CANVAS, fetchInfoResponses),
     takeEvery(ActionTypes.UPDATE_COMPANION_WINDOW, fetchCollectionManifests),
     takeEvery(ActionTypes.SET_WINDOW_VIEW_TYPE, updateVisibleCanvases),
+    takeEvery(ActionTypes.SELECT_ANNOTATION, setCanvasforSelectedAnnotation),
     takeEvery(ActionTypes.FOCUS_WINDOW, panToFocusedWindow),
   ]);
 }

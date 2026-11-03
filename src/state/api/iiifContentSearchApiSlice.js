@@ -17,10 +17,11 @@ export const iiifContentSearchApiSlice = createApi({
         getNextPageParam: (lastPage, allPages) => undefined
       },
       query: ({queryArg, pageParam}) => {
+        console.log(queryArg);
         if (pageParam) {
           return { url: pageParam }
         } else {
-          return { url: `${queryArg.endpoint}?q=${queryArg.query.toString()}` }
+          return { url: `${queryArg.endpoint}?q=${queryArg.query?.toString()}` }
         }
       },
       // `providesTags` determines which 'tag' is attached to the

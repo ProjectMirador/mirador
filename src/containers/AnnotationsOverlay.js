@@ -11,6 +11,7 @@ import {
   getPresentAnnotationsOnSelectedCanvases,
   getSelectedAnnotationId,
   getCurrentCanvasWorld,
+  getSearchAnnotationsForWindow,
 } from '../state/selectors';
 
 /**
@@ -24,11 +25,11 @@ const mapStateToProps = (state, { windowId }) => ({
   drawAnnotations:
     getConfig(state).window.forceDrawAnnotations ||
     getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0,
-  drawSearchAnnotations: false,
+  drawSearchAnnotations: true,
   highlightAllAnnotations: getWindow(state, { windowId }).highlightAllAnnotations,
   hoveredAnnotationIds: getWindow(state, { windowId }).hoveredAnnotationIds,
   palette: getTheme(state).palette,
-  searchAnnotations: [],
+  searchAnnotations: getSearchAnnotationsForWindow(state, { windowId }),
   selectedAnnotationId: getSelectedAnnotationId(state, { windowId }),
 });
 
