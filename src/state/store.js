@@ -8,6 +8,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import createRootReducer from './reducers/rootReducer';
 import getRootSaga from './sagas';
 import settings from '../config/settings';
+import { windowsListenerMiddleware } from './listeners/windows';
 
 /**
  * Configure Mirador Store
@@ -41,7 +42,7 @@ function createStore(pluginReducers, pluginSagas = []) {
           // everything under an extra top-level key.
           ignoredPaths: [/(^|\.)config$/],
         },
-      }).concat(sagaMiddleware),
+      }).concat(sagaMiddleware, windowsListenerMiddleware.middleware),
     reducer,
   });
 
