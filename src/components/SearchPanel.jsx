@@ -30,9 +30,9 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
  * change canvas when clicking an annotation
  * add overlays
  * add gallery view badge
+ * loading indicators
  * 
  * TODO:
- * loading indicators
  * load more
  * autocomplete
  * suggested search queries
@@ -102,7 +102,7 @@ const SearchHit = forwardRef(({ result: { hit, annotations }, focusedAnnotationI
     const renderedHit = focused ? hit : new TruncatedHit(hit);
     const wasTruncated = hit && (renderedHit.before !== hit.before || renderedHit.after !== hit.after);
     return (
-      <ListItemButton onClick={handleClick} ref={ref}>
+      <ListItemButton onClick={handleClick} ref={ref} divider>
         <ListItemText>
         <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas, selected: selected }} /> {renderedHit.before} <strong>{renderedHit?.match}</strong> {renderedHit.after}
         {wasTruncated && <button onClick={onFocus}>more</button>}
@@ -111,7 +111,7 @@ const SearchHit = forwardRef(({ result: { hit, annotations }, focusedAnnotationI
     );
   } else {
     return (
-      <ListItemButton onClick={handleClick} ref={ref}>
+      <ListItemButton onClick={handleClick} ref={ref} divider>
         <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas, selected: selected }} /> {annotations[0]?.chars}
       </ListItemButton>
     );
