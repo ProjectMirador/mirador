@@ -24,10 +24,10 @@ import { requestSearch } from '../state/actions/search';
  * highlight search results on the visible canvases
  * ScrollTo when you move canvases
  * change canvas when clicking an annotation
- * 
- * TODO:
  * add overlays
  * add gallery view badge
+ * 
+ * TODO:
  * loading indicators
  * load more
  * autocomplete
