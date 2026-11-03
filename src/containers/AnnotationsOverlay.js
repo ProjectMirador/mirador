@@ -5,7 +5,6 @@ import { AnnotationsOverlay } from '../components/AnnotationsOverlay';
 import * as actions from '../state/actions';
 import {
   getWindow,
-  getSearchAnnotationsForWindow,
   getCompanionWindowsForContent,
   getTheme,
   getConfig,
@@ -25,13 +24,11 @@ const mapStateToProps = (state, { windowId }) => ({
   drawAnnotations:
     getConfig(state).window.forceDrawAnnotations ||
     getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0,
-  drawSearchAnnotations:
-    getConfig(state).window.forceDrawAnnotations ||
-    getCompanionWindowsForContent(state, { content: 'search', windowId }).length > 0,
+  drawSearchAnnotations: false,
   highlightAllAnnotations: getWindow(state, { windowId }).highlightAllAnnotations,
   hoveredAnnotationIds: getWindow(state, { windowId }).hoveredAnnotationIds,
   palette: getTheme(state).palette,
-  searchAnnotations: getSearchAnnotationsForWindow(state, { windowId }),
+  searchAnnotations: [],
   selectedAnnotationId: getSelectedAnnotationId(state, { windowId }),
 });
 

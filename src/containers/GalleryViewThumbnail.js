@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import * as actions from '../state/actions';
 import { GalleryViewThumbnail } from '../components/GalleryViewThumbnail';
 import {
-  getSearchAnnotationsForWindow,
   getCurrentCanvas,
   getConfig,
   getPresentAnnotationsOnSelectedCanvases,
@@ -13,10 +12,6 @@ import {
 /** */
 const mapStateToProps = (state, { canvas, windowId }) => {
   const currentCanvas = getCurrentCanvas(state, { windowId });
-  const searchAnnotations = getSearchAnnotationsForWindow(state, { windowId });
-
-  const canvasAnnotations = searchAnnotations.flatMap((a) => a.resources).filter((a) => a.targetId === canvas.id);
-
   const hasOpenAnnotationsWindow = getCompanionWindowsForContent(state, { content: 'annotations', windowId }).length > 0;
 
   return {
@@ -27,7 +22,7 @@ const mapStateToProps = (state, { canvas, windowId }) => {
       return annotations.reduce((v, a) => v + a.resources.filter((r) => r.targetId === canvas.id).length, 0);
     })(),
     config: getConfig(state).galleryView,
-    searchAnnotationsCount: canvasAnnotations.length,
+    searchAnnotationsCount: 0,
     selected: currentCanvas && currentCanvas.id === canvas.id,
   };
 };

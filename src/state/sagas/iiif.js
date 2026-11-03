@@ -8,8 +8,6 @@ import {
   receiveInfoResponse,
   receiveInfoResponseFailure,
   receiveDegradedInfoResponse,
-  receiveSearch,
-  receiveSearchFailure,
   receiveAnnotation,
   receiveAnnotationFailure,
 } from '../actions';
@@ -185,16 +183,6 @@ export function* fetchInfoResponse({ imageResource, infoId, windowId }) {
 }
 
 /** @private */
-export function* fetchSearchResponse({ windowId, companionWindowId, query, searchId }) {
-  const callbacks = {
-    failure: ({ error, json, response }) => receiveSearchFailure(windowId, companionWindowId, searchId, stringifyError(error)),
-    success: ({ json, response }) => receiveSearch(windowId, companionWindowId, searchId, json),
-  };
-  const dispatch = yield call(fetchIiifResource, searchId, {}, callbacks);
-  yield put(dispatch);
-}
-
-/** @private */
 export function* fetchAnnotation({ targetId, annotationId }) {
   const callbacks = {
     failure: ({ error, json, response }) => receiveAnnotationFailure(targetId, annotationId, stringifyError(error)),
@@ -232,7 +220,6 @@ export default function* iiifSaga() {
   yield all([
     takeEvery(ActionTypes.REQUEST_MANIFEST, fetchManifest),
     takeEvery(ActionTypes.REQUEST_INFO_RESPONSE, fetchInfoResponse),
-    // takeEvery(ActionTypes.REQUEST_SEARCH, fetchSearchResponse),
     takeEvery(ActionTypes.REQUEST_ANNOTATION, fetchAnnotation),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),
   ]);
