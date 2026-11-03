@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { forwardRef, useRef, useState, useMemo } from 'react';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,15 +14,16 @@ import { useGetIiifContentSearchInfiniteQuery } from '../state/api/iiifContentSe
 import AnnotationResource from '../lib/AnnotationResource';
 import { selectAnnotation } from '../state/actions';
 import TruncatedHit from '../lib/TruncatedHit';
+import { ScrollTo } from './ScrollTo';
 
 /**
  * DONE:
  * show search results (hits/annotations)
  * focus mode
  * highlight search results on the visible canvases
+ * ScrollTo when you move canvases
  * 
  * TODO:
- * ScrollTo when you move canvases
  * change canvas when clicking an annotation
  * add overlays
  * add gallery view badge
@@ -72,7 +73,7 @@ function normalizeContentSearchResult(data, canvasIds) {
   return { results: sortedResults, hits, resources };
 }
 
-function SearchHit({ result: { hit, annotations }, focusedAnnotationId, onFocus, index, windowId }) {
+const SearchHit = forwardRef(({ result: { hit, annotations }, containerRef, focusedAnnotationId, onFocus, index, windowId }, ref) => {
   const dispatch = useDispatch();
   const handleClick = () => {
     dispatch(selectAnnotation(windowId, annotations[0]?.id));
@@ -93,7 +94,7 @@ function SearchHit({ result: { hit, annotations }, focusedAnnotationId, onFocus,
     const renderedHit = focused ? hit : new TruncatedHit(hit);
     const wasTruncated = hit && (renderedHit.before !== hit.before || renderedHit.after !== hit.after);
     return (
-      <ListItemButton onClick={handleClick}>
+      <ListItemButton onClick={handleClick} ref={ref}>
         <ListItemText>
         <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas }} /> {renderedHit.before} <strong>{renderedHit?.match}</strong> {renderedHit.after}
         {wasTruncated && <button onClick={onFocus}>more</button>}
@@ -102,30 +103,41 @@ function SearchHit({ result: { hit, annotations }, focusedAnnotationId, onFocus,
     );
   } else {
     return (
-      <ListItemButton onClick={handleClick}>
+      <ListItemButton onClick={handleClick} ref={ref}>
         <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas }} /> {annotations[0]?.chars}
       </ListItemButton>
     );
   }
 
-}
+});
 
 export function SearchPanel({ id, windowId }) {
   const { t } = useTranslation();
+  const containerRef = useRef(null);
+
   const endpoint = useSelector(state => getManifestSearchService(state, { windowId }))?.id;
   const [input, setInput] = useState('');
   const [query, setQuery] = useState('');
   const [focusedAnnotationId, setFocusedAnnotationId] = useState(null);
   const canvasIds = useSelector(state => getCanvases(state, { windowId })).map(canvas => canvas.id);
 
+  const visibleCanvasIds = useSelector(state => getVisibleCanvasIds(state, { windowId }));
+
   const { data, isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip:  query?.length === 0 });
   const contentSearchResult = useMemo(() => normalizeContentSearchResult(data, canvasIds), [data, canvasIds]);
+
+  const bestResultToScrollTo = useMemo(() => {
+    return contentSearchResult?.results?.find(result =>
+      visibleCanvasIds.some(canvasId => result?.annotations?.some(annotation => annotation?.targetId === canvasId))
+    );
+  }, [contentSearchResult, visibleCanvasIds])
 
   return (
     <CompanionWindow
       ariaLabel={t('searchTitle')}
       id={id}
       title={t('searchTitle')}
+      ref={containerRef}
       windowId={windowId}>
         <form style={{ display: 'flex', gap: '8px', alignItems: 'center' }} onSubmit={(e) => { e.preventDefault(); setQuery(input) }}>
           <TextField
@@ -137,7 +149,14 @@ export function SearchPanel({ id, windowId }) {
         {focusedAnnotationId && <button onClick={() => setFocusedAnnotationId(null)}>Back</button> }
         <List>
           {contentSearchResult?.results?.map((result, index) => (
-            <SearchHit key={index} index={index} result={result} windowId={windowId} onFocus={() => setFocusedAnnotationId(result?.annotations?.[0]?.id)} focusedAnnotationId={focusedAnnotationId} />
+            <ScrollTo
+              containerRef={containerRef}
+              key={`${result?.annotations?.[0]?.id}-scroll`}
+              offsetTop={96} // offset for the height of the form above
+              scrollTo={bestResultToScrollTo == result}
+            >
+              <SearchHit key={index} index={index} result={result} windowId={windowId} onFocus={() => setFocusedAnnotationId(result?.annotations?.[0]?.id)} focusedAnnotationId={focusedAnnotationId} containerRef={containerRef}  />
+            </ScrollTo>
           ))}
         </List>
     </CompanionWindow>
