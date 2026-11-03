@@ -57,6 +57,7 @@ export function SearchHit({
   annotationId = undefined,
   annotationLabel = undefined,
   announcer = undefined,
+  canvasId = undefined,
   canvasLabel = undefined,
   companionWindowId = undefined,
   containerRef = undefined,
@@ -65,6 +66,7 @@ export function SearchHit({
   index = undefined,
   selectAnnotation = () => {},
   selected = false,
+  setCanvas = () => {},
   showDetails = () => {},
   total = undefined,
   windowId,
@@ -74,7 +76,10 @@ export function SearchHit({
 
   /** */
   const handleClick = () => {
-    if (annotation && annotationId) selectAnnotation(annotationId);
+    if (!annotation || !annotationId) return;
+
+    selectAnnotation(annotationId);
+    if (canvasId && !adjacent) setCanvas(canvasId);
   };
 
   const truncatedHit = useMemo(() => hit && new TruncatedHit(hit, annotation), [hit, annotation]);
@@ -204,6 +209,7 @@ SearchHit.propTypes = {
   annotationId: PropTypes.string,
   annotationLabel: PropTypes.string,
   announcer: PropTypes.func,
+  canvasId: PropTypes.string,
   canvasLabel: PropTypes.string,
   companionWindowId: PropTypes.string,
   containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]),
@@ -216,6 +222,7 @@ SearchHit.propTypes = {
   index: PropTypes.number,
   selectAnnotation: PropTypes.func,
   selected: PropTypes.bool,
+  setCanvas: PropTypes.func,
   showDetails: PropTypes.func,
   total: PropTypes.number,
   windowId: PropTypes.string.isRequired,

@@ -4,68 +4,50 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRightSharp';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import useSearchResults from '../hooks/useSearchResults';
 
 /**
  * SearchPanelNavigation ~
  */
-export function SearchPanelNavigation({
-  numTotal = undefined,
-  searchHits = [],
-  selectedContentSearchAnnotation,
-  direction,
-  selectAnnotation,
-}) {
+export function SearchPanelNavigation({ companionWindowId, direction, selectAnnotation, setCanvas, windowId }) {
   const { t } = useTranslation();
-  /** */
-  const nextSearchResult = (currentHitIndex) => {
-    selectAnnotation(searchHits[currentHitIndex + 1].annotations[0]);
+  const { currentIndex, results, total, visibleCanvasIds } = useSearchResults(windowId, companionWindowId);
+
+  if (results.length === 0) return null;
+
+  /** select a result and move to its canvas if it isn't already visible */
+  const selectResult = (entry) => {
+    if (!entry?.annotationId) return;
+
+    selectAnnotation(entry.annotationId);
+    if (entry.canvasId && !visibleCanvasIds.includes(entry.canvasId)) setCanvas(entry.canvasId);
   };
 
-  /** */
-  const previousSearchResult = (currentHitIndex) => {
-    selectAnnotation(searchHits[currentHitIndex - 1].annotations[0]);
-  };
-
-  /** */
-  const hasNextResult = (currentHitIndex) => {
-    if (searchHits.length === 0) return false;
-    if (currentHitIndex < searchHits.length - 1) return true;
-    return false;
-  };
-
-  /** */
-  const hasPreviousResult = (currentHitIndex) => {
-    if (searchHits.length === 0) return false;
-    if (currentHitIndex > 0) return true;
-    return false;
-  };
-
+  const hasPreviousResult = currentIndex > 0;
+  const hasNextResult = currentIndex < results.length - 1;
   const iconStyle = direction === 'rtl' ? { transform: 'rotate(180deg)' } : {};
 
-  const currentHitIndex = searchHits.findIndex((val) => val.annotations.includes(selectedContentSearchAnnotation[0]));
-  let lengthText = searchHits.length;
-  if (searchHits.length < numTotal) {
+  let lengthText = results.length;
+  if (results.length < total) {
     lengthText += '+';
   }
-
-  if (searchHits.length === 0) return null;
 
   return (
     <Typography variant="body2" align="center">
       <MiradorMenuButton
         aria-label={t('searchPreviousResult')}
-        disabled={!hasPreviousResult(currentHitIndex)}
-        onClick={() => previousSearchResult(currentHitIndex)}
+        disabled={!hasPreviousResult}
+        onClick={() => selectResult(results[currentIndex - 1])}
       >
         <ChevronLeftIcon style={iconStyle} />
       </MiradorMenuButton>
       <span style={{ unicodeBidi: 'plaintext' }} role="status">
-        {t('pagination', { current: currentHitIndex + 1, total: lengthText })}
+        {t('pagination', { current: currentIndex + 1, total: lengthText })}
       </span>
       <MiradorMenuButton
         aria-label={t('searchNextResult')}
-        disabled={!hasNextResult(currentHitIndex)}
-        onClick={() => nextSearchResult(currentHitIndex)}
+        disabled={!hasNextResult}
+        onClick={() => selectResult(results[currentIndex + 1])}
       >
         <ChevronRightIcon style={iconStyle} />
       </MiradorMenuButton>
@@ -74,11 +56,9 @@ export function SearchPanelNavigation({
 }
 
 SearchPanelNavigation.propTypes = {
+  companionWindowId: PropTypes.string.isRequired,
   direction: PropTypes.string.isRequired,
-  numTotal: PropTypes.number,
-  searchHits: PropTypes.arrayOf(PropTypes.object),
   selectAnnotation: PropTypes.func.isRequired,
-  selectedContentSearchAnnotation: PropTypes.arrayOf(PropTypes.string).isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
+  setCanvas: PropTypes.func.isRequired,
   windowId: PropTypes.string.isRequired,
 };

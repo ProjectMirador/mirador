@@ -3,12 +3,14 @@ import { PropertyValue } from 'manifesto.js';
 import AnnotationList from '../../lib/AnnotationList';
 import { getCanvas, getCanvases } from './canvases';
 import { getWindow } from './getters';
-import { getManifestLocale } from './manifests';
+import { getManifestLocale, getManifestSearchService } from './manifests';
+import iiifContentSearchApiSlice from '../api/iiifContentSearchApiSlice';
 import { miradorSlice, EMPTY_ARRAY, EMPTY_OBJECT } from './utils';
 
 /**
  *  Get searches from state.
  */
+//TODO: .... get from RTkQ now??
 const getSearches = (state) => miradorSlice(state).searches;
 
 /**
@@ -17,6 +19,7 @@ const getSearches = (state) => miradorSlice(state).searches;
  * @param {string} windowId
  * @returns {object}
  */
+// TODO:...
 export const getSearchForWindow = createSelector([(state, { windowId }) => windowId, getSearches], (windowId, searches) => {
   if (!windowId || !searches) return EMPTY_OBJECT;
 
@@ -29,6 +32,7 @@ export const getSearchForWindow = createSelector([(state, { windowId }) => windo
  * @param {string} companionWindowId
  * @returns {object|undefined}
  */
+// TODO: .....
 const getSearchForCompanionWindow = createSelector(
   [getSearchForWindow, (state, { companionWindowId }) => companionWindowId],
   (results, companionWindowId) => {
@@ -172,17 +176,38 @@ export const getSortedSearchAnnotationsForCompanionWindow = createSelector(
 );
 
 /**
- * Returns sorted search annotations for window.
+ * Returns the content search annotations for each search companion window
+ * in a window, read from the RTK Query cache.
  * @param {object} state
  * @param {string} windowId
- * @returns {Array}
+ * @returns {Array<{id: string, resources: Array}>}
  */
-export const getSearchAnnotationsForWindow = createSelector([getSearchForWindow], (results) => {
-  if (!results) return EMPTY_ARRAY;
-  const data = Object.values(results).map((r) => Object.values(r.data));
+export const getSearchAnnotationsForWindow = createSelector(
+  [
+    getSearchForWindow,
+    (state, { windowId }) => getManifestSearchService(state, { windowId })?.id,
+    (state) => miradorSlice(state)[iiifContentSearchApiSlice.reducerPath],
+  ],
+  (searches, endpoint, apiState) => {
+    if (!searches || !endpoint || !apiState) return EMPTY_ARRAY;
 
-  return data.map((d) => searchResultsToAnnotation(d)).filter((a) => a.resources.length > 0);
-});
+    const annotations = Object.values(searches)
+      .map(({ query }) => {
+        if (!query) return undefined;
+
+        // same arg shape as useSearchResults, so it resolves to the same cache entry
+        const { data } = iiifContentSearchApiSlice.endpoints.getIiifContentSearch.select({ endpoint, query })({
+          [iiifContentSearchApiSlice.reducerPath]: apiState,
+        });
+        const resources = (data?.pages ?? []).flatMap((page) => new AnnotationList(page).resources);
+
+        return { id: data?.pages?.[0]?.['@id'], resources };
+      })
+      .filter((a) => a && a.resources.length > 0);
+
+    return annotations.length > 0 ? annotations : EMPTY_ARRAY;
+  },
+);
 
 /**
  * Returns ids of selected content search annotations.

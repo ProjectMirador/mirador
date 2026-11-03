@@ -14,13 +14,15 @@ export const iiifContentSearchApiSlice = createApi({
     getIiifContentSearch: build.infiniteQuery({
       infiniteQueryOptions: {
         initialPageParam: undefined,
-        getNextPageParam: (lastPage, allPages) => undefined
+        // IIIF Content Search v1: each page links to the next page by URL
+        getNextPageParam: (lastPage) => lastPage?.next,
       },
       query: ({queryArg, pageParam}) => {
         if (pageParam) {
           return { url: pageParam }
         } else {
-          return { url: `${queryArg.endpoint}?q=${queryArg.query.toString()}` }
+          const separator = queryArg.endpoint.includes('?') ? '&' : '?'
+          return { url: `${queryArg.endpoint}${separator}${new URLSearchParams({ q: queryArg.query })}` }
         }
       },
       // `providesTags` determines which 'tag' is attached to the

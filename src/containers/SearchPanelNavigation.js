@@ -3,26 +3,15 @@ import { connect } from 'react-redux';
 import { withPlugins } from '../extend/withPlugins';
 import { SearchPanelNavigation } from '../components/SearchPanelNavigation';
 import * as actions from '../state/actions';
-import {
-  getSelectedContentSearchAnnotationIds,
-  getSearchNumTotal,
-  getSortedSearchHitsForCompanionWindow,
-  getThemeDirection,
-} from '../state/selectors';
+import { getThemeDirection } from '../state/selectors';
 
 /**
  * mapStateToProps - used to hook up connect to state
- * @memberof SearchPanelControls
+ * @memberof SearchPanelNavigation
  * @private
  */
-const mapStateToProps = (state, { companionWindowId, windowId }) => ({
+const mapStateToProps = (state) => ({
   direction: getThemeDirection(state),
-  numTotal: getSearchNumTotal(state, { companionWindowId, windowId }),
-  searchHits: getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
-  selectedContentSearchAnnotation: getSelectedContentSearchAnnotationIds(state, {
-    companionWindowId,
-    windowId,
-  }),
 });
 
 /**
@@ -32,6 +21,7 @@ const mapStateToProps = (state, { companionWindowId, windowId }) => ({
  */
 const mapDispatchToProps = (dispatch, { windowId }) => ({
   selectAnnotation: (...args) => dispatch(actions.selectAnnotation(windowId, ...args)),
+  setCanvas: (...args) => dispatch(actions.setCanvas(windowId, ...args)),
 });
 
 const enhance = compose(connect(mapStateToProps, mapDispatchToProps), withPlugins('SearchPanelNavigation'));
