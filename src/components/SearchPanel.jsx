@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState, useMemo } from 'react';
+import { forwardRef, useRef, useState, useMemo, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import { useDispatch, useSelector } from 'react-redux';
@@ -121,10 +121,16 @@ export function SearchPanel({ id, windowId }) {
   const containerRef = useRef(null);
   
   const endpoint = useSelector(state => getManifestSearchService(state, { windowId }))?.id;
-  const [input, setInput] = useState('');
-
+  
   const query = useSelector(state => getSearchQuery(state, { companionWindowId: id, windowId }));
   const setQuery = (query) => dispatch(requestSearch(windowId, id, query));
+  const hasQuery = query && query !== ''
+
+  const [input, setInput] = useState(query || '');
+
+  useEffect(() => {
+    setInput(query || '');
+  }, [query]);
 
   const [focusedAnnotationId, setFocusedAnnotationId] = useState(null);
   const selectedAnnotationId = useSelector(state => getSelectedAnnotationId(state, { windowId }));
@@ -153,7 +159,25 @@ export function SearchPanel({ id, windowId }) {
     <CompanionWindow
       ariaLabel={t('searchTitle')}
       id={id}
-      title={t('searchTitle')}
+      title={
+        <>
+          {t('searchTitle')}
+          {hasQuery && (
+            <Chip
+              aria-label={t('clearSearchAria')}
+              role="button"
+              sx={{ marginLeft: 1 }}
+              color="secondary"
+              label={t('clearSearch')}
+              onClick={() => setQuery(null) }
+              onDelete={() => setQuery(null)}
+              size="small"
+              tabIndex={0}
+              variant="outlined"
+            />
+          )}
+        </>
+      }
       ref={containerRef}
       windowId={windowId}>
         <form style={{ display: 'flex', gap: '8px', alignItems: 'center' }} onSubmit={(e) => { e.preventDefault(); setQuery(input) }}>
