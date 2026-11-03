@@ -31,9 +31,9 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
  * add overlays
  * add gallery view badge
  * loading indicators
+ * load more
  * 
  * TODO:
- * load more
  * autocomplete
  * suggested search queries
  */
@@ -180,8 +180,9 @@ export function SearchPanel({ id, windowId }) {
 
   const visibleCanvasIds = useSelector(state => getVisibleCanvasIds(state, { windowId }));
 
-  const { data, isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: query?.length === 0 });
+  const { data, hasNextPage, fetchNextPage } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: query?.length === 0 });
   const contentSearchResult = useMemo(() => normalizeContentSearchResult(data, canvasIds), [data, canvasIds]);
+  const searchNumTotal = data?.pages?.[0]?.within?.total;
 
   const bestResultToScrollTo = useMemo(() => {
 
@@ -238,6 +239,17 @@ export function SearchPanel({ id, windowId }) {
             </ScrollTo>
           ))}
         </List>
+        {hasNextPage && (
+            <Button
+            sx={{ width: '100%' }}
+            color="secondary"
+            onClick={() => fetchNextPage()}
+          >
+            {t('moreResults')}
+            <br />
+            {searchNumTotal && `(${t('searchResultsRemaining', { numLeft: searchNumTotal - contentSearchResult?.results?.length})})`}
+          </Button>
+        )}
     </CompanionWindow>
   );
 }
