@@ -16,6 +16,10 @@ import { selectAnnotation } from '../state/actions';
 import TruncatedHit from '../lib/TruncatedHit';
 import { ScrollTo } from './ScrollTo';
 import { requestSearch } from '../state/actions/search';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/SearchSharp';
+import CircularProgress from '@mui/material/CircularProgress';
+import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
  * DONE:
@@ -115,6 +119,49 @@ const SearchHit = forwardRef(({ result: { hit, annotations }, focusedAnnotationI
 
 });
 
+
+const SearchProgressIndicator = () => (
+  <CircularProgress
+    sx={{
+      left: '50%',
+      marginLeft: '-25px',
+      marginTop: '-25px',
+      position: 'absolute',
+      top: '50%',
+    }}
+    size={50}
+  />
+)
+
+function SearchBar({ query, submit, windowId }) {
+  const { t } = useTranslation();
+  const [input, setInput] = useState(query || '');
+  const endpoint = useSelector(state => getManifestSearchService(state, { windowId }))?.id;
+  const { data, isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: query?.length === 0 });
+
+  return (
+    <form style={{ display: 'flex', gap: '8px', alignItems: 'center', marginRight: 8, paddingBottom: 8 }} onSubmit={(e) => { e.preventDefault(); submit(input) }}>
+      <TextField
+        label={t('searchInputLabel')}
+        value={input}
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment sx={{ position: 'relative'}} position="end">
+                <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
+                  <SearchIcon />
+                </MiradorMenuButton>
+                {isFetching && <SearchProgressIndicator />}
+              </InputAdornment>
+            )
+          }
+        }}
+        onChange={(e) => setInput(e.target.value)}
+      />
+    </form>
+  )
+}
+
 export function SearchPanel({ id, windowId }) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -126,11 +173,6 @@ export function SearchPanel({ id, windowId }) {
   const setQuery = (query) => dispatch(requestSearch(windowId, id, query));
   const hasQuery = query && query !== ''
 
-  const [input, setInput] = useState(query || '');
-
-  useEffect(() => {
-    setInput(query || '');
-  }, [query]);
 
   const [focusedAnnotationId, setFocusedAnnotationId] = useState(null);
   const selectedAnnotationId = useSelector(state => getSelectedAnnotationId(state, { windowId }));
@@ -138,7 +180,7 @@ export function SearchPanel({ id, windowId }) {
 
   const visibleCanvasIds = useSelector(state => getVisibleCanvasIds(state, { windowId }));
 
-  const { data, isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip:  query?.length === 0 });
+  const { data, isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: query?.length === 0 });
   const contentSearchResult = useMemo(() => normalizeContentSearchResult(data, canvasIds), [data, canvasIds]);
 
   const bestResultToScrollTo = useMemo(() => {
@@ -178,15 +220,11 @@ export function SearchPanel({ id, windowId }) {
           )}
         </>
       }
+      titleControls={
+        <SearchBar key={query} query={query} submit={setQuery} windowId={windowId} />
+      }
       ref={containerRef}
       windowId={windowId}>
-        <form style={{ display: 'flex', gap: '8px', alignItems: 'center' }} onSubmit={(e) => { e.preventDefault(); setQuery(input) }}>
-          <TextField
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <button>{t('search')}</button>
-        </form>
         {focusedAnnotationId && <button onClick={() => setFocusedAnnotationId(null)}>Back</button> }
         <List>
           {contentSearchResult?.results?.map((result, index) => (
