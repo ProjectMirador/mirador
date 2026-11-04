@@ -34,7 +34,7 @@ function createStore(pluginReducers, pluginSagas = []) {
           // This keeps compatibility with any external consumer of that documented ActionTypes entry
           // `config` is included here too since IMPORT_MIRADOR_STATE's
           // action payload carries a full `state.config` snapshot.
-          ignoredActionPaths: ['imageResource', /(^|\.)config$/],
+          ignoredActionPaths: ['imageResource', /(^|\.)config$/, ],
           // config is Mirador's plugin/host config API surface -- it
           // legitimately carries functions by design (MUI theme
           // styleOverrides, config.export.manifests.filter, etc.). Matched by

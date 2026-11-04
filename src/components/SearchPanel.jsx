@@ -1,5 +1,6 @@
 import { forwardRef, useRef, useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useDebounce } from 'use-debounce'
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +13,7 @@ import {
   getWindow,
   getManifestSearchService,
   getThemeDirection,
+  getManifestAutocompleteService,
 } from '../state/selectors';
 import TextField from '@mui/material/TextField';
 import List from '@mui/material/List';
@@ -19,7 +21,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
-import { useGetIiifContentSearchInfiniteQuery } from '../state/api/iiifContentSearchApiSlice';
+import { useGetIiifContentSearchInfiniteQuery, useGetContentSearchAutocompleteQuery } from '../state/api/iiifContentSearchApiSlice';
 import AnnotationResource from '../lib/AnnotationResource';
 import { selectAnnotation } from '../state/actions';
 import TruncatedHit from '../lib/TruncatedHit';
@@ -47,9 +49,9 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRightSharp';
  * loading indicators
  * load more
  * suggested search queries
+ * autocomplete
  *
  * TODO:
- * autocomplete
  * select the first search result after receiving search results
  */
 
@@ -172,9 +174,14 @@ const SearchProgressIndicator = () => (
 
 function SearchBar({ query = '', submit, windowId }) {
   const { t } = useTranslation();
-  const [input, setInput] = useState(query);
+  const [input, setInput] = useState(query)
   const endpoint = useSelector((state) => getManifestSearchService(state, { windowId }))?.id;
+  const autocompleteEndpoint = useSelector((state) => getManifestAutocompleteService(state, { windowId }))?.id
+
   const { data, isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: query?.length === 0 });
+
+
+  const { autocompleteData, autocompleteIsFetching } = useGetContentSearchAutocompleteQuery({ autocompleteEndpoint, input }, { skip: input?.length < 2 });
 
   return (
     <form
