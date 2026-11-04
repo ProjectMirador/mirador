@@ -1,4 +1,5 @@
 import { forwardRef, useRef, useState, useMemo, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import { useDispatch, useSelector } from 'react-redux';
@@ -91,43 +92,63 @@ function normalizeContentSearchResult(data, canvasIds) {
   return { results: sortedResults, hits, resources };
 }
 
-const SearchHit = forwardRef(({ result: { hit, annotations }, focusedAnnotationId, onFocus, index, selected, windowId }, ref) => {
-  const dispatch = useDispatch();
-  const handleClick = () => {
-    dispatch(selectAnnotation(windowId, annotations[0]?.id, annotations[0]?.targetId));
-  };
+const SearchHit = forwardRef(
+  ({ result: { hit, annotations }, focusedAnnotationId = undefined, onFocus, index, selected = false, windowId }, ref) => {
+    const dispatch = useDispatch();
+    const handleClick = () => {
+      dispatch(selectAnnotation(windowId, annotations[0]?.id, annotations[0]?.targetId));
+    };
 
-  const visibleCanvasIds = useSelector((state) => getVisibleCanvasIds(state, { windowId }));
+    const visibleCanvasIds = useSelector((state) => getVisibleCanvasIds(state, { windowId }));
 
-  const annotationCanvasIds = annotations.map((annotation) => annotation.targetId);
-  const onCurrentlyVisibleCanvas = annotationCanvasIds.some((id) => visibleCanvasIds.includes(id));
+    const annotationCanvasIds = annotations.map((annotation) => annotation.targetId);
+    const onCurrentlyVisibleCanvas = annotationCanvasIds.some((id) => visibleCanvasIds.includes(id));
 
-  const focused = focusedAnnotationId === annotations[0]?.id;
+    const focused = focusedAnnotationId === annotations[0]?.id;
 
-  if (focusedAnnotationId && !focused) {
-    return null;
-  }
+    if (focusedAnnotationId && !focused) {
+      return null;
+    }
 
-  if (hit) {
-    const renderedHit = focused ? hit : new TruncatedHit(hit);
-    const wasTruncated = hit && (renderedHit.before !== hit.before || renderedHit.after !== hit.after);
+    if (hit) {
+      const renderedHit = focused ? hit : new TruncatedHit(hit);
+      const wasTruncated = hit && (renderedHit.before !== hit.before || renderedHit.after !== hit.after);
+      return (
+        <ListItemButton onClick={handleClick} ref={ref} divider>
+          <ListItemText>
+            <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas, selected: selected }} />{' '}
+            {renderedHit.before} <strong>{renderedHit?.match}</strong> {renderedHit.after}
+            {wasTruncated && <button onClick={onFocus}>more</button>}
+          </ListItemText>
+        </ListItemButton>
+      );
+    }
     return (
       <ListItemButton onClick={handleClick} ref={ref} divider>
-        <ListItemText>
-          <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas, selected: selected }} />{' '}
-          {renderedHit.before} <strong>{renderedHit?.match}</strong> {renderedHit.after}
-          {wasTruncated && <button onClick={onFocus}>more</button>}
-        </ListItemText>
+        <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas, selected: selected }} />{' '}
+        {annotations[0]?.chars}
       </ListItemButton>
     );
-  }
-  return (
-    <ListItemButton onClick={handleClick} ref={ref} divider>
-      <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas, selected: selected }} />{' '}
-      {annotations[0]?.chars}
-    </ListItemButton>
-  );
-});
+  },
+);
+
+SearchHit.displayName = 'SearchHit';
+SearchHit.propTypes = {
+  focusedAnnotationId: PropTypes.string,
+  index: PropTypes.number.isRequired,
+  result: PropTypes.shape({
+    hit: PropTypes.object,
+    annotations: PropTypes.arrayOf(PropTypes.object).isRequired,
+  }).isRequired,
+  onFocus: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
+  windowId: PropTypes.string.isRequired,
+};
+
+SearchHit.defaultProps = {
+  focusedAnnotationId: undefined,
+  selected: false,
+};
 
 const SearchProgressIndicator = () => (
   <CircularProgress
@@ -142,9 +163,9 @@ const SearchProgressIndicator = () => (
   />
 );
 
-function SearchBar({ query, submit, windowId }) {
+function SearchBar({ query = '', submit, windowId }) {
   const { t } = useTranslation();
-  const [input, setInput] = useState(query || '');
+  const [input, setInput] = useState(query);
   const endpoint = useSelector((state) => getManifestSearchService(state, { windowId }))?.id;
   const { data, isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: query?.length === 0 });
 
@@ -177,6 +198,12 @@ function SearchBar({ query, submit, windowId }) {
   );
 }
 
+SearchBar.propTypes = {
+  query: PropTypes.string,
+  submit: PropTypes.func.isRequired,
+  windowId: PropTypes.string.isRequired,
+};
+
 export function SearchPanel({ id, windowId }) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -185,7 +212,7 @@ export function SearchPanel({ id, windowId }) {
   const endpoint = useSelector((state) => getManifestSearchService(state, { windowId }))?.id;
 
   const query = useSelector((state) => getSearchQuery(state, { companionWindowId: id, windowId }));
-  const setQuery = (query) => dispatch(requestSearch(windowId, id, query));
+  const setQuery = (q) => dispatch(requestSearch(windowId, id, q));
   const hasQuery = query && query !== '';
 
   const [focusedAnnotationId, setFocusedAnnotationId] = useState(null);
@@ -250,10 +277,10 @@ export function SearchPanel({ id, windowId }) {
             containerRef={containerRef}
             key={`${result?.annotations?.[0]?.id}-scroll`}
             offsetTop={96} // offset for the height of the form above
-            scrollTo={bestResultToScrollTo == result}
+            scrollTo={bestResultToScrollTo === result}
           >
             <SearchHit
-              key={index}
+              key={`${result?.annotations?.[0]?.id}-hit`}
               index={index}
               result={result}
               windowId={windowId}
@@ -285,3 +312,8 @@ export function SearchPanel({ id, windowId }) {
     </CompanionWindow>
   );
 }
+
+SearchPanel.propTypes = {
+  windowId: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+};

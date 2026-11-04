@@ -67,7 +67,6 @@ export function AnnotationsOverlay({
   viewer = null,
   windowId,
 }) {
-  console.log(searchAnnotations);
   const ref = useRef();
 
   const osdCanvasOverlay = useMemo(() => new OpenSeadragonCanvasOverlay(viewer, ref), [ref, viewer]);
@@ -101,7 +100,6 @@ export function AnnotationsOverlay({
 
   const renderAnnotations = useCallback(() => {
     if (drawSearchAnnotations) {
-      console.log(searchAnnotations);
       annotationsToContext(searchAnnotations, palette.search);
     }
 

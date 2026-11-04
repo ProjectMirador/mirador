@@ -17,7 +17,6 @@ export const iiifContentSearchApiSlice = createApi({
         getNextPageParam: (lastPage, allPages) => undefined,
       },
       query: ({ queryArg, pageParam }) => {
-        console.log(queryArg);
         if (pageParam) {
           return { url: pageParam };
         }
