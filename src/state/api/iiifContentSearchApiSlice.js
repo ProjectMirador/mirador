@@ -27,14 +27,14 @@ export const iiifContentSearchApiSlice = createApi({
       providesTags: (_result, _error, query) => [{ type: 'IiifContentSearch', query }],
     }),
     getContentSearchAutocomplete: build.query({
-      query: ({ queryArg }) => {
-        console.log(queryArg)
-        return { url: `${queryArg.autocompleteEndpoint}?q=${queryArg.input?.toString()}` };
-      },
+      query: ({ endpoint, query }) => ({ url: `${endpoint}?q=${encodeURIComponent(query)}` }),
       // `providesTags` determines which 'tag' is attached to the
       // cached data returned by the query.
+      transformResponse: (response) => {
+        return response?.terms.map((p) => p?.match ?? p);
+      },
       providesTags: (_result, _error, query) => [{ type: 'contentSearchAutocomplete', query }],
-    })
+    }),
   }),
 });
 

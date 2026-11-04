@@ -1,6 +1,6 @@
 import { forwardRef, useRef, useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDebounce } from 'use-debounce'
+import { useDebounce } from 'use-debounce';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +21,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
-import { useGetIiifContentSearchInfiniteQuery, useGetContentSearchAutocompleteQuery } from '../state/api/iiifContentSearchApiSlice';
+import {
+  useGetIiifContentSearchInfiniteQuery,
+  useGetContentSearchAutocompleteQuery,
+} from '../state/api/iiifContentSearchApiSlice';
 import AnnotationResource from '../lib/AnnotationResource';
 import { selectAnnotation } from '../state/actions';
 import TruncatedHit from '../lib/TruncatedHit';
@@ -35,7 +38,7 @@ import Button from '@mui/material/Button';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeftSharp';
 import ChevronRightIcon from '@mui/icons-material/ChevronRightSharp';
-
+import Autocomplete from '@mui/material/Autocomplete';
 
 /**
  * DONE:
@@ -174,14 +177,17 @@ const SearchProgressIndicator = () => (
 
 function SearchBar({ query = '', submit, windowId }) {
   const { t } = useTranslation();
-  const [input, setInput] = useState(query)
+  const [input, setInput] = useState(query ?? '');
+  const [debouncedInput] = useDebounce(input, 500);
   const endpoint = useSelector((state) => getManifestSearchService(state, { windowId }))?.id;
-  const autocompleteEndpoint = useSelector((state) => getManifestAutocompleteService(state, { windowId }))?.id
+  const autocompleteEndpoint = useSelector((state) => getManifestAutocompleteService(state, { windowId }))?.id;
 
-  const { data, isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: query?.length === 0 });
+  const { isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: !query });
 
-
-  const { autocompleteData, autocompleteIsFetching } = useGetContentSearchAutocompleteQuery({ autocompleteEndpoint, input }, { skip: input?.length < 2 });
+  const { data: autocompleteData } = useGetContentSearchAutocompleteQuery(
+    { endpoint: autocompleteEndpoint, query: debouncedInput },
+    { skip: !autocompleteEndpoint || debouncedInput.length < 2 },
+  );
 
   return (
     <form
@@ -191,22 +197,37 @@ function SearchBar({ query = '', submit, windowId }) {
         submit(input);
       }}
     >
-      <TextField
-        label={t('searchInputLabel')}
-        value={input}
-        slotProps={{
-          input: {
-            endAdornment: (
-              <InputAdornment sx={{ position: 'relative' }} position="end">
-                <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
-                  <SearchIcon />
-                </MiradorMenuButton>
-                {isFetching && <SearchProgressIndicator />}
-              </InputAdornment>
-            ),
-          },
+      <Autocomplete
+        options={autocompleteData ?? []}
+        inputValue={input}
+        noOptionsText=""
+        freeSolo
+        slotProps={{ popper: { disablePortal: true } }}
+        disableClearable
+        onInputChange={(_event, value) => setInput(value)}
+        onChange={(_event, value, reason) => {
+          if (reason === 'selectOption' && value) submit(value);
         }}
-        onChange={(e) => setInput(e.target.value)}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={t('searchInputLabel')}
+            slotProps={{
+              ...params.slotProps,
+              input: {
+                ...params.slotProps.input,
+                endAdornment: (
+                  <InputAdornment sx={{ position: 'relative' }} position="end">
+                    <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
+                      <SearchIcon />
+                    </MiradorMenuButton>
+                    {isFetching && <SearchProgressIndicator />}
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+        )}
       />
     </form>
   );
