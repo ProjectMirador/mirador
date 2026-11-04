@@ -10,8 +10,6 @@ import {
   receiveDegradedInfoResponse,
   receiveSearch,
   receiveSearchFailure,
-  receiveAnnotation,
-  receiveAnnotationFailure,
 } from '../actions';
 import { getManifests, getRequestsConfig, getAccessTokens, selectInfoResponse } from '../selectors';
 
@@ -194,16 +192,6 @@ export function* fetchSearchResponse({ windowId, companionWindowId, query, searc
   yield put(dispatch);
 }
 
-/** @private */
-export function* fetchAnnotation({ targetId, annotationId }) {
-  const callbacks = {
-    failure: ({ error, json, response }) => receiveAnnotationFailure(targetId, annotationId, stringifyError(error)),
-    success: ({ json, response }) => receiveAnnotation(targetId, annotationId, json),
-  };
-  const dispatch = yield call(fetchIiifResource, annotationId, {}, callbacks);
-  yield put(dispatch);
-}
-
 /** */
 export function* fetchResourceManifest({ manifestId, manifestJson }) {
   if (manifestJson) {
@@ -233,7 +221,6 @@ export default function* iiifSaga() {
     takeEvery(ActionTypes.REQUEST_MANIFEST, fetchManifest),
     takeEvery(ActionTypes.REQUEST_INFO_RESPONSE, fetchInfoResponse),
     takeEvery(ActionTypes.REQUEST_SEARCH, fetchSearchResponse),
-    takeEvery(ActionTypes.REQUEST_ANNOTATION, fetchAnnotation),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),
   ]);
 }
