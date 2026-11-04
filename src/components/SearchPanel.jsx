@@ -2,12 +2,18 @@ import { forwardRef, useRef, useState, useMemo, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import { useDispatch, useSelector } from 'react-redux';
-import { getVisibleCanvasIds, getCanvases, getSelectedAnnotationId, getSearchQuery, getWindow } from '../state/selectors';
+import {
+  getVisibleCanvasIds,
+  getCanvases,
+  getSelectedAnnotationId,
+  getSearchQuery,
+  getWindow,
+  getManifestSearchService,
+} from '../state/selectors';
 import TextField from '@mui/material/TextField';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { getManifestSearchService } from '../state/selectors';
 import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
 import { useGetIiifContentSearchInfiniteQuery } from '../state/api/iiifContentSearchApiSlice';
@@ -34,7 +40,7 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
  * add gallery view badge
  * loading indicators
  * load more
- * 
+ *
  * TODO:
  * autocomplete
  * suggested search queries
@@ -45,7 +51,8 @@ const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerSta
   ...(ownerState?.selected && {
     backgroundColor: theme.palette.highlights.primary,
   }),
-  ...(!ownerState?.selected && ownerState?.onCurrentlyVisibleCanvas && {
+  ...(!ownerState?.selected &&
+    ownerState?.onCurrentlyVisibleCanvas && {
       backgroundColor: theme.palette.highlights.secondary,
     }),
   height: 30,
@@ -57,22 +64,23 @@ const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerSta
 function normalizeHit(hit, resources) {
   return {
     hit: hit,
-    annotations: resources.filter(resource => hit.annotations.some(a => resource.id === a))
-  }
+    annotations: resources.filter((resource) => hit.annotations.some((a) => resource.id === a)),
+  };
 }
 
 function normalizedAnnotation(annotation) {
   return {
     hit: undefined,
-    annotations: [annotation]
-  }
+    annotations: [annotation],
+  };
 }
 
 function normalizeContentSearchResult(data, canvasIds) {
-  const hits = data?.pages?.flatMap(page => page?.hits ?? []);
-  const resources = data?.pages?.flatMap(page => page?.resources ?? []).map(resource => new AnnotationResource(resource));
-  
-  const results = hits?.map(hit => normalizeHit(hit, resources) ) ?? resources?.map(resource => (normalizedAnnotation(resource)));
+  const hits = data?.pages?.flatMap((page) => page?.hits ?? []);
+  const resources = data?.pages?.flatMap((page) => page?.resources ?? []).map((resource) => new AnnotationResource(resource));
+
+  const results =
+    hits?.map((hit) => normalizeHit(hit, resources)) ?? resources?.map((resource) => normalizedAnnotation(resource));
 
   const sortedResults = results?.sort((a, b) => {
     const canvasIndexForA = canvasIds.indexOf(a.annotations[0]?.targetId);
@@ -89,10 +97,10 @@ const SearchHit = forwardRef(({ result: { hit, annotations }, focusedAnnotationI
     dispatch(selectAnnotation(windowId, annotations[0]?.id, annotations[0]?.targetId));
   };
 
-  const visibleCanvasIds = useSelector(state => getVisibleCanvasIds(state, { windowId }));
+  const visibleCanvasIds = useSelector((state) => getVisibleCanvasIds(state, { windowId }));
 
-  const annotationCanvasIds = annotations.map(annotation => annotation.targetId);
-  const onCurrentlyVisibleCanvas = annotationCanvasIds.some(id => visibleCanvasIds.includes(id));
+  const annotationCanvasIds = annotations.map((annotation) => annotation.targetId);
+  const onCurrentlyVisibleCanvas = annotationCanvasIds.some((id) => visibleCanvasIds.includes(id));
 
   const focused = focusedAnnotationId === annotations[0]?.id;
 
@@ -106,21 +114,20 @@ const SearchHit = forwardRef(({ result: { hit, annotations }, focusedAnnotationI
     return (
       <ListItemButton onClick={handleClick} ref={ref} divider>
         <ListItemText>
-        <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas, selected: selected }} /> {renderedHit.before} <strong>{renderedHit?.match}</strong> {renderedHit.after}
-        {wasTruncated && <button onClick={onFocus}>more</button>}
+          <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas, selected: selected }} />{' '}
+          {renderedHit.before} <strong>{renderedHit?.match}</strong> {renderedHit.after}
+          {wasTruncated && <button onClick={onFocus}>more</button>}
         </ListItemText>
       </ListItemButton>
     );
-  } else {
-    return (
-      <ListItemButton onClick={handleClick} ref={ref} divider>
-        <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas, selected: selected }} /> {annotations[0]?.chars}
-      </ListItemButton>
-    );
   }
-
+  return (
+    <ListItemButton onClick={handleClick} ref={ref} divider>
+      <Counter label={index + 1} ownerState={{ onCurrentlyVisibleCanvas: onCurrentlyVisibleCanvas, selected: selected }} />{' '}
+      {annotations[0]?.chars}
+    </ListItemButton>
+  );
 });
-
 
 const SearchProgressIndicator = () => (
   <CircularProgress
@@ -133,73 +140,81 @@ const SearchProgressIndicator = () => (
     }}
     size={50}
   />
-)
+);
 
 function SearchBar({ query, submit, windowId }) {
   const { t } = useTranslation();
   const [input, setInput] = useState(query || '');
-  const endpoint = useSelector(state => getManifestSearchService(state, { windowId }))?.id;
+  const endpoint = useSelector((state) => getManifestSearchService(state, { windowId }))?.id;
   const { data, isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: query?.length === 0 });
 
   return (
-    <form style={{ display: 'flex', gap: '8px', alignItems: 'center', marginRight: 8, paddingBottom: 8 }} onSubmit={(e) => { e.preventDefault(); submit(input) }}>
+    <form
+      style={{ display: 'flex', gap: '8px', alignItems: 'center', marginRight: 8, paddingBottom: 8 }}
+      onSubmit={(e) => {
+        e.preventDefault();
+        submit(input);
+      }}
+    >
       <TextField
         label={t('searchInputLabel')}
         value={input}
         slotProps={{
           input: {
             endAdornment: (
-              <InputAdornment sx={{ position: 'relative'}} position="end">
+              <InputAdornment sx={{ position: 'relative' }} position="end">
                 <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
                   <SearchIcon />
                 </MiradorMenuButton>
                 {isFetching && <SearchProgressIndicator />}
               </InputAdornment>
-            )
-          }
+            ),
+          },
         }}
         onChange={(e) => setInput(e.target.value)}
       />
     </form>
-  )
+  );
 }
 
 export function SearchPanel({ id, windowId }) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const containerRef = useRef(null);
-  
-  const endpoint = useSelector(state => getManifestSearchService(state, { windowId }))?.id;
-  
-  const query = useSelector(state => getSearchQuery(state, { companionWindowId: id, windowId }));
+
+  const endpoint = useSelector((state) => getManifestSearchService(state, { windowId }))?.id;
+
+  const query = useSelector((state) => getSearchQuery(state, { companionWindowId: id, windowId }));
   const setQuery = (query) => dispatch(requestSearch(windowId, id, query));
-  const hasQuery = query && query !== ''
+  const hasQuery = query && query !== '';
 
   const [focusedAnnotationId, setFocusedAnnotationId] = useState(null);
-  const selectedAnnotationId = useSelector(state => getSelectedAnnotationId(state, { windowId }));
-  const canvasIds = useSelector(state => getCanvases(state, { windowId })).map(canvas => canvas.id);
+  const selectedAnnotationId = useSelector((state) => getSelectedAnnotationId(state, { windowId }));
+  const canvasIds = useSelector((state) => getCanvases(state, { windowId })).map((canvas) => canvas.id);
 
-  const visibleCanvasIds = useSelector(state => getVisibleCanvasIds(state, { windowId }));
+  const visibleCanvasIds = useSelector((state) => getVisibleCanvasIds(state, { windowId }));
 
-  const { data, hasNextPage, fetchNextPage } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: query?.length === 0 });
+  const { data, hasNextPage, fetchNextPage } = useGetIiifContentSearchInfiniteQuery(
+    { endpoint, query },
+    { skip: query?.length === 0 },
+  );
   const contentSearchResult = useMemo(() => normalizeContentSearchResult(data, canvasIds), [data, canvasIds]);
   const searchNumTotal = data?.pages?.[0]?.within?.total;
 
-  const suggestedSearches = useSelector(state => getWindow(state, { windowId })).suggestedSearches;
+  const { suggestedSearches } = useSelector((state) => getWindow(state, { windowId }));
 
   const bestResultToScrollTo = useMemo(() => {
-
     if (selectedAnnotationId) {
-      const resultWithSelectedAnnotation = contentSearchResult?.results?.find(result =>
-        result?.annotations?.some(annotation => annotation?.id === selectedAnnotationId)
+      const resultWithSelectedAnnotation = contentSearchResult?.results?.find((result) =>
+        result?.annotations?.some((annotation) => annotation?.id === selectedAnnotationId),
       );
       if (resultWithSelectedAnnotation) return resultWithSelectedAnnotation;
     }
 
-    return contentSearchResult?.results?.find(result =>
-      visibleCanvasIds.some(canvasId => result?.annotations?.some(annotation => annotation?.targetId === canvasId))
+    return contentSearchResult?.results?.find((result) =>
+      visibleCanvasIds.some((canvasId) => result?.annotations?.some((annotation) => annotation?.targetId === canvasId)),
     );
-  }, [contentSearchResult, visibleCanvasIds, selectedAnnotationId])
+  }, [contentSearchResult, visibleCanvasIds, selectedAnnotationId]);
 
   return (
     <CompanionWindow
@@ -215,7 +230,7 @@ export function SearchPanel({ id, windowId }) {
               sx={{ marginLeft: 1 }}
               color="secondary"
               label={t('clearSearch')}
-              onClick={() => setQuery(null) }
+              onClick={() => setQuery(null)}
               onDelete={() => setQuery(null)}
               size="small"
               tabIndex={0}
@@ -224,46 +239,49 @@ export function SearchPanel({ id, windowId }) {
           )}
         </>
       }
-      titleControls={
-        <SearchBar key={query} query={query} submit={setQuery} windowId={windowId} />
-      }
+      titleControls={<SearchBar key={query} query={query} submit={setQuery} windowId={windowId} />}
       ref={containerRef}
-      windowId={windowId}>
-        {focusedAnnotationId && <button onClick={() => setFocusedAnnotationId(null)}>Back</button> }
-        <List>
-          {contentSearchResult?.results?.map((result, index) => (
-            <ScrollTo
+      windowId={windowId}
+    >
+      {focusedAnnotationId && <button onClick={() => setFocusedAnnotationId(null)}>Back</button>}
+      <List>
+        {contentSearchResult?.results?.map((result, index) => (
+          <ScrollTo
+            containerRef={containerRef}
+            key={`${result?.annotations?.[0]?.id}-scroll`}
+            offsetTop={96} // offset for the height of the form above
+            scrollTo={bestResultToScrollTo == result}
+          >
+            <SearchHit
+              key={index}
+              index={index}
+              result={result}
+              windowId={windowId}
+              selected={result?.annotations?.some((annotation) => annotation?.id === selectedAnnotationId)}
+              onFocus={() => setFocusedAnnotationId(result?.annotations?.[0]?.id)}
+              focusedAnnotationId={focusedAnnotationId}
               containerRef={containerRef}
-              key={`${result?.annotations?.[0]?.id}-scroll`}
-              offsetTop={96} // offset for the height of the form above
-              scrollTo={bestResultToScrollTo == result}
-            >
-              <SearchHit key={index} index={index} result={result} windowId={windowId} selected={result?.annotations?.some(annotation => annotation?.id === selectedAnnotationId)} onFocus={() => setFocusedAnnotationId(result?.annotations?.[0]?.id)} focusedAnnotationId={focusedAnnotationId} containerRef={containerRef}  />
-            </ScrollTo>
-          ))}
-        </List>
-        {suggestedSearches && !hasQuery && suggestedSearches.map((search) => (
+            />
+          </ScrollTo>
+        ))}
+      </List>
+      {suggestedSearches &&
+        !hasQuery &&
+        suggestedSearches.map((search) => (
           <Typography component="p" key={search} variant="body1" sx={{ margin: 2 }}>
-            <Button
-              variant="inlineText"
-              color="secondary"
-              onClick={() => setQuery(search)}
-            >
+            <Button variant="inlineText" color="secondary" onClick={() => setQuery(search)}>
               {t('suggestSearch', { query: search })}
             </Button>
           </Typography>
         ))}
-        {hasNextPage && (
-            <Button
-            sx={{ width: '100%' }}
-            color="secondary"
-            onClick={() => fetchNextPage()}
-          >
-            {t('moreResults')}
-            <br />
-            {searchNumTotal && `(${t('searchResultsRemaining', { numLeft: searchNumTotal - contentSearchResult?.results?.length})})`}
-          </Button>
-        )}
+      {hasNextPage && (
+        <Button sx={{ width: '100%' }} color="secondary" onClick={() => fetchNextPage()}>
+          {t('moreResults')}
+          <br />
+          {searchNumTotal &&
+            `(${t('searchResultsRemaining', { numLeft: searchNumTotal - contentSearchResult?.results?.length })})`}
+        </Button>
+      )}
     </CompanionWindow>
   );
 }
