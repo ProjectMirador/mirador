@@ -2,7 +2,7 @@ import { forwardRef, useRef, useState, useMemo, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
 import { useDispatch, useSelector } from 'react-redux';
-import { getVisibleCanvasIds, getCanvases, getSelectedAnnotationId, getSearchQuery } from '../state/selectors';
+import { getVisibleCanvasIds, getCanvases, getSelectedAnnotationId, getSearchQuery, getWindow } from '../state/selectors';
 import TextField from '@mui/material/TextField';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -19,6 +19,8 @@ import { requestSearch } from '../state/actions/search';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/SearchSharp';
 import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 /**
@@ -173,7 +175,6 @@ export function SearchPanel({ id, windowId }) {
   const setQuery = (query) => dispatch(requestSearch(windowId, id, query));
   const hasQuery = query && query !== ''
 
-
   const [focusedAnnotationId, setFocusedAnnotationId] = useState(null);
   const selectedAnnotationId = useSelector(state => getSelectedAnnotationId(state, { windowId }));
   const canvasIds = useSelector(state => getCanvases(state, { windowId })).map(canvas => canvas.id);
@@ -183,6 +184,8 @@ export function SearchPanel({ id, windowId }) {
   const { data, hasNextPage, fetchNextPage } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: query?.length === 0 });
   const contentSearchResult = useMemo(() => normalizeContentSearchResult(data, canvasIds), [data, canvasIds]);
   const searchNumTotal = data?.pages?.[0]?.within?.total;
+
+  const suggestedSearches = useSelector(state => getWindow(state, { windowId })).suggestedSearches;
 
   const bestResultToScrollTo = useMemo(() => {
 
@@ -239,6 +242,17 @@ export function SearchPanel({ id, windowId }) {
             </ScrollTo>
           ))}
         </List>
+        {suggestedSearches && !hasQuery && suggestedSearches.map((search) => (
+          <Typography component="p" key={search} variant="body1" sx={{ margin: 2 }}>
+            <Button
+              variant="inlineText"
+              color="secondary"
+              onClick={() => setQuery(search)}
+            >
+              {t('suggestSearch', { query: search })}
+            </Button>
+          </Typography>
+        ))}
         {hasNextPage && (
             <Button
             sx={{ width: '100%' }}
