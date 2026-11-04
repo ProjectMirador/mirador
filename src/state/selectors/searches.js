@@ -59,7 +59,7 @@ export const getSearchAnnotationsForWindow = createSelector(
 
         return {
           id: data?.pages?.[0]?.id,
-          resources: data?.pages?.[0]?.resources?.map((resource) => new AnnotationResource(resource)),
+          resources: data?.pages?.flatMap((page) => page?.resources?.map((resource) => new AnnotationResource(resource))),
         };
       })
       .filter((a) => a.resources?.length > 0);
