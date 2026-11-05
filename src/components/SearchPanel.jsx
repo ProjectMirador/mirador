@@ -65,8 +65,8 @@ const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerSta
   }),
   ...(!ownerState?.selected &&
     ownerState?.onCurrentlyVisibleCanvas && {
-      backgroundColor: theme.palette.highlights.secondary,
-    }),
+    backgroundColor: theme.palette.highlights.secondary,
+  }),
   height: 30,
   marginRight: theme.spacing(1),
   typography: 'subtitle2',
@@ -213,9 +213,9 @@ function SearchBar({ query = '', submit, windowId }) {
             {...params}
             label={t('searchInputLabel')}
             slotProps={{
-              ...params.slotProps,
+              ...params.InputProps,
+              ...params.slotProps?.input,
               input: {
-                ...params.slotProps.input,
                 endAdornment: (
                   <InputAdornment sx={{ position: 'relative' }} position="end">
                     <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
