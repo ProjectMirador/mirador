@@ -7,9 +7,11 @@ import {
   getVisibleCanvasIds,
   getCanvases,
   getSelectedAnnotationId,
+  getCurrentAnnotationId,
   getSearchQuery,
   getWindow,
   getManifestSearchService,
+  getThemeDirection,
 } from '../state/selectors';
 import TextField from '@mui/material/TextField';
 import List from '@mui/material/List';
@@ -29,6 +31,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeftSharp';
+import ChevronRightIcon from '@mui/icons-material/ChevronRightSharp';
+
 
 /**
  * DONE:
@@ -41,10 +46,11 @@ import MiradorMenuButton from '../containers/MiradorMenuButton';
  * add gallery view badge
  * loading indicators
  * load more
+ * suggested search queries
  *
  * TODO:
  * autocomplete
- * suggested search queries
+ * select the first search result after receiving search results
  */
 
 const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerState, theme }) => ({
@@ -93,10 +99,10 @@ function normalizeContentSearchResult(data, canvasIds) {
 }
 
 const SearchHit = forwardRef(
-  ({ result: { hit, annotations }, focusedAnnotationId = undefined, onFocus, index, selected = false, windowId }, ref) => {
+  ({ result: { hit, annotations }, focusedAnnotationId = undefined, onFocus, index, selected = false, windowId, companionWindowId }, ref) => {
     const dispatch = useDispatch();
     const handleClick = () => {
-      dispatch(selectAnnotation(windowId, annotations[0]?.id, annotations[0]?.targetId));
+      dispatch(selectAnnotation(windowId, annotations[0]?.id, annotations[0]?.targetId, companionWindowId));
     };
 
     const visibleCanvasIds = useSelector((state) => getVisibleCanvasIds(state, { windowId }));
@@ -134,6 +140,7 @@ const SearchHit = forwardRef(
 
 SearchHit.displayName = 'SearchHit';
 SearchHit.propTypes = {
+  companionWindowId: PropTypes.string,
   focusedAnnotationId: PropTypes.string,
   index: PropTypes.number.isRequired,
   result: PropTypes.shape({
@@ -204,6 +211,65 @@ SearchBar.propTypes = {
   windowId: PropTypes.string.isRequired,
 };
 
+function SearchNavigation({ data, companionWindowId, windowId }) {
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+
+  const direction = useSelector((state) => getThemeDirection(state));
+
+  const currentAnnotationId = useSelector((state) => getCurrentAnnotationId(state, { companionWindowId, windowId }) ?? data?.results?.[0]?.annotations?.[0]?.id);
+
+  const currentHitIndex = data?.results?.findIndex((result) =>
+    result?.annotations?.some((annotation) => annotation?.id === currentAnnotationId),
+  ) || 0;
+
+  const searchNumTotal = data?.pages?.[0]?.within?.total || (data?.results?.length ?? 0);
+  const hasPreviousResult = currentHitIndex > 0;
+  const hasNextResult = currentHitIndex < searchNumTotal - 1;
+
+  const previousSearchResult = (currentHitIndex) => {
+    const result = data?.results?.[currentHitIndex - 1];
+    const annotations = result?.annotations ?? [];
+    if (annotations.length > 0) {
+      dispatch(selectAnnotation(windowId, annotations[0]?.id, annotations[0]?.targetId, companionWindowId));
+    }
+  };
+
+  const nextSearchResult = (currentHitIndex) => {
+    const result = data?.results?.[currentHitIndex + 1];
+    const annotations = result?.annotations ?? [];
+    if (annotations.length > 0) {
+      dispatch(selectAnnotation(windowId, annotations[0]?.id, annotations[0]?.targetId, companionWindowId));
+    }
+  };
+
+  const iconStyle = direction === 'rtl' ? { transform: 'rotate(180deg)' } : {};
+
+  if (data.results?.length === 0) return null;
+
+  return (
+    <Typography variant="body2" align="center">
+      <MiradorMenuButton
+        aria-label={t('searchPreviousResult')}
+        disabled={!hasPreviousResult}
+        onClick={() => previousSearchResult(currentHitIndex)}
+      >
+        <ChevronLeftIcon style={iconStyle} />
+      </MiradorMenuButton>
+      <span style={{ unicodeBidi: 'plaintext' }} role="status">
+        {t('pagination', { current: currentHitIndex + 1, total: searchNumTotal })}
+      </span>
+      <MiradorMenuButton
+        aria-label={t('searchNextResult')}
+        disabled={!hasNextResult}
+        onClick={() => nextSearchResult(currentHitIndex)}
+      >
+        <ChevronRightIcon style={iconStyle} />
+      </MiradorMenuButton>
+    </Typography>
+  );
+}
+
 export function SearchPanel({ id, windowId }) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -217,6 +283,7 @@ export function SearchPanel({ id, windowId }) {
 
   const [focusedAnnotationId, setFocusedAnnotationId] = useState(null);
   const selectedAnnotationId = useSelector((state) => getSelectedAnnotationId(state, { windowId }));
+  const currentAnnotationId = useSelector((state) => getCurrentAnnotationId(state, { companionWindowId: id, windowId }));
   const canvasIds = useSelector((state) => getCanvases(state, { windowId })).map((canvas) => canvas.id);
 
   const visibleCanvasIds = useSelector((state) => getVisibleCanvasIds(state, { windowId }));
@@ -238,10 +305,17 @@ export function SearchPanel({ id, windowId }) {
       if (resultWithSelectedAnnotation) return resultWithSelectedAnnotation;
     }
 
+    if (currentAnnotationId) {
+      const resultWithCurrentAnnotation = contentSearchResult?.results?.find((result) =>
+        result?.annotations?.some((annotation) => annotation?.id === currentAnnotationId),
+      );
+      if (resultWithCurrentAnnotation) return resultWithCurrentAnnotation;
+    }
+
     return contentSearchResult?.results?.find((result) =>
       visibleCanvasIds.some((canvasId) => result?.annotations?.some((annotation) => annotation?.targetId === canvasId)),
     );
-  }, [contentSearchResult, visibleCanvasIds, selectedAnnotationId]);
+  }, [contentSearchResult, visibleCanvasIds, selectedAnnotationId, currentAnnotationId]);
 
   return (
     <CompanionWindow
@@ -266,7 +340,10 @@ export function SearchPanel({ id, windowId }) {
           )}
         </>
       }
-      titleControls={<SearchBar key={query} query={query} submit={setQuery} windowId={windowId} />}
+      titleControls={<>
+        <SearchBar key={query} query={query} submit={setQuery} windowId={windowId} />
+        <SearchNavigation data={contentSearchResult} companionWindowId={id} windowId={windowId} />
+      </>}
       ref={containerRef}
       windowId={windowId}
     >
@@ -281,6 +358,7 @@ export function SearchPanel({ id, windowId }) {
           >
             <SearchHit
               key={`${result?.annotations?.[0]?.id}-hit`}
+              companionWindowId={id}
               index={index}
               result={result}
               windowId={windowId}

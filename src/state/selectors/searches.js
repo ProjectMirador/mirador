@@ -35,6 +35,8 @@ const getSearchForCompanionWindow = createSelector(
   },
 );
 
+export const getCurrentAnnotationId = createSelector([getSearchForCompanionWindow], (results) => results && results.currentAnnotationId);
+
 /**
  * Returns the search query for a specific companion window.
  * @param {object} state
