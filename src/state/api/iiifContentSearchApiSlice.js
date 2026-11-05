@@ -22,18 +22,6 @@ export const iiifContentSearchApiSlice = createApi({
         }
         return { url: `${queryArg.endpoint}?q=${queryArg.query?.toString()}` };
       },
-      async onQueryStarted(id, { dispatch, queryFulfilled, getState }) {
-        try {
-          const { data } = await queryFulfilled
-          // `onSuccess` side-effect
-          console.log(id)
-          console.log(getState())
-          console.log(data)
-          dispatch(selectAnnotation(windowId, annotations[0]?.id, annotations[0]?.targetId, companionWindowId))
-        } catch (err) {
-          // TODO:? 
-        }
-      },
       // `providesTags` determines which 'tag' is attached to the
       // cached data returned by the query.
       providesTags: (_result, _error, query) => [{ type: 'IiifContentSearch', query }],

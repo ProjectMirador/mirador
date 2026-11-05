@@ -294,13 +294,14 @@ export function SearchPanel({ id, windowId }) {
     { skip: query?.length === 0 },
   );
 
-  if (!currentAnnotationId && query) {
-    console.log(data?.pages[0]?.resources[0]?.id)
-    dispatch(selectAnnotation(windowId, data?.pages[0]?.resources[0]?.id, data?.pages[0].resources[0]?.targetId, id));
-  }
-
   const contentSearchResult = useMemo(() => normalizeContentSearchResult(data, canvasIds), [data, canvasIds]);
   const searchNumTotal = data?.pages?.[0]?.within?.total;
+
+  useEffect(() => {
+    if (currentAnnotationId || !query || !contentSearchResult) return;
+    const first = contentSearchResult?.results[0]?.annotations[0]
+    if (first) dispatch(selectAnnotation(windowId, first.id, first.targetId, id));
+  }, [data, query, currentAnnotationId, contentSearchResult, windowId, id, dispatch]);
 
   const { suggestedSearches } = useSelector((state) => getWindow(state, { windowId }));
 
