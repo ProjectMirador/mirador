@@ -1,36 +1,46 @@
+import { configureStore } from '@reduxjs/toolkit';
 import {
   getAnnotationResourcesByMotivation,
   getAnnotationResourcesByMotivationForCanvas,
   getSelectedAnnotationId,
 } from '../../../src/state/selectors';
+import { iiifApi } from '../../../src/state/api/iiifApi';
+
+/** Seeds iiifApi's own cache (via upsertQueryData) and returns its state slice, for building test fixtures. */
+async function buildIiifApiState(entries) {
+  const store = configureStore({
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(iiifApi.middleware),
+    reducer: { [iiifApi.reducerPath]: iiifApi.reducer },
+  });
+
+  await Promise.all(
+    entries.map(({ annotationId, targetId, json }) =>
+      store.dispatch(iiifApi.util.upsertQueryData('getAnnotation', { annotationId, targetId }, json)),
+    ),
+  );
+
+  return store.getState()[iiifApi.reducerPath];
+}
 
 describe('getAnnotationResourcesByMotivationForCanvas', () => {
-  it('returns an array of annotation resources on a given canvas (filtered by the passed in array of motiviations)', () => {
+  it('returns an array of annotation resources on a given canvas (filtered by the passed in array of motiviations)', async () => {
     const expected = [['oa:commenting'], ['sc:something-else', 'oa:commenting']];
 
     const state = {
-      annotations: {
-        cid1: {
-          annoId1: {
-            id: 'annoId1',
-            json: {
-              resources: [{ '@id': 'annoId1', motivation: 'oa:commenting' }],
-            },
+      iiifApi: await buildIiifApiState([
+        { annotationId: 'annoId1', json: { resources: [{ '@id': 'annoId1', motivation: 'oa:commenting' }] }, targetId: 'cid1' },
+        {
+          annotationId: 'annoId2',
+          json: {
+            resources: [
+              { '@id': 'annoId1', motivation: 'oa:commenting' },
+              { '@id': 'annoId2', motivation: 'oa:not-commenting' },
+              { '@id': 'annoId3', motivation: ['sc:something-else', 'oa:commenting'] },
+            ],
           },
+          targetId: 'cid2',
         },
-        cid2: {
-          annoId1: {
-            id: 'annoId2',
-            json: {
-              resources: [
-                { '@id': 'annoId1', motivation: 'oa:commenting' },
-                { '@id': 'annoId2', motivation: 'oa:not-commenting' },
-                { '@id': 'annoId3', motivation: ['sc:something-else', 'oa:commenting'] },
-              ],
-            },
-          },
-        },
-      },
+      ]),
       manifests: {
         mid: {
           json: {
@@ -63,24 +73,23 @@ describe('getAnnotationResourcesByMotivationForCanvas', () => {
 });
 
 describe('getAnnotationResourcesByMotivation', () => {
-  it('returns an array of annotation resources (filtered by the passed in array of motiviations)', () => {
+  it('returns an array of annotation resources (filtered by the passed in array of motiviations)', async () => {
     const expected = [['oa:commenting'], ['sc:something-else', 'oa:commenting']];
 
     const state = {
-      annotations: {
-        cid1: {
-          annoId1: {
-            id: 'annoId1',
-            json: {
-              resources: [
-                { '@id': 'annoId1', motivation: 'oa:commenting' },
-                { '@id': 'annoId2', motivation: 'oa:not-commenting' },
-                { '@id': 'annoId3', motivation: ['sc:something-else', 'oa:commenting'] },
-              ],
-            },
+      iiifApi: await buildIiifApiState([
+        {
+          annotationId: 'annoId1',
+          json: {
+            resources: [
+              { '@id': 'annoId1', motivation: 'oa:commenting' },
+              { '@id': 'annoId2', motivation: 'oa:not-commenting' },
+              { '@id': 'annoId3', motivation: ['sc:something-else', 'oa:commenting'] },
+            ],
           },
+          targetId: 'cid1',
         },
-      },
+      ]),
       manifests: {
         mid: {
           json: {
@@ -149,28 +158,27 @@ it('getSelectedAnnotationId returns the selected annotation ID from state', () =
   expect(getSelectedAnnotationId(state, { windowId: 'wid' })).toEqual('aid1');
 });
 
-it('returns all annotation resources when no motivations are passed and config.filteredMotivations is empty', () => {
+it('returns all annotation resources when no motivations are passed and config.filteredMotivations is empty', async () => {
   const state = {
-    annotations: {
-      cid1: {
-        annoId1: {
-          id: 'annoId1',
-          json: {
-            resources: [
-              { '@id': 'annoId1', motivations: ['oa:commenting'] },
-              { '@id': 'annoId2', motivations: ['oa:not-commenting'] },
-              { '@id': 'annoId3', motivations: ['sc:something-else', 'oa:commenting'] },
-            ],
-          },
-        },
-      },
-    },
     config: {
       annotations: {
         filteredMotivations: [], // Empty array
         htmlSanitizationRuleSet: 'iiif',
       },
     },
+    iiifApi: await buildIiifApiState([
+      {
+        annotationId: 'annoId1',
+        json: {
+          resources: [
+            { '@id': 'annoId1', motivations: ['oa:commenting'] },
+            { '@id': 'annoId2', motivations: ['oa:not-commenting'] },
+            { '@id': 'annoId3', motivations: ['sc:something-else', 'oa:commenting'] },
+          ],
+        },
+        targetId: 'cid1',
+      },
+    ]),
     manifests: {
       mid: {
         json: {

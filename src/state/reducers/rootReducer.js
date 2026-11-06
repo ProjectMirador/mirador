@@ -11,11 +11,11 @@ import {
   viewersReducer,
   windowsReducer,
   workspaceReducer,
-  annotationsReducer,
   searchesReducer,
   layersReducer,
   catalogReducer,
 } from '.';
+import { iiifApi } from '../api/iiifApi';
 
 /**
  * Function to create root reducer
@@ -25,13 +25,13 @@ import {
 export default function createRootReducer(pluginReducers) {
   return combineReducers({
     accessTokens: accessTokensReducer,
-    annotations: annotationsReducer,
     auth: authReducer,
     catalog: catalogReducer,
     companionWindows: companionWindowsReducer,
     config: configReducer,
     elasticLayout: elasticLayoutReducer,
     errors: errorsReducer,
+    [iiifApi.reducerPath]: iiifApi.reducer,
     infoResponses: infoResponsesReducer,
     layers: layersReducer,
     manifests: manifestsReducer,
