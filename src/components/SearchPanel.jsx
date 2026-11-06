@@ -213,9 +213,9 @@ function SearchBar({ query = '', submit, windowId }) {
             {...params}
             label={t('searchInputLabel')}
             slotProps={{
-              ...params.InputProps,
-              ...params.slotProps?.input,
+              ...params.slotProps,
               input: {
+                ...params.slotProps.input,
                 endAdornment: (
                   <InputAdornment sx={{ position: 'relative' }} position="end">
                     <MiradorMenuButton aria-label={t('searchSubmitAria')} type="submit">
