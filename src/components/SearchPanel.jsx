@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState, useMemo, useEffect } from 'react';
+import { forwardRef, useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Chip from '@mui/material/Chip';
@@ -24,7 +24,7 @@ import AnnotationResource from '../lib/AnnotationResource';
 import { selectAnnotation } from '../state/actions';
 import TruncatedHit from '../lib/TruncatedHit';
 import { ScrollTo } from './ScrollTo';
-import { requestSearch } from '../state/actions/search';
+import { searchAndShowFirstResult } from '../state/actions/search';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/SearchSharp';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -278,7 +278,7 @@ export function SearchPanel({ id, windowId }) {
   const endpoint = useSelector((state) => getManifestSearchService(state, { windowId }))?.id;
 
   const query = useSelector((state) => getSearchQuery(state, { companionWindowId: id, windowId }));
-  const setQuery = (q) => dispatch(requestSearch(windowId, id, q));
+  const setQuery = (q) => dispatch(searchAndShowFirstResult(windowId, id, q));
   const hasQuery = query && query !== '';
 
   const [focusedAnnotationId, setFocusedAnnotationId] = useState(null);
