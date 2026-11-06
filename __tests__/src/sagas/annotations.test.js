@@ -18,9 +18,8 @@ describe('annotation sagas', () => {
           [select(getAnnotations), { a: {} }],
         ])
         .put({
-          annotationId: 'annoId',
-          targetId: 'a',
-          type: 'mirador/REQUEST_ANNOTATION',
+          payload: { annotationId: 'annoId', targetId: 'a' },
+          type: 'annotations/requestAnnotation',
         })
         .run();
     });
@@ -52,9 +51,8 @@ describe('annotation sagas', () => {
           [select(getAnnotations), { a: {} }],
         ])
         .put({
-          annotationId: 'annoId',
-          targetId: 'a',
-          type: 'mirador/REQUEST_ANNOTATION',
+          payload: { annotationId: 'annoId', targetId: 'a' },
+          type: 'annotations/requestAnnotation',
         })
         .run();
     });
@@ -72,10 +70,8 @@ describe('annotation sagas', () => {
           [select(getAnnotations), { a: {} }],
         ])
         .put({
-          annotationId: 'annoId',
-          annotationJson: annotations,
-          targetId: 'a',
-          type: 'mirador/RECEIVE_ANNOTATION',
+          payload: { annotationId: 'annoId', annotationJson: annotations, targetId: 'a' },
+          type: 'annotations/receiveAnnotation',
         })
         .run();
     });

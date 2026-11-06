@@ -15,19 +15,28 @@ describe('annotation actions', () => {
     });
   });
   describe('requestAnnotation', () => {
-    it('requests an annotation from given a url', () => {
+    it('requests an annotation from the legacy positional call', () => {
       const targetId = 'foo';
       const annotationId = 'abc123';
       const expectedAction = {
-        annotationId,
-        targetId,
+        payload: { annotationId, targetId },
         type: ActionTypes.REQUEST_ANNOTATION,
       };
       expect(actions.requestAnnotation(targetId, annotationId)).toEqual(expectedAction);
     });
+
+    it('requests an annotation from a single-object call', () => {
+      const targetId = 'foo';
+      const annotationId = 'abc123';
+      const expectedAction = {
+        payload: { annotationId, targetId },
+        type: ActionTypes.REQUEST_ANNOTATION,
+      };
+      expect(actions.requestAnnotation({ annotationId, targetId })).toEqual(expectedAction);
+    });
   });
   describe('receiveAnnotation', () => {
-    it('recieves an annotation', () => {
+    it('recieves an annotation from the legacy positional call', () => {
       const targetId = 'foo';
       const annotationId = 'abc123';
       const json = {
@@ -35,12 +44,47 @@ describe('annotation actions', () => {
         content: 'annotation request',
       };
       const expectedAction = {
-        annotationId,
-        annotationJson: json,
-        targetId,
+        payload: { annotationId, annotationJson: json, targetId },
         type: ActionTypes.RECEIVE_ANNOTATION,
       };
       expect(actions.receiveAnnotation(targetId, annotationId, json)).toEqual(expectedAction);
+    });
+
+    it('recieves an annotation from a single-object call', () => {
+      const targetId = 'foo';
+      const annotationId = 'abc123';
+      const json = {
+        annotationId,
+        content: 'annotation request',
+      };
+      const expectedAction = {
+        payload: { annotationId, annotationJson: json, targetId },
+        type: ActionTypes.RECEIVE_ANNOTATION,
+      };
+      expect(actions.receiveAnnotation({ annotationId, annotationJson: json, targetId })).toEqual(expectedAction);
+    });
+  });
+  describe('receiveAnnotationFailure', () => {
+    it('receives an annotation failure from the legacy positional call', () => {
+      const targetId = 'foo';
+      const annotationId = 'abc123';
+      const error = 'Something went wrong';
+      const expectedAction = {
+        payload: { annotationId, error, targetId },
+        type: ActionTypes.RECEIVE_ANNOTATION_FAILURE,
+      };
+      expect(actions.receiveAnnotationFailure(targetId, annotationId, error)).toEqual(expectedAction);
+    });
+
+    it('receives an annotation failure from a single-object call', () => {
+      const targetId = 'foo';
+      const annotationId = 'abc123';
+      const error = 'Something went wrong';
+      const expectedAction = {
+        payload: { annotationId, error, targetId },
+        type: ActionTypes.RECEIVE_ANNOTATION_FAILURE,
+      };
+      expect(actions.receiveAnnotationFailure({ annotationId, error, targetId })).toEqual(expectedAction);
     });
   });
 

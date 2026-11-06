@@ -195,7 +195,7 @@ export function* fetchSearchResponse({ windowId, companionWindowId, query, searc
 }
 
 /** @private */
-export function* fetchAnnotation({ targetId, annotationId }) {
+export function* fetchAnnotation({ payload: { targetId, annotationId } }) {
   const callbacks = {
     failure: ({ error, json, response }) => receiveAnnotationFailure(targetId, annotationId, stringifyError(error)),
     success: ({ json, response }) => receiveAnnotation(targetId, annotationId, json),

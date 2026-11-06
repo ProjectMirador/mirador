@@ -1,14 +1,13 @@
-import { annotationsReducer } from '../../../src/state/reducers/annotations';
+import { annotationsReducer } from '../../../src/state/slices/annotationsSlice';
 import ActionTypes from '../../../src/state/actions/action-types';
 
-describe('annotation reducer', () => {
+describe('annotations reducer', () => {
   it('should handle REQUEST_ANNOTATION', () => {
     expect(
       annotationsReducer(
         {},
         {
-          annotationId: 'abc123',
-          targetId: 'foo',
+          payload: { annotationId: 'abc123', targetId: 'foo' },
           type: ActionTypes.REQUEST_ANNOTATION,
         },
       ),
@@ -21,6 +20,7 @@ describe('annotation reducer', () => {
       },
     });
   });
+
   it('should handle RECEIVE_ANNOTATION', () => {
     expect(
       annotationsReducer(
@@ -33,13 +33,15 @@ describe('annotation reducer', () => {
           },
         },
         {
-          annotationId: 'abc123',
-          annotationJson: {
-            '@type': 'sc:AnnotationList',
-            content: 'anno stuff',
-            id: 'abc123',
+          payload: {
+            annotationId: 'abc123',
+            annotationJson: {
+              '@type': 'sc:AnnotationList',
+              content: 'anno stuff',
+              id: 'abc123',
+            },
+            targetId: 'foo',
           },
-          targetId: 'foo',
           type: ActionTypes.RECEIVE_ANNOTATION,
         },
       ),
@@ -53,6 +55,7 @@ describe('annotation reducer', () => {
       },
     });
   });
+
   it('should be able to RECEIVE_ANNOTATION from multiple sources and merge state', () => {
     const firstReduction = annotationsReducer(
       {
@@ -64,13 +67,15 @@ describe('annotation reducer', () => {
         },
       },
       {
-        annotationId: 'efg456',
-        annotationJson: {
-          '@type': 'sc:AnnotationList',
-          content: 'anno stuff',
-          id: 'efg456',
+        payload: {
+          annotationId: 'efg456',
+          annotationJson: {
+            '@type': 'sc:AnnotationList',
+            content: 'anno stuff',
+            id: 'efg456',
+          },
+          targetId: 'foo',
         },
-        targetId: 'foo',
         type: ActionTypes.RECEIVE_ANNOTATION,
       },
     );
@@ -90,14 +95,17 @@ describe('annotation reducer', () => {
         },
       },
     });
+
     const secondReduction = annotationsReducer(firstReduction, {
-      annotationId: 'abc123',
-      annotationJson: {
-        '@type': 'sc:AnnotationList',
-        content: 'anno stuff',
-        id: 'abc123',
+      payload: {
+        annotationId: 'abc123',
+        annotationJson: {
+          '@type': 'sc:AnnotationList',
+          content: 'anno stuff',
+          id: 'abc123',
+        },
+        targetId: 'foo',
       },
-      targetId: 'foo',
       type: ActionTypes.RECEIVE_ANNOTATION,
     });
     expect(secondReduction).toMatchObject({
@@ -122,6 +130,7 @@ describe('annotation reducer', () => {
       },
     });
   });
+
   it('should handle RECEIVE_ANNOTATION_FAILURE', () => {
     expect(
       annotationsReducer(
@@ -134,9 +143,11 @@ describe('annotation reducer', () => {
           },
         },
         {
-          annotationId: 'abc123',
-          error: "This institution didn't enable CORS.",
-          targetId: 'foo',
+          payload: {
+            annotationId: 'abc123',
+            error: "This institution didn't enable CORS.",
+            targetId: 'foo',
+          },
           type: ActionTypes.RECEIVE_ANNOTATION_FAILURE,
         },
       ),
@@ -150,6 +161,7 @@ describe('annotation reducer', () => {
       },
     });
   });
+
   it('should handle IMPORT_MIRADOR_STATE setting to clean state', () => {
     expect(
       annotationsReducer(
