@@ -1,14 +1,4 @@
-import ActionTypes from './action-types';
+import { updateLayers as updateLayersSliceAction } from '../slices';
+import convertToSliceAction from './convertToSliceAction';
 
-/**
- * updateLayers - action creator
- * @param {string} id
- */
-export function updateLayers(windowId, canvasId, payload) {
-  return {
-    canvasId,
-    payload,
-    type: ActionTypes.UPDATE_LAYERS,
-    windowId,
-  };
-}
+export const updateLayers = convertToSliceAction(updateLayersSliceAction, ['windowId', 'canvasId', 'payload']);
