@@ -170,19 +170,33 @@ export default class MiradorCanvas {
   }
 
   /**
+   * Return the "xywh=" fragment value (e.g. "10,20,300,400") an annotation
+   * target carries, or undefined when it targets the full canvas.
+   * Targets can be a plain URI (v2/v3 shorthand), or an object:
+   *  - v4 (and allowed in v3):  { id: '…/canvas/p1', type: 'Canvas' }
+   *  - v3 SpecificResource:     { source: '…/canvas/p1', selector: { value: 'xywh=…' } }
+   *  - v2:                      { full: '…/canvas/p1', selector: { value: 'xywh=…' } }
+   * or an array of any of these (the first is used).
+   */
+  static xywhFragment(target) {
+    const value = Array.isArray(target) ? target[0] : target;
+    const selector = Array.isArray(value?.selector) ? value.selector[0] : value?.selector;
+    const candidates = [value, selector?.value, value?.id, value?.full, value?.source?.id, value?.source];
+
+    return candidates.find((v) => typeof v === 'string' && v.includes('xywh='))?.match(/xywh=(.*)$/)?.[1];
+  }
+
+  /**
    * Returns the fragment placement values if a resourceAnnotation is placed on
    * a canvas somewhere besides the full extent
    */
   onFragment(id) {
     const resourceAnnotation = this.resourceAnnotation(id);
     if (!resourceAnnotation) return undefined;
-    // IIIF v2
-    const on = resourceAnnotation.getProperty('on');
-    // IIIF v3
-    const target = resourceAnnotation.getProperty('target');
-    const fragmentMatch = (on || target).match(/xywh=(.*)$/);
-    if (!fragmentMatch) return undefined;
-    return fragmentMatch[1].split(',').map((str) => parseInt(str, 10));
+    // IIIF v2 uses `on`; v3+ uses `target`
+    const fragment = MiradorCanvas.xywhFragment(resourceAnnotation.getProperty('on') || resourceAnnotation.getProperty('target'));
+    if (!fragment) return undefined;
+    return fragment.split(',').map((str) => parseInt(str, 10));
   }
 
   /** */
