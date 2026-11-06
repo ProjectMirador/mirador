@@ -11,9 +11,9 @@ export default {
   id: 'mirador',
   windows: [
     {
-      manifestId: 'https://purl.stanford.edu/fg165hz3589/iiif/manifest',
+      manifestId: 'https://iiif.wellcomecollection.org/presentation/v2/b18035723',
       // defaultSearchQuery: 'NSF',
-      suggestedSearches: ['NSF'],
+      suggestedSearches: ['Form'],
     },
     {
       manifestId: 'https://iiif.wellcomecollection.org/presentation/v2/b18035723',

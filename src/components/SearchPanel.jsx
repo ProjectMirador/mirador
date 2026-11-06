@@ -312,6 +312,7 @@ export function SearchPanel({ id, windowId }) {
   const [focusedAnnotationId, setFocusedAnnotationId] = useState(null);
   const selectedAnnotationId = useSelector((state) => getSelectedAnnotationId(state, { windowId }));
   const currentAnnotationId = useSelector((state) => getCurrentAnnotationId(state, { companionWindowId: id, windowId }));
+
   const canvasIds = useSelector((state) => getCanvases(state, { windowId })).map((canvas) => canvas.id);
 
   const visibleCanvasIds = useSelector((state) => getVisibleCanvasIds(state, { windowId }));
@@ -320,8 +321,15 @@ export function SearchPanel({ id, windowId }) {
     { endpoint, query },
     { skip: query?.length === 0 },
   );
+
   const contentSearchResult = useMemo(() => normalizeContentSearchResult(data, canvasIds), [data, canvasIds]);
   const searchNumTotal = data?.pages?.[0]?.within?.total;
+
+  useEffect(() => {
+    if (currentAnnotationId || !query || !contentSearchResult) return;
+    const first = contentSearchResult?.results[0]?.annotations[0]
+    if (first) dispatch(selectAnnotation(windowId, first.id, first.targetId, id));
+  }, [data, query, currentAnnotationId, contentSearchResult, windowId, id, dispatch]);
 
   const { suggestedSearches } = useSelector((state) => getWindow(state, { windowId }));
 
