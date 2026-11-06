@@ -8,7 +8,6 @@ export * from './infoResponses';
 export * from './config';
 export * from './viewers';
 export * from './auth';
-export * from './elasticLayout';
 export * from './search';
 export * from './catalog';
-export { annotationsReducer, layersReducer } from '../slices';
+export { annotationsReducer, layersReducer, elasticLayoutReducer } from '../slices';

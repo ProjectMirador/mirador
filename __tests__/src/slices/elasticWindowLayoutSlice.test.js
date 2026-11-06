@@ -1,7 +1,7 @@
-import { elasticLayoutReducer } from '../../../src/state/reducers/elasticLayout';
+import { elasticLayoutReducer } from '../../../src/state/slices/elasticWindowLayoutSlice';
 import ActionTypes from '../../../src/state/actions/action-types';
 
-describe('elastic layout reducer', () => {
+describe('elastic window layout reducer', () => {
   it('should handle ADD_WINDOW', () => {
     expect(
       elasticLayoutReducer(
@@ -20,6 +20,33 @@ describe('elastic layout reducer', () => {
       },
     });
   });
+
+  it('keeps existing windows when handling ADD_WINDOW', () => {
+    expect(
+      elasticLayoutReducer(
+        {
+          def456: {
+            windowId: 'def456',
+          },
+        },
+        {
+          elasticLayout: { x: 1, y: 2 },
+          type: ActionTypes.ADD_WINDOW,
+          window: { id: 'abc123' },
+        },
+      ),
+    ).toEqual({
+      abc123: {
+        windowId: 'abc123',
+        x: 1,
+        y: 2,
+      },
+      def456: {
+        windowId: 'def456',
+      },
+    });
+  });
+
   it('should handle REMOVE_WINDOW', () => {
     expect(
       elasticLayoutReducer(
@@ -42,6 +69,7 @@ describe('elastic layout reducer', () => {
       },
     });
   });
+
   it('should handle UPDATE_ELASTIC_WINDOW_LAYOUT', () => {
     expect(
       elasticLayoutReducer(
@@ -52,11 +80,11 @@ describe('elastic layout reducer', () => {
         },
         {
           payload: {
+            windowId: 'abc123',
             x: 1,
             y: 2,
           },
           type: ActionTypes.UPDATE_ELASTIC_WINDOW_LAYOUT,
-          windowId: 'abc123',
         },
       ),
     ).toEqual({

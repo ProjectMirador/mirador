@@ -1,10 +1,4 @@
-import ActionTypes from './action-types';
+import { updateElasticWindowLayout as updateElasticWindowLayoutSliceAction } from '../slices';
+import convertToSliceAction from './convertToSliceAction';
 
-/** */
-export function updateElasticWindowLayout(windowId, payload) {
-  return {
-    payload,
-    type: ActionTypes.UPDATE_ELASTIC_WINDOW_LAYOUT,
-    windowId,
-  };
-}
+export const updateElasticWindowLayout = convertToSliceAction(updateElasticWindowLayoutSliceAction, ['windowId', 'payload']);
