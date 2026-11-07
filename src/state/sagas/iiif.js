@@ -232,7 +232,7 @@ export default function* iiifSaga() {
   yield all([
     takeEvery(ActionTypes.REQUEST_MANIFEST, fetchManifest),
     takeEvery(ActionTypes.REQUEST_INFO_RESPONSE, fetchInfoResponse),
-    takeEvery(ActionTypes.REQUEST_SEARCH, fetchSearchResponse),
+    // takeEvery(ActionTypes.REQUEST_SEARCH, fetchSearchResponse),
     takeEvery(ActionTypes.REQUEST_ANNOTATION, fetchAnnotation),
     takeEvery(ActionTypes.ADD_RESOURCE, fetchResourceManifest),
   ]);

@@ -16,6 +16,7 @@ import {
   layersReducer,
   catalogReducer,
 } from '.';
+import iiifContentSearchApiSlice from '../api/iiifContentSearchApiSlice';
 
 /**
  * Function to create root reducer
@@ -39,6 +40,7 @@ export default function createRootReducer(pluginReducers) {
     viewers: viewersReducer,
     windows: windowsReducer,
     workspace: workspaceReducer,
+    [iiifContentSearchApiSlice.reducerPath]: iiifContentSearchApiSlice.reducer,
     ...pluginReducers,
   });
 }
