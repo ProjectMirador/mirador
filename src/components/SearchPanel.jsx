@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState, useMemo, useEffect } from 'react';
+import { forwardRef, useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useDebounce } from 'use-debounce';
 import { styled } from '@mui/material/styles';
@@ -321,6 +321,10 @@ export function SearchPanel({ id, windowId }) {
     { skip: query?.length === 0 },
   );
   const contentSearchResult = useMemo(() => normalizeContentSearchResult(data, canvasIds), [data, canvasIds]);
+  if (contentSearchResult.results?.length > 0 && !selectedAnnotationId) {
+    dispatch(selectAnnotation(windowId, contentSearchResult.results[0]?.annotations[0]?.id,
+                              contentSearchResult.results[0]?.annotations[0]?.targetId, id))
+  }
   const searchNumTotal = data?.pages?.[0]?.within?.total;
 
   const { suggestedSearches } = useSelector((state) => getWindow(state, { windowId }));
