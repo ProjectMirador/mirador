@@ -282,7 +282,7 @@ function SearchNavigation({ data, companionWindowId, windowId }) {
 
   const iconStyle = direction === 'rtl' ? { transform: 'rotate(180deg)' } : {};
 
-  if (data.results?.length === 0) return null;
+  if (searchNumTotal === 0) return null;
 
   return (
     <Typography variant="body2" align="center">
