@@ -8,13 +8,12 @@ import {
   getVisibleCanvasIds,
   getCanvases,
   getSelectedAnnotationId,
-  getCurrentAnnotationId,
   getSearchQuery,
   getWindow,
   getManifestSearchService,
   getThemeDirection,
-  getManifestAutocompleteService,
-} from '../state/selectors';
+  getManifestAutocompleteService } 
+from '../state/selectors';
 import TextField from '@mui/material/TextField';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -182,7 +181,7 @@ function SearchBar({ query = '', submit, windowId }) {
   const endpoint = useSelector((state) => getManifestSearchService(state, { windowId }))?.id;
   const autocompleteEndpoint = useSelector((state) => getManifestAutocompleteService(state, { windowId }))?.id;
 
-  const { isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query }, { skip: !query });
+  const { isFetching } = useGetIiifContentSearchInfiniteQuery({ endpoint, query  }, { skip: !query || !endpoint });
 
   const { data: autocompleteData } = useGetContentSearchAutocompleteQuery(
     { endpoint: autocompleteEndpoint, query: debouncedInput },
@@ -244,11 +243,10 @@ function SearchNavigation({ data, companionWindowId, windowId }) {
   const { t } = useTranslation();
 
   const direction = useSelector((state) => getThemeDirection(state));
-
-  const currentAnnotationId = useSelector((state) => getCurrentAnnotationId(state, { companionWindowId, windowId }) ?? data?.results?.[0]?.annotations?.[0]?.id);
+  const selectedAnnotationId = useSelector((state) => getSelectedAnnotationId(state, { companionWindowId, windowId }));
 
   const currentHitIndex = data?.results?.findIndex((result) =>
-    result?.annotations?.some((annotation) => annotation?.id === currentAnnotationId),
+    result?.annotations?.some((annotation) => annotation?.id === selectedAnnotationId),
   ) || 0;
 
   const searchNumTotal = data?.pages?.[0]?.within?.total || (data?.results?.length ?? 0);
@@ -311,17 +309,25 @@ export function SearchPanel({ id, windowId }) {
 
   const [focusedAnnotationId, setFocusedAnnotationId] = useState(null);
   const selectedAnnotationId = useSelector((state) => getSelectedAnnotationId(state, { windowId }));
-  const currentAnnotationId = useSelector((state) => getCurrentAnnotationId(state, { companionWindowId: id, windowId }));
-  const canvasIds = useSelector((state) => getCanvases(state, { windowId })).map((canvas) => canvas.id);
+
+  const canvases = useSelector((state) => getCanvases(state, { windowId }));
+  const canvasIds = useMemo(() => canvases.map((canvas) => canvas.id), [canvases]);
 
   const visibleCanvasIds = useSelector((state) => getVisibleCanvasIds(state, { windowId }));
 
-  const { data, hasNextPage, fetchNextPage } = useGetIiifContentSearchInfiniteQuery(
-    { endpoint, query },
-    { skip: query?.length === 0 },
+  const { data, currentData, hasNextPage, fetchNextPage } = useGetIiifContentSearchInfiniteQuery(
+    { endpoint, query, companionWindowId: id, canvasIds },
+    { skip: !query || !endpoint },
   );
   const contentSearchResult = useMemo(() => normalizeContentSearchResult(data, canvasIds), [data, canvasIds]);
   const searchNumTotal = data?.pages?.[0]?.within?.total;
+
+  useEffect(() => {
+    if (selectedAnnotationId || !query || !contentSearchResult) return;
+    console.log(contentSearchResult)
+    const first = contentSearchResult?.results?.[0]?.annotations[0]
+    if (first) dispatch(selectAnnotation(windowId, first.id, first.targetId, id));
+  }, [data, query, selectedAnnotationId, contentSearchResult, windowId, id, dispatch]);
 
   const { suggestedSearches } = useSelector((state) => getWindow(state, { windowId }));
 
@@ -333,17 +339,10 @@ export function SearchPanel({ id, windowId }) {
       if (resultWithSelectedAnnotation) return resultWithSelectedAnnotation;
     }
 
-    if (currentAnnotationId) {
-      const resultWithCurrentAnnotation = contentSearchResult?.results?.find((result) =>
-        result?.annotations?.some((annotation) => annotation?.id === currentAnnotationId),
-      );
-      if (resultWithCurrentAnnotation) return resultWithCurrentAnnotation;
-    }
-
     return contentSearchResult?.results?.find((result) =>
       visibleCanvasIds.some((canvasId) => result?.annotations?.some((annotation) => annotation?.targetId === canvasId)),
     );
-  }, [contentSearchResult, visibleCanvasIds, selectedAnnotationId, currentAnnotationId]);
+  }, [contentSearchResult, visibleCanvasIds, selectedAnnotationId]);
 
   return (
     <CompanionWindow

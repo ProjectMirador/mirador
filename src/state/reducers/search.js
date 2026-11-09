@@ -16,17 +16,6 @@ export const searchesReducer = (state = {}, action) => {
           },
         },
       };
-    case ActionTypes.SELECT_ANNOTATION:
-      return {
-        ...state,
-        [action.windowId]: {
-          ...(state[action.windowId] || {}),
-          [action.companionWindowId]: {
-            ...(state[action.windowId]?.[action.companionWindowId] || {}),
-            currentAnnotationId: action.annotationId,
-          },
-        },
-      };
     default:
       return state;
   }

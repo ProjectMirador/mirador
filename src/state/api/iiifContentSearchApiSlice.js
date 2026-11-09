@@ -14,13 +14,15 @@ export const iiifContentSearchApiSlice = createApi({
     getIiifContentSearch: build.infiniteQuery({
       infiniteQueryOptions: {
         initialPageParam: undefined,
-        getNextPageParam: (lastPage, allPages) => undefined,
+        // IIIF Content Search v1: each page links to the next page by URL
+        getNextPageParam: (lastPage) => lastPage?.next,
       },
       query: ({ queryArg, pageParam }) => {
         if (pageParam) {
           return { url: pageParam };
         }
-        return { url: `${queryArg.endpoint}?q=${queryArg.query?.toString()}` };
+        const separator = queryArg.endpoint.includes('?') ? '&' : '?';
+        return { url: `${queryArg.endpoint}${separator}${new URLSearchParams({ q: queryArg.query ?? '' })}` };
       },
       // `providesTags` determines which 'tag' is attached to the
       // cached data returned by the query.
@@ -31,7 +33,7 @@ export const iiifContentSearchApiSlice = createApi({
       // `providesTags` determines which 'tag' is attached to the
       // cached data returned by the query.
       transformResponse: (response) => {
-        return response?.terms.map((p) => p?.match ?? p);
+        return response?.terms?.map((p) => p?.match ?? p) ?? [];
       },
       providesTags: (_result, _error, query) => [{ type: 'contentSearchAutocomplete', query }],
     }),
