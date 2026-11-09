@@ -245,11 +245,20 @@ function SearchNavigation({ data, companionWindowId, windowId }) {
 
   const direction = useSelector((state) => getThemeDirection(state));
 
-  const currentAnnotationId = useSelector((state) => getCurrentAnnotationId(state, { companionWindowId, windowId }) ?? data?.results?.[0]?.annotations?.[0]?.id);
+  const windowSelectedAnnotationId = useSelector((state) => getSelectedAnnotationId(state, { windowId }));
+  const currentAnnotationId = useSelector((state) => getCurrentAnnotationId(state, { companionWindowId, windowId }));
 
-  const currentHitIndex = data?.results?.findIndex((result) =>
-    result?.annotations?.some((annotation) => annotation?.id === currentAnnotationId),
-  ) || 0;
+  let currentHitIndex = data?.results?.findIndex((result) =>
+    result?.annotations?.some((annotation) => annotation?.id === windowSelectedAnnotationId),
+  )
+
+  if (currentHitIndex < 0) {
+    currentHitIndex = data?.results?.findIndex((result) =>
+      result?.annotations?.some((annotation) => annotation?.id === currentAnnotationId),
+    )
+   }
+
+  if (currentHitIndex < 0) currentHitIndex = 0;
 
   const searchNumTotal = data?.pages?.[0]?.within?.total || (data?.results?.length ?? 0);
   const hasPreviousResult = currentHitIndex > 0;
