@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState, useMemo, useEffect } from 'react';
+import { forwardRef, useCallback, useRef, useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDebounce } from 'use-debounce';
 import { styled } from '@mui/material/styles';
@@ -319,7 +319,10 @@ export function SearchPanel({ id, windowId }) {
   const hasQuery = query && query !== '';
 
   const [focusedAnnotationId, setFocusedAnnotationId] = useState(null);
+
   const selectedAnnotationId = useSelector((state) => getSelectedAnnotationId(state, { windowId }));
+  const dispatchSelectAnnotation = useCallback((annotation) => dispatch(selectAnnotation(windowId, annotation.id, annotation.targetId, id)), [dispatch, windowId, id]);
+
   const currentAnnotationId = useSelector((state) => getCurrentAnnotationId(state, { companionWindowId: id, windowId }));
   const canvasIds = useSelector((state) => getCanvases(state, { windowId })).map((canvas) => canvas.id);
 
@@ -331,6 +334,20 @@ export function SearchPanel({ id, windowId }) {
   );
   const contentSearchResult = useMemo(() => normalizeContentSearchResult(data, canvasIds), [data, canvasIds]);
   const searchNumTotal = data?.pages?.[0]?.within?.total;
+
+  const selectedAnnotationFromCurrentResults = useMemo(() => {
+    return contentSearchResult?.results?.some((result) =>
+      result?.annotations?.some((annotation) => annotation?.id === selectedAnnotationId),
+    );
+  }, [contentSearchResult, selectedAnnotationId]);
+
+  useEffect(() => {
+    if (currentAnnotationId) return;
+    if (selectedAnnotationFromCurrentResults) return;
+
+    const annotation = contentSearchResult?.results?.[0]?.annotations?.[0];
+    if (annotation) dispatchSelectAnnotation(annotation);
+  }, [currentAnnotationId, selectedAnnotationFromCurrentResults, contentSearchResult, dispatchSelectAnnotation]);
 
   const { suggestedSearches } = useSelector((state) => getWindow(state, { windowId }));
 
