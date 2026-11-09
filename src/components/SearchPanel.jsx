@@ -330,7 +330,7 @@ export function SearchPanel({ id, windowId }) {
 
   const { data, hasNextPage, fetchNextPage } = useGetIiifContentSearchInfiniteQuery(
     { endpoint, query },
-    { skip: query?.length === 0 },
+    { skip: !query || query?.length === 0 },
   );
   const contentSearchResult = useMemo(() => normalizeContentSearchResult(data, canvasIds), [data, canvasIds]);
   const searchNumTotal = data?.pages?.[0]?.within?.total;
