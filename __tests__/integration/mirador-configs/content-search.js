@@ -15,5 +15,9 @@ export default {
       // defaultSearchQuery: 'NSF',
       suggestedSearches: ['NSF'],
     },
+    {
+      manifestId: 'https://iiif.wellcomecollection.org/presentation/v2/b18035723',
+      suggestedSearches: ['Form'],
+    },
   ],
 };

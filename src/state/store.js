@@ -8,6 +8,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import createRootReducer from './reducers/rootReducer';
 import getRootSaga from './sagas';
 import settings from '../config/settings';
+import { iiifContentSearchApiSlice } from './api/iiifContentSearchApiSlice';
 
 /**
  * Configure Mirador Store
@@ -33,7 +34,7 @@ function createStore(pluginReducers, pluginSagas = []) {
           // This keeps compatibility with any external consumer of that documented ActionTypes entry
           // `config` is included here too since IMPORT_MIRADOR_STATE's
           // action payload carries a full `state.config` snapshot.
-          ignoredActionPaths: ['imageResource', /(^|\.)config$/],
+          ignoredActionPaths: ['imageResource', /(^|\.)config$/, 'meta.baseQueryMeta.request', 'meta.baseQueryMeta.response'],
           // config is Mirador's plugin/host config API surface -- it
           // legitimately carries functions by design (MUI theme
           // styleOverrides, config.export.manifests.filter, etc.). Matched by
@@ -41,7 +42,7 @@ function createStore(pluginReducers, pluginSagas = []) {
           // everything under an extra top-level key.
           ignoredPaths: [/(^|\.)config$/],
         },
-      }).concat(sagaMiddleware),
+      }).concat(sagaMiddleware, iiifContentSearchApiSlice.middleware),
     reducer,
   });
 

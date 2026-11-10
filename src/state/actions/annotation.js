@@ -71,9 +71,11 @@ export function receiveAnnotationFailure(targetId, annotationId, error) {
  * @param  {String} annotationId
  * @memberof ActionCreators
  */
-export function selectAnnotation(windowId, annotationId) {
+export function selectAnnotation(windowId, annotationId, canvasId = undefined, companionWindowId = undefined) {
   return {
     annotationId,
+    canvasId,
+    companionWindowId,
     type: ActionTypes.SELECT_ANNOTATION,
     windowId,
   };

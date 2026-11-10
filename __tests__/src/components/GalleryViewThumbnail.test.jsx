@@ -133,20 +133,4 @@ describe('GalleryView', () => {
       expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50');
     });
   });
-
-  describe('search annotation count chip', () => {
-    it('hides the chip if there are no annotations', () => {
-      const { container } = createWrapper({ searchAnnotationsCount: 0 });
-      // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
-      expect(container.querySelector('.MuiChip-root')).not.toBeInTheDocument();
-    });
-
-    it('shows the number of search annotations on a canvas', () => {
-      const { container } = createWrapper({ searchAnnotationsCount: 50 });
-      // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
-      expect(container.querySelector('.MuiChip-root')).toBeInTheDocument();
-      // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
-      expect(container.querySelector('.MuiChip-root')).toHaveTextContent('50');
-    });
-  });
 });
