@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
-import { server } from '../../mocks/server';
+import { server, useMsw } from '../../mocks/server';
 import { contentSearchMock } from '../../mocks/contentSearchMock';
 import SearchPanel from '../../../src/containers/SearchPanel';
 import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
@@ -41,6 +41,9 @@ function createWrapper(props = {}, { search, window } = {}) {
 }
 
 describe('SearchPanel', () => {
+  // TODO: remove after migration off vitest-fetch-mock
+  useMsw();
+
   it('renders a CompanionWindow', () => {
     createWrapper();
     expect(screen.getByRole('region')).toBeInTheDocument();

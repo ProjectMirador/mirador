@@ -1,9 +1,9 @@
 import '@testing-library/jest-dom';
-import { vi, beforeAll, beforeEach, afterEach, afterAll } from 'vitest';
+import { vi, beforeEach, afterAll } from 'vitest';
 import { setupIntersectionMocking } from 'react-intersection-observer/test-utils';
 import i18next from 'i18next';
+import createFetchMock from 'vitest-fetch-mock';
 import en from './src/locales/en/translation.json';
-import { server } from './__tests__/mocks/server';
 
 // vitest doesn't set a default
 window.origin = 'http://localhost';
@@ -15,33 +15,29 @@ window['__@hello-pangea/dnd-disable-dev-warnings'] = true;
 
 vi.setConfig({ testTimeout: 10_000 });
 
+// TODO: remove fetch mock logic in favor of msw once all tests are migrated off fetchMock
+const fetchMocker = createFetchMock(vi);
+
 let usesRealNetwork = false;
 
-beforeAll(() => {
-  server.listen({
-    onUnhandledRequest(request, print) {
-      // Allow real network requests in /integration tests
-      if (usesRealNetwork) return;
-      print.error();
-    },
-  });
-});
-
+// TODO: remove after migration complete
+// changes default behavior of fetchMock to use the real 'fetch' implementation and not mock responses
 beforeEach((context) => {
   usesRealNetwork = context.task.file.name.includes('/integration');
-});
 
-afterEach(async () => {
-  server.resetHandlers();
+  if (globalThis.__USE_MSW__) return;
 
-  if (usesRealNetwork && window.happyDOM) {
-    await window.happyDOM.abort();
+  if (usesRealNetwork) {
+    fetchMocker.disableMocks();
+  } else {
+    // sets globalThis.fetch and globalThis.fetchMock to our mocked version
+    fetchMocker.enableMocks();
   }
 });
 
+// integration tests use the real network; let in-flight requests settle before
+// happy-dom tears down the window, otherwise it aborts them and logs AbortErrors
 afterAll(async () => {
-  server.close();
-
   if (!usesRealNetwork || !window.happyDOM) return;
 
   await Promise.race([window.happyDOM.waitUntilComplete(), new Promise((resolve) => setTimeout(resolve, 5_000))]);

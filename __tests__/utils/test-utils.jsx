@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import PropTypes from 'prop-types';
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
