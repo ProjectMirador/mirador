@@ -31,17 +31,19 @@ beforeEach((context) => {
   usesRealNetwork = context.task.file.name.includes('/integration');
 });
 
-afterEach(() => {
+afterEach(async () => {
   server.resetHandlers();
+
+  if (usesRealNetwork && window.happyDOM) {
+    await window.happyDOM.abort();
+  }
 });
 
 afterAll(async () => {
   server.close();
 
-  if (!usesRealNetwork) return;
+  if (!usesRealNetwork || !window.happyDOM) return;
 
-  // integration tests use the real network; let in-flight requests settle before
-  // happy-dom tears down the window, otherwise it aborts them and logs AbortErrors
   await Promise.race([
     window.happyDOM.waitUntilComplete(),
     new Promise((resolve) => setTimeout(resolve, 5_000)),

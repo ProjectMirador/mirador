@@ -93,44 +93,48 @@ describe('SearchPanel', () => {
   it('suggests searches and renders results from the API', async () => {
     const user = userEvent.setup();
 
-    createWrapper({}, { window: { suggestedSearches: ['NSF'] } });
+    createWrapper({}, { window: { suggestedSearches: ['Dry Cleaning & Laundry'] } });
 
-    const suggestionBtn = screen.getByRole('button', { name: 'Search this document for "NSF"' });
+    const suggestionBtn = screen.getByRole('button', {
+      name: 'Search this document for "Dry Cleaning & Laundry"',
+    });
     expect(suggestionBtn).toBeInTheDocument();
 
     await user.click(suggestionBtn);
 
-    expect(await screen.findByText(/ROAD CODE BOOK/i)).toBeInTheDocument();
-    expect(screen.getAllByText('NSF').length).toBeGreaterThan(0);
+    expect((await screen.findAllByText(/Dry Cleaning/i)).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Laundry/i).length).toBeGreaterThan(0);
   });
 
   it('encodes special characters in suggested search URLs and renders results', async () => {
     const user = userEvent.setup();
+    const searchUrl = manifestFixtureFg165hz3589.service[0]['@id'];
     let requestedUrl;
+    console.log(contentSearchMock);
 
     server.use(
-      http.get('https://stanford.edu', ({ request }) => {
+      http.get(searchUrl, ({ request }) => {
         requestedUrl = request.url;
-
-        return HttpResponse.json({
-          ...contentSearchMock,
-          hits: [{ ...contentSearchMock.hits, match: 'hel^lo' }],
-        });
+        return HttpResponse.json(contentSearchMock);
       }),
     );
 
-    createWrapper({}, { window: { suggestedSearches: ['hel^lo'] } });
+    createWrapper({}, { window: { suggestedSearches: ['Dry Cleaning & Laundry'] } });
 
-    const suggestionBtn = screen.getByRole('button', { name: 'Search this document for "hel^lo"' });
+    const suggestionBtn = screen.getByRole('button', {
+      name: 'Search this document for "Dry Cleaning & Laundry"',
+    });
     expect(suggestionBtn).toBeInTheDocument();
 
     await user.click(suggestionBtn);
 
-    expect(await screen.findByText(/ROAD CODE BOOK/i)).toBeInTheDocument();
-    expect(screen.getByText('hel^lo')).toBeInTheDocument();
-    expect(requestedUrl).toBe('https://stanford.edu?q=hel%5Elo');
-  });
+    // The results rendered (including the '&' in the snippet)
+    expect(await screen.findByText('Dry Cleaning')).toBeInTheDocument();
+    expect(screen.getByText(/^& Laundry - \(Located at side of Medical Building\)/)).toBeInTheDocument();
 
+    // 2The special character '&' and spaces were URL-encoded in the request
+    expect(requestedUrl).toBe(`${searchUrl}?q=Dry+Cleaning+%26+Laundry`);
+  });
   it('does not suggest searches if the user has made a query', () => {
     createWrapper(
       {},
