@@ -4,13 +4,12 @@ import { http, HttpResponse } from 'msw';
 import { server } from '../../mocks/server';
 import { contentSearchMock } from '../../mocks/contentSearchMock';
 import SearchPanel from '../../../src/containers/SearchPanel';
+import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
 
 /**
  * Helper function to wrap the Redux-connected SearchPanel
  */
-function createWrapper(props = {}, preloadedState = {}) {
-  const { windows: windowsState, ...restState } = preloadedState;
-
+function createWrapper(props = {}, { search, window } = {}) {
   return render(
     <SearchPanel
       id="xyz"
@@ -21,44 +20,32 @@ function createWrapper(props = {}, preloadedState = {}) {
       preloadedState: {
         companionWindows: { xyz: { content: 'search' } },
         manifests: {
-          'manifest.stanford.edu/test1': {
-            id: 'manifest.stanford.edu/test1',
-            json: {
-              '@context': 'http://iiif.io/api/presentation/2/context.json',
-              '@id': 'manifest.stanford.edu/test1',
-              '@type': 'sc:Manifest',
-              sequences: [
-                {
-                  canvases: [
-                    { '@id': 'https://stanford.edu', label: 'Page 1' },
-                    { '@id': 'https://stanford.edu', label: 'Page 2' },
-                    { '@id': 'https://stanford.edu', label: 'Page 5' },
-                  ],
-                },
-              ],
-              service: {
-                '@context': 'http://iiif.io/api/search/1/context.json',
-                '@id': 'https://stanford.edu/content-search',
-                profile: 'http://iiif.io/api/search/1/search',
+          manifest: {
+            id: 'manifest',
+            json: manifestFixtureFg165hz3589,
+          },
+        },
+        ...(search && {
+          searches: {
+            window: {
+              xyz: {
+                data: {},
+                ...search,
               },
             },
           },
-        },
-        
+        }),
         windows: {
           window: {
             id: 'window',
-            manifestId: 'manifest.stanford.edu/test1',
-            ...windowsState?.window,
+            manifestId: 'manifest',
+            ...window,
           },
         },
-        ...restState,
       },
     },
   );
 }
-
-
 
 describe('SearchPanel', () => {
   it('renders a CompanionWindow', () => {
@@ -68,10 +55,7 @@ describe('SearchPanel', () => {
   });
 
   it('passes a Clear chip as the CompanionWindow title prop', () => {
-    createWrapper(
-      {},
-      { searches: { window: { xyz: { data: {}, query: 'Wolpertinger' } } } },
-    );
+    createWrapper({}, { search: { query: 'Wolpertinger' } });
 
     expect(screen.getByRole('heading', { name: /Search/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Reset search' })).toBeInTheDocument();
@@ -80,10 +64,7 @@ describe('SearchPanel', () => {
   it('clears the search when the Clear chip is clicked', async () => {
     const user = userEvent.setup();
 
-    createWrapper(
-      {},
-      { searches: { window: { xyz: { data: {}, query: 'Wolpertinger' } } } },
-    );
+    createWrapper({}, { search: { query: 'Wolpertinger' } });
 
     await user.click(screen.getByRole('button', { name: 'Reset search' }));
 
@@ -112,14 +93,7 @@ describe('SearchPanel', () => {
   it('suggests searches and renders results from the API', async () => {
     const user = userEvent.setup();
 
-    createWrapper(
-      {},
-      {
-        windows: {
-          window: { suggestedSearches: ['NSF'] },
-        },
-      },
-    );
+    createWrapper({}, { window: { suggestedSearches: ['NSF'] } });
 
     const suggestionBtn = screen.getByRole('button', { name: 'Search this document for "NSF"' });
     expect(suggestionBtn).toBeInTheDocument();
@@ -132,26 +106,20 @@ describe('SearchPanel', () => {
 
   it('encodes special characters in suggested search URLs and renders results', async () => {
     const user = userEvent.setup();
+    let requestedUrl;
 
     server.use(
-      http.get('https://stanford.edu/content-search', ({ request }) => {
-        // expect(request.url).toBe('https://stanford.edu/content-search?q=hel%5Elo');
+      http.get('https://stanford.edu', ({ request }) => {
+        requestedUrl = request.url;
 
         return HttpResponse.json({
           ...contentSearchMock,
-          hits: [{ ...contentSearchMock.hits[0], match: 'hel^lo' }],
+          hits: [{ ...contentSearchMock.hits, match: 'hel^lo' }],
         });
       }),
     );
 
-    createWrapper(
-      {},
-      {
-        windows: {
-          window: { suggestedSearches: ['hel^lo'] },
-        },
-      },
-    );
+    createWrapper({}, { window: { suggestedSearches: ['hel^lo'] } });
 
     const suggestionBtn = screen.getByRole('button', { name: 'Search this document for "hel^lo"' });
     expect(suggestionBtn).toBeInTheDocument();
@@ -160,20 +128,15 @@ describe('SearchPanel', () => {
 
     expect(await screen.findByText(/ROAD CODE BOOK/i)).toBeInTheDocument();
     expect(screen.getByText('hel^lo')).toBeInTheDocument();
+    expect(requestedUrl).toBe('https://stanford.edu?q=hel%5Elo');
   });
 
   it('does not suggest searches if the user has made a query', () => {
     createWrapper(
       {},
       {
-        searches: {
-          window: {
-            xyz: { data: {}, query: 'blah' },
-          },
-        },
-        windows: {
-          window: { suggestedSearches: ['NSF'] },
-        },
+        search: { query: 'blah' },
+        window: { suggestedSearches: ['NSF'] },
       },
     );
 
