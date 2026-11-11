@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import PropTypes from 'prop-types';
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
@@ -21,7 +21,6 @@ const rootReducer = createRootReducer();
 const theme = createTheme(settings.theme);
 
 const i18n = createI18nInstance();
-
 
 /**
  * Helper to create a store with Mirador's reducer and saga middleware
@@ -124,7 +123,6 @@ export const setupIntegrationTestViewer = (config, plugins) => {
   });
 
   afterEach((context) => {
-    cleanup();
     // If miradorInstance has a store or unmount method, tear it down here
     if (context.miradorInstance?.unmount) {
       context.miradorInstance.unmount();

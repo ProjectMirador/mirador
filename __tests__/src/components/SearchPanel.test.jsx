@@ -10,41 +10,34 @@ import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.jso
  * Helper function to wrap the Redux-connected SearchPanel
  */
 function createWrapper(props = {}, { search, window } = {}) {
-  return render(
-    <SearchPanel
-      id="xyz"
-      windowId="window"
-      {...props}
-    />,
-    {
-      preloadedState: {
-        companionWindows: { xyz: { content: 'search' } },
-        manifests: {
-          manifest: {
-            id: 'manifest',
-            json: manifestFixtureFg165hz3589,
-          },
+  return render(<SearchPanel id="xyz" windowId="window" {...props} />, {
+    preloadedState: {
+      companionWindows: { xyz: { content: 'search' } },
+      manifests: {
+        manifest: {
+          id: 'manifest',
+          json: manifestFixtureFg165hz3589,
         },
-        ...(search && {
-          searches: {
-            window: {
-              xyz: {
-                data: {},
-                ...search,
-              },
+      },
+      ...(search && {
+        searches: {
+          window: {
+            xyz: {
+              data: {},
+              ...search,
             },
           },
-        }),
-        windows: {
-          window: {
-            id: 'window',
-            manifestId: 'manifest',
-            ...window,
-          },
+        },
+      }),
+      windows: {
+        window: {
+          id: 'window',
+          manifestId: 'manifest',
+          ...window,
         },
       },
     },
-  );
+  });
 }
 
 describe('SearchPanel', () => {

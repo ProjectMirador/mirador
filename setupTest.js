@@ -44,10 +44,7 @@ afterAll(async () => {
 
   if (!usesRealNetwork || !window.happyDOM) return;
 
-  await Promise.race([
-    window.happyDOM.waitUntilComplete(),
-    new Promise((resolve) => setTimeout(resolve, 5_000)),
-  ]);
+  await Promise.race([window.happyDOM.waitUntilComplete(), new Promise((resolve) => setTimeout(resolve, 5_000))]);
 });
 
 /** */
