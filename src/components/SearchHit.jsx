@@ -26,7 +26,10 @@ const Root = styled(ListItem, { name: 'SearchHit', slot: 'root' })(({ ownerState
       backgroundColor: 'inherit',
     }),
   },
-  paddingRight: theme.spacing(1),
+  ...(!ownerState.selected && {
+    margin: 0,
+    padding: 0,
+  }),
 }));
 
 const CanvasLabel = styled('h4', { name: 'SearchHit', slot: 'canvasLabel' })(({ theme }) => ({
@@ -48,6 +51,15 @@ const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerSta
   typography: 'subtitle2',
   verticalAlign: 'inherit',
 }));
+
+/** Stub component that renders a button unless the item is selected (so the user can e.g. copy + paste the content easily) */
+const ButtonUnlessSelected = ({ children, selected = false, ...props }) =>
+  selected ? <>{children}</> : <ListItemButton {...props}>{children}</ListItemButton>;
+
+ButtonUnlessSelected.propTypes = {
+  children: PropTypes.node.isRequired,
+  selected: PropTypes.bool,
+};
 
 /** */
 // eslint-disable-next-line complexity
@@ -138,58 +150,53 @@ export function SearchHit({
       offsetTop={96} // offset for the height of the form above
       scrollTo={windowSelected && !focused}
     >
-      <Root
-        ownerState={ownerState}
-        className={classNames(ns('search-hit'), windowSelected ? 'windowSelected' : '')}
-        divider
-        component={selected ? 'li' : ListItemButton}
-        onClick={handleClick}
-        selected={selected}
-      >
-        <ListItemText
-          primary={header}
-          secondary={
-            <>
-              {hit && (
-                <>
-                  <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.before} />{' '}
-                  <strong>
-                    <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.match} />
-                  </strong>{' '}
-                  <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.after} />{' '}
-                  {truncated && !focused && (
-                    <Button
-                      sx={{
-                        '& span': {
-                          lineHeight: '1.5em',
-                        },
-                        margin: 0,
-                        padding: 0,
-                        textTransform: 'none',
-                      }}
-                      onClick={showDetails}
-                      color="secondary"
-                      size="small"
-                      aria-describedby={canvasLabelHtmlId}
-                    >
-                      {t('more')}
-                    </Button>
-                  )}
-                </>
-              )}
-              {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
-            </>
-          }
-          slotProps={{
-            primary: {
-              component: 'div',
-              sx: { marginBottom: 1 },
-              variant: 'subtitle2',
-            },
+      <Root ownerState={ownerState} className={classNames(ns('search-hit'), windowSelected ? 'windowSelected' : '')} divider>
+        <ButtonUnlessSelected selected={selected} onClick={handleClick}>
+          <ListItemText
+            primary={header}
+            secondary={
+              <>
+                {hit && (
+                  <>
+                    <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.before} />{' '}
+                    <strong>
+                      <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.match} />
+                    </strong>{' '}
+                    <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.after} />{' '}
+                    {truncated && !focused && (
+                      <Button
+                        sx={{
+                          '& span': {
+                            lineHeight: '1.5em',
+                          },
+                          margin: 0,
+                          padding: 0,
+                          textTransform: 'none',
+                        }}
+                        onClick={showDetails}
+                        color="secondary"
+                        size="small"
+                        aria-describedby={canvasLabelHtmlId}
+                      >
+                        {t('more')}
+                      </Button>
+                    )}
+                  </>
+                )}
+                {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
+              </>
+            }
+            slotProps={{
+              primary: {
+                component: 'div',
+                sx: { marginBottom: 1 },
+                variant: 'subtitle2',
+              },
 
-            secondary: { variant: 'body1' },
-          }}
-        />
+              secondary: { variant: 'body1' },
+            }}
+          />
+        </ButtonUnlessSelected>
       </Root>
     </ScrollTo>
   );
