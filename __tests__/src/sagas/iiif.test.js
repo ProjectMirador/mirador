@@ -8,19 +8,27 @@ import {
   fetchResourceManifest,
 } from '../../../src/state/sagas/iiif';
 import { getConfig, getManifests, selectInfoResponse, getAccessTokens, getRequestsConfig } from '../../../src/state/selectors';
+import { http, HttpResponse } from 'msw';
+import { server } from '../../mocks/server';
 
 describe('IIIF sagas', () => {
+  const manifestId = 'http://server/prefix/manifestId';
+  const searchId = 'http://server/prefix/searchId';
+  const annotationId = 'http://server/prefix/annotationId';
+  const infoId = 'http://server/prefix/infoId';
+  const infoUrl = `${infoId}/info.json`;
+
   describe('fetchManifest', () => {
     it('fetches a IIIF manifest', () => {
-      fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
+      server.use(http.get(manifestId, () => HttpResponse.json({ data: '12345' }), { once: true }));
       const action = {
-        manifestId: 'manifestId',
+        manifestId,
       };
 
       return expectSaga(fetchManifest, action)
         .provide([[select(getConfig), {}]])
         .put({
-          manifestId: 'manifestId',
+          manifestId,
           manifestJson: { data: '12345' },
           type: 'mirador/RECEIVE_MANIFEST',
         })
@@ -28,9 +36,9 @@ describe('IIIF sagas', () => {
     });
 
     it('handles failures', () => {
-      fetch.mockResponseOnce('<h1>Not Json</h1>');
+      server.use(http.get(manifestId, () => HttpResponse.html('<h1>Not Json</h1>'), { once: true }));
       const action = {
-        manifestId: 'manifestId',
+        manifestId,
       };
 
       return expectSaga(fetchManifest, action)
@@ -41,51 +49,79 @@ describe('IIIF sagas', () => {
 
     it('uses the HTTP status instead of a JSON parsing error for a non-JSON error response body', () => {
       // e.g. a Cantaloupe 404 page, which is plain text, not JSON
-      fetch.mockResponseOnce('404 Not Found\n\nFailed to resolve jpeg/333026 to /jp2/jpeg/333026.jp2', {
-        status: 404,
-        statusText: 'Not Found',
-      });
+      server.use(
+        http.get(
+          manifestId,
+          () =>
+            HttpResponse.text('404 Not Found\n\nFailed to resolve jpeg/333026 to /jp2/jpeg/333026.jp2', {
+              status: 404,
+              statusText: 'Not Found',
+            }),
+          { once: true },
+        ),
+      );
+
       const action = {
-        manifestId: 'https://example.org/manifestId',
+        manifestId,
       };
 
       return expectSaga(fetchManifest, action)
         .provide([[select(getConfig), {}]])
         .put({
-          error: '404 Not Found: https://example.org/manifestId',
-          manifestId: 'https://example.org/manifestId',
+          error: `404 Not Found: ${manifestId}`,
+          manifestId,
           type: 'mirador/RECEIVE_MANIFEST_FAILURE',
         })
         .run();
     });
 
-    it('supports request configuration preprocessors', () => {
-      fetch.once((req) => Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })));
+    it('supports request configuration preprocessors', async () => {
+      let capturedHeaders;
+
+      server.use(
+        http.get(
+          manifestId,
+          ({ request }) => {
+            capturedHeaders = request.headers;
+            return HttpResponse.json({ data: 'manifest content' });
+          },
+          { once: true },
+        ),
+      );
+
       const action = {
-        manifestId: 'manifestId',
+        manifestId,
       };
 
-      return expectSaga(fetchManifest, action)
+      await expectSaga(fetchManifest, action)
         .provide([
           [
             select(getRequestsConfig),
             {
-              preprocessors: [(url, options) => ({ ...options, headers: { CustomHeader: 'config injected' } })],
+              preprocessors: [
+                (url, options) => ({
+                  ...options,
+                  headers: { CustomHeader: 'config injected' },
+                }),
+              ],
             },
           ],
         ])
         .put({
-          manifestId: 'manifestId',
-          manifestJson: { data: 'config injected' },
+          manifestId,
+          manifestJson: { data: 'manifest content' },
           type: 'mirador/RECEIVE_MANIFEST',
         })
         .run();
+
+      expect(capturedHeaders?.get('customheader')).toBe('config injected');
     });
 
     it('supports response postprocessors', () => {
-      fetch.once((req) => Promise.resolve(JSON.stringify({ data: req.headers.get('customheader') })));
+      server.use(http.get(manifestId, () => HttpResponse.json({ data: 'original content' }), { once: true }));
+
       const action = {
-        manifestId: 'manifestId',
+        manifestId,
       };
 
       return expectSaga(fetchManifest, action)
@@ -103,7 +139,7 @@ describe('IIIF sagas', () => {
           ],
         ])
         .put({
-          manifestId: 'manifestId',
+          manifestId,
           manifestJson: { foo: 'modified!' },
           type: 'mirador/RECEIVE_MANIFEST',
         })
@@ -113,16 +149,21 @@ describe('IIIF sagas', () => {
 
   describe('fetchInfoResponse', () => {
     it('fetches a IIIF info response', () => {
-      fetch.mockResponseOnce(JSON.stringify({ id: 'http://server/prefix/infoId' }));
+      server.use(
+        http.get(infoUrl, () => HttpResponse.json({ id: infoId }), {
+          once: true,
+        }),
+      );
+
       const action = {
         imageResource: {},
-        infoId: 'http://server/prefix/infoId',
+        infoId,
       };
 
       return expectSaga(fetchInfoResponse, action)
         .put({
-          infoId: 'http://server/prefix/infoId',
-          infoJson: { id: 'http://server/prefix/infoId' },
+          infoId,
+          infoJson: { id: infoId },
           ok: true,
           tokenServiceId: undefined,
           type: 'mirador/RECEIVE_INFO_RESPONSE',
@@ -131,9 +172,14 @@ describe('IIIF sagas', () => {
     });
 
     it('retrieves any previous IIIF info response to try any applicable access tokens', () => {
-      fetch.mockResponseOnce(JSON.stringify({ id: 'infoId' }));
+      server.use(
+        http.get(infoUrl, () => HttpResponse.json({ id: infoId }), {
+          once: true,
+        }),
+      );
+
       const action = {
-        infoId: 'infoId',
+        infoId,
       };
       const infoResponse = {
         id: 'degradedInfoId',
@@ -154,7 +200,7 @@ describe('IIIF sagas', () => {
 
       return expectSaga(fetchInfoResponse, action)
         .provide([
-          [select(selectInfoResponse, { infoId: 'infoId' }), infoResponse],
+          [select(selectInfoResponse, { infoId }), infoResponse],
           [
             select(getAccessTokens),
             {
@@ -163,8 +209,8 @@ describe('IIIF sagas', () => {
           ],
         ])
         .put({
-          infoId: 'infoId',
-          infoJson: { id: 'infoId' },
+          infoId,
+          infoJson: { id: infoId },
           ok: true,
           tokenServiceId: 'x',
           type: 'mirador/RECEIVE_INFO_RESPONSE',
@@ -173,9 +219,14 @@ describe('IIIF sagas', () => {
     });
 
     it('ignores IIIF Auth 2.0 services (which may lack a profile) and uses the v1 access token', () => {
-      fetch.mockResponseOnce(JSON.stringify({ id: 'infoId' }));
+      server.use(
+        http.get(infoUrl, () => HttpResponse.json({ id: infoId }), {
+          once: true,
+        }),
+      );
+
       const action = {
-        infoId: 'infoId',
+        infoId,
       };
       const infoResponse = {
         id: 'degradedInfoId',
@@ -214,7 +265,7 @@ describe('IIIF sagas', () => {
 
       return expectSaga(fetchInfoResponse, action)
         .provide([
-          [select(selectInfoResponse, { infoId: 'infoId' }), infoResponse],
+          [select(selectInfoResponse, { infoId }), infoResponse],
           [
             select(getAccessTokens),
             {
@@ -223,8 +274,8 @@ describe('IIIF sagas', () => {
           ],
         ])
         .put({
-          infoId: 'infoId',
-          infoJson: { id: 'infoId' },
+          infoId,
+          infoJson: { id: infoId },
           ok: true,
           tokenServiceId: 'x',
           type: 'mirador/RECEIVE_INFO_RESPONSE',
@@ -233,26 +284,32 @@ describe('IIIF sagas', () => {
     });
 
     it('handles failed requests', () => {
-      fetch.mockResponseOnce('<h1>Not Found</h1>');
+      server.use(http.get(infoUrl, () => HttpResponse.html('<h1>Not Found</h1>'), { once: true }));
       const action = {
         imageResource: {},
-        infoId: 'infoId',
+        infoId,
       };
 
       return expectSaga(fetchInfoResponse, action).put.actionType('mirador/RECEIVE_INFO_RESPONSE_FAILURE').run();
     });
+
     it('handles degraded requests', () => {
-      fetch.mockResponseOnce(JSON.stringify({ id: 'otherInfoId' }));
+      server.use(
+        http.get(infoUrl, () => HttpResponse.json({ id: 'http://server/prefix/otherInfoId' }), {
+          once: true,
+        }),
+      );
+
       const action = {
         imageResource: {},
-        infoId: 'infoId',
+        infoId,
         windowId: 'window',
       };
 
       return expectSaga(fetchInfoResponse, action)
         .put({
-          infoId: 'infoId',
-          infoJson: { id: 'otherInfoId' },
+          infoId,
+          infoJson: { id: 'http://server/prefix/otherInfoId' },
           ok: true,
           tokenServiceId: undefined,
           type: 'mirador/RECEIVE_DEGRADED_INFO_RESPONSE',
@@ -263,7 +320,7 @@ describe('IIIF sagas', () => {
 
     it('rerequests documents if the authoritative response suggests a different access token service', () => {
       const degradedInfoResponse = {
-        id: 'degradedInfoId',
+        id: 'http://server/prefix/degradedInfoId/info.json',
         service: [
           {
             '@context': 'http://iiif.io/api/auth/1/context.json',
@@ -278,15 +335,21 @@ describe('IIIF sagas', () => {
           },
         ],
       };
-      fetch.once(JSON.stringify(degradedInfoResponse)).once(JSON.stringify({ id: 'infoId' }));
+
+      server.use(
+        http.get(infoUrl, () => HttpResponse.json(degradedInfoResponse), { once: true }),
+        http.get(infoUrl, () => HttpResponse.json({ id: infoId }), {
+          once: true,
+        }),
+      );
       const action = {
         imageResource: {},
-        infoId: 'infoId',
+        infoId,
       };
 
       return expectSaga(fetchInfoResponse, action)
         .provide([
-          [select(selectInfoResponse, { infoId: 'infoId' }), undefined],
+          [select(selectInfoResponse, { infoId }), undefined],
           [
             select(getAccessTokens),
             {
@@ -295,8 +358,8 @@ describe('IIIF sagas', () => {
           ],
         ])
         .put({
-          infoId: 'infoId',
-          infoJson: { id: 'infoId' },
+          infoId,
+          infoJson: { id: infoId },
           ok: true,
           tokenServiceId: 'x',
           type: 'mirador/RECEIVE_INFO_RESPONSE',
@@ -307,18 +370,19 @@ describe('IIIF sagas', () => {
 
   describe('fetchSearchResponse', () => {
     it('fetches a IIIF search', () => {
-      fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
+      server.use(http.get(searchId, () => HttpResponse.json({ data: '12345' }), { once: true }));
+
       const action = {
         companionWindowId: 'companionWindowId',
         query: 'q',
-        searchId: 'searchId',
+        searchId,
         windowId: 'windowId',
       };
 
       return expectSaga(fetchSearchResponse, action)
         .put({
           companionWindowId: 'companionWindowId',
-          searchId: 'searchId',
+          searchId,
           searchJson: { data: '12345' },
           type: 'mirador/RECEIVE_SEARCH',
           windowId: 'windowId',
@@ -327,11 +391,11 @@ describe('IIIF sagas', () => {
     });
 
     it('handles failures', () => {
-      fetch.mockResponseOnce('<h1>Not Json</h1>');
+      server.use(http.get(searchId, () => HttpResponse.html('<h1>Not Json</h1>'), { once: true }));
       const action = {
         companionWindowId: 'companionWindowId',
         query: 'q',
-        searchId: 'searchId',
+        searchId,
         windowId: 'windowId',
       };
 
@@ -341,15 +405,15 @@ describe('IIIF sagas', () => {
 
   describe('fetchAnnotation', () => {
     it('fetches a IIIF annotation page', () => {
-      fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
+      server.use(http.get(annotationId, () => HttpResponse.json({ data: '12345' }), { once: true }));
       const action = {
-        annotationId: 'annotationId',
+        annotationId,
         targetId: 'targetId',
       };
 
       return expectSaga(fetchAnnotation, action)
         .put({
-          annotationId: 'annotationId',
+          annotationId,
           annotationJson: { data: '12345' },
           targetId: 'targetId',
           type: 'mirador/RECEIVE_ANNOTATION',
@@ -358,9 +422,9 @@ describe('IIIF sagas', () => {
     });
 
     it('handles failures', () => {
-      fetch.mockResponseOnce('<h1>Not Json</h1>');
+      server.use(http.get(annotationId, () => HttpResponse.html('<h1>Not Json</h1>'), { once: true }));
       const action = {
-        annotationId: 'annotationId',
+        annotationId,
         targetId: 'targetId',
       };
 
@@ -370,9 +434,9 @@ describe('IIIF sagas', () => {
 
   describe('fetchResourceManifest', () => {
     it('eagerly fetches the manifest for a resource', () => {
-      fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
+      server.use(http.get(manifestId, () => HttpResponse.json({ data: '12345' }), { once: true }));
       const action = {
-        manifestId: 'manifestId',
+        manifestId,
       };
 
       return expectSaga(fetchResourceManifest, action)
@@ -381,7 +445,7 @@ describe('IIIF sagas', () => {
           [select(getManifests), {}],
         ])
         .put({
-          manifestId: 'manifestId',
+          manifestId,
           manifestJson: { data: '12345' },
           type: 'mirador/RECEIVE_MANIFEST',
         })
@@ -392,13 +456,13 @@ describe('IIIF sagas', () => {
       const manifestJson = { data: '12345' };
 
       const action = {
-        manifestId: 'manifestId',
+        manifestId,
         manifestJson,
       };
 
       return expectSaga(fetchResourceManifest, action)
         .put({
-          manifestId: 'manifestId',
+          manifestId,
           manifestJson: { data: '12345' },
           type: 'mirador/RECEIVE_MANIFEST',
         })
@@ -407,13 +471,13 @@ describe('IIIF sagas', () => {
 
     it('does nothing if the manifest is already present', () => {
       const action = {
-        manifestId: 'manifestId',
+        manifestId,
       };
 
       return expectSaga(fetchResourceManifest, action)
         .provide([
           [select(getConfig), {}],
-          [select(getManifests), { manifestId: {} }],
+          [select(getManifests), { [manifestId]: {} }],
         ])
         .run()
         .then(({ allEffects }) => allEffects.length === 0);
