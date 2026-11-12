@@ -2,7 +2,7 @@ import { handleDrop } from '../../../src/components/IIIFDropTarget';
 
 const monitor = vi.fn();
 
-// jsdom doesn't load images, so we mock an implementation
+// Mock an implementation
 vi.mock('../../../src/lib/readImageMetadata', () => ({
   readImageMetadata: (file) =>
     Promise.resolve({

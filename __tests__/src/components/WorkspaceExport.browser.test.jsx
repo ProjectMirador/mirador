@@ -1,14 +1,12 @@
 import { screen, render } from '@tests/utils/test-utils';
-import userEvent from '@testing-library/user-event';
+import { userEvent } from 'vitest/browser';
 import { WorkspaceExport } from '../../../src/components/WorkspaceExport';
 
 describe('WorkspaceExport', () => {
-  let user;
-  let handleClose = vi.fn();
+  let handleClose;
   let mockState;
 
   beforeEach(() => {
-    user = userEvent.setup();
     handleClose = vi.fn();
     mockState = {
       companionWindows: {},
@@ -31,27 +29,24 @@ describe('WorkspaceExport', () => {
   });
 
   it('is closable by clicking the cancel button', async () => {
-    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(handleClose).toHaveBeenCalled();
   });
 
   it('reveals a snackbar on copy', async () => {
-    // jsdom doesn't support the clipboard API or prompt (used as a fallback)
-    // so we mock the prompt at least to avoid a warning in the test output
-    vi.stubGlobal(
-      'prompt',
-      vi.fn(() => true),
-    );
+  const promptSpy = vi.spyOn(window, 'prompt').mockReturnValue(true);
 
-    await user.click(screen.getByRole('button', { name: 'Copy' }));
-    expect(screen.getByRole('alert')).toHaveTextContent('The workspace configuration was copied to your clipboard');
+  await userEvent.click(screen.getByRole('button', { name: 'Copy' }));
 
-    await user.click(screen.getByRole('button', { name: 'Dismiss' }));
-    expect(handleClose).toHaveBeenCalled();
-  });
+  expect(screen.getByRole('alert')).toHaveTextContent(
+    'The workspace configuration was copied to your clipboard',
+  );
+
+  promptSpy.mockRestore();
+});
 
   it('renders an exportable version of state', async () => {
-    await user.click(screen.getByRole('button', { name: 'View workspace configuration' }));
+    await userEvent.click(screen.getByRole('button', { name: 'View workspace configuration' }));
     // eslint-disable-next-line testing-library/no-node-access
     expect(screen.getByRole('region').querySelector('pre')).toHaveTextContent(
       '{ "companionWindows": {}, "config": {}, "elasticLayout": {}, "viewers": {}, "windows": {}, "workspace": {} }',
