@@ -22,7 +22,6 @@ const Subject = (props) => (
       match: 'moose',
     }}
     windowId="window"
-    selected
     index={0}
     windowSelected
     {...props}
@@ -38,8 +37,14 @@ describe('SearchHit', () => {
     expect(screen.getByRole('listitem')).toHaveClass('windowSelected');
     expect(screen.getByRole('listitem')).toHaveTextContent('1Light up the moose , and start the chai more');
 
-    await user.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button', { name: '1 Light up the moose , and start the chai more...' }));
     expect(selectAnnotation).toHaveBeenCalledWith('foo');
+  });
+
+  it('renders a ListItem for a selected hit', async () => {
+    render(<Subject selected />);
+
+    expect(screen.getByRole('listitem')).toBeInTheDocument();
   });
 
   it('renders the annotation char if the hit is not available', () => {
