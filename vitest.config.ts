@@ -1,13 +1,22 @@
+// vitest.config.js
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'url';
+import { playwright } from '@vitest/browser-playwright';
+
 
 export default defineConfig({
+  // Shared Vite plugins and aliases (inherited via `extends: true`)
   oxc: {
     exclude: [],
     include: /(src|__tests__)\/.*\.jsx?$/,
   },
   optimizeDeps: {
+    include: [
+      '@testing-library/react',
+      '@testing-library/user-event',
+      '@testing-library/jest-dom/vitest',
+    ],
     rolldownOptions: {
       moduleTypes: {
         '.js': 'jsx',
@@ -21,21 +30,44 @@ export default defineConfig({
     },
   },
   test: {
-    environment: 'happy-dom',
-    environmentOptions: {
-      happyDOM: {
-        settings: {
-          // don't load real pages into iframes (e.g. IIIF auth token iframes)
-          navigation: { disableChildFrameNavigation: true },
-        },
-      },
-    },
-    exclude: ['node_modules'],
     globals: true,
-    include: ['**/*.test.js', '**/*.test.jsx'],
     sequence: {
       shuffle: true,
     },
-    setupFiles: ['./setupTest.js'],
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'unit', // Runs in Node + happy-dom
+          environment: 'happy-dom',
+          environmentOptions: {
+            happyDOM: {
+              settings: {
+                navigation: { disableChildFrameNavigation: true },
+              },
+            },
+          },
+          // Matches all normal tests, EXCLUDING browser tests
+          include: ['**/*.test.js', '**/*.test.jsx'],
+          exclude: ['**/*.browser.test.js', '**/*.browser.test.jsx', 'node_modules'],
+          setupFiles: ['./setupTest.js'],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: 'browser', // Runs in real Chromium
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            headless: true,
+            instances: [{ browser: 'chromium' }],
+          },
+          // Matches ONLY *.browser.test.* files
+          include: ['**/*.browser.test.js', '**/*.browser.test.jsx'],
+          setupFiles: ['./setupBrowserTest.js'],
+        },
+      },
+    ],
   },
 });

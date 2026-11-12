@@ -4,7 +4,7 @@ import { WorkspaceExport } from '../../../src/components/WorkspaceExport';
 
 describe('WorkspaceExport', () => {
   let user;
-  let handleClose = vi.fn();
+  let handleClose;
   let mockState;
 
   beforeEach(() => {
@@ -36,13 +36,6 @@ describe('WorkspaceExport', () => {
   });
 
   it('reveals a snackbar on copy', async () => {
-    // jsdom doesn't support the clipboard API or prompt (used as a fallback)
-    // so we mock the prompt at least to avoid a warning in the test output
-    vi.stubGlobal(
-      'prompt',
-      vi.fn(() => true),
-    );
-
     await user.click(screen.getByRole('button', { name: 'Copy' }));
     expect(screen.getByRole('alert')).toHaveTextContent('The workspace configuration was copied to your clipboard');
 
