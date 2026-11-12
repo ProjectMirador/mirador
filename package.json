@@ -30,7 +30,8 @@
     "prepublishOnly": "npm run build",
     "size": "size-limit",
     "start": "vite",
-    "test": "npm run build && npm run lint && npm run size && vitest run"
+    "test": "npm run build && npm run lint && npm run size && vitest run",
+    "test:browser": "vitest --browser.headless --config=vitest.browser.config.js"
   },
   "license": "Apache-2.0",
   "contributors": [
@@ -45,6 +46,7 @@
     "@mui/icons-material": "^9.0.0",
     "@mui/utils": "^9.0.0",
     "@mui/x-tree-view": "^9.0.0",
+    "@playwright/test": "^1.65.0",
     "@react-aria/live-announcer": "^3.1.2",
     "@react-hook/resize-observer": "^2.0.2",
     "@redux-devtools/extension": "^4.0.0",
@@ -95,6 +97,7 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.4.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/browser-playwright": "^5.1.0",
     "@vitest/coverage-v8": "^5.0.0",
     "@vitest/ui": "^5.0.0",
     "chalk": "^5.3.0",
@@ -119,7 +122,8 @@
     "redux-saga-test-plan": "^4.0.0-rc.3",
     "size-limit": "^14.0.0",
     "vite": "^8.2.1",
-    "vitest": "^5.0.0",
+    "vitest": "^5.1.0",
+    "vitest-browser-react": "^2.3.0",
     "vitest-fetch-mock": "^0.4.2"
   },
   "overrides": {
