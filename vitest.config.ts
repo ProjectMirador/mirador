@@ -59,9 +59,13 @@ export default defineConfig({
           name: 'browser', // Runs in real Chromium
           browser: {
             enabled: true,
-            provider: playwright(),
+            provider: playwright({
+              contextOptions: {
+                permissions: ['clipboard-read', 'clipboard-write'],
+              },
+            }),
             headless: true,
-            instances: [{ browser: 'chromium' }],
+            instances: [{ browser: 'chromium', }],
           },
           // Matches ONLY *.browser.test.* files
           include: ['**/*.browser.test.js', '**/*.browser.test.jsx'],
