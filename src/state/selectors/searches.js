@@ -235,15 +235,7 @@ const getAnnotationById = createSelector(
  * @param {string} windowId
  * @returns {Array}
  */
-export const getCanvasForAnnotation = createSelector(
-  [
-    getAnnotationById,
-    (state, { windowId }) =>
-      (canvasId) =>
-        getCanvas(state, { canvasId, windowId }),
-  ],
-  (annotation, getCanvasById) => {
-    const canvasId = annotation && annotation.targetId;
-    return canvasId && getCanvasById(canvasId);
-  },
-);
+export const getCanvasForAnnotation = createSelector([getAnnotationById, getCanvases], (annotation, canvases) => {
+  if (!annotation || !canvases) return undefined;
+  return canvases.find((canvas) => canvas.id === annotation.targetId);
+});
