@@ -14,7 +14,7 @@ import settings from '../config/settings';
  *
  * Exported as the default (see src/state/index.js, which re-exports it as `createStore`)
  */
-function createStore(pluginReducers, pluginSagas = []) {
+function createStore(pluginReducers, pluginSagas = [], otherStoreOptions) {
   const miradorReducer = createRootReducer(pluginReducers);
 
   // RTK's configureStore calls combineReducers when given a reducer map
@@ -43,6 +43,7 @@ function createStore(pluginReducers, pluginSagas = []) {
         },
       }).concat(sagaMiddleware),
     reducer,
+    ...otherStoreOptions,
   });
 
   // then run the saga
