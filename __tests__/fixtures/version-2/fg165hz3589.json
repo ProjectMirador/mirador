@@ -18,13 +18,13 @@
   },
   "service": [
     {
-      "@context": "http://iiif.io/api/search/0/context.json",
+      "@context": "http://iiif.io/api/search/1/context.json",
       "@id": "https://contentsearch.stanford.edu/fg165hz3589/search",
-      "profile": "http://iiif.io/api/search/0/search",
+      "profile": "http://iiif.io/api/search/1/search",
       "label": "Search within this manifest",
       "service": {
         "@id": "https://contentsearch.stanford.edu/fg165hz3589/autocomplete",
-        "profile": "http://iiif.io/api/search/0/autocomplete"
+        "profile": "http://iiif.io/api/search/1/autocomplete"
       }
     }
   ],

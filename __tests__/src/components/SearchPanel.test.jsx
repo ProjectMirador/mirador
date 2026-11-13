@@ -1,23 +1,43 @@
-import { render, screen } from '@tests/utils/test-utils';
+import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { t } from 'i18next';
-
-import { SearchPanel } from '../../../src/components/SearchPanel';
+import { http, HttpResponse } from 'msw';
+import { server } from '../../mocks/server';
+import { contentSearchMock } from '../../mocks/contentSearchMock';
+import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
+import SearchPanel from '../../../src/containers/SearchPanel';
 
 /**
- * Helper function to create a shallow wrapper around SearchPanel
+ * Helper function to wrap the Redux-connected SearchPanel
  */
-function createWrapper(props) {
-  return render(
-    <SearchPanel
-      id="xyz"
-      fetchSearch={() => {}}
-      searchService={{ id: 'http://example.com/search' }}
-      windowId="window"
-      {...props}
-    />,
-    { preloadedState: { companionWindows: { xyz: { content: 'search' } } } },
-  );
+function createWrapper(props = {}, { search, window } = {}) {
+  return render(<SearchPanel id="xyz" windowId="window" {...props} />, {
+    preloadedState: {
+      companionWindows: { xyz: { content: 'search' } },
+      manifests: {
+        manifest: {
+          id: 'manifest',
+          json: manifestFixtureFg165hz3589,
+        },
+      },
+      ...(search && {
+        searches: {
+          window: {
+            xyz: {
+              data: {},
+              ...search,
+            },
+          },
+        },
+      }),
+      windows: {
+        window: {
+          id: 'window',
+          manifestId: 'manifest',
+          ...window,
+        },
+      },
+    },
+  });
 }
 
 describe('SearchPanel', () => {
@@ -28,21 +48,20 @@ describe('SearchPanel', () => {
   });
 
   it('passes a Clear chip as the CompanionWindow title prop', () => {
-    createWrapper({ query: 'Wolpertinger' });
+    createWrapper({}, { search: { query: 'Wolpertinger' } });
 
     expect(screen.getByRole('heading', { name: /Search/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Reset search' })).toBeInTheDocument();
   });
 
-  it('the Clear chip calls the removeSearch prop', async () => {
+  it('clears the search when the Clear chip is clicked', async () => {
     const user = userEvent.setup();
-    const removeSearch = vi.fn();
 
-    createWrapper({ query: 'Wolpertinger', removeSearch });
+    createWrapper({}, { search: { query: 'Wolpertinger' } });
 
     await user.click(screen.getByRole('button', { name: 'Reset search' }));
 
-    expect(removeSearch).toHaveBeenCalled();
+    expect(screen.queryByRole('button', { name: 'Reset search' })).not.toBeInTheDocument();
   });
 
   it('does not render a Clear chip if there is no search query to be cleared', () => {
@@ -64,40 +83,52 @@ describe('SearchPanel', () => {
     expect(screen.getByRole('list')).toBeInTheDocument();
   });
 
-  it('suggests searches', async () => {
+  it('suggests searches, encodes special characters in the request URL, and renders results', async () => {
     const user = userEvent.setup();
-    const fetchSearch = vi.fn();
-    createWrapper({
-      fetchSearch,
-      query: '',
-      suggestedSearches: ['abc'],
-      t,
+    const searchUrl = manifestFixtureFg165hz3589.service.at(0)['@id'];
+    expect(searchUrl).toBeDefined();
+    let requestedUrl;
+
+    server.use(
+      http.get(searchUrl, ({ request }) => {
+        requestedUrl = request.url;
+        return HttpResponse.json(contentSearchMock);
+      }),
+    );
+
+    createWrapper({}, { window: { suggestedSearches: ['Dry Cleaning & Laundry'] } });
+
+    const suggestionBtn = screen.getByRole('button', {
+      name: 'Search this document for "Dry Cleaning & Laundry"',
     });
+    expect(suggestionBtn).toBeInTheDocument();
 
-    expect(screen.getByRole('button', { name: 'Search this document for "abc"' })).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Search this document for "abc"' }));
-    expect(fetchSearch).toHaveBeenCalledWith('http://example.com/search?q=abc', 'abc');
-  });
+    await user.click(suggestionBtn);
 
-  it('encodes special characters in suggested search URLs', async () => {
-    const user = userEvent.setup();
-    const fetchSearch = vi.fn();
-    createWrapper({
-      fetchSearch,
-      query: '',
-      suggestedSearches: ['hel^lo'],
-      t,
-    });
+    // TODO: unify these tests to expect 3 results rather than 1+2 once we address SearchHit's DOM structure
+    // Verify the first hit (auto-selected listitem) renders its counter, highlight, and snippet
+    const firstHit = within(await screen.findByRole('listitem'));
+    expect(firstHit.getByText('1')).toBeInTheDocument();
+    expect(firstHit.getByText('Dry Cleaning')).toBeInTheDocument();
+    expect(firstHit.getByText(/^& Laundry - \(Located at side of Medical Building\)/)).toBeInTheDocument();
 
-    expect(screen.getByRole('button', { name: 'Search this document for "hel^lo"' })).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Search this document for "hel^lo"' }));
-    expect(fetchSearch).toHaveBeenCalledWith('http://example.com/search?q=hel%5Elo', 'hel^lo');
+    // Verify the remaining two unselected hits render as clickable buttons
+    const unselectedHits = screen.getAllByRole('button', { name: /Dry Cleaning/i });
+    expect(unselectedHits).toHaveLength(2);
+
+    // Verify special characters and spaces were URL-encoded in the request
+    expect(requestedUrl).toBe(`${searchUrl}?q=Dry+Cleaning+%26+Laundry`);
   });
 
   it('does not suggest searches if the user has made a query', () => {
-    const fetchSearch = vi.fn();
-    createWrapper({ fetchSearch, query: 'blah', suggestedSearches: ['abc'] });
+    createWrapper(
+      {},
+      {
+        search: { query: 'blah' },
+        window: { suggestedSearches: ['NSF'] },
+      },
+    );
 
-    expect(screen.queryByRole('button', { name: 'Search this document for "abc"' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Search this document for "NSF"' })).not.toBeInTheDocument();
   });
 });
