@@ -1,13 +1,24 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import BackIcon from '@mui/icons-material/ArrowBackSharp';
 import { announce } from '@react-aria/live-announcer';
 import { useTranslation } from 'react-i18next';
-import SearchHit from '../containers/SearchHit';
-import { ScrollTo } from './ScrollTo';
+import { withPlugins } from '../../extend/withPlugins';
+import * as actions from '../../state/actions';
+import {
+  getNextSearchId,
+  getSearchIsFetching,
+  getSearchNumTotal,
+  getSearchQuery,
+  getSortedSearchAnnotationsForCompanionWindow,
+  getSortedSearchHitsForCompanionWindow,
+} from '../../state/selectors';
+import { ScrollTo } from '../ScrollTo';
+import SearchHit from './SearchHit';
 
 /**
  * Return SearchHits for every hit in the response
@@ -56,25 +67,29 @@ function SearchHitsAndAnnotations({
 }
 
 /** */
-export function SearchResults({
-  companionWindowId,
-  containerRef = undefined,
-  isFetching = false,
-  fetchSearch,
-  nextSearch = undefined,
-  query = undefined,
-  searchAnnotations = [],
-  searchHits = [],
-  searchNumTotal = undefined,
-  windowId,
-}) {
+export function SearchResults({ companionWindowId, containerRef = undefined, windowId }) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const [focused, setFocused] = useState(false);
+
+  const isFetching = useSelector((state) => getSearchIsFetching(state, { companionWindowId, windowId }));
+  const nextSearch = useSelector((state) => getNextSearchId(state, { companionWindowId, windowId }));
+  const query = useSelector((state) => getSearchQuery(state, { companionWindowId, windowId }));
+  const searchAnnotations = useSelector((state) =>
+    getSortedSearchAnnotationsForCompanionWindow(state, {
+      companionWindowId,
+      windowId,
+    }),
+  );
+  const searchHits = useSelector((state) => getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }));
+  const searchNumTotal = useSelector((state) => getSearchNumTotal(state, { companionWindowId, windowId }));
+
+  const fetchSearch = useCallback((...args) => dispatch(actions.fetchSearch(...args)), [dispatch]);
 
   /** */
   const toggleFocus = useCallback(() => {
-    setFocused(!focused);
-  }, [setFocused, focused]);
+    setFocused((prevFocused) => !prevFocused);
+  }, []);
 
   const noResultsState = query && !isFetching && searchHits.length === 0 && searchAnnotations.length === 0;
 
@@ -127,12 +142,7 @@ export function SearchResults({
 SearchResults.propTypes = {
   companionWindowId: PropTypes.string.isRequired,
   containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]),
-  fetchSearch: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool,
-  nextSearch: PropTypes.string,
-  query: PropTypes.string,
-  searchAnnotations: PropTypes.arrayOf(PropTypes.object),
-  searchHits: PropTypes.arrayOf(PropTypes.object),
-  searchNumTotal: PropTypes.number,
   windowId: PropTypes.string.isRequired,
 };
+
+export default withPlugins('SearchResults')(SearchResults);

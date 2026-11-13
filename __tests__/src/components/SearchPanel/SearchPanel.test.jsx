@@ -1,10 +1,10 @@
 import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
-import { server } from '../../mocks/server';
-import { contentSearchMock } from '../../mocks/contentSearchMock';
-import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
-import SearchPanel from '../../../src/containers/SearchPanel';
+import { server } from '@tests/mocks/server';
+import { contentSearchMock } from '@tests/mocks/contentSearchMock';
+import manifestFixtureFg165hz3589 from '@tests/fixtures/version-2/fg165hz3589.json';
+import SearchPanel from '@src/components/SearchPanel';
 
 /**
  * Helper function to wrap the Redux-connected SearchPanel

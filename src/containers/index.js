@@ -39,11 +39,12 @@ export { default as ConnectedOpenSeadragonViewer } from './OpenSeadragonViewer';
 export { default as ConnectedPrimaryWindow } from './PrimaryWindow';
 export { default as ConnectedSanitizedHtml } from './SanitizedHtml';
 export { default as ConnectedScrollIndicatedDialogContent } from './ScrollIndicatedDialogContent';
-export { default as ConnectedSearchHit } from './SearchHit';
-export { default as ConnectedSearchPanel } from './SearchPanel';
-export { default as ConnectedSearchPanelControls } from './SearchPanelControls';
-export { default as ConnectedSearchPanelNavigation } from './SearchPanelNavigation';
-export { default as ConnectedSearchResults } from './SearchResults';
+// Note, these Search imports come from migrated hook-based components, not container files
+export { default as ConnectedSearchHit } from '../components/SearchPanel/SearchHit';
+export { default as ConnectedSearchPanel } from '../components/SearchPanel';
+export { default as ConnectedSearchPanelControls } from '../components/SearchPanel/SearchPanelControls';
+export { default as ConnectedSearchPanelNavigation } from '../components/SearchPanel/SearchPanelNavigation';
+export { default as ConnectedSearchResults } from '../components/SearchPanel/SearchResults';
 export { default as ConnectedSelectCollection } from './SelectCollection';
 export { default as ConnectedSidebarIndexItem } from './SidebarIndexItem';
 export { default as ConnectedSidebarIndexList } from './SidebarIndexList';

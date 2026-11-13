@@ -1,5 +1,4 @@
-import { useEffect, useId, useMemo } from 'react';
-import { useEffectEvent } from 'use-effect-event';
+import { useId } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import ListItem from '@mui/material/ListItem';
@@ -9,11 +8,10 @@ import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
-import SanitizedHtml from '../containers/SanitizedHtml';
-import TruncatedHit from '../lib/TruncatedHit';
-import { ScrollTo } from './ScrollTo';
-import ns from '../config/css-ns';
 import classNames from 'classnames';
+import SanitizedHtml from '../../containers/SanitizedHtml';
+import { ScrollTo } from '../ScrollTo';
+import ns from '../../config/css-ns';
 
 const Root = styled(ListItem, { name: 'SearchHit', slot: 'root' })(({ ownerState, theme }) => ({
   '&.Mui-focused': {
@@ -63,66 +61,26 @@ ButtonUnlessSelected.propTypes = {
 
 /** */
 // eslint-disable-next-line complexity
-export function SearchHit({
+export function SearchHitItem({
   adjacent = false,
   annotation = undefined,
-  annotationId = undefined,
   annotationLabel = undefined,
-  announcer = undefined,
   canvasLabel = undefined,
-  companionWindowId = undefined,
   containerRef = undefined,
   focused = false,
   hit = undefined,
   index = undefined,
-  selectAnnotation = () => {},
+  onMoreClick = () => {},
+  onSelect = () => {},
+  renderedHit = undefined,
   selected = false,
-  showDetails = () => {},
-  total = undefined,
-  windowId,
   windowSelected = false,
 }) {
   const { t } = useTranslation();
-
-  /** */
-  const handleClick = () => {
-    if (annotation && annotationId) selectAnnotation(annotationId);
-  };
-
-  const truncatedHit = useMemo(() => hit && new TruncatedHit(hit, annotation), [hit, annotation]);
-
-  /**
-   * Pass content describing the hit to the announcer prop (intended for screen readers)
-   */
-  const announceHit = useEffectEvent(() => {
-    if (!announcer || !truncatedHit) return;
-
-    announcer(
-      [
-        t('pagination', { current: index + 1, total }),
-        canvasLabel,
-        annotationLabel,
-        truncatedHit.before,
-        truncatedHit.match,
-        truncatedHit.after,
-      ].join(' '),
-      'polite',
-    );
-  });
-
-  useEffect(() => {
-    if (selected) {
-      announceHit();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
-
   const canvasLabelHtmlId = useId();
 
-  if (focused && !selected) return null;
-
-  const renderedHit = focused ? hit : hit && truncatedHit;
-  const truncated = hit && (renderedHit.before !== hit.before || renderedHit.after !== hit.after);
+  const hasHitContent = Boolean(hit && hit.match && renderedHit);
+  const truncated = hasHitContent && (renderedHit.before !== hit.before || renderedHit.after !== hit.after);
   const ownerState = {
     adjacent,
     focused,
@@ -151,12 +109,12 @@ export function SearchHit({
       scrollTo={windowSelected && !focused}
     >
       <Root ownerState={ownerState} className={classNames(ns('search-hit'), windowSelected ? 'windowSelected' : '')} divider>
-        <ButtonUnlessSelected selected={selected} onClick={handleClick}>
+        <ButtonUnlessSelected selected={selected} onClick={onSelect}>
           <ListItemText
             primary={header}
             secondary={
               <>
-                {hit && (
+                {hasHitContent && (
                   <>
                     <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.before} />{' '}
                     <strong>
@@ -173,7 +131,7 @@ export function SearchHit({
                           padding: 0,
                           textTransform: 'none',
                         }}
-                        onClick={showDetails}
+                        onClick={onMoreClick}
                         color="secondary"
                         size="small"
                         aria-describedby={canvasLabelHtmlId}
@@ -183,7 +141,7 @@ export function SearchHit({
                     )}
                   </>
                 )}
-                {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
+                {!hasHitContent && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
               </>
             }
             slotProps={{
@@ -192,7 +150,6 @@ export function SearchHit({
                 sx: { marginBottom: 1 },
                 variant: 'subtitle2',
               },
-
               secondary: { variant: 'body1' },
             }}
           />
@@ -202,17 +159,14 @@ export function SearchHit({
   );
 }
 
-SearchHit.propTypes = {
+SearchHitItem.propTypes = {
   adjacent: PropTypes.bool,
   annotation: PropTypes.shape({
     chars: PropTypes.string,
     targetId: PropTypes.string,
   }),
-  annotationId: PropTypes.string,
   annotationLabel: PropTypes.string,
-  announcer: PropTypes.func,
   canvasLabel: PropTypes.string,
-  companionWindowId: PropTypes.string,
   containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]),
   focused: PropTypes.bool,
   hit: PropTypes.shape({
@@ -221,10 +175,15 @@ SearchHit.propTypes = {
     match: PropTypes.string,
   }),
   index: PropTypes.number,
-  selectAnnotation: PropTypes.func,
+  onMoreClick: PropTypes.func,
+  onSelect: PropTypes.func,
+  renderedHit: PropTypes.shape({
+    after: PropTypes.string,
+    before: PropTypes.string,
+    match: PropTypes.string,
+  }),
   selected: PropTypes.bool,
-  showDetails: PropTypes.func,
-  total: PropTypes.number,
-  windowId: PropTypes.string.isRequired,
   windowSelected: PropTypes.bool,
 };
+
+export default SearchHitItem;
