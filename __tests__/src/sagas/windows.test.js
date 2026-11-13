@@ -339,6 +339,7 @@ describe('window-level sagas', () => {
             [select(getSearchForWindow, { windowId: 'abc123' }), { cwid: {} }],
             [
               select(getAnnotationsBySearch, {
+                annotationId: undefined,
                 canvasIds: ['a', 'b'],
                 companionWindowIds: ['cwid'],
                 windowId: 'abc123',
@@ -367,6 +368,7 @@ describe('window-level sagas', () => {
           [select(getSearchForWindow, { windowId: 'abc123' }), { cwid: {} }],
           [
             select(getAnnotationsBySearch, {
+              annotationId: undefined,
               canvasIds: ['a', 'b'],
               companionWindowIds: ['cwid'],
               windowId: 'abc123',
@@ -386,6 +388,100 @@ describe('window-level sagas', () => {
           windowId: 'abc123',
         })
         .run();
+    });
+
+    it('passes the annotationId from the action through to getAnnotationsBySearch', () => {
+      const action = {
+        annotationId: 'clickedAnno',
+        type: ActionTypes.SET_CANVAS,
+        visibleCanvases: ['a', 'b'],
+        windowId: 'abc123',
+      };
+
+      return expectSaga(setCurrentAnnotationsOnCurrentCanvas, action)
+        .provide([
+          [select(getSearchForWindow, { windowId: 'abc123' }), { cwid: {} }],
+          [
+            select(getAnnotationsBySearch, {
+              annotationId: 'clickedAnno',
+              canvasIds: ['a', 'b'],
+              companionWindowIds: ['cwid'],
+              windowId: 'abc123',
+            }),
+            { cwid: ['clickedAnno'] },
+          ],
+        ])
+        .put({
+          annotationIds: ['clickedAnno'],
+          companionWindowId: 'cwid',
+          type: ActionTypes.SET_CONTENT_SEARCH_CURRENT_ANNOTATIONS,
+          windowId: 'abc123',
+        })
+        .put({
+          annotationId: 'clickedAnno',
+          type: ActionTypes.SELECT_ANNOTATION,
+          windowId: 'abc123',
+        })
+        .run();
+    });
+  });
+
+  describe('getAnnotationsBySearch', () => {
+    const state = {
+      searches: {
+        abc123: {
+          cwid: {
+            data: {
+              'search?q=x': {
+                isFetching: false,
+                json: {
+                  '@id': 'search?q=x',
+                  '@type': 'sc:AnnotationList',
+                  resources: [
+                    { '@id': 'anno1', '@type': 'oa:Annotation', on: 'canvasA#xywh=0,0,10,10' },
+                    { '@id': 'anno2', '@type': 'oa:Annotation', on: 'canvasB#xywh=0,0,10,10' },
+                    { '@id': 'anno3', '@type': 'oa:Annotation', on: 'canvasB#xywh=20,20,10,10' },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    };
+
+    it('returns the first annotation on the visible canvases', () => {
+      expect(getAnnotationsBySearch(state, { canvasIds: ['canvasB'], companionWindowIds: ['cwid'], windowId: 'abc123' })).toEqual(
+        { cwid: ['anno2'] },
+      );
+    });
+
+    it('prefers the given annotationId when it is on a visible canvas', () => {
+      expect(
+        getAnnotationsBySearch(state, {
+          annotationId: 'anno3',
+          canvasIds: ['canvasB'],
+          companionWindowIds: ['cwid'],
+          windowId: 'abc123',
+        }),
+      ).toEqual({ cwid: ['anno3'] });
+    });
+
+    it('falls back to the first annotation when the annotationId is not on a visible canvas', () => {
+      expect(
+        getAnnotationsBySearch(state, {
+          annotationId: 'anno1',
+          canvasIds: ['canvasB'],
+          companionWindowIds: ['cwid'],
+          windowId: 'abc123',
+        }),
+      ).toEqual({ cwid: ['anno2'] });
+    });
+
+    it('omits searches with no annotations on the visible canvases', () => {
+      expect(getAnnotationsBySearch(state, { canvasIds: ['canvasC'], companionWindowIds: ['cwid'], windowId: 'abc123' })).toEqual(
+        {},
+      );
     });
   });
 
@@ -529,7 +625,7 @@ describe('window-level sagas', () => {
         .provide([
           [select(getVisibleCanvasIds, { windowId }), ['q']],
           [select(getCanvasForAnnotation, { annotationId, windowId }), { id: 'z' }],
-          [call(setCanvas, windowId, 'z'), { type: 'expectedThunk' }],
+          [call(setCanvas, windowId, 'z', undefined, { annotationId }), { type: 'expectedThunk' }],
         ])
         .put({ type: 'expectedThunk' })
         .run();
