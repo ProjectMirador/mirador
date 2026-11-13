@@ -105,16 +105,11 @@ describe('SearchPanel', () => {
 
     await user.click(suggestionBtn);
 
-    // TODO: unify these tests to expect 3 results rather than 1+2 once we address SearchHit's DOM structure
-    // Verify the first hit (auto-selected listitem) renders its counter, highlight, and snippet
-    const firstHit = within(await screen.findByRole('listitem'));
-    expect(firstHit.getByText('1')).toBeInTheDocument();
-    expect(firstHit.getByText('Dry Cleaning')).toBeInTheDocument();
-    expect(firstHit.getByText(/^& Laundry - \(Located at side of Medical Building\)/)).toBeInTheDocument();
-
-    // Verify the remaining two unselected hits render as clickable buttons
-    const unselectedHits = screen.getAllByRole('button', { name: /Dry Cleaning/i });
-    expect(unselectedHits).toHaveLength(2);
+    const hits = await screen.findAllByRole('listitem');
+    expect(hits).toHaveLength(3);
+    expect(hits[0]).toHaveTextContent('1');
+    expect(hits[0]).toHaveTextContent('Dry Cleaning');
+    expect(hits[0]).toHaveTextContent(/& Laundry - \(Located at side of Medical Building\)/);
 
     // Verify special characters and spaces were URL-encoded in the request
     expect(requestedUrl).toBe(`${searchUrl}?q=Dry+Cleaning+%26+Laundry`);
