@@ -80,6 +80,89 @@ describe('WindowTopMenu', () => {
     expect(toggleDraggingEnabled).toHaveBeenCalledTimes(1);
   });
 
+  it('hides the thumbnail settings when showThumbnailNavigationSettings is false', () => {
+    createAnchor();
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open showThumbnailNavigationSettings={false} />);
+
+    const menu = screen.getByRole('menu');
+    expect(within(menu).getByText('View')).toBeInTheDocument();
+    expect(within(menu).queryByText('Thumbnails')).not.toBeInTheDocument();
+    expect(within(menu).getAllByRole('menuitemradio')).toHaveLength(2);
+  });
+
+  it('applies the window-top-menu class to the menu paper', () => {
+    createAnchor();
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
+
+    expect(screen.getByTestId('menu-trigger-button')).toBeInTheDocument();
+  });
+
+  it('calls toggleDraggingEnabled when the menu opens', () => {
+    createAnchor();
+    const toggleDraggingEnabled = vi.fn();
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open toggleDraggingEnabled={toggleDraggingEnabled} />);
+
+    expect(toggleDraggingEnabled).toHaveBeenCalledTimes(1);
+  });
+
+  it('closes the menu when Escape is pressed', async () => {
+    const user = userEvent.setup();
+    createAnchor();
+    const handleClose = vi.fn();
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} handleClose={handleClose} open />);
+
+    await user.keyboard('{Escape}');
+    expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not close the menu on other key presses', async () => {
+    const user = userEvent.setup();
+    createAnchor();
+    const handleClose = vi.fn();
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} handleClose={handleClose} open />);
+
+    await user.keyboard('a');
+    expect(handleClose).not.toHaveBeenCalled();
+  });
+
+  it('closes the menu when clicking outside of it', async () => {
+    const user = userEvent.setup();
+    createAnchor();
+    const handleClose = vi.fn();
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} handleClose={handleClose} open />);
+
+    await user.click(document.body);
+    expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not close the menu when clicking inside it', async () => {
+    const user = userEvent.setup();
+    createAnchor();
+    const handleClose = vi.fn();
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} handleClose={handleClose} open />);
+
+    await user.click(within(screen.getByRole('menu')).getByText('View'));
+    expect(handleClose).not.toHaveBeenCalled();
+  });
+
+  it('traps focus within the menu', async () => {
+    const user = userEvent.setup();
+    createAnchor();
+    render(<Subject anchorEl={screen.getByTestId('menu-trigger-button')} open />);
+
+    const menu = screen.getByRole('menu');
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(menu).toContainElement(document.activeElement);
+
+    await user.tab();
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(menu).toContainElement(document.activeElement);
+    await user.tab({ shift: true });
+    await user.tab({ shift: true });
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(menu).toContainElement(document.activeElement);
+  });
+
   describe('when a plugin is registered for the WindowTopMenu target', () => {
     it('renders the plugin section header and the plugin component', () => {
       vi.mocked(usePlugins).mockReturnValue({ PluginComponents: [MockPluginComponent] });

@@ -1,6 +1,10 @@
 import { useContext } from 'react';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
 import ListSubheader from '@mui/material/ListSubheader';
-import Popover from '@mui/material/Popover';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import FocusTrap from '@mui/material/Unstable_TrapFocus';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import WindowThumbnailSettings from '../containers/WindowThumbnailSettings';
@@ -43,35 +47,43 @@ export function WindowTopMenu({
   const pluginProps = arguments[0];
 
   return (
-    <Popover
+    <Popper
       container={container?.current}
-      anchorOrigin={{
-        horizontal: 'right',
-        vertical: 'bottom',
-      }}
-      transformOrigin={{
-        horizontal: 'right',
-        vertical: 'top',
-      }}
-      onClose={handleClose}
-      orientation="horizontal"
+      placement="bottom-end"
+      modifiers={[{ name: 'computeStyles', options: { adaptive: false } }]}
       anchorEl={anchorEl}
       open={open}
       role="menu"
-      slotProps={{
-        transition: {
-          onEntering: toggleDraggingEnabled,
-          onExit: toggleDraggingEnabled,
-        },
-        paper: {
-          className: ns('window-top-menu'),
-        },
-      }}
+      transition
+      sx={{ zIndex: 'modal' }}
     >
-      <WindowViewSettings windowId={windowId} handleClose={handleClose} />
-      {showThumbnailNavigationSettings && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}
-      <PluginHookWithHeader targetName="WindowTopMenu" {...pluginProps} />
-    </Popover>
+      {({ TransitionProps }) => (
+        <ClickAwayListener
+          mouseEvent="onPointerDown"
+          touchEvent="onTouchStart"
+          onClickAway={(e) => {
+            if (!anchorEl?.contains(e.target)) handleClose();
+          }}
+        >
+          <Grow
+            {...TransitionProps}
+            style={{ transformOrigin: 'right top' }}
+            onEntering={toggleDraggingEnabled}
+            onExit={toggleDraggingEnabled}
+          >
+            <Paper className={ns('window-top-menu')} elevation={8} onKeyDown={(e) => e.key === 'Escape' && handleClose()}>
+              <FocusTrap open={open}>
+                <div tabIndex={-1}>
+                  <WindowViewSettings windowId={windowId} handleClose={handleClose} />
+                  {showThumbnailNavigationSettings && <WindowThumbnailSettings windowId={windowId} handleClose={handleClose} />}
+                  <PluginHookWithHeader targetName="WindowTopMenu" {...pluginProps} />
+                </div>
+              </FocusTrap>
+            </Paper>
+          </Grow>
+        </ClickAwayListener>
+      )}
+    </Popper>
   );
 }
 
