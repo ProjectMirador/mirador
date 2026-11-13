@@ -7,6 +7,7 @@ import BackIcon from '@mui/icons-material/ArrowBackSharp';
 import { announce } from '@react-aria/live-announcer';
 import { useTranslation } from 'react-i18next';
 import SearchHit from '../containers/SearchHit';
+import AnnotationList from '../lib/AnnotationList';
 import { ScrollTo } from './ScrollTo';
 
 /**
@@ -57,15 +58,14 @@ function SearchHitsAndAnnotations({
 
 /** */
 export function SearchResults({
+  canvases = [],
   companionWindowId,
   containerRef = undefined,
+  data = {},
   isFetching = false,
-  fetchSearch,
-  nextSearch = undefined,
+  hasNextPage,
+  fetchNextPage,
   query = undefined,
-  searchAnnotations = [],
-  searchHits = [],
-  searchNumTotal = undefined,
   windowId,
 }) {
   const { t } = useTranslation();
@@ -76,7 +76,29 @@ export function SearchResults({
     setFocused(!focused);
   }, [setFocused, focused]);
 
-  const noResultsState = query && !isFetching && searchHits.length === 0 && searchAnnotations.length === 0;
+  if (!data?.pages?.length) {
+    if (!query || isFetching) return;
+
+    return (
+      <Typography
+        sx={{
+          padding: 2,
+          typography: 'h6',
+        }}
+      >
+        {t('searchNoResults')}
+      </Typography>
+    );
+  }
+
+  const searchAnnotations = (data?.pages?.flatMap(page => page.resources) ?? []).map(r => new AnnotationList(r));
+  const canvasIds = (canvases || []).map(canvas => canvas.id);
+  const searchHits = (data?.pages?.flatMap(page => page.hits) ?? []).sort((a, b) => {
+    const hitA = searchAnnotations.find((r) => r.id === a.annotations[0]);
+    const hitB = searchAnnotations.find((r) => r.id === b.annotations[0]);
+    return canvasIds.indexOf(hitA.targetId) - canvasIds.indexOf(hitB.targetId);
+  });
+  const searchNumTotal = (data?.pages?.[0] ?? {}).within?.total;
 
   return (
     <>
@@ -87,16 +109,6 @@ export function SearchResults({
             {t('backToResults')}
           </Button>
         </ScrollTo>
-      )}
-      {noResultsState && (
-        <Typography
-          sx={{
-            padding: 2,
-            typography: 'h6',
-          }}
-        >
-          {t('searchNoResults')}
-        </Typography>
       )}
       <List disablePadding>
         <SearchHitsAndAnnotations
@@ -109,11 +121,11 @@ export function SearchResults({
           toggleFocus={toggleFocus}
         />
       </List>
-      {nextSearch && (
+      {hasNextPage && (
         <Button
           sx={{ width: '100%' }}
           color="secondary"
-          onClick={() => fetchSearch(windowId, companionWindowId, nextSearch, query)}
+          onClick={() => fetchNextPage()}
         >
           {t('moreResults')}
           <br />
@@ -125,11 +137,14 @@ export function SearchResults({
 }
 
 SearchResults.propTypes = {
+  canvases: PropTypes.arrayOf(PropTypes.object),
   companionWindowId: PropTypes.string.isRequired,
   containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]),
+  data: PropTypes.object,
   fetchSearch: PropTypes.func.isRequired,
   isFetching: PropTypes.bool,
-  nextSearch: PropTypes.string,
+  hasNextPage: PropTypes.bool,
+  fetchNextPage: PropTypes.func,
   query: PropTypes.string,
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),
   searchHits: PropTypes.arrayOf(PropTypes.object),
