@@ -2,7 +2,7 @@ import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { server } from '@tests/mocks/server';
-import { SearchResults } from '@src/components/SearchPanel/SearchResults';
+import { SearchResults } from '@src/components/SearchResults';
 
 const defaultHits = [
   {

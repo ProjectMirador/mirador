@@ -9,9 +9,9 @@ import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import SanitizedHtml from '../../containers/SanitizedHtml';
-import { ScrollTo } from '../ScrollTo';
-import ns from '../../config/css-ns';
+import SanitizedHtml from '../containers/SanitizedHtml';
+import { ScrollTo } from './ScrollTo';
+import ns from '../config/css-ns';
 
 const Root = styled(ListItem, { name: 'SearchHit', slot: 'root' })(({ ownerState, theme }) => ({
   '&.Mui-focused': {

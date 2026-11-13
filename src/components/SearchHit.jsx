@@ -3,9 +3,9 @@ import { useEffectEvent } from 'use-effect-event';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { withPlugins } from '../../extend/withPlugins';
-import TruncatedHit from '../../lib/TruncatedHit';
-import * as actions from '../../state/actions';
+import { withPlugins } from '../extend/withPlugins';
+import TruncatedHit from '../lib/TruncatedHit';
+import * as actions from '../state/actions';
 import {
   getCanvasLabel,
   getResourceAnnotationForSearchHit,
@@ -13,7 +13,7 @@ import {
   getSelectedAnnotationId,
   getSelectedContentSearchAnnotationIds,
   getVisibleCanvasIds,
-} from '../../state/selectors';
+} from '../state/selectors';
 import SearchHitItem from './SearchHitItem';
 
 /** */

@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { withPlugins } from '../../extend/withPlugins';
-import * as actions from '../../state/actions';
+import { withPlugins } from '../extend/withPlugins';
+import * as actions from '../state/actions';
 import {
   getManifestAutocompleteService,
   getManifestSearchService,
   getSearchIsFetching,
   getSearchQuery,
-} from '../../state/selectors';
+} from '../state/selectors';
 import SearchInputForm from './SearchInputForm';
 import SearchPanelNavigation from './SearchPanelNavigation';
 import { useSearchAutocomplete } from './useSearchAutocomplete';

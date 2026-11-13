@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { SearchPanelNavigation } from '@src/components/SearchPanel/SearchPanelNavigation';
+import { SearchPanelNavigation } from '@src/components/SearchPanelNavigation';
 
 /** */
 function buildPreloadedState({

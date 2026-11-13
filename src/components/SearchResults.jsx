@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import BackIcon from '@mui/icons-material/ArrowBackSharp';
 import { announce } from '@react-aria/live-announcer';
 import { useTranslation } from 'react-i18next';
-import { withPlugins } from '../../extend/withPlugins';
-import * as actions from '../../state/actions';
+import { withPlugins } from '../extend/withPlugins';
+import * as actions from '../state/actions';
 import {
   getNextSearchId,
   getSearchIsFetching,
@@ -16,8 +16,8 @@ import {
   getSearchQuery,
   getSortedSearchAnnotationsForCompanionWindow,
   getSortedSearchHitsForCompanionWindow,
-} from '../../state/selectors';
-import { ScrollTo } from '../ScrollTo';
+} from '../state/selectors';
+import { ScrollTo } from './ScrollTo';
 import SearchHit from './SearchHit';
 
 /**

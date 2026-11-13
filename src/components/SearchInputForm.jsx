@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/SearchSharp';
 import { useTranslation } from 'react-i18next';
-import MiradorMenuButton from '../../containers/MiradorMenuButton';
+import MiradorMenuButton from '../containers/MiradorMenuButton';
 
 const StyledForm = styled('form', { name: 'SearchPanelControls', slot: 'form' })(({ theme }) => ({
   paddingBottom: theme.spacing(1),

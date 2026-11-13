@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import TruncatedHit from '@src/lib/TruncatedHit';
-import { SearchHitItem } from '@src/components/SearchPanel/SearchHitItem';
+import { SearchHitItem } from '@src/components/SearchHitItem';
 
 vi.mock('@src/components/ScrollTo', () => ({
   // eslint-disable-next-line react/prop-types

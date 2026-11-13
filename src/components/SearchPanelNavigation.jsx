@@ -5,15 +5,15 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeftSharp';
 import ChevronRightIcon from '@mui/icons-material/ChevronRightSharp';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
-import MiradorMenuButton from '../../containers/MiradorMenuButton';
-import { withPlugins } from '../../extend/withPlugins';
-import * as actions from '../../state/actions';
+import MiradorMenuButton from '../containers/MiradorMenuButton';
+import { withPlugins } from '../extend/withPlugins';
+import * as actions from '../state/actions';
 import {
   getSearchNumTotal,
   getSelectedContentSearchAnnotationIds,
   getSortedSearchHitsForCompanionWindow,
   getThemeDirection,
-} from '../../state/selectors';
+} from '../state/selectors';
 
 /**
  * SearchPanelNavigation ~

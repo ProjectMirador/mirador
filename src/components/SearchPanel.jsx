@@ -5,10 +5,10 @@ import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
-import CompanionWindow from '../../containers/CompanionWindow';
-import { withPlugins } from '../../extend/withPlugins';
-import * as actions from '../../state/actions';
-import { getManifestSearchService, getSearchQuery, getWindow } from '../../state/selectors';
+import CompanionWindow from '../containers/CompanionWindow';
+import { withPlugins } from '../extend/withPlugins';
+import * as actions from '../state/actions';
+import { getManifestSearchService, getSearchQuery, getWindow } from '../state/selectors';
 import SearchPanelControls from './SearchPanelControls';
 import SearchResults from './SearchResults';
 

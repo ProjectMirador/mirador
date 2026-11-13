@@ -5,7 +5,7 @@ import * as actions from '@src/state/actions';
 import manifestFixtureFg165hz3589 from '@tests/fixtures/version-2/fg165hz3589.json';
 import { autocompleteMock } from '@tests/mocks/autocompleteMock';
 import { server } from '@tests/mocks/server';
-import { SearchPanelControls } from '@src/components/SearchPanel/SearchPanelControls';
+import { SearchPanelControls } from '@src/components/SearchPanelControls';
 
 const searchEndpoint = 'https://contentsearch.stanford.edu/fg165hz3589/search';
 const autocompleteEndpoint = 'https://contentsearch.stanford.edu/fg165hz3589/autocomplete';
