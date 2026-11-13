@@ -21,7 +21,7 @@ export function VideoViewer({ captions = [], videoOptions = {}, videoResources =
     <StyledContainer>
       <StyledVideo {...videoOptions} key={canvasId} ref={mediaRef}>
         {videoResources.map((video) => (
-          <source key={video.io} src={video.id} type={video.getFormat()} />
+          <source key={video.id} src={video.id} type={video.getFormat()} />
         ))}
         {captions.map((caption) => (
           <track key={caption.id} src={caption.id} label={caption.getDefaultLabel()} srcLang={caption.getProperty('language')} />

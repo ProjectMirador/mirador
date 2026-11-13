@@ -34,9 +34,9 @@ const defaultManifestStatus = Object.freeze({ missing: true });
  * @param {object} state
  * @param {object} props
  * @param {string} props.windowId
- * @returns {object} {error: null: id: string, isFetching: boolean, json: {...}}
+ * @returns {object} {error: null, id: string, isFetching: boolean, json: {...}}
  */
-export const getManifestStatus = createSelector([getManifest], (manifest) => manifest || defaultManifestStatus);
+export const getManifestStatus = (state, props) => getManifest(state, props) || defaultManifestStatus;
 
 /**
  * Convenience selector to get a manifest loading error

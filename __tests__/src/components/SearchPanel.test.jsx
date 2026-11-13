@@ -41,6 +41,28 @@ function createWrapper(props = {}, { search, window } = {}) {
 }
 
 describe('SearchPanel', () => {
+  const searchUrl = manifestFixtureFg165hz3589.service.at(0)['@id'];
+  beforeEach(() => {
+    server.use(
+      http.get(searchUrl, ({ request }) => {
+        const query = new URL(request.url).searchParams.get('q') || '';
+        return HttpResponse.json({
+          '@context': ['http://iiif.io/api/presentation/2/context.json', 'http://iiif.io/api/search/1/context.json'],
+          '@id': `${searchUrl}?q=${query}`,
+          '@type': 'sc:AnnotationList',
+          hits: [],
+          resources: [],
+          within: {
+            '@type': 'sc:Layer',
+            first: `${searchUrl}?start=0`,
+            ignored: [],
+            last: `${searchUrl}?start=0`,
+          },
+        });
+      }),
+    );
+  });
+
   it('renders a CompanionWindow', () => {
     createWrapper();
     expect(screen.getByRole('region')).toBeInTheDocument();
@@ -48,7 +70,15 @@ describe('SearchPanel', () => {
   });
 
   it('passes a Clear chip as the CompanionWindow title prop', () => {
-    createWrapper({}, { search: { query: 'Wolpertinger' } });
+    createWrapper(
+      {},
+      {
+        search: {
+          data: { [`${searchUrl}?q=Wolpertinger`]: { isFetching: false, json: contentSearchMock } },
+          query: 'Wolpertinger',
+        },
+      },
+    );
 
     expect(screen.getByRole('heading', { name: /Search/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Reset search' })).toBeInTheDocument();
@@ -57,7 +87,15 @@ describe('SearchPanel', () => {
   it('clears the search when the Clear chip is clicked', async () => {
     const user = userEvent.setup();
 
-    createWrapper({}, { search: { query: 'Wolpertinger' } });
+    createWrapper(
+      {},
+      {
+        search: {
+          data: { [`${searchUrl}?q=Wolpertinger`]: { isFetching: false, json: contentSearchMock } },
+          query: 'Wolpertinger',
+        },
+      },
+    );
 
     await user.click(screen.getByRole('button', { name: 'Reset search' }));
 
@@ -85,7 +123,6 @@ describe('SearchPanel', () => {
 
   it('suggests searches, encodes special characters in the request URL, and renders results', async () => {
     const user = userEvent.setup();
-    const searchUrl = manifestFixtureFg165hz3589.service.at(0)['@id'];
     expect(searchUrl).toBeDefined();
     let requestedUrl;
 
@@ -119,7 +156,10 @@ describe('SearchPanel', () => {
     createWrapper(
       {},
       {
-        search: { query: 'blah' },
+        search: {
+          data: { [`${searchUrl}?q=blah`]: { isFetching: false, json: contentSearchMock } },
+          query: 'blah',
+        },
         window: { suggestedSearches: ['NSF'] },
       },
     );

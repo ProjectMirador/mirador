@@ -2,6 +2,8 @@ import { render, screen, fireEvent, waitFor } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { http, HttpResponse } from 'msw';
+import { server } from '../../mocks/server';
 
 import { WorkspaceAdd } from '../../../src/components/WorkspaceAdd';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
@@ -30,6 +32,10 @@ function createWrapper(props) {
 }
 
 describe('WorkspaceAdd', () => {
+  beforeEach(() => {
+    server.use(http.get('*/abc', () => HttpResponse.json({})));
+  });
+
   it('renders a list item for each manifest in the state', () => {
     createWrapper();
 
@@ -78,7 +84,7 @@ describe('WorkspaceAdd', () => {
 
   it('hides the form on submit', async () => {
     const user = userEvent.setup();
-    createWrapper();
+    createWrapper({ addResource: vi.fn() });
 
     await user.click(screen.getByRole('button', { name: 'Add resource' }));
 
@@ -90,7 +96,7 @@ describe('WorkspaceAdd', () => {
 
   it('scrolls to the top after an item is added', async () => {
     const user = userEvent.setup();
-    const { container } = createWrapper();
+    const { container } = createWrapper({ addResource: vi.fn() });
 
     const scrollTo = vi.fn();
 

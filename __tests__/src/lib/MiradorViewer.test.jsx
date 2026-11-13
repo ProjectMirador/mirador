@@ -1,12 +1,25 @@
 import { act, render, screen } from '@tests/utils/test-utils';
 import MiradorViewer from '../../../src/lib/MiradorViewer';
+import { http, HttpResponse } from 'msw';
+import { server } from '../../mocks/server';
+import manifestFixture from '../../fixtures/version-2/001.json';
 
 /** */
 const DummyPlugin = () => <div data-testid="plugin">Plugin</div>;
 
+// Mock App's lazy children so MiradorViewer unit tests don't suspend outside act(...)
+vi.mock('../../../src/containers/WorkspaceArea', () => ({
+  default: () => <div data-testid="mock-workspace-area" />,
+}));
+vi.mock('../../../src/containers/AuthenticationSender', () => ({
+  default: () => null,
+}));
+
 describe('MiradorViewer', () => {
   let container;
+
   beforeEach(async () => {
+    server.use(http.get('https://iiif.harvardartmuseums.org/manifests/object/299843', () => HttpResponse.json(manifestFixture)));
     render(<div id="mirador" data-testid="container" />);
     container = await screen.findByTestId('container');
   });

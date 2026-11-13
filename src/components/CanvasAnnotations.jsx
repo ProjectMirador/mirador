@@ -88,8 +88,8 @@ export function CanvasAnnotations({
             >
               <ListItemText
                 primary={<SanitizedHtml ruleSet={htmlSanitizationRuleSet} htmlString={annotation.content} />}
-                secondary={annotation.tags.map((tag) => (
-                  <Chip component="span" size="small" variant="outlined" label={tag} id={tag} key={tag?.toString()} />
+                secondary={annotation.tags.filter(Boolean).map((tag) => (
+                  <Chip component="span" size="small" variant="outlined" label={tag} id={tag} key={String(tag)} />
                 ))}
                 slotProps={{
                   primary: { variant: 'body2' },

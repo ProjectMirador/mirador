@@ -1,9 +1,15 @@
 import { expect, it } from 'vitest';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { setupIntegrationTestViewer } from '@tests/utils/test-utils';
+import { http, HttpResponse } from 'msw';
+import { server } from '../../mocks/server';
 import config from '../mirador-configs/blank';
 
 describe('Invalid response while adding manifest', () => {
+  beforeEach(() => {
+    server.use(http.get('http://localhost:4444/invalid', () => new HttpResponse(null, { status: 500 })));
+  });
+
   setupIntegrationTestViewer(config);
 
   /** */

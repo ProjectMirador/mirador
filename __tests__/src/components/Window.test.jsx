@@ -21,6 +21,13 @@ function createWrapper(props, state, renderOptions) {
   );
 }
 
+// Mock PrimaryWindow to prevent its React.lazy viewer imports from resolving
+// asynchronously outside of act(...) during synchronous Window unit tests.
+// Removes test warnings
+vi.mock('../../../src/containers/PrimaryWindow', () => ({
+  default: () => <div className="mirador-primary-window" data-testid="mock-primary-window" />,
+}));
+
 describe('Window', () => {
   it('should render outer element', () => {
     createWrapper();
