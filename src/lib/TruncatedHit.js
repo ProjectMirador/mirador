@@ -10,7 +10,7 @@ export default class TruncatedHit {
 
   /** */
   get match() {
-    return this.hit.match || (this.annotation && this.annotation.resource.resource.chars) || '-';
+    return this.hit.match || (this.annotation && this.annotation.resource.resource?.chars) || '-';
   }
 
   /** */
