@@ -109,11 +109,6 @@ export default defineConfig({
       name: 'html-url-rewrite',
     },
   ],
-  resolve: {
-    alias: {
-      '@tests/': fileURLToPath(new URL('./__tests__', import.meta.url)),
-    },
-  },
   server: {
     fs: {
       allow: [

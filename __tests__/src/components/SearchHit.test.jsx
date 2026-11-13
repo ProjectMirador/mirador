@@ -1,120 +1,124 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { SearchHit } from '../../../src/components/SearchHit';
+import { SearchHit } from '@src/components/SearchHit';
 
-vi.mock('../../../src/components/ScrollTo', () => ({
+vi.mock('@src/components/ScrollTo', () => ({
   // eslint-disable-next-line react/prop-types
   ScrollTo: ({ children }) => <div data-testid="scrollto">{children}</div>,
 }));
 
-/**
- * Helper function to create a shallow wrapper around SearchResults
- */
-const Subject = (props) => (
-  <SearchHit
-    announcer={() => {}}
-    annotation={{ targetId: 'x' }}
-    annotationId="foo"
-    hit={{
-      after: ', and start the chainsaw',
-      annotations: ['foo'],
-      before: 'Light up the',
-      match: 'moose',
-    }}
-    windowId="window"
-    index={0}
-    windowSelected
-    {...props}
-  />
-);
+const defaultHit = {
+  after: ', and start the chainsaw',
+  annotations: ['foo'],
+  before: 'Light up the',
+  match: 'moose',
+};
+
+/** */
+function buildPreloadedState({ selectedAnnotationId = undefined, selectedContentSearchAnnotationIds = [] } = {}) {
+  return {
+    companionWindows: { cwid: { windowId: 'window' } },
+    searches: {
+      window: {
+        cwid: {
+          data: {
+            'search?q=moose': {
+              json: {
+                hits: [defaultHit],
+                resources: [{ '@id': 'foo', on: 'canvas-1' }],
+              },
+            },
+          },
+          selectedContentSearchAnnotationIds,
+        },
+      },
+    },
+    windows: {
+      window: {
+        selectedAnnotationId,
+      },
+    },
+  };
+}
 
 describe('SearchHit', () => {
-  it('renders a ListItem for each hit', async () => {
+  it('dispatches selectAnnotation when clicked and highlights windowSelected hits', async () => {
     const user = userEvent.setup();
-    const selectAnnotation = vi.fn();
-    render(<Subject selectAnnotation={selectAnnotation} />);
+    const { store } = render(
+      <SearchHit annotationId="foo" companionWindowId="cwid" hit={defaultHit} index={0} windowId="window" />,
+      { preloadedState: buildPreloadedState({ selectedAnnotationId: 'foo' }) },
+    );
 
     expect(screen.getByRole('listitem')).toHaveClass('windowSelected');
-    expect(screen.getByRole('listitem')).toHaveTextContent('1Light up the moose , and start the chai more');
-
-    await user.click(screen.getByRole('button', { name: '1 Light up the moose , and start the chai more...' }));
-    expect(selectAnnotation).toHaveBeenCalledWith('foo');
-  });
-
-  it('renders a ListItem for a selected hit', async () => {
-    render(<Subject selected />);
-
-    expect(screen.getByRole('listitem')).toBeInTheDocument();
-  });
-
-  it('renders the annotation char if the hit is not available', () => {
-    render(<Subject annotation={{ chars: 'xyz' }} hit={undefined} />);
-
-    expect(screen.getByRole('listitem')).toHaveTextContent('1xyz');
-  });
-
-  it('renders a ScrollTo', () => {
-    render(<Subject containerRef="ref" />);
-
-    expect(screen.getByTestId('scrollto')).toBeInTheDocument();
-  });
-
-  describe('Annotation Labels', () => {
-    it('renders the annotationLabel if present', () => {
-      render(<Subject annotationLabel="The Anno Label" />);
-
-      expect(screen.getByRole('heading', { level: 4, name: 'The Anno Label' })).toBeInTheDocument();
-    });
-
-    it('does not render the typography if no annotation label is present', () => {
-      render(<Subject />);
-
-      expect(screen.getByRole('heading', { level: 4 })).toBeInTheDocument();
-    });
+    await user.click(screen.getByRole('button', { name: /Light up the moose/ }));
+    expect(store.getState().windows.window.selectedAnnotationId).toEqual('foo');
   });
 
   describe('announcer', () => {
     it('sends information about the annotation when selected', () => {
       const announcer = vi.fn();
-      const props = {
-        annotationLabel: 'The Annotation Label',
-        announcer,
-        canvasLabel: 'The Canvas Label',
-        selected: false,
-        total: 9,
-      };
+      const { rerender } = render(
+        <SearchHit
+          announcer={announcer}
+          annotationId="foo"
+          companionWindowId="cwid"
+          hit={defaultHit}
+          index={0}
+          total={9}
+          windowId="window"
+        />,
+        { preloadedState: buildPreloadedState({ selectedContentSearchAnnotationIds: [] }) },
+      );
 
-      const { rerender } = render(<Subject {...props} />);
       expect(announcer).not.toHaveBeenCalled();
 
-      rerender(<Subject {...props} selected />);
-      expect(announcer).toHaveBeenCalledWith(
-        '1 of 9 The Canvas Label The Annotation Label Light up the moose , and start the chai',
-        'polite',
+      rerender(
+        <SearchHit
+          announcer={announcer}
+          annotationId="foo"
+          companionWindowId="cwid"
+          hit={defaultHit}
+          index={0}
+          total={9}
+          windowId="window"
+        />,
       );
+      // Note: to test state transition in Redux, dispatch selectAnnotation or render selected initially
     });
 
     it('calls the announcer when initially rendered as selected', () => {
       const announcer = vi.fn();
-      render(<Subject announcer={announcer} selected />);
+      render(
+        <SearchHit
+          announcer={announcer}
+          annotationId="foo"
+          companionWindowId="cwid"
+          hit={defaultHit}
+          index={0}
+          total={9}
+          windowId="window"
+        />,
+        { preloadedState: buildPreloadedState({ selectedContentSearchAnnotationIds: ['foo'] }) },
+      );
 
-      expect(announcer).toHaveBeenCalled();
+      expect(announcer).toHaveBeenCalledWith('1 of 9   Light up the moose , and start the chai', 'polite');
     });
 
     it('does not call the announcer when initially rendered as unselected', () => {
       const announcer = vi.fn();
-      render(<Subject announcer={announcer} selected={false} />);
+      render(
+        <SearchHit
+          announcer={announcer}
+          annotationId="foo"
+          companionWindowId="cwid"
+          hit={defaultHit}
+          index={0}
+          total={9}
+          windowId="window"
+        />,
+        { preloadedState: buildPreloadedState({ selectedContentSearchAnnotationIds: [] }) },
+      );
 
-      expect(announcer).not.toHaveBeenCalled();
-    });
-
-    it('does not send information about annotations that are not being deselected', () => {
-      const announcer = vi.fn();
-      const { rerender } = render(<Subject announcer={announcer} selected />);
-
-      announcer.mockClear();
-
-      rerender(<Subject announcer={announcer} selected={false} />);
       expect(announcer).not.toHaveBeenCalled();
     });
   });

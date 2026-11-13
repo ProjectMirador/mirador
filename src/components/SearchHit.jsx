@@ -1,95 +1,83 @@
-import { useEffect, useId, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useEffectEvent } from 'use-effect-event';
 import PropTypes from 'prop-types';
-import Button from '@mui/material/Button';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';
-import Typography from '@mui/material/Typography';
-import Chip from '@mui/material/Chip';
-import { styled } from '@mui/material/styles';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import SanitizedHtml from '../containers/SanitizedHtml';
+import { withPlugins } from '../extend/withPlugins';
 import TruncatedHit from '../lib/TruncatedHit';
-import { ScrollTo } from './ScrollTo';
-import ns from '../config/css-ns';
-import classNames from 'classnames';
-
-const Root = styled(ListItem, { name: 'SearchHit', slot: 'root' })(({ ownerState, theme }) => ({
-  '&.Mui-focused': {
-    '&:hover': {
-      ...(ownerState.windowSelected && {
-        backgroundColor: 'inherit',
-      }),
-    },
-    ...(ownerState.windowSelected && {
-      backgroundColor: 'inherit',
-    }),
-  },
-  ...(!ownerState.selected && {
-    margin: 0,
-    padding: 0,
-  }),
-}));
-
-const CanvasLabel = styled('h4', { name: 'SearchHit', slot: 'canvasLabel' })(({ theme }) => ({
-  display: 'inline',
-  marginBottom: theme.spacing(1.5),
-}));
-
-const Counter = styled(Chip, { name: 'SearchHit', slot: 'counter' })(({ ownerState, theme }) => ({
-  backgroundColor: theme.palette.hitCounter.default,
-  ...(ownerState.windowSelected && {
-    backgroundColor: theme.palette.highlights.primary,
-  }),
-  ...(ownerState.adjacent &&
-    !ownerState.windowSelected && {
-      backgroundColor: theme.palette.highlights.secondary,
-    }),
-  height: 30,
-  marginRight: theme.spacing(1),
-  typography: 'subtitle2',
-  verticalAlign: 'inherit',
-}));
-
-/** Stub component that renders a button unless the item is selected (so the user can e.g. copy + paste the content easily) */
-const ButtonUnlessSelected = ({ children, selected = false, ...props }) =>
-  selected ? <>{children}</> : <ListItemButton {...props}>{children}</ListItemButton>;
-
-ButtonUnlessSelected.propTypes = {
-  children: PropTypes.node.isRequired,
-  selected: PropTypes.bool,
-};
+import * as actions from '../state/actions';
+import {
+  getCanvasLabel,
+  getResourceAnnotationForSearchHit,
+  getResourceAnnotationLabel,
+  getSelectedAnnotationId,
+  getSelectedContentSearchAnnotationIds,
+  getVisibleCanvasIds,
+} from '../state/selectors';
+import SearchHitItem from './SearchHitItem';
 
 /** */
-// eslint-disable-next-line complexity
 export function SearchHit({
-  adjacent = false,
-  annotation = undefined,
   annotationId = undefined,
-  annotationLabel = undefined,
   announcer = undefined,
-  canvasLabel = undefined,
   companionWindowId = undefined,
   containerRef = undefined,
   focused = false,
-  hit = undefined,
+  hit = { annotations: [] },
   index = undefined,
-  selectAnnotation = () => {},
-  selected = false,
   showDetails = () => {},
   total = undefined,
   windowId,
-  windowSelected = false,
 }) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const realAnnoId = annotationId || hit.annotations[0];
+  const annotation = useSelector((state) =>
+    getResourceAnnotationForSearchHit(state, {
+      annotationUri: realAnnoId,
+      companionWindowId,
+      windowId,
+    }),
+  );
+  const annotationLabelList = useSelector((state) =>
+    getResourceAnnotationLabel(state, {
+      annotationUri: realAnnoId,
+      companionWindowId,
+      windowId,
+    }),
+  );
+  const selectedCanvasIds = useSelector((state) => getVisibleCanvasIds(state, { windowId }));
+  const selectedContentSearchAnnotationIds = useSelector((state) =>
+    getSelectedContentSearchAnnotationIds(state, {
+      companionWindowId,
+      windowId,
+    }),
+  );
+  const windowSelectedAnnotationId = useSelector((state) => getSelectedAnnotationId(state, { windowId }));
+  const canvasLabel = useSelector(
+    (state) =>
+      annotation &&
+      getCanvasLabel(state, {
+        canvasId: annotation.targetId,
+        windowId,
+      }),
+  );
+
+  const annotationLabel = annotationLabelList[0];
+  const allAnnoIds = [annotationId, ...hit.annotations];
+  const adjacent = selectedCanvasIds.includes(annotation?.targetId);
+  const selected = Boolean(selectedContentSearchAnnotationIds[0] && allAnnoIds.includes(selectedContentSearchAnnotationIds[0]));
+  const windowSelected = Boolean(windowSelectedAnnotationId && allAnnoIds.includes(windowSelectedAnnotationId));
+
+  const selectAnnotation = useCallback((...args) => dispatch(actions.selectAnnotation(windowId, ...args)), [dispatch, windowId]);
 
   /** */
   const handleClick = () => {
-    if (annotation && annotationId) selectAnnotation(annotationId);
+    if (annotation && realAnnoId) selectAnnotation(realAnnoId);
   };
 
-  const truncatedHit = useMemo(() => hit && new TruncatedHit(hit, annotation), [hit, annotation]);
+  const truncatedHit = useMemo(() => hit && hit.match && new TruncatedHit(hit, annotation), [hit, annotation]);
 
   /**
    * Pass content describing the hit to the announcer prop (intended for screen readers)
@@ -117,114 +105,43 @@ export function SearchHit({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
-  const canvasLabelHtmlId = useId();
-
   if (focused && !selected) return null;
 
-  const renderedHit = focused ? hit : hit && truncatedHit;
-  const truncated = hit && (renderedHit.before !== hit.before || renderedHit.after !== hit.after);
-  const ownerState = {
-    adjacent,
-    focused,
-    selected,
-    windowSelected,
-  };
-
-  const header = (
-    <>
-      <Counter component="span" ownerState={ownerState} label={index + 1} />
-      <CanvasLabel id={canvasLabelHtmlId}>
-        {canvasLabel}
-        {annotationLabel && (
-          <Typography component="span" sx={{ display: 'block', marginTop: 1 }}>
-            {annotationLabel}
-          </Typography>
-        )}
-      </CanvasLabel>
-    </>
-  );
-
   return (
-    <ScrollTo
+    <SearchHitItem
+      adjacent={adjacent}
+      annotation={annotation}
+      annotationLabel={annotationLabel}
+      canvasLabel={canvasLabel}
       containerRef={containerRef}
-      offsetTop={96} // offset for the height of the form above
-      scrollTo={windowSelected && !focused}
-    >
-      <Root ownerState={ownerState} className={classNames(ns('search-hit'), windowSelected ? 'windowSelected' : '')} divider>
-        <ButtonUnlessSelected selected={selected} onClick={handleClick}>
-          <ListItemText
-            primary={header}
-            secondary={
-              <>
-                {hit && (
-                  <>
-                    <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.before} />{' '}
-                    <strong>
-                      <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.match} />
-                    </strong>{' '}
-                    <SanitizedHtml ruleSet="iiif" htmlString={renderedHit.after} />{' '}
-                    {truncated && !focused && (
-                      <Button
-                        sx={{
-                          '& span': {
-                            lineHeight: '1.5em',
-                          },
-                          margin: 0,
-                          padding: 0,
-                          textTransform: 'none',
-                        }}
-                        onClick={showDetails}
-                        color="secondary"
-                        size="small"
-                        aria-describedby={canvasLabelHtmlId}
-                      >
-                        {t('more')}
-                      </Button>
-                    )}
-                  </>
-                )}
-                {!hit && annotation && <SanitizedHtml ruleSet="iiif" htmlString={annotation.chars} />}
-              </>
-            }
-            slotProps={{
-              primary: {
-                component: 'div',
-                sx: { marginBottom: 1 },
-                variant: 'subtitle2',
-              },
-
-              secondary: { variant: 'body1' },
-            }}
-          />
-        </ButtonUnlessSelected>
-      </Root>
-    </ScrollTo>
+      focused={focused}
+      hit={hit}
+      index={index}
+      onMoreClick={showDetails}
+      onSelect={handleClick}
+      renderedHit={focused ? hit : truncatedHit}
+      selected={selected}
+      windowSelected={windowSelected}
+    />
   );
 }
 
 SearchHit.propTypes = {
-  adjacent: PropTypes.bool,
-  annotation: PropTypes.shape({
-    chars: PropTypes.string,
-    targetId: PropTypes.string,
-  }),
   annotationId: PropTypes.string,
-  annotationLabel: PropTypes.string,
   announcer: PropTypes.func,
-  canvasLabel: PropTypes.string,
   companionWindowId: PropTypes.string,
   containerRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.instanceOf(Element) })]),
   focused: PropTypes.bool,
   hit: PropTypes.shape({
     after: PropTypes.string,
+    annotations: PropTypes.arrayOf(PropTypes.string),
     before: PropTypes.string,
     match: PropTypes.string,
   }),
   index: PropTypes.number,
-  selectAnnotation: PropTypes.func,
-  selected: PropTypes.bool,
   showDetails: PropTypes.func,
   total: PropTypes.number,
   windowId: PropTypes.string.isRequired,
-  windowSelected: PropTypes.bool,
 };
+
+export default withPlugins('SearchHit')(SearchHit);

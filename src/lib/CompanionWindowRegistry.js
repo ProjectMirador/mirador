@@ -3,7 +3,8 @@ import WindowSideBarAnnotationsPanel from '../containers/WindowSideBarAnnotation
 import WindowSideBarInfoPanel from '../containers/WindowSideBarInfoPanel';
 import WindowSideBarCanvasPanel from '../containers/WindowSideBarCanvasPanel';
 import AttributionPanel from '../containers/AttributionPanel';
-import SearchPanel from '../containers/SearchPanel';
+// import SearchPanel from '../containers/SearchPanel';
+import SearchPanel from '../components/SearchPanel';
 import LayersPanel from '../containers/LayersPanel';
 import CustomPanel from '../containers/CustomPanel';
 import WindowSideBarCollectionPanel from '../containers/WindowSideBarCollectionPanel';

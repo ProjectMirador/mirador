@@ -1,25 +1,35 @@
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
-import SearchPanelControls from '../containers/SearchPanelControls';
-import SearchResults from '../containers/SearchResults';
+import { withPlugins } from '../extend/withPlugins';
+import * as actions from '../state/actions';
+import { getManifestSearchService, getSearchQuery, getWindow } from '../state/selectors';
+import SearchPanelControls from './SearchPanelControls';
+import SearchResults from './SearchResults';
 
-/** */
-export function SearchPanel({
-  fetchSearch = undefined,
-  id,
-  query = '',
-  removeSearch,
-  searchService,
-  suggestedSearches = [],
-  windowId,
-}) {
+/**
+ * SearchPanel ~
+ */
+export function SearchPanel({ id, windowId }) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const containerRef = useRef(null);
+
+  const query = useSelector((state) => getSearchQuery(state, { companionWindowId: id, windowId })) || '';
+  const searchService = useSelector((state) => getManifestSearchService(state, { windowId }));
+  const suggestedSearches = useSelector((state) => getWindow(state, { windowId })?.suggestedSearches) || [];
+
+  const handleFetchSearch = useCallback(
+    (searchId, searchQuery) => dispatch(actions.fetchSearch(windowId, id, searchId, searchQuery)),
+    [dispatch, id, windowId],
+  );
+
+  const handleRemoveSearch = useCallback(() => dispatch(actions.removeSearch(windowId, id)), [dispatch, id, windowId]);
 
   return (
     <CompanionWindow
@@ -27,15 +37,15 @@ export function SearchPanel({
       title={
         <>
           {t('searchTitle')}
-          {query && query !== '' && (
+          {query !== '' && (
             <Chip
               aria-label={t('clearSearchAria')}
               role="button"
               sx={{ marginLeft: 1 }}
               color="secondary"
               label={t('clearSearch')}
-              onClick={removeSearch}
-              onDelete={removeSearch}
+              onClick={handleRemoveSearch}
+              onDelete={handleRemoveSearch}
               size="small"
               tabIndex={0}
               variant="outlined"
@@ -49,15 +59,14 @@ export function SearchPanel({
       ref={containerRef}
     >
       <SearchResults containerRef={containerRef} companionWindowId={id} windowId={windowId} />
-      {fetchSearch &&
-        suggestedSearches &&
+      {suggestedSearches.length > 0 &&
         query === '' &&
         suggestedSearches.map((search) => (
           <Typography component="p" key={search} variant="body1" sx={{ margin: 2 }}>
             <Button
               variant="inlineText"
               color="secondary"
-              onClick={() => fetchSearch(`${searchService.id}?${new URLSearchParams({ q: search })}`, search)}
+              onClick={() => handleFetchSearch(`${searchService.id}?${new URLSearchParams({ q: search })}`, search)}
             >
               {t('suggestSearch', { query: search })}
             </Button>
@@ -68,13 +77,8 @@ export function SearchPanel({
 }
 
 SearchPanel.propTypes = {
-  fetchSearch: PropTypes.func,
   id: PropTypes.string.isRequired,
-  query: PropTypes.string,
-  removeSearch: PropTypes.func.isRequired,
-  searchService: PropTypes.shape({
-    id: PropTypes.string,
-  }).isRequired,
-  suggestedSearches: PropTypes.arrayOf(PropTypes.string),
   windowId: PropTypes.string.isRequired,
 };
+
+export default withPlugins('SearchPanel')(SearchPanel);

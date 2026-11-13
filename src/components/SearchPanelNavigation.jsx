@@ -1,21 +1,39 @@
+import { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeftSharp';
 import ChevronRightIcon from '@mui/icons-material/ChevronRightSharp';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import MiradorMenuButton from '../containers/MiradorMenuButton';
+import { withPlugins } from '../extend/withPlugins';
+import * as actions from '../state/actions';
+import {
+  getSearchNumTotal,
+  getSelectedContentSearchAnnotationIds,
+  getSortedSearchHitsForCompanionWindow,
+  getThemeDirection,
+} from '../state/selectors';
 
 /**
  * SearchPanelNavigation ~
  */
-export function SearchPanelNavigation({
-  numTotal = undefined,
-  searchHits = [],
-  selectedContentSearchAnnotation,
-  direction,
-  selectAnnotation,
-}) {
+export function SearchPanelNavigation({ companionWindowId, windowId }) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const direction = useSelector(getThemeDirection);
+  const numTotal = useSelector((state) => getSearchNumTotal(state, { companionWindowId, windowId }));
+  const searchHits = useSelector((state) => getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }));
+  const selectedContentSearchAnnotation = useSelector((state) =>
+    getSelectedContentSearchAnnotationIds(state, {
+      companionWindowId,
+      windowId,
+    }),
+  );
+
+  const selectAnnotation = useCallback((...args) => dispatch(actions.selectAnnotation(windowId, ...args)), [dispatch, windowId]);
+
   /** */
   const nextSearchResult = (currentHitIndex) => {
     selectAnnotation(searchHits[currentHitIndex + 1].annotations[0]);
@@ -74,11 +92,8 @@ export function SearchPanelNavigation({
 }
 
 SearchPanelNavigation.propTypes = {
-  direction: PropTypes.string.isRequired,
-  numTotal: PropTypes.number,
-  searchHits: PropTypes.arrayOf(PropTypes.object),
-  selectAnnotation: PropTypes.func.isRequired,
-  selectedContentSearchAnnotation: PropTypes.arrayOf(PropTypes.string).isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
+  companionWindowId: PropTypes.string.isRequired,
   windowId: PropTypes.string.isRequired,
 };
+
+export default withPlugins('SearchPanelNavigation')(SearchPanelNavigation);
