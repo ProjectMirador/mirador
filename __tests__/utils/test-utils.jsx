@@ -1,12 +1,9 @@
 import { Provider } from 'react-redux';
 import { render, screen } from '@testing-library/react';
 import PropTypes from 'prop-types';
-import { configureStore } from '@reduxjs/toolkit';
-import createSagaMiddleware from 'redux-saga';
-import getRootSaga from '../../src/state/sagas';
+import createStore from '../../src/state/store';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { I18nextProvider } from 'react-i18next';
-import createRootReducer from '../../src/state/reducers/rootReducer';
 import settings from '../../src/config/settings';
 import createI18nInstance from '../../src/i18n';
 import { failIfErrorDialogPresent, safeFindByRole, safeFindAllByRole } from './safe-queries';
@@ -17,32 +14,9 @@ import { viewer as miradorViewer } from '../../src/index';
 export * from '@testing-library/react';
 export { renderWithProviders as render, safeFindByRole };
 
-const rootReducer = createRootReducer();
 const theme = createTheme(settings.theme);
 
 const i18n = createI18nInstance();
-
-/**
- * Helper to create a store with Mirador's reducer and saga middleware
- */
-function createTestStore(preloadedState = {}) {
-  const sagaMiddleware = createSagaMiddleware();
-
-  const store = configureStore({
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActionPaths: ['imageResource', /(^|\.)config$/],
-          ignoredPaths: [/(^|\.)config$/],
-        },
-      }).concat(sagaMiddleware),
-    preloadedState,
-    reducer: rootReducer,
-  });
-
-  sagaMiddleware.run(getRootSaga());
-  return store;
-}
 
 /**
  * Hook up our rendered object to redux
@@ -52,7 +26,7 @@ function renderWithProviders(
   {
     preloadedState = {},
     // Automatically create a store instance if no store was passed in
-    store = createTestStore(preloadedState),
+    store = createStore([], [], { preloadedState }),
     ...renderOptions
   } = {},
 ) {
