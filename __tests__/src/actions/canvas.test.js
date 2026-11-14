@@ -53,7 +53,22 @@ describe('canvas actions', () => {
       store.dispatch(actions.setCanvas(id, 'a', undefined, { startTime: 30 }));
       expect(store.getActions()[0]).toEqual(expectedAction);
     });
+
+    it('passes through an annotationId', () => {
+      const id = 'abc123';
+      const expectedAction = {
+        annotationId: 'anno1',
+        canvasId: 'a',
+        preserveViewport: true,
+        type: ActionTypes.SET_CANVAS,
+        visibleCanvases: ['a'],
+        windowId: id,
+      };
+      store.dispatch(actions.setCanvas(id, 'a', undefined, { annotationId: 'anno1' }));
+      expect(store.getActions()[0]).toEqual(expectedAction);
+    });
   });
+
   describe('setPreviousCanvas', () => {
     let store = null;
     beforeEach(() => {
