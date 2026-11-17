@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { WindowCanvasNavigationControls } from '../../../src/components/WindowCanvasNavigationControls';
+import { WindowCanvasNavigationControls } from '@src/components/WindowCanvasNavigationControls';
 
 /**
  * create a simple wrapper for rendering our component

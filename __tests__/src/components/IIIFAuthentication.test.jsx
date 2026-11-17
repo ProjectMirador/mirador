@@ -1,6 +1,6 @@
 import { screen, render, waitFor } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { IIIFAuthentication } from '../../../src/components/IIIFAuthentication';
+import { IIIFAuthentication } from '@src/components/IIIFAuthentication';
 
 /**
  * Helper function to create IIIFAuthentication

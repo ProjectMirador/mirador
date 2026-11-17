@@ -1,5 +1,5 @@
-import { companionWindowsReducer } from '../../../src/state/reducers/companionWindows';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { companionWindowsReducer } from '@src/state/reducers/companionWindows';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('companionWindowsReducer', () => {
   describe('ADD_COMPANION_WINDOW', () => {

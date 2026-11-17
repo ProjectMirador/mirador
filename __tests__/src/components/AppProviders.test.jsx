@@ -2,8 +2,8 @@ import Button from '@mui/material/Button';
 import { render, screen } from '@tests/utils/test-utils';
 import { useTranslation } from 'react-i18next';
 import { useDrop } from 'react-dnd';
-import { AppProviders } from '../../../src/components/AppProviders';
-import settings from '../../../src/config/settings';
+import { AppProviders } from '@src/components/AppProviders';
+import settings from '@src/config/settings';
 
 /** */
 function MockTranslationComponent() {

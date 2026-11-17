@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { TextViewer } from '../../../src/components/TextViewer';
+import { TextViewer } from '@src/components/TextViewer';
 
 /** create wrapper */
 function createWrapper(props, suspenseFallback) {

@@ -4,7 +4,7 @@ import { http, HttpResponse } from 'msw';
 import { server } from '../../mocks/server';
 import { contentSearchMock } from '../../mocks/contentSearchMock';
 import manifestFixtureFg165hz3589 from '../../fixtures/version-2/fg165hz3589.json';
-import SearchPanel from '../../../src/containers/SearchPanel';
+import SearchPanel from '@src/containers/SearchPanel';
 
 /**
  * Helper function to wrap the Redux-connected SearchPanel

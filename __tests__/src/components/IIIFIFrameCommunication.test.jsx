@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { IIIFIFrameCommunication } from '../../../src/components/IIIFIFrameCommunication';
+import { IIIFIFrameCommunication } from '@src/components/IIIFIFrameCommunication';
 
 /** */
 function createWrapper(props) {

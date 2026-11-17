@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
-import { WorkspaceMenuButton } from '../../../src/components/WorkspaceMenuButton';
+import { WorkspaceMenuButton } from '@src/components/WorkspaceMenuButton';
 
 describe('WorkspaceMenuButton', () => {
   let user;

@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WorkspaceSelectionDialog } from '../../../src/components/WorkspaceSelectionDialog';
+import { WorkspaceSelectionDialog } from '@src/components/WorkspaceSelectionDialog';
 
 describe('WorkspaceSelectionDialog', () => {
   let handleClose;

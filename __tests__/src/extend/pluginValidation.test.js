@@ -1,4 +1,4 @@
-import { validatePlugin } from '../../../src/extend/pluginValidation';
+import { validatePlugin } from '@src/extend/pluginValidation';
 
 /** */
 const createPlugin = (props) => ({

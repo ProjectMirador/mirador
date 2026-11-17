@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WindowList } from '../../../src/components/WindowList';
+import { WindowList } from '@src/components/WindowList';
 
 describe('WindowList', () => {
   let handleClose;

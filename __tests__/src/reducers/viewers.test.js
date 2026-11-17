@@ -1,5 +1,5 @@
-import { viewersReducer } from '../../../src/state/reducers/viewers';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { viewersReducer } from '@src/state/reducers/viewers';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('viewers reducer', () => {
   it('should handle UPDATE_VIEWPORT', () => {

@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WindowTopMenuButton } from '../../../src/components/WindowTopMenuButton';
+import { WindowTopMenuButton } from '@src/components/WindowTopMenuButton';
 
 /** create wrapper */
 function Subject({ ...props }) {

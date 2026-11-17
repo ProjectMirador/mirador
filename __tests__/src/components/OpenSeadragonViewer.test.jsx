@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 import { getCanvasWorld } from '../../utils/mirador-wrappers';
-import { OpenSeadragonViewer } from '../../../src/components/OpenSeadragonViewer';
+import { OpenSeadragonViewer } from '@src/components/OpenSeadragonViewer';
 import fixture from '../../fixtures/version-2/019.json';
-import { OSDReferences } from '../../../src/plugins/OSDReferences';
+import { OSDReferences } from '@src/plugins/OSDReferences';
 
 vi.mock('../../../src/components/ImageFailureMessage', () => ({
   ImageFailureMessage: vi.fn(() => null),

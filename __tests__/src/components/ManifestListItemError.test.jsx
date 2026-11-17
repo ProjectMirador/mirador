@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { ManifestListItemError } from '../../../src/components/ManifestListItemError';
+import { ManifestListItemError } from '@src/components/ManifestListItemError';
 
 /**
  * Helper function to wrap creating a ManifestListItemError component

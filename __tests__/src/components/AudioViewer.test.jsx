@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { AudioViewer } from '../../../src/components/AudioViewer';
+import { AudioViewer } from '@src/components/AudioViewer';
 
 /** create wrapper */
 function createWrapper(props, suspenseFallback) {

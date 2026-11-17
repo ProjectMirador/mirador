@@ -2,7 +2,7 @@ import {
   getAnnotationResourcesByMotivation,
   getLanguagesFromConfigWithCurrent,
   getSelectedAnnotationId,
-} from '../../../src/state/selectors';
+} from '@src/state/selectors';
 
 describe('getAnnotationResourcesByMotivation', () => {
   it('returns an array of annotation resources (filtered by the passed in array of motiviations)', () => {

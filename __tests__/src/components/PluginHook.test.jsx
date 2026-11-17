@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { PluginHook } from '../../../src/components/PluginHook';
-import { usePlugins } from '../../../src/extend/usePlugins';
+import { PluginHook } from '@src/components/PluginHook';
+import { usePlugins } from '@src/extend/usePlugins';
 
 vi.mock('../../../src/extend/usePlugins');
 

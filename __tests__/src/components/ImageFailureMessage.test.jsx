@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { ImageFailureMessage } from '../../../src/components/ImageFailureMessage';
-import FailedImageProvider from '../../../src/contexts/FailedImageProvider';
-import FailedImageContext from '../../../src/contexts/FailedImageContext';
+import { ImageFailureMessage } from '@src/components/ImageFailureMessage';
+import FailedImageProvider from '@src/contexts/FailedImageProvider';
+import FailedImageContext from '@src/contexts/FailedImageContext';
 
 describe('ImageFailureMessage', () => {
   it('does not render when no images have failed', () => {

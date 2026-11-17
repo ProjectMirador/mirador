@@ -1,4 +1,4 @@
-import { set, update, unset } from '../../../src/state/reducers/utils';
+import { set, update, unset } from '@src/state/reducers/utils';
 
 describe('set', () => {
   it('does not change input object', () => {

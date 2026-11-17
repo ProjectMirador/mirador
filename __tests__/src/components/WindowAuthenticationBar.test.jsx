@@ -2,7 +2,7 @@ import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { config } from 'react-transition-group';
 import { waitFor } from '@testing-library/react';
-import { WindowAuthenticationBar } from '../../../src/components/WindowAuthenticationBar';
+import { WindowAuthenticationBar } from '@src/components/WindowAuthenticationBar';
 
 /**
  * Helper function to create a shallow wrapper around AuthenticationLogout

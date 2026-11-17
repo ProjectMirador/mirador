@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@tests/utils/test-utils';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import { WorkspaceMosaic } from '../../../src/components/WorkspaceMosaic';
+import { WorkspaceMosaic } from '@src/components/WorkspaceMosaic';
 
 /** create wrapper */
 function createWrapper(props) {

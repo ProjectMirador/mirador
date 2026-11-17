@@ -6,7 +6,7 @@ import audioFixture from '../../fixtures/version-3/0002-mvm-audio.json';
 import textFixture from '../../fixtures/version-3/text-pdf.json';
 import videoFixture from '../../fixtures/version-3/0015-start.json';
 import videoWithAnnoCaptions from '../../fixtures/version-3/video_with_annotation_captions.json';
-import settings from '../../../src/config/settings';
+import settings from '@src/config/settings';
 
 import {
   getVisibleCanvases,
@@ -22,7 +22,7 @@ import {
   getVisibleCanvasAudioResources,
   getVisibleCanvasCaptions,
   getVisibleCanvasIds,
-} from '../../../src/state/selectors/canvases';
+} from '@src/state/selectors/canvases';
 
 describe('getVisibleCanvasIds', () => {
   const state = {

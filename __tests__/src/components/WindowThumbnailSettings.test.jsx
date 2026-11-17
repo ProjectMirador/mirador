@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WindowThumbnailSettings } from '../../../src/components/WindowThumbnailSettings';
+import { WindowThumbnailSettings } from '@src/components/WindowThumbnailSettings';
 
 /** create wrapper */
 function createWrapper(props) {

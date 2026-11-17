@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import MenuList from '@mui/material/MenuList';
-import { NestedMenu } from '../../../src/components/NestedMenu';
+import { NestedMenu } from '@src/components/NestedMenu';
 
 /**
  * Helper function to wrap creating a NestedMenu component

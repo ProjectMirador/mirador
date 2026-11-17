@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WorkspaceOptionsMenu } from '../../../src/components/WorkspaceOptionsMenu';
+import { WorkspaceOptionsMenu } from '@src/components/WorkspaceOptionsMenu';
 
 /** create wrapper */
 function Subject({ ...props }) {

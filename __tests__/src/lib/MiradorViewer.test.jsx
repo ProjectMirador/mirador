@@ -1,5 +1,5 @@
 import { act, render, screen } from '@tests/utils/test-utils';
-import MiradorViewer from '../../../src/lib/MiradorViewer';
+import MiradorViewer from '@src/lib/MiradorViewer';
 import { http, HttpResponse } from 'msw';
 import { server } from '../../mocks/server';
 import manifestFixture from '../../fixtures/version-2/001.json';

@@ -4,7 +4,7 @@ import { Utils } from 'manifesto.js';
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
 
 import manifestJson from '../../fixtures/version-2/019.json';
-import { GalleryViewThumbnail } from '../../../src/components/GalleryViewThumbnail';
+import { GalleryViewThumbnail } from '@src/components/GalleryViewThumbnail';
 
 /** create wrapper */
 function createWrapper(props) {

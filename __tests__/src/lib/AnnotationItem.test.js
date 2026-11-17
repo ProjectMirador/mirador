@@ -1,4 +1,4 @@
-import AnnotationItem from '../../../src/lib/AnnotationItem';
+import AnnotationItem from '@src/lib/AnnotationItem';
 import svgAnnotations from '../../fixtures/version-3/svg-annotations.json';
 
 describe('AnnotationItem', () => {

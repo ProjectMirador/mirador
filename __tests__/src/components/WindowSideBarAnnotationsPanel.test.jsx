@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
-import CanvasAnnotations from '../../../src/containers/CanvasAnnotations';
-import { WindowSideBarAnnotationsPanel } from '../../../src/components/WindowSideBarAnnotationsPanel';
+import CanvasAnnotations from '@src/containers/CanvasAnnotations';
+import { WindowSideBarAnnotationsPanel } from '@src/components/WindowSideBarAnnotationsPanel';
 
 /** */
 function createWrapper(props, state) {

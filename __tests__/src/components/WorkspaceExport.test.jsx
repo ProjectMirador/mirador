@@ -1,6 +1,6 @@
 import { screen, render } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WorkspaceExport } from '../../../src/components/WorkspaceExport';
+import { WorkspaceExport } from '@src/components/WorkspaceExport';
 
 describe('WorkspaceExport', () => {
   let user;

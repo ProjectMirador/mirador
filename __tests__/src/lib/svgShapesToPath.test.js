@@ -1,4 +1,4 @@
-import { buildPath2D } from '../../../src/lib/svgShapesToPath';
+import { buildPath2D } from '@src/lib/svgShapesToPath';
 
 /** Creates an <svg> element and parses innerHTML into real SVG children. */
 function svgToElement(innerHTML) {

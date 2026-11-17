@@ -1,6 +1,6 @@
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import manifestFixtureHamilton from '../../fixtures/version-2/hamilton.json';
-import { getCanvasLayers, getLayers, getSortedLayers, getLayersForVisibleCanvases } from '../../../src/state/selectors/layers';
+import { getCanvasLayers, getLayers, getSortedLayers, getLayersForVisibleCanvases } from '@src/state/selectors/layers';
 
 describe('getCanvasLayers', () => {
   const state = {

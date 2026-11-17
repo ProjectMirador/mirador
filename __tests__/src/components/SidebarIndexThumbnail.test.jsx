@@ -2,7 +2,7 @@ import { render, screen } from '@tests/utils/test-utils';
 import { Utils } from 'manifesto.js';
 
 import fixture from '../../fixtures/version-2/019.json';
-import { SidebarIndexThumbnail } from '../../../src/components/SidebarIndexThumbnail';
+import { SidebarIndexThumbnail } from '@src/components/SidebarIndexThumbnail';
 
 /** */
 function createWrapper(props) {

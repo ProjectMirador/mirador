@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import PropTypes from 'prop-types';
 import userEvent from '@testing-library/user-event';
-import { CompanionWindow } from '../../../src/components/CompanionWindow';
+import { CompanionWindow } from '@src/components/CompanionWindow';
 
 /** create wrapper */
 function createWrapper(props) {

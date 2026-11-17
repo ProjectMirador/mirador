@@ -3,7 +3,7 @@
  */
 import { render, screen, waitFor } from '@tests/utils/test-utils';
 
-import { AttributionPanel } from '../../../src/components/AttributionPanel';
+import { AttributionPanel } from '@src/components/AttributionPanel';
 
 /**
  * Helper function to create a shallow wrapper around AttributionPanel

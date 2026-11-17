@@ -2,7 +2,7 @@ import { Utils } from 'manifesto.js';
 import { wrapCanvas } from '../../utils/mirador-wrappers';
 import fixture from '../../fixtures/version-2/019.json';
 import fragmentFixture from '../../fixtures/version-2/hamilton.json';
-import CanvasWorld from '../../../src/lib/CanvasWorld';
+import CanvasWorld from '@src/lib/CanvasWorld';
 
 const canvases = Utils.parseManifest(fixture).getSequences()[0].getCanvases().map(wrapCanvas);
 const canvasSubset = [canvases[1], canvases[2]];

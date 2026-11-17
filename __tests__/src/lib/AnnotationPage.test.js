@@ -1,5 +1,5 @@
-import AnnotationPage from '../../../src/lib/AnnotationPage';
-import AnnotationItem from '../../../src/lib/AnnotationItem';
+import AnnotationPage from '@src/lib/AnnotationPage';
+import AnnotationItem from '@src/lib/AnnotationItem';
 
 describe('AnnotationPage', () => {
   describe('id', () => {

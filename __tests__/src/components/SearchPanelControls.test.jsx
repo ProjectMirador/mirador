@@ -5,7 +5,7 @@ import { autocompleteMock } from '../../mocks/autocompleteMock';
 import { http, HttpResponse } from 'msw';
 import { server } from '../../mocks/server';
 
-import { SearchPanelControls } from '../../../src/components/SearchPanelControls';
+import { SearchPanelControls } from '@src/components/SearchPanelControls';
 
 /**
  * Helper function to create a shallow wrapper around AttributionPanel

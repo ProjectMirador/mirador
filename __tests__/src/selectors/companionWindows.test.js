@@ -5,7 +5,7 @@ import {
   getCompanionWindowsForPosition,
   selectCompanionWindowDimensions,
   getCompanionWindowsForContent,
-} from '../../../src/state/selectors/companionWindows';
+} from '@src/state/selectors/companionWindows';
 
 describe('getThumbnailNavigationPosition', () => {
   const state = {

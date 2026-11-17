@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { ZoomControls } from '../../../src/components/ZoomControls';
-import OpenSeadragonViewerContext from '../../../src/contexts/OpenSeadragonViewerContext';
+import { ZoomControls } from '@src/components/ZoomControls';
+import OpenSeadragonViewerContext from '@src/contexts/OpenSeadragonViewerContext';
 
 /** Builds a mock OpenSeadragonViewerContext ref exposing the given zoom bounds */
 function osdViewerWithZoom({ zoom, minZoom, maxZoom }) {

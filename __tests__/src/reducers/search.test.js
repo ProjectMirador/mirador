@@ -1,5 +1,5 @@
-import { searchesReducer } from '../../../src/state/reducers/search';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { searchesReducer } from '@src/state/reducers/search';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('search reducer', () => {
   it('should handle REQUEST_SEARCH', () => {

@@ -1,4 +1,4 @@
-import CanvasGroupings from '../../../src/lib/CanvasGroupings';
+import CanvasGroupings from '@src/lib/CanvasGroupings';
 
 describe('CanvasGroupings', () => {
   describe('constructor', () => {

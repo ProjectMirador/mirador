@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 
-import { WindowSideBarInfoPanel } from '../../../src/components/WindowSideBarInfoPanel';
+import { WindowSideBarInfoPanel } from '@src/components/WindowSideBarInfoPanel';
 
 /** create wrapper */
 function createWrapper(props) {

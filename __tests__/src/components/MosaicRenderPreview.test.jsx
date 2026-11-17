@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 
-import { MosaicRenderPreview } from '../../../src/components/MosaicRenderPreview';
+import { MosaicRenderPreview } from '@src/components/MosaicRenderPreview';
 
 describe('MosaicRenderPreview', () => {
   it('it renders the given title prop passed through the t prop function', () => {

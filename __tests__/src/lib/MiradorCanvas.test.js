@@ -1,5 +1,5 @@
 import { Utils } from 'manifesto.js';
-import MiradorCanvas from '../../../src/lib/MiradorCanvas';
+import MiradorCanvas from '@src/lib/MiradorCanvas';
 import fixture from '../../fixtures/version-2/019.json';
 import serviceFixture from '../../fixtures/version-2/canvasService.json';
 import otherContentFixture from '../../fixtures/version-2/299843.json';

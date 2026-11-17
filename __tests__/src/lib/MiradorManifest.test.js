@@ -1,5 +1,5 @@
 import { Utils } from 'manifesto.js';
-import MiradorManifest from '../../../src/lib/MiradorManifest';
+import MiradorManifest from '@src/lib/MiradorManifest';
 
 /** */
 function getSubject(manifest) {

@@ -1,15 +1,15 @@
 import { Provider } from 'react-redux';
 import { render, screen } from '@testing-library/react';
 import PropTypes from 'prop-types';
-import createStore from '../../src/state/store';
+import createStore from '@src/state/store';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { I18nextProvider } from 'react-i18next';
-import settings from '../../src/config/settings';
-import createI18nInstance from '../../src/i18n';
+import settings from '@src/config/settings';
+import createI18nInstance from '@src/i18n';
 import { failIfErrorDialogPresent, safeFindByRole, safeFindAllByRole } from './safe-queries';
 
 /** Mirador viewer setup for Integration tests */
-import { viewer as miradorViewer } from '../../src/index';
+import { viewer as miradorViewer } from '@src/index';
 
 export * from '@testing-library/react';
 export { renderWithProviders as render, safeFindByRole };

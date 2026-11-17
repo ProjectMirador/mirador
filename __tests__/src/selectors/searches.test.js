@@ -8,7 +8,7 @@ import {
   getResourceAnnotationLabel,
   getSearchIsFetching,
   getNextSearchId,
-} from '../../../src/state/selectors';
+} from '@src/state/selectors';
 
 const mockCanvases = [
   { id: 'http://example.com/iiif/canvas1' },

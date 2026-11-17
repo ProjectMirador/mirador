@@ -1,5 +1,5 @@
-import { accessTokensReducer } from '../../../src/state/reducers/accessTokens';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { accessTokensReducer } from '@src/state/reducers/accessTokens';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('access tokens response reducer', () => {
   it('should handle REQUEST_ACCESS_TOKEN', () => {

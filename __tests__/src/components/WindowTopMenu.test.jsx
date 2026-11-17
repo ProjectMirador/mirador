@@ -1,7 +1,7 @@
 import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WindowTopMenu } from '../../../src/components/WindowTopMenu';
-import { usePlugins } from '../../../src/extend/usePlugins';
+import { WindowTopMenu } from '@src/components/WindowTopMenu';
+import { usePlugins } from '@src/extend/usePlugins';
 
 vi.mock('../../../src/extend/usePlugins');
 

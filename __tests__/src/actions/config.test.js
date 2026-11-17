@@ -1,5 +1,5 @@
-import * as actions from '../../../src/state/actions';
-import ActionTypes from '../../../src/state/actions/action-types';
+import * as actions from '@src/state/actions';
+import ActionTypes from '@src/state/actions/action-types';
 import configFixture from '../../fixtures/config/export.example.json';
 
 describe('config actions', () => {

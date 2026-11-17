@@ -1,7 +1,7 @@
 import { MosaicWindowContext } from 'react-mosaic-component';
 import { render, screen } from '@tests/utils/test-utils';
 
-import { Window } from '../../../src/components/Window';
+import { Window } from '@src/components/Window';
 
 /** create wrapper */
 function createWrapper(props, state, renderOptions) {

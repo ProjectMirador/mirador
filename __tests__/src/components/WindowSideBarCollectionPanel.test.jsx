@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import { Utils } from 'manifesto.js';
 
-import { WindowSideBarCollectionPanel } from '../../../src/components/WindowSideBarCollectionPanel';
+import { WindowSideBarCollectionPanel } from '@src/components/WindowSideBarCollectionPanel';
 import collectionJson from '../../fixtures/version-2/collection.json';
 
 /**

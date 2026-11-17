@@ -1,10 +1,10 @@
 import { call } from 'redux-saga/effects';
 import { expectSaga, testSaga } from 'redux-saga-test-plan';
 
-import { fetchCollectionManifests, importConfig, importState } from '../../../src/state/sagas/app';
-import { fetchManifests } from '../../../src/state/sagas/iiif';
-import { fetchWindowManifest } from '../../../src/state/sagas/windows';
-import { addWindow } from '../../../src/state/actions';
+import { fetchCollectionManifests, importConfig, importState } from '@src/state/sagas/app';
+import { fetchManifests } from '@src/state/sagas/iiif';
+import { fetchWindowManifest } from '@src/state/sagas/windows';
+import { addWindow } from '@src/state/actions';
 
 describe('app-level sagas', () => {
   describe('importState', () => {

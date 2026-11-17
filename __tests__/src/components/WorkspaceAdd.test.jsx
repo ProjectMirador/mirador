@@ -5,7 +5,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { http, HttpResponse } from 'msw';
 import { server } from '../../mocks/server';
 
-import { WorkspaceAdd } from '../../../src/components/WorkspaceAdd';
+import { WorkspaceAdd } from '@src/components/WorkspaceAdd';
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture002 from '../../fixtures/version-2/002.json';
 

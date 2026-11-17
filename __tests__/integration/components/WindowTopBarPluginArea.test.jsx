@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WindowTopBar } from '../../../src/components/WindowTopBar';
-import PluginContext from '../../../src/extend/PluginContext';
+import { WindowTopBar } from '@src/components/WindowTopBar';
+import PluginContext from '@src/extend/PluginContext';
 import AddComponentD from '../components/AddComponentD';
 
 describe('WindowTopBarPluginArea button interaction', () => {

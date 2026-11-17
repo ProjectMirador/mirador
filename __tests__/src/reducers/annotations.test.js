@@ -1,5 +1,5 @@
-import { annotationsReducer } from '../../../src/state/reducers/annotations';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { annotationsReducer } from '@src/state/reducers/annotations';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('annotation reducer', () => {
   it('should handle REQUEST_ANNOTATION', () => {

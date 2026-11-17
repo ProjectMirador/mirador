@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { ViewerInfo } from '../../../src/components/ViewerInfo';
+import { ViewerInfo } from '@src/components/ViewerInfo';
 
 /** create wrapper */
 function createWrapper(props) {

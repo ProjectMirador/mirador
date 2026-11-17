@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import * as actions from '../../../src/state/actions';
-import ActionTypes from '../../../src/state/actions/action-types';
+import * as actions from '@src/state/actions';
+import ActionTypes from '@src/state/actions/action-types';
 
 vi.mock('../../../src/state/selectors', () => ({
   getCanvasGrouping: (state, { canvasId }) => [{ id: canvasId }],

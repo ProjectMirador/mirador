@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { WindowSideBar } from '../../../src/components/WindowSideBar';
+import { WindowSideBar } from '@src/components/WindowSideBar';
 
 /** create wrapper */
 function createWrapper({ ...props }) {

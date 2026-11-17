@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { ManifestForm } from '../../../src/components/ManifestForm';
+import { ManifestForm } from '@src/components/ManifestForm';
 
 /** create wrapper */
 function createWrapper(props) {

@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { LabelValueMetadata } from '../../../src/components/LabelValueMetadata';
+import { LabelValueMetadata } from '@src/components/LabelValueMetadata';
 
 /** */
 function createWrapper(props) {

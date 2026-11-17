@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
-import WorkspaceElastic from '../../../src/components/WorkspaceElastic';
+import WorkspaceElastic from '@src/components/WorkspaceElastic';
 
 /** create wrapper */
 function createWrapper({ elasticLayout = {}, ...props }) {

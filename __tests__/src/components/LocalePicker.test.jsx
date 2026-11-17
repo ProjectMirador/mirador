@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { LocalePicker } from '../../../src/components/LocalePicker';
+import { LocalePicker } from '@src/components/LocalePicker';
 
 /**
  * Helper function to create a shallow wrapper around LocalePicker

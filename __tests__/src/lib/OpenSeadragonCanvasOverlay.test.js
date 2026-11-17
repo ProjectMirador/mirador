@@ -1,5 +1,5 @@
 import OpenSeadragon from 'openseadragon';
-import OpenSeadragonCanvasOverlay from '../../../src/lib/OpenSeadragonCanvasOverlay';
+import OpenSeadragonCanvasOverlay from '@src/lib/OpenSeadragonCanvasOverlay';
 
 vi.mock('openseadragon');
 

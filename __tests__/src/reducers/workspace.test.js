@@ -1,5 +1,5 @@
-import { workspaceReducer } from '../../../src/state/reducers/workspace';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { workspaceReducer } from '@src/state/reducers/workspace';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('workspace reducer', () => {
   it('should handle UPDATE_WORKSPACE', () => {

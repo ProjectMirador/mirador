@@ -1,4 +1,4 @@
-import * as imports from '../../src';
+import * as imports from '@src/index';
 
 describe('index', () => {
   it('does not have default exports (suggesting we are treating a default export as a named export)', () => {

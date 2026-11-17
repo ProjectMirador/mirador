@@ -1,5 +1,5 @@
-import { layersReducer } from '../../../src/state/reducers/layers';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { layersReducer } from '@src/state/reducers/layers';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('layers reducer', () => {
   const windowId = 'foo';

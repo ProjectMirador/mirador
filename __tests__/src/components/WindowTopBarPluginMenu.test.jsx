@@ -2,8 +2,8 @@ import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { WindowTopBarPluginMenu } from '../../../src/components/WindowTopBarPluginMenu';
-import { usePlugins } from '../../../src/extend/usePlugins';
+import { WindowTopBarPluginMenu } from '@src/components/WindowTopBarPluginMenu';
+import { usePlugins } from '@src/extend/usePlugins';
 
 vi.mock('../../../src/extend/usePlugins');
 

@@ -1,4 +1,4 @@
-import * as actions from '../../../src/state/actions';
+import * as actions from '@src/state/actions';
 
 describe('addResource', () => {
   it('dispatches ADD_RESOURCE', () => {

@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WorkspaceAddButton } from '../../../src/components/WorkspaceAddButton';
+import { WorkspaceAddButton } from '@src/components/WorkspaceAddButton';
 
 /** create wrapper */
 function createWrapper(props) {

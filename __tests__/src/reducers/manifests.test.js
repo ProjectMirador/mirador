@@ -1,5 +1,5 @@
-import { manifestsReducer } from '../../../src/state/reducers/manifests';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { manifestsReducer } from '@src/state/reducers/manifests';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('manifests reducer', () => {
   it('should handle REQUEST_MANIFEST', () => {

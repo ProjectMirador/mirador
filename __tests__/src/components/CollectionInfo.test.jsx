@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { CollectionInfo } from '../../../src/components/CollectionInfo';
+import { CollectionInfo } from '@src/components/CollectionInfo';
 
 /** */
 function createWrapper(props) {

@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 
-import { LayersPanel } from '../../../src/components/LayersPanel';
+import { LayersPanel } from '@src/components/LayersPanel';
 
 /**
  * Helper function to create a shallow wrapper around AttributionPanel

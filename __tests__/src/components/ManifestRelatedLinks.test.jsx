@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { ManifestRelatedLinks } from '../../../src/components/ManifestRelatedLinks';
+import { ManifestRelatedLinks } from '@src/components/ManifestRelatedLinks';
 
 describe('ManifestRelatedLinks', () => {
   describe('when metadata is present', () => {

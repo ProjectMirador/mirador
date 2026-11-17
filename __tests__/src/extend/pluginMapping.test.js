@@ -2,7 +2,7 @@ import {
   connectPluginsToStore,
   createTargetToPluginMapping,
   addPluginsToCompanionWindowsRegistry,
-} from '../../../src/extend/pluginMapping';
+} from '@src/extend/pluginMapping';
 
 describe('createTargetToPluginMapping', () => {
   it('returns empty object if plugin array is empty', () => {

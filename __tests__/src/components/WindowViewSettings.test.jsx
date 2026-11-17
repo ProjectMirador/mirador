@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WindowViewSettings } from '../../../src/components/WindowViewSettings';
+import { WindowViewSettings } from '@src/components/WindowViewSettings';
 
 /** create wrapper */
 function createWrapper(props) {
