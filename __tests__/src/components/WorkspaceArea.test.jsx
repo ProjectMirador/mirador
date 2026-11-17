@@ -2,7 +2,7 @@ import { render, screen, within } from '@tests/utils/test-utils';
 import { DndProvider } from 'react-dnd';
 import { TestBackend } from 'react-dnd-test-backend';
 
-import { WorkspaceArea } from '../../../src/components/WorkspaceArea';
+import { WorkspaceArea } from '@src/components/WorkspaceArea';
 
 /** */
 function createWrapper(props) {

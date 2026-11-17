@@ -1,6 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../../utils/test-utils';
-import { ViewerNavigation } from '../../../src/components/ViewerNavigation';
+import { ViewerNavigation } from '@src/components/ViewerNavigation';
 
 /** create wrapper */
 function createWrapper(props) {

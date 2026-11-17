@@ -2,7 +2,7 @@ import {
   getAnnotationResourcesByMotivation,
   getAnnotationResourcesByMotivationForCanvas,
   getSelectedAnnotationId,
-} from '../../../src/state/selectors';
+} from '@src/state/selectors';
 
 describe('getAnnotationResourcesByMotivationForCanvas', () => {
   it('returns an array of annotation resources on a given canvas (filtered by the passed in array of motiviations)', () => {

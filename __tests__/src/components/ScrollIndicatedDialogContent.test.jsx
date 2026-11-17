@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { ScrollIndicatedDialogContent } from '../../../src/components/ScrollIndicatedDialogContent';
+import { ScrollIndicatedDialogContent } from '@src/components/ScrollIndicatedDialogContent';
 
 /** Utility function to wrap  */
 function createWrapper(props) {

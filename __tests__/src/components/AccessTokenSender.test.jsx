@@ -1,5 +1,5 @@
 import { render } from '@tests/utils/test-utils';
-import { AccessTokenSender } from '../../../src/components/AccessTokenSender';
+import { AccessTokenSender } from '@src/components/AccessTokenSender';
 
 /**
  * Helper function to create a shallow wrapper around ErrorDialog

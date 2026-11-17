@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { CanvasInfo } from '../../../src/components/CanvasInfo';
+import { CanvasInfo } from '@src/components/CanvasInfo';
 
 describe('CanvasInfo', () => {
   const metadata = [{ label: 'some label', values: ['some value'] }];

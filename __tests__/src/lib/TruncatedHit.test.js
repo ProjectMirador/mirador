@@ -1,4 +1,4 @@
-import TruncatedHit from '../../../src/lib/TruncatedHit';
+import TruncatedHit from '@src/lib/TruncatedHit';
 
 describe('TruncatedHit', () => {
   const annotation = { resource: { resource: { chars: 'xyz' } } };

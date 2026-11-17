@@ -1,5 +1,5 @@
-import CanvasWorld from '../../src/lib/CanvasWorld';
-import MiradorCanvas from '../../src/lib/MiradorCanvas';
+import CanvasWorld from '@src/lib/CanvasWorld';
+import MiradorCanvas from '@src/lib/MiradorCanvas';
 
 /** wrap a manifesto canvas as mirador canvas  */
 export const wrapCanvas = (c) => new MiradorCanvas(c);

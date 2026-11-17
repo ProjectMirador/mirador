@@ -2,7 +2,7 @@ import { screen, fireEvent, render } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Resource } from 'manifesto.js';
 
-import { CanvasLayers } from '../../../src/components/CanvasLayers';
+import { CanvasLayers } from '@src/components/CanvasLayers';
 
 /** Utility function to wrap CanvasAnnotations */
 function createWrapper(props) {

@@ -1,4 +1,4 @@
-import { handleDrop } from '../../../src/components/IIIFDropTarget';
+import { handleDrop } from '@src/components/IIIFDropTarget';
 
 const monitor = vi.fn();
 

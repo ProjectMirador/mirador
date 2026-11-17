@@ -1,5 +1,5 @@
-import { catalogReducer } from '../../../src/state/reducers/catalog';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { catalogReducer } from '@src/state/reducers/catalog';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('catalog reducer', () => {
   describe('ADD_MANIFEST', () => {

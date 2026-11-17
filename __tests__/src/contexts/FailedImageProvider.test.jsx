@@ -1,9 +1,9 @@
 import { act } from '@tests/utils/test-utils';
 import { renderHook } from '@testing-library/react';
 import { useContext } from 'react';
-import FailedImageProvider from '../../../src/contexts/FailedImageProvider';
-import FailedImageContext from '../../../src/contexts/FailedImageContext';
-import config from '../../../src/config/settings';
+import FailedImageProvider from '@src/contexts/FailedImageProvider';
+import FailedImageContext from '@src/contexts/FailedImageContext';
+import config from '@src/config/settings';
 
 describe('FailedImageProvider', () => {
   let originalFallback;

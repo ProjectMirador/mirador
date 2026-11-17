@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { MiradorMenuButton } from '../../../src/components/MiradorMenuButton';
+import { MiradorMenuButton } from '@src/components/MiradorMenuButton';
 
 /**
  * Helper function to wrap creating a MiradorMenuButton component

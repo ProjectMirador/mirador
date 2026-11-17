@@ -1,8 +1,8 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
-import { CanvasAnnotations } from '../../../src/components/CanvasAnnotations';
-import { ScrollTo } from '../../../src/components/ScrollTo';
+import { CanvasAnnotations } from '@src/components/CanvasAnnotations';
+import { ScrollTo } from '@src/components/ScrollTo';
 
 /** Utility function to wrap CanvasAnnotations */
 function createWrapper(props) {

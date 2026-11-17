@@ -1,5 +1,5 @@
-import { errorsReducer } from '../../../src/state/reducers/errors';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { errorsReducer } from '@src/state/reducers/errors';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('ADD_ERROR', () => {
   const errorMessage = 'testErrorMessage';

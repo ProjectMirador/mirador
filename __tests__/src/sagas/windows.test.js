@@ -2,8 +2,8 @@ import { call, select } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { Utils } from 'manifesto.js';
 
-import ActionTypes from '../../../src/state/actions/action-types';
-import { setCanvas } from '../../../src/state/actions';
+import ActionTypes from '@src/state/actions/action-types';
+import { setCanvas } from '@src/state/actions';
 import {
   getManifests,
   getManifestoInstance,
@@ -21,8 +21,8 @@ import {
   getCanvases,
   selectInfoResponses,
   getWindowConfig,
-} from '../../../src/state/selectors';
-import { fetchManifests } from '../../../src/state/sagas/iiif';
+} from '@src/state/selectors';
+import { fetchManifests } from '@src/state/sagas/iiif';
 import {
   determineAndShowCollectionDialog,
   fetchWindowManifest,
@@ -37,7 +37,7 @@ import {
   fetchInfoResponses,
   setCanvasOnNewSequence,
   setCollectionPath,
-} from '../../../src/state/sagas/windows';
+} from '@src/state/sagas/windows';
 import fixture from '../../fixtures/version-2/019.json';
 import collectionFixture from '../../fixtures/version-2/collection.json';
 

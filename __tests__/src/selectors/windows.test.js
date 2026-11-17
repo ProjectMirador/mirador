@@ -9,7 +9,7 @@ import {
   getWindowDraggability,
   getMaximizedWindowsIds,
   getAllowedWindowViewTypes,
-} from '../../../src/state/selectors/windows';
+} from '@src/state/selectors/windows';
 
 describe('getWindowConfig', () => {
   it('merges the current window with the global defaults', () => {

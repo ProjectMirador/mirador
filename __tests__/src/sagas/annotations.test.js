@@ -1,8 +1,8 @@
 import { select } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 
-import { fetchCanvasAnnotations, fetchAnnotations } from '../../../src/state/sagas/annotations';
-import { getAnnotations, getCanvas } from '../../../src/state/selectors';
+import { fetchCanvasAnnotations, fetchAnnotations } from '@src/state/sagas/annotations';
+import { getAnnotations, getCanvas } from '@src/state/selectors';
 
 describe('annotation sagas', () => {
   describe('fetchCanvasAnnotations', () => {

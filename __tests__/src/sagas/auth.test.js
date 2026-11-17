@@ -2,24 +2,17 @@ import { call, select } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { Utils } from 'manifesto.js';
 import serviceFixture from '../../fixtures/version-2/canvasService.json';
-import settings from '../../../src/config/settings';
-import ActionTypes from '../../../src/state/actions/action-types';
+import settings from '@src/config/settings';
+import ActionTypes from '@src/state/actions/action-types';
 import {
   refetchInfoResponses,
   refetchInfoResponsesOnLogout,
   doAuthWorkflow,
   rerequestOnAccessTokenFailure,
   invalidateInvalidAuth,
-} from '../../../src/state/sagas/auth';
-import { fetchInfoResponse } from '../../../src/state/sagas/iiif';
-import {
-  getAccessTokens,
-  getWindows,
-  selectInfoResponses,
-  getVisibleCanvases,
-  getAuth,
-  getConfig,
-} from '../../../src/state/selectors';
+} from '@src/state/sagas/auth';
+import { fetchInfoResponse } from '@src/state/sagas/iiif';
+import { getAccessTokens, getWindows, selectInfoResponses, getVisibleCanvases, getAuth, getConfig } from '@src/state/selectors';
 
 describe('IIIF Authentication sagas', () => {
   describe('refetchInfoResponsesOnLogout', () => {

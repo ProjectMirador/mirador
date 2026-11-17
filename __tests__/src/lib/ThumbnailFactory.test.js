@@ -1,5 +1,5 @@
 import { ManifestResource, Resource, Service, Utils } from 'manifesto.js';
-import getThumbnail, { ThumbnailFactory } from '../../../src/lib/ThumbnailFactory';
+import getThumbnail, { ThumbnailFactory } from '@src/lib/ThumbnailFactory';
 import fixture from '../../fixtures/version-2/019.json';
 
 const manifest = Utils.parseManifest(fixture);

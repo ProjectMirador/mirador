@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import FullScreenContext from '../../../src/contexts/FullScreenContext';
-import { FullScreenButton } from '../../../src/components/FullScreenButton';
+import FullScreenContext from '@src/contexts/FullScreenContext';
+import { FullScreenButton } from '@src/components/FullScreenButton';
 
 /** */
 function createWrapper(props, contextProps = { active: false }) {

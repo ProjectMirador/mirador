@@ -1,6 +1,6 @@
-import AnnotationFactory from '../../../src/lib/AnnotationFactory';
-import AnnotationList from '../../../src/lib/AnnotationList';
-import AnnotationPage from '../../../src/lib/AnnotationPage';
+import AnnotationFactory from '@src/lib/AnnotationFactory';
+import AnnotationList from '@src/lib/AnnotationList';
+import AnnotationPage from '@src/lib/AnnotationPage';
 
 describe('AnnotationFactory', () => {
   describe('determineAnnotation', () => {

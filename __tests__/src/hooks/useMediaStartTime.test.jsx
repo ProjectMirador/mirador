@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { render, screen } from '@tests/utils/test-utils';
-import useMediaStartTime from '../../../src/hooks/useMediaStartTime';
+import useMediaStartTime from '@src/hooks/useMediaStartTime';
 
 /** Minimal component that attaches the hook's ref to an audio element */
 function TestMedia({ startTime = undefined, mediaKey = 'a' }) {

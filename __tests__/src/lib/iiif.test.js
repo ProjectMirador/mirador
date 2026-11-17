@@ -1,5 +1,5 @@
 import { Service } from 'manifesto.js';
-import { getIiifResourceImageService } from '../../../src/lib/iiif';
+import { getIiifResourceImageService } from '@src/lib/iiif';
 
 describe('IIIF utils', () => {
   it('extracts the IIIF image service from the resource', () => {

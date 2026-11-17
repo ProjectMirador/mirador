@@ -1,8 +1,8 @@
 import { act, render } from '@tests/utils/test-utils';
-import TileSource from '../../../src/components/OpenSeadragonTileSource';
-import OpenSeadragonViewerContext from '../../../src/contexts/OpenSeadragonViewerContext';
-import FailedImageProvider from '../../../src/contexts/FailedImageProvider';
-import FailedImageContext from '../../../src/contexts/FailedImageContext';
+import TileSource from '@src/components/OpenSeadragonTileSource';
+import OpenSeadragonViewerContext from '@src/contexts/OpenSeadragonViewerContext';
+import FailedImageProvider from '@src/contexts/FailedImageProvider';
+import FailedImageContext from '@src/contexts/FailedImageContext';
 
 describe('OpenSeadragonTileSource', () => {
   it('calls addTiledImage with the tile source', () => {

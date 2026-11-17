@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import OpenSeadragon from 'openseadragon';
-import useOsdEvent from '../../../src/hooks/useOsdEvent';
+import useOsdEvent from '@src/hooks/useOsdEvent';
 
 /** Build a real OSD Viewer (not a mock) so subscribe/unsubscribe timing is genuine */
 function createViewer() {

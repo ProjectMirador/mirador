@@ -1,5 +1,5 @@
 import { render } from '@tests/utils/test-utils';
-import { NewBrowserWindow } from '../../../src/components/NewBrowserWindow';
+import { NewBrowserWindow } from '@src/components/NewBrowserWindow';
 
 /**
  * Helper function to create a shallow wrapper around ErrorDialog

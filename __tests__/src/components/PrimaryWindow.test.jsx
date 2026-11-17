@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@tests/utils/test-utils';
 import { Resource } from 'manifesto.js';
 import textManifest from '../../fixtures/version-3/text-pdf.json';
-import { PrimaryWindow } from '../../../src/components/PrimaryWindow';
+import { PrimaryWindow } from '@src/components/PrimaryWindow';
 
 /** create wrapper */
 function createWrapper(props) {

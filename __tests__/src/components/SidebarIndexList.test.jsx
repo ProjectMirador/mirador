@@ -2,7 +2,7 @@ import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 
-import { SidebarIndexList } from '../../../src/components/SidebarIndexList';
+import { SidebarIndexList } from '@src/components/SidebarIndexList';
 import manifestJson from '../../fixtures/version-2/019.json';
 
 /**

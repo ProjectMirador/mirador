@@ -9,7 +9,7 @@ import {
   getExpandedNodeIds,
   getNodeIdToScrollTo,
   getDefaultSidebarVariant,
-} from '../../../src/state/selectors';
+} from '@src/state/selectors';
 
 const state = {
   companionWindows: {

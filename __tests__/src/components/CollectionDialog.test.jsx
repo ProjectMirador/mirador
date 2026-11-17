@@ -2,7 +2,7 @@ import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 
-import { CollectionDialog } from '../../../src/components/CollectionDialog';
+import { CollectionDialog } from '@src/components/CollectionDialog';
 import collection from '../../fixtures/version-2/collection.json';
 import parentCollection from '../../fixtures/version-2/parentCollection.json';
 

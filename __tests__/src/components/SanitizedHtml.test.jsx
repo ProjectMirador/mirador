@@ -2,7 +2,7 @@
 // See https://github.com/capricorn86/happy-dom/issues/2182
 // @vitest-environment jsdom
 import { render, screen } from '@tests/utils/test-utils';
-import { SanitizedHtml } from '../../../src/components/SanitizedHtml';
+import { SanitizedHtml } from '@src/components/SanitizedHtml';
 
 describe('SanitizedHtml', () => {
   beforeEach(() => {

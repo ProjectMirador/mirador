@@ -33,7 +33,7 @@ import {
   getRights,
   getManifestSearchService,
   getManifestAutocompleteService,
-} from '../../../src/state/selectors/manifests';
+} from '@src/state/selectors/manifests';
 
 describe('getManifestStatus', () => {
   const state = {

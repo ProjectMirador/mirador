@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { getManifestoInstance } from '../../../src/state/selectors';
-import { ManifestListItem } from '../../../src/components/ManifestListItem';
+import { getManifestoInstance } from '@src/state/selectors';
+import { ManifestListItem } from '@src/components/ManifestListItem';
 
 /** */
 function createWrapper(props) {

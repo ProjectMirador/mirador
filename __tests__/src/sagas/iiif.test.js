@@ -6,8 +6,8 @@ import {
   fetchSearchResponse,
   fetchInfoResponse,
   fetchResourceManifest,
-} from '../../../src/state/sagas/iiif';
-import { getConfig, getManifests, selectInfoResponse, getAccessTokens, getRequestsConfig } from '../../../src/state/selectors';
+} from '@src/state/sagas/iiif';
+import { getConfig, getManifests, selectInfoResponse, getAccessTokens, getRequestsConfig } from '@src/state/selectors';
 import { http, HttpResponse } from 'msw';
 import { server } from '../../mocks/server';
 

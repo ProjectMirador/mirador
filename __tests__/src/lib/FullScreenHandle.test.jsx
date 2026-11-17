@@ -1,6 +1,6 @@
 import { act, render, screen } from '@tests/utils/test-utils';
 import { renderHook } from '@testing-library/react';
-import { useFullScreenHandle, FullScreen } from '../../../src/lib/FullScreenHandle';
+import { useFullScreenHandle, FullScreen } from '@src/lib/FullScreenHandle';
 
 describe('FullScreenHandle', () => {
   describe('useFullScreenHandle', () => {

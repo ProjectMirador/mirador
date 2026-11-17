@@ -1,5 +1,5 @@
-import { elasticLayoutReducer } from '../../../src/state/reducers/elasticLayout';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { elasticLayoutReducer } from '@src/state/reducers/elasticLayout';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('elastic layout reducer', () => {
   it('should handle ADD_WINDOW', () => {

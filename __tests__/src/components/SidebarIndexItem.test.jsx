@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { SidebarIndexItem } from '../../../src/components/SidebarIndexItem';
+import { SidebarIndexItem } from '@src/components/SidebarIndexItem';
 
 /** */
 function createWrapper(props) {

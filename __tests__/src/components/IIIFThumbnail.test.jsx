@@ -1,7 +1,7 @@
 import { render, screen, act } from '@tests/utils/test-utils';
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
-import { IIIFThumbnail } from '../../../src/components/IIIFThumbnail';
-import FailedImageContext from '../../../src/contexts/FailedImageContext';
+import { IIIFThumbnail } from '@src/components/IIIFThumbnail';
+import FailedImageContext from '@src/contexts/FailedImageContext';
 
 /**
  * Helper function to create a shallow wrapper around IIIFThumbnail

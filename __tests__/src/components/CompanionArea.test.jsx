@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
-import { CompanionArea } from '../../../src/components/CompanionArea';
+import { CompanionArea } from '@src/components/CompanionArea';
 
 /** */
 function createWrapper(props) {

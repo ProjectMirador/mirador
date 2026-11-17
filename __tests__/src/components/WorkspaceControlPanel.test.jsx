@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 
-import { WorkspaceControlPanel } from '../../../src/components/WorkspaceControlPanel';
+import { WorkspaceControlPanel } from '@src/components/WorkspaceControlPanel';
 
 describe('WorkspaceControlPanel', () => {
   beforeEach(() => {

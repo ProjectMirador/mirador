@@ -1,7 +1,7 @@
 import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
-import settings from '../../../src/config/settings';
-import { getAccessTokens, selectCurrentAuthServices } from '../../../src/state/selectors/auth';
+import settings from '@src/config/settings';
+import { getAccessTokens, selectCurrentAuthServices } from '@src/state/selectors/auth';
 
 describe('getAccessTokens', () => {
   const state = {

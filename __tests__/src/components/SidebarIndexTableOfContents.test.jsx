@@ -2,12 +2,12 @@ import { render, screen, waitFor } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 import { act } from '@testing-library/react';
-import { SidebarIndexTableOfContents } from '../../../src/components/SidebarIndexTableOfContents';
-import ConnectedSidebarIndexTableOfContents from '../../../src/containers/SidebarIndexTableOfContents';
+import { SidebarIndexTableOfContents } from '@src/components/SidebarIndexTableOfContents';
+import ConnectedSidebarIndexTableOfContents from '@src/containers/SidebarIndexTableOfContents';
 import manifestVersion2 from '../../fixtures/version-2/structures.json';
 import manifestVersion3 from '../../fixtures/version-3/structures.json';
 import multiLanguageLabels from '../../fixtures/version-2/multi-language-labels.json';
-import { getLocalizedSequenceTreeStructure } from '../../../src/state/selectors/sequences';
+import { getLocalizedSequenceTreeStructure } from '@src/state/selectors/sequences';
 
 /**
  * Create wrapper for SidebarIndexTableOfContents component

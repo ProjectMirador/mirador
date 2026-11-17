@@ -13,7 +13,7 @@ import {
   getSequenceViewingDirection,
   getSequenceBehaviors,
   getLocalizedSequenceTreeStructure,
-} from '../../../src/state/selectors/sequences';
+} from '@src/state/selectors/sequences';
 
 describe('getSequences', () => {
   describe('with a v2 manifest', () => {

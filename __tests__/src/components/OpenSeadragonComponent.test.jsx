@@ -1,6 +1,6 @@
 import { render } from '@tests/utils/test-utils';
 import OpenSeadragon from 'openseadragon';
-import OpenSeadragonComponent from '../../../src/components/OpenSeadragonComponent';
+import OpenSeadragonComponent from '@src/components/OpenSeadragonComponent';
 
 vi.mock('openseadragon');
 

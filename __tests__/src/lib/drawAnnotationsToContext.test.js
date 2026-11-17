@@ -1,5 +1,5 @@
-import { drawAnnotationsToContext } from '../../../src/lib/drawAnnotationsToContext';
-import CanvasAnnotationDisplay from '../../../src/lib/CanvasAnnotationDisplay';
+import { drawAnnotationsToContext } from '@src/lib/drawAnnotationsToContext';
+import CanvasAnnotationDisplay from '@src/lib/CanvasAnnotationDisplay';
 
 vi.mock('../../../src/lib/CanvasAnnotationDisplay', () => ({
   default: vi.fn(),

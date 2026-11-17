@@ -1,4 +1,4 @@
-import MosaicLayout from '../../../src/lib/MosaicLayout';
+import MosaicLayout from '@src/lib/MosaicLayout';
 
 describe('MosaicLayout', () => {
   describe('constructor', () => {

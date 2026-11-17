@@ -2,7 +2,7 @@ import { render, screen, within } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 
-import { WindowSideBarCanvasPanel } from '../../../src/components/WindowSideBarCanvasPanel';
+import { WindowSideBarCanvasPanel } from '@src/components/WindowSideBarCanvasPanel';
 import manifestJson from '../../fixtures/version-2/019.json';
 
 /**

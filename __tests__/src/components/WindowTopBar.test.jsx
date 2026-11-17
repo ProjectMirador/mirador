@@ -1,8 +1,8 @@
 import { screen, fireEvent, render } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WindowTopBar } from '../../../src/components/WindowTopBar';
+import { WindowTopBar } from '@src/components/WindowTopBar';
 
-import FullscreenContext from '../../../src/contexts/FullScreenContext';
+import FullscreenContext from '@src/contexts/FullScreenContext';
 
 /** create wrapper */
 function Subject({ ...props }) {

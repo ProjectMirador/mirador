@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { WindowTopBarPluginArea } from '../../../src/components/WindowTopBarPluginArea';
-import { usePlugins } from '../../../src/extend/usePlugins';
+import { WindowTopBarPluginArea } from '@src/components/WindowTopBarPluginArea';
+import { usePlugins } from '@src/extend/usePlugins';
 
 vi.mock('../../../src/extend/usePlugins');
 

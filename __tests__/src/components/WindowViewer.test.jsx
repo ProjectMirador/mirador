@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { WindowViewer } from '../../../src/components/WindowViewer';
+import { WindowViewer } from '@src/components/WindowViewer';
 
 /** create wrapper */
 function createWrapper(props) {

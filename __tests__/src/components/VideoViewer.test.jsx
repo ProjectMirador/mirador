@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { VideoViewer } from '../../../src/components/VideoViewer';
+import { VideoViewer } from '@src/components/VideoViewer';
 
 /** create wrapper */
 function createWrapper(props, suspenseFallback) {

@@ -1,4 +1,4 @@
-import { getCurrentCanvasWorld } from '../../../src/state/selectors/viewer';
+import { getCurrentCanvasWorld } from '@src/state/selectors/viewer';
 
 describe('getCurrentCanvasWorld', () => {
   it('returns a CanvasWorld', () => {

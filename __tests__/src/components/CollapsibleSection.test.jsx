@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { CollapsibleSection } from '../../../src/components/CollapsibleSection';
+import { CollapsibleSection } from '@src/components/CollapsibleSection';
 
 /**
  * Helper function to create a shallow wrapper around CollapsibleSection

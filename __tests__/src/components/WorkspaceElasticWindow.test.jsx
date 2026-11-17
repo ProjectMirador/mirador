@@ -3,7 +3,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { render } from '@tests/utils/test-utils';
 
-import WorkspaceElasticWindow from '../../../src/components/WorkspaceElasticWindow';
+import WorkspaceElasticWindow from '@src/components/WorkspaceElasticWindow';
 
 /** create wrapper */
 function createWrapper(props) {

@@ -2,7 +2,7 @@ import { render, screen } from '@tests/utils/test-utils';
 import { Utils } from 'manifesto.js';
 
 import manifestJson from '../../fixtures/version-2/019.json';
-import { GalleryView } from '../../../src/components/GalleryView';
+import { GalleryView } from '@src/components/GalleryView';
 
 /** create wrapper */
 function createWrapper(props) {

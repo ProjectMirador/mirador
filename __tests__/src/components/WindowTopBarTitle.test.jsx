@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 
-import { WindowTopBarTitle } from '../../../src/components/WindowTopBarTitle';
+import { WindowTopBarTitle } from '@src/components/WindowTopBarTitle';
 
 /** create wrapper */
 function createWrapper(props) {

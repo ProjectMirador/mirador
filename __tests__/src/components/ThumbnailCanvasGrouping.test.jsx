@@ -2,8 +2,8 @@ import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Utils } from 'manifesto.js';
 
-import { ThumbnailCanvasGrouping } from '../../../src/components/ThumbnailCanvasGrouping';
-import CanvasGroupings from '../../../src/lib/CanvasGroupings';
+import { ThumbnailCanvasGrouping } from '@src/components/ThumbnailCanvasGrouping';
+import CanvasGroupings from '@src/lib/CanvasGroupings';
 import manifestJson from '../../fixtures/version-2/019.json';
 
 /** create wrapper */

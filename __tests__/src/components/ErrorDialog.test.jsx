@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { ErrorDialog } from '../../../src/components/ErrorDialog';
+import { ErrorDialog } from '@src/components/ErrorDialog';
 
 /**
  * Helper function to create a shallow wrapper around ErrorDialog

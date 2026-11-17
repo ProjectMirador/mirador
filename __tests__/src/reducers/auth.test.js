@@ -1,5 +1,5 @@
-import { authReducer } from '../../../src/state/reducers/auth';
-import ActionTypes from '../../../src/state/actions/action-types';
+import { authReducer } from '@src/state/reducers/auth';
+import ActionTypes from '@src/state/actions/action-types';
 
 describe('auth response reducer', () => {
   it('should handle ADD_AUTHENTICATION_REQUEST', () => {

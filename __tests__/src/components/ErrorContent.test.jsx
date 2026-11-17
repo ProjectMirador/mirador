@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { ErrorContent } from '../../../src/components/ErrorContent';
+import { ErrorContent } from '@src/components/ErrorContent';
 
 describe('ErrorContent', () => {
   it('should render everything when showJsError is true', async () => {

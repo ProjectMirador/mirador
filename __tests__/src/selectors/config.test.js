@@ -8,7 +8,7 @@ import {
   getConfig,
   getRequestsConfig,
   getExportableState,
-} from '../../../src/state/selectors';
+} from '@src/state/selectors';
 
 describe('getConfig', () => {
   it('returns the whole config', () => {

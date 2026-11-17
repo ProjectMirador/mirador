@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WindowSideBarButtons } from '../../../src/components/WindowSideBarButtons';
+import { WindowSideBarButtons } from '@src/components/WindowSideBarButtons';
 
 /** create wrapper */
 function createWrapper(props) {

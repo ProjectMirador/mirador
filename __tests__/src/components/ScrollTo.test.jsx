@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import { createRef } from 'react';
-import { ScrollTo } from '../../../src/components/ScrollTo';
+import { ScrollTo } from '@src/components/ScrollTo';
 
 describe('ScrollTo', () => {
   const originalGetBoundingClientRect = Element.prototype.getBoundingClientRect;

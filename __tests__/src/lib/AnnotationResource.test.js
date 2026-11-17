@@ -1,4 +1,4 @@
-import AnnotationResource from '../../../src/lib/AnnotationResource';
+import AnnotationResource from '@src/lib/AnnotationResource';
 
 describe('AnnotationResource', () => {
   describe('id', () => {

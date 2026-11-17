@@ -1,7 +1,7 @@
 import { Utils } from 'manifesto.js';
-import settings from '../../../src/config/settings';
-import { ThumbnailFactory } from '../../../src/lib/ThumbnailFactory';
-import { getThumbnailFactory } from '../../../src/state/selectors/thumbnails';
+import settings from '@src/config/settings';
+import { ThumbnailFactory } from '@src/lib/ThumbnailFactory';
+import { getThumbnailFactory } from '@src/state/selectors/thumbnails';
 
 /** return the slice of config relevant to MiradorCanvas */
 const miradorConfigSlice = () => ({

@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@tests/utils/test-utils';
-import { ImageWithFallback } from '../../../src/components/ImageWithFallback';
-import FailedImageContext from '../../../src/contexts/FailedImageContext';
+import { ImageWithFallback } from '@src/components/ImageWithFallback';
+import FailedImageContext from '@src/contexts/FailedImageContext';
 
 describe('ImageWithFallback', () => {
   it('renders the image', () => {

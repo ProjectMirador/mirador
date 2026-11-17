@@ -1,5 +1,5 @@
 import { render, screen } from '@tests/utils/test-utils';
-import { ManifestInfo } from '../../../src/components/ManifestInfo';
+import { ManifestInfo } from '@src/components/ManifestInfo';
 
 describe('ManifestInfo', () => {
   const metadata = [{ label: 'some label', values: ['some value'] }];

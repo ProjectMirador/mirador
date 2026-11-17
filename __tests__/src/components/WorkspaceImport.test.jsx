@@ -1,5 +1,5 @@
 import { screen, render } from '@tests/utils/test-utils';
-import { WorkspaceImport } from '../../../src/components/WorkspaceImport';
+import { WorkspaceImport } from '@src/components/WorkspaceImport';
 
 describe('WorkspaceImport', () => {
   let handleClose;

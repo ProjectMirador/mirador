@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { WorkspaceMenu } from '../../../src/components/WorkspaceMenu';
+import { WorkspaceMenu } from '@src/components/WorkspaceMenu';
 
 /** */
 function createShallow(props) {

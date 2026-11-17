@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { ChangeThemeDialog } from '../../../src/components/ChangeThemeDialog';
+import { ChangeThemeDialog } from '@src/components/ChangeThemeDialog';
 
 /**
  * Helper function to create a shallow wrapper around ErrorDialog

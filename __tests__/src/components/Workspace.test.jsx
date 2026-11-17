@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@tests/utils/test-utils';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import { Workspace } from '../../../src/components/Workspace';
+import { Workspace } from '@src/components/Workspace';
 
 /**
  * Utility function to create a Worksapce

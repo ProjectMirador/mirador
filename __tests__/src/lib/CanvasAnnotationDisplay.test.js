@@ -1,5 +1,5 @@
-import CanvasAnnotationDisplay from '../../../src/lib/CanvasAnnotationDisplay';
-import AnnotationResource from '../../../src/lib/AnnotationResource';
+import CanvasAnnotationDisplay from '@src/lib/CanvasAnnotationDisplay';
+import AnnotationResource from '@src/lib/AnnotationResource';
 import dualStrategyAnno from '../../fixtures/version-2/annotationMiradorDual.json';
 
 /** */

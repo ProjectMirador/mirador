@@ -1,6 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 
-import { CompanionWindowFactory } from '../../../src/components/CompanionWindowFactory';
+import { CompanionWindowFactory } from '@src/components/CompanionWindowFactory';
 
 /** create wrapper */
 function createWrapper({ content = 'closed', ...props }) {

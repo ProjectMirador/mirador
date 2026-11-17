@@ -1,7 +1,7 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 
-import { SearchResults } from '../../../src/components/SearchResults';
+import { SearchResults } from '@src/components/SearchResults';
 
 /**
  * Helper function to create a shallow wrapper around SearchResults
