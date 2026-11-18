@@ -55,6 +55,8 @@ export const getWindowViewType = createSelector(
   (window, { views = [], defaultView }, manifestViewingHint, manifestBehaviors) => {
     if (window && window.view) return window.view;
 
+    console.log(views, manifestViewingHint, manifestBehaviors);
+
     const config = (views || []).find(
       (view) => view.behaviors && view.behaviors.some((b) => manifestViewingHint === b || manifestBehaviors.includes(b)),
     );
