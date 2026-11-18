@@ -27,9 +27,19 @@ function buildWindowState({
     buildCompanionWindowState({ ...cw, default: index === 0 ? true : false }),
   );
 
+  const companionWindowData = {};
+
+  builtCompanionWindows.forEach(({ id, data = undefined, content }) => {
+    if (content == 'search' && data) {
+      companionWindowData.searches = companionWindowData.searches || {};
+      companionWindowData.searches[windowId] = companionWindowData.searches[windowId] || {};
+      companionWindowData.searches[windowId][id] = data;
+    }
+  });
+
   return {
     manifests: manifest ? { [calculatedManifestId]: { id: calculatedManifestId, isFetching: false, json: manifest } } : {},
-    companionWindows: Object.fromEntries(builtCompanionWindows.map((cw) => [cw.id, cw])),
+    companionWindows: Object.fromEntries(builtCompanionWindows.map(({ id, data: _, ...cw }) => [id, { ...cw, id: id }])),
     windows: {
       [windowId]: {
         id: windowId,
@@ -42,6 +52,7 @@ function buildWindowState({
     workspace: {
       windowIds: [windowId],
     },
+    ...companionWindowData
   };
 }
 

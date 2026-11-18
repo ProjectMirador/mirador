@@ -3,7 +3,14 @@ import { buildMiradorState } from './build-state';
 describe('buildMiradorState', () => {
   it('should build state with a single window', () => {
     const state = buildMiradorState({
-      windows: [{ id: 'window-1', companionWindows: [{ id: 'cw-1', content: 'info' }], manifest: { id: 'manifest-1' } }],
+      windows: [{
+        id: 'window-1',
+        companionWindows: [
+          { id: 'cw-1', content: 'info' },
+          { content: 'search', data: { query: 'xyz' } }
+        ],
+        manifest: { id: 'manifest-1' }
+      }],
     });
     expect(state).toEqual({
       companionWindows: { 'cw-1': { id: 'cw-1', default: true, position: 'left', content: 'info' } },
