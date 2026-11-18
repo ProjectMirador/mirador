@@ -430,6 +430,7 @@ export default {
     ar: 'العربية',
     de: 'Deutsch',
     en: 'English',
+    es: 'Español',
     et: 'Eesti',
     fa: 'فارسی',
     fr: 'Français',
