@@ -1,25 +1,11 @@
 import { createSelector } from 'reselect';
-import { PropertyValue, Utils, Resource } from 'manifesto.js';
+import { PropertyValue, Resource } from 'manifesto.js';
 import asArray from '../../lib/asArray';
 import { getCompanionWindowLocale } from './companionWindows';
 import { getManifest } from './getters';
 import { getConfig } from './config';
 import { getThumbnailFactory } from './thumbnails';
-
-/** */
-function createManifestoInstance(json, locale) {
-  if (!json) return undefined;
-  // Use structuredClone to create a deep copy and prevent Manifesto from mutating the json
-  const manifestoObject = Utils.parseManifest(structuredClone(json), locale ? { locale } : undefined);
-  if (manifestoObject) {
-    // Local patching of Manifesto so that when its a Collection, it behaves similarly
-    if (typeof manifestoObject.getSequences != 'function') {
-      manifestoObject.getSequences = () => [];
-    }
-    return manifestoObject;
-  }
-  return undefined;
-}
+import MiradorManifest from '../../lib/MiradorManifest';
 
 /** */
 export const getLocale = createSelector(
@@ -47,12 +33,6 @@ export const getManifestStatus = (state, props) => getManifest(state, props) || 
  */
 export const getManifestError = createSelector([getManifest], (manifest) => manifest && manifest.error);
 
-/** Instantiate a manifesto instance */
-const getContextualManifestoInstance = createSelector(
-  getManifest,
-  (manifest) => manifest && createManifestoInstance(manifest.json),
-);
-
 /**
  * Instantiate a manifesto instance
  * @param {object} state
@@ -61,9 +41,9 @@ const getContextualManifestoInstance = createSelector(
  * @returns {object}
  */
 export const getManifestoInstance = createSelector(
-  getContextualManifestoInstance,
+  getManifest,
   (state, { json }) => json,
-  (manifesto, manifestJson) => (manifestJson && createManifestoInstance(manifestJson)) || manifesto,
+  (manifest, manifestJson) => (manifestJson || manifest?.json) && new MiradorManifest(manifestJson || manifest?.json),
 );
 
 export const getManifestLocale = createSelector(

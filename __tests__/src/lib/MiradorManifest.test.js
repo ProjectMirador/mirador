@@ -1,9 +1,8 @@
-import { Utils } from 'manifesto.js';
 import MiradorManifest from '@src/lib/MiradorManifest';
 
 /** */
 function getSubject(manifest) {
-  return new MiradorManifest(Utils.parseManifest(manifest));
+  return new MiradorManifest(manifest);
 }
 
 describe('MiradorCanvas', () => {

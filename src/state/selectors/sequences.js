@@ -132,7 +132,7 @@ export const getSequenceBehaviors = createSelector([getSequence, getManifestoIns
  * @returns {object}
  */
 export const getSequenceTreeStructure = createSelector([getSequence, getManifestoInstance], (sequence, manifest) => {
-  if (sequence && sequence.getProperty('type') && sequence.isRange()) return sequence.getTree(new TreeNode('root'));
+  if (sequence?.isRange()) return sequence.getTree();
 
   return manifest?.getDefaultTree();
 });

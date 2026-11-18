@@ -42,6 +42,8 @@
     "@custom-react-hooks/use-element-size": "^1.5.1",
     "@emotion/cache": "^11.11.0",
     "@hello-pangea/dnd": "^18.0.0",
+    "@iiif/helpers": "^4.0.5",
+    "@iiif/parser": "^4.0.7",
     "@mui/icons-material": "^9.0.0",
     "@mui/utils": "^9.0.0",
     "@mui/x-tree-view": "^9.0.0",

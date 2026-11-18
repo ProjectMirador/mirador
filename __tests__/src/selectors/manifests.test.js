@@ -232,8 +232,8 @@ describe('getManifestRenderings', () => {
         x: {
           json: {
             '@context': 'http://iiif.io/api/presentation/3/context.json',
-            'id': 'http://iiif.io/api/presentation/3.0/example/fixtures/19/manifest.json',
-            'type': 'Manifest',
+            id: 'http://iiif.io/api/presentation/3.0/example/fixtures/19/manifest.json',
+            type: 'Manifest',
             rendering: [
               {
                 format: 'application/pdf',

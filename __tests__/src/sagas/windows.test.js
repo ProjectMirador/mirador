@@ -38,6 +38,7 @@ import {
   setCanvasOnNewSequence,
   setCollectionPath,
 } from '@src/state/sagas/windows';
+import MiradorManifest from '@src/lib/MiradorManifest';
 import fixture from '../../fixtures/version-2/019.json';
 import collectionFixture from '../../fixtures/version-2/collection.json';
 
@@ -184,7 +185,7 @@ describe('window-level sagas', () => {
         },
       };
 
-      const manifest = Utils.parseManifest({
+      const manifest = new MiradorManifest({
         ...fixture,
         start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' },
       });
@@ -210,7 +211,7 @@ describe('window-level sagas', () => {
         },
       };
 
-      const manifest = Utils.parseManifest(fixture);
+      const manifest = new MiradorManifest(fixture);
 
       return expectSaga(fetchWindowManifest, action)
         .provide([
@@ -231,7 +232,7 @@ describe('window-level sagas', () => {
         },
       };
 
-      const manifest = Utils.parseManifest({
+      const manifest = new MiradorManifest({
         ...fixture,
         start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' },
       });

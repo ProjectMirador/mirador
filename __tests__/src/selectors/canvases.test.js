@@ -453,6 +453,7 @@ describe('selectInfoResponse', () => {
                     images: [
                       {
                         resource: {},
+                        on: 'some-canvas-without-services',
                       },
                     ],
                   },
