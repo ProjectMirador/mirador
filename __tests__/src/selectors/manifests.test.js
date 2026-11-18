@@ -231,9 +231,9 @@ describe('getManifestRenderings', () => {
       manifests: {
         x: {
           json: {
-            '@context': 'http://iiif.io/api/presentation/2/context.json',
-            '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
-            '@type': 'sc:Manifest',
+            '@context': 'http://iiif.io/api/presentation/3/context.json',
+            'id': 'http://iiif.io/api/presentation/3.0/example/fixtures/19/manifest.json',
+            'type': 'Manifest',
             rendering: [
               {
                 format: 'application/pdf',
@@ -504,10 +504,10 @@ describe('getRights', () => {
   });
   it('gets the rights data for a IIIF v3 manifest', () => {
     const manifest = {
-      '@context': 'http://iiif.io/api/presentation/2/context.json',
-      '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
-      '@type': 'sc:Manifest',
-      license: 'http://example.com',
+      '@context': 'http://iiif.io/api/presentation/3/context.json',
+      id: 'http://iiif.io/api/presentation/3.0/example/fixtures/19/manifest.json',
+      type: 'Manifest',
+      rights: 'http://example.com',
     };
     const state = { manifests: { x: { json: manifest } } };
     const received = getRights(state, { manifestId: 'x' });
