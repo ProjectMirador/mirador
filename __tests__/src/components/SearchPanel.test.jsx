@@ -1,7 +1,6 @@
 import { render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
-import { server } from '../../mocks/server';
 import { server } from '@tests/mocks/server';
 import { buildManifestV2, buildManifestV3 } from '@tests/utils/build-manifest';
 import { buildMiradorState } from '@tests/utils/build-state';
@@ -48,19 +47,22 @@ describe.each([
 ])('SearchPanel (%s)', (_label, manifest) => {
   const renderPanel = (props = {}, { search, window } = {}) => {
     const preloadedState = buildMiradorState({
-      windows: [{ companionWindows: [{ content: 'search' }], manifest, ...window }],
+      windows: [
+        {
+          companionWindows: [
+            {
+              content: 'search',
+              ...(search && { data: search }),
+            },
+          ],
+          manifest,
+          ...window,
+        },
+      ],
     });
 
     const [windowId] = preloadedState.workspace.windowIds;
     const [companionWindowId] = preloadedState.windows[windowId].companionWindowIds;
-
-    if (search) {
-      preloadedState.searches = {
-        [windowId]: {
-          [companionWindowId]: { data: {}, ...search },
-        },
-      };
-    }
 
     return render(<SearchPanel id={companionWindowId} windowId={windowId} {...props} />, { preloadedState });
   };

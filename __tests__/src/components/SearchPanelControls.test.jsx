@@ -33,60 +33,50 @@ const emptySearchResponse = (id) => ({
 describe.each([
   [
     'Presentation 2',
-    ({ autocompleteId, searchId }) =>
+    (searchId) =>
       buildManifestV2({
         service: [
           {
             '@context': searchContext,
             '@id': searchId,
             profile: searchProfile,
-            ...(autocompleteId && {
-              service: { '@id': autocompleteId, profile: autocompleteProfile },
-            }),
+            service: { '@id': `${stanfordBase}/autocomplete`, profile: autocompleteProfile },
           },
         ],
       }),
   ],
   [
     'Presentation 3',
-    ({ autocompleteId, searchId }) =>
+    (searchId) =>
       buildManifestV3({
         service: [
           {
             id: searchId,
             profile: searchProfile,
             type: 'SearchService1',
-            ...(autocompleteId && {
-              service: [{ id: autocompleteId, profile: autocompleteProfile, type: 'AutoCompleteService1' }],
-            }),
+            service: [{ id: `${stanfordBase}/autocomplete`, profile: autocompleteProfile, type: 'AutoCompleteService1' }],
           },
         ],
       }),
   ],
 ])('SearchPanelControls (%s)', (_label, createManifest) => {
-  const renderControls = ({
-    autocompleteId = `${stanfordBase}/autocomplete`,
-    data = {},
-    query = undefined,
-    searchId = defaultSearchId,
-  } = {}) => {
+  const renderControls = ({ data = {}, query, searchId = defaultSearchId } = {}) => {
     const preloadedState = buildMiradorState({
       windows: [
         {
-          companionWindows: [{ content: 'search' }],
-          manifest: createManifest({ autocompleteId, searchId }),
+          companionWindows: [
+            {
+              content: 'search',
+              data: { data, query },
+            },
+          ],
+          manifest: createManifest(searchId),
         },
       ],
     });
 
     const [windowId] = preloadedState.workspace.windowIds;
     const [companionWindowId] = preloadedState.windows[windowId].companionWindowIds;
-
-    preloadedState.searches = {
-      [windowId]: {
-        [companionWindowId]: { data, query },
-      },
-    };
 
     return {
       ...render(<SearchPanelControls companionWindowId={companionWindowId} windowId={windowId} />, {

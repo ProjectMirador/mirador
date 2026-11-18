@@ -22,40 +22,34 @@ describe.each([
 ])('SearchHit (%s)', (_label, manifest) => {
   const renderHit = (
     props = {},
-    {
-      resources = [{ '@id': 'foo', on: 'canvas-1' }],
-      selectedAnnotationId = undefined,
-      selectedContentSearchAnnotationIds = [],
-    } = {},
+    { resources = [{ '@id': 'foo', on: 'canvas-1' }], selectedContentSearchAnnotationIds = [] } = {},
   ) => {
     const preloadedState = buildMiradorState({
       windows: [
         {
-          companionWindows: [{ content: 'search' }],
+          companionWindows: [
+            {
+              content: 'search',
+              data: {
+                data: {
+                  'search?q=moose': {
+                    json: {
+                      hits: [defaultHit],
+                      resources,
+                    },
+                  },
+                },
+                selectedContentSearchAnnotationIds,
+              },
+            },
+          ],
           manifest,
-          selectedAnnotationId,
         },
       ],
     });
 
     const [windowId] = preloadedState.workspace.windowIds;
     const [companionWindowId] = preloadedState.windows[windowId].companionWindowIds;
-
-    preloadedState.searches = {
-      [windowId]: {
-        [companionWindowId]: {
-          data: {
-            'search?q=moose': {
-              json: {
-                hits: [defaultHit],
-                resources,
-              },
-            },
-          },
-          selectedContentSearchAnnotationIds,
-        },
-      },
-    };
 
     const hitProps = {
       annotationId: 'foo',

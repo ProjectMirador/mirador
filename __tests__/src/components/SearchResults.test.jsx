@@ -36,34 +36,39 @@ describe.each([
     query = 'query',
     resources = [defaultResource],
   } = {}) => {
+    const searchState = query
+      ? {
+          [defaultSearchUrl]: {
+            id: defaultSearchUrl,
+            isFetching,
+            json: {
+              hits,
+              resources,
+              ...(next && { next }),
+            },
+          },
+        }
+      : {};
+
     const preloadedState = buildMiradorState({
-      windows: [{ companionWindows: [{ content: 'search' }], manifest }],
+      windows: [
+        {
+          companionWindows: [
+            {
+              content: 'search',
+              data: {
+                data: searchState,
+                query,
+              },
+            },
+          ],
+          manifest,
+        },
+      ],
     });
 
     const [windowId] = preloadedState.workspace.windowIds;
     const [companionWindowId] = preloadedState.windows[windowId].companionWindowIds;
-
-    preloadedState.searches = {
-      [windowId]: {
-        [companionWindowId]: {
-          data: query
-            ? {
-                [defaultSearchUrl]: {
-                  id: defaultSearchUrl,
-                  isFetching,
-                  json: {
-                    hits,
-                    resources,
-                    ...(next && { next }),
-                  },
-                },
-              }
-            : {},
-          query,
-          selectedContentSearchAnnotationIds: [],
-        },
-      },
-    };
 
     return {
       ...render(<SearchResults companionWindowId={companionWindowId} windowId={windowId} />, {

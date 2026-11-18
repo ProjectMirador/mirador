@@ -16,22 +16,26 @@ describe.each([
   ['Presentation 2', buildManifestV2()],
   ['Presentation 3', buildManifestV3()],
 ])('SearchPanelNavigation (%s)', (_label, manifest) => {
-  const renderNavigation = ({ hits = [], resources = defaultResources, selectedContentSearchAnnotationIds = [] } = {}) => {
+  const renderNavigation = ({ hits, selectedContentSearchAnnotationIds }) => {
     const preloadedState = buildMiradorState({
-      windows: [{ companionWindows: [{ content: 'search' }], manifest }],
+      windows: [
+        {
+          companionWindows: [
+            {
+              content: 'search',
+              data: {
+                data: { [searchUrl]: { json: { hits, resources: defaultResources } } },
+                selectedContentSearchAnnotationIds,
+              },
+            },
+          ],
+          manifest,
+        },
+      ],
     });
 
     const [windowId] = preloadedState.workspace.windowIds;
     const [companionWindowId] = preloadedState.windows[windowId].companionWindowIds;
-
-    preloadedState.searches = {
-      [windowId]: {
-        [companionWindowId]: {
-          data: { [searchUrl]: { json: { hits, resources } } },
-          selectedContentSearchAnnotationIds,
-        },
-      },
-    };
 
     return {
       ...render(<SearchPanelNavigation companionWindowId={companionWindowId} windowId={windowId} />, {
