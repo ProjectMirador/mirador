@@ -15,6 +15,10 @@ export function WindowTopMenuButton({ classes = {}, windowId }) {
 
   /** */
   const handleMenuClick = (event) => {
+    if (open) {
+      handleMenuClose();
+      return;
+    }
     setAnchorEl(event.currentTarget);
     setOpen(true);
   };
