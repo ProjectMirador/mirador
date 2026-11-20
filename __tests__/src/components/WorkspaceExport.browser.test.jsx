@@ -34,16 +34,14 @@ describe('WorkspaceExport', () => {
   });
 
   it('reveals a snackbar on copy', async () => {
-  const promptSpy = vi.spyOn(window, 'prompt').mockReturnValue(true);
+    const promptSpy = vi.spyOn(window, 'prompt').mockReturnValue(true);
 
-  await userEvent.click(screen.getByRole('button', { name: 'Copy' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Copy' }));
 
-  expect(screen.getByRole('alert')).toHaveTextContent(
-    'The workspace configuration was copied to your clipboard',
-  );
+    expect(screen.getByRole('alert')).toHaveTextContent('The workspace configuration was copied to your clipboard');
 
-  promptSpy.mockRestore();
-});
+    promptSpy.mockRestore();
+  });
 
   it('renders an exportable version of state', async () => {
     await userEvent.click(screen.getByRole('button', { name: 'View workspace configuration' }));
