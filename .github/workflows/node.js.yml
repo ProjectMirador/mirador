@@ -22,7 +22,17 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
       - run: npm test -- --coverage
+      - name: Upload browser test failure screenshots
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: vitest-failure-screenshots-${{ matrix.node-version }}
+          path: .vitest/attachments/
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v7
         env:
