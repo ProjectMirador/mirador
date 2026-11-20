@@ -37,18 +37,15 @@ describe.each([
     const [windowId] = preloadedState.workspace.windowIds;
     const [companionWindowId] = preloadedState.windows[windowId].companionWindowIds;
 
-    return {
-      ...render(<SearchPanelNavigation companionWindowId={companionWindowId} windowId={windowId} />, {
-        preloadedState,
-      }),
-      windowId,
-    };
+    return render(<SearchPanelNavigation companionWindowId={companionWindowId} windowId={windowId} />, {
+      preloadedState,
+    });
   };
 
   describe('when searchHits are available', () => {
     it('renders text with buttons', async () => {
       const user = userEvent.setup();
-      const { store, windowId } = renderNavigation({
+      renderNavigation({
         hits: [{ annotations: ['1'] }, { annotations: ['2'] }, { annotations: ['3'] }],
         selectedContentSearchAnnotationIds: ['2'],
       });
@@ -57,11 +54,13 @@ describe.each([
       expect(screen.getAllByRole('button').length).toEqual(2);
 
       await user.click(screen.getByRole('button', { name: 'Previous result' }));
-      expect(store.getState().windows[windowId].selectedAnnotationId).toEqual('1');
+      expect(screen.getByText('1 of 3')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Previous result' })).toBeDisabled();
 
       await user.click(screen.getByRole('button', { name: 'Next result' }));
       await user.click(screen.getByRole('button', { name: 'Next result' }));
-      expect(store.getState().windows[windowId].selectedAnnotationId).toEqual('3');
+      expect(screen.getByText('3 of 3')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Next result' })).toBeDisabled();
     });
 
     it('buttons disabled when no next/prev', () => {

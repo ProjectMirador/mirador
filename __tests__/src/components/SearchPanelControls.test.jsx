@@ -113,7 +113,7 @@ describe.each([
       }),
     );
 
-    const { companionWindowId, store, windowId } = renderControls({ searchId: `${stanfordBase}/search` });
+    renderControls({ searchId: `${stanfordBase}/search` });
 
     const input = screen.getByRole('combobox');
     await user.type(input, 'wund');
@@ -125,7 +125,7 @@ describe.each([
     await user.click(wunderOption);
 
     expect(requestedSearchUrl).toBe(`${stanfordBase}/search?q=wunder`);
-    expect(store.getState().searches[windowId][companionWindowId].query).toBe('wunder');
+    expect(input).toHaveValue('wunder');
   });
 
   it('renders a text input through the renderInput prop', () => {
@@ -161,17 +161,18 @@ describe.each([
       }),
     );
 
-    const { companionWindowId, store, windowId } = renderControls({
+    renderControls({
       query: 'asdf',
       searchId: wwwSearchId,
     });
 
-    await user.clear(screen.getByRole('combobox'));
+    const input = screen.getByRole('combobox');
+    await user.clear(input);
     await user.keyboard('yolo');
     await user.click(screen.getByRole('button'));
 
     expect(requestedSearchUrl).toBe(`${wwwSearchId}?q=yolo`);
-    expect(store.getState().searches[windowId][companionWindowId].query).toBe('yolo');
+    expect(input).toHaveValue('yolo');
   });
 
   it('does not submit an empty search', async () => {

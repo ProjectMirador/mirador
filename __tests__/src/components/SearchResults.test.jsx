@@ -70,13 +70,9 @@ describe.each([
     const [windowId] = preloadedState.workspace.windowIds;
     const [companionWindowId] = preloadedState.windows[windowId].companionWindowIds;
 
-    return {
-      ...render(<SearchResults companionWindowId={companionWindowId} windowId={windowId} />, {
-        preloadedState,
-      }),
-      companionWindowId,
-      windowId,
-    };
+    return render(<SearchResults companionWindowId={companionWindowId} windowId={windowId} />, {
+      preloadedState,
+    });
   };
 
   it('renders a SearchHit for each hit', () => {
@@ -158,18 +154,33 @@ describe.each([
             '@context': [presentationContext, searchContext],
             '@id': request.url,
             '@type': 'sc:AnnotationList',
-            hits: [],
-            resources: [],
+            hits: [
+              {
+                after: ' page 2',
+                annotations: ['bar'],
+                before: 'Result on',
+                match: 'squirrel',
+              },
+            ],
+            resources: [
+              {
+                '@id': 'bar',
+                '@type': 'oa:Annotation',
+                motivation: 'sc:painting',
+                on: 'canvas-1',
+              },
+            ],
           });
         }),
       );
 
-      const { companionWindowId, store, windowId } = renderResults({ next: nextSearchUrl });
+      renderResults({ next: nextSearchUrl });
 
       await user.click(screen.getByRole('button', { name: /More results/ }));
 
       expect(requestedUrl).toBe(nextSearchUrl);
-      expect(store.getState().searches[windowId][companionWindowId].data[nextSearchUrl]).toBeDefined();
+      expect(await screen.findByRole('button', { name: /Result on squirrel page 2/ })).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /More results/ })).not.toBeInTheDocument();
     });
   });
 });

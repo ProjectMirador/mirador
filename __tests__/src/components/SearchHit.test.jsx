@@ -70,14 +70,13 @@ describe.each([
 
   it('dispatches selectAnnotation when clicked and highlights windowSelected hits', async () => {
     const user = userEvent.setup();
-    const { store, windowId } = renderHit();
+    renderHit();
 
     expect(screen.getByRole('listitem')).not.toHaveClass('windowSelected');
     expect(screen.getByRole('listitem')).toHaveTextContent('1Light up the moose , and start the chai more');
 
     await user.click(screen.getByRole('button', { name: /Light up the moose/ }));
 
-    expect(store.getState().windows[windowId].selectedAnnotationId).toEqual('foo');
     expect(screen.getByRole('listitem')).toHaveClass('windowSelected');
   });
 
