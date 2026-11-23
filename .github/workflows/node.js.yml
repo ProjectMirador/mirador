@@ -22,8 +22,15 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - name: Install Playwright Chromium
-        run: npx playwright install chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --only-shell chromium
       - run: npm test -- --coverage
       - name: Upload browser test failure screenshots
         if: failure()
