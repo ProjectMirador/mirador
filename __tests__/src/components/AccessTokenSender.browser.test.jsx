@@ -1,4 +1,4 @@
-import { render } from '@tests/utils/test-utils';
+import { render, screen } from '@tests/utils/test-utils';
 import { AccessTokenSender } from '@src/components/AccessTokenSender';
 
 /**
@@ -13,14 +13,13 @@ describe('AccessTokenSender', () => {
     const { container } = createWrapper({});
     expect(container).toBeEmptyDOMElement();
   });
-
   it('renders properly', () => {
-    const { container } = createWrapper({ url: 'http://example.com' });
+    createWrapper({ url: 'http://example.com' });
+    const expectedOrigin = encodeURIComponent(window.location.origin);
 
-    // eslint-disable-next-line testing-library/no-node-access, testing-library/no-container
-    expect(container.querySelector('iframe')).toHaveAttribute(
+    expect(screen.getByTitle('AccessTokenSender', { hidden: true })).toHaveAttribute(
       'src',
-      'http://example.com/?origin=http%3A%2F%2Flocalhost&messageId=http%3A%2F%2Fexample.com',
+      `http://example.com/?origin=${expectedOrigin}&messageId=http%3A%2F%2Fexample.com`,
     );
   });
 
