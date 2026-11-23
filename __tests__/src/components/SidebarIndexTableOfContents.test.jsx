@@ -64,6 +64,7 @@ function createInteractiveWrapper({ manifest = manifestVersion3, ...props }) {
 
 describe('SidebarIndexTableOfContents', () => {
   let setCanvas;
+  let user;
 
   beforeEach(() => {
     setCanvas = vi.fn();
@@ -141,7 +142,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('toggles branch nodes on click', async () => {
-    const user = userEvent.setup();
     const { store } = createInteractiveWrapper({});
     expect(screen.getByRole('treeitem')).toBeInTheDocument();
     const root = screen.getByRole('treeitem');
@@ -160,8 +160,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('toggles branch nodes with arrow keys', async () => {
-    const user = userEvent.setup();
-
     const { store } = createInteractiveWrapper({});
     const root = screen.getByRole('treeitem');
     act(() => {
@@ -180,8 +178,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('toggles branch nodes with Space or Enter key', async () => {
-    const user = userEvent.setup();
-
     const { store } = createInteractiveWrapper({});
     const root = screen.getByRole('treeitem');
 
@@ -201,8 +197,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('calls setCanvas only on click for leaf nodes', async () => {
-    const user = userEvent.setup();
-
     const { store } = createInteractiveWrapper({});
     const root = screen.getByRole('treeitem');
 
@@ -222,7 +216,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('sets the canvas to a start canvas if present (IIIF v2)', async () => {
-    const user = userEvent.setup();
     createWrapper({
       expandItems: () => {},
       manifest: manifestVersion2,
@@ -251,7 +244,6 @@ describe('SidebarIndexTableOfContents', () => {
     }
 
     async function selectItem() {
-      const user = userEvent.setup();
       act(() => {
         screen.getByRole('treeitem').focus();
       });
@@ -311,8 +303,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('sets the canvas to a start canvas if present (IIIF v3)', async () => {
-    const user = userEvent.setup();
-
     const { store } = createInteractiveWrapper({
       manifest: manifestVersion3,
     });
