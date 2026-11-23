@@ -9,17 +9,25 @@ import manifestVersion3 from '../../fixtures/version-3/structures.json';
 import multiLanguageLabels from '../../fixtures/version-2/multi-language-labels.json';
 import { getLocalizedSequenceTreeStructure } from '@src/state/selectors/sequences';
 
+vi.mock('@mui/material/Collapse', () => ({
+  default: ({ in: open, children }) => (open ? children : null),
+}));
+
 /**
  * Create wrapper for SidebarIndexTableOfContents component
  * @param {*} props
  */
 function createWrapper(props) {
-  const manifest = Utils.parseManifest(props.manifest ? props.manifest : manifestVersion2);
+  const treeStructure =
+    'treeStructure' in props
+      ? props.treeStructure
+      : Utils.parseManifest(props.manifest ? props.manifest : manifestVersion2).getDefaultTree();
+
   return render(
     <SidebarIndexTableOfContents
       id="something"
       classes={{}}
-      treeStructure={props.treeStructure ? props.treeStructure : manifest.getDefaultTree()}
+      treeStructure={treeStructure}
       visibleNodeIds={props.visibleNodeIds ? props.visibleNodeIds : []}
       expandedNodeIds={props.expandedNodeIds ? props.expandedNodeIds : []}
       containerRef={props.containerRef}
@@ -59,6 +67,7 @@ describe('SidebarIndexTableOfContents', () => {
 
   beforeEach(() => {
     setCanvas = vi.fn();
+    user = userEvent.setup({ delay: null });
   });
 
   it('does not render a TreeView if the tree structure is missing', () => {

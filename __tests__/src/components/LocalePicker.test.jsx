@@ -57,8 +57,8 @@ describe('LocalePicker', () => {
     const user = userEvent.setup();
     // Intl.DisplayNames could error in older browser environments
     // Fallback to the raw locale code in those cases.
-    vi.spyOn(Intl, 'DisplayNames').mockImplementation(() => {
-      throw new Error('not supported');
+    vi.spyOn(Intl, 'DisplayNames').mockImplementation(function () {
+      throw new Error('RangeError');
     });
     // 'fi' is not in availableLanguages; DisplayNames unavailable, so raw code is shown
     createWrapper({ availableLocales: ['en', 'fi'], locale: 'en' });

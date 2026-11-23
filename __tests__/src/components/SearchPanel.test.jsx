@@ -1,4 +1,4 @@
-import { render, screen, within } from '@tests/utils/test-utils';
+import { render, screen, waitFor, act } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { server } from '../../mocks/server';
@@ -42,6 +42,7 @@ function createWrapper(props = {}, { search, window } = {}) {
 
 describe('SearchPanel', () => {
   const searchUrl = manifestFixtureFg165hz3589.service.at(0)['@id'];
+
   beforeEach(() => {
     server.use(
       http.get(searchUrl, ({ request }) => {
@@ -61,6 +62,12 @@ describe('SearchPanel', () => {
         });
       }),
     );
+  });
+
+  afterEach(async () => {
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
   });
 
   it('renders a CompanionWindow', () => {
@@ -153,15 +160,7 @@ describe('SearchPanel', () => {
   });
 
   it('does not suggest searches if the user has made a query', async () => {
-    let requestSettled = false;
-    server.use(
-      http.get(searchUrl, () => {
-        requestSettled = true;
-        return HttpResponse.json(contentSearchMock);
-      }),
-    );
-
-    createWrapper(
+    const { store } = createWrapper(
       {},
       {
         search: {
@@ -173,6 +172,9 @@ describe('SearchPanel', () => {
     );
 
     expect(screen.queryByRole('button', { name: 'Search this document for "NSF"' })).not.toBeInTheDocument();
-    await vi.waitFor(() => expect(requestSettled).toBe(true));
+
+    await waitFor(() => {
+      expect(store.getState().searches.window.xyz.data[`${searchUrl}?q=blah`]?.isFetching).toBe(false);
+    });
   });
 });

@@ -57,7 +57,7 @@ describe('MiradorViewer', () => {
     });
   });
   describe('processConfig', () => {
-    it('transforms config values to actions to dispatch to store', () => {
+    it('transforms config values to actions to dispatch to store', async () => {
       const instance = new MiradorViewer(
         {
           catalog: [
@@ -95,6 +95,8 @@ describe('MiradorViewer', () => {
       act(() => {
         instance.renderInto(container);
       });
+
+      await screen.findByTestId('mock-workspace-area');
 
       const { windows, catalog, config } = instance.store.getState();
       const windowIds = Object.keys(windows);
