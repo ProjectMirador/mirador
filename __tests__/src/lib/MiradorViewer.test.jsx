@@ -19,9 +19,22 @@ describe('MiradorViewer', () => {
   let container;
 
   beforeEach(async () => {
-    server.use(http.get('https://iiif.harvardartmuseums.org/manifests/object/299843', () => HttpResponse.json(manifestFixture)));
+    server.use(
+      http.get('https://iiif.harvardartmuseums.org/manifests/object/299843', () =>
+        HttpResponse.json({
+          '@context': 'http://iiif.io',
+          '@id': 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+          '@type': 'sc:Manifest',
+          sequences: [],
+        }),
+      ),
+    );
     render(<div id="mirador" data-testid="container" />);
     container = await screen.findByTestId('container');
+  });
+
+  afterEach(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
   describe('constructor', () => {

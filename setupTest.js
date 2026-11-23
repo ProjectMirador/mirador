@@ -41,11 +41,10 @@ afterEach(() => {
 // integration tests use the real network; let in-flight requests settle before
 // happy-dom tears down the window, otherwise it aborts them and logs AbortErrors
 afterAll(async () => {
+  if (window.happyDOM) {
+    await Promise.race([window.happyDOM.waitUntilComplete(), new Promise((resolve) => setTimeout(resolve, 5_000))]);
+  }
   server.close();
-
-  if (!usesRealNetwork || !window.happyDOM) return;
-
-  await Promise.race([window.happyDOM.waitUntilComplete(), new Promise((resolve) => setTimeout(resolve, 5_000))]);
 });
 
 /** */

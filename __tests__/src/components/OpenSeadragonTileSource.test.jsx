@@ -1,4 +1,4 @@
-import { act, render } from '@tests/utils/test-utils';
+import { act, render, waitFor } from '@tests/utils/test-utils';
 import TileSource from '@src/components/OpenSeadragonTileSource';
 import OpenSeadragonViewerContext from '@src/contexts/OpenSeadragonViewerContext';
 import FailedImageProvider from '@src/contexts/FailedImageProvider';
@@ -163,6 +163,7 @@ describe('OpenSeadragonTileSource', () => {
   });
 
   it('loads fallback image when tile load fails', async () => {
+    const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const addTiledImage = vi
       .fn()
       .mockImplementationOnce(({ error }) => error(new Error('fail')))
@@ -183,11 +184,13 @@ describe('OpenSeadragonTileSource', () => {
       </FailedImageProvider>,
     );
 
-    // eslint-disable-next-line testing-library/no-unnecessary-act
-    await act(async () => {});
+    await waitFor(() => {
+      expect(addTiledImage).toHaveBeenCalledTimes(2);
+    });
 
-    // Should attempt to load original, then fallback
-    expect(addTiledImage).toHaveBeenCalledTimes(2);
     expect(addTiledImage.mock.calls[1][0].tileSource.type).toBe('image');
+    expect(consoleWarnSpy).toHaveBeenCalledWith('[Mirador: OSD tile image load failed]', expect.any(Error));
+
+    consoleWarnSpy.mockRestore();
   });
 });

@@ -152,7 +152,15 @@ describe('SearchPanel', () => {
     expect(requestedUrl).toBe(`${searchUrl}?q=Dry+Cleaning+%26+Laundry`);
   });
 
-  it('does not suggest searches if the user has made a query', () => {
+  it('does not suggest searches if the user has made a query', async () => {
+    let requestSettled = false;
+    server.use(
+      http.get(searchUrl, () => {
+        requestSettled = true;
+        return HttpResponse.json(contentSearchMock);
+      }),
+    );
+
     createWrapper(
       {},
       {
@@ -165,5 +173,6 @@ describe('SearchPanel', () => {
     );
 
     expect(screen.queryByRole('button', { name: 'Search this document for "NSF"' })).not.toBeInTheDocument();
+    await vi.waitFor(() => expect(requestSettled).toBe(true));
   });
 });
