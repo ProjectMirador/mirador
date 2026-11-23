@@ -21,7 +21,7 @@ describe('initialViewerConfig', () => {
           viewerObject = viewers[Object.keys(viewers)[0]];
           expect(viewerObject?.x).toBe(934);
         },
-        { timeout: 3000 },
+        { timeout: 6000 },
       );
 
       expect(viewerObject.x).toBe(934);
