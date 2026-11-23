@@ -28,7 +28,7 @@ describe('getSequences', () => {
     });
   });
   describe('with a v2 manifest with top ranges', () => {
-    it('works', () => {
+    it('ignores the top-ranges', () => {
       const manifest = {
         ...manifestFixture001,
         structures: [
@@ -39,10 +39,8 @@ describe('getSequences', () => {
       };
       const state = { manifests: { x: { json: manifest } } };
       const sequences = getSequences(state, { manifestId: 'x' });
-      expect(sequences.length).toEqual(1);
-      expect(sequences.map((s) => s.id)).toEqual([
-        'https://iiif.bodleian.ox.ac.uk/iiif/sequence/9cca8fdd-4a61-4429-8ac1-f648764b4d6d_default.json',
-      ]);
+      expect(sequences.length).toEqual(2);
+      expect(sequences.map((s) => s.id)).toEqual(['a', 'b']);
     });
   });
   describe('with a v3 manifest', () => {
@@ -57,8 +55,8 @@ describe('getSequences', () => {
       };
       const state = { manifests: { x: { json: manifest } } };
       const sequences = getSequences(state, { manifestId: 'x' });
-      expect(sequences.length).toEqual(3);
-      expect(sequences.map((s) => s.id)).toEqual([undefined, 'a', 'b']);
+      expect(sequences.length).toEqual(2);
+      expect(sequences.map((s) => s.id)).toEqual(['a', 'b']);
     });
   });
 });
