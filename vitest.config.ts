@@ -35,6 +35,11 @@ export default defineConfig({
     sequence: {
       shuffle: true,
     },
+    coverage: {
+    exclude: [
+      'src/locales/**',
+    ],
+  },
     projects: [
       {
         extends: true,

@@ -94,7 +94,7 @@ describe('WorkspaceMosaic', () => {
 
       wrapper.rerender(
         <WorkspaceMosaic
-          layout={{}}
+          layout={{ direction: 'row', first: '1', second: '2' }}
           classes={{}}
           windowIds={[]}
           workspaceId="foo"

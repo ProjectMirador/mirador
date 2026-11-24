@@ -38,22 +38,23 @@ describe('MiradorViewer', () => {
   });
 
   describe('constructor', () => {
-    it('returns viewer store', () => {
+    it('returns viewer store', async () => {
       const instance = new MiradorViewer({});
 
       act(() => {
         instance.renderInto(container);
       });
+      await screen.findByTestId('mock-workspace-area');
       expect(instance.store.dispatch).toBeDefined();
     });
-    it('renders via ReactDOM', () => {
+    it('renders via ReactDOM', async () => {
       const instance = new MiradorViewer({});
 
       act(() => {
         instance.renderInto(container);
       });
 
-      expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
+      expect(await screen.findByTestId('mock-workspace-area')).toBeInTheDocument();
     });
   });
   describe('processConfig', () => {
@@ -179,13 +180,15 @@ describe('MiradorViewer', () => {
   });
 
   describe('unmount', () => {
-    it('unmounts via ReactDOM', () => {
+    it('unmounts via ReactDOM', async () => {
       const instance = new MiradorViewer({});
 
       act(() => {
         instance.renderInto(container);
       });
+      await screen.findByTestId('mock-workspace-area');
       expect(container).not.toBeEmptyDOMElement();
+
       act(() => {
         instance.unmount();
       });
