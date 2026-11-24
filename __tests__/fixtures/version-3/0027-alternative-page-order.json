@@ -1,0 +1,262 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "en": [
+      "Alternative Page Sequences"
+    ]
+  },
+  "provider": [
+    {
+      "id": "https://www.bibliotecabertoliana.it/",
+      "type": "Agent",
+      "label": {
+        "en": [
+          "Biblioteca Civica Bertoliana"
+        ]
+      },
+      "homepage": [
+        {
+          "id": "https://www.bibliotecabertoliana.it/",
+          "type": "Text",
+          "label": {
+            "en": [
+              "Biblioteca Civica Bertoliana Homepage"
+            ]
+          },
+          "format": "text/html"
+        }
+      ],
+      "logo": [
+        {
+          "id": "https://www.bibliotecabertoliana.it/img/logo-bertoliana.png",
+          "type": "Image",
+          "format": "image/png",
+          "height": 346,
+          "width": 89
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p1",
+      "type": "Canvas",
+      "label": {
+        "en": [
+          "171r (387)"
+        ]
+      },
+      "height": 3184,
+      "width": 2156,
+      "items": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/page/p1/1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/annotation/p0001-image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.io/api/image/3.0/example/reference/3ec31f43ce55cfcc076804c88c06aa43-CF-f0186r_aVISNK_387/full/max/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "height": 3184,
+                "width": 2156,
+                "service": [
+                  {
+                    "id": "https://iiif.io/api/image/3.0/example/reference/3ec31f43ce55cfcc076804c88c06aa43-CF-f0186r_aVISNK_387",
+                    "type": "ImageService3",
+                    "profile": "level1"
+                  }
+                ]
+              },
+              "target": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p2",
+      "type": "Canvas",
+      "label": {
+        "en": [
+          "171v (384)"
+        ]
+      },
+      "height": 3184,
+      "width": 2156,
+      "items": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/page/p2/1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/annotation/p0002-image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.io/api/image/3.0/example/reference/3ec31f43ce55cfcc076804c88c06aa43-CF-f0186v_aVISNK_384/full/max/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "height": 3184,
+                "width": 2156,
+                "service": [
+                  {
+                    "id": "https://iiif.io/api/image/3.0/example/reference/3ec31f43ce55cfcc076804c88c06aa43-CF-f0186v_aVISNK_384",
+                    "type": "ImageService3",
+                    "profile": "level1"
+                  }
+                ]
+              },
+              "target": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p3",
+      "type": "Canvas",
+      "label": {
+        "en": [
+          "172r (385)"
+        ]
+      },
+      "height": 3184,
+      "width": 2156,
+      "items": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/page/p3/1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/annotation/p0003-image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.io/api/image/3.0/example/reference/3ec31f43ce55cfcc076804c88c06aa43-CF-f0187r_aVISNK_385/full/max/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "height": 3184,
+                "width": 2156,
+                "service": [
+                  {
+                    "id": "https://iiif.io/api/image/3.0/example/reference/3ec31f43ce55cfcc076804c88c06aa43-CF-f0187r_aVISNK_385",
+                    "type": "ImageService3",
+                    "profile": "level1"
+                  }
+                ]
+              },
+              "target": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p4",
+      "type": "Canvas",
+      "label": {
+        "en": [
+          "172v [386]"
+        ]
+      },
+      "height": 3184,
+      "width": 2156,
+      "items": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/page/p4/1",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/annotation/p0004-image",
+              "type": "Annotation",
+              "motivation": "painting",
+              "body": {
+                "id": "https://iiif.io/api/image/3.0/example/reference/3ec31f43ce55cfcc076804c88c06aa43-CF-f0187v_aVISNK_386/full/max/0/default.jpg",
+                "type": "Image",
+                "format": "image/jpeg",
+                "height": 3184,
+                "width": 2156,
+                "service": [
+                  {
+                    "id": "https://iiif.io/api/image/3.0/example/reference/3ec31f43ce55cfcc076804c88c06aa43-CF-f0187v_aVISNK_386",
+                    "type": "ImageService3",
+                    "profile": "level1"
+                  }
+                ]
+              },
+              "target": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p4"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/range/r1",
+      "type": "Range",
+      "behavior": [
+        "sequence"
+      ],
+      "label": {
+        "en": [
+          "Physical sequence"
+        ]
+      },
+      "items": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p1",
+          "type": "Canvas"
+        },
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p2",
+          "type": "Canvas"
+        },
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p3",
+          "type": "Canvas"
+        },
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p4",
+          "type": "Canvas"
+        }
+      ]
+    },
+    {
+      "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/range/r2",
+      "type": "Range",
+      "behavior": [
+        "sequence"
+      ],
+      "label": {
+        "en": [
+          "Author-intended sequence"
+        ]
+      },
+      "items": [
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p2",
+          "type": "Canvas"
+        },
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p3",
+          "type": "Canvas"
+        },
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p4",
+          "type": "Canvas"
+        },
+        {
+          "id": "https://iiif.io/api/cookbook/recipe/0027-alternative-page-order/canvas/p1",
+          "type": "Canvas"
+        }
+      ]
+    }
+  ]
+}
