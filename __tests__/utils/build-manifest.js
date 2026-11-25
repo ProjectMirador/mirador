@@ -1,4 +1,5 @@
 import deepmerge from 'deepmerge';
+import { buildCanvasesV2, buildCanvasesV3, buildCanvasesV4 } from './build-canvases';
 
 const presentation2Context = ['http:', '', 'iiif.io', 'api', 'presentation', '2', 'context.json'].join('/');
 const presentation3Context = ['http:', '', 'iiif.io', 'api', 'presentation', '3', 'context.json'].join('/');
@@ -10,7 +11,7 @@ const overwriteArrayMerge = (_destinationArray, sourceArray) => sourceArray;
  * Builds a minimal IIIF Presentation 2 manifest.
  */
 export function buildManifestV2({
-  canvases = [{ '@id': 'canvas-1', '@type': 'sc:Canvas', label: 'Canvas 1' }],
+  canvases = buildCanvasesV2(),
   id = ['http:', '', 'example.com', 'manifest'].join('/'),
   ...overrides
 } = {}) {
@@ -32,7 +33,7 @@ export function buildManifestV2({
  */
 export function buildManifestV3({
   id = ['http:', '', 'example.com', 'manifest'].join('/'),
-  items = [{ id: 'canvas-1', label: { en: ['Canvas 1'] }, type: 'Canvas' }],
+  items = buildCanvasesV3(),
   ...overrides
 } = {}) {
   return deepmerge(
@@ -53,7 +54,7 @@ export function buildManifestV3({
  */
 export function buildManifestV4({
   id = ['http:', '', 'example.com', 'manifest'].join('/'),
-  items = [{ id: 'canvas-1', label: { en: ['Canvas 1'] }, type: 'Canvas' }],
+  items = buildCanvasesV4(),
   ...overrides
 } = {}) {
   return deepmerge(
