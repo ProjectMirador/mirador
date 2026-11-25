@@ -6,7 +6,7 @@ import { buildPath2D } from '../lib/svgShapesToPath';
 
 export default class CanvasAnnotationDisplay {
   /** */
-  constructor({ resource, palette, zoomRatio, offset, selected, hovered, imageSource, canvasSize }) {
+  constructor({ resource, palette, zoomRatio, offset, selected, hovered, imageSource, canvasSize, draft = false }) {
     this.resource = resource;
     this.palette = palette;
     this.zoomRatio = zoomRatio;
@@ -15,6 +15,19 @@ export default class CanvasAnnotationDisplay {
     this.hovered = hovered;
     this.imageSource = imageSource;
     this.canvasSize = canvasSize;
+    this.draft = draft;
+  }
+
+  /** Draft palette, when this annotation is a draft and the palette has one. */
+  get draftPalette() {
+    return this.draft && this.palette.draft ? this.palette.draft : null;
+  }
+
+  /** Applies a palette's dash pattern, scaled like the line width. */
+  applyLineDash(currentPalette, scale = 1) {
+    if (Array.isArray(currentPalette.lineDash) && this.context.setLineDash) {
+      this.context.setLineDash(currentPalette.lineDash.map((n) => n * scale));
+    }
   }
 
   /** */
@@ -41,7 +54,7 @@ export default class CanvasAnnotationDisplay {
     } else if (this.selected) {
       currentPalette = this.palette.selected;
     } else {
-      currentPalette = this.palette.default;
+      currentPalette = this.draftPalette || this.palette.default;
     }
 
     if (currentPalette.globalAlpha === 0) return;
@@ -84,9 +97,12 @@ export default class CanvasAnnotationDisplay {
 
       this.context.lineWidth = Number.isFinite(this.context.lineWidth) ? this.context.lineWidth : 1;
 
-      // Reset the color if it is selected or hovered on
+      // Reset the color if it is selected or hovered on, or a draft
       if (this.selected || this.hovered) {
         this.context.strokeStyle = currentPalette.strokeStyle || currentPalette.fillStyle;
+      } else if (currentPalette === this.draftPalette) {
+        this.context.strokeStyle = currentPalette.strokeStyle || this.context.strokeStyle;
+        this.applyLineDash(currentPalette);
       }
 
       if (element.attributes['stroke-opacity']) {
@@ -125,13 +141,15 @@ export default class CanvasAnnotationDisplay {
     } else if (this.hovered) {
       currentPalette = this.palette.hovered;
     } else {
-      currentPalette = this.palette.default;
+      currentPalette = this.draftPalette || this.palette.default;
     }
 
     this.context.save();
     Object.keys(currentPalette).forEach((key) => {
+      if (key === 'lineDash') return;
       this.context[key] = currentPalette[key];
     });
+    this.applyLineDash(currentPalette, 1 / this.zoomRatio);
 
     if (currentPalette.globalAlpha === 0) return;
 

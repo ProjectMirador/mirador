@@ -9,6 +9,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import CanvasOverlayVideo from '../lib/CanvasOverlayVideo';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
+import { isDraftAnnotation } from '../lib/draftAnnotations';
 import { VideosReferences } from '../plugins/VideosReferences';
 
 /** AnnotationsOverlayVideo - based on AnnotationsOverlay */
@@ -588,7 +589,8 @@ export class AnnotationsOverlayVideo extends Component {
    * annotationsToContext - converts anontations to a canvas context
    */
   annotationsToContext(annotations, palette) {
-    const { highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId, canvasWorld, currentTime } = this.props;
+    const { draftMarker, highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId, canvasWorld, currentTime } =
+      this.props;
     const context = this.canvasOverlay.context2d;
     const zoomRatio = 1;
     annotations.forEach((annotation) => {
@@ -601,6 +603,7 @@ export class AnnotationsOverlayVideo extends Component {
         const canvasSize = canvasWorld.canvasToWorldCoordinates(resource.targetId);
         const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
           canvasSize,
+          draft: isDraftAnnotation(annotation.resource, draftMarker),
           hovered: hoveredAnnotationIds.includes(resource.id),
           imageSource,
           offset,
@@ -610,6 +613,12 @@ export class AnnotationsOverlayVideo extends Component {
               ...palette.default,
               ...(!highlightAllAnnotations && palette.hidden),
             },
+            ...(palette.draft && {
+              draft: {
+                ...palette.draft,
+                ...(!highlightAllAnnotations && palette.hidden),
+              },
+            }),
           },
           resource,
           selected: selectedAnnotationId === resource.id,
@@ -687,6 +696,7 @@ AnnotationsOverlayVideo.defaultProps = {
   highlightAllAnnotations: false,
   hoverAnnotation: () => {},
   hoveredAnnotationIds: [],
+  draftMarker: null,
   palette: {},
   paused: true,
   searchAnnotations: [],
@@ -714,6 +724,7 @@ AnnotationsOverlayVideo.propTypes = {
   iiifVideoInfos: PropTypes.object.isRequired,
   onFunctionsReady: PropTypes.object.isRequired,
   palette: PropTypes.object,
+  draftMarker: PropTypes.shape({ property: PropTypes.string, value: PropTypes.any }),
   paused: PropTypes.bool,
   playerRef: PropTypes.object.isRequired,
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),

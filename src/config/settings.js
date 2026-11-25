@@ -73,6 +73,8 @@ export default {
         default: { strokeStyle: '#00BFFF', globalAlpha: 1 },
         hovered: { strokeStyle: '#BF00FF', globalAlpha: 1 },
         selected: { strokeStyle: '#ffff00', globalAlpha: 1 },
+        // Drafts (see annotations.draftMarker): dashed outline, in canvas pixels at zoom 1.
+        draft: { strokeStyle: '#FF8C00', globalAlpha: 0.8, lineDash: [8, 6] },
       },
       search: {
         default: { fillStyle: '#00BFFF', globalAlpha: 0.3 },
@@ -452,6 +454,9 @@ export default {
     // filteredMotivations: if empty, all annotation motivations will be shown.
     // Otherwise, only annotations with motivations listed in the array will be shown.
     filteredMotivations: [],
+    // draftMarker: marks draft annotations, drawn with theme.palette.annotations.draft.
+    // e.g. { property: 'status', value: 'draft' } (null: no drafts).
+    draftMarker: null,
   },
   createGenerateClassNameOptions: {
     // Options passed directly to createGenerateClassName in Material-UI https://material-ui.com/styles/api/#creategenerateclassname-options-class-name-generator

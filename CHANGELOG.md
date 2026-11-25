@@ -10,6 +10,10 @@ Entries types:
 - `SECURITY` to invite users to upgrade in case of vulnerabilities.
 - `UPSTREAM` to indicate code is pulled in from Mirador main repository.
 
+# [ Unreleased ]
+
+- ADDED : Draft annotations: `annotations.draftMarker` setting (`{ property, value }`) and a `draft` entry in `theme.palette.annotations`, drawn as a dashed orange outline unless hovered or selected
+
 # [ 4.2.1 ]
 
 - FIXED : Update dependencies to fix vulnerabilities

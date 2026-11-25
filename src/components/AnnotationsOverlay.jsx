@@ -7,6 +7,7 @@ import xor from 'lodash/xor';
 import OpenSeadragonCanvasOverlay from '../lib/OpenSeadragonCanvasOverlay';
 import CanvasWorld from '../lib/CanvasWorld';
 import CanvasAnnotationDisplay from '../lib/CanvasAnnotationDisplay';
+import { isDraftAnnotation } from '../lib/draftAnnotations';
 import { buildPath2D } from '../lib/svgShapesToPath';
 
 /** @private */
@@ -51,6 +52,7 @@ export function AnnotationsOverlay({
   deselectAnnotation = () => {},
   drawAnnotations = true,
   drawSearchAnnotations = true,
+  draftMarker = null,
   highlightAllAnnotations = false,
   hoverAnnotation = () => {},
   hoveredAnnotationIds = [],
@@ -88,6 +90,7 @@ export function AnnotationsOverlay({
           if (!canvasWorld.canvasIds.includes(resource.targetId)) return;
           const offset = canvasWorld.offsetByCanvas(resource.targetId);
           const canvasAnnotationDisplay = new CanvasAnnotationDisplay({
+            draft: isDraftAnnotation(annotation.resource, draftMarker),
             hovered: hoveredAnnotationIds.includes(resource.id),
             offset,
             palette: {
@@ -96,6 +99,12 @@ export function AnnotationsOverlay({
                 ...currentPalette.default,
                 ...(!highlightAllAnnotations && currentPalette.hidden),
               },
+              ...(currentPalette.draft && {
+                draft: {
+                  ...currentPalette.draft,
+                  ...(!highlightAllAnnotations && currentPalette.hidden),
+                },
+              }),
             },
             resource,
             selected: selectedAnnotationId === resource.id,
@@ -105,7 +114,7 @@ export function AnnotationsOverlay({
         });
       });
     },
-    [osdCanvasOverlay, viewer, canvasWorld, highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId],
+    [osdCanvasOverlay, viewer, canvasWorld, draftMarker, highlightAllAnnotations, hoveredAnnotationIds, selectedAnnotationId],
   );
 
   const renderAnnotations = useCallback(() => {
@@ -317,6 +326,7 @@ AnnotationsOverlay.propTypes = {
   hoverAnnotation: PropTypes.func,
   hoveredAnnotationIds: PropTypes.arrayOf(PropTypes.string),
   palette: PropTypes.object,
+  draftMarker: PropTypes.shape({ property: PropTypes.string, value: PropTypes.any }),
   searchAnnotations: PropTypes.arrayOf(PropTypes.object),
   selectAnnotation: PropTypes.func,
   selectedAnnotationId: PropTypes.string,

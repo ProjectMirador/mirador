@@ -45,6 +45,7 @@ const mapStateToProps = (state, { windowId }) => ({
     }).length > 0,
   highlightAllAnnotations: getWindow(state, { windowId }).highlightAllAnnotations,
   hoveredAnnotationIds: getWindow(state, { windowId }).hoveredAnnotationIds,
+  draftMarker: getConfig(state).annotations?.draftMarker ?? null,
   palette: getTheme(state).palette,
   paused: getWindowPausedStatus(state, { windowId }),
   searchAnnotations: getSearchAnnotationsForWindow(state, { windowId }),

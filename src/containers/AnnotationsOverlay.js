@@ -30,6 +30,7 @@ const mapStateToProps = (state, { windowId }) => ({
     getCompanionWindowsForContent(state, { content: 'search', windowId }).length > 0,
   highlightAllAnnotations: getWindow(state, { windowId }).highlightAllAnnotations,
   hoveredAnnotationIds: getWindow(state, { windowId }).hoveredAnnotationIds,
+  draftMarker: getConfig(state).annotations?.draftMarker ?? null,
   palette: getTheme(state).palette,
   searchAnnotations: getSearchAnnotationsForWindow(state, { windowId }),
   selectedAnnotationId: getSelectedAnnotationId(state, { windowId }),

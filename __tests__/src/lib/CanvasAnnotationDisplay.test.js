@@ -171,4 +171,84 @@ describe('CanvasAnnotationDisplay', () => {
       expect(context.lineWidth).toEqual(2);
     });
   });
+
+  describe('drafts', () => {
+    const palette = {
+      default: { globalAlpha: 1, strokeStyle: 'black' },
+      draft: { globalAlpha: 0.8, lineDash: [8, 6], strokeStyle: 'orange' },
+      hovered: { globalAlpha: 1, strokeStyle: 'blue' },
+      selected: { globalAlpha: 1, strokeStyle: 'yellow' },
+    };
+    const fragmentResource = () =>
+      new AnnotationResource({
+        motivation: 'oa:commenting',
+        on: 'https://example.org/canvas/1#xywh=10,20,30,40',
+      });
+    const fragmentContext = () => ({
+      restore: vi.fn(),
+      save: vi.fn(),
+      setLineDash: vi.fn(),
+      strokeRect: vi.fn(),
+    });
+
+    it('draws a draft fragment dashed in the draft color, scaled by zoom', () => {
+      const context = fragmentContext();
+      createSubject({ draft: true, palette, resource: fragmentResource() }).toContext(context);
+      expect(context.strokeStyle).toBe('orange');
+      expect(context.globalAlpha).toBe(0.8);
+      expect(context.lineDash).toBeUndefined();
+      expect(context.setLineDash).toHaveBeenCalledWith([16, 12]);
+      expect(context.strokeRect).toHaveBeenCalled();
+    });
+
+    it('uses the normal colors when a draft is selected or hovered', () => {
+      const context = fragmentContext();
+      createSubject({ draft: true, palette, resource: fragmentResource(), selected: true }).toContext(context);
+      expect(context.strokeStyle).toBe('yellow');
+      expect(context.setLineDash).not.toHaveBeenCalled();
+    });
+
+    it('draws published annotations as before, even with a draft palette', () => {
+      const context = fragmentContext();
+      createSubject({ palette, resource: fragmentResource() }).toContext(context);
+      expect(context.strokeStyle).toBe('black');
+      expect(context.setLineDash).not.toHaveBeenCalled();
+    });
+
+    it('ignores the draft flag when the palette has no draft entry', () => {
+      const context = fragmentContext();
+      const { draft, ...noDraft } = palette;
+      createSubject({ draft: true, palette: noDraft, resource: fragmentResource() }).toContext(context);
+      expect(context.strokeStyle).toBe('black');
+    });
+
+    it('strokes a draft SVG shape with the draft color and dash', () => {
+      const context = {
+        fill: vi.fn(),
+        restore: vi.fn(),
+        save: vi.fn(),
+        setLineDash: vi.fn(),
+        stroke: vi.fn(),
+        translate: vi.fn(),
+      };
+      createSubject({
+        draft: true,
+        palette,
+        resource: new AnnotationResource({
+          motivation: 'oa:commenting',
+          on: {
+            selector: {
+              item: {
+                '@type': 'oa:SvgSelector',
+                value: "<svg xmlns='http://www.w3.org/2000/svg'><path d='M0 0 L10 10' stroke='red'/></svg>",
+              },
+            },
+          },
+        }),
+      }).toContext(context);
+      expect(context.strokeStyle).toBe('orange');
+      expect(context.setLineDash).toHaveBeenLastCalledWith([8, 6]);
+      expect(context.stroke).toHaveBeenCalled();
+    });
+  });
 });
