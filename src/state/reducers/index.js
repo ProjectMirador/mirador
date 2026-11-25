@@ -11,5 +11,6 @@ export * from './annotations';
 export * from './auth';
 export * from './elasticLayout';
 export * from './search';
+export * from './searchPointers';
 export * from './layers';
 export * from './catalog';
