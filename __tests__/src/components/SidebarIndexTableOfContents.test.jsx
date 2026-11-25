@@ -9,17 +9,25 @@ import manifestVersion3 from '../../fixtures/version-3/structures.json';
 import multiLanguageLabels from '../../fixtures/version-2/multi-language-labels.json';
 import { getLocalizedSequenceTreeStructure } from '@src/state/selectors/sequences';
 
+vi.mock('@mui/material/Collapse', () => ({
+  default: ({ in: open, children }) => (open ? children : null),
+}));
+
 /**
  * Create wrapper for SidebarIndexTableOfContents component
  * @param {*} props
  */
 function createWrapper(props) {
-  const manifest = Utils.parseManifest(props.manifest ? props.manifest : manifestVersion2);
+  const treeStructure =
+    'treeStructure' in props
+      ? props.treeStructure
+      : Utils.parseManifest(props.manifest ? props.manifest : manifestVersion2).getDefaultTree();
+
   return render(
     <SidebarIndexTableOfContents
       id="something"
       classes={{}}
-      treeStructure={props.treeStructure ? props.treeStructure : manifest.getDefaultTree()}
+      treeStructure={treeStructure}
       visibleNodeIds={props.visibleNodeIds ? props.visibleNodeIds : []}
       expandedNodeIds={props.expandedNodeIds ? props.expandedNodeIds : []}
       containerRef={props.containerRef}
@@ -56,9 +64,11 @@ function createInteractiveWrapper({ manifest = manifestVersion3, ...props }) {
 
 describe('SidebarIndexTableOfContents', () => {
   let setCanvas;
+  let user;
 
   beforeEach(() => {
     setCanvas = vi.fn();
+    user = userEvent.setup({ delay: null });
   });
 
   it('does not render a TreeView if the tree structure is missing', () => {
@@ -132,7 +142,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('toggles branch nodes on click', async () => {
-    const user = userEvent.setup();
     const { store } = createInteractiveWrapper({});
     expect(screen.getByRole('treeitem')).toBeInTheDocument();
     const root = screen.getByRole('treeitem');
@@ -151,8 +160,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('toggles branch nodes with arrow keys', async () => {
-    const user = userEvent.setup();
-
     const { store } = createInteractiveWrapper({});
     const root = screen.getByRole('treeitem');
     act(() => {
@@ -171,8 +178,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('toggles branch nodes with Space or Enter key', async () => {
-    const user = userEvent.setup();
-
     const { store } = createInteractiveWrapper({});
     const root = screen.getByRole('treeitem');
 
@@ -192,8 +197,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('calls setCanvas only on click for leaf nodes', async () => {
-    const user = userEvent.setup();
-
     const { store } = createInteractiveWrapper({});
     const root = screen.getByRole('treeitem');
 
@@ -213,7 +216,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('sets the canvas to a start canvas if present (IIIF v2)', async () => {
-    const user = userEvent.setup();
     createWrapper({
       expandItems: () => {},
       manifest: manifestVersion2,
@@ -242,7 +244,6 @@ describe('SidebarIndexTableOfContents', () => {
     }
 
     async function selectItem() {
-      const user = userEvent.setup();
       act(() => {
         screen.getByRole('treeitem').focus();
       });
@@ -302,8 +303,6 @@ describe('SidebarIndexTableOfContents', () => {
   });
 
   it('sets the canvas to a start canvas if present (IIIF v3)', async () => {
-    const user = userEvent.setup();
-
     const { store } = createInteractiveWrapper({
       manifest: manifestVersion3,
     });

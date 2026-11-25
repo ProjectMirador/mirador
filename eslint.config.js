@@ -164,7 +164,7 @@ export default [
   {
     files: ['__tests__/**/*.{js,jsx}'],
     rules: {
-      'import/no-unresolved': ['error', { ignore: ['^@src/', '^@tests/'] }],
+      'import/no-unresolved': ['error', { ignore: ['^@src/', '^@tests/', '^vitest/browser$'] }],
     },
   },
 ];

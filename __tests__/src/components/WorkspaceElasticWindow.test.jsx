@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { render } from '@tests/utils/test-utils';
+import { render, act } from '@tests/utils/test-utils';
 
 import WorkspaceElasticWindow from '@src/components/WorkspaceElasticWindow';
 
@@ -44,7 +44,7 @@ describe('WorkspaceElasticWindow', () => {
     y: 20,
   };
 
-  it('should render properly with an initialValue', () => {
+  it('should render properly with an initialValue', async () => {
     const { container } = createWrapper({ layout });
     const el = container.firstChild;
 
@@ -53,6 +53,10 @@ describe('WorkspaceElasticWindow', () => {
       height: '200px',
       transform: 'translate(5040px,5040px)',
       width: '200px',
+    });
+
+    await act(async () => {
+      await vi.dynamicImportSettled();
     });
   });
   describe('focuses the window', () => {

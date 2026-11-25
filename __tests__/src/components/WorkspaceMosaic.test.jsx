@@ -78,10 +78,12 @@ describe('WorkspaceMosaic', () => {
         workspaceId: 'foo',
       };
       wrapper = createWrapper(props);
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
       wrapper.rerender(<WorkspaceMosaic {...props} windowIds={['1']} />);
 
       expect(updateWorkspaceMosaicLayout).toHaveBeenLastCalledWith('1');
+      consoleErrorSpy.mockRestore();
     });
     it('when no windows remain', () => {
       const updateWorkspaceMosaicLayout = vi.fn();
@@ -92,7 +94,7 @@ describe('WorkspaceMosaic', () => {
 
       wrapper.rerender(
         <WorkspaceMosaic
-          layout={{}}
+          layout={{ direction: 'row', first: '1', second: '2' }}
           classes={{}}
           windowIds={[]}
           workspaceId="foo"

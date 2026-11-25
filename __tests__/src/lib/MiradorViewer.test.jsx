@@ -19,32 +19,46 @@ describe('MiradorViewer', () => {
   let container;
 
   beforeEach(async () => {
-    server.use(http.get('https://iiif.harvardartmuseums.org/manifests/object/299843', () => HttpResponse.json(manifestFixture)));
+    server.use(
+      http.get('https://iiif.harvardartmuseums.org/manifests/object/299843', () =>
+        HttpResponse.json({
+          '@context': 'http://iiif.io',
+          '@id': 'https://iiif.harvardartmuseums.org/manifests/object/299843',
+          '@type': 'sc:Manifest',
+          sequences: [],
+        }),
+      ),
+    );
     render(<div id="mirador" data-testid="container" />);
     container = await screen.findByTestId('container');
   });
 
+  afterEach(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  });
+
   describe('constructor', () => {
-    it('returns viewer store', () => {
+    it('returns viewer store', async () => {
       const instance = new MiradorViewer({});
 
       act(() => {
         instance.renderInto(container);
       });
+      await screen.findByTestId('mock-workspace-area');
       expect(instance.store.dispatch).toBeDefined();
     });
-    it('renders via ReactDOM', () => {
+    it('renders via ReactDOM', async () => {
       const instance = new MiradorViewer({});
 
       act(() => {
         instance.renderInto(container);
       });
 
-      expect(screen.getByTestId('container')).not.toBeEmptyDOMElement();
+      expect(await screen.findByTestId('mock-workspace-area')).toBeInTheDocument();
     });
   });
   describe('processConfig', () => {
-    it('transforms config values to actions to dispatch to store', () => {
+    it('transforms config values to actions to dispatch to store', async () => {
       const instance = new MiradorViewer(
         {
           catalog: [
@@ -82,6 +96,8 @@ describe('MiradorViewer', () => {
       act(() => {
         instance.renderInto(container);
       });
+
+      await screen.findByTestId('mock-workspace-area');
 
       const { windows, catalog, config } = instance.store.getState();
       const windowIds = Object.keys(windows);
@@ -164,13 +180,15 @@ describe('MiradorViewer', () => {
   });
 
   describe('unmount', () => {
-    it('unmounts via ReactDOM', () => {
+    it('unmounts via ReactDOM', async () => {
       const instance = new MiradorViewer({});
 
       act(() => {
         instance.renderInto(container);
       });
+      await screen.findByTestId('mock-workspace-area');
       expect(container).not.toBeEmptyDOMElement();
+
       act(() => {
         instance.unmount();
       });
