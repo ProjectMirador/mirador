@@ -114,7 +114,6 @@ export function SearchHit({
     if (selected) {
       announceHit();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected]);
 
   const canvasLabelHtmlId = useId();
