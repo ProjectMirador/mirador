@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import CompanionWindow from '../containers/CompanionWindow';
 import SearchPanelControls from '../containers/SearchPanelControls';
 import SearchResults from '../containers/SearchResults';
+import { useGetIiifContentSearchInfiniteQuery } from '../state/api/iiifContentSearchApiSlice';
 
 /** */
 export function SearchPanel({
@@ -20,6 +21,11 @@ export function SearchPanel({
 }) {
   const { t } = useTranslation();
   const containerRef = useRef(null);
+
+  const { data, isLoading, isError, hasNextPage, fetchNextPage } = useGetIiifContentSearchInfiniteQuery(
+    { query: query, endpoint: searchService?.id },
+    { skip: !query || query === '' }
+  );
 
   return (
     <CompanionWindow
@@ -45,10 +51,10 @@ export function SearchPanel({
       }
       windowId={windowId}
       id={id}
-      titleControls={<SearchPanelControls companionWindowId={id} windowId={windowId} />}
+      titleControls={<SearchPanelControls companionWindowId={id} searchIsFetching={isLoading} windowId={windowId} />}
       ref={containerRef}
     >
-      <SearchResults containerRef={containerRef} companionWindowId={id} windowId={windowId} />
+      <SearchResults data={data} isFetching={isLoading} fetchNextPage={fetchNextPage} hasNextPage={hasNextPage} containerRef={containerRef} companionWindowId={id} windowId={windowId} />
       {fetchSearch &&
         suggestedSearches &&
         query === '' &&

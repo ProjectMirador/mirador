@@ -4,12 +4,8 @@ import { withPlugins } from '../extend/withPlugins';
 import { SearchResults } from '../components/SearchResults';
 import * as actions from '../state/actions';
 import {
-  getNextSearchId,
+  getCanvases,
   getSearchQuery,
-  getSearchIsFetching,
-  getSearchNumTotal,
-  getSortedSearchHitsForCompanionWindow,
-  getSortedSearchAnnotationsForCompanionWindow,
 } from '../state/selectors';
 
 /**
@@ -18,15 +14,8 @@ import {
  * @private
  */
 const mapStateToProps = (state, { companionWindowId, windowId }) => ({
-  isFetching: getSearchIsFetching(state, { companionWindowId, windowId }),
-  nextSearch: getNextSearchId(state, { companionWindowId, windowId }),
+  canvases: getCanvases(state, { windowId }),
   query: getSearchQuery(state, { companionWindowId, windowId }),
-  searchAnnotations: getSortedSearchAnnotationsForCompanionWindow(state, {
-    companionWindowId,
-    windowId,
-  }),
-  searchHits: getSortedSearchHitsForCompanionWindow(state, { companionWindowId, windowId }),
-  searchNumTotal: getSearchNumTotal(state, { companionWindowId, windowId }),
 });
 
 const mapDispatchToProps = {
