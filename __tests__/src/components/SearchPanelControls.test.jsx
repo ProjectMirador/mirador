@@ -1,134 +1,216 @@
-import { cloneElement } from 'react';
-import { render, screen } from '@tests/utils/test-utils';
+import { act, render, screen } from '@tests/utils/test-utils';
 import userEvent from '@testing-library/user-event';
-import { autocompleteMock } from '../../mocks/autocompleteMock';
 import { http, HttpResponse } from 'msw';
-import { server } from '../../mocks/server';
+import { autocompleteMock } from '@tests/mocks/autocompleteMock';
+import { server } from '@tests/mocks/server';
+import { removeSearch } from '@src/state/actions';
+import { buildManifestV2, buildManifestV3 } from '@tests/utils/build-manifest';
+import { buildMiradorState } from '@tests/utils/build-state';
+import SearchPanelControls from '@src/containers/SearchPanelControls';
 
-import { SearchPanelControls } from '@src/components/SearchPanelControls';
+const presentationContext = 'http://iiif.io/api/presentation/2/context.json';
+const searchContext = 'http://iiif.io/api/search/1/context.json';
+const searchProfile = 'http://iiif.io/api/search/1/search';
+const autocompleteProfile = 'http://iiif.io/api/search/1/autocomplete';
+const defaultSearchId = 'http://example.com/search';
+const stanfordBase = 'https://contentsearch.stanford.edu/fg165hz3589';
+const wwwSearchId = 'http://www.example.com/search';
 
-/**
- * Helper function to create a shallow wrapper around AttributionPanel
- */
-function createWrapper(props) {
-  const component = (
-    <SearchPanelControls
-      companionWindowId="cw"
-      windowId="window"
-      fetchSearch={vi.fn()}
-      searchService={{ id: 'http://example.com/search' }}
-      {...props}
-    />
-  );
-  return { component, ...render(component) };
-}
+const emptySearchResponse = (id) => ({
+  '@context': [presentationContext, searchContext],
+  '@id': id,
+  '@type': 'sc:AnnotationList',
+  hits: [],
+  resources: [],
+  within: {
+    '@type': 'sc:Layer',
+    first: `${id.split('?')[0]}?start=0`,
+    ignored: [],
+    last: `${id.split('?')[0]}?start=0`,
+  },
+});
 
-describe('SearchPanelControls', () => {
+describe.each([
+  [
+    'Presentation 2',
+    (searchId) =>
+      buildManifestV2({
+        service: [
+          {
+            '@context': searchContext,
+            '@id': searchId,
+            profile: searchProfile,
+            service: { '@id': `${stanfordBase}/autocomplete`, profile: autocompleteProfile },
+          },
+        ],
+      }),
+  ],
+  [
+    'Presentation 3',
+    (searchId) =>
+      buildManifestV3({
+        service: [
+          {
+            id: searchId,
+            profile: searchProfile,
+            type: 'SearchService1',
+            service: [{ id: `${stanfordBase}/autocomplete`, profile: autocompleteProfile, type: 'AutoCompleteService1' }],
+          },
+        ],
+      }),
+  ],
+])('SearchPanelControls (%s)', (_label, createManifest) => {
+  const renderControls = ({ data = {}, query, searchId = defaultSearchId } = {}) => {
+    const preloadedState = buildMiradorState({
+      windows: [
+        {
+          companionWindows: [
+            {
+              content: 'search',
+              data: { data, query },
+            },
+          ],
+          manifest: createManifest(searchId),
+        },
+      ],
+    });
+
+    const [windowId] = preloadedState.workspace.windowIds;
+    const [companionWindowId] = preloadedState.windows[windowId].companionWindowIds;
+
+    return {
+      ...render(<SearchPanelControls companionWindowId={companionWindowId} windowId={windowId} />, {
+        preloadedState,
+      }),
+      companionWindowId,
+      windowId,
+    };
+  };
+
+  beforeEach(() => {
+    server.use(
+      http.get(defaultSearchId, ({ request }) => {
+        const q = new URL(request.url).searchParams.get('q') || '';
+        return HttpResponse.json(emptySearchResponse(`${defaultSearchId}?q=${q}`));
+      }),
+    );
+  });
+
   it('renders a form', () => {
-    createWrapper();
+    renderControls();
     expect(screen.getByRole('form')).toBeInTheDocument();
   });
 
   it('displays proposed autocomplete options when typing and submits search', async () => {
     const user = userEvent.setup();
-    const fetchSearch = vi.fn();
+    let requestedSearchUrl;
 
     server.use(
-      http.get('https://contentsearch.stanford.edu/fg165hz3589/autocomplete', () => {
-        return HttpResponse.json(autocompleteMock, {
-          headers: { 'Access-Control-Allow-Origin': '*' },
-        });
+      http.get(`${stanfordBase}/autocomplete`, () => HttpResponse.json(autocompleteMock)),
+      http.get(`${stanfordBase}/search`, ({ request }) => {
+        requestedSearchUrl = request.url;
+        return HttpResponse.json(emptySearchResponse(request.url));
       }),
     );
 
-    createWrapper({
-      autocompleteService: { id: 'https://contentsearch.stanford.edu/fg165hz3589/autocomplete' },
-      fetchSearch,
-      searchService: { id: 'https://contentsearch.stanford.edu/fg165hz3589/search' },
-    });
+    renderControls({ searchId: `${stanfordBase}/search` });
 
     const input = screen.getByRole('combobox');
     await user.type(input, 'wund');
 
-    // Wait for the Component's 500ms debounce and MSW response,
-    // then check the dropdown options
     expect(await screen.findByRole('option', { name: 'wunder' })).toBeInTheDocument();
     expect(screen.getByRole('option', { name: 'wunderbar' })).toBeInTheDocument();
 
     const wunderOption = await screen.findByRole('option', { name: 'wunder' });
     await user.click(wunderOption);
 
-    expect(fetchSearch).toHaveBeenCalledTimes(1);
-    expect(fetchSearch).toHaveBeenCalledWith(
-      'window',
-      'cw',
-      'https://contentsearch.stanford.edu/fg165hz3589/search?q=wunder',
-      'wunder',
+    expect(requestedSearchUrl).toBe(`${stanfordBase}/search?q=wunder`);
+    expect(input).toHaveValue('wunder');
+  });
+
+  it('renders a text input through the renderInput prop', () => {
+    const { companionWindowId } = renderControls();
+
+    expect(screen.getByRole('combobox')).toHaveAttribute('id', `search-${companionWindowId}`);
+  });
+
+  it('endAdornment is a SearchIcon (with no CircularProgress indicator)', () => {
+    renderControls();
+    // eslint-disable-next-line testing-library/no-node-access
+    expect(screen.getByRole('button').querySelector('svg')).toBeInTheDocument();
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+  });
+
+  it('endAdornment has a CircularProgress indicator when the current search is fetching', () => {
+    renderControls({
+      data: { [`${defaultSearchId}?q=foo`]: { isFetching: true } },
+      query: 'foo',
+    });
+
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+  });
+
+  it('form change and submission triggers a search action', async () => {
+    const user = userEvent.setup();
+    let requestedSearchUrl;
+
+    server.use(
+      http.get(wwwSearchId, ({ request }) => {
+        requestedSearchUrl = request.url;
+        return HttpResponse.json(emptySearchResponse(request.url));
+      }),
     );
-  });
-});
 
-it('renders a text input through the renderInput prop', () => {
-  createWrapper();
+    renderControls({
+      query: 'asdf',
+      searchId: wwwSearchId,
+    });
 
-  expect(screen.getByRole('combobox')).toHaveAttribute('id', 'search-cw');
-});
-it('endAdornment is a SearchIcon (with no CircularProgress indicator)', () => {
-  createWrapper();
-  // eslint-disable-next-line testing-library/no-node-access
-  expect(screen.getByRole('button').querySelector('svg')).toBeInTheDocument();
-  expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
-});
+    const input = screen.getByRole('combobox');
+    await user.clear(input);
+    await user.keyboard('yolo');
+    await user.click(screen.getByRole('button'));
 
-it('endAdornment has a CircularProgress indicator when there the current search is fetching', () => {
-  createWrapper({ searchIsFetching: true });
-
-  expect(screen.getByRole('progressbar')).toBeInTheDocument();
-});
-
-it('form change and submission triggers an action', async () => {
-  const user = userEvent.setup();
-  const fetchSearch = vi.fn();
-  const searchService = {
-    id: 'http://www.example.com/search',
-    options: { resource: { id: 'example.com/manifest' } },
-  };
-  createWrapper({ fetchSearch, query: 'asdf', searchService });
-
-  await user.clear(screen.getByRole('combobox'));
-  await user.keyboard('yolo');
-  await user.click(screen.getByRole('button'));
-
-  expect(fetchSearch).toHaveBeenCalledWith('window', 'cw', 'http://www.example.com/search?q=yolo', 'yolo');
-});
-
-it('does not submit an empty search', async () => {
-  const user = userEvent.setup();
-  const fetchSearch = vi.fn();
-  const searchService = {
-    id: 'http://www.example.com/search',
-    options: { resource: { id: 'example.com/manifest' } },
-  };
-
-  createWrapper({ fetchSearch, query: '', searchService });
-
-  await user.clear(screen.getByRole('combobox'));
-  await user.click(screen.getByRole('button', { name: 'Search in the document' }));
-  expect(fetchSearch).not.toHaveBeenCalled();
-});
-
-describe('input', () => {
-  it('has the query prop has the input value on intial render', () => {
-    createWrapper({ query: 'Wolpertinger' });
-    expect(screen.getByRole('combobox')).toHaveValue('Wolpertinger');
+    expect(requestedSearchUrl).toBe(`${wwwSearchId}?q=yolo`);
+    expect(input).toHaveValue('yolo');
   });
 
-  it('clears the local search state/input when the incoming query prop has been cleared', () => {
-    const { component, rerender } = createWrapper({ query: 'Wolpertinger' });
-    expect(screen.getByRole('combobox')).toHaveValue('Wolpertinger');
+  it('does not submit an empty search', async () => {
+    const user = userEvent.setup();
+    let searchCalled = false;
 
-    rerender(cloneElement(component, { query: '' }));
+    server.use(
+      http.get(wwwSearchId, () => {
+        searchCalled = true;
+        return HttpResponse.json({});
+      }),
+    );
 
-    expect(screen.getByRole('combobox')).toHaveValue('');
+    renderControls({
+      query: '',
+      searchId: wwwSearchId,
+    });
+
+    await user.clear(screen.getByRole('combobox'));
+    await user.click(screen.getByRole('button', { name: 'Search in the document' }));
+    expect(searchCalled).toBe(false);
+  });
+
+  describe('input', () => {
+    it('has the query prop as the input value on initial render', () => {
+      renderControls({ query: 'Wolpertinger' });
+      expect(screen.getByRole('combobox')).toHaveValue('Wolpertinger');
+    });
+
+    it('clears the local search state/input when the incoming query prop has been cleared', () => {
+      const { companionWindowId, store, windowId } = renderControls({ query: 'Wolpertinger' });
+      expect(screen.getByRole('combobox')).toHaveValue('Wolpertinger');
+
+      act(() => {
+        store.dispatch(removeSearch(windowId, companionWindowId));
+      });
+
+      expect(screen.getByRole('combobox')).toHaveValue('');
+    });
   });
 });
