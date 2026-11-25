@@ -23,6 +23,7 @@ export function setCanvas(windowId, canvasId, newGroup = undefined, options = {}
       canvasId,
       preserveViewport: options?.preserveViewport ?? preserveViewport,
       startTime: options.startTime,
+      annotationId: options.annotationId,
       type: ActionTypes.SET_CANVAS,
       visibleCanvases,
       windowId,

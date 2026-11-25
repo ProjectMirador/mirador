@@ -146,7 +146,7 @@ export function* setWindowDefaultSearchQuery(action) {
 }
 
 /** @private */
-export function getAnnotationsBySearch(state, { canvasIds, companionWindowIds, windowId }) {
+export function getAnnotationsBySearch(state, { canvasIds, companionWindowIds, windowId, annotationId }) {
   const annotationBySearch = companionWindowIds.reduce((accumulator, companionWindowId) => {
     const annotations = getSearchAnnotationsForCompanionWindow(state, {
       companionWindowId,
@@ -154,7 +154,8 @@ export function getAnnotationsBySearch(state, { canvasIds, companionWindowIds, w
     });
 
     const resourceAnnotations = annotations.resources;
-    const hitAnnotation = resourceAnnotations.find((r) => canvasIds.includes(r.targetId));
+    const onCanvas = resourceAnnotations.filter((r) => canvasIds.includes(r.targetId));
+    const hitAnnotation = onCanvas.find((r) => annotationId && r.id === annotationId) ?? onCanvas[0];
 
     // eslint-disable-next-line no-param-reassign
     if (hitAnnotation) accumulator[companionWindowId] = [hitAnnotation.id];
@@ -174,6 +175,7 @@ export function* setCurrentAnnotationsOnCurrentCanvas({ annotationId, windowId, 
   const annotationBySearch = yield select(getAnnotationsBySearch, {
     canvasIds: visibleCanvases,
     companionWindowIds,
+    annotationId,
     windowId,
   });
 
@@ -183,9 +185,9 @@ export function* setCurrentAnnotationsOnCurrentCanvas({ annotationId, windowId, 
     ),
   );
 
-  if (Object.values(annotationBySearch).length > 0) {
-    // if the currently selected annotation isn't on this canvas, do a thing.
-    yield put(selectAnnotation(windowId, Object.values(annotationBySearch)[0][0]));
+  const hits = Object.values(annotationBySearch).flat();
+  if (hits.length > 0) {
+    yield put(selectAnnotation(windowId, hits.includes(annotationId) ? annotationId : hits[0]));
   }
 }
 
@@ -253,7 +255,7 @@ export function* setCanvasforSelectedAnnotation({ annotationId, windowId }) {
 
   if (!canvas || canvasIds.includes(canvas.id)) return;
 
-  const thunk = yield call(setCanvas, windowId, canvas.id);
+  const thunk = yield call(setCanvas, windowId, canvas.id, undefined, { annotationId });
   yield put(thunk);
 }
 
