@@ -32,17 +32,19 @@ describe('MiradorCanvas', () => {
 
     it('gets the start data for a IIIF v3 manifest', () => {
       const manifest = {
-        '@context': 'http://iiif.io/api/presentation/2/context.json',
-        '@id': 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
-        '@type': 'sc:Manifest',
+        '@context': 'http://iiif.io/api/presentation/3/context.json',
+        id: 'http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json',
+        type: 'Manifest',
         sequences: [
           {
             canvases: [
               {
-                '@id': 'http://example.com/1',
+                id: 'http://example.com/1',
+                type: 'Canvas',
               },
               {
-                '@id': 'http://example.com/2',
+                id: 'http://example.com/2',
+                type: 'Canvas',
               },
             ],
           },
