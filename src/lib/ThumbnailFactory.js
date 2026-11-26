@@ -268,8 +268,7 @@ class ThumbnailFactory {
     }
 
     if (resource.isManifest()) {
-      const miradorManifest = this.getMiradorManifest(resource);
-      const canvas = miradorManifest.startCanvas || miradorManifest.canvasAt(0);
+      const canvas = resource.startCanvas || resource.canvasAt(0);
       if (canvas) return this.getSourceContentResource(canvas);
 
       return undefined;
