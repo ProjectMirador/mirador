@@ -40,6 +40,7 @@ import {
 } from '@src/state/sagas/windows';
 import MiradorManifest from '@src/lib/MiradorManifest';
 import fixture from '../../fixtures/version-2/019.json';
+import fixtureV3 from '../../fixtures/version-3/019.json';
 import collectionFixture from '../../fixtures/version-2/collection.json';
 
 describe('window-level sagas', () => {
@@ -186,7 +187,7 @@ describe('window-level sagas', () => {
       };
 
       const manifest = new MiradorManifest({
-        ...fixture,
+        ...fixtureV3,
         start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' },
       });
 
@@ -233,7 +234,7 @@ describe('window-level sagas', () => {
       };
 
       const manifest = new MiradorManifest({
-        ...fixture,
+        ...fixtureV3,
         start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' },
       });
 
