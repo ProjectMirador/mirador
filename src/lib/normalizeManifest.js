@@ -114,5 +114,19 @@ export default (input) => {
     serialized.structures[0].behavior.push('sequence');
   }
 
+  if (serialized.items?.length > 0) {
+    // iiif normalization insists on adding an empty items array, even for externally referenced pages...
+    serialized.items.forEach((item) => {
+      if (item.annotations) {
+        item.annotations
+          .filter((a) => a.items && a.items.length === 0)
+          .forEach((annotation) => {
+            // eslint-disable-next-line no-param-reassign
+            delete annotation.items;
+          });
+      }
+    });
+  }
+
   return serialized;
 };
