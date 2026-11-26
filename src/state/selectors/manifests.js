@@ -33,6 +33,11 @@ export const getManifestStatus = (state, props) => getManifest(state, props) || 
  */
 export const getManifestError = createSelector([getManifest], (manifest) => manifest && manifest.error);
 
+const getManifestJson = createSelector(
+  [getManifest, (state, { json }) => json],
+  (manifest, manifestJson) => manifestJson || manifest?.json,
+);
+
 /**
  * Instantiate a manifesto instance
  * @param {object} state
@@ -40,11 +45,19 @@ export const getManifestError = createSelector([getManifest], (manifest) => mani
  * @param {string} props.manifestId
  * @returns {object}
  */
-export const getManifestoInstance = createSelector(
-  getManifest,
-  (state, { json }) => json,
-  (manifest, manifestJson) => (manifestJson || manifest?.json) && new MiradorManifest(manifestJson || manifest?.json),
-);
+export const getManifestoInstance = createSelector(getManifestJson, (manifestJson) => {
+  if (!manifestJson) return undefined;
+
+  try {
+    const wrapper = new MiradorManifest(manifestJson);
+
+    if (!wrapper.manifest) return undefined;
+
+    return wrapper;
+  } catch (e) {
+    return undefined;
+  }
+});
 
 export const getManifestLocale = createSelector(
   [getManifestoInstance, getLocale],
@@ -312,6 +325,8 @@ export function getDestructuredMetadata(iiifResource, locale = undefined) {
   );
 }
 
+const EMPTY_ARRAY = [];
+
 /**
  * Return manifest metadata in a label / value structure
  * @param {object} state
@@ -322,7 +337,7 @@ export function getDestructuredMetadata(iiifResource, locale = undefined) {
  */
 export const getManifestMetadata = createSelector(
   [getManifestoInstance, getManifestLocale],
-  (manifest, locale) => manifest && getDestructuredMetadata(manifest, locale),
+  (manifest, locale) => (manifest && getDestructuredMetadata(manifest, locale)) || EMPTY_ARRAY,
 );
 
 /** */
