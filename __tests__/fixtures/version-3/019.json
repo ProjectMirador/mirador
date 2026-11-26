@@ -1,0 +1,135 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "http://iiif.io/api/presentation/2.1/example/fixtures/19/manifest.json",
+  "type": "Manifest",
+  "label": {
+    "none": [
+      "Test 19 Manifest: Multiple Canvases"
+    ]
+  },
+  "partOf": [
+    {
+      "id": "http://iiif.io/api/presentation/2.1/example/fixtures/collection.json",
+      "type": "Collection"
+    }
+  ],
+  "items": [
+    {
+      "id": "http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json",
+      "type": "Canvas",
+      "height": 1800,
+      "width": 1200,
+      "label": {
+        "none": [
+          "Test 19 Canvas: 1"
+        ]
+      },
+      "items": [
+        {
+          "id": "http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json/annotation-page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "http://example.org/oa:Annotation/1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "http://iiif.io/api/presentation/2.0/example/fixtures/canvas/24/c1.json",
+              "body": {
+                "id": "https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44/full/full/0/default.jpg",
+                "type": "Image",
+                "height": 3820,
+                "width": 5426,
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://stacks.stanford.edu/image/iiif/hg676jb4964%2F0380_796-44",
+                    "@type": "ImageService2",
+                    "profile": "level2"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1",
+      "type": "Canvas",
+      "height": 4421,
+      "width": 6501,
+      "label": {
+        "none": [
+          "Image 1"
+        ]
+      },
+      "items": [
+        {
+          "id": "https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1/annotation-page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://purl.stanford.edu/fr426cg9537/iiif/annotation/fr426cg9537_1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1",
+              "body": {
+                "id": "https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005/full/full/0/default.jpg",
+                "type": "Image",
+                "height": 4421,
+                "width": 6501,
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://stacks.stanford.edu/image/iiif/fr426cg9537%2FSC1094_s3_b14_f17_Cats_1976_0005",
+                    "@type": "ImageService2",
+                    "profile": "level2"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1",
+      "type": "Canvas",
+      "height": 4288,
+      "width": 2848,
+      "label": {
+        "none": [
+          "Image 2"
+        ]
+      },
+      "items": [
+        {
+          "id": "https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1/annotation-page",
+          "type": "AnnotationPage",
+          "items": [
+            {
+              "id": "https://purl.stanford.edu/rz176rt6531/iiif/annotation/rz176rt6531_1",
+              "type": "Annotation",
+              "motivation": "painting",
+              "target": "https://purl.stanford.edu/rz176rt6531/iiif/canvas/rz176rt6531_1",
+              "body": {
+                "id": "https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410/full/full/0/default.jpg",
+                "type": "Image",
+                "height": 4288,
+                "width": 2848,
+                "format": "image/jpeg",
+                "service": [
+                  {
+                    "@id": "https://stacks.stanford.edu/image/iiif/rz176rt6531%2FPC0170_s3_Tree_Calendar_20081101_152516_0410",
+                    "@type": "ImageService2",
+                    "profile": "level2"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

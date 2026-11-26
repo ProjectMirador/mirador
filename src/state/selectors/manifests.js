@@ -1,25 +1,11 @@
 import { createSelector } from 'reselect';
-import { PropertyValue, Utils, Resource } from 'manifesto.js';
+import { PropertyValue, Resource } from 'manifesto.js';
 import asArray from '../../lib/asArray';
 import { getCompanionWindowLocale } from './companionWindows';
 import { getManifest } from './getters';
 import { getConfig } from './config';
 import { getThumbnailFactory } from './thumbnails';
-
-/** */
-function createManifestoInstance(json, locale) {
-  if (!json) return undefined;
-  // Use structuredClone to create a deep copy and prevent Manifesto from mutating the json
-  const manifestoObject = Utils.parseManifest(structuredClone(json), locale ? { locale } : undefined);
-  if (manifestoObject) {
-    // Local patching of Manifesto so that when its a Collection, it behaves similarly
-    if (typeof manifestoObject.getSequences != 'function') {
-      manifestoObject.getSequences = () => [];
-    }
-    return manifestoObject;
-  }
-  return undefined;
-}
+import MiradorManifest from '../../lib/MiradorManifest';
 
 /** */
 export const getLocale = createSelector(
@@ -47,10 +33,9 @@ export const getManifestStatus = (state, props) => getManifest(state, props) || 
  */
 export const getManifestError = createSelector([getManifest], (manifest) => manifest && manifest.error);
 
-/** Instantiate a manifesto instance */
-const getContextualManifestoInstance = createSelector(
-  getManifest,
-  (manifest) => manifest && createManifestoInstance(manifest.json),
+const getManifestJson = createSelector(
+  [getManifest, (state, { json }) => json],
+  (manifest, manifestJson) => manifestJson || manifest?.json,
 );
 
 /**
@@ -60,11 +45,19 @@ const getContextualManifestoInstance = createSelector(
  * @param {string} props.manifestId
  * @returns {object}
  */
-export const getManifestoInstance = createSelector(
-  getContextualManifestoInstance,
-  (state, { json }) => json,
-  (manifesto, manifestJson) => (manifestJson && createManifestoInstance(manifestJson)) || manifesto,
-);
+export const getManifestoInstance = createSelector(getManifestJson, (manifestJson) => {
+  if (!manifestJson) return undefined;
+
+  try {
+    const wrapper = new MiradorManifest(manifestJson);
+
+    if (!wrapper.manifest) return undefined;
+
+    return wrapper;
+  } catch (e) {
+    return undefined;
+  }
+});
 
 export const getManifestLocale = createSelector(
   [getManifestoInstance, getLocale],
@@ -332,6 +325,8 @@ export function getDestructuredMetadata(iiifResource, locale = undefined) {
   );
 }
 
+const EMPTY_ARRAY = [];
+
 /**
  * Return manifest metadata in a label / value structure
  * @param {object} state
@@ -342,7 +337,7 @@ export function getDestructuredMetadata(iiifResource, locale = undefined) {
  */
 export const getManifestMetadata = createSelector(
   [getManifestoInstance, getManifestLocale],
-  (manifest, locale) => manifest && getDestructuredMetadata(manifest, locale),
+  (manifest, locale) => (manifest && getDestructuredMetadata(manifest, locale)) || EMPTY_ARRAY,
 );
 
 /** */

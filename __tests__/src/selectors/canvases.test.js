@@ -2,6 +2,9 @@ import manifestFixture001 from '../../fixtures/version-2/001.json';
 import manifestFixture019 from '../../fixtures/version-2/019.json';
 import minimumRequired from '../../fixtures/version-2/minimumRequired.json';
 import minimumRequired3 from '../../fixtures/version-3/minimumRequired.json';
+import multipleSequencesFixture from '../../fixtures/version-2/multipleSequences.json';
+import multistructureSequencesFixture from '../../fixtures/version-3/multistructureSequences.json';
+import manifestFixture027 from '../../fixtures/version-3/0027-alternative-page-order.json';
 import audioFixture from '../../fixtures/version-3/0002-mvm-audio.json';
 import textFixture from '../../fixtures/version-3/text-pdf.json';
 import videoFixture from '../../fixtures/version-3/0015-start.json';
@@ -13,6 +16,7 @@ import {
   getNextCanvasGrouping,
   getPreviousCanvasGrouping,
   getCanvas,
+  getCanvases,
   getCanvasLabel,
   getCanvasDescription,
   selectInfoResponse,
@@ -23,6 +27,65 @@ import {
   getVisibleCanvasCaptions,
   getVisibleCanvasIds,
 } from '@src/state/selectors/canvases';
+
+describe('getCanvases', () => {
+  const miradorStateWithManifest = ({ manifest, ...windowProps }) => ({
+    manifests: {
+      x: {
+        id: 'x',
+        json: manifest,
+      },
+    },
+    windows: {
+      a: {
+        id: 'a',
+        manifestId: 'x',
+        ...windowProps,
+      },
+    },
+  });
+
+  it('returns all canvases from the manifest default sequence', () => {
+    const canvases = getCanvases(miradorStateWithManifest({ manifest: manifestFixture019 }), { windowId: 'a' });
+    expect(canvases.length).toEqual(3);
+  });
+
+  it('returns the canvases from the default sequence', () => {
+    const canvases = getCanvases(miradorStateWithManifest({ manifest: multipleSequencesFixture }), { windowId: 'a' });
+    expect(canvases.length).toEqual(1);
+  });
+
+  it('returns the canvases from the default range sequence', () => {
+    const canvases = getCanvases(miradorStateWithManifest({ manifest: manifestFixture027 }), { windowId: 'a' });
+    expect(canvases.length).toEqual(4);
+  });
+
+  it('returns the canvases from the first range sequence', () => {
+    const canvases = getCanvases(miradorStateWithManifest({ manifest: multistructureSequencesFixture }), { windowId: 'a' });
+    expect(canvases.length).toEqual(3);
+    expect(canvases.map((c) => c.id)).toEqual([
+      'https://example.com/canvas/1r',
+      'https://example.com/canvas/1v',
+      'https://example.com/canvas/2r',
+    ]);
+  });
+
+  it('returns the canvases from the specified range sequence', () => {
+    const canvases = getCanvases(
+      miradorStateWithManifest({
+        manifest: multistructureSequencesFixture,
+        sequenceId: 'https://example.com/range/readingOrder',
+      }),
+      { windowId: 'a' },
+    );
+    expect(canvases.length).toEqual(3);
+    expect(canvases.map((c) => c.id)).toEqual([
+      'https://example.com/canvas/2r',
+      'https://example.com/canvas/1v',
+      'https://example.com/canvas/1r',
+    ]);
+  });
+});
 
 describe('getVisibleCanvasIds', () => {
   const state = {
@@ -390,6 +453,7 @@ describe('selectInfoResponse', () => {
                     images: [
                       {
                         resource: {},
+                        on: 'some-canvas-without-services',
                       },
                     ],
                   },

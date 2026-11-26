@@ -185,15 +185,6 @@
       ]
     },
     {
-      "@id": "http://foo.test/1/range/0-1-2-0",
-      "@type": "sc:Range",
-      "ranges": [],
-      "canvases": [
-        "http://foo.test/1/canvas/c8",
-        "http://foo.test/1/canvas/c9"
-      ]
-    },
-    {
       "@id": "http://foo.test/1/range/0-2",
       "@type": "sc:Range",
       "ranges": [

@@ -1,8 +1,9 @@
 import { ManifestResource, Resource, Service, Utils } from 'manifesto.js';
 import getThumbnail, { ThumbnailFactory } from '@src/lib/ThumbnailFactory';
+import MiradorManifest from '@src/lib/MiradorManifest';
 import fixture from '../../fixtures/version-2/019.json';
 
-const manifest = Utils.parseManifest(fixture);
+const manifest = new MiradorManifest(fixture);
 const canvas = manifest.getSequences()[0].getCanvases()[0];
 
 /** */
@@ -237,7 +238,7 @@ describe('getThumbnail', () => {
 
   describe('with a manifest', () => {
     it('does nothing with a plain URL', () => {
-      const manifestWithThumbnail = Utils.parseManifest({
+      const manifestWithThumbnail = new MiradorManifest({
         ...manifest.__jsonld,
         thumbnail: url,
       });
@@ -246,7 +247,7 @@ describe('getThumbnail', () => {
     });
 
     it('uses the thumbnail', () => {
-      const manifestWithThumbnail = Utils.parseManifest({
+      const manifestWithThumbnail = new MiradorManifest({
         ...manifest.__jsonld,
         thumbnail: { ...iiifLevel1Service },
       });
@@ -257,7 +258,7 @@ describe('getThumbnail', () => {
     });
 
     it('uses the startCanvas', () => {
-      const manifestWithStartCanvas = Utils.parseManifest({
+      const manifestWithStartCanvas = new MiradorManifest({
         ...manifest.__jsonld,
         start: { id: 'https://purl.stanford.edu/fr426cg9537/iiif/canvas/fr426cg9537_1' },
       });

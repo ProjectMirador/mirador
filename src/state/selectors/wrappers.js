@@ -9,7 +9,4 @@ export const getMiradorCanvasWrapper = createSelector(
 );
 
 /** */
-export const getMiradorManifestWrapper = createSelector(
-  [],
-  (resourceTypes) => (manifest) => manifest && new MiradorManifest(manifest),
-);
+export const getMiradorManifestWrapper = createSelector([], (resourceTypes) => (manifest) => manifest);

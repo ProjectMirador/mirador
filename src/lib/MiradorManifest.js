@@ -1,11 +1,46 @@
+import { Utils } from 'manifesto.js';
+import normalizeManifest from './normalizeManifest';
 /**
  * MiradorManifest - adds additional, testable logic around Manifesto's Manifest
  * https://iiif-commons.github.io/manifesto/classes/_canvas_.manifesto.canvas.html
  */
 export default class MiradorManifest {
   /** */
-  constructor(manifest) {
-    this.manifest = manifest;
+  #manifest;
+  #json;
+
+  constructor(json) {
+    this.raw = json;
+
+    return new Proxy(this, {
+      get(target, prop) {
+        return prop in target ? target[prop] : target.manifest[prop];
+      },
+    });
+  }
+
+  get manifest() {
+    if (this.#manifest) return this.#manifest;
+
+    // Use structuredClone to create a deep copy and prevent Manifesto from mutating the json
+    const manifestoObject = Utils.parseManifest(structuredClone(this.json), undefined);
+    if (manifestoObject) {
+      // Local patching of Manifesto so that when its a Collection, it behaves similarly
+      if (typeof manifestoObject.getSequences != 'function') {
+        manifestoObject.getSequences = () => [];
+      }
+    }
+
+    this.#manifest = manifestoObject;
+    return manifestoObject;
+  }
+
+  get json() {
+    if (this.#json) return this.#json;
+
+    this.#json = normalizeManifest(this.raw);
+
+    return this.#json;
   }
 
   /**

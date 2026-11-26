@@ -1,0 +1,70 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://example.com/iiif/book1/manifest",
+  "type": "Manifest",
+  "label": { "en": ["Manuscript with Alternative Sequences"] },
+  "items": [
+    {
+      "id": "https://example.com/canvas/1r",
+      "type": "Canvas",
+      "label": { "en": ["Folio 1r (Physical Page 1)"] },
+      "height": 2000,
+      "width": 1500,
+      "items": []
+    },
+    {
+      "id": "https://example.com/canvas/1v",
+      "type": "Canvas",
+      "label": { "en": ["Folio 1v (Physical Page 2)"] },
+      "height": 2000,
+      "width": 1500,
+      "items": []
+    },
+    {
+      "id": "https://example.com/canvas/2r",
+      "type": "Canvas",
+      "label": { "en": ["Folio 2r (Physical Page 3)"] },
+      "height": 2000,
+      "width": 1500,
+      "items": []
+    }
+  ],
+  "structures": [
+    {
+      "id": "https://example.com/range/physical",
+      "type": "Range",
+      "label": { "en": ["Physical Order (Default)"] },
+      "behavior": ["sequence"],
+      "items": [
+        { "id": "https://example.com/canvas/1r", "type": "Canvas" },
+        { "id": "https://example.com/canvas/1v", "type": "Canvas" },
+        { "id": "https://example.com/canvas/2r", "type": "Canvas" }
+      ]
+    },
+    {
+      "id": "https://example.com/range/readingOrder",
+      "type": "Range",
+      "label": { "en": ["Author's Intended Reading Order"] },
+      "behavior": ["sequence"],
+      "items": [
+        {
+          "id": "https://example.com/range/chapter1",
+          "type": "Range",
+          "label": { "en": ["Chapter 1"] },
+          "items": [
+            { "id": "https://example.com/canvas/2r", "type": "Canvas" },
+            { "id": "https://example.com/canvas/1v", "type": "Canvas" }
+          ]
+        },
+        {
+          "id": "https://example.com/range/chapter2",
+          "type": "Range",
+          "label": { "en": ["Chapter 2"] },
+          "items": [
+            { "id": "https://example.com/canvas/1r", "type": "Canvas" }
+          ]
+        }
+      ]
+    }
+  ]
+}

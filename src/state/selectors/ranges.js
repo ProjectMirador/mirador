@@ -8,7 +8,15 @@ import { getSequenceTreeStructure } from './sequences';
 
 /** */
 function rangeContainsCanvasId(range, canvasId) {
-  const canvasIds = range.getCanvasIds();
+  if (!range?.__jsonld?.items) return false;
+  // We'd prefer to use manifesto helpers, but getCanvasIds doesn't handle SpecificResource at all...
+  const canvasIds = range.__jsonld.items
+    .map((item) => {
+      if (item.type === 'Canvas') return item.id;
+      if (item.type === 'SpecificResource' && item.source.type === 'Canvas') return item.source.id;
+      return undefined;
+    })
+    .filter(Boolean);
   for (let i = 0; i < canvasIds.length; i += 1) {
     if (Utils.normalisedUrlsMatch(canvasIds[i], canvasId)) {
       return true;

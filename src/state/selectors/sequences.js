@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { TreeNode } from 'manifesto.js';
 import { getManifestoInstance, getManifestLocale } from './manifests';
+import MiradorRangeSequence from '../../lib/MiradorRangeSequence';
 import { getWindow } from './getters';
 
 /**
@@ -15,20 +16,23 @@ export const getSequences = createSelector([getManifestoInstance], (manifest) =>
 
   const topRangesOrRoot = manifest.getTopRanges();
   const v2TopRanges = topRangesOrRoot.filter((r) => r.getProperty('viewingHint') === 'top');
+
+  if (v2TopRanges.length > 0) return v2TopRanges.map((s) => new MiradorRangeSequence(s, manifest));
+
   let v3RangeSequences = [];
 
-  if (v2TopRanges.length === 0 && topRangesOrRoot.length === 1) {
+  if (topRangesOrRoot.length === 1) {
     v3RangeSequences = topRangesOrRoot[0].getRanges().filter((r) => r.getBehavior() === 'sequence');
   }
+
+  if (v3RangeSequences.length > 0) return v3RangeSequences.map((s) => new MiradorRangeSequence(s, manifest));
 
   const sequences = [].concat(
     // v2: multi-sequence manifests, or v3: items
     manifest.getSequences(),
-    // v3: all top-level ranges with behavior=sequence
-    v3RangeSequences,
   );
 
-  return sequences;
+  return sequences.map((s) => new MiradorRangeSequence(s, manifest));
 });
 
 /**
@@ -128,9 +132,9 @@ export const getSequenceBehaviors = createSelector([getSequence, getManifestoIns
  * @returns {object}
  */
 export const getSequenceTreeStructure = createSelector([getSequence, getManifestoInstance], (sequence, manifest) => {
-  if (sequence && sequence.getProperty('type') && sequence.isRange()) return sequence.getTree(new TreeNode('root'));
+  if (sequence?.isRange()) return sequence.getTree();
 
-  return manifest && manifest.getDefaultTree();
+  return manifest?.getDefaultTree();
 });
 
 /**
